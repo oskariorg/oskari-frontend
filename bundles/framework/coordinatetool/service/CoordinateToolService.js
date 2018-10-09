@@ -16,8 +16,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
         this.urls.reverseGeocode = Oskari.urls.getRoute('GetReverseGeocodingResult');
     }, {
         __name: 'CoordinateTool.CoordinateToolService',
-        __qname : 'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
-        getQName : function () {
+        __qname: 'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
+        getQName: function () {
             return this.__qname;
         },
         getName: function () {
@@ -63,9 +63,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
             }
 
             jQuery.ajax({
-                url : url,
-                type : 'GET',
-                dataType : 'json',
+                url: url,
+                type: 'GET',
+                dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
@@ -98,9 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolSer
             if (_.isFunction(cb)) {
                 cb(result);
             }
-
-
         }
     }, {
-        'protocol' : ['Oskari.mapframework.service.Service']
+        'protocol': ['Oskari.mapframework.service.Service']
     });

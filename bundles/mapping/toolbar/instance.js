@@ -145,7 +145,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 toolbarRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHandler', me),
                 showMapMeasurementRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler', me)
             };
-
         },
         /**
          * @method createMenuToolbarContainer
@@ -231,7 +230,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
-
             } else {
                 if (!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
@@ -272,7 +270,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                     colours: data.colours
                 };
             }
-
 
             return c;
         },
@@ -323,7 +320,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 
                 sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
-
             }
         },
 
@@ -380,7 +376,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-
             if (!state) {
                 // TODO: loop buttons and check which had selected = true for default tool
                 return;
@@ -476,7 +471,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
             var me = this;
             var tbid = ptbid || 'default';
 
-
             if (!data) {
                 data = {};
             }
@@ -486,7 +480,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
-
             } else {
                 if (!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
@@ -508,9 +501,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                         '</style>').appendTo('head');
             }
 
-
             this._toolbarConfigs[tbid].colours = data.colours;
-
 
             // change toolbar toolicons
             var c = me.containers[tbid];
@@ -533,7 +524,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                     }
                 });
             }
-
         },
         /**
          * @static

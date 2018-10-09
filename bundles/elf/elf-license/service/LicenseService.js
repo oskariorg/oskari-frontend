@@ -109,7 +109,6 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             var me = this;
             me._pendingAjaxQuery[requestName].busy = true;
             me._pendingAjaxQuery[requestName].timestamp = dteMs;
-
         },
         /**
          * @method _finishAjaxRequest
@@ -148,8 +147,8 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'licenseInformation');
 
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 data: data,
                 beforeSend: function (x) {
                     me._pendingAjaxQuery['licenseInformation'].jqhr = x;
@@ -157,12 +156,12 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
-                url : me._licenseServiceUrl,
-                error : function () {
+                url: me._licenseServiceUrl,
+                error: function () {
                     me._finishAjaxRequest('licenseInformation');
                     errorCb();
                 },
-                success : function (data) {
+                success: function (data) {
                     me._finishAjaxRequest('licenseInformation');
                     successCb(data);
                 },
@@ -200,8 +199,8 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'getPrice');
 
             jQuery.ajax({
-                dataType : 'json',
-                type : 'POST',
+                dataType: 'json',
+                type: 'POST',
                 data: data,
                 beforeSend: function (x) {
                     me._pendingAjaxQuery['getPrice'].jqhr = x;
@@ -209,12 +208,12 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
-                url : me._licenseServiceUrl,
-                error : function (jqXHR) {
+                url: me._licenseServiceUrl,
+                error: function (jqXHR) {
                     me._finishAjaxRequest('getPrice');
                     errorCb(jqXHR);
                 },
-                success : function (data) {
+                success: function (data) {
                     me._finishAjaxRequest('getPrice');
                     successCb(data);
                 },
@@ -252,8 +251,8 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'concludeLicense');
 
             jQuery.ajax({
-                dataType : 'json',
-                type : 'PUT',
+                dataType: 'json',
+                type: 'PUT',
                 data: data,
                 beforeSend: function (x) {
                     me._pendingAjaxQuery['concludeLicense'].jqhr = x;
@@ -261,12 +260,12 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
-                url : me._licenseServiceUrl,
-                error : function (jqXHR) {
+                url: me._licenseServiceUrl,
+                error: function (jqXHR) {
                     me._finishAjaxRequest('concludeLicense');
                     errorCb(jqXHR);
                 },
-                success : function (data) {
+                success: function (data) {
                     me._finishAjaxRequest('concludeLicense');
                     successCb(data);
                 },
@@ -304,20 +303,20 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             me._startAjaxRequest(dteMs, 'deactivateLicense');
 
             jQuery.ajax({
-                dataType : 'json',
-                type : 'DELETE',
+                dataType: 'json',
+                type: 'DELETE',
                 beforeSend: function (x) {
                     me._pendingAjaxQuery['deactivateLicense'].jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
-                url : me._licenseServiceUrl + '&' + jQuery.param(data),
-                error : function (jqXHR) {
+                url: me._licenseServiceUrl + '&' + jQuery.param(data),
+                error: function (jqXHR) {
                     me._finishAjaxRequest('deactivateLicense');
                     errorCb(jqXHR);
                 },
-                success : function (data) {
+                success: function (data) {
                     me._finishAjaxRequest('deactivateLicense');
                     successCb(data);
                 },

@@ -52,8 +52,8 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 submit = template.find('#submit'),
                 cancel = template.find('#cancel');
 
-            username.attr('placeholder',this.locale.username);
-            password.attr('placeholder',this.locale.password);
+            username.attr('placeholder', this.locale.username);
+            password.attr('placeholder', this.locale.password);
 
             template.find('#asdicsrf').val(Oskari.app.getXSRFToken());
             submit.val(this.locale.login);
@@ -75,14 +75,13 @@ Oskari.clazz.define('Oskari.asdi.login.Flyout',
                 windowWidth = jQuery(window).width(),
                 windowHeight = jQuery(window).height();
 
-
             var left = ((parseInt(windowWidth) / 2) - (parseInt(containerWidth) / 2));
             var top = ((parseInt(windowHeight) / 2) - (parseInt(containerHeight) / 2));
-            flyoutContainer.css('min-width','400px');
+            flyoutContainer.css('min-width', '400px');
             flyoutContainer.css('left', left + 'px');
             flyoutContainer.css('top', top + 'px');
 
-            //above everything else but just under the login flyout
+            // above everything else but just under the login flyout
             shade.css('z-index', shadeZIndex);
             jQuery('body').append(shade);
         },

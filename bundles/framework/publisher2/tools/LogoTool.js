@@ -1,19 +1,19 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
     function () {
     }, {
-        index : 1,
-        allowedLocations : ['bottom left', 'bottom right'],
+        index: 1,
+        allowedLocations: ['bottom left', 'bottom right'],
         lefthanded: 'bottom left',
         righthanded: 'bottom right',
-        allowedSiblings : [
+        allowedSiblings: [
             'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
         ],
 
-        groupedSiblings : false,
+        groupedSiblings: false,
 
-        //_showInToolsPanel: false,
+        // _showInToolsPanel: false,
         /**
     * Get tool object.
     * @method getTool
@@ -55,6 +55,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
             return false;
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

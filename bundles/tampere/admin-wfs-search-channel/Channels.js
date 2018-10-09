@@ -15,7 +15,7 @@ Oskari.clazz.define(
         this.setTitle(localization.title);
         this.setContent(this.createUi());
         this.state = {};
-    },{
+    }, {
 
         /**
          * @private @method _initTemplates
@@ -221,10 +221,9 @@ Oskari.clazz.define(
             wfsLayers.forEach(function (layer) {
                 me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
                     value: layer.getId(),
-                    text : layer.getName()
+                    text: layer.getName()
                 }));
             });
-
         },
 
         /**
@@ -244,7 +243,6 @@ Oskari.clazz.define(
                         jQuery(el).find('select[name=choose-param-for-search]').empty();
 
                         if (data.propertyTypes == null) {
-
                             me._openPopup(
                                 me._getLocalization('columns_failed'),
                                 me._getLocalization('no_columns_for_layer')
@@ -256,7 +254,7 @@ Oskari.clazz.define(
                             jQuery(el).find('select[name=choose-param-for-search]').append(jQuery('<option>', {
                                 type: type,
                                 value: name,
-                                text : name
+                                text: name
                             }));
                         });
                     },
@@ -405,7 +403,6 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, channel) {
-
             item.attr('data-id', channel.id);
             item.find('h3').html(
                 channel.locale[Oskari.getLang()].name
@@ -515,10 +512,10 @@ Oskari.clazz.define(
             var dataObject = {
                 'id': frm.find('[name=id]').val(),
                 'wfsLayerId': frm.find('[name=choose-wfs-layer]').val(),
-                'locale' : {},
-                'paramsForSearch' : [],
-                'isDefault' : frm.find('[name=details-default]').is(':checked'),
-                'config' : {}
+                'locale': {},
+                'paramsForSearch': [],
+                'isDefault': frm.find('[name=details-default]').is(':checked'),
+                'config': {}
             };
 
             // TODO: setup config properly instead of isAddress
@@ -528,8 +525,8 @@ Oskari.clazz.define(
 
             jQuery.each(Oskari.getSupportedLanguages(), function (index, item) {
                 dataObject.locale[item] = {
-                    name : frm.find('[name=details-topic-' + item + ']').val(),
-                    desc : frm.find('[name=details-desc-' + item + ']').val()
+                    name: frm.find('[name=details-topic-' + item + ']').val(),
+                    desc: frm.find('[name=details-desc-' + item + ']').val()
                 };
             });
 
@@ -569,7 +566,7 @@ Oskari.clazz.define(
          * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE'
          * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
          */
-        __tryRestMethods : function (method, config) {
+        __tryRestMethods: function (method, config) {
             var me = this;
             config.type = method;
             var errorHandler = function (jqXHR, textStatus, errorThrown) {
@@ -585,8 +582,7 @@ Oskari.clazz.define(
                         }
                     };
                     me.__tryRestMethods('POST', config);
-                }
-                else if (config.__oskariError) {
+                } else if (config.__oskariError) {
                     config.__oskariError(jqXHR, textStatus, errorThrown);
                 }
             };
@@ -621,11 +617,11 @@ Oskari.clazz.define(
                     if (index > 0) {
                         fragment.find('.new-params-btn').trigger('click');
                     }
-                    //FIXME Dynamic option adding needs it
+                    // FIXME Dynamic option adding needs it
                     setTimeout(function () {
                         fragment.find('[name=choose-param-for-search]').eq(index).val(text);
                         me._progressSpinner.stop();
-                    },600);
+                    }, 600);
                 });
 
                 fragment.attr('method', 'POST');

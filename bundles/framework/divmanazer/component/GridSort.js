@@ -6,7 +6,7 @@
 Oskari.clazz.category(
     'Oskari.userinterface.component.Grid',
     'sort', {
-        /* Sort options.*/
+        /* Sort options. */
         sortOptions: {},
 
         /* last sort parameters are saved so we can change sort direction if the
@@ -50,8 +50,8 @@ Oskari.clazz.category(
             me._moveSelectedRowsTop();
 
             me.trigger('sort', {
-                column : scopedValue,
-                ascending : !descending
+                column: scopedValue,
+                ascending: !descending
             });
         },
         /**

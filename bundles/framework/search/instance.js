@@ -55,7 +55,6 @@ Oskari.clazz.define(
             return this.sandbox;
         },
 
-
         /**
          * @method getLocalization
          * Returns JSON presentation of bundles localization data for
@@ -129,7 +128,7 @@ Oskari.clazz.define(
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             var reqName = 'userinterface.AddExtensionRequest',
                 reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
@@ -193,7 +192,6 @@ Oskari.clazz.define(
             }
 
             return handler.apply(this, [event]);
-
         },
 
         /**
@@ -216,7 +214,7 @@ Oskari.clazz.define(
                     plugin.focus();
                 }
             },
-            'SearchResultEvent' : function (event) {
+            'SearchResultEvent': function (event) {
                 var plugin = this.plugins['Oskari.userinterface.Flyout'];
                 var params = event.getRequestParameters();
                 if (typeof params === 'object') {

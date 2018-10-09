@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintCanceledEven
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function () {
+        getName: function () {
             return 'Printout.PrintCanceledEvent';
         },
 
@@ -24,5 +24,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintCanceledEven
             return this._state;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

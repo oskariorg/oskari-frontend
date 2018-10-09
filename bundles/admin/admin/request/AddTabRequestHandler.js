@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin.request.AddTabRequestHandl
      * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
      *      request to handle
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             this.flyout.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
         }
     }, {
@@ -29,5 +29,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin.request.AddTabRequestHandl
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

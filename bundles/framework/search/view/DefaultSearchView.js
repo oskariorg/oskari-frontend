@@ -43,8 +43,8 @@ Oskari.clazz.define(
             this.instance.getLocalization('searchResults') + ' ${count} ' +
             this.instance.getLocalization('searchResultsDescription') + ' ${search}</h3></div>');
     }, {
-    	__templates : {
-            main : _.template(
+    	__templates: {
+            main: _.template(
 			    '<div class="searchContainer">' +
                 '  <div class="searchDescription">${desc}</div>' +
                 '  <div class="controls">' +
@@ -54,13 +54,13 @@ Oskari.clazz.define(
                 '  <div><br></div>' +
                 '  <div class="resultList"></div>' +
                 '</div>'),
-            resultTable : _.template(
+            resultTable: _.template(
             	'<table class="search_result oskari-grid">' +
                 '  <thead><tr></tr></thead>' +
                 '  <tbody></tbody>' +
                 '</table>'),
-            resultTableHeader : _.template('<th><a href="JavaScript:void(0);">${title}</a></th>'),
-            resultTableRow : _.template(
+            resultTableHeader: _.template('<th><a href="JavaScript:void(0);">${title}</a></th>'),
+            resultTableRow: _.template(
                 '<tr>' +
                 '  <td><a href="JavaScript:void(0);">${name}</a></td>' +
                 '  <td>${region}</td>' +
@@ -111,10 +111,10 @@ Oskari.clazz.define(
             // add it to container
             ui.append(searchContainer);
         },
-        getContainer : function () {
+        getContainer: function () {
         	if (!this._searchContainer) {
 	            var searchContainer = this.__templates.main({
-	            	desc : this.instance.getLocalization('searchDescription')
+	            	desc: this.instance.getLocalization('searchDescription')
 	            });
 	            this._searchContainer = jQuery(searchContainer);
 	        }
@@ -124,7 +124,7 @@ Oskari.clazz.define(
          * The search field
          * @return {Oskari.userinterface.component.FormInput}
          */
-        getField : function () {
+        getField: function () {
         	var me = this;
         	if (!this._searchField) {
         		// TODO: change to TextInput, but it doesn't have setIds()
@@ -149,7 +149,7 @@ Oskari.clazz.define(
          * The search field
          * @return {Oskari.userinterface.component.FormInput}
          */
-        getButton : function () {
+        getButton: function () {
         	if (!this._searchBtn) {
 	            var button = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
 	            button.setId('oskari_search_button_search');
@@ -157,7 +157,7 @@ Oskari.clazz.define(
         	}
             return this._searchBtn;
         },
-        __searchTextChanged : function (value) {
+        __searchTextChanged: function (value) {
             var me = this;
             var sandbox = me.getSandbox();
             var searchContainer = this.getContainer();
@@ -178,7 +178,7 @@ Oskari.clazz.define(
             }
         },
 
-        __doSearch : function () {
+        __doSearch: function () {
         	var me = this;
             var field = this.getField();
             var button = this.getButton();
@@ -203,7 +203,7 @@ Oskari.clazz.define(
                 me.getSandbox().request(this.instance, request);
             }
         },
-        __doAutocompleteSearch : function () {
+        __doAutocompleteSearch: function () {
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
             this.searchservice.doAutocompleteSearch(searchKey, function (result) {
@@ -215,7 +215,7 @@ Oskari.clazz.define(
             });
         },
 
-        handleSearchResult : function (isSuccess, result, searchedFor) {
+        handleSearchResult: function (isSuccess, result, searchedFor) {
             var me = this;
             var field = this.getField();
             var button = this.getButton();
@@ -284,9 +284,9 @@ Oskari.clazz.define(
                 error, [okButton]
             );
         },
-        __getSearchResultHeader : function (count, hasMore) {
+        __getSearchResultHeader: function (count, hasMore) {
         	var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
-        	var msg = intro({count : count});
+        	var msg = intro({count: count});
         	msg = msg + '<br/>';
 
             if (hasMore) {
@@ -339,7 +339,7 @@ Oskari.clazz.define(
                 tableBody = table.find('tbody');
 
             _.each(this.resultHeaders, function (headerItem) {
-                var header = me.__templates.resultTableHeader({ title : headerItem.title });
+                var header = me.__templates.resultTableHeader({ title: headerItem.title });
                 header = jQuery(header);
                 var link = header.find('a');
                 link.on('click', function () {
@@ -371,8 +371,8 @@ Oskari.clazz.define(
 
             this._populateResultTable(tableBody, result.locations);
             resultList.append(this.__templates.resultheading({
-            	count : result.totalCount,
-            	search : searchKey
+            	count: result.totalCount,
+            	search: searchKey
             }));
             resultList.append(table);
         },
@@ -400,7 +400,7 @@ Oskari.clazz.define(
             var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if (result.zoomScale) {
-                zoom = {scale : result.zoomScale};
+                zoom = {scale: result.zoomScale};
             }
             sandbox.request(
                 me.instance.getName(),
@@ -492,7 +492,7 @@ Oskari.clazz.define(
         removeSearchResultAction: function (name) {
             delete this.resultActions[name];
         },
-        getSandbox : function () {
+        getSandbox: function () {
         	return this.sandbox;
         },
         /**

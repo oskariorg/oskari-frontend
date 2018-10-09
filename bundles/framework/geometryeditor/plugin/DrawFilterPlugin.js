@@ -896,7 +896,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 if (j === features[fInd].geometry.components[0].components[i].markerPoint) {
                     markerIndexes[0].push([features[fInd].geometry.components[0].components[i].markerPoint,i]);
                 }
-                }*/
+                } */
                 if (removed) {
                     break;
                 }
@@ -951,7 +951,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                     if (markerIndexes[1][k][0].id !== features[j].geometry.components[0].components[markerIndexes[1][k][1]]) {
                         markerIndexes[1][k][0] = features[j].geometry.components[0].components[markerIndexes[1][k][1]+1];
                     }
-                    }*/
+                    } */
                     break addPoint;
                 }
             }
@@ -1851,7 +1851,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         clipTargetPolygons = [];
                         clipTargetPolygons.push(clipSolutionPolygons[k]);
                         for (l = 0; l < polygonIndexes.length; l += 1) {
-
                             // Check which polygon contains the hole
                             cpr = new ClipperLib.Clipper();
                             clipSubjectPolygons = [];
@@ -2023,7 +2022,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         return olNewFeatures;
     },
 
-
     /**
      * @method _enableIE8
      * Enable functions needed by libraries for older browsers
@@ -2032,7 +2030,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
     _enableIE8: function () {
         // IE8 compatibility
         if (!Array.prototype.indexOf) {
-            Array.prototype.indexOf = function (elt /*, from*/) {
+            Array.prototype.indexOf = function (elt /*, from */) {
                 var len = this.length >>> 0;
 
                 var from = Number(arguments[1]) || 0;
@@ -2052,9 +2050,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         // Production steps of ECMA-262, Edition 5, 15.4.4.18
         // Reference: http://es5.github.com/#x15.4.4.18
         if (!Array.prototype.forEach) {
-
             Array.prototype.forEach = function forEach (callback, thisArg) {
-
                 var T, k;
 
                 if (this === null) {
@@ -2085,14 +2081,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
 
                 // 7. Repeat, while k < len
                 while (k < len) {
-
                     // a. Let Pk be ToString(k).
                     //   This is implicit for LHS operands of the in operator
                     // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
                     //   This step can be combined with c
                     // c. If kPresent is true, then
                     if (k in O) {
-
                         // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
                         kValue = O[k];
 
@@ -2217,7 +2211,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.targetLayer.addFeatures([newTarget]);
         this.targetLayer.redraw();
     },
-
 
     /**
      * @method getFiltered

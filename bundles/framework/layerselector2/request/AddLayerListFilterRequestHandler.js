@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
          * @param {Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest} request
          *      request to handle
          */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             this.layerlistService.registerLayerlistFilterButton(request.getToolText(), request.getTooltip(), {
                 active: request.getIconClassActive(),
                 deactive: request.getIconClassDeactive()
@@ -34,5 +34,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

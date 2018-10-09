@@ -18,23 +18,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         // tool state
         this.state = {
             enabled: false,
-            mode:null
+            mode: null
         };
-
     }, {
     // the panel group where tool is appended
-        group : 'maptools',
+        group: 'maptools',
         // tool index in group, 0 is top
-        index : 999,
+        index: 999,
         // allowed locations
-        allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
-        allowedSiblings : [
+        allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
+        allowedSiblings: [
             'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons'
         ],
 
-        groupedSiblings : true,
+        groupedSiblings: true,
         /**
     * Get tool object.
     * @method getTool
@@ -56,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-        setEnabled : function (enabled) {
+        setEnabled: function (enabled) {
 
         },
         /**
@@ -115,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Integer} group id
     */
-        getGroup : function () {
+        getGroup: function () {
             var me = this;
             return me.__group;
         },
@@ -126,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
     *
     * @returns {Integer} index
     */
-        getIndex : function () {
+        getIndex: function () {
             var me = this;
             return me.__index;
         },
@@ -153,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
                 saveState = {
                     tool: me.getTool().id,
                     show: me.state.enabled,
-                    subTools : []
+                    subTools: []
                 };
 
             return saveState;
@@ -169,5 +168,5 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         // or tool create validation
         }
     }, {
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

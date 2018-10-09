@@ -145,7 +145,7 @@ Oskari.clazz.define(
                     if (event.getToolId() === this.activeTool) {
                         this._deactivateControls(this.activeTool);
                     } else {
-                        //deactivate all
+                        // deactivate all
                         this._deactivateControls();
                         this.activeTool = null;
                     }
@@ -305,7 +305,7 @@ Oskari.clazz.define(
 
             // mouse control
             if (conf.mouseControls !== false) {
-                //this._mouseControls = new OpenLayers.Control.PorttiMouse(this.getConfig().mouse);
+                // this._mouseControls = new OpenLayers.Control.PorttiMouse(this.getConfig().mouse);
                 me._mouseControls = new OskariNavigation();
                 me._mouseControls.setup(this.getMapModule());
             }

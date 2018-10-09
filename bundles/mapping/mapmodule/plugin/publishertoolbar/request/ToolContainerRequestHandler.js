@@ -22,11 +22,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerReq
      * @param {Oskari.mapframework.bundle.toolbar.request.AddToolbarRequest/Oskari.mapframework.bundle.toolbar.request.RemoveToolbarRequest/Oskari.mapframework.bundle.toolbar.request.ToolButtonStateRequest} request
      *      request to handle
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             if (request.getOp() == 'set') {
                 this._toolbar.setToolContent(request.getData());
-            }
-            else if (request.getOp() == 'reset') {
+            } else if (request.getOp() == 'reset') {
                 this._toolbar.resetToolContent(request.getData());
             }
         }
@@ -35,5 +34,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerReq
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

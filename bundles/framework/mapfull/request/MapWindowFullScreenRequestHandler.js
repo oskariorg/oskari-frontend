@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
      * @param {Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest} request
      *      request to handle
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             this.mapfull.toggleFullScreen();
         }
     }, {
@@ -28,5 +28,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

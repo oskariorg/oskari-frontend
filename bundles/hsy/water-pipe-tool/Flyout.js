@@ -100,7 +100,6 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Flyout',
                         return;
                     }
                     handler.apply(tabDef.instance, [event]);
-
                 }
             });
         },
@@ -160,7 +159,6 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

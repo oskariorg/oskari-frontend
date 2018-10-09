@@ -1,17 +1,17 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
     function () {
     }, {
-        index : 1,
-        allowedLocations : ['bottom left', 'bottom right'],
+        index: 1,
+        allowedLocations: ['bottom left', 'bottom right'],
         lefthanded: 'bottom right',
         righthanded: 'bottom left',
-        allowedSiblings : [
+        allowedSiblings: [
             'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
         ],
 
-        groupedSiblings : false,
+        groupedSiblings: false,
 
         /**
     * Get tool object.
@@ -51,6 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

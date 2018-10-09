@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Flyout',
  * Always extend this class, never use as is.
  */
     function (instance, locale, ui) {
-
         this.instance = instance;
 
         /* @property locale locale for this */
@@ -26,49 +25,48 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Flyout',
         this.ui = ui;
         this.state = null;
         this.hasUI = false;
-
     }, {
-        getName : function () {
+        getName: function () {
             return 'Oskari.integration.bundle.bb.Flyout';
         },
-        setEl : function (el) {
+        setEl: function (el) {
             this.container = jQuery(el);
         },
-        getEl : function () {
+        getEl: function () {
             return this.container;
         },
-        startPlugin : function () {
+        startPlugin: function () {
             var me = this,
                 ui = me.ui;
             ui.setEl(me.container);
             me.container.append(this.locale.fetchingLayers);
         },
-        stopPlugin : function () {
+        stopPlugin: function () {
             this.container.empty();
             this.hasUI = false;
         },
-        getTitle : function () {
+        getTitle: function () {
             return this.locale.title;
         },
-        getDescription : function () {
+        getDescription: function () {
             return this.locale.description;
         },
-        setState : function (state) {
+        setState: function (state) {
             this.state = state;
         },
-        getState : function () {
+        getState: function () {
             return this.state;
         },
 
-        lazyRender : function () {
+        lazyRender: function () {
             if (!this.hasUI) {
                 this.ui.render();
                 this.hasUI = true;
             }
         },
-        render : function () {
+        render: function () {
             this.ui.render();
         }
     }, {
-        'protocol' : ['Oskari.userinterface.Flyout']
+        'protocol': ['Oskari.userinterface.Flyout']
     });

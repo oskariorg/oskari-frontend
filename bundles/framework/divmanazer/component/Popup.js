@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
-
         },
         /**
          * @method _getMaxHeights
@@ -135,7 +134,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 });
             }
             if (zIndex && zIndex > 0) {
-                this.dialog.css('z-index',zIndex);
+                this.dialog.css('z-index', zIndex);
             }
         },
         /**
@@ -181,17 +180,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
             }
 
-            /*buttons and actionlinks*/
+            /* buttons and actionlinks */
             if (colourScheme) {
                 if (colourScheme.linkColour) {
                     this.dialog.find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
                 }
                 if (colourScheme.buttonBgColour) {
-                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background','none');
-                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background', 'none');
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color', colourScheme.buttonBgColour);
                 }
                 if (colourScheme.buttonLabelColour) {
-                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color', colourScheme.buttonLabelColour);
                 }
             }
         },
@@ -232,7 +231,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 me.close(true);
             });
             this.dialog.off('click');
-
         },
 
         /**
@@ -286,7 +284,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         moveTo: function (target, alignment, noArrow, topOffsetElement) {
             var me = this,
                 align = 'right',
-                //get the position of the target element
+                // get the position of the target element
                 tar = jQuery(target),
                 pos = tar.offset(),
                 parent = jQuery(window);
@@ -346,11 +344,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             // Check at if popup is outside screen from bottom
             if (windowHeight < (me.dialog.outerHeight() + top)) {
-                //set the popup top-position to be the original top position - amount which is outside of screen
+                // set the popup top-position to be the original top position - amount which is outside of screen
                 top = top - ((me.dialog.outerHeight() + top) - windowHeight);
             }
 
-            //move dialog to correct location
+            // move dialog to correct location
             me.dialog.css({
                 'left': left + 'px',
                 'top': top + 'px',
@@ -361,7 +359,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (topOffsetElement) {
                 me._adjustPopupTop(topOffsetElement);
             }
-
         },
         /**
          * @method @private _adjustPopupTop
@@ -374,7 +371,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 var top = jQuery(topOffsetElement).offset().top,
                     height = jQuery(topOffsetElement).outerHeight(true),
                     popupTop = parseInt(top) + parseInt(height);
-                this.dialog.css('top',popupTop + 'px');
+                this.dialog.css('top', popupTop + 'px');
             }
         },
         adjustHeight: function () {
@@ -548,7 +545,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this.eventHandlers = {
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+                    this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
                 }
             };
 

@@ -13,12 +13,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.event.BackendStatu
         this._status = status;
     }, {
     /** @static @property __name event name */
-        __name : 'BackendStatus.BackendStatusChangedEvent',
+        __name: 'BackendStatus.BackendStatusChangedEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -40,5 +40,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.event.BackendStatu
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

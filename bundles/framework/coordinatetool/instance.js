@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         /**
          * Needed by sandbox.register()
          */
-        init : function () {},
+        init: function () {},
 
         /**
          * @method setSandbox
@@ -97,8 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             this.plugin = plugin;
             sandbox.register(me);
 
-
-            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            // get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile() && this.plugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
             }

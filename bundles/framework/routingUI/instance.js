@@ -236,7 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
 
             var title = loc.routeInstructions.titleOne;
             if (plan.itineraries.length > 1) {
-                title = loc.routeInstructions.titleMulti.replace('{count}',plan.itineraries.length);
+                title = loc.routeInstructions.titleMulti.replace('{count}', plan.itineraries.length);
             }
             titleDiv.html('<h4>' + title + '</h4>');
 
@@ -312,7 +312,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                 featureStyle: style
             }]);
         },
-
 
         /**
      * @method  @private _formatDate format date to string

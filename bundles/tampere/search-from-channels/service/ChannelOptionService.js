@@ -14,26 +14,25 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
  *            searchUrl ajax URL to actual metadata catalogue search implementation
  */
     function (searchUrl) {
-
     /* searchUrl url that will give us results */
         this._searchUrl = searchUrl;
     }, {
     /** @static @property __qname fully qualified name for service */
-        __qname : 'Oskari.tampere.bundle.searchfromchannels.service.ChannelOptionService',
+        __qname: 'Oskari.tampere.bundle.searchfromchannels.service.ChannelOptionService',
         /**
      * @method getQName
      * @return {String} fully qualified name for service
      */
-        getQName : function () {
+        getQName: function () {
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name : 'SearchService',
+        __name: 'SearchService',
         /**
      * @method getName
      * @return {String} service name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -47,13 +46,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */
-        getOptions : function (onSuccess, onError) {
+        getOptions: function (onSuccess, onError) {
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
-                url : this._searchUrl,
-                error : onError,
-                success : onSuccess
+                dataType: 'json',
+                type: 'GET',
+                url: this._searchUrl,
+                error: onError,
+                success: onSuccess
             });
         }
     }, {
@@ -61,5 +60,5 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.service.Service']
+        'protocol': ['Oskari.mapframework.service.Service']
     });

@@ -109,7 +109,6 @@ Oskari.clazz.define(
          */
         setState: function (state) {
             this.state = state;
-
         },
 
         /**
@@ -120,14 +119,12 @@ Oskari.clazz.define(
          *
          */
         createUi: function () {
-
             this.view = Oskari.clazz.create(
                 'Oskari.analysis.bundle.analyse.view.StartView',
                 this.instance,
                 this.instance.getLocalization('StartView')
             );
         },
-
 
         /**
          * @public @method refresh

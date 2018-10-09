@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Oskari.mapframework.bundle.search.request.SearchRequest} request
          *      request to handle
          */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             var params = request.getSearchParams();
             // backward compatibility code, can be removed in Oskari 1.36
             if (typeof params === 'object') {

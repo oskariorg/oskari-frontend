@@ -48,7 +48,6 @@ Oskari.clazz.define('Oskari.elf.extension.EnhancedExtension',
          */
         update: function () {},
 
-
         /**
          *@method setLocalization
          *

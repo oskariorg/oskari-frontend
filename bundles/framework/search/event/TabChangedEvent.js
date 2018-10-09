@@ -15,13 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
         this._newTabId = newTabId;
     }, {
     /** @static @property __name event name */
-        __name : 'Search.TabChangedEvent',
+        __name: 'Search.TabChangedEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
      * Returns the id of closed tab
      * @return {String}
      */
-        getPreviousTabId : function () {
+        getPreviousTabId: function () {
             return this._previousTabId;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
      * Returns the id of opened tab
      * @return {String}
      */
-        getNewTabId : function () {
+        getNewTabId: function () {
             return this._newTabId;
         }
     }, {
@@ -45,5 +45,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

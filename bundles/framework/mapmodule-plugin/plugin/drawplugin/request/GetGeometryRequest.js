@@ -5,17 +5,17 @@ Oskari.clazz
             this._creator = null;
             this._callbackMethod = callbackMethod;
         }, {
-            __name : 'DrawPlugin.GetGeometryRequest',
-            getName : function () {
+            __name: 'DrawPlugin.GetGeometryRequest',
+            getName: function () {
                 return this.__name;
             },
-            getCallBack : function () {
+            getCallBack: function () {
                 return this._callbackMethod;
             }
         },
 
         {
-            'protocol' : ['Oskari.mapframework.request.Request']
+            'protocol': ['Oskari.mapframework.request.Request']
         });
 
 /* Inheritance */

@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
      * @param {Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest} request
      *      request to handle
      */
-    handleRequest : function (core, request) {
+    handleRequest: function (core, request) {
         var actionElement = request.getActionElement(),
             callback = request.getCallback(),
             bindCallbackTo = request.getBindCallbackTo(),
@@ -38,5 +38,5 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
+    protocol: ['Oskari.mapframework.core.RequestHandler']
 });

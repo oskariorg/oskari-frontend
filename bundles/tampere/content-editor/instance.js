@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
@@ -350,7 +350,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     'float': ''
                 });
 
-
                 Oskari.setLang(me.oskariLang);
                 if (me.sideContentEditor) {
                     me.sideContentEditor.destroy();
@@ -363,7 +362,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
 
                 request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
-
             }
 
             me.sandbox.postRequestByName('MapFull.MapSizeUpdateRequest', []);

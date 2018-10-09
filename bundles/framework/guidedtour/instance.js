@@ -149,7 +149,7 @@ Oskari.clazz.define(
             if (this.conf && this.conf.steps) {
                 // step ordering
                 var stepSpec = this.conf.steps;
-                var index = stepSpec.map(function (s) {return s.bundleName;}).indexOf(delegate.bundleName);
+                var index = stepSpec.map(function (s) { return s.bundleName; }).indexOf(delegate.bundleName);
                 if (delegate.bundleName !== me.getName()) {
                     if (index < 0) {
                         return;
@@ -168,11 +168,11 @@ Oskari.clazz.define(
                         };
                         this._getGuideContent(content, function (success, response) {
                             if (success) {
-                                delegate.getContent = function () {return jQuery('<div>' + response.body + '</div>');};
+                                delegate.getContent = function () { return jQuery('<div>' + response.body + '</div>'); };
                                 if (reRenderTarget) {
                                     reRenderTarget.prepend(response.body);
                                 }
-                                delegate.getTitle = function () {return response.title;};
+                                delegate.getTitle = function () { return response.title; };
                             } else {
                                 Oskari.log(me.getName()).error('Failed to load guided tour content for step "' + stepSpec[index].bundleName + '" with tags: ' + content);
                             }
@@ -181,7 +181,7 @@ Oskari.clazz.define(
                 }
             }
             if (typeof delegate.priority === 'number') {
-                var priorities = this._guideSteps.map(function (d) {return d.priority;});
+                var priorities = this._guideSteps.map(function (d) { return d.priority; });
                 var insertLocation = _.sortedIndex(priorities, delegate.priority);
                 this._guideSteps.splice(insertLocation, 0, delegate);
                 if (this.guideStep >= insertLocation && this._guideSteps.length !== 1) { // correct current location
@@ -208,7 +208,7 @@ Oskari.clazz.define(
             if (typeof step.getLinks === 'function' && step.getLinks() !== null) {
                 var links = step.getLinks();
                 content.append('<br /><br />');
-                links.forEach(function (l) {content.append(l);});
+                links.forEach(function (l) { content.append(l); });
             }
             if (stepIndex === 0 || stepIndex === this._guideSteps.length - 1) {
                 content.append('<br><br>');

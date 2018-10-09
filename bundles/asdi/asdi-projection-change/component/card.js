@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
             var me = this;
             var tpl = this.card;
 
-            var card = jQuery(tpl ({
+            var card = jQuery(tpl({
                 imgPath: me.getImagePath(view.srsName),
                 srs: view.srsName,
                 projectionName: me.loc.projectionCode[view.srsName].displayName,
@@ -80,12 +80,12 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
                 event.stopPropagation();
                 me.projectionChangeHandler(view.uuid, view.srsName);
             });
-            //infolink
+            // infolink
             card.find('.projection-info').on('click', function (event) {
                 event.stopPropagation();
                 me.infoView.show(jQuery(this));
             });
-            //warningLink
+            // warningLink
             card.find('.projection-warning').on('click', function (event) {
                 event.stopPropagation();
                 me.errorListing.show(jQuery(this), me.getUnsupportedLayers());

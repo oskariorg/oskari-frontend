@@ -25,8 +25,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                 Object.keys(value).forEach(function (key) {
                     var obj = value[key];
                     var valObject = {
-                        id : obj.id,
-                        title : obj.title,
+                        id: obj.id,
+                        title: obj.title,
                         cls: obj.cls
                     };
                     selections.push(valObject);
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                     if (key === '0') {
                         options = {
                             placeholder_text: obj.title,
-                            allow_single_deselect : true,
+                            allow_single_deselect: true,
                             disable_search_threshold: 10,
                             width: '100%'
                         };
@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.select',
                         var dropdown = select.create(selections, options);
                         selections = [];
                         options = {};
-                        dropdown.css({ width:'180px' });
+                        dropdown.css({ width: '180px' });
                         select.adjustChosen();
                         select.selectFirstValue();
                         selects[instanceKey] = select;

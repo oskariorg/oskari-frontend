@@ -15,12 +15,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * @static
      * @property __name
      */
-        __name : 'UsageTracker',
+        __name: 'UsageTracker',
         /**
      * @method getName
      * @return {String} the name for the component
      */
-        'getName' : function () {
+        'getName': function () {
             return this.__name;
         },
         /**
@@ -28,30 +28,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * @param {Oskari.Sandbox} sandbox
      * Sets the sandbox reference to this component
      */
-        setSandbox : function (sandbox) {
+        setSandbox: function (sandbox) {
             this.sandbox = sandbox;
         },
         /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function () {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
      * @method start
      * implements BundleInstance start methdod
      */
-        'start' : function () {
-
+        'start': function () {
             var me = this;
             if (me.started) {
                 return;
             }
             me.started = true;
 
-   		var conf = this.conf ;
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox' ;
+   		var conf = this.conf;
+            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
@@ -77,14 +76,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      *
      * implements bundle instance update method
      */
-        'update' : function () {
+        'update': function () {
 
         },
         /**
      * @method stop
      * implements BundleInstance protocol stop method
      */
-        'stop' : function () {
+        'stop': function () {
             var me = this;
             var sandbox = me.sandbox;
 
@@ -114,20 +113,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
      * Event is handled forwarded to correct #eventHandlers if found or discarded
      * if not.
      */
-        onEvent : function (event) {
+        onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
             return handler.apply(this, [event]);
-
         },
 
         /**
      * @property {Object} eventHandlers are configurable
      * @static
      */
-        eventHandlers : {},
+        eventHandlers: {},
 
         /**
      * @method logState
@@ -139,11 +137,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
                 logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
 
             jQuery.ajax({
-                type : 'GET',
-                url : logUrlWithLinkParams
+                type: 'GET',
+                url: logUrlWithLinkParams
             });
         }
 
     }, {
-        'protocol' : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

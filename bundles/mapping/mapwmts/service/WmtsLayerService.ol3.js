@@ -23,7 +23,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      */
     setCapabilities: function (name, caps) {
         this.capabilities[name] = caps;
-
     },
 
     /**
@@ -66,12 +65,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         if (triggerAjaxBln) {
             jQuery.ajax({
                 data: {
-                    id : layer.getId()
+                    id: layer.getId()
                 },
-                dataType : 'xml',
-                type : 'GET',
-                url : getCapsUrl,
-                success : function (response) {
+                dataType: 'xml',
+                type: 'GET',
+                url: getCapsUrl,
+                success: function (response) {
                     var responseXml = response;
 
                     // Fixed IE9 issue when getting capabilities XML.
@@ -116,15 +115,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * @param  {String}  url           layerUrl
      * @param  {Boolean} invokeFailure true to call the error callback (optional)
      */
-    __handleCallbacksForLayerUrl : function (url, invokeFailure) {
+    __handleCallbacksForLayerUrl: function (url, invokeFailure) {
         var me = this;
         var caps = this.getCapabilities(url);
         _.each(this.requestsMap[url], function (args) {
             if (!invokeFailure) {
                 var layer = args[0];
                 args[1](me.__createWMTSLayer(caps, layer));
-            }
-            else if (args.length > 2 && typeof args[2] === 'function') {
+            } else if (args.length > 2 && typeof args[2] === 'function') {
                 args[2]();
             }
         });
@@ -132,14 +130,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     __createWMTSLayer: function (caps, layer) {
         var config = this.__getLayerConfig(caps, layer);
         var options = optionsFromCapabilities(caps, config);
-        //this doesn't get merged automatically by ol3
+        // this doesn't get merged automatically by ol3
         options.crossOrigin = config.crossOrigin;
         if (config.url) {
             // override capabilities url with the configured one
             options.urls = [config.url];
         }
         var wmtsLayer = new olLayerTile({
-            source : new olSourceWMTS(options),
+            source: new olSourceWMTS(options),
             opacity: layer.getOpacity() / 100.0,
             transparent: true,
             visible: layer.isInScale(this.sandbox.getMap().getScale()) && layer.isVisible()
@@ -147,22 +145,20 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         return wmtsLayer;
     },
 
-
-    __getLayerConfig : function (caps, layer) {
-
+    __getLayerConfig: function (caps, layer) {
         // default params and options
         // URL is tuned serverside so we use the correct one
         var config = {
-            url : layer.getTileUrl(),
-            name : 'layer_' + layer.getId(),
+            url: layer.getTileUrl(),
+            name: 'layer_' + layer.getId(),
             style: layer.getCurrentStyle().getName(),
             layer: layer.getLayerName(),
             matrixSet: layer.getWmtsMatrixSetId(),
-            params : {},
+            params: {},
             buffer: 0,
             displayInLayerSwitcher: false,
             isBaseLayer: false,
-            crossOrigin : layer.getAttributes('crossOrigin')
+            crossOrigin: layer.getAttributes('crossOrigin')
         };
 
             // override default params and options from layer

@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             AfterMapLayerAddEvent: function (event) {
                 if (!this.hasPublishRight(event._mapLayer)) {
-                    //TODO: ?
+                    // TODO: ?
                 }
                 this.handleLayerSelectionChanged();
             },
@@ -147,19 +147,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 if (event && event.getTool() && event.getTool().getTool() && event.getTool().getTool().id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
                     if (event.getTool().state.enabled === true) {
                         me._plugin = event.getTool().getPlugin();
-                        //update the plugin's baselayer info in case some of the layers have that ticked.
+                        // update the plugin's baselayer info in case some of the layers have that ticked.
                         var contentPanel = me.getPanel().getContainer();
-                        //find checked baselayerinputs
+                        // find checked baselayerinputs
                         var checkedBaseLayers = contentPanel.find('input.baselayer:checked');
 
                         _.each(checkedBaseLayers, function (checkbox) {
-                            var id = checkbox.id.replace('checkbox','');
+                            var id = checkbox.id.replace('checkbox', '');
                             var layer = me.sandbox.findMapLayerFromSelectedMapLayers(id);
                             if (layer) {
                                 me.getPlugin().addBaseLayer(layer);
                             }
                         });
-
                     } else {
                         me._plugin = null;
                     }
@@ -212,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
-            //this._populateMapLayerPanel();
+            // this._populateMapLayerPanel();
             return this.panel;
         },
         /**
@@ -282,9 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 layer,
                 input;
 
-
             for (i = 0; i < layers.length; i += 1) {
-
                 layer = layers[i];
                 var layerContainer = this.templateLayer.clone();
                 layerContainer.attr('data-id', layer.getId());
@@ -310,7 +307,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                             me.getPlugin().removeBaseLayer(layer);
                         }
                         sandbox.request(me.instance.getName(), request);
-
                     });
                 }
 
@@ -623,7 +619,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             input.prop('checked', !!isChecked);
             input.on('change', closureMagic(layer));
 
-
             return tools;
         },
         /**
@@ -742,7 +737,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             // or nothing at all
             return (layer.getPermission('publish') === 'publication_permission_ok');
         }
-
 
     }
 );

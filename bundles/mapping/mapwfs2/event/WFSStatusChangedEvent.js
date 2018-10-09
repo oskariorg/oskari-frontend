@@ -21,26 +21,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEv
         this._type = undefined;
         this._status = undefined;
         this._nop = false; // no operations needed in success case (e.g. keep featuredata content)
-
     }, {
     /** @static @property __name event name */
-        __name : 'WFSStatusChangedEvent',
-        status : {
-            'loading' : 1,
-            'complete' : 200,
-            'error' : 500
+        __name: 'WFSStatusChangedEvent',
+        status: {
+            'loading': 1,
+            'complete': 200,
+            'error': 500
         },
-        type : {
-            'image' : 1,
-            'highlight' : 2,
-            'feature' : 3,
-            'mapClick' : 4
+        type: {
+            'image': 1,
+            'highlight': 2,
+            'feature': 3,
+            'mapClick': 4
         },
         /**
      * @method getName
      * @return {String} event name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -48,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEv
      * @method getLayerId
      * @return {String} layer id
      */
-        getLayerId : function () {
+        getLayerId: function () {
             return this._layerId;
         },
 
@@ -56,42 +55,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEv
      * @method setStatus
      * @param {Number} statusCode
      */
-        setStatus : function (statusCode) {
+        setStatus: function (statusCode) {
             this._status = statusCode;
         },
         /**
      * @method getStatus
      * @return {Number} statusCode
      */
-        getStatus : function () {
+        getStatus: function () {
             return this._status;
         },
         /**
     * @method setNop
     * @param {Boolean} nop
     */
-        setNop : function (nop) {
+        setNop: function (nop) {
             this._nop = nop;
         },
         /**
      * @method getNop
      * @return {Boolean} nop
      */
-        getNop : function () {
+        getNop: function () {
             return Boolean(this._nop);
         },
         /**
      * @method getFeature
      * @return {Number} typeCode
      */
-        getRequestType : function () {
+        getRequestType: function () {
             return this._type;
         },
         /**
      * @method getFeature
      * @param {Number} requestType
      */
-        setRequestType : function (requestType) {
+        setRequestType: function (requestType) {
             this._type = requestType;
         }
     }, {
@@ -99,5 +98,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSStatusChangedEv
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

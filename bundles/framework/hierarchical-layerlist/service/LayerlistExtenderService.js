@@ -99,8 +99,6 @@
 
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
-
-
         }, {
             __name: 'HierarchicalLayerlist.LayerlistExtenderService',
             __qname: 'Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService',

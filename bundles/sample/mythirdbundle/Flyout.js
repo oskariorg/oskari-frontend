@@ -92,7 +92,6 @@ Oskari.clazz.define('Oskari.sample.bundle.mythirdbundle.Flyout',
          * Creates the UI for a fresh start
          */
         createUI: function () {
-
             // clear container
             var cel = jQuery(this.container);
             cel.empty();

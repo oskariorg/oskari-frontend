@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisual
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function () {
+        getName: function () {
             return 'MapMyPlaces.MyPlacesVisualizationChangeEvent';
         },
         /**
@@ -35,9 +35,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisual
      * Returns forced for redraw
      * @return {boolean}
      */
-        isForced : function () {
+        isForced: function () {
             return this._forced;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

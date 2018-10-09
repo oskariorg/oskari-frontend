@@ -235,7 +235,6 @@ Oskari.clazz.define(
                     me._deleteFailure();
                 }
             });
-
         },
         /**
          * Success callback for backend operation.

@@ -60,17 +60,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
          * dragging - {Boolean}
          */
         moveTo: function (bounds, zoomChanged) {
-
             bounds = bounds || this.map.getExtent();
 
             if (bounds !== null && bounds !== undefined) {
-
                 // if grid is empty or zoom has changed, we *must* re-tile
                 var forceReTile = !this.grid.length || zoomChanged;
 
                 // total bounds of the tiles
                 var tilesBounds = this.getTilesBounds();
-
 
                 // if the bounds have changed such that they are not even
                 //  *partially* contained by our tiles (IE user has
@@ -80,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
                 if (forceReTile || !tilesBounds.containsBounds(bounds, true)) {
                     this.initGriddedTiles(bounds);
                 } else {
-                    //we might have to shift our buffer tiles
+                    // we might have to shift our buffer tiles
                     this.moveGriddedTiles(bounds);
                 }
             }
@@ -97,8 +94,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
         setTileSize: function (size) {
 
         },
-
-
 
         /**
          * APIMethod: getTilesBounds
@@ -123,11 +118,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
                     bottomLeftTile.bounds.bottom,
                     topRightTile.bounds.right,
                     topRightTile.bounds.top);
-
             }
             return bounds;
         },
-
 
         /**
          * Method: calculateGridLayout
@@ -166,7 +159,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
                 tileoffsetx: tileoffsetx,
                 tileoffsety: tileoffsety
             };
-
         },
 
         /**
@@ -176,7 +168,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
          * bounds - {<OpenLayers.Bounds>}
          */
         initGriddedTiles: function (bounds) {
-
             // work out mininum number of rows and columns; this is the number of
             // tiles required to cover the viewport plus at least one for panning
             var viewSize = this.map.getSize();
@@ -208,7 +199,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
 
             var layerContainerDivLeft = parseInt(this.map.layerContainerDiv.style.left, 10);
             var layerContainerDivTop = parseInt(this.map.layerContainerDiv.style.top, 10);
-
 
             do {
                 var row = this.grid[rowidx++];
@@ -251,11 +241,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
                 tileoffsety += this.tileSize.h;
             } while ((tileoffsetlat >= bounds.bottom - tilelat * this.buffer) || rowidx < minRows);
             // FIXME colidx is out of scope
-            //shave off excess rows and colums
+            // shave off excess rows and colums
             this.removeExcessTiles(rowidx, colidx);
-
         },
-
 
         /**
          * APIMethod: addTile
@@ -274,7 +262,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
         addTile: function (bounds, position) {
             return new OpenLayers.Tile(this.layer, bounds, position, '', this.tileSize);
         },
-
 
         /**
          * Method: moveGriddedTiles
@@ -414,8 +401,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid',
          * dimensions of the map pane.
          */
         onMapResize: function () {},
-
-
 
         CLASS_NAME: 'NLSFI.OpenLayers.Strategy.QueuedTilesGrid'
     });

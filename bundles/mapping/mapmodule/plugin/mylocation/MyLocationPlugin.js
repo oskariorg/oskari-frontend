@@ -22,7 +22,7 @@ Oskari.clazz.define(
         me._name = 'MyLocationPlugin';
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-my-location': {
                     iconCls: 'mobile-my-location',
                     tooltip: '',
@@ -139,7 +139,7 @@ Oskari.clazz.define(
                     // error getting location
                     return;
                 }
-                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+                mapmodule.centerMap({ lon: lon, lat: lat }, 6);
             });
         },
         /**

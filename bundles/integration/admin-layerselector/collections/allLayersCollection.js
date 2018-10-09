@@ -13,7 +13,6 @@
                  */
                 initialize: function () {},
 
-
                 /**
                  * returns layer groups so that they are grouped with given grouping method
                  *
@@ -23,7 +22,6 @@
                     var groupList = [],
                         me = this,
                         layers = this.models;
-
 
                     // sort layers by grouping & name
                     this.models.sort(function (a, b) {
@@ -45,7 +43,6 @@
                             groupList.push(group);
                         }
                         group.addLayer(layer);
-
                     }
                     return groupList;
                 },
@@ -85,6 +82,5 @@
                 }
 
             });
-
         });
 }).call(this);

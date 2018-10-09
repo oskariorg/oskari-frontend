@@ -761,7 +761,6 @@ Oskari.clazz.define(
             throw 'Not implemented _getExactResolutionImpl function.';
         },
 
-
         /**
          * @method getResolutionForScale
          * Calculate max resolution for the scale
@@ -829,7 +828,6 @@ Oskari.clazz.define(
             return layerResolutions;
         },
         /* --------------- /MAP ZOOM ------------------------ */
-
 
         /* --------------- MAP STATE ------------------------ */
 

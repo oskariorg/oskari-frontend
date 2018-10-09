@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.BundleInstance',
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
@@ -120,14 +120,12 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.BundleInstance',
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -142,7 +140,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.BundleInstance',
                 var me = this;
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
-                    return;
+
                 }
             }
         },

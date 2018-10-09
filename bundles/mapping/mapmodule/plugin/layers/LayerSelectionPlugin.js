@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '        <div class="layers"></div>' +
                 '    </div>' +
                 '  </div>');
-            //same as in main, only used when returning from some other layout to default (publisher)
+            // same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             me.templates.layer = jQuery(
                 '<div class="layer"><label><span></span></label></div>'
@@ -162,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 },
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanged({width:evt.getWidth(), height:evt.getHeight()});
+                    this._handleMapSizeChanged({width: evt.getWidth(), height: evt.getHeight()});
                 }
             };
         },
@@ -292,7 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 var layer = sandbox.findMapLayerFromAllAvailable(layerId);
                 if (layer) {
                     el.off('change');
-                    me._bindCheckbox(el,layer);
+                    me._bindCheckbox(el, layer);
                 }
             };
             me.layerContent.find('input[type=radio]').each(function () {
@@ -557,7 +557,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 layerId = selectedBaseLayers[i].getId() + '';
                 baseLayers.each(insertBaseLayer);
             }
-
         },
 
         /**
@@ -689,7 +688,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);
                     me.popup = null;
-                    return;
                 } else if (me.getElement().find('.content')[0]) {
                     me.closeSelection();
                 } else {
@@ -724,8 +722,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             return el;
         },
 
-        teardownUI : function () {
-            //remove old element
+        teardownUI: function () {
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
             if (this.popup) {
                 this.popup.close(true);
@@ -794,7 +792,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
                 } else {
-                    //not found -> use the style config obtained from the mapmodule.
+                    // not found -> use the style config obtained from the mapmodule.
                     var toolStyle = me.getToolStyleFromMapModule();
                     if (toolStyle !== null && toolStyle !== undefined) {
                         me.changeToolStyle(toolStyle, me.getElement());
@@ -847,7 +845,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
-
             } else {
                 header.append(me.templates.defaultArrow.clone());
                 header.append(me._loc.title);

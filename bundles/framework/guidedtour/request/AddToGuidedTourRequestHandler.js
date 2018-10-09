@@ -10,5 +10,5 @@ Oskari.clazz.define('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHa
         this.tour.addStep(delegate);
     }
 }, {
-    protocol : ['Oskari.mapframework.core.RequestHandler']
+    protocol: ['Oskari.mapframework.core.RequestHandler']
 });

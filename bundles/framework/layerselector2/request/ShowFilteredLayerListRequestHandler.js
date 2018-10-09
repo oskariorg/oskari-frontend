@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          * @param {Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest} request
          *      request to handle
          */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
 
             this.instance.filteredLayerListOpenedByRequest = true;
@@ -39,5 +39,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

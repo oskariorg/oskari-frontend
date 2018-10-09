@@ -16,19 +16,19 @@ Oskari.clazz.define(
         this._index = 1;
         this._name = 'LogoPlugin';
     }, {
-        constLayerGroupId : 'layers',
+        constLayerGroupId: 'layers',
         templates: {
-            main :  jQuery(
+            main: jQuery(
                 '<div class="mapplugin logoplugin"></div>'
             ),
             dataSourcesDialog: jQuery('<div class="data-sources-dialog"></div>'),
             dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
             extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
         },
-        _initImpl : function () {
+        _initImpl: function () {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
         },
-        getService : function () {
+        getService: function () {
             if (!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
 
@@ -40,10 +40,10 @@ Oskari.clazz.define(
                     // add initial layers
                     layers.forEach(function (layer) {
                         me._service.addItemToGroup(me.constLayerGroupId, {
-                            'id' : layer.getId(),
-                            'name' : layer.getName(),
+                            'id': layer.getId(),
+                            'name': layer.getName(),
                             // AH-2182 Show source for user layers
-                            'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                            'source': layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
                         });
                     });
                     // if service was created, add a change listener
@@ -76,26 +76,26 @@ Oskari.clazz.define(
          * @return {Object.<string, Function>} EventHandlers
          */
         _createEventHandlers: function () {
-            //TODO: listen to MapLayerEvent and if(event.getOperation() === 'update') -> update layer name in ui?
+            // TODO: listen to MapLayerEvent and if(event.getOperation() === 'update') -> update layer name in ui?
             return {
-                'AfterMapLayerRemoveEvent' : function (event) {
+                'AfterMapLayerRemoveEvent': function (event) {
                     var service = this.getService();
                     if (!service || !event.getMapLayer()) {
                         return;
                     }
                     service.removeItemFromGroup(this.constLayerGroupId, event.getMapLayer().getId());
                 },
-                'AfterMapLayerAddEvent' : function (event) {
+                'AfterMapLayerAddEvent': function (event) {
                     var layer = event.getMapLayer();
                     var service = this.getService();
                     if (!service || !layer) {
                         return;
                     }
                     service.addItemToGroup(this.constLayerGroupId, {
-                        'id' : layer.getId(),
-                        'name' : layer.getName(),
+                        'id': layer.getId(),
+                        'name': layer.getName(),
                         // AH-2182 Show source for user layers
-                        'source' : layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
+                        'source': layer.getSource && layer.getSource() ? layer.getSource() : layer.getOrganizationName()
                     });
                 },
                 'MapSizeChangedEvent': function (event) {
@@ -170,7 +170,7 @@ Oskari.clazz.define(
             }
 
             var options = {
-                id:'icon',
+                id: 'icon',
                 callback: function (event) {
                     if (!me.inLayerToolsEditMode()) {
                         linkParams = me.getSandbox().generateMapLinkParameters({});
@@ -187,7 +187,7 @@ Oskari.clazz.define(
          * @private
          * @return {String} base URL for state parameters
          */
-        __getMapUrl : function () {
+        __getMapUrl: function () {
             var sandbox = this.getSandbox();
             var url = Oskari.getLocalized(this.getConfig().mapUrlPrefix);
 
@@ -201,7 +201,7 @@ Oskari.clazz.define(
                 return;
             }
             var options = {
-                id:'terms',
+                id: 'terms',
                 callback: function (evt) {
                     evt.preventDefault();
                     if (!me.inLayerToolsEditMode()) {
@@ -222,7 +222,7 @@ Oskari.clazz.define(
                 return;
             }
             var options = {
-                id:'data-sources',
+                id: 'data-sources',
                 callback: function (e) {
                     if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
                         me._openDataSourcesDialog(e.target);
@@ -260,7 +260,7 @@ Oskari.clazz.define(
             this.changeCssClasses(classToAdd, testRegex, [div]);
         },
 
-        updateDialog : function () {
+        updateDialog: function () {
             if (!this.dataSourcesDialog) {
                 return;
             }
@@ -268,7 +268,7 @@ Oskari.clazz.define(
             this.dataSourcesDialog.moveTo(this.getElement().find('div.data-sources'), 'top');
         },
 
-        getDialogContent : function () {
+        getDialogContent: function () {
             var service = this.getService();
             if (!service) {
                 return;
@@ -295,7 +295,7 @@ Oskari.clazz.define(
          * @param  {String|Object|Object[]} src datasources for item to show on the UI
          * @return {String|jQuery} appendable presentation of datasources for an UI item.
          */
-        __formatItemSources : function (src) {
+        __formatItemSources: function (src) {
             if (!src) {
                 return '';
             }
@@ -372,9 +372,9 @@ Oskari.clazz.define(
             // add initial layers
             Object.keys(indicators).forEach(function (id) {
                 me._service.addItemToGroup('indicators', {
-                    'id' : id,
-                    'name' : indicators[id].title,
-                    'source' : indicators[id].organization
+                    'id': id,
+                    'name': indicators[id].title,
+                    'source': indicators[id].organization
                 });
             });
         },
@@ -399,7 +399,7 @@ Oskari.clazz.define(
                     extend.addClass(link.options.id.toLowerCase());
                 }
                 if (link.options.id !== 'icon') {
-                    extend.css('margin','5px');
+                    extend.css('margin', '5px');
                 }
                 extend.find('a').text(link.title);
                 template.append(extend);

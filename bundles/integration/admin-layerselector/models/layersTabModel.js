@@ -30,7 +30,6 @@
                 });
             },
 
-
             /**
              * Return the name of this layerTab
              *
@@ -299,7 +298,6 @@
              * @return {Object} object for form template
              */
             getTemplateGroup: function () {
-
                 var supportedLanguages = Oskari.getSupportedLanguages();
                 supportedLanguages.sort();
 
@@ -443,7 +441,6 @@
                     }
                 });
             },
-
 
             getGroup: function (groupId) {
                 var groups = this.layerGroups;

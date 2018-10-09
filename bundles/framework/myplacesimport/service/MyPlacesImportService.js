@@ -18,8 +18,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         this.urls.getStyle = Oskari.urls.getRoute('GetUserLayerStyle');
     }, {
         __name: 'MyPlacesImport.MyPlacesImportService',
-        __qname : 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
-        getQName : function () {
+        __qname: 'Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService',
+        getQName: function () {
             return this.__qname;
         },
         getName: function () {
@@ -77,9 +77,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             if (id) url += ('&id=' + id);
 
             jQuery.ajax({
-                url : url,
-                type : 'GET',
-                dataType : 'json',
+                url: url,
+                type: 'GET',
+                dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
@@ -139,7 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
                 var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
                 me.sandbox.notifyAll(event); // add user layers programmatically since normal link processing
             }
-
         },
         /**
      * Adds one layer to the map layer service
@@ -162,5 +161,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             return mapLayer;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.service.Service']
+        'protocol': ['Oskari.mapframework.service.Service']
     });

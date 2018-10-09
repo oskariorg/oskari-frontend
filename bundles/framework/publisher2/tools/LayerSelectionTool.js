@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
     function () {
     }, {
-        index : 1,
+        index: 1,
         allowedLocations: ['top left', 'top center', 'top right'],
         lefthanded: 'top right',
         righthanded: 'top left',
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             var me = this,
                 layers = me._getLayersList();
 
-            for (var i = 0;i < layers.length;i++) {
+            for (var i = 0; i < layers.length; i++) {
                 var layer = layers[i];
                 var selected = jQuery('.background-layers[data-id=' + layer.getId() + '] input:checked');
                 if (selected.length > 0) {
@@ -79,7 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 }
             }
             jQuery('.background-layers[data-id=' + layer.getId() + '] input:checked').trigger('change');
-
         },
         _getLayerSelection: function () {
             var me = this,
@@ -107,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 backgroundLayerSelector.find('.header').html(me.__loc.layerselection.info);
                 me._backgroundLayerSelector = backgroundLayerSelector;
                 var layers = me._getLayersList();
-                for (var i = 0;i < layers.length;i++) {
+                for (var i = 0; i < layers.length; i++) {
                     var layer = layers[i];
                     me._addLayer(layer);
                 }
@@ -212,23 +211,22 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * @return {Boolean} true if layer must be preselect, other false
      */
         shouldPreselectLayer: function (id) {
-
             var me = this;
             var isConfig = (me.data && me.data.configuration) ? true : false;
-            var isPlugins = (isConfig && me.data.configuration.mapfull
-            && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
+            var isPlugins = (isConfig && me.data.configuration.mapfull &&
+            me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
             if (isPlugins) {
                 var plugins = me.data.configuration.mapfull.conf.plugins;
                 var toolPlugin = null;
-                for (var i = 0; i < plugins.length;i++) {
+                for (var i = 0; i < plugins.length; i++) {
                     var plugin = plugins[i];
                     if (plugin.id === me.getTool().id) {
                         toolPlugin = plugin;
                         break;
                     }
                 }
-                var isPluginConfig = (toolPlugin && toolPlugin.config
-                && toolPlugin.config.baseLayers) ? true : false;
+                var isPluginConfig = (toolPlugin && toolPlugin.config &&
+                toolPlugin.config.baseLayers) ? true : false;
 
                 if (isPluginConfig) {
                     var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
@@ -326,6 +324,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

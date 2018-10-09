@@ -60,6 +60,5 @@ Oskari.clazz.define('Oskari.userinterface.component.Alert',
                 this.ui.remove();
                 this.ui = null;
             }
-
         }
     });

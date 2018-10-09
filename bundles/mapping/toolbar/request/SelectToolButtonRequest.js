@@ -21,28 +21,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.SelectToolButton
         this._group = group;
     }, {
     /** @static @property __name request name */
-        __name : 'Toolbar.SelectToolButtonRequest',
+        __name: 'Toolbar.SelectToolButtonRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {String} identifier for the button
      */
-        getId : function () {
+        getId: function () {
             return this._id;
         },
         /**
      * @method getGroup
      * @return {String} identifier for button group
      */
-        getGroup : function () {
+        getGroup: function () {
             return this._group;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

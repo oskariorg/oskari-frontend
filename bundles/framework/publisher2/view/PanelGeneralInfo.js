@@ -159,7 +159,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             var me = this,
                 message = (value !== Oskari.getLang() ? me.loc.language.languageChangedDisclaimer : '');
             jQuery(me.langField.element).find('div.info-label').html(message);
-
         },
         /**
          * Returns the selections the user has done with the form inputs.

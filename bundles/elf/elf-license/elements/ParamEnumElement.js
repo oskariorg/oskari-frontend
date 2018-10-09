@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
          */
         getElementLabel: function (param, value) {
             if (param.name === 'LICENSE_DURATION' && value && value.length) {
-                //value is of form P[int][D/W/M/Y]
+                // value is of form P[int][D/W/M/Y]
                 var me = this,
                     duration = value.substring(1, value.length - 1),
                     unit = value[value.length - 1],

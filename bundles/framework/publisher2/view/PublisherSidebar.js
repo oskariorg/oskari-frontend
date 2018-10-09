@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             '</div>');
 
         me.normalMapPlugins = [];
-        //additional bundles (=not map plugins) that were stopped when entering publisher
+        // additional bundles (=not map plugins) that were stopped when entering publisher
         me.stoppedBundles = [];
 
         me.loc = localization;
@@ -139,8 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     'EnableMapKeyboardMovementRequest'
                 );
             });
-
-
         },
         /**
         * Initialize panels.
@@ -217,7 +215,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 sandbox, mapModule, me.loc, me.instance
             );
 
-
             // initialize form (restore data when editing)
             form.init(me.data, function (value) {});
 
@@ -253,7 +250,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     sandbox, mapModule, me.loc, me.instance
                 );
 
-
             // initialize form (restore data when editing)
             form.init(me.data, function (value) {});
 
@@ -264,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         * @method getHandlers
         * @public
         */
-        getHandlers : function () {
+        getHandlers: function () {
             var me = this;
             return {
                 'MapSizeChanged': function () {
@@ -272,7 +268,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             };
         },
-
 
         /**
          * @private @method _createToolGroupings
@@ -307,7 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 }
             });
             return {
-                groups : grouping,
+                groups: grouping,
                 tools: allTools
             };
         },
@@ -434,7 +429,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     me._showReplaceConfirm(save);
                 });
                 replaceBtn.insertTo(buttonCont);
-
             } else {
                 saveBtn.setTitle(me.loc.buttons.save);
                 saveBtn.setHandler(function () {
@@ -501,7 +495,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 error: errorHandler
             });
         },
-
 
         /**
          * @method setEnabled

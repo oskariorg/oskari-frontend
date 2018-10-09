@@ -88,7 +88,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
             popup.show(popupLoc, this.popupContent, controlButtons);
             popup.moveTo('#toolbar div.toolrow[tbgroup=default-viewtools]', 'top');
             this.startTool();
-
         },
 
         /**
@@ -156,7 +155,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
                 me.sandbox.request(me.instance.getName(), reqBuilder([me.markerIds.start]));
                 me.sandbox.request(me.instance.getName(), reqBuilder([me.markerIds.end]));
             }
-
         },
 
         /**

@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
      */
 
     function (layer, sandbox, localization) {
-
         this.sandbox = sandbox;
         this.localization = localization;
         this.layer = layer;
@@ -33,11 +32,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
          * @return {String} layer id
          */
         getId: function () {
-
             return this.layer.getId();
         },
         setVisible: function (bln) {
-
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             if (bln) {
@@ -47,7 +44,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
             }
         },
         setSelected: function (isSelected) {
-
             // TODO assúme boolean and clean up everyhting that passes somehting else
             // checking since we dont assume param is boolean
             this.ui.find('input').prop('checked', !!isSelected);
@@ -57,7 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
          * @method updateLayerContent
          */
         updateLayerContent: function (layer) {
-
             /* set title */
             var newName = layer.getName(),
                 /* set/clear alert if required */
@@ -98,10 +93,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
                 elBackendStatus.attr('title', '');
             }
             this.backendStatus = currBackendStatus;
-
         },
         getContainer: function () {
-
             return this.ui;
         },
         /**
@@ -111,7 +104,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
          */
         _createLayerContainer: function (layer) {
-
             var me = this,
                 sandbox = me.sandbox,
                 // create from layer template
@@ -148,8 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
             } else if (layer.isLayerOfType('WFS')) {
                 if (layer.isManualRefresh()) {
                     icon.attr('title', tooltips['type-wfs-manual']);
-                }
-                else {
+                } else {
                     icon.attr('title', tooltips['type-wfs']);
                 }
             } else if (layer.isLayerOfType('VECTOR')) {
@@ -192,10 +183,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
                                 additionalUuids.push({
                                     uuid: subUuid
                                 });
-
                             }
                         }
-
                     }
 
                     sandbox.postRequestByName(rn, [{

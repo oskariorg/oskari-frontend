@@ -3,7 +3,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
         var me = this;
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
-        //me.mapSelectionContainer = null;
+        // me.mapSelectionContainer = null;
         me.dialog = null;
         this._template = jQuery(
             '<div class="coordinateSelectionPopup coordinatetransformation-flyout">' +
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             content.find('label[for=add-coordinate-to-map]').append(this.loc('mapMarkers.select.add'));
             content.find('label[for=remove-coordinate-from-map]').append(this.loc('mapMarkers.select.remove'));
 
-            me.instance.setRemoveMarkers(false); //add markers radio button is pre-checked
+            me.instance.setRemoveMarkers(false); // add markers radio button is pre-checked
 
             content.find('input[type=radio]').on('change', function (evt) {
                 var value = this.value;
@@ -78,14 +78,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
             dialog.makeDraggable();
             dialog.show(this.loc('mapMarkers.select.title'), content, [cancelBtn, btn]);
             dialog.moveTo(jQuery('.coordinatetransformation'), 'right', true);
-        },
-        /*getCoords: function ( coords ) {
+        }
+        /* getCoords: function ( coords ) {
             Object.keys( coords ).forEach( function ( key ) {
                 coords[key] = Math.round( coords[key] );
             });
             if( coords != null ) {
                 this.mapcoords.push( coords );
             }
-        },*/
+        }, */
     }
 );

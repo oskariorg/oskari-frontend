@@ -93,7 +93,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 dummyLayer.setOpacity(100);
                 var event = builder(featureIdList, dummyLayer, true);
                 sb.notifyAll(event);
-
             }, 500);
         },
         /**
@@ -106,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
             var olPoints = {
                     _points: [],
                     addPoint: function (lon, lat) {
-                        this._points.push({lon:parseFloat(lon), lat:parseFloat(lat)});
+                        this._points.push({lon: parseFloat(lon), lat: parseFloat(lat)});
                     },
                     getBounds: function () {
                         var top = 0,
@@ -118,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                         left = this._points[0].lon;
                         bottom = this._points[0].lat;
 
-                        for (var i = 0;i < this._points.length;i++) {
+                        for (var i = 0; i < this._points.length; i++) {
                             var point = this._points[i];
                             if (point.lon > right) {
                                 right = point.lon;
@@ -148,7 +147,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                             x: bbox.left + (bbox.right - bbox.left) / 2,
                             y: bbox.bottom + (bbox.top - bbox.bottom) / 2
                         };
-
                     }
                 },
                 count,
@@ -179,7 +177,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -199,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
              */
             'MapLayerEvent': function (event) {
                 // layerId in event is null for initial ajax load
-                if ('add' === event.getOperation() && !event.getLayerId()) {
+                if (event.getOperation() === 'add' && !event.getLayerId()) {
                     this._highlightFeature(this.state.highlightFeatureLayerId, this.state.highlightFeatureId);
                 }
             }

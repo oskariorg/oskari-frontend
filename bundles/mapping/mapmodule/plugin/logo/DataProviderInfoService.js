@@ -55,11 +55,11 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
          * @param {Object[]} items optional array of items for the group.
          * @return {Object} The group that was added
          */
-            addGroup : function (id, name, items) {
+            addGroup: function (id, name, items) {
                 var group = {
-                    id : id,
-                    name : name || id,
-                    items : items || []
+                    id: id,
+                    name: name || id,
+                    items: items || []
                 };
                 var me = this;
                 var list = this.groups;
@@ -82,7 +82,7 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
          * @param  {Number | String} id if for the group to remove
          * @return {Boolean} true if the group was removed
          */
-            removeGroup : function (id) {
+            removeGroup: function (id) {
                 var list = this.groups;
                 var indexForGroup = this._getItemIndex('id', id, list);
                 if (indexForGroup === -1) {
@@ -99,7 +99,7 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
          * Only includes groups that have items and should be shown in the UI.
          * @return {Object[]} Array of groups to be shown in the UI.
          */
-            getNonEmptyGroups : function () {
+            getNonEmptyGroups: function () {
                 var list = [];
                 this.groups.forEach(function (group) {
                     if (group.items.length) {
@@ -113,7 +113,7 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
          * @param  {Number | String} id optional if for a group
          * @return {Object[] | Object | Boolean} returns all the groups if parameter was undefined, boolean false if the requested group did not exist or the requested group.
          */
-            getGroups : function (id) {
+            getGroups: function (id) {
                 if (typeof id === 'undefined') {
                     return this.groups;
                 }
@@ -133,7 +133,7 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
          * @param  {Number | String} itemId  id for the item
          * @return {Boolean} true if item was removed, false if group/item was not found.
          */
-            removeItemFromGroup : function (groupId, itemId) {
+            removeItemFromGroup: function (groupId, itemId) {
                 if (!groupId || !itemId) {
                     return false;
                 }
@@ -158,7 +158,7 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
          * @param {Object} item     object to add for the group
          * @return {Boolean} true if the item was added.
          */
-            addItemToGroup : function (groupId, item) {
+            addItemToGroup: function (groupId, item) {
                 if (!groupId || !item) {
                     return false;
                 }

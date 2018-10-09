@@ -186,10 +186,7 @@ Oskari.clazz.define(
             }
 
             return handler.apply(this, [event]);
-
         },
-
-
 
         /**
          * @property {Object} eventHandlers
@@ -215,7 +212,6 @@ Oskari.clazz.define(
             'MapLayerVisibilityChangedEvent': function (event) {
                 var me = this;
                 me._pushState();
-
             }
         },
 
@@ -273,7 +269,7 @@ Oskari.clazz.define(
             plugin.stopPlugin(this.sandbox);
         },
 
-        //FIXME
+        // FIXME
         /**
          * @method setCurrentViewId
          * @param {Number} Current view ID
@@ -331,7 +327,7 @@ Oskari.clazz.define(
                     }
                 }
                 if (allInvisible) {
-                    //Don't save state when all are invisible
+                    // Don't save state when all are invisible
                     return false;
                 }
 
@@ -340,7 +336,6 @@ Oskari.clazz.define(
                     nextLayer = nextLayers[ln];
 
                     me._log.debug('comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
-
 
                     if (prevLayer.id !== nextLayer.id) {
                         return true;
@@ -422,7 +417,7 @@ Oskari.clazz.define(
             switch (this._historyPrevious.length) {
             case 0:
                 /* hard reset */
-                /*this.resetState();*/
+                /* this.resetState(); */
                 break;
             case 1:
                 break;

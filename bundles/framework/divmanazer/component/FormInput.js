@@ -225,9 +225,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 value = value.match(this._regExp).join('');
             }
             // Basic check before AH-1708
-            value = value.replace('<','');
-            value = value.replace('&','');
-            value = value.replace('\\','');
+            value = value.replace('<', '');
+            value = value.replace('&', '');
+            value = value.replace('\\', '');
             return value;
         },
 
@@ -405,7 +405,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-
             var input = this._field.find('input');
 
             input.on('keyup', function (event) {
@@ -419,7 +418,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-
             var me = this,
                 input = this._field.find('input');
 
@@ -437,13 +435,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-
             // all set, ready to bind requests
             var input = this._field.find('input');
             input.on('blur', function () {
                 callback();
             });
-
         },
 
         /**
@@ -511,7 +507,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 return;
             }
 
-
             enabler = Oskari.requestBuilder('EnableMapKeyboardMovementRequest');
             disabler = Oskari.requestBuilder('DisableMapKeyboardMovementRequest');
             if (!enabler || !disabler) {
@@ -566,4 +561,3 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             return (keycode === 38);
         }
     });
-

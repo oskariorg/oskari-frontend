@@ -40,7 +40,7 @@ Oskari.clazz.define(
          * @params {String} includes drawMode, geometry and style
          */
         startDrawing: function (params) {
-            //Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
+            // Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
             this.WFSLayerService.setSelectionToolsActive(true);
             this._toggleControl(params.drawMode);
         },

@@ -329,8 +329,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             } else {
                 buttonEl.addClass(btnConfig.iconCls + '-dark');
             }
-        }
-        else {
+        } else {
             buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
         }
     },

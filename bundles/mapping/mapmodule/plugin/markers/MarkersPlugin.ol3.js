@@ -59,9 +59,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me._showMarkerButton = conf.markerButton;
         }
         this.__layer = undefined;
-
     }, {
-        getDefaultIconUrl : function () {
+        getDefaultIconUrl: function () {
             return this.getImagePath() + 'marker.png';
         },
         /**
@@ -169,7 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Handle toolbar tool click.
          * Activate the "add marker mode" on map.
          */
-        __toolButtonClicked : function () {
+        __toolButtonClicked: function () {
             var me = this;
             me.enableGfi(false);
             me._waitingUserClickToAddMarker = true;
@@ -228,8 +227,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
-        __mapClick : function (event) {
-
+        __mapClick: function (event) {
             // adding a marker
             if (this._waitingUserClickToAddMarker) {
                 this._showForm(event.getMouseX(), event.getMouseY());
@@ -317,7 +315,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     delete me._unVisibleMarkers[optionalMarkerId];
                 }
             }
-
 
             if (!suppressEvent) {
                 var removeEvent = Oskari.eventBuilder(
@@ -473,7 +470,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 delete this._unVisibleMarkers[data.id];
             }
 
-
             // Image data already available
             var iconSrc = null;
             if (me._svg) {
@@ -486,13 +482,13 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     }
                 } else {
                     // Construct image
-                    //iconSrc = this.constructImage(data);
-                    //size = this._getSizeInPixels(data.size);
+                    // iconSrc = this.constructImage(data);
+                    // size = this._getSizeInPixels(data.size);
                     size = data.size;
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
-                //size = this._getSizeInPixels(data.size);
+                // size = this._getSizeInPixels(data.size);
                 size = data.size;
             }
             if (typeof data.color === 'string') {
@@ -510,7 +506,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 data.stroke = me._defaultData.stroke;
             }
             var style = {
-                image : {
+                image: {
                     color: data.color,
                     size: data.size,
                     shape: data.shape,
@@ -518,16 +514,16 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     offsetY: data.offsetY,
                     stroke: data.stroke
                 },
-                text : {
+                text: {
                     font: 'bold 16px Arial',
                     textAlign: 'left',
                     textBaseline: 'middle',
                     offsetX: 8 + 2 * data.size,
                     offsetY: 8,
-                    fill : {
-                        color : '#000000'
+                    fill: {
+                        color: '#000000'
                     },
-                    stroke : {
+                    stroke: {
                     	color: '#ffffff',
                     	width: 1
                     }
@@ -636,10 +632,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {number} Size in pixels
          * @private
          */
-        //--> method moved to AbstractMapModule.js
-        /*_getSizeInPixels: function(size) {
+        // --> method moved to AbstractMapModule.js
+        /* _getSizeInPixels: function(size) {
             return 40 + 10 * size;
-        },*/
+        }, */
 
         /**
          * Raises the marker layer above the other layers

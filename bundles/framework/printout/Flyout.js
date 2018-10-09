@@ -90,7 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method createUi

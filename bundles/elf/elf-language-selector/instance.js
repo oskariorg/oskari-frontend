@@ -4,7 +4,7 @@
 Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
 
 }, {
-    templates : {
+    templates: {
         'link': '<a></a>',
         'option': '<option></option>',
         'flyout': '<div class="langSelection">' +
@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
             '</div>'
     },
 
-    startPlugin : function () {
+    startPlugin: function () {
         var sandbox = this.getSandbox();
         var elem = jQuery('#langSelector');
 
@@ -29,13 +29,13 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
         this.languageList = _.reduce(languages, function (result, value, key) {
             if (_.contains(_supported, key)) {
                 result.push({
-                    lang : key,
-                    label : value.toLowerCase()
+                    lang: key,
+                    label: value.toLowerCase()
                 });
             }
             return result;
         }, []);
-        this.languageList.sort(function (a,b) {
+        this.languageList.sort(function (a, b) {
             return a.label > b.label;
         });
 
@@ -59,11 +59,11 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
         elem.append(changeLink);
     },
 
-    stopPlugin : function () {
+    stopPlugin: function () {
 
     },
 
-    getFlyoutContent : function () {
+    getFlyoutContent: function () {
         var container = jQuery(this.templates.flyout).clone(),
             langList = container.find('select'),
             langOption = jQuery(this.templates.option),
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
         return container;
     },
 
-    eventHandlers : {}
+    eventHandlers: {}
 }, {
-    'extend' : ['Oskari.elf.extension.EnhancedExtension']
+    'extend': ['Oskari.elf.extension.EnhancedExtension']
 });

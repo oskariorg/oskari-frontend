@@ -179,7 +179,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
                 onScreenForm.find('input[data-name=imagelink]').val(data.place.imageLink);
                 onScreenForm.find('select[data-name=category]').val(data.place.category);
                 this._updateImageUrl(data.place.imageLink, onScreenForm);
-
             }
 
             this.initialValues = data;

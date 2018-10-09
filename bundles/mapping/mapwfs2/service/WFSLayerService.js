@@ -31,7 +31,6 @@ Oskari.clazz.define(
                 me.sandbox.registerForEventByName(me, p);
             }
         }
-
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService',
@@ -146,14 +145,14 @@ Oskari.clazz.define(
 
             if (makeNewSelection) {
                 _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': featureIds});
+                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': featureIds});
             } else {
                 existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-                //no existing selections -> add all
+                // no existing selections -> add all
                 if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
                     existingFeatureSelections.push(featureIds);
                 } else {
-                    //existing selections found -> just add the features that weren't previously selected
+                    // existing selections found -> just add the features that weren't previously selected
                     _.each(featureIds, function (featureId) {
                         // add the features that weren't previously selected
                         if (existingFeatureSelections[0].indexOf(featureId) < 0) {
@@ -163,12 +162,11 @@ Oskari.clazz.define(
                             _.pull(existingFeatureSelections[0], featureId);
                         }
                     });
-
                 }
-                //clear old selection
+                // clear old selection
                 _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                //add the updated selection
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': existingFeatureSelections[0]});
+                // add the updated selection
+                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': existingFeatureSelections[0]});
             }
         },
 

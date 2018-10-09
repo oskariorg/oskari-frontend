@@ -165,8 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 me.container.find('form input[type=submit]').prop('disabled', false);
             }
 
-
-        },*/
+        }, */
         /**
          * Creates the template for file upload form
          *
@@ -193,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file.find('input[name=file-import]').on('change', function (e) {
                 var file = this.files[0],
                     maxFileSizeMb = me.instance.conf.maxFileSizeMb;
-                if ((file.size / 1048576) > maxFileSizeMb) { //size in mb
+                if ((file.size / 1048576) > maxFileSizeMb) { // size in mb
                     me.container.find('form input[type=button]').prop('disabled', true);
                     me.__showMessage(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), false);
                 } else {
@@ -203,25 +202,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
             file.find('input[type=button]').on('click', function (e) {
                 var styleJson = JSON.stringify(me.__getStyleValues(styleForm)),
-                    form = file.find('form'); //jQuery(this).parent()
+                    form = file.find('form'); // jQuery(this).parent()
                 // Set the value of the hidden style field
                 form.find('input[name=layer-style]').val(styleJson);
                 // Prevent from sending if there were missing fields
-                if (me.__validateForm (form, locale)) {
-                    return; //e.preventDefault()
+                if (me.__validateForm(form, locale)) {
+                    return; // e.preventDefault()
                 }
 
                 jQuery.ajax({
                     url: action,
                     type: 'POST',
                     data: new FormData(form[0]),
-                    cache : false,
-                    contentType: false, //multipart/form-data
+                    cache: false,
+                    contentType: false, // multipart/form-data
                     processData: false,
-                    //timeout : ,
-                    //dataType: 'json',
+                    // timeout : ,
+                    // dataType: 'json',
                     xhr: function () {
-                        var myXhr = jQuery.ajaxSettings.xhr();//new XMLHttpRequest()
+                        var myXhr = jQuery.ajaxSettings.xhr();// new XMLHttpRequest()
                         if (myXhr.upload) {
                             myXhr.upload.addEventListener('loadstart', function (e) {
                                 me.progressSpinner.start();
@@ -229,7 +228,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                             myXhr.upload.addEventListener('progress', function (e) {
                                 if (e.lengthComputable) {
                                     me.progressBarFile.show();
-                                    me.progressBarFile.updateProgressBar(e.total,e.loaded);
+                                    me.progressBarFile.updateProgressBar(e.total, e.loaded);
                                 }
                             });
                         }
@@ -238,7 +237,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
 
                     success: function (data, textStatus, jqXHR) {
                         me.progressSpinner.stop();
-                        me.__finish(data,locale);
+                        me.__finish(data, locale);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         var msg = null,
@@ -257,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                                 }
                             } catch (e) {
                                 Oskari.log(me.getName())
-                                    .warn('Error whilst parsing json',e);
+                                    .warn('Error whilst parsing json', e);
                             }
                         } else if (textStatus === 'timeout') {
                             error = textStatus;

@@ -16,22 +16,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabled
     function (resizeEnabled) {
         this._creator = null;
         this._resizeEnabled = resizeEnabled;
-
     }, {
     /** @static @property __name request name */
-        __name : 'MapFull.MapResizeEnabledRequest',
+        __name: 'MapFull.MapResizeEnabledRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getPublishMode
      * @return {Boolean} boolean if window resizing is enabled
      */
-        getResizeEnabled : function () {
+        getResizeEnabled: function () {
             return this._resizeEnabled;
         }
     }, {
@@ -39,5 +38,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabled
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

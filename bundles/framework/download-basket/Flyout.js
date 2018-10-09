@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
         },{
             'id': 'download-basket-tab',
             'clazz': 'Oskari.mapframework.bundle.downloadBasket.Basket'
-        }],*/
+        }], */
         /**
          * @method getName
          * @return {String} the name for the component
@@ -149,7 +149,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

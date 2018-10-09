@@ -133,7 +133,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

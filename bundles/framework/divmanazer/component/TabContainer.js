@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer.children().eq(index - 1).after(header);
             }
 
-            this.panels.splice(index,0,panel);
+            this.panels.splice(index, 0, panel);
             if (this.panels.length === 1) {
                 // select first by default
                 this.select(panel);

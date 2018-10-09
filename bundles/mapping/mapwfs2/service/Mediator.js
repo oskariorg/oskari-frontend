@@ -113,7 +113,7 @@ Oskari.clazz.define(
                 }
             }
         },
-        __handleInitStarted : function () {
+        __handleInitStarted: function () {
             var me = this;
             this.__initInProgress = false;
             // send out any buffered messages
@@ -127,23 +127,21 @@ Oskari.clazz.define(
             this.__connectionTries = 0;
             this.__latestTry = 0;
         },
-        handleError : function (params) {
+        handleError: function (params) {
             var oskariLayer = this.plugin.getSandbox().getMap().getSelectedLayer(params.data.layerId);
-            //assumption that all layers fail
+            // assumption that all layers fail
             this.plugin.getMapModule().loadingState(oskariLayer.getId(), null, true);
             this.statusHandler.handleError(params.data, this.plugin);
         },
-        statusChange : function (params) {
+        statusChange: function (params) {
             // handle init started
             if (params.data.reqId === -1 && params.data.message === 'started') {
                 this.__handleInitStarted();
-            }
-            else {
+            } else {
                 this.statusHandler.handleChannelStatus(params.data);
             }
         },
-        sendMessage : function (channel, message) {
-
+        sendMessage: function (channel, message) {
             var isInit = (channel === '/service/wfs/init');
             // connected flag is not setup when init is called so ignore it.
             if (isInit || (this.connection.isConnected() && !this.__initInProgress)) {
@@ -153,21 +151,19 @@ Oskari.clazz.define(
                 }
                 if (channel === '/service/wfs/removeMapLayer') {
                     this.statusHandler.clearStatus(message.layerId);
-                }
-                else if (channel === '/service/wfs/setLocation') {
+                } else if (channel === '/service/wfs/setLocation') {
                     // only setup in setLocation?
                     this.statusHandler.handleChannelRequest(message.layerId, channel, message.reqId);
                 }
                 this.cometd.publish(channel, message);
-            }
-            else {
+            } else {
                 this.__bufferedMessages.push({
-                    channel : channel,
-                    message : message
+                    channel: channel,
+                    message: message
                 });
             }
         },
-        __getApikey : function () {
+        __getApikey: function () {
             // prefer API key - default to cookie or "no session"...
             return Oskari.user().getAPIkey() || jQuery.cookie('JSESSIONID') || '';
         },
@@ -229,7 +225,7 @@ Oskari.clazz.define(
                 }
                 message.layers[layer.getId() + ''] = {
                     styleName: layer.getCurrentStyle().getName(),
-                    visible : layer.isVisible()
+                    visible: layer.isVisible()
                 };
             });
             this.__initInProgress = true;
@@ -308,15 +304,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
             if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder()) {
                 // this is a "userlayer" type layer
-                this.setOrderForFeatureProperties(layer,data.data.fields);
+                this.setOrderForFeatureProperties(layer, data.data.fields);
                 layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
-                layer.setLocales (this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
+                layer.setLocales(this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
             } else {
                 // this is any other layer supported by transport
                 layer.setFields(data.data.fields);
                 layer.setLocales(data.data.locales);
             }
-
         }
 
         if (this._propertyTimer) {
@@ -343,7 +338,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             feature = data.data.feature;
             if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder()) {
                 // this is a "userlayer" type layer
-                layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer,feature));
+                layer.setActiveFeature(this.sortArrayByFeaturePropertyIndexes(layer, feature));
             } else {
                 // this is any other layer supported by transport
                 layer.setActiveFeature(feature);
@@ -377,14 +372,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectionMode = data.data.keepPrevious,
             featureIds = [];
 
-        /*Ugly -> instead try to figure out _why_ the first click in the selection tool ends up in here*/
+        /* Ugly -> instead try to figure out _why_ the first click in the selection tool ends up in here */
         if (this.WFSLayerService && this.WFSLayerService.isSelectionToolsActive()) {
             return;
         }
 
         // handle CTRL click (selection) and normal click (getInfo) differently
         if (selectionMode) {
-
             if (!this.__isSelectionLayer(layer.getId())) {
                 return;
             }
@@ -406,14 +400,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 // this is a "userlayer" type layer - props are sorted to match the original order
                 features = data.data.features;
                 for (var i = 0; i < features.length; i++) {
-                    features[i] = this.sortArrayByFeaturePropertyIndexes (layer, features[i]);
+                    features[i] = this.sortArrayByFeaturePropertyIndexes(layer, features[i]);
                 }
             }
             var infoEvent = Oskari.eventBuilder('GetInfoResultEvent')(data.data);
             sandbox.notifyAll(infoEvent);
         }
     },
-    __isSelectionLayer : function (layerId) {
+    __isSelectionLayer: function (layerId) {
         var topWFSLayerId = this.WFSLayerService.getTopWFSLayer();
         var analysisWFSLayerId = this.WFSLayerService.getAnalysisWFSLayerId();
 
@@ -446,7 +440,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
         var event = Oskari.eventBuilder('WFSFeatureGeometriesEvent')(layer, keepPrevious);
         sandbox.notifyAll(event);
-
     },
 
     /**
@@ -466,7 +459,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
             hasNoFeatures = data.data.features === 'empty';
 
-        //if user has not used Ctrl during selection, make totally new selection
+        // if user has not used Ctrl during selection, make totally new selection
         var makeNewSelection = !data.data.keepPrevious;
         if (makeNewSelection) {
             selectFeatures = false;
@@ -481,7 +474,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
                 }
                 return;
             }
-
         } else {
             if (hasNoFeatures) {
                 me.WFSLayerService.emptyAllWFSFeatureSelections();
@@ -763,8 +755,8 @@ Oskari.clazz.category(
             this.sendMessage('/service/wfs/setMapClick', {
                 'longitude': lonlat.lon,
                 'latitude': lonlat.lat,
-                'filter' : {
-                    geojson : lonlat.json
+                'filter': {
+                    geojson: lonlat.json
                 },
                 'keepPrevious': keepPrevious,
                 'geomRequest': geomRequest
@@ -834,10 +826,8 @@ Oskari.clazz.category(
                     } else {
                         previouslySelectedIds.splice(previouslySelectedIds.indexOf(id), 1);
                         unselectedMode = true;
-
                     }
                 });
-
             }
             if (unselectedMode) {
                 return ['unselectMode', previouslySelectedIds.concat(featureIds)];

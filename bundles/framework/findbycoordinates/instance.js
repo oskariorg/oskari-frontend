@@ -20,9 +20,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         this._logger = Oskari.log('findbycoordinates');
         this.POPUP_ID = 'findbycoordinates-search-result';
     }, {
-        __name : 'findbycoordinates',
-        __templates : {
-            item : jQuery('<div>' +
+        __name: 'findbycoordinates',
+        __templates: {
+            item: jQuery('<div>' +
                 '   <div class="channel_header">' +
                 '       <h3 class="channel_id"></h3>' +
                 '   </div>' +
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         __colors: ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
             '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
         ],
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         eventHandlers: {
@@ -315,7 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 me._popup.createCloseIcon();
                 me._popup.onClose(function () {
                     if (removeMarkerRequestBuilder) {
-                        for (var i = 0;i <= me._markerMaxIndex;i++) {
+                        for (var i = 0; i <= me._markerMaxIndex; i++) {
                             sandbox.request(me, removeMarkerRequestBuilder(MARKER_ID_PREFIX + i));
                         }
                     }
@@ -337,7 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 }
 
                 // Loop results
-                for (var i = 0, resultsCount = results.locations.length; i < resultsCount;i++) {
+                for (var i = 0, resultsCount = results.locations.length; i < resultsCount; i++) {
                     if (i >= markersLength * colorsLength) {
                         // If all markers and colors are used hten log warn and break results.
                         this._logger.warn('Find nearest places return more than ' + (markersLength * colorsLength) + 'results, breaking.');
@@ -363,7 +363,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                     }
 
                     var markerSvg = mapmodule.getSvg({
-                        shape:shapeIndex,
+                        shape: shapeIndex,
                         color: color,
                         stroke: '#000000'
                     });
@@ -372,7 +372,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         x: result.lon,
                         y: result.lat,
                         color: color,
-                        msg : '',
+                        msg: '',
                         shape: shapeIndex,
                         size: 3,
                         stroke: '#000000'
@@ -394,14 +394,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         colorIndex = 0;
                         shapeIndex += 1;
                     }
-
                 }
 
                 me._popup.show(loc.popupTitle, popupContent, [closeBtn]);
 
                 me._popup.moveTo(jQuery('#oskari_toolbar_selectiontools_findbycoordinates'), popupLocation, true);
                 me._popup.adaptToMapSize(sandbox, popupName);
-
             }
         },
         /**
@@ -429,10 +427,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             return {
                 // use higher priority for ones with "village" info more than ones that don't
                 // this way "nice-to-know" features like "what 3 words" are at the bottom
-                prio : (result.village) ? 1 : -1,
-                html : item
+                prio: (result.village) ? 1 : -1,
+                html: item
             };
         }
     }, {
-        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     });

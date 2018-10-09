@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
      */
     function () {
     }, {
-        name : 'Oskari.userinterface.extension.DefaultModule',
+        name: 'Oskari.userinterface.extension.DefaultModule',
         /**
          * @method getSandbox
          * Convenience method to call from Tile and Flyout
@@ -52,7 +52,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
                 p;
-
 
             me.sandbox = sandbox;
             sandbox.register(this);
@@ -120,7 +119,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
         getConfiguration: function () {
             return this.conf || {};
         },
-        getState : function () {
+        getState: function () {
             return this.state || {};
         },
 
@@ -165,7 +164,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
             return handler.apply(this, [request]);
         },
 
-
         /**
          * @method getLang
          * helper to get current language from Oskari
@@ -174,7 +172,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
         'getLang': function () {
             return Oskari.getLang();
         },
-
 
         /* o2 helpers for notifications and requetss */
         slicer: Array.prototype.slice,

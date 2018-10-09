@@ -55,7 +55,7 @@ Oskari.clazz.define(
                     // error getting location
                     return;
                 }
-                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+                mapmodule.centerMap({ lon: lon, lat: lat }, 6);
                 me._locationIsSet = true;
             });
         }

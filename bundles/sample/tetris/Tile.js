@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Tile',
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function () {
+        getName: function () {
             return 'Oskari.sample.bundle.tetris.Tile';
         },
         /**
@@ -33,55 +33,55 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Tile',
      *
      * Interface method implementation
      */
-        setEl : function (el) {
+        setEl: function (el) {
             this.container = jQuery(el);
         },
         /**
      * @method startPlugin
      * Interface method implementation, calls #refresh()
      */
-        startPlugin : function () {
+        startPlugin: function () {
             this.refresh();
         },
         /**
      * @method stopPlugin
      * Interface method implementation, clears the container
      */
-        stopPlugin : function () {
+        stopPlugin: function () {
             this.container.empty();
         },
         /**
      * @method getTitle
      * @return {String} localized text for the title of the tile
      */
-        getTitle : function () {
+        getTitle: function () {
             return this.instance.getLocalization('title');
         },
         /**
      * @method getDescription
      * @return {String} localized text for the description of the tile
      */
-        getDescription : function () {
+        getDescription: function () {
             return this.instance.getLocalization('desc');
         },
         /**
      * @method getOptions
      * Interface method implementation, does nothing atm
      */
-        getOptions : function () {
+        getOptions: function () {
 
         },
         /**
      * @method setState
      * Interface method implementation, does nothing atm
      */
-        setState : function () {
+        setState: function () {
         },
         /**
      * @method refresh
      * Creates the UI for a fresh start
      */
-        refresh : function () {
+        refresh: function () {
 
         }
     }, {
@@ -89,5 +89,5 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Tile',
      * @property {String[]} protocol
      * @static
      */
-        'protocol' : ['Oskari.userinterface.Tile']
+        'protocol': ['Oskari.userinterface.Tile']
     });

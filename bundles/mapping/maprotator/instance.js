@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
         this._mapmodule = null;
         this._sandbox = null;
     }, {
-        __name:'maprotator',
+        __name: 'maprotator',
         /**
      * @method getName
      * @return {String} the name for the component
@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
         getName: function () {
             return this.__name;
         },
-        init : function () {},
+        init: function () {},
         setSandbox: function (sbx) {
             this.sandbox = sbx;
         },

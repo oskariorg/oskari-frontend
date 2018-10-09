@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
         this.urls.result = Oskari.urls.getRoute('GetConversionResult');
     }, {
         __name: 'coordinatetransformation.TransformationService',
-        __qname : 'Oskari.coordinatetransformation.TransformationService',
-        getQName : function () {
+        __qname: 'Oskari.coordinatetransformation.TransformationService',
+        getQName: function () {
             return this.__qname;
         },
         getName: function () {
@@ -62,7 +62,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
                 formData.append('coordFile', importSettings.file);
             }
             return formData;
-
         },
         handleError: function (callback, jqXHR) {
             if (typeof callback !== 'function') {
@@ -101,9 +100,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
             var url = this.requestUrlBuilder(crs, 'F2A');
             var formData = this.formDataBuilder(fileSettings);
             jQuery.ajax({
-                contentType: false, //multipart/form-data
+                contentType: false, // multipart/form-data
                 type: 'POST',
-                cache : false,
+                cache: false,
                 processData: false,
                 url: url,
                 data: formData,
@@ -120,9 +119,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
             var url = this.requestUrlBuilder(crs, 'F2R');
             var formData = this.formDataBuilder(fileSettings);
             jQuery.ajax({
-                contentType: false, //multipart/form-data
+                contentType: false, // multipart/form-data
                 type: 'POST',
-                cache : false,
+                cache: false,
                 processData: false,
                 url: url,
                 data: formData,
@@ -154,12 +153,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
         },
         transformFileToFile: function (crs, importSettings, exportSettings, successCb, errorCb) {
             var me = this;
-            var url = this.requestUrlBuilder(crs , 'F2F');
+            var url = this.requestUrlBuilder(crs, 'F2F');
             var formData = this.formDataBuilder(importSettings, exportSettings);
             jQuery.ajax({
-                contentType: false, //multipart/form-data
+                contentType: false, // multipart/form-data
                 type: 'POST',
-                cache : false,
+                cache: false,
                 processData: false,
                 url: url,
                 data: formData,
@@ -185,5 +184,5 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
             return 'results.txt';
         }
     }, {
-        'protocol' : ['Oskari.mapframework.service.Service']
+        'protocol': ['Oskari.mapframework.service.Service']
     });

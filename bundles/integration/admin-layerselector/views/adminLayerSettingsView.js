@@ -37,7 +37,7 @@ function (
             'click .admin-remove-sublayer': 'removeLayer',
             'click .show-edit-layer': 'clickLayerSettings',
             'click .fetch-ws-button': 'fetchCapabilities',
-            //'click .edit-wfs-button': 'editWfsLayerConfiguration',
+            // 'click .edit-wfs-button': 'editWfsLayerConfiguration',
             'click .import-wfs-style-button': 'importSldStyle',
             'click .save-wfs-style-button': 'saveSldStyle',
             'click .cancel-wfs-style-button': 'cancelSldStyle',
@@ -50,7 +50,7 @@ function (
             'change .admin-interface-version': 'handleInterfaceVersionChange',
             'change .admin-sld-styles': 'handleSldStylesChange',
             'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
-            'click .layer-capabilities.icon-info' : 'showCapabilitiesPopup',
+            'click .layer-capabilities.icon-info': 'showCapabilitiesPopup',
             'click .add-layer-forced-proj .icon-close': 'removeForcedProj',
             'click .add-layer-forced-proj-add': 'addForcedProj',
             'click .add-layer-recheck': 'recheckCapabilities',
@@ -136,7 +136,6 @@ function (
                     errorDialog.show(me.instance.locale('errors.dataprovider.title'), me.instance.locale('errors.dataprovider.message'));
                     errorDialog.fadeout();
                 }
-
             });
 
             var message = jQuery('<div class="group-names"></div>');
@@ -216,7 +215,6 @@ function (
                     me.options.maplayerGroups = selected;
                     popup.close();
                 }
-
             });
 
             var message = jQuery('<div class="maplayer-groups"></div>');
@@ -245,7 +243,6 @@ function (
 
             popup.show(me.instance.locale('groupTitles.selectLayerGroups'), message, buttons);
             popup.makeModal();
-
         },
 
         recheckCapabilities: function (e) {
@@ -618,7 +615,6 @@ function (
             var element = jQuery(e.currentTarget);
             if (element.parents('.admin-add-layer').hasClass('show-edit-layer') ||
                     element.parents('.admin-add-layer').hasClass('show-add-layer')) {
-
                 element.parents('.create-layer').children('.admin-add-layer-btn').html(this.options.instance.getLocalization('admin').addLayer);
                 element.parents('.create-layer').children('.admin-add-layer-btn').attr('title', this.options.instance.getLocalization('admin').addLayerDesc);
                 element.parents('.admin-add-layer').removeClass('show-edit-layer');
@@ -644,7 +640,6 @@ function (
             } else {
                 form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-default']").prop('checked', true);
             }
-
         },
         /**
              * New sld style management for importing it to server
@@ -662,7 +657,6 @@ function (
 
             // Show  new sld input block
             sldImport.show();
-
         },
         /**
              * Cancel sld style management for importing it to server
@@ -681,7 +675,6 @@ function (
 
             // Show  new sld input block
             sldImport.hide();
-
         },
         /**
              * Save new sld style to data base
@@ -697,7 +690,7 @@ function (
                 sldName = form.find('.add-layer-sld-style-sldname').val(),
                 sldXml = form.find('.add-sld-file').val();
 
-                //Check if sld is valid
+                // Check if sld is valid
             if (me._checkXml(sldXml)) {
                 // Save new style
                 me._saveSldStyle(sldName, sldXml);
@@ -705,13 +698,11 @@ function (
                 return;
             }
 
-
             // set this element invisible
             sldImportBtn.show();
 
             // Show  new sld input block
             sldImport.hide();
-
         },
         /**
              * Check, that xml has valid  syntax
@@ -734,7 +725,6 @@ function (
                 me._showDialog('title', 'Not valid sld xml');
             }
             return isValid;
-
         },
         /**
              * Handle sld styles selection
@@ -749,7 +739,6 @@ function (
 
             styles = me.selectedSldStyles(form);
             me._DefaultStylesUI(element, styles);
-
         },
         /**
              * selected sld styles selection
@@ -757,7 +746,6 @@ function (
              * @method selectedSldStyles
              */
         selectedSldStyles: function (form) {
-
             var selectedStyles = {},
                 styles = [];
 
@@ -781,7 +769,6 @@ function (
             for (var i = 0; selection != null && i < selection.selectedStyles.length; i++) {
                 defaelem.append('<option value=' + selection.selectedStyles[i].id + ' >' + selection.selectedStyles[i].name + '</option>');
             }
-
         },
         /**
              * Handle layer style legend Url change
@@ -863,7 +850,6 @@ function (
                         }
                     }
                 });
-
             });
             cancelBtn.setHandler(function () {
                 dialog.close();
@@ -871,7 +857,6 @@ function (
 
             dialog.show(me.instance.getLocalization('admin').warningTitle, confirmMsg, [btn, cancelBtn]);
             dialog.makeModal();
-
         },
         /**
              * @method _showDialog
@@ -949,7 +934,7 @@ function (
 
                         resp.groups = me.options.maplayerGroups;
 
-                        //trigger event to View.js so that it can act accordingly
+                        // trigger event to View.js so that it can act accordingly
                         accordion.trigger({
                             type: 'adminAction',
                             command: me.model.getId() !== null && me.model.getId() !== undefined ? 'editLayer' : 'addLayer',
@@ -1020,7 +1005,6 @@ function (
                 interfaceVersion = form.find('#add-layer-interface-version').val(),
                 sandbox = Oskari.getSandbox(),
                 admin;
-
 
                 // If this is a sublayer -> setup parent layers id
             if (me.options.baseLayerId) {
@@ -1227,14 +1211,14 @@ function (
                 success: function (resp) {
                     jQuery('body').css('cursor', '');
                     if (!me.model.getId()) {
-                        //trigger event to View.js so that it can act accordingly
+                        // trigger event to View.js so that it can act accordingly
                         accordion.trigger({
                             type: 'adminAction',
                             command: 'addLayer',
                             layerData: resp
                         });
                     } else {
-                        //trigger event to View.js so that it can act accordingly
+                        // trigger event to View.js so that it can act accordingly
                         accordion.trigger({
                             type: 'adminAction',
                             command: 'editLayer',
@@ -1346,7 +1330,7 @@ function (
                 warningMessage;
             me.model.setCapabilitiesResponse(response);
             if (layerType === 'wfslayer') {
-                //check layers with error and act accordingly.
+                // check layers with error and act accordingly.
                 var capabilities = me.model.get('capabilities');
                 if (capabilities && capabilities.layersWithErrors && capabilities.layersWithErrors.length > 0) {
                     warningMessage = _.template(LayersWithErrorsPopupTemplate, {
@@ -1453,9 +1437,8 @@ function (
                 url: Oskari.urls.getRoute('SldStyles'),
                 success: function (resp) {
                     me._showDialog('title', 'New sld saved success / ' + sldName);
-                    //Update UI
+                    // Update UI
                     me._SldStylesAppendUI(resp.id, sldName);
-
                 },
                 error: function (jqXHR) {
                     if (jqXHR.status !== 0) {
@@ -1471,7 +1454,6 @@ function (
             for (var i = 0; me.sldStyles != null && i < me.sldStyles.length; i++) {
                 sldSele.append('<option value=' + me.sldStyles[i].id + ' >' + me.sldStyles[i].name + '</option>');
             }
-
         },
         _SldStylesAppendUI: function (id, name) {
             var me = this,
@@ -1479,8 +1461,6 @@ function (
                 sldSele = elem.find('#add-layer-sld-style');
 
             sldSele.append('<option value=' + id + ' >' + name + '</option>');
-
-
         },
 
         /**

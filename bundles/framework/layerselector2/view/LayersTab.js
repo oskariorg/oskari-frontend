@@ -39,17 +39,14 @@ Oskari.clazz.define(
     }, {
 
         getTitle: function () {
-
             return this.title;
         },
 
         getTabPanel: function () {
-
             return this.tabPanel;
         },
 
         getState: function () {
-
             var state = {
                 tab: this.getTitle(),
                 filter: this.filterField.getValue(),
@@ -59,7 +56,6 @@ Oskari.clazz.define(
         },
 
         setState: function (state) {
-
             if (!state) {
                 return;
             }
@@ -88,7 +84,6 @@ Oskari.clazz.define(
          * Creates info icon for given oskarifield
          */
         _createInfoIcon: function (oskarifield) {
-
             var me = this,
                 infoIcon = jQuery('<div class="icon-info"></div>'),
                 indicatorCont = oskarifield.find('.field-description');
@@ -112,7 +107,6 @@ Oskari.clazz.define(
                     dialog.close(true);
                 });
                 dialog.show(me._locale.filter.text, desc, [okBtn]);
-
             });
         },
 
@@ -123,7 +117,6 @@ Oskari.clazz.define(
          * @param  {String} oskarifieldId oskari field id
          */
         _createUI: function (oskarifieldId) {
-
             var me = this,
                 oskarifield,
                 layerFilter;
@@ -179,7 +172,6 @@ Oskari.clazz.define(
          * @return {Oskari.userinterface.component.FormInput} field
          */
         getFilterField: function () {
-
             var me = this,
                 field,
                 timer = 0;
@@ -200,7 +192,6 @@ Oskari.clazz.define(
                     me._fireFiltering(field.getValue(), evt, me);
                     timer = null;
                 }, 300);
-
             }, true);
 
             me.filterField = field;
@@ -219,7 +210,6 @@ Oskari.clazz.define(
          * Calls all needed functions to do the layer filtering.
          */
         _fireFiltering: function (keyword, event, me) {
-
             // Filter by name
             me.filterLayers(keyword);
 
@@ -240,7 +230,6 @@ Oskari.clazz.define(
          * @param  {Array} groups
          */
         showLayerGroups: function (groups) {
-
             var me = this,
                 i,
                 groupsLength = groups.length,
@@ -316,7 +305,6 @@ Oskari.clazz.define(
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
         filterLayers: function (keyword, ids) {
-
             var me = this,
                 visibleGroupCount = 0,
                 visibleLayerCount,
@@ -363,7 +351,6 @@ Oskari.clazz.define(
                 if (group.badge) {
                     group.badge.updateContent(visibleLayerCount + '/' + layers.length);
                 }
-
             }
 
             // check if there are no groups visible -> show 'no matches' notification
@@ -391,7 +378,6 @@ Oskari.clazz.define(
          * Clears related keywords popup
          */
         clearRelatedKeywordsPopup: function (keyword, oskarifield) {
-
             // clear only if sent keyword has changed or it is not null
             if (this.sentKeyword && this.sentKeyword !== keyword) {
                 oskarifield.find('.related-keywords').html('').hide();
@@ -411,8 +397,7 @@ Oskari.clazz.define(
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
         _relatedKeywordsPopup: function (keyword, event, me) {
-
-            //event.preventDefault();
+            // event.preventDefault();
             var oskarifield = jQuery(event.currentTarget).parents(
                     '.oskarifield'
                 ),
@@ -490,7 +475,6 @@ Oskari.clazz.define(
          * Concatenates (in place) those values from arr2 to arr1 that are not present in arr1
          */
         _concatNew: function (arr1, arr2) {
-
             var me = this,
                 i;
 
@@ -508,7 +492,6 @@ Oskari.clazz.define(
          * Determines if the given value... has a value.
          */
         _isDefined: function (value) {
-
             return typeof value !== 'undefined' && value !== null && value !== '';
         },
 
@@ -520,7 +503,6 @@ Oskari.clazz.define(
          * Returns true if keyword contains match (ignoring case)
          */
         _containsIgnoreCase: function (keyword, match) {
-
             var me = this;
             return me._isDefined(keyword) && me._isDefined(match) && keyword.toLowerCase().indexOf(match.toLowerCase()) > -1;
         },
@@ -534,7 +516,6 @@ Oskari.clazz.define(
          * Also returns false if one or both types are not defined
          */
         _matchesIgnoreCase: function (type1, type2) {
-
             var me = this;
             return me._isDefined(type1) && me._isDefined(type2) && type1.toLowerCase() === type2.toLowerCase();
         },
@@ -548,7 +529,6 @@ Oskari.clazz.define(
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
         _showRelatedKeywords: function (userInput, keywords, oskarifield) {
-
             var me = this,
                 relatedKeywordsCont = me.getFilterField().getField().find(
                     '.related-keywords'
@@ -586,7 +566,6 @@ Oskari.clazz.define(
                 }
             }
 
-
             if (ontologySuggestions.length > 0) {
                 relatedKeywordsCont.prepend(
                     jQuery(me.templates.keywordsTitle).text(
@@ -595,7 +574,7 @@ Oskari.clazz.define(
                 );
             } else {
                 // Why show an error if we can't find suggestions?
-                //relatedKeywordsCont.prepend(jQuery(me.templates.keywordsTitle).text(me._locale.errors.noResultsForKeyword));
+                // relatedKeywordsCont.prepend(jQuery(me.templates.keywordsTitle).text(me._locale.errors.noResultsForKeyword));
             }
 
             // sort ontology suggestions by layer count
@@ -638,7 +617,6 @@ Oskari.clazz.define(
         },
 
         _showAllLayers: function () {
-
             var i,
                 group,
                 layers,
@@ -668,7 +646,6 @@ Oskari.clazz.define(
         },
 
         setLayerSelected: function (layerId, isSelected) {
-
             var layerCont = this.layerContainers[layerId];
             if (layerCont) {
                 layerCont.setSelected(isSelected);
@@ -676,7 +653,6 @@ Oskari.clazz.define(
         },
 
         updateLayerContent: function (layerId, layer) {
-
             var layerCont = this.layerContainers[layerId];
             if (layerCont) {
                 layerCont.updateLayerContent(layer);

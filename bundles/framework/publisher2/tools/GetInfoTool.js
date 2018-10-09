@@ -1,11 +1,11 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     function () {
     }, {
-        index : 8,
-        allowedLocations : [],
-        allowedSiblings : [],
+        index: 8,
+        allowedLocations: [],
+        allowedSiblings: [],
 
-        groupedSiblings : true,
+        groupedSiblings: true,
 
         templates: {
             colours: jQuery('<div id="publisher-layout-colours" class="tool-options">' + '<label for="publisher-colours"></label>' + '<div id="publisher-layout-coloursSelector">' + '<input type="text" name="publisher-colour" disabled />' + '<button id="publisher-colours"></button>' + '</div>' + '</div>'),
@@ -164,11 +164,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-        setEnabled : function (enabled) {
+        setEnabled: function (enabled) {
             var me = this,
                 tool = me.getTool();
 
-            //state actually hasn't changed -> do nothing
+            // state actually hasn't changed -> do nothing
             if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
                 return;
             }
@@ -258,7 +258,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             }
         },
 
-
         /**
      * Creates and opens the dialog from which to choose the colour scheme.
      * Also handles the creation of the sample gfi popup.
@@ -311,10 +310,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 content.find('div#publisher-colour-inputs').append(colourInput);
 
                 // Create the inputs for custom colour
-                if ('custom' === colours[i].val) {
+                if (colours[i].val === 'custom') {
                     content.find('div#publisher-colour-inputs').append(me._createCustomColoursInputs());
                     // Color picker value or icon changed
-                    content.find('div#publisher-custom-colours').on('change',function () {
+                    content.find('div#publisher-custom-colours').on('change', function () {
                         jQuery('#publisher-colour-inputs input[id=custom]').prop('checked', true);
                         jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(me.__instance._localization.BasicView.layout.fields.colours['custom']).attr('data-colour-code', 'custom');
                         me._updatePreviewFromCustomValues(content);
@@ -633,9 +632,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         _createColorPickers: function () {
             var options = {className: 'oskari-colorpickerinput'};
             this._colorPickers = [
-                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),
-                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),
-                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options)
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options)
             ];
         },
 
@@ -721,6 +720,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

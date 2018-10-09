@@ -5,17 +5,17 @@ Oskari.clazz
             this._creator = null;
             this._selections = selections;
         }, {
-            __name : 'printout.PrintMapRequest',
-            getName : function () {
+            __name: 'printout.PrintMapRequest',
+            getName: function () {
                 return this.__name;
             },
-            getSelections : function () {
+            getSelections: function () {
                 return this._selections;
             }
         },
 
         {
-            'protocol' : ['Oskari.mapframework.request.Request']
+            'protocol': ['Oskari.mapframework.request.Request']
         });
 
 /* Inheritance */

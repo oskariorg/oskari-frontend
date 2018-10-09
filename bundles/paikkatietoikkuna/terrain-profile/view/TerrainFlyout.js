@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .range([graphHeight - graphMargin.bottom, graphMargin.top]);
 
             var area = d3.area()
-                .defined(function (d) {return d.height !== null;})
+                .defined(function (d) { return d.height !== null; })
                 .x(function (d) {
                     return x(d.distance);
                 })

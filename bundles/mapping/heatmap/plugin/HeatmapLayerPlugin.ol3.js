@@ -29,7 +29,7 @@ Oskari.clazz.define(
                     ID: layer.getId(),
                     STYLES: layer.getCurrentStyle().getName(),
                     FORMAT: 'image/png',
-                    SLD_BODY : this.__getSLD(layer),
+                    SLD_BODY: this.__getSLD(layer)
                 },
                 layerParams = layer.getParams();
             layerAttributes = layer.getAttributes() || undefined;
@@ -56,7 +56,7 @@ Oskari.clazz.define(
             }
 
             var wmsSource = new olSourceImageWMS({
-                id:layerIdPrefix + layer.getId(),
+                id: layerIdPrefix + layer.getId(),
                 url: layer.getLayerUrls()[0],
                 params: defaultParams
             });
@@ -66,7 +66,7 @@ Oskari.clazz.define(
                 source: wmsSource,
                 projection: reverseProjection ? reverseProjection : undefined,
                 opacity: layer.getOpacity() / 100,
-                visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
+                visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible()
             });
 
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);

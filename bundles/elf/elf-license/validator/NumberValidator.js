@@ -7,7 +7,6 @@ Oskari.clazz.define('Oskari.elf.license.validator.NumberValidator',
         this.sandbox = instance.getSandbox();
         this._allowDecimal = allowDecimal;
         this._allowNegative = allowNegative;
-
     }, {
         __name: 'elf-license.NumberValidator',
         __qname: 'Oskari.elf.license.validator.NumberValidator',

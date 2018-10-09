@@ -52,7 +52,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.CategoryHandle
                 // default to default category id(?)
                 var defCat = this.myPlacesService.getDefaultCategory();
                 if (defCat) {
-
                     categoryId = defCat.getId();
                 } else {
                     categoryId = '-99';

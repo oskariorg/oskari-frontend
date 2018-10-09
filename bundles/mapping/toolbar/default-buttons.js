@@ -232,7 +232,7 @@ Oskari.clazz.category(
          * @private
          * @return {String} base URL for state parameters
          */
-        __getMapUrl : function () {
+        __getMapUrl: function () {
             var sandbox = this.getSandbox();
             var url = null;
             if (this.conf) {

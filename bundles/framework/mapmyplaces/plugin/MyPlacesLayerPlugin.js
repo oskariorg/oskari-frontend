@@ -552,7 +552,7 @@ Oskari.clazz.define(
                             /*
                             for (i = 0; i < clusteredFeatures.length; i += 1) {
                                 featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
-                            }*/
+                            } */
 
                             /*
                              if (clusteredFeatures > 0) {
@@ -726,7 +726,6 @@ Oskari.clazz.define(
             /* if (myPlacesService) {
                 this._addPointClusters(myPlacesService, layer.getId(), clusterLayer);
             } */
-
         },
         /**
          * Used when layer is added or modified. Just trigger an update.
@@ -734,7 +733,7 @@ Oskari.clazz.define(
          * @param  {Boolean} forced
          * @param  {Object} params
          */
-        updateLayerParams : function (layer, forced, params) {
+        updateLayerParams: function (layer, forced, params) {
             var openLayerId = 'layer_' + layer.getId(),
                 oLayer = this.layers[openLayerId],
                 i;
@@ -844,7 +843,6 @@ Oskari.clazz.define(
                         );
                     });
                 }
-
             });
         },
 
@@ -917,7 +915,6 @@ Oskari.clazz.define(
                 return;
             }
             this._removeMapLayerFromMap(layer);
-
         },
 
         /**
@@ -939,7 +936,7 @@ Oskari.clazz.define(
             });
 
             /* This should free all memory */
-            //mapLayer[0].destroy();
+            // mapLayer[0].destroy();
         },
 
         /**
@@ -954,7 +951,7 @@ Oskari.clazz.define(
                 return null;
             }
 
-            //return this.getMap().getLayersByName('layer_' + layer.getId());
+            // return this.getMap().getLayersByName('layer_' + layer.getId());
             return this.layers['layer_' + layer.getId()];
         },
 
@@ -979,7 +976,7 @@ Oskari.clazz.define(
             _.forEach(openLayers, function (mapLayer) {
                 mapLayer.setOpacity(opacity);
             });
-            //openLayer[0].setOpacity(opacity);
+            // openLayer[0].setOpacity(opacity);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

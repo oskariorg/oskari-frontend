@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
 
             sandbox.register(me);
 
-            //Let's extend UI
+            // Let's extend UI
             var reqName = 'userinterface.AddExtensionRequest';
             var reqBuilder = Oskari.requestBuilder(reqName);
             var request = reqBuilder(this);
@@ -148,12 +148,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * or discarded if not.
      */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) return;
 
             return handler.apply(this, [event]);
-
         },
         /**
      * @property {Object} eventHandlers

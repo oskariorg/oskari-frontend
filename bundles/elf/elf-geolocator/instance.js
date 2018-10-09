@@ -5,8 +5,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
     function () {
         this.searchUrl = undefined;
     }, {
-        __name : 'elf-geolocator',
-        getName : function () {
+        __name: 'elf-geolocator',
+        getName: function () {
             return this.__name;
         },
         eventHandlers: {
@@ -97,12 +97,12 @@ Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
-            var template = '<h3><%= name %></h3>'
-                    + '<p><%= village %></p>'
-                    + '<p><%= type %></p>';
+            var template = '<h3><%= name %></h3>' +
+                    '<p><%= village %></p>' +
+                    '<p><%= type %></p>';
 
             return _.template(template, result);
         }
     }, {
-        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     });

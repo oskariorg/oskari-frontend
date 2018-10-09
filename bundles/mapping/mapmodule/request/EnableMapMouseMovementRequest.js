@@ -19,12 +19,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapMouse
         this._options = options;
     }, {
     /** @static @property __name request name */
-        __name : 'EnableMapMouseMovementRequest',
+        __name: 'EnableMapMouseMovementRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         getOptions: function (option) {
@@ -42,5 +42,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapMouse
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

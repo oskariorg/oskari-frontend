@@ -48,14 +48,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          * Stores references to layers that are not available for publishing
          * @param {Oskari.mapframework.domain.AbstractLayer[]} deniedList
          */
-        setNonPublisherLayers : function (deniedList) {
+        setNonPublisherLayers: function (deniedList) {
             this.disabledLayers = deniedList;
         },
         /**
          * Returns layers that are not available for publishing
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
-        getNonPublisherLayers : function () {
+        getNonPublisherLayers: function () {
             if (!this.disabledLayers) {
                 return [];
             }

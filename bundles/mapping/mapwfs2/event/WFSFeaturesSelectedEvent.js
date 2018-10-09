@@ -21,33 +21,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeaturesSelecte
         this._mapLayer = mapLayer;
     }, {
     /** @static @property __name event name */
-        __name : 'WFSFeaturesSelectedEvent',
+        __name: 'WFSFeaturesSelectedEvent',
         /**
      * @method getName
      * @return {String} event name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getName
      * @return {String[]} WFS feature id selection list
      */
-        getWfsFeatureIds : function () {
+        getWfsFeatureIds: function () {
             return this._wfsFeatureIds;
         },
         /**
      * @method isKeepSelection
      * @return {Boolean} true if this should append previous selection
      */
-        isKeepSelection : function () {
+        isKeepSelection: function () {
             return this._keepCollection;
         },
         /**
      * @method getMapLayer
      * @return {Oskari.mapframework.domain.WfsLayer} mapLayer highlighted/selected maplayer
      */
-        getMapLayer : function () {
+        getMapLayer: function () {
             return this._mapLayer;
         }
     }, {
@@ -55,5 +55,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeaturesSelecte
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

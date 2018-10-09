@@ -16,13 +16,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._creatorId = creatorId;
     }, {
     /** @static @property __name event name */
-        __name : 'DrawFilterPlugin.FinishedDrawFilteringEvent',
+        __name: 'DrawFilterPlugin.FinishedDrawFilteringEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Returns the filtered geometry
      * @return {OpenLayers.Geometry}
      */
-        getFiltered : function () {
+        getFiltered: function () {
             return this._filtered;
         },
         /**
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
-        isModification : function () {
+        isModification: function () {
             return this._modification;
         },
         getCreatorId: function () {
@@ -49,5 +49,5 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

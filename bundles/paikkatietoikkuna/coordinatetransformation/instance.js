@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         conf.name = 'coordinatetransformation';
         conf.flyoutClazz = 'Oskari.coordinatetransformation.Flyout';
         this.plugins = {};
-        //this._mapmodule = null;
+        // this._mapmodule = null;
         this.transformationService = null;
         this.dataHandler = null;
         this.views = null;
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         this.isMapSelection = false;
         this.isRemoveMarkers = false;
         this.sandbox = Oskari.getSandbox();
-        //TODO should dimensions be handled by dataHandler
+        // TODO should dimensions be handled by dataHandler
         this.dimensions = {
             input: 2,
             output: 2
@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         setRemoveMarkers: function (isRemove) {
             this.isRemoveMarkers = isRemove;
         },
-        addMapCoordsToInput: function (addBln) { //event??
+        addMapCoordsToInput: function (addBln) { // event??
             this.getDataHandler().addMapCoordsToInput(addBln);
         },
         /**
@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
         var transformationService = Oskari.clazz.create( 'Oskari.coordinatetransformation.TransformationService', this );
         sandbox.registerService(transformationService);
         return transformationService;
-    },*/
+    }, */
         eventHandlers: {
             'MapClickedEvent': function (event) {
                 if (!this.isMapSelection || this.isRemoveMarkers) {
@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
                     lon: parseInt(lonlat.lon),
                     lat: parseInt(lonlat.lat)
                 };
-                //add coords to map coords
+                // add coords to map coords
                 markerId = this.dataHandler.addMapCoord(roundedLonLat);
                 label = this.helper.getLabelForMarker(roundedLonLat);
                 this.helper.addMarkerForCoords(markerId, roundedLonLat, label);
@@ -181,6 +181,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
          * @property {String[]} protocol
          * @static
          */
-        extend : ['Oskari.userinterface.extension.DefaultExtension'],
+        extend: ['Oskari.userinterface.extension.DefaultExtension'],
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

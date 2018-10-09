@@ -13,11 +13,11 @@ Oskari.clazz.define('Oskari.sample.bundle.helloworld.HelloWorldBundleInstance',
 
     }, {
 
-        'eventHandlers' : {
-            'AfterMapMoveEvent' : function () {
+        'eventHandlers': {
+            'AfterMapMoveEvent': function () {
             }
         }
 
     }, {
-        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     });

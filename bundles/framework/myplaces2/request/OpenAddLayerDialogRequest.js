@@ -18,19 +18,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDi
         this._originator = originator;
         this._side = side;
     }, {
-        __name : 'MyPlaces.OpenAddLayerDialogRequest',
+        __name: 'MyPlaces.OpenAddLayerDialogRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {jQuery} Originating jQuery element
      */
-        getOriginator : function () {
+        getOriginator: function () {
             return this._originator;
         },
         getSide: function () {
@@ -42,5 +42,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDi
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

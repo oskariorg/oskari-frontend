@@ -16,12 +16,12 @@ Oskari.clazz.define(
      */
     function () {
     }, {
-        _clazz : 'Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin',
-        __name : 'MyPlacesLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin',
+        __name: 'MyPlacesLayerPlugin',
         /** @static @property layertype type of layers this plugin handles */
         layertype: 'myplaces',
 
-        getLayerTypeSelector : function () {
+        getLayerTypeSelector: function () {
             return this.layertype;
         },
         /**
@@ -75,7 +75,7 @@ Oskari.clazz.define(
                 opacity: layer.getOpacity() / 100
 
             });
-            //minresolution === maxscale and vice versa...
+            // minresolution === maxscale and vice versa...
             if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
                 openlayer.setMinResolution(map.getResolutionForScale(layer.getMaxScale()));
             }
@@ -118,7 +118,6 @@ Oskari.clazz.define(
             source.on('imageloaderror', function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
-
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],

@@ -15,37 +15,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
         this._toolId = toolId;
     }, {
     /** @static @property tools available tools to select */
-        tools : {
-            navigate : 'map_control_navigate_tool',
-            zoom : 'map_control_zoom_tool',
-            previous : 'map_control_tool_prev',
-            next : 'map_control_tool_prev',
-            measure : 'map_control_measure_tool',
-            measure_area : 'map_control_measure_area_tool',
-            select : 'map_control_select_tool',
-            draw_area : 'map_control_draw_area_tool'
+        tools: {
+            navigate: 'map_control_navigate_tool',
+            zoom: 'map_control_zoom_tool',
+            previous: 'map_control_tool_prev',
+            next: 'map_control_tool_prev',
+            measure: 'map_control_measure_tool',
+            measure_area: 'map_control_measure_area_tool',
+            select: 'map_control_select_tool',
+            draw_area: 'map_control_draw_area_tool'
         },
         /** @static @property __name request name */
-        __name : 'ToolSelectionRequest',
+        __name: 'ToolSelectionRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getToolId
      * @return {String}
      */
-        getToolId : function () {
+        getToolId: function () {
             return this._toolId;
         },
         /**
      * @method setToolId
      * @param {String} toolId
      */
-        setToolId : function (toolId) {
+        setToolId: function (toolId) {
             this._toolId = toolId;
         },
         /**
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
      * If the toolId has . this returns the first part of the toolId, otherwise returns empty string
      * @return {String}
      */
-        getNamespace : function () {
+        getNamespace: function () {
             if (this._toolId.indexOf('.') == -1) {
                 return '';
             }
@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
      * If the toolId has . this returns the last part of the toolId, otherwise returns the toolId as is
      * @return {String}
      */
-        getToolName : function () {
+        getToolName: function () {
             if (this._toolId.indexOf('.') == -1) {
                 return this._toolId;
             }
@@ -76,5 +76,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

@@ -19,112 +19,112 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace',
      * @method setId
      * @param {Number} value
      */
-        setId : function (value) {
+        setId: function (value) {
             this.id = value;
         },
         /**
      * @method getId
      * @return {Number}
      */
-        getId : function () {
+        getId: function () {
             return this.id;
         },
         /**
      * @method setName
      * @param {String} value
      */
-        setName : function (value) {
+        setName: function (value) {
             this.name = value;
         },
         /**
      * @method getName
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.name;
         },
         /**
      * @method setDescription
      * @param {String} value
      */
-        setDescription : function (value) {
+        setDescription: function (value) {
             this.description = value;
         },
         /**
      * @method getDescription
      * @return {String}
      */
-        getDescription : function () {
+        getDescription: function () {
             return this.description;
         },
         /**
          * @method getAttention_text
          * @return {String}
          */
-        getAttention_text : function () {
+        getAttention_text: function () {
             return this.attention_text;
         },
         /**
          * @method setAttention_text
          * @param {String} value
          */
-        setAttention_text : function (value) {
+        setAttention_text: function (value) {
             this.attention_text = value;
         },
         /**
      * @method setLink
      * @param {String} value
      */
-        setLink : function (value) {
+        setLink: function (value) {
             this.link = value;
         },
         /**
      * @method getLink
      * @return {String}
      */
-        getLink : function () {
+        getLink: function () {
             return this.link;
         },
         /**
      * @method setImageLink
      * @param {String} value
      */
-        setImageLink : function (value) {
+        setImageLink: function (value) {
             this.imageLink = value;
         },
         /**
      * @method getImageLink
      * @return {String}
      */
-        getImageLink : function () {
+        getImageLink: function () {
             return this.imageLink;
         },
         /**
      * @method setCategoryID
      * @param {Number} value
      */
-        setCategoryID : function (value) {
+        setCategoryID: function (value) {
             this.categoryID = value;
         },
         /**
      * @method getCategoryID
      * @return {Number}
      */
-        getCategoryID : function () {
+        getCategoryID: function () {
             return this.categoryID;
         },
         /**
      * @method setGeometry
      * @param {OpenLayers.Geometry} value
      */
-        setGeometry : function (value) {
+        setGeometry: function (value) {
             this.geometry = value;
         },
         /**
      * @method getGeometry
      * @return {OpenLayers.Geometry}
      */
-        getGeometry : function () {
+        getGeometry: function () {
             return this.geometry;
         },
         /**
@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace',
      * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
      * @param {String} value
      */
-        setCreateDate : function (value) {
+        setCreateDate: function (value) {
             this.createDate = value;
         },
         /**
@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace',
      * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
      * @return {String}
      */
-        getCreateDate : function () {
+        getCreateDate: function () {
             return this.createDate;
         },
         /**
@@ -152,7 +152,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace',
      * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
      * @param {String} value
      */
-        setUpdateDate : function (value) {
+        setUpdateDate: function (value) {
             this.updateDate = value;
         },
         /**
@@ -162,21 +162,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.model.MyPlace',
      * See Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
      * @return {String}
      */
-        getUpdateDate : function () {
+        getUpdateDate: function () {
             return this.updateDate;
         },
         /**
      * @method setUUID
      * @param {String} value
      */
-        setUUID : function (value) {
+        setUUID: function (value) {
             this.uuid = value;
         },
         /**
      * @method getUUID
      * @return {String}
      */
-        getUUID : function () {
+        getUUID: function () {
             return this.uuid;
         }
     });

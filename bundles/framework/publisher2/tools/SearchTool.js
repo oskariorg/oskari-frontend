@@ -1,17 +1,17 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
     function () {
     }, {
-        index : 4,
-        allowedLocations : ['top left', 'top center', 'top right'],
+        index: 4,
+        allowedLocations: ['top left', 'top center', 'top right'],
         lefthanded: 'top right',
         righthanded: 'top left',
-        allowedSiblings : [
+        allowedSiblings: [
             'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin'
         ],
 
-        groupedSiblings : false,
+        groupedSiblings: false,
 
         /**
     * Get tool object.
@@ -51,6 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SearchTool',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

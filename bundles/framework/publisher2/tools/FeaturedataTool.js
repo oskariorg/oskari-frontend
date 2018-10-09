@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
     function () {
     }, {
-        index : 9,
+        index: 9,
         // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
         allowedLocations: ['top right'],
         lefthanded: 'top right',
@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
             'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
         ],
-        groupedSiblings : false,
+        groupedSiblings: false,
         /**
     * Get tool object.
     * @method getTool
@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
                 }
             };
         },
-        //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
+        // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'featuredata2',
 
         /**
@@ -82,6 +82,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
             return wfs;
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

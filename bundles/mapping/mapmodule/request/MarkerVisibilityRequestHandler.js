@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MarkerVisibili
     handleRequest: function (core, request) {
         this._log.debug('Change Marker Visibility');
 
-        this.markersPlugin.changeMapMarkerVisibility(request.isVisible(),request.getID());
+        this.markersPlugin.changeMapMarkerVisibility(request.isVisible(), request.getID());
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']

@@ -59,7 +59,6 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 title = param.name;
             }
 
-
             jQuery.each(param.values, function (index, value) {
                 var valueEl = valueElement.clone();
                 valueEl.html(value);

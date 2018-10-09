@@ -49,7 +49,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        _startPluginImpl : function (sandbox) {
+        _startPluginImpl: function (sandbox) {
             var me = this;
             me.setEnabled(me._enabled);
             return me.setVisible(me._visible);
@@ -60,7 +60,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        _stopPluginImpl : function (sandbox) {
+        _stopPluginImpl: function (sandbox) {
             this.removeFromPluginContainer(this.getElement());
         },
 

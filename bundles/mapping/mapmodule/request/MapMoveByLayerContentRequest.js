@@ -21,12 +21,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
         this._zoomToExtent = (zoomToExtent === true);
     }, {
     /** @static @property __name request name */
-        __name : 'MapModulePlugin.MapMoveByLayerContentRequest',
+        __name: 'MapModulePlugin.MapMoveByLayerContentRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
      * @return {String} id for map layer used in
      * Oskari.mapframework.service.MapLayerService
      */
-        getMapLayerId : function () {
+        getMapLayerId: function () {
             return this._mapLayerId;
         },
         /**
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
      * @return {Boolean} zoomToExtent
      * Oskari.mapframework.service.MapLayerService
      */
-        getZoomToExtent : function () {
+        getZoomToExtent: function () {
             return this._zoomToExtent;
         }
     }, {
@@ -50,5 +50,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

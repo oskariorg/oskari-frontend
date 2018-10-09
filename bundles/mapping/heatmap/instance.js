@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
     function () {
         this._log = Oskari.log(this.getName());
     }, {
-        __idCounter : 1,
+        __idCounter: 1,
         /**
          * @static
          * @property __name
@@ -28,14 +28,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
         /**
          * Needed by sandbox.register()
          */
-        init : function () {},
+        init: function () {},
         /**
          * Bundle startup
          *
          * @method start
          */
         start: function () {
-
             var sandboxName = (this.conf ? this.conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
 
@@ -51,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
             var plugin = Oskari.clazz.create('Oskari.mapframework.heatmap.HeatmapLayerPlugin');
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
-            //this._plugin = plugin;
+            // this._plugin = plugin;
         },
         /**
          * @method update
@@ -99,12 +98,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                     dialog.showDialog(layerModel, function (values) {
                         me.__setupHeatmap(layerModel, values, false);
                     }, false);
-                }
-                else {
+                } else {
                     var layer = Oskari.clazz.create('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer');
                     layer.copyValues(layerModel, {
-                        id : 'heatmap_' + (me.__idCounter++),
-                        name : layerModel.getName() + ' - ' + label
+                        id: 'heatmap_' + (me.__idCounter++),
+                        name: layerModel.getName() + ' - ' + label
                     });
                     layer.setTools([]);
                     me.__addTool(layer, true);
@@ -116,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
 
             service.addToolForLayer(layerModel, tool, suppressEvent);
         },
-        __setupHeatmap : function (layer, values, isNew) {
+        __setupHeatmap: function (layer, values, isNew) {
             layer.setRadius(values.radius);
             layer.setWeightedHeatmapProperty(values.property);
             layer.setPixelsPerCell(values.pixelsPerCell);
@@ -131,8 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapBundleInstance',
                 // add layer to map with request
                 var rbAdd = Oskari.requestBuilder('AddMapLayerRequest');
                 this.sandbox.request(this, rbAdd(layer.getId(), true));
-            }
-            else {
+            } else {
                 this._log.debug('Update heatmap with values', values, layer);
                 // request update for the layer
                 var rbUpdate = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');

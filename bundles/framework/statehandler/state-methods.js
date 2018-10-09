@@ -39,7 +39,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         me._historyPrevious = [];
         me._historyNext = [];
 
-
         for (pluginName in me._pluginInstances) {
             if (me._pluginInstances.hasOwnProperty(pluginName)) {
                 me._log.debug('resetting state on ' + pluginName);

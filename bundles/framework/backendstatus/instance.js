@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             }
 
             return url;
-            /*return 'GetBackendStatus.json';*/
+            /* return 'GetBackendStatus.json'; */
         },
         /**
          * @method start
@@ -179,14 +179,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property extensionsByName
@@ -219,7 +217,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
              * @method ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-
                 var extension = event.getExtension();
                 if (!extension) {
                     return;
@@ -264,7 +261,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(feedBackTextx.title, feedBackTextx.message);
             dialog.fadeout();
-
         },
         openURLinWindow: function (infoUrl) {
             var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200',
@@ -276,7 +272,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * implements BundleInstance protocol stop method
          */
         'stop': function () {
-
             var me = this,
                 sandbox = me._sandbox,
                 p;
@@ -327,7 +322,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             me._pendingAjaxQuery.busy = true;
             me._pendingAjaxQuery.timestamp = dteMs;
-
         },
         _finishAjaxRequest: function () {
             var me = this;
@@ -361,7 +355,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 return;
             }
 
-            //when asking for all known statuses, don't go further, if all maplayers have _not_ finished loading. (in case the user is _really_ fast in opening flyouts.)
+            // when asking for all known statuses, don't go further, if all maplayers have _not_ finished loading. (in case the user is _really_ fast in opening flyouts.)
             if (allKnown && !me._mapLayerService.isAllLayersLoaded()) {
                 return;
             }
@@ -395,7 +389,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 type: 'POST',
                 dataType: 'json',
                 url: ajaxUrl
-                /*url : 'GetBackendStatus.json'*/
+                /* url : 'GetBackendStatus.json' */
             });
         },
         _processResponse: function (resp, allKnown) {
@@ -432,7 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         changed: true
                     };
                     extendedStatuses[layerId] = data;
-                    /*this._log.debug(layerId+" new alert");*/
+                    /* this._log.debug(layerId+" new alert"); */
                     // FIXME use !==
                 } else if (this.backendStatus[layerId].status !== data.status) {
                     changeNotifications[layerId] = {
@@ -440,7 +434,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         changed: true
                     };
                     extendedStatuses[layerId] = data;
-                    /*this._log.debug(layerId+" changed alert");*/
+                    /* this._log.debug(layerId+" changed alert"); */
                 } else {
                     changeNotifications[layerId] = {
                         status: data.status,
@@ -458,7 +452,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                             status: null,
                             changed: true
                         };
-                        /*this._log.debug(p+" alert closed");*/
+                        /* this._log.debug(p+" alert closed"); */
                     }
                 }
             }
@@ -475,8 +469,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     var maplayer = sandbox.findMapLayerFromAllAvailable(p);
                     if (maplayer) {
                         maplayer.setBackendStatus(this.backendStatus[p].status);
-                        /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
-                        if (changeNotifications[p].changed || 'DOWN' === maplayer.getBackendStatus()) {
+                        /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not... */
+                        if (changeNotifications[p].changed || maplayer.getBackendStatus() === 'DOWN') {
                             if (sandbox.isLayerAlreadySelected(maplayer.getId())) {
                                 // If the layer's been selected, notify immediately
                                 evt = evtBuilder(maplayer.getId(), maplayer.getBackendStatus());
@@ -497,8 +491,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 me._pendingAjaxQuery.timestamp = null;
                 me.backendStatus = {};
 
-                //if all map layers have been loaded, there's no point in _not_ updating their statuses...?
-                //this gets hit when the user is too eager to open up the layerselector2 flyout while layers still loading.
+                // if all map layers have been loaded, there's no point in _not_ updating their statuses...?
+                // this gets hit when the user is too eager to open up the layerselector2 flyout while layers still loading.
                 if (me._mapLayerService.isAllLayersLoaded()) {
                     // If too many have changed, just ask to do a bulk update
                     evt = evtBuilder();

@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function () {
+        getName: function () {
             return 'Printout.PrintableContentEvent';
         },
 
@@ -56,14 +56,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
      * @method getData
      * @return {Array[Object]}
      */
-        getTileData : function () {
+        getTileData: function () {
             return this._tileData;
         },
         /**
      * @method setData
      * @param {Array[Object]} data [{ bbox: [l,b,r,t], url: "" }, ... ]
      */
-        setTileData : function (data) {
+        setTileData: function (data) {
             this._tileData = data;
         },
         /**
@@ -72,16 +72,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
      * @method getGeoJsonData
      * @return {Object}
      */
-        getGeoJsonData : function () {
+        getGeoJsonData: function () {
             return this._geojsonData;
         },
         /**
      * @method setData
      * @param {Object} geojson
      */
-        setGeoJsonData : function (data) {
+        setGeoJsonData: function (data) {
             this._geojsonData = data;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

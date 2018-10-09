@@ -7,8 +7,8 @@ Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
             'loginButton': jQuery('<input id="loginbutton" type="submit" value="">')
         };
     }, {
-        __name : 'asdi-login',
-        getName : function () {
+        __name: 'asdi-login',
+        getName: function () {
             return this.__name;
         },
         eventHandlers: {
@@ -36,10 +36,10 @@ Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
         },
         showLoginFlyout: function () {
             Oskari.getSandbox().postRequestByName(
-                'userinterface.UpdateExtensionRequest',[this, 'attach']
+                'userinterface.UpdateExtensionRequest', [this, 'attach']
             );
         }
     }, {
-        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     }
 );

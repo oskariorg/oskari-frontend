@@ -15,13 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
         this._payload = payload;
     }, {
     /** @static @property __name event name */
-        __name : 'RPCUIEvent',
+        __name: 'RPCUIEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
      * Returns
      * @return {String}
      */
-        getBundleId : function () {
+        getBundleId: function () {
             return this._bundleId;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
      * Returns
      * @return {}
      */
-        getPayload : function () {
+        getPayload: function () {
             return this._payload;
         },
         getParams: function () {
@@ -50,5 +50,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.rpc.event.RPCUIEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

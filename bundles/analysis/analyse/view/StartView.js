@@ -64,15 +64,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
             var me = this,
                 content = this.template.clone();
             this.content = content;
-            /*content.find('div.content').before(txt);*/
+            /* content.find('div.content').before(txt); */
             container.append(content);
 
             this.alert.insertTo(container);
 
             this.alert.setContent(this.loc.text, 'default', true);
 
-            //in analyse mode features can be selected only from one layer at once
-            //check if user have selections from many layers and notify about it
+            // in analyse mode features can be selected only from one layer at once
+            // check if user have selections from many layers and notify about it
             var selectionsInManyLayers = this.checkFeatureSelections();
 
             var continueButton = Oskari.clazz.create(
@@ -146,7 +146,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
             this.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
-
         },
 
         checkFeatureSelections: function (container) {
@@ -192,7 +191,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 me.content.find('div.content').append(layerList);
                 return true;
             }
-
         },
 
         getLayerName: function (layerId) {
@@ -209,6 +207,5 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
             });
 
             return layerName;
-
         }
     });

@@ -174,7 +174,7 @@ Oskari.clazz.category(
             var me = this;
             var selected = {
                 elements: [],
-                values : []
+                values: []
             };
             if (me.table) {
                 me.table.find('tr.selected').each(function () {

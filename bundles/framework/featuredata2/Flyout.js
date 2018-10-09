@@ -52,7 +52,6 @@ Oskari.clazz.define(
             }
         }
 
-
         for (var t in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(t)) {
                 me.sandbox.registerForEventByName(me, t);
@@ -62,7 +61,7 @@ Oskari.clazz.define(
         this.wfsLayerService = null;
     }, {
         __templates: {
-            wrapper : '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
+            wrapper: '<div class="gridMessageContainer" style="margin-top:30px; margin-left: 10px;"></div>'
         },
         /**
          * @method getName
@@ -181,7 +180,6 @@ Oskari.clazz.define(
                     }
                     me.selectedTab = selectedPanel;
                     if (selectedPanel) {
-
                         if (selectedPanel.getContainer().css('display') == 'none') {
                             selectedPanel.getContainer().show();
                         }
@@ -215,7 +213,7 @@ Oskari.clazz.define(
         },
 
         addFilterFunctionality: function (event, layer) {
-            if (layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
+            if (layer.isLayerOfType('userlayer')) { // Filter functionality is not implemented for userlayers
                 return;
             }
 
@@ -288,7 +286,7 @@ Oskari.clazz.define(
             panel.layer = layer;
             this.layers['' + layer.getId()] = panel;
             this.tabsContainer.addPanel(panel);
-            if (!layer.isLayerOfType('userlayer')) { //Filter functionality is not implemented for userlayers
+            if (!layer.isLayerOfType('userlayer')) { // Filter functionality is not implemented for userlayers
                 panel.setTitleIcon('icon-funnel', function (event) {
                     me.addFilterFunctionality(event, layer);
                 });
@@ -589,7 +587,7 @@ Oskari.clazz.define(
 
                 fields = model.getFields();
 
-                //ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
+                // ONLY AVAILABLE FOR WFS LAYERS WITH MANUAL REFRESH!
                 if (allowLocateOnMap) {
                     fields.unshift('locate_on_map');
                 }
@@ -631,7 +629,6 @@ Oskari.clazz.define(
                             me.dialog = dialog;
                         });
 
-
                     panel.grid.setColumnSelector(true);
                     panel.grid.setResizableColumns(true);
                     if (conf && !conf.disableExport) {
@@ -666,7 +663,7 @@ Oskari.clazz.define(
                     panel.grid.setNumericField(field, me._fixedDecimalCount);
                 });
 
-                //custom renderer for locating feature on map
+                // custom renderer for locating feature on map
                 if (allowLocateOnMap) {
                     panel.grid.setColumnUIName('locate_on_map', ' ');
                     panel.grid.setColumnValueRenderer('locate_on_map', function (name, data) {
@@ -708,7 +705,7 @@ Oskari.clazz.define(
                             jQuery('.featuredata-go-to-location').html(normalIconObj.outerHTML());
                             jQuery(this).html(activeIconObj.outerHTML());
 
-                            //create the eventhandler for this particular fid
+                            // create the eventhandler for this particular fid
                             me.instance.eventHandlers.WFSFeatureGeometriesEvent = function (event) {
                                 var wkts = event.getGeometries(),
                                     wkt;
@@ -720,14 +717,13 @@ Oskari.clazz.define(
                                 }
                                 var viewportInfo = me.instance.mapModule.getViewPortForGeometry(wkt);
                                 if (viewportInfo) {
-
-                                    //feature didn't fit -> zoom to bounds
+                                    // feature didn't fit -> zoom to bounds
                                     if (viewportInfo.bounds) {
                                         setTimeout(function () {
                                             me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y, viewportInfo.bounds]);
                                         }, 1000);
                                     } else {
-                                        //else just set center.
+                                        // else just set center.
                                         setTimeout(function () {
                                             me.instance.sandbox.postRequestByName('MapMoveRequest', [viewportInfo.x, viewportInfo.y]);
                                         }, 1000);
@@ -737,7 +733,6 @@ Oskari.clazz.define(
                                 me.instance.eventHandlers.WFSFeatureGeometriesEvent = null;
                             };
                             me.instance.sandbox.registerForEventByName(me.instance, 'WFSFeatureGeometriesEvent');
-
                         });
                         return div;
                     });
@@ -806,7 +801,6 @@ Oskari.clazz.define(
                 if (selected && selected.length > 0) {
                     me.selectGridValues(selected, layer);
                 }
-
             }
         },
         setGridOpacity: function (layer, opacity) {
@@ -816,7 +810,6 @@ Oskari.clazz.define(
             var panel = this.layers['' + layer.getId()],
                 tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content');
             isOk = this.tabsContainer.isSelected(panel);
-
 
             if (isOk && panel.grid) {
                 tabContent.css({ 'opacity': opacity });
@@ -1038,7 +1031,7 @@ Oskari.clazz.define(
          * @param  {String}  layerId
          * @param  {Boolean} blnLoading true to show, false to remove
          */
-        showLoadingIndicator : function (layerId, blnLoading) {
+        showLoadingIndicator: function (layerId, blnLoading) {
             this.__addOrRemoveClassFromHeader(
                 this.layers[layerId], blnLoading, 'loading');
         },
@@ -1047,7 +1040,7 @@ Oskari.clazz.define(
          * @param  {String}  layerId
          * @param  {Boolean} blnError true to show, false to remove
          */
-        showErrorIndicator : function (layerId, blnError) {
+        showErrorIndicator: function (layerId, blnError) {
             this.__addOrRemoveClassFromHeader(
                 this.layers[layerId], blnError, 'error');
         },
@@ -1059,7 +1052,7 @@ Oskari.clazz.define(
          * @param  {Boolean} blnAdd  true to show, false to remove
          * @param  {String} strClass class to toggle
          */
-        __addOrRemoveClassFromHeader : function (panel, blnAdd, strClass) {
+        __addOrRemoveClassFromHeader: function (panel, blnAdd, strClass) {
             if (panel) {
                 link = panel.getHeader().find('a');
             }
@@ -1070,8 +1063,7 @@ Oskari.clazz.define(
             // setup indicator
             if (blnAdd) {
                 link.addClass(strClass);
-            }
-            else {
+            } else {
                 link.removeClass(strClass);
             }
         },
@@ -1089,7 +1081,7 @@ Oskari.clazz.define(
                 inputlayer,
                 loc = this.instance.getLocalization('gridFooter'),
                 message;
-            //clean up the old headermessage in case there was one
+            // clean up the old headermessage in case there was one
             jQuery(panel.html).parent().find('div.gridMessageContainer').remove();
             if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
                 return;
@@ -1102,7 +1094,7 @@ Oskari.clazz.define(
                     if (inputlayer.getWpsLayerParams().no_data) {
                         message = loc.noDataCommonMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
                         if (locales) {
-                            //TODO: better management for recognasing private data messages
+                            // TODO: better management for recognasing private data messages
                             _.forEach(locales, function (field) {
                                 if (field === loc.aggregateColumnField) {
                                     message = loc.noDataMessage + ' (' + inputlayer.getWpsLayerParams().no_data + ').';
@@ -1111,16 +1103,14 @@ Oskari.clazz.define(
                                 }
                             });
                         }
-
                     }
                 }
             }
 
             if (message) {
-                //insert header text into dom before tabcontent (=always visible when content scrolling)
+                // insert header text into dom before tabcontent (=always visible when content scrolling)
                 jQuery(panel.html).before(footer.html(message));
             }
-
         }
 
     }, {

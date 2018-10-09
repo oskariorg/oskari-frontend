@@ -47,7 +47,6 @@ Oskari.clazz.define(
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
-
         },
 
         /**
@@ -144,7 +143,7 @@ Oskari.clazz.define(
     '<ColorMap type="ramp" >';
 
             // setup color map
-            //'<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
+            // '<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
             var colors = layer.getColorConfig();
             var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
             _.each(colors, function (color) {

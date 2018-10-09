@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.SimpleFlyout',
             tags = tags + ',' + Oskari.getLang();
         }
         this.userGuideTabs = [{
-            tags : tags
+            tags: tags
         }];
     }, {
 

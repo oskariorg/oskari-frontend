@@ -1,11 +1,11 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
     function () {
     }, {
-        index : 4,
-        allowedLocations : ['top left', 'top right'],
+        index: 4,
+        allowedLocations: ['top left', 'top right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings : [],
+        allowedSiblings: [],
         bundleName: 'maplegend',
         /**
    * Get tool object.
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
                 }
             };
         },
-        getInstance : function () {
+        getInstance: function () {
             return this.__sandbox.findRegisteredModuleInstance(this.bundleName);
         },
         getPlugin: function () {
@@ -39,7 +39,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             if (!data || !data.configuration[me.bundleName]) {
                 return;
             }
-
 
             me.setEnabled(true);
         },
@@ -71,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
   *
   * @param {Boolean} enabled is tool enabled or not
   */
-        setEnabled : function (enabled) {
+        setEnabled: function (enabled) {
             var me = this,
                 tool = me.getTool();
 
@@ -112,6 +111,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MapLegend',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

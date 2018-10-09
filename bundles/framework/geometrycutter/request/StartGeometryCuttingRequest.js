@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCutt
         this._operationId = operationId;
         this._feature = feature;
         this._mode = mode;
-
     }, {
         __name: 'StartGeometryCuttingRequest',
         __modes: {
@@ -33,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StartGeometryCutt
 
         getFeature: function () {
             return this._feature;
-        },
+        }
     }, {
         'protocol': ['Oskari.mapframework.request.Request']
     });

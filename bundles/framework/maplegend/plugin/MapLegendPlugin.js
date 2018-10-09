@@ -253,7 +253,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 legendContainer.append(legendDivider);
             }
             return legendContainer;
-
         },
         createDropdown: function () {
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
@@ -275,7 +274,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             return dropdown;
         },
         getLayerLegend: function (successCb, errorCb, singleLegend, dropdown) {
-
             var layer,
                 me = this;
 
@@ -299,11 +297,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                         errorCb(this);
                     });
                 }
-
             } else {
-
                 dropdown.on('change', function (e, params) {
-
                     var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
                     layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
 
@@ -319,7 +314,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     legendImg.on('error', function () {
                         errorCb(this);
                     });
-
                 });
             }
         },
@@ -371,10 +365,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             }
             this._createUI();
-
         },
         teardownUI: function () {
-            //detach old element from screen
+            // detach old element from screen
             if (this.getElement() !== undefined) {
                 this.getElement().detach();
                 this.removeFromPluginContainer(this.getElement());

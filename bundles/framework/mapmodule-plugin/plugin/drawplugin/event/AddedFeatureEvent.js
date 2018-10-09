@@ -15,13 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
         this._creatorId = creatorId;
     }, {
     /** @static @property __name event name */
-        __name : 'DrawPlugin.AddedFeatureEvent',
+        __name: 'DrawPlugin.AddedFeatureEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function () {
+        getDrawing: function () {
             return this._drawing;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
      * Returns the current drawing mode
      * @return {String}
      */
-        getDrawingMode : function () {
+        getDrawingMode: function () {
             return this._drawingMode;
         },
         getCreatorId: function () {
@@ -48,5 +48,5 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

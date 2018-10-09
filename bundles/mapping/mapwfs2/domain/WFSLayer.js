@@ -183,7 +183,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             for (var j = 0; j < fgeom.length; ++j) {
                 this._clickedGeometries.push(fgeom[j]);
             }
-
         },
         /**
          * @method setPropertyTypes
@@ -282,7 +281,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         setWMSLayerId: function (id) {
             this._WMSLayerId = id;
-
         },
         /**
          * @method getWMSLayerId

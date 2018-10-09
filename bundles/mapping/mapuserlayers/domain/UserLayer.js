@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.domain.UserLayer'
         this.description = undefined;
         this.source = undefined;
         this.renderingElement = undefined;
-        this.featureProperties = []; //property names in fixed order from user_layer table fields column
+        this.featureProperties = []; // property names in fixed order from user_layer table fields column
         this.featurePropertyIndexes = [];
     }, {
         setDescription: function (desc) {

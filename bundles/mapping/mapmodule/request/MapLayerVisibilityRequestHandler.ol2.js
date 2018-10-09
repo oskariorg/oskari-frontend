@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
     function (sandbox, layersPlugin) {
         this.sandbox = sandbox;
         this.layersPlugin = layersPlugin;
-        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
+        // in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
         this.wmtsRetryCounter = {
 
         };
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             var me = this;
             var layerId = request.getMapLayerId();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            //should check that the visibility actually has changed.
+            // should check that the visibility actually has changed.
             if (!layer) {
                 this.tryVectorLayers(layerId, request.getVisible());
                 // no need to notify other components if it was a vector layer
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             // notify other components
             this.layersPlugin.notifyLayerVisibilityChanged(layer);
         },
-        tryVectorLayers : function (id, blnVisible) {
+        tryVectorLayers: function (id, blnVisible) {
             var module = this.layersPlugin.getMapModule();
             var plugin = module.getLayerPlugins('vectorlayer');
             if (!plugin || typeof plugin.getLayerById !== 'function') {
@@ -72,17 +72,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             }
             this.setVisible(layer, blnVisible);
         },
-        setVisible : function (layer, bln) {
+        setVisible: function (layer, bln) {
             // ol2 specific
             layer.setVisibility(bln);
             layer.display(bln);
         },
-        handleWMTStimingIssue : function (layer, core, request) {
+        handleWMTStimingIssue: function (layer, core, request) {
             var me = this;
             if (!layer.isLayerOfType('WMTS')) {
                 return;
             }
-            //No OLMapLayers found and a WMTS layer? There might be a WMTS timing issue. Run again after a while with a timer...
+            // No OLMapLayers found and a WMTS layer? There might be a WMTS timing issue. Run again after a while with a timer...
 
             if (!me.wmtsRetryCounter[layer.getId()]) {
                 me.wmtsRetryCounter[layer.getId()] = 0;

@@ -69,13 +69,11 @@ Oskari.clazz.define(
             });
             // TODO should this be extended from BasicMapModulePlugin afterall?
             me.getMap().addControl(me.hoverControl);
-
         },
 
         // should activate when omat paikat layer is shown
         activate: function () {
             this.hoverControl.activate();
-
         },
 
         // should activate when omat paikat layer is not shown

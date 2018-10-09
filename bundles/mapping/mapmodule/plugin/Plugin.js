@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * @return {String} plugin name
      * @throws always override this
      */
-        getName : function () {
+        getName: function () {
             throw 'Implement your own';
         },
 
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * Sets reference to reference to map module
      * @param {Oskari.mapframework.ui.module.common.MapModule} mapModule
      */
-        setMapModule : function (mapModule) {
+        setMapModule: function (mapModule) {
             throw 'Implement your own';
         },
 
@@ -36,14 +36,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * @method register
      * Interface method for the module protocol
      */
-        register : function () {
+        register: function () {
             throw 'Implement your own';
         },
         /**
      * @method unregister
      * Interface method for the module protocol
      */
-        unregister : function () {
+        unregister: function () {
             throw 'Implement your own';
         },
 
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
-        startPlugin : function (sandbox) {
+        startPlugin: function (sandbox) {
             throw 'Implement your own';
         },
         /**
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * @param {Oskari.Sandbox} sandbox
      *          reference to application sandbox
      */
-        stopPlugin : function (sandbox) {
+        stopPlugin: function (sandbox) {
             throw 'Implement your own';
         },
 
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * events bundle is listening and how bundle reacts to them
      * @static
      */
-        eventHandlers : {},
+        eventHandlers: {},
 
         /**
      * @method onEvent
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * Event is handled forwarded to correct #eventHandlers if found or discarded
      * if not.
      */
-        onEvent : function (event) {
+        onEvent: function (event) {
             return this.eventHandlers[event.getName()].apply(this, [event]);
         }
     });

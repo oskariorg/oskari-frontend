@@ -1,16 +1,16 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
     function () {
     }, {
-        index : 0,
-        allowedLocations : ['bottom left', 'bottom right'],
+        index: 0,
+        allowedLocations: ['bottom left', 'bottom right'],
         lefthanded: 'bottom left',
         righthanded: 'bottom right',
-        allowedSiblings : [
+        allowedSiblings: [
             'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
         ],
-        groupedSiblings : false,
+        groupedSiblings: false,
         /**
     * Get tool object.
     * @method getTool
@@ -51,6 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

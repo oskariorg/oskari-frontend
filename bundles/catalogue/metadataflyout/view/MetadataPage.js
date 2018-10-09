@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
      *
      */
     function (instance, locale) {
-
         /* @property instance bundle instance */
         this.instance = instance;
 
@@ -27,7 +26,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             Oskari.getLocalization('DivManazer').LanguageSelect.languages;
 
         this.asyncTabs = {};
-
     }, {
         init: function () {},
 
@@ -192,7 +190,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     identification.useLimitations[i] =
                         me._prettify(identification.useLimitations[i]);
                 }
-
             });
 
             data.uuid = uuid;
@@ -322,12 +319,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 '$1<a href="http://$2" target="_blank">$2</a>'
             );
 
-            //Change email addresses to mailto:: links
-            //replacePattern = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
-            //replacedText = replacedText.replace(
+            // Change email addresses to mailto:: links
+            // replacePattern = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+            // replacedText = replacedText.replace(
             //    replacePattern,
             //    '<a href="mailto:$1">$1</a>'
-            //);
+            // );
 
             return replacedText;
         }

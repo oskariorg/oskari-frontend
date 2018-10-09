@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * Returns path to image resources
          * @return {String}
          */
-        getImagePath : function () {
+        getImagePath: function () {
             return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
         },
 

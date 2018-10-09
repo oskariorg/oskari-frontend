@@ -2,7 +2,6 @@
  * @class Oskari.tampere.bundle.content-editor.OskariEventNotifierService
  */
 (function (Oskari) {
-
     Oskari.clazz.define('Oskari.tampere.bundle.content-editor.OskariEventNotifierService',
 
         /**
@@ -12,7 +11,6 @@
         function () {
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
-
         }, {
             __name: 'ContentEditor.OskariEventNotifierService',
             __qname: 'Oskari.tampere.bundle.content-editor.OskariEventNotifierService',

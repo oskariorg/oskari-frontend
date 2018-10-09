@@ -223,7 +223,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
                 me._openDialog();
                 return false;
             });
-
         },
 
         /**
@@ -247,9 +246,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
             for (i = 0; i < selectedLayers.length; ++i) {
                 layer = selectedLayers[i];
 
-                //compare names for grouping
+                // compare names for grouping
                 if (group !== layer.getOrganizationName()) {
-                    //get organization names
+                    // get organization names
                     group = layer.getOrganizationName();
 
                     heading = this.templateheading.clone();
@@ -282,7 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
         _getLayers: function () {
             var me = this,
                 selectedLayers = me._sandbox.findAllSelectedMapLayers();
-            //sort the layers
+            // sort the layers
             selectedLayers.sort(function (a, b) {
                 return me._layerListComparator(a, b);
             });
@@ -300,7 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.DataSourcePlugi
                 layerName = layer.getName();
             if (layerName) {
                 var layerItem = jQuery('<li>' + layerName + '</li>');
-                //metadata link
+                // metadata link
                 var uuid = layer.getMetadataIdentifier();
                 if (uuid) {
                     var layerIcon = infoIcon.clone();

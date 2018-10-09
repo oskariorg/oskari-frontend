@@ -10,14 +10,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         me.fileInput;
         me.settings = {};
         me.dialog;
-        me.degreeSystem = true; //show degree systems options by default
+        me.degreeSystem = true; // show degree systems options by default
         me._template = {
             settings: _.template('<div class="coordinatetransformation-file-form">' +
                                     '<% if (obj.export === true) { %> ' +
                                         '<div class="selection-wrapper fileName without-infolink">' +
                                             '<b class="title">${fileName}</b>' +
                                             '<input type="text">' +
-                //'<div class="infolink icon-info" data-selection="fileName"></div>' +
+                // '<div class="infolink icon-info" data-selection="fileName"></div>' +
                                         '</div>' +
                                     '<% } else { %>' +
                                         '<div class="selection-wrapper fileInput without-infolink"></div>' +
@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             this.setElement(element);
             this.setTooltips();
         },
-        /*createEventHandlers: function ( dialog ) {
+        /* createEventHandlers: function ( dialog ) {
             var me = this;
             jQuery( '.oskari-coordinate-form' ).on('click', '.done', function () {
                 me.trigger('GetSettings', me.getFormSelections() );
@@ -185,12 +185,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             jQuery( '.oskari-coordinate-form' ).on('click', '.cancel', function () {
                 dialog.close();
             });
-        },*/
+        }, */
         /**
          * @method getFormSelections
          */
         getFormSelections: function () {
-            //var element = jQuery('.oskari-coordinate-form');
+            // var element = jQuery('.oskari-coordinate-form');
             var element = this.getElement();
             var settings = {
                 fileName: element.find('.fileName input').val(),
@@ -241,27 +241,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             dialog.createCloseIcon();
             dialog.makeDraggable();
             if (this.degreeSystem === false) {
-                formatRow.css('display','none');
+                formatRow.css('display', 'none');
                 decimalInput.val(3);
             } else {
-                formatRow.css('display','');
+                formatRow.css('display', '');
                 decimalInput.val(8);
             }
             this.bindInfoLinks();
-            //when degree unit is changed, change also default decimal value
+            // when degree unit is changed, change also default decimal value
             elem.find('.unitFormat select').on('change', function () {
                 var decimals = jQuery(this).find(':checked').data('decimals');
                 decimalInput.val(decimals);
             });
             // HACK //
-            //TODO handle listeners if fileinput is moved to file settings form instead of flyout
+            // TODO handle listeners if fileinput is moved to file settings form instead of flyout
             if (this.type === 'import' && jQuery._data(this.fileInput.getElement().get(0), 'events') === undefined) {
                 this.fileInput._bindAdvancedUpload();
             }
             dialog.show(title, elem, [cancelBtn, btn]);
             this.dialog = dialog;
-            //this.createEventHandlers( dialog );
-
+            // this.createEventHandlers( dialog );
         },
         bindInfoLinks: function () {
             var me = this;
@@ -293,7 +292,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             dialog.moveTo(this);
             dialog.makeDraggable();
 
-        },*/
+        }, */
         /*
         exportFile: function ( settings ) {
             var exportArray = this.dataHandler.getOutputCoords();
@@ -305,6 +304,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             } else {
                 Oskari.log(this.getName()).warn("No transformed coordinates to write to file!");
             }
-        }*/
+        } */
     }
 );

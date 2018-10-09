@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
         this.loader = null;
         this._requestHandlers = {};
         this.feedbackService = null;
-
     }, {
         /**
          * @static
@@ -114,7 +113,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
             )(this);
             sandbox.request(this, request);
 
-
             this._activateMetadataSearchResultsShowRating();
 
             this._addMetadataFeedbackTabToMetadataFlyout();
@@ -138,7 +136,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
                     actionTextElement: null,
                     actionText: null,
                     showAction: function (metadata) {
-                        //add the span with metadata's id to be able to identify and update rating later
+                        // add the span with metadata's id to be able to identify and update rating later
                         this.actionText = '<span id="metadataRatingSpan_' + metadata.id + '" style="display:none;"/>&nbsp;' + me._getAdminMetadataRating(metadata.latestAdminRating);
 
                         return true;
@@ -163,7 +161,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
                     template: null,
                     title: me._locale.feedbackList.tabTitle,
                     tabActivatedCallback: function (uuid, panel) {
-                        me.feedbackService.fetchFeedback({'category': 'ELF_METADATA' ,'categoryItem': uuid},
+                        me.feedbackService.fetchFeedback({'category': 'ELF_METADATA', 'categoryItem': uuid},
                             function (response) {
                                 _.each(response[1], function (feedbackItem) {
                                     feedbackItem.score = me._getMetadataRating(feedbackItem);
@@ -209,7 +207,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @method setSandbox
@@ -293,7 +290,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
                     numRatingsContainer.append(numRatingsText);
                     ratingContainer.append(numRatingsContainer);
                 }
-
             }
             return ratingContainer.html();
         },
@@ -323,7 +319,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
         _updateRating: function () {
         }
 
-    },{
+    }, {
         protocol: [
             'Oskari.bundle.BundleInstance',
             'Oskari.mapframework.module.Module',

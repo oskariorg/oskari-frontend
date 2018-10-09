@@ -17,12 +17,12 @@ Oskari.clazz
             this._placement = config.placement;
             this._content = config.content;
         }, {
-            __name : 'userguide.ShowUserGuideRequest',
-            getName : function () {
+            __name: 'userguide.ShowUserGuideRequest',
+            getName: function () {
                 return this.__name;
             },
 
-            getUuid : function () {
+            getUuid: function () {
                 return this._uuid;
             },
 
@@ -36,7 +36,7 @@ Oskari.clazz
 
             getEl: function () {
                 return this._el;
-            } ,
+            },
             isToggle: function () {
                 return this._toggle;
             },
@@ -50,7 +50,7 @@ Oskari.clazz
         },
 
         {
-            'protocol' : ['Oskari.mapframework.request.Request']
+            'protocol': ['Oskari.mapframework.request.Request']
         });
 
 /* Inheritance */

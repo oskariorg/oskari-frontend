@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 );
 
             if (!mapLayerService) {
-                //TODO: signal failure - no map layer service
+                // TODO: signal failure - no map layer service
                 return;
             }
 
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                         return;
                     }
                     if (layer && op === 'update') {
-                        //Maplayer updated -> url might have changed (case forceProxy). Update that.
+                        // Maplayer updated -> url might have changed (case forceProxy). Update that.
                         me._replaceMapLayer(layer);
                     }
                 },
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 return;
             }
 
-            //layer added to map -> recreate with the new config
+            // layer added to map -> recreate with the new config
             var olMapLayer = olMapLayers[0];
             var oldLayerIndex = this._map.getLayerIndex(olMapLayer);
             var map = this.getMap();
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             });
         },
 
-        __getLayerName : function (layer) {
+        __getLayerName: function (layer) {
             var name = 'layer_' + layer.getId();
             if (layer.isBaseLayer() || layer.isGroupLayer()) {
                 name = 'basemap_' + layer.getId();
@@ -194,8 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             }
         },
 
-
-        //in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
+        // in case of wmts layer timing issues the request is tried a couple of times. Use the counter to prevent trying again til the end of time.
         afterChangeOpacityRetryCounter: {},
         afterChangeMapLayerOpacityEvent: function (event) {
             var me = this;
@@ -245,8 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @private
          */
         _getPlaceHolderWmtsLayer: function (layer) {
-
-            var layerHolder = new OpenLayers.Layer.Vector('layer_' + layer.getId(),{
+            var layerHolder = new OpenLayers.Layer.Vector('layer_' + layer.getId(), {
                 visibility: false
             });
             return layerHolder;

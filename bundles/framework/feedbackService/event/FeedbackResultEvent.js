@@ -17,14 +17,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
         this._data = data;
     }, {
     /** @static @property __name event name */
-        __name : 'FeedbackResultEvent',
+        __name: 'FeedbackResultEvent',
 
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns the success  info
      * @return {Boolean}
      */
-        getSuccess : function () {
+        getSuccess: function () {
             return this._success;
         },
         /**
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns the response data JSON
      * @return {JSON}
      */
-        getData : function () {
+        getData: function () {
             return this._data;
         },
         /**
@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns request paremeters
      * @return {JSON}
      */
-        getRequestParameters : function () {
+        getRequestParameters: function () {
             return this._requestParameters;
         },
 
@@ -64,5 +64,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

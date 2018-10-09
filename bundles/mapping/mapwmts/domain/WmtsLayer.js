@@ -9,8 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
  * @static
  */
     function () {
-
-    //Internal id for this map layer
+    // Internal id for this map layer
         this._WmtsMatrixSetId = null;
         this._tileURL = null;
         this._availableQueryFormats = [];
@@ -21,14 +20,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
      * @method setTileUrl
      * @param {String} url
      */
-        setTileUrl : function (url) {
+        setTileUrl: function (url) {
             this._tileURL = url;
         },
         /**
      * @method getTileUrl
      * @return {String} url
      */
-        getTileUrl : function () {
+        getTileUrl: function () {
             if (!this._tileURL) {
                 return this.getLayerUrl();
             }
@@ -38,14 +37,14 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
      * @method setWmtsMatrixSetId
      * @param {String} matrixSetId
      */
-        setWmtsMatrixSetId : function (matrixSetId) {
+        setWmtsMatrixSetId: function (matrixSetId) {
             this._WmtsMatrixSetId = matrixSetId;
         },
         /**
      * @method getWmtsMatrixSetId
      * @return {String}
      */
-        getWmtsMatrixSetId : function () {
+        getWmtsMatrixSetId: function () {
             return this._WmtsMatrixSetId;
         },
         /**
@@ -54,7 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.domain.WmtsLayer',
      * @param {String[]} options for GFI output
      */
         setAvailableQueryFormats: function (options) {
-
             this._availableQueryFormats = options || [];
         },
         /**

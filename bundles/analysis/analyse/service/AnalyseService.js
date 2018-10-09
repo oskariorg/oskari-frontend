@@ -108,7 +108,6 @@ Oskari.clazz.define(
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
                 }
             );
-
         },
 
         /**
@@ -143,7 +142,6 @@ Oskari.clazz.define(
                         mapLayer = mapLayerService.createMapLayer(analyseJson);
                         // Add the layer to the map layer service
                         mapLayerService.addLayer(mapLayer, true);
-
                     }
                 }
             }
@@ -219,7 +217,6 @@ Oskari.clazz.define(
                 function (jqXHR, textStatus, errorThrown) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
                 });
-
         },
 
         /**

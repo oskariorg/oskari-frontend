@@ -116,9 +116,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             )
         };
         me.spinnerStopTimer = null;
-        //me.lastLonLat = null;
+        // me.lastLonLat = null;
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-coordinatetool': {
                     iconCls: 'mobile-xy',
                     tooltip: '',
@@ -254,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             lat = me._latInput.val();
 
                         var msg = null;
-                        if (Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
+                        if (Oskari.util.coordinateIsDegrees([lon, lat]) && me._allowDegrees()) {
                             msg = {
                                 lat: lat,
                                 lon: lon
@@ -275,7 +275,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     } else {
                         me._showCoordinatesNotValidMessage();
                     }
-
                 });
             }
 
@@ -318,7 +317,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popup.addClass('mobile-popup');
                 me._popup.setColourScheme({'bgColour': '#e6e6e6'});
 
-                //hide mouse coordinates
+                // hide mouse coordinates
                 popupContent.find('.mousecoordinates-div').hide();
 
                 popupService.closeAllPopups(true);
@@ -344,14 +343,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             } else {
                 me._popup.makeDraggable();
                 me._popup.addClass('coordinatetool__popup');
-                //check location of the tool and open popup according to it
+                // check location of the tool and open popup according to it
                 if (me._config.location && me._config.location.classes === 'top left') {
                     popupLocation = 'right';
                 } else {
                     popupLocation = 'left';
                 }
 
-                //show mouse coordinates
+                // show mouse coordinates
                 popupContent.find('div.mousecoordinates-div').show();
 
                 me._popup.show(popupTitle, popupContent, buttons);
@@ -427,8 +426,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 reverseGeoCheckbox.on('change', function () {
                     if (this.checked) {
                         reverseGeocodeLabel.show();
-                    }
-                    else {
+                    } else {
                         reverseGeocodeLabel.hide();
                     }
                 });
@@ -438,7 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._reverseGeocodeLabel = popupContent.find('div.reverseGeocodeContainer');
             }
         },
-        _markersSupported : function () {
+        _markersSupported: function () {
             var builder = Oskari.requestBuilder('MapModulePlugin.AddMarkerRequest');
             return !!builder;
         },
@@ -455,8 +453,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lon = parseFloat(inputData.lonlat.lon),
                 inputLonLatData = {
                     'lonlat': {
-                        'lat':lat,
-                        'lon':lon
+                        'lat': lat,
+                        'lon': lon
                     }
                 };
 
@@ -572,7 +570,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             me._coordinateTransformationExtension.getTransformedCoordinatesFromServer(data, fromProj, toProj, successCb, errorCb);
         },
 
-
         /**
          * Seet inputs disabled
          * @method  @private _setDisabledInputs
@@ -643,8 +640,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         isOpen: function () {
             return this._toolOpen;
         },
-        teardownUI : function () {
-            //remove old element
+        teardownUI: function () {
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
             if (this._popup) {
                 this._popup.close(true);
@@ -713,27 +710,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 if (lat.indexOf('~') === 0) {
                     lat = lat.substring(1, lat.length);
                 }
-                lat = lat.replace(/,/g,'.');
+                lat = lat.replace(/,/g, '.');
                 if (lon.indexOf('~') === 0) {
                     lon = lon.substring(1, lat.length);
                 }
-                lon = lon.replace(/,/g,'.');
+                lon = lon.replace(/,/g, '.');
 
                 lat = lat + '';
                 lon = lon + '';
                 if (lat.indexOf('~') === 0) {
                     lat = lat.substring(1, lat.length);
                 }
-                lat = lat.replace(/,/g,'.');
+                lat = lat.replace(/,/g, '.');
                 if (lon.indexOf('~') === 0) {
                     lon = lon.substring(1, lat.length);
                 }
-                lon = lon.replace(/,/g,'.');
-
+                lon = lon.replace(/,/g, '.');
 
                 // Need to show degrees ?
                 if (me._allowDegrees() && !isNaN(lat) && !isNaN(lon)) {
-                    var degreePoint = Oskari.util.coordinateMetricToDegrees([lon,lat], me._getProjectionDecimals());
+                    var degreePoint = Oskari.util.coordinateMetricToDegrees([lon, lat], me._getProjectionDecimals());
                     lon = degreePoint[0];
                     lat = degreePoint[1];
                 }
@@ -820,7 +816,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var coordinateDisplayDegY = coordinateFormatDisplayY.find('div.coordinatedisplay-degy');
                 var coordinateDisplayDegminY = coordinateFormatDisplayY.find('div.coordinatedisplay-degminy');
 
-                //X
+                // X
                 coordinateDisplayDeg.find('span.degreesX').html(
                     parseFloat(data.lonlat.lat).toFixed(9).replace('.', me._decimalSeparator) + '&deg;'
                 );
@@ -828,7 +824,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 coordinateDisplayDegmin.find('span.degreesX').html(degmin.degreesY + '&deg;');
                 coordinateDisplayDegmin.find('span.minutesX').html(degmin.minutesY + '\'');
 
-                //Y
+                // Y
                 coordinateDisplayDegY.find('span.degreesY').html(
                     parseFloat(data.lonlat.lon).toFixed(9).replace('.', me._decimalSeparator) + '&deg;'
                 );
@@ -837,10 +833,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 coordinateDisplayDegminY.find('span.minutesY').html(degmin.minutesX + '\'');
 
                 me._changeCoordinateContainerVisibility(true);
-            }
-            else {
+            } else {
                 me._changeCoordinateContainerVisibility(false);
-                return;
             }
         },
         /**
@@ -849,7 +843,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         getEmergencyCallCoordinatesFromServer: function (data) {
             var me = this;
 
-            //get the transform from current data
+            // get the transform from current data
             var sourceProjection = me.getMapModule().getProjection();
 
             // If coordinates are not  EPSG:4326 then
@@ -873,10 +867,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 degmin = me._coordinateTransformationExtension._formatDegrees(data.lonlat.lon, data.lonlat.lat, 'min'),
                 coordinateDisplayEmergencyCall = me._popupContent.find('div.coordinatedisplay-emergencycall');
 
-            var minutesX = '' + parseFloat(degmin.minutesX.replace(me._decimalSeparator,'.')).toFixed(3);
+            var minutesX = '' + parseFloat(degmin.minutesX.replace(me._decimalSeparator, '.')).toFixed(3);
             minutesX = minutesX.replace('.', me._decimalSeparator);
 
-            var minutesY = '' + parseFloat(degmin.minutesY.replace(me._decimalSeparator,'.')).toFixed(3);
+            var minutesY = '' + parseFloat(degmin.minutesY.replace(me._decimalSeparator, '.')).toFixed(3);
             minutesY = minutesY.replace('.', me._decimalSeparator);
 
             coordinateDisplayEmergencyCall.find('span.coordinatedisplay-emergencycall-label').html(me._locale('display.coordinatesTransform.emergencyCallLabel'));
@@ -887,7 +881,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             coordinateDisplayEmergencyCall.find('span.minutesY').html(minutesY);
             coordinateDisplayEmergencyCall.show();
             me._checkPopupPosition();
-        } ,
+        },
         /**
          * Update reverse geocode value to inputs
          * @method  @private _updateReverseGeocode
@@ -940,8 +934,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
 
                     Oskari.log('coordinatetool').warn(message);
-                },data.lonlat.lon, data.lonlat.lat);
-
+                }, data.lonlat.lon, data.lonlat.lat);
         },
         /**
          * Updates the given coordinates to the UI
@@ -965,7 +958,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         me._projectionChanged = false;
                     }
                     data = me._coordinateTransformationExtension.transformCoordinates(data, fromProjection, changeToProjection);
-
                 } catch (error) {
                     if (me._latInput && me._lonInput) {
                         me._latInput.val('');
@@ -995,7 +987,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @method @public getElement
          */
         getElement: function () {
-            return this._element;//jQuery('.mapplugin.coordinatetool');
+            return this._element;// jQuery('.mapplugin.coordinatetool');
         },
 
         getEmergencyCallInfo: function (data) {
@@ -1065,7 +1057,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                             me.refresh(_.clone(data));
                         }
 
-
                         if (event.isPaused() && me._getPreciseTransform) {
                             me._getTransformedCoordinatesFromServer(dataServer, false, true);
                         }
@@ -1115,7 +1106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                         },
                         dataServer = _.clone(data);
                     if (!me._showMouseCoordinates) {
-                        //don't manipulate the original data- object, we need the coordinates in map projection for the reverse geocoding to work
+                        // don't manipulate the original data- object, we need the coordinates in map projection for the reverse geocoding to work
                         me.refresh(_.clone(data));
                         if (me._getPreciseTransform) {
                             me._getTransformedCoordinatesFromServer(dataServer, false, true);
@@ -1158,7 +1149,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for (var c = 0;c < classList.length;c++) {
+            for (var c = 0; c < classList.length; c++) {
                 var className = classList[c];
                 if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
@@ -1227,8 +1218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
 
             if (!isProjectionShowConfig && isAllProjectionConfig) {
                 decimals = conf.projectionShowFormat.decimals;
-            }
-            else if (!isProjectionShowConfig && conf.roundToDecimals) {
+            } else if (!isProjectionShowConfig && conf.roundToDecimals) {
                 decimals = conf.roundToDecimals;
                 me.getSandbox().printWarn('Deprecated coordinatetool.conf.roundToDecimals - please use coordinatetool.conf.projectionShowFormat.decimals or ' +
                     'coordinatetool.conf.projectionShowFormat["projection"].decimals instead.');
@@ -1245,13 +1235,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 lat = me._latInput.val(),
                 dec = null;
 
-            if (Oskari.util.coordinateIsDegrees([lon,lat]) && me._allowDegrees()) {
-                dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
+            if (Oskari.util.coordinateIsDegrees([lon, lat]) && me._allowDegrees()) {
+                dec = Oskari.util.coordinateDegreesToMetric([lon, lat], 20);
                 lon = dec[0];
                 lat = dec[1];
-            }
-            else if (Oskari.util.coordinateIsDegrees([lon,lat]) && me._previousProjection && me._allowDegrees(me._previousProjection)) {
-                dec = Oskari.util.coordinateDegreesToMetric([lon,lat], 20);
+            } else if (Oskari.util.coordinateIsDegrees([lon, lat]) && me._previousProjection && me._allowDegrees(me._previousProjection)) {
+                dec = Oskari.util.coordinateDegreesToMetric([lon, lat], 20);
                 lon = dec[0];
                 lat = dec[1];
             }

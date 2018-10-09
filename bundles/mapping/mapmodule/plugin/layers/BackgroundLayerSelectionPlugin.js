@@ -83,7 +83,7 @@ Oskari.clazz.define(
                  */
                 AfterRearrangeSelectedMapLayerEvent: function (event) {
                     // Update selection, bottom baselayer might've changed
-                    //this._updateUISelection();
+                    // this._updateUISelection();
                     this.refresh();
                 },
 
@@ -98,7 +98,7 @@ Oskari.clazz.define(
                     // TODO Check if event.getMapLayer() id is in our layers first...
                     // if not, still do this._updateUISelection() as the selected
                     // layer might still have changed
-                    //this._createLayerSelectionElements();
+                    // this._createLayerSelectionElements();
                     this.refresh();
                 },
 
@@ -113,7 +113,7 @@ Oskari.clazz.define(
                     // TODO Check if event.getMapLayer() id is in our layers first...
                     // if not, still do this._updateUISelection() as the selected
                     // layer might still have changed
-                    //this._createLayerSelectionElements();
+                    // this._createLayerSelectionElements();
                     this.refresh();
                 },
 
@@ -125,7 +125,7 @@ Oskari.clazz.define(
                  */
                 MapLayerEvent: function (event) {
                     // TODO add check for event.getMapLayer().getId() here?
-                    //this._createLayerSelectionElements();
+                    // this._createLayerSelectionElements();
                     this.refresh();
                 },
 

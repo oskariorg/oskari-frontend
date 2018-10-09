@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             if (this.isEmbedded()) {
                 this.createPlugin();
             } else {
-                //Let's extend UI
+                // Let's extend UI
                 var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
                 sandbox.request(this, request);
 
@@ -122,14 +122,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -318,7 +316,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             if (!layer || !layer.getLegendImage()) {
                 return;
             }
-
 
             var tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('show-layer-legend-tool');

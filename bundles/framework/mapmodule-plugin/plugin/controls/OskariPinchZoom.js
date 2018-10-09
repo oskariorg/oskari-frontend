@@ -11,7 +11,7 @@ OskariPinchZoom = OpenLayers.Class(OpenLayers.Control.PinchZoom, {
         OpenLayers.Control.PinchZoom.prototype.initialize.apply(this, arguments);
     },
     /* @method setup */
-    setup : function (mapmodule) {
+    setup: function (mapmodule) {
         this.mapmodule = mapmodule;
     },
     pinchDone: function () {

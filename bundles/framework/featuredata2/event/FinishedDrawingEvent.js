@@ -16,13 +16,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.FinishedDrawi
         this._selectAllLayers = blnSelectAllLayers;
     }, {
     /** @static @property __name event name */
-        __name : 'FeatureData.FinishedDrawingEvent',
+        __name: 'FeatureData.FinishedDrawingEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.FinishedDrawi
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function () {
+        getDrawing: function () {
             return this._drawing;
         },
         /**
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.FinishedDrawi
      * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
-        isModification : function () {
+        isModification: function () {
             return this._modification;
         },
         /**
@@ -54,5 +54,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.FinishedDrawi
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

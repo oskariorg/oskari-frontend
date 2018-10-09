@@ -138,7 +138,7 @@ Oskari.clazz.define(
          */
         destroy: function () {
             // remember to remove live bindings if any
-            //jQuery('div.myplacescategoryform input.oskaricolor').off();
+            // jQuery('div.myplacescategoryform input.oskaricolor').off();
             if (this.dialog) {
                 this.dialog.close();
             }

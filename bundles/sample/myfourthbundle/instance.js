@@ -37,13 +37,13 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
      * @static
      * @property __name
      */
-        __name : 'MyFourthBundle',
+        __name: 'MyFourthBundle',
 
         /**
      * @method getName
      * Module protocol method
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -51,18 +51,18 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
      * @method update
      * BundleInstance protocol method
      */
-        update : function () {
+        update: function () {
         },
         /**
      * @method start
      * BundleInstance protocol method
      */
-        start : function () {
+        start: function () {
             var me = this;
 
             // Should this not come as a param?
-        	var conf = me.conf ;
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox' ;
+        	var conf = me.conf;
+            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
             this.sandbox = sandbox;
 
@@ -73,10 +73,10 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
             if (reqBuilder) {
             // got builder -> toolbar is loaded
                 sandbox.request(me, reqBuilder('mytool', 'sampletools', {
-                    iconCls : 'tool-myfourth',
+                    iconCls: 'tool-myfourth',
                     tooltip: me.getLocalization('tooltip'),
                     sticky: false,
-                    callback : function () {
+                    callback: function () {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         dialog.show(null, me.getLocalization('toolClicked'));
                         dialog.makeModal();
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
      * @method init
      * Module protocol method
      */
-        init : function () {
+        init: function () {
         // headless module so nothing to return
             return null;
         },
@@ -99,14 +99,14 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
      * @method onEvent
      * Module protocol method/Event dispatch
      */
-        onEvent : function (event) {
+        onEvent: function (event) {
         },
 
         /**
      * @method stop
      * BundleInstance protocol method
      */
-        stop : function () {
+        stop: function () {
             var me = this;
             // unregister module from sandbox
             me.sandbox.unregister(me);
@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
      *      JSON object for complete data depending on localization
      *      structure and if parameter key is given
      */
-        getLocalization : function (key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -132,6 +132,6 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
             return this._localization;
         }
     }, {
-        protocol : [ 'Oskari.bundle.BundleInstance',
+        protocol: [ 'Oskari.bundle.BundleInstance',
             'Oskari.mapframework.module.Module']
     });

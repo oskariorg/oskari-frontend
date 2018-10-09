@@ -313,7 +313,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 return link;
             }
             return content;
-
         },
         /**
          * @private @method _renderAdditionalData
@@ -460,8 +459,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                     me.select(selections, false);
                     me.trigger('sort', {
-                        column : scopedValue,
-                        ascending : !descending
+                        column: scopedValue,
+                        ascending: !descending
                     });
                     return false;
                 };
@@ -578,7 +577,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 tableHeader.prepend(row);
             }
 
-
             for (i = 0; i < me._fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
                 link = header.find('a');
@@ -589,7 +587,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 if (typeof uiName === 'function') {
                     uiName(header);
                 } else {
-
                     var tools = this.columnTools[baseKey] || [];
                     if (!uiName) {
                         uiName = fieldName;
@@ -597,7 +594,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         uiName = fieldName.replace(baseKey, uiName);
                     }
                     link.append(uiName);
-                    header.attr('title',uiName);
+                    header.attr('title', uiName);
                     if (me.lastSort && fieldName === me.lastSort.attr) {
                         if (me.lastSort.descending) {
                             header.addClass('desc');
@@ -640,7 +637,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param  {String} value column field name
          * @return {String}       value with problematic characters removed/replaced
          */
-        __getHeaderClass : function (value) {
+        __getHeaderClass: function (value) {
             if (!value) {
                 return value;
             }
@@ -659,7 +656,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param  {Object[]} tools  array of items with name and callback
          * @param  {String} field  column name for the callback parameter
          */
-        __attachHeaderTools : function (header, tools, field) {
+        __attachHeaderTools: function (header, tools, field) {
             var me = this;
             tools.forEach(function (tool) {
                 var tpl = me.templateTool.clone();
@@ -976,21 +973,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     var additionalInfo = [];
                     if (jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
                         additionalInfo.push({
-                            type : 'datasource',
-                            name : me._loc('Grid.export.additional.dataSource'),
-                            value : exportForm.getElement().elements.dataSource.value
+                            type: 'datasource',
+                            name: me._loc('Grid.export.additional.dataSource'),
+                            value: exportForm.getElement().elements.dataSource.value
                         });
                     }
                     additionalInfo.push({
-                        type : 'layerName',
-                        name : me._loc('Grid.export.additional.layerName'),
-                        value : me._getLayerName()
+                        type: 'layerName',
+                        name: me._loc('Grid.export.additional.layerName'),
+                        value: me._getLayerName()
                     });
                     if (jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
                         additionalInfo.push({
-                            type : 'metadata',
-                            name : me._loc('Grid.export.additional.metadata'),
-                            value : exportForm.getElement().elements.metadata.value
+                            type: 'metadata',
+                            name: me._loc('Grid.export.additional.metadata'),
+                            value: exportForm.getElement().elements.metadata.value
                         });
                     }
 
@@ -1008,7 +1005,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         'Oskari.userinterface.component.Popup'
                     );
                     // Selection state
-                    jQuery(exportForm.getElement()).find('input[name=export_selection]').prop('disabled',me.getSelection().length === 0);
+                    jQuery(exportForm.getElement()).find('input[name=export_selection]').prop('disabled', me.getSelection().length === 0);
                     me.exportPopup.makeModal();
 
                     me.exportPopup.show(
@@ -1277,8 +1274,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         });
                         ret.push(row);
                     }
-                }
-                else {
+                } else {
                     fields.forEach(function (field) {
                         row.push(me._prepareData(rowData[field]));
                     });
@@ -1354,14 +1350,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _prepareData: function (data) {
             if (data instanceof Date) {
                 data = String(data);
-            }
-            else if (!isNaN(data)) {
+            } else if (!isNaN(data)) {
                 data = String(data);
             }
             return data;
         },
-        //http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
-        contentScroll : function (follow) {
+        // http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+        contentScroll: function (follow) {
             var me = this;
             if (this.__scrollSortFunc) {
                 this.off('sort', this.__scrollSortFunc);
@@ -1373,22 +1368,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             this.on('sort', this.__scrollSortFunc);
             this.table.find('thead').css('display', 'block');
             this.table.find('tbody').css({
-                'display' : 'block',
-                'overflow' : 'auto'
+                'display': 'block',
+                'overflow': 'auto'
             });
             var dataCells = this.table.find('tbody tr:first').children();
             this.table.find('thead tr').children().each(function (i, header) {
                 jQuery(header).css({
                     'padding': '5px',
                     'width': '120px',
-                    'max-width' : 'none'
+                    'max-width': 'none'
                 });
             });
             dataCells.each(function (i, cell) {
                 jQuery(cell).css({
                     'padding': '5px',
                     'width': '120px',
-                    'max-width' : 'none'
+                    'max-width': 'none'
                 });
             });
             var headerHeight = this.table.find('thead').height();

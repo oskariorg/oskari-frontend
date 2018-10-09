@@ -12,7 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
      */
 
     function (instance) {
-
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -22,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * @return {String} the name for the component
          */
         getName: function () {
-
             return 'Oskari.mapframework.bundle.layerselector2.Tile';
         },
         /**
@@ -37,7 +35,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * Interface method implementation
          */
         setEl: function (el, width, height) {
-
             this.container = jQuery(el);
         },
         /**
@@ -66,7 +63,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * Interface method implementation, clears the container
          */
         stopPlugin: function () {
-
             this.container.empty();
         },
         /**
@@ -74,7 +70,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * @return {String} localized text for the title of the tile
          */
         getTitle: function () {
-
             return this.instance.getLocalization('title');
         },
         /**
@@ -82,7 +77,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Tile',
          * @return {String} localized text for the description of the tile
          */
         getDescription: function () {
-
             return this.instance.getLocalization('desc');
         },
         /**

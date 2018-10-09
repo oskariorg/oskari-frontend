@@ -29,5 +29,5 @@ Oskari.clazz.define('Oskari.mapping.maprotator.request.rotate.map',
             return this._degrees;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

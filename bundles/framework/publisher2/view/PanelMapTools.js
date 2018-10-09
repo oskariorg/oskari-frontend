@@ -43,14 +43,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 });
             }
 
-
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.sandbox.registerForEventByName(me, p);
                 }
             }
-
-
         },
         /**
          * @method onEvent
@@ -96,7 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         */
         _sortTools: function () {
             var me = this,
-                sortFunc = function (a,b) {
+                sortFunc = function (a, b) {
                     if (a.getIndex() < b.getIndex()) {
                         return -1;
                     }
@@ -129,8 +126,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me._sortTools();
             // Add tools to panel
             _.each(tools, function (tool) {
-                var ui = jQuery(me.templates.tool({title : tool.getTitle() }));
-                //setup values when editing an existing map
+                var ui = jQuery(me.templates.tool({title: tool.getTitle() }));
+                // setup values when editing an existing map
                 ui.find('input').prop('checked', !!tool.isEnabled());
                 ui.find('input').prop('disabled', !!tool.isDisabled());
 
@@ -191,7 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @return {Object}
          */
         getValues: function () {
-            //just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
+            // just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
             return null;
         },
         /**
@@ -205,7 +202,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 if (tool.getTool().name === name) {
                     bartool = tool;
                 }
-
             });
             return bartool;
         },
@@ -232,7 +228,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @param {String} mode the mode
          */
         setMode: function (mode) {
-
             if (!this.panel) {
                 return;
             }

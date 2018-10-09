@@ -16,7 +16,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
             var me = this,
             	layerIdPrefix = 'layer_',
             	key;
@@ -28,10 +27,10 @@ Oskari.clazz.define(
                     id: layer.getId(),
                     styles: layer.getCurrentStyle().getName(),
                     format: 'image/png',
-                    SLD_BODY : this.__getSLD(layer)
+                    SLD_BODY: this.__getSLD(layer)
                 },
                 defaultOptions = {
-                    singleTile : true,
+                    singleTile: true,
                     layerId: layer.getLayerName(),
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
@@ -71,7 +70,7 @@ Oskari.clazz.define(
             	}
         		this.____oskariFlagSLD = true;
                 openLayer.mergeNewParams({
-                    SLD_BODY : me.__getSLD(layer)
+                    SLD_BODY: me.__getSLD(layer)
                 });
             };
             // /hack

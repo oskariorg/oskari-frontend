@@ -149,7 +149,6 @@ Oskari.clazz.define(
                 overlay.on('mousedown', function (e) {
                     e.preventDefault();
                 });
-
             } else {
                 me._inputField.prop('disabled', false);
                 me._searchButton.prop('disabled', false);
@@ -203,7 +202,7 @@ Oskari.clazz.define(
                 if (reqBuilder) {
                     sandbox.request(me.getName(), reqBuilder());
                 }
-                //me._checkForKeywordClear();
+                // me._checkForKeywordClear();
             });
             me._inputField.on('blur', function () {
                 reqBuilder = Oskari.requestBuilder(
@@ -212,7 +211,7 @@ Oskari.clazz.define(
                 if (reqBuilder) {
                     sandbox.request(me.getName(), reqBuilder());
                 }
-                //me._checkForKeywordInsert();
+                // me._checkForKeywordInsert();
             });
 
             me._inputField.on('keypress', function (event) {
@@ -233,7 +232,6 @@ Oskari.clazz.define(
                     me._doSearch();
                 }
             });
-
 
             // to close button
             content.find('div.close').on('click', function (event) {
@@ -367,7 +365,7 @@ Oskari.clazz.define(
                 themeColours = mapmodule.getThemeColours(),
                 popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
-            /*clear the existing search results*/
+            /* clear the existing search results */
             if (me.popup) {
                 me.popup.close();
                 me.popup = null;
@@ -392,7 +390,7 @@ Oskari.clazz.define(
                     lat = msg.locations[0].lat;
                     zoom = msg.locations[0].zoomLevel;
                     if (msg.locations[0].zoomScale) {
-                        zoom = {scale : msg.locations[0].zoomScale};
+                        zoom = {scale: msg.locations[0].zoomScale};
                     }
 
                     me.getSandbox().request(
@@ -433,7 +431,7 @@ Oskari.clazz.define(
                         zoom = resultItem.zoomLevel;
 
                         if (resultItem.zoomScale) {
-                            zoom = {scale : resultItem.zoomScale};
+                            zoom = {scale: resultItem.zoomScale};
                         }
 
                         var row = me.templateResultsRow.clone(),
@@ -476,11 +474,10 @@ Oskari.clazz.define(
                 }
             }
 
-
             var popupContent = resultsContainer;
             var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
             if (Oskari.util.isMobile()) {
-                //get the sticky buttons into their initial state and kill all popups
+                // get the sticky buttons into their initial state and kill all popups
                 me.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest', [null, 'mobileToolbar-mobile-toolbar']);
                 popupService.closeAllPopups(true);
             }
@@ -514,7 +511,7 @@ Oskari.clazz.define(
         _resultClicked: function (result) {
             var zoom = result.zoomLevel;
             if (result.zoomScale) {
-                zoom = {scale : result.zoomScale};
+                zoom = {scale: result.zoomScale};
             }
             this.getSandbox().request(
                 this.getName(),
@@ -584,7 +581,6 @@ Oskari.clazz.define(
                     'default-search-div'
                 );
 
-
                 div.empty();
                 me.template.children().clone().appendTo(div);
                 me._inputField = div.find('input[type=text]');
@@ -632,7 +628,7 @@ Oskari.clazz.define(
                 'width': style.widthRight + 'px'
             });
 
-            //calculate the width for the middle container of the search
+            // calculate the width for the middle container of the search
             var middleWidth = parseInt(jQuery('.search-area-div').css('width')) - style.widthLeft - style.widthRight;
             middle.css({
                 'background-image': 'url("' + bgMiddle + '")',
@@ -709,7 +705,7 @@ Oskari.clazz.define(
             this.changeCssClasses(cssClass, testRegex, [div]);
         },
 
-        teardownUI : function () {
+        teardownUI: function () {
             if (this.popup) {
                 this.popup.close();
             }
@@ -748,11 +744,11 @@ Oskari.clazz.define(
                 me._element = me._createControlElement();
             }
 
-            //remove old element
+            // remove old element
             this.teardownUI();
 
             if (isMobile) {
-                //remove old element
+                // remove old element
                 this.removeFromPluginContainer(this.getElement(), true);
 
                 var mobileDivElement = me.getMapModule().getMobileDiv();

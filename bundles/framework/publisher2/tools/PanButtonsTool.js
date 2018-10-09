@@ -1,17 +1,17 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
     function () {
     }, {
-        index : 2,
-        allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
+        index: 2,
+        allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings : [
+        allowedSiblings: [
             'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         ],
 
-        groupedSiblings : true,
+        groupedSiblings: true,
 
         /**
     * Get tool object.
@@ -51,6 +51,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
             }
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

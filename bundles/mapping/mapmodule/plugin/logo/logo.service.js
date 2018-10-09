@@ -20,8 +20,8 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
         Oskari.makeObservable(this);
     }, {
         __name: 'map.logo.service',
-        __qname : 'Oskari.map.LogoPluginService',
-        getQName : function () {
+        __qname: 'Oskari.map.LogoPluginService',
+        getQName: function () {
             return this.__qname;
         },
         getName: function () {
@@ -44,6 +44,6 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
             this.labels.push({ title: title, options: options || {} });
             this.trigger('change');
         }
-    },{
-        'protocol' : ['Oskari.framework.service.Service']
+    }, {
+        'protocol': ['Oskari.framework.service.Service']
     });

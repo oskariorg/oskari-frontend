@@ -105,7 +105,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.MainView',
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -335,7 +334,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.MainView',
                     if (blnSuccess) {
                         // add category as a maplayer to oskari maplayer service
                         // NOTE! added as a map layer to maplayer service through categoryhandler getting an event
-                        //me.instance.addLayerToService(model);
+                        // me.instance.addLayerToService(model);
                         // save the actual place
                         formValues.place.category = model.getId();
                         me.__savePlace(formValues.place);
@@ -422,7 +421,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.MainView',
                     dialog.show(me.loc('notification.placeAdded.title'), me.loc('notification.placeAdded.message'));
                     dialog.fadeout();
                     // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
-                    //me.drawPlugin.stopDrawing();
+                    // me.drawPlugin.stopDrawing();
                 } else {
                     me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
                 }
