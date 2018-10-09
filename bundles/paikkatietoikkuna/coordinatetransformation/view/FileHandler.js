@@ -208,6 +208,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             }
             return settings;
         },
+        closeFileDialogue: function () {
+            if(this.dialog){
+                this.dialog.close(true);
+            }
+            this.infoPopup.close();
+        },
         showFileDialogue: function(callback) {
             if (this.dialog){
                 this.dialog.close(true);

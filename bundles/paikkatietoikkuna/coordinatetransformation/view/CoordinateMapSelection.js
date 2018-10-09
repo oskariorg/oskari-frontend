@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateMapSelection
         //me.mapSelectionContainer = null;
         me.dialog = null;
         this._template = jQuery(
-                '<div class="coordinateSelectionPopup coordinatetransformation-flyout">' +
+                '<div class="coordinateSelectionPopup coordinatetransformation">' +
                 '   <div class="coordinateSelectionContent"></div>' +
                 '   <div class="coordinateSelectionOptions">' +
                 '       <input id="add-coordinate-to-map" type="radio" name="coordinate-map-select" value="add" checked/>' +

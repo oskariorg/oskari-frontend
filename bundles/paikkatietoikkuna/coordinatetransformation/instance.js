@@ -101,13 +101,22 @@ function () {
     },
     toggleViews: function (view) {
         var views = this.getViews();
-        if( !views[view] ) {
-           return;
+        if(views[view]) {
+           views[view].setVisible(true);
         }
-        Object.keys( views ).forEach( function ( view ) {
-            views[view].setVisible(false);
+        Object.keys( views ).forEach( function ( key ) {
+            if (view !== key){
+                views[key].setVisible(false);
+            }
         });
-        views[view].setVisible(true);
+    },
+    clearPopupsAndMarkers: function () {
+        this.views.MapSelection.setVisible(false);
+        this.views.mapmarkers.setVisible(false);
+        this.views.transformation.closePopups();
+        this.helper.removeMarkers();
+        this.addMapCoordsToInput(false);
+        this.setMapSelectionMode(false);
     },
     createUi: function () {
         this.plugins['Oskari.userinterface.Flyout'].createUi();
@@ -169,10 +178,14 @@ function () {
                 return;
             }
             var state = event.getViewState();
-            if (state === "attach" || state === "restore"){
+            if (state === "attach"){
                 this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            } else if (state === "close" || state === "minimize"){
+                this.clearPopupsAndMarkers();
+            } else if (state === "hide"){
                 this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+            } else if (state === "close"){
+                this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                this.clearPopupsAndMarkers();
             }
         }
     }

@@ -1,25 +1,25 @@
-.coordinatetransformation-flyout {
+.coordinatetransformation {
     /*
     top: 0px; !important;
     min-width: 640px;
     max-width: 900px;
     */
 }
-.coordinatetransformation-flyout h4 {
+.coordinatetransformation h4 {
     padding-bottom: 6px;
 }
-.coordinatetransformation-flyout h5 {
+.coordinatetransformation h5 {
     padding-bottom: 0px;
 }
 
 /* Custom radio button */
-.coordinatetransformation-flyout input[type="radio"] {
+.coordinatetransformation input[type="radio"] {
     display: none;
 }
-.coordinatetransformation-flyout .coordinate-datasources-wrapper {
+.coordinatetransformation .coordinate-datasources-wrapper {
     font-size: 14px;
 }
-.coordinatetransformation-flyout .source-select span {
+.coordinatetransformation .source-select span {
     background-color:whitesmoke;
     display:inline-block;
     width:12px;
@@ -34,72 +34,72 @@
     -moz-transition:background-color 0.4s linear;
     transition:background-color 0.4s linear;
 }
-.coordinatetransformation-flyout .source-select.selected span {
+.coordinatetransformation .source-select.selected span {
      background-color: black;
 }
-.coordinatetransformation-flyout input[type="radio"]:checked + label span {
+.coordinatetransformation input[type="radio"]:checked + label span {
      background-color: black;
 }
 .coordinate-datasources-wrapper label {
     cursor: pointer;
 }
 /* Source selection */
-.coordinatetransformation-flyout .datasource-wrapper {
+.coordinatetransformation .datasource-wrapper {
     width: 600px;
     padding-bottom: 24px;
 }
-.coordinatetransformation-flyout .coordinate-datasources-wrapper {
+.coordinatetransformation .coordinate-datasources-wrapper {
     display: flex;
 }
-.coordinatetransformation-flyout .source-select-wrapper {
+.coordinatetransformation .source-select-wrapper {
     margin-right: auto;
     display: flex;
 }
-.coordinatetransformation-flyout .source-select {
+.coordinatetransformation .source-select {
     display: flex;
     margin-right: auto;
 }
-.coordinatetransformation-flyout .source-select .action-link{
+.coordinatetransformation .source-select .action-link{
     display: flex;
 }
 
-/*.coordinatetransformation-flyout .datasource-wrapper a {
+/*.coordinatetransformation .datasource-wrapper a {
     font-weight: 700;
 }*/
-.coordinatetransformation-flyout .source-select:not(.selected) .action-link {
+.coordinatetransformation .source-select:not(.selected) .action-link {
     display: none;
 }
 /* Coordinate systems filter */
-.coordinatetransformation-flyout .systems-filter-wrapper {
+.coordinatetransformation .systems-filter-wrapper {
     width: 400px;
     padding-bottom: 12px;
 }
-.coordinatetransformation-flyout .coordinate-systems-filters {
+.coordinatetransformation .coordinate-systems-filters {
     display: flex;
 }
 
 /*
-.coordinatetransformation-flyout .datasource-info {
+.coordinatetransformation .datasource-info {
     height: 62px;
 }
 
-.coordinatetransformation-flyout .coordinate-datasource {
+.coordinatetransformation .coordinate-datasource {
     padding-bottom: 6px;
 }
-.coordinatetransformation-flyout .keyboardinfo, .mapinfo {
+.coordinatetransformation .keyboardinfo, .mapinfo {
     padding-top: 6px;
     padding-left: 12px;
     font-size: 13px;
 }*/
 
 /* Coordinate map selection */
-.coordinatetransformation-flyout.coordinateSelectionPopup {
+.coordinatetransformation.coordinateSelectionPopup {
     width: 400px;
     display: flex;
     flex-direction: column;
 
 }
-.coordinatetransformation-flyout .coordinateSelectionOptions {
+.coordinatetransformation .coordinateSelectionOptions {
     margin-top: 24px;
     margin-left: auto;
     margin-right: auto;
@@ -110,48 +110,48 @@
 }
 
 /* Coordinate system selections */
-.coordinatetransformation-flyout .coordinate-systems-wrapper {
+.coordinatetransformation .coordinate-systems-wrapper {
     display: flex;
     padding-bottom: 12px;
 }
-.coordinatetransformation-flyout .transformation-system {
+.coordinatetransformation .transformation-system {
     min-width: 360px;
     min-height: 202px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
 }
-.coordinatetransformation-flyout .auto-margin-divider {
+.coordinatetransformation .auto-margin-divider {
     width: 20px;
     margin-left: auto;
     margin-right: auto;
     /* or source: margin-right: 20; target: margin-left: auto;*/
 }
-.coordinatetransformation-flyout .selection-wrapper {
+.coordinatetransformation .selection-wrapper {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
     width: 360px;
 }
-.coordinatetransformation-flyout .dropdown_title {
+.coordinatetransformation .dropdown_title {
     font-weight: bold;
     /*max-width:12em !important;*/
     width: 160px;
 }
-.coordinatetransformation-flyout .epsgSearch input {
+.coordinatetransformation .epsgSearch input {
     color: #444;
     line-height: 12px;
     font-size: 12px;
     width: 168px;
     margin-left: auto;
 }
-.coordinatetransformation-flyout .geodetic-coordinate .chosen-default {
+.coordinatetransformation .geodetic-coordinate .chosen-default {
     color: #444;
 }
-.coordinatetransformation-flyout .elevation .chosen-default {
+.coordinatetransformation .elevation .chosen-default {
     color: #444;
 }
-.coordinatetransformation-flyout .epsgSearch {
+.coordinatetransformation .epsgSearch {
     margin-bottom: 40px;
 }
 .transformation-wrapper .selectMountPoint {
@@ -166,37 +166,37 @@
     padding-left: 3px;
 }
 /* Coordinate tables  */
-.coordinatetransformation-flyout .coordinate-tables-wrapper {
+.coordinatetransformation .coordinate-tables-wrapper {
     display: flex;
     padding-bottom: 12px;
 }
-.coordinatetransformation-flyout .oskari-coordinate-table {
+.coordinatetransformation .oskari-coordinate-table {
     border: 1px solid black;
     overflow-y: scroll;
     line-height: 1em;
     table-layout: fixed;
     margin-bottom: 0px;
 }
-.coordinatetransformation-flyout .transformation-button {
+.coordinatetransformation .transformation-button {
     margin-left: auto;
     margin-right: auto;
     margin-top: 100px;
 }
-.coordinatetransformation-flyout .transformation-button input {
+.coordinatetransformation .transformation-button input {
     font-size:80%;
 }
-.coordinatetransformation-flyout .oskari-table-content {
+.coordinatetransformation .oskari-table-content {
     width: 320px;
     height: 285px;
     overflow: auto;
 }
-.coordinatetransformation-flyout .rowcount {
+.coordinatetransformation .rowcount {
     float:right;
 }
-.coordinatetransformation-flyout .oskari-table-header {
+.coordinatetransformation .oskari-table-header {
     min-height: 36px;
 }
-.coordinatetransformation-flyout .oskari-tbl-header {
+.coordinatetransformation .oskari-tbl-header {
     margin-bottom: 0;
     table-layout: fixed;
     word-wrap: break-word;
@@ -213,30 +213,30 @@
     vertical-align: bottom;
     width: 50% !important;
 }
-.coordinatetransformation-flyout td { /*.cell*/
+.coordinatetransformation td { /*.cell*/
     background: #FAFAFA;
     border: 1px solid black;
     padding: 0px;
 }
-.coordinatetransformation-flyout table.two-dimensions td {
+.coordinatetransformation table.two-dimensions td {
     width: 50%;
 }
-.coordinatetransformation-flyout table.three-dimensions td {
+.coordinatetransformation table.three-dimensions td {
     width: 33%;
 }
-.coordinatetransformation-flyout .cellContent {
+.coordinatetransformation .cellContent {
     text-align: center;
     height: 12px;
     padding-bottom: 7px;
     padding-top: 8px;
     overflow: hidden;
 }
-.coordinatetransformation-flyout .invalid-coord {
+.coordinatetransformation .invalid-coord {
     border: 1px solid red;
     padding-bottom: 6px;
     padding-top: 7px;
 }
-.coordinatetransformation-flyout .cell.control {
+.coordinatetransformation .cell.control {
     border: inherit; 
     border-bottom: 1px solid black;
     display: none; 
@@ -250,7 +250,7 @@
 * TABLE HOVER
 */
 /*
-.coordinatetransformation-flyout .hoverable {
+.coordinatetransformation .hoverable {
   background: white;
   border-radius:3px;
   border-collapse: collapse;
@@ -262,32 +262,32 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
 }
-.coordinatetransformation-flyout .hoverable td { 
+.coordinatetransformation .hoverable td {
     padding: 0px;
     border:#4e95f4 1px solid;
     width:33% !important;
 }*/
 
 /*
-.coordinatetransformation-flyout .hoverable tr:hover {
+.coordinatetransformation .hoverable tr:hover {
   background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
-.coordinatetransformation-flyout tr:hover td {
+.coordinatetransformation tr:hover td {
   background:#4E5066;
   color:#FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }*/
-.coordinatetransformation-flyout table .highlighted td {
+.coordinatetransformation table .highlighted td {
   background:#4E5066;
   color: #FFFFFF;
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
-.coordinatetransformation-flyout .removerow {
+.coordinatetransformation .removerow {
     border-radius: 50%;
     height:1.3em;
     width:1.4em;
@@ -366,18 +366,18 @@
 }
 
 @media screen and (max-width: 1000px) {
-    .coordinatetransformation-flyout {
+    .coordinatetransformation {
         max-width: 560px;
     }
-    .coordinatetransformation-flyout .datasource-wrapper{
+    .coordinatetransformation .datasource-wrapper{
         width: 360px;
         margin-left: auto;
         margin-right: auto;
     }
-    .coordinatetransformation-flyout .coordinate-datasources-wrapper {
+    .coordinatetransformation .coordinate-datasources-wrapper {
         flex-direction: column;
     }
-    .coordinatetransformation-flyout .coordinate-systems-wrapper {
+    .coordinatetransformation .coordinate-systems-wrapper {
         flex-direction: column;
         width: 360px;
         margin-left: auto;
@@ -385,10 +385,10 @@
         /*align-items: center;
         flex-wrap: wrap;*/
     }
-    .coordinatetransformation-flyout .coordinate-system-wrapper.input {
+    .coordinatetransformation .coordinate-system-wrapper.input {
         margin-bottom: 12px;
     }
-    .coordinatetransformation-flyout .coordinate-tables-wrapper {
+    .coordinatetransformation .coordinate-tables-wrapper {
         flex-direction: column;
         width: 322px;
         margin-left: auto;
@@ -404,7 +404,7 @@
         width: 320px;
     }
 
-    .coordinatetransformation-flyout .util-row-wrapper {
+    .coordinatetransformation .util-row-wrapper {
         font-size: 12px;
     }
 

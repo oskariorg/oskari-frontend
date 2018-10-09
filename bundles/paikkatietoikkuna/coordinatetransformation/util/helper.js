@@ -28,7 +28,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
                     x: lonlat.lon,
                     y: lonlat.lat,
                     color: color,
-                    shape: 3
+                    shape: 3,
+                    size: 3
                 };
                 if (label) {
                     data.msg = label;
@@ -120,6 +121,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
     },
     removeMarkers: function () {
+        //TODO remove only own markers
         if( this.removeMarkersReq ) {
             this.sb.request('MainMapModule', this.removeMarkersReq());
         }
@@ -235,6 +237,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         } else {
             dialog.show(title, message, [btn]);
         }
+        dialog.fadeout();
     },
     /**
      * Tries to find epsg values by number.

@@ -28,16 +28,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
         createUi: function() {
             var view = this.instance.getViews().transformation.createUI(this.container);
         },
-        toggleFlyout: function ( visible ) {
-            if( !visible ) {
-                jQuery( this.container ).parent().parent().hide();
-            } else {
-                jQuery( this.container ).parent().parent().show();
-            }
-        },
         startPlugin: function() {
             this.template = jQuery();
         }
-    }, {
-        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
     });

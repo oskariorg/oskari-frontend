@@ -18,6 +18,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
     getElement: function() {
         return this.element;
     },
+    close: function () {
+        if (this.dialog){
+            this.dialog.close(true);
+        }
+    },
     show: function( parentElement, key , skipInfo) {
         if (this.dialog){
             this.dialog.close(true);
