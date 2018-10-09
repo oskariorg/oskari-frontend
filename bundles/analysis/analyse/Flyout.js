@@ -154,7 +154,6 @@ Oskari.clazz.define(
             // Show info or not
             if (jQuery.cookie('analyse_info_seen') !== '1' || layersWithFeaturesCount > 1) {
                 this.view.render(flyout);
-                flyout.parent().parent().css('display', '');
             } else {
                 this.instance.setAnalyseMode(true);
             }

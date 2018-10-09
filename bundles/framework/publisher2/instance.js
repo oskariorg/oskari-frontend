@@ -290,9 +290,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // FIXME: not like this! see removing...
                 me.sandbox.mapMode = 'mapPublishMode';
 
-                // hide flyout?
-                // TODO: move to default flyout/extension as "mode functionality"?
-                jQuery(me.getFlyout().container).parent().parent().css('display', 'none');
+                // hide flyout
+                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'hide']);
 
                 me.publisher = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.publisher2.view.PublisherSidebar',
@@ -307,9 +306,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             } else {
                 Oskari.setLang(me.oskariLang);
                 if (me.publisher) {
-                    // show flyout?
-                    // TODO: move to default flyout/extension as "mode functionality"?
-                    jQuery(me.getFlyout().container).parent().parent().css('display', '');
+                    // reset tile status
+                    me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'close']);
                     me.publisher.setEnabled(false);
                     me.publisher.destroy();
                 }

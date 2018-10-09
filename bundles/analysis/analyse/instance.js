@@ -269,8 +269,12 @@ Oskari.clazz.define(
                     // not me -> do nothing
                     return;
                 }
-
-                var isOpen = event.getViewState() !== 'close';
+                var state = event.getViewState();
+                if (state === "hide") {
+                    //analysis started and flyout set hidden
+                    return;
+                }
+                var isOpen = state === 'attach';
 
                 me.displayContent(isOpen);
             }
@@ -405,7 +409,7 @@ Oskari.clazz.define(
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
+                me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'hide']);
 
                 // proceed with analyse view
                 if (!this.analyse) {

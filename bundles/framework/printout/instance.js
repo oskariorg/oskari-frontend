@@ -394,9 +394,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                 map.addClass('mapPrintoutMode');
                 me.sandbox.mapMode = 'mapPrintoutMode';
 
-                //me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
-
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
 
                 // proceed with printout view
                 if (!this.printout) {
@@ -416,9 +414,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundleInstance"
                     delete me.sandbox._mapMode;
                 }
                 if (this.printout) {
-                    jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
-                    request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                    me.sandbox.request(me.getName(), request);
+                    this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
                     this.printout.setEnabled(false);
                     this.printout.hide();
                 }
