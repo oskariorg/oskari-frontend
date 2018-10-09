@@ -466,7 +466,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
             }
             // make the ajax call
             jQuery.ajax({
-                url: Oskari.urls.getRoute(AppSetup),
+                url: Oskari.urls.getRoute('AppSetup'),
                 type: 'POST',
                 dataType: 'json',
                 data: {
