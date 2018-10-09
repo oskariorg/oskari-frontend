@@ -18,7 +18,7 @@ function(wktString) {
     this._wktString = wktString;
 }, {
 	/** @static @property __name request name */
-    __name : "AddWKTGeometryRequest",
+    __name : 'AddWKTGeometryRequest',
     /**
      * @method getName
      * @return {String} request name

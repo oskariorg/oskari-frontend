@@ -1,9 +1,9 @@
-﻿/**
+/**
 * @class Oskari.hsy.bundle.waterPipeTool.BundleInstance
 *
 * Oskari.hsy.bundle.waterPipeTool.BundleInstance
 */
-Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
+Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.BundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -89,8 +89,7 @@ Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
             }
 
 		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
-
+            sandbox.request(me, request);
         },
         /**
          * @method init
@@ -120,7 +119,6 @@ Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -147,20 +145,19 @@ Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
                 }
             },
-            'MapClickedEvent' : function(evt) {
+            'MapClickedEvent': function (evt) {
                 var me = this,
-                x = evt.getMouseX(),
-                y = evt.getMouseY(),
-                tagPipe = me.plugins['Oskari.userinterface.Flyout'].tabsContainer.panels[0];
+                    x = evt.getMouseX(),
+                    y = evt.getMouseY(),
+                    tagPipe = me.plugins['Oskari.userinterface.Flyout'].tabsContainer.panels[0];
 
-                if(tagPipe.getStateTagPipe()){
-                   tagPipe.findPipesRequest(x,y);
-                   tagPipe.state.tagPipeClickLonLat = evt.getLonLat();
+                if (tagPipe.getStateTagPipe()) {
+                    tagPipe.findPipesRequest(x, y);
+                    tagPipe.state.tagPipeClickLonLat = evt.getLonLat();
                 }
-                if(tagPipe.getStateMustache()){
+                if (tagPipe.getStateMustache()) {
                     tagPipe.mustachePointOnMap(evt.getLonLat());
                 }
             }
@@ -182,7 +179,6 @@ Oskari.clazz.define("Oskari.hsy.bundle.waterPipeTool.BundleInstance",
 
             request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
-
 
             this.sandbox.unregister(this);
             this.started = false;

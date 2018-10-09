@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             }
 
             var ajaxUrl = Oskari.urls.getRoute();
-            //"/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
+            // "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
             var sessionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlugin', ajaxUrl);
             this.registerPlugin(sessionPlugin);
             this.startPlugin(sessionPlugin);
@@ -184,7 +184,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             }
 
             return handler.apply(this, [event]);
-
         },
 
         /**
@@ -214,8 +213,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 this._pushState();
             }
         },
-
-
 
         /**
          * @method registerPlugin
@@ -329,8 +326,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                             allInvisible = false;
                         }
                     }
-                    if(allInvisible){
-                        //Don't save state when all are invisible
+                    if (allInvisible) {
+                        // Don't save state when all are invisible
                         return false;
                     }
                     for (ln = 0; ln < nextLayers.length; ln += 1) {
@@ -338,7 +335,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                         nextLayer = nextLayers[ln];
 
                         me._log.debug('comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
-
 
                         if (prevLayer.id !== nextLayer.id) {
                             return true;
@@ -404,21 +400,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             return cmpResult;
         },
 
-        /**
-         * @method logState
-         * @private
-         * Sends a GET request to the url in the conf with map parameters
-         */
-        _logState: function () {
-            var me = this,
-                logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
-
-            jQuery.ajax({
-                type: 'GET',
-                url: logUrlWithLinkParams
-            });
-        },
-
         _pushState: function () {
             var me = this;
             if (me._historyEnabled) {
@@ -431,10 +412,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];
-
-                    if (me.conf && me.conf.logUrl) {
-                        me._logState();
-                    }
                 }
             }
         },
@@ -458,27 +435,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             var me = this;
             var sandbox = me.getSandbox();
             switch (me._historyPrevious.length) {
-                case 0:
-                    /* hard reset */
-                    /*this.resetState();*/
-                    break;
-                case 1:
-                    /* soft reset (retains the future) */
-                    var nextHistory = this._historyNext;
-                    me.resetState();
-                    me._historyNext = nextHistory;
-                    break;
-                default:
-                    /* pops current state */
-                    var cstate = this._historyPrevious.pop(); /* currentstate */
-                    this._historyNext.push(cstate);
-                    var state = this._historyPrevious[this._historyPrevious.length - 1],
-                        mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
-                        currentState = this._getMapState();
-                    this._historyEnabled = false;
-                    this._setMapState(mapmodule, state, currentState);
-                    this._historyEnabled = true;
-                    break;
+            case 0:
+                /* hard reset */
+                /* this.resetState(); */
+                break;
+            case 1:
+                /* soft reset (retains the future) */
+                var nextHistory = this._historyNext;
+                me.resetState();
+                me._historyNext = nextHistory;
+                break;
+            default:
+                /* pops current state */
+                var cstate = this._historyPrevious.pop(); /* currentstate */
+                this._historyNext.push(cstate);
+                var state = this._historyPrevious[this._historyPrevious.length - 1],
+                    mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                    currentState = this._getMapState();
+                this._historyEnabled = false;
+                this._setMapState(mapmodule, state, currentState);
+                this._historyEnabled = true;
+                break;
             }
         },
 

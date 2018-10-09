@@ -735,7 +735,7 @@ Oskari.clazz.define(
          */
         zoomToScale: function (scale, closest, suppressEnd) {
             var resolution = this.getResolutionForScale(scale);
-            if(!closest) {
+            if (!closest) {
                 // get exact resolution
                 resolution = this.getExactResolution(scale);
                 this.setResolution(resolution, suppressEnd);
@@ -753,14 +753,13 @@ Oskari.clazz.define(
          * @param  {Float}           scale the new scale
          * @return {Float}           exact resolution
          */
-        getExactResolution: function(scale) {
-            if(typeof this._getExactResolutionImpl === 'function') {
+        getExactResolution: function (scale) {
+            if (typeof this._getExactResolutionImpl === 'function') {
                 return this._getExactResolutionImpl(scale);
             }
 
             throw 'Not implemented _getExactResolutionImpl function.';
         },
-
 
         /**
          * @method getResolutionForScale
@@ -829,7 +828,6 @@ Oskari.clazz.define(
             return layerResolutions;
         },
         /* --------------- /MAP ZOOM ------------------------ */
-
 
         /* --------------- MAP STATE ------------------------ */
 
@@ -1824,7 +1822,7 @@ Oskari.clazz.define(
             }
 
             var isMarkerShape = !!((marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)));
-            var isCustomMarker = !!((marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))));
+            var isCustomMarker = !!((marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg') > -1))));
 
             var markerSize = (marker && marker.data && marker.data.size) ? me.getPixelForSize(marker.data.size) : 32;
 
@@ -1905,7 +1903,6 @@ Oskari.clazz.define(
          */
         __changePathAttribute: function (svg, attr, value) {
             var htmlObject = jQuery(svg);
-            var sandbox = this.getSandbox();
             htmlObject.find('path').attr(attr, value);
 
             if (htmlObject.find('path').length > 1) {
@@ -2272,8 +2269,7 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         afterMapLayerAddEvent: function (event) {
-            var map = this.getMap(),
-                layer = event.getMapLayer(),
+            var layer = event.getMapLayer(),
                 keepLayersOrder = true,
                 isBaseMap = false,
                 layerPlugins = this.getLayerPlugins(),

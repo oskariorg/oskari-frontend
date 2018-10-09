@@ -4,7 +4,7 @@
  * Class to load metadata content from backend
  *
  */
-Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader", function (urls, sandbox) {
+Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader', function (urls, sandbox) {
     this.urls = urls;
     this.sandbox = sandbox;
     this.dev = false;
@@ -18,7 +18,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
      */
     getURLForView: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType) {
         var url = this.urls[subsetId],
-            uri = url + "uuid=" + uuid;
+            uri = url + 'uuid=' + uuid;
 
         /*dev only */
         if (this.dev) {
@@ -49,7 +49,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
 
         var ajaxUrl = Oskari.urls.getRoute('GetMetadata');
 
-        me.sandbox.printDebug("loadMetadata " + uri);
+        me.sandbox.printDebug('loadMetadata ' + uri);
 
         if (uri === null || uri === undefined) {
             return;
@@ -68,9 +68,9 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
             beforeSend: function (x) {
                 if (x && x.overrideMimeType) {
                     if (dataType && dataType === 'json') {
-                        x.overrideMimeType("application/json");
+                        x.overrideMimeType('application/json');
                     } else {
-                        x.overrideMimeType("text/html");
+                        x.overrideMimeType('text/html');
                     }
                 }
             },
@@ -116,9 +116,9 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
                         beforeSend: function (x) {
                             if (x && x.overrideMimeType) {
                                 if (dataType && dataType === 'json') {
-                                    x.overrideMimeType("application/json");
+                                    x.overrideMimeType('application/json');
                                 } else {
-                                    x.overrideMimeType("text/html");
+                                    x.overrideMimeType('text/html');
                                 }
                             }
                         },
@@ -140,9 +140,9 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoad
     openMetadata: function (subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace, cb, dataType, target) {
         var uri = this.getURLForView(subsetId, uuid, RS_Identifier_Code, RS_Identifier_CodeSpace);
 
-        this.sandbox.printDebug("openMetadata " + uri);
+        this.sandbox.printDebug('openMetadata ' + uri);
 
-        var win = window.open(uri, target, "resizable=yes,scrollbars=yes,status=yes");
+        var win = window.open(uri, target, 'resizable=yes,scrollbars=yes,status=yes');
 
     }
 });

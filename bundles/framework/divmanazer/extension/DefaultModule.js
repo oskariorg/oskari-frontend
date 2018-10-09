@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
+Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
 
     /**
      * @method create called automatically on construction
@@ -12,7 +12,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
      */
     function () {
     }, {
-        name : 'Oskari.userinterface.extension.DefaultModule',
+        name: 'Oskari.userinterface.extension.DefaultModule',
         /**
          * @method getSandbox
          * Convenience method to call from Tile and Flyout
@@ -51,9 +51,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             var me = this,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                request,
                 p;
-
 
             me.sandbox = sandbox;
             sandbox.register(this);
@@ -88,7 +86,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          */
         stop: function () {
             var sandbox = this.sandbox,
-            p;
+                p;
 
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
@@ -105,7 +103,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             this.sandbox = null;
         },
 
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
@@ -121,7 +119,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         getConfiguration: function () {
             return this.conf || {};
         },
-        getState : function() {
+        getState: function () {
             return this.state || {};
         },
 
@@ -129,10 +127,10 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          * @property eventHandlers
          * may be overridden in derived classes to get some events
          */
-        "eventHandlers": {
+        'eventHandlers': {
 
         },
-        "requestHandlers": {
+        'requestHandlers': {
 
         },
 
@@ -166,16 +164,14 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             return handler.apply(this, [request]);
         },
 
-
         /**
          * @method getLang
          * helper to get current language from Oskari
          *
          */
-        "getLang": function () {
+        'getLang': function () {
             return Oskari.getLang();
         },
-
 
         /* o2 helpers for notifications and requetss */
         slicer: Array.prototype.slice,

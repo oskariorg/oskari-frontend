@@ -17,14 +17,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         var sourceType = source.getGeometryType();
 
         switch (sourceType) {
-            case 'MultiPolygon':
-            case 'Polygon':
-                return this._polygonSplit(source, drawn);
-            case 'MultiLineString':
-            case 'LineString':
-                return this._lineSplit(source, drawn);
-            default:
-                throw new Error('Unsupported split source geometry: ' + sourceType);
+        case 'MultiPolygon':
+        case 'Polygon':
+            return this._polygonSplit(source, drawn);
+        case 'MultiLineString':
+        case 'LineString':
+            return this._lineSplit(source, drawn);
+        default:
+            throw new Error('Unsupported split source geometry: ' + sourceType);
         }
     },
     _polygonSplit: function (sourceGeometry, drawnGeometry) {
@@ -53,16 +53,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
         var splitted = sourceGeometry.difference(drawnGeometry);
         var parts = [];
         switch (splitted.getGeometryType()) {
-            case 'LineString':
-                parts.push(splitted);
-                break;
-            case 'MultiLineString':
-                for (let i = 0; i < splitted.getNumGeometries(); i++) {
-                    parts.push(splitted.getGeometryN(i));
-                }
-                break;
-            default:
-                throw new Error('Unsupported split geometry result!');
+        case 'LineString':
+            parts.push(splitted);
+            break;
+        case 'MultiLineString':
+            for (let i = 0; i < splitted.getNumGeometries(); i++) {
+                parts.push(splitted.getGeometryN(i));
+            }
+            break;
+        default:
+            throw new Error('Unsupported split geometry result!');
         }
         return parts.map(function (part, i) {
             return {
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryProcessor
                 properties: {
                     id: i
                 }
-            }
+            };
         }, this);
     },
     clipByPolygon: function (sourceFeature, drawnFeature) {

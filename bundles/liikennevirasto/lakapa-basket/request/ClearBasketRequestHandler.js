@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequestHand
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-        this.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest] Clear basket");
+        this.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest] Clear basket');
         this.flyout.clear();
         this.tile.clear();
     }

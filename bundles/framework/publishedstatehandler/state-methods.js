@@ -31,8 +31,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.publishedstatehandler.Publishe
      * implementation.
      */
     resetState: function () {
-        var me = this,
-            pluginName;
+        var me = this;
         me._historyEnabled = false;
         me._historyPrevious = [];
         me._historyNext = [];

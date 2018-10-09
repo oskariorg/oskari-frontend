@@ -142,9 +142,24 @@ export default class MapModule extends AbstractMapModule {
                 evt.pixel[0],
                 evt.pixel[1]);
             sandbox.notifyAll(hoverEvent);
-        })
+        });
+    }
+    _registerVectorFeatureService () {
+        const sandbox = this._sandbox;
+        let ftrService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+        if (!ftrService) {
+            ftrService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this._map);
+            sandbox.registerService(ftrService);
+        }
+        this.requestHandlers.vectorLayerRequestHandler = Oskari.clazz.create(
+            'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
+            sandbox,
+            ftrService
+        );
+        sandbox.requestHandler('VectorLayerRequest', this.requestHandlers.vectorLayerRequestHandler);
     }
     _startImpl () {
+        this._registerVectorFeatureService();
         this.getMap().render();
         return true;
     }

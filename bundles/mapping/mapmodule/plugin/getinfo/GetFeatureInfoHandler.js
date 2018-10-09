@@ -26,9 +26,9 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             if (request.getName() === 'MapModulePlugin.GetFeatureInfoRequest') {
                 var lonlat = {
-                        lon: request.getLon(),
-                        lat: request.getLat()
-                    };
+                    lon: request.getLon(),
+                    lat: request.getLat()
+                };
                 this.getInfoPlugin.clickLocation = lonlat;
                 this.getInfoPlugin.handleGetInfo(lonlat);
             } else if (request.getName() === 'MapModulePlugin.GetFeatureInfoActivationRequest') {

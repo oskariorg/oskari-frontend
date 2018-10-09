@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.HideSelect
 function() {
 }, {
 	/** @static @property __name request name */
-    __name : "HideSelectionRequest",
+    __name : 'HideSelectionRequest',
     /**
      * @method getName
      * @return {String} request name

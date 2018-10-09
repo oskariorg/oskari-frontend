@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                         this.tabsContainer.addPanel(panel);
                         this.tabPanels[id] = panel;
                     } else {
-                        //lets set a name for the panel
+                        // lets set a name for the panel
                         panel.setTitle(categories[i].name);
                         // update panel graphics
                         me.tabsContainer.updatePanel(panel);
@@ -124,7 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     deleteLink.append(this.loc('tab.deleteCategory'));
                     deleteLink.on('click', deletelinkClosure(id));
                     panel.getContainer().append(deleteLink);
-
                 }
                 this._removeObsoleteCategories();
 
@@ -225,11 +224,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             }
             var olClass = geometry.CLASS_NAME,
                 ret = null;
-            if (('OpenLayers.Geometry.MultiPoint' === olClass) || ('OpenLayers.Geometry.Point' === olClass)) {
+            if ((olClass === 'OpenLayers.Geometry.MultiPoint') || (olClass === 'OpenLayers.Geometry.Point')) {
                 ret = 'point';
-            } else if (('OpenLayers.Geometry.MultiLineString' === olClass) || ('OpenLayers.Geometry.LineString' === olClass)) {
+            } else if ((olClass === 'OpenLayers.Geometry.MultiLineString') || (olClass === 'OpenLayers.Geometry.LineString')) {
                 ret = 'line';
-            } else if (('OpenLayers.Geometry.MultiPolygon' === olClass) || ('OpenLayers.Geometry.Polygon' === olClass)) {
+            } else if ((olClass === 'OpenLayers.Geometry.MultiPolygon') || (olClass === 'OpenLayers.Geometry.Polygon')) {
                 ret = 'area';
             }
             return ret;
@@ -374,14 +373,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @method bindEvents
@@ -397,7 +394,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     sandbox.registerForEventByName(this, p);
                 }
             }
-
         },
         /**
          * @method unbindEvents
@@ -415,7 +411,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             }
         },
 
-        _informOfMaxFeatures: function(container) {
+        _informOfMaxFeatures: function (container) {
             var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
             alert.insertTo(container);
             alert.setContent(this.loc('tab.maxFeaturesExceeded'));
@@ -428,10 +424,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * TODO: maybe config for expansion frame size
          */
         _fitBounds: function (gbounds) {
-
             if (gbounds.bottom === gbounds.top &&
-                gbounds.left === gbounds.right)
-            {
+                gbounds.left === gbounds.right) {
                 gbounds.bottom = gbounds.bottom - 100;
                 gbounds.left = gbounds.left - 100;
                 gbounds.top = gbounds.top + 100;

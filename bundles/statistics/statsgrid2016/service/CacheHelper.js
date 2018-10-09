@@ -184,7 +184,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.CacheHelper', function (cache, 
             // flush the cache for logged in user so it gets reloaded from the server
             // for guests this will show some erronous info, but it's a beast to track which
             //  year/regionsets actually have data and can be removed
-            this.cache.remove(metadataCacheKey)
+            this.cache.remove(metadataCacheKey);
         }
     }
 });

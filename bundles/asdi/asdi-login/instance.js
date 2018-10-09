@@ -1,14 +1,14 @@
 /**
  * @class Oskari.asdi.login.BundleInstance
  */
-Oskari.clazz.define("Oskari.asdi.login.BundleInstance",
-    function() {
+Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
+    function () {
         this.templates = {
-            "loginButton": jQuery('<input id="loginbutton" type="submit" value="">')
+            'loginButton': jQuery('<input id="loginbutton" type="submit" value="">')
         };
     }, {
-        __name : 'asdi-login',
-        getName : function () {
+        __name: 'asdi-login',
+        getName: function () {
             return this.__name;
         },
         eventHandlers: {
@@ -17,7 +17,7 @@ Oskari.clazz.define("Oskari.asdi.login.BundleInstance",
          * @method afterStart
          * implements BundleInstance protocol start methdod
          */
-        afterStart: function() {
+        afterStart: function () {
             var me = this;
             if (Oskari.user().isLoggedIn()) {
                 // no need for login UI
@@ -28,18 +28,18 @@ Oskari.clazz.define("Oskari.asdi.login.BundleInstance",
             this.flyout = this.getFlyout();
 
             var loginButton = this.templates.loginButton.clone();
-            loginButton.val(this.locale.flyout.login)
-            loginButton.on('click', function() {
+            loginButton.val(this.locale.flyout.login);
+            loginButton.on('click', function () {
                 me.showLoginFlyout();
             });
             jQuery('#maptools').find('#login').append(loginButton);
         },
-        showLoginFlyout: function() {
+        showLoginFlyout: function () {
             Oskari.getSandbox().postRequestByName(
-                'userinterface.UpdateExtensionRequest',[this, 'attach']
+                'userinterface.UpdateExtensionRequest', [this, 'attach']
             );
         }
     }, {
-        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     }
 );

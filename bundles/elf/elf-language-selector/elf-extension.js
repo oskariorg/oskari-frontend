@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
+Oskari.clazz.define('Oskari.elf.extension.EnhancedExtension',
 
     /**
      * @method create called automatically on construction
@@ -47,7 +47,6 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * BundleInstance protocol method
          */
         update: function () {},
-
 
         /**
          *@method setLocalization
@@ -183,7 +182,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
         getPlugins: function () {
             return this.plugins;
         },
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
@@ -204,11 +203,11 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * @property eventHandlers
          * may be overridden in derived classes to get some events
          */
-        "eventHandlers": {
+        'eventHandlers': {
 
         },
 
-        "requestHandlers": {
+        'requestHandlers': {
 
         },
 

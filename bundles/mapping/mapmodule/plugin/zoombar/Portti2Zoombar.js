@@ -65,8 +65,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             buttonGroup: 'mobile-toolbar'
         };
 
-
-
         this._desktopStyles = {
             plus: {
                 css: {}

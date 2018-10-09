@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             AfterMapLayerAddEvent: function (event) {
                 if (!this.hasPublishRight(event._mapLayer)) {
-                    //TODO: ?
+                    // TODO: ?
                 }
                 this.handleLayerSelectionChanged();
             },
@@ -137,9 +137,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              */
             MapLayerVisibilityChangedEvent: function (event) {
                 this.handleLayerVisibilityChanged(
-                        event.getMapLayer(),
-                        event.isInScale(),
-                        event.isGeometryMatch()
+                    event.getMapLayer(),
+                    event.isInScale(),
+                    event.isGeometryMatch()
                 );
             },
             'Publisher2.ToolEnabledChangedEvent': function (event) {
@@ -147,19 +147,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 if (event && event.getTool() && event.getTool().getTool() && event.getTool().getTool().id === 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin') {
                     if (event.getTool().state.enabled === true) {
                         me._plugin = event.getTool().getPlugin();
-                        //update the plugin's baselayer info in case some of the layers have that ticked.
+                        // update the plugin's baselayer info in case some of the layers have that ticked.
                         var contentPanel = me.getPanel().getContainer();
-                        //find checked baselayerinputs
+                        // find checked baselayerinputs
                         var checkedBaseLayers = contentPanel.find('input.baselayer:checked');
 
-                        _.each(checkedBaseLayers, function(checkbox) {
-                            var id = checkbox.id.replace('checkbox','');
+                        _.each(checkedBaseLayers, function (checkbox) {
+                            var id = checkbox.id.replace('checkbox', '');
                             var layer = me.sandbox.findMapLayerFromSelectedMapLayers(id);
                             if (layer) {
                                 me.getPlugin().addBaseLayer(layer);
                             }
                         });
-
                     } else {
                         me._plugin = null;
                     }
@@ -199,11 +198,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             }
             return handler.apply(this, [event]);
         },
-        getPlugin: function() {
+        getPlugin: function () {
             return this._plugin;
         },
-        getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelMapLayers";
+        getName: function () {
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelMapLayers';
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
@@ -212,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * @return {Oskari.userinterface.component.AccordionPanel}
          */
         getPanel: function () {
-            //this._populateMapLayerPanel();
+            // this._populateMapLayerPanel();
             return this.panel;
         },
         /**
@@ -282,9 +281,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 layer,
                 input;
 
-
             for (i = 0; i < layers.length; i += 1) {
-
                 layer = layers[i];
                 var layerContainer = this.templateLayer.clone();
                 layerContainer.attr('data-id', layer.getId());
@@ -310,7 +307,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                             me.getPlugin().removeBaseLayer(layer);
                         }
                         sandbox.request(me.instance.getName(), request);
-
                     });
                 }
 
@@ -565,8 +561,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
          * viewport
          */
         handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
-            var me = this,
-                lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
+            var lyrSel = 'li.layer.selected[data-id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
                 footer = layerDiv.find('div.layer-tools'), // teardown previous footer & layer state classes
                 isChecked = footer.find('.baselayer').is(':checked');
@@ -613,7 +608,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                     layer.selected = isChecked;
                     if (isChecked && me.getPlugin()) {
                         me.getPlugin().addBaseLayer(layer);
-                    } else if(me.getPlugin()){
+                    } else if (me.getPlugin()) {
                         me.getPlugin().removeBaseLayer(layer);
                     }
                 };
@@ -623,7 +618,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             input.attr('id', 'checkbox' + layer.getId());
             input.prop('checked', !!isChecked);
             input.on('change', closureMagic(layer));
-
 
             return tools;
         },
@@ -686,10 +680,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
 
             toolsDiv.append(footer);
 
-            var slider = this._addSlider(layer, layerDiv),
-                opa = layerDiv.find('div.layer-opacity input.opacity');
+            this._addSlider(layer, layerDiv);
+            var opa = layerDiv.find('div.layer-opacity input.opacity');
             opa.attr('value', layer.getOpacity());
-
         },
 
         /**
@@ -744,7 +737,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
             // or nothing at all
             return (layer.getPermission('publish') === 'publication_permission_ok');
         }
-
 
     }
 );

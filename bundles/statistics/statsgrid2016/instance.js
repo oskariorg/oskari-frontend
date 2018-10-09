@@ -51,7 +51,6 @@ Oskari.clazz.define(
             statsService.addDatasource(conf.sources);
             statsService.addRegionset(conf.regionsets);
 
-
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
             this.flyoutManager.init();

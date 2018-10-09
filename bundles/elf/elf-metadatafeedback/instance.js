@@ -8,15 +8,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
  * @method create called automatically on construction
  * @static
  */
-function () {
-    this.sandbox = null;
-    this._locale = null;
-    this.plugins = {};
-    this.loader = null;
-    this._requestHandlers = {};
-    this.feedbackService = null;
-
-}, {
+    function () {
+        this.sandbox = null;
+        this._locale = null;
+        this.plugins = {};
+        this.loader = null;
+        this._requestHandlers = {};
+        this.feedbackService = null;
+    }, {
         /**
          * @static
          * @property templates
@@ -27,28 +26,28 @@ function () {
             numRatings: jQuery('<div class="numRatings"></div>'),
             feedbackTabErrorTemplate: _.template('<article><%=responseText%></article>'),
             feedbackSuccessTemplate: _.template(
-                '<article>'+
-                '   <div class="feedback-list-rating">'+
-                '       <span class="feedback-list-rating-subject"><%=locale.feedbackList.average%>: </span>'+
-                '       <%=average%>'+
-                '   </div>'+
-                '   <br/>'+
-                '   <br/>'+
-                '   <%_.forEach(feedbacks, function(feedback) { %>'+
-                '       <div class="feedbacklist-feedback">'+
-                '           <div class="feedback-list-rating">'+
-                '               <%=feedback.score%>'+
-                '               <span class="feedbacklist-userrole">'+
-                '                   <%=locale.userInformation[feedback.userRole] ? locale.userInformation[feedback.userRole] : feedback.userRole%>'+
-                '               </span>'+
-                '           </div>'+
-                '           <br/>'+
-                '           <br/>'+
-                '           <div>'+
-                '               <%=feedback.comment%>'+
-                '           </div>'+
-                '       </div>'+
-                '   <%})%>'+
+                '<article>' +
+                '   <div class="feedback-list-rating">' +
+                '       <span class="feedback-list-rating-subject"><%=locale.feedbackList.average%>: </span>' +
+                '       <%=average%>' +
+                '   </div>' +
+                '   <br/>' +
+                '   <br/>' +
+                '   <%_.forEach(feedbacks, function(feedback) { %>' +
+                '       <div class="feedbacklist-feedback">' +
+                '           <div class="feedback-list-rating">' +
+                '               <%=feedback.score%>' +
+                '               <span class="feedbacklist-userrole">' +
+                '                   <%=locale.userInformation[feedback.userRole] ? locale.userInformation[feedback.userRole] : feedback.userRole%>' +
+                '               </span>' +
+                '           </div>' +
+                '           <br/>' +
+                '           <br/>' +
+                '           <div>' +
+                '               <%=feedback.comment%>' +
+                '           </div>' +
+                '       </div>' +
+                '   <%})%>' +
                 '</article>')
         },
         /**
@@ -106,14 +105,13 @@ function () {
             };
 
             for (var key in this._requestHandlers) {
-                sandbox.requestHandler(key, this._requestHandlers[key])
+                sandbox.requestHandler(key, this._requestHandlers[key]);
             }
 
             var request = Oskari.requestBuilder(
                 'userinterface.AddExtensionRequest'
             )(this);
             sandbox.request(this, request);
-
 
             this._activateMetadataSearchResultsShowRating();
 
@@ -124,22 +122,22 @@ function () {
          * @method _activateMetadataSearchResultsShowRating
          * @private
          */
-        _activateMetadataSearchResultsShowRating: function(){
+        _activateMetadataSearchResultsShowRating: function () {
             var me = this,
                 reqBuilder = Oskari.requestBuilder('AddSearchResultActionRequest');
 
             if (reqBuilder) {
                 var data = {
                     actionElement: jQuery('<div class="ratingInfo"></div>'),
-                    callback: function(metadata) {
+                    callback: function (metadata) {
                         me.sandbox.postRequestByName('catalogue.ShowFeedbackRequest', [metadata]);
                     },
                     bindCallbackTo: null,
                     actionTextElement: null,
                     actionText: null,
-                    showAction: function(metadata) {
-                        //add the span with metadata's id to be able to identify and update rating later
-                        this.actionText = '<span id="metadataRatingSpan_'+metadata.id+'" style="display:none;"/>&nbsp;'+me._getAdminMetadataRating(metadata.latestAdminRating);
+                    showAction: function (metadata) {
+                        // add the span with metadata's id to be able to identify and update rating later
+                        this.actionText = '<span id="metadataRatingSpan_' + metadata.id + '" style="display:none;"/>&nbsp;' + me._getAdminMetadataRating(metadata.latestAdminRating);
 
                         return true;
                     }
@@ -148,26 +146,26 @@ function () {
                 me.sandbox.request(me, request);
             }
         },
-        updateMetadataRating: function(metadata) {
-            var idSpan = $('#metadataRatingSpan_'+metadata.id);
+        updateMetadataRating: function (metadata) {
+            var idSpan = $('#metadataRatingSpan_' + metadata.id);
             var container = idSpan.parent();
             container.empty();
             container.append(idSpan);
-            container.append('&nbsp;'+this._getAdminMetadataRating(metadata.latestAdminRating));
+            container.append('&nbsp;' + this._getAdminMetadataRating(metadata.latestAdminRating));
         },
-        _addMetadataFeedbackTabToMetadataFlyout: function() {
+        _addMetadataFeedbackTabToMetadataFlyout: function () {
             var me = this,
                 reqBuilder = Oskari.requestBuilder('catalogue.AddTabRequest');
             var data = {
                 'feedback': {
                     template: null,
                     title: me._locale.feedbackList.tabTitle,
-                    tabActivatedCallback: function(uuid, panel) {
-                        me.feedbackService.fetchFeedback({'category': 'ELF_METADATA' ,'categoryItem': uuid},
-                            function(response) {
-                                _.each(response[1], function(feedbackItem) {
+                    tabActivatedCallback: function (uuid, panel) {
+                        me.feedbackService.fetchFeedback({'category': 'ELF_METADATA', 'categoryItem': uuid},
+                            function (response) {
+                                _.each(response[1], function (feedbackItem) {
                                     feedbackItem.score = me._getMetadataRating(feedbackItem);
-                                    feedbackItem.comment = feedbackItem.comment.split("\n").join("<br />");
+                                    feedbackItem.comment = feedbackItem.comment.split('\n').join('<br />');
                                 });
                                 var json = {
                                     'locale': me._locale,
@@ -176,8 +174,8 @@ function () {
                                 };
                                 panel.setContent(_.template(me.templates.feedbackSuccessTemplate(json)));
                             },
-                            function(error) {
-                                var content = me.templates.feedbackTabErrorTemplate(error);
+                            function (error) {
+                                panel.setContent(_.template(me.templates.feedbackTabErrorTemplate(error)));
                             }
                         );
                     }
@@ -209,7 +207,6 @@ function () {
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @method setSandbox
@@ -250,7 +247,7 @@ function () {
         getState: function () {
             return this.plugins[
                 'Oskari.userinterface.Flyout'
-                ].getContentState();
+            ].getContentState();
         },
         eventHandlers: {},
 
@@ -264,7 +261,7 @@ function () {
                 );
         },
 
-        _getAdminMetadataRating: function(score) {
+        _getAdminMetadataRating: function (score) {
             if (!score) {
                 score = 0;
             }
@@ -275,10 +272,10 @@ function () {
          * @param {Object} metadata object
          * @return raty stars dom for current metadata
          */
-        _getMetadataRating: function(metadata) {
+        _getMetadataRating: function (metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
-            if (typeof metadata.score !== "undefined") {
+            if (typeof metadata.score !== 'undefined') {
                 var ratingSymbols = me._generateRatingSymbols(metadata.score);
                 for (j = 0; j < 5; j++) {
                     starContainer = me.templates.starItem.clone();
@@ -289,11 +286,10 @@ function () {
 
                 if (metadata.amount !== undefined) {
                     var numRatingsContainer = me.templates.numRatings.clone();
-                    var numRatingsText = metadata.amount !== undefined ? "("+metadata.amount +")" : "&nbsp;";
+                    var numRatingsText = metadata.amount !== undefined ? '(' + metadata.amount + ')' : '&nbsp;';
                     numRatingsContainer.append(numRatingsText);
                     ratingContainer.append(numRatingsContainer);
                 }
-
             }
             return ratingContainer.html();
         },
@@ -302,31 +298,31 @@ function () {
          *  @method _generateRatingSymbols
          *
          */
-        _generateRatingSymbols: function(input) {
-            if ((typeof input === "undefined")||(input === null)) {
+        _generateRatingSymbols: function (input) {
+            if ((typeof input === 'undefined') || (input === null)) {
                 return null;
             }
             var ratingSymbols = [];
             var score = Number(input);
             var i;
-            for (i=0; i<5; i++) {
-                if (score < i+0.25) {
-                    ratingSymbols.push("icon-star-off");
-                } else if ((i+0.25 <= score)&&(score < i+0.75)) {
-                    ratingSymbols.push("icon-star-half");
+            for (i = 0; i < 5; i++) {
+                if (score < i + 0.25) {
+                    ratingSymbols.push('icon-star-off');
+                } else if ((i + 0.25 <= score) && (score < i + 0.75)) {
+                    ratingSymbols.push('icon-star-half');
                 } else {
-                    ratingSymbols.push("icon-star-on");
+                    ratingSymbols.push('icon-star-on');
                 }
             }
             return ratingSymbols;
         },
-        _updateRating: function() {
+        _updateRating: function () {
         }
 
-    },{
-    protocol: [
-        'Oskari.bundle.BundleInstance',
-        'Oskari.mapframework.module.Module',
-        'Oskari.userinterface.Extension'
-    ]
-});
+    }, {
+        protocol: [
+            'Oskari.bundle.BundleInstance',
+            'Oskari.mapframework.module.Module',
+            'Oskari.userinterface.Extension'
+        ]
+    });

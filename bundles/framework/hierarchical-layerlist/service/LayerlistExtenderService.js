@@ -1,7 +1,7 @@
 /**
  * @class Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService
  */
-(function(Oskari) {
+(function (Oskari) {
     var _log = Oskari.log('HierarchicalLayerlist.LayerlistExtenderService');
 
     Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService',
@@ -10,7 +10,7 @@
          * @method create called automatically on construction
          * @static
          */
-        function() {
+        function () {
             var me = this;
             this.sb = Oskari.getSandbox();
             /* Default options for jsTree */
@@ -47,7 +47,7 @@
                     show_only_matches: true,
                     show_only_matches_children: true,
                     close_opened_onclear: true,
-                    search_callback: function(text, node) {
+                    search_callback: function (text, node) {
                         if (node.type == 'layer') {
                             var searchText = text.toLowerCase();
                             var nodeText = jQuery(node.text).find('.layer-title').text().toLowerCase();
@@ -63,7 +63,7 @@
                 state: {
                     key: 'hierarchical-layerlist'
                 },
-                conditionalselect: function(node, event) {
+                conditionalselect: function (node, event) {
                     me.trigger('conditional.select', {
                         node: node,
                         event: event
@@ -73,7 +73,7 @@
             };
             this._events = [{
                 name: 'search.jstree',
-                handler: function(nodes, str, res) {
+                handler: function (nodes, str, res) {
                     me.trigger('search', {
                         nodes: nodes,
                         str: str,
@@ -82,7 +82,7 @@
                 }
             }, {
                 name: 'clear_search.jstree',
-                handler: function(nodes, str, res) {
+                handler: function (nodes, str, res) {
                     me.trigger('search.clear', {
                         nodes: nodes,
                         str: str,
@@ -99,23 +99,21 @@
 
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
-
-
         }, {
-            __name: "HierarchicalLayerlist.LayerlistExtenderService",
-            __qname: "Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService",
+            __name: 'HierarchicalLayerlist.LayerlistExtenderService',
+            __qname: 'Oskari.framework.bundle.hierarchical-layerlist.LayerlistExtenderService',
 
             /*******************************************************************************************************************************
             /* PUBLIC METHODS
             *******************************************************************************************************************************/
 
-            getQName: function() {
+            getQName: function () {
                 return this.__qname;
             },
-            getName: function() {
+            getName: function () {
                 return this.__name;
             },
-            getSandbox: function() {
+            getSandbox: function () {
                 return this.sandbox;
             },
             /**
@@ -124,7 +122,7 @@
              * @param  {String}                 key layerlist option id, if not defined then return all.
              * @return {Object|String|Boolean}  option value
              */
-            getLayerlistOption: function(key) {
+            getLayerlistOption: function (key) {
                 if (!key) {
                     return this._jsTreeOptions;
                 }
@@ -137,7 +135,7 @@
              * @param  {Object|String|Boolean}  value   option value
              * @param {Boolean}                 notTriggerEvent not trigger event when tru, defaults false
              */
-            addLayerlistOption: function(key, value, notTriggerEvent) {
+            addLayerlistOption: function (key, value, notTriggerEvent) {
                 this._jsTreeOptions[key] = value;
                 if (!notTriggerEvent) {
                     this.trigger('option.added', {
@@ -153,7 +151,7 @@
              * @param  {String}    id if defined return tool id corresponding tool, if not defeined return all maintools.
              * @return {Object}    wanted main tool or all main tools
              */
-            getMainTool: function(id) {
+            getMainTool: function (id) {
                 if (!id) {
                     return this._mainTools;
                 }
@@ -171,7 +169,7 @@
              *                             }
              *
              */
-            addMainTool: function(id, handler, options) {
+            addMainTool: function (id, handler, options) {
                 if (this._mainTools[id]) {
                     _log.warn('Main tool "' + id + '" allready defined.');
                     return;
@@ -182,7 +180,7 @@
                 }
 
                 this._mainTools[id] = {
-                    handler: function(tool) {
+                    handler: function (tool) {
                         handler(tool, id);
                     },
                     options: options
@@ -199,12 +197,12 @@
              * @param  {String}        eventName event name
              * @return {Array}         if eventName not defeined then return all events, other return all wanted event name handlers
              */
-            getEventHandler: function(eventName) {
+            getEventHandler: function (eventName) {
                 var me = this;
                 if (!eventName) {
                     return me._events;
                 }
-                return jQuery.grep(me._events, function(name) {
+                return jQuery.grep(me._events, function (name) {
                     return name === eventName;
                 });
             },
@@ -214,7 +212,7 @@
              * @param  {String}        eventName event name
              * @param  {function}      handler   event handler
              */
-            addEventHandler: function(eventName, handler) {
+            addEventHandler: function (eventName, handler) {
                 var obj = {
                     name: name,
                     handler: handler
@@ -228,7 +226,7 @@
              * @param  {String}     id group tool id
              * @return {Object}     wanted group tool
              */
-            getGroupTool: function(id) {
+            getGroupTool: function (id) {
                 if (!id) {
                     return this._groupTools;
                 }
@@ -247,7 +245,7 @@
              *                                     cls: 'active-cls'
              *                                 }
              */
-            addGroupTool: function(id, handler, options) {
+            addGroupTool: function (id, handler, options) {
                 if (this._groupTools[id]) {
                     _log.warn('Group tool "' + id + '" allready defined.');
                     return;
@@ -274,7 +272,7 @@
              * @param  {String}     id subgroup tool id
              * @return {Object}     wanted subgroup tool
              */
-            getSubgroupTool: function(id) {
+            getSubgroupTool: function (id) {
                 if (!id) {
                     return this._subgroupTools;
                 }
@@ -293,7 +291,7 @@
              *                                     cls: 'active-cls'
              *                                 }
              */
-            addSubgroupTool: function(id, handler, options) {
+            addSubgroupTool: function (id, handler, options) {
                 if (this._subgroupTools[id]) {
                     _log.warn('Subgroup tool "' + id + '" allready defined.');
                     return;
@@ -321,7 +319,7 @@
              * @param  {String}     id subgroup tool id
              * @return {Object}     wanted subgroup tool
              */
-            getSubgroupSubgroupTool: function(id) {
+            getSubgroupSubgroupTool: function (id) {
                 if (!id) {
                     return this._subgroupSubgroupTools;
                 }
@@ -340,7 +338,7 @@
              *                                     cls: 'active-cls'
              *                                 }
              */
-            addSubgroupSubgroupTool: function(id, handler, options) {
+            addSubgroupSubgroupTool: function (id, handler, options) {
                 if (this._subgroupSubgroupTools[id]) {
                     _log.warn('Subgroup subgroup tool "' + id + '" allready defined.');
                     return;
@@ -368,7 +366,7 @@
              * @param  {String}    id if defined return tool id corresponding tool, if not defeined return all layer tools.
              * @return {Object}    wanted layer tool or all layer tools
              */
-            getLayerTool: function(id) {
+            getLayerTool: function (id) {
                 if (!id) {
                     return this._layerTools;
                 }
@@ -384,7 +382,7 @@
              *                                     cls: 'active-cls'
              *                                 }
              */
-            addLayerTool: function(id, handler, options) {
+            addLayerTool: function (id, handler, options) {
                 if (this._layerTools[id]) {
                     _log.warn('Layer tool "' + id + '" allready defined.');
                     return;
@@ -409,7 +407,7 @@
              * @method showEmptyGroups
              * @param  {Boolean} show empty groups
              */
-            showEmptyGroups: function(showEmptyGroups) {
+            showEmptyGroups: function (showEmptyGroups) {
                 this._showEmptyGroups = showEmptyGroups;
                 this.trigger('show.empty.groups', this._showEmptyGroups);
             },
@@ -418,7 +416,7 @@
              * @method hasEmptyGroupsVisible
              * @return {Boolean} show empty groups
              */
-            hasEmptyGroupsVisible: function() {
+            hasEmptyGroupsVisible: function () {
                 return this._showEmptyGroups;
             }
 

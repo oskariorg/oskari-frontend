@@ -3,7 +3,7 @@
  */
 Oskari.clazz.define('Oskari.projection.change.request.ShowProjectionChangerRequest',
     function () {
-               
+
     },
     {
         __name: 'ShowProjectionChangerRequest',

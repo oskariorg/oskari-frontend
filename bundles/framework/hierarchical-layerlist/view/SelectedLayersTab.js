@@ -11,7 +11,7 @@ Oskari.clazz.define(
      * @static
      */
 
-    function(instance) {
+    function (instance) {
         this.instance = instance;
         this.locale = this.instance.getLocalization('SelectedLayersTab');
         this.service = this.instance.layerlistExtenderService;
@@ -24,7 +24,6 @@ Oskari.clazz.define(
         this._templates = {
             layerlist: jQuery('<ul class="layerlist sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>')
         };
-
 
         this._layers = {};
 
@@ -42,17 +41,17 @@ Oskari.clazz.define(
          * @method  _bindExtenderServiceListeners
          * @private
          */
-        _bindExtenderServiceListeners: function() {
+        _bindExtenderServiceListeners: function () {
             var me = this;
-            me.service.on('group.added', function(data) {
+            me.service.on('group.added', function (data) {
                 if (data.method === 'update') {
-                    Object.keys(me._layers).forEach(function(key) {
+                    Object.keys(me._layers).forEach(function (key) {
                         me._layers[key].updateBreadcrumb();
                     });
                 }
             });
 
-            me.service.on('admin.layer', function(data) {
+            me.service.on('admin.layer', function (data) {
                 if (data.mode !== 'delete' && me._layers[data.layerData.id]) {
                     var layer = me.sb.findMapLayerFromAllAvailable(data.layerData.id);
                     me._layers[data.layerData.id].updateLayer(layer);
@@ -65,7 +64,7 @@ Oskari.clazz.define(
          * @method  _updateLayerCount
          * @private
          */
-        _updateLayerCount: function() {
+        _updateLayerCount: function () {
             var me = this;
             var selectedLayers = me.sb.findAllSelectedMapLayers();
             var icon = me.tabPanel.getHeader().find('.layers-selected');
@@ -80,7 +79,7 @@ Oskari.clazz.define(
          *
          * @param  {String} oskarifieldId oskari field id
          */
-        _createUI: function(oskarifieldId) {
+        _createUI: function (oskarifieldId) {
             var me = this;
 
             me.tabPanel = Oskari.clazz.create('Oskari.userinterface.component.TabPanel');
@@ -90,12 +89,12 @@ Oskari.clazz.define(
             var layerContainer = me._templates.layerlist.clone();
 
             layerContainer.sortable({
-                start: function(event, ui) {
+                start: function (event, ui) {
                     me._dragging = true;
                     var height = ui.item.height();
                     me._calculateContainerHeightDuringSort(height);
                 },
-                stop: function(event, ui) {
+                stop: function (event, ui) {
                     me._dragging = false;
                     me._calculateContainerHeightDuringSort();
                     me._layerOrderChanged(ui.item);
@@ -104,7 +103,6 @@ Oskari.clazz.define(
 
             me.tabPanel.setContent(layerContainer);
 
-
             me._updateContainerHeight(jQuery('#mapdiv').height());
         },
         /**
@@ -112,14 +110,13 @@ Oskari.clazz.define(
          * @method  _setSelectedLayers
          * @private
          */
-        _setSelectedLayers: function() {
+        _setSelectedLayers: function () {
             var me = this;
             var selectedLayers = me.sb.findAllSelectedMapLayers();
 
-            selectedLayers.reverse().forEach(function(layer) {
+            selectedLayers.reverse().forEach(function (layer) {
                 me._addLayer(layer, false, true);
             });
-
         },
 
         /**
@@ -128,12 +125,12 @@ Oskari.clazz.define(
          * @param   {Integer}                            height heigt
          * @private
          */
-        _calculateContainerHeightDuringSort: function(height) {
+        _calculateContainerHeightDuringSort: function (height) {
             var me = this;
             var container = me.tabPanel.getContainer();
-            if (typeof height === "undefined") {
+            if (typeof height === 'undefined') {
                 container.css({
-                    height: ""
+                    height: ''
                 });
             }
             var totalHeight = container.height() + height;
@@ -150,7 +147,7 @@ Oskari.clazz.define(
          * @param   {Boolean} forceAdd        force adding
          * @private
          */
-        _addLayer: function(layer, keepLayersOrder, forceAdd) {
+        _addLayer: function (layer, keepLayersOrder, forceAdd) {
             var me = this;
             if (me._layers[layer.getId()]) {
                 return;
@@ -180,12 +177,11 @@ Oskari.clazz.define(
          * @param {Number} newIndex index where the moved layer is now
          *
          */
-        _layerOrderChanged: function(item) {
+        _layerOrderChanged: function (item) {
             var me = this;
             var allNodes = me.tabPanel.getContainer().find('.layerlist li.layer'),
                 movedId = item.attr('data-layerid'),
                 movedIndex = me.tabPanel.getContainer().find('.layer[data-layerid=' + movedId + ']').index();
-
 
             if (movedIndex > -1) {
                 // the layer order is reversed in presentation
@@ -204,7 +200,7 @@ Oskari.clazz.define(
          * @param {AfterRearrangeSelectedMapLayerEvent} event
          *
          */
-        _handleLayerOrderChanged: function(event) {
+        _handleLayerOrderChanged: function (event) {
             var me = this;
             var layer = event.getMovedMapLayer();
             var fromPosition = event.getFromPosition();
@@ -248,7 +244,7 @@ Oskari.clazz.define(
          * @param   {Integer}               height map height
          * @private
          */
-        _updateContainerHeight: function(height) {
+        _updateContainerHeight: function (height) {
             var me = this;
             jQuery(me.tabPanel.getContainer()).find('ul.layerlist').css('max-height', (height * 0.7) + 'px');
         },
@@ -258,15 +254,15 @@ Oskari.clazz.define(
          * @method  _bindOskariEvents
          * @private
          */
-        _bindOskariEvents: function() {
+        _bindOskariEvents: function () {
             var me = this;
-            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
+            me._notifierService.on('AfterMapLayerAddEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 me._addLayer(layer, evt.getKeepLayersOrder());
                 me._updateLayerCount();
             });
 
-            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
+            me._notifierService.on('AfterMapLayerRemoveEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 me._layers[layer.getId()].getElement().remove();
                 delete me._layers[layer.getId()];
@@ -274,29 +270,27 @@ Oskari.clazz.define(
                 me._updateLayerCount();
             });
 
-            me._notifierService.on('MapLayerVisibilityChangedEvent', function(evt) {
+            me._notifierService.on('MapLayerVisibilityChangedEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 if (me._layers[layer.getId()]) {
                     me._layers[layer.getId()].setLayer(layer);
                 }
             });
 
-            me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function(evt) {
+            me._notifierService.on('AfterRearrangeSelectedMapLayerEvent', function (evt) {
                 if (evt._creator !== me.instance.getName()) {
                     me._handleLayerOrderChanged(evt);
                 }
             });
 
-            me._notifierService.on('AfterChangeMapLayerOpacityEvent', function(evt) {
+            me._notifierService.on('AfterChangeMapLayerOpacityEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 me._layers[layer.getId()].setLayer(layer);
             });
 
-            me._notifierService.on('MapSizeChangedEvent', function(evt) {
+            me._notifierService.on('MapSizeChangedEvent', function (evt) {
                 me._updateContainerHeight(evt.getHeight());
             });
-
-
         },
         /**
          * Blink wanted element
@@ -305,7 +299,7 @@ Oskari.clazz.define(
          * @param   {Integer} count   how many times blinked
          * @private
          */
-        _blink: function(element, count) {
+        _blink: function (element, count) {
             var me = this;
             if (!element) {
                 return;
@@ -316,11 +310,11 @@ Oskari.clazz.define(
             // animate to low opacity
             element.animate({
                 opacity: 0.25
-            }, 500, function() {
+            }, 500, function () {
                 // on complete, animate back to fully visible
                 element.animate({
                     opacity: 1
-                }, 500, function() {
+                }, 500, function () {
                     // on complete, check and adjust the count parameter
                     // recurse if count has not been reached yet
                     if (count > 1) {
@@ -338,14 +332,14 @@ Oskari.clazz.define(
          * @method @public getTabPanel Gets tab panel
          * @return {Oskari.userinterface.component.TabPanel} selected layer tab panel
          */
-        getTabPanel: function() {
+        getTabPanel: function () {
             return this.tabPanel;
         },
         /**
          * Update selected laeyrs
          * @method updateSelected  Layers
          */
-        updateSelectedLayers: function() {
+        updateSelectedLayers: function () {
             var me = this;
             me._setSelectedLayers();
             me._updateLayerCount();
@@ -355,7 +349,7 @@ Oskari.clazz.define(
          * @method hasDragging
          * @return {Boolean}   has dragging
          */
-        hasDragging: function(){
+        hasDragging: function () {
             return this._dragging;
         }
     }

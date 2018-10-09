@@ -39,7 +39,6 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         me._historyPrevious = [];
         me._historyNext = [];
 
-
         for (pluginName in me._pluginInstances) {
             if (me._pluginInstances.hasOwnProperty(pluginName)) {
                 me._log.debug('resetting state on ' + pluginName);
@@ -59,7 +58,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             var data = {
                 uuid: Oskari.app.getUuid(),
                 noSavedState: true
-            }
+            };
             jQuery.ajax({
                 dataType: 'json',
                 data: data,
@@ -96,7 +95,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     _getStartupState: function () {
         var ret;
         if (this._startupState) {
-            ret =  jQuery.extend(true, {}, this._startupState);
+            ret = jQuery.extend(true, {}, this._startupState);
         } else {
             ret = this._startupState;
         }

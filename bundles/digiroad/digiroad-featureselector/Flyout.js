@@ -13,7 +13,7 @@ function(instance) {
     this.instance = instance;
     this.container = null;
     this.state = null;
-    this.loc = instance.getLocalization("gridheaders");
+    this.loc = instance.getLocalization('gridheaders');
 
     this.grids = {};
     this.gridDataArrays = {};
@@ -192,9 +192,9 @@ function(instance) {
             cel = jQuery(this.container),
             h2 = layerName,
             objectId = [{
-                "id": "object_id",
-                "name": "Tunnus",
-                "field": this.instance.targetLayers[layerName].objectId
+                'id': 'object_id',
+                'name': 'Tunnus',
+                'field': this.instance.targetLayers[layerName].objectId
             }];
 
         var gridHeaders = objectId.concat(gridHeadersBase);
@@ -263,7 +263,7 @@ function(instance) {
         grid = new Slick.Grid(insertTo, dataArray, columnArray, options);
 
         var commitEditedFeaturesCallback = function(response) {
-            var errors = me.instance.getLocalization("errors")['dataSendFailed'];
+            var errors = me.instance.getLocalization('errors')['dataSendFailed'];
             if(!response) {
                 alert(errors);
             } else {
@@ -281,7 +281,7 @@ function(instance) {
                 feature = me.instance.features[oid],
                 columnId = grid.getColumns()[cell].id;
 
-            var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeatureHighlightEvent");
+            var eventBuilder = sandbox.getEventBuilder('FeatureSelector.FeatureHighlightEvent');
             if(eventBuilder) {
                 var event = eventBuilder(layerName, feature, highlightType);
                 sandbox.notifyAll(event);
@@ -299,10 +299,10 @@ function(instance) {
             sandbox.notifyAll(event);
         });
         grid.onMouseEnter.subscribe(function(e) {
-            onMouseFunction(e, "highlight");
+            onMouseFunction(e, 'highlight');
         });
         grid.onMouseLeave.subscribe(function(e) {
-            onMouseFunction(e, "unHighlight");
+            onMouseFunction(e, 'unHighlight');
         });
 
         return grid;
@@ -324,13 +324,13 @@ function(instance) {
             var col = header[i];
 
             switch(col.editor) {
-	            case "integer":
+	            case 'integer':
 	                col.editor = Slick.Editors.Integer;
 	                break;
-	            case "select":
+	            case 'select':
 	                col.editor = Slick.Editors.SelectOption;
 	                break;
-	            case "text":
+	            case 'text':
 	            	col.editor = Slick.Editors.Text;
 	            	break;
 	        }
@@ -352,13 +352,13 @@ function(instance) {
      * @return {Object} formatter and options as keys, or null if not found from localization.
      */
     _getFormatterForHeader: function(id) {
-        var mappings = this.instance.getLocalization("mappings")[id];
+        var mappings = this.instance.getLocalization('mappings')[id];
         if(mappings) {
             return {
                 'formatter': function(row, cell, value, columnDef, dataContext) {
-                    return mappings["int"][value];
+                    return mappings['int'][value];
                 },
-                'options': mappings["string"]
+                'options': mappings['string']
             }
         } else {
             return null;

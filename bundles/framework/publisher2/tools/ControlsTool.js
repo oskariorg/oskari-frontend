@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ControlsTool',
         stop: function () {
             this.allowPanning(true);
         }
-}, {
+    }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
         'protocol': ['Oskari.mapframework.publisher.Tool']
-});
+    });

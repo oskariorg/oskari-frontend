@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.MainView',
 
     /**
      * @method create called automatically on construction
@@ -39,11 +39,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
          * @method getPopupId
          * @return {String} popupid
          */
-        getPopupId: function (){
+        getPopupId: function () {
             return this.popupId;
         },
 
-        getForm: function(){
+        getForm: function () {
             return this.form;
         },
         /**
@@ -105,7 +105,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -209,14 +208,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
             var actions = [
                 {
                     name: me.loc('buttons.cancel'),
-                    type: "button",
+                    type: 'button',
                     group: 1,
                     action: function () {
                         me.cleanupPopup();
                     }
                 }, {
                     name: me.loc('buttons.save'),
-                    type: "button",
+                    type: 'button',
                     group: 1,
                     action: function () {
                         me._saveForm();
@@ -317,7 +316,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                 formValues = this.form.getValues();
 
             // Disable buttons to prevent duplicate jobs
-            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop("disabled", true);
+            jQuery('div#myplacesForm_contentDiv').find('input[type="button"]').prop('disabled', true);
 
             // validation
             var errors = this._validateForm(formValues);
@@ -335,7 +334,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     if (blnSuccess) {
                         // add category as a maplayer to oskari maplayer service
                         // NOTE! added as a map layer to maplayer service through categoryhandler getting an event
-                        //me.instance.addLayerToService(model);
+                        // me.instance.addLayerToService(model);
                         // save the actual place
                         formValues.place.category = model.getId();
                         me.__savePlace(formValues.place);
@@ -422,7 +421,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.MainView",
                     dialog.show(me.loc('notification.placeAdded.title'), me.loc('notification.placeAdded.message'));
                     dialog.fadeout();
                     // remove drawing handled in ButtonHandler InfoBox.InfoBoxEvent listener
-                    //me.drawPlugin.stopDrawing();
+                    // me.drawPlugin.stopDrawing();
                 } else {
                     me.instance.showMessage(me.loc('notification.error.title'), me.loc('notification.error.savePlace'));
                 }

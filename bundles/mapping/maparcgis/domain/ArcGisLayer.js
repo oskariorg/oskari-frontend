@@ -12,9 +12,9 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer',
 
     function () {
         /* Layer Type */
-        this._layerType = "arcgis";
+        this._layerType = 'arcgis';
     }, {
 
     }, {
-        "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+        'extend': ['Oskari.mapframework.domain.AbstractLayer']
     });

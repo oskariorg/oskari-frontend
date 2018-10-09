@@ -263,8 +263,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         getValues: function () {
             var me = this;
 
-            //metadata currently saved to two places. The publisher uses the values from metadata to restore a published map's state whereas a published map itself uses
-            //the values stored under mapfull's conf.
+            // metadata currently saved to two places. The publisher uses the values from metadata to restore a published map's state whereas a published map itself uses
+            // the values stored under mapfull's conf.
             me.values = {
                 metadata: {
                     style: {

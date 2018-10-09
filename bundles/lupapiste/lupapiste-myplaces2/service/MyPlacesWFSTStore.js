@@ -67,7 +67,7 @@ function(url, uuid) {
         var uuid = this.uuid;
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
+            property : 'uuid',
             value : uuid
         });
         var p = this.protocols['categories'];
@@ -110,7 +110,7 @@ function(url, uuid) {
 
             var category = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
             category.setId(id);
-            category.setDefault("true" === featAtts['default']);
+            category.setDefault('true' === featAtts['default']);
             category.setName(featAtts['category_name']);
             category.setLineWidth(featAtts['stroke_width']);
             category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
@@ -320,7 +320,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
+            property : 'uuid',
             value : uuid
         });
 
@@ -395,7 +395,7 @@ function(url, uuid) {
             type : OpenLayers.Filter.Logical.AND,
             filters : [new OpenLayers.Filter.Comparison({
                 type : OpenLayers.Filter.Comparison.EQUAL_TO,
-                property : "uuid",
+                property : 'uuid',
                 value : uuid
             }), new OpenLayers.Filter.FeatureId({
                 fids : idList

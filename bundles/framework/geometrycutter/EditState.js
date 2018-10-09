@@ -41,12 +41,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
         }
         var geometryType;
         switch (this.mode) {
-            case 'lineSplit':
-                geometryType = 'LineString';
-                break;
-            case 'polygonClip':
-                geometryType = 'Polygon';
-                break;
+        case 'lineSplit':
+            geometryType = 'LineString';
+            break;
+        case 'polygonClip':
+            geometryType = 'Polygon';
+            break;
         }
         this.drawing = true;
         this.makeRequest('DrawTools.StartDrawingRequest', [this.id, geometryType]);
@@ -114,13 +114,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
     executeGeometryOp: function (feature) {
         this.drawnFeature = feature;
         switch (this.mode) {
-            case 'lineSplit':
-                this.resultFeatures = this._geometryProcessor.splitByLine(this.sourceFeature, this.drawnFeature);
-                break;
-            case 'polygonClip':
-                this.resultFeatures = this._geometryProcessor.clipByPolygon(this.sourceFeature, this.drawnFeature);
-                break;
+        case 'lineSplit':
+            this.resultFeatures = this._geometryProcessor.splitByLine(this.sourceFeature, this.drawnFeature);
+            break;
+        case 'polygonClip':
+            this.resultFeatures = this._geometryProcessor.clipByPolygon(this.sourceFeature, this.drawnFeature);
+            break;
         }
         return !!this.resultFeatures;
-    },
+    }
 }, {});

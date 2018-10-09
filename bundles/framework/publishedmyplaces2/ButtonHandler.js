@@ -3,7 +3,7 @@
  *
  * Handles the buttons for myplaces functionality
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler",
+Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler',
 
     /**
      * @method create called automatically on construction
@@ -60,7 +60,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                     drawMode : 'cut'
                 });
             }
-        }*/
+        } */
         };
         me.templateGuide = jQuery('<div><div class="guide"></div>' +
             '<div class="buttons">' +
@@ -82,7 +82,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          * implements Module protocol init method
          */
         init: function () {
-
             var loc = this.instance.getLocalization('tools'),
                 user = Oskari.user();
 
@@ -118,7 +117,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
                     sandbox.request(me, reqBuilder(tool, me.buttonGroup, me.buttons[tool]));
                 }
             } else {
-                this._log.debug("Missing toolbar.");
+                this._log.debug('Missing toolbar.');
             }
 
             if (!Oskari.user().isLoggedIn() && me.conf.allowGuest !== true) {
@@ -134,7 +133,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
         disableButtons: function () {
             var sandbox = this.instance.sandbox,
                 stateReqBuilder = Oskari.requestBuilder('Toolbar.ToolButtonStateRequest');
-            if(stateReqBuilder) {
+            if (stateReqBuilder) {
                 sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
             }
         },
@@ -158,14 +157,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
          * @param config params for StartDrawRequest
          */
         sendDrawRequest: function (config) {
-            var me = this,
-                startRequest = Oskari.requestBuilder('DrawPlugin.StartDrawingRequest')(config);
+            var startRequest = Oskari.requestBuilder('DrawPlugin.StartDrawingRequest')(config);
             this.instance.sandbox.request(this, startRequest);
 
             if (!config.geometry) {
                 // show only when drawing new place
                 this._showDrawHelper(config.drawMode);
-
             }
         },
         /**
@@ -203,10 +200,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
 
             // store data for later reuse
             me.toolContentDivData = {
-                "className": 'myplaces2',
-                "title": title,
-                "content": content,
-                "buttons": buttons
+                'className': 'myplaces2',
+                'title': title,
+                'content': content,
+                'buttons': buttons
             };
 
             toolContainerRequest = Oskari.requestBuilder('Toolbar.ToolContainerRequest')('set', me.toolContentDivData);
@@ -247,7 +244,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -307,7 +303,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler"
              */
             'DrawPlugin.AddedFeatureEvent': function (event) {
                 var me = this;
-                if (typeof event.getDrawingMode() !== "undefined") {
+                if (typeof event.getDrawingMode() !== 'undefined') {
                     if (event.getDrawingMode() !== null) {
                         var loc = this.instance.getLocalization('tools'),
                             areaDialogContent = loc[event.getDrawingMode()].next;

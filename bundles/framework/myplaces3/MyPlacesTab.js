@@ -139,8 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @private
          */
         _showPlace: function (geometry, categoryId) {
-            // center map on selected place
-            var me = this;
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
             var bounds = mapModule.getBoundsFromGeoJSON(geometry);

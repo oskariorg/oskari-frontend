@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowBoundi
 	 */
     handleRequest : function(core, request) {
     	var me = this;
-        me.sandbox.printDebug("[Oskari.liikennevirasto.bundle.transport.selector.ShowBoundingBoxRequest] Clear basket");
+        me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.transport.selector.ShowBoundingBoxRequest] Clear basket');
         me.plugin.showOnMap(request.getBbox());
     }
 }, {

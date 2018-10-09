@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.harava.bundle.MapQuestions bundle
  */
-Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
+Oskari.clazz.define('Oskari.harava.bundle.MapQuestionsBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -126,7 +126,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @method start
          * BundleInstance protocol method
          */
-        "start": function () {
+        'start': function () {
             var me = this;
             if (me.started) {
                 return;
@@ -220,7 +220,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * Get current module all features
          * @return {OpenLayers.Feature[]} features
          */
-        "getCurrentModuleFeatures": function () {
+        'getCurrentModuleFeatures': function () {
             var me = this;
             var features = me.plugin.getCurrentModuleFeatures();
             return features;
@@ -230,7 +230,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * Get all modules all features
          * @return {OpenLayers.Feature[]} features
          */
-        "getAllModuleFeatures": function () {
+        'getAllModuleFeatures': function () {
             var me = this;
             var features = me.plugin.getAllModuleFeatures();
             return features;
@@ -240,7 +240,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * Close all popus and unselect all features
          * @param {OpenLayers.Event} evt
          */
-        "onPopupClose": function (evt) {
+        'onPopupClose': function (evt) {
             var sandbox = Oskari.getSandbox();
             var me = sandbox.findRegisteredModuleInstance('HaravaMapQuestions');
             me.plugin.onPopupClose();
@@ -250,7 +250,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @method deActivateAll
          * Deactivate all module controls and tools
          */
-        "deActivateAll": function () {
+        'deActivateAll': function () {
             var me = this;
             jQuery('.harava-question-tool').removeClass('active');
             jQuery('.harava-question-tool').removeClass('selected');
@@ -260,7 +260,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * Move questions to defined step
          * @param {String} moduleId
          */
-        "showStep": function (moduleId) {
+        'showStep': function (moduleId) {
             var me = this;
             var oldmodule = me.getModuleById(me._currentStep);
             if (oldmodule != null) {
@@ -279,7 +279,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @param {String} moduleId selected moduleid
          * @param {String} questionId selected qustion id
          */
-        "activateControl": function (moduleId, questionId) {
+        'activateControl': function (moduleId, questionId) {
             var me = this;
             var module = me.getModuleById(moduleId);
             var isSelected = jQuery('#harava-question-tool_' + moduleId + '_' + questionId).hasClass('active');
@@ -305,7 +305,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @param {String} moduleId
          * @return {Object} founded module if exists. If not return null.
          */
-        "getModuleById": function (moduleId) {
+        'getModuleById': function (moduleId) {
             var me = this;
             var retModule = null;
             jQuery.each(me.modules, function (k, module) {
@@ -322,7 +322,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @param {String[]} questions
          * @return {Object} founded question if exists. If not return null.
          */
-        "getQuestionById": function (questionId, questions) {
+        'getQuestionById': function (questionId, questions) {
             var me = this;
             var retQuestion = null;
             jQuery.each(questions, function (k, question) {
@@ -336,7 +336,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @method destroySelectedFeature
          * Destroy selected feature
          */
-        "destroySelectedFeature": function () {
+        'destroySelectedFeature': function () {
             var me = this;
             me.plugin.destroySelectedFeature();
         },
@@ -345,7 +345,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * Hide selected feature
          * @param {Boolean} notCloseTools
          */
-        "hideSelectedFeature": function (notCloseTools) {
+        'hideSelectedFeature': function (notCloseTools) {
             var me = this;
             me.plugin.hideSelectedFeature(notCloseTools);
         },
@@ -355,7 +355,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @param {String} question id
          * @param {Boolean} enabled
          */
-        "changeToolVisibility": function (moduleId, questionId, enabled) {
+        'changeToolVisibility': function (moduleId, questionId, enabled) {
             if (enabled === true) {
                 jQuery('#harava-question-tool_' + moduleId + '_' + questionId).removeClass('disabled');
                 jQuery('#harava-question-tool_' + moduleId + '_' + questionId).prev().removeClass('disabled');
@@ -368,7 +368,7 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @method stop
          * BundleInstance protocol method
          */
-        "stop": function () {
+        'stop': function () {
             var sandbox = this.sandbox();
             for (p in this.eventHandlers) {
                 sandbox.unregisterFromEventByName(this, p);
@@ -391,18 +391,18 @@ Oskari.clazz.define("Oskari.harava.bundle.MapQuestionsBundleInstance",
          * @method init
          * implements Module protocol init method - initializes request handlers
          */
-        "init": function () {
+        'init': function () {
 
         },
         /**
          * @method update
          * BundleInstance protocol method
          */
-        "update": function () {}
+        'update': function () {}
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ['Oskari.bundle.BundleInstance']
+        'protocol': ['Oskari.bundle.BundleInstance']
     });

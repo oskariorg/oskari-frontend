@@ -48,7 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-
             var me = this;
             me.templateLayer =
                 jQuery('<div class="maplegend-layer"><div class="maplegend-tools"><div class="layer-description"><div class="icon-info"></div></div></div></div>');
@@ -118,7 +117,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
             var layers = sandbox.findAllSelectedMapLayers().slice(0),
                 n,
                 layer,
-                groupAttr,
                 layerContainer,
                 accordionPanel;
 
@@ -127,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 groupAttr = layer.getName();
                 layerContainer = this._createLayerContainer(layer);
 
-                if(layerContainer !== null) {
+                if (layerContainer !== null) {
                     accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     accordionPanel.open();
                     accordionPanel.setTitle(layer.getName());
@@ -138,7 +136,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             // If no legend images at all, inform the user
             me._informNoLegendImages();
-
         },
 
         /**
@@ -175,7 +172,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                         layerDiv.append(subLayerlegendDiv);
                     }
                 }
-
 
                 /* metadata link */
                 var uuid = layer.getMetadataIdentifier(),
@@ -217,14 +213,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
                 return null;
             }
 
-
             var legendDiv = me.templateLayerLegend.clone(),
                 imgDiv = legendDiv.find('img'),
                 img = new Image();
 
             legendDiv.prepend(layer.getCurrentStyle().getTitle() + '<br />');
 
-            if(me._legendImagesNotLoaded[legendUrl]) {
+            if (me._legendImagesNotLoaded[legendUrl]) {
                 me._checkNoLegendText();
                 // return null;
             }
@@ -239,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             img.onerror = function () {
                 img.onerror = null;
-                //Show legend invalid info for the layer
+                // Show legend invalid info for the layer
                 me._legendImagesNotLoaded[legendUrl] = true;
                 me._checkNoLegendText(legendDiv, layer);
             };
@@ -253,32 +248,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
         * @method _checkNoLegendText
         * @private
         */
-        _checkNoLegendText: function(legendDiv, layer){
+        _checkNoLegendText: function (legendDiv, layer) {
             var me = this,
                 invalidLegendUrl = this.instance.getLocalization('invalidLegendUrl'),
                 noLegendContainer = me.templateNoLegend.clone();
 
             if (legendDiv && layer) {
                 var legendUrl = layer.getLegendImage ? layer.getLegendImage() : null;
-                if(legendUrl){
+                if (legendUrl) {
                     noLegendContainer.html(invalidLegendUrl);
-                    Oskari.log(me.instance.getName()).debug(invalidLegendUrl + ": " + legendUrl);
+                    Oskari.log(me.instance.getName()).debug(invalidLegendUrl + ': ' + legendUrl);
                 }
                 legendDiv.append(noLegendContainer);
             }
-
         },
-        _informNoLegendImages: function(){
+        _informNoLegendImages: function () {
             var me = this,
                 noLegendText = this.instance.getLocalization('noLegendsText'),
                 legendDivs = jQuery('.oskari-flyoutcontent.maplegend').find('.accordion_panel'),
                 noLegendContainer = me.templateNoLegend.clone();
 
-            if(legendDivs !== null  && legendDivs.length === 0){
+            if (legendDivs !== null && legendDivs.length === 0) {
                 noLegendContainer.html(noLegendText);
                 jQuery('.oskari-flyoutcontent.maplegend').append(noLegendContainer);
             }
-
         }
     }, {
         /**

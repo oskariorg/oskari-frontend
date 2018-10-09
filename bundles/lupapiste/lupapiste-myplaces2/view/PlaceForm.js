@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.view.PlaceForm",
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.view.PlaceForm',
 
 /**
  * @method create called automatically on construction
@@ -100,8 +100,8 @@ function(instance) {
                 if(placeLink.indexOf('://') == -1 || placeLink.indexOf('://') > 6) {
                     placeLink = 'http://' + placeLink;
                 }
-                placeLink = placeLink.replace("<", '');
-                placeLink = placeLink.replace(">", '');
+                placeLink = placeLink.replace('<', '');
+                placeLink = placeLink.replace('>', '');
             }
             var placeDesc = onScreenForm.find('textarea[name=placedesc]').val();
             var categorySelection = onScreenForm.find('select[name=category]').val();

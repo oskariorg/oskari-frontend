@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapLayerEvent',
         this._operation = operation;
     }, {
         /** @static @property __name event name */
-        __name: "MapLayerEvent",
+        __name: 'MapLayerEvent',
         /**
          * @method getName
          * @return {String} event name

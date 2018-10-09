@@ -7,23 +7,23 @@ Oskari.clazz.define('Oskari.framework.bundle.oskariui.Layout',
 /**
  * @static constructor function
  */
-function() {
+    function () {
 
-}, {
+    }, {
 
-	/**
+        /**
 	 * @method applyLayout
 	 * applies this layout with given DomManager
 	 */
-	applyLayout : function() {
+        applyLayout: function () {
 
-	},
-	/**
+        },
+        /**
 	 * @method removeLayout
 	 */
-	removeLayout : function() {
+        removeLayout: function () {
 
-	}
-}, {
-	"protocol" : ["Oskari.dom.Layout"]
-});
+        }
+    }, {
+        'protocol': ['Oskari.dom.Layout']
+    });

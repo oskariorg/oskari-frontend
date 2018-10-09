@@ -16,10 +16,10 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
     function () {
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'ArcGisLayerPlugin',
-        _clazz : 'Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
+        __name: 'ArcGisLayerPlugin',
+        _clazz: 'Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
-        layertype : 'arcgis',
+        layertype: 'arcgis',
 
         /** @static @property _layerType2 type of layers this plugin handles */
         _layerType2: 'arcgis93',
@@ -30,8 +30,8 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
          * @return {Boolean}       true if this plugin handles the type of layers
          */
-        isLayerSupported : function(layer) {
-            if(!layer || !this.isLayerSrsSupported(layer)) {
+        isLayerSupported: function (layer) {
+            if (!layer || !this.isLayerSrsSupported(layer)) {
                 return false;
             }
             return layer.isLayerOfType(this.layerType) || layer.isLayerOfType(this._layerType2);
@@ -55,12 +55,12 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
         },
 
-        __tuneURLsForOL3 : function(urls) {
-            var strToFind = "/export",
+        __tuneURLsForOL3: function (urls) {
+            var strToFind = '/export',
                 length = strToFind.length;
-            return _.map(urls, function(url) {
+            return _.map(urls, function (url) {
                 // Note! endsWith requires a polyfill. One is available in bundles/bundle.js
-                if(url.endsWith(strToFind)) {
+                if (url.endsWith(strToFind)) {
                     return url.substring(0, url.length - length);
                 }
                 return url;
@@ -78,11 +78,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             var me = this,
                 openlayer,
                 sandbox = me.getSandbox(),
-                map = sandbox.getMap(),
-                layerScales = me.getMapModule().calculateLayerScales(
-                    layer.getMaxScale(),
-                    layer.getMinScale()
-                ),
                 layerType;
 
             if (!layer.isLayerOfType(me._layerType) && !layer.isLayerOfType(me._layerType2)) {
@@ -90,15 +85,15 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
 
             if (layer.isLayerOfType(me._layerType2)) {
-                //ArcGIS REST layer
+                // ArcGIS REST layer
                 openlayer = new olLayerTile({
                     extent: me.getMap().getView().getProjection().getExtent(),
                     source: new olSourceTileArcGISRest({
                         urls: this.__tuneURLsForOL3(layer.getLayerUrls()),
-                        params : {
-                            'layers' : 'show:' + layer.getLayerName()
+                        params: {
+                            'layers': 'show:' + layer.getLayerName()
                         },
-                        crossOrigin : layer.getAttributes('crossOrigin')
+                        crossOrigin: layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
@@ -112,7 +107,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 openlayer = new olLayerTile({
                     source: new olSourceXYZ({
                         url: layer.getLayerUrl(),
-                        crossOrigin : layer.getAttributes('crossOrigin')
+                        crossOrigin: layer.getAttributes('crossOrigin')
                     }),
                     id: layer.getId(),
                     visible: layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible(),
@@ -140,26 +135,24 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+        _registerLayerEvents: function (layer, oskariLayer) {
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('tileloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('tileloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            });
 
-        source.on('tileloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('tileloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            });
 
-        source.on('tileloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-
-        });
-
-      }
+            source.on('tileloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
+        }
     }, {
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

@@ -1,7 +1,7 @@
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
 export default class VectorTileLayer extends AbstractLayer {
-    constructor(params, options) {
+    constructor (params, options) {
         super(params, options);
         /* style definition for this layer */
         this.hoverOptions = null;
@@ -9,14 +9,14 @@ export default class VectorTileLayer extends AbstractLayer {
         /* Layer Type */
         this._layerType = 'VECTORTILE';
     }
-    setHoverOptions(options) {
+    setHoverOptions (options) {
         this.hoverOptions = options;
     }
     /**
      * @method getHoverOptions
      * @return {Object} options
      */
-    getHoverOptions() {
+    getHoverOptions () {
         return this.hoverOptions;
     }
     /**
@@ -24,7 +24,7 @@ export default class VectorTileLayer extends AbstractLayer {
      * @param {String} styleName
      * @return {Object}
      */
-    getStyleDef(styleName) {
+    getStyleDef (styleName) {
         if (this._options.styles) {
             return this._options.styles[styleName];
         }
@@ -33,7 +33,7 @@ export default class VectorTileLayer extends AbstractLayer {
      * @method getCurrentStyleDef
      * @return {Object}
      */
-    getCurrentStyleDef() {
+    getCurrentStyleDef () {
         return this.getStyleDef(this._currentStyle.getName());
     }
 }

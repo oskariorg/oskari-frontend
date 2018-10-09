@@ -62,20 +62,18 @@ Oskari.clazz.define(
                 onPause: function (evt) {
                     var lonlat = me._map.getLonLatFromPixel(evt.xy),
                         event = Oskari.eventBuilder(
-                                'MyPlaces.MyPlaceHoverEvent'
-                            )(lonlat, evt, me._map.getZoom());
+                            'MyPlaces.MyPlaceHoverEvent'
+                        )(lonlat, evt, me._map.getZoom());
                     me.getSandbox().notifyAll(event);
                 }
             });
             // TODO should this be extended from BasicMapModulePlugin afterall?
             me.getMap().addControl(me.hoverControl);
-
         },
 
         // should activate when omat paikat layer is shown
         activate: function () {
             this.hoverControl.activate();
-
         },
 
         // should activate when omat paikat layer is not shown

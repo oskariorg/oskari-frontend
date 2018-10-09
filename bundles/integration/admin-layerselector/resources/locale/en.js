@@ -57,7 +57,7 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache layer",
                 "arcgis93": "ArcGISRest layer",
                 "tiles3d" : "3D Tiles layer",
-                "vectortile" : "MBTiles layer"
+                "vectortile" : "MVT layer"
             },
             "selectLayer": "Select map layer",
             "selectSubLayer": "Select sub layer",
@@ -84,7 +84,7 @@ Oskari.registerLocalization(
             "getInfo": "Get info",
             "editWfs": "Edit WFS",
             "options": "Options JSON",
-            "mbtilesOptionsDesc": "{\n  styles: {\n    default: { ... },\n    myStyle: { ... }\n  },\n  tileGrid: { ... }\n}",
+            "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
             "selectClass": "Select theme",
             "selectClassDesc": "Select a theme describing the map layer from the list.",
             "baseName": "Background Map Layer Name",

@@ -15,12 +15,12 @@ Oskari.clazz.define(
     function () {
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'UserLayersLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
+        __name: 'UserLayersLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'userlayer',
+        layertype: 'userlayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return this.layertype;
         },
         /**
@@ -30,8 +30,8 @@ Oskari.clazz.define(
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             if (!mapLayerService) {
                 return;
@@ -60,7 +60,6 @@ Oskari.clazz.define(
             var layerId = _.last(layer.getId().split('_'));
             var imgUrl = (layer.getLayerUrls()[0] + layerId).replace(/&amp;/g, '&');
 
-            var sandbox = this.getSandbox();
             var map = this.getMapModule();
             var model = {
                 source: new olSourceImageWMS({
@@ -71,18 +70,18 @@ Oskari.clazz.define(
                         // Avoid AxisOrder issues by not using WMS 1.3.0
                         'VERSION': '1.1.1'
                     },
-                    crossOrigin : layer.getAttributes('crossOrigin')
+                    crossOrigin: layer.getAttributes('crossOrigin')
                 }),
                 visible: layer.isInScale(map.getMapScale()) && layer.isVisible(),
                 opacity: layer.getOpacity() / 100
             };
-            //minresolution === maxscale and vice versa...
-            if(layer.getMaxScale() && layer.getMaxScale() !== -1) {
+            // minresolution === maxscale and vice versa...
+            if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
                 model.minResolution = map.getResolutionForScale(layer.getMaxScale());
             }
-            if(layer.getMinScale() && layer.getMinScale() !== -1) {
+            if (layer.getMinScale() && layer.getMinScale() !== -1) {
                 var maxResolution = map.getResolutionForScale(layer.getMinScale());
-                if(maxResolution !== map.getResolutionArray()[0]) {
+                if (maxResolution !== map.getResolutionArray()[0]) {
                     // ol3 maxReso is exclusive so don't set if it's the map max resolution
                     model.maxResolution = maxResolution;
                 }
@@ -106,25 +105,25 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
             var source = layer.getSource();
 
-            source.on('imageloadstart', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            source.on('imageloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            source.on('imageloadend', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            source.on('imageloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            source.on('imageloaderror', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on('imageloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
         }
 
     }, {
-        'extend': ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

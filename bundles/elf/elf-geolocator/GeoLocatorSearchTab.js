@@ -18,12 +18,12 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         this.countryUrl = Oskari.urls.getRoute('GetELFCountriesData') + '&lang=' + Oskari.getLang();
         this.loc = instance.getLocalization('tab');
         this.templates = {};
-        //Selections for advanced search
+        // Selections for advanced search
         this.selections = [];
-        this.results = {locationtypes:{id:[],name:[]}, namelanguages:[]};
+        this.results = {locationtypes: {id: [], name: []}, namelanguages: []};
 
         for (var t in this.__templates) {
-            if(this.__templates.hasOwnProperty(t)) {
+            if (this.__templates.hasOwnProperty(t)) {
                 this.templates[t] = jQuery(this.__templates[t]);
             }
         }
@@ -32,45 +32,45 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             'Oskari.userinterface.component.ProgressSpinner');
         this.tabContent = this.__initContent();
     }, {
-        __templates: { container: '<div class="geolocator">'
-                +    '<div class="geolocator-search">'
-                +        '<div class="errors"></div>'
-                +        '<form>'
-                +            '<div class="search-fields"></div>'
-                +            '<div class="search-buttons">'
-                +            '<div class="commit">'
-                +                '<input type="submit" />'
-                +            '</div>'
-                +          '</div>'
-                +    '  <div class="moreLess"><a href="JavaScript:void(0);" class="moreLessLink"></a></div>'
-                +        '</form>'
-                +   '  <div class="searchadvanced"></div>'
-                +    '</div>'
-                +    '<div class="geolocator-results">'
-                +        '<div class="header-results">'
-                +           '<p>'
-                +               '<span class="title"></span>'
-                +               '<span class="back elf-fake-link"></span>'
-                +           '</p>'
-                +        '</div>'
-                +        '<div class="search-results"></div>'
-                +    '</div>'
-                +'</div>',
-            addInput:
+        __templates: { container: '<div class="geolocator">' +
+                '<div class="geolocator-search">' +
+                '<div class="errors"></div>' +
+                '<form>' +
+                '<div class="search-fields"></div>' +
+                '<div class="search-buttons">' +
+                '<div class="commit">' +
+                '<input type="submit" />' +
+                '</div>' +
+                '</div>' +
+                '  <div class="moreLess"><a href="JavaScript:void(0);" class="moreLessLink"></a></div>' +
+                '</form>' +
+                '  <div class="searchadvanced"></div>' +
+                '</div>' +
+                '<div class="geolocator-results">' +
+                '<div class="header-results">' +
+                '<p>' +
+                '<span class="title"></span>' +
+                '<span class="back elf-fake-link"></span>' +
+                '</p>' +
+                '</div>' +
+                '<div class="search-results"></div>' +
+                '</div>' +
+                '</div>',
+        addInput:
             '<div class="additional-input">' +
             '   <div class="controls">' +
             '    <input type="radio" />' +
             '    <label></label>' +
             '  </div>' +
             '</div>',
-            addInputCbx:
+        addInputCbx:
             '<div class="additional-input">' +
             '   <div class="controls">' +
             '    <input type="checkbox" />' +
             '    <label></label>' +
             '  </div>' +
             '</div>',
-            countryAutoInput:
+        countryAutoInput:
             '<div class="geoLocatorRow ui-country-autocomplete-widget">' +
               '<div class="rowLabel"></div>' +
               '<div class="ui-country-autocomplete-widget">' +
@@ -78,61 +78,61 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
               '<input id="countries">' +
               '</div>' +
             '</div>',
-            emptyDiv: '<div><br/></div>',
-            result: '<div class="result"></div>',
+        emptyDiv: '<div><br/></div>',
+        result: '<div class="result"></div>',
 
-            geoLocatorDropdown: jQuery(
-                '<div class="geoLocatorDropdown">' +
+        geoLocatorDropdown: jQuery(
+            '<div class="geoLocatorDropdown">' +
                 '  <select class="geolocatorDef"></select>' +
                 '</div>'
-            ),
-            dropdownRow: jQuery(
-                '<div class="geoLocatorRow dropdownRow">' +
+        ),
+        dropdownRow: jQuery(
+            '<div class="geoLocatorRow dropdownRow">' +
                 '  <div class="rowLabel"></div>' +
                 '</div>'
-            ),
-            dropdownOption: jQuery('<option class="opt"></option>'),
-            geoLocatorCheckbox: jQuery(
-                '<div class="geolocatorType">' +
+        ),
+        dropdownOption: jQuery('<option class="opt"></option>'),
+        geoLocatorCheckbox: jQuery(
+            '<div class="geolocatorType">' +
                 '  <label class="geolocatorTypeText">' +
                 '    <input type="checkbox" class="geoLocatorMultiDef">' +
                 '  </label>' +
                 '</div>'
-            ),
-            checkboxRow: jQuery(
-                '<div class="geoLocatorRow checkboxRow">' +
+        ),
+        checkboxRow: jQuery(
+            '<div class="geoLocatorRow checkboxRow">' +
                 '  <div class="checkboxRow">' +
                   '  <input class="chk" type="checkbox" name="addresses" value="bar" checked>Addresses<input class="chk" type="checkbox" name="geographical_names" checked>Geographical Names<br>' +
                 ' </div>' +
                 '</div>'
-            ),
-            nearestFilterRow: jQuery(
-                '<div class="geoLocatorRow nearestFilterRow">' +
+        ),
+        nearestFilterRow: jQuery(
+            '<div class="geoLocatorRow nearestFilterRow">' +
                 '  <div class="nearestFilterRow">' +
                   '  <input class="nearestcheck" type="checkbox" name="nearest" value="bar">Sort by nearest</input>' +
                 ' </div>' +
                 '</div>'
-            )
-          },
-          getAdvancedSearchParams: function( val ) {
+        )
+        },
+        getAdvancedSearchParams: function (val) {
             var searchValues = [];
             var obj = {};
             var queryValue;
-              for( var i = 0; i< val.length; i++ ) {
-               var selected = val[i].find(':selected').text();
-               var n = parseInt(selected);
-               n ? queryValue = n : queryValue = selected;
+            for (var i = 0; i < val.length; i++) {
+                var selected = val[i].find(':selected').text();
+                var n = parseInt(selected);
+                n ? queryValue = n : queryValue = selected;
 
-               var queryKey = val[i].find(':selected').val();
+                var queryKey = val[i].find(':selected').val();
 
-               if( queryKey !== "empty" ){
-                  obj[queryKey] = queryValue;
-               }
-          }
-          searchValues.push(obj);
-          return searchValues;
-          },
-          _getDropdownValue: function( advancedContainer ) {
+                if (queryKey !== 'empty') {
+                    obj[queryKey] = queryValue;
+                }
+            }
+            searchValues.push(obj);
+            return searchValues;
+        },
+        _getDropdownValue: function (advancedContainer) {
             var dropdownRows = advancedContainer.find('.dropdownRow');
             for (i = 0; i < dropdownRows.length; i += 1) {
                 dropdownDefs = jQuery(dropdownRows[i]).find('.geolocatorDef');
@@ -146,87 +146,84 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     }
                 }
             }
-          },
-          _createAdvancedPanel: function (data, advancedContainer) {
-              var me = this,
-                  i,
-                  newRow,
-                  newLabel,
-                  j,
-                  newDropdown,
-                  dropdownDef,
-                  emptyOption,
-                  newOption,
-                  names = { dropdown:["LocationType","NameLanguage"]
-                          },
-                  regionInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput','elf-geolocator-region', this.sandbox),
-                  countryInput = this.templates.countryAutoInput.clone(),
-                  newCheckBoxRow = me.__templates.checkboxRow.clone();
-                  filterRow = me.__templates.nearestFilterRow.clone();
+        },
+        _createAdvancedPanel: function (data, advancedContainer) {
+            var me = this,
+                i,
+                newRow,
+                newLabel,
+                newDropdown,
+                dropdownDef,
+                emptyOption,
+                newOption,
+                names = { dropdown: ['LocationType', 'NameLanguage']
+                },
+                regionInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput', 'elf-geolocator-region', this.sandbox),
+                countryInput = this.templates.countryAutoInput.clone(),
+                newCheckBoxRow = me.__templates.checkboxRow.clone();
+            filterRow = me.__templates.nearestFilterRow.clone();
 
-              countryInput.find('div.rowLabel')
-                      .text(this.loc.countryFilter);
+            countryInput.find('div.rowLabel')
+                .text(this.loc.countryFilter);
 
-              this.regionInput = regionInput;
-              advancedContainer.append(filterRow);
-              advancedContainer.append(newCheckBoxRow);
-              advancedContainer.append(countryInput);
-              // Populate autocomplete countries
-              this.__getCountries();
+            this.regionInput = regionInput;
+            advancedContainer.append(filterRow);
+            advancedContainer.append(newCheckBoxRow);
+            advancedContainer.append(countryInput);
+            // Populate autocomplete countries
+            this.__getCountries();
 
-              //generate dropdown rows from data
-              var count = _.keys( this.results ).length;
-              var tmp = [];
-              var resultArray = {locationtypes:{id:[], name:[]}, namelanguages:[] };
-              for( i = 0; i < count; i++ ){
-                if( i === 0 ){
-                  for( var k = 0; k < _.keys( this.results.locationtypes.id ).length; k++ ){
-                    resultArray.locationtypes.id.push( this.results.locationtypes.id[k] );
-                    resultArray.locationtypes.name.push( this.results.locationtypes.id[k]  + ": " + this.results.locationtypes.name[k]  );
+            // generate dropdown rows from data
+            var count = _.keys(this.results).length;
+            var tmp = [];
+            var resultArray = {locationtypes: {id: [], name: []}, namelanguages: [] };
+            for (i = 0; i < count; i++) {
+                if (i === 0) {
+                    for (var k = 0; k < _.keys(this.results.locationtypes.id).length; k++) {
+                        resultArray.locationtypes.id.push(this.results.locationtypes.id[k]);
+                        resultArray.locationtypes.name.push(this.results.locationtypes.id[k] + ': ' + this.results.locationtypes.name[k]);
                     }
                     newLabel = this.loc.locationFilter;
-                  }
-                  else{
-                    for( var j = 0; j < this.results.namelanguages.length; j++ ){
-                      resultArray.namelanguages.push( this.results.namelanguages[j] );
+                } else {
+                    for (var j = 0; j < this.results.namelanguages.length; j++) {
+                        resultArray.namelanguages.push(this.results.namelanguages[j]);
                     }
                     newLabel = this.loc.namelangFilter;
-                   }
-                   i === 0 ? tmp = resultArray.locationtypes.name : tmp = resultArray.namelanguages;
-                    newRow = null;
-                    newRow = me.__templates.dropdownRow.clone();
-                      newRow.find('div.rowLabel').text(newLabel);
-                      newDropdown =  me.__templates.geoLocatorDropdown.clone();
-                      dropdownDef = newDropdown.find('.geolocatorDef');
-                      emptyOption = me.__templates.dropdownOption.clone();
-                      emptyOption.attr('value', 'empty');
-                      emptyOption.text(me.loc.emptyOption);
-                      dropdownDef.append(emptyOption);
-                       for (j = 0; j < tmp.length; j++) {
-                           newOption = me.__templates.dropdownOption.clone();
-                           newOption.attr('value', names.dropdown[i]);
-                           newOption.text(tmp[j]);
-                           dropdownDef.append(newOption);
-                       }
-                      newRow.append(newDropdown);
-                      advancedContainer.append(newRow);
                 }
+                i === 0 ? tmp = resultArray.locationtypes.name : tmp = resultArray.namelanguages;
+                newRow = null;
+                newRow = me.__templates.dropdownRow.clone();
+                newRow.find('div.rowLabel').text(newLabel);
+                newDropdown = me.__templates.geoLocatorDropdown.clone();
+                dropdownDef = newDropdown.find('.geolocatorDef');
+                emptyOption = me.__templates.dropdownOption.clone();
+                emptyOption.attr('value', 'empty');
+                emptyOption.text(me.loc.emptyOption);
+                dropdownDef.append(emptyOption);
+                for (j = 0; j < tmp.length; j++) {
+                    newOption = me.__templates.dropdownOption.clone();
+                    newOption.attr('value', names.dropdown[i]);
+                    newOption.text(tmp[j]);
+                    dropdownDef.append(newOption);
+                }
+                newRow.append(newDropdown);
+                advancedContainer.append(newRow);
+            }
 
-                  advancedContainer.append(newRow);
+            advancedContainer.append(newRow);
 
-                  filterRow.find("input.nearestcheck").on('change', function(){
-                    if(filterRow.find("input.nearestcheck").is(":checked")){
-                      newCheckBoxRow.find("input.chk").prop('disabled', true);
-                      countryInput.find("input.ui-autocomplete-input").prop('disabled', true);
-                      advancedContainer.find("select.geolocatorDef").prop('disabled', true);
-                    }
-                    else{
-                      newCheckBoxRow.find("input.chk").prop('disabled', false);
-                      countryInput.find("input.ui-autocomplete-input").prop('disabled', false);
-                      advancedContainer.find("select.geolocatorDef").prop('disabled', false);
-                    }
-                  });
-              },
+            filterRow.find('input.nearestcheck').on('change', function () {
+                if (filterRow.find('input.nearestcheck').is(':checked')) {
+                    newCheckBoxRow.find('input.chk').prop('disabled', true);
+                    countryInput.find('input.ui-autocomplete-input').prop('disabled', true);
+                    advancedContainer.find('select.geolocatorDef').prop('disabled', true);
+                } else {
+                    newCheckBoxRow.find('input.chk').prop('disabled', false);
+                    countryInput.find('input.ui-autocomplete-input').prop('disabled', false);
+                    advancedContainer.find('select.geolocatorDef').prop('disabled', false);
+                }
+            });
+        },
         /**
          * @method getTitle
          * @return {String}
@@ -267,7 +264,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 searchUi = container.find('div.geolocator-search'),
                 resultsUi = container.find('div.geolocator-results'),
                 searchButton = searchUi.find('div.commit input[type="submit"]'),
-                searchInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput','elf-geolocator-search', this.sandbox),
+                searchInput = Oskari.clazz.create('Oskari.userinterface.component.FormInput', 'elf-geolocator-search', this.sandbox),
                 backButton = resultsUi.find('div.header-results span.back'),
                 moreLessLink = container.find('a.moreLessLink'),
                 advancedSearchVisiblity = false;
@@ -282,42 +279,41 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             moreLessLink.html(this.loc.showMore);
 
             moreLessLink.on('click', function () {
-              advancedSearchVisiblity = true;
-              var advancedContainer = jQuery('div.searchadvanced');
-              if (moreLessLink.html() === me.loc.showMore) {
-                  // open advanced/toggle link text
-                  moreLessLink.html(me.loc.showLess);
-                  if (advancedContainer.is(':empty')) {
-                          me._createAdvancedPanel(data, advancedContainer);
-                      }
-                   else {
-                      advancedContainer.show();
-                  }
-              } else {
-                  advancedSearchVisiblity = false;
-                  // close advanced/toggle link text
-                  advancedContainer.hide();
-                  moreLessLink.html(me.loc.showMore);
-              }
-      });
+                advancedSearchVisiblity = true;
+                var advancedContainer = jQuery('div.searchadvanced');
+                if (moreLessLink.html() === me.loc.showMore) {
+                    // open advanced/toggle link text
+                    moreLessLink.html(me.loc.showLess);
+                    if (advancedContainer.is(':empty')) {
+                        me._createAdvancedPanel(data, advancedContainer);
+                    } else {
+                        advancedContainer.show();
+                    }
+                } else {
+                    advancedSearchVisiblity = false;
+                    // close advanced/toggle link text
+                    advancedContainer.hide();
+                    moreLessLink.html(me.loc.showMore);
+                }
+            });
 
             searchButton.val(this.loc.searchButton).on('click submit', function (e) {
-                    e.preventDefault();
-                    var values = me.__getValues( advancedSearchVisiblity );
-                    me.__removeErrors(container);
-                    if (values.errors) {
-                        me.__addErrors(values.errors);
-                    } else {
-                        me.__doSearch(values);
-                        searchUi.hide();
-                        resultsUi.show();
-                    }
-                });
+                e.preventDefault();
+                var values = me.__getValues(advancedSearchVisiblity);
+                me.__removeErrors(container);
+                if (values.errors) {
+                    me.__addErrors(values.errors);
+                } else {
+                    me.__doSearch(values);
+                    searchUi.hide();
+                    resultsUi.show();
+                }
+            });
 
             backButton.text(this.loc.backButton).on('click', function () {
-                    resultsUi.hide();
-                    searchUi.show();
-                });
+                resultsUi.hide();
+                searchUi.show();
+            });
 
             container.find('div.search-fields')
                 .append(searchInput.getField())
@@ -349,11 +345,10 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             var title = this.loc.resultsTitle;
             // Add search method to title (method might be changed in backend)
             if (method !== undefined && method !== null) {
-                for(var key in method[0]) {
+                for (var key in method[0]) {
                     if (method[0][key] === 'fuzzy') {
                         title = this.loc.fuzzyResultsTitle;
-                    }
-                    else if (method[0][key] === 'filter') {
+                    } else if (method[0][key] === 'filter') {
                         title = this.loc.filterResultsTitle;
                     }
                 }
@@ -373,7 +368,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @private
          * @return {Object}
          */
-        __getValues: function ( advVisiblity ) {
+        __getValues: function (advVisiblity) {
             var values = {},
                 container = this.getContent(),
                 termErrors = this.searchInput.validate(),
@@ -385,42 +380,40 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             }
 
             this._getDropdownValue(container);
-            //selections is defined in the _createAdvancedPanel method
+            // selections is defined in the _createAdvancedPanel method
             var params = this.getAdvancedSearchParams(this.selections);
             /* params[0].LocationType
                params[0].NameLanguage */
             this.selections = [];
             values.term = this.searchInput.getValue();
 
-            if(jQuery(container).find('input[name=addresses]')[0] === undefined && jQuery(container).find('input[name=geographical_names]')[0] === undefined){
-              values.addresses = true;
-              values.geographical_names = true;
-            }
-            else {
-              values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
-              values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
+            if (jQuery(container).find('input[name=addresses]')[0] === undefined && jQuery(container).find('input[name=geographical_names]')[0] === undefined) {
+                values.addresses = true;
+                values.geographical_names = true;
+            } else {
+                values.addresses = jQuery(container).find('input[name=addresses]')[0].checked;
+                values.geographical_names = jQuery(container).find('input[name=geographical_names]')[0].checked;
             }
 
-            if( advVisiblity ){
-            values.nearest = jQuery(container).find('input[name=nearest]')[0].checked;
-            if(values.nearest){
-              values.lon = lon;
-              values.lat = lat;
+            if (advVisiblity) {
+                values.nearest = jQuery(container).find('input[name=nearest]')[0].checked;
+                if (values.nearest) {
+                    values.lon = lon;
+                    values.lat = lat;
+                } else {
+                    if (params[0].LocationType) {
+                        values.locationtype = params[0].LocationType;
+                    }
+                    if (params[0].NameLanguage) {
+                        values.namelanguage = params[0].NameLanguage;
+                    }
+                    values.region = this.regionInput.getValue();
+                    if (container.find('#countries').val()) {
+                        values.country = container
+                            .find('#countries').attr('country');
+                    }
+                }
             }
-            else {
-              if(params[0].LocationType){
-                values.locationtype = params[0].LocationType;
-              }
-              if(params[0].NameLanguage){
-                values.namelanguage = params[0].NameLanguage;
-              }
-              values.region = this.regionInput.getValue();
-              if (container.find('#countries').val()) {
-              values.country = container
-                  .find('#countries').attr('country');
-              }
-            }
-          }
             return values;
         },
         /**
@@ -430,7 +423,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @private
          * @param  {Object} values
          */
-        __doSearch: function(values) {
+        __doSearch: function (values) {
             var me = this;
 
             me.__beforeSearch();
@@ -450,7 +443,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @private
          * @param  {Object} values
          */
-        __getCountries: function() {
+        __getCountries: function () {
             var me = this;
             this.instance.getSearchService().getCountries(me.countryUrl,
                 function (results) {
@@ -467,15 +460,15 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @private
          * @param  {Object} values
          */
-        __getLocationTypes: function(){
-          var me = this;
-          this.instance.getSearchService().getLocationType(me.locationTypeUrl,
-          function (results) {
-            me.__handleLocationTypeResults(results);
-          },
-          function(){
-            me.__handleLocationTypeResults();
-          });
+        __getLocationTypes: function () {
+            var me = this;
+            this.instance.getSearchService().getLocationType(me.locationTypeUrl,
+                function (results) {
+                    me.__handleLocationTypeResults(results);
+                },
+                function () {
+                    me.__handleLocationTypeResults();
+                });
         },
         /**
          * Empties the search results div and starts the progress spinner.
@@ -519,40 +512,40 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          * @param  {Object} results
          */
         __handleCountryResult: function (results) {
-            if(jQuery.isEmptyObject(results)) {
+            if (jQuery.isEmptyObject(results)) {
                 return;
             }
 
             var container = this.getContent().find('div.geolocator-search');
 
-            //populate autocomplete source (ELF countries)
-            jQuery(function() {
+            // populate autocomplete source (ELF countries)
+            jQuery(function () {
                 container.find('#countries').autocomplete({
                     minLength: 0,
                     source: results,
-                    select: function(event, ui) {
-                        container.find('#countries').attr('country',ui.item.id);
+                    select: function (event, ui) {
+                        container.find('#countries').attr('country', ui.item.id);
                     }
                 }).on('focus', function (event) {
-                      event.preventDefault();
-                      container.find('#countries').val('');
-                      container.find('#countries').autocomplete('search', '');
-                  });
+                    event.preventDefault();
+                    container.find('#countries').val('');
+                    container.find('#countries').autocomplete('search', '');
                 });
+            });
         },
-        __handleLocationTypeResults: function (results){
-          if (!results) {
-            return;
-          }
-          for(var i = 0; i<results[0].SI_LocationTypes.length; i++){
-            this.results.locationtypes.id[i] = results[0].SI_LocationTypes[i].id;
-            this.results.locationtypes.name[i] = results[0].SI_LocationTypes[i].name;
-          }
-          for(var j = 0; j<results[1].NameLanguages.length; j++){
-            this.results.namelanguages.push(results[1].NameLanguages[j]);
-          }
-          // sort the languages to make it easier to find one
-          this.results.namelanguages.sort();
+        __handleLocationTypeResults: function (results) {
+            if (!results) {
+                return;
+            }
+            for (var i = 0; i < results[0].SI_LocationTypes.length; i++) {
+                this.results.locationtypes.id[i] = results[0].SI_LocationTypes[i].id;
+                this.results.locationtypes.name[i] = results[0].SI_LocationTypes[i].name;
+            }
+            for (var j = 0; j < results[1].NameLanguages.length; j++) {
+                this.results.namelanguages.push(results[1].NameLanguages[j]);
+            }
+            // sort the languages to make it easier to find one
+            this.results.namelanguages.sort();
         },
         /**
          * Renders the search results to a div.
@@ -608,11 +601,11 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
 
             grid.setVisibleFields(visibleFields);
 
-            grid.setColumnValueRenderer('name', function(name, data) {
+            grid.setColumnValueRenderer('name', function (name, data) {
                 var nameTemplate = jQuery('<div class="nameColumn"></div>'),
                     link = jQuery('<span class="elf-fake-link"></span>');
 
-                link.append(name).on('click', function() {
+                link.append(name).on('click', function () {
                     me.instance.resultClicked(data);
                 });
 
@@ -628,7 +621,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 return nameTemplate;
             });
 
-            _.each(visibleFields, function(field) {
+            _.each(visibleFields, function (field) {
                 grid.setColumnUIName(field, me.loc.grid[field]);
             });
 
@@ -644,7 +637,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
          */
         __getGridModel: function (results) {
             var gridModel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.GridModel');
+                'Oskari.userinterface.component.GridModel');
 
             gridModel.setIdField('id');
 

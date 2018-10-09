@@ -55,7 +55,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * f.ex to provide some kind of active visualisations.
          */
         startPlugin: function () {
-
             var isContainer = (this.container && this.instance.mediator) ? true : false;
             var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
             var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
@@ -122,10 +121,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * @param {Boolean} blnEnabled true to enable.
          */
         setEnabled: function (blnEnabled) {
-            if(!!blnEnabled) {
+            if (blnEnabled) {
                 this.container.removeClass('disabled');
-            }
-            else {
+            } else {
                 this.container.addClass('disabled');
             }
         },

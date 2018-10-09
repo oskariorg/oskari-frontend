@@ -15,40 +15,39 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
  * @param {Boolean}
  *            visible boolean if map layer should be visible or not
  */
-function(mapLayerId, visible) {
-    this._creator = null;
-    this._mapLayerId = mapLayerId;
-    this._visible = visible;
-
-}, {
+    function (mapLayerId, visible) {
+        this._creator = null;
+        this._mapLayerId = mapLayerId;
+        this._visible = visible;
+    }, {
     /** @static @property __name request name */
-    __name : "MapModulePlugin.MapLayerVisibilityRequest",
-    /**
+        __name: 'MapModulePlugin.MapLayerVisibilityRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getMapLayerId
      * @return {String} id for map layer used in
      * Oskari.mapframework.service.MapLayerService
      */
-    getMapLayerId : function() {
-        return this._mapLayerId;
-    },
-    /**
+        getMapLayerId: function () {
+            return this._mapLayerId;
+        },
+        /**
      * @method getVisible
      * @return {Boolean} boolean if map layer should be visible or not
      */
-    getVisible : function() {
-        return this._visible;
-    }
-}, {
+        getVisible: function () {
+            return this._visible;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

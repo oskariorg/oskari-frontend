@@ -25,13 +25,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
     }, {
-  /*      tabs: [{
+        /*      tabs: [{
             'id': 'download-basket-cropping-tab',
             'clazz': 'Oskari.mapframework.bundle.downloadBasket.Cropping'
         },{
             'id': 'download-basket-tab',
             'clazz': 'Oskari.mapframework.bundle.downloadBasket.Basket'
-        }],*/
+        }], */
         /**
          * @method getName
          * @return {String} the name for the component
@@ -82,8 +82,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
             tabsContainer.addPanel(me.instance.basket);
             tabsContainer.insertTo(this.container);
         },
-        tabChanged: function(previous, current){
-            if(current.getId() === 'download-basket-tab'){
+        tabChanged: function (previous, current) {
+            if (current.getId() === 'download-basket-tab') {
                 current.createBasket();
             }
         },
@@ -149,7 +149,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

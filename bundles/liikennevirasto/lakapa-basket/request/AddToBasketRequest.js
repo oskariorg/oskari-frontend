@@ -25,7 +25,7 @@ function(bbox, selectedLayers,croppingMode, transport, identifier,features) {
     this._features = features;
 }, {
 	/** @static @property __name request name */
-    __name : "AddToBasketRequest",
+    __name : 'AddToBasketRequest',
     /**
      * @method getName
      * @return {String} request name

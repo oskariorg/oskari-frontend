@@ -1,19 +1,16 @@
 /**
  * @class Oskari.tampere.bundle.content-editor.OskariEventNotifierService
  */
-(function(Oskari) {
-    var _log = Oskari.log('ContentEditor.OskariEventNotifierService');
-
+(function (Oskari) {
     Oskari.clazz.define('Oskari.tampere.bundle.content-editor.OskariEventNotifierService',
 
         /**
          * @method create called automatically on construction
          * @static
          */
-        function() {
+        function () {
             // attach on, off, trigger functions
             Oskari.makeObservable(this);
-
         }, {
             __name: 'ContentEditor.OskariEventNotifierService',
             __qname: 'Oskari.tampere.bundle.content-editor.OskariEventNotifierService',
@@ -22,16 +19,16 @@
             /*******************************************************************************************************************************
             /* PUBLIC METHODS
             *******************************************************************************************************************************/
-            getQName: function() {
+            getQName: function () {
                 return this.__qname;
             },
-            getName: function() {
+            getName: function () {
                 return this.__name;
             },
-            getSandbox: function() {
+            getSandbox: function () {
                 return this.sandbox;
             },
-            onEvent: function(event) {
+            onEvent: function (event) {
                 this.trigger(event.getName(), event);
             }
         }, {

@@ -39,7 +39,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "TimeseriesLayerService",
+        __name: 'TimeseriesLayerService',
         /**
          * @method getName
          * @return {String} service name
@@ -139,7 +139,7 @@ Oskari.clazz.define(
             var me = this,
                 layers = me._sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
-                if (!layers[i].hasTimeseries() || !layers[i].isVisible() || !layers[i].isSupported(me._sandbox.getMap().getSrsName()) ) {
+                if (!layers[i].hasTimeseries() || !layers[i].isVisible() || !layers[i].isSupported(me._sandbox.getMap().getSrsName())) {
                     continue;
                 }
                 var layer = layers[i];

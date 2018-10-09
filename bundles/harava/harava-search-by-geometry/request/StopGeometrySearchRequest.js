@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRe
 function() {
 }, {
 	/** @static @property __name request name */
-    __name : "StopGeometrySearchRequest",
+    __name : 'StopGeometrySearchRequest',
     /**
      * @method getName
      * @return {String} request name

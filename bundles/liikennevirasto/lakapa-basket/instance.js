@@ -2,7 +2,7 @@
  * @class Oskari.liikennevirasto.bundle.lakapa.BasketBundleInstance
  *
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.BasketBundleInstance",
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.BasketBundleInstance',
 
 /**
  * @method create called automatically on construction

@@ -7,8 +7,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
     allowedSiblings: [],
 
     init: function (data) {
-        var me = this;
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
     },
     getTool: function (stateData) {
         var me = this;

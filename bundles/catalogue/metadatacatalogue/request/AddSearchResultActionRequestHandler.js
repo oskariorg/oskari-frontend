@@ -2,7 +2,7 @@
  * @class Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler
  * Handles Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequest.
  */
- /**
+/**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.Sandbox} sandbox
@@ -10,7 +10,7 @@
  * @param {Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogueBundleInstance} instance
  *          reference to my metadatacatalogue bundle instance
  */
-Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler', function(sandbox, instance) {
+Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearchResultActionRequestHandler', function (sandbox, instance) {
     this.sandbox = sandbox;
     this.instance = instance;
     this._log = Oskari.log('AddSearchResultActionRequestHandler');
@@ -23,14 +23,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
      * @param {Oskari.catalogue.bundle.metadatacatalogue.request.ShowLicenseRequest} request
      *      request to handle
      */
-    handleRequest : function(core, request) {
+    handleRequest: function (core, request) {
         var actionElement = request.getActionElement(),
             callback = request.getCallback(),
             bindCallbackTo = request.getBindCallbackTo(),
             actionTextElement = request.getActionTextElement(),
             actionText = request.getActionText(),
             showAction = request.getShowAction();
-        this._log.debug("Handling reguest");
+        this._log.debug('Handling reguest');
         this.instance.addSearchResultAction(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction);
     }
 }, {
@@ -38,5 +38,5 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.request.AddSearch
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
+    protocol: ['Oskari.mapframework.core.RequestHandler']
 });

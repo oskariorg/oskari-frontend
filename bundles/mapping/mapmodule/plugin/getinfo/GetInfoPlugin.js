@@ -348,8 +348,7 @@ Oskari.clazz.define(
          * @param  {Object} data
          */
         _handleInfoResult: function (data) {
-            var me = this,
-                content = [],
+            var content = [],
                 contentData = {},
                 fragments = [],
                 colourScheme,

@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
         init: function (sandbox) {
             var me = this;
             this._sandbox = sandbox;
-            this._sandbox.printDebug("[GetInfoPlugin] init");
+            this._sandbox.printDebug('[GetInfoPlugin] init');
             this.getGFIHandler = Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.getinfo.GetFeatureInfoHandler', me);
         },
         /**
@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
             if (!jqhr) {
                 return;
             }
-            this._sandbox.printDebug("[GetInfoPlugin] Abort jqhr ajax request");
+            this._sandbox.printDebug('[GetInfoPlugin] Abort jqhr ajax request');
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery.busy = false;
@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
             var me = this;
             me._pendingAjaxQuery.busy = false;
             me._pendingAjaxQuery.jqhr = null;
-            this._sandbox.printDebug("[GetInfoPlugin] finished jqhr ajax request");
+            this._sandbox.printDebug('[GetInfoPlugin] finished jqhr ajax request');
         },
         /**
          * @method _buildLayerIdList
@@ -268,11 +268,11 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
                 }
 
                 if (!layerIds) {
-                    layerIds = "";
+                    layerIds = '';
                 }
 
-                if (layerIds !== "") {
-                    layerIds += ",";
+                if (layerIds !== '') {
+                    layerIds += ',';
                 }
 
                 layerIds += layer.getId();
@@ -321,7 +321,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
          */
         _notifyAjaxFailure: function () {
             var me = this;
-            me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo AJAX failed");
+            me._sandbox.printDebug('[GetInfoPlugin] GetFeatureInfo AJAX failed');
         },
         /**
          * @method _isAjaxRequestBusy
@@ -352,7 +352,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
 
             if (me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
                 dteMs - me._pendingAjaxQuery.timestamp < 500) {
-                me._sandbox.printDebug("[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)");
+                me._sandbox.printDebug('[GetInfoPlugin] GetFeatureInfo NOT SENT (time difference < 500ms)');
                 return;
             }
 
@@ -364,7 +364,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
 
             /* let's not start anything we cant' resolve */
             if (!layerIds) {
-                me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
+                me._sandbox.printDebug('[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible');
                 return;
             }
 
@@ -383,7 +383,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/json;charset=UTF-8");
+                        x.overrideMimeType('application/json;charset=UTF-8');
                     }
                 },
                 success: function (resp) {
@@ -441,7 +441,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
          * Closes the infobox with GFI data
          */
         _closeGfiInfo: function () {
-            var rn = "HaravaInfoBox.HideInfoBoxRequest";
+            var rn = 'HaravaInfoBox.HideInfoBoxRequest';
             var rb = this._sandbox.getRequestBuilder(rn);
             var r = rb(this.infoboxId);
             this._sandbox.request(this, r);
@@ -456,9 +456,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
         _showGfiInfo: function (content, lonlat) {
             var me = this;
             // send out the request
-            var rn = "HaravaInfoBox.ShowInfoBoxRequest";
+            var rn = 'HaravaInfoBox.ShowInfoBoxRequest';
             var rb = this._sandbox.getRequestBuilder(rn);
-            var r = rb("getinforesult", "GetInfo Result", content, lonlat, true);
+            var r = rb('getinforesult', 'GetInfo Result', content, lonlat, true);
             this._sandbox.request(me, r);
         },
         /**
@@ -473,9 +473,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
             var contentHtml = [];
             var content = {};
             content.html = data.html;
-            var rn = "HaravaInfoBox.ShowInfoBoxRequest";
+            var rn = 'HaravaInfoBox.ShowInfoBoxRequest';
             var rb = me._sandbox.getRequestBuilder(rn);
-            var r = rb(data.popupid, "Info", [content], data.lonlat, true);
+            var r = rb(data.popupid, 'Info', [content], data.lonlat, true);
             me._sandbox.request(me, r);
         }
     }, {
@@ -483,5 +483,5 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaGetInfoPlugin',
          * @property {Object} protocol
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

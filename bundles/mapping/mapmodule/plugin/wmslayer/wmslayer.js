@@ -11,11 +11,10 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
      */
 
     function () {
-
         this._availableQueryFormats = [];
 
         /* Layer Type */
-        this._layerType = "WMS";
+        this._layerType = 'WMS';
     }, {
         /**
          * @method addWmsUrl
@@ -86,5 +85,5 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
             return this._availableQueryFormats || [];
         }
     }, {
-        "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+        'extend': ['Oskari.mapframework.domain.AbstractLayer']
     });

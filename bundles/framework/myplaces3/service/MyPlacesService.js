@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 var placesInCategory = placesList[category];
                 var indexInCategory = placesInCategory.findIndex(function (place) {
                     return place.getId() === id;
-                })
+                });
                 if (indexInCategory !== -1) {
                     placesInCategory.splice(indexInCategory, 1);
                 }
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 var placesInCategory = placesList[category];
                 place = placesInCategory.find(function (place) {
                     return place.getId() === id;
-                })
+                });
             });
             return place;
         },

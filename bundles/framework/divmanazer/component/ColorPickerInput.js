@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
      */
     function (options) {
         var me = this;
-        
+
         if (!options) {
-            options = {}
+            options = {};
         }
 
         me._clazz = 'Oskari.userinterface.component.ColorPickerInput';
@@ -42,15 +42,15 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
             cancelText: '',
             localStorageKey: 'colorpicker',
             showPalette: true,
-            hideAfterPaletteSelect:true,
+            hideAfterPaletteSelect: true,
             showAlpha: false,
             palette: [
-                ['#ffffff','#666666'],
-                ['#ffde00','#f8931f'],
-                ['#ff3334','#bf2652'],
-                ['#000000','#cccccc'],
-                ['#652d90','#3233ff'],
-                ['#26bf4b','#00ff01']
+                ['#ffffff', '#666666'],
+                ['#ffde00', '#f8931f'],
+                ['#ff3334', '#bf2652'],
+                ['#000000', '#cccccc'],
+                ['#652d90', '#3233ff'],
+                ['#26bf4b', '#00ff01']
             ],
             maxSelectionSize: 2
         };
@@ -157,4 +157,4 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

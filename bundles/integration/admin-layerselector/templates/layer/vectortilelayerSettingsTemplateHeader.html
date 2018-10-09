@@ -11,6 +11,6 @@
     <div class="add-layer-input-area">
         <% var options = _.isEmpty(model.getOptions()) ? "" : JSON.stringify(model.getOptions()); %>
         <textarea rows="3" cols="50" class="add-layer-input long layer-options" 
-            placeholder="<%= instance.getLocalization('admin').mbtilesOptionsDesc %>"><%=options%></textarea>
+            placeholder="<%- instance.getLocalization('admin').mvtilesOptionsDesc %>"><%=options%></textarea>
     </div>
 </div>

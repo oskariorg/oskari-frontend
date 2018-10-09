@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
      * @method create called automatically on construction
      * @static
      */
-    function() {
+    function () {
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -29,14 +29,14 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
          * @method getSandbox
          * @return {Oskari.Sandbox}
          */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          *      JSON object for complete data depending on localization
          *      structure and if parameter key is given
          */
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method start
          * Implements BundleInstance protocol start method
          */
-        start: function() {
+        start: function () {
             var me = this,
                 conf = me.conf,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
             var notifierService = Oskari.clazz.create('Oskari.tampere.bundle.content-editor.OskariEventNotifierService');
             me.sandbox.registerService(notifierService);
             me.notifierService = notifierService;
-            me.notifierService.eventHandlers.forEach(function(eventName){
+            me.notifierService.eventHandlers.forEach(function (eventName) {
                 sandbox.registerForEventByName(me.notifierService, eventName);
             });
 
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method init
          * Implements Module protocol init method - does nothing atm
          */
-        init: function() {
+        init: function () {
             return null;
         },
 
@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method update
          * Implements BundleInstance protocol update method - does nothing atm
          */
-        update: function() {
+        update: function () {
 
         },
 
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          */
-        onEvent: function(event) {
+        onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -151,7 +151,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
          */
-        getLayerService: function() {
+        getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
 
@@ -160,25 +160,25 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @param  {String| Number} layerId layer to process
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
-        __addTool: function(layerModel, suppressEvent) {
+        __addTool: function (layerModel, suppressEvent) {
             var me = this;
             var service = this.getLayerService();
             if (typeof layerModel !== 'object') {
                 // detect layerId and replace with the corresponding layerModel
                 layerModel = service.findMapLayer(layerModel);
             }
-            if (!layerModel || !layerModel.getPermission("EDIT_LAYER_CONTENT") || !layerModel.isLayerOfType("WFS")) {
+            if (!layerModel || !layerModel.getPermission('EDIT_LAYER_CONTENT') || !layerModel.isLayerOfType('WFS')) {
                 return;
             }
 
             // add feature data tool for layer
             var label = this.getLocalization('title') || {},
                 tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-            tool.setName("content-editor");
+            tool.setName('content-editor');
             tool.setTitle(label);
             tool.setIconCls('show-content-editor-tool');
             tool.setTooltip(label);
-            tool.setCallback(function() {
+            tool.setCallback(function () {
                 me.sandbox.postRequestByName('ContentEditor.ShowContentEditorRequest', [layerModel.getId()]);
             });
 
@@ -187,12 +187,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
         /**
          * Adds tools for all layers
          */
-        __setupLayerTools: function() {
+        __setupLayerTools: function () {
             var me = this;
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function(layer) {
+            _.each(layers, function (layer) {
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
@@ -204,13 +204,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * [_bindOskariEvents description]
          * @return {[type]} [description]
          */
-        _bindOskariEvents: function() {
+        _bindOskariEvents: function () {
             var me = this;
-            me.notifierService.on('DrawingEvent', function(evt) {
+            me.notifierService.on('DrawingEvent', function (evt) {
                 if (me.getName() !== evt.getId()) {
                     return;
                 }
-                if(!evt.getIsFinished()) {
+                if (!evt.getIsFinished()) {
                     return;
                 }
                 me.sideContentEditor.setCurrentGeoJson(evt.getGeoJson());
@@ -222,17 +222,17 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @static
          */
         eventHandlers: {
-            GetInfoResultEvent: function(evt) {
+            GetInfoResultEvent: function (evt) {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor._handleInfoResult(evt.getData());
                 }
             },
-            WFSFeatureGeometriesEvent: function(evt) {
+            WFSFeatureGeometriesEvent: function (evt) {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.parseWFSFeatureGeometries(evt);
                 }
             },
-            'MapClickedEvent': function(event) {
+            'MapClickedEvent': function (event) {
                 if (this.sideContentEditor != null) {
                     this.sideContentEditor.setClickCoords({
                         x: event.getLonLat().lon,
@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     });
                 }
             },
-            'MapLayerEvent': function(event) {
+            'MapLayerEvent': function (event) {
                 if (event.getOperation() !== 'add') {
                     // only handle add layer
                     return;
@@ -257,7 +257,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method stop
          * Implements BundleInstance protocol stop method
          */
-        stop: function() {
+        stop: function () {
             var sandbox = this.sandbox(),
                 request,
                 p;
@@ -277,33 +277,33 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @method startExtension
          * implements Oskari.userinterface.Extension protocol startExtension method
          */
-        startExtension: function() {},
+        startExtension: function () {},
         /**
          * @method stopExtension
          * implements Oskari.userinterface.Extension protocol stopExtension method
          * Clears references to flyout
          */
-        stopExtension: function() {},
+        stopExtension: function () {},
         /**
          * @method getPlugins
          * implements Oskari.userinterface.Extension protocol getPlugins method
          * @return {Object} references to flyout
          */
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
         /**
          * @method getTitle
          * @return {String} localized text for the title of the component
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.getLocalization('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
-        getDescription: function() {
+        getDescription: function () {
             return this.getLocalization('desc');
         },
         /**
@@ -311,7 +311,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @private
          * (re)creates the UI
          */
-        _createUi: function() {},
+        _createUi: function () {},
 
         /**
          * @method setEditorMode
@@ -319,7 +319,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
          * @param {Boolean} blnEnabled true to enable, false to disable/return to normal mode
          * @param {string} layerId
          */
-        setEditorMode: function(blnEnabled, layerId) {
+        setEditorMode: function (blnEnabled, layerId) {
             var me = this,
                 map = jQuery('#contentMap'),
                 request;
@@ -350,7 +350,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
                     'float': ''
                 });
 
-
                 Oskari.setLang(me.oskariLang);
                 if (me.sideContentEditor) {
                     me.sideContentEditor.destroy();
@@ -363,25 +362,24 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.ContentEditorBundleIns
 
                 request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                 me.sandbox.request(me.getName(), request);
-
             }
 
             me.sandbox.postRequestByName('MapFull.MapSizeUpdateRequest', []);
         },
-        _getFakeExtension: function(name) {
+        _getFakeExtension: function (name) {
             return {
-                getName: function() {
+                getName: function () {
                     return name;
                 }
             };
         },
-        _closeExtension: function(name) {
+        _closeExtension: function (name) {
             var extension = this._getFakeExtension(name);
             var rn = 'userinterface.UpdateExtensionRequest';
             this.sandbox.postRequestByName(rn, [extension, 'close']);
         },
-        showContentEditor: function(layerId) {
-            this._closeExtension("LayerSelection");
+        showContentEditor: function (layerId) {
+            this._closeExtension('LayerSelection');
             this.setEditorMode(true, layerId);
         }
     }, {

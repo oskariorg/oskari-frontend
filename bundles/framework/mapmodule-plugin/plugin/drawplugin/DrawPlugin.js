@@ -53,15 +53,13 @@ Oskari.clazz.define(
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
-
             } else {
                 // Solve OL problem in select modify feature
-                if(this.modifyControls.modify.feature){
-                     this.modifyControls.modify.feature = null;
+                if (this.modifyControls.modify.feature) {
+                    this.modifyControls.modify.feature = null;
                 }
                 // remove possible old drawing
                 this.drawLayer.destroyFeatures();
-
 
                 if (params.geometry) {
                     // sent existing geometry == edit mode
@@ -81,8 +79,6 @@ Oskari.clazz.define(
                     this.toggleControl(params.drawMode);
                 }
             }
-
-
         },
         /**
          * Disables all draw controls and
@@ -109,33 +105,33 @@ Oskari.clazz.define(
             for (i = 0; i < activeControls.length; i += 1) {
                 activeControl = activeControls[i];
                 switch (activeControl) {
-                    case 'point':
-                        if(drawLayer.features.length === 0){
-                            return;
-                        }
-                        break;
-                    case 'line':
-                        if (!drawControls.line.handler.line){
-                            return;
-                        }
-                        if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
-                            return;
-                        }
-                        break;
-                    case 'area':
-                        if (!drawControls.area.handler.polygon){
-                            return;
-                        }
-                        components = drawControls.area.handler.polygon.geometry.components;
-                        if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
-                            return;
-                        }
-                        break;
+                case 'point':
+                    if (drawLayer.features.length === 0) {
+                        return;
+                    }
+                    break;
+                case 'line':
+                    if (!drawControls.line.handler.line) {
+                        return;
+                    }
+                    if (drawControls.line.handler.line.geometry.components.length < 3 && drawLayer.features.length === 0) {
+                        return;
+                    }
+                    break;
+                case 'area':
+                    if (!drawControls.area.handler.polygon) {
+                        return;
+                    }
+                    components = drawControls.area.handler.polygon.geometry.components;
+                    if (components[components.length - 1].components.length < 5 && drawLayer.features.length === 0) {
+                        return;
+                    }
+                    break;
                 }
             };
             try {
-                //needed when preparing unfinished objects but causes unwanted features into the layer:
-                //this.drawControls[this.currentDrawMode].finishSketch();
+                // needed when preparing unfinished objects but causes unwanted features into the layer:
+                // this.drawControls[this.currentDrawMode].finishSketch();
                 this.finishedDrawing(true);
             } catch (error) {
                 // happens when the sketch isn't even started -> reset state
@@ -176,17 +172,17 @@ Oskari.clazz.define(
                     if (typeof drawControls[activeControl].handler.finishGeometry === 'function') {
                         // No need to finish geometry if already finished
                         switch (activeControl) {
-                            case 'line':
-                                if (drawControls.line.handler.line.geometry.components.length < 3) {
-                                    continue;
-                                }
-                                break;
-                            case 'area':
-                                components = drawControls.area.handler.polygon.geometry.components;
-                                if (components[components.length - 1].components.length < 5) {
-                                    continue;
-                                }
-                                break;
+                        case 'line':
+                            if (drawControls.line.handler.line.geometry.components.length < 3) {
+                                continue;
+                            }
+                            break;
+                        case 'area':
+                            components = drawControls.area.handler.polygon.geometry.components;
+                            if (components[components.length - 1].components.length < 5) {
+                                continue;
+                            }
+                            break;
                         }
                         drawControls[activeControl].handler.finishGeometry();
                     }
@@ -234,9 +230,7 @@ Oskari.clazz.define(
          */
         toggleControl: function (drawMode) {
             var key,
-                control,
-                activeDrawing,
-                event;
+                control;
 
             this.currentDrawMode = drawMode;
 
@@ -268,12 +262,12 @@ Oskari.clazz.define(
 
             me.drawLayer = new OpenLayers.Layer.Vector(
                 me.prefix + 'DrawLayer', {
-                    /*style: {
+                    /* style: {
                      strokeColor: "#ff00ff",
                      strokeWidth: 3,
                      fillOpacity: 0,
                      cursor: "pointer"
-                     },*/
+                     }, */
                     eventListeners: {
                         featuresadded: function (layer) {
                             // send an event that the drawing has been completed
@@ -323,9 +317,9 @@ Oskari.clazz.define(
                         geodesic: geodesic
                     }
                 ),
-                /*cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
+                /* cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
                                                           OpenLayers.Handler.Polygon,
-                                                          {handlerOptions:{drawingHole: true}}),*/
+                                                          {handlerOptions:{drawingHole: true}}), */
                 box: new OpenLayers.Control.DrawFeature(
                     me.drawLayer,
                     OpenLayers.Handler.RegularPolygon,
@@ -373,7 +367,6 @@ Oskari.clazz.define(
                 }
             );
 
-
             me.getMap().addLayers([me.drawLayer]);
             for (key in me.drawControls) {
                 if (me.drawControls.hasOwnProperty(key)) {
@@ -391,7 +384,7 @@ Oskari.clazz.define(
             var me = this,
                 sandbox = me.getSandbox();
 
-            if(!me.registerRequests) {
+            if (!me.registerRequests) {
                 return {};
             }
 
@@ -413,7 +406,6 @@ Oskari.clazz.define(
                 )
             };
         },
-
 
         /**
          * Returns the drawn geometry from the draw layer
@@ -444,17 +436,17 @@ Oskari.clazz.define(
                 }
             }
             switch (featClass) {
-                case 'OpenLayers.Geometry.Point':
-                    drawing = new OpenLayers.Geometry.MultiPoint(components);
-                    break;
-                case 'OpenLayers.Geometry.LineString':
-                    drawing = new OpenLayers.Geometry.MultiLineString(
-                        components
-                    );
-                    break;
-                case 'OpenLayers.Geometry.Polygon':
-                    drawing = new OpenLayers.Geometry.MultiPolygon(components);
-                    break;
+            case 'OpenLayers.Geometry.Point':
+                drawing = new OpenLayers.Geometry.MultiPoint(components);
+                break;
+            case 'OpenLayers.Geometry.LineString':
+                drawing = new OpenLayers.Geometry.MultiLineString(
+                    components
+                );
+                break;
+            case 'OpenLayers.Geometry.Polygon':
+                drawing = new OpenLayers.Geometry.MultiPolygon(components);
+                break;
             }
             this.currentDrawing = drawing;
             return drawing;
@@ -514,16 +506,16 @@ Oskari.clazz.define(
             if (drawMode === null || drawMode === undefined) {
                 featClass = geometry.CLASS_NAME;
                 switch (featClass) {
-                    case 'OpenLayers.Geometry.LineString':
-                    case 'OpenLayers.Geometry.MultiLineString':
-                        drawMode = 'line';
-                        break;
-                    case 'OpenLayers.Geometry.Polygon':
-                    case 'OpenLayers.Geometry.MultiPolygon':
-                        drawMode = 'area';
-                        break;
-                    default:
-                        return;
+                case 'OpenLayers.Geometry.LineString':
+                case 'OpenLayers.Geometry.MultiLineString':
+                    drawMode = 'line';
+                    break;
+                case 'OpenLayers.Geometry.Polygon':
+                case 'OpenLayers.Geometry.MultiPolygon':
+                    drawMode = 'area';
+                    break;
+                default:
+                    return;
                 }
             }
 
@@ -532,7 +524,6 @@ Oskari.clazz.define(
                 this.getSandbox().notifyAll(event);
             }
         },
-
 
         _stopPluginImpl: function () {
             this.toggleControl();

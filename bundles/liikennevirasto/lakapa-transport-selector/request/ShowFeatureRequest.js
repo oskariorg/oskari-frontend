@@ -14,7 +14,7 @@ function(feature) {
 	this._feature = feature;
 }, {
 	/** @static @property __name request name */
-    __name : "ShowFeatureRequest",
+    __name : 'ShowFeatureRequest',
     /**
      * @method getName
      * @return {String} request name

@@ -44,47 +44,47 @@ function(url, uuid) {
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "SEGMENTIT_UUDET",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'SEGMENTIT_UUDET',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['edited_elements'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "LIIKENNE_ELEMENTTI_MUUTOS",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'LIIKENNE_ELEMENTTI_MUUTOS',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['edited_segments'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "SEGMENTTI_MUUTOS",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'SEGMENTTI_MUUTOS',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['feedback_area'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "PALAUTE",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'PALAUTE',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['turning_restrictions'] = new OpenLayers.Protocol.WFS({
             version: '1.1.0',
             srsName: 'EPSG:3067',
             geometryName: 'GEOMETRY',
-            featureType: "KAANTYMISMAARAYS_UUDET",
+            featureType: 'KAANTYMISMAARAYS_UUDET',
             featureNS: 'http://localhost/LiVi',
             featurePrefix: 'LiVi',
             outputFormat: 'json',
@@ -141,7 +141,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -356,7 +356,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -441,7 +441,7 @@ function(url, uuid) {
         var me = this;
         p.commit(features, {
         	headers: {
-        		"Content-Type": "application/xml; charset=utf-8"
+        		'Content-Type': 'application/xml; charset=utf-8'
         	},
             callback : function(response) {
                 me._handleCommitEditedFeaturesResponse(response, p, uuid, callback);
@@ -500,7 +500,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -544,7 +544,7 @@ function(url, uuid) {
 
         p.commit(features, {
         	headers: {
-        		"Content-Type": "application/xml; charset=utf-8"
+        		'Content-Type': 'application/xml; charset=utf-8'
         	},
             callback : function(response) {
                 me._handleCommitFeedbackResponse(response, callback);
@@ -598,7 +598,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -646,7 +646,7 @@ function(url, uuid) {
     _createUuidFidFilter: function(fids) {
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : this.uuid
         });
         var fidFilter = new OpenLayers.Filter.FeatureId({

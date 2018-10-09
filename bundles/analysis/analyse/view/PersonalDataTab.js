@@ -1,4 +1,4 @@
-import {getCenter as olExtentGetCenter, getArea as olExtentGetArea} from 'ol/extent'
+import {getCenter as olExtentGetCenter, getArea as olExtentGetArea} from 'ol/extent';
 
 /**
  * @class Oskari.mapframework.bundle.analyse.view.PersonalDataTab
@@ -215,7 +215,6 @@ Oskari.clazz.define(
          */
         _deleteAnalysis: function (layer, showDialog) {
             var me = this,
-                sandbox = this.instance.sandbox,
                 tokenIndex = layer.getId().lastIndexOf('_') + 1, // parse actual id from layer id
                 idParam = layer.getId().substring(tokenIndex);
 
@@ -236,7 +235,6 @@ Oskari.clazz.define(
                     me._deleteFailure();
                 }
             });
-
         },
         /**
          * Success callback for backend operation.

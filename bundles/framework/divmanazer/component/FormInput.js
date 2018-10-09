@@ -34,20 +34,20 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._contentCheckMsg = 'illegal characters';
         this._bindFocusAndBlur();
         // word characters, digits, whitespace and chars '-,.?!' allowed
-        this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
+        this._regExp = /[\s\w\d.,?!\-äöåÄÖÅ]*/;
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
         /**
          * @method bindOnFloatingLabelInput
          * binds floating label functionality.
          */
-        bindOnFloatingLabelInput: function() {
-            this._field.find('.oskarifield_floating_input').on('focus', function() {
+        bindOnFloatingLabelInput: function () {
+            this._field.find('.oskarifield_floating_input').on('focus', function () {
                 var $field = jQuery(this).closest('.oskarifield');
                 $field.addClass('oskarifield--not-empty');
             });
 
-            this._field.find('.oskarifield_floating_input').on('blur', function() {
+            this._field.find('.oskarifield_floating_input').on('blur', function () {
                 var $field = jQuery(this).closest('.oskarifield');
                 if (!this.value) {
                     $field.removeClass('oskarifield--not-empty');
@@ -106,9 +106,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 tooltip.addClass('help');
                 tooltip.attr('helptags', pDataTags);
             }
-            if (bindToInput){
+            if (bindToInput) {
                 place = this._field.find('input');
-            }else{
+            } else {
                 place = this._field.find('label');
             }
             place.before(tooltip);
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setFloatingLabel: function (pLabel, topPosition) {
             var input = this._field.find('input'),
                 label = this._field.find('label');
-            if (topPosition){
+            if (topPosition) {
                 this._setTopPosition(label, topPosition);
             }
             label.addClass('oskarifield_floating_label');
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Integer} top value in px
          */
         _setTopPosition: function (elem, top) {
-            if (typeof top === "number"){
+            if (typeof top === 'number') {
                 elem.css('top', top + 'px');
             }
         },
@@ -225,9 +225,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
                 value = value.match(this._regExp).join('');
             }
             // Basic check before AH-1708
-            value = value.replace('<','');
-            value = value.replace('&','');
-            value = value.replace('\\','');
+            value = value.replace('<', '');
+            value = value.replace('&', '');
+            value = value.replace('\\', '');
             return value;
         },
 
@@ -239,7 +239,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         setValue: function (value) {
             var input = this._field.find('input');
             input.attr('value', value);
-            if(value && input.hasClass("oskarifield_floating_input")){
+            if (value && input.hasClass('oskarifield_floating_input')) {
                 this._field.addClass('oskarifield--not-empty');
             }
         },
@@ -405,9 +405,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if up is pressed on the input
          */
         bindUpKey: function (callback) {
-
-            var me = this,
-                input = this._field.find('input');
+            var input = this._field.find('input');
 
             input.on('keyup', function (event) {
                 callback(event);
@@ -420,7 +418,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if down is pressed on the input
          */
         bindDownKey: function (callback) {
-
             var me = this,
                 input = this._field.find('input');
 
@@ -438,13 +435,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {Function} callback method that is called if blur has happened for the input
          */
         bindOnBlur: function (callback) {
-
             // all set, ready to bind requests
             var input = this._field.find('input');
             input.on('blur', function () {
                 callback();
             });
-
         },
 
         /**
@@ -464,7 +459,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         },
         bindAutocompleteSelect: function (callback) {
             var input = this._field.find('input');
-            input.on("autocompleteselect", callback);
+            input.on('autocompleteselect', callback);
         },
         autocomplete: function (results) {
             var input = this._field.find('input');
@@ -474,7 +469,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             });
             input.autocomplete('search', input.val());
         },
-        addClass: function(className) {
+        addClass: function (className) {
             var input = this._field.find('input');
             input.addClass(className);
         },
@@ -511,7 +506,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             if (!sandbox) {
                 return;
             }
-
 
             enabler = Oskari.requestBuilder('EnableMapKeyboardMovementRequest');
             disabler = Oskari.requestBuilder('DisableMapKeyboardMovementRequest');
@@ -567,4 +561,3 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
             return (keycode === 38);
         }
     });
-

@@ -186,10 +186,7 @@ Oskari.clazz.define(
             }
 
             return handler.apply(this, [event]);
-
         },
-
-
 
         /**
          * @property {Object} eventHandlers
@@ -215,7 +212,6 @@ Oskari.clazz.define(
             'MapLayerVisibilityChangedEvent': function (event) {
                 var me = this;
                 me._pushState();
-
             }
         },
 
@@ -273,7 +269,7 @@ Oskari.clazz.define(
             plugin.stopPlugin(this.sandbox);
         },
 
-//FIXME
+        // FIXME
         /**
          * @method setCurrentViewId
          * @param {Number} Current view ID
@@ -288,7 +284,7 @@ Oskari.clazz.define(
         getCurrentViewId: function () {
             return this._currentViewId;
         },
-//
+        //
         /* state pop / push ie undo redo begins here */
 
         _stateComparators: [{
@@ -303,7 +299,7 @@ Oskari.clazz.define(
             cmp: function (prevState, nextState) {
                 if (prevState.east !== nextState.east ||
                         prevState.north !== nextState.north
-                        ) {
+                ) {
                     return true;
                 }
                 if (prevState.zoom !== nextState.zoom) {
@@ -330,8 +326,8 @@ Oskari.clazz.define(
                         allInvisible = false;
                     }
                 }
-                if(allInvisible){
-                    //Don't save state when all are invisible
+                if (allInvisible) {
+                    // Don't save state when all are invisible
                     return false;
                 }
 
@@ -340,7 +336,6 @@ Oskari.clazz.define(
                     nextLayer = nextLayers[ln];
 
                     me._log.debug('comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
-
 
                     if (prevLayer.id !== nextLayer.id) {
                         return true;
@@ -386,21 +381,6 @@ Oskari.clazz.define(
             return cmpResult;
         },
 
-        /**
-         * @method logState
-         * @private
-         * Sends a GET request to the url in the conf with map parameters
-         */
-        _logState: function () {
-            var me = this,
-                logUrlWithLinkParams = me.conf.logUrl + '?' + me.sandbox.generateMapLinkParameters();
-
-            jQuery.ajax({
-                type: 'GET',
-                url: logUrlWithLinkParams
-            });
-        },
-
         _pushState: function () {
             var me = this;
             if (me._historyEnabled) {
@@ -413,10 +393,6 @@ Oskari.clazz.define(
                     state.rule = cmpResult.rule;
                     me._historyPrevious.push(state);
                     me._historyNext = [];
-
-                    if (me.conf && me.conf.logUrl) {
-                        me._logState();
-                    }
                 }
             }
         },
@@ -441,7 +417,7 @@ Oskari.clazz.define(
             switch (this._historyPrevious.length) {
             case 0:
                 /* hard reset */
-                /*this.resetState();*/
+                /* this.resetState(); */
                 break;
             case 1:
                 break;
@@ -469,7 +445,6 @@ Oskari.clazz.define(
             var sandbox = this.getSandbox(),
                 map = sandbox.getMap(),
                 selectedLayers = sandbox.findAllSelectedMapLayers(),
-                zoom = map.getZoom(),
                 lat = map.getX(),
                 lon = map.getY(),
                 state = {

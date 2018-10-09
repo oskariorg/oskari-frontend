@@ -117,5 +117,5 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', func
     stop : function(sandbox) {
     }
 }, {
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

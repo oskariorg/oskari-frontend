@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowMessag
 	 */
     handleRequest : function(core, request) {
     	var me = this;
-        me.sandbox.printDebug("[Oskari.liikennevirasto.bundle.transport.selector.ShowMessageRequest] show message");
+        me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.transport.selector.ShowMessageRequest] show message');
         me.plugin.showMessage(request.getTitle(),request.getMessage(), request.getHandler());
     }
 }, {

@@ -113,8 +113,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WfsLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this.getSandbox(),
-                i,
+            var i,
                 layer,
                 layerId;
 
@@ -179,21 +178,21 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function (layer, oskariLayer) {
+            var me = this;
 
-           layer.events.register("tileloadstart", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            });
 
-           layer.events.register("tileloaded", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            });
 
-          layer.events.register("tileerror", layer, function(){
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-         });
-       },
+            layer.events.register('tileerror', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
+        },
 
         /**
          * Adds  map layers (Wms layer / label text layer / group layer) to this map
@@ -205,8 +204,7 @@ Oskari.clazz.define(
          * @param {Boolean} isNew  is WMS openLayer already on Map
          */
         _addMapLayersToMap: function (layer, openLayer, keepLayerOnTop, isNew) {
-            var me = this,
-                openLayerId = 'layer_' + layer.getId(),
+            var openLayerId = 'layer_' + layer.getId(),
                 renderer = OpenLayers.Util.getParameters(window.location.href).renderer;
 
             renderer = (renderer) ? [renderer] : OpenLayers.Layer.Vector.prototype.renderers;
@@ -554,7 +552,7 @@ Oskari.clazz.define(
                             /*
                             for (i = 0; i < clusteredFeatures.length; i += 1) {
                                 featureFilter = featureFilter + "+AND+id<>'" + clusteredFeatures[i] + "'";
-                            }*/
+                            } */
 
                             /*
                              if (clusteredFeatures > 0) {
@@ -671,21 +669,18 @@ Oskari.clazz.define(
             });
 
             var clusterStrategy = new OpenLayers.Strategy.Cluster({
-                distance: 25,
-                threshold: 2
-            }),
-            clusterLayer = new OpenLayers.Layer.Vector(
-                'layer_name_' + layer.getId() + 'C',
-                {
-                    strategies: [clusterStrategy],
-                    styleMap: new OpenLayers.StyleMap({
-                        'default': style
-                    })
-                }
-            ),
-            myPlacesService = this.getSandbox().getService(
-                'Oskari.mapframework.bundle.myplaces2.service.MyPlacesService'
-            );
+                    distance: 25,
+                    threshold: 2
+                }),
+                clusterLayer = new OpenLayers.Layer.Vector(
+                    'layer_name_' + layer.getId() + 'C',
+                    {
+                        strategies: [clusterStrategy],
+                        styleMap: new OpenLayers.StyleMap({
+                            'default': style
+                        })
+                    }
+                );
 
             /*  GeoServer is used instead.
             if (myPlacesService) {
@@ -731,7 +726,6 @@ Oskari.clazz.define(
             /* if (myPlacesService) {
                 this._addPointClusters(myPlacesService, layer.getId(), clusterLayer);
             } */
-
         },
         /**
          * Used when layer is added or modified. Just trigger an update.
@@ -739,26 +733,26 @@ Oskari.clazz.define(
          * @param  {Boolean} forced
          * @param  {Object} params
          */
-        updateLayerParams : function(layer, forced, params) {
+        updateLayerParams: function (layer, forced, params) {
             var openLayerId = 'layer_' + layer.getId(),
                 oLayer = this.layers[openLayerId],
                 i;
-            if(!oLayer) {
+            if (!oLayer) {
                 return;
             }
             params = params || {};
-            if(forced) {
+            if (forced) {
                 params._ts = Date.now();
             }
             // myLayersGroup[openLayer, attentionLayer, clusterLayer]
-            if (jQuery.isArray(oLayer)){
-                for (i=0; i < oLayer.length; i+=1){
-                    if (typeof oLayer[i].mergeNewParams ==='function'){
+            if (jQuery.isArray(oLayer)) {
+                for (i = 0; i < oLayer.length; i += 1) {
+                    if (typeof oLayer[i].mergeNewParams === 'function') {
                         oLayer[i].mergeNewParams(params);
                     }
                 }
             } else {
-                if (typeof oLayer.mergeNewParams ==='function'){
+                if (typeof oLayer.mergeNewParams === 'function') {
                     oLayer.mergeNewParams(params);
                 }
             }
@@ -849,7 +843,6 @@ Oskari.clazz.define(
                         );
                     });
                 }
-
             });
         },
 
@@ -922,7 +915,6 @@ Oskari.clazz.define(
                 return;
             }
             this._removeMapLayerFromMap(layer);
-
         },
 
         /**
@@ -944,7 +936,7 @@ Oskari.clazz.define(
             });
 
             /* This should free all memory */
-            //mapLayer[0].destroy();
+            // mapLayer[0].destroy();
         },
 
         /**
@@ -959,7 +951,7 @@ Oskari.clazz.define(
                 return null;
             }
 
-            //return this.getMap().getLayersByName('layer_' + layer.getId());
+            // return this.getMap().getLayersByName('layer_' + layer.getId());
             return this.layers['layer_' + layer.getId()];
         },
 
@@ -984,7 +976,7 @@ Oskari.clazz.define(
             _.forEach(openLayers, function (mapLayer) {
                 mapLayer.setOpacity(opacity);
             });
-            //openLayer[0].setOpacity(opacity);
+            // openLayer[0].setOpacity(opacity);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],

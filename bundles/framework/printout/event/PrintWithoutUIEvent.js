@@ -13,44 +13,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintWithoutUIEve
  *          Parameters for to send backend print service
  * @param {Object} geojsonData
  */
-function(contentId, printParams, geojsonData) {
-    this._contentId = contentId;
-    this._printParams = printParams;
-    this._geojsonData = geojsonData;
-}, {
+    function (contentId, printParams, geojsonData) {
+        this._contentId = contentId;
+        this._printParams = printParams;
+        this._geojsonData = geojsonData;
+    }, {
     /**
      * @method getName
      * Returns event name
      * @return {String} The event name.
      */
-    getName : function() {
-        return "Printout.PrintWithoutUIEvent";
-    },
+        getName: function () {
+            return 'Printout.PrintWithoutUIEvent';
+        },
 
-    getContentId: function() {
-        return this._contentId;
-    },
+        getContentId: function () {
+            return this._contentId;
+        },
 
-    /**
+        /**
      * Returns print parameters for backend
      *
      * @method getPrintParams
      * @return {Array[Object]}
      */
-    getPrintParams : function() {
-        return this._printParams;
-    },
+        getPrintParams: function () {
+            return this._printParams;
+        },
 
- /**
+        /**
      * Returns the geojson data used to generate output
      *
      * @method getGeoJsonData
      * @return {Object}
      */
-    getGeoJsonData : function() {
-        return this._geojsonData;
-    }
+        getGeoJsonData: function () {
+            return this._geojsonData;
+        }
 
-}, {
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+    }, {
+        'protocol': ['Oskari.mapframework.event.Event']
+    });

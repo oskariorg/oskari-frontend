@@ -21,7 +21,7 @@ Oskari.clazz.define(
             cap: this.defaultValues.cap,
             corner: this.defaultValues.corner,
             width: this.defaultValues.width,
-            color: '#'+this.defaultValues.color
+            color: '#' + this.defaultValues.color
         };
 
         this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
@@ -30,7 +30,7 @@ Oskari.clazz.define(
 
         this.basicColors = ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
             '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
-            ];
+        ];
         this.paper = null;
         this.activeColorCell = -1;
         // Default color
@@ -187,7 +187,7 @@ Oskari.clazz.define(
                 }
                 // FIXME create function outside loop
                 styleBtnContainer.on('click', function () {
-                    newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
+                    newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('style', newValue);
                     me.values.style = newValue;
                     me._updatePreview(dialogContent);
@@ -246,20 +246,13 @@ Oskari.clazz.define(
             widthSpinner.val(me.values.width !== null && me.values.width !== undefined ? me.values.width : 1);
             content.append(widthSpinner);
 
-            var statedChosenColor = false,
-                colorCell,
-                idExt,
-                id,
-                cellIndex,
-                activeCell;
-
             // Create color picker element
             me._createColorPicker();
             var colorPickerWrapper = dialogContent.find('.color-picker-wrapper');
             colorPickerWrapper.append(me._colorPicker.getElement());
             me._colorPicker.setValue(me.values.color);
 
-            colorPickerWrapper.on('change', function() {
+            colorPickerWrapper.on('change', function () {
                 me.values.color = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
             });
@@ -313,7 +306,7 @@ Oskari.clazz.define(
          * @method createColorPicker
          * Creates a color picker component
          */
-        _createColorPicker: function() {
+        _createColorPicker: function () {
             this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput');
         },
 

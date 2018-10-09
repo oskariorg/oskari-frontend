@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
     init: function (pdata) {
         var me = this;
 
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
             me.setEnabled(true);
         } else {

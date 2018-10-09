@@ -5,20 +5,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.dialog = null;
     }, {
-        getName: function() {
+        getName: function () {
             return 'Oskari.coordinatetransformation.view.mapmarkers';
         },
-        setVisible: function ( visible ) {
-            if(this.dialog === null  && !visible) {
+        setVisible: function (visible) {
+            if (this.dialog === null && !visible) {
                 return;
             }
-            if( !visible ) {
+            if (!visible) {
                 this.dialog.close();
             } else {
                 this.show();
             }
         },
-        show: function() {
+        show: function () {
             var me = this;
             var helper = me.instance.getHelper();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -29,14 +29,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.mapmarkers',
 
             btn.addClass('primary');
 
-            btn.setHandler(function() {
+            btn.setHandler(function () {
                 helper.removeMarkers();
-                me.instance.toggleViews("transformation");
+                me.instance.toggleViews('transformation');
             });
 
             dialog.show(this.loc('mapMarkers.show.title'), this.loc('mapMarkers.show.info'), [btn]);
-            dialog.moveTo( jQuery('.coordinatetransformation'), 'right', true);
+            dialog.moveTo(jQuery('.coordinatetransformation'), 'right', true);
         }
     }
 );
- 

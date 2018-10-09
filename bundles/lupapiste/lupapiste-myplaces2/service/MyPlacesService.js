@@ -27,12 +27,12 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     this.defaultCategoryName = defaultName;
     this._instance = pInstance;
 }, {
-    __qname : "Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService",
+    __qname : 'Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService',
     getQName : function() {
         return this.__qname;
     },
 
-    __name : "MyPlacesService",
+    __name : 'MyPlacesService',
     getName : function() {
         return this.__name;
     },
@@ -582,7 +582,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             data : {

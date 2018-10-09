@@ -356,7 +356,7 @@ function(instance, localization) {
     },
 
     _displayValueForDynType: {
-        '11': "Nopeusrajoitus"
+        '11': 'Nopeusrajoitus'
     },
 
     /**

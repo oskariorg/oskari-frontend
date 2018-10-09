@@ -138,7 +138,7 @@ Oskari.clazz.define(
 
 	        return 'point';
 	    }
-	}, {
+    }, {
         protocol: ['Oskari.mapframework.service.Service']
     }
 );
