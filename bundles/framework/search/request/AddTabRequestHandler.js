@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddTabRequestHand
      * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
      *      request to handle
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             this.search.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
         }
     }, {
@@ -29,5 +29,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddTabRequestHand
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

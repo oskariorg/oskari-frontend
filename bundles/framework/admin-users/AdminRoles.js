@@ -42,7 +42,7 @@ Oskari.clazz.define(
                 '</li>'
             );
             form = me.templates.main.find('div.add-role');
-            //create new role
+            // create new role
             me.templates.form = jQuery(
                 '<form method="" action="">' +
                 '    <span>' + me._getLocalization('newrole') + '</span>' +
@@ -199,7 +199,6 @@ Oskari.clazz.define(
                     me.sandbox.notifyAll(evt);
                 }
             });
-
         },
         /**
          * @method createUi
@@ -223,7 +222,7 @@ Oskari.clazz.define(
                 }
             );
             // Not sure if we want save on enter
-            //field.bindEnterKey(doSave);
+            // field.bindEnterKey(doSave);
 
             controls.append(button.getElement());
             return me.container;
@@ -237,7 +236,6 @@ Oskari.clazz.define(
          * @return {String} Permissions table
          */
         createLayerRightGrid: function (columnHeaders, layerRightsJSON) {
-
             var table = '<table class="layer-rights-table">',
                 i = 0,
                 tr = 0,
@@ -269,14 +267,14 @@ Oskari.clazz.define(
                 // lets loop through header
                 for (i = 0; i < columnHeaders.length; i += 1) {
                     header = columnHeaders[i];
-                    //select input value based on arrangement of header columns
+                    // select input value based on arrangement of header columns
                     value = layerRight[header.id];
                     tooltip = header.name;
 
                     if (header.id === 'name') {
                         if (layer) {
                             tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
-                            //value = '<div class="layer-icon ' + layer.getIconClassname() + '"></div> ' + value;
+                            // value = '<div class="layer-icon ' + layer.getIconClassname() + '"></div> ' + value;
                         }
                         table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName +
                             '" data-namespace="' + layerRight.namespace +

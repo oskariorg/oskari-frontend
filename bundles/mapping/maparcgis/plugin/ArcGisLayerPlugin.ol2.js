@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         /** @static @property _layerType2 type of layers this plugin handles */
         _layerType2: 'arcgis93',
 
-
         /**
          * @method register
          * Interface method for the plugin protocol.
@@ -34,7 +33,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          */
         register: function () {
             this.getMapModule().setLayerPlugin('arcgislayer', this);
-
         },
         /**
          * @method unregister
@@ -43,7 +41,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          */
         unregister: function () {
             this.getMapModule().setLayerPlugin('arcgislayer', null);
-
         },
         /**
          * @private @method _initImpl
@@ -104,7 +101,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
-
         },
 
         /**
@@ -114,7 +110,7 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
          *            event
          */
         _afterMapMoveEvent: function () {
-            //TODO: not an excellent solution, but close enough
+            // TODO: not an excellent solution, but close enough
             var id;
             for (id in this._layer) {
                 if (this._layer.hasOwnProperty(id)) {
@@ -167,7 +163,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
                 openLayer.setVisibility(layer.isInScale(sandbox.getMap().getScale()) && layer.isVisible());
                 me._registerLayerEvents(openLayer, _layer);
                 me.getMapModule().addLayer(openLayer, !keepLayerOnTop);
-
             });
 
             me._log.debug(
@@ -191,14 +186,13 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             }
             var params = {
                 layers: 'show:' + layer.getLayerName(),
-                srs:me.getMap().projection.substr(
+                srs: me.getMap().projection.substr(
                     me.getMap().projection.indexOf(':') + 1),
                 transparent: 'true'};
 
             var openLayer = new OpenLayers.Layer.ArcGIS93Rest('arcgis93layer_' + layer.getId(),
                 layer.getLayerUrls()[0],
                 params);
-
 
             openLayer.isBaseLayer = false;
             me._layer[layer.getId()] = openLayer;
@@ -236,7 +230,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
 
             layer.events.register('tileerror', layer, function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true);
-
             });
         },
 

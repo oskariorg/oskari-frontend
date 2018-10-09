@@ -53,7 +53,6 @@ Oskari.clazz.define(
             if (params.isModify) {
                 // preselect it for modification
                 this.modifyControls.select.select(this.drawLayer.features[0]);
-
             } else {
                 // Solve OL problem in select modify feature
                 if (this.modifyControls.modify.feature) {
@@ -61,7 +60,6 @@ Oskari.clazz.define(
                 }
                 // remove possible old drawing
                 this.drawLayer.destroyFeatures();
-
 
                 if (params.geometry) {
                     // sent existing geometry == edit mode
@@ -81,8 +79,6 @@ Oskari.clazz.define(
                     this.toggleControl(params.drawMode);
                 }
             }
-
-
         },
         /**
          * Disables all draw controls and
@@ -134,8 +130,8 @@ Oskari.clazz.define(
                 }
             };
             try {
-                //needed when preparing unfinished objects but causes unwanted features into the layer:
-                //this.drawControls[this.currentDrawMode].finishSketch();
+                // needed when preparing unfinished objects but causes unwanted features into the layer:
+                // this.drawControls[this.currentDrawMode].finishSketch();
                 this.finishedDrawing(true);
             } catch (error) {
                 // happens when the sketch isn't even started -> reset state
@@ -266,12 +262,12 @@ Oskari.clazz.define(
 
             me.drawLayer = new OpenLayers.Layer.Vector(
                 me.prefix + 'DrawLayer', {
-                    /*style: {
+                    /* style: {
                      strokeColor: "#ff00ff",
                      strokeWidth: 3,
                      fillOpacity: 0,
                      cursor: "pointer"
-                     },*/
+                     }, */
                     eventListeners: {
                         featuresadded: function (layer) {
                             // send an event that the drawing has been completed
@@ -321,9 +317,9 @@ Oskari.clazz.define(
                         geodesic: geodesic
                     }
                 ),
-                /*cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
+                /* cut : new OpenLayers.Control.DrawFeature(me.drawLayer,
                                                           OpenLayers.Handler.Polygon,
-                                                          {handlerOptions:{drawingHole: true}}),*/
+                                                          {handlerOptions:{drawingHole: true}}), */
                 box: new OpenLayers.Control.DrawFeature(
                     me.drawLayer,
                     OpenLayers.Handler.RegularPolygon,
@@ -371,7 +367,6 @@ Oskari.clazz.define(
                 }
             );
 
-
             me.getMap().addLayers([me.drawLayer]);
             for (key in me.drawControls) {
                 if (me.drawControls.hasOwnProperty(key)) {
@@ -411,7 +406,6 @@ Oskari.clazz.define(
                 )
             };
         },
-
 
         /**
          * Returns the drawn geometry from the draw layer
@@ -530,7 +524,6 @@ Oskari.clazz.define(
                 this.getSandbox().notifyAll(event);
             }
         },
-
 
         _stopPluginImpl: function () {
             this.toggleControl();

@@ -2,11 +2,11 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
     function () {
     }, {
-        index : 4,
-        allowedLocations : ['top left', 'top right'],
+        index: 4,
+        allowedLocations: ['top left', 'top right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings : [
+        allowedSiblings: [
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
             };
         },
 
-        //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
+        // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'coordinatetool',
 
         /**
@@ -127,7 +127,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
                     }
                 });
 
-
                 if (me.projectionTrasformationIsCheckedInModifyMode) {
                     inputTransform.setChecked(true);
                     me.supportedProjections = me.toolConfig.supportedProjections;
@@ -140,11 +139,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
                 if (checked === 'on') {
                     me.noUI = true;
                     me.getPlugin().teardownUI();
-                //me.getPlugin().toggleIconVisibility(false);
+                // me.getPlugin().toggleIconVisibility(false);
                 } else {
                     me.noUI = null;
                     me.getPlugin().redrawUI(Oskari.util.isMobile());
-                //me.getPlugin().toggleIconVisibility(true);
+                // me.getPlugin().toggleIconVisibility(true);
                 }
             });
 
@@ -161,6 +160,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
             return template;
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

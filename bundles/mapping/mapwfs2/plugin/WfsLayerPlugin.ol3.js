@@ -56,7 +56,6 @@ Oskari.clazz.define(
 
         me.activeHighlightLayers = [];
 
-
         me.tempVectorLayer = null;
 
         me.__layersByName = {};
@@ -138,7 +137,7 @@ Oskari.clazz.define(
                 );
             }
 
-            //What's this do?
+            // What's this do?
             me._visualizationForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.VisualizationForm'
             );
@@ -177,9 +176,6 @@ Oskari.clazz.define(
             });
         },
 
-
-
-
         /**
          * @method refresh
          * Updates the plugins interface (hides if no manual load wfs layers selected)
@@ -212,7 +208,6 @@ Oskari.clazz.define(
 
             // Check, if all invisible
             if (isVisible && this.getElement()) {
-
                 for (i = 0; i < layers.length; i++) {
                     if (layers[i].hasFeatureData() && layers[i].isManualRefresh() && !layers[i].isVisible()) {
                         countInvisi++;
@@ -237,7 +232,6 @@ Oskari.clazz.define(
                         this.getElement().attr('title', loc.refresh_title);
                     }
                 }
-
             }
             if (isVisible && this.getElement()) {
                 this.getElement().show();
@@ -251,7 +245,6 @@ Oskari.clazz.define(
                 var toolStyle = me.getToolStyleFromMapModule();
                 me.changeToolStyle(toolStyle, me.getElement());
             }
-
         },
         /**
          * @public @method changeToolStyle
@@ -271,7 +264,7 @@ Oskari.clazz.define(
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for (var c = 0;c < classList.length;c++) {
+            for (var c = 0; c < classList.length; c++) {
                 var className = classList[c];
                 if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
@@ -297,7 +290,6 @@ Oskari.clazz.define(
                 return true;
             }
             return false;
-
         },
         /**
          * @method inform
@@ -367,7 +359,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterMapLayerAddEvent: function (event) {
-
                     me.mapLayerAddHandler(event);
                     // Refresh UI refresh button visible/invisible
                     me.refresh();
@@ -381,7 +372,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterMapLayerRemoveEvent: function (event) {
-
                     me.mapLayerRemoveHandler(event);
                     // Refresh UI refresh button visible/invisible
                     me.refresh();
@@ -408,7 +398,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerStyleEvent: function (event) {
-
                     me.changeMapLayerStyleHandler(event);
                 },
                 /**
@@ -432,7 +421,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 AfterChangeMapLayerOpacityEvent: function (event) {
-
                     me.afterChangeMapLayerOpacityEvent(event);
                 },
 
@@ -441,7 +429,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 MapSizeChangedEvent: function (event) {
-
                     me.mapSizeChangedHandler(event);
                 },
 
@@ -450,7 +437,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetFilter: function (event) {
-
                     me.setFilterHandler(event);
                 },
 
@@ -459,7 +445,6 @@ Oskari.clazz.define(
                  * @param {Object} event
                  */
                 WFSSetPropertyFilter: function (event) {
-
                     me.setPropertyFilterHandler(event);
                 },
 
@@ -525,7 +510,7 @@ Oskari.clazz.define(
          * @param  {String} reqLayerId optional id
          * @return {Oskari.mapframework.domain.AbstractLayer}  layers array
          */
-        _getLayers : function (reqLayerId) {
+        _getLayers: function (reqLayerId) {
             var sb = this.getSandbox();
 
             if (!reqLayerId) {
@@ -578,12 +563,10 @@ Oskari.clazz.define(
             me.activeHighlightLayers.forEach(function (layer) {
                 if (me.getConnection().isLazy() &&
                     (!me.getConnection().isConnected() || !sandbox.findMapLayerFromSelectedMapLayers(layer.getId()))) {
-
                     var fids = layer.getClickedFeatureIds();
                     me.removeHighlightImages(layer);
                     me.getHighlightImage(layer, srs, bbox, zoom, fids);
                 }
-
             });
 
             layers.forEach(function (layer) {
@@ -593,7 +576,7 @@ Oskari.clazz.define(
                 var fids = me.WFSLayerService.getSelectedFeatureIds(layer.getId());
                 me.removeHighlightImages(layer);
                 if (me._highlighted) {
-                    me.getIO().highlightMapLayerFeatures(layer.getId(),fids, false, true);
+                    me.getIO().highlightMapLayerFeatures(layer.getId(), fids, false, true);
                 }
             });
         },
@@ -611,7 +594,7 @@ Oskari.clazz.define(
                     ol2Extent.top
                 ];
             } else if (ol2Extent && ol2Extent.length && ol2Extent.length === 4) {
-                //supposedly already in ol3 form -> just return as is.
+                // supposedly already in ol3 form -> just return as is.
                 return ol2Extent;
             }
             return null;
@@ -638,7 +621,6 @@ Oskari.clazz.define(
                 }
                 if (styleName === null || styleName === undefined ||
                     styleName === '') {
-
                     styleName = 'default';
                 }
 
@@ -648,7 +630,6 @@ Oskari.clazz.define(
                 ); // add WMS layer
                 // send together
                 connection.get().batch(function () {
-
                     me.getIO().addMapLayer(
                         layer.getId(),
                         styleName,
@@ -665,7 +646,7 @@ Oskari.clazz.define(
         mapLayerRemoveHandler: function (event) {
             var me = this,
                 layer = event.getMapLayer();
-            //remove loading tiles attached to this layer
+            // remove loading tiles attached to this layer
             layer.loadingDone(0);
 
             if (layer.hasFeatureData()) {
@@ -700,7 +681,6 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         featuresSelectedHandler: function (event) {
-
             if (!event.getMapLayer().hasFeatureData()) {
                 // No featuredata available, return
                 return;
@@ -750,7 +730,6 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         mapClickedHandler: function (event) {
-
             // don't process while moving
             if (this.getSandbox().getMap().isMoving()) {
                 return;
@@ -767,17 +746,17 @@ Oskari.clazz.define(
                 features: [{
                     type: 'Feature',
                     geometry: JSON.parse(geojson.writeGeometry(point)),
-                    properties : {
+                    properties: {
                         // add buffer based on resolution
-                        buffer_radius : this.getMap().getView().getResolution() * pixelTolerance
+                        buffer_radius: this.getMap().getView().getResolution() * pixelTolerance
                     }
                 }]
             };
 
             this.getIO().setMapClick({
-                lon : lonlat.lon,
-                lat : lonlat.lat,
-                json : json
+                lon: lonlat.lon,
+                lat: lonlat.lat,
+                json: json
             }, keepPrevious);
         },
 
@@ -786,7 +765,6 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         changeMapLayerStyleHandler: function (event) {
-
             if (event.getMapLayer().hasFeatureData()) {
                 // render "normal" layer with new style
                 var OLLayer = this.getOLMapLayer(
@@ -831,7 +809,6 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         afterChangeMapLayerOpacityEvent: function (event) {
-
             var layer = event.getMapLayer(),
                 layers,
                 opacity;
@@ -874,10 +851,8 @@ Oskari.clazz.define(
             }
 
             if (event.getLayerId()) {
-
                 layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
-            }
-            else {
+            } else {
                 layers = me.getSandbox().findAllSelectedMapLayers();
             }
 
@@ -889,7 +864,7 @@ Oskari.clazz.define(
                         layerId = layer.getId();
                         var ollayer = me.getOLMapLayer(layer);
                         tiles = ollayer.getSource().getNonCachedGrid(grid);
-                        //tiles = me.getNonCachedGrid(layerId, grid);
+                        // tiles = me.getNonCachedGrid(layerId, grid);
                         me.getIO().setLocation(
                             layerId,
                             srs, [
@@ -939,7 +914,7 @@ Oskari.clazz.define(
                     return;
                 }
                 var tiles = ollayer.getSource().getNonCachedGrid(grid);
-                //tiles = me.getNonCachedGrid(layerId, grid);
+                // tiles = me.getNonCachedGrid(layerId, grid);
                 me.getIO().setLocation(
                     layer.getId(),
                     srs, [
@@ -969,7 +944,6 @@ Oskari.clazz.define(
          * @param {Object} event
          */
         setPropertyFilterHandler: function (event) {
-
             /// clean selected features lists
             var me = this,
                 layers = this.getSandbox().findAllSelectedMapLayers();
@@ -994,7 +968,6 @@ Oskari.clazz.define(
             // convert values to send (copy the values - don't edit the original)
             this.getIO().setMapLayerCustomStyle(layerId, values);
         },
-
 
         /**
          * @method clearConnectionErrorTriggers
@@ -1112,14 +1085,14 @@ Oskari.clazz.define(
             this._tileGrid = new olTilegridTileGrid({
                 extent: this.ol2ExtentOl3Transform(this.getMapModule().getMaxExtent()),
                 tileSize: [tileSize.width, tileSize.height],
-                resolutions : this.getMapModule().getResolutionArray()
+                resolutions: this.getMapModule().getResolutionArray()
             });
         },
 
         getTileSize: function () {
             return {
-                width : 256,
-                height : 256
+                width: 256,
+                height: 256
             };
         },
         getGrid: function () {
@@ -1139,7 +1112,7 @@ Oskari.clazz.define(
 
             for (var iy = tileRangeExtent.minY; iy <= tileRangeExtent.maxY; iy++) {
                 for (var ix = tileRangeExtent.minX; ix <= tileRangeExtent.maxX; ix++) {
-                    var zxy = [z,ix,iy];
+                    var zxy = [z, ix, iy];
                     var tileBounds = tileGrid.getTileCoordExtent(zxy);
                     grid.bounds.push(tileBounds);
                     colidx++;
@@ -1191,7 +1164,6 @@ Oskari.clazz.define(
         getLayerCount: function () {
             return this._isWFSOpen;
         },
-
 
         /**
          * @method _isArrayEqual
@@ -1302,12 +1274,10 @@ Oskari.clazz.define(
                     dialog.close(true);
                 });
                 dialog.show(title, message, [okBtn]);
-            }
-            else {
+            } else {
                 dialog.show(title, message);
                 dialog.fadeout(5000);
             }
-
         },
 
         /**
@@ -1424,7 +1394,6 @@ Oskari.clazz.define(
          * @param {String} layerType
          */
         _addMapLayerToMap: function (_layer, layerType) {
-
             if (!_layer.hasFeatureData()) {
                 return;
             }
@@ -1449,7 +1418,7 @@ Oskari.clazz.define(
             }
             var projection = olProj.get(me.getMapModule().getProjection());
 
-            //var tileSrc = new olSourceTileImage({
+            // var tileSrc = new olSourceTileImage({
             var tileSrc = new OskariAsyncTileImage({
                 layerId: _layer.getId(),
                 projection: projection,
@@ -1486,7 +1455,6 @@ Oskari.clazz.define(
             source.on('tileloaderror', function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
-
         },
         drawImageTile: function (layer, imageUrl, imageBbox, imageSize, layerType, boundaryTile, keepPrevious) {
             var me = this,
@@ -1507,7 +1475,7 @@ Oskari.clazz.define(
                 return;
             }
             if (layerType === me.__typeHighlight) {
-                ols = [imageSize.width,imageSize.height]; // ol/size
+                ols = [imageSize.width, imageSize.height]; // ol/size
 
                 wfsMapImageLayer = new olLayerImage({
                     source: new olSourceImageStatic({
@@ -1515,7 +1483,7 @@ Oskari.clazz.define(
                         imageExtent: boundsObj,
                         imageSize: ols,
                         logo: false,
-                        crossOrigin : layer.getAttributes('crossOrigin')
+                        crossOrigin: layer.getAttributes('crossOrigin')
                     }),
                     title: layerName
                 });
@@ -1545,11 +1513,11 @@ Oskari.clazz.define(
                 ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
             }
         },
-        getLayerName : function (layer, type) {
+        getLayerName: function (layer, type) {
             type = type || this.__typeNormal;
             return this.__layerPrefix + layer.getId() + '_' + type;
         },
-        layerByName : function (name, value) {
+        layerByName: function (name, value) {
             if (!value) {
                 return this.__layersByName[name];
             }

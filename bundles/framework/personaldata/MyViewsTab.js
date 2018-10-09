@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 tooltip: this.loc('tabs.myviews.button.toolbarsave') || '',
                 sticky: false,
                 // disable button for non logged in users
-                enabled : Oskari.user().isLoggedIn(),
+                enabled: Oskari.user().isLoggedIn(),
                 prepend: true,
                 callback: function () {
                     me._promptForView(function (name, description, isDefault) {
@@ -105,7 +105,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _renderViewsList: function (views) {
-
             if (!views) {
                 views = [];
             }
@@ -267,7 +266,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
          * @private
          */
         _getGridModel: function (views) {
-
             var gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 i,
                 view,
@@ -306,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             var me = this;
             var instance = this.instance;
             var sandbox = instance.getSandbox();
-            var visibleFields = ['default','name', 'description', /*'publish',*/ 'edit', 'delete'];
+            var visibleFields = ['default', 'name', 'description', /* 'publish', */ 'edit', 'delete'];
             var grid = Oskari.clazz.create('Oskari.userinterface.component.Grid');
             grid.setDataModel(model);
             grid.setVisibleFields(visibleFields);
@@ -314,7 +312,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             // set up the link from edit field
             var defaultViewRenderer = function (name, data) {
                 var input = me.templateDefaultGridView.clone();
-                input.prop('checked',data.isDefault);
+                input.prop('checked', data.isDefault);
                 input.on('click', function () {
                     var view = me._getViewById(data.id);
                     var service = me.instance.getViewService();
@@ -326,24 +324,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                     var wasChecked = this.checked;
                     var checkboxes = jQuery(grid.table).find('input[name=isDefault]');
                     _.each(checkboxes, function (checkbox) {
-                        //uncheck other checkboxes,
-                        //disable all isDefault checkboxes
+                        // uncheck other checkboxes,
+                        // disable all isDefault checkboxes
                         checkbox.checked = false;
                         checkbox.disabled = 'disabled';
                     });
                     this.checked = wasChecked;
-                    //start spinner
-                    me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
+                    // start spinner
+                    me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest', [true]);
                     service.updateView(view.id, view.name, view.description, this.checked, function (isSuccess) {
-                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest', [false]);
                         me._editViewSuccessNotify(isSuccess);
                     });
                 });
                 return input;
             };
             grid.setColumnValueRenderer('default', defaultViewRenderer);
-
-
 
             // set up the link from name field
             var nameRenderer = function (name, data) {
@@ -582,6 +578,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
             }
 
             return handler.apply(this, [event]);
-
         }
     });

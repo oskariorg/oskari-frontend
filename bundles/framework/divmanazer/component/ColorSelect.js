@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             }
             if (optionClone.length > 0) {
                 me._selectedValue = value;
-                optionClone.css('background-color','transparent');
+                optionClone.css('background-color', 'transparent');
                 me._selected.html(optionClone);
                 option.attr('data-selected', true);
                 option.css('background-color', '#' + me._colorsConfig.selected);
@@ -155,7 +155,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
             me._element.find('.color-selection-arrow').off('click');
             me._element.find('.color-selection-arrow').on('click', handlers.selectHandler);
         },
-
 
         /**
          * @private @method _getColorTemplate Get color template
@@ -225,8 +224,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorSelect',
                             'width': (me._selected.outerWidth() + arrow.outerWidth() - 2) + 'px'
                         });
                         me.open();
-                    }
-                    else if (me._selected.attr('data-state') === 'opened') {
+                    } else if (me._selected.attr('data-state') === 'opened') {
                         me.close();
                     }
                 },

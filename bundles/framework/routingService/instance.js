@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
             'marker': {
                 'offsetX': 16,
                 'offsetY': 0,
-                'data':"<svg width='32' height='32'><g transform='matrix(0.36866667,0,0,0.36866667,-0.59000005,20.792533)'><path fill='#b94b20' class='shading-color' d='m 75,-26.4 c 0,14.3 -20.4,34.5 -27.7,55.2 -0.7,2.1 -3.7,2.1 -4.5,0 C 35.9,8.1 15,-12.1 15,-26.4 c 0,-16.6 13.4,-30 30,-30 16.6,0 30,13.4 30,30 z' /><circle fill='#e5e5e5' r='20' cy='-26.6' cx='45.200001' /><path fill='#ffffff' d='m 44.8,-46.6 c -11.1,0.2 -20,9 -20,20 0,11 8.9,19.8 20,20 l 0,-40 z' /><path class='normal-color' fill='#e75d10' d='m 44.9,-6.6 c -10.9,-0.2 -19.7,-9 -19.7,-20 0,-11 8.8,-19.8 19.7,-20 l 0,-9.8 c -16.5,0.1 -29.9,13.5 -29.9,30 0,14.3 20.9,34.5 27.9,55.2 0.3,1 1.1,1.5 2,1.6 l 0,-37 z' /></g></svg>"
+                'data': "<svg width='32' height='32'><g transform='matrix(0.36866667,0,0,0.36866667,-0.59000005,20.792533)'><path fill='#b94b20' class='shading-color' d='m 75,-26.4 c 0,14.3 -20.4,34.5 -27.7,55.2 -0.7,2.1 -3.7,2.1 -4.5,0 C 35.9,8.1 15,-12.1 15,-26.4 c 0,-16.6 13.4,-30 30,-30 16.6,0 30,13.4 30,30 z' /><circle fill='#e5e5e5' r='20' cy='-26.6' cx='45.200001' /><path fill='#ffffff' d='m 44.8,-46.6 c -11.1,0.2 -20,9 -20,20 0,11 8.9,19.8 20,20 l 0,-40 z' /><path class='normal-color' fill='#e75d10' d='m 44.9,-6.6 c -10.9,-0.2 -19.7,-9 -19.7,-20 0,-11 8.8,-19.8 19.7,-20 l 0,-9.8 c -16.5,0.1 -29.9,13.5 -29.9,30 0,14.3 20.9,34.5 27.9,55.2 0.3,1 1.1,1.5 2,1.6 l 0,-37 z' /></g></svg>"
             },
             'marker_automobile': {
                 'offsetX': 16,
@@ -192,20 +192,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
 
             jQuery.ajax({
                 data: params,
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : Oskari.urls.getRoute('Routing'),
-                error : function () {
+                url: Oskari.urls.getRoute('Routing'),
+                error: function () {
                 // send an event about failure (for RPC etc)
                     var evt = Oskari.eventBuilder('RouteResultEvent')(false, undefined, undefined, params);
                     me.sandbox.notifyAll(evt);
                 },
-                success : function (response) {
+                success: function (response) {
                     var success = response.success,
                         requestParameters = response.requestParameters,
                         plan = response.plan;

@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             }
         },
         _Spinner: (function (window, document) {
-            //fgnass.github.com/spin.js#v1.2.8
+            // fgnass.github.com/spin.js#v1.2.8
 
             /**
              * Copyright (c) 2011 Felix Gnass [fgnass at neteye dot de]
@@ -181,13 +181,13 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             /**
              * Insert a new stylesheet to hold the @keyframe or VML rules.
              */
-            sheet = function () {
+            sheet = (function () {
                 var el = createEl('style', {
                     type: 'text/css'
                 });
                 ins(document.getElementsByTagName('head')[0], el);
                 return el.sheet || el.styleSheet;
-            }();
+            }());
 
             /**
              * Creates an opacity keyframe animation rule and returns its name.
@@ -288,7 +288,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 }
                 this.opts = merge(o || {}, Spinner.defaults, defaults);
             }
-
 
             Spinner.defaults = {};
 
@@ -399,15 +398,14 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 }
             });
 
-            /////////////////////////////////////////////////////////////////////////
+            /// //////////////////////////////////////////////////////////////////////
             // VML rendering for IE
-            /////////////////////////////////////////////////////////////////////////
+            /// //////////////////////////////////////////////////////////////////////
 
             /**
              * Check and init VML support
              */
             (function () {
-
                 function vml (tag, attr) {
                     return createEl('<' + tag + ' xmlns="urn:schemas-microsoft.com:vml" class="spin-vml">', attr);
                 }
@@ -417,7 +415,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 });
 
                 if (!vendor(ss, 'transform') && ss.adj) {
-
                     // VML support detected. Insert CSS rule ...
                     sheet.addRule('.spin-vml', 'behavior:url(#default#VML)');
 

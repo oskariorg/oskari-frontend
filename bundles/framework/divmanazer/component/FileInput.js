@@ -9,31 +9,31 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     this.files = [];
     this.options = options || {
         'allowMultipleFiles': false,
-        'maxFileSize': 10, //MB
-        //if both types and extensions are empty -> allow all
-        'allowedFileTypes': [], //MIME types e.g. "text/plain"
-        'allowedFileExtensions': [], //File extensions without dot e.g. "txt"
-        'showNoFile': true //shows error popup when getFiles() is called and file isn't given
+        'maxFileSize': 10, // MB
+        // if both types and extensions are empty -> allow all
+        'allowedFileTypes': [], // MIME types e.g. "text/plain"
+        'allowedFileExtensions': [], // File extensions without dot e.g. "txt"
+        'showNoFile': true // shows error popup when getFiles() is called and file isn't given
     };
     this.visible = true;
 
     this._template = {
         fileBox: _.template('<div class="<%= classes %>"> ' +
-            //'<form method="post" action="" enctype="multipart/form-data" class="box">'+
+            // '<form method="post" action="" enctype="multipart/form-data" class="box">'+
                         '<div class="box__input">' +
                             '<input type="file" class="box__file" accept="<%= allowedFiles %>" />' +
                             '<label><%= fileupload %>' +
                                 '&nbsp;' +
-                                //'<label for="file" style="cursor: pointer;">' +
+                                // '<label for="file" style="cursor: pointer;">' +
                                 '<a href="javascript:void(0);"><%= link %></a>' +
-            //'</label>' +
+            // '</label>' +
                             '</label> ' +
                         '</div>' +
                         '<div class="box__uploaded"></div>' +
-            //'<div class="box__uploading"> <%= uploading %>&hellip;</div>'+
-            //'<div class="box__success"><%= success %></div>'+
-            //'<div class="box__error"><%= error %></div>'+
-            //'</form>' +
+            // '<div class="box__uploading"> <%= uploading %>&hellip;</div>'+
+            // '<div class="box__success"><%= success %></div>'+
+            // '<div class="box__error"><%= error %></div>'+
+            // '</form>' +
                 '</div>'),
         basicInput: _.template(
             '<div class="<%= classes %>">' +
@@ -63,8 +63,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          */
     _canUseAdvancedUpload: function () {
         var div = document.createElement('div');
-        return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div))
-                        && 'FormData' in window && 'FileReader' in window;
+        return (('draggable' in div) || ('ondragstart' in div && 'ondrop' in div)) &&
+                        'FormData' in window && 'FileReader' in window;
     },
     /**
          * @method _bindAdvancedUpload
@@ -137,14 +137,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
                 if (me._validateFile(file) === true) {
                     me.files.push(file);
                 } else {
-                    //TODO or keep valid files
+                    // TODO or keep valid files
                     me.files = [];
-                    return;
                 }
             });
         } else {
             if (files.length > 1) {
-                this._showPopup(this.loc('fileInput.error'),this.loc('fileInput.multipleNotAllowed'));
+                this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.multipleNotAllowed'));
             } else {
                 file = files[0];
                 if (file && this._validateFile(file) === true) {
@@ -183,7 +182,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             }
             this._showPopup(this.loc('fileInput.error'), message);
         }
-        //if max file size is defined check that file isn't too large
+        // if max file size is defined check that file isn't too large
         if (opts.maxFileSize && file.size > opts.maxFileSize * 1048576) {
             valid = false;
             this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.fileSize', {size: opts.maxFileSize}));
@@ -199,7 +198,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             }
             return null;
         } else if (opts.allowMultipleFiles !== true) {
-            return files[0]; //or should we use getFile() for single file (allowMultiple false)
+            return files[0]; // or should we use getFile() for single file (allowMultiple false)
         } else {
             return files;
         }
@@ -208,7 +207,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          * @method readFilesInBrowser
          * Checks for drag and drop events, on submit makes ajax request
          */
-    //TODO do we need this?? If we want to check that unknown file type is text file, then this should help
+    // TODO do we need this?? If we want to check that unknown file type is text file, then this should help
     _readFilesInBrowser: function (files, cb) {
         var files = files; // FileList object
 
@@ -273,7 +272,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         var allowedExtensions = Array.isArray(this.options.allowedFileExtensions) ? this.options.allowedFileExtensions : [];
         var acceptedFiles = [];
         if (allowedTypes.length === 0 && allowedExtensions.length === 0) {
-            //if not defined in option, accept all
+            // if not defined in option, accept all
             return '';
         } else {
             allowedTypes.forEach(function (type) {
@@ -298,7 +297,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         var extension = file.name.split('.').pop();
         var validType;
         var validExtension;
-        //if both types and extensions are empty -> allow all
+        // if both types and extensions are empty -> allow all
         if (types.length === 0 && extensions.length === 0) {
             return true;
         }
@@ -328,13 +327,12 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             elem.css('display', '');
         }
     },
-    //TODO should these be in different place
+    // TODO should these be in different place
     exportToFile: function (data, filename, type) {
         var blob = new Blob([data], {type: type});
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, filename);
-        }
-        else {
+        } else {
             var elem = window.document.createElement('a');
             elem.href = window.URL.createObjectURL(blob);
             elem.download = filename;

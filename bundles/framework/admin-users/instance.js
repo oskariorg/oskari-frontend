@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             }
 
             me.getRoles(function () {
-                //Let's extend UI after we have the role data
+                // Let's extend UI after we have the role data
                 var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
             }, function () {
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 dialog.show(me._localization.failed_to_get_roles_title, me._localization.failed_to_get_roles_message, [btn]);
             });
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
+            // sandbox.registerAsStateful(this.mediator.bundleId, this);
         },
         /**
          * @method init
@@ -135,7 +135,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -162,7 +161,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
                 }
             },
 
@@ -200,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
 
             sandbox.request(this, request);
 
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
+            // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },

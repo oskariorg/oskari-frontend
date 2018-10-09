@@ -24,13 +24,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
         this._keepPrevious = !!keepPrevious;
     }, {
     /** @static @property __name event name */
-        __name : 'WFSImageEvent',
+        __name: 'WFSImageEvent',
 
         /**
      * @method getName
      * @return {String} event name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method getLayer
      * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-        getLayer : function () {
+        getLayer: function () {
             return this._layer;
         },
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method getImageUrl
      * @return {String} image url
      */
-        getImageUrl : function () {
+        getImageUrl: function () {
             return this._imageUrl;
         },
 
@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method getBBOX
      * @return {Number[]} bbox
      */
-        getBBOX : function () {
+        getBBOX: function () {
             return this._bbox;
         },
 
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method getSize
      * @return {Object} size
      */
-        getSize : function () {
+        getSize: function () {
             return this._size;
         },
 
@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method getLayerType
      * @return {String} layer type
      */
-        getLayerType : function () {
+        getLayerType: function () {
             return this._layerType;
         },
 
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method isBoundaryTile
      * @return {Boolean} boundary tile
      */
-        isBoundaryTile : function () {
+        isBoundaryTile: function () {
             return this._boundaryTile;
         },
 
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @method isKeepPrevious
      * @return {Boolean} keep previous
      */
-        isKeepPrevious : function () {
+        isKeepPrevious: function () {
             return this._keepPrevious;
         }
     }, {
@@ -94,5 +94,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSImageEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

@@ -34,7 +34,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.bootstrap.UserInterfaceBundleIn
 
         },
 
-
         /**
          * @static @property flyout default positioning
          */

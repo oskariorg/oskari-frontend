@@ -18,27 +18,27 @@ Oskari.clazz.define('Oskari.mapping.drawtools.event.DrawingEvent',
         this._isFinished = isFinished;
     }, {
     /** @static @property __name event name */
-        __name : 'DrawingEvent',
+        __name: 'DrawingEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
-        getId : function () {
+        getId: function () {
             return this._id;
         },
-        getGeoJson : function () {
+        getGeoJson: function () {
             return this._geojson;
         },
-        getData : function () {
+        getData: function () {
             return this._data;
         },
-        getCrs : function () {
+        getCrs: function () {
             return this._geoJson.crs;
         },
-        getIsFinished : function () {
+        getIsFinished: function () {
             return this._isFinished;
         },
         /**
@@ -59,5 +59,5 @@ Oskari.clazz.define('Oskari.mapping.drawtools.event.DrawingEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

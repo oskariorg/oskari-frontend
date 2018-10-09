@@ -20,26 +20,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.PublishCategor
         this._categoryId = categoryId;
         this._isPublic = isPublic == true;
     }, {
-        __name : 'MyPlaces.PublishCategoryRequest',
+        __name: 'MyPlaces.PublishCategoryRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {Number} id of category to be edited
      */
-        getId : function () {
+        getId: function () {
             return this._categoryId;
         },
         /**
      * @method getId
      * @return {Number} id of category to be edited
      */
-        isPublic : function () {
+        isPublic: function () {
             return this._isPublic;
         }
     }, {
@@ -47,5 +47,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.PublishCategor
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

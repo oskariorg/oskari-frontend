@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
     getElement: function () {
         return this.element;
     },
-    show: function (parentElement, key , skipInfo) {
+    show: function (parentElement, key, skipInfo) {
         if (this.dialog) {
             this.dialog.close(true);
             this.dialog = null;
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
         var btn = dialog.createCloseButton(this.loc('actions.close'));
         btn.addClass('primary');
         dialog.createCloseIcon();
-        //dialog.dialog.zIndex(parentElement.zIndex() + 1);
+        // dialog.dialog.zIndex(parentElement.zIndex() + 1);
         dialog.show(title, content, [btn]);
         dialog.moveTo(parentElement);
         dialog.makeDraggable();
@@ -54,7 +54,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInform
             content.find('.info-content').append(this._createList(infoLoc.listItems));
         }
         return content;
-
     },
     _createList: function (list) {
         var me = this;

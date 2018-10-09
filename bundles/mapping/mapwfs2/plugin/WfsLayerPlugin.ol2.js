@@ -114,7 +114,6 @@ Oskari.clazz.define(
                 me
             );
 
-
             // register domain model
             mapLayerService = sandbox.getService(
                 'Oskari.mapframework.service.MapLayerService'
@@ -149,9 +148,6 @@ Oskari.clazz.define(
             me._visualizationForm = Oskari.clazz.create(
                 'Oskari.userinterface.component.VisualizationForm'
             );
-
-
-
         },
         /**
          * @method _createControlElement
@@ -217,7 +213,6 @@ Oskari.clazz.define(
 
             // Check, if all invisible
             if (isVisible && this.getElement()) {
-
                 for (i = 0; i < layers.length; i++) {
                     if (layers[i].hasFeatureData() && layers[i].isManualRefresh() && !layers[i].isVisible()) {
                         countInvisi++;
@@ -242,7 +237,6 @@ Oskari.clazz.define(
                         this.getElement().attr('title', loc.refresh_title);
                     }
                 }
-
             }
             if (isVisible && this.getElement()) {
                 this.getElement().show();
@@ -256,7 +250,6 @@ Oskari.clazz.define(
                 var toolStyle = me.getToolStyleFromMapModule();
                 me.changeToolStyle(toolStyle, me.getElement());
             }
-
         },
         /**
          * @public @method changeToolStyle
@@ -276,7 +269,7 @@ Oskari.clazz.define(
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for (var c = 0;c < classList.length;c++) {
+            for (var c = 0; c < classList.length; c++) {
                 var className = classList[c];
                 if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
@@ -302,7 +295,6 @@ Oskari.clazz.define(
                 return true;
             }
             return false;
-
         },
         /**
          * @method inform
@@ -331,10 +323,7 @@ Oskari.clazz.define(
             if (count === 1 && layer.isManualRefresh()) {
                 me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
-
-
         },
-
 
         /**
          * @method register
@@ -555,8 +544,7 @@ Oskari.clazz.define(
                 if (layer) {
                     layers.push(layer);
                 }
-            }
-            else {
+            } else {
                 layers = sandbox.findAllSelectedMapLayers();
             }
 
@@ -605,7 +593,6 @@ Oskari.clazz.define(
                 if (me.getConnection().isLazy() &&
                     (!me.getConnection().isConnected() ||
                         !sandbox.findMapLayerFromSelectedMapLayers(me.activeHighlightLayers[x].getId()))) {
-
                     fids = me.activeHighlightLayers[x].getClickedFeatureIds();
                     me.removeHighlightImages(
                         me.activeHighlightLayers[x]
@@ -662,7 +649,6 @@ Oskari.clazz.define(
                 }
                 if (styleName === null || styleName === undefined ||
                     styleName === '') {
-
                     styleName = 'default';
                 }
 
@@ -692,7 +678,7 @@ Oskari.clazz.define(
         mapLayerRemoveHandler: function (event) {
             var me = this,
                 layer = event.getMapLayer();
-            //remove loading tiles attached to this layer
+            // remove loading tiles attached to this layer
             layer.loadingDone(0);
 
             if (layer.hasFeatureData()) {
@@ -705,7 +691,6 @@ Oskari.clazz.define(
 
                 // remove linked layer  e.g. wms layer for wfs rendering
                 me._removeLinkedLayer(layer);
-
 
                 // clean tiles for printing
                 me._printTiles[layer.getId()] = [];
@@ -799,16 +784,16 @@ Oskari.clazz.define(
                 features: [{
                     type: 'Feature',
                     geometry: JSON.parse(selection),
-                    properties : {
+                    properties: {
                         // add buffer based on resolution
-                        buffer_radius : this.getMap().getResolution() * pixelTolerance
+                        buffer_radius: this.getMap().getResolution() * pixelTolerance
                     }
                 }]
             };
             this.getIO().setMapClick({
-                lon : lonlat.lon,
-                lat : lonlat.lat,
-                json : json
+                lon: lonlat.lon,
+                lat: lonlat.lat,
+                json: json
             }, keepPrevious, true);
         },
 
@@ -902,8 +887,7 @@ Oskari.clazz.define(
 
             if (event.getLayerId()) {
                 layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
-            }
-            else {
+            } else {
                 layers = me.getSandbox().findAllSelectedMapLayers();
             }
 
@@ -972,7 +956,6 @@ Oskari.clazz.define(
                     true
                 );
                 me._tilesLayer.redraw();
-
             }
         },
         /**
@@ -1066,7 +1049,6 @@ Oskari.clazz.define(
             // convert values to send (copy the values - don't edit the original)
             this.getIO().setMapLayerCustomStyle(layerId, values);
         },
-
 
         /**
          * @method clearConnectionErrorTriggers
@@ -1226,11 +1208,11 @@ Oskari.clazz.define(
             }
 
             if (layerType === me.__typeHighlight) {
-                ols = new OpenLayers.Size(imageSize.width,imageSize.height);
-                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(),layer.getMinScale());
+                ols = new OpenLayers.Size(imageSize.width, imageSize.height);
+                layerScales = me.getMapModule().calculateLayerScales(layer.getMaxScale(), layer.getMinScale());
 
                 wfsMapImageLayer = new OpenLayers.Layer.Image(
-                    layerName,imageUrl,
+                    layerName, imageUrl,
                     boundsObj, ols, {
                         scales: layerScales,
                         transparent: true,
@@ -1262,23 +1244,23 @@ Oskari.clazz.define(
 
                 if (normalLayer.length > 0 && highlightLayer.length > 0) {
                     normalLayerIndex = map.getLayerIndex(normalLayer[normalLayer.length - 1]);
-                    map.setLayerIndex(highlightLayer[0],normalLayerIndex + 10);
+                    map.setLayerIndex(highlightLayer[0], normalLayerIndex + 10);
                 }
             } else { // "normal"
                 BBOX = boundsObj.toArray(false);
                 bboxKey = this.bboxkeyStrip(BBOX);
                 style = layer.getCurrentStyle().getName();
-                tileToUpdate = me._tilesToUpdate.mget(layerId,'',bboxKey);
+                tileToUpdate = me._tilesToUpdate.mget(layerId, '', bboxKey);
 
                 // put the data in cache
                 // normal case and cached
                 if (!boundaryTile) {
-                    me._tileData.mput(layerId,style,bboxKey,imageUrl);
+                    me._tileData.mput(layerId, style, bboxKey, imageUrl);
                 }
                 // temp cached and redrawn if gotten better
                 else {
-                    //Old temp tile (border tile) cant be used, because it is not valid after map move
-                    me._tileDataTemp.mput(layerId,style,bboxKey,imageUrl);
+                    // Old temp tile (border tile) cant be used, because it is not valid after map move
+                    me._tileDataTemp.mput(layerId, style, bboxKey, imageUrl);
                 }
                 // QUEUES updates!
                 if (tileToUpdate) {
@@ -1652,7 +1634,6 @@ Oskari.clazz.define(
             this._tileDataTemp.purgeOffset(4 * 60 * 1000);
         },
 
-
         /*
          * @method getNonCachedGrid
          *
@@ -1816,12 +1797,10 @@ Oskari.clazz.define(
                     dialog.close(true);
                 });
                 dialog.show(title, message, [okBtn]);
-            }
-            else {
+            } else {
                 dialog.show(title, message);
                 dialog.fadeout(5000);
             }
-
         },
 
         /**

@@ -59,14 +59,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             } else {
                 label = this.getLabelForMarker(lonlat, mapEpsgValues);
             }
-            this.addMarkerForCoords(null, lonlat, label); //null id -> generate
+            this.addMarkerForCoords(null, lonlat, label); // null id -> generate
         }
         this.moveMapToMarkers(coords);
     },
     moveMapToMarkers: function (points) {
         var closestZoom = 6;
         if (!Array.isArray(points) || points.length === 0) {
-            return;
+
         } else if (points.length === 1) {
             var x;
             var y;
@@ -109,9 +109,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             lonLabel = this.loc('mapMarkers.show.east');
             latLabel = this.loc('mapMarkers.show.north');
         }
-        //TODO do we need to localize decimal separator for label
+        // TODO do we need to localize decimal separator for label
         // Oskari.getDecimalSeparator();
-        //lon = coords[].replace('.', Oskari.getDecimalSeparator());
+        // lon = coords[].replace('.', Oskari.getDecimalSeparator());
         if (epsgValues.lonFirst) {
             return lonLabel + ': ' + lonlat.lon + ', ' + latLabel + ': ' + lonlat.lat;
         } else {
@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         }
     },
     validateCrsSelections: function (crs) {
-        //source crs and target crs should be always selected
+        // source crs and target crs should be always selected
         if (!crs.sourceCrs || !crs.targetCrs) {
             this.showPopup(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.crs'));
             return false;
@@ -133,13 +133,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
     },
     validateFileSelections: function (settings) {
         if (Object.keys(settings).length === 0) {
-            this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.noFileSettings'));
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.noFileSettings'));
             return false;
         }
 
         var selects = settings.selects;
-        //var type = settings.type;
-        //var file = settings.file;
+        // var type = settings.type;
+        // var file = settings.file;
         var errors = [];
         if (selects.decimalSeparator === ',' && selects.coordinateSeparator === 'comma') {
             errors.push(this.loc('flyout.transform.validateErrors.doubleComma'));
@@ -170,7 +170,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         }
 
         if (errors.length !== 0) {
-            this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.message'), errors);
+            this.showPopup(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.message'), errors);
             return false;
         }
         return true;
@@ -179,8 +179,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         var blob = new Blob([data], {type: type});
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, filename);
-        }
-        else {
+        } else {
             var elem = window.document.createElement('a');
             elem.href = window.URL.createObjectURL(blob);
             elem.download = filename;
@@ -247,7 +246,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         var compound;
         if (epsgNumber.length === 4 || epsgNumber.length === 5) {
             srs = 'EPSG:' + epsgNumber;
-            //check first if is's compound system
+            // check first if is's compound system
             compound = this.getCompoundSystem(srs);
             if (compound !== null) {
                 epsgValues = this.getEpsgValues(compound.geodetic);
@@ -327,7 +326,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             'geodetic-coordinate': geoCoords,
             'elevation': this.getElevationOptions()
         };
-
     },
     getDatumOptions: function () {
         return {
@@ -391,7 +389,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'title': 'Gauss-Kruger',
                 'cls': 'DATUM_EUREF-FIN'
             },
-            'PROJECTION_LAEA':{
+            'PROJECTION_LAEA': {
                 'title': 'Lambert Azimuthal Equal Area',
                 'cls': 'DATUM_EUREF-FIN'
             },
@@ -401,17 +399,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             }
         };
     },
-    //bounds:[minx, miny, maxx, maxy], lonFirst: true -> lonlat, EN, XY
+    // bounds:[minx, miny, maxx, maxy], lonFirst: true -> lonlat, EN, XY
     getGeodeticCoordinateOptions: function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.choose'),
-                'datum':'',
-                'proj':'',
-                'coord':'',
+                'datum': '',
+                'proj': '',
+                'coord': ''
             },
-            //newer GK EPSG-codes which have false easting 500000 prefixed with zone number -> GK19 19500000
-            'EPSG:3873':{
+            // newer GK EPSG-codes which have false easting 500000 prefixed with zone number -> GK19 19500000
+            'EPSG:3873': {
                 'title': 'ETRS-GK19',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -435,7 +433,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [17935765.83, 4324906.92, 21707943.90, 9384787.32],
                 'lonFirst': false
             },
-            'EPSG:3876':{
+            'EPSG:3876': {
                 'title': 'ETRS-GK22',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -443,7 +441,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [18835101.07, 4367049.45, 22697152.55, 9381268.03],
                 'lonFirst': false
             },
-            'EPSG:3877':{
+            'EPSG:3877': {
                 'title': 'ETRS-GK23',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -451,7 +449,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [19734149.31, 4410859.98, 23686302.23, 9377936.99],
                 'lonFirst': false
             },
-            'EPSG:3878':{
+            'EPSG:3878': {
                 'title': 'ETRS-GK24',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -459,7 +457,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [20632915.73, 4456388.39, 24675396.21, 9374795.15],
                 'lonFirst': false
             },
-            'EPSG:3879':{
+            'EPSG:3879': {
                 'title': 'ETRS-GK25',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -467,7 +465,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [21531406.93, 4503686.78, 25664437.76, 9371843.41],
                 'lonFirst': false
             },
-            'EPSG:3880':{
+            'EPSG:3880': {
                 'title': 'ETRS-GK26',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -475,15 +473,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [22429630.98, 4552809.52, 26653430.17, 9369082.63],
                 'lonFirst': false
             },
-            'EPSG:3881':{
+            'EPSG:3881': {
                 'title': 'ETRS-GK27',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
-                'coord':'COORD_PROJ_2D',
+                'coord': 'COORD_PROJ_2D',
                 'bounds': [23327597.57, 4603813.37, 27642376.73, 9366513.60],
                 'lonFirst': false
             },
-            'EPSG:3882':{
+            'EPSG:3882': {
                 'title': 'ETRS-GK28',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -491,23 +489,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [24225318.05, 4656757.53, 28631280.76, 9364137.06],
                 'lonFirst': false
             },
-            'EPSG:3883':{
-                'title':'ETRS-GK29',
+            'EPSG:3883': {
+                'title': 'ETRS-GK29',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [25122805.55, 4711703.72, 29620145.58, 9361953.68],
                 'lonFirst': false
             },
-            'EPSG:3884':{
-                'title':'ETRS-GK30',
+            'EPSG:3884': {
+                'title': 'ETRS-GK30',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [26020075.09, 4768716.31, 30608974.53, 9359964.10],
                 'lonFirst': false
             },
-            'EPSG:3885':{
+            'EPSG:3885': {
                 'title': 'ETRS-GK31',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
@@ -515,7 +513,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [26917143.71, 4827862.39, 31597770.94, 9358168.88],
                 'lonFirst': false
             },
-            'EPSG:3035':{
+            'EPSG:3035': {
                 'title': 'ETRS-LAEA',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_LAEA',
@@ -523,23 +521,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [1896628.62, 1507846.05, 4656644.57, 6827128.02],
                 'lonFirst': false
             },
-            'EPSG:3034':{
+            'EPSG:3034': {
                 'title': 'ETRS-LCC',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_LCC',
                 'coord': 'COORD_PROJ_2D',
-                'bounds': [1584884.54,1150546.94,4435373.08,6675249.46],
+                'bounds': [1584884.54, 1150546.94, 4435373.08, 6675249.46],
                 'lonFirst': false
             },
-            'EPSG:3046':{
-                'title':'ETRS-TM34',
+            'EPSG:3046': {
+                'title': 'ETRS-TM34',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_TM',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [-3062460.04, 4323108.17, 707860.72, 9381033.40],
                 'lonFirst': false
             },
-            'EPSG:3047':{
+            'EPSG:3047': {
                 'title': 'ETRS-TM35',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_TM',
@@ -547,7 +545,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [-3669433.90, 4601644.86, 642319.78, 9362767.00],
                 'lonFirst': false
             },
-            'EPSG:3048':{
+            'EPSG:3048': {
                 'title': 'ETRS-TM36',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_TM',
@@ -555,17 +553,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [-4283197.87, 4949558.27, 575249.45, 9351421.46],
                 'lonFirst': false
             },
-            'EPSG:3067':{
-                'title': 'ETRS-TM35FIN', //(E,N)
+            'EPSG:3067': {
+                'title': 'ETRS-TM35FIN', // (E,N)
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_TM',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [-3669433.90, 4601644.86, 642319.78, 9362767.00],
                 'lonFirst': true
             },
-            //TODO: add when transformation service supports these
+            // TODO: add when transformation service supports these
             // and add possibility to search with 5 digits
-            /*"EPSG:5048":{
+            /* "EPSG:5048":{
                 "title": "ETRS-TM35FIN (N,E)",
                 "datum": "DATUM_EUREF-FIN",
                 "proj": "PROJECTION_TM",
@@ -598,7 +596,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 "lonFirst": true
             },
             */
-            'EPSG:4258':{
+            'EPSG:4258': {
                 'title': 'EUREF-FIN-GRS80',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': '',
@@ -606,7 +604,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [-16.1, 32.88, 39.65, 84.17],
                 'lonFirst': false
             },
-            'EPSG:4937':{
+            'EPSG:4937': {
                 'title': 'EUREF-FIN-GRS80h',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': '',
@@ -614,7 +612,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [-16.1, 32.88, 39.65, 84.17],
                 'lonFirst': false
             },
-            'EPSG:4936':{
+            'EPSG:4936': {
                 'title': 'EUREF-FIN-XYZ',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': '',
@@ -622,31 +620,31 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [5151420.52, -1486881.13, 500495.11, 414781.77],
                 'lonFirst': true
             },
-            'EPSG:3386':{
-                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':0}),
+            'EPSG:3386': {
+                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone': 0}),
                 'datum': 'DATUM_KKJ',
                 'proj': 'PROJECTION_KKJ',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [569217.09, 6663791.81, 583029.96, 6693054.88],
                 'lonFirst': false
             },
-            'EPSG:2391':{
-                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':1}),
+            'EPSG:2391': {
+                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone': 1}),
                 'datum': 'DATUM_KKJ',
                 'proj': 'PROJECTION_KKJ',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [1415885.57, 6628437.53, 1559300.06, 7695112.84],
                 'lonFirst': false
             },
-            'EPSG:2392':{
-                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':2}),
+            'EPSG:2392': {
+                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone': 2}),
                 'datum': 'DATUM_KKJ',
                 'proj': 'PROJECTION_KKJ',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [2415851.96, 6627314.46, 2560464.61, 7647148.92],
                 'lonFirst': false
             },
-            'EPSG:2393':{
+            'EPSG:2393': {
                 'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.ykj'),
                 'datum': 'DATUM_KKJ',
                 'proj': 'PROJECTION_KKJ',
@@ -654,23 +652,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'bounds': [3064557.21, 6651895.29, 3674549.99, 7785726.70],
                 'lonFirst': false
             },
-            'EPSG:2394':{
-                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':4}),
+            'EPSG:2394': {
+                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone': 4}),
                 'datum': 'DATUM_KKJ',
                 'proj': 'PROJECTION_KKJ',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [4418851.11, 6759862.03, 4557959.34, 7748619.72],
                 'lonFirst': false
             },
-            'EPSG:3387':{
-                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone':5}),
+            'EPSG:3387': {
+                'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.kkj', {'zone': 5}),
                 'datum': 'DATUM_KKJ',
                 'proj': 'PROJECTION_KKJ',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [5423705.81, 6970442.95, 5428707.25, 6989284.23],
                 'lonFirst': false
             },
-            'EPSG:4123':{//KKJ_GEO
+            'EPSG:4123': {// KKJ_GEO
                 'title': 'KKJ-Hayford',
                 'datum': 'DATUM_KKJ',
                 'proj': '',
@@ -684,45 +682,45 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.heightSystem.none'),
-                'cls':'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
+                'cls': 'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
             },
             'EPSG:3900': {
-                'title':'N2000',
-                'cls':'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
+                'title': 'N2000',
+                'cls': 'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
             },
             'EPSG:5717': {
-                'title':'N60',
-                'cls':'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
+                'title': 'N60',
+                'cls': 'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
             },
-            'N43': { //no EPSG
-                'title':'N43',
-                'cls':'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
+            'N43': { // no EPSG
+                'title': 'N43',
+                'cls': 'DATUM_KKJ DATUM_EUREF-FIN DATUM_DEFAULT'
             }
         };
     },
     getCompoundSystem: function (epsg) {
         switch (epsg) {
-        case 'EPSG:3091': //YKJ + N60
+        case 'EPSG:3091': // YKJ + N60
             return {
                 geodetic: 'EPSG:2393',
                 height: 'EPSG:5717'
             };
-        case 'EPSG:3092': //ETRS-TM35FIN (N,E) + N60
+        case 'EPSG:3092': // ETRS-TM35FIN (N,E) + N60
             return {
-                geodetic: 'EPSG:3047', //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                geodetic: 'EPSG:3047', // CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
                 height: 'EPSG:5717'
             };
-        case 'EPSG:3093': //ETRS-TM35FIN (N,E) + N2000
+        case 'EPSG:3093': // ETRS-TM35FIN (N,E) + N2000
             return {
-                geodetic: 'EPSG:3047', //CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
+                geodetic: 'EPSG:3047', // CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
                 height: 'EPSG:3900'
             };
-        case 'EPSG:7409': //ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
+        case 'EPSG:7409': // ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
             return {
                 geodetic: 'EPSG:4258',
                 height: 'EPSG:5717'
             };
-        case 'EPSG:7423': //ETRS89 + EVRF2007 (EUREF-FIN-GRS80 + N2000)
+        case 'EPSG:7423': // ETRS89 + EVRF2007 (EUREF-FIN-GRS80 + N2000)
             return {
                 geodetic: 'EPSG:4258',
                 height: 'EPSG:3900'
@@ -739,6 +737,5 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 geoCoord.cls = geoCoord.datum + ' ' + geoCoord.proj + ' ' + geoCoord.coord;
             }
         });
-
     }
 });

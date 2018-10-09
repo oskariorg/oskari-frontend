@@ -32,8 +32,8 @@ Oskari.clazz.define(
         me._positionClasses = {
             'left': 'center-right',
             'right': 'center-left',
-            'top':'bottom-center',
-            'bottom':'top-center'
+            'top': 'bottom-center',
+            'bottom': 'top-center'
         };
         // popup max size = map size * 0.7
         me._viewportMargins = {
@@ -154,7 +154,7 @@ Oskari.clazz.define(
                 currPopup.contentData = contentData;
             }
 
-            me._renderPopup(id, contentData, title, {lon:lon, lat:lat}, options, refresh, additionalTools, marker);
+            me._renderPopup(id, contentData, title, {lon: lon, lat: lat}, options, refresh, additionalTools, marker);
         },
 
         /**
@@ -232,14 +232,14 @@ Oskari.clazz.define(
                 popup.onClose(function () {
                     me.close(id);
                 });
-                //clear the ugly backgroundcolor from the popup content
-                jQuery(popup.dialog).css('background-color','inherit');
+                // clear the ugly backgroundcolor from the popup content
+                jQuery(popup.dialog).css('background-color', 'inherit');
             } else {
                 popupType = 'desktop';
                 popup = new olOverlay({
                     element: popupElement[0],
                     position: lonlatArray,
-                    //start with null positioning
+                    // start with null positioning
                     positioning: null,
                     offset: [offsetX, offsetY]
                 });
@@ -285,7 +285,6 @@ Oskari.clazz.define(
                 type: popupType
             };
 
-
             // Fix popup header height to match title content height if using desktop popup
             if (title && !isInMobileMode) {
                 var popupEl = jQuery(popup.getElement());
@@ -312,13 +311,12 @@ Oskari.clazz.define(
             if (me.adaptable && !isInMobileMode) {
                 if (positioning && positioning !== 'no-position-info') {
                     me._adaptPopupSizeWithPositioning(id, refresh);
-                    //if refresh, we need to reset the positioning
+                    // if refresh, we need to reset the positioning
                     if (refresh) {
                         popup.setPositioning(null);
                     }
-                    //update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3)
+                    // update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3)
                     popup.setPositioning(positioning);
-
                 } else {
                     me._adaptPopupSize(id, refresh);
                 }
@@ -377,7 +375,7 @@ Oskari.clazz.define(
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
 
-            //add additional btns
+            // add additional btns
             jQuery.each(additionalTools, function (index, key) {
                 var additionalButton = me._headerAdditionalButton.clone();
                 additionalButton.attr({
@@ -424,7 +422,6 @@ Oskari.clazz.define(
                 }
 
                 contentWrapper.append(sanitizedHtml);
-
 
 	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
@@ -614,7 +611,7 @@ Oskari.clazz.define(
                 'min-height': '200px',
                 'left': left + 'px',
                 'position': 'absolute',
-                'overflow' : 'visible',
+                'overflow': 'visible',
                 'z-index': '16000'
             });
 
@@ -649,11 +646,11 @@ Oskari.clazz.define(
 
             popup.css({
                 'height': 'auto',
-                //just have some initial width, other than auto, so that we don't get ridiculous widths with wide content
+                // just have some initial width, other than auto, so that we don't get ridiculous widths with wide content
                 'width': '1px',
                 'min-width': '300px',
                 'max-width': maxWidth + 'px',
-                'overflow' : 'visible',
+                'overflow': 'visible',
                 'z-index': '16000'
             });
         },
@@ -681,15 +678,15 @@ Oskari.clazz.define(
                 popup = jQuery('.olPopup'),
                 popupX = popup.width(),
                 popupY = popup.height();
-            //WORKAROUND: pixels should be in the viewport.
-            //if them aren't, then mapmove isn't ended before getPixelFromCoordinate called
-            //and pixels aren't calculated correctly -> don't try to pan map
+            // WORKAROUND: pixels should be in the viewport.
+            // if them aren't, then mapmove isn't ended before getPixelFromCoordinate called
+            // and pixels aren't calculated correctly -> don't try to pan map
             var margin = margins.isInViewport / 2;
             if (pixels.y > mapSize.height + margin || pixels.y < -margin || pixels.x > mapSize.width + margin || pixels.x < -margin) {
                 return;
             }
 
-            //If supported ol/OverlayPositioning is used, use it instead of default values
+            // If supported ol/OverlayPositioning is used, use it instead of default values
             Object.keys(posClasses).forEach(function (pos) {
                 if (positioning === posClasses[pos]) {
                     var popupDirection = positioning.split('-');
@@ -697,7 +694,7 @@ Oskari.clazz.define(
                     positionX = popupDirection[1];
                 }
             });
-            //TODO: popupHeaderArrow and header sizes are not included
+            // TODO: popupHeaderArrow and header sizes are not included
             // Check panY
             if (positionY === 'top') {
                 if (pixels.y + popupY + margins.bottom > mapSize.height) {
@@ -770,7 +767,7 @@ Oskari.clazz.define(
                 featureHeader = div.find('h3.myplaces_header'),
                 closeButton = div.find('div.olPopupCloseBox');
 
-            /*top arrow needs to be the same color as the header, when it's pointing out of the header (bottom and no positioning (=default))*/
+            /* top arrow needs to be the same color as the header, when it's pointing out of the header (bottom and no positioning (=default)) */
             if (jQuery(gfiHeaderArrow).hasClass('top-center')) {
                 gfiHeaderArrow.css({
                     'border-bottom-color': colourScheme.bgColour
@@ -808,17 +805,17 @@ Oskari.clazz.define(
                     .addClass(colourScheme.iconCls);
             }
 
-            /*buttons and actionlinks*/
+            /* buttons and actionlinks */
             if (colourScheme) {
                 if (colourScheme.linkColour) {
                     jQuery(div).find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
                 }
                 if (colourScheme.buttonBgColour) {
-                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background','none');
-                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background', 'none');
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color', colourScheme.buttonBgColour);
                 }
                 if (colourScheme.buttonLabelColour) {
-                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color', colourScheme.buttonLabelColour);
                 }
             }
         },
@@ -830,13 +827,13 @@ Oskari.clazz.define(
                 if (me._popups.hasOwnProperty(pid)) {
                     popup = this._popups[pid];
                     if (popup.isInMobileMode) {
-                        //are we moving away from the mobile mode? -> close and rerender.
+                        // are we moving away from the mobile mode? -> close and rerender.
                         if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
                             popup.popup.close(true);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
                         }
                     } else {
-                        //are we moving into the mobile mode? -> close old and rerender
+                        // are we moving into the mobile mode? -> close old and rerender
                         if (me._isInMobileMode(popup.options.mobileBreakpoints)) {
                             me.close(pid);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);

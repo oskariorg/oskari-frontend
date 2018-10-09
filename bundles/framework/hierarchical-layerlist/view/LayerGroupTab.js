@@ -169,12 +169,10 @@ Oskari.clazz.define(
                             count.visible += subCount.visible;
                             count.all += subCount.all;
                         }
-
                     });
 
                     return count;
                 };
-
 
                 return getLayersCount(node);
             };
@@ -222,7 +220,6 @@ Oskari.clazz.define(
                 me._addSubgroupSubgroupTools();
                 me._addLayerTools();
             }, 200);
-
         },
         /**
          * Add group tools
@@ -250,7 +247,6 @@ Oskari.clazz.define(
                     grouptool.handler(jQuery(this), groupId);
                 });
                 groupTools.append(tool);
-
             });
         },
         /**
@@ -280,7 +276,6 @@ Oskari.clazz.define(
                     subgrouptool.handler(jQuery(this), groupId, parentGroupId);
                 });
                 subgroupTools.append(tool);
-
             });
         },
         /**
@@ -310,7 +305,6 @@ Oskari.clazz.define(
                     subgrouptool.handler(jQuery(this), groupId, parentGroupId);
                 });
                 subgroupSubgroupTools.append(tool);
-
             });
         },
         /**
@@ -340,7 +334,6 @@ Oskari.clazz.define(
                     layertool.handler(jQuery(this), groupId, layerId);
                 });
                 layerTools.append(tool);
-
             });
         },
         /**
@@ -353,7 +346,6 @@ Oskari.clazz.define(
          * @private
          */
         _getJsTreeObject: function (text, type, opts, children, tools) {
-
             var jstreeObject = {
                 text: text + '<div class="' + type + '-tools"></div>',
                 type: type,
@@ -380,7 +372,7 @@ Oskari.clazz.define(
          * Creates info icon for given oskarifield
          */
         _createInfoIcon: function (oskarifield) {
-            //"use strict";
+            // "use strict";
             var me = this,
                 infoIcon = jQuery('<div class="icon-info"></div>'),
                 indicatorCont = oskarifield.find('.field-description');
@@ -404,7 +396,6 @@ Oskari.clazz.define(
                     dialog.close(true);
                 });
                 dialog.show(me.instance.getLocalization('filter').text, desc, [okBtn]);
-
             });
         },
         /**
@@ -552,7 +543,6 @@ Oskari.clazz.define(
                 icon.attr('title', tooltips['type-wms']);
             }
 
-
             if (!layer.getMetadataIdentifier()) {
                 subLayers = layer.getSubLayers();
                 subLmeta = false;
@@ -595,7 +585,6 @@ Oskari.clazz.define(
             return layerDiv;
         },
 
-
         /**
          * Update container height
          * @method  _updateContainerHeight
@@ -620,12 +609,10 @@ Oskari.clazz.define(
                 me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
-
             me._notifierService.on('AfterMapLayerRemoveEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 me._toggleLayerCheckboxes(layer.getId(), false);
             });
-
 
             me._notifierService.on('MapSizeChangedEvent', function (evt) {
                 me._updateContainerHeight(evt.getHeight());
@@ -655,7 +642,6 @@ Oskari.clazz.define(
                 me.getJsTreeElement().jstree().uncheck_node(layers);
             }
         },
-
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
@@ -697,7 +683,7 @@ Oskari.clazz.define(
          * @param  {Object} state state
          */
         setState: function (state) {
-            //"use strict";
+            // "use strict";
             if (!state) {
                 return;
             }
@@ -744,7 +730,6 @@ Oskari.clazz.define(
                     me.getJsTreeElement().jstree(true).search(field.getValue());
                     timer = null;
                 }, 300);
-
             }, true);
 
             me.filterField = field;
@@ -797,7 +782,6 @@ Oskari.clazz.define(
                 }
                 // uncheck nodes
                 else if (isChecked) {
-
                     tree.jstree().uncheck_node(node);
 
                     layerId = me._getNodeRealId(node);
@@ -851,11 +835,10 @@ Oskari.clazz.define(
                         }
                     });
                 } else {
-                    //If there are already 10 or more layers on the map show a warning to the user when adding more layers.
+                    // If there are already 10 or more layers on the map show a warning to the user when adding more layers.
                     // selected layers
 
                     if ((layersChecked.length > 10 || allSelectedLayersLength >= 10)) {
-
                         var text = me.instance.getLocalization('manyLayersWarning').text;
                         if (allSelectedLayersLength >= 10) {
                             text = me.instance.getLocalization('manyLayersWarningAlready').text;
@@ -900,7 +883,6 @@ Oskari.clazz.define(
             return this.tabPanel.getContainer().find('.hierarchical-layerlist-tree');
         },
 
-
         /**
          * Show layer groups
          * @method  @public showLayerGroups
@@ -916,7 +898,7 @@ Oskari.clazz.define(
             }
             var layerTree = me.templates.layerTree.clone();
 
-            var getLayerConf = function (layer,group) {
+            var getLayerConf = function (layer, group) {
                 if (layer) {
                     var opts = {
                         a_attr: {
@@ -945,14 +927,13 @@ Oskari.clazz.define(
                         }
                     };
 
-                    addChildren(maplayerGroup,subgroupChildren, groupPrefix + 'subgroup-');
+                    addChildren(maplayerGroup, subgroupChildren, groupPrefix + 'subgroup-');
 
                     return me._getJsTreeObject(Oskari.getLocalized(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
                         groupPrefix + 'subgroup',
                         opts, subgroupChildren);
                 }
                 return null;
-
             };
 
             me.tabPanel.getContainer().append(layerTree);
@@ -974,8 +955,7 @@ Oskari.clazz.define(
                         if (layerConf) {
                             groupChildren.push(layerConf);
                         }
-                    }
-                    else {
+                    } else {
                         var groupConf = getSubgroupConf(me._mapLayerService.getAllLayerGroups(children.id), group, groupPrefix);
                         if (groupConf) {
                             groupChildren.push(groupConf);
@@ -992,7 +972,7 @@ Oskari.clazz.define(
                         'data-group-id': group.getId()
                     }
                 };
-                //Create root group
+                // Create root group
                 if (!group.hasSelectable()) {
                     extraOpts.a_attr.class = 'no-checkbox';
                 }
@@ -1041,8 +1021,7 @@ Oskari.clazz.define(
                 });
             });
 
-
-            me.getJsTreeElement().on('redraw.jstree',function () {
+            me.getJsTreeElement().on('redraw.jstree', function () {
                 me._updateAllTools();
                 me._updateLayerCountsAndGroupsVisibility(true);
             });

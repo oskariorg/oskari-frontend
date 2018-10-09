@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'normal', value: 2000 },
             { key: 'slow', value: 3000 }
         ],
-        __skipOptions : [
+        __skipOptions: [
             { key: 'none', value: '' },
             { key: 'minute', value: 'minutes' },
             { key: 'hour', value: 'hours' },
@@ -187,7 +187,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
             if (targetTime.toISOString() > this._uiState.rangeEnd) {
                 return null;
-
             } else if (index >= this._uiState.times.length - 1) {
                 return null;
             }
@@ -511,7 +510,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             var handle = svg.select('g.drag-handle')
                 .attr('transform', 'translate(' + scaleSubset(new Date(this._uiState.currentTime)) + ',80)')
                 .on('.drag', null); // remove old event handlers
-
 
             function renderHandle () {
                 var newX = scaleSubset(new Date(me._uiState.currentTime));

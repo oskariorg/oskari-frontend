@@ -105,7 +105,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
             sandbox.request(me, request);
 
             this.mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
         },
         /**
          * @method init
@@ -135,7 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -167,10 +165,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
                 }
             },
-            'MapClickedEvent' : function (evt) {
+            'MapClickedEvent': function (evt) {
                 var me = this,
                     x = evt.getMouseX(),
                     y = evt.getMouseY();
@@ -178,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
                     me.cropping.croppingLayersHighlight(x, y);
                 }
             },
-            'AfterMapLayerAddEvent' : function (event) {
+            'AfterMapLayerAddEvent': function (event) {
                 var me = this;
                 var map = me.mapModule.getMap();
 
@@ -204,7 +201,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
 
             request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
-
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -251,7 +247,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
         getDescription: function () {
             return this.getLocalization('desc');
         },
-        addBasketNotify:function () {
+        addBasketNotify: function () {
             this.plugins['Oskari.userinterface.Tile'].refresh();
         }
 

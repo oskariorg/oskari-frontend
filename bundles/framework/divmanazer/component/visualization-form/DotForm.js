@@ -150,7 +150,7 @@ Oskari.clazz.define(
 
             var markers = Oskari.getMarkers();
 
-            for (var i = 0;i < markers.length;i++) {
+            for (var i = 0; i < markers.length; i++) {
                 btnContainer = this.templateSymbolButton.clone();
 
                 var svgObj = jQuery(markers[i].data);
@@ -240,11 +240,11 @@ Oskari.clazz.define(
                 var messageContainer = this.templateMessage.clone();
                 messageContainer.find('label.message-label').html(this.loc.message.label);
                 var input = messageContainer.find('input.message-text');
-                input.attr('placeholder',this.loc.message.hint);
+                input.attr('placeholder', this.loc.message.hint);
                 input.on('input', function () {
                     me.values.message = jQuery(this).val();
                 });
-                input.on('keypress' ,function (evt) {
+                input.on('keypress', function (evt) {
                     if (evt.keyCode === 13) {
                         saveButtonHandler();
                     }
@@ -378,7 +378,6 @@ Oskari.clazz.define(
                 x: x,
                 y: y
             });
-
 
             preview.empty();
             preview.append(previewTemplate);

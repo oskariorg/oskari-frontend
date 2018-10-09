@@ -62,7 +62,6 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                 model: this.model
             }));
             this._renderLayerTools();
-
         },
 
         /**
@@ -109,7 +108,6 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                                 additionalUuids.push({
                                     uuid: subUuid
                                 });
-
                             }
                         }
                     }
@@ -192,7 +190,6 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                             return Oskari.util.naturalSort(a.name, b.name);
                         });
                         callback();
-
                     }
                 });
             } else {
@@ -208,8 +205,8 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
             var me = this,
                 element = jQuery(e.currentTarget);
 
-            me.getDataproviders(false,function () {
-                //show layer settings
+            me.getDataproviders(false, function () {
+                // show layer settings
                 if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
                     e.stopPropagation();
                     if (!me.instance.locale) {
@@ -221,7 +218,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     // create AdminLayerSettingsView
                     var settings = new AdminLayerSettingsView({
                         model: me.model,
-                        supportedTypes : me.supportedTypes,
+                        supportedTypes: me.supportedTypes,
                         instance: me.options.instance,
                         classes: me.classNames,
                         layerTabModel: me.options.layerTabModel,
@@ -235,7 +232,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     element.append(settings.$el);
                     element.find('.admin-add-layer').addClass('show-edit-layer');
                 } else {
-                    //hide layer settings
+                    // hide layer settings
                     element.find('.admin-add-layer').removeClass('show-edit-layer');
                     element.find('.admin-add-layer').remove();
                 }
@@ -257,7 +254,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                 // create AdminLayerSettingsView
             var settings = new AdminLayerSettingsView({
                 model: subLayer,
-                supportedTypes : me.supportedTypes,
+                supportedTypes: me.supportedTypes,
                 instance: this.options.instance,
                 layerTabModel: this.options.layerTabModel,
                 baseLayerId: parentId,
@@ -280,8 +277,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                 };
             if (subLayer && subLayer.getId && subLayer.getId()) {
                 saveButton.setTitle(this.instance.getLocalization('save'));
-            }
-            else {
+            } else {
                 saveButton.setTitle(this.instance.getLocalization('add'));
             }
             saveButton.addClass('primary');
@@ -339,7 +335,6 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
             if (element.parents('.admin-add-layer').hasClass('show-edit-layer')) {
                 element.parents('.admin-add-layer').removeClass('show-edit-layer');
                 element.parents('.admin-add-layer').remove();
-
             }
         },
 

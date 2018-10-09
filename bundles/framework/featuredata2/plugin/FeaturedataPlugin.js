@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._flyoutOpen = undefined;
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-featuredata': {
                     iconCls: 'mobile-info-marker',
                     tooltip: '',
@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                             var flyout = me._instance.plugins['Oskari.userinterface.Flyout'];
                             jQuery(flyout.container.parentElement.parentElement).removeClass('mobile');
                         } else {
-                            //kill open popups
+                            // kill open popups
                             me.getSandbox().getService('Oskari.userinterface.component.PopupService').closeAllPopups(false);
 
                             me._openFeatureDataFlyout();
@@ -118,8 +118,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
         },
 
-        teardownUI : function () {
-            //remove old element
+        teardownUI: function () {
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
             this._instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
             var mobileDefs = this.getMobileDefs();
@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for (var c = 0;c < classList.length;c++) {
+            for (var c = 0; c < classList.length; c++) {
                 var className = classList[c];
                 if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
@@ -226,25 +226,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
             el.addClass(styleClass);
         },
-        showLoadingIndicator : function (blnLoad) {
+        showLoadingIndicator: function (blnLoad) {
             if (!this.getElement()) {
                 return;
             }
             if (blnLoad) {
                 this.getElement().addClass('loading');
-            }
-            else {
+            } else {
                 this.getElement().removeClass('loading');
             }
         },
-        showErrorIndicator : function (blnLoad) {
+        showErrorIndicator: function (blnLoad) {
             if (!this.getElement()) {
                 return;
             }
             if (blnLoad) {
                 this.getElement().addClass('error');
-            }
-            else {
+            } else {
                 this.getElement().removeClass('error');
             }
         },
@@ -271,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
 
         _openFeatureDataFlyout: function () {
             this._instance.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'detach']);
-            //set style to mobile flyout
+            // set style to mobile flyout
             var flyout = this._instance.plugins['Oskari.userinterface.Flyout'];
             jQuery(flyout.container.parentElement.parentElement).addClass('mobile');
             var mapModule = this._instance.sandbox.findRegisteredModuleInstance('MainMapModule'),

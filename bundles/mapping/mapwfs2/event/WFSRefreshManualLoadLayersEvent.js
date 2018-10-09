@@ -15,19 +15,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSRefreshManualLo
         this._layerId = layerId;
     }, {
     /** @static @property __name event name */
-        __name : 'WFSRefreshManualLoadLayersEvent',
+        __name: 'WFSRefreshManualLoadLayersEvent',
         /**
      * @method getName
      * @return {String} event name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getLayerId
      * @return int mapLayer id for  maplayer to be refreshed (option)
      */
-        getLayerId : function () {
+        getLayerId: function () {
             return this._layerId;
         }
     }, {
@@ -35,5 +35,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSRefreshManualLo
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

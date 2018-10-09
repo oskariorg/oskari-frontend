@@ -14,13 +14,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
         this._drawingMode = drawingMode;
     }, {
     /** @static @property __name event name */
-        __name : 'FeatureData.AddedFeatureEvent',
+        __name: 'FeatureData.AddedFeatureEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function () {
+        getDrawing: function () {
             return this._drawing;
         },
         /**
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
      * Returns the current drawing mode
      * @return {String}
      */
-        getDrawingMode : function () {
+        getDrawingMode: function () {
             return this._drawingMode;
         }
     }, {
@@ -44,5 +44,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

@@ -91,7 +91,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadata.MetadataSearchInstance'
                     me.drawPlugin.startDrawing();
                 }
             }));
-
         },
 
         /**

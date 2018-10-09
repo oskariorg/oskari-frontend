@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
             return;
         }
 
-        var info = jQuery(this.infoView ({
+        var info = jQuery(this.infoView({
             desc: this.loc.projectionCode[this.projection.srsName].desc,
             img: this.createClassSelector(this.projection.srsName) + '.png'
         }));

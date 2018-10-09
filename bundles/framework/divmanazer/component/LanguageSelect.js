@@ -11,7 +11,6 @@ Oskari.clazz.define(
      * @method create called automatically on construction
      */
     function () {
-
         var me = this,
             i,
             languages,

@@ -15,12 +15,12 @@ Oskari.clazz.define(
     function () {
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'UserLayersLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
+        __name: 'UserLayersLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'userlayer',
+        layertype: 'userlayer',
 
-        getLayerTypeSelector : function () {
+        getLayerTypeSelector: function () {
             return this.layertype;
         },
         /**
@@ -70,12 +70,12 @@ Oskari.clazz.define(
                         // Avoid AxisOrder issues by not using WMS 1.3.0
                         'VERSION': '1.1.1'
                     },
-                    crossOrigin : layer.getAttributes('crossOrigin')
+                    crossOrigin: layer.getAttributes('crossOrigin')
                 }),
                 visible: layer.isInScale(map.getMapScale()) && layer.isVisible(),
                 opacity: layer.getOpacity() / 100
             };
-            //minresolution === maxscale and vice versa...
+            // minresolution === maxscale and vice versa...
             if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
                 model.minResolution = map.getResolutionForScale(layer.getMaxScale());
             }

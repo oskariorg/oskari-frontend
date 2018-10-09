@@ -12,11 +12,11 @@ Oskari.clazz.define(
         this._log = Oskari.log(this.getName());
     },
     {
-        __name : 'WmsLayerPlugin',
-        _clazz : 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
-        layertype : 'wmslayer',
+        __name: 'WmsLayerPlugin',
+        _clazz: 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
+        layertype: 'wmslayer',
 
-        getLayerTypeSelector : function () {
+        getLayerTypeSelector: function () {
             return 'WMS';
         },
 
@@ -44,7 +44,6 @@ Oskari.clazz.define(
                 layerIdPrefix = 'layer_',
                 sandbox = this.getSandbox();
             var me = this;
-
 
             // insert layer or sublayers into array to handle them identically
             if (subLayers.length > 0) {
@@ -123,8 +122,6 @@ Oskari.clazz.define(
                 olLayers.push(openLayer);
 
                 me._log.debug('#!#! CREATED OPENLAYER.LAYER.WMS for ' + oskariLayer.getId());
-
-
             });
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
@@ -145,7 +142,6 @@ Oskari.clazz.define(
 
             layer.events.register('tileerror', layer, function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true);
-
             });
         },
         /**
@@ -192,7 +188,7 @@ Oskari.clazz.define(
 
                 var loopLayer = layerList[i];
 
-                //url might've changed (case forceProxy). Update that.
+                // url might've changed (case forceProxy). Update that.
                 oLayers[i].setUrl(_.clone(loopLayer.getLayerUrls()));
 
                 oLayers[i].mergeNewParams(loopLayer.getParams());

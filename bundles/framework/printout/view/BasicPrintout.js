@@ -412,7 +412,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                         el.attr('value', scale);
                         el.html('1:' + scale);
                         if (scale === currentScale) {
-                            el.attr('selected',true);
+                            el.attr('selected', true);
                         }
                         selection.find('select').append(el);
                     });
@@ -756,7 +756,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (selections.scaleText) {
                 url = url + '&scaleText=' + selections.scaleText;
             }
-
 
             // We need to use the POST method if there's GeoJSON or tile data.
             if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson) {

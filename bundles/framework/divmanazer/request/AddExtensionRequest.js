@@ -4,13 +4,13 @@
 Oskari.clazz.define('Oskari.userinterface.request.AddExtensionRequest', function (extension) {
     this._extension = extension;
 }, {
-    __name : 'userinterface.AddExtensionRequest',
-    getName : function () {
+    __name: 'userinterface.AddExtensionRequest',
+    getName: function () {
         return this.__name;
     },
-    getExtension : function () {
+    getExtension: function () {
         return this._extension;
     }
 }, {
-    'protocol' : ['Oskari.mapframework.request.Request']
+    'protocol': ['Oskari.mapframework.request.Request']
 });

@@ -27,7 +27,6 @@ Oskari.clazz.define(
         };
 
         me.log = Oskari.log('Oskari.mapframework.bundle.infobox.plugin.mapmodule.OpenlayersPopupPlugin');
-
     }, {
 
         /**
@@ -138,7 +137,7 @@ Oskari.clazz.define(
                 contentData = currPopup.contentData.concat(contentData);
                 currPopup.contentData = contentData;
             }
-            me._renderPopup(id, contentData, title, {lon:lon, lat:lat}, options, refresh, additionalTools, marker);
+            me._renderPopup(id, contentData, title, {lon: lon, lat: lat}, options, refresh, additionalTools, marker);
         },
 
         /**
@@ -156,7 +155,6 @@ Oskari.clazz.define(
                 popupDOM;
 
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
-
 
             if (!options.mobileBreakpoints) {
                 options.mobileBreakpoints = me._mobileBreakpoints;
@@ -194,8 +192,8 @@ Oskari.clazz.define(
                 popup.onClose(function () {
                     me.close(id);
                 });
-                //clear the ugly backgroundcolor from the popup content
-                jQuery(popup.dialog).css('background-color','inherit');
+                // clear the ugly backgroundcolor from the popup content
+                jQuery(popup.dialog).css('background-color', 'inherit');
             } else {
                 popupType = 'desktop';
 
@@ -301,7 +299,6 @@ Oskari.clazz.define(
                     return false;
                 }
             }
-
         },
         _showInMobileMode: function (popup) {
             popup.makeModal();
@@ -339,7 +336,7 @@ Oskari.clazz.define(
             headerWrapper.append(header);
             headerWrapper.append(closeButton);
 
-            //add additional btns
+            // add additional btns
             jQuery.each(additionalTools, function (index, key) {
                 var additionalButton = me._headerAdditionalButton.clone();
                 additionalButton.attr({
@@ -542,7 +539,7 @@ Oskari.clazz.define(
         },
 
         _adaptPopupSize: function (olPopupId, isOld) {
-            //viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
+            // viewport = jQuery(this.getMapModule().getMapViewPortDiv()),
             var size = this.getMapModule().getSize(),
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left'));
@@ -596,7 +593,6 @@ Oskari.clazz.define(
             if (!isOverThanMax) {
                 popup.css('min-height', 'inherit');
             }
-
         },
 
         /**
@@ -701,17 +697,17 @@ Oskari.clazz.define(
                     .removeClass('icon-close-white icon-close')
                     .addClass(colourScheme.iconCls);
             }
-            /*buttons and actionlinks*/
+            /* buttons and actionlinks */
             if (colourScheme) {
                 if (colourScheme.linkColour) {
                     jQuery(div).find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
                 }
                 if (colourScheme.buttonBgColour) {
-                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background','none');
-                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background', 'none');
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('background-color', colourScheme.buttonBgColour);
                 }
                 if (colourScheme.buttonLabelColour) {
-                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                    jQuery(div).find('span.infoboxActionLinks').find('input:button').css('color', colourScheme.buttonLabelColour);
                 }
             }
         },
@@ -723,13 +719,13 @@ Oskari.clazz.define(
                 if (me._popups.hasOwnProperty(pid)) {
                     popup = this._popups[pid];
                     if (popup.isInMobileMode) {
-                        //are we moving away from the mobile mode? -> close and rerender.
+                        // are we moving away from the mobile mode? -> close and rerender.
                         if (!me._isInMobileMode(popup.options.mobileBreakpoints)) {
                             popup.popup.close(true);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);
                         }
                     } else {
-                        //are we moving into the mobile mode? -> close old and rerender
+                        // are we moving into the mobile mode? -> close old and rerender
                         if (me._isInMobileMode(popup.options.mobileBreakpoints)) {
                             me.close(pid);
                             me._renderPopup(pid, popup.contentData, popup.title, popup.lonlat, popup.options, false, []);

@@ -16,42 +16,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
         this._content = content;
         this._first = !!first;
         this._id = id;
-    },{
+    }, {
     /** @static @property __name request name */
-        __name : 'PersonalData.AddTabRequest',
+        __name: 'PersonalData.AddTabRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {String} tab title
      */
-        getId : function () {
+        getId: function () {
             return this._id;
         },
         /**
      * @method getTitle
      * @return {String} tab title
      */
-        getTitle : function () {
+        getTitle: function () {
             return this._title;
         },
         /**
      * @method getContent
      * @return {String} content for the tab to be added
      */
-        getContent : function () {
+        getContent: function () {
             return this._content;
         },
         /**
      * @method isFirst
      * @return {Boolean} is tab added as first
      */
-        isFirst : function () {
+        isFirst: function () {
             return this._first;
         }
     }, {
@@ -59,5 +59,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

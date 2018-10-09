@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
      */
 
     function (instance, locale) {
-
         this.instance = instance;
         this.locale = locale;
         this.container = null;

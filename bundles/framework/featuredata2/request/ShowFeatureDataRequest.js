@@ -18,19 +18,19 @@ Oskari.clazz
             this._id = id;
         }, {
         /** @static @property __name request name */
-            __name : 'ShowFeatureDataRequest',
+            __name: 'ShowFeatureDataRequest',
             /**
          * @method getName
          * @return {String} request name
          */
-            getName : function () {
+            getName: function () {
                 return this.__name;
             },
             /**
          * @method getId
          * @return {String} identifier so we can manage select correct tab
          */
-            getId : function () {
+            getId: function () {
                 return this._id;
             }
         }, {
@@ -38,5 +38,5 @@ Oskari.clazz
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-            'protocol' : ['Oskari.mapframework.request.Request']
+            'protocol': ['Oskari.mapframework.request.Request']
         });

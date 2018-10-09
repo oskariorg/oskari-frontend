@@ -13,21 +13,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent',
         this._contentId = _contentId;
     }, {
     /** @static @property __name event name */
-        __name : 'InfoBox.InfoBoxEvent',
+        __name: 'InfoBox.InfoBoxEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
-        getId : function () {
+        getId: function () {
             return this._popupId;
         },
-        isOpen : function () {
+        isOpen: function () {
             return this._isOpen;
         },
-        getContentId : function () {
+        getContentId: function () {
             return this._contentId;
         },
         /**
@@ -46,5 +46,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

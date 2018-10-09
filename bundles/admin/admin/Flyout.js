@@ -8,13 +8,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
     function () {
         this.tabsContainer = null;
     }, {
-        tabs : [{
-            'id' : 'defaultviews',
-            'clazz' : 'Oskari.admin.bundle.admin.DefaultViews'
+        tabs: [{
+            'id': 'defaultviews',
+            'clazz': 'Oskari.admin.bundle.admin.DefaultViews'
         }],
 
         /* App specific methods */
-        createUI : function () {
+        createUI: function () {
             if (this.tabsContainer) {
                 return;
             }
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
             });
             tabsContainer.insertTo(this.getEl());
         },
-        __createTab : function (tabDef) {
+        __createTab: function (tabDef) {
             var tab = Oskari.clazz.create(tabDef.clazz, this.locale[tabDef.id] || {}, this.instance);
             tab.setId(tabDef.id);
             if (tabDef.title) {
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
          * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
          *      request to handle
          */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             this.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
         }
     }, {

@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
                     me._toggleProjectionSelectionConfirmation(false);
                 });
 
-                //set default value
+                // set default value
                 me._resetProjectionSelect();
             }
         },
@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
             var me = this,
                 currentProjection = me._mapmodule.getProjection();
 
-            //select the option with projection text
+            // select the option with projection text
             jQuery(this._projectionSelect).find('option').filter(function () {
                 return jQuery(this).text() === currentProjection;
             }).prop('selected', true);

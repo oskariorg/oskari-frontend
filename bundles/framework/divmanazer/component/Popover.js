@@ -17,8 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================== */
-!function ($) {
-
+!(function ($) {
     /* TOOLTIP PUBLIC CLASS DEFINITION
      * =============================== */
 
@@ -107,7 +106,7 @@
                 if (this.options.animation) {
                     $tip.addClass('fade');
                 }
-                placement = /*typeof this.options.placement == 'function' ? this.options.placement.call(this, $tip[0], this.$element[0]) : this.options.placement*/
+                placement = /* typeof this.options.placement == 'function' ? this.options.placement.call(this, $tip[0], this.$element[0]) : this.options.placement */
                     this.options.placement.apply(this.options.scope);
                 inside = /in/.test(placement);
 
@@ -148,7 +147,6 @@
                 }
 
                 $tip.css(tp).addClass(placement).addClass('in');
-
             }
         },
         isHTML: function (text) {
@@ -331,7 +329,6 @@
             this.data = null;
             this.shown = false;
             this.placement = 'bottom';
-
         }, {
             templates: {
                 'container': '<div class="oskari-popover-container"/>'
@@ -367,7 +364,6 @@
                         'trigger': 'manual',
                         'placement': me.getPlacement
                     });
-
                 } else {
                     me.data.attach(me.$container);
                 }
@@ -404,5 +400,4 @@
                 return this.placement;
             }
         });
-
-}(window.jQuery);
+}(window.jQuery));

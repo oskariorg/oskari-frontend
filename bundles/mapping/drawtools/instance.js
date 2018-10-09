@@ -34,19 +34,19 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @static
      * @property __name
      */
-        __name : 'DrawTools',
+        __name: 'DrawTools',
 
         /**
      * @static
      * @property __validShapeTypes
      */
-        __validShapeTypes : ['Point','Circle','Polygon','Box','Square','LineString'],
+        __validShapeTypes: ['Point', 'Circle', 'Polygon', 'Box', 'Square', 'LineString'],
 
         /**
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -54,27 +54,27 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @param {Oskari.Sandbox} sandbox
      * Sets the sandbox reference to this component
      */
-        setSandbox : function (sbx) {
+        setSandbox: function (sbx) {
             this.sandbox = sbx;
         },
         /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function () {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
      * @method update
      * implements BundleInstance protocol update method - does nothing atm
      */
-        update : function () {
+        update: function () {
         },
         /**
      * @method start
      * implements BundleInstance protocol start methdod
      */
-        start : function () {
+        start: function () {
             var me = this;
             // Should this not come as a param?
             var sandbox = Oskari.getSandbox();
@@ -100,8 +100,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @method init
      * implements Module protocol init method - initializes request handlers
      */
-        init : function () {
-
+        init: function () {
         // initialize drawPlugin
             this.drawPlugin = Oskari.clazz.create('Oskari.mapping.drawtools.plugin.DrawPlugin');
             return null;
@@ -112,7 +111,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      *      reference to the application core (reference sandbox core.getSandbox())
      * @param {Oskari.mapping.drawtools.request.StartDrawingRequest|Oskari.mapping.drawtools.request.StopDrawingRequest} request
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             if (request.getName() === 'DrawTools.StartDrawingRequest') {
                 var shapeType = request.getShape();
                 if (!this.isValidShapeType(shapeType)) {
@@ -120,8 +119,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
                     return;
                 }
                 this.drawPlugin.draw(request.getId(), shapeType, request.getOptions());
-            }
-            else if (request.getName() === 'DrawTools.StopDrawingRequest') {
+            } else if (request.getName() === 'DrawTools.StopDrawingRequest') {
                 this.drawPlugin.stopDrawing(request.getId(), request.isClearCurrent(), request.supressEvent());
             }
         },
@@ -139,14 +137,14 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @param {Oskari.mapframework.event.Event} event a Oskari event object
      * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
      */
-        onEvent : function (event) {
+        onEvent: function (event) {
         },
 
         /**
      * @method stop
      * implements BundleInstance protocol stop method
      */
-        stop : function () {
+        stop: function () {
             var me = this;
             // TODO: maybe stop/unregister drawplugin?
             me.sandbox.unregister(me);
@@ -157,5 +155,5 @@ Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
      * @property {String[]} protocol
      * @static
      */
-        protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

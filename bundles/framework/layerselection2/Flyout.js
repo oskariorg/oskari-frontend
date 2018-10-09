@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
-            //set id to flyouttool-close
+            // set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
             elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselection2_flyout_oskari_flyouttool_close');
@@ -145,7 +145,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
 
         /**
@@ -186,17 +185,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 }
             });
 
-            //this blocks user inputs/selections in FF and Opera
-            /*listContainer.disableSelection();*/
+            // this blocks user inputs/selections in FF and Opera
+            /* listContainer.disableSelection(); */
 
             // RIGHTJS sortable event handling
             // TODO: get rid of sortableBinded and UNBIND?
             if (!me.sortableBinded) {
                 me.sortableBinded = true;
-                /*RightJS('.selectedLayersList').on('finish', function (event) {
+                /* RightJS('.selectedLayersList').on('finish', function (event) {
                  me._layerOrderChanged(event.index);
-                 });*/
-
+                 }); */
             }
         },
         calculateContainerHeightDuringSort: function (height) {
@@ -295,7 +293,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             } else {
                 refreshDiv.css('display', '');
             }
-
         },
 
         /**
@@ -316,9 +313,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     min: 0,
                     max: 100,
                     value: opa,
-                    /*change: function (event,ui) {
+                    /* change: function (event,ui) {
                      me._layerOpacityChanged(layer, ui.value);
-                     },*/
+                     }, */
                     slide: function (event, ui) {
                         me._layerOpacityChanged(layer, ui.value);
                     },
@@ -332,7 +329,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             if (input) {
                 input.attr('value', layer.getOpacity());
                 input.on('change paste keyup', function () {
-                    //sliderEl.slider('value', jQuery(this).val());
+                    // sliderEl.slider('value', jQuery(this).val());
                     me._layerOpacityChanged(layer, jQuery(this).val());
                 });
             }
@@ -650,7 +647,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 this._sliders[layer.getId()].slider('value', layer.getOpacity());
                 this._changeOpacityInput(layer);
             }
-
         },
 
         /**
@@ -780,7 +776,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 return false;
             });
 
-
             var closureMagic = function (tool) {
                 return function () {
                     tool.getCallback()();
@@ -883,7 +878,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 }
 
                 this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
-
             }
             // remove layer
             else {

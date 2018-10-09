@@ -41,14 +41,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 '<div class="datasource-wrapper">' +
                     '<h4></h4>' +
                     '<div class="coordinate-datasources-wrapper"></div>' +
-                //'<div class="datasource-actions-wrapper"></div>' +
+                // '<div class="datasource-actions-wrapper"></div>' +
                 '</div>'
             ),
             source2: _.template(
                 '<div class="source-select-wrapper">' +
                     '<div class="source-select">' +
-                        //'<input type="radio" id="source-${type}" value="${type}">' +
-                        //'<label for="source-${type}">' +
+                        // '<input type="radio" id="source-${type}" value="${type}">' +
+                        // '<label for="source-${type}">' +
                         '<label>' +
                             '<span/>' +
                             '${label}' +
@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
             var container = this._template.sourceWrapper2.clone();
             container.find('h4').text(loc.title);
             var sourceWrapper = container.find('.coordinate-datasources-wrapper');
-            /*var source = this._template.source({
+            /* var source = this._template.source({
                 title: this.loc('flyout.dataSource.title'),
                 file: this.loc('flyout.dataSource.file.label'),
                 keyboard: this.loc('flyout.dataSource.keyboard.label'),
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 keyboardupload: this.loc('flyout.dataSource.keyboard.info'),
                 mapInfo: this.loc('flyout.dataSource.map.info'),
                 mapButton: this.loc('actions.selectFromMap')
-            });*/
+            }); */
             this.sources.forEach(function (source) {
                 var elem = jQuery(me._template.source2({
                     type: source,
@@ -124,27 +124,27 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
                 me.sourceElems[source] = sourceSelect;
                 sourceWrapper.append(elem);
             });
-            //wrapper.append(info);
-            //wrapper.find('.selectFromMap').addClass('primary');
-            //var actions = this._template.actions({
+            // wrapper.append(info);
+            // wrapper.find('.selectFromMap').addClass('primary');
+            // var actions = this._template.actions({
             //    fileButton: this.loc('dataSource.file.action'),
             //    mapButton: this.loc('dataSource.map.action')
-            //});
-            //sourceWrapper.append(actions);
+            // });
+            // sourceWrapper.append(actions);
             this.setElement(container);
         },
         bindClickHandler: function (elem, value) {
             var me = this;
             elem.on('click', function () {
-                //elem.find('input').trigger('click');
+                // elem.find('input').trigger('click');
                 var currentValue = me.sourceSelection;
                 if (currentValue !== value) {
-                    /*elem.addClass('selected');
+                    /* elem.addClass('selected');
                     elem.find('.action').removeClass('oskari-hidden');
                     if (currentValue !== null){
                         me.sourceElems[currentValue].removeClass('selected');
                         me.sourceElems[currentValue].find('.action').addClass('oskari-hidden');
-                    }*/
+                    } */
                     me.trigger('SourceSelectChange', value);
                 } else {
                     me.trigger('SourceSelectClick', me.sourceSelection);
@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.SourceSelect',
          * @method handleRadioButtons
          * Inits the on change listeners for the radio buttons
          */
-        //TODO if source + radiobuttons are used then fix this -> trigger SourceSelectChange
+        // TODO if source + radiobuttons are used then fix this -> trigger SourceSelectChange
         handleRadioButtons: function () {
             var me = this;
             var elem = this.getElement();

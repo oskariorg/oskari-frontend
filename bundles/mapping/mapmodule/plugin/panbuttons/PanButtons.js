@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._name = 'PanButtons';
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-reset': {
                     iconCls: 'mobile-reset-map-state',
                     tooltip: '',
@@ -174,14 +174,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
-                //not found -> use the style config obtained from the mapmodule.
+                // not found -> use the style config obtained from the mapmodule.
                 var toolStyle = me.getToolStyleFromMapModule();
                 if (toolStyle !== null && toolStyle !== undefined) {
                     me.changeToolStyle(toolStyle, me.getElement());
                 }
             }
         },
-
 
         /**
          * @method changeToolStyle
@@ -200,7 +199,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (styleName === null) {
                 panButtons.removeAttr('style');
             } else {
-
                 var imgUrl = this.getImagePath(),
                     bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png';
 

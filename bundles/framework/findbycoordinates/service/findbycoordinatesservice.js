@@ -40,16 +40,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.service.FindBy
             var url = this.getUrl(options);
 
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : url,
-                error : errorCb,
-                success : successCb
+                url: url,
+                error: errorCb,
+                success: successCb
             });
         }
     }, {

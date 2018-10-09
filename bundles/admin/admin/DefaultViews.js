@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
     templates: {
         'main': _.template('<div>${ msg }<div class="grid-placeholder"></div></div>'),
         'link': _.template('<a href="javascript:void(0);" onClick="return false;">${ msg }</a>'),
-        'errorGuest' : _.template('<div>${listTitle}<ul>${list}</ul></div>'),
+        'errorGuest': _.template('<div>${listTitle}<ul>${list}</ul></div>'),
         'listItem': _.template('<li>${ msg }</li>')
     },
     /**
@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
             success: function (data) {
                 callback(data);
             },
-            error : function () {
+            error: function () {
                 me.instance.showMessage(
                     me.locale.notifications.errorTitle,
                     me.locale.notifications.errorLoadingFailed);
@@ -85,19 +85,18 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
             north: sb.getMap().getY(),
             east: sb.getMap().getX(),
             zoom: sb.getMap().getZoom(),
-            srs : sb.getMap().getSrsName(),
+            srs: sb.getMap().getSrsName(),
             selectedLayers: '[]',
-            force : !!force
+            force: !!force
         };
         // setup layers
         var layers = sb.findAllSelectedMapLayers();
         _.each(layers, function (layer) {
             // backend assumes id is in string format
-            selectedLayers.push({ id : '' + layer.getId() });
+            selectedLayers.push({ id: '' + layer.getId() });
         });
         // backend assumes selectedLayers is stringified JSON
         data.selectedLayers = JSON.stringify(selectedLayers);
-
 
         jQuery.ajax({
             type: 'POST',
@@ -107,7 +106,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
             success: function (response) {
                 me.__viewSaved(id, response);
             },
-            error : function (xhr) {
+            error: function (xhr) {
                 me.__parseError(xhr, id);
             }
         });
@@ -131,12 +130,11 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
                     return;
                 }
             }
-
         } catch (err) { }
         this.__showGenericErrorSave(id);
     },
-    errorHandlers : {
-        'guest_not_available' : function (data, id) {
+    errorHandlers: {
+        'guest_not_available': function (data, id) {
             var me = this,
                 sb = me.instance.getSandbox(),
                 problemLayers = data.selectedLayers;
@@ -149,12 +147,12 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
                     if (layer) {
                         msg = layer.getName();
                     }
-                    list.push(me.templates.listItem({ msg : msg }));
+                    list.push(me.templates.listItem({ msg: msg }));
                 });
 
                 var msg = this.templates.errorGuest({
-                    listTitle : this.locale.notifications.listTitle,
-                    list : list.join(' ')
+                    listTitle: this.locale.notifications.listTitle,
+                    list: list.join(' ')
                 });
                 // buttons
                 var okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
@@ -176,13 +174,13 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.DefaultViews', function (locale, 
     __showGenericErrorSave: function (id) {
         this.instance.showMessage(
             this.locale.notifications.errorTitle,
-            _.template(this.locale.notifications.errorUpdating)({id : id}));
+            _.template(this.locale.notifications.errorUpdating)({id: id}));
     },
 
     __viewSaved: function (id, data) {
         this.instance.showMessage(
             this.locale.notifications.successTitle,
-            _.template(this.locale.notifications.viewUpdated)({id : id}));
+            _.template(this.locale.notifications.viewUpdated)({id: id}));
     },
 
     /**

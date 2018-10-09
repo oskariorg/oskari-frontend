@@ -16,18 +16,17 @@ Oskari.clazz
      */
         function (enabled) {
             this._enabled = !!enabled;
-
         }, {
         /** @static @property __name request name */
-            __name : 'WfsLayerPlugin.ActivateHighlightRequest',
+            __name: 'WfsLayerPlugin.ActivateHighlightRequest',
             /**
          * @method getName
          * @return {String} request name
          */
-            getName : function () {
+            getName: function () {
                 return this.__name;
             },
-            isEnabled : function () {
+            isEnabled: function () {
                 return this._enabled;
             }
         }, {
@@ -35,5 +34,5 @@ Oskari.clazz
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-            'protocol' : ['Oskari.mapframework.request.Request']
+            'protocol': ['Oskari.mapframework.request.Request']
         });

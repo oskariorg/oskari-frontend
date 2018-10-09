@@ -18,7 +18,6 @@ function (FilterLayersTemplate,
     LayerRowTemplate,
     AdminLayerSettingsView,
     LayerView) {
-
     return Backbone.View.extend({
         tagName: 'div',
         className: 'tab-content',
@@ -160,7 +159,7 @@ function (FilterLayersTemplate,
                 // Loop through layer groupings
                 for (var i = 0; i < this.layerGroupingModel.layerGroups.length; ++i) {
                     var group = this.layerGroupingModel.layerGroups[i];
-                    //create groupPanel / accordion
+                    // create groupPanel / accordion
                     var groupPanel = jQuery(this.accordionTemplate({
                         title: this.layerGroupingModel.getGroupingTitle(i, Oskari.getLang()),
                         instance: this.options.instance
@@ -203,7 +202,6 @@ function (FilterLayersTemplate,
                         .append(this.__createGroupingPanel(this.options.tabId, group));
                     // add group panel to this tab
                     this.$el.append(jQuery(tab).append(groupPanel));
-
                 }
                 // add new grouping button and settings template
                 this.$el.prepend(this.filterTemplate({
@@ -219,7 +217,6 @@ function (FilterLayersTemplate,
                 } else {
                     btnConfig.title = this.options.instance.getLocalization('admin').addOrganization;
                     btnConfig.desc = this.options.instance.getLocalization('admin').addOrganizationDesc;
-
                 }
                 var groupingPanelContainer = this.$el.find('.oskarifield');
                 groupingPanelContainer.append(this.addGroupingButtonTemplate({
@@ -288,13 +285,13 @@ function (FilterLayersTemplate,
              * @method toggleGroupingSettings
              */
         toggleGroupingSettings: function (e) {
-            //show grouping settings
+            // show grouping settings
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
                 grouping = element.parents('.accordion-header');
                 // if there is no accordion-header
             if (grouping.length === 0) {
-                element.parents('.admin-add-class').removeClass('show-add-class');;
+                element.parents('.admin-add-class').removeClass('show-add-class'); ;
             }
             // if there is accordion header, toggle visibility of settings
             else {
@@ -364,7 +361,6 @@ function (FilterLayersTemplate,
                             return Oskari.util.naturalSort(a.name, b.name);
                         });
                         callback();
-
                     }
                 });
             } else {
@@ -482,7 +478,6 @@ function (FilterLayersTemplate,
             if (element.parents('.admin-add-layer').hasClass('show-add-layer')) {
                 element.parents('.admin-add-layer').removeClass('show-add-layer');
                 element.parents('.admin-add-layer').remove();
-
             }
         },
         /**
@@ -572,7 +567,6 @@ function (FilterLayersTemplate,
                     }
                     if (err) {
                         me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
-                        return;
                     }
                 });
             });
@@ -621,7 +615,6 @@ function (FilterLayersTemplate,
         catchClicks: function (e) {
             e.stopPropagation();
         }
-
 
     });
 });

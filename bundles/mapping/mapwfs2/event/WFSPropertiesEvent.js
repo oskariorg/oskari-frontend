@@ -16,13 +16,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
         this._fields = fields;
     }, {
     /** @static @property __name event name */
-        __name : 'WFSPropertiesEvent',
+        __name: 'WFSPropertiesEvent',
 
         /**
      * @method getName
      * @return {String} event name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getLayer
      * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-        getLayer : function () {
+        getLayer: function () {
             return this._layer;
         },
 
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getLocales
      * @return {String[]} locales
      */
-        getLocales : function () {
+        getLocales: function () {
             return this._locales;
         },
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @method getFields
      * @return {String[]} fields
      */
-        getFields : function () {
+        getFields: function () {
             return this._fields;
         }
     }, {
@@ -54,5 +54,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSPropertiesEvent
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

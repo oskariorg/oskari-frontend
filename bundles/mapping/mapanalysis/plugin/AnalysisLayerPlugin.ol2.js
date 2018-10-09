@@ -17,12 +17,12 @@ Oskari.clazz.define(
         }
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'AnalysisLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
+        __name: 'AnalysisLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'analysislayer',
+        layertype: 'analysislayer',
 
-        getLayerTypeSelector : function () {
+        getLayerTypeSelector: function () {
             return 'ANALYSIS';
         },
 
@@ -135,7 +135,7 @@ Oskari.clazz.define(
             });
         }
     }, {
-        'extend' : ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer for which to parse geometry
      *
      */
-        _parseGeometryForLayer : function (layer) {
+        _parseGeometryForLayer: function (layer) {
         // parse geometry if available
             if (layer.getGeometry && layer.getGeometry().length === 0) {
                 var layerWKTGeom = layer.getGeometryWKT();
@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer to check against
      * @return {Boolean} true if geometry is visible or cant determine if it isnt
      */
-        isInGeometry : function (layer) {
+        isInGeometry: function (layer) {
             var geometries = layer.getGeometry();
             if (!geometries) {
                 return true;
@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
      *            layer layer to check against
      * @param {Boolean} isRequest if MapLayerVisibilityRequest, then trigger always change because layer's visibility has changed
      */
-        handleMapLayerVisibility : function (layer, isRequest) {
+        handleMapLayerVisibility: function (layer, isRequest) {
             var scaleOk = layer.isVisible();
             var geometryMatch = layer.isVisible();
             var triggerChange = (isRequest === true);

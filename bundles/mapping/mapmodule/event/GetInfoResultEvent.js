@@ -11,19 +11,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.GetInfoResultEve
         this._data = data;
     }, {
     /** @static @property __name event name */
-        __name : 'GetInfoResultEvent',
+        __name: 'GetInfoResultEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
 
         /**
      * @method getData
      */
-        getData : function () {
+        getData: function () {
             return this._data;
         }
     }, {
@@ -31,5 +31,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.GetInfoResultEve
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

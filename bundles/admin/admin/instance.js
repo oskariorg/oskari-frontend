@@ -27,15 +27,14 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminBundleInstance',
                 this._dialog.moveTo(location.target, location.align);
             }
         },
-        afterStart : function () {
-
+        afterStart: function () {
             // register request handler
             this.getSandbox().requestHandler('Admin.AddTabRequest', this.getFlyout());
         },
         /**
          * Closes the message dialog if one is open
          */
-        closeDialog : function () {
+        closeDialog: function () {
             if (this._dialog) {
                 this._dialog.close(true);
                 this._dialog = null;

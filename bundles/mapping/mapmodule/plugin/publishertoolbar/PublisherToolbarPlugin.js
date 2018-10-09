@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me.activeTool;
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-publishedtoolbar': {
                     iconCls: 'mobile-menu',
                     tooltip: '',
@@ -49,7 +49,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         };
 
         me._buttons = conf.buttons || [];
-
     }, {
         // templates for tools-mapplugin
         templates: {
@@ -88,9 +87,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             me.template = jQuery(me.templates.main);
 
-            /////////////////////////////////
+            /// //////////////////////////////
             // ADD TOOL CONFIGURATION HERE //
-            /////////////////////////////////
+            /// //////////////////////////////
             me.buttonGroups = [
                 {
                     'name': 'basictools',
@@ -281,10 +280,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             return el;
         },
 
-        teardownUI : function () {
+        teardownUI: function () {
             var me = this;
 
-            //remove old element
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
 
             if (me.popup && me.popup.isVisible()) {
@@ -329,13 +328,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 if (!div) {
                     return;
                 }
-                //no default exists for the menu icon, using rounded-dark instead...
+                // no default exists for the menu icon, using rounded-dark instead...
                 if (!toolStyle) {
                     toolStyle = 'rounded-dark';
                 }
 
                 var icon = div.find('.icon');
-
 
                 if (toolStyle === null) {
                     icon.removeAttr('style');
@@ -343,8 +341,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     icon.removeClass();
                     icon.addClass('icon menu-' + toolStyle);
                 }
-
-
             };
 
             if (!toolbarNotReady && isMobile) {
@@ -355,7 +351,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 changeToolStyle();
                 me._bindIcon();
             }
-
         },
 
         _createToolbar: function (mapInMobileMode) {
@@ -384,7 +379,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 );
                 sandbox.request(me.getName(), request);
-
             }
         },
 
@@ -461,7 +455,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     }
                 }
             }
-
         },
 
         _bindIcon: function () {
@@ -533,12 +526,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                         }
                     );
                     sandbox.request(me.getName(), request);
-
                 }
             }
-
         },
-
 
         setToolbarContainer: function () {
             var me = this,

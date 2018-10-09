@@ -1,5 +1,4 @@
 Oskari.clazz.define('Oskari.analysis.bundle.analyse.request.AnalyseRequestHandler', function (sandbox, handlerFunc) {
-
     this.sandbox = sandbox;
     this.cb = handlerFunc;
     this._log = Oskari.log('AnalyseRequestHandler');

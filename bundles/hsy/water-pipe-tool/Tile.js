@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Tile',
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function () {
+        getName: function () {
             return 'Oskari.hsy.bundle.waterPipeTool.Tile';
         },
         /**
@@ -37,42 +37,42 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Tile',
      *
      * Interface method implementation
      */
-        setEl : function (el, width, height) {
+        setEl: function (el, width, height) {
             this.container = jQuery(el);
         },
         /**
      * @method startPlugin
      * Interface method implementation, calls #refresh()
      */
-        startPlugin : function () {
+        startPlugin: function () {
             this.refresh();
         },
         /**
      * @method stopPlugin
      * Interface method implementation, clears the container
      */
-        stopPlugin : function () {
+        stopPlugin: function () {
             this.container.empty();
         },
         /**
      * @method getTitle
      * @return {String} localized text for the title of the tile
      */
-        getTitle : function () {
+        getTitle: function () {
             return this.instance.getLocalization('title');
         },
         /**
      * @method getDescription
      * @return {String} localized text for the description of the tile
      */
-        getDescription : function () {
+        getDescription: function () {
             return this.instance.getLocalization('desc');
         },
         /**
      * @method getOptions
      * Interface method implementation, does nothing atm
      */
-        getOptions : function () {
+        getOptions: function () {
 
         },
         /**
@@ -81,13 +81,13 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Tile',
      *      state that this component should use
      * Interface method implementation, does nothing atm
      */
-        setState : function (state) {
+        setState: function (state) {
         },
         /**
      * @method refresh
      * Creates the UI for a fresh start
      */
-        refresh : function () {
+        refresh: function () {
 
         }
     }, {
@@ -95,5 +95,5 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Tile',
      * @property {String[]} protocol
      * @static
      */
-        'protocol' : ['Oskari.userinterface.Tile']
+        'protocol': ['Oskari.userinterface.Tile']
     });

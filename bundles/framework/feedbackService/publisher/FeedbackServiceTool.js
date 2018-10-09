@@ -2,7 +2,7 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
     function () {
     }, {
-        index : 9,
+        index: 9,
         apiUrl: null,
         apiKey: null,
         urlValue: null,
@@ -25,14 +25,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
          */
         getTool: function () {
             return {
-                //doesn't actually map to anything real, just need this in order to not break stuff in publisher
+                // doesn't actually map to anything real, just need this in order to not break stuff in publisher
                 id: 'Oskari.mapframework.publisher.tool.FeedbackServiceTool',
                 title: 'FeedbackServiceTool',
                 config: {}
             };
         },
 
-        //Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
+        // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
         bundleName: 'feedbackService',
 
         /**
@@ -53,7 +53,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
             me.urlValue = meta.url;
             me.keyValue = meta.key;
             me.extensionsValue = meta.extensions;
-
         },
         /**
     * Get values.
@@ -121,6 +120,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
             me.state.enabled = (enabled === true) ? true : false;
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

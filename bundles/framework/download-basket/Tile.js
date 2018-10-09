@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function () {
+        getName: function () {
             return 'Oskari.mapframework.bundle.downloadBasket.Tile';
         },
         /**
@@ -37,29 +37,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
      *
      * Interface method implementation
      */
-        setEl : function (el, width, height) {
+        setEl: function (el, width, height) {
             this.container = jQuery(el);
         },
         /**
      * @method startPlugin
      * Interface method implementation, calls #refresh()
      */
-        startPlugin : function () {
-        //this.refresh();
+        startPlugin: function () {
+        // this.refresh();
             this.createUI();
         },
         /**
      * @method stopPlugin
      * Interface method implementation, clears the container
      */
-        stopPlugin : function () {
+        stopPlugin: function () {
             this.container.empty();
         },
         /**
      * @method _createUI
      * Creates the UI for a fresh start
      */
-        createUI : function () {
+        createUI: function () {
             this.container.addClass('download-basket-tile');
             this.container.find('.oskari-tile-status').addClass('icon-bubble-right').html(0);
         },
@@ -67,21 +67,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
      * @method getTitle
      * @return {String} localized text for the title of the tile
      */
-        getTitle : function () {
+        getTitle: function () {
             return this.instance.getLocalization('title');
         },
         /**
      * @method getDescription
      * @return {String} localized text for the description of the tile
      */
-        getDescription : function () {
+        getDescription: function () {
             return this.instance.getLocalization('desc');
         },
         /**
      * @method getOptions
      * Interface method implementation, does nothing atm
      */
-        getOptions : function () {
+        getOptions: function () {
 
         },
         /**
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
      *      state that this component should use
      * Interface method implementation, does nothing atm
      */
-        setState : function (state) {
+        setState: function (state) {
         },
         /**
      * @method refresh
@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
             var me = this;
             me.refresh();
         },
-        notifyUser : function () {
+        notifyUser: function () {
             var status = this.container.children('.oskari-tile-status');
 
             // stop current animation
@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
             // blink 2 times
             this._blink(status, 2);
         },
-        _blink : function (element, count) {
+        _blink: function (element, count) {
             var me = this;
             if (!element) {
                 return;
@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
             // on complete, animate back to fully visible
                 element.animate({
                     opacity: 1
-                }, 500,function () {
+                }, 500, function () {
                 // on complete, check and adjust the count parameter
                 // recurse if count has not been reached yet
                     if (count > 1) {
@@ -143,5 +143,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
      * @property {String[]} protocol
      * @static
      */
-        'protocol' : ['Oskari.userinterface.Tile']
+        'protocol': ['Oskari.userinterface.Tile']
     });

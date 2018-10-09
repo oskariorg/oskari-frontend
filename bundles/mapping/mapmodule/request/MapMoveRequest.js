@@ -37,7 +37,6 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
         this._zoom = zoom;
 
         this._projectionCode = srsName;
-
     }, {
         /** @static @property {String} __name request name */
         __name: 'MapMoveRequest',

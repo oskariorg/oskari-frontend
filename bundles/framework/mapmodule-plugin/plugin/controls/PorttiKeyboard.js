@@ -12,7 +12,7 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
     slideFactor: 50, // 75
     core: null,
     setup: function (mapmodule) {
-        //this.core = config.core;
+        // this.core = config.core;
         this.mapmodule = mapmodule;
         this.sandbox = mapmodule.getSandbox();
     },
@@ -26,7 +26,6 @@ OpenLayers.Control.PorttiKeyboard = OpenLayers.Class(OpenLayers.Control, {
         });
     },
     defaultKeyDown: function (evt) {
-
         if (jQuery('input:focus').length > 0) {
             // cancel all handling if there are inputs with focus
             // (user might be writing something)

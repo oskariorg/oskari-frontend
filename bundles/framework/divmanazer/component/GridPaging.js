@@ -27,7 +27,7 @@ Oskari.clazz.category(
                 var table = groupHeader.parents('table');
 
                 // hide grouping cols
-                for (var i = groupStartCol;i < groupCols + groupStartCol;i++) {
+                for (var i = groupStartCol; i < groupCols + groupStartCol; i++) {
                     var content = table.find('tr th:not(.grouping):nth-child(' + i + ') ,td:not(.grouping):nth-child(' + i + ')');
                     content.hide();
                 }
@@ -82,7 +82,6 @@ Oskari.clazz.category(
                     currentColEl.show();
                 });
 
-
                 if (visibleCols.length < groupCols) {
                     pagingHandler(groupHeader, {
                         visible: {
@@ -96,8 +95,6 @@ Oskari.clazz.category(
 
                     checkPagingButtonsVisiblity();
                 }
-
-
             }
         },
         /**
@@ -129,7 +126,7 @@ Oskari.clazz.category(
                     groupHeader.attr('data-page', page);
                     me._changePage(groupHeader);
                 };
-                table.find('th.grouping').each(function (i,el) {
+                table.find('th.grouping').each(function (i, el) {
                     var groupHeader = jQuery(this);
                     var groupCols = groupHeader.attr('colspan') ? Number(groupHeader.attr('colspan')) : 1;
                     var maxCols = groupHeader.attr('data-max-cols');
@@ -204,7 +201,7 @@ Oskari.clazz.category(
                         if (colIndex % maxCols > 0) {
                             wantedPage += 1;
                         }
-                        groupHeader.attr('data-page',wantedPage);
+                        groupHeader.attr('data-page', wantedPage);
                         me._changePage(groupHeader);
                     }
                 });

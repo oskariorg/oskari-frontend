@@ -79,7 +79,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
         wfsTileCache.tileSetIdentifier = ++wfsTileCache.tileSetIdentifier;
         for (i = 0; i < grid.bounds.length; i += 1) {
             bboxKey = me.bboxkeyStrip_(grid.bounds[i]);
-            //at this point the tile should already been cached by the layers getTile - function.
+            // at this point the tile should already been cached by the layers getTile - function.
             var tileInfo = layerTileInfos[bboxKey],
                 tileCoord = tileInfo ? tileInfo.tileCoord : undefined,
                 tileCoordKey = tileCoord ? olTilecoordGetKeyZXY(tileCoord[0], tileCoord[1], tileCoord[2]) : undefined,
@@ -103,7 +103,6 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
         return result;
     };
 
-
     /**
      * Note! Same as the original function, but tilestate is initialized to LOADING
      * so tilequeue isn't blocked by the async nature of Oskari WFS
@@ -122,14 +121,14 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
     createOskariAsyncTile (z, x, y, pixelRatio, projection, key) {
         var tileCoordKey = olTilecoordGetKeyZXY(z, x, y);
         if (this.tileCache.containsKey(tileCoordKey)) {
-            return /**@type {!ol/Tile}*/(this.tileCache.get(tileCoordKey));
+            return /** @type {!ol/Tile} */(this.tileCache.get(tileCoordKey));
         } else {
             // console.assert(projection, 'argument projection is truthy');
             var tileCoord = [z, x, y];
             var urlTileCoord = this.getTileCoordForTileUrlFunction(
                 tileCoord, projection);
-            var tileUrl = !urlTileCoord ? undefined :
-                this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
+            var tileUrl = !urlTileCoord ? undefined
+                : this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
             var tile = new this.tileClass(
                 tileCoord,
                 // always set state as LOADING since loading is handled outside ol3
@@ -174,7 +173,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
         }
         switch (tile.getState()) {
         case olTileState.IDLE: // IDLE: 0,
-        case olTileState.LOADING: //LOADING: 1,
+        case olTileState.LOADING: // LOADING: 1,
             me.__fixTile(tile, imageData, layer, map);
             break;
         case olTileState.LOADED: // LOADED: 2

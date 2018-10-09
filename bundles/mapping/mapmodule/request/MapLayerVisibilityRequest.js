@@ -19,15 +19,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
         this._creator = null;
         this._mapLayerId = mapLayerId;
         this._visible = visible;
-
     }, {
     /** @static @property __name request name */
-        __name : 'MapModulePlugin.MapLayerVisibilityRequest',
+        __name: 'MapModulePlugin.MapLayerVisibilityRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -35,14 +34,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
      * @return {String} id for map layer used in
      * Oskari.mapframework.service.MapLayerService
      */
-        getMapLayerId : function () {
+        getMapLayerId: function () {
             return this._mapLayerId;
         },
         /**
      * @method getVisible
      * @return {Boolean} boolean if map layer should be visible or not
      */
-        getVisible : function () {
+        getVisible: function () {
             return this._visible;
         }
     }, {
@@ -50,5 +49,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

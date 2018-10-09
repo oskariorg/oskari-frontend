@@ -19,14 +19,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
         this._rawParams = rawParams;
     }, {
     /** @static @property __name event name */
-        __name : 'RouteResultEvent',
+        __name: 'RouteResultEvent',
 
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns the successfully routing info
      * @return {Boolean}
      */
-        getSuccess : function () {
+        getSuccess: function () {
             return this._success;
         },
         /**
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns the plan JSON
      * @return {JSON}
      */
-        getPlan : function () {
+        getPlan: function () {
             return this._plan;
         },
         /**
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * Returns request paremeters
      * @return {JSON}
      */
-        getRequestParameters : function () {
+        getRequestParameters: function () {
             return this._requestParameters;
         },
 
@@ -59,7 +59,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
                 success: this._success,
                 plan: this._plan,
                 requestParameters: this._requestParameters,
-                rawParams : this._rawParams
+                rawParams: this._rawParams
             };
         }
     }, {
@@ -67,5 +67,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.event.RouteResult
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

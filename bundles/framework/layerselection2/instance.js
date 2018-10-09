@@ -74,8 +74,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
         'start': function () {
             var me = this;
 
-            if (me.started)
-                return;
+            if (me.started) { return; }
 
             me.started = true;
 
@@ -95,11 +94,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
+            // sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
             me.createUi();
             me._registerForGuidedTour();
@@ -124,10 +123,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
-            if (!handler)
-                return;
+            if (!handler) { return; }
 
             // Skip events, if internally linked layer
             if (typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer()) {
@@ -136,7 +133,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -176,8 +172,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                     if (layerId) {
                         layer = mapLayerService.findMapLayer(layerId);
                         flyout.handleLayerModified(layer);
-                    }
-                    else {
+                    } else {
                         // no layer specified, update all layers
                         var layers = this.sandbox.findAllSelectedMapLayers();
                         _.each(layers, function (layer) {
@@ -243,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
 
             sandbox.request(this, request);
 
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
+            // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },

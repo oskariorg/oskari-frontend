@@ -177,7 +177,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
                 onScreenForm.find('input[name=imagelink]').val(data.place.imageLink);
                 onScreenForm.find('select[data-name=category]').val(data.place.category);
                 this._updateImageUrl(data.place.imageLink, onScreenForm);
-
             }
 
             this.initialValues = data;
@@ -187,9 +186,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
 
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
 
-            this._getOnScreenForm().
-                find('div.measurementResult').
-                html(this.measurementResult);
+            this._getOnScreenForm()
+                .find('div.measurementResult')
+                .html(this.measurementResult);
         },
         bindEvents: function () {
             var me = this;
@@ -268,7 +267,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
                 evt.preventDefault();
                 me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
                 form.find('div#newLayerForm').html(me.categoryForm.getForm());
-                //add listeners etc.
+                // add listeners etc.
                 me.categoryForm.start();
             });
         },

@@ -42,7 +42,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                 cls: 'update-capabilities',
                 tooltip: me.locale('recheckAllButton')
             });
-
         },
         /**
          * Add group tools
@@ -220,8 +219,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
             //  - helper: the helper shown next to the mouse
             //  - event: the event that caused the stop
             jQuery(document).on('dnd_stop.vakata', function (event, data) {
-                //If the drag target group is not open, we have to open it.
-                //Otherwise we can't get the necessary information of the drag operation.
+                // If the drag target group is not open, we have to open it.
+                // Otherwise we can't get the necessary information of the drag operation.
                 var targetGroup = data.data.origin.get_node(jQuery(data.event.target).prop('id').split('_anchor')[0]);
                 var draggedNode = data.data.origin.get_node(data.data.nodes[0]);
                 if (!draggedNode.type) {
@@ -367,7 +366,6 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
 
             popup.show(loc('recheckTitle'), content, [closeButton, primaryButton]);
         },
-
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS

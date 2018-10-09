@@ -27,7 +27,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          * implements BundleInstance protocol start methdod
          */
         afterStart: function (sandbox) {
-
             var conf = this.getConfiguration(),
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName);
@@ -84,7 +83,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
                 helpContentPart = me.getLocalization('help').contentPart || helpContentPart;
             }
 
-
             function closureMagic (tagsTxt) {
                 return function (isSuccess, pContent) {
                     var content = pContent,
@@ -114,7 +112,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
             }
         },
 
-
         /**
          * @method stop
          * implements BundleInstance protocol stop method
@@ -135,7 +132,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
 
             sandbox.request(this, request);
 
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
+            // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         }

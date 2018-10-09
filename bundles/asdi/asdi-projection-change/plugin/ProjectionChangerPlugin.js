@@ -47,9 +47,9 @@ Oskari.clazz.define('Oskari.projection.change.ProjectionChangerPlugin',
    */
         _createEventHandlers: function () {
             return {
-                'MapSizeChangedEvent' : function (evt) {
+                'MapSizeChangedEvent': function (evt) {
                     var width = evt._width;
-                    //if the rightoffset + element width is greater than screensize use a different right offset
+                    // if the rightoffset + element width is greater than screensize use a different right offset
                     if (width * 0.45 + this._flyout.getElement().width() > width) {
                         this._flyout.move(this.offsetRightSmallScreen, this.offsetTop, true);
                         return;
@@ -111,8 +111,8 @@ Oskari.clazz.define('Oskari.projection.change.ProjectionChangerPlugin',
                 this.createUi();
             }
         },
-        teardownUI : function (stopping) {
-            //detach old element from screen
+        teardownUI: function (stopping) {
+            // detach old element from screen
             var mobileDefs = this.getMobileDefs();
             this.getElement().detach();
             this.removeFromPluginContainer(this.getElement());

@@ -5,8 +5,8 @@
  * MIT License. by Paul Irish et al.
  */
 
-/*jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
-/*global jQuery: false */
+/* jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
+/* global jQuery: false */
 
 ;(function ($, undefined) {
     'use strict';
@@ -121,5 +121,4 @@
 
         return deferred ? deferred.promise($this) : $this;
     };
-
 })(jQuery);

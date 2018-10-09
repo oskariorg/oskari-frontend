@@ -25,22 +25,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * (needed because we fake to be module for listening to
      * events (getName and onEvent methods are needed for this))
      */
-        getName : function () {
+        getName: function () {
             return 'MyPlaces2.MyPlaces';
         },
-        getTitle : function () {
+        getTitle: function () {
             return this.loc.title;
         },
-        getTabsContainer : function () {
+        getTabsContainer: function () {
             return this.tabsContainer;
         },
-        getContent : function () {
+        getContent: function () {
             return this.tabsContainer.ui;
         },
         initContainer: function () {
             this.tabsContainer = Oskari.clazz.create('Oskari.userinterface.component.TabDropdownContainer', this.loc['nocategories']);
         },
-        addTabContent : function (container) {
+        addTabContent: function (container) {
             this.initTabContent();
             container.append(this.tabsContainer.ui);
         },
@@ -48,12 +48,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @property {Object} eventHandlers
      * @static
      */
-        eventHandlers : {
+        eventHandlers: {
         /**
          * @method MyPlaces.MyPlacesChangedEvent
          * Updates the category tabs and grids inside them with current data
          */
-            'MyPlaces.MyPlacesChangedEvent' : function (event) {
+            'MyPlaces.MyPlacesChangedEvent': function (event) {
                 var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
                 var categories = service.getAllCategories();
                 var me = this;
@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
                         this.tabsContainer.addPanel(panel);
                         this.tabPanels[id] = panel;
                     } else {
-                    //lets set a name for the panel
+                    // lets set a name for the panel
                         panel.setTitle(categories[i].name);
                         // update panel graphics
                         me.tabsContainer.updatePanel(panel);
@@ -140,7 +140,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @param {Number} categoryId categoryId for the place so we can add it's layer to map
      * @private
      */
-        _showPlace : function (geometry, categoryId) {
+        _showPlace: function (geometry, categoryId) {
         // center map on selected place
             var center = geometry.getCentroid();
             var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, geometry.getBounds());
@@ -159,7 +159,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @param {Object} data grid data object for place
      * @private
      */
-        _editPlace : function (data) {
+        _editPlace: function (data) {
         // focus on map
             this._showPlace(data.geometry, data.categoryId);
             // request form
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @param {Object} data grid data object for place
      * @private
      */
-        _deletePlace : function (data) {
+        _deletePlace: function (data) {
     	var me = this;
     	var sandbox = this.instance.sandbox;
             var loc = this.loc.notification['delete'];
@@ -186,7 +186,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
                 dialog.close();
                 var service = sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
                 var callback = function (isSuccess) {
-
             	/* let's refresh map also if there */
             	var categoryId = data.categoryId;
             	var layerId = 'myplaces_' + categoryId;
@@ -199,8 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
 
                     if (isSuccess) {
                         dialog.show(loc.title, loc.success);
-                    }
-                    else {
+                    } else {
                         dialog.show(loc.title, loc['error']);
                     }
                     dialog.fadeout();
@@ -219,16 +217,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @return {String} matching draw mode string-key for the geometry
      * @private
      * */
-        _getDrawModeFromGeometry : function (geometry) {
+        _getDrawModeFromGeometry: function (geometry) {
             if (geometry === null) return null;
             var olClass = geometry.CLASS_NAME;
-            if (('OpenLayers.Geometry.MultiPoint' === olClass) || ('OpenLayers.Geometry.Point' === olClass)) {
+            if ((olClass === 'OpenLayers.Geometry.MultiPoint') || (olClass === 'OpenLayers.Geometry.Point')) {
         	return 'point';
-            }
-            else if (('OpenLayers.Geometry.MultiLineString' === olClass) || ('OpenLayers.Geometry.LineString' === olClass)) {
+            } else if ((olClass === 'OpenLayers.Geometry.MultiLineString') || (olClass === 'OpenLayers.Geometry.LineString')) {
         	return 'line';
-            }
-            else if (('OpenLayers.Geometry.MultiPolygon' === olClass) || ('OpenLayers.Geometry.Polygon' === olClass)) {
+            } else if ((olClass === 'OpenLayers.Geometry.MultiPolygon') || (olClass === 'OpenLayers.Geometry.Polygon')) {
         	return 'area';
             }
             return null;
@@ -239,7 +235,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @param {Oskari.mapframework.bundle.publishedmyplaces.model.MyPlacesCategory} category category to populate
      * @private
      */
-        _createCategoryTab : function (category) {
+        _createCategoryTab: function (category) {
             var me = this;
             var id = category.getId();
 
@@ -260,7 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
 
                 link.append(name);
                 link.on('click', function () {
-                    me._showPlace(data.geometry,data.categoryId);
+                    me._showPlace(data.geometry, data.categoryId);
                     return false;
                 });
                 return link;
@@ -300,7 +296,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * Populates given categorys grid
      * @param {Number} categoryId id for category to populate
      */
-        _populatePlaces : function (categoryId) {
+        _populatePlaces: function (categoryId) {
             var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
             var places = service.getAllMyPlaces();
             var panel = this.tabPanels[categoryId];
@@ -317,14 +313,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
                 }
                 gridModel.addData({
                     'id': places[i].getId(),
-                    'name' : places[i].getName(),
-                    'desc' : places[i].getDescription(),
-                    'geometry' : places[i].getGeometry(),
-                    'categoryId' : places[i].getCategoryID(),
-                    'edit' : this.loc['edit'],
-                    'delete' : this.loc['delete'],
-                    'createDate' : this._formatDate(service, places[i].getCreateDate()),
-                    'updateDate' : this._formatDate(service, places[i].getUpdateDate())
+                    'name': places[i].getName(),
+                    'desc': places[i].getDescription(),
+                    'geometry': places[i].getGeometry(),
+                    'categoryId': places[i].getCategoryID(),
+                    'edit': this.loc['edit'],
+                    'delete': this.loc['delete'],
+                    'createDate': this._formatDate(service, places[i].getCreateDate()),
+                    'updateDate': this._formatDate(service, places[i].getUpdateDate())
                 });
             }
         },
@@ -333,23 +329,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * Formats timestamp for UI
      * @return {String}
      */
-        _formatDate : function (service, date) {
+        _formatDate: function (service, date) {
             var time = service.parseDate(date);
             var value = '';
             if (time.length > 0) {
                 value = time[0];
             }
             // skip time
-            /*if(time.length > 1) {
+            /* if(time.length > 1) {
             value = value  + ' ' + time[1];
-        }*/
+        } */
             return value;
         },
         /**
      * @method _removeObsoleteCategories
      * Removes tabs for categories that have been removed
      */
-        _removeObsoleteCategories : function () {
+        _removeObsoleteCategories: function () {
             var service = this.instance.sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
 
             for (var categoryId in this.tabPanels) {
@@ -370,33 +366,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * Event is handled forwarded to correct #eventHandlers if found or discarded
      * if not.
      */
-        onEvent : function (event) {
-
+        onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
-            if (!handler)
-                return;
+            if (!handler) { return; }
 
             return handler.apply(this, [event]);
-
         },
         /**
      * @method bindEvents
      * Register tab as eventlistener
      */
-        bindEvents : function () {
+        bindEvents: function () {
             var instance = this.instance;
             var sandbox = instance.getSandbox();
             // faking to be module with getName/onEvent methods
             for (p in this.eventHandlers) {
                 sandbox.registerForEventByName(this, p);
             }
-
         },
         /**
      * @method unbindEvents
      * Unregister tab as eventlistener
      */
-        unbindEvents : function () {
+        unbindEvents: function () {
             var instance = this.instance;
             var sandbox = instance.getSandbox();
             // faking to be module with getName/onEvent methods

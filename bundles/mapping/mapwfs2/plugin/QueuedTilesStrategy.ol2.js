@@ -15,7 +15,6 @@
 
 Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy',
     function (options) {
-
         this.debugGridFeatures = true;
 
         this.options = options;
@@ -37,7 +36,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
         }
 
         this.active = false;
-
     }, {
 
         getGrid: function () {
@@ -63,7 +61,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                 this.layer.destroyFeatures(tileFeatures);
             }
             this.tileQueue.flushQueue();
-
         },
 
         /**
@@ -154,7 +151,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                 return;
             }
             this.triggerRead();
-
         },
 
         /**
@@ -177,9 +173,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          * the right thing to do
          */
         triggerUnload: function (bounds) {
-
             this.layer.destroyFeatures();
-
         },
 
         /**
@@ -189,7 +183,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          * object returned by the layer protocol.
          */
         triggerRead: function () {
-
             var gridGrid = this.grid.grid;
             var gridFeatures = [];
             var debugGridFeatures = this.debugGridFeatures;
@@ -203,7 +196,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                         right: bs.right,
                         bottom: bs.bottom
                     };
-
 
                     // just for debugging
                     //  gridcalc bundle supports this as well
@@ -238,15 +230,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                             tileFeature: boundsFeature
                         });
                     this.tileQueue.pushJob(qObj);
-
                 }
             }
 
             if (debugGridFeatures) {
                 this.layer.addFeatures(gridFeatures);
             }
-
-
         },
 
         /**

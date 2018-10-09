@@ -184,7 +184,6 @@
                 return found;
             },
 
-
             /**
              * Returns XSLT if defined or null if not
              * @return {String} xslt
@@ -336,7 +335,6 @@
              */
             getStyleLegendUrl: function (styleName) {
                 var capabilitiesBlock = this.getCapabilities();
-
 
                 if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
                     var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {

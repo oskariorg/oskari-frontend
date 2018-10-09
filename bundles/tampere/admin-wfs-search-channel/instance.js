@@ -1,4 +1,4 @@
-﻿/**
+/**
 * @class Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance
 *
 * Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance.
@@ -90,7 +90,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
 
 		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
-
         },
         /**
          * @method init
@@ -118,7 +117,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -158,7 +156,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
 
             request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
-
 
             this.sandbox.unregister(this);
             this.started = false;

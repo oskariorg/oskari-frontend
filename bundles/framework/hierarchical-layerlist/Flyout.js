@@ -73,7 +73,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     me._updateBreadcrumbGroups(data.layerData);
                 }
 
-
                 me.populateLayers();
             });
 
@@ -83,7 +82,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     me.populateLayers();
                 }
             });
-
 
             // group added
             me.service.on('group.added', function (data) {
@@ -177,26 +175,24 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 var group = layer.getGroups()[0];
                 if (group && isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
                     if (!notLoadedBackend[group.id]) {
-                        notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
+                        notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
                             id: group.id,
-                            name:{},
+                            name: {},
                             orderNumber: -1,
                             selectable: true,
                             toolsVisible: false
                         });
                         notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].getChildren().push({id:layer.getId(), type:'layer'});
+                    notLoadedBackend[group.id].getChildren().push({id: layer.getId(), type: 'layer'});
                     notLoadedBackend[group.id].layersModels.push(layer);
                 }
             });
-
 
             Object.keys(notLoadedBackend).forEach(function (key) {
                 var group = notLoadedBackend[key];
                 allGroups.unshift(group);
             });
-
 
             allGroups.forEach(function (group) {
                 var groupModel = Oskari.clazz.create(
@@ -221,7 +217,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @param {String} groupingMethod method name to sort by
          */
         _layerListComparator: function (a, b, groupingMethod) {
-            //"use strict";
+            // "use strict";
             var nameA = a[groupingMethod]().toLowerCase(),
                 nameB = b[groupingMethod]().toLowerCase();
             if (nameA === nameB && (a.getName() && b.getName())) {
@@ -280,7 +276,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 });
             });
         },
-
 
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
@@ -497,7 +492,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 tab = me.layerTabs[i];
                 me.tabContainer.addPanel(tab.getTabPanel());
             }
-
 
             // Add other tabs
             me.selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);

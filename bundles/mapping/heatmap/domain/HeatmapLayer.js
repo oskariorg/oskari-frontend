@@ -12,14 +12,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
     function () {
         this.init();
     }, {
-    	init : function () {
+    	init: function () {
 	        this._layerType = 'HEATMAP';
             this._selectedProperty = null;
             this._radius = 30;
             this._pixelsPerCell = 10;
 	        this.localization = Oskari.getLocalization('heatmap');
     	},
-    	copyValues : function (parentLayer, overrides) {
+    	copyValues: function (parentLayer, overrides) {
     		var me = this;
     		// maybe just copy url, name, technical stuff?
     		// NOTE! this might have unwanted side-effects
@@ -36,30 +36,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
     		this.setId(overrides.id);
     		this.setName(overrides.name);
     	},
-        getGeometryProperty : function () {
+        getGeometryProperty: function () {
             var attr = this.getAttributes();
             return attr.geometryProperty;
         },
-        getHeatmapProperties : function () {
+        getHeatmapProperties: function () {
             var attr = this.getAttributes();
             return attr.heatmap || [];
         },
-        setRadius : function (param) {
+        setRadius: function (param) {
             this._radius = param;
         },
-        getRadius : function () {
+        getRadius: function () {
             return this._radius;
         },
-        setPixelsPerCell : function (param) {
+        setPixelsPerCell: function (param) {
             this._pixelsPerCell = param;
         },
-        getPixelsPerCell : function () {
+        getPixelsPerCell: function () {
             return this._pixelsPerCell;
         },
-        setWeightedHeatmapProperty : function (param) {
+        setWeightedHeatmapProperty: function (param) {
             this._selectedProperty = param;
         },
-        getWeightedHeatmapProperty : function () {
+        getWeightedHeatmapProperty: function () {
             if (this._selectedProperty) {
                 return this._selectedProperty;
             }
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
                 return this._selectedColors;
             }
         },
-        getSLDNamedLayer : function () {
+        getSLDNamedLayer: function () {
             var attr = this.getAttributes();
             var name = this.getLayerName();
             var workspace = attr.layerWorkspace;
@@ -90,15 +90,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
             }
             return name;
         },
-        setColorConfig : function (colorConfig) {
+        setColorConfig: function (colorConfig) {
             this._colorConfig = [
-                { color : colorConfig[0], quantity : 0.02, opacity : 0 },
-                { color : colorConfig[1], quantity : 0.1, opacity : 1 },
-                { color : colorConfig[2], quantity : 0.5, opacity : 1 },
-                { color : colorConfig[3], quantity : 1, opacity : 1 }];
+                { color: colorConfig[0], quantity: 0.02, opacity: 0 },
+                { color: colorConfig[1], quantity: 0.1, opacity: 1 },
+                { color: colorConfig[2], quantity: 0.5, opacity: 1 },
+                { color: colorConfig[3], quantity: 1, opacity: 1 }];
         },
 
-        getColorConfig : function () {
+        getColorConfig: function () {
             return this._colorConfig;
         }
 

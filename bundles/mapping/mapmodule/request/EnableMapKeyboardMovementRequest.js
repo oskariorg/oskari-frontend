@@ -21,12 +21,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapKeybo
         this._options = options;
     }, {
     /** @static @property __name request name */
-        __name : 'EnableMapKeyboardMovementRequest',
+        __name: 'EnableMapKeyboardMovementRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         getOptions: function (option) {
@@ -44,5 +44,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapKeybo
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

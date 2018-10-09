@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
                     drawMode : 'cut'
                 });
             }
-        }*/
+        } */
         };
         me.templateGuide = jQuery('<div><div class="guide"></div>' +
             '<div class="buttons">' +
@@ -82,7 +82,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
          * implements Module protocol init method
          */
         init: function () {
-
             var loc = this.instance.getLocalization('tools'),
                 user = Oskari.user();
 
@@ -164,7 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
             if (!config.geometry) {
                 // show only when drawing new place
                 this._showDrawHelper(config.drawMode);
-
             }
         },
         /**
@@ -246,7 +244,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers

@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             }
 
             var ajaxUrl = Oskari.urls.getRoute();
-            //"/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
+            // "/web/fi/kartta?p_p_id=Portti2Map_WAR_portti2mapportlet&p_p_lifecycle=1&p_p_state=exclusive&p_p_mode=view&p_p_col_id=column-1&p_p_col_count=1&_Portti2Map_WAR_portti2mapportlet_fi.mml.baseportlet.CMD=ajax.jsp&";
             var sessionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlugin', ajaxUrl);
             this.registerPlugin(sessionPlugin);
             this.startPlugin(sessionPlugin);
@@ -184,7 +184,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             }
 
             return handler.apply(this, [event]);
-
         },
 
         /**
@@ -214,8 +213,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 this._pushState();
             }
         },
-
-
 
         /**
          * @method registerPlugin
@@ -330,7 +327,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                         }
                     }
                     if (allInvisible) {
-                        //Don't save state when all are invisible
+                        // Don't save state when all are invisible
                         return false;
                     }
                     for (ln = 0; ln < nextLayers.length; ln += 1) {
@@ -338,7 +335,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                         nextLayer = nextLayers[ln];
 
                         me._log.debug('comparing layer state ' + prevLayer.id + ' vs ' + nextLayer.id);
-
 
                         if (prevLayer.id !== nextLayer.id) {
                             return true;
@@ -441,7 +437,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             switch (me._historyPrevious.length) {
             case 0:
                 /* hard reset */
-                /*this.resetState();*/
+                /* this.resetState(); */
                 break;
             case 1:
                 /* soft reset (retains the future) */

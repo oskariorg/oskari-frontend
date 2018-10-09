@@ -10,14 +10,14 @@ Oskari.clazz.define(
         this._dblClick = dblClick;
         this._creatorId = creatorId;
     }, {
-        __name : 'DrawPlugin.SelectedDrawingEvent',
-        getName : function () {
+        __name: 'DrawPlugin.SelectedDrawingEvent',
+        getName: function () {
             return this.__name;
         },
-        getPlace : function () {
+        getPlace: function () {
             return this._place;
         },
-        isDblClick : function () {
+        isDblClick: function () {
             return this._dblClick;
         },
         getCreatorId: function () {
@@ -25,7 +25,7 @@ Oskari.clazz.define(
         }
     },
     {
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });
 
 /* Inheritance */

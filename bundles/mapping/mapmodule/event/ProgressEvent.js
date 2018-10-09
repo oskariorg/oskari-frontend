@@ -13,12 +13,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.ProgressEvent',
         this._id = id;
     }, {
     /** @static @property __name event name */
-        __name : 'ProgressEvent',
+        __name: 'ProgressEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         getId: function () {
@@ -32,5 +32,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.ProgressEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

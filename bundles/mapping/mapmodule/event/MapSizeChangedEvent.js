@@ -15,26 +15,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MapSizeChangedEv
         this._height = height;
     }, {
     /** @static @property __name event name */
-        __name : 'MapSizeChangedEvent',
+        __name: 'MapSizeChangedEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getWidth
      * @return {Number}
      */
-        getWidth : function () {
+        getWidth: function () {
             return this._width;
         },
         /**
      * @method getHeight
      * @return {Number}
      */
-        getHeight : function () {
+        getHeight: function () {
             return this._height;
         }
     }, {
@@ -42,5 +42,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.MapSizeChangedEv
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

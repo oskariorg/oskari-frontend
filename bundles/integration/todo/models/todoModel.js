@@ -1,8 +1,6 @@
 
 (function () {
-
     define(function () {
-
         // Todo Model
         // ----------
 
@@ -10,25 +8,25 @@
         return Backbone.Model.extend({
 
             // Default attributes for the todo item.
-            defaults : function () {
+            defaults: function () {
                 return {
-                    title : 'empty todo...',
-                    order : 0,
-                    done : false
+                    title: 'empty todo...',
+                    order: 0,
+                    done: false
                 };
             },
             // Ensure that each todo created has `title`.
-            initialize : function () {
+            initialize: function () {
                 if (!this.get('title')) {
                     this.set({
-                        'title' : this.defaults().title
+                        'title': this.defaults().title
                     });
                 }
             },
             // Toggle the `done` state of this todo item.
-            toggle : function () {
+            toggle: function () {
                 this.save({
-                    done : !this.get('done')
+                    done: !this.get('done')
                 });
             }
         });

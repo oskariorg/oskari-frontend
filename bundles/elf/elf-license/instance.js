@@ -88,13 +88,13 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
      * @static
      * @property __name
      */
-    __name : 'elf-license',
+    __name: 'elf-license',
     /**
      * Module protocol method
      *
      * @method getName
      */
-    getName : function () {
+    getName: function () {
         return this.__name;
     },
     eventHandlers: {
@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             me, me._licenseInformationUrl);
 
         // Create validators
-        me._validator.number = Oskari.clazz.create('Oskari.elf.license.validator.NumberValidator',me, false, true);
+        me._validator.number = Oskari.clazz.create('Oskari.elf.license.validator.NumberValidator', me, false, true);
 
         // Create elements
         me._paramEnumElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamEnumElement', me, me._validator);
@@ -137,7 +137,6 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         me._paramBlnElement = Oskari.clazz.create('Oskari.elf.license.elements.ParamBlnElement', me, me._validator);
 
         this._addLicenseTabToMetadataFlyout();
-
     },
     /**
      * Activate metadata search results show license link
@@ -220,7 +219,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
      */
     _getLicenseInfoForMetadataFlyout: function (metadataModel, panel) {
         var me = this;
-        //make some room for progress spinner
+        // make some room for progress spinner
         panel.setContent('<br><br>');
         me._progressSpinner.insertTo(panel.html);
         me._progressSpinner.start();
@@ -239,7 +238,6 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             me._progressSpinner.stop();
             me.getSandbox().printWarn('ELF license info failed', [].slice.call(arguments));
             me._getLicenseInfoForMetadataFlyoutFailed(panel);
-
         });
     },
     _getLicenseInfoForMetadataFlyoutFailed: function (panel) {
@@ -300,7 +298,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             message += '<li>' + value.title + '</li>';
         });
         message += '</ul></div>';
-        me._showMessage(me._locale.errors.checkFields.title, message,0, true,true);
+        me._showMessage(me._locale.errors.checkFields.title, message, 0, true, true);
     },
     /**
      * Conclude license
@@ -406,7 +404,6 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         if (!doFadeout) {
             dialog.fadeout(fadeoutTime);
         }
-
     },
     /**
      * Show license deactivate information dialog
@@ -469,7 +466,6 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         if (data.licenseModels.length === 1) {
             me._showLicenseDeactivateParams(data.licenseModels[0], data, infoForUser);
         }
-
     },
     _showLoginInfo: function (element) {
         var me = this;
@@ -512,7 +508,6 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             userInfo.hide();
         }
 
-
         modelDetails.find('.license_basic_data').append('<div></div>');
         modelDetails.find('.help').html(me._locale.dialog.help.orderDetails);
 
@@ -533,7 +528,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         if (licenseData.licenseId) {
             var licenceIdElem = modelDetails.find('.license_id'),
                 licenceIdText = me._locale.dialog.licenseId;
-            licenceIdText = licenceIdText.replace('{licenseid}',licenseData.licenseId);
+            licenceIdText = licenceIdText.replace('{licenseid}', licenseData.licenseId);
             licenceIdElem.html(licenceIdText);
         }
 
@@ -548,7 +543,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         // Show valid to
         if (licenseData.validTo) {
             var validText = me._locale.dialog.validTo;
-            validText = validText.replace('{day}',licenseData.validTo);
+            validText = validText.replace('{day}', licenseData.validTo);
             validToElem.html(validText);
         }
 
@@ -573,7 +568,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             me._deactivateLicense();
         });
 
-        dialog.show(me._locale.dialog.deactivateConfirm.title, me._locale.dialog.deactivateConfirm.message , [noBtn, yesBtn]);
+        dialog.show(me._locale.dialog.deactivateConfirm.title, me._locale.dialog.deactivateConfirm.message, [noBtn, yesBtn]);
         dialog.makeModal();
     },
     /**
@@ -682,7 +677,6 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }
         }
 
-
         metadataTitle = metadata.name;
         me._dialog.show(me._locale.dialog.licenseTitle + ' - ' + metadataTitle, dialogContent, [me.prevBtn, cancelBtn, me.nextBtn]);
         me._dialog.makeModal();
@@ -735,10 +729,10 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }
         }
         var licenseDialogLink = jQuery('<a>' + me._locale.getLicenseText + '</a>');
-        licenseDialogLink.attr('href','JavaScript:void(0);');
+        licenseDialogLink.attr('href', 'JavaScript:void(0);');
         var closureMagic = function (metadataModel) {
             if (data) {
-                //fake a similar kind of json that is produced by the search channel -> the dialog only uses name and organization from here...
+                // fake a similar kind of json that is produced by the search channel -> the dialog only uses name and organization from here...
                 var metadata = {
                     'name': metadataModel.identification.citation.title,
                     'organization': metadataModel.metadataResponsibleParties[0].organisationName
@@ -753,14 +747,13 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }
         };
 
-        licenseDialogLink.on('click' , function () {
+        licenseDialogLink.on('click', function () {
             closureMagic(metadataModel);
         });
         dialogContent.append(licenseDialogLink);
 
         return dialogContent;
     },
-
 
     /**
      * @method  @private _fixModelsHeight fix models height
@@ -795,7 +788,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
         var me = this;
         me.nextBtn.setTitle(me._locale.buttons.next);
         if (me._dialogStep === null) {
-            return;
+
         } else if (me._dialogStep === 'step2') {
             me._showLicenseModels();
         } else if (me._dialogStep === 'step3') {
@@ -810,13 +803,12 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
     _goNext: function () {
         var me = this;
         if (me._dialogStep === null) {
-            return;
+
         } else if (me._dialogStep === 'step2') {
             me._getPrice();
         } else if (me._dialogStep === 'step3') {
             me._concludeLicense();
         }
-
     },
     /**
      * Hide previous button
@@ -1098,9 +1090,8 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }
         });
 
-
         return values;
     }
 }, {
-    'extend' : ['Oskari.userinterface.extension.DefaultExtension']
+    'extend': ['Oskari.userinterface.extension.DefaultExtension']
 });

@@ -222,7 +222,7 @@ Oskari.clazz.define(
                     me._removeFeaturesByAttribute(olLayer, identifier, value);
                     olLayer.refresh();
                 }
-                //remove all features from the given layer
+                // remove all features from the given layer
                 else {
                     this._map.removeLayer(me._olLayers[layerId]);
                     this._removeFeaturesByAttribute(olLayer);
@@ -284,7 +284,7 @@ Oskari.clazz.define(
             });
             sandbox.notifyAll(removeEvent);
         },
-        _removeFromCache : function (layerId, feature) {
+        _removeFromCache: function (layerId, feature) {
             var storedFeatures = this._features[layerId];
             for (var i = 0; i < storedFeatures.length; i++) {
                 var featuresInDataset = storedFeatures[i].data;
@@ -399,7 +399,6 @@ Oskari.clazz.define(
                 mapLayerService.updateLayer(options.layerId, layer);
             }
 
-
             olLayer = me._getOlLayer(layer);
             if (!olLayer) {
                 return;
@@ -440,7 +439,7 @@ Oskari.clazz.define(
                 features = [features];
             }
 
-            //set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
+            // set feature styles. For attribute dependent styles (=label text from property) we gotta use styleMap
             for (i = 0; i < features.length; i++) {
                 featureInstance = features[i];
                 styleMap.styles['default'] = new OpenLayers.Style(me.getStyle(options, features[i]));
@@ -609,7 +608,6 @@ Oskari.clazz.define(
                     }
                 }
             }
-
         },
         /**
          * @method _createRequestHandlers

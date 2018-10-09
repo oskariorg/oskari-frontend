@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
     */
         getTool: function () {
             return {
-        	//doesn't actually map to anything real, just need this in order to not break stuff in publisher
+        	// doesn't actually map to anything real, just need this in order to not break stuff in publisher
                 id: 'Oskari.mapframework.publisher.tool.CrosshairTool',
                 title: 'CrosshairTool',
                 config: {}
@@ -58,10 +58,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
     	me.state.enabled = (enabled === true) ? true : false;
         },
         stop: function () {
-    	//remove crosshair when exiting
+    	// remove crosshair when exiting
     	this.setEnabled(false);
         }
     }, {
-        'extend' : ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
-        'protocol' : ['Oskari.mapframework.publisher.Tool']
+        'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+        'protocol': ['Oskari.mapframework.publisher.Tool']
     });

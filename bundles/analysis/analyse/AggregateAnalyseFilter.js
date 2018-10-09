@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
                 var aggregateValue = value[0];
                 if (!_.isUndefined(aggregateValue)) {
                     var _valueDifference = _.difference(me._cachedAggregateValue, value);
-                    //we always assume that _valueOfDifference returns an array with one value
+                    // we always assume that _valueOfDifference returns an array with one value
                     var indexofChangedValue = _.indexOf(me._cachedAggregateValue, _valueDifference[0]);
                     me._cachedAggregateValue = value;
                     if (indexofChangedValue === 0) {
@@ -185,7 +185,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
             me.indicatorData = data.analysisdata;
 
             me.indicatorData.forEach(function (indicatorItem) {
-
                 var datasets = _.keys(indicatorItem);
 
                 var values = {
@@ -201,7 +200,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
             var updateValues = {
                 options: options
             };
-
 
             me.selectValues[index] = updateValues;
             var ilen = index + 1;

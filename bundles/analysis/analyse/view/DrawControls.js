@@ -18,7 +18,6 @@ Oskari.clazz.define(
             this.mapModule.registerPlugin(me.selectionPlugin);
             this.mapModule.startPlugin(me.selectionPlugin);
         }
-
     }, {
         /**
          * @static @property _templates
@@ -88,8 +87,8 @@ Oskari.clazz.define(
             panelHeader.append(tooltipCont);
             panelContainer.append(this.createDrawButtons(loc));
 
-            //don't create buttons since geometryeditor is not yet changed to work with ol4
-            //panelContainer.append(this._createDrawFilterButtons(loc));
+            // don't create buttons since geometryeditor is not yet changed to work with ol4
+            // panelContainer.append(this._createDrawFilterButtons(loc));
 
             panelContainer.append(this.createSelectToolButtons(loc));
 
@@ -166,7 +165,7 @@ Oskari.clazz.define(
                 clearTimeout(this._flyoutTimeOut);
                 this._flyoutTimeOut = setTimeout(function () {
                     me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
-                },100);
+                }, 100);
             } else {
                 me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
             }
@@ -195,8 +194,8 @@ Oskari.clazz.define(
                     'title': loc.content.features.tooltips[tool],
                     'id': 'oskari_analysis_analyse_view_analyse_content_features_' + tool
                 });
-                toolDiv.on('click',function () {
-                    //if selection tool is left active, deactivate it
+                toolDiv.on('click', function () {
+                    // if selection tool is left active, deactivate it
                     me.deactivateSelectTools();
 
                     me.drawStarter({
@@ -243,20 +242,19 @@ Oskari.clazz.define(
                     groupName = 'analysis-selection-';
                 drawFilterDiv.addClass(groupName + drawFilter);
 
-                //disabled by default
+                // disabled by default
                 drawFilterDiv.addClass('disabled');
                 drawFilterDiv.attr('title', me.loc.content.drawFilter.tooltip[drawFilter]);
                 drawFilterDiv.on('click', function () {
-                    //if selection tool is left active, deactivate it
+                    // if selection tool is left active, deactivate it
                     me.deactivateSelectTools();
 
                     if (jQuery(this).hasClass('disabled')) {
                         return;
                     }
 
-                    //notify WFSLayerService that the selection tools ain't on any more.
+                    // notify WFSLayerService that the selection tools ain't on any more.
                     me.WFSLayerService.setSelectionToolsActive(false);
-
 
                     me._startNewDrawFiltering({
                         mode: drawFilter,
@@ -283,7 +281,7 @@ Oskari.clazz.define(
                 selectionToolButtonsContainer = selectionToolsContainer.find('div.toolContainerButtons'),
                 WFSSelections = (me.WFSLayerService.getWFSSelections() && me.WFSLayerService.getWFSSelections().length > 0);
 
-            //use the existing component to render selection buttons
+            // use the existing component to render selection buttons
             me.selectionButtonsRenderer = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', me.instance);
             me.selectionButtonsRenderer.renderSelectionToolButtons(selectionToolDiv);
 
@@ -306,7 +304,6 @@ Oskari.clazz.define(
             selectionToolsContainer.find('div.toolContainerButtons').append(emptyBtn);
             selectionToolsContainer.find('h4').html(loc.content.selectionTools.title);
             selectionToolsContainer.find('div.toolContainerFooter').html(loc.content.selectionTools.description);
-
 
             return selectionToolsContainer;
         },

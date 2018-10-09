@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', function (helper) {
-    this.inputCoords = []; //[[1324, 12424]]
-    this.resultCoords = []; //[[1324, 12424]]
-    this.mapCoords = []; //[{id: "coord_marker_1", lon:123, lat:134}]
+    this.inputCoords = []; // [[1324, 12424]]
+    this.resultCoords = []; // [[1324, 12424]]
+    this.mapCoords = []; // [{id: "coord_marker_1", lon:123, lat:134}]
     this.mapCoordId = 0;
     this.helper = helper;
     Oskari.makeObservable(this);
@@ -14,12 +14,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     },
     addInputCoord: function (coord) {
         this.inputCoords.push(coord);
-        //this.trigger('InputCoordAdded', coord);
+        // this.trigger('InputCoordAdded', coord);
         this.trigger('InputCoordsChanged', this.inputCoords);
     },
     setInputCoords: function (coords, suppressEvent) {
         this.inputCoords = coords;
-        //don't render input table
+        // don't render input table
         if (suppressEvent !== true) {
             this.trigger('InputCoordsChanged', coords);
         }
@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     setMapCoords: function (mapCoords) {
         this.mapCoords = mapCoords;
     },
-    //Select from map
+    // Select from map
     addMapCoord: function (lonlat) {
         var id = 'coord_marker_' + this.mapCoordId;
         var coord = {
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         };
         this.mapCoords = this.mapCoords.filter(checkId);
     },
-    //add input coords as previously selected coordinates
+    // add input coords as previously selected coordinates
     populateMapCoordsAndMarkers: function () {
         var me = this;
         var lonFirst = this.helper.getMapEpsgValues().lonFirst;
@@ -73,7 +73,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
             mapCoord = me.helper.getLonLatObj(coord, lonFirst);
             markerId = me.addMapCoord(mapCoord);
             label = me.helper.getLabelForMarker(mapCoord);
-            me.helper.addMarkerForCoords (markerId, mapCoord, label, color);
+            me.helper.addMarkerForCoords(markerId, mapCoord, label, color);
         });
     },
     /** 
@@ -142,8 +142,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         return obj;
     },
 
-    //generic -> to helper??
-    //lonLatCoordToArray or addLonLatCoordToArray (array,..)
+    // generic -> to helper??
+    // lonLatCoordToArray or addLonLatCoordToArray (array,..)
     lonLatCoordToArray: function (coord, lonFirst) {
         var arr = [];
         if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number') {
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         }
         return arr;
     },
-    //generic -> to helper??
+    // generic -> to helper??
     arrayCoordToLonLat: function (coord, lonFirst) {
         var obj = {};
         if (lonFirst === true) {
@@ -175,13 +175,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         var coords = [];
         var lonFirst = this.helper.getMapEpsgValues().lonFirst;
         if (addBln === true) {
-            for (var i = 0 ; i < mapCoords.length ; i++) {
+            for (var i = 0; i < mapCoords.length; i++) {
                 coords.push(this.lonLatCoordToArray(mapCoords[i], lonFirst));
             }
             this.setInputCoords(coords);
         }
-        //mapcoords is used only with select on map
-        //reset always
+        // mapcoords is used only with select on map
+        // reset always
         mapCoords.length = 0;
     },
     clearCoords: function () {
@@ -229,5 +229,5 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         } else {
             return;
         }
-    },*/
+    }, */
 });

@@ -16,13 +16,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent'
         this._groupId = groupId;
     }, {
     /** @static @property __name event name */
-        __name : 'Toolbar.ToolSelectedEvent',
+        __name: 'Toolbar.ToolSelectedEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent'
      * Returns id for the tool that was selected
      * @return {String}
      */
-        getToolId : function () {
+        getToolId: function () {
             return this._toolId;
         },
         /**
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent'
      * Returns group id for the tool that was selected
      * @return {String}
      */
-        getGroupId : function () {
+        getGroupId: function () {
             return this._groupId;
         }
     }, {
@@ -46,5 +46,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent'
      * @property {String[]} protocol
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

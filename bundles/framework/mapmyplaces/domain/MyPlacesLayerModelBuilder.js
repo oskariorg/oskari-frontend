@@ -38,8 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             }
             if (loclayer.inspire) {
                 layer.setGroups([{
-                    id:'MYPLACES',
-                    name:loclayer.inspire
+                    id: 'MYPLACES',
+                    name: loclayer.inspire
                 }]);
             }
         }

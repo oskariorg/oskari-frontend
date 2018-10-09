@@ -27,7 +27,7 @@ Oskari.clazz.define(
         getSandbox: function () {
             return this.sandbox;
         },
-        isClientSupported : function (clientVer) {
+        isClientSupported: function (clientVer) {
             if (!clientVer) {
                 return false;
             }
@@ -38,7 +38,6 @@ Oskari.clazz.define(
          * BundleInstance protocol method
          */
         start: function () {
-
             var me = this,
                 channel,
                 conf = this.conf || {},
@@ -142,7 +141,7 @@ Oskari.clazz.define(
 
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-                    'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+                    'RouteResultEvent', 'FeedbackResultEvent', 'SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
                     'RPCUIEvent', 'map.rotated'];
             }
 
@@ -200,7 +199,7 @@ Oskari.clazz.define(
             me.__setupAvailableEvents(allowedEvents);
             me.__setupAvailableRequests(allowedRequests);
         },
-        __setupAvailableEvents : function (allowedEvents) {
+        __setupAvailableEvents: function (allowedEvents) {
             var available = [];
             for (var i = 0; i < allowedEvents.length; ++i) {
                 if (typeof Oskari.eventBuilder(allowedEvents[i]) === 'function') {
@@ -209,7 +208,7 @@ Oskari.clazz.define(
             }
             this._allowedEvents = this.__arrayToObject(available);
         },
-        __setupAvailableRequests : function (allowedRequests) {
+        __setupAvailableRequests: function (allowedRequests) {
             var available = [];
             for (var i = 0; i < allowedRequests.length; ++i) {
                 if (typeof Oskari.requestBuilder(allowedRequests[i]) === 'function') {
@@ -231,26 +230,26 @@ Oskari.clazz.define(
             }
             return result;
         },
-        _availableFunctions : {
+        _availableFunctions: {
             // format "supportedXYZ" to an object for easier checking for specific name
-            getSupportedEvents : function () {
+            getSupportedEvents: function () {
                 return this._allowedEvents;
             },
-            getSupportedFunctions : function () {
+            getSupportedFunctions: function () {
                 return this._allowedFunctions;
             },
-            getSupportedRequests : function () {
+            getSupportedRequests: function () {
                 return this._allowedRequests;
             },
-            getInfo : function (transaction, clientVersion) {
+            getInfo: function (transaction, clientVersion) {
                 var sbMap = this.sandbox.getMap();
                 return {
-                    version : Oskari.VERSION,
-                    clientSupported : this.isClientSupported(clientVersion),
-                    srs  : sbMap.getSrsName()
+                    version: Oskari.VERSION,
+                    clientSupported: this.isClientSupported(clientVersion),
+                    srs: sbMap.getSrsName()
                 };
             },
-            getAllLayers : function () {
+            getAllLayers: function () {
                 var me = this;
                 var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
@@ -265,7 +264,7 @@ Oskari.clazz.define(
                             id: layer.getId(),
                             opacity: layer.getOpacity(),
                             visible: layer.isVisible(),
-                            name : layer.getName(),
+                            name: layer.getName(),
                             minZoom: minZoomLevel,
                             maxZoom: maxZoomLevel
                         };
@@ -274,12 +273,12 @@ Oskari.clazz.define(
                             id: layer.getId(),
                             opacity: layer.getOpacity(),
                             visible: layer.isVisible(),
-                            name : layer.getName()
+                            name: layer.getName()
                         };
                     }
                 });
             },
-            getMapBbox : function () {
+            getMapBbox: function () {
                 var bbox = this.sandbox.getMap().getBbox();
                 return {
                     bottom: bbox.bottom,
@@ -288,7 +287,7 @@ Oskari.clazz.define(
                     top: bbox.top
                 };
             },
-            getMapPosition : function () {
+            getMapPosition: function () {
                 var sbMap = this.sandbox.getMap();
                 return {
                     centerX: sbMap.getX(),
@@ -298,7 +297,7 @@ Oskari.clazz.define(
                     srsName: sbMap.getSrsName()
                 };
             },
-            getZoomRange : function () {
+            getZoomRange: function () {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return {
                     min: 0,
@@ -306,24 +305,24 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
-            zoomIn : function () {
+            zoomIn: function () {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 var newZoom = mapModule.getNewZoomLevel(1);
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             },
-            zoomOut : function () {
+            zoomOut: function () {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 var newZoom = mapModule.getNewZoomLevel(-1);
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             },
-            zoomTo : function (transaction, newZoom) {
+            zoomTo: function (transaction, newZoom) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 mapModule.setZoomLevel(newZoom);
                 return mapModule.getMapZoom();
             },
-            getPixelMeasuresInScale : function (transaction, mmMeasures, scale) {
+            getPixelMeasuresInScale: function (transaction, mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
                     pixelMeasures = [],
@@ -351,18 +350,18 @@ Oskari.clazz.define(
                     zoomLevel: zoomLevel
                 };
             },
-            resetState : function () {
+            resetState: function () {
                 this.sandbox.resetState();
                 return true;
             },
-            getCurrentState : function () {
+            getCurrentState: function () {
                 return this.sandbox.getCurrentState();
             },
-            useState : function (transaction,state) {
+            useState: function (transaction, state) {
                 this.sandbox.useState(state);
                 return true;
             },
-            getFeatures: function (transaction,includeFeatures) {
+            getFeatures: function (transaction, includeFeatures) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     plugin = mapModule.getLayerPlugins(['vectorlayer']),
                     features = {};
@@ -373,8 +372,7 @@ Oskari.clazz.define(
                 layers.forEach(function (id) {
                     if (includeFeatures === true) {
                         features[id] = plugin.getLayerFeatures(id);
-                    }
-                    else {
+                    } else {
                         features[id] = [];
                     }
                 });
@@ -401,7 +399,6 @@ Oskari.clazz.define(
          *
          */
         _bindFunctions: function (channel) {
-
             var me = this,
                 funcs = this._allowedFunctions;
             var bindFunction = function (name) {
@@ -442,7 +439,6 @@ Oskari.clazz.define(
          * @return {Boolean} Does origin match config domain
          */
         _domainMatch: function (origin) {
-
             if (!origin) {
                 this.log.warn('No origin in RPC message');
                 // no origin, always deny
@@ -474,7 +470,6 @@ Oskari.clazz.define(
          *
          */
         _registerEventHandler: function (eventName) {
-
             var me = this;
             if (me.eventHandlers[eventName]) {
                 // Event handler already in place
@@ -498,7 +493,6 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-
             var me = this,
                 sandbox = this.sandbox,
                 p;
@@ -526,7 +520,6 @@ Oskari.clazz.define(
          *
          */
         onEvent: function (event) {
-
             var me = this,
                 handler = me.eventHandlers[event.getName()];
             if (!handler) {
@@ -546,7 +539,6 @@ Oskari.clazz.define(
          * @return {Object}       Event params
          */
         _getParams: function (event) {
-
             var ret = {},
                 key,
                 allowedTypes = ['string', 'number', 'boolean'];
@@ -577,7 +569,7 @@ Oskari.clazz.define(
          *
          * @return {Boolean}  true if value is part of the list
          */
-        __isInList : function (value, list) {
+        __isInList: function (value, list) {
             var i = 0,
                 len = list.length;
             for (;i < len; ++i) {
@@ -595,7 +587,6 @@ Oskari.clazz.define(
          *
          */
         update: function () {
-
             return undefined;
         },
 
@@ -606,7 +597,6 @@ Oskari.clazz.define(
          *
          */
         _unregisterEventHandler: function (eventName) {
-
             delete this.eventHandlers[eventName];
             this.sandbox.unregisterFromEventByName(this, eventName);
         }

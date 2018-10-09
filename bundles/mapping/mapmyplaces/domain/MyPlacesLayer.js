@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
      * @method setWmsUrl
      * @param {String} wmsUrl
      */
-        setWmsUrl : function (wmsUrl) {
+        setWmsUrl: function (wmsUrl) {
             this._wmsUrl = wmsUrl;
         },
         /**
@@ -31,21 +31,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
      * @method getWmsUrl
      * @return {String}
      */
-        getWmsUrl : function () {
+        getWmsUrl: function () {
             return this._wmsUrl;
         },
         /**
      * @method setWmsName
      * @param {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
      */
-        setWmsName : function (wmsName) {
+        setWmsName: function (wmsName) {
             this._wmsName = wmsName;
         },
         /**
      * @method getWmsName
      * @return {String} wmsName used to identify service f.ex. in GetFeatureInfo queries.
      */
-        getWmsName : function () {
+        getWmsName: function () {
             return this._wmsName;
         }
 

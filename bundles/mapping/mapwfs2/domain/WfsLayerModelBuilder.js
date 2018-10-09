@@ -75,7 +75,7 @@ Oskari.clazz.define(
             // default style for WFS is given as last parameter
             maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
 
-            //Set current Style
+            // Set current Style
             if (mapLayerJson.style) {
                 layer.selectStyle(mapLayerJson.style);
             }
@@ -84,6 +84,5 @@ Oskari.clazz.define(
             if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
             }
-
         }
     });

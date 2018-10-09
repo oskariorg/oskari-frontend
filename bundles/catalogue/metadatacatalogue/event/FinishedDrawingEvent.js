@@ -15,13 +15,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
         this._modification = (blnEdit == true);
     }, {
     /** @static @property __name event name */
-        __name : 'MetaData.FinishedDrawingEvent',
+        __name: 'MetaData.FinishedDrawingEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function () {
+        getDrawing: function () {
             return this._drawing;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
      * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
-        isModification : function () {
+        isModification: function () {
             return this._modification;
         }
     }, {
@@ -45,5 +45,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

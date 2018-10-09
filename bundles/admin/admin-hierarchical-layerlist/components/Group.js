@@ -87,7 +87,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function (sandb
                     groupname: groupName
                 }), [confirmBtnCancel, confirmBtnOk]);
                 confirmDialog.makeModal();
-
             });
             returnObject.buttons.push(btnDelete);
         }
@@ -140,7 +139,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Group', function (sandb
                 errorDialog.show(me.locale('errors.groupname.title'), me.locale('errors.groupname.message'));
                 errorDialog.fadeout();
             }
-
         });
 
         var message = jQuery('<div class="group-names"></div>');

@@ -9,11 +9,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     function () {
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'WmtsLayerPlugin',
-        _clazz : 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
-        layertype : 'wmtslayer',
+        __name: 'WmtsLayerPlugin',
+        _clazz: 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
+        layertype: 'wmtslayer',
 
-        getLayerTypeSelector : function () {
+        getLayerTypeSelector: function () {
             return 'WMTS';
         },
 
@@ -72,8 +72,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 me.setOLMapLayers(layer.getId(), wmtsLayer);
             }, function () {
             });
-
-
         },
         /**
          * Reserves correct position for wmts layer, which will be added async later
@@ -83,7 +81,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @private
          */
         _getPlaceHolderWmtsLayer: function (layer) {
-
             var layerHolder = new olLayerVector({
                 source: new olSourceVector({}),
                 title: 'layer_' + layer.getId(),
@@ -114,7 +111,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             source.on('tileloaderror', function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
-
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],

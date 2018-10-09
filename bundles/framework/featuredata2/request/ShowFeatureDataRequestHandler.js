@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          * @param {Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequest} request
          *      request to handle
          */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             var id = request.getId(),
                 flyout = this.featureData.plugins['Oskari.userinterface.Flyout'],
                 panels = flyout.tabsContainer.panels,
@@ -38,5 +38,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

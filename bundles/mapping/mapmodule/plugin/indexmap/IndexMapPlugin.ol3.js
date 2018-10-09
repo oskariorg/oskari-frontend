@@ -65,8 +65,7 @@ Oskari.clazz.define(
 
             icon.off('click');
             icon.on('click', function (event) {
-
-                //Add index map control - remove old one
+                // Add index map control - remove old one
                 if (!me._indexMap || me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
                     var layer = me._getBaseLayer();
@@ -95,15 +94,11 @@ Oskari.clazz.define(
                         me._indexMap = new olControlOverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
                         me.getMap().addControl(me._indexMap);
-
                     }
                     me._indexMap.setCollapsed(false);
-                }
-
-                else {
+                } else {
                     me._indexMap.setCollapsed(true);
                 }
-
             });
         },
 

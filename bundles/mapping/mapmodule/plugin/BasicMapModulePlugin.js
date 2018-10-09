@@ -71,8 +71,8 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
         },
-        addToPluginContainer : function (element) {
-            //var element = this.getElement();
+        addToPluginContainer: function (element) {
+            // var element = this.getElement();
             if (!element) {
                 // no element to place, log a warning
                 return;
@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 this.getSandbox().printWarn('"' + this.getName() + '" ', e);
             }
         },
-        removeFromPluginContainer : function (element, preserve) {
+        removeFromPluginContainer: function (element, preserve) {
             if (!element) {
                 // no element to remove, log a warning
                 return;
@@ -105,11 +105,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             }
         },
 
-        teardownUI : function () {
-            //remove old element
+        teardownUI: function () {
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
         },
-        getMobileDefs : function () {
+        getMobileDefs: function () {
             return this._mobileDefs || {};
         },
 
@@ -368,7 +368,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 el.addClass(classToAdd);
             }
         },
-        addToolbarButtons : function (buttons, group) {
+        addToolbarButtons: function (buttons, group) {
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
             var themeColors = this.getMapModule().getThemeColours();
@@ -389,7 +389,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 }
             }
         },
-        removeToolbarButtons : function (buttons, group) {
+        removeToolbarButtons: function (buttons, group) {
             var sandbox = this.getSandbox();
             if (!sandbox) {
                 return true;

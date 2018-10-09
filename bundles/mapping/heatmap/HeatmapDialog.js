@@ -11,18 +11,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     function (localization) {
     	this.loc = localization;
     }, {
-        __templates : {
-            'main' : _.template('<div>' +
+        __templates: {
+            'main': _.template('<div>' +
             	'</div>'),
-            'propertySelect' : _.template('<div><span>${label}</span></div>'),
-            'select' : _.template('<select name="heatmapProperties">' +
+            'propertySelect': _.template('<div><span>${label}</span></div>'),
+            'select': _.template('<select name="heatmapProperties">' +
                         '<option value="">${label}</option>' +
                         '<% props.forEach(function(value) {  %>' +
             				'<option>${value}</option>' +
         				'<% }); %>' +
             		'</select>'),
 
-            'colorThemes' : _.template('<div><span>${label}</span></div>' +
+            'colorThemes': _.template('<div><span>${label}</span></div>' +
                                     '<div class="color-themes">' +
                                         '<div class="color-theme theme-1"><input id="theme1" type="radio" name="colorThemes">' +
                                             '<div class="color-box theme-box theme-box-1" color="#4444FF" style="background-color:#4444FF"></div>' +
@@ -41,8 +41,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                                         '</div>' +
                                     '</div>'),
 
-            'customThemeLabel' : _.template('<div><span>${label}</span></div>'),
-            'customThemeGroup' : _.template('<div class="colorpicker-group"><input id="customTheme" type="radio" name="colorThemes"></div>'),
+            'customThemeLabel': _.template('<div><span>${label}</span></div>'),
+            'customThemeGroup': _.template('<div class="colorpicker-group"><input id="customTheme" type="radio" name="colorThemes"></div>')
 
         },
 
@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             ];
         },
 
-    	showDialog : function (layer, callback, isNew) {
+    	showDialog: function (layer, callback, isNew) {
     		if (this.dialog) {
     			this.dialog.close(true);
     			delete this.dialog;
@@ -89,11 +89,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
     		// only show select if there is something to select
     		if (layer.getHeatmapProperties().length > 0) {
     			propertyElement = jQuery(this.__templates.propertySelect({
-	    			label : this.loc.propertyLabel
+	    			label: this.loc.propertyLabel
 	    		}));
     			propertySelector = jQuery(this.__templates.select({
-    				label : this.loc.noneOption,
-	    			props : layer.getHeatmapProperties()
+    				label: this.loc.noneOption,
+	    			props: layer.getHeatmapProperties()
 	    		}));
 	    		propertySelector.val(layer.getWeightedHeatmapProperty());
 	    		propertyElement.append(propertySelector);
@@ -106,8 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
             content.append(colorThemes);
 
-
-            //colorpicker -->
+            // colorpicker -->
             var customThemeLabel = jQuery(this.__templates.customThemeLabel({
                 label: this.loc.colorPickerLabel
             }));
@@ -127,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
                 jQuery(content).find('input[id=theme1]').prop('checked', true);
             }
 
-            //set colors for colorboxes
+            // set colors for colorboxes
             var colorSetup = layer.getColorSetup();
             if (colorSetup) {
                 this._colorPickers[0].setValue(colorSetup[0]);
@@ -138,16 +137,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             var okBtn = null;
             if (isNew) {
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
-            }
-            else {
+            } else {
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             }
             okBtn.setHandler(function () {
                 // TODO: validate
                 var values = {
-                    radius : radiusInput.getValue(),
-                    pixelsPerCell : ppcInput.getValue(),
-                    colorConfig : me.getSelectedColors(content),
+                    radius: radiusInput.getValue(),
+                    pixelsPerCell: ppcInput.getValue(),
+                    colorConfig: me.getSelectedColors(content),
                     colorSetup: me.getColorSetup(content),
                     selectedTheme: me.getSelectedTheme(content)
                 };
@@ -185,8 +183,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
 
             if (element.attr('id') === 'customTheme') {
                 this.colors = this.colors.concat(this.getColorSetup());
-            }
-            else {
+            } else {
                 var colorBoxes = jQuery(element[0].parentElement).find('.color-box');
                 colorBoxes.each(function (index, colorBox) {
                     me.colors.push(jQuery(colorBox).attr('color'));
@@ -195,7 +192,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             return me.colors;
         },
 
-        //Returns colors that are selected with color picker
+        // Returns colors that are selected with color picker
         getColorSetup: function () {
             var selectedColors = [];
             this._colorPickers.forEach(function (picker) {

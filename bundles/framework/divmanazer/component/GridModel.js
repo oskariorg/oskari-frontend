@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
          */
         setFirstField: function (firstField) {
             if (_.indexOf(this.fields, firstField) === 0 || _.indexOf(this.fields, firstField) === -1) {
-                return;
+
             } else {
                 _.pull(this.fields, firstField);
                 this.fields.unshift(firstField);
@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
                     }
                 }
             }
-            //if key is not in fields, add it there
+            // if key is not in fields, add it there
             if (addMissingFields) {
                 _.forEach(pData, function (n, key) {
                     var index = _.indexOf(me.fields, key);
@@ -99,7 +99,6 @@ Oskari.clazz.define('Oskari.userinterface.component.GridModel',
                 });
             }
             this.data.push(pData);
-
         },
         /**
          * @method getData

@@ -32,8 +32,8 @@ Oskari.clazz.define(
             var zoom = request.getZoom(),
                 srsName = request.getSrsName(),
                 lonlat = {
-                    lon : request.getCenterX(),
-                    lat : request.getCenterY()
+                    lon: request.getCenterX(),
+                    lat: request.getCenterY()
                 };
 
             // transform coordinates to given projection
@@ -41,7 +41,7 @@ Oskari.clazz.define(
 
             var zoomChange = (zoom || zoom === 0);
 
-            //if zoom is about to change -> Suppress the event
+            // if zoom is about to change -> Suppress the event
             this.mapModule.centerMap(lonlat, null, !!zoomChange);
             if (zoomChange) {
                 if (zoom.left && zoom.top && zoom.bottom && zoom.right) {

@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             var requestBuilder = Oskari.requestBuilder('userinterface.AddExtensionRequest');
             if (requestBuilder) {
                 var request = requestBuilder(this);
@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
             localization = this.getLocalization('selectionTools');
 
-            //sends request via config to add tool selection button
+            // sends request via config to add tool selection button
             if (this.conf && this.conf.selectionTools === true) {
                 this.popupHandler = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.PopupHandler', this);
                 var addBtnRequestBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest'),
@@ -376,7 +376,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 // ExtensionUpdateEvents are fired a lot, only let featuredata2 extension event to be handled when enabled
                 if (event.getExtension().getName() !== this.getName()) {
                     // wasn't me or disabled -> do nothing
-                    return;
+
                 } else if (event.getViewState() === 'close') {
                     plugin.setEnabled(false);
                     if (this.plugin) {
@@ -403,7 +403,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
 
                 var evt = Oskari.eventBuilder('WFSSetFilter')(features);
                 me.sandbox.notifyAll(evt);
-
             },
             'DrawingEvent': function (evt) {
                 var me = this;
@@ -425,7 +424,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (geojson.features.length > 0) {
                     geojson.features[0].properties.buffer_radius = me.selectionPlugin.getMapModule().getResolution() * pixelTolerance;
                 } else {
-                    //no features
+                    // no features
                     return;
                 }
 
@@ -526,7 +525,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
 
-            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            // get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile()) {
                 mapModule.redrawPluginUIs(true);
             }

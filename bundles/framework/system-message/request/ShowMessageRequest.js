@@ -16,10 +16,10 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.request.ShowMessageR
     }, {
         /** @static @property __name request name */
         __name: 'ShowMessageRequest',
-        colors : {
-            'info' : 'blue',
-            'warning' : 'orange',
-            'error' : 'red'
+        colors: {
+            'info': 'blue',
+            'warning': 'orange',
+            'error': 'red'
         },
         /**
    * @method getName
@@ -41,5 +41,5 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.request.ShowMessageR
             return this.colors[this._level] || 'gray';
         }
     }, {
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

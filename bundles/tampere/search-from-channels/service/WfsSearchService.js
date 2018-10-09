@@ -14,26 +14,25 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.WfsSearchS
  *            searchUrl ajax URL to actual search implementation
  */
     function (searchUrl) {
-
     /* searchUrl url that will give us results */
         this._searchUrl = searchUrl;
     }, {
     /** @static @property __qname fully qualified name for service */
-        __qname : 'Oskari.tampere.bundle.searchfromchannels.service.WfsSearchService',
+        __qname: 'Oskari.tampere.bundle.searchfromchannels.service.WfsSearchService',
         /**
      * @method getQName
      * @return {String} fully qualified name for service
      */
-        getQName : function () {
+        getQName: function () {
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name : 'SearchService',
+        __name: 'SearchService',
         /**
      * @method getName
      * @return {String} service name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -47,21 +46,21 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.WfsSearchS
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */
-        doSearch : function (searchString, channelIds, onSuccess, onError) {
+        doSearch: function (searchString, channelIds, onSuccess, onError) {
             var lang = Oskari.getLang(),
                 epsg = Oskari.getSandbox().getMap().getSrsName();
             jQuery.ajax({
-                dataType : 'json',
-                type : 'POST',
-                url : this._searchUrl,
-                data : {
-                    'searchKey' : searchString,
-                    'Language' : lang,
-                    'epsg' : epsg,
-                    'channels' : channelIds.join()
+                dataType: 'json',
+                type: 'POST',
+                url: this._searchUrl,
+                data: {
+                    'searchKey': searchString,
+                    'Language': lang,
+                    'epsg': epsg,
+                    'channels': channelIds.join()
                 },
-                error : onError,
-                success : onSuccess
+                error: onError,
+                success: onSuccess
             });
         }
     }, {
@@ -69,7 +68,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.WfsSearchS
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.service.Service']
+        'protocol': ['Oskari.mapframework.service.Service']
     });
 
 /* Inheritance */

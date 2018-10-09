@@ -49,8 +49,6 @@ Oskari.clazz.define(
                 }
             );
 
-
-
             me.templates.search.find('div.icon-close').on('click',
                 function (event) {
                     jQuery(event.target)
@@ -109,7 +107,7 @@ Oskari.clazz.define(
                 '<fieldset></fieldset>' +
                 '</form>'
             );
-            //me.templates.form.attr('action', Oskari.urls.getRoute() + me.instance.conf.restUrl);
+            // me.templates.form.attr('action', Oskari.urls.getRoute() + me.instance.conf.restUrl);
             me.templates.form.find('input').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
@@ -202,7 +200,7 @@ Oskari.clazz.define(
                     var optEl = document.createElement('option');
                     optEl.value = value;
                     optEl.textContent = name;
-                    //opt = jQuery('<option value="' + value + '">' + name + '</option>');
+                    // opt = jQuery('<option value="' + value + '">' + name + '</option>');
                     sel.append(optEl);
                 }
             }
@@ -330,7 +328,6 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, user) {
-
             item.attr('data-id', user.id);
             item.find('h3').text(
                 user.user +
@@ -441,7 +438,6 @@ Oskari.clazz.define(
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
             if (me._formIsValid(frm, me)) {
-
                 jQuery.ajax({
                     type: frm.attr('method'),
                     url: Oskari.urls.getRoute() + me.instance.conf.restUrl,

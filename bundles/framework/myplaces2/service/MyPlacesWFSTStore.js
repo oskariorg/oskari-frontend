@@ -90,7 +90,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     me._handleCategoriesResponse(response, cb);
                 }
             });
-
         },
 
         /**
@@ -126,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.model.MyPlacesCategory');
                 category.setId(id);
                 category.setName(Oskari.util.sanitize(featAtts.category_name));
-                category.setDefault('true' === featAtts['default']);
+                category.setDefault(featAtts['default'] === 'true');
                 category.setLineWidth(featAtts.stroke_width);
                 category.setLineStyle(featAtts.stroke_dasharray);
                 category.setLineCap(featAtts.stroke_linecap);
@@ -152,7 +151,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             if (cb) {
                 cb(list);
             }
-
         },
         /**
          * @method  _formatColorFromServer
@@ -230,11 +228,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
             }
             p.commit(features, {
                 callback: function (response) {
-
                     me._handleCommitCategoriesResponse(response, list, callback);
                 }
             });
-
         },
 
         /**
@@ -242,9 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          *
          */
         _handleCommitCategoriesResponse: function (response, list, cb) {
-
             if (response.success()) {
-
                 var features = response.reqFeatures;
                 // deal with inserts, updates, and deletes
                 var state, feature;
@@ -268,12 +262,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 }
 
                 cb(true, list);
-
             } else {
-
                 cb(false, list);
             }
-
         },
 
         /*
@@ -321,17 +312,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          *
          */
         _handleDeleteCategoriesResponse: function (response, list, cb) {
-
             /**
              * Let's call service
              */
             if (response.success()) {
                 cb(true, list);
-
             } else {
                 cb(false, list);
             }
-
         },
 
         /**
@@ -372,7 +360,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     me._handleMyPlacesResponse(response, cb);
                 }
             });
-
         },
 
         /**
@@ -414,13 +401,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 place.setUUID(uuid);
 
                 list.push(place);
-                //service._addMyPlace(place);
+                // service._addMyPlace(place);
             }
 
             if (cb) {
                 cb(list);
             }
-
         },
 
         /**
@@ -433,7 +419,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
         getMyPlacesByIdList: function (idList, cb) {
             var uuid = this.uuid;
             var p = this.protocols.my_places;
-            //var geoserverId = p.featureType + '.' + idList[0];
+            // var geoserverId = p.featureType + '.' + idList[0];
 
             var filter = new OpenLayers.Filter.Logical({
                 type: OpenLayers.Filter.Logical.AND,
@@ -511,7 +497,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          */
         _handleCommitMyPlacesResponse: function (response, list, cb, skipFeatureLoading) {
             if (response.success()) {
-
                 var features = response.reqFeatures;
                 // deal with inserts, updates, and deletes
                 var state, feature;
@@ -551,9 +536,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     };
                     this.getMyPlacesByIdList(formattedIdList, modelUpdateCb);
                 }
-
             } else {
-
                 cb(false, list);
             }
         },
@@ -602,17 +585,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
          * update state to local models
          */
         _handleDeleteMyPlacesResponse: function (response, list, cb) {
-
             /**
              * Let's call service
              */
             if (response.success()) {
                 cb(true, list);
-
             } else {
                 cb(false, list);
             }
-
         },
 
         /*

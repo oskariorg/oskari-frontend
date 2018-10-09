@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
                 return;
             }
 
-            //renders selections tools to the content
+            // renders selections tools to the content
             me.renderSelectionToolButtons(content);
 
             var instructions = me.template.instructions.clone();
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
-                //destroy the active sketch, disable the selected control
+                // destroy the active sketch, disable the selected control
                 me.selectionPlugin.stopDrawing();
                 dialog.close(true);
             });
@@ -201,13 +201,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             dialog.show(popupLoc, content, controlButtons);
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
 
-            //tick the select from all layers - checkbox, if it was on previously
+            // tick the select from all layers - checkbox, if it was on previously
             if (me.WFSLayerService.isSelectFromAllLayers()) {
                 jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
             }
-
         },
-
 
         /**
          * @method renderSelectionToolButtons
@@ -250,7 +248,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
                 me.btnContainer = btnContainer;
                 content.append(btnContainer);
             });
-
         },
 
         /**

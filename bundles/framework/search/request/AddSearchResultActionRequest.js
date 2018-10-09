@@ -11,28 +11,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddSearchResultAc
     function (linkName, callback) {
         this._linkName = linkName;
         this._callback = callback;
-    },{
+    }, {
     /** @static @property __name request name */
-        __name : 'Search.AddSearchResultActionRequest',
+        __name: 'Search.AddSearchResultActionRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getLinkName
      * @return {String} link name
      */
-        getLinkName : function () {
+        getLinkName: function () {
             return this._linkName;
         },
         /**
      * @method getCallback
      * @return {Function} callback function
      */
-        getCallback : function () {
+        getCallback: function () {
             return this._callback;
         }
     }, {
@@ -40,5 +40,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddSearchResultAc
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

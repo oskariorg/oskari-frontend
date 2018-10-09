@@ -14,61 +14,60 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.service.FeedbackSe
  *            searchUrl ajax URL to actual metadata catalogue search implementation
  */
     function (addFeedbackAjaxUrl, fetchFeedbackAjaxUrl) {
-
     /* searchUrl url that will give us results */
         this._addFeedbackAjaxUrl = addFeedbackAjaxUrl;
         this._fetchFeedbackAjaxUrl = fetchFeedbackAjaxUrl;
     }, {
     /** @static @property __qname fully qualified name for service */
-        __qname : 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService',
+        __qname: 'Oskari.catalogue.bundle.metadatafeedback.service.FeedbackService',
         /**
      * @method getQName
      * @return {String} fully qualified name for service
      */
-        getQName : function () {
+        getQName: function () {
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name : 'FeedbackService',
+        __name: 'FeedbackService',
         /**
      * @method getName
      * @return {String} service name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         addFeedback: function (params, onSuccess, onError) {
             jQuery.ajax({
-                dataType : 'json',
-                type : 'POST',
+                dataType: 'json',
+                type: 'POST',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : this._addFeedbackAjaxUrl,
-                data : {
+                url: this._addFeedbackAjaxUrl,
+                data: {
                     data: JSON.stringify(params)
                 },
-                error : onError,
-                success : onSuccess
+                error: onError,
+                success: onSuccess
             });
         },
         fetchFeedback: function (params, onSuccess, onError) {
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : this._fetchFeedbackAjaxUrl,
-                data : {
+                url: this._fetchFeedbackAjaxUrl,
+                data: {
                     data: JSON.stringify(params)
                 },
-                error : onError,
-                success : onSuccess
+                error: onError,
+                success: onSuccess
             });
         }
     }, {
@@ -76,7 +75,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.service.FeedbackSe
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.service.Service']
+        'protocol': ['Oskari.mapframework.service.Service']
     });
 
 /* Inheritance */

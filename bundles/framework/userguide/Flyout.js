@@ -96,8 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
                         newtab.setContent(content);
                     }
                 }
-            }
-            else {
+            } else {
                 me.cel.append(content);
             }
         }

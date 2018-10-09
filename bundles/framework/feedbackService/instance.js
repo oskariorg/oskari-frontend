@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
      * @param {Oskari.mapframework.bundle.feedbackService.request.GetFeedbackRequest} request
      *      request to handle
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             var params = request.getFeedbackParams() || {};
             var name = request.getName();
             if (name === 'GetFeedbackServiceRequest') {
@@ -103,15 +103,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.FeedbackServiceB
             }
             jQuery.ajax({
                 data: params,
-                dataType : 'json',
-                type : 'POST',
-                url : Oskari.urls.getRoute('Feedback'),
-                error : function (response) {
+                dataType: 'json',
+                type: 'POST',
+                url: Oskari.urls.getRoute('Feedback'),
+                error: function (response) {
                     var success = false;
                     var evt = Oskari.eventBuilder('FeedbackResultEvent')(success, params, response);
                     me.sandbox.notifyAll(evt);
                 },
-                success : function (response) {
+                success: function (response) {
                     var success = response.success,
                         requestParameters = response.requestParameters,
                         data = response.data;

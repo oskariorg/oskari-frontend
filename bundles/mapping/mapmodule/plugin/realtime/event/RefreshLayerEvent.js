@@ -10,15 +10,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin.
         this._layer = _layer;
     }, {
     /** @static @property __name event name */
-        __name : 'Realtime.RefreshLayerEvent',
+        __name: 'Realtime.RefreshLayerEvent',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
-        getMapLayer : function () {
+        getMapLayer: function () {
             return this._layer;
         }
     }, {
@@ -26,5 +26,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.RealtimePlugin.
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

@@ -40,44 +40,44 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
             var url = this.getUrl(options);
 
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : url,
-                error : errorCb,
-                success : successCb
+                url: url,
+                error: errorCb,
+                success: successCb
             });
         },
         getCountries: function (url, successCb, errorCb) {
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : url,
-                error : errorCb,
-                success : successCb
+                url: url,
+                error: errorCb,
+                success: successCb
             });
         },
         getLocationType: function (url, successCb, errorCb) {
             jQuery.ajax({
-                dataType : 'json',
-                type : 'GET',
+                dataType: 'json',
+                type: 'GET',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
-                url : url,
-                error : errorCb,
-                success : successCb
+                url: url,
+                error: errorCb,
+                success: successCb
             });
         }
     }, {

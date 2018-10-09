@@ -17,26 +17,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SaveStateRe
         this._isDefault = isDefault;
     }, {
     /** @static @property __name request name */
-        __name : 'StateHandler.SaveStateRequest',
+        __name: 'StateHandler.SaveStateRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getViewName
      * @return {String} name for the view to be saved
      */
-        getViewName : function () {
+        getViewName: function () {
             return this._viewName;
         },
         /**
      * @method getViewDescription
      * @return {String} description for the view to be saved
      */
-        getViewDescription : function () {
+        getViewDescription: function () {
             return this._viewDescription;
         },
         /**
@@ -51,5 +51,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.request.SaveStateRe
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

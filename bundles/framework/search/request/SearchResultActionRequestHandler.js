@@ -21,14 +21,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchResultActio
      * @param {Oskari.mapframework.bundle.personaldata.request.SearchResultActionRequestHandler} request
      *      request to handle
      */
-        handleRequest : function (core, request) {
+        handleRequest: function (core, request) {
             if (request.getName() === 'Search.AddSearchResultActionRequest') {
                 this.search.addSearchResultAction({
                     'name': request.getLinkName(),
                     'callback': request.getCallback()
                 });
-            }
-            else if (request.getName() === 'Search.RemoveSearchResultActionRequest') {
+            } else if (request.getName() === 'Search.RemoveSearchResultActionRequest') {
                 this.search.removeSearchResultAction(request.getLinkName());
             }
         }
@@ -37,5 +36,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchResultActio
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

@@ -186,7 +186,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             me.setState(state);
 
             me._setupLayerTools();
-
         },
         /**
          * Fetches reference to the map layer service
@@ -280,7 +279,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             }
 
             return handler.apply(this, [event]);
-
         },
 
         /**
@@ -327,7 +325,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
                     // ajax call for all layers
                     this._setupLayerTools();
                 }
-            },
+            }
         },
 
         /**

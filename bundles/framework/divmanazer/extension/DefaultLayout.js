@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
      */
 
     function (instance, locale) {
-
         /* @property extension instance */
         this.instance = instance;
 
@@ -24,7 +23,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
 
         /* @property container the DIV element */
         this.container = null;
-
     }, {
         /**
          * @method getName
@@ -102,7 +100,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultLayout',
         getLocalization: function () {
             return this.locale;
         }
-
 
     }, {
         'protocol': ['Oskari.userinterface.Layout']

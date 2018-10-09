@@ -122,7 +122,7 @@ Oskari.clazz.define(
             var me = this;
             var container = me._messageContainer.clone();
             var field = me._messageField.clone();
-            //Get reference to the div we use to show the messages
+            // Get reference to the div we use to show the messages
             this.messageElement = jQuery('#oskari-system-messages');
             this.messageElement.append(container, field);
             if (!this.messageElement.length) {
@@ -159,7 +159,7 @@ Oskari.clazz.define(
             el.text(message);
             setTimeout(function () {
                 el.hide();
-            },3000);
+            }, 3000);
             if (this.messages.length === 0) {
                 el.empty();
             }

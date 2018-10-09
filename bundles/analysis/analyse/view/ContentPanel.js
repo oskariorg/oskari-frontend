@@ -211,7 +211,6 @@ Oskari.clazz.define(
                 }
                 this.addGeometry(event.getFiltered());
                 this.drawFilterPlugin.stopDrawFiltering();
-
             },
 
             'WFSFeatureGeometriesEvent': function (event) {
@@ -233,7 +232,7 @@ Oskari.clazz.define(
                 // if there are selected features, unselect them
                 me.selectControl.unselectAll();
 
-                //set selected geometry for filter json
+                // set selected geometry for filter json
                 var geometries = [];
                 _.forEach(event.getGeometries(), function (geometry) {
                     geometries.push(geometry[1]);
@@ -312,8 +311,8 @@ Oskari.clazz.define(
             me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls',
                 me.instance,
                 me.loc,
-                function (isCancel) {me._stopDrawing(isCancel);},
-                function (drawMode) {me._startNewDrawing(drawMode);});
+                function (isCancel) { me._stopDrawing(isCancel); },
+                function (drawMode) { me._startNewDrawing(drawMode); });
 
             me.dataPanel = me.drawControls.createDataPanel(me.loc);
             me.drawToolsPanel = me.drawControls.createDrawToolsPanel(me.loc);
@@ -504,9 +503,9 @@ Oskari.clazz.define(
                         var wkt = new OpenLayers.Format.WKT(),
                             featureWKT = wkt.write(event.feature);
 
-                        //set geometry for drawFilter
+                        // set geometry for drawFilter
                         me.selectedGeometry = featureWKT;
-                        //set geometry for filter Json
+                        // set geometry for filter Json
                         var geometries = [];
                         geometries.push(featureWKT);
                         me.view.setFilterGeometry(geometries);
@@ -592,7 +591,7 @@ Oskari.clazz.define(
                 {
                     id: this.drawPluginId,
                     multipart: true,
-                    requests : false
+                    requests: false
                 }
             );
 
@@ -679,7 +678,7 @@ Oskari.clazz.define(
                 clearTimeout(this._flyoutTimeOut);
                 this._flyoutTimeOut = setTimeout(function () {
                     me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
-                },100);
+                }, 100);
             } else {
                 me.sandbox.postRequestByName(rn, [extension, 'attach', rn, '0', '424']);
             }
@@ -714,7 +713,6 @@ Oskari.clazz.define(
                 return;
             }
 
-
             var me = this,
                 diaLoc = this.loc.content.drawFilter.dialog,
                 controlButtons = [],
@@ -740,8 +738,8 @@ Oskari.clazz.define(
                 controlButtons = this._createDrawFilterControls();
                 this.helpDialog.addClass('drawfilterdialog');
                 this.helpDialog.show(dialogTitle, dialogText, controlButtons);
-                this.helpDialog.
-                    moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
+                this.helpDialog
+                    .moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
             }
 
             // Disable WFS highlight and GFI dialog
@@ -913,7 +911,7 @@ Oskari.clazz.define(
             var me = this,
                 layer = new OpenLayers.Layer.Vector('AnalyseFeatureLayer');
 
-            //add select possibility to temp layers
+            // add select possibility to temp layers
             // requires highlight refactoring so is not in use yet
             me.highlightControl = new OpenLayers.Control.SelectFeature(
                 layer,
@@ -1108,6 +1106,6 @@ Oskari.clazz.define(
             jQuery('div.drawFilter').removeClass('selected');
             // Close the help dialog
             this.drawControls.closeHelpDialog();
-        },
+        }
     }
 );

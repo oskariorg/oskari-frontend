@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
          */
         eventHandlers: {
             MapSizeChangedEvent: function () {
-                //update map / container size but prevent a new mapsizechanged request from being sent
+                // update map / container size but prevent a new mapsizechanged request from being sent
                 this.updateMapSize();
             }
         },
@@ -226,8 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
         * Update map size
         */
         _updateMapModuleSize: function () {
-
-            //turn off event handlers in order to avoid consecutive calls to mapsizechanged
+            // turn off event handlers in order to avoid consecutive calls to mapsizechanged
             this._unregisterEventHandlers();
             var me = this;
             if (me.sandbox.hasHandler('MapFull.MapSizeUpdateRequest')) {
@@ -236,7 +235,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             me._updateMapMode();
 
-            //turn event handlers back on.
+            // turn event handlers back on.
             this._registerEventHandlers();
         },
 
@@ -330,9 +329,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             me.modeChangedCB = modeChangedCB;
 
-            //initial mode selection if modify.
+            // initial mode selection if modify.
             if (pData && pData.metadata && pData.metadata.preview) {
-
                 var selectedOptions = me.sizeOptions.filter(function (option) {
                     return (option.id === pData.metadata.preview);
                 });
@@ -345,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                 }
             }
 
-            //initialise fields only after it's certain which option is selected (new / modify)
+            // initialise fields only after it's certain which option is selected (new / modify)
             me.fields = {
                 size: {
                     clazz: 'Oskari.userinterface.component.RadioButtonGroup',
@@ -357,7 +355,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                     },
                     options: me.sizeOptions.map(function (option) {
                         var title = me.loc.sizes[option.id];
-                        if ('custom' !== option.id && 'fill' !== option.id) {
+                        if (option.id !== 'custom' && option.id !== 'fill') {
                             title = me._getSizeLabel(title, option);
                         }
 
@@ -369,8 +367,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
                     value: me.selected.id
                 }
             };
-
-
 
             for (fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {
@@ -404,7 +400,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
             }
 
             me._createCustomSizes(contentPanel);
-
 
             me.panel = panel;
             me.updateMapSize();
@@ -461,7 +456,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapPreview'
 
             customSizes.className = 'customsize';
             contentPanel.append(customSizes);
-
         },
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.

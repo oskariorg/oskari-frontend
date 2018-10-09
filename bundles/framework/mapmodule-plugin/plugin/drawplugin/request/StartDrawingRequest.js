@@ -15,32 +15,31 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.r
             }
             this._drawMode = config.drawMode;
         }
-
     }, {
-        __name : 'DrawPlugin.StartDrawingRequest',
-        getName : function () {
+        __name: 'DrawPlugin.StartDrawingRequest',
+        getName: function () {
             return this.__name;
         },
 
-        isModify : function () {
+        isModify: function () {
             return this._continueCurrent;
         },
 
-        drawModes : {
-            point : 'point',
-            line : 'line',
-            area : 'area',
-            cut : 'cut',
-            box : 'box'
+        drawModes: {
+            point: 'point',
+            line: 'line',
+            area: 'area',
+            cut: 'cut',
+            box: 'box'
         },
 
-        getDrawMode : function () {
+        getDrawMode: function () {
             return this._drawMode;
         },
 
-        getGeometry : function () {
+        getGeometry: function () {
             return this._geometry;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

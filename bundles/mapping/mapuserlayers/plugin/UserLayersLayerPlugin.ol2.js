@@ -12,12 +12,12 @@ Oskari.clazz.define(
     function () {
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'UserLayersLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
+        __name: 'UserLayersLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'userlayer',
+        layertype: 'userlayer',
 
-        getLayerTypeSelector : function () {
+        getLayerTypeSelector: function () {
             return this.layertype;
         },
         /**
@@ -75,7 +75,6 @@ Oskari.clazz.define(
                     buffer: 0
                 });
 
-
             openLayer.opacity = layer.getOpacity() / 100;
             this._registerLayerEvents(openLayer, layer);
             this.getMapModule().addLayer(openLayer, !keepLayerOnTop);
@@ -107,7 +106,6 @@ Oskari.clazz.define(
 
             layer.events.register('tileerror', layer, function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), null, true);
-
             });
         },
 
@@ -154,8 +152,8 @@ Oskari.clazz.define(
          * @param  {Boolean} forced
          * @param  {Object} params
          */
-        updateLayerParams : function (layer, forced, params) {
-            //var openLayerId = 'layer_' + layer.getId();
+        updateLayerParams: function (layer, forced, params) {
+            // var openLayerId = 'layer_' + layer.getId();
             var oLayer = this.getOLMapLayers(layer);
 
             if (!oLayer) {

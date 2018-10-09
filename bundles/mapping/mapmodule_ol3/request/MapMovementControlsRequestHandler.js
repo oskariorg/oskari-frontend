@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
     function (mapModule) {
         this.mapModule = mapModule;
     }, {
-        getMapModule : function () {
+        getMapModule: function () {
             return this.mapModule;
         },
         /**
@@ -44,8 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                     if (request.getOptions('zoom')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                     }
-                }
-                else {
+                } else {
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                 }
@@ -62,8 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                     if (request.getOptions('zoom')) {
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                     }
-                }
-                else {
+                } else {
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                 }
@@ -82,8 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
                     }
-                }
-                else {
+                } else {
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionMouseWheelZoom));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
@@ -104,8 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
                     }
-                }
-                else {
+                } else {
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionMouseWheelZoom));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));

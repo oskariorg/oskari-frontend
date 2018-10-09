@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.request.common.AddMapLayerRequest',
      */
 
     function (mapLayerId) {
-
         this._creator = null;
         this._mapLayerId = mapLayerId;
     }, {

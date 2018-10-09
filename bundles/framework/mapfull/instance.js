@@ -162,7 +162,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-
             me.adjustMapSize();
 
             // startup plugins
@@ -295,7 +294,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'MapFull.MapSizeUpdateRequest',
                 me.mapSizeUpdateRequestHandler
             );
-
         },
 
         /**
@@ -490,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 if (plugin && plugin.setState) {
                     plugin.setState(state.plugins[pluginName]);
                 }
-            }*/
+            } */
 
             // Hackhack
             if (!state.plugins) {
@@ -542,7 +540,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     },
                     mapmodule.getState()
                 );
-
 
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
@@ -617,7 +614,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         toggleFullScreen: function () {
-
             this.adjustMapSize();
         },
 

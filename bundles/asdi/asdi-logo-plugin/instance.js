@@ -7,8 +7,8 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
         this.data = null;
         this._loc;
     }, {
-        __name : 'asdi-logo-plugin',
-        getName : function () {
+        __name: 'asdi-logo-plugin',
+        getName: function () {
             return this.__name;
         },
 
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
             var me = this;
             var logoService = Oskari.getSandbox().getService('Oskari.map.LogoPluginService');
             var options = {
-                id:'About',
+                id: 'About',
                 callback: function (event) {
                     me.createAboutDialog(event);
                 }
@@ -79,6 +79,6 @@ Oskari.clazz.define('Oskari.asdi.logo.BundleInstance',
         }
 
     }, {
-        'extend' : ['Oskari.userinterface.extension.DefaultExtension']
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
     }
 );

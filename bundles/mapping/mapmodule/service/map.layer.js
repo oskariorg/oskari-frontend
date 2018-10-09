@@ -503,9 +503,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     // if layer is not part of the groups layers -> add it
                     if (!layer) {
                         me.getAllLayerGroups(group).addChildren({
-                            type:'layer',
+                            type: 'layer',
                             id: newLayerConf.id,
-                            order:1000000
+                            order: 1000000
                         });
                     }
                 });
@@ -1285,7 +1285,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            /*prefer url - param, fall back to wmsUrl if not available */
+            /* prefer url - param, fall back to wmsUrl if not available */
             if (jsonLayer.url) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.url));
             } else if (jsonLayer.wmsUrl) {

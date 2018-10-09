@@ -180,7 +180,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 // default to default category id(?)
                 var defCat = this.myPlacesService.getDefaultCategory();
                 if (defCat) {
-
                     categoryId = defCat.getId();
                 } else {
                     categoryId = '-99';
@@ -334,9 +333,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             dialog.makeModal();
             dialog.show(me.loc('categoryform.edit.title'), content, buttons);
             dialog.moveTo('div.personaldata ul li select', 'right');
-            //bind listeners etc. for category form
+            // bind listeners etc. for category form
             form.start();
-
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -356,7 +354,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             }
             dialog.makeModal();
             dialog.show(this.loc('validation.title'), content, [okBtn]);
-
         },
         /**
          * @method _showMessage
@@ -577,7 +574,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 var locParams = [category.getName(), places.length, defaultCategory.getName()];
                 content = me.loc('notification.categoryDelete.deleteConfirmMove', locParams);
             } else {
-
                 deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 deleteBtn.setTitle(me.loc('buttons.deleteCategory'));
                 deleteBtn.addClass('primary');

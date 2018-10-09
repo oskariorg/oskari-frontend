@@ -7,17 +7,16 @@ Oskari.clazz.define(
         this._log = Oskari.log('StopDrawFilteringRequestPluginHandler');
     },
     {
-        handleRequest: function (core,request) {
+        handleRequest: function (core, request) {
             this._log.debug('Stop draw filtering');
             if (request.isCancel()) {
                 // we wish to clear the drawing without sending further events
                 this.drawFilterPlugin.stopDrawFiltering();
-            }
-            else {
+            } else {
                 // pressed finished drawing
                 this.drawFilterPlugin.finishDrawFiltering();
             }
         }
-    },{
+    }, {
         protocol: ['Oskari.mapframework.core.RequestHandler']
     });

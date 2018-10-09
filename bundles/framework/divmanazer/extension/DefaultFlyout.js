@@ -14,7 +14,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
      * Always extend this class, never use as is.
      */
     function (instance, locale) {
-
         /* @property extension instance */
         this.instance = instance;
 
@@ -27,15 +26,15 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         this._sidetool = null;
         this._log = Oskari.log(this.getName());
     }, {
-        __temp:{
-            sideTool:_.template(
+        __temp: {
+            sideTool: _.template(
                 '<div class="sidetool">' +
                 '<div class="icon icon-arrow-white-right"></div>' +
                 '<label class="verticalsidelabel"></label>' +
                 '</div>')
         },
-        //this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
-        getSideLabel : function (text) {
+        // this function collects the label and calls the default flyout function addSideTool sending the label and the callback function.
+        getSideLabel: function (text) {
             var sidelabel = jQuery(this.__temp.sideTool());
             sidelabel.find('label').text(text);
             return sidelabel;
@@ -49,8 +48,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
                 if (index === 0) {
                     jQuery(this).css('top', heights);
                     heights += jQuery(this).height() + 10;
-                }
-                else {
+                } else {
                     jQuery(this).css('top', heights + 'px');
                     heights += jQuery(this).height() + 10;
                 }
@@ -65,8 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
             var me = this;
             var sidelabel = this.getSideLabel(label);
 
-            var textWidth = function (el)
-            {
+            var textWidth = function (el) {
                 // Only create the dummy element once
                 var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap' }).appendTo('body');
                 var width = calc.html(el.html()).width();
@@ -95,8 +92,8 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
                 sidelabel.on('click', function () {
                     var position = me.getEl().parents('.oskari-flyout').position();
                     var bounds = {
-                        left : position.left + sidelabel.position().left,
-                        top : position.top + sidelabel.position().top
+                        left: position.left + sidelabel.position().left,
+                        top: position.top + sidelabel.position().top
                     };
                     bounds.right = bounds.left + sidelabel.outerWidth();
                     bounds.bottom = bounds.top + sidelabel.height();
@@ -194,7 +191,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         getState: function () {
             return this.state;
         },
-        move : function (top, left) {
+        move: function (top, left) {
             var flyout = this.getEl().parent().parent();
             if (typeof top === 'number' || typeof top === 'string') {
                 flyout.css('top', top);
@@ -207,7 +204,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
          * @method close
          * Closes the flyout
          */
-        close : function () {
+        close: function () {
             var instance = this.getExtension();
             var sandbox = this.getSandbox();
             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [instance, 'close']);
@@ -250,14 +247,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultFlyout',
         /**
          * Hook function for bundle specific op. Called when flyout is opened.
          */
-        onOpen : function () {
+        onOpen: function () {
             this._log.debug('Opened flyout ' + this.getName());
         },
 
         /**
          * Hook function for bundle specific op. Called when flyout is closed.
          */
-        onClose : function () {
+        onClose: function () {
             this._log.debug('Closed flyout' + this.getName());
         }
 

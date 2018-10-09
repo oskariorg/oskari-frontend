@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
      * Always extend this class, never use as is.
      */
     function (instance, locale, model) {
-
         /* @property instance bundle instance */
         this.instance = instance;
 
@@ -570,7 +569,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
 
             return handler.apply(this, [event]);
-
         },
 
         /**
@@ -593,7 +591,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 this.renderMapLayerList();
             },
             MapLayerEvent: function (event) {
-                /*add + no layerid -> mass load -> all map layers probably loaded*/
+                /* add + no layerid -> mass load -> all map layers probably loaded */
                 if (event.getOperation() === 'add' && event.getLayerId() === null) {
                     this.renderMapLayerList();
                 }
@@ -610,7 +608,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
                 var viewState = event.getViewState();
                 if (viewState === 'close') {
-                    //parent closing -> clear my eventhandlers
+                    // parent closing -> clear my eventhandlers
                     for (var p in me.eventHandlers) {
                         if (me.eventHandlers.hasOwnProperty(p)) {
                             me.instance.sandbox.unregisterFromEventByName(me, p);
@@ -651,9 +649,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     );
                     entry.setId(tabId);
 
-                    //skip async tabs whose content comes from someplace else
+                    // skip async tabs whose content comes from someplace else
                     if (me._templates.tabs[tabId]) {
-                        //the "native" tabs have keys in this bundles locale
+                        // the "native" tabs have keys in this bundles locale
                         entry.setTitle(locale[tabId]);
                         entry.setContent(
                             me._templates.tabs[tabId](model)
@@ -668,7 +666,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
 
-            /*add the tab change event listener only once.*/
+            /* add the tab change event listener only once. */
             if (additionalTabsFound) {
                 me._tabContainer.addTabChangeListener(function (previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
@@ -724,7 +722,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          */
         addTabs: function (tabsJSON) {
-            //TODO: adding dynamically _after_ I've already been rendered...
+            // TODO: adding dynamically _after_ I've already been rendered...
             var me = this;
             me._additionalTabs = tabsJSON;
             for (var tabId in tabsJSON) {
@@ -811,14 +809,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         _toggleMapLayerVisibility: function (layer) {
             var me = this,
                 labelText;
-            //not added -> add.
+            // not added -> add.
             if (me.isLayerSelected(layer) && layer.isVisible()) {
-                //added -> remove from map
+                // added -> remove from map
                 me.instance.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
                 labelText = me.locale.layerList.show;
             } else {
                 me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
-                //turn visible in case was invisible
+                // turn visible in case was invisible
                 if (!layer.isVisible()) {
                     me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
                 }

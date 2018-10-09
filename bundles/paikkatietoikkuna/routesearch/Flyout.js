@@ -91,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routesearch.Flyout',
          * @param {OpenLayers.LonLat} lonLat Location
          */
         _reverseGeoCode: function (field, lonLat) {
-            //not implemented
+            // not implemented
         },
         bindLocation: function (location) {
             var me = this;

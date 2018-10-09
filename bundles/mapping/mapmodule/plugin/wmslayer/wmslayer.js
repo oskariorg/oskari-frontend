@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.WmsLayer',
      */
 
     function () {
-
         this._availableQueryFormats = [];
 
         /* Layer Type */

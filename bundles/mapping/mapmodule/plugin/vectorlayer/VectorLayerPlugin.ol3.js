@@ -358,7 +358,7 @@ Oskari.clazz.define(
                 if (identifier && identifier !== null && value && value !== null) {
                     me._removeFeaturesByAttribute(olLayer, identifier, value);
                 }
-                //remove all features from the given layer
+                // remove all features from the given layer
                 else {
                     this._removeFeaturesByAttribute(olLayer);
                     delete this._features[layerId];
@@ -408,7 +408,7 @@ Oskari.clazz.define(
             });
             sandbox.notifyAll(removeEvent);
         },
-        _removeFromCache : function (layerId, feature) {
+        _removeFromCache: function (layerId, feature) {
             var storedFeatures = this._features[layerId];
             for (var i = 0; i < storedFeatures.length; i++) {
                 var featuresInDataset = storedFeatures[i].data;
@@ -835,7 +835,6 @@ Oskari.clazz.define(
             var vectorLayer = this._olLayers[layer.getId()];
             this._map.removeLayer(vectorLayer);
             delete this._olLayers[layer.getId()];
-
         },
         /**
          * @method getOLMapLayers
@@ -860,7 +859,7 @@ Oskari.clazz.define(
             }
             return this._olLayers[id];
         },
-        setVisibleByLayerId : function (id, visible) {
+        setVisibleByLayerId: function (id, visible) {
             var layer = this.getLayerById(id);
             if (layer) {
                 layer.setVisible(visible);
@@ -897,7 +896,7 @@ Oskari.clazz.define(
             var me = this;
             var style = this.getStyle(options, feature, update);
 
-            //set up property-based labeling
+            // set up property-based labeling
             if (update && typeof feature.getId === 'function') {
                 options.featureStyle = me._featureStyles[feature.getId()] || options.featureStyle;
             }
@@ -1026,7 +1025,6 @@ Oskari.clazz.define(
                     }
                 }
             }
-
         },
         /**
          * @method zoomToFeatures

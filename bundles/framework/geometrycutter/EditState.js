@@ -122,5 +122,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.EditState', funct
             break;
         }
         return !!this.resultFeatures;
-    },
+    }
 }, {});

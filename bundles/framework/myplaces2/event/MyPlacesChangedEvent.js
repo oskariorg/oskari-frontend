@@ -11,13 +11,13 @@ Oskari.clazz.define('Oskari.mapframework.myplaces.event.MyPlacesChangedEvent',
     function (config) {
     }, {
     /** @static @property __name event name */
-        __name : 'MyPlaces.MyPlacesChangedEvent',
+        __name: 'MyPlaces.MyPlacesChangedEvent',
         /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         }
     }, {
@@ -25,5 +25,5 @@ Oskari.clazz.define('Oskari.mapframework.myplaces.event.MyPlacesChangedEvent',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

@@ -19,12 +19,12 @@ Oskari.clazz
             this._openLayerList = openLayerList;
         }, {
         /** @static @property __name request name */
-            __name : 'ShowFilteredLayerListRequest',
+            __name: 'ShowFilteredLayerListRequest',
             /**
          * @method getName
          * @return {String} request name
          */
-            getName : function () {
+            getName: function () {
                 return this.__name;
             },
             /**
@@ -46,5 +46,5 @@ Oskari.clazz
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-            'protocol' : ['Oskari.mapframework.request.Request']
+            'protocol': ['Oskari.mapframework.request.Request']
         });

@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionChange', function (
             if (layerString !== '') {
                 layerString += ',';
             }
-            layerString += layer._id + '+' + layer._opacity ;
+            layerString += layer._id + '+' + layer._opacity;
             if (layer.style) {
                 layerString += '+' + layer.style;
             } else {

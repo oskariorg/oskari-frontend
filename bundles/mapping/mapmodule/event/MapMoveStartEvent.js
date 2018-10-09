@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapMoveStartEvent',
         this._x = x;
 
         this._y = y;
-
     }, {
 
         /** @static @property __name event name */

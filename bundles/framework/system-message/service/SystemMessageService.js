@@ -10,10 +10,10 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.service.SystemMessag
         this._instance = instance;
         this._sandbox = instance.sandbox;
         this.urls = {};
-    },{
+    }, {
         __name: 'system.message.SystemMessageService',
-        __qname : 'Oskari.framework.bundle.system.message.service.SystemMessageService',
-        getQName : function () {
+        __qname: 'Oskari.framework.bundle.system.message.service.SystemMessageService',
+        getQName: function () {
             return this.__qname;
         },
         getName: function () {
@@ -30,6 +30,6 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.service.SystemMessag
             // this._instance.messages.push();
             this._instance.showStatusMessage();
         }
-    },{
-        'protocol' : ['Oskari.framework.service.Service']
+    }, {
+        'protocol': ['Oskari.framework.service.Service']
     });

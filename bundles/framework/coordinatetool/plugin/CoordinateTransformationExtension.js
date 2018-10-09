@@ -251,7 +251,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     'secondsY': secondsY.replace('.', Oskari.getDecimalSeparator())
                 };
             }
-
         },
         /**
          * @public @method changeToolStyle
@@ -271,7 +270,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for (var c = 0;c < classList.length;c++) {
+            for (var c = 0; c < classList.length; c++) {
                 var className = classList[c];
                 if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);

@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance',
                         '</div>')
         };
     }, {
-        getName : function () {
+        getName: function () {
             return 'AdminAppSetup';
         },
         getLocalization: function (key) {
@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance',
             }
             return this._localization;
         },
-        start : function () {
+        start: function () {
             var me = this;
             var sandbox = Oskari.getSandbox();
             sandbox.register(this);
@@ -97,24 +97,24 @@ Oskari.clazz.define('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance',
             me._importBtn.setEnabled(false);
 
             jQuery.ajax({
-                type : 'POST',
-                dataType   : 'json',
+                type: 'POST',
+                dataType: 'json',
                 contentType: 'application/json; charset=UTF-8',
-                url : Oskari.urls.getRoute('Views'),
-                data : JSON.stringify(parsed),
-                error : function () {
+                url: Oskari.urls.getRoute('Views'),
+                data: JSON.stringify(parsed),
+                error: function () {
                     me._popup.show(me._localization.error.title, me._localization.error.importError);
                     me._popup.fadeout(5000);
                     me._importBtn.setEnabled(true);
                 },
-                success : function (response) {
+                success: function (response) {
                     var btn = me._popup.createCloseButton(me._localization.ok);
                     btn.addClass('primary');
                     var message = me._templates.successMessage.clone();
                     message.find('span.view-id').html(response.id);
                     message.find('span.view-uuid').html(response.uuid);
                     message.find('a').html(response.url);
-                    message.find('a').attr('href',response.url);
+                    message.find('a').attr('href', response.url);
                     me._popup.show(me._localization.success.title, message, [btn]);
                     me._importBtn.setEnabled(true);
                     me._jsonInput.setValue('');
@@ -125,10 +125,10 @@ Oskari.clazz.define('Oskari.admin.bundle.appsetup.AppSetupAdminBundleInstance',
         init: function () {
 
         },
-        stop : function () {
+        stop: function () {
 
         },
-        update : function () {
+        update: function () {
 
         }
     }, {

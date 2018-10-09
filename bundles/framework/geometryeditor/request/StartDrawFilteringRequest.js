@@ -19,38 +19,37 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
         if (config.sourceGeometry) {
             this._sourceGeometry = config.sourceGeometry;
         }
-
     }, {
-        __name : 'DrawFilterPlugin.StartDrawFilteringRequest',
-        getName : function () {
+        __name: 'DrawFilterPlugin.StartDrawFilteringRequest',
+        getName: function () {
             return this.__name;
         },
 
-        isModify : function () {
+        isModify: function () {
             if (this._continueCurrent) {
                 return true;
             }
             return false;
         },
 
-        modes : {
-            point : 'point',
-            line : 'line',
-            edit : 'edit',
-            remove : 'remove'
+        modes: {
+            point: 'point',
+            line: 'line',
+            edit: 'edit',
+            remove: 'remove'
         },
 
-        getMode : function () {
+        getMode: function () {
             return this._mode;
         },
 
-        getGeometry : function () {
+        getGeometry: function () {
             return this._geometry;
         },
 
-        getSourceGeometry : function () {
+        getSourceGeometry: function () {
             return this._sourceGeometry;
         }
     }, {
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         Oskari.makeObservable(this);
         this._baseZIndex = 20000;
     }, {
-	    __templates : {
+	    __templates: {
 	    	popup: jQuery('<div class="oskari-flyout">' +
 	    		'<div class="oskari-flyouttoolbar">' +
 	    		'	<div class="oskari-flyoutheading"></div>' +
@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 '<label class="verticalsidelabel">${ label }</label>' +
                 '</div>')
 	    },
-	    isVisible : function () {
+	    isVisible: function () {
 	    	return this._visible;
 	    },
 	    show: function () {
@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             }
             this._popup.addClass(cls);
         },
-        setSize : function (width, height) {
+        setSize: function (width, height) {
             if (!this._popup) {
                 return;
             }
@@ -132,15 +132,14 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             if (height) {
                 this._popup.css('height', height);
             }
-
         },
-        bringToTop : function () {
+        bringToTop: function () {
             if (!this._popup) {
                 return;
             }
             this._popup.css('z-index', this._baseZIndex + Oskari.seq.nextVal());
         },
-        move : function (left, top, keepOnScreen) {
+        move: function (left, top, keepOnScreen) {
             if (!this._popup) {
                 return;
             }
@@ -164,19 +163,19 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 'top': top
             });
         },
-        getPosition : function () {
+        getPosition: function () {
             if (!this._popup) {
                 return;
             }
             return this._popup.position();
         },
-        getSize : function () {
+        getSize: function () {
             if (!this._popup) {
                 return;
             }
             return {
-                width : this._popup.outerWidth(),
-                height : this._popup.height()
+                width: this._popup.outerWidth(),
+                height: this._popup.height()
             };
         },
         toggle: function () {
@@ -220,8 +219,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 if (index === 0) {
                     jQuery(this).css('top', heights);
                     heights += jQuery(this).height() + 10;
-                }
-                else {
+                } else {
                     jQuery(this).css('top', heights + 'px');
                     heights += jQuery(this).height() + 10;
                 }
@@ -234,10 +232,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          */
         addSideTool: function (label, callback) {
             var me = this;
-            var sidelabel = jQuery(this.__templates.sideTool({label : label}));
+            var sidelabel = jQuery(this.__templates.sideTool({label: label}));
 
-            var textWidth = function (el)
-            {
+            var textWidth = function (el) {
                 // Only create the dummy element once
                 var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap' }).appendTo('body');
                 var width = calc.html(el.html()).width();
@@ -259,8 +256,8 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 sidelabel.on('click', function () {
                     var position = me._popup.position();
                     var bounds = {
-                        left : position.left + sidelabel.position().left - 16,
-                        top : position.top + sidelabel.position().top
+                        left: position.left + sidelabel.position().left - 16,
+                        top: position.top + sidelabel.position().top
                     };
                     bounds.right = bounds.left + sidelabel.outerWidth();
                     bounds.bottom = bounds.top + sidelabel.height();

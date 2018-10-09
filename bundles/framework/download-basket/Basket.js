@@ -17,10 +17,10 @@ Oskari.clazz.define(
         this._el = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket"></div>'),
-            basketWrapper : jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
-            basketButtons : jQuery('<div class="oskari__download-basket-buttons"></div>'),
-            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"><p></p></div>'),
-            basketForm : jQuery(
+            basketWrapper: jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
+            basketButtons: jQuery('<div class="oskari__download-basket-buttons"></div>'),
+            basketUserInfo: jQuery('<div class="oskari__download-basket-user-info"><p></p></div>'),
+            basketForm: jQuery(
                 '<form method="" action="">' +
                 '<fieldset>' +
                 '    <label>' +
@@ -36,8 +36,7 @@ Oskari.clazz.define(
                 '</form>'
             )
         };
-
-    },{
+    }, {
         startBasket: function () {
             this.setContent(this.createUi());
         },
@@ -50,11 +49,11 @@ Oskari.clazz.define(
         _initTemplates: function () {
             var me = this;
 
-            //Wrapper
+            // Wrapper
             me._templates.basketWrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
             me._templates.main.append(me._templates.basketWrapper);
 
-            //Basket user info
+            // Basket user info
             me._templates.basketUserInfo.append(me._templates.basketForm);
             me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
             me._templates.main.append(me._templates.basketUserInfo);
@@ -65,7 +64,7 @@ Oskari.clazz.define(
                 curEl.prev('span').html(me._getLocalization(curEl.attr('name')));
             });
 
-            //Basket wizard buttons
+            // Basket wizard buttons
             me.emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -135,7 +134,7 @@ Oskari.clazz.define(
             var me = this;
             var downloadDetails = [];
             var el = me.getContainer();
-            el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
+            el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled', true);
 
             el.find('.download-basket__component').each(function () {
                 var parent = jQuery(this);
@@ -155,7 +154,6 @@ Oskari.clazz.define(
                 };
 
                 downloadDetails.push(details);
-
             });
             var strDownloadDetails = JSON.stringify(downloadDetails);
 
@@ -165,18 +163,18 @@ Oskari.clazz.define(
             var strUserDetails = JSON.stringify(userDetails);
 
             jQuery.ajax({
-                beforeSend : function (x) {
+                beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json;charset=UTF-8');
                     }
                 },
-                success : function (resp) {
+                success: function (resp) {
                     if (resp.success) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                             btn = dialog.createCloseButton('OK');
                         btn.setHandler(function () {
                             var buttons = el.find('.oskari__download-basket-buttons');
-                            buttons.find('input.send').attr('disabled',false);
+                            buttons.find('input.send').attr('disabled', false);
                             el.find('.oskari__download-basket-user-info').find('input').val('');
                             buttons.find('input.prev').trigger('click');
                             buttons.find('input.empty').trigger('click');
@@ -192,9 +190,8 @@ Oskari.clazz.define(
                             me._getLocalization('error-in-downloading')
                         );
                     }
-
                 },
-                error : function (jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
 
                     me._openPopup(
@@ -202,16 +199,15 @@ Oskari.clazz.define(
                         error
                     );
                 },
-                data : {
-                    downloadDetails : strDownloadDetails,
+                data: {
+                    downloadDetails: strDownloadDetails,
                     lang: Oskari.getLang(),
                     userDetails: strUserDetails
                 },
-                type : 'POST',
-                dataType : 'json',
-                url : Oskari.urls.getRoute('DownloadInfo')
+                type: 'POST',
+                dataType: 'json',
+                url: Oskari.urls.getRoute('DownloadInfo')
             });
-
         },
 
         _openPopup: function (title, message) {
@@ -221,7 +217,7 @@ Oskari.clazz.define(
             } else {
                 me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             }
-            me._popup.show(title,message);
+            me._popup.show(title, message);
             me._popup.fadeout();
         },
 
@@ -335,22 +331,22 @@ Oskari.clazz.define(
 
                 me._selected.forEach(function (basketItem, index) {
                     var basketEl = template.clone();
-                    basketEl.attr('data-layer-name',basketItem.layerName);
-                    basketEl.attr('data-layer-id',basketItem.layerUrl);
-                    basketEl.attr('data-bbox-bottom',basketItem.bbox.bottom);
-                    basketEl.attr('data-bbox-left',basketItem.bbox.left);
-                    basketEl.attr('data-bbox-right',basketItem.bbox.right);
-                    basketEl.attr('data-bbox-top',basketItem.bbox.top);
-                    basketEl.attr('data-cropping-layer',basketItem.cropLayerName);
-                    basketEl.attr('data-cropping-url',basketItem.cropLayerUrl);
-                    basketEl.attr('data-cropping-mode',basketItem.cropMode);
+                    basketEl.attr('data-layer-name', basketItem.layerName);
+                    basketEl.attr('data-layer-id', basketItem.layerUrl);
+                    basketEl.attr('data-bbox-bottom', basketItem.bbox.bottom);
+                    basketEl.attr('data-bbox-left', basketItem.bbox.left);
+                    basketEl.attr('data-bbox-right', basketItem.bbox.right);
+                    basketEl.attr('data-bbox-top', basketItem.bbox.top);
+                    basketEl.attr('data-cropping-layer', basketItem.cropLayerName);
+                    basketEl.attr('data-cropping-url', basketItem.cropLayerUrl);
+                    basketEl.attr('data-cropping-mode', basketItem.cropMode);
                     basketEl.attr('data-index', index);
                     var identifiers = [];
                     var identifier = {
                         layerName: basketItem.cropLayerName,
                         uniqueColumn: basketItem.cropUniqueKey,
-                        geometryColumn : basketItem.cropGeometryColumn,
-                        geometryName : basketItem.cropGeometryName,
+                        geometryColumn: basketItem.cropGeometryColumn,
+                        geometryName: basketItem.cropGeometryName,
                         uniqueValue: basketItem.cropUniqueKeyValue
                     };
                     identifiers.push(identifier);
@@ -369,7 +365,7 @@ Oskari.clazz.define(
                         licenseLink.text(Oskari.getLocalized(me.instance.conf.licenseName) ||
                             me.instance.conf.licenseName ||
                             me._getLocalization('basket-license-name'));
-                        licenseLink.attr('href',Oskari.getLocalized(me.instance.conf.licenseUrl) ||
+                        licenseLink.attr('href', Oskari.getLocalized(me.instance.conf.licenseUrl) ||
                             me.instance.conf.licenseUrl);
                     } else {
                         licenseTitle.remove();
@@ -387,7 +383,7 @@ Oskari.clazz.define(
                             me._selected = [];
                         }
                         var index = basketEl.attr('data-index');
-                        me._selected.splice(index,1);
+                        me._selected.splice(index, 1);
                         event.preventDefault();
                         me.instance.addBasketNotify();
                     });

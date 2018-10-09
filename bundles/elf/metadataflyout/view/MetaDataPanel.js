@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
      * Always extend this class, never use as is.
      */
     function (instance, locale, model) {
-
         /* @property instance bundle instance */
         this.instance = instance;
 
@@ -92,7 +91,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '           <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
                     '               <p><%= temporalExtent.begin %> - <%= temporalExtent.end %></p>' +
                     '           <% }); %>' +
-                    //TODO: "updated:" + maintenanceAndUpdateFrequency
+                    // TODO: "updated:" + maintenanceAndUpdateFrequency
                     '           </td>' +
                     '       </tr>' +
                     '       <tr>' +
@@ -386,7 +385,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
 
             return handler.apply(this, [event]);
-
         },
 
         /**
@@ -409,7 +407,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 this.renderMapLayerList();
             },
             MapLayerEvent: function (event) {
-                /*add + no layerid -> mass load -> all map layers probably loaded*/
+                /* add + no layerid -> mass load -> all map layers probably loaded */
                 if (event.getOperation() === 'add' && event.getLayerId() === null) {
                     this.renderMapLayerList();
                 }
@@ -426,7 +424,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
                 var viewState = event.getViewState();
                 if (viewState === 'close') {
-                    //parent closing -> clear my eventhandlers
+                    // parent closing -> clear my eventhandlers
                     for (var p in me.eventHandlers) {
                         if (me.eventHandlers.hasOwnProperty(p)) {
                             me.instance.sandbox.unregisterFromEventByName(me, p);
@@ -463,14 +461,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             var asyncTabsFound = false;
             for (tabId in me._templates.tabs) {
                 if (me._templates.tabs.hasOwnProperty(tabId)) {
-
-                    //only show quality tab for services and datasets
-                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    // only show quality tab for services and datasets
+                    // TODO: maybe make this a configurable thing at some point instead of hardcoding...
                     if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
                         continue;
                     }
 
-                    //license tab but no license url -> skip rendering the tab.
+                    // license tab but no license url -> skip rendering the tab.
                     if (tabId === 'license' && (!model.license || model.license === '')) {
                         continue;
                     }
@@ -479,9 +476,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                         'Oskari.userinterface.component.TabPanel'
                     );
                     entry.setId(tabId);
-                    //skip async tabs whose content comes from someplace else
+                    // skip async tabs whose content comes from someplace else
                     if (me._templates.tabs[tabId]) {
-                        //the "native" tabs have keys in this bundles locale
+                        // the "native" tabs have keys in this bundles locale
                         entry.setTitle(locale[tabId]);
                         entry.setContent(
                             me._templates.tabs[tabId](model)
@@ -497,7 +494,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }
             }
 
-            /*add the tab change event listener only once.*/
+            /* add the tab change event listener only once. */
             if (asyncTabsFound) {
                 me._tabContainer.addTabChangeListener(function (previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
@@ -562,19 +559,18 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             for (var tabId in tabsJSON) {
                 me.asyncTabs[tabId] = tabsJSON[tabId];
                 if (tabsJSON.hasOwnProperty(tabId)) {
-
-                    //only show quality tab for services and datasets
-                    //TODO: maybe make this a configurable thing at some point instead of hardcoding...
+                    // only show quality tab for services and datasets
+                    // TODO: maybe make this a configurable thing at some point instead of hardcoding...
                     if (tabId === 'quality' && (model.identification.type !== 'series' && model.identification.type !== 'data')) {
                         continue;
                     }
 
-                    //license tab but no license url -> skip rendering the tab.
+                    // license tab but no license url -> skip rendering the tab.
                     if (tabId === 'license' && (!model.license || model.license === '')) {
                         continue;
                     }
 
-                    //feedback tab added asynchronously -> also get and reveal the ratings under metadata tab...
+                    // feedback tab added asynchronously -> also get and reveal the ratings under metadata tab...
                     if (tabId === 'feedback' && model.amount) {
                         me.getMetadataTabRatingStars();
                     }
@@ -638,9 +634,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 if (me._model.geom) {
                     entry = jQuery('<a/>');
                     entry.addClass('metadata_coverage_bbox_link');
-                    entry.attr('href','javascript:void(0)');
+                    entry.attr('href', 'javascript:void(0)');
                     entry.html(me.instance._locale.flyout.coverage.showBBOX);
-
 
                     if (links) {
                         links = links.add(entry);
@@ -651,19 +646,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
             me.addActions(links);
 
-            //Add click handler for the show coverage - link (under both metadata tab & actions tab)
+            // Add click handler for the show coverage - link (under both metadata tab & actions tab)
             jQuery('.metadata_coverage_bbox_link').on('click', function () {
                 me.toggleCoverage(jQuery(this));
             });
 
-            //set rating stars if available (an administrator has rated the metadata)
+            // set rating stars if available (an administrator has rated the metadata)
             if (me._model.latestAdminRating) {
                 me.getMetadataTabRatingStars();
             }
         },
         getMetadataTabRatingStars: function () {
             var me = this;
-            //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
+            // obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
             var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance('catalogue.bundle.metadatafeedback');
             if (metadataFeedbackBundle) {
                 jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating) + '&nbsp;');
@@ -719,7 +714,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     featureStyle: style
                 }]);
             }
-
         },
         renderMapLayerList: function () {
             var me = this,
@@ -756,14 +750,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
         _toggleMapLayerVisibility: function (layer) {
             var me = this,
                 labelText;
-            //not added -> add.
+            // not added -> add.
             if (me.isLayerSelected(layer) && layer.isVisible()) {
-                //added -> remove from map
+                // added -> remove from map
                 me.instance.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
                 labelText = me.locale.layerList.show;
             } else {
                 me.instance.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
-                //turn visible in case was invisible
+                // turn visible in case was invisible
                 if (!layer.isVisible()) {
                     me.instance.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), true]);
                 }

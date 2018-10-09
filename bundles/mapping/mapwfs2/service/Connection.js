@@ -41,7 +41,7 @@ Oskari.clazz.define(
 
         me.cometd.configure({
             url: me.cometURL,
-            //logLevel : "debug",
+            // logLevel : "debug",
             // if connection can't be established add this time to waiting time before trying again (ms)
             backoffIncrement: me.config.backoffIncrement || 1000,
             // maximum time of backoff (not incremented after reaching) (ms)
@@ -71,7 +71,8 @@ Oskari.clazz.define(
 
         // Disconnect when the page unloads
         jQuery(window).on('beforeunload', function () {
-            me.disconnect(); });
+            me.disconnect();
+        });
     }, {
         /**
          * @method connect

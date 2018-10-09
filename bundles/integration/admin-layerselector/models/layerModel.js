@@ -23,7 +23,7 @@
              * Selects the first style so legendImage will show initial value
              * @return {[type]} [description]
              */
-            _selectFirstStyle : function () {
+            _selectFirstStyle: function () {
                 var styles = this.getStyles();
                 if (styles.length) {
                     this.selectStyle(styles[0].getName());
@@ -119,7 +119,7 @@
              * If data is not given assume getter, otherwise setup data.
              * @type {Object}
              */
-            _typeHandlers : {
+            _typeHandlers: {
             },
             /**
              * Recursive function to search capabilities by layerName.
@@ -151,8 +151,7 @@
                             return true;
                         }
                     }
-                }
-                else {
+                } else {
                     if (capabilities.layerName === layerName) {
                         if (!additionalId) {
                             me._setupFromCapabilitiesValues(capabilities);
@@ -186,7 +185,6 @@
                 }
                 return found;
             },
-
 
             /**
              * Returns XSLT if defined or null if not
@@ -353,7 +351,6 @@
              */
             getStyleLegendUrl: function (styleName) {
                 var capabilitiesBlock = this.getCapabilities();
-
 
                 if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
                     var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {

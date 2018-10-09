@@ -19,21 +19,21 @@ Oskari.clazz.define(
         this._errorLayers = [];
         this.timer = null;
     }, {
-        getMapLayer : function (layerId) {
+        getMapLayer: function (layerId) {
             var service = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             return service.findMapLayer(layerId);
         },
-        getLayerStatus : function (layerId) {
+        getLayerStatus: function (layerId) {
             layerId = '' + layerId;
             if (!this.status[layerId]) {
                 this.status[layerId] = {
-                    inProgress : [],
-                    error : []
+                    inProgress: [],
+                    error: []
                 };
             }
             return this.status[layerId];
         },
-        clearStatus : function (layerId) {
+        clearStatus: function (layerId) {
             delete this.status['' + layerId];
 
             var sb = this.sandbox;
@@ -42,12 +42,12 @@ Oskari.clazz.define(
             loadEvent.setStatus(loadEvent.status.complete);
             sb.notifyAll(loadEvent);
         },
-        handleChannelRequest : function (layerId, type, reqId) {
+        handleChannelRequest: function (layerId, type, reqId) {
             var status = this.getLayerStatus(layerId);
             Oskari.log('mapwfs2').debug('Request data for layer: ' + layerId + ' (req:' + reqId + ')');
             status.inProgress.push({
                 type: type,
-                reqId : reqId
+                reqId: reqId
             });
             var sb = this.sandbox;
             var loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
@@ -55,7 +55,7 @@ Oskari.clazz.define(
             loadEvent.setRequestType(loadEvent.type.image);
             sb.notifyAll(loadEvent);
         },
-        __handleCompleted : function (data) {
+        __handleCompleted: function (data) {
             var me = this;
             var status = this.getLayerStatus(data.layerId);
 
@@ -78,15 +78,14 @@ Oskari.clazz.define(
                 loadEvent.setStatus(loadEvent.status.complete);
                 // No operations for wfs layer in case of true, e.g. manual refresh / feature data refresh
                 loadEvent.setNop(data.success_nop);
-            }
-            else {
+            } else {
                 status.error.push('error');
                 loadEvent.setStatus(loadEvent.status.error);
             }
             sb.notifyAll(loadEvent);
             Oskari.log('mapwfs2').debug('WFS complete', data);
         },
-        handleChannelStatus : function (data) {
+        handleChannelStatus: function (data) {
             if (data.message === 'started') {
                 Oskari.log('mapwfs2').debug('Processing started for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
                 if (typeof this.timer === 'undefined') {
@@ -94,20 +93,17 @@ Oskari.clazz.define(
                         Oskari.log('mapwfs2').debug('Processing layer ' + data.layerId + ' takes longer than excpected');
                     }, 4000);
                 }
-                return;
-            }
-            else if (data.message === 'completed') {
+            } else if (data.message === 'completed') {
                 clearTimeout(this.timer);
                 if (data.success) {
                     Oskari.log('mapwfs2').debug('Processing finished for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
-                }
-                else {
+                } else {
                     Oskari.log('mapwfs2').debug('Processing error for layer ' + data.layerId + ' (req: ' + data.reqId + ')');
                 }
                 this.__handleCompleted(data);
             }
         },
-        handleError : function (error, plugin) {
+        handleError: function (error, plugin) {
             Oskari.log('mapwfs2').debug('Error on layer ' + error.layerId + ':' + error.message);
             var status = this.getLayerStatus(error.layerId);
             status.error.push(error.message);
@@ -118,7 +114,7 @@ Oskari.clazz.define(
                 this._errorLayer = error;
             } else {
                 for (var i = 0; i < this._errorLayers.length; i++) {
-                    //same layer don't do anythin
+                    // same layer don't do anythin
                     if (this._errorLayers[i].errorlayer.layerId === error.layerId) {
                         return;
                     }
@@ -132,7 +128,7 @@ Oskari.clazz.define(
                     Oskari.log(this.getName()).info('no system-message started');
                 }
                 this._errorLayer = error;
-                this._errorLayers.push({errorlayer:this._errorLayer});
+                this._errorLayers.push({errorlayer: this._errorLayer});
             }
             if (error.level === 'warning') {
                 if (requestBuilder) {
@@ -142,7 +138,7 @@ Oskari.clazz.define(
                     Oskari.log(this.getName()).info('no system-message started');
                 }
                 this._errorLayer = error;
-                this._errorLayers.push({errorlayer:this._errorLayer});
+                this._errorLayers.push({errorlayer: this._errorLayer});
             }
             if (error.key === 'layer_scale_out_of_range') {
                 plugin.updateScale(layer, error.minscale, error.maxscale);

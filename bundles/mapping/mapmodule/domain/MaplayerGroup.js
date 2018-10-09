@@ -65,7 +65,6 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
                     return 1;
                 }
 
-
                 // else use order or id to sort
                 if (a.order < b.order) {
                     return -1;

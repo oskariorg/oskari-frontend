@@ -187,7 +187,7 @@ Oskari.clazz.define(
                 }
                 // FIXME create function outside loop
                 styleBtnContainer.on('click', function () {
-                    newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
+                    newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('style', newValue);
                     me.values.style = newValue;
                     me._updatePreview(dialogContent);

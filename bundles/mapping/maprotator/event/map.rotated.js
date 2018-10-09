@@ -8,12 +8,12 @@ Oskari.clazz.define('Oskari.mapping.event.map.rotated',
         this.degrees = degrees;
     }, {
     /** @static @property __name event name */
-        __name : 'map.rotated',
+        __name: 'map.rotated',
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         getRotationDegrees: function () {
@@ -24,5 +24,5 @@ Oskari.clazz.define('Oskari.mapping.event.map.rotated',
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

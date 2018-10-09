@@ -19,19 +19,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
         this.idPrefix = 'myplaces';
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'PublishedMyPlaces',
+        __name: 'PublishedMyPlaces',
         /**
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function () {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
@@ -44,7 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      *      JSON object for complete data depending on localization
      *      structure and if parameter key is given
      */
-        getLocalization : function (key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * @param {String} title popup title
      * @param {String} message popup message
      */
-        showMessage : function (title, message) {
+        showMessage: function (title, message) {
             var loc = this.getLocalization();
     	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
     	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -80,7 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * Disables the functionality since something went wrong
      * (couldnt create default category)
      */
-        forceDisable : function () {
+        forceDisable: function () {
             this.buttons.disableButtons();
             var loc = this.getLocalization();
 
@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * Enables/disables the gfi functionality
      * @param {Boolean} blnEnable true to enable, false to disable
      */
-        enableGfi : function (blnEnable) {
+        enableGfi: function (blnEnable) {
             var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             if (gfiReqBuilder) {
                 this.sandbox.request(this.buttons, gfiReqBuilder(blnEnable));
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * Returns the my places main service
      * @return {Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService}
      */
-        getService : function () {
+        getService: function () {
             return this.myPlacesService;
         },
         /**
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * Returns reference to the draw plugin
      * @return {Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin}
      */
-        getDrawPlugin : function () {
+        getDrawPlugin: function () {
             return this.view.drawPlugin;
         },
         /**
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * Returns reference to the category handler
      * @return {Oskari.mapframework.bundle.publishedmyplaces.CategoryHandler}
      */
-        getCategoryHandler : function () {
+        getCategoryHandler: function () {
             return this.categoryHandler;
         },
         /**
@@ -127,29 +127,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * Returns reference to the main view
      * @return {Oskari.mapframework.bundle.myplaces.view.MainView}
      */
-        getMainView : function () {
+        getMainView: function () {
             return this.view;
         },
         /**
      * @method update
      * implements BundleInstance protocol update method - does nothing atm
      */
-        update : function () {
+        update: function () {
         },
         /**
      * @method init
      * implements Module protocol init method
      */
-        init : function () {
+        init: function () {
         },
         /**
      * @method start
      * implements BundleInstance protocol start methdod
      */
-        start : function () {
+        start: function () {
             var me = this;
             var conf = me.conf || {};
-            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox' ;
+            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
             this.sandbox = sandbox;
 
@@ -163,7 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
             // handles toolbar buttons related to my places
             this.buttons = Oskari.clazz.create('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler', this);
             this.buttons.start();
-
 
             var user = Oskari.user();
 
@@ -203,11 +202,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * @method stop
      * implements BundleInstance protocol stop method - does nothing atm
      */
-        stop : function () {
+        stop: function () {
             this.sandbox = null;
         },
 
-        _getCategoryDefaults : function () {
+        _getCategoryDefaults: function () {
             var defaults = {
                 name: this.getLocalization('category').defaultName,
                 point: {
@@ -247,5 +246,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.PublishedMyPla
      * @property {String[]} protocol
      * @static
      */
-        protocol : ['Oskari.bundle.BundleInstance']
+        protocol: ['Oskari.bundle.BundleInstance']
     });

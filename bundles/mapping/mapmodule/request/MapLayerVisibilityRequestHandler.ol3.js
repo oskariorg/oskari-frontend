@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibi
             // and notifies other components
             this.layersPlugin.handleMapLayerVisibility(layer, true);
         },
-        tryVectorLayers : function (id, blnVisible) {
+        tryVectorLayers: function (id, blnVisible) {
             var module = this.layersPlugin.getMapModule();
             var plugin = module.getLayerPlugins('vectorlayer');
             if (!plugin || typeof plugin.setVisibleByLayerId !== 'function') {

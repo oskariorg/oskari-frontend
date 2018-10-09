@@ -19,12 +19,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometri
         this._mapLayer = mapLayer;
     }, {
     /** @static @property __name event name */
-        __name : 'WFSFeatureGeometriesEvent',
+        __name: 'WFSFeatureGeometriesEvent',
         /**
      * @method getName
      * @return {String} event name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
 
@@ -32,21 +32,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometri
      * @method isKeepSelection
      * @return {Boolean} true if geometry is appended to previous one
      */
-        isKeepSelection : function () {
+        isKeepSelection: function () {
             return this._addToSelection;
         },
         /**
      * @method getMapLayer
      * @return {Oskari.mapframework.domain.WfsLayer} mapLayer highlighted/selected maplayer
      */
-        getMapLayer : function () {
+        getMapLayer: function () {
             return this._mapLayer;
         },
         /**
          * @method getGeometries [[layerid,geom]..]
          * @return [[layerid,geom]..] mapLayer highlighted/selected maplayer
     */
-        getGeometries : function () {
+        getGeometries: function () {
             return this._mapLayer.getClickedGeometries();
         }
     }, {
@@ -54,5 +54,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.event.WFSFeatureGeometri
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.event.Event']
+        'protocol': ['Oskari.mapframework.event.Event']
     });

@@ -33,19 +33,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
         me.toolLayouts = ['lefthanded', 'righthanded', 'userlayout'];
         me.data = me.instance.publisher.data;
-        me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout ?
-            me.instance.publisher.data.metadata.toolLayout : 'lefthanded';
+        me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout
+            ? me.instance.publisher.data.metadata.toolLayout : 'lefthanded';
         me.toolLayoutEditMode = false;
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
                 var me = this;
-                //we're in layout edit mode and a new tool was added -> recreate the draggables / droppables
+                // we're in layout edit mode and a new tool was added -> recreate the draggables / droppables
                 if (me.toolLayoutEditMode && event.getTool().state.enabled === true) {
                     me._editToolLayoutOff();
                     me._editToolLayoutOn();
                 } else {
-                    //just update the plugins' locationdata
+                    // just update the plugins' locationdata
                     me._changeToolLayout(me.activeToolLayout, null);
                 }
             }
@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             }
 
             me._toggleAdditionalTools();
-            //init the tools' plugins location infos
+            // init the tools' plugins location infos
             if (me.data && me.activeToolLayout === 'userlayout') {
                 me._initUserLayout();
             } else {
@@ -103,13 +103,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 return defaults;
             } else if (extend.constructor && extend.constructor === Object) {
                 jQuery.each(extend, function (key, value) {
-                    //not an array or an object -> just use the plain value
+                    // not an array or an object -> just use the plain value
                     if (defaults[key] === null || defaults[key] === undefined || !(defaults[key] instanceof Array || defaults[key] instanceof Object)) {
                         defaults[key] = value;
                     } else {
                         defaults[key] = me._extendRecursive(defaults[key], value);
                     }
-
                 });
                 return defaults;
             }
@@ -124,7 +123,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 values = {};
 
             _.each(me.tools, function (tool) {
-
                 if (tool.isDisplayed(me.data)) {
                     var value = tool.getValues();
                     if (value !== undefined && value !== null) {
@@ -160,7 +158,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         _toggleAdditionalTools: function () {
             var me = this;
             _.each(me.tools, function (tool) {
-                //don't call for tools that already have been set enabled (=plugin has already been created.)
+                // don't call for tools that already have been set enabled (=plugin has already been created.)
                 if (tool.isDisplayed(me.data) && !tool.isShownInToolsPanel() && !tool.state.enabled) {
                     tool.setEnabled(true);
                 }
@@ -196,7 +194,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     }
                 };
             panel.setTitle(me.loc.toollayout.label);
-
 
             tooltipCont.attr('title', me.loc.toollayout.tooltip);
             panel.getHeader().append(tooltipCont);
@@ -282,7 +279,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     }
                 }
 
-
                 if (event) {
                     target = jQuery(event.currentTarget);
                     button = target.parents('.content').find('input#editModeBtn');
@@ -310,7 +306,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var me = this,
                 tools = this.tools,
                 pluginConfigs;
-            //gotta figure out some nicer way to check the existence of (deep) nested properties in an object...
+            // gotta figure out some nicer way to check the existence of (deep) nested properties in an object...
             try {
                 pluginConfigs = me.data.configuration.mapfull.conf.plugins;
             } catch (e) {
@@ -409,9 +405,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             var me = this;
             return draggables.draggable({
                 appendTo: '.mappluginsContent',
-                //containment: "#mapdiv", nosiree, this doesn't play well with droppable's tolerance: 'pointer'
+                // containment: "#mapdiv", nosiree, this doesn't play well with droppable's tolerance: 'pointer'
                 drag: function (event, ui) {
-                    //return false;
+                    // return false;
                 },
                 snap: true,
                 start: function (event, ui) {
@@ -515,7 +511,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         stop: function () {
             var me = this;
             _.each(me.tools, function (tool) {
-                //just call stop for the tools that haven't already been shut down by the tool panel
+                // just call stop for the tools that haven't already been shut down by the tool panel
                 if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
                     tool.stop();
                     tool.setEnabled(false);
@@ -552,7 +548,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 ret = 2,
                 tool = me.getToolById(pluginClazz);
 
-            //no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
+            // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
             if (!tool) {
                 return 2;
             } else if (!pluginClazz) {
@@ -644,7 +640,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
 
             _.each(me.tools, function (tool) {
                 if (tool.isDisplayed(me.data) && tool.isStarted()) {
-                    //reset
+                    // reset
                     tool.setEnabled(false);
                     tool.setEnabled(true);
                 }

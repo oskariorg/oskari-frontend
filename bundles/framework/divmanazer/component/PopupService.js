@@ -26,7 +26,6 @@ Oskari.clazz.define(
                 me.sandbox.registerForEventByName(me, p);
             }
         }
-
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.userinterface.component.PopupService',
@@ -84,7 +83,7 @@ Oskari.clazz.define(
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
             popup.onShow(function () {
-                //add the popup to bookkeeping
+                // add the popup to bookkeeping
                 me.popups.push(popup);
             });
 
@@ -93,7 +92,7 @@ Oskari.clazz.define(
                     i;
                 for (i = 0; i < me.popups.length; i++) {
                     if (popup === me.popups[i]) {
-                        //found
+                        // found
                         found = true;
                         break;
                     }
@@ -103,8 +102,6 @@ Oskari.clazz.define(
                     me.popups[i].clearListeners();
                     me.popups.splice(i, 1);
                 }
-
-                return;
             });
             return popup;
         },
@@ -114,7 +111,7 @@ Oskari.clazz.define(
          */
         closeAllPopups: function (closeFlyouts) {
             _.each(this.popups, function (popup) {
-                //publisher toolbar seems to need this for the tools to stay intact...
+                // publisher toolbar seems to need this for the tools to stay intact...
                 popup.getJqueryContent().detach();
                 popup.close();
             });
@@ -122,6 +119,5 @@ Oskari.clazz.define(
             if (closeFlyouts) {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', null]);
             }
-            return;
         }
     });

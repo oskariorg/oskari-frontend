@@ -51,9 +51,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me._showMarkerButton = conf.markerButton;
         }
         this.__layer = undefined;
-
     }, {
-        getDefaultIconUrl : function () {
+        getDefaultIconUrl: function () {
             return this.getImagePath() + 'marker.png';
         },
         /**
@@ -161,7 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * Handle toolbar tool click.
          * Activate the "add marker mode" on map.
          */
-        __toolButtonClicked : function () {
+        __toolButtonClicked: function () {
             var me = this;
             me.enableGfi(false);
             me._waitingUserClickToAddMarker = true;
@@ -233,12 +232,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @private
          * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event map click
          */
-        __mapClick : function (event) {
-
+        __mapClick: function (event) {
             // adding a marker
             if (this._waitingUserClickToAddMarker) {
                 this._showForm(event.getMouseX(), event.getMouseY());
-                return;
             }
         },
         /**
@@ -346,8 +343,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             // if we dont set false here the user can click map again and a new popup is opened on top of the existing one
             me._waitingUserClickToAddMarker = false;
             var lonlat = me._map.getLonLatFromPixel({
-                x : clickX,
-                y : clickY
+                x: clickX,
+                y: clickY
             });
             var loc = me.getLocalization().form;
             me.dotForm = Oskari.clazz.create(
@@ -479,7 +476,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     if (jQuery.isNumeric(markerData.size)) {
                     } else {
                     }
-
                 } else {
                 }
             } else {
@@ -501,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 data.stroke = me._strokeStyle.stroke;
             }
             var style = {
-                image : {
+                image: {
                     color: data.color,
                     size: data.size,
                     shape: data.shape,
@@ -510,16 +506,16 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     stroke: data.stroke,
                     opacity: 1
                 },
-                text : {
+                text: {
                     font: 'bold 16px Arial',
                     textAlign: 'left',
                     textBaseline: 'middle',
                     offsetX: 8 + 2 * data.size,
                     offsetY: 8,
-                    fill : {
-                        color : '#000000'
+                    fill: {
+                        color: '#000000'
                     },
-                    stroke : {
+                    stroke: {
                         color: '#ffffff',
                         width: 1
                     }
@@ -632,10 +628,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          * @returns {number} Size in pixels
          * @private
          */
-        //--> moved to AbstractMapModule.js
-        /*_getSizeInPixels: function(size) {
+        // --> moved to AbstractMapModule.js
+        /* _getSizeInPixels: function(size) {
             return 40 + 10 * size;
-        },*/
+        }, */
 
         /**
          * Raises the marker layer above the other layers

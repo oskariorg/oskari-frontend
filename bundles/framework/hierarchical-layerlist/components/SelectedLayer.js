@@ -158,7 +158,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
                 me.sb.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [me._layer.getId(), !me._layer.isVisible()]);
             });
         }
-
     },
     /**
      * Set breadcrumb
@@ -169,7 +168,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         var me = this;
         var breakcrumb = me._getBreadcrump();
         this._el.find('.breadcrumb').html(breakcrumb);
-
     },
 
     /**
@@ -205,7 +203,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
 
         groups.reverse();
         return groups.join(' > ');
-
     },
     /**
      * Set title
@@ -304,7 +301,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
                 sel.trigger('change');
                 stylesel.show();
             }
-
         }
     },
     /**

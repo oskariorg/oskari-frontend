@@ -17,19 +17,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditCategoryRe
     function (categoryId) {
         this._categoryId = categoryId;
     }, {
-        __name : 'MyPlaces.EditCategoryRequest',
+        __name: 'MyPlaces.EditCategoryRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {Number} id of category to be edited
      */
-        getId : function () {
+        getId: function () {
             return this._categoryId;
         }
     }, {
@@ -37,5 +37,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditCategoryRe
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

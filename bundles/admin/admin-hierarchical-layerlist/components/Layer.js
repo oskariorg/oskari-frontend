@@ -45,7 +45,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
     this._setupSupportedLayerTypes();
     this.log = Oskari.log('Oskari.admin.hierarchical-layerlist.Layer');
     this.dataProviders = null;
-
 }, {
 
     /*******************************************************************************************************************************
@@ -77,7 +76,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
     _setupSupportedLayerTypes: function () {
         var me = this;
         // generic list of layertypes supported
-
 
         me.supportedTypes = _.filter(this.supportedTypes, function (type) {
             return me.layerService.hasSupportForLayerType(type.id);
@@ -246,7 +244,6 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
                 me._extraFlyout.setContent(content);
                 me._extraFlyout.show();
             });
-
         });
     }
 });

@@ -8,7 +8,6 @@ define([
 function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPanelView) {
     return Backbone.View.extend({
 
-
         /**
              * This object contains backbone event-handling.
              * It binds methods to certain events fired by different elements.
@@ -36,7 +35,7 @@ function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPa
             this.tabTitleTemplate = _.template(TabTitleTemplate);
             this.selectedType = 'organization';
             _.bindAll(this);
-            //render this view immediately after initialization.
+            // render this view immediately after initialization.
             this.render();
         },
 
@@ -60,13 +59,13 @@ function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPa
             if (!layerGroupingTab) {
                 return;
             }
-            //create tab container
+            // create tab container
             var tabContent = new TabPanelView({
                 layerGroupingModel: layerGroupingTab,
                 instance: this.instance,
                 tabId: tabType
             });
-                //create headers for tabs
+                // create headers for tabs
             jQuery('.admin-layerselectorapp').find('.tabsContent').append(tabContent.$el);
             jQuery('.admin-layerselectorapp').find('.tabsHeader ul').append(
                 this.tabTitleTemplate({
@@ -196,7 +195,6 @@ function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPa
                 jQuery('.tab-content.organization').find('.admin-filter-input').focus();
                 this.selectedType = type;
             }
-
         },
 
         /**

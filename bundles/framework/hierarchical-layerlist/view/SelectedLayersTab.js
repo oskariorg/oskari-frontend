@@ -25,7 +25,6 @@ Oskari.clazz.define(
             layerlist: jQuery('<ul class="layerlist sortable" ' + 'data-sortable=\'{' + 'itemCss: "li.layer.selected", ' + 'handleCss: "div.layer-title" ' + '}\'></ul>')
         };
 
-
         this._layers = {};
 
         this._createUI();
@@ -104,7 +103,6 @@ Oskari.clazz.define(
 
             me.tabPanel.setContent(layerContainer);
 
-
             me._updateContainerHeight(jQuery('#mapdiv').height());
         },
         /**
@@ -119,7 +117,6 @@ Oskari.clazz.define(
             selectedLayers.reverse().forEach(function (layer) {
                 me._addLayer(layer, false, true);
             });
-
         },
 
         /**
@@ -185,7 +182,6 @@ Oskari.clazz.define(
             var allNodes = me.tabPanel.getContainer().find('.layerlist li.layer'),
                 movedId = item.attr('data-layerid'),
                 movedIndex = me.tabPanel.getContainer().find('.layer[data-layerid=' + movedId + ']').index();
-
 
             if (movedIndex > -1) {
                 // the layer order is reversed in presentation
@@ -295,8 +291,6 @@ Oskari.clazz.define(
             me._notifierService.on('MapSizeChangedEvent', function (evt) {
                 me._updateContainerHeight(evt.getHeight());
             });
-
-
         },
         /**
          * Blink wanted element

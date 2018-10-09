@@ -19,15 +19,15 @@ Oskari.clazz.define(
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
-        parseLayerData : function (layer, mapLayerJson, maplayerService) {
+        parseLayerData: function (layer, mapLayerJson, maplayerService) {
             var loclayer = this.localization.layer;
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             // set layer specific data
             layer.setOrganizationName(loclayer.organization);
             layer.setGroups([{
-                id:'USERLAYER',
-                name:loclayer.inspire
+                id: 'USERLAYER',
+                name: loclayer.inspire
             }]);
             layer.setDescription(mapLayerJson.description);
             layer.setSource(mapLayerJson.source);
@@ -42,7 +42,7 @@ Oskari.clazz.define(
 
         addHiddenFields: function (fields) {
             if (fields.indexOf('__fid') === -1) {
-                fields.splice(0,0,'__fid');
+                fields.splice(0, 0, '__fid');
             }
             if (fields.indexOf('__centerX') === -1) {
                 fields.push('__centerX');

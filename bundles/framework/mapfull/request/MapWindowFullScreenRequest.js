@@ -12,15 +12,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
  */
     function () {
         this._creator = null;
-
     }, {
     /** @static @property __name request name */
-        __name : 'MapFull.MapWindowFullScreenRequest',
+        __name: 'MapFull.MapWindowFullScreenRequest',
         /**
      * @method getName
      * @return {String} request name
      */
-        getName : function () {
+        getName: function () {
             return this.__name;
         }
     }, {
@@ -28,5 +27,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

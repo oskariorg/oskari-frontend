@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method getWpsName
      * @return {String} wpsName used to identify service f.ex. in GetFeatureInfo queries.
      */
-        getWpsName : function () {
+        getWpsName: function () {
             return this._wpsName;
         },
 
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
      * @method getWpsLayerId
      * @return {String}
      */
-        getWpsLayerId : function () {
+        getWpsLayerId: function () {
             return this._wpsLayerId;
         },
         /**

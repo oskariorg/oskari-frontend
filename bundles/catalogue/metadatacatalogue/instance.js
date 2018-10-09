@@ -63,21 +63,21 @@ Oskari.clazz.define(
          * @static
          * @property __drawStyle
          */
-        __drawStyle:{
-            draw : {
-                fill : {
+        __drawStyle: {
+            draw: {
+                fill: {
                     color: 'rgba(35, 216, 194, 0.3)'
                 },
-                stroke : {
+                stroke: {
                     color: 'rgba(35, 216, 194, 1)',
                     width: 2
                 }
             },
-            modify : {
-                fill : {
+            modify: {
+                fill: {
                     color: 'rgba(0, 0, 238, 0.3)'
                 },
-                stroke : {
+                stroke: {
                     color: 'rgba(0, 0, 238, 1)',
                     width: 2
                 }
@@ -285,7 +285,6 @@ Oskari.clazz.define(
                 this.addSearchResultActionRequestHandler
             );
 
-
             // draw ui
             me.createUi();
         },
@@ -312,14 +311,12 @@ Oskari.clazz.define(
          * or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -614,7 +611,7 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
-                renderCoverageButton = (_.filter(dataFields, {'field':'coverage'}).length > 0),
+                renderCoverageButton = (_.filter(dataFields, {'field': 'coverage'}).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -917,11 +914,10 @@ Oskari.clazz.define(
             optionPanel.hide();
             resultPanel.show();
 
-
-            //filter functionality
+            // filter functionality
             resultHeader.find('.filter-link').on('click', function (event) {
                 var filterValues = jQuery(event.currentTarget).data('value').split(',');
-                //hide filterlinks and show "show all"-link
+                // hide filterlinks and show "show all"-link
                 resultHeader.find('.filter-link').hide();
                 resultHeader.find('.showLink').show();
 
@@ -937,7 +933,6 @@ Oskari.clazz.define(
                     if (!classNameFound) {
                         jQuery(item).hide();
                     }
-
                 });
             });
         },
@@ -975,7 +970,7 @@ Oskari.clazz.define(
                     resultContainer = me.templates.resultTableRow.clone();
                     resultContainer.addClass('res' + i);
 
-                    //resultcontainer filtering
+                    // resultcontainer filtering
                     if (row.natureofthetarget) {
                         resultContainer.addClass('filter-' + row.natureofthetarget);
                     }
@@ -998,7 +993,7 @@ Oskari.clazz.define(
                             locIdentificationCode = identification.code;
                         }
 
-                        //only add the date for certain types of targets
+                        // only add the date for certain types of targets
                         if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
@@ -1053,7 +1048,7 @@ Oskari.clazz.define(
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
                         // jQuery(cells[1]).append("*****");
-                        //jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
+                        // jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
                         if (me._isAction() == true) {
@@ -1063,8 +1058,8 @@ Oskari.clazz.define(
                                         callbackElement = null,
                                         actionTextEl = null;
 
-                                    actionElement.css('margin-left','6px');
-                                    actionElement.css('margin-right','6px');
+                                    actionElement.css('margin-left', '6px');
+                                    actionElement.css('margin-right', '6px');
 
                                     // Set action callback
                                     if (action.callback && typeof action.callback == 'function') {
@@ -1076,7 +1071,7 @@ Oskari.clazz.define(
                                         else {
                                             callbackElement = actionElement.first();
                                         }
-                                        callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function (event) {
+                                        callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
                                             action.callback(event.data.metadata);
                                         });
                                     }
@@ -1092,19 +1087,15 @@ Oskari.clazz.define(
                                         actionTextEl.is('select') ||
                                         actionTextEl.is('button') ||
                                         actionTextEl.is('textarea')) {
-
                                         if (action.actionText && action.actionText != null) {
                                             actionTextEl.val(action.actionText);
-                                        }
-                                        else {
+                                        } else {
                                             actionTextEl.val(me.getLocalization('licenseText'));
                                         }
-                                    }
-                                    else {
+                                    } else {
                                         if (action.actionText && action.actionText != null) {
                                             actionTextEl.html(action.actionText);
-                                        }
-                                        else {
+                                        } else {
                                             actionTextEl.html(me.getLocalization('licenseText'));
                                         }
                                     }
@@ -1255,7 +1246,6 @@ Oskari.clazz.define(
             this.lastResult.sort(function (a, b) {
                 return me._searchResultComparator(a, b, pAttribute, pDescending);
             });
-
         },
         /**
          * @method _searchResultComparator
@@ -1307,7 +1297,7 @@ Oskari.clazz.define(
                 callback: callback,
                 bindCallbackTo: bindCallbackTo,
                 actionText: actionText,
-                showAction: function (metadata) {return true;}
+                showAction: function (metadata) { return true; }
             };
 
             if (showAction && showAction !== null) {

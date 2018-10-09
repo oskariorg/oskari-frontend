@@ -16,8 +16,8 @@ Oskari.clazz.define('Oskari.projection.change.view.ErrorListing', function () {
         return list;
     },
     show: function (parentElement, errorList) {
-        var error = jQuery(this.errorView ({
-            desc: this.loc.error.desc,
+        var error = jQuery(this.errorView({
+            desc: this.loc.error.desc
         }));
 
         var layerList = this.createList(errorList);

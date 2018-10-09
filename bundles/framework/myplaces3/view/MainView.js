@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
         this.drawing;
         this.drawingData;
-        this.tempGeom; //for editPlace
+        this.tempGeom; // for editPlace
     }, {
         __name: 'MyPlacesMainView',
         /**
@@ -95,7 +95,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -119,11 +118,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                             this.drawing = event.getGeoJson();
                             this.drawingData = event.getData();
                         } else {
-                            //update measurement result
+                            // update measurement result
                             this._setMeasurementResult(event.getData());
                         }
                     } else if (this.instance.isFinishedDrawing()) {
-                        this._handleFinishedDrawingEvent (event);
+                        this._handleFinishedDrawingEvent(event);
                     }
                 }
             }
@@ -137,12 +136,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         _handleFinishedDrawingEvent: function (event) {
             this.drawing = event.getGeoJson();
             if (this.drawing.features && this.drawing.features.length === 0) {
-                //no features, user clicks save my place without valid geometry
+                // no features, user clicks save my place without valid geometry
                 this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
-                //should we start new drawing?? and inform user that line should have atleast 2 points and area 3 points
+                // should we start new drawing?? and inform user that line should have atleast 2 points and area 3 points
                 return;
             }
-            //TODO: closestPoint or centroid
+            // TODO: closestPoint or centroid
             var location = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').getClosestPointFromGeoJSON(this.drawing);
             this.drawingData = event.getData();
             this.showPlaceForm(location);
@@ -189,14 +188,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     }
                 };
                 this.form.setValues(param);
-                //set measurement result from place geometry
+                // set measurement result from place geometry
                 drawMode = this._getDrawModeFromGeometry(place.getGeometry());
                 measurement = mapModule.getMeasurementResult(place.getGeometry());
                 this.form.setMeasurementResult(measurement, drawMode);
-                this.tempGeom = place.getGeometry(); //store if geometry is not edited
+                this.tempGeom = place.getGeometry(); // store if geometry is not edited
                 layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryId());
                 this.isEditPlace = true;
-            //set measurement result from drawing
+            // set measurement result from drawing
             } else {
                 this._setMeasurementResult(this.drawingData);
             }
@@ -258,7 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @return {String} matching draw mode string-key for the geometry
          * @private
          */
-        //TODO move to more common place
+        // TODO move to more common place
         _getDrawModeFromGeometry: function (geometry) {
             if (geometry === null) {
                 return null;
@@ -371,7 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                     if (blnSuccess) {
                         // add category as a maplayer to oskari maplayer service
                         // NOTE! added as a map layer to maplayer service through categoryhandler getting an event
-                        //me.instance.addLayerToService(model);
+                        // me.instance.addLayerToService(model);
                         // save the actual place
                         formValues.place.category = model.getId();
                         me.__savePlace(formValues.place);

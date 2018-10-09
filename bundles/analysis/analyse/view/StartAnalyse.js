@@ -101,7 +101,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         me._param_footer.append(this.loc.aggregate.footer);
         me._showFeatureDataAfterAnalysis = null;
         me._showFeatureDataWithoutSaving = null;
-
     }, {
         __templates: {
             content: '<div class="layer_data"></div>',
@@ -439,7 +438,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         me.methodOptions[j].selected = false;
                     }
                     tool.selected = true;
-
                 };
             };
             var clickMagic = function (tool) {
@@ -469,7 +467,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 });
                 toolContainer.find('input').on('change', closureMagic(option));
                 toolContainer.find('input').on('click', clickMagic(option));
-
             }
 
             return panel;
@@ -700,7 +697,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         jQuery(this).prop('disabled', true);
                     }
 
-
                     jQuery(input).on('change', function (event) {
                         var checked = propertyList.find('li input:checked'),
                             fieldSelectionInfo = me.mainPanel.find('div.analysis_additional_info'),
@@ -793,7 +789,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             contentPanel.append(colorTitle);
 
             // Create random color picker checkbox
-            colorRandomizer.find('input[name=randomize_colors]').prop('checked',true);
+            colorRandomizer.find('input[name=randomize_colors]').prop('checked', true);
             colorRandomizer.find('label').addClass('params_checklabel').find('span').html(
                 me.loc.output.random_color_label
             );
@@ -871,7 +867,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
         _getOLGeometry: function (geojson) {
             var formatter = new OpenLayers.Format.GeoJSON();
             if (geojson) {
-
                 var feature = formatter.read(geojson);
                 return feature[0].geometry;
             }
@@ -1017,7 +1012,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         option.id = (me.id_prefix + 'layer_' + option.id);
                     }
 
-                    //selections exist on some maplayer -> check that one. Otherwise use either the one that was selected before or the one that was added last
+                    // selections exist on some maplayer -> check that one. Otherwise use either the one that was selected before or the one that was added last
                     if (allSelectedFeatures && allSelectedFeatures.length > 0) {
                         if (selectedFeaturesOnCurrentLayer && selectedFeaturesOnCurrentLayer.length > 0) {
                             option.checked = 'checked';
@@ -1045,13 +1040,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             if (!selectedLayer && contentOptions.length) {
-
-                var checkedOptionsFound = _.find(contentOptions, {'checked':'checked'});
+                var checkedOptionsFound = _.find(contentOptions, {'checked': 'checked'});
                 if (!checkedOptionsFound) {
                     _.first(contentOptions).checked = 'checked';
                 }
             }
-
 
             me._determineAnalysisWFSLayer(contentOptions);
 
@@ -1079,17 +1072,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         me._refreshIntersectLayers();
                         me.refreshExtraParameters();
 
-                        //set the selected layer to be used by selection tools
+                        // set the selected layer to be used by selection tools
                         if (selectedlayer && selectedlayer.hasFeatureData()) {
                             me.WFSLayerService.setAnalysisWFSLayerId(selectedlayer.getId());
                         } else {
-                            //templayer or sumpin -> just set analysis layer null. Also, disable selection tools.
+                            // templayer or sumpin -> just set analysis layer null. Also, disable selection tools.
                             me.WFSLayerService.setAnalysisWFSLayerId(null);
-
                         }
 
                         me.contentPanel.toggleSelectionTools();
-
                     });
 
                 opt.find('label')
@@ -1157,7 +1148,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
             me.WFSLayerService.setAnalysisWFSLayerId(null);
 
-            //option checked and is a WFS layer -> set this layer to be used for selections in analysis...
+            // option checked and is a WFS layer -> set this layer to be used for selections in analysis...
             option = _.find(contentOptions, {checked: 'checked'}, 'layerId');
             if (option && option.layerId) {
                 var layer = me.instance.sandbox.findMapLayerFromSelectedMapLayers(option.layerId);
@@ -1171,7 +1162,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.setContentPanelSelectedGeometry();
                 me.contentPanel._operateDrawFilters();
             }
-
         },
         /**
          * @method setContentPanelSelectedGeometry
@@ -1191,7 +1181,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (analysisWFSLayerId) {
                 analysisWFSLayer = me.instance.getSandbox().findMapLayerFromSelectedMapLayers(me.WFSLayerService.getAnalysisWFSLayerId());
                 if (analysisWFSLayer && analysisWFSLayer.getClickedGeometries && analysisWFSLayer.getClickedGeometries().length > 0) {
-                    //set filter geometry for filter json
+                    // set filter geometry for filter json
                     var geometries = [];
                     _.forEach(analysisWFSLayer.getClickedGeometries(), function (feature) {
                         geometries.push(feature[1]);
@@ -1200,7 +1190,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     selectedGeometry = analysisWFSLayer.getClickedGeometries()[0];
                 }
             }
-
 
             if (selectedGeometry) {
                 feature = me.contentPanel.parseFeatureFromClickedFeature(selectedGeometry);
@@ -1390,7 +1379,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 showValuesCheckbox.find('input').on('change', function () {
                     if (showValuesCheckbox.find('input')[0].checked) {
-                        showDataInput.prop({'checked': false, 'disabled' : true});
+                        showDataInput.prop({'checked': false, 'disabled': true});
                     } else {
                         showDataInput.prop('disabled', false);
                     }
@@ -1401,7 +1390,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 if (me._getNoDataValue()) {
                     toolContainer.append(me._param_footer);
                 }
-
             },
 
             aggregateNumeric: function (me, contentPanel) {
@@ -1433,7 +1421,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                             me.aggreOptions[j].selected = false;
                         }
                         tool.selected = true;
-
                     };
                 };
 
@@ -1453,10 +1440,9 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     });
                     toolContainer.find('input').on('change', closureMagic(option));
                 }
-
             },
 
-            union: function (me,contentPanel) {
+            union: function (me, contentPanel) {
                 contentPanel.parent().find('input[name=showFeatureData]').prop('checked', false);
             },
 
@@ -1547,7 +1533,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 // Show spatial operator choice
                 if (showSpatial) {
-                    //title spatial operator
+                    // title spatial operator
                     me._addTitle(contentPanel, me.loc.spatial.label, me.loc.spatial.labelTooltipIntersect);
 
                     var selectSpatial = function (tool) {
@@ -1858,14 +1844,14 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.differenceOptions = options;
                 me.differenceLayer = null;
 
-                //spatial join mode: normal/aggregate
+                // spatial join mode: normal/aggregate
                 me._addTitle(extraParams, loc.mode, loc.modeTooltip);
                 var modeToolContainer = me.template.radioToolOption.clone();
-                modeToolContainer.find('input').attr({'name':'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
+                modeToolContainer.find('input').attr({'name': 'spatial_join_mode', 'value': 'oskari_analyse_normal'}).prop('checked', true);
                 modeToolContainer.find('label span').append(loc.normalMode);
                 modeToolContainer.on('change', function () {
                     _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
-                        input.setAttribute('type','checkbox');
+                        input.setAttribute('type', 'checkbox');
                     });
                     contentPanel.find('#oskari_analyse_intersect')[0].disabled = false;
                 });
@@ -1876,7 +1862,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 modeToolContainer2.find('label span').append(loc.aggregateMode);
                 modeToolContainer2.on('change', function () {
                     _.forEach(extraParams.find('input[name=analyse-layer1-field-property]'), function (input) {
-                        input.setAttribute('type','radio');
+                        input.setAttribute('type', 'radio');
                         input.disabled = false;
                     });
                     limitSelection(false);
@@ -1994,7 +1980,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 contentPanel.append(extraParams);
 
                 if (showSpatial) {
-                    //title spatial operator
+                    // title spatial operator
                     var titlespa = me.template.title_extra.clone();
                     titlespa.find('.extra_title_label').html(
                         me.loc.spatial.label
@@ -2253,7 +2239,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Remove old content
             contentPanel.empty();
 
-            contentPanel.parent().find('#showFeatureDataAfterAnalysis').prop('disabled',false);
+            contentPanel.parent().find('#showFeatureDataAfterAnalysis').prop('disabled', false);
 
             if (contentPanel.parent().find('.show_data_in_popup')) {
                 contentPanel.parent().find('.show_data_in_popup').remove();
@@ -2374,7 +2360,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             this.contentPanel.emptyLayers();
             this.contentPanel._activateSelectControls();
             this._addAnalyseData(this.contentPanel, layer_id);
-
         },
 
         /**
@@ -2463,8 +2448,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             // Override style - :TODO make UI for this and get override from there
             if (defaults.method === 'difference') {
                 selections.override_sld = 'sld_muutos_n1';
-            }
-            else if (defaults.method === 'areas_and_sectors') {
+            } else if (defaults.method === 'areas_and_sectors') {
                 selections.override_sld = 'sld_label_t1';
             }
             return selections;
@@ -2679,7 +2663,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
             // Check that parameters are a-okay
             if (me._checkSelections(selections)) {
-
                 // Sorry - use intersect method for clip
                 if (selections.method === 'clip') {
                     selections.method = 'intersect';
@@ -2687,7 +2670,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 }
 
                 if (functions && functions.length) {
-
                     selections.methodParams.locales = [];
                     functions.forEach(function (func) {
                         selections.methodParams.locales.push(
@@ -2738,7 +2720,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         }
                         data.filter2 = JSON.stringify(ifilterJson);
                     }
-
                 }
                 // if we don't wan't to save data, let's give some data to the grid
                 if (me._showFeatureDataWithoutSaving) {
@@ -2758,19 +2739,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     for (k = 0; k < locales.length; k += 1) {
                         me.grid.setColumnUIName(fields[k], locales[k]);
                     }
-
                 }
 
-                //clean the "additional info" div
+                // clean the "additional info" div
                 me.mainPanel.find('div.analysis_additional_info').html('');
 
                 // Send the data for analysis to the backend
-                me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[true]);
+                me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest', [true]);
                 me.instance.analyseService.sendAnalyseData(
                     data,
                     // Success callback
                     function (response) {
-                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest', [false]);
                         if (response) {
                             if (response.error) {
                                 showError(response.error);
@@ -2781,12 +2761,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     },
                     // Error callback
                     function (jqXHR, textStatus, errorThrown) {
-                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest',[false]);
+                        me.instance.sandbox.postRequestByName('ShowProgressSpinnerRequest', [false]);
                         showError(textStatus);
                     }
                 );
             }
-
         },
 
         /**
@@ -2907,19 +2886,17 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 content.prepend('<div>' + me.loc.aggregate.footer + '</div>');
             }
 
-
             var storeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             storeBtn.setTitle(me.loc.aggregatePopup.store);
             storeBtn.setTooltip(me.loc.aggregatePopup.store_tooltip);
             storeBtn.setHandler(function () {
                 var rq = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rq);
-                //Store temp geometry layer
+                // Store temp geometry layer
                 var title = me.mainPanel.find('.settings_name_field').val() ? me.mainPanel.find('.settings_name_field').val() : '_';
                 contentPanel.addGeometry(me._getOLGeometry(geojson), title);
                 me._showFeatureDataWithoutSaving = false;
                 popup.close(true);
-
             });
 
             var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -2935,7 +2912,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 cancel: '.content'
             });
 
-            popup.show(me.loc.aggregatePopup.title, content, [storeBtn,closeBtn]);
+            popup.show(me.loc.aggregatePopup.title, content, [storeBtn, closeBtn]);
         },
 
         /**
@@ -3030,18 +3007,16 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.filterDialog
             );
 
-
             filterIcon.off('click');
             filterIcon.on('click', function () {
                 var selectedFeatures = me.WFSLayerService.getSelectedFeatureIds(layer.getId()),
                     boolSelectedFeatures = (selectedFeatures !== undefined && selectedFeatures.length > 0),
                     boolSelectedGeometry = (me.contentPanel.selectedGeometry !== null);
 
-
                 if (!me._filterPopups[layer.getId()]) {
                     prevJson = me.getFilterJson(layer.getId());
                     selectedLayer = me._getSelectedMapLayer();
-                    //Check weather the layer is selected of not
+                    // Check weather the layer is selected of not
                     if (parseInt(layerId) === selectedLayer._id) {
                         layer._isLayerSelected = true;
                     } else {
@@ -3293,7 +3268,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             } else {
                 this._enableAllParamsSelection();
             }
-
         },
 
         _checkMethodSelection: function () {

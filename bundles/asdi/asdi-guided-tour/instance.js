@@ -125,7 +125,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE1
+        // PAGE1
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -166,7 +166,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE2
+        // PAGE2
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -206,7 +206,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE3
+        // PAGE3
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -246,7 +246,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE4
+        // PAGE4
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -286,7 +286,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE5
+        // PAGE5
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -326,7 +326,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE6
+        // PAGE6
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -366,7 +366,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE7
+        // PAGE7
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -406,7 +406,7 @@ Oskari.clazz.define(
                 return content;
             }
         },
-        //PAGE8
+        // PAGE8
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -428,7 +428,7 @@ Oskari.clazz.define(
             },
             positionAlign: 'right'
         },
-        //PAGE9
+        // PAGE9
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -449,7 +449,7 @@ Oskari.clazz.define(
             },
             positionAlign: 'right'
         },
-        //PAGE10
+        // PAGE10
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -470,7 +470,7 @@ Oskari.clazz.define(
             },
             positionAlign: 'right'
         },
-        //PAGE11
+        // PAGE11
         {
             setScope: function (inst) {
                 this.ref = inst;
@@ -491,7 +491,7 @@ Oskari.clazz.define(
             },
             positionAlign: 'left'
         },
-        //PAGE12
+        // PAGE12
         {
             appendTourSeenCheckbox: true,
 

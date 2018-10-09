@@ -141,11 +141,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             sandbox.registerService(printService);
             this.printService = printService;
 
-            //Let's extend UI
+            // Let's extend UI
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
+            // sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
             me._createUi();
 
@@ -221,7 +221,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
              * @method userinterface.ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-
                 var me = this;
 
                 if (event.getExtension().getName() !== me.getName()) {
@@ -231,7 +230,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
 
                 var isOpen = event.getViewState() !== 'close';
                 me.displayContent(isOpen);
-
             },
 
             /**
@@ -273,7 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 if (geoJson) {
                     me.geoJson = geoJson;
                 }
-                //Request pdf
+                // Request pdf
                 if (!me.printout) {
                     var map = jQuery('#contentMap');
                     me.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
@@ -285,14 +283,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             }
         },
 
-
-
         /**
          * @method stop
          * Implements BundleInstance protocol stop method
          */
         'stop': function () {
-
             if (this.printout) {
                 this.printout.destroy();
                 this.printout = undefined;
@@ -326,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Flyout', this);
-            /*this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Tile', this);*/
+            /* this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.printout.Tile', this); */
         },
         /**
          * @method stopExtension
@@ -335,7 +330,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         stopExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = null;
-            /*this.plugins['Oskari.userinterface.Tile'] = null;*/
+            /* this.plugins['Oskari.userinterface.Tile'] = null; */
         },
         /**
          * @method getPlugins
@@ -366,7 +361,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         _createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
-            /*this.plugins['Oskari.userinterface.Tile'].refresh();*/
+            /* this.plugins['Oskari.userinterface.Tile'].refresh(); */
         },
         /**
          * @method setPublishMode
@@ -385,13 +380,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             this.sandbox.notifyAll(eventBuilder(this.mediator.bundleId));
 
             if (blnEnabled) {
-
                 map.addClass('mapPrintoutMode');
                 me.sandbox.mapMode = 'mapPrintoutMode';
 
-                //me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
+                // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
                 jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
-
 
                 // proceed with printout view
                 if (!this.printout) {
