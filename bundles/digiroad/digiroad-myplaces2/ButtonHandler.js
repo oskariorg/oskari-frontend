@@ -3,7 +3,7 @@
  *
  * Handles the buttons for myplaces functionality
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.ButtonHandler',
 
     /**
      * @method create called automatically on construction
@@ -274,7 +274,7 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
             var locTool = this.instance.getLocalization('tools')[drawMode];
             var locBtns = this.instance.getLocalization('buttons');
             var title = this.instance.getLocalization('title');
-            var message = locTool["new"];
+            var message = locTool['new'];
 
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog = dialog;
@@ -332,9 +332,9 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
             var me = this,
                 oid = element.text(),
                 feature = me.features[oid],
-                layerName = "liikenne_elementti";
+                layerName = 'liikenne_elementti';
 
-            var eventBuilder = this.instance.sandbox.getEventBuilder("FeatureSelector.FeatureHighlightEvent");
+            var eventBuilder = this.instance.sandbox.getEventBuilder('FeatureSelector.FeatureHighlightEvent');
             if (eventBuilder) {
                 element.hover(function () {
                     var event = eventBuilder(layerName, feature, 'highlight');
@@ -417,15 +417,15 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.mapmodule-plugin.event.FeaturesAddedEvent} event
              */
             'FeatureSelector.FeaturesAddedEvent': function (event) {
-                var layerName = event.getLayerName().replace(/_vector$/, "");
+                var layerName = event.getLayerName().replace(/_vector$/, '');
                 var features = event.getFeatures();
 
-                if (layerName !== "liikenne_elementti" || !features) {
+                if (layerName !== 'liikenne_elementti' || !features) {
                     return;
                 }
 
                 var oid = features[0].attributes.OID_TUNNUS;
-                var restrictionDiv = jQuery("#restriction_helper");
+                var restrictionDiv = jQuery('#restriction_helper');
                 var firstElem = restrictionDiv.find('#first_element');
                 var lastElem = restrictionDiv.find('#last_element');
 
@@ -448,15 +448,15 @@ Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.ButtonHandler",
              * @param {Oskari.mapframework.mapmodule-plugin.event.FeaturesAddedEvent} event
              */
             'FeatureSelector.FeaturesRemovedEvent': function (event) {
-                var layerName = event.getLayerName().replace(/_vector$/, "");
+                var layerName = event.getLayerName().replace(/_vector$/, '');
                 var features = event.getFeatures();
 
-                if (layerName !== "liikenne_elementti" || !features) {
+                if (layerName !== 'liikenne_elementti' || !features) {
                     return;
                 }
 
                 var oid = features[0].attributes.OID_TUNNUS;
-                var restrictionDiv = jQuery("#restriction_helper");
+                var restrictionDiv = jQuery('#restriction_helper');
                 var firstElem = restrictionDiv.find('#first_element');
                 var lastElem = restrictionDiv.find('#last_element');
 

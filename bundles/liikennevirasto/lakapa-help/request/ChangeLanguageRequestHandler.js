@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLan
 	 */
     handleRequest : function(core, request) {
     	var me = this;
-        me.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLanguageRequest] language changed");
+        me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLanguageRequest] language changed');
         jQuery.cookie('language', request._language, {expires: 365});
         location.reload(true);
         //me.instance.plugins['Oskari.userinterface.Flyout'].createUI(request.getTransport());

@@ -442,7 +442,7 @@ function(instance) {
 
         if( me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
             	dteMs - me._pendingAjaxQuery.timestamp < 500 ) {
-            	me._sandbox.printDebug("[LakapaBasket] Save last selected region NOT SENT (time difference < 500ms)");
+            	me._sandbox.printDebug('[LakapaBasket] Save last selected region NOT SENT (time difference < 500ms)');
             	return;
         }
 		me._cancelAjaxRequest();
@@ -454,7 +454,7 @@ function(instance) {
             beforeSend : function(x) {
             	me._pendingAjaxQuery.jqhr = x;
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/json;charset=UTF-8");
+                    x.overrideMimeType('application/json;charset=UTF-8');
                 }
             },
             success : function(resp) {
@@ -785,7 +785,7 @@ function(instance) {
      */
     _notifyAjaxFailure: function() {
     	 var me = this;
-    	 me._sandbox.printDebug("[LiviBasket] AJAX failed");
+    	 me._sandbox.printDebug('[LiviBasket] AJAX failed');
     },
     /**
      * Get fileSizes
@@ -826,7 +826,7 @@ function(instance) {
     	if( !jqhr) {
     		return;
     	}
-    	this._sandbox.printDebug("[LakapaBasket] Abort jqhr ajax request");
+    	this._sandbox.printDebug('[LakapaBasket] Abort jqhr ajax request');
     	jqhr.abort();
     	jqhr = null;
     	me._pendingAjaxQuery.busy = false;
@@ -858,7 +858,7 @@ function(instance) {
         jQuery('#lakapa-basket-loading-overlay').remove();
         jQuery('#lakapa-basket-loading-container').remove();
         me._sandbox.postRequestByName('ToggleTransportSelectorRequest', [true]);
-        this._sandbox.printDebug("[LakapaBasket] finished jqhr ajax request");
+        this._sandbox.printDebug('[LakapaBasket] finished jqhr ajax request');
     }
 }, {
 	/**

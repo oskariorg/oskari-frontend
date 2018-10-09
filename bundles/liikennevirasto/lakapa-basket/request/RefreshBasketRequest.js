@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequest',
 function() {
 }, {
 	/** @static @property __name request name */
-    __name : "RefreshBasketRequest",
+    __name : 'RefreshBasketRequest',
     /**
      * @method getName
      * @return {String} request name

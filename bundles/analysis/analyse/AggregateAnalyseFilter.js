@@ -3,7 +3,7 @@
  *
  * Adds to the filterDialog the possibility to filter with aggregate analyse values
  */
-Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
+Oskari.clazz.define('Oskari.analysis.bundle.analyse.aggregateAnalyseFilter',
 
     /**
      * @method create called automatically on construction
@@ -11,7 +11,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
      * @param {Oskari.userinterface.component.FilterDialog} filterDialog
      */
 
-    function(instance, filterDialog) {
+    function (instance, filterDialog) {
         this.instance = instance;
         this.localization = filterDialog.loc;
         this.filterDialog = filterDialog;
@@ -22,22 +22,22 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @param {Array} aggregateAnalysis
          * Adds multiLevelSelect or shows advertisingtext after user clicks the link to filter with aggregate value
          */
-        addAggregateFilterFunctionality: function(aggregateAnalysis) {
+        addAggregateFilterFunctionality: function (aggregateAnalysis) {
             var me = this;
             me.content = me.filterDialog.popup.dialog.find('.analyse-filter-popup-content');
 
             if (me.filterDialog.popup.dialog.find('.add-link')) {
-                me.filterDialog.popup.dialog.on('click', '.add-link', function(event) {
+                me.filterDialog.popup.dialog.on('click', '.add-link', function (event) {
                     if (aggregateAnalysis.length === 0) {
                         me.aggregateAnalyseFilter.showAdvertisingText();
                     } else {
-                        me.content.find('.input-blink').removeClass("input-blink");
-                        jQuery(event.target).parent().parent().find('input[name=attribute-value]').addClass("input-blink");
+                        me.content.find('.input-blink').removeClass('input-blink');
+                        jQuery(event.target).parent().parent().find('input[name=attribute-value]').addClass('input-blink');
                         var aggregateSelect = me.content.find('.filter-popup-multiselect');
                         if (aggregateSelect) {
                             aggregateSelect.remove();
                         }
-                        me.aggregateAnalyseFilter.addAggregateValuesSelect(aggregateAnalysis, function(value) {
+                        me.aggregateAnalyseFilter.addAggregateValuesSelect(aggregateAnalysis, function (value) {
                             jQuery(event.target).parent().parent().find('input').val(value);
                             me.aggregateAnalyseFilter._blink(jQuery(event.target).parent().parent().find('input'));
                         });
@@ -50,13 +50,13 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method showAdvertisingText
          * shows text advertising analyse aggregate values if user doesn't have any
          */
-        showAdvertisingText: function() {
+        showAdvertisingText: function () {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton'),
                 title = this.localization.aggregateAnalysisFilter.noAggregateAnalysisPopupTitle,
                 content = this.localization.aggregateAnalysisFilter.noAggregateAnalysisPopupContent;
             okBtn.setPrimary(true);
-            okBtn.setHandler(function() {
+            okBtn.setHandler(function () {
                 dialog.close(true);
             });
             dialog.show(title, content, [okBtn]);
@@ -67,14 +67,14 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method _blink
          * blinks the input element when aggregate value is selected
          */
-        _blink: function(element) {
+        _blink: function (element) {
             if (!element) {
                 return;
             }
             // animate to low opacity
             element.animate({
                 opacity: 0.25
-            }, 250, function() {
+            }, 250, function () {
                 // on complete, animate back to fully visible
                 element.animate({
                     opacity: 1
@@ -86,13 +86,13 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method addAggregateValuesSelect
          * renders MultiLevelSelect to content with aggregateValues
          */
-        addAggregateValuesSelect: function(aggregateAnalysis, callback) {
+        addAggregateValuesSelect: function (aggregateAnalysis, callback) {
             var me = this;
 
             me.content = me.filterDialog.popup.dialog.find('.analyse-filter-popup-content');
 
             // Get values for first select
-            var options = _.map(aggregateAnalysis, function(aggregateAnalyse) {
+            var options = _.map(aggregateAnalysis, function (aggregateAnalyse) {
                 var analyse = {
                     title: aggregateAnalyse.name,
                     value: aggregateAnalyse.wpsLayerId
@@ -112,30 +112,30 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
             me.aggregateValuesSelect.setOptions(me.selectValues);
             me.aggregateValuesSelect.insertTo(me.content.find('.filter-popup-multiselect'));
 
-            me.content.find('.icon-close').on('click', function() {
+            me.content.find('.icon-close').on('click', function () {
                 me.content.find('.filter-popup-multiselect').remove();
                 me._turnOnClickOff();
-                me.content.find('.input-blink').removeClass("input-blink");
+                me.content.find('.input-blink').removeClass('input-blink');
             });
 
             me._cachedAggregateValue = [-1];
-            me.aggregateValuesSelect.setHandler(function(value) {
+            me.aggregateValuesSelect.setHandler(function (value) {
                 var aggregateValue = value[0];
                 if (!_.isUndefined(aggregateValue)) {
                     var _valueDifference = _.difference(me._cachedAggregateValue, value);
-                    //we always assume that _valueOfDifference returns an array with one value
+                    // we always assume that _valueOfDifference returns an array with one value
                     var indexofChangedValue = _.indexOf(me._cachedAggregateValue, _valueDifference[0]);
                     me._cachedAggregateValue = value;
                     if (indexofChangedValue === 0) {
                         me.getAggregateAnalysisJSON(value[0]);
                     }
                     if (indexofChangedValue === 1) {
-                        if (value[1] !== "undefined") {
+                        if (value[1] !== 'undefined') {
                             me.parseLastSelect(value[1]);
                         }
                     }
                     if (indexofChangedValue === 2) {
-                        if (value[2] !== "undefined") {
+                        if (value[2] !== 'undefined') {
                             me.useAggregateValue(value[2], callback);
                         }
                     }
@@ -147,17 +147,17 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method getAggregateAnalysisJSON
          * @param {integer} analyse_id
          */
-        getAggregateAnalysisJSON: function(analyse_id) {
+        getAggregateAnalysisJSON: function (analyse_id) {
             var me = this;
             var url = Oskari.urls.getRoute('GetAnalysisData') + '&analyse_id=' + analyse_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
                 url: url,
-                success: function(result) {
+                success: function (result) {
                     me.handleResult(result);
                 },
-                error: function(jqXHR, textStatus, errorThrown) {
+                error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
                         me.localization.aggregateAnalysisFilter.getAggregateAnalysisFailed,
@@ -173,7 +173,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * parses aggregate analysis JSON to correct format for MultiLevelSelect
          * creates the second select of MultiLevelSelect
          */
-        handleResult: function(data) {
+        handleResult: function (data) {
             var me = this,
                 index = 1,
                 options = [];
@@ -184,8 +184,7 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
             }
             me.indicatorData = data.analysisdata;
 
-            me.indicatorData.forEach(function(indicatorItem) {
-
+            me.indicatorData.forEach(function (indicatorItem) {
                 var datasets = _.keys(indicatorItem);
 
                 var values = {
@@ -202,7 +201,6 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                 options: options
             };
 
-
             me.selectValues[index] = updateValues;
             var ilen = index + 1;
             while (ilen < me.selectValues.length) {
@@ -216,11 +214,11 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @param {string} keyValue
          * parses options for last select
          */
-        parseLastSelect: function(keyValue) {
+        parseLastSelect: function (keyValue) {
             var me = this,
                 index = 2,
                 options = [],
-                datasets = _.find(me.indicatorData, function(obj) {
+                datasets = _.find(me.indicatorData, function (obj) {
                     return obj.hasOwnProperty(keyValue);
                 })[keyValue];
 
@@ -242,17 +240,17 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
                 me.selectReadyButton = '<input class="oskari-button primary oskari-filter-with-aggregateAnalysis" type="button" value=' + me.localization.aggregateAnalysisFilter.selectReadyButton + '>';
                 me.content.find('.oskari-multilevelselect').append(me.selectReadyButton);
             }
-            me.content.on('click', '.oskari-filter-with-aggregateAnalysis', function() {
+            me.content.on('click', '.oskari-filter-with-aggregateAnalysis', function () {
                 me.content.find('.filter-popup-multiselect').remove();
                 me._turnOnClickOff();
-                me.content.find('.input-blink').removeClass("input-blink");
+                me.content.find('.input-blink').removeClass('input-blink');
             });
         },
 
         /**
          * @method useAggregateValue
          */
-        useAggregateValue: function(key, callback) {
+        useAggregateValue: function (key, callback) {
             callback(key);
         },
 
@@ -260,24 +258,24 @@ Oskari.clazz.define("Oskari.analysis.bundle.analyse.aggregateAnalyseFilter",
          * @method _openPopup
          * opens a modal popup, no buttons or anything.
          */
-        _openPopup: function(title, content) {
+        _openPopup: function (title, content) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             okBtn.setPrimary(true);
-            okBtn.setHandler(function() {
+            okBtn.setHandler(function () {
                 dialog.close(true);
             });
             dialog.show(title, content, [okBtn]);
             dialog.makeModal();
         },
 
-        _turnOnClickOff: function() {
+        _turnOnClickOff: function () {
             var me = this;
             me.content.off('click', '.oskari-filter-with-aggregateAnalysis');
             me.content.find('.icon-close').off('click');
         },
 
-        _getErrorText: function(jqXHR, textStatus, errorThrown) {
+        _getErrorText: function (jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown,
                 err;
             try {

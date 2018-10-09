@@ -4,7 +4,7 @@ export default class OskariImageWMS extends olSourceImageWMS {
     /**
      * Return currently shown image url
      */
-    getImageUrl() {
+    getImageUrl () {
         return this.image_.src_;
     }
 }

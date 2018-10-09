@@ -64,7 +64,7 @@ function(conf) {
     init : function(sandbox) {
         var me = this;
         this._sandbox = sandbox;
-        this._sandbox.printDebug("[AttributionPlugin] init");
+        this._sandbox.printDebug('[AttributionPlugin] init');
 
 
     },
@@ -157,5 +157,5 @@ function(conf) {
      * @property {Object} protocol
      * @static
      */
-    'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol' : ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

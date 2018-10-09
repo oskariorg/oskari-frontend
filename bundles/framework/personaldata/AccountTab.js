@@ -78,4 +78,4 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.AccountTab',
                 return false;
             });
         }
-});
+    });

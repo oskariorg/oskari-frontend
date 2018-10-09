@@ -110,10 +110,10 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
                 layerName = event.getLayerName();
 
             switch(type) {
-                case "highlight":
+                case 'highlight':
                     this.highlightFeature(layerName, feature);
                     break;
-                case "unHighlight":
+                case 'unHighlight':
                     this.unHighlightFeature(layerName, feature);
                     break;
             }
@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             if (!layer.isLayerOfType(this._layerType))
                 continue;
 
-            this._log.debug("preselecting " + layerId);
+            this._log.debug('preselecting ' + layerId);
             this.addMapLayerToMap(layer,true,layer.isBaseLayer());
         }
 
@@ -167,10 +167,10 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
      * registers default vector formats
      */
     registerVectorFormats : function() {
-        this.registerVectorFormat("application/json",
+        this.registerVectorFormat('application/json',
                 new OpenLayers.Format.GeoJSON( {}));
         this.registerVectorFormat(
-                "application/nlsfi-x-openlayers-feature",
+                'application/nlsfi-x-openlayers-feature',
                 new function() {
                     this.read = function(data) {
                         return data;
@@ -186,31 +186,31 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             return;
 
         var layerId = layer.getId();
-        var markerLayer = this._map.getLayersByName("Markers");
+        var markerLayer = this._map.getLayersByName('Markers');
         this._map.removeLayer(markerLayer[0], false);
 
 //                      var layerScales = this.getMapModule().calculateLayerScales(layer
 //                              .getMaxScale(), layer.getMinScale());
 
         var styleOpts = {
-            "defaultStrokeColor": "#FF2222",
-            "selectStrokeColor": "#FF0000"
+            'defaultStrokeColor': '#FF2222',
+            'selectStrokeColor': '#FF0000'
         };
         var styleMap = new OpenLayers.StyleMap({
             'default': new OpenLayers.Style({
                 'strokeWidth': 5,
                 'strokeOpacity': 0.6,
-                'strokeColor': styleOpts["defaultStrokeColor"],
+                'strokeColor': styleOpts['defaultStrokeColor'],
                 'pointRadius': 6,
-                'fillColor': "#ff9966",
+                'fillColor': '#ff9966',
                 'fillOpacity': 0.6
             }),
             'select': new OpenLayers.Style({
                 'strokeWidth': 7,
                 'strokeOpacity': 1,
-                'strokeColor': styleOpts["selectStrokeColor"],
+                'strokeColor': styleOpts['selectStrokeColor'],
                 'pointRadius': 6,
-                'fillColor': "#ff9966",
+                'fillColor': '#ff9966',
                 'fillOpacity': 1
             })
         });
@@ -259,7 +259,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
         this._controls[layerId]['getFeature'] = this.activateGetFeature(layer, openLayer, protocol, filter);
         this._controls[layerId]['selectFeature'] = this.activateSelectFeature(openLayer);
 
-        this._log.debug("#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for "
+        this._log.debug('#!#! CREATED VECTOR / OPENLAYER.LAYER.VECTOR for '
                         + layer.getId());
 
         if (keepLayerOnTop) {
@@ -295,33 +295,33 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
             protocol: protocol,
             filterType: OpenLayers.Filter.Spatial.BBOX,
             customFilter: filter,
-            toggleKey: "ctrlKey",
+            toggleKey: 'ctrlKey',
             box: true,
             handlerOptions: {
                 'box': {keyMask: OpenLayers.Handler.MOD_ALT}
             }
         });
 
-        control.events.register("beforefeatureselected", this, function(e) {
+        control.events.register('beforefeatureselected', this, function(e) {
             if(!layer.isInScale()) {
                 return false;
             }
         });
-        control.events.register("featureselected", this, function(e) {
+        control.events.register('featureselected', this, function(e) {
             openLayer.addFeatures([e.feature]);
 
             var sandbox = this._sandbox;
-            var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeaturesAddedEvent");
+            var eventBuilder = sandbox.getEventBuilder('FeatureSelector.FeaturesAddedEvent');
             if(eventBuilder) {
                 var event = eventBuilder(layer.getId(), [e.feature]);
                 sandbox.notifyAll(event);
             }
         });
-        control.events.register("featureunselected", this, function(e) {
+        control.events.register('featureunselected', this, function(e) {
             openLayer.removeFeatures([e.feature]);
 
             var sandbox = this._sandbox;
-            var eventBuilder = sandbox.getEventBuilder("FeatureSelector.FeaturesRemovedEvent");
+            var eventBuilder = sandbox.getEventBuilder('FeatureSelector.FeaturesRemovedEvent');
             if(eventBuilder) {
                 var event = eventBuilder(layer.getId(), [e.feature]);
                 sandbox.notifyAll(event);
@@ -381,7 +381,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.plugin.VectorLayerPl
 },
 {
     'protocol' : [
-        "Oskari.mapframework.module.Module",
-        "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+        'Oskari.mapframework.module.Module',
+        'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
     ]
 });

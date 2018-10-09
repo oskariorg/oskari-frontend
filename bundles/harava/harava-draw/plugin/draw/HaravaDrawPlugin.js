@@ -26,10 +26,10 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
         this._lastfeature = null;
         this._suppressFeatureAdd = false;
         this.featureStyle = new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style({
-                pointRadius: "6",
-                fillColor: "#ffcc66",
-                strokeColor: "#ff9933",
+            'default': new OpenLayers.Style({
+                pointRadius: '6',
+                fillColor: '#ffcc66',
+                strokeColor: '#ff9933',
                 strokeWidth: 2,
                 graphicZIndex: 1,
                 fillOpacity: 0.5,
@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
             style.cursor = 'pointer';
 
             // check wkt type
-            if (typeof wktObject === "string") {
+            if (typeof wktObject === 'string') {
                 me._suppressFeatureAdd = true;
                 var wkt = new OpenLayers.Format.WKT();
                 var feature = wkt.read(wktObject);
@@ -160,11 +160,11 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
         init: function (sandbox) {
             var me = this;
             this._sandbox = sandbox;
-            this._sandbox.printDebug("[HaravaDrawPlugin] init");
+            this._sandbox.printDebug('[HaravaDrawPlugin] init');
 
-            me._drawLayer = new OpenLayers.Layer.Vector("Harava geometry layer", {
+            me._drawLayer = new OpenLayers.Layer.Vector('Harava geometry layer', {
                 eventListeners: {
-                    "featuresadded": function (layer) {
+                    'featuresadded': function (layer) {
                         // send an event that the drawing has been completed
                         me.finishedDrawing(me._suppressFeatureAdd);
                     },
@@ -232,7 +232,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
                 polygon: new OpenLayers.Control.DrawFeature(me._drawLayer,
                     OpenLayers.Handler.Polygon, {
                         handlerOptions: {
-                            holeModifier: "altKey"
+                            holeModifier: 'altKey'
                         }
                     })
             };
@@ -412,7 +412,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
         hidePopup: function () {
             var me = this;
             if (me._conf.popupHtml !== null && me._conf.popupHtml !== undefined) {
-                var rn = "HaravaInfoBox.HideInfoBoxRequest",
+                var rn = 'HaravaInfoBox.HideInfoBoxRequest',
                     rb = this._sandbox.getRequestBuilder(rn),
                     r = rb(this.infoboxId);
                 this._sandbox.request(this, r);
@@ -441,9 +441,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
 
                 var content = {};
                 content.html = feature.popupHtml;
-                var rn = "HaravaInfoBox.ShowInfoBoxRequest",
+                var rn = 'HaravaInfoBox.ShowInfoBoxRequest',
                     rb = me._sandbox.getRequestBuilder(rn),
-                    r = rb('kana', "Info", [content], lonlat, true, null, null, true);
+                    r = rb('kana', 'Info', [content], lonlat, true, null, null, true);
                 me._sandbox.request(me, r);
 
                 jQuery('.olPopupCloseBox').hide();
@@ -511,7 +511,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
          * @method deActivateAll
          * Deactivate all module controls and tools
          */
-        "deActivateAll": function () {
+        'deActivateAll': function () {
             var me = this;
 
             for (var key in me.drawControls) {
@@ -647,5 +647,5 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawPlugin',
          * @property {Object} protocol
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

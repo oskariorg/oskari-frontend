@@ -214,4 +214,4 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-  });
+    });

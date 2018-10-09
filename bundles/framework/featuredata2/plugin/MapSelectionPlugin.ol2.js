@@ -47,7 +47,7 @@ Oskari.clazz.define(
          * @params {String} includes drawMode, geometry and style
          */
         startDrawing: function (params) {
-            //Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
+            // Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
             this.WFSLayerService.setSelectionToolsActive(true);
             if (params.isModify) {
                 // preselect it for modification
@@ -78,7 +78,7 @@ Oskari.clazz.define(
             // disable all draw controls
             this._toggleControl();
         },
-        clearDrawing: function() {
+        clearDrawing: function () {
             this.removeFeatures();
         },
         removeFeatures: function () {
@@ -297,17 +297,17 @@ Oskari.clazz.define(
             }
 
             switch (featClass) {
-                case 'OpenLayers.Geometry.Point':
-                    drawing = new OpenLayers.Geometry.MultiPoint(components);
-                    break;
-                case 'OpenLayers.Geometry.LineString':
-                    drawing = new OpenLayers.Geometry.MultiLineString(
-                        components
-                    );
-                    break;
-                case 'OpenLayers.Geometry.Polygon':
-                    drawing = new OpenLayers.Geometry.MultiPolygon(components);
-                    break;
+            case 'OpenLayers.Geometry.Point':
+                drawing = new OpenLayers.Geometry.MultiPoint(components);
+                break;
+            case 'OpenLayers.Geometry.LineString':
+                drawing = new OpenLayers.Geometry.MultiLineString(
+                    components
+                );
+                break;
+            case 'OpenLayers.Geometry.Polygon':
+                drawing = new OpenLayers.Geometry.MultiPolygon(components);
+                break;
             }
             return drawing;
         },

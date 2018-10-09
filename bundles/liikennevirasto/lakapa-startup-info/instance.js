@@ -236,6 +236,6 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.StartupInfoBundleInsta
             me.sandbox.unregister(me);
         }
     }, {
-        protocol: ["Oskari.bundle.Bundle", "Oskari.bundle.BundleInstance", "Oskari.mapframework.bundle.extension.ExtensionBundle"]
+        protocol: ['Oskari.bundle.Bundle', 'Oskari.bundle.BundleInstance', 'Oskari.mapframework.bundle.extension.ExtensionBundle']
     }
 );

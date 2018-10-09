@@ -64,15 +64,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
             var me = this,
                 content = this.template.clone();
             this.content = content;
-            /*content.find('div.content').before(txt);*/
+            /* content.find('div.content').before(txt); */
             container.append(content);
 
             this.alert.insertTo(container);
 
             this.alert.setContent(this.loc.text, 'default', true);
 
-            //in analyse mode features can be selected only from one layer at once
-            //check if user have selections from many layers and notify about it
+            // in analyse mode features can be selected only from one layer at once
+            // check if user have selections from many layers and notify about it
             var selectionsInManyLayers = this.checkFeatureSelections();
 
             var continueButton = Oskari.clazz.create(
@@ -146,7 +146,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
             this.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
-
         },
 
         checkFeatureSelections: function (container) {
@@ -176,16 +175,15 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
 
                         layerList.find('ul').append(layerListRadioElement);
 
-                        if (layerList.find("input")[0].checked !== true) {
-                            layerList.find("input").prop('checked', true);
+                        if (layerList.find('input')[0].checked !== true) {
+                            layerList.find('input').prop('checked', true);
                             layersWithFeatures = _.map(WFSSelections, 'layerId');
                             me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerId);
                         }
                     }
                 );
                 jQuery(layerList).find('input').on('click', function (el) {
-                    var layerid = parseInt(el.currentTarget.value),
-                        layerIdsToEmpty;
+                    var layerid = parseInt(el.currentTarget.value);
                     layersWithFeatures = _.map(WFSSelections, 'layerId');
                     me.emptySelectionsFromLayers = _.pull(layersWithFeatures, layerid);
                 });
@@ -193,7 +191,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 me.content.find('div.content').append(layerList);
                 return true;
             }
-
         },
 
         getLayerName: function (layerId) {
@@ -207,9 +204,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
                 if (layerId === layer._id) {
                     layerName = layer.getName();
                 }
-            })
+            });
 
             return layerName;
-
         }
     });

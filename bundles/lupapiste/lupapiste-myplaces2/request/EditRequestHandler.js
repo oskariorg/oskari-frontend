@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
             }
         },
         _handleEditPlace: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] edit requested for place " + request.getId());
+            this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] edit requested for place ' + request.getId());
             var service = this.instance.getService(),
                 place = service.findMyPlace(request.getId());
             if (place) {
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
             }
         },
         _handleEditCategory: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] edit requested for category " + request.getId());
+            this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] edit requested for category ' + request.getId());
             var service = this.instance.getService(),
                 category = service.findCategory(request.getId());
             if (category) {
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
             }
         },
         _handleDeleteCategory: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] delete requested for category " + request.getId());
+            this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] delete requested for category ' + request.getId());
             var service = this.instance.getService(),
                 category = service.findCategory(request.getId());
             if (category) {
@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandle
             }
         },
         _handlePublishCategory: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] (un/)publish requested for category " + request.getId());
+            this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler] (un/)publish requested for category ' + request.getId());
             var service = this.instance.getService(),
                 category = service.findCategory(request.getId());
             if (category) {

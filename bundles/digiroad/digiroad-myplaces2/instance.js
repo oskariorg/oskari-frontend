@@ -3,7 +3,7 @@
  *
  * My places functionality
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.MyPlacesBundleInstance",
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.MyPlacesBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -135,10 +135,10 @@ function() {
         this.sandbox = sandbox;
 
         var me = this;
-        this._log.debug("Initializing my places module...");
+        this._log.debug('Initializing my places module...');
 
         // handles toolbar buttons related to my places
-        this.buttons = Oskari.clazz.create("Oskari.digiroad.bundle.myplaces2.ButtonHandler", this);
+        this.buttons = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.ButtonHandler', this);
         this.buttons.start();
 
         var user = Oskari.user();
@@ -169,7 +169,7 @@ function() {
         this.myPlacesService.init();
 
         // handles my places insert form etc
-        this.view = Oskari.clazz.create("Oskari.digiroad.bundle.myplaces2.view.MainView", this);
+        this.view = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.view.MainView', this);
         this.view.start();
 
         this.editRequestHandler = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.request.EditRequestHandler', sandbox, me);

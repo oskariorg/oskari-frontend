@@ -28,10 +28,10 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
         };
 
         this.featureStyle = new OpenLayers.StyleMap({
-            "default": new OpenLayers.Style({
+            'default': new OpenLayers.Style({
                 pointRadius: 8,
-                strokeColor: "#1C7372",
-                fillColor: "#1C7372",
+                strokeColor: '#1C7372',
+                fillColor: '#1C7372',
                 fillOpacity: 0.3,
                 strokeOpacity: 0.4,
                 strokeWidth: 3
@@ -112,18 +112,18 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
         init: function (sandbox) {
             var me = this;
             this._sandbox = sandbox;
-            this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] init");
+            this._sandbox.printDebug('[HaravaDrawSearchGeometryPlugin] init');
 
-            me._searchLayer = new OpenLayers.Layer.Vector("Harava search geometry layer", {
+            me._searchLayer = new OpenLayers.Layer.Vector('Harava search geometry layer', {
                 eventListeners: {
-                    "featuresadded": function (layer) {
+                    'featuresadded': function (layer) {
                         // send an event that the drawing has been completed
                         me.finishedDrawing();
                     }
                 },
                 styleMap: this.featureStyle
             });
-            me._oldSearchLayer = new OpenLayers.Layer.Vector("Harava old search geometry layer", {
+            me._oldSearchLayer = new OpenLayers.Layer.Vector('Harava old search geometry layer', {
                 styleMap: this.featureStyle
             });
             me._map.addLayers([me._searchLayer, me._oldSearchLayer]);
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
 
             if (me._pendingAjaxQuery.busy && me._pendingAjaxQuery.timestamp &&
                 dteMs - me._pendingAjaxQuery.timestamp < 500) {
-                me._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] HaravaDrawSearchGeometry NOT SENT (time difference < 500ms)");
+                me._sandbox.printDebug('[HaravaDrawSearchGeometryPlugin] HaravaDrawSearchGeometry NOT SENT (time difference < 500ms)');
                 return;
             }
 
@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
 
             /* let's not start anything we cant' resolve */
             if (!layerIds) {
-                me._sandbox.printDebug("[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible");
+                me._sandbox.printDebug('[GetInfoPlugin] NO layers with featureInfoEnabled, in scale and visible');
                 return;
             }
             $('#searchbygeom-searchindicator').addClass('show');
@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {
@@ -295,7 +295,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
                         var lonlat = new OpenLayers.LonLat(resp.center.lon, resp.center.lat);
                         var parsed = {
                             html: html,
-                            title: "Tiedot"
+                            title: 'Tiedot'
                         };
                         parsed.lonlat = lonlat;
                         parsed.popupid = me.infoboxId;
@@ -304,10 +304,10 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
                         me._closeGfiInfo();
                         me.removeAllDrawings();
                         if (resp.funcs === null || resp.funcs === undefined || resp.funcs.length === 0 || resp.funcs === '') {
-                            if (Message && typeof Message.createMessage === "function" && typeof Message.showMessage === "function" && typeof Message.closeMessage === "function") {
+                            if (Message && typeof Message.createMessage === 'function' && typeof Message.showMessage === 'function' && typeof Message.closeMessage === 'function') {
                                 Message.createMessage(me._locale.tooltips.searchNotFound, me._locale.tooltips.searchNotFoundOkButton);
                                 Message.showMessage();
-                                $("#aMessage").on('click', function () {
+                                $('#aMessage').on('click', function () {
                                     Message.closeMessage();
                                     return false;
                                 });
@@ -358,7 +358,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
             if (!jqhr) {
                 return;
             }
-            this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] Abort jqhr ajax request");
+            this._sandbox.printDebug('[HaravaDrawSearchGeometryPlugin] Abort jqhr ajax request');
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery.busy = false;
@@ -384,7 +384,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
             me._pendingAjaxQuery.busy = false;
             me._pendingAjaxQuery.jqhr = null;
             $('#searchbygeom-searchindicator').removeClass('show');
-            this._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] finished jqhr ajax request");
+            this._sandbox.printDebug('[HaravaDrawSearchGeometryPlugin] finished jqhr ajax request');
         },
         /**
          * @method _buildLayerList
@@ -413,11 +413,11 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
                 }
 
                 if (!layerIds) {
-                    layerIds = "";
+                    layerIds = '';
                 }
 
-                if (layerIds !== "") {
-                    layerIds += ",";
+                if (layerIds !== '') {
+                    layerIds += ',';
                 }
 
                 layerIds += layer.getId();
@@ -432,7 +432,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
          */
         _notifyAjaxFailure: function () {
             var me = this;
-            me._sandbox.printDebug("[HaravaDrawSearchGeometryPlugin] GetFeatureInfo AJAX failed");
+            me._sandbox.printDebug('[HaravaDrawSearchGeometryPlugin] GetFeatureInfo AJAX failed');
         },
         /**
          * @method _isAjaxRequestBusy
@@ -484,9 +484,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
                 contentHtml = [],
                 content = {};
             content.html = data.html;
-            var rn = "HaravaInfoBox.ShowInfoBoxRequest",
+            var rn = 'HaravaInfoBox.ShowInfoBoxRequest',
                 rb = me._sandbox.getRequestBuilder(rn),
-                r = rb(data.popupid, "Info", [content], data.lonlat, true, null, null, true);
+                r = rb(data.popupid, 'Info', [content], data.lonlat, true, null, null, true);
             me._sandbox.request(me, r);
         },
         /**
@@ -607,7 +607,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
          * Closes the infobox with GFI data
          */
         _closeGfiInfo: function () {
-            var rn = "HaravaInfoBox.HideInfoBoxRequest";
+            var rn = 'HaravaInfoBox.HideInfoBoxRequest';
             var rb = this._sandbox.getRequestBuilder(rn);
             var r = rb(this.infoboxId);
             this._sandbox.request(this, r);
@@ -666,5 +666,5 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaDrawSearchGeome
          * @property {Object} protocol
          * @static
          */
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

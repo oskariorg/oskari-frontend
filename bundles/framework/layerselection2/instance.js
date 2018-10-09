@@ -8,7 +8,7 @@
  * See Oskari.mapframework.bundle.layerselection2.LayerSelectionBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
@@ -71,11 +71,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
+        'start': function () {
             var me = this;
 
-            if (me.started)
-                return;
+            if (me.started) { return; }
 
             me.started = true;
 
@@ -95,11 +94,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                 }
             }
 
-            //Let's extend UI
+            // Let's extend UI
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
+            // sandbox.registerAsStateful(this.mediator.bundleId, this);
             // draw ui
             me.createUi();
             me._registerForGuidedTour();
@@ -108,14 +107,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
@@ -124,19 +123,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
-            if (!handler)
-                return;
+            if (!handler) { return; }
 
             // Skip events, if internally linked layer
-            if(typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer() ){
+            if (typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer()) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -173,14 +169,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                     layerId = event.getLayerId(),
                     layer;
                 if (event.getOperation() === 'update' || event.getOperation() === 'tool') {
-                    if(layerId) {
+                    if (layerId) {
                         layer = mapLayerService.findMapLayer(layerId);
                         flyout.handleLayerModified(layer);
-                    }
-                    else {
+                    } else {
                         // no layer specified, update all layers
                         var layers = this.sandbox.findAllSelectedMapLayers();
-                        _.each(layers, function(layer) {
+                        _.each(layers, function (layer) {
                             flyout.handleLayerModified(layer);
                         });
                     }
@@ -230,7 +225,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function () {
             var sandbox = this.sandbox,
                 p;
             for (p in this.eventHandlers) {
@@ -243,7 +238,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
 
             sandbox.request(this, request);
 
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
+            // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },
@@ -294,7 +289,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * (re)creates the UI for "selected layers" functionality
          */
         createUi: function () {
-            var me = this;
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
@@ -306,10 +300,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          */
         __guidedTourDelegateTemplate: {
             priority: 30,
-            show: function(){
+            show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelection']);
             },
-            hide: function(){
+            hide: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelection']);
             },
             getTitle: function () {
@@ -320,7 +314,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                 content.append(this.localization.guidedTour.message);
                 return content;
             },
-            getLinks: function() {
+            getLinks: function () {
                 var me = this;
                 var loc = this.localization.guidedTour;
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -349,16 +343,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(var prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -368,14 +362,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);
@@ -386,5 +380,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

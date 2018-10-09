@@ -1,7 +1,7 @@
 /**
  * @class Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundleInstance
  */
-Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundleInstance", function () {
+Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundleInstance', function () {
     this.map = null;
     this.core = null;
     this.sandbox = null;
@@ -21,7 +21,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
      *
      */
     __name: 'catalogue.bundle.metadataflyout',
-    "getName": function () {
+    'getName': function () {
         return this.__name;
     },
     /**
@@ -43,40 +43,40 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
      */
 
     layerSpec: {
-        "text": "",
-        "name": "Metadata",
-        "wmsName": "1",
-        "type": "vectorlayer",
-        "styles": {
-            "title": "Trains",
-            "legend": "",
-            "name": "1"
+        'text': '',
+        'name': 'Metadata',
+        'wmsName': '1',
+        'type': 'vectorlayer',
+        'styles': {
+            'title': 'Trains',
+            'legend': '',
+            'name': '1'
         },
-        "descriptionLink": "",
-        "orgName": "Metadata",
-        "inspire": "Metadata",
-        "legendImage": "",
-        "info": "",
-        "isQueryable": true,
-        "formats": {
-            "value": "text/html"
+        'descriptionLink': '',
+        'orgName': 'Metadata',
+        'inspire': 'Metadata',
+        'legendImage': '',
+        'info': '',
+        'isQueryable': true,
+        'formats': {
+            'value': 'text/html'
         },
-        "id": 'catalogue_metadataflyout_layer',
-        "minScale": 36000000,
-        "maxScale": 1,
-        "style": "",
-        "dataUrl": "",
-        "wmsUrl": "x",
-        "opacity": 60,
-        "checked": "false",
-        "styledLayerDescriptor": '<StyledLayerDescriptor version="1.0.0" ' + 'xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" ' + '    xmlns="http://www.opengis.net/sld" ' + '    xmlns:ogc="http://www.opengis.net/ogc" ' + '    xmlns:xlink="http://www.w3.org/1999/xlink" ' + '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> ' + '  <NamedLayer> ' + '    <Name>Simple point with stroke</Name> ' + '   <UserStyle><Title>GeoServer SLD Cook Book: Simple point with stroke</Title> ' + '    <FeatureTypeStyle><Rule>' + '<PolygonSymbolizer>' + ' <Graphic><Mark><WellKnownName>circle</WellKnownName>' + '<Fill>' + '        <CssParameter name="fill">#000040</CssParameter>' + '       </Fill>' + '<Stroke>' + '          <CssParameter name="stroke">#000040</CssParameter>' + '           <CssParameter name="stroke-width">2</CssParameter>' + '          </Stroke>' + '</Mark><Size>12</Size></Graphic>' + '     </PolygonSymbolizer>' + '<TextSymbolizer><Label><ogc:PropertyName>title</ogc:PropertyName></Label>' + '<Fill><CssParameter name="fill">#000000</CssParameter></Fill></TextSymbolizer>' + '</Rule></FeatureTypeStyle>' + '</UserStyle></NamedLayer></StyledLayerDescriptor>'
+        'id': 'catalogue_metadataflyout_layer',
+        'minScale': 36000000,
+        'maxScale': 1,
+        'style': '',
+        'dataUrl': '',
+        'wmsUrl': 'x',
+        'opacity': 60,
+        'checked': 'false',
+        'styledLayerDescriptor': '<StyledLayerDescriptor version="1.0.0" ' + 'xsi:schemaLocation="http://www.opengis.net/sld StyledLayerDescriptor.xsd" ' + '    xmlns="http://www.opengis.net/sld" ' + '    xmlns:ogc="http://www.opengis.net/ogc" ' + '    xmlns:xlink="http://www.w3.org/1999/xlink" ' + '    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"> ' + '  <NamedLayer> ' + '    <Name>Simple point with stroke</Name> ' + '   <UserStyle><Title>GeoServer SLD Cook Book: Simple point with stroke</Title> ' + '    <FeatureTypeStyle><Rule>' + '<PolygonSymbolizer>' + ' <Graphic><Mark><WellKnownName>circle</WellKnownName>' + '<Fill>' + '        <CssParameter name="fill">#000040</CssParameter>' + '       </Fill>' + '<Stroke>' + '          <CssParameter name="stroke">#000040</CssParameter>' + '           <CssParameter name="stroke-width">2</CssParameter>' + '          </Stroke>' + '</Mark><Size>12</Size></Graphic>' + '     </PolygonSymbolizer>' + '<TextSymbolizer><Label><ogc:PropertyName>title</ogc:PropertyName></Label>' + '<Fill><CssParameter name="fill">#000000</CssParameter></Fill></TextSymbolizer>' + '</Rule></FeatureTypeStyle>' + '</UserStyle></NamedLayer></StyledLayerDescriptor>'
     },
 
     /**
      * @method implements BundleInstance start methdod
      *
      */
-    "start": function () {
+    'start': function () {
         if (this.started) {
             return;
         }
@@ -95,7 +95,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         this.sandbox = sandbox;
 
         /* loader */
-        this.loader = Oskari.clazz.create("Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader",
+        this.loader = Oskari.clazz.create('Oskari.catalogue.bundle.metadataflyout.service.MetadataLoader',
             this.getLocale().loader, sandbox);
 
         sandbox.register(this);
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         sandbox.registerAsStateful(this.mediator.bundleId, this);
 
     },
-    "init": function () {
+    'init': function () {
         return null;
     },
     /**
@@ -128,7 +128,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
      *
      * implements bundle instance update method
      */
-    "update": function () {
+    'update': function () {
 
     },
     /**
@@ -156,7 +156,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
      *
      * implements bundle instance stop method
      */
-    "stop": function () {
+    'stop': function () {
 
         var sandbox = this.sandbox,
             p;
@@ -198,7 +198,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
         return this.getLocale().title;
     },
     getDescription: function () {
-        return "Sample";
+        return 'Sample';
     },
     getPlugins: function () {
         return this.plugins;
@@ -242,16 +242,16 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             feats.push(ef);
         }
 
-        var eventBuilder = me.getSandbox().getEventBuilder("FeaturesAvailableEvent");
+        var eventBuilder = me.getSandbox().getEventBuilder('FeaturesAvailableEvent');
         // FIXME: FeaturesAvailableEvent has been removed. Use MapModulePlugin.AddFeaturesToMapRequest instead.
         if(eventBuilder) {
             var event = eventBuilder(
                 this.layer,
                 feats,
-                "application/nlsfi-x-openlayers-feature",
+                'application/nlsfi-x-openlayers-feature',
                 Oskari.getSandbox().getMap().getSrsName(),
                 //"EPSG:3067",
-                "replace"
+                'replace'
             );
             me.sandbox.notifyAll(event);
         }
@@ -278,5 +278,5 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          */
     }
 }, {
-    "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

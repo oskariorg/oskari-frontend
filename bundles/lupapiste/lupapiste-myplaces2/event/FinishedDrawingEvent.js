@@ -15,7 +15,7 @@ function(geometry, blnEdit) {
     this._modification = (blnEdit == true);
 }, {
     /** @static @property __name event name */
-    __name : "LupaPisteMyPlaces.FinishedDrawingEvent",
+    __name : 'LupaPisteMyPlaces.FinishedDrawingEvent',
     /**
      * @method getName
      * Returns event name

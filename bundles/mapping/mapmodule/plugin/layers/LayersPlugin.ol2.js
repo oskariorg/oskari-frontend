@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          * @param {OpenLayers.Geometry} geometry
          * @return {Object} centroid
          */
-        getGeometryCenter: function (geometry){
+        getGeometryCenter: function (geometry) {
             var center = geometry.getCentroid();
             return {
                 lon: center.x,
@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
          * @param {OpenLayers.Geometry} geometry
          * @return {OpenLayers.Bounds} bounds
          */
-        getGeometryBounds: function (geometry){
+        getGeometryBounds: function (geometry) {
             return geometry.getBounds();
         },
         /**
@@ -256,8 +256,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
             // NOTE: DO NOT CHANGE visibility in internal layer object (it will
             // change in UI also)
             // this is for optimization purposes
-            var map = this.getMap(),
-                mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
+            var mapLayers = this.getMapModule().getOLMapLayers(layer.getId()),
                 mapLayer = mapLayers.length ? mapLayers[0] : null;
 
             if (scaleOk && geometryMatch && layer.isVisible()) {

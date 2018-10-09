@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
             getGeometryHandler: Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.GetGeometryRequestPluginHandler', sandbox, me)
         };
 
-        this.drawLayer = new OpenLayers.Layer.Vector("MyPlaces Draw Layer", {
+        this.drawLayer = new OpenLayers.Layer.Vector('MyPlaces Draw Layer', {
             /*style: {
              strokeColor: "#ff00ff",
              strokeWidth: 3,
@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
              cursor: "pointer"
              },*/
             eventListeners: {
-                "featuresadded": function (layer) {
+                'featuresadded': function (layer) {
                     // send an event that the drawing has been completed
                     me.finishedDrawing();
                 }
@@ -229,5 +229,5 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.DrawPlugin', funct
      */
     stop: function (sandbox) {}
 }, {
-    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

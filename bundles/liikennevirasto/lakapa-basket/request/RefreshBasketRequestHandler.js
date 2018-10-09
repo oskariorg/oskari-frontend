@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequestHa
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-        this.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequest] Refresh basket");
+        this.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequest] Refresh basket');
         this.flyout.refresh();
         this.tile.refresh();
     }

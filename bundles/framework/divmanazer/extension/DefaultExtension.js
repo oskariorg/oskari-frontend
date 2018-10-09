@@ -345,8 +345,8 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultExtension',
 
         setDefaultTile: function (txt) {
             var tile = Oskari.clazz.create('Oskari.userinterface.extension.DefaultTile', this, {
-                    title: txt || ''
-                });
+                title: txt || ''
+            });
             this.plugins['Oskari.userinterface.Tile'] = tile;
             return tile;
         },

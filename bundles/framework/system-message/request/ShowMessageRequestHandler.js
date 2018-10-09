@@ -11,10 +11,10 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.request.ShowMessageR
     function (instance) {
         this.instance = instance;
     }, {
-      handleRequest: function (core, request) {
-        this.instance.messages.push(request.getMessage().fontcolor(request.getUrgencyLevel()));
-        this.instance.showStatusMessage(request.getMessage());
-      }
+        handleRequest: function (core, request) {
+            this.instance.messages.push(request.getMessage().fontcolor(request.getUrgencyLevel()));
+            this.instance.showStatusMessage(request.getMessage());
+        }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}

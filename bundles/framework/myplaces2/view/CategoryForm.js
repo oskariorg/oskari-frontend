@@ -68,8 +68,8 @@ Oskari.clazz.define(
             '    <label>' + loc('categoryform.drawing.label') + '</label><br clear="all" />' +
             '    <div class="rendering"></div>' +
             '  </div>' +
-// Currently visible fields are not saved or used in any way so commenting out the UI for now
-/*            '<div class="field visibleFields">' +
+            // Currently visible fields are not saved or used in any way so commenting out the UI for now
+            /*            '<div class="field visibleFields">' +
             '<label>' + loc('categoryform.visibleFields.label') + '</label><br clear="all" />' +
             '<input type="checkbox" name="placename" checked="checked" />' + loc('categoryform.visibleFields.placename') + '<br/>' +
             '<input type="checkbox" name="placedesc" checked="checked" />' + loc('categoryform.visibleFields.placedesc') + '<br/>' +
@@ -89,8 +89,7 @@ Oskari.clazz.define(
          * @return {jQuery} jquery reference for the form
          */
         getForm: function () {
-            var ui = this.template.clone(),
-                table = ui.find('div.drawing table');
+            var ui = this.template.clone();
             // populate the rendering fields
             var content = ui.find('div.rendering');
             content.append(this.visualizationForm.getForm());
@@ -180,7 +179,7 @@ Oskari.clazz.define(
          */
         destroy: function () {
             // remember to remove live bindings if any
-            //jQuery('div.myplacescategoryform input.oskaricolor').off();
+            // jQuery('div.myplacescategoryform input.oskaricolor').off();
             if (this.dialog) {
                 this.dialog.close();
             }

@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
     }, {
-         tabs: [{
+        tabs: [{
             'id': 'admin-wfs-search-channel-tab',
             'clazz': 'Oskari.tampere.bundle.tampere.admin-wfs-search-channel.Channels'
         }],
@@ -133,7 +133,6 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout'
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

@@ -13,7 +13,7 @@ const isHovered = (feature, hoverState) => {
     return false;
 }
 
-export default function styleGenerator(styleFactory, styleDef, hoverOptions, hoverState) {
+export default function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState) {
     const styleCache = {};
     Object.keys(styleDef).forEach((layerName) => {
         const styles = {};
@@ -43,7 +43,7 @@ export default function styleGenerator(styleFactory, styleDef, hoverOptions, hov
             });
         }
         styleCache[layerName] = styles;
-    })
+    });
     return (feature, resolution) => {
         var hovered = isHovered(feature, hoverState);
         var styles = styleCache[feature.get('layer')];
@@ -65,5 +65,5 @@ export default function styleGenerator(styleFactory, styleDef, hoverOptions, hov
             return styles.base;
         }
         return invisible;
-    }
+    };
 }

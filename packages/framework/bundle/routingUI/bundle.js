@@ -20,6 +20,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.RoutingUIBundle",
             "src": "../../../../bundles/framework/routingUI/popupRouting.js"
         }, {
             "type": "text/javascript",
+            "expose": "moment",
             "src" : "../../../../libraries/moment/2.10.6/moment-with-locales.js"
         }, {
             "type": "text/css",

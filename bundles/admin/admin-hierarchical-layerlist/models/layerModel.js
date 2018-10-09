@@ -1,9 +1,9 @@
-(function() {
-    define(function() {
+(function () {
+    define(function () {
         return Backbone.Model.extend({
 
             // Ensure that each todo created has `title`.
-            initialize: function(model) {
+            initialize: function (model) {
                 // exted given object (layer) with this one
                 if (model) {
                     for (var key in model) {
@@ -22,7 +22,7 @@
              * Selects the first style so legendImage will show initial value
              * @return {[type]} [description]
              */
-            _selectFirstStyle: function() {
+            _selectFirstStyle: function () {
                 var styles = this.getStyles();
                 if (styles.length) {
                     this.selectStyle(styles[0].getName());
@@ -33,27 +33,27 @@
              * Call setupCapabilities with selected wmslayer to pick one layer def from the whole response after calling this.
              * @param  {Object} capabilities response from server
              */
-            setCapabilitiesResponse: function(resp, skipSort) {
+            setCapabilitiesResponse: function (resp, skipSort) {
                 if (!skipSort) {
                     this._sortCapabilities(resp);
                 }
                 this.set({
-                    "capabilities": resp
+                    'capabilities': resp
                 });
             },
-            _sortCapabilities: function(capabilities) {
+            _sortCapabilities: function (capabilities) {
                 var me = this,
                     sortFunction = me._getPropertyComparatorFor('title');
                 capabilities.layers.sort(sortFunction);
                 if (capabilities.groups) {
                     capabilities.groups.sort(sortFunction);
-                    _.each(capabilities.groups, function(group) {
+                    _.each(capabilities.groups, function (group) {
                         me._sortCapabilities(group);
                     });
                 }
             },
-            _getPropertyComparatorFor: function(property) {
-                return function(a, b) {
+            _getPropertyComparatorFor: function (property) {
+                return function (a, b) {
                     if (a[property] > b[property]) {
                         return 1;
                     } else if (a[property] < b[property]) {
@@ -67,15 +67,15 @@
              * @private
              * @param  {Object} capabilitiesNode
              */
-            _setupFromCapabilitiesValues: function(capabilitiesNode) {
+            _setupFromCapabilitiesValues: function (capabilitiesNode) {
                 var sb = Oskari.getSandbox();
-                Oskari.log('admin-hierarchical-layerlist~layerModel').debug("Found:", capabilitiesNode);
+                Oskari.log('admin-hierarchical-layerlist~layerModel').debug('Found:', capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
                     mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
                     dataToKeep = null;
                 // clear existing values
-                var capabilities = this.get("capabilities");
-                var adminBlock = this.get("_admin");
+                var capabilities = this.get('capabilities');
+                var adminBlock = this.get('_admin');
 
                 var typeFunction = this._typeHandlers[mapLayer.getLayerType()];
                 if (typeFunction) {
@@ -106,8 +106,8 @@
              * Append wfsconfiguration to capabilities adminblock.
              * @param  {Object} GetWfsLayerconfiguration response from server
              */
-            setWfsConfigurationResponse: function(resp) {
-                var adminBlock = this.get("_admin");
+            setWfsConfigurationResponse: function (resp) {
+                var adminBlock = this.get('_admin');
                 if (adminBlock) {
                     adminBlock.passtrough = resp;
                 }
@@ -129,7 +129,7 @@
              * @param  {String} title used for  mapping capabilities because of duplicate layer names
              * @return {Boolean}             true if name was found
              */
-            setupCapabilities: function(layerName, capabilities, additionalId, title) {
+            setupCapabilities: function (layerName, capabilities, additionalId, title) {
                 if (!layerName) {
                     return;
                 }
@@ -168,14 +168,14 @@
                 var found = false;
 
                 // check layers directly under this
-                _.each(capabilities.layers, function(layer) {
+                _.each(capabilities.layers, function (layer) {
                     if (!found) {
                         found = me.setupCapabilities(layerName, layer, additionalId, title);
                     }
                 });
                 // if not found, check any groups under this
                 if (!found && capabilities.groups) {
-                    _.each(capabilities.groups, function(group) {
+                    _.each(capabilities.groups, function (group) {
                         if (!found) {
                             found = me.setupCapabilities(layerName, group, additionalId);
                         }
@@ -184,12 +184,11 @@
                 return found;
             },
 
-
             /**
              * Returns XSLT if defined or null if not
              * @return {String} xslt
              */
-            getGfiXslt: function() {
+            getGfiXslt: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.xslt;
@@ -201,7 +200,7 @@
              * Returns username if defined or null if not
              * @return {String} username
              */
-            getUsername: function() {
+            getUsername: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.username;
@@ -213,7 +212,7 @@
              * Returns password if defined or null if not
              * @return {String} password
              */
-            getPassword: function() {
+            getPassword: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.password;
@@ -224,7 +223,7 @@
              * Returns service version if defined or null if not
              * @return {String} version
              */
-            getVersion: function() {
+            getVersion: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.version;
@@ -235,7 +234,7 @@
              * Returns service  jobtype if defined or null if not
              * @return {String} jobtype
              */
-            getJobType: function() {
+            getJobType: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.jobtype;
@@ -246,7 +245,7 @@
              * Returns capabilities for layer JSON
              * @return {Object} capabilities
              */
-            getCapabilities: function() {
+            getCapabilities: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.capabilities;
@@ -257,7 +256,7 @@
              * Returns wfs service manual refresh mode
              * @return {Boolean} true/false
              */
-            isManualRefresh: function() {
+            isManualRefresh: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.manualRefresh;
@@ -268,7 +267,7 @@
              * Returns wfs service resolveDepth param
              * @return {Boolean} true/false
              */
-            isResolveDepth: function() {
+            isResolveDepth: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.resolveDepth;
@@ -279,7 +278,7 @@
              * Returns interface url
              * @return {String} url
              */
-            getInterfaceUrl: function() {
+            getInterfaceUrl: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.url;
@@ -292,7 +291,7 @@
              * @param  {String} type ['organization' | 'inspire']
              * @return {Number} group id
              */
-            getGroupId: function(type) {
+            getGroupId: function (type) {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     // inspireId or organizationId
@@ -304,14 +303,14 @@
              * Returns language codes for defined names
              * @return {String[]} language codes
              */
-            getNameLanguages: function() {
+            getNameLanguages: function () {
                 return this._getLanguages(this.get('_name'));
             },
             /**
              * Returns language codes for defined names
              * @return {String[]} language codes
              */
-            getDescLanguages: function() {
+            getDescLanguages: function () {
                 return this._getLanguages(this.get('_description'));
             },
 
@@ -319,7 +318,7 @@
              * Returns legend url
              * @returns {String} legend url
              */
-            getLegendUrl: function() {
+            getLegendUrl: function () {
                 var adminBlock = this.getAdmin();
                 var capabilitiesBlock = this.getCapabilities();
 
@@ -334,12 +333,11 @@
              * @param styleName  style name
              * @returns {String} legend url
              */
-            getStyleLegendUrl: function(styleName) {
+            getStyleLegendUrl: function (styleName) {
                 var capabilitiesBlock = this.getCapabilities();
 
-
                 if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
-                    var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function(style) {
+                    var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
                         return style.name === styleName;
                     });
 
@@ -354,7 +352,7 @@
              * Returns style legend urls
              * @returns {String} legend url
              */
-            getStyleLegendUrls: function() {
+            getStyleLegendUrls: function () {
                 var capabilitiesBlock = this.getCapabilities(),
                     styleName,
                     legends = [];
@@ -364,7 +362,7 @@
                         styleName = this.getStyles()[i].getName();
 
                         if (styleName && capabilitiesBlock.styles) {
-                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function(style) {
+                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
                                 return style.name === styleName;
                             });
 
@@ -385,7 +383,7 @@
              * @return {String[]} [description]
              * @private
              */
-            _getLanguages: function(attr) {
+            _getLanguages: function (attr) {
                 var langList = [];
                 // add languages from possible object value
                 if (attr && typeof attr === 'object') {
@@ -397,7 +395,7 @@
                 }
 
                 // add any missing languages
-                _.each(this.supportedLanguages, function(lang) {
+                _.each(this.supportedLanguages, function (lang) {
                     if (jQuery.inArray(lang, langList) === -1) {
                         langList.push(lang);
                     }

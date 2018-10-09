@@ -127,7 +127,7 @@ Oskari.clazz.define(
                 'Oskari.mapframework.service.MapLayerService'
             );
 
-            //Let's extend UI
+            // Let's extend UI
             var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
@@ -223,13 +223,13 @@ Oskari.clazz.define(
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
                     this._log.debug('ANALYSE REFRESH');
-                    //this.analyse.refreshAnalyseData();
+                    // this.analyse.refreshAnalyseData();
                 }
             },
             AfterMapMoveEvent: function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    //this.analyse.refreshAnalyseData();
+                    // this.analyse.refreshAnalyseData();
                 }
             },
             AfterMapLayerAddEvent: function (event) {
@@ -250,7 +250,7 @@ Oskari.clazz.define(
             AfterChangeMapLayerStyleEvent: function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    //this.analyse.refreshAnalyseData();
+                    // this.analyse.refreshAnalyseData();
                 }
             },
             /**
@@ -393,10 +393,7 @@ Oskari.clazz.define(
          */
         setAnalyseMode: function (blnEnabled) {
             var me = this,
-                map = jQuery('#contentMap'),
-                mapmodule = me.sandbox.findRegisteredModuleInstance('MainMapModule'),
-                tools = jQuery('#maptools');
-
+                map = jQuery('#contentMap');
 
             if (blnEnabled) {
                 map.addClass('mapAnalyseMode');
@@ -505,7 +502,6 @@ Oskari.clazz.define(
             dialog.show(title, message);
             dialog.fadeout(5000);
         },
-
 
         /**
          * @private @method _afterMapLayerEvent

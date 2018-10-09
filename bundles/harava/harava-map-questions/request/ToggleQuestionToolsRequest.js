@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToo
 function() {
 }, {
 	/** @static @property __name request name */
-    __name : "ToggleQuestionToolsRequest",
+    __name : 'ToggleQuestionToolsRequest',
     /**
      * @method getName
      * @return {String} request name

@@ -5,7 +5,7 @@
  * Updates information only when LayerSelector2 is being opened.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -69,7 +69,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
@@ -98,13 +98,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             }
 
             return url;
-            /*return 'GetBackendStatus.json';*/
+            /* return 'GetBackendStatus.json'; */
         },
         /**
          * @method start
          * implements BundleInstance protocol start method
          */
-        "start": function () {
+        'start': function () {
             var me = this;
 
             if (me._started) {
@@ -120,7 +120,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
 
             me._sandbox = sandbox;
 
-            me._mapLayerService = sandbox.getService("Oskari.mapframework.service.MapLayerService");
+            me._mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -138,13 +138,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
         },
 
         handleRequest: function (core, request) {
-            if(request.getName() !== 'ShowMapLayerInfoRequest') {
+            if (request.getName() !== 'ShowMapLayerInfoRequest') {
                 return false;
             }
 
             var maplayerId = request.getMapLayerId();
-            var layer = this._mapLayerService.findMapLayer(maplayerId);
-            var mapLayerBackendStatus = layer.getBackendStatus();
             var backendExtendedStatusForLayer = this.backendExtendedStatus[maplayerId];
 
             if (!backendExtendedStatusForLayer) {
@@ -165,14 +163,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
@@ -181,14 +179,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property extensionsByName
@@ -221,7 +217,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
              * @method ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-
                 var extension = event.getExtension();
                 if (!extension) {
                     return;
@@ -266,19 +261,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(feedBackTextx.title, feedBackTextx.message);
             dialog.fadeout();
-
         },
         openURLinWindow: function (infoUrl) {
-            var wopParm = "location=1," + "status=1," + "scrollbars=1," + "width=850," + "height=1200",
+            var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200',
                 link = infoUrl;
-            window.open(link, "BackendStatus", wopParm);
+            window.open(link, 'BackendStatus', wopParm);
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
-
+        'stop': function () {
             var me = this,
                 sandbox = me._sandbox,
                 p;
@@ -320,7 +313,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             if (!jqhr) {
                 return;
             }
-            this._log.debug("Abort jqhr ajax request");
+            this._log.debug('Abort jqhr ajax request');
             jqhr.abort();
             jqhr = null;
             me._pendingAjaxQuery.busy = false;
@@ -329,17 +322,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             me._pendingAjaxQuery.busy = true;
             me._pendingAjaxQuery.timestamp = dteMs;
-
         },
         _finishAjaxRequest: function () {
             var me = this;
             me._pendingAjaxQuery.busy = false;
             me._pendingAjaxQuery.jqhr = null;
-            this._log.debug("finished jqhr ajax request");
+            this._log.debug('finished jqhr ajax request');
         },
         _notifyAjaxFailure: function () {
             var me = this;
-            this._log.debug("BackendStatus AJAX failed");
+            this._log.debug('BackendStatus AJAX failed');
             me._processResponse({
                 backendstatus: []
             });
@@ -352,18 +344,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             var me = this;
             me.gotStartupProcessCall = me.gotStartupProcessCall || allKnown;
             if (!allKnown && me._pendingAjaxQuery.busy) {
-                this._log.debug("updateBackendStatus NOT SENT previous query is busy");
+                this._log.debug('updateBackendStatus NOT SENT previous query is busy');
                 return;
             }
             var dte = new Date();
             var dteMs = dte.getTime();
 
             if (!allKnown && me._pendingAjaxQuery.timestamp && dteMs - me._pendingAjaxQuery.timestamp < me.timeInterval) {
-                this._log.debug("updateBackendStatus NOT SENT (time difference < " + me.timeInterval + "ms)");
+                this._log.debug('updateBackendStatus NOT SENT (time difference < ' + me.timeInterval + 'ms)');
                 return;
             }
 
-            //when asking for all known statuses, don't go further, if all maplayers have _not_ finished loading. (in case the user is _really_ fast in opening flyouts.)
+            // when asking for all known statuses, don't go further, if all maplayers have _not_ finished loading. (in case the user is _really_ fast in opening flyouts.)
             if (allKnown && !me._mapLayerService.isAllLayersLoaded()) {
                 return;
             }
@@ -376,7 +368,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 beforeSend: function (x) {
                     me._pendingAjaxQuery.jqhr = x;
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {
@@ -397,21 +389,21 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 type: 'POST',
                 dataType: 'json',
                 url: ajaxUrl
-                /*url : 'GetBackendStatus.json'*/
+                /* url : 'GetBackendStatus.json' */
             });
         },
         _processResponse: function (resp, allKnown) {
             var me = this;
             var sandbox = this._sandbox;
             if (!resp) {
-                this._log.debug("empty data from server");
+                this._log.debug('empty data from server');
                 return;
             }
 
             var backendStatusArr = resp.backendstatus;
             // FIXME use ===
             if (!backendStatusArr || backendStatusArr.length === undefined) {
-                this._log.debug("backendStatus NO data");
+                this._log.debug('backendStatus NO data');
                 return;
             }
 
@@ -434,7 +426,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         changed: true
                     };
                     extendedStatuses[layerId] = data;
-                    /*this._log.debug(layerId+" new alert");*/
+                    /* this._log.debug(layerId+" new alert"); */
                     // FIXME use !==
                 } else if (this.backendStatus[layerId].status !== data.status) {
                     changeNotifications[layerId] = {
@@ -442,7 +434,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                         changed: true
                     };
                     extendedStatuses[layerId] = data;
-                    /*this._log.debug(layerId+" changed alert");*/
+                    /* this._log.debug(layerId+" changed alert"); */
                 } else {
                     changeNotifications[layerId] = {
                         status: data.status,
@@ -460,7 +452,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                             status: null,
                             changed: true
                         };
-                        /*this._log.debug(p+" alert closed");*/
+                        /* this._log.debug(p+" alert closed"); */
                     }
                 }
             }
@@ -477,8 +469,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                     var maplayer = sandbox.findMapLayerFromAllAvailable(p);
                     if (maplayer) {
                         maplayer.setBackendStatus(this.backendStatus[p].status);
-                        /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not...*/
-                        if (changeNotifications[p].changed || "DOWN" === maplayer.getBackendStatus()) {
+                        /* forcing DOWN to be notified - we do not know if layerselector2 has shown the msg or not... */
+                        if (changeNotifications[p].changed || maplayer.getBackendStatus() === 'DOWN') {
                             if (sandbox.isLayerAlreadySelected(maplayer.getId())) {
                                 // If the layer's been selected, notify immediately
                                 evt = evtBuilder(maplayer.getId(), maplayer.getBackendStatus());
@@ -499,8 +491,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
                 me._pendingAjaxQuery.timestamp = null;
                 me.backendStatus = {};
 
-                //if all map layers have been loaded, there's no point in _not_ updating their statuses...?
-                //this gets hit when the user is too eager to open up the layerselector2 flyout while layers still loading.
+                // if all map layers have been loaded, there's no point in _not_ updating their statuses...?
+                // this gets hit when the user is too eager to open up the layerselector2 flyout while layers still loading.
                 if (me._mapLayerService.isAllLayersLoaded()) {
                     // If too many have changed, just ask to do a bulk update
                     evt = evtBuilder();
@@ -527,5 +519,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

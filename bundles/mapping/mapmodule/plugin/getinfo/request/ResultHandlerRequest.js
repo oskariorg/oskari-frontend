@@ -13,29 +13,29 @@ Oskari.clazz
      *
      * @param {Function} filterFunction layer list filter function
      */
-        function(callback) {
+        function (callback) {
             this._callback = callback;
-    }, {
+        }, {
         /** @static @property __name request name */
-        __name : "GetInfoPlugin.ResultHandlerRequest",
-        /**
+            __name: 'GetInfoPlugin.ResultHandlerRequest',
+            /**
          * @method getName
          * @return {String} request name
          */
-        getName : function() {
-            return this.__name;
-        },
-        /**
+            getName: function () {
+                return this.__name;
+            },
+            /**
          * @method getCallback
          * @return {Function} a callback
          */
-        getCallback : function() {
-            return this._callback;
-        }
-    }, {
+            getCallback: function () {
+                return this._callback;
+            }
+        }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol' : ['Oskari.mapframework.request.Request']
-    });
+            'protocol': ['Oskari.mapframework.request.Request']
+        });

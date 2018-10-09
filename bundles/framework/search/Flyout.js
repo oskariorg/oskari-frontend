@@ -150,8 +150,8 @@ Oskari.clazz.define(
             var defaultUI = this.getDefaultUI();
             defaultUI.createUi(me.container);
         },
-        getDefaultUI : function() {
-            if(!this._defaultUI) {
+        getDefaultUI: function () {
+            if (!this._defaultUI) {
                 this._defaultUI = Oskari.clazz.create('Oskari.mapframework.bundle.search.DefaultView', this.instance);
             }
             return this._defaultUI;

@@ -93,10 +93,7 @@ Oskari.clazz.define(
          *
          */
         loadAnalyseLayers: function () {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = Oskari.urls.getRoute(),
-                loc = Oskari.getLocalization(me.instance.getName());
+            var me = this;
 
             // Request analyis layers via the backend
             me._getAnalysisLayers(
@@ -111,7 +108,6 @@ Oskari.clazz.define(
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
                 }
             );
-
         },
 
         /**
@@ -127,8 +123,6 @@ Oskari.clazz.define(
                 sandbox = me.instance.getSandbox(),
                 mapLayerService,
                 mapLayer,
-                requestBuilder,
-                request,
                 layerarr = analysislayersJson.analysislayers,
                 i,
                 analyseJson;
@@ -148,7 +142,6 @@ Oskari.clazz.define(
                         mapLayer = mapLayerService.createMapLayer(analyseJson);
                         // Add the layer to the map layer service
                         mapLayerService.addLayer(mapLayer, true);
-
                     }
                 }
             }
@@ -210,10 +203,7 @@ Oskari.clazz.define(
          *
          */
         loadWFSLayerPropertiesAndTypes: function (layer_id) {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = Oskari.urls.getRoute(),
-                loc = Oskari.getLocalization(me.instance.getName());
+            var me = this;
 
             // Request analyis layers via the backend
             me._getWFSLayerPropertiesAndTypes(layer_id,
@@ -227,7 +217,6 @@ Oskari.clazz.define(
                 function (jqXHR, textStatus, errorThrown) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
                 });
-
         },
 
         /**
@@ -246,7 +235,7 @@ Oskari.clazz.define(
             }
             if (layer) {
                 layer.setPropertyTypes(propertyJson.propertyTypes);
-                if(propertyJson.wps_params) {
+                if (propertyJson.wps_params) {
                     layer.setWpsLayerParams(propertyJson.wps_params);
                 }
             }

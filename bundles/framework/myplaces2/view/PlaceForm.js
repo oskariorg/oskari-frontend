@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.view.PlaceForm',
 
     /**
      * @method create called automatically on construction
@@ -43,7 +43,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
             '  </div>' +
             '  <div class="field" id="newLayerForm">' +
             '    <label for="category">' +
-            '      <a href="#" class="newLayerLink functional">' + this.loc('placeform.category.newLayer') + '</a>' + " " + this.loc('placeform.category.choose') +
+            '      <a href="#" class="newLayerLink functional">' + this.loc('placeform.category.newLayer') + '</a>' + ' ' + this.loc('placeform.category.choose') +
             '    </label>' +
             '    <br clear="all" />' +
             '    <select data-name="category"></select>' +
@@ -133,8 +133,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                     if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                         placeLink = 'http://' + placeLink;
                     }
-                    placeLink = placeLink.replace("<", '');
-                    placeLink = placeLink.replace(">", '');
+                    placeLink = placeLink.replace('<', '');
+                    placeLink = placeLink.replace('>', '');
                 }
                 var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[data-name=category]').val();
@@ -177,7 +177,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 onScreenForm.find('input[name=imagelink]').val(data.place.imageLink);
                 onScreenForm.find('select[data-name=category]').val(data.place.category);
                 this._updateImageUrl(data.place.imageLink, onScreenForm);
-
             }
 
             this.initialValues = data;
@@ -187,14 +186,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
 
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
 
-            this._getOnScreenForm().
-            find('div.measurementResult').
-            html(this.measurementResult);
+            this._getOnScreenForm()
+                .find('div.measurementResult')
+                .html(this.measurementResult);
         },
-        bindEvents: function(){
+        bindEvents: function () {
             var me = this;
             var isPublished = (this.options ? this.options.published : false);
-            if(!isPublished) {
+            if (!isPublished) {
                 me._bindCategoryChange();
                 me._bindCreateNewLayer();
             }
@@ -268,7 +267,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.view.PlaceForm",
                 evt.preventDefault();
                 me.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces2.view.CategoryForm', me.instance);
                 form.find('div#newLayerForm').html(me.categoryForm.getForm());
-                //add listeners etc.
+                // add listeners etc.
                 me.categoryForm.start();
             });
         },

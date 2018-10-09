@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequestHand
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-        this.sandbox.printDebug("[Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequest] Add to basket");
+        this.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequest] Add to basket');
         this.flyout.addToBasket(request.getBbox(), request.getSelectedLayers(),request.getCroppingMode(),
         		request.getTransport(), request.getIdentifier(), request.getFeatures());
         this.tile.refresh();

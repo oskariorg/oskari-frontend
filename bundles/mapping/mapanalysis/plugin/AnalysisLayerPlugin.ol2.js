@@ -17,12 +17,12 @@ Oskari.clazz.define(
         }
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'AnalysisLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
+        __name: 'AnalysisLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'analysislayer',
+        layertype: 'analysislayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return 'ANALYSIS';
         },
 
@@ -35,8 +35,8 @@ Oskari.clazz.define(
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             if (!mapLayerService) {
                 return;
@@ -119,23 +119,23 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function (layer, oskariLayer) {
+            var me = this;
 
-           layer.events.register("tileloadstart", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            });
 
-           layer.events.register("tileloaded", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            });
 
-          layer.events.register("tileerror", layer, function(){
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-         });
-         }
+            layer.events.register('tileerror', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
+        }
     }, {
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

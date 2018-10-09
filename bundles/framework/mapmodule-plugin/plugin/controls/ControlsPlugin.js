@@ -142,26 +142,26 @@ Oskari.clazz.define(
                  */
                 'Toolbar.ToolSelectedEvent': function (event) {
                     // changed tool -> cancel any current tool
-                    if (event.getToolId() === this.activeTool){
+                    if (event.getToolId() === this.activeTool) {
                         this._deactivateControls(this.activeTool);
                     } else {
-                        //deactivate all
+                        // deactivate all
                         this._deactivateControls();
                         this.activeTool = null;
                     }
                 }
             };
         },
-        _deactivateControls: function (skipTool){
+        _deactivateControls: function (skipTool) {
             if (this.getConfig().zoomBox !== false && skipTool !== 'zoombox') {
                 this._zoomBoxTool.deactivate();
             }
             if (this.getConfig().measureControls !== false) {
                 this.getMapModule().orderLayersByZIndex();
-                if(skipTool !== 'measureline') {
+                if (skipTool !== 'measureline') {
                     this._measureControls.line.deactivate();
                 }
-                if (skipTool !== 'measurearea'){
+                if (skipTool !== 'measurearea') {
                     this._measureControls.area.deactivate();
                 }
             }
@@ -195,7 +195,6 @@ Oskari.clazz.define(
             var me = this,
                 conf = me.getConfig(),
                 geodesic = conf.geodesic === undefined ? true : conf.geodesic,
-                sandbox = me.getSandbox(),
                 key;
 
             // check if already created
@@ -259,12 +258,10 @@ Oskari.clazz.define(
                 };
             }
 
-            function measurementsHandler(event, finished) {
+            function measurementsHandler (event, finished) {
                 var sandbox = me.getSandbox(),
                     geometry = event.geometry,
-                    units = event.units,
                     order = event.order,
-                    measure = event.measure,
                     mapModule = me.getMapModule(),
                     out = null,
                     geomAsText = null,
@@ -308,7 +305,7 @@ Oskari.clazz.define(
 
             // mouse control
             if (conf.mouseControls !== false) {
-                //this._mouseControls = new OpenLayers.Control.PorttiMouse(this.getConfig().mouse);
+                // this._mouseControls = new OpenLayers.Control.PorttiMouse(this.getConfig().mouse);
                 me._mouseControls = new OskariNavigation();
                 me._mouseControls.setup(this.getMapModule());
             }

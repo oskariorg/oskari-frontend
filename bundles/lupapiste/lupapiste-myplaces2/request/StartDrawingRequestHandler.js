@@ -5,7 +5,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.request.StartDrawingReque
 }, {
     handleRequest : function(core, request) {
         var drawMode = request.getDrawMode();
-        this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.StartDrawingRequestPluginHandler] Start Drawing: " + drawMode);
+        this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.StartDrawingRequestPluginHandler] Start Drawing: ' + drawMode);
         this.drawPlugin.startDrawing({
             drawMode : request.getDrawMode(),
             geometry : request.getGeometry(),

@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
      * @method create called automatically on construction
      */
     function () {
-        
         var me = this;
 
         me._clazz = 'Oskari.userinterface.component.CheckboxInput';
@@ -33,7 +32,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * Focuses the component.
          */
         focus: function () {
-            
             this._input.focus();
         },
 
@@ -49,13 +47,10 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
         },
 
         isEnabled: function () {
-            
             return !this._input.disabled;
         },
 
-
         _valueChanged: function () {
-            
             if (this.getHandler()) {
                 this.getHandler()(this.getValue());
             }
@@ -65,12 +60,10 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method _setEnabledImpl
          */
         _setEnabledImpl: function (enabled) {
-            
             this._input.disabled = !enabled;
         },
 
         getName: function () {
-            
             return this._input.name;
         },
 
@@ -78,17 +71,14 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setName
          */
         setName: function (name) {
-            
             this._input.name = name || '';
         },
 
         getPlaceHolder: function () {
-            
             return this._input.placeholder;
         },
 
         setPlaceHolder: function (placeholder) {
-            
             this._input.placeholder = placeholder;
         },
 
@@ -96,12 +86,10 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method _setRequiredImpl
          */
         _setRequiredImpl: function () {
-            
             this._input.required = this.isRequired();
         },
 
         getTitle: function () {
-            
             return this._titleEl.textContent;
         },
 
@@ -109,7 +97,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setTitle
          */
         setTitle: function (title) {
-            
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -120,7 +107,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
         },
 
         getTooltip: function () {
-            
             return this._element.title;
         },
 
@@ -128,12 +114,10 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setTooltip
          */
         setTooltip: function () {
-            
             this._element.title = this.getTooltip();
         },
 
         getValue: function () {
-            
             return this._input.checked ? this._input.value : undefined;
         },
 
@@ -141,7 +125,6 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method setValue
          */
         setValue: function (value) {
-            
             this._input.value = value;
         },
 
@@ -149,10 +132,9 @@ Oskari.clazz.define('Oskari.userinterface.component.CheckboxInput',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function () {
-            
             this.getElement().style.display = this.isVisible() ? '' : 'none';
         }
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

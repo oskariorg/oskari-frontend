@@ -3,7 +3,7 @@
  *
  * Just for validation since MainView uses this and it's linked from under myplaces2
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.CategoryHandler",
+Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.CategoryHandler',
 
     /**
      * @method create called automatically on construction
@@ -52,7 +52,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publishedmyplaces.CategoryHandle
                 // default to default category id(?)
                 var defCat = this.myPlacesService.getDefaultCategory();
                 if (defCat) {
-
                     categoryId = defCat.getId();
                 } else {
                     categoryId = '-99';

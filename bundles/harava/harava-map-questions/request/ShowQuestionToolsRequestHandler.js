@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionTools
 	 * 		request to handle
 	 */
     handleRequest : function(core, request) {
-        this.sandbox.printDebug("[Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest]");
+        this.sandbox.printDebug('[Oskari.harava.bundle.mapquestions.request.ShowQuestionToolsRequest]');
         this.bundle.showTools(request.getFast());
     }
 }, {

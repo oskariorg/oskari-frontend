@@ -21,7 +21,7 @@ function(visible, deleteAll) {
     this._deleteAll = deleteAll;
 }, {
 	/** @static @property __name request name */
-    __name : "ToggleVisibilityHaravaDrawRequest",
+    __name : 'ToggleVisibilityHaravaDrawRequest',
     /**
      * @method getName
      * @return {String} request name

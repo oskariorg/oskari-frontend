@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
      */
     createMapMarkersLayer: function () {
         var sandbox = this._sandbox,
-            layerMarkers = new OpenLayers.Layer.Markers("LupapisteMarkers");
+            layerMarkers = new OpenLayers.Layer.Markers('LupapisteMarkers');
         this._map.addLayer(layerMarkers);
         this._map.setLayerIndex(layerMarkers, 1000);
     },
@@ -100,14 +100,14 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
      */
     afterHideMapMarkerEvent: function (event) {
         // FIXME: AfterHideMapMarkerEvent is no longer available. Need to do this in another way
-        var markerLayer = this._map.getLayersByName("LupapisteMarkers");
+        var markerLayer = this._map.getLayersByName('LupapisteMarkers');
         if (markerLayer !== null && markerLayer !== undefined && markerLayer[0] !== null && markerLayer[0] !== undefined) {
             markerLayer[0].setVisibility(false);
         }
     },
 
     clearMapMarkers: function () {
-        var markerLayer = this._map.getLayersByName("LupapisteMarkers");
+        var markerLayer = this._map.getLayersByName('LupapisteMarkers');
         if (markerLayer !== null && markerLayer !== undefined && markerLayer[0] !== null && markerLayer[0] !== undefined) {
             markerLayer[0].clearMarkers();
         }
@@ -115,7 +115,7 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
     },
 
     getMapMarkerBounds: function () {
-        var markerLayer = this._map.getLayersByName("LupapisteMarkers");
+        var markerLayer = this._map.getLayersByName('LupapisteMarkers');
         if (markerLayer !== null && markerLayer !== undefined && markerLayer[0] !== null && markerLayer[0] !== undefined) {
             return markerLayer[0].getDataExtent();
         }
@@ -124,12 +124,12 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
     addMapMarker: function (x, y, id, events, iconUrl) {
         if (!id) {
             id = this._markers.length + 1;
-            id = "id" + id;
+            id = 'id' + id;
         }
         if (!iconUrl) {
             iconUrl = 'http://www.openlayers.org/dev/img/marker.png';
         }
-        var markerLayer = this._map.getLayersByName("LupapisteMarkers"),
+        var markerLayer = this._map.getLayersByName('LupapisteMarkers'),
             size = new OpenLayers.Size(21, 25),
             offset = new OpenLayers.Pixel(-(size.w / 2), -size.h),
             icon = new OpenLayers.Icon(iconUrl, size, offset),
@@ -144,5 +144,5 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.lupakartta.plugin.MarkersPlugin', f
         markerLayer[0].addMarker(marker);
     }
 }, {
-    'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+    'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
 });

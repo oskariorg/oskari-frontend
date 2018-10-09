@@ -16,7 +16,6 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-
             var me = this,
             	layerIdPrefix = 'layer_',
             	key;
@@ -28,10 +27,10 @@ Oskari.clazz.define(
                     id: layer.getId(),
                     styles: layer.getCurrentStyle().getName(),
                     format: 'image/png',
-                    SLD_BODY : this.__getSLD(layer)
+                    SLD_BODY: this.__getSLD(layer)
                 },
                 defaultOptions = {
-                    singleTile : true,
+                    singleTile: true,
                     layerId: layer.getLayerName(),
                     isBaseLayer: false,
                     displayInLayerSwitcher: false,
@@ -62,18 +61,18 @@ Oskari.clazz.define(
 
             // hackish way of hooking into layers redraw calls
             var original = openLayer.redraw;
-            openLayer.redraw = function() {
+            openLayer.redraw = function () {
             	// mergeNewParams triggers a new redraw so we need to use
             	// a flag variable to detect if we should redraw or calculate new SLD
-            	if(this.____oskariFlagSLD === true) {
+            	if (this.____oskariFlagSLD === true) {
             		this.____oskariFlagSLD = false;
             		return original.apply(this, arguments);
             	}
         		this.____oskariFlagSLD = true;
                 openLayer.mergeNewParams({
-                    SLD_BODY : me.__getSLD(layer)
+                    SLD_BODY: me.__getSLD(layer)
                 });
-            }
+            };
             // /hack
 
             this.getMap().addLayer(openLayer, !keepLayerOnTop);

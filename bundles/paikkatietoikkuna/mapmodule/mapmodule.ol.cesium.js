@@ -74,7 +74,7 @@ class MapModuleOlCesium extends MapModuleOl {
             scene.postRender.removeEventListener(updateReadyStatus);
             me._mapReady = true;
             me._notifyMapReadySubscribers();
-        }
+        };
         scene.postRender.addEventListener(updateReadyStatus);
 
         return map;
@@ -192,13 +192,13 @@ class MapModuleOlCesium extends MapModuleOl {
             x: coords[0],
             y: coords[1],
             altitude: olcsCam.getAltitude()
-        }
+        };
         var sceneCam = this._map3d.getCesiumScene().camera;
         view.orientation = {
             heading: Cesium.Math.toDegrees(sceneCam.heading),
             pitch: Cesium.Math.toDegrees(sceneCam.pitch),
             roll: Cesium.Math.toDegrees(sceneCam.roll)
-        }
+        };
         return view;
     }
 
@@ -237,7 +237,7 @@ class MapModuleOlCesium extends MapModuleOl {
                         heading: this._toRadians(options.orientation.heading),
                         pitch: this._toRadians(options.orientation.pitch),
                         roll: this._toRadians(options.orientation.roll)
-                    }
+                    };
                 }
                 camera.setView(view);
                 this._map3d.getCamera().updateView();

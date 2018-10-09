@@ -15,7 +15,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
      */
 
     function (sandbox, controlsPlugin) {
-
         this.sandbox = sandbox;
         this.controlsPlugin = controlsPlugin;
     }, {
@@ -30,8 +29,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var toolId = request.getToolId();
-            var namespace = request.getNamespace();
             var toolName = request.getToolName();
             var stateHandler;
             if (toolName === 'map_control_tool_prev') {
@@ -41,7 +38,6 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 if (stateHandler) {
                     stateHandler.historyMovePrevious();
                 }
-
             } else if (toolName === 'map_control_tool_next') {
                 // custom history (TODO: more testing needed + do this with request
                 // instead of findRegisteredModuleInstance)

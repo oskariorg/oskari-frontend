@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.elements.ParamDisplayElement
  */
 Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
-    function(instance, validator) {
+    function (instance, validator) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._templates = {
@@ -49,10 +49,9 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 element = me._templates.licenseUserData.clone(),
                 title = param.title,
                 data = me._templates.licenseInput.clone(),
-                valueElement = jQuery('<div></div>'),
-                showInput = true;
+                valueElement = jQuery('<div></div>');
 
-            if(readOnly) {
+            if (readOnly) {
                 showInput = false;
             }
 
@@ -60,8 +59,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 title = param.name;
             }
 
-
-            jQuery.each(param.values, function(index, value){
+            jQuery.each(param.values, function (index, value) {
                 var valueEl = valueElement.clone();
                 valueEl.html(value);
                 data.append(valueEl);

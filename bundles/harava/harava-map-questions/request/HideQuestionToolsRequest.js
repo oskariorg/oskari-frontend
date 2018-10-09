@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.HideQuestionTools
 function() {
 }, {
 	/** @static @property __name request name */
-    __name : "HideQuestionToolsRequest",
+    __name : 'HideQuestionToolsRequest',
     /**
      * @method getName
      * @return {String} request name

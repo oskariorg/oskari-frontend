@@ -20,12 +20,12 @@ Oskari.clazz.define(
         }
         this._log = Oskari.log(this.getName());
     }, {
-        __name : 'AnalysisLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
+        __name: 'AnalysisLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.mapanalysis.plugin.AnalysisLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'analysislayer',
+        layertype: 'analysislayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return 'ANALYSIS';
         },
 
@@ -36,8 +36,8 @@ Oskari.clazz.define(
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             if (!mapLayerService) {
                 return;
@@ -74,10 +74,8 @@ Oskari.clazz.define(
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             var me = this,
-                sandbox = this.getSandbox(),
-                openLayerId = 'layer_' + layer.getId(),
                 imgUrl = layer.getWpsUrl() + layer.getWpsLayerId(),
-                //minresolution === maxscale and vice versa...
+                // minresolution === maxscale and vice versa...
                 minResolution = this.getMapModule().getResolutionForScale(layer.getMaxScale()),
                 maxResolution = this.getMapModule().getResolutionForScale(layer.getMinScale()),
                 wms = {
@@ -94,7 +92,7 @@ Oskari.clazz.define(
                             'LAYERS': wms.LAYERS,
                             'FORMAT': wms.FORMAT
                         },
-                        crossOrigin : layer.getAttributes('crossOrigin')
+                        crossOrigin: layer.getAttributes('crossOrigin')
                     }),
                     minResolution: minResolution,
                     maxResolution: maxResolution,
@@ -119,25 +117,24 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+        _registerLayerEvents: function (layer, oskariLayer) {
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('imageloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('imageloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            });
 
-        source.on('imageloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('imageloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            });
 
-        source.on('imageloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-        });
-
-      }
+            source.on('imageloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
+        }
     }, {
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
          * @static @property {string[]} protocol array of superclasses
          */

@@ -1,23 +1,23 @@
 /**
  * @class  Oskari.elf.LanguageSelector
  */
-Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
+Oskari.clazz.define('Oskari.elf.languageselector.BundleInstance', function () {
 
 }, {
-    templates : {
-        "link": '<a></a>',
-        "option": '<option></option>',
-        "flyout": '<div class="langSelection">' +
+    templates: {
+        'link': '<a></a>',
+        'option': '<option></option>',
+        'flyout': '<div class="langSelection">' +
                 '<select></select>' +
                 '<a class="btn"></a>' +
             '</div>'
     },
 
-    startPlugin : function() {
+    startPlugin: function () {
         var sandbox = this.getSandbox();
         var elem = jQuery('#langSelector');
 
-        jQuery("#langSelector").appendTo("#maptools");
+        jQuery('#langSelector').appendTo('#maptools');
 
         // get localization file "Languages" for language "all" - imported by this bundle
         // don't try this at home
@@ -26,16 +26,16 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         var _supported = Oskari.getSupportedLanguages();
 
         // reduce list to supported languages
-        this.languageList = _.reduce(languages, function(result, value, key) {
-            if(_.contains(_supported, key)) {
+        this.languageList = _.reduce(languages, function (result, value, key) {
+            if (_.contains(_supported, key)) {
                 result.push({
-                    lang : key,
-                    label : value.toLowerCase()
+                    lang: key,
+                    label: value.toLowerCase()
                 });
             }
             return result;
         }, []);
-        this.languageList.sort(function(a,b) {
+        this.languageList.sort(function (a, b) {
             return a.label > b.label;
         });
 
@@ -59,22 +59,22 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         elem.append(changeLink);
     },
 
-    stopPlugin : function() {
+    stopPlugin: function () {
 
     },
 
-    getFlyoutContent : function () {
+    getFlyoutContent: function () {
         var container = jQuery(this.templates.flyout).clone(),
             langList = container.find('select'),
             langOption = jQuery(this.templates.option),
             link = container.find('a'),
             firstLang;
 
-        _.each(this.languageList, function(item) {
+        _.each(this.languageList, function (item) {
             var opt = langOption.clone();
             opt.val(item.lang);
             opt.text(item.label);
-            if(item.lang === Oskari.getLang()) {
+            if (item.lang === Oskari.getLang()) {
                 opt.attr('selected', 'selected');
             }
             langList.append(opt);
@@ -93,7 +93,7 @@ Oskari.clazz.define("Oskari.elf.languageselector.BundleInstance", function() {
         return container;
     },
 
-    eventHandlers : {}
+    eventHandlers: {}
 }, {
-    "extend" : ["Oskari.elf.extension.EnhancedExtension"]
+    'extend': ['Oskari.elf.extension.EnhancedExtension']
 });

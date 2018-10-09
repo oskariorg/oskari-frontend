@@ -2,7 +2,7 @@
  * @class Oskari.liikenenvirasto.bundle.lakapa.layerselector2.view.PublishedLayersTab
  *
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.PublishedLayersTab",
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.layerselector2.view.PublishedLayersTab',
 
 /**
  * @method create called automatically on construction
@@ -98,11 +98,11 @@ function(instance, title) {
             var me = this;
             var ajaxUrl = Oskari.urls.getRoute();
             jQuery.ajax({
-                type : "GET",
+                type : 'GET',
                 dataType: 'json',
                 beforeSend: function(x) {
                   if(x && x.overrideMimeType) {
-                   x.overrideMimeType("application/j-son;charset=UTF-8");
+                   x.overrideMimeType('application/j-son;charset=UTF-8');
                   }
                  },
                 url : ajaxUrl + 'action_route=GetPublishedMyPlaceLayers',
@@ -135,7 +135,7 @@ function(instance, title) {
         for (var n = 0; n < jsonResponse.length; ++n) {
             var groupJSON = jsonResponse[n];
             if (!group || group.getTitle() != groupJSON.name) {
-                group = Oskari.clazz.create("Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.LayerGroup", groupJSON.name);
+                group = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.layerselector2.model.LayerGroup', groupJSON.name);
                 this.layerGroups.push(group);
             }
             for (var i = 0; i < groupJSON.layers.length; ++i) {
@@ -155,19 +155,19 @@ function(instance, title) {
      */
     _getPublishedLayer : function(jsonResponse, mapLayerService, usersOwnLayer) {
         var baseJson = this._getMapLayerJsonBase();
-        baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + jsonResponse.id + "&"; // this.instance.conf.wmsUrl
+        baseJson.wmsUrl = '/karttatiili/myplaces?myCat=' + jsonResponse.id + '&'; // this.instance.conf.wmsUrl
         //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
         baseJson.name = jsonResponse.name;
         baseJson.id = 'myplaces_' + jsonResponse.id;
 
         if(usersOwnLayer) {
             baseJson.permissions = {
-                "publish" : "publication_permission_ok"
+                'publish' : 'publication_permission_ok'
             };
         }
         else {
             baseJson.permissions = {
-                "publish" : "no_publication_permission"
+                'publish' : 'no_publication_permission'
             };
         }
 
@@ -195,13 +195,13 @@ function(instance, title) {
         var catLoc = this.instance.getLocalization('published');
         var json = {
             wmsName: 'ows:my_places_categories',
-            descriptionLink:"",
-            type: "wmslayer",
+            descriptionLink:'',
+            type: 'wmslayer',
             baseLayerId:-1,
-            legendImage:"",
+            legendImage:'',
             //gfi : 'disabled',
             formats: {
-               value:"text/html"
+               value:'text/html'
             },
             isQueryable:true,
             minScale:12000000,
@@ -276,11 +276,11 @@ function(instance, title) {
 
         // search
         jQuery.ajax({
-            type : "GET",
+            type : 'GET',
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             data : {

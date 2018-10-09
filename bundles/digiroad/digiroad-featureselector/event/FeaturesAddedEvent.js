@@ -8,7 +8,7 @@ Oskari.clazz.define(
         this._features = features;
     },
     {
-        __name : "FeatureSelector.FeaturesAddedEvent",
+        __name : 'FeatureSelector.FeaturesAddedEvent',
         getName : function() {
             return this.__name;
         },

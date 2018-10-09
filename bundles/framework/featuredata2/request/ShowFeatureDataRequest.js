@@ -14,29 +14,29 @@ Oskari.clazz
      * @param {String}
      *            id layer identifier so we can select correct tab
      */
-        function(id) {
+        function (id) {
             this._id = id;
-    }, {
+        }, {
         /** @static @property __name request name */
-        __name : "ShowFeatureDataRequest",
-        /**
+            __name: 'ShowFeatureDataRequest',
+            /**
          * @method getName
          * @return {String} request name
          */
-        getName : function() {
-            return this.__name;
-        },
-        /**
+            getName: function () {
+                return this.__name;
+            },
+            /**
          * @method getId
          * @return {String} identifier so we can manage select correct tab
          */
-        getId : function() {
-            return this._id;
-        }
-    }, {
+            getId: function () {
+                return this._id;
+            }
+        }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol' : ['Oskari.mapframework.request.Request']
-    });
+            'protocol': ['Oskari.mapframework.request.Request']
+        });

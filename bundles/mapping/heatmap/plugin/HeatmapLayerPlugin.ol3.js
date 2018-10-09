@@ -19,8 +19,7 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var me = this,
-            	layerIdPrefix = 'layer_',
+            var layerIdPrefix = 'layer_',
             	key;
 
             // default params and options
@@ -30,11 +29,10 @@ Oskari.clazz.define(
                     ID: layer.getId(),
                     STYLES: layer.getCurrentStyle().getName(),
                     FORMAT: 'image/png',
-                    SLD_BODY : this.__getSLD(layer),
+                    SLD_BODY: this.__getSLD(layer)
                 },
-                layerParams = layer.getParams(),
-                layerOptions = layer.getOptions();
-                layerAttributes = layer.getAttributes() || undefined;
+                layerParams = layer.getParams();
+            layerAttributes = layer.getAttributes() || undefined;
 
             if (layer.getMaxScale() || layer.getMinScale()) {
                 // use resolutions instead of scales to minimize chance of transformation errors
@@ -48,17 +46,17 @@ Oskari.clazz.define(
                 }
             }
             var projection = this.getMapModule().getProjection(),
-            reverseProjection;
+                reverseProjection;
 
             if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
-                    // use reverse coordinate order for this layer!
-                    if (layerAttributes.reverseXY[projectionCode]) {
-                        reverseProjection = this._createReverseProjection(projection);
-                    }
+                // use reverse coordinate order for this layer!
+                if (layerAttributes.reverseXY[projectionCode]) {
+                    reverseProjection = this._createReverseProjection(projection);
+                }
             }
 
             var wmsSource = new olSourceImageWMS({
-                id:layerIdPrefix + layer.getId(),
+                id: layerIdPrefix + layer.getId(),
                 url: layer.getLayerUrls()[0],
                 params: defaultParams
             });
@@ -68,10 +66,8 @@ Oskari.clazz.define(
                 source: wmsSource,
                 projection: reverseProjection ? reverseProjection : undefined,
                 opacity: layer.getOpacity() / 100,
-                visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
+                visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible()
             });
-
-            var params = openlayer.getSource().getParams();
 
             this.getMapModule().addLayer(openlayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), openlayer);
@@ -83,9 +79,9 @@ Oskari.clazz.define(
             var params = params || {};
             params.SLD_BODY = this.__getSLD(layer);
 
-            var updateLayer = this.getOLMapLayers( layer.getId() );
-            updateLayer.forEach( function ( layer ) {
-                layer.getSource().updateParams( params );
+            var updateLayer = this.getOLMapLayers(layer.getId());
+            updateLayer.forEach(function (layer) {
+                layer.getSource().updateParams(params);
             });
         }
     },

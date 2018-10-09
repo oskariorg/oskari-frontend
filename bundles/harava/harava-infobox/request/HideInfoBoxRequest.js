@@ -18,7 +18,7 @@ function(id) {
 	this._id = id;
 }, {
     /** @static @property __name request name */
-	__name : "HaravaInfoBox.HideInfoBoxRequest",
+	__name : 'HaravaInfoBox.HideInfoBoxRequest',
     /**
      * @method getName
      * @return {String} request name

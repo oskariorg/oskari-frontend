@@ -1,7 +1,7 @@
 /**
  * @class Oskari.liikenenvirasto.bundle.lakapa.HelpFlyoutBundleInstance
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstance", function() {
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstance', function() {
 	this.map = null;
 	this.core = null;
 	this.sandbox = null;
@@ -20,7 +20,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 	 *
 	 */
 	__name : 'LakapaHelpBundle',
-	"getName" : function() {
+	'getName' : function() {
 		return this.__name;
 	},
 	/**
@@ -36,7 +36,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 	 * @method implements BundleInstance start methdod
 	 *
 	 */
-	"start" : function() {
+	'start' : function() {
 		var me = this;
 		if(me.started)
 			return;
@@ -94,7 +94,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 
 
 	},
-	"init" : function() {
+	'init' : function() {
 		return null;
 	},
 	/**
@@ -102,7 +102,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 	 *
 	 * implements bundle instance update method
 	 */
-	"update" : function() {
+	'update' : function() {
 
 	},
 	/**
@@ -127,7 +127,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 	 *
 	 * implements bundle instance stop method
 	 */
-	"stop" : function() {
+	'stop' : function() {
 
 		var sandbox = this.sandbox;
 
@@ -162,7 +162,7 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 		return this.getLocale()['title'];
 	},
 	getDescription : function() {
-		return "Help";
+		return 'Help';
 	},
 	getPlugins : function() {
 		return this.plugins;
@@ -190,5 +190,5 @@ Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
 		return this.plugins['Oskari.userinterface.Flyout'].getContentState();
 	}
 }, {
-	"protocol" : ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+	'protocol' : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

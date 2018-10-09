@@ -1,28 +1,28 @@
-(function() {
-    define(['_bundle/models/layerModel'],function(LayerModel) {
+(function () {
+    define(['_bundle/models/layerModel'], function (LayerModel) {
         return Backbone.Collection.extend({
 
             // Reference to this collection's model.
-            model : LayerModel,
+            model: LayerModel,
 
             /**
              * Initialize
              *
              * @method initialize
              */
-            initialize: function(models,title) {
+            initialize: function (models, title) {
                 this.name = title;
                 this.searchIndex = {};
-                if(!models || models.length === 0) {
+                if (!models || models.length === 0) {
                     // setup empty collection
                     this.resetLayers();
                 }
                 var me = this;
 
-                this.on('add', function(layerModel) {
+                this.on('add', function (layerModel) {
                     me.searchIndex[layerModel.getId()] = me._getSearchIndex(layerModel);
                 });
-                this.on('change', function(layerModel) {
+                this.on('change', function (layerModel) {
                     me.searchIndex[layerModel.getId()] = me._getSearchIndex(layerModel);
                 });
             },
@@ -32,7 +32,7 @@
              * @method setTitle
              * @param {String} value
              */
-            setTitle : function(value) {
+            setTitle: function (value) {
                 this.name = value;
             },
             /**
@@ -40,15 +40,15 @@
              * Usable for editing form
              * @return {Object[]} object with lang and name properties
              */
-            getNamesAsList : function() {
+            getNamesAsList: function () {
                 var names = [];
                 var usedLanguages = {};
                 for (var lang in this.names) {
                     if (this.names.hasOwnProperty(lang)) {
                         usedLanguages[lang] = true;
                         names.push({
-                            "lang" : lang,
-                            "name" : this.names[lang]
+                            'lang': lang,
+                            'name': this.names[lang]
                         });
                     }
                 }
@@ -59,8 +59,8 @@
                 for (var j = 0; j < supportedLanguages.length; j++) {
                     if (!usedLanguages[supportedLanguages[j]]) {
                         names.push({
-                            "lang" : supportedLanguages[j],
-                            "name": ""
+                            'lang': supportedLanguages[j],
+                            'name': ''
                         });
                     }
                 }
@@ -71,7 +71,7 @@
              * @method getTitle
              * @return {String}
              */
-            getTitle : function() {
+            getTitle: function () {
                 return this.name;
             },
             /**
@@ -80,7 +80,7 @@
              * @method getLayers
              * @return {Layer[]}
              */
-            getLayers : function() {
+            getLayers: function () {
                 return this.models;
             },
             /**
@@ -89,7 +89,7 @@
              * @method addLayer
              * @param {LayerModel} layer
              */
-            resetLayers : function() {
+            resetLayers: function () {
                 this.reset();
             },
             /**
@@ -98,9 +98,9 @@
              * @param {LayerModel} layer
              * @return {String} name+inspireName+organizationName
              */
-            _getSearchIndex : function(layerModel) {
-                var val = layerModel.getName() +  ' ' +
-                    layerModel.getInspireName() +  ' ' +
+            _getSearchIndex: function (layerModel) {
+                var val = layerModel.getName() + ' ' +
+                    layerModel.getInspireName() + ' ' +
                     layerModel.getOrganizationName();
                 // TODO: maybe filter out undefined texts
                 return val.toLowerCase();
@@ -112,12 +112,11 @@
              * @param {String} keyword
              * @return {boolean} true if keyword is found from layer name
              */
-            matchesKeyword : function(layerId, keyword) {
+            matchesKeyword: function (layerId, keyword) {
                 var searchableIndex = this.searchIndex[layerId];
                 return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
             }
 
         });
-
     });
 }).call(this);

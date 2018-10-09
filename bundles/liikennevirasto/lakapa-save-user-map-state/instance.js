@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.liikennevirasto.bundle.lakapa.SaveUserMapStateBundleInstance plugin for main map.
  */
-Oskari.clazz.define("Oskari.liikennevirasto.bundle.lakapa.SaveUserMapStateBundleInstance",
+Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.SaveUserMapStateBundleInstance',
 
 /**
  * @method create called automatically on construction

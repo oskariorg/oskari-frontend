@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
 
         if (classification.transparency) {
-            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency)
+            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency);
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },

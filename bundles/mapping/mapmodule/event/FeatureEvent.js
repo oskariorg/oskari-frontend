@@ -12,32 +12,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
         this._features = [];
     }, {
         __name: 'FeatureEvent',
-        op : {
-            'add' : 'add',
-            'remove' : 'remove',
-            'click' : 'click',
+        op: {
+            'add': 'add',
+            'remove': 'remove',
+            'click': 'click',
             'zoom': 'zoom',
             'error': 'error'
         },
-        setOpAdd : function() {
+        setOpAdd: function () {
             this._operation = this.op.add;
             return this;
         },
-        setOpRemove : function() {
+        setOpRemove: function () {
             this._operation = this.op.remove;
             return this;
         },
-        setOpClick : function() {
+        setOpClick: function () {
             this._operation = this.op.click;
             return this;
         },
-        setOpZoom : function() {
+        setOpZoom: function () {
             this._operation = this.op.zoom;
             return this;
         },
-        setOpError : function(msg) {
+        setOpError: function (msg) {
             this._operation = this.op.error;
-            if(msg) {
+            if (msg) {
                 this._msg = msg;
             }
             return this;
@@ -45,29 +45,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.FeatureEvent',
         getName: function () {
             return this.__name;
         },
-        getFeatures: function() {
+        getFeatures: function () {
             return this._features;
         },
-        getOperation: function() {
+        getOperation: function () {
             return this._operation;
         },
-        addFeature : function(id, geojson, layerId) {
+        addFeature: function (id, geojson, layerId) {
             this._features.push({
-                id : id,
-                geojson : geojson,
-                layerId : layerId
+                id: id,
+                geojson: geojson,
+                layerId: layerId
             });
             return this;
         },
-        hasFeatures : function() {
-            return this._features.length>0;
+        hasFeatures: function () {
+            return this._features.length > 0;
         },
         /**
          * Serialization for RPC
          * @return {Object} object has key id which has the marker id
          */
         getParams: function () {
-            if(this._operation === 'error' && this._msg) {
+            if (this._operation === 'error' && this._msg) {
                 return {
                     operation: this._operation,
                     features: this._features,
