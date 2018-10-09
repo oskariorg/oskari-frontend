@@ -12,7 +12,7 @@ const isHovered = (feature, hoverState) => {
         }
     }
     return false;
-}
+};
 
 export default function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState) {
     const styleCache = {};
