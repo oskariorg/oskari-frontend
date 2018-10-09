@@ -9,6 +9,7 @@ import {BufferOp} from 'jsts/org/locationtech/jts/operation/buffer';
 import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 
 const olParser = new jstsOL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
@@ -53,7 +54,6 @@ Oskari.clazz.define(
             }
         };
         this._nextFeatureId = 0;
-        this._hoverOverlay = undefined;
         this._hoverFeature = undefined;
         this._log = Oskari.log('VectorLayerPlugin');
     }, {
@@ -81,9 +81,8 @@ Oskari.clazz.define(
             var me = this;
             me.registerVectorFormats();
             me._createConfiguredLayers();
-            me._createHoverOverlay();
+            me._registerToFeatureService();
         },
-
         /**
          * @method  @private _createConfiguredLayers Create configured layers an their styles
          */
@@ -103,11 +102,9 @@ Oskari.clazz.define(
                     var opacity = 100;
                     var vectorSource = new olSourceVector();
                     var olLayer = new olLayerVector({
-                        name: me._olLayerPrefix + layerId,
-                        id: layerId,
                         source: vectorSource
                     });
-
+                    olLayer.set(LAYER_ID, layerId, true);
                     olLayer.setOpacity(opacity);
 
                     me._map.addLayer(olLayer);
@@ -137,17 +134,11 @@ Oskari.clazz.define(
             var me = this;
 
             return {
-                MapClickedEvent: function (event) {
-                    me.__mapClick(event);
-                },
                 AfterMapLayerRemoveEvent: function (event) {
                     me.afterMapLayerRemoveEvent(event);
                 },
                 AfterChangeMapLayerOpacityEvent: function (event) {
                     me._afterChangeMapLayerOpacityEvent(event);
-                },
-                MouseHoverEvent: function (event) {
-                    me._mapHover(event);
                 }
             };
         },
@@ -173,87 +164,62 @@ Oskari.clazz.define(
             me.handleLayerOpacity(layer, (layer.getOpacity() / 100), true);
         },
         /**
-         * Find features from layers controlled by vectorlayerplugin and handle clicks for all those features
-         * @param  {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event [description]
+         * @method _registerToFeatureService
+         * @private
+         * Registers vector layer type to feature service for tooltip, click and layer requests.
          */
-        __mapClick: function (event) {
-            var me = this;
-            var features = [];
-            this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], function (feature, layer) {
-                _.forEach(me._olLayers, function (vectorlayer, id) {
-                    if (vectorlayer === layer) {
-                        features.push({
-                            feature: feature,
-                            layerId: id
-                        });
-                        return true;
-                    }
-                });
-            });
-            me.__featureClicked(features);
+        _registerToFeatureService: function () {
+            var defaultHandlerDef = [SERVICE_LAYER_REQUEST];
+            var vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
+            vectorFeatureService.registerLayerType('vector', this, defaultHandlerDef);
         },
-        __featureClicked: function (features) {
-            if (!features || !features.length) {
-                return;
-            }
-            var sandbox = this.getSandbox();
-            var clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
-            var formatter = this._supportedFormats.GeoJSON;
-            _.forEach(features, function (obj) {
-                var geojson = formatter.writeFeaturesObject([obj.feature]);
-                clickEvent.addFeature(obj.feature.getId(), geojson, obj.layerId);
-            });
-            sandbox.notifyAll(clickEvent);
+        /**
+         * @method onLayerRequest VectorFeatureService handler impl method
+         * Handles VectorLayerRequest.
+         * 
+         * @param { Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest } request
+         */
+        onLayerRequest: function (request) {
+            this.prepareVectorLayer(request.getOptions());
         },
-        _mapHover: function (event) {
-            var me = this;
-            var showTooltip = false;
+        /**
+         * @method onMapHover VectorFeatureService handler impl method
+         * Handles feature highlighting on map hover.
+         * 
+         * @param { Oskari.mapframework.event.common.MouseHoverEvent } event 
+         * @param { olFeature } feature 
+         * @param { olVectorLayer } layer 
+         */ 
+        onMapHover: function (event, feature, layer) {
             var cursor;
-            var mapDiv = me._map.getTarget();
-            mapDiv = typeof mapDiv === 'string' ? jQuery('#' + mapDiv) : jQuery(mapDiv);
 
-            var hit = me.getMap().forEachFeatureAtPixel([event.getPageX(), event.getPageY()], function (feature, layer) {
+            if (feature) {
                 // Remove highlighting from the previously hovered feature
-                if (me._hoverFeature && me._hoverFeature !== feature) {
-                    me._applyOriginalStyle(me._hoverFeature);
+                if (this._hoverFeature && this._hoverFeature !== feature) {
+                    this._applyOriginalStyle(this._hoverFeature);
                 }
                 var hover = feature.getProperties()['hover'];
                 if (hover) {
                     // Highlight hovered feature
                     if (hover.style) {
-                        me._applyHoverStyle(feature, hover.style);
-                    }
-                    // Update tooltip's position and content
-                    if (hover.content) {
-                        var margin = 20;
-                        var tooltip = jQuery(me._hoverOverlay.getElement());
-                        var positioningY = event.getPageY() > (tooltip.outerHeight() || 100) + margin ? 'bottom' : 'top';
-                        var positioningX = event.getPageX() + (tooltip.outerWidth() || 200) + margin < mapDiv.width() ? 'left' : 'right';
-                        var positioning = positioningY + '-' + positioningX;
-                        me._hoverOverlay.setPositioning(positioning);
-                        me._hoverOverlay.setPosition([event.getLon(), event.getLat()]);
-                        tooltip.html(hover.content);
-                        showTooltip = true;
+                        this._applyHoverStyle(feature, hover.style);
                     }
                 }
-                me._hoverFeature = feature;
+                this._hoverFeature = feature;
                 cursor = feature.getProperties()['oskari-cursor'];
-                return true;
-            });
-            if (!hit && me._hoverFeature) {
+            } else if (this._hoverFeature) {
                 // Remove feature highlighting
-                me._applyOriginalStyle(me._hoverFeature);
-                me._hoverFeature = null;
+                this._applyOriginalStyle(this._hoverFeature);
+                this._hoverFeature = null;
             }
 
-            // Set tooltip's visibility
-            me._hoverOverlay.getElement().style.display = showTooltip ? '' : 'none';
-
             // Update map cursor
+            var mapDiv = this._map.getTarget();
+            mapDiv = typeof mapDiv === 'string' ? jQuery('#' + mapDiv) : jQuery(mapDiv);
             if (cursor) {
                 mapDiv.css('cursor', cursor);
             } else {
-                mapDiv.css('cursor', me.getMapModule().getCursorStyle());
+                mapDiv.css('cursor', this.getMapModule().getCursorStyle());
             }
         },
         /**
@@ -286,7 +252,7 @@ Oskari.clazz.define(
             }
         },
         /**
-         * @method _applyHoverStyle
+         * @method _applyOriginalStyle
          * 
          * Switch back to the original style.
          * 
@@ -343,7 +309,7 @@ Oskari.clazz.define(
                 layerId;
             if (layer && layer !== null) {
                 if (layer instanceof olLayerVector) {
-                    layerId = layer.get('id');
+                    layerId = layer.get(LAYER_ID);
                 } else if (_.isString(layer) || _.isNumber(layer)) {
                     layerId = layer;
                 }
@@ -402,9 +368,9 @@ Oskari.clazz.define(
             featuresToRemove.forEach(function (feature) {
                 source.removeFeature(feature);
                 // remove from "cache"
-                me._removeFromCache(olLayer.get('id'), feature);
+                me._removeFromCache(olLayer.get(LAYER_ID), feature);
                 var geojson = formatter.writeFeaturesObject([feature]);
-                removeEvent.addFeature(feature.getId(), geojson, olLayer.get('id'));
+                removeEvent.addFeature(feature.getId(), geojson, olLayer.get(LAYER_ID));
             });
             sandbox.notifyAll(removeEvent);
         },
@@ -439,10 +405,13 @@ Oskari.clazz.define(
             var olLayer = me._olLayers[layer.getId()];
             if (!olLayer) {
                 olLayer = new olLayerVector({
-                    name: me._olLayerPrefix + layer.getId(),
-                    id: layer.getId(),
                     source: new olSourceVector()
                 });
+                // Set oskari properties
+                const silent = true;
+                olLayer.set(LAYER_ID, layer.getId(), silent);
+                olLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
+                olLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
                 me._olLayers[layer.getId()] = olLayer;
                 me._map.addLayer(olLayer);
                 me.raiseVectorLayer(olLayer);
@@ -567,6 +536,7 @@ Oskari.clazz.define(
                 }
                 if (options.hover) {
                     layer.setHoverOptions(options.hover);
+                    this._getOlLayer(layer).set(LAYER_HOVER, layer.getHoverOptions());
                 }
                 if (options.layerDescription) {
                     layer.setDescription(options.layerDescription);
@@ -651,11 +621,11 @@ Oskari.clazz.define(
                 });
             }
             features.forEach(function (feature) {
-                if (typeof feature.getId() === 'undefined' && typeof feature.get('id') === 'undefined') {
+                if (typeof feature.getId() === 'undefined' && typeof feature.get(FTR_PROPERTY_ID) === 'undefined') {
                     var id = 'F' + me._nextFeatureId++;
                     feature.setId(id);
                     // setting id using set(key, value) to make id-property asking by get('id') possible
-                    feature.set('id', id);
+                    feature.set(FTR_PROPERTY_ID, id);
                 }
                 me.setupFeatureStyle(options, feature, false);
                 me.setupFeatureHover(layer, feature);
@@ -706,7 +676,7 @@ Oskari.clazz.define(
                 if (!feature.getGeometry()) {
                     event = errorEvent;
                 }
-                event.addFeature(feature.getId(), geojson, olLayer.get('id'));
+                event.addFeature(feature.getId(), geojson, olLayer.get(LAYER_ID));
             });
             if (errorEvent.hasFeatures()) {
                 sandbox.notifyAll(errorEvent);
@@ -800,11 +770,6 @@ Oskari.clazz.define(
                 ),
                 'MapModulePlugin.ZoomToFeaturesRequest': Oskari.clazz.create(
                     'Oskari.mapframework.bundle.mapmodule.request.ZoomToFeaturesRequestHandler',
-                    sandbox,
-                    me
-                ),
-                'VectorLayerRequest': Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequestHandler',
                     sandbox,
                     me
                 )
@@ -921,29 +886,6 @@ Oskari.clazz.define(
             var layerOptions = layer.getHoverOptions();
             if (layerOptions) {
                 var featureOptions = {};
-                if (Array.isArray(layerOptions.content)) {
-                    var content = '';
-                    layerOptions.content.forEach(function (entry) {
-                        var key = entry.key;
-                        if (typeof key === 'undefined' && entry.keyProperty) {
-                            key = feature.get(entry.keyProperty);
-                        }
-                        if (typeof key !== 'undefined') {
-                            content += '<div>' + key;
-                            if (entry.valueProperty) {
-                                content += ': ';
-                                var value = feature.get(entry.valueProperty);
-                                if (typeof value !== 'undefined') {
-                                    content += value;
-                                }
-                            }
-                            content += '</div>';
-                        }
-                    });
-                    if (content) {
-                        featureOptions.content = content;
-                    }
-                }
                 if (layerOptions.featureStyle) {
                     featureOptions.style = layerOptions.featureStyle;
                 }

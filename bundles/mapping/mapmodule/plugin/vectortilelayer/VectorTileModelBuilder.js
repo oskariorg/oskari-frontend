@@ -12,5 +12,8 @@ export default class VectorTileModelBuilder {
             });
             layer.selectStyle('default');
         }
+        if (mapLayerJson.options.hover) {
+            layer.setHoverOptions(mapLayerJson.options.hover);
+        }
     }
 }

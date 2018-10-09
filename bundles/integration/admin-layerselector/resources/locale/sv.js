@@ -57,7 +57,7 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache Lager",
                 "arcgis93": "ArcGISRest Lager",
                 "tiles3d" : "3D Tiles Lager",
-                "vectortile" : "MBTiles Lager"
+                "vectortile" : "MVT Lager"
             },
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
@@ -84,7 +84,7 @@ Oskari.registerLocalization(
             "getInfo": "Sök data",
             "editWfs": "Editera WFS",
             "options": "Options JSON",
-            "mbtilesOptionsDesc": "{\n  styles: {\n    default: { ... },\n    myStyle: { ... }\n  },\n  tileGrid: { ... }\n}",
+            "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
             "selectClass": "Välj tema",
             "selectClassDesc": "Välj tema",
             "baseName": "Bakgrundsnivåns namn",

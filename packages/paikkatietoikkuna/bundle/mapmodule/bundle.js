@@ -446,6 +446,12 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/RegisterStyleRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/VectorLayerRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/VectorLayerRequestHandler.js"
                 },
 
                 /**
