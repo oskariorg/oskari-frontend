@@ -316,7 +316,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             // No feature hits for these layer types. Call hover handlers without feature or layer.
             Object.keys(this.layerTypeHandlers).forEach(layerType => {
                 const handler = this._getRegisteredHandler(layerType, SERVICE_HOVER);
-                const featureHit = feature && layer.get(LAYER_TYPE) === layerType;
+                const featureHit = feature && layer && layer.get(LAYER_TYPE) === layerType;
                 if (!featureHit && handler) {
                     handler(event);
                 }
