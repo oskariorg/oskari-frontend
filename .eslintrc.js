@@ -18,7 +18,11 @@ module.exports = {
     "sourceType": "module"
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
-  "extends": "standard",
+  "extends": [
+    "standard",
+    "plugin:import/errors",
+    "plugin:import/warnings"
+  ],
   // add your custom rules here
   "rules": {
     "indent": ["error", 4],

@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import * as olExtent from 'ol/extent';
-import olInteractionDraw from 'ol/interaction/Draw';
+import olInteractionDraw, {createRegularPolygon} from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
@@ -807,7 +807,7 @@ Oskari.clazz.define(
                 };
             } else if (shape === 'Square') {
                 geometryType = 'Circle';
-                geometryFunction = olInteractionDraw.createRegularPolygon(4);
+                geometryFunction = createRegularPolygon(4);
             } else if (shape === 'Circle' && options.buffer > 0) {
                 geometryType = 'Point';
                 me._circleHasGeom = true;
@@ -821,7 +821,7 @@ Oskari.clazz.define(
                 };
             } else if (shape === 'Circle' && !options.buffer) {
                 geometryType = 'Circle';
-                geometryFunction = olInteractionDraw.createRegularPolygon(50);
+                geometryFunction = createRegularPolygon(50);
             } else if (shape === 'Polygon') {
                 geometryFunction = function (coordinates, geometry) {
                     var coords = makeClosedPolygonCoords(coordinates);

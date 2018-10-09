@@ -232,18 +232,18 @@ export default class MapModule extends AbstractMapModule {
     }
 
     getMeasurementResult (geometry) {
-        var olGeom = this.getOLGeometryFromGeoJSON(geometry);
+        var olGeometry = this.getOLGeometryFromGeoJSON(geometry);
         var sum = 0;
-        if (olGeom.getType() === 'LineString') {
-            return this.getGeomLength(olGeom);
-        } else if (olGeom.getType() === 'MultiLineString') {
-            var lineStrings = olGeom.getLineStrings();
+        if (olGeometry.getType() === 'LineString') {
+            return this.getGeomLength(olGeometry);
+        } else if (olGeometry.getType() === 'MultiLineString') {
+            var lineStrings = olGeometry.getLineStrings();
             for (var i = 0; i < lineStrings.length; i++) {
                 sum += this.getGeomLength(lineStrings[i]);
             }
             return sum;
-        } else if (olGeom.getType() === 'Polygon' || olGeom.getType() === 'MultiPolygon') {
-            return this.getGeomArea(olGeom);
+        } else if (olGeometry.getType() === 'Polygon' || olGeometry.getType() === 'MultiPolygon') {
+            return this.getGeomArea(olGeometry);
         }
     }
 
@@ -662,8 +662,8 @@ export default class MapModule extends AbstractMapModule {
 
     // TODO: check LayersPlugin.ol3 getGeometryCenter
     getCentroidFromGeoJSON (geojson) {
-        var olGeom = this.getOLGeometryFromGeoJSON(geojson);
-        var olBounds = olGeom.getExtent();
+        var olGeometry = this.getOLGeometryFromGeoJSON(geojson);
+        var olBounds = olGeometry.getExtent();
         var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
         var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
         return {lon: x, lat: y};
@@ -671,18 +671,18 @@ export default class MapModule extends AbstractMapModule {
 
     getClosestPointFromGeoJSON (geojson) {
         // TODO?? getInteriorPoint() for polygon --> placeform, attention text,..
-        var olGeom = this.getOLGeometryFromGeoJSON(geojson);
-        var olBounds = olGeom.getExtent();
+        var olGeometry = this.getOLGeometryFromGeoJSON(geojson);
+        var olBounds = olGeometry.getExtent();
         var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
         var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
-        var coord = olGeom.getClosestPoint([x, y]);
+        var coord = olGeometry.getClosestPoint([x, y]);
         return {lon: coord[0], lat: coord[1]};
     }
 
     // TODO: check LayersPlugin.ol3 getGeometryBounds
     getBoundsFromGeoJSON (geojson) {
-        var olGeom = this.getOLGeometryFromGeoJSON(geojson);
-        var extent = olGeom.getExtent();
+        var olGeometry = this.getOLGeometryFromGeoJSON(geojson);
+        var extent = olGeometry.getExtent();
         return {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
     }
 
