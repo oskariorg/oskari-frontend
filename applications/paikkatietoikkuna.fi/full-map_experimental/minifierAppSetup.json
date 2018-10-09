@@ -25,6 +25,9 @@
                     "oskariui": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
+                    "mapuserlayers": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
                     "ui-components": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
@@ -122,6 +125,15 @@
 				}
 			}
 		}, {
+            "bundlename": "personaldata",
+            "metadata": {
+                "Import-Bundle": {
+                    "personaldata": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "publisher2",
             "metadata": {
                 "Import-Bundle": {
@@ -154,6 +166,15 @@
                 "Import-Bundle": {
                     "metadataflyout": {
                         "bundlePath": "../../../packages/catalogue/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "featuredata2",
+            "metadata": {
+                "Import-Bundle": {
+                    "featuredata2": {
+                        "bundlePath": "../../../packages/framework/"
                     }
                 }
             }
@@ -199,6 +220,24 @@
                 "Import-Bundle": {
                     "statsgrid": {
                         "bundlePath": "../../../packages/statistics/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "myplaces3",
+            "metadata": {
+                "Import-Bundle": {
+                    "myplaces3": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "myplacesimport",
+            "metadata" : {
+                "Import-Bundle" : {
+                    "myplacesimport" : {
+                        "bundlePath" : "../../../packages/framework/bundle/"
                     }
                 }
             }
