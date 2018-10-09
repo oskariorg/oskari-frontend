@@ -245,6 +245,15 @@
                 }
             }
         }, {
+            "bundlename": "myplaces3",
+            "metadata": {
+                "Import-Bundle": {
+                    "myplaces3": {
+                        "bundlePath": "../../../packages/framework/bundle/"
+                    }
+                }
+            }
+        }, {
             "bundlename" : "myplacesimport",
             "metadata" : {
                 "Import-Bundle" : {
@@ -409,6 +418,15 @@
                     }
                 }
             }
-        }
+        }, {
+			"bundlename": "demo-link",
+			"metadata": {
+				"Import-Bundle": {
+					"demo-link": {
+						"bundlePath": "../../../packages/paikkatietoikkuna/bundle/"
+					}
+				}
+			}
+		}
     ]
 }

@@ -238,12 +238,12 @@ Oskari.clazz.define(
                 popupType = 'desktop';
                 popup = new olOverlay({
                     element: popupElement[0],
-                    position: lonlatArray,
                     // start with null positioning
                     positioning: null,
                     offset: [offsetX, offsetY]
                 });
                 mapModule.getMap().addOverlay(popup);
+                popup.setPosition(lonlatArray);
                 jQuery(popup.getElement()).html(popupContentHtml);
                 setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
 
