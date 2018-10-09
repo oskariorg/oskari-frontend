@@ -168,7 +168,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
                     olLayers.forEach(lyr => {
                         lyr.set(LAYER_HOVER, layer.getHoverOptions());
                         lyr.setStyle(this._getLayerCurrentStyleFunction(layer));
-                    })
+                    });
                 }
             }
         }
