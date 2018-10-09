@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
  * @method create called automatically on construction
  * @static
  * @param {Object} config
- * 		JSON config with params needed to run the bundle
+ *         JSON config with params needed to run the bundle
  *
  */
     function () {}, {
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.usagetracker.UsageTrackerBundleI
             }
             me.started = true;
 
-   		var conf = this.conf;
+            var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
 

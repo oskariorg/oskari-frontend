@@ -12,15 +12,15 @@ Oskari.clazz.define('Oskari.framework.bundle.oskariui.Layout',
     }, {
 
         /**
-	 * @method applyLayout
-	 * applies this layout with given DomManager
-	 */
+     * @method applyLayout
+     * applies this layout with given DomManager
+     */
         applyLayout: function () {
 
         },
         /**
-	 * @method removeLayout
-	 */
+     * @method removeLayout
+     */
         removeLayout: function () {
 
         }

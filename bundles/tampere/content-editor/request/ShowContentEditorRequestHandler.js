@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.request.ShowContentEdi
          *      request to handle
          */
         handleRequest: function (core, request) {
-        	this.instance.showContentEditor(request._layerId);
+            this.instance.showContentEditor(request._layerId);
         }
     }, {
         /**

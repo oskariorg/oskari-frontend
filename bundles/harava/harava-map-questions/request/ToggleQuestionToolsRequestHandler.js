@@ -7,19 +7,19 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToo
     this.sandbox = sandbox;
     this.bundle = bundle;
 }, {
-	/**
-	 * @method handleRequest
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
         this.sandbox.printDebug('[Oskari.harava.bundle.mapquestions.request.ToggleQuestionToolsRequest]');
         this.bundle.toggleTools();
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

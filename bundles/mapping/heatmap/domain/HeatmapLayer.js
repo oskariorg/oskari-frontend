@@ -12,30 +12,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.domain.HeatmapLayer',
     function () {
         this.init();
     }, {
-    	init: function () {
-	        this._layerType = 'HEATMAP';
+        init: function () {
+            this._layerType = 'HEATMAP';
             this._selectedProperty = null;
             this._radius = 30;
             this._pixelsPerCell = 10;
-	        this.localization = Oskari.getLocalization('heatmap');
-    	},
-    	copyValues: function (parentLayer, overrides) {
-    		var me = this;
-    		// maybe just copy url, name, technical stuff?
-    		// NOTE! this might have unwanted side-effects
-    		_.each(parentLayer, function (value, key) {
-    			me[key] = value;
-    		});
-    		this.init();
+            this.localization = Oskari.getLocalization('heatmap');
+        },
+        copyValues: function (parentLayer, overrides) {
+            var me = this;
+            // maybe just copy url, name, technical stuff?
+            // NOTE! this might have unwanted side-effects
+            _.each(parentLayer, function (value, key) {
+                me[key] = value;
+            });
+            this.init();
             this.setMaxScale(null);
             this.setMinScale(null);
             this._styles = [];
             // initial opacity to 70%
             this.setOpacity(70);
 
-    		this.setId(overrides.id);
-    		this.setName(overrides.name);
-    	},
+            this.setId(overrides.id);
+            this.setName(overrides.name);
+        },
         getGeometryProperty: function () {
             var attr = this.getAttributes();
             return attr.geometryProperty;

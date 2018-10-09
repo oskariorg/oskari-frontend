@@ -13,14 +13,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
         var cb;
         // if request.getCenterMap() is truthy: also move map
         if (request.getCenterMap()) {
-        	cb = function (lon, lat) {
+            cb = function (lon, lat) {
                 if (!lon || !lat) {
                     // error getting location
                     return;
                 }
-        		// move map to coordinates
+                // move map to coordinates
                 mapmodule.centerMap({ lon: lon, lat: lat }, 6);
-        	};
+            };
         }
         // call the getUserLocation() function to trigger an event with or without the cb
         mapmodule.getUserLocation(cb);

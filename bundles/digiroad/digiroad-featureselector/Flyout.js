@@ -19,91 +19,91 @@ function(instance) {
     this.gridDataArrays = {};
     this.gridColumnArrays = {};
 
-	this.template = null;
+    this.template = null;
 }, {
-	/**
-	 * @method getName
-	 * @return {String} the name for the component
-	 */
+    /**
+     * @method getName
+     * @return {String} the name for the component
+     */
     getName: function() {
         return 'Oskari.digiroad.bundle.featureselector.Flyout';
     },
-	/**
-	 * @method setEl
-	 * @param {Object} el
-	 * 		reference to the container in browser
-	 * @param {Number} width
-	 * 		container size(?) - not used
-	 * @param {Number} height
-	 * 		container size(?) - not used
-	 *
-	 * Interface method implementation
-	 */
+    /**
+     * @method setEl
+     * @param {Object} el
+     *         reference to the container in browser
+     * @param {Number} width
+     *         container size(?) - not used
+     * @param {Number} height
+     *         container size(?) - not used
+     *
+     * Interface method implementation
+     */
     setEl: function(el, width, height) {
         this.container = el[0];
-		if(!jQuery(this.container).hasClass('featureselector')) {
-			jQuery(this.container).addClass('featureselector');
-		}
+        if(!jQuery(this.container).hasClass('featureselector')) {
+            jQuery(this.container).addClass('featureselector');
+        }
     },
-	/**
-	 * @method startPlugin
-	 *
-	 * Interface method implementation, assigns the HTML templates that will be used to create the UI
-	 */
+    /**
+     * @method startPlugin
+     *
+     * Interface method implementation, assigns the HTML templates that will be used to create the UI
+     */
     startPlugin: function() {
-		var me = this;
-		this.template = jQuery('<div></div>');
+        var me = this;
+        this.template = jQuery('<div></div>');
     },
-	/**
-	 * @method stopPlugin
-	 *
-	 * Interface method implementation, does nothing atm
-	 */
-	stopPlugin: function() {
+    /**
+     * @method stopPlugin
+     *
+     * Interface method implementation, does nothing atm
+     */
+    stopPlugin: function() {
 
-	},
-	/**
-	 * @method getTitle
-	 * @return {String} localized text for the title of the flyout
-	 */
-	getTitle: function() {
-		return this.instance.getLocalization('title');
-	},
-	/**
-	 * @method getDescription
-	 * @return {String} localized text for the description of the flyout
-	 */
-	getDescription: function() {
-		return this.instance.getLocalization('desc');
-	},
-	/**
-	 * @method getOptions
-	 * Interface method implementation, does nothing atm
-	 */
-	getOptions: function() {
+    },
+    /**
+     * @method getTitle
+     * @return {String} localized text for the title of the flyout
+     */
+    getTitle: function() {
+        return this.instance.getLocalization('title');
+    },
+    /**
+     * @method getDescription
+     * @return {String} localized text for the description of the flyout
+     */
+    getDescription: function() {
+        return this.instance.getLocalization('desc');
+    },
+    /**
+     * @method getOptions
+     * Interface method implementation, does nothing atm
+     */
+    getOptions: function() {
 
-	},
-	/**
-	 * @method setState
-	 * @param {Object} state
-	 * 		state that this component should use
-	 * Interface method implementation, does nothing atm
-	 */
-	setState: function(state) {
-		this.state = state;
-	},
+    },
+    /**
+     * @method setState
+     * @param {Object} state
+     *         state that this component should use
+     * Interface method implementation, does nothing atm
+     */
+    setState: function(state) {
+        this.state = state;
+    },
 
-	/**
-	 * @method createUI
-	 * Creates the UI for a fresh start
-	 */
+    /**
+     * @method createUI
+     * Creates the UI for a fresh start
+     */
     createUI: function() {
         var me = this;
         var sandbox = me.instance.getSandbox();
 
-		// clear container
-		var cel = jQuery(this.container);
-		cel.empty();
+        // clear container
+        var cel = jQuery(this.container);
+        cel.empty();
 
         var content = this.template.clone();
         cel.append(content);
@@ -124,11 +124,11 @@ function(instance) {
         // setting it to use 'visibility: hidden;' instead when the features
         // are being rendered to the grid.
         var flyoutContainer = jQuery(this.container).closest('.oskari-flyout');
-	    if(flyoutContainer.hasClass('oskari-closed')) {
-	        flyoutContainer.removeClass('oskari-closed').addClass('featureselector-closed');
-	    }
+        if(flyoutContainer.hasClass('oskari-closed')) {
+            flyoutContainer.removeClass('oskari-closed').addClass('featureselector-closed');
+        }
 
-    	for(var i = 0; i < features.length; ++i) {
+        for(var i = 0; i < features.length; ++i) {
             f = {};
             feature = features[i];
             for(attr in feature.data) {
@@ -138,7 +138,7 @@ function(instance) {
             }
             f.geometry = feature.geometry;
             gridData.push(f);
-    	}
+        }
 
         grid.updateRowCount();
         grid.render();
@@ -162,13 +162,13 @@ function(instance) {
             gridData.length = 0;
             grid.setData(gridData);
         } else {
-        	for(var i = 0; i < features.length; ++i) {
-        		oid = features[i].data[this.instance.targetLayers[layerName].objectId];
-        		row_index = this._findGridRowIndexByOid(layerName, gridData, oid);
-        		if(row_index !== null) {
+            for(var i = 0; i < features.length; ++i) {
+                oid = features[i].data[this.instance.targetLayers[layerName].objectId];
+                row_index = this._findGridRowIndexByOid(layerName, gridData, oid);
+                if(row_index !== null) {
                    gridData.splice(row_index, 1);
                 }
-        	}
+            }
         }
 
         grid.updateRowCount();
@@ -231,13 +231,13 @@ function(instance) {
      * @return {Integer} the index of the searched feature, or null if not found.
      */
     _findGridRowIndexByOid: function(layerName, grid_data, oid) {
-    	for(var i = 0; i < grid_data.length; ++i) {
+        for(var i = 0; i < grid_data.length; ++i) {
             var elem_oid = grid_data[i][this.instance.targetLayers[layerName].objectId];
-    		if(elem_oid === oid) {
-    			return i;
-    		}
-    	}
-    	return null;
+            if(elem_oid === oid) {
+                return i;
+            }
+        }
+        return null;
     },
 
     /**
@@ -324,16 +324,16 @@ function(instance) {
             var col = header[i];
 
             switch(col.editor) {
-	            case 'integer':
-	                col.editor = Slick.Editors.Integer;
-	                break;
-	            case 'select':
-	                col.editor = Slick.Editors.SelectOption;
-	                break;
-	            case 'text':
-	            	col.editor = Slick.Editors.Text;
-	            	break;
-	        }
+                case 'integer':
+                    col.editor = Slick.Editors.Integer;
+                    break;
+                case 'select':
+                    col.editor = Slick.Editors.SelectOption;
+                    break;
+                case 'text':
+                    col.editor = Slick.Editors.Text;
+                    break;
+            }
             /*var formatter = this._getFormatterForHeader(col.id);
             if(formatter) {
                 col.formatter = formatter['formatter'];
@@ -365,9 +365,9 @@ function(instance) {
         }
     }
 }, {
-	/**
-	 * @property {String[]} protocol
-	 * @static
-	 */
+    /**
+     * @property {String[]} protocol
+     * @static
+     */
     'protocol' : ['Oskari.userinterface.Flyout']
 });

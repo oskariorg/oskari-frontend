@@ -20,7 +20,7 @@ Oskari.clazz.define(
                 toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 
             if (!layer.isLayerOfType('HEATMAP')) {
-            	return;
+                return;
             }
             var locLabel = this.localization['tool_label'],
                 toolHeatmap = toolBuilder();

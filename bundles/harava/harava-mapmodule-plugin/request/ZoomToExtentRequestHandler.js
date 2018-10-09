@@ -16,16 +16,16 @@ function(sandbox, mapModule) {
     this.sandbox = sandbox;
     this.mapModule = mapModule;
 }, {
-	/**
-	 * @method handleRequest
-	 * Zoom to Extent
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * Zoom to Extent
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
-    	this.mapModule.zoomToExtent(request.getBounds(), false,false);
+        this.mapModule.zoomToExtent(request.getBounds(), false,false);
    }
 }, {
     /**

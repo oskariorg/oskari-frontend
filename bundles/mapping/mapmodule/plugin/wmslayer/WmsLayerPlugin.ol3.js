@@ -200,8 +200,8 @@ Oskari.clazz.define(
         },
         updateLayerParams: function (layer, forced, params) {
             var me = this,
-            	i,
-            	olLayerList,
+                i,
+                olLayerList,
                 count = 0,
                 proxyUrl = null;
             if (!layer) {
@@ -214,10 +214,10 @@ Oskari.clazz.define(
                 if (olLayerList) {
                     count = olLayerList.length;
                     for (i = 0; i < count; i++) {
-                    		var layerSource = olLayerList[i].getSource();
-                    		// TileWMS -> original is olSourceTileWMS.getTileLoadFunction
-                    		if (layerSource.getTileLoadFunction && typeof (layerSource.getTileLoadFunction) === 'function') {
-                    			var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
+                        var layerSource = olLayerList[i].getSource();
+                        // TileWMS -> original is olSourceTileWMS.getTileLoadFunction
+                        if (layerSource.getTileLoadFunction && typeof (layerSource.getTileLoadFunction) === 'function') {
+                            var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
                             layerSource.setTileLoadFunction(function (image, src) {
                                 if (src.length >= 2048) {
                                     proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
@@ -226,10 +226,10 @@ Oskari.clazz.define(
                                     originalTileLoadFunction.apply(this, arguments);
                                 }
                             });
-                    		}
-                    		// ImageWMS -> original is olSourceImageWMS.getImageLoadFunction
-                    		else if (layerSource.getImageLoadFunction && typeof (layerSource.getImageLoadFunction) === 'function') {
-                    			var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
+                        }
+                        // ImageWMS -> original is olSourceImageWMS.getImageLoadFunction
+                        else if (layerSource.getImageLoadFunction && typeof (layerSource.getImageLoadFunction) === 'function') {
+                            var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
                             layerSource.setImageLoadFunction(function (image, src) {
                                 if (src.length >= 2048) {
                                     proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
@@ -238,7 +238,7 @@ Oskari.clazz.define(
                                     originalImageLoadFunction.apply(this, arguments);
                                 }
                             });
-                    		}
+                        }
                         olLayerList[i].getSource().updateParams(params);
                     }
                 }
@@ -254,18 +254,18 @@ Oskari.clazz.define(
             var img = image.getImage();
             if (typeof window.btoa === 'function') {
                 var xhr = new XMLHttpRequest();
-			  	// GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
-			  	var dataEntries = src.split('&');
-			  	var params = '';
-			  	// i === 0 -> the actual url, skip. Everything after that is params.
-			  	for (var i = 1; i < dataEntries.length; i++) {
-			    	params = params + '&' + dataEntries[i];
-			  	}
-			 	xhr.open('POST', proxyUrl, true);
+                // GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
+                var dataEntries = src.split('&');
+                var params = '';
+                // i === 0 -> the actual url, skip. Everything after that is params.
+                for (var i = 1; i < dataEntries.length; i++) {
+                    params = params + '&' + dataEntries[i];
+                }
+                xhr.open('POST', proxyUrl, true);
 
-			  	xhr.responseType = 'arraybuffer';
-			  	xhr.onload = function (e) {
-		    		if (this.status === 200) {
+                xhr.responseType = 'arraybuffer';
+                xhr.onload = function (e) {
+                    if (this.status === 200) {
                         var uInt8Array = new Uint8Array(this.response);
                         var i = uInt8Array.length;
                         var binaryString = new Array(i);
@@ -282,7 +282,7 @@ Oskari.clazz.define(
                 xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
                 xhr.send(params);
             } else {
-			  img.src = src;
+                img.src = src;
             }
         }
     }, {

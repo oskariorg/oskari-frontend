@@ -204,15 +204,15 @@ function(instance) {
     },
     _showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = dialog.createCloseButton(loc.buttons.ok);
-    	var content = jQuery('<ul></ul>');
-    	for(var i = 0 ; i < errors.length; ++i) {
-    		var row = jQuery('<li></li>');
-    		row.append(errors[i]['error'])
-    		content.append(row);
-    	}
-    	dialog.show(loc.validation.title, content, [okBtn]);
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = dialog.createCloseButton(loc.buttons.ok);
+        var content = jQuery('<ul></ul>');
+        for(var i = 0 ; i < errors.length; ++i) {
+            var row = jQuery('<li></li>');
+            row.append(errors[i]['error'])
+            content.append(row);
+        }
+        dialog.show(loc.validation.title, content, [okBtn]);
     },
     /**
      * @method _saveForm
@@ -253,10 +253,10 @@ function(instance) {
                     // blnNew should always be true since we are adding a category
                     var loc = me.instance.getLocalization('notification')['error'];
                     if(blnNew) {
-                		me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
+                        me.instance.showMessage(loc['error'].title, loc['error'].addCategory);
                     }
                     else {
-                		me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
+                        me.instance.showMessage(loc['error'].title, loc['error'].editCategory);
                     }
                 }
             }
@@ -279,7 +279,7 @@ function(instance) {
         if(!values) {
             // should not happen
             var loc = me.instance.getLocalization('notification')['error'];
-    		me.instance.showMessage(loc.title, loc.savePlace);
+            me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
         var place = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlace');
@@ -301,7 +301,7 @@ function(instance) {
             if(blnSuccess) {
                 // add map layer to map (we could check if its already there but core will handle that)
                 var layerId = me.instance.getCategoryHandler()._getMapLayerId(place.getCategoryID());
-				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
                 var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
 
                 var request = requestBuilder(layerId, true);
@@ -333,7 +333,7 @@ function(instance) {
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];
-        		me.instance.showMessage(loc.title, loc.savePlace);
+                me.instance.showMessage(loc.title, loc.savePlace);
             }
         }
         this.instance.getService().saveMyPlace(place,serviceCallback);

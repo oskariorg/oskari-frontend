@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowBoundi
  * @static
  */
 function(bbox) {
-	this._bbox = bbox;
+    this._bbox = bbox;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'ShowBoundingBoxRequest',
     /**
      * @method getName
@@ -30,7 +30,7 @@ function(bbox) {
         return this._bbox;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

@@ -1,13 +1,13 @@
 ﻿Oskari.registerLocalization({
-	"lang": "fi",
-	"key": "water-pipe-tool",
-	"value": {
-		"title" : "A: Putkityökalu",
-		"desc" : "",
-		"tile": {
+    "lang": "fi",
+    "key": "water-pipe-tool",
+    "value": {
+        "title" : "A: Putkityökalu",
+        "desc" : "",
+        "tile": {
             "title": "A: Putkityökalu"
         },
-		"flyout": {
+        "flyout": {
             "title": "A: Merkinnät",
             "water-pipe-tool-tab" : {
                 "title" : "A: Merkinnät",
@@ -64,5 +64,5 @@
             }
         },
         "save": "tallenna"
-	}
+    }
 });

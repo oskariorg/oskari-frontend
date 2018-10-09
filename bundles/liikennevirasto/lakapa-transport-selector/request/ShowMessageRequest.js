@@ -11,11 +11,11 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowMessag
  * @static
  */
 function(title, message, handler) {
-	this._title = title;
-	this._message = message;
-	this._handler = handler;
+    this._title = title;
+    this._message = message;
+    this._handler = handler;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'ShowMessageRequest',
     /**
      * @method getName
@@ -46,7 +46,7 @@ function(title, message, handler) {
         return this._handler;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

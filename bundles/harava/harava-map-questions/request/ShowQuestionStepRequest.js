@@ -15,9 +15,9 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionStepR
  *            moduleId showed question module id
  */
 function(moduleId) {
-	this._moduleId = moduleId;
+    this._moduleId = moduleId;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'ShowQuestionStepRequest',
     /**
      * @method getName
@@ -31,10 +31,10 @@ function(moduleId) {
      * @return {String} module id
      */
      getModuleId : function() {
-     	return this._moduleId;
- 	}
+         return this._moduleId;
+     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

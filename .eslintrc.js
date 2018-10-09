@@ -40,8 +40,6 @@ module.exports = {
     "handle-callback-err": ["warn", "^(err|error)$" ],
     "new-cap": ["warn", { "newIsCap": true, "capIsNew": false }],
     "no-extend-native": "warn",
-    "no-mixed-spaces-and-tabs": "warn",
-    "no-tabs": "warn",
     "no-throw-literal": "warn",
     "no-undef": "warn",
     "no-unmodified-loop-condition": "warn",

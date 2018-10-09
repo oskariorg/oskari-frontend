@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.HideQuestionTools
  */
 function() {
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'HideQuestionToolsRequest',
     /**
      * @method getName
@@ -23,7 +23,7 @@ function() {
         return this.__name;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

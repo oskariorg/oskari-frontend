@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddWKTGeometryReques
 function(wktString) {
     this._wktString = wktString;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'AddWKTGeometryRequest',
     /**
      * @method getName
@@ -34,7 +34,7 @@ function(wktString) {
         return this._wktString;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

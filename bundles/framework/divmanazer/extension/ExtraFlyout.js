@@ -26,44 +26,44 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         Oskari.makeObservable(this);
         this._baseZIndex = 20000;
     }, {
-	    __templates: {
-	    	popup: jQuery('<div class="oskari-flyout">' +
-	    		'<div class="oskari-flyouttoolbar">' +
-	    		'	<div class="oskari-flyoutheading"></div>' +
-	    		'	<div class="oskari-flyout-title"><p></p></div>' +
-	    		'	<div class="oskari-flyouttools">' +
-	    		'		<div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
-	    		'	</div>' +
-	    		'</div>' +
-	    		'<div class="oskari-flyoutcontentcontainer"></div>' +
-	    		'</div>'),
+        __templates: {
+            popup: jQuery('<div class="oskari-flyout">' +
+                '<div class="oskari-flyouttoolbar">' +
+                '    <div class="oskari-flyoutheading"></div>' +
+                '    <div class="oskari-flyout-title"><p></p></div>' +
+                '    <div class="oskari-flyouttools">' +
+                '        <div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
+                '    </div>' +
+                '</div>' +
+                '<div class="oskari-flyoutcontentcontainer"></div>' +
+                '</div>'),
             sideTool: _.template(
                 '<div class="sidetool">' +
                 '<div class="icon icon-arrow-white-right"></div>' +
                 '<label class="verticalsidelabel">${ label }</label>' +
                 '</div>')
-	    },
-	    isVisible: function () {
-	    	return this._visible;
-	    },
-	    show: function () {
-	    	var me = this;
+        },
+        isVisible: function () {
+            return this._visible;
+        },
+        show: function () {
+            var me = this;
             if (me.isVisible()) {
                 return;
             }
-	    	me._popup.show();
+            me._popup.show();
             me.bringToTop();
-    		me._visible = true;
-    		this.trigger('show');
-	    },
-	    hide: function (suppressEvent) {
-	    	var me = this;
+            me._visible = true;
+            this.trigger('show');
+        },
+        hide: function (suppressEvent) {
+            var me = this;
             if (!me.isVisible()) {
                 return;
             }
-	    	me._popup.hide();
-    		me._visible = false;
-    		suppressEvent = suppressEvent ? suppressEvent : false;
+            me._popup.hide();
+            me._visible = false;
+            suppressEvent = suppressEvent ? suppressEvent : false;
             if (!suppressEvent) {
                 this.trigger('hide');
             }
