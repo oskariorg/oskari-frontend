@@ -322,7 +322,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 }
             });
 
-            if (feature) {
+            if (feature && layer) {
                 const layerType = layer.get(LAYER_TYPE);
                 const hoverOptions = layer.get(LAYER_HOVER);
                 const contentOptions = hoverOptions ? hoverOptions.content : null;
@@ -367,6 +367,9 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const me = this;
             let clickHits = [];
             me._map.forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
+                if (!layer) {
+                    return;
+                }
                 const layerType = layer.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];
                 if (isRegisteredLayerType) {
