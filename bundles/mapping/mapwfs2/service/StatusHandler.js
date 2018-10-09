@@ -109,6 +109,7 @@ Oskari.clazz.define(
             status.error.push(error.message);
             var requestBuilder = Oskari.requestBuilder('ShowMessageRequest');
             var layer = this.getMapLayer(error.layerId);
+            var request;
 
             if (this._errorLayer === null) {
                 this._errorLayer = error;
@@ -122,7 +123,7 @@ Oskari.clazz.define(
             }
             if (error.type === 'normal' && !error.success) {
                 if (requestBuilder) {
-                    var request = requestBuilder(plugin._loc.error.layer_load_fail + ': ' + layer._name, 'error');
+                    request = requestBuilder(plugin._loc.error.layer_load_fail + ': ' + layer._name, 'error');
                     Oskari.getSandbox().request('system-message', request);
                 } else {
                     Oskari.log(this.getName()).info('no system-message started');
@@ -132,7 +133,7 @@ Oskari.clazz.define(
             }
             if (error.level === 'warning') {
                 if (requestBuilder) {
-                    var request = requestBuilder(layer._name + ' ' + error.message, 'warning');
+                    request = requestBuilder(layer._name + ' ' + error.message, 'warning');
                     Oskari.getSandbox().request('system-message', request);
                 } else {
                     Oskari.log(this.getName()).info('no system-message started');

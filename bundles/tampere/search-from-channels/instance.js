@@ -520,7 +520,7 @@ Oskari.clazz.define(
 
             // invalid characters (or a star in the wrong place...)
             if (me.safeChars) {
-                if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+                if (!/^[a-zåäöA-ZÅÄÖ .,?!0-9]+\**$/.test(key)) {
                     me._showError(me.getLocalization('invalid_characters'));
                     return false;
                 }

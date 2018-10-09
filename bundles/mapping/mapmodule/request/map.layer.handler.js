@@ -25,6 +25,8 @@ Oskari.clazz.define('map.layer.handler',
          */
         handleRequest: function (core, request) {
             var sandbox = this.layerService.getSandbox();
+            var layer;
+            var evt;
 
             if (request.getName() === 'activate.map.layer') {
                 var layerId = request.getLayerId();
@@ -34,20 +36,20 @@ Oskari.clazz.define('map.layer.handler',
                     this.mapState.deactivateLayer(layerId, request._creator);
                 }
             } else if (request.getName() === 'AddMapLayerRequest') {
-                var layer = this.layerService.findMapLayer(request.getMapLayerId());
+                layer = this.layerService.findMapLayer(request.getMapLayerId());
                 this.mapState.addLayer(layer, request._creator);
             } else if (request.getName() === 'RemoveMapLayerRequest') {
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
             } else if (request.getName() === 'RearrangeSelectedMapLayerRequest') {
                 this.mapState.moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
             } else if (request.getName() === 'ChangeMapLayerOpacityRequest') {
-                var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
+                layer = this.mapState.getSelectedLayer(request.getMapLayerId());
                 if (!layer) {
                     return;
                 }
                 layer.setOpacity(request.getOpacity());
 
-                var evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
+                evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
             } else if (request.getName() === 'ChangeMapLayerStyleRequest') {
@@ -55,13 +57,13 @@ Oskari.clazz.define('map.layer.handler',
                     // Check for magic string - should propably be removed...
                     return;
                 }
-                var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
+                layer = this.mapState.getSelectedLayer(request.getMapLayerId());
                 if (!layer) {
                     return;
                 }
                 layer.selectStyle(request.getStyle());
 
-                var evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
             }

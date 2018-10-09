@@ -1,7 +1,6 @@
 Oskari.clazz.define('Oskari.coordinatetransformation.view.CoordinateSystemInformation', function (system) {
     this.system = system;
     this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
-    this.dialog;
 }, {
     _template: {
         content: jQuery('<div class="oskari-coordinatesystem-info">' +

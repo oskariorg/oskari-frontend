@@ -10,12 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
      * @static
      */
     function () {
-        this._sandbox;
         this.started = false;
-        this._controlPlugin;
-        this._timeseriesService;
-        this._timeseriesLayerService;
-        this._controlPluginConf;
     }, {
         __name: 'timeseries',
         /**

@@ -281,6 +281,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             z = '',
             lonFirst = epsgValues.lonFirst,
             coordSystem = epsgValues.coord;
+        var header;
 
         switch (coordSystem) {
         case 'COORD_PROJ_3D':
@@ -309,12 +310,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
         if (elevSystem) {
             z = this.loc('flyout.coordinateTable.elevation');
         }
-        var header = this.template.header({
+        header = this.template.header({
             col1: x,
             col2: y,
             elev: z
         });
-        var header = jQuery(header);
+        header = jQuery(header);
         if (z === '') {
             header.find('th').addClass('two');
             header.find('.elevation').css('display', 'none');

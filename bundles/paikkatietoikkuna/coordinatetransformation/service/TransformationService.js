@@ -49,8 +49,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.TransformationService',
             return urlBase + urlParameterString;
         },
         formDataBuilder: function (importSettings, exportSettings) {
-            var file = file;
-            var settings = settings;
             var formData = new FormData();
             if (exportSettings && exportSettings.selects) {
                 formData.append('exportSettings', JSON.stringify(exportSettings.selects));

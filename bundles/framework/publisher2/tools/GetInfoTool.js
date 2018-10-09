@@ -302,7 +302,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 });
 
                 // Set the selected colour or default to 'dark_grey' if non-existant.
-                if (prevColour && prevColour.val === colours[i].val || (!prevColour && colours[i].val === 'dark_grey')) {
+                if ((prevColour && prevColour.val === colours[i].val) || (!prevColour && colours[i].val === 'dark_grey')) {
                     colourInput.find('input[type=radio]').prop('checked', true);
                     me._changeGfiColours(colours[i], content);
                 }

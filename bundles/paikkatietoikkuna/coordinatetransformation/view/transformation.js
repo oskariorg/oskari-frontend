@@ -393,7 +393,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         },
         // TODO to table
         handleCell: function (coord, cell) { // or handleRow
-            var cell = jQuery(cell).find('.cellContent');
+            cell = jQuery(cell).find('.cellContent');
             var cellValue = cell.text().replace(',', '.');
             var num = parseFloat(cellValue);
             if (isNaN(num)) { // do not update input coords

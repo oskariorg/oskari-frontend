@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
         this._filterJson = null;
-        this._WMSLayerId;
         this._internalOpened = false;
 
         this.localization = Oskari.getLocalization('MapWfs2');

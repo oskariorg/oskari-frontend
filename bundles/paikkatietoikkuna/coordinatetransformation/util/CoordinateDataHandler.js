@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
      * check different conditions if data matches to them
      */
     validateData: function (data) {
-        var lonlatKeyMatch = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
+        var lonlatKeyMatch = new RegExp(/(?:lon|lat)[:][0-9.]+[,].*,?/g);
         var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi);
 
         var matched = data.match(lonlatKeyMatch);
@@ -100,17 +100,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
      * @description constructs a object from string with lon lat keys
      */
     constructObjectFromRegExpMatch: function (data, lonlat) {
-        var matchLonLat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
+        var matchLonLat = new RegExp(/(lon|lat)[:][0-9.]+[,]?/g);
         var matchNumericComma = new RegExp(/([0-9.])+\s*,?/g);
         var numeric = new RegExp(/[0-9.]+/);
         var array = [];
+        var match;
         for (var i = 0; i < data.length; i++) {
             var lonlatObject = {};
 
             if (lonlat) {
-                var match = data[i].match(matchLonLat);
+                match = data[i].match(matchLonLat);
             } else {
-                var match = data[i].match(matchNumericComma);
+                match = data[i].match(matchNumericComma);
             }
             var lonValue = match[0].match(numeric);
             var latValue = match[1].match(numeric);

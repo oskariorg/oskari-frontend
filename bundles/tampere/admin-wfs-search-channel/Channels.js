@@ -110,12 +110,10 @@ Oskari.clazz.define(
 
             me.templates.form.find('.remove--param').on('click', function (event) {
                 jQuery(this).parent().remove();
-                event.preventDefault;
             });
 
             me.templates.form.find('select[name=choose-wfs-layer]').on('change', function (event) {
                 me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
-                event.preventDefault;
             });
 
             me.templates.form.find('input,select').each(function (index) {

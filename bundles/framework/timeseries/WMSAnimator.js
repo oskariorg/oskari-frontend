@@ -165,7 +165,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          * Releases any event handlers and any other resources
          */
         destroy: function () {
-            var p;
             for (var p in this.__eventHandlers) {
                 if (this.__eventHandlers.hasOwnProperty(p)) {
                     this._sandbox.unregisterFromEventByName(this, p);

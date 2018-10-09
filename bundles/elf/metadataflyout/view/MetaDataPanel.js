@@ -692,20 +692,21 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     color: 'rgba(255,222,0, 0.6)'
                 }
             };
+            var rn;
 
             if (coverageVisible) {
                 jQuery('a.metadata_coverage_bbox_link')
                     .removeClass('metadata-coverage-visible')
                     .html(me.instance._locale.flyout.coverage.showBBOX);
 
-                var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
                 me.instance.sandbox.postRequestByName(rn, null);
             } else {
                 jQuery('a.metadata_coverage_bbox_link')
                     .addClass('metadata-coverage-visible')
                     .html(me.instance._locale.flyout.coverage.removeBBOX);
 
-                var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                rn = 'MapModulePlugin.AddFeaturesToMapRequest';
                 me.instance.sandbox.postRequestByName(rn, [me._model.geom, {
                     layerId: 'METADATACATALOGUE_VECTORLAYER',
                     clearPrevious: true,

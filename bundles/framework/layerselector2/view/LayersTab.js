@@ -258,7 +258,7 @@ Oskari.clazz.define(
                 groupPanel.setTitle(group.getTitle());
                 groupPanel.setId(
                     'oskari_layerselector2_accordionPanel_' +
-                    group.getTitle().replace(/[^a-z0-9\-_:\.]/gi, '-')
+                    group.getTitle().replace(/[^a-z0-9\-_:.]/gi, '-')
                 );
                 group.layerListPanel = groupPanel;
 

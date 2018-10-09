@@ -39,7 +39,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
         _createContent: function (data) {
             var me = this,
                 i,
-                me = this,
                 model,
                 panel,
                 template;
@@ -305,7 +304,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             // URLs starting with http://, https://, or ftp://
             replacePattern =
-                /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+                /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
             replacedText = inputText.replace(
                 replacePattern,
                 '<a href="$1" target="_blank">$1</a>'
@@ -313,7 +312,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             // URLs starting with www.
             // (without // before it, or it'd re-link the ones done above)
-            replacePattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+            replacePattern = /(^|[^/])(www\.[\S]+(\b|$))/gim;
             replacedText = replacedText.replace(
                 replacePattern,
                 '$1<a href="http://$2" target="_blank">$2</a>'

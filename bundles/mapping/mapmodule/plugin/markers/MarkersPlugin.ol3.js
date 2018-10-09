@@ -571,6 +571,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          *                  exists, it will be changed visibility.
          */
         changeMapMarkerVisibility: function (visible, markerId) {
+            var key;
             // Check hiding for wanted marker
             if (!visible && markerId) {
                 if (this._markers[markerId]) {
@@ -583,7 +584,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             // Check hiding for all markers
             else if (!visible) {
-                for (var key in this._markers) {
+                for (key in this._markers) {
                     this._unVisibleMarkers[key] = _.cloneDeep(this._markers[key]);
                     // remove if found
                     // event is suppressed as this is "modify"
@@ -603,7 +604,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             // Check showing for all markers
             else if (visible) {
-                for (var key in this._unVisibleMarkers) {
+                for (key in this._unVisibleMarkers) {
                     this._markers[key] = _.cloneDeep(this._unVisibleMarkers[key]);
                     // remove if found
                     // event is suppressed as this is "modify"

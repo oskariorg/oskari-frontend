@@ -31,9 +31,10 @@
                     var group = null;
                     for (var n = 0; n < layers.length; ++n) {
                         var layer = layers[n];
-                        if (layer.getMetaType &&
+                        if (layer.getMetaType && (
                             layer.getMetaType() === 'published' ||
-                            layer.getMetaType() === 'myplaces') {
+                            layer.getMetaType() === 'myplaces')
+                        ) {
                             // skip published layers
                             continue;
                         }
