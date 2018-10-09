@@ -423,7 +423,7 @@ Oskari.clazz.define(
 
                 contentWrapper.append(sanitizedHtml);
 
-	            contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
+                contentWrapper.attr('id', 'oskari_' + id + '_contentWrapper');
 
                 if (actions && _.isArray(actions)) {
                     _.forEach(actions, function (action) {
@@ -901,7 +901,7 @@ Oskari.clazz.define(
             var pid,
                 popup,
                 event,
-            	sandbox = this.getMapModule().getSandbox();
+                sandbox = this.getMapModule().getSandbox();
             if (!id) {
                 for (pid in this._popups) {
                     if (this._popups.hasOwnProperty(pid)) {
@@ -934,7 +934,7 @@ Oskari.clazz.define(
                     popup.popup.close();
                 }
                 event = Oskari.eventBuilder('InfoBox.InfoBoxEvent')(id, false);
-            	sandbox.notifyAll(event);
+                sandbox.notifyAll(event);
             }
             // else notify popup not found?
         },

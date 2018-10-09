@@ -99,22 +99,22 @@ function(url, uuid) {
      * Removes prefix #-character if present
      */
     _formatColorFromServer : function(color) {
-    	if(color && color.charAt(0) == '#') {
-    		return color.substring(1);
-    	}
-    	return color;
-  	},
+        if(color && color.charAt(0) == '#') {
+            return color.substring(1);
+        }
+        return color;
+      },
     /**
      * @method  _prefixColorForServer
      * @private
      * Adds prefix #-character if not present
      */
     _prefixColorForServer : function(color) {
-    	if(color.charAt(0) != '#') {
-    		return '#' + color;
-    	}
-    	return color;
-  	},
+        if(color.charAt(0) != '#') {
+            return '#' + color;
+        }
+        return color;
+      },
 
     /**
      * @method _parseNumericId
@@ -167,9 +167,9 @@ function(url, uuid) {
         var uuid = this.uuid;
         var feats = response.features;
         if (feats == null || feats.length == 0) {
-	        if (cb) {
-	            cb();
-	        }
+            if (cb) {
+                cb();
+            }
             return;
         }
 
@@ -316,9 +316,9 @@ function(url, uuid) {
         var filter = this._createUuidFidFilter([fid]);
 
         p.filterDelete(filter, {
-        	callback: function(resp) {
-        		me._handleDeleteMyPlacesResponse(resp, list, callback);
-        	}
+            callback: function(resp) {
+                me._handleDeleteMyPlacesResponse(resp, list, callback);
+            }
         });
     },
 
@@ -440,9 +440,9 @@ function(url, uuid) {
 
         var me = this;
         p.commit(features, {
-        	headers: {
-        		'Content-Type': 'application/xml; charset=utf-8'
-        	},
+            headers: {
+                'Content-Type': 'application/xml; charset=utf-8'
+            },
             callback : function(response) {
                 me._handleCommitEditedFeaturesResponse(response, p, uuid, callback);
             }
@@ -480,13 +480,13 @@ function(url, uuid) {
         var filter = this._createUuidFidFilter([fid]);
 
         p.filterDelete(filter, {
-        	callback: function(resp) {
-        		if(resp.error) {
-        			callback(false);
-        		} else {
-        			callback(true);
-        		}
-        	}
+            callback: function(resp) {
+                if(resp.error) {
+                    callback(false);
+                } else {
+                    callback(true);
+                }
+            }
         });
     },
 
@@ -543,9 +543,9 @@ function(url, uuid) {
         features.push(feat);
 
         p.commit(features, {
-        	headers: {
-        		'Content-Type': 'application/xml; charset=utf-8'
-        	},
+            headers: {
+                'Content-Type': 'application/xml; charset=utf-8'
+            },
             callback : function(response) {
                 me._handleCommitFeedbackResponse(response, callback);
             }

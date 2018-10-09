@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.HideSelect
  */
 function() {
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'HideSelectionRequest',
     /**
      * @method getName
@@ -22,7 +22,7 @@ function() {
         return this.__name;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

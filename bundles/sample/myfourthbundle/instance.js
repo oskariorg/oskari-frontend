@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleIns
             var me = this;
 
             // Should this not come as a param?
-        	var conf = me.conf;
+            var conf = me.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
             this.sandbox = sandbox;

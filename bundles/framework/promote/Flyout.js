@@ -27,11 +27,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
         /**
      * @method setEl
      * @param {Object} el
-     * 		reference to the container in browser
+     *         reference to the container in browser
      * @param {Number} width
-     * 		container size(?) - not used
+     *         container size(?) - not used
      * @param {Number} height
-     * 		container size(?) - not used
+     *         container size(?) - not used
      *
      * Interface method implementation
      */
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
      */
         startPlugin: function () {
             this.template = jQuery('<div class="promoteContainer">' +
-        		'<div class="promoteDescription"></div>' +
+                '<div class="promoteDescription"></div>' +
                 '<div><a class="promoteSignup"></a></div>' +
                 '<div><a class="promoteRegister"></a></div>' +
             '</div>');

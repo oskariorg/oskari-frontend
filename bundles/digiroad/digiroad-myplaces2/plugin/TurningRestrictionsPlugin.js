@@ -2,7 +2,7 @@
  * @class Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictionsPlugin
  */
 Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.plugin.TurningRestrictionsPlugin', function(url) {
-	this.url = url;
+    this.url = url;
     this.mapModule = null;
     this.pluginName = null;
     this._sandbox = null;

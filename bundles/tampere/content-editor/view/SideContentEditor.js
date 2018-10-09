@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @param  {Array}    buttons buttons
          * @param  {Boolean}   isModal show message as model
          */
-    	showMessage: function (title, content, buttons, isModal) {
+        showMessage: function (title, content, buttons, isModal) {
             this.closeDialog();
             this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this._dialog.show(title, content, buttons);
@@ -363,7 +363,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             container.append(content);
             container.find('.icon-close').on('click', function () {
                 me.sendStopDrawRequest(true);
-            	me.instance.setEditorMode(false);
+                me.instance.setEditorMode(false);
             });
 
             content.find('div.header h3').append(me.loc.title);
@@ -392,8 +392,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             content.find('.content').append(jQuery('<div />').addClass('properties-container'));
 
             if (!me._checkLayerVisibility(me.layerId)) {
-            	me.isLayerVisible = false;
-            	me._changeLayerVisibility(me.layerId, true);
+                me.isLayerVisible = false;
+                me._changeLayerVisibility(me.layerId, true);
             }
             me._hideLayers();
             me._disableGFI();
@@ -623,15 +623,15 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @method @public destroy
          */
         destroy: function () {
-        	var me = this;
-        	me._showLayers();
+            var me = this;
+            me._showLayers();
 
-        	var gfiActivationRequestBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            var gfiActivationRequestBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             var request = gfiActivationRequestBuilder(true);
             me.sandbox.request(me.instance.getName(), request);
 
             if (!me.isLayerVisible) {
-            	me._changeLayerVisibility(me.layerId, false);
+                me._changeLayerVisibility(me.layerId, false);
             }
 
             this.mainPanel.remove();
@@ -647,16 +647,16 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 layer;
 
             for (i = 0; i < me.allLayers.length; i++) {
-            	if (me.allLayers[i].isVisible()) {
-            		me.allVisibleLayers.push(me.allLayers[i]);
-            	}
+                if (me.allLayers[i].isVisible()) {
+                    me.allVisibleLayers.push(me.allLayers[i]);
+                }
             }
 
             if (me.allVisibleLayers) {
                 for (i = 0; i < me.allVisibleLayers.length; i += 1) {
                     layer = me.allVisibleLayers[i];
                     if (me.layerId != layer.getId() && layer.isLayerOfType('WFS')) {
-                    	me._changeLayerVisibility(layer.getId(), false);
+                        me._changeLayerVisibility(layer.getId(), false);
                     }
                 }
             }
@@ -668,7 +668,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @private
          */
         _showLayers: function () {
-        	var me = this;
+            var me = this;
             me.allVisibleLayers.forEach(function (layer) {
                 me._changeLayerVisibility(layer.getId(), true);
             });
@@ -680,8 +680,8 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @private
          */
         _disableGFI: function () {
-        	var me = this;
-        	var gfiActivationRequestBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+            var me = this;
+            var gfiActivationRequestBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
             var request = gfiActivationRequestBuilder(false);
             me.sandbox.request(me.instance.getName(), request);
         },
@@ -694,12 +694,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @private
          */
         _checkLayerVisibility: function (layerId) {
-        	var me = this;
-        	var layer = me._getLayerById(layerId);
-        	if (layer.isVisible()) {
-        		return true;
-        	}
-        	return false;
+            var me = this;
+            var layer = me._getLayerById(layerId);
+            if (layer.isVisible()) {
+                return true;
+            }
+            return false;
         },
 
         /**
@@ -710,10 +710,10 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @private
          */
         _changeLayerVisibility: function (layerId, isVisible) {
-        	var me = this;
+            var me = this;
 
-        	var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
-        	var request = visibilityRequestBuilder(layerId, isVisible);
+            var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+            var request = visibilityRequestBuilder(layerId, isVisible);
             me.sandbox.request(me.instance.getName(), request);
         },
 
@@ -725,12 +725,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          * @private
          */
         _getLayerById: function (layerId) {
-        	var me = this;
-        	for (var i = 0; i < me.allLayers.length; i++) {
-        		if (me.allLayers[i].getId() == layerId) {
-        			return me.allLayers[i];
-        		}
-        	}
+            var me = this;
+            for (var i = 0; i < me.allLayers.length; i++) {
+                if (me.allLayers[i].getId() == layerId) {
+                    return me.allLayers[i];
+                }
+            }
         },
 
         /**
@@ -796,7 +796,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             }
 
             this.selectedLayerId = data.layerId;
-        	this.currentData = data;
+            this.currentData = data;
 
             var content = [],
                 contentData = {},

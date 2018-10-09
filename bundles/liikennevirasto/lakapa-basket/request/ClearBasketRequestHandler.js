@@ -7,21 +7,21 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequestHand
     this.flyout = flyout;
     this.tile = tile;
 }, {
-	/**
-	 * @method handleRequest
-	 * Add to basket
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * Add to basket
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
         this.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest] Clear basket');
         this.flyout.clear();
         this.tile.clear();
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

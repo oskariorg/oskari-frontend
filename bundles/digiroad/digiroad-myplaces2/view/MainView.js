@@ -237,15 +237,15 @@ function(instance) {
     },
     _showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = dialog.createCloseButton(loc.buttons.ok);
-    	var content = jQuery('<ul></ul>');
-    	for(var i = 0 ; i < errors.length; ++i) {
-    		var row = jQuery('<li></li>');
-    		row.append(errors[i]['error'])
-    		content.append(row);
-    	}
-    	dialog.show(loc.validation.title, content, [okBtn]);
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = dialog.createCloseButton(loc.buttons.ok);
+        var content = jQuery('<ul></ul>');
+        for(var i = 0 ; i < errors.length; ++i) {
+            var row = jQuery('<li></li>');
+            row.append(errors[i]['error'])
+            content.append(row);
+        }
+        dialog.show(loc.validation.title, content, [okBtn]);
     },
     /**
      * @method _saveForm
@@ -288,7 +288,7 @@ function(instance) {
         if(!values) {
             // should not happen
             var loc = me.instance.getLocalization('notification')['error'];
-    		me.instance.showMessage(loc.title, loc.savePlace);
+            me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
         var place = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.model.MyPlace');
@@ -311,7 +311,7 @@ function(instance) {
             if(blnSuccess) {
                 // add map layer to map (we could check if its already there but core will handle that)
                 var layerId = drawMode === 'line' ? 'uudet_kohteet' : 'palautekuviot';
-				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
                 var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
 
                 var request = requestBuilder(layerId, true);
@@ -337,7 +337,7 @@ function(instance) {
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];
-        		me.instance.showMessage(loc.title, loc.savePlace);
+                me.instance.showMessage(loc.title, loc.savePlace);
             }
         };
         if(drawMode === 'line') {

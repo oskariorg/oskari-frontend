@@ -82,11 +82,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          * @param {String} inputId
          */
         setIds: function (fieldId, inputId) {
-        	if (fieldId) {
-            	this._field.attr('id', fieldId);
+            if (fieldId) {
+                this._field.attr('id', fieldId);
             }
             if (inputId) {
-            	this._field.find('input').attr('id', inputId);
+                this._field.find('input').attr('id', inputId);
             }
         },
         /**

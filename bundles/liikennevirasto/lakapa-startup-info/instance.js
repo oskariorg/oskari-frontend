@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.StartupInfoBundleInsta
                 closeTxt = me._localization.button.close;
             var closeBtn = dialog.createCloseButton(closeTxt);
             dialog.onClose(function() {
-            	me.sandbox.postRequestByName('ShowHelpRequest');
+                me.sandbox.postRequestByName('ShowHelpRequest');
             });
             buttons.push(closeBtn);
             return buttons;

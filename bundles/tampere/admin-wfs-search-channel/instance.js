@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
                 }
             }
 
-		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
         },
         /**
@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
          * Oskari.mapframework.bundle.layerselection2.Tile
          */
         startExtension: function () {
-          	this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile', this);
         },
         /**

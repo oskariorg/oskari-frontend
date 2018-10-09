@@ -39,12 +39,12 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
      * @method doSearch
      *
      * Makes the actual ajax call to search service implementation
-	 * @param {String}
-	 *            searchString the query to search with
-	 * @param {Function}
-	 *            onSuccess callback method for successful search
-	 * @param {Function}
-	 *            onComplete callback method for search completion
+     * @param {String}
+     *            searchString the query to search with
+     * @param {Function}
+     *            onSuccess callback method for successful search
+     * @param {Function}
+     *            onComplete callback method for search completion
      */
         getOptions: function (onSuccess, onError) {
             jQuery.ajax({

@@ -7,14 +7,14 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHara
     this.sandbox = sandbox;
     this.plugin = plugin;
 }, {
-	/**
-	 * @method handleRequest
-	 * Start geometry search
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * Start geometry search
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHaravaDrawRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
         var visibility = request.getVisibility();
         var deleteAll = request.getDeleteAll();
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHara
         this.plugin.toggleVisibility(visibility, deleteAll);
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

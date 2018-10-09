@@ -23,11 +23,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
         return true;
     },
     /**
-	 * parses any additional fields to model
-	 * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer partially populated layer
-	 * @param {Object} mapLayerJson JSON presentation of the layer
-	 * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
-	 */
+     * parses any additional fields to model
+     * @param {Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer} layer partially populated layer
+     * @param {Object} mapLayerJson JSON presentation of the layer
+     * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
+     */
     parseLayerData: function (layer, mapLayerJson, maplayerService) {
         var me = this;
         if (layer.isFilterSupported()) {
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapanalysis.domain.AnalysisLayer
             layer.setOverrideSld(mapLayerJson.override_sld);
         }
         if (loclayer.organization) {
-		    layer.setOrganizationName(loclayer.organization);
+            layer.setOrganizationName(loclayer.organization);
         }
         if (loclayer.inspire) {
             layer.setGroups([{

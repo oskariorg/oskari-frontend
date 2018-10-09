@@ -9,18 +9,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
      * @static
      */
     function (localization) {
-    	this.loc = localization;
+        this.loc = localization;
     }, {
         __templates: {
             'main': _.template('<div>' +
-            	'</div>'),
+                '</div>'),
             'propertySelect': _.template('<div><span>${label}</span></div>'),
             'select': _.template('<select name="heatmapProperties">' +
                         '<option value="">${label}</option>' +
                         '<% props.forEach(function(value) {  %>' +
-            				'<option>${value}</option>' +
-        				'<% }); %>' +
-            		'</select>'),
+                            '<option>${value}</option>' +
+                        '<% }); %>' +
+                    '</select>'),
 
             'colorThemes': _.template('<div><span>${label}</span></div>' +
                                     '<div class="color-themes">' +
@@ -54,18 +54,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             ];
         },
 
-    	showDialog: function (layer, callback, isNew) {
-    		if (this.dialog) {
-    			this.dialog.close(true);
-    			delete this.dialog;
-    		}
-    		var me = this,
-    			dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        showDialog: function (layer, callback, isNew) {
+            if (this.dialog) {
+                this.dialog.close(true);
+                delete this.dialog;
+            }
+            var me = this,
+                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
             dialog.addClass('heatmap settings-dialog');
 
             this._createColorPickers();
-    		var content = jQuery(this.__templates.main());
+            var content = jQuery(this.__templates.main());
 
             // TODO: maybe replace radius field with a slider?
             var radiusInput = Oskari.clazz.create('Oskari.userinterface.component.NumberInput');
@@ -84,20 +84,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             jQuery(ppcInput.getElement()).find('input').attr('name', 'heatmap-input');
             content.append(ppcInput.getElement());
 
-    		var propertyElement = null;
-    		var propertySelector = null;
-    		// only show select if there is something to select
-    		if (layer.getHeatmapProperties().length > 0) {
-    			propertyElement = jQuery(this.__templates.propertySelect({
-	    			label: this.loc.propertyLabel
-	    		}));
-    			propertySelector = jQuery(this.__templates.select({
-    				label: this.loc.noneOption,
-	    			props: layer.getHeatmapProperties()
-	    		}));
-	    		propertySelector.val(layer.getWeightedHeatmapProperty());
-	    		propertyElement.append(propertySelector);
-	    		content.append(propertyElement);
+            var propertyElement = null;
+            var propertySelector = null;
+            // only show select if there is something to select
+            if (layer.getHeatmapProperties().length > 0) {
+                propertyElement = jQuery(this.__templates.propertySelect({
+                    label: this.loc.propertyLabel
+                }));
+                propertySelector = jQuery(this.__templates.select({
+                    label: this.loc.noneOption,
+                    props: layer.getHeatmapProperties()
+                }));
+                propertySelector.val(layer.getWeightedHeatmapProperty());
+                propertyElement.append(propertySelector);
+                content.append(propertyElement);
             }
 
             var colorThemes = jQuery(this.__templates.colorThemes({
@@ -169,11 +169,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.heatmap.HeatmapDialog',
             this._colorPickers[1].setHandler(colorPickerHandler);
             this._colorPickers[2].setHandler(colorPickerHandler);
 
-    		dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
+            dialog.show(this.loc.title, content, [cancelBtn, okBtn]);
             jQuery(dialog.dialog[0]).find('.actions').addClass('heatmap-actions');
-    		dialog.makeDraggable();
+            dialog.makeDraggable();
             this.dialog = dialog;
-    	},
+        },
 
         getSelectedColors: function (content) {
             this.colors = [];

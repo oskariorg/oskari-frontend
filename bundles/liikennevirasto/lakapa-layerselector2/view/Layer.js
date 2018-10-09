@@ -16,7 +16,7 @@ function(layer, sandbox, localization) {
     this.backendStatus = null;
     this.ui = this._createLayerContainer(layer);
 }, {
-	__template : '<div class="layer"><input type="checkbox" /> ' +
+    __template : '<div class="layer"><input type="checkbox" /> ' +
                 '<div class="layer-tools"><div class="layer-backendstatus-icon"></div>' +
                 '<div class="layer-icon"></div><div class="layer-info"></div></div>' +
                 '<div class="layer-title"></div>' +
@@ -48,41 +48,41 @@ function(layer, sandbox, localization) {
      */
     updateLayerContent : function(layer) {
 
-    	/* set title */
-    	var newName = layer.getName();
+        /* set title */
+        var newName = layer.getName();
         this.ui.find('.layer-title').html(newName);
 
         /* set/clear alert if required */
         var prevBackendStatus = this.backendStatus;
-       	var currBackendStatus = layer.getBackendStatus();
-       	var loc = this.localization['backendStatus'] ;
-       	var locForPrevBackendStatus = prevBackendStatus ? loc[prevBackendStatus] : null;
-       	var locForCurrBackendStatus = currBackendStatus ? loc[currBackendStatus] : null;
-       	var clsForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.iconClass : null;
-       	var clsForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.iconClass : null;
-       	var tipForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.tooltip : null;
-       	var tipForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.tooltip : null;
-		var elBackendStatus = this.ui.find('.layer-backendstatus-icon');
-		if( clsForPrevBackendStatus ) {
-			/* update or clear */
-			if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
-				elBackendStatus.removeClass(clsForPrevBackendStatus);
-			}
-		}
-		if( clsForCurrBackendStatus ) {
-			/* update or set */
-			if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
-				elBackendStatus.addClass(clsForCurrBackendStatus);
-			}
-		}
-		if( tipForCurrBackendStatus ) {
-			if( tipForPrevBackendStatus != tipForCurrBackendStatus  ) {
-				elBackendStatus.attr('title',tipForCurrBackendStatus);
-			}
-		} else if( tipForPrevBackendStatus ) {
-			elBackendStatus.attr('title','');
-		}
-		this.backendStatus = currBackendStatus;
+           var currBackendStatus = layer.getBackendStatus();
+           var loc = this.localization['backendStatus'] ;
+           var locForPrevBackendStatus = prevBackendStatus ? loc[prevBackendStatus] : null;
+           var locForCurrBackendStatus = currBackendStatus ? loc[currBackendStatus] : null;
+           var clsForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.iconClass : null;
+           var clsForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.iconClass : null;
+           var tipForPrevBackendStatus = locForPrevBackendStatus ? locForPrevBackendStatus.tooltip : null;
+           var tipForCurrBackendStatus = locForCurrBackendStatus ? locForCurrBackendStatus.tooltip : null;
+        var elBackendStatus = this.ui.find('.layer-backendstatus-icon');
+        if( clsForPrevBackendStatus ) {
+            /* update or clear */
+            if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
+                elBackendStatus.removeClass(clsForPrevBackendStatus);
+            }
+        }
+        if( clsForCurrBackendStatus ) {
+            /* update or set */
+            if( clsForPrevBackendStatus != clsForCurrBackendStatus  ) {
+                elBackendStatus.addClass(clsForCurrBackendStatus);
+            }
+        }
+        if( tipForCurrBackendStatus ) {
+            if( tipForPrevBackendStatus != tipForCurrBackendStatus  ) {
+                elBackendStatus.attr('title',tipForCurrBackendStatus);
+            }
+        } else if( tipForPrevBackendStatus ) {
+            elBackendStatus.attr('title','');
+        }
+        this.backendStatus = currBackendStatus;
 
     },
     getContainer : function() {

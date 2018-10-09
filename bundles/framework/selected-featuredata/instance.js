@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 }
             }
 
-		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
             var reqGetInfoResultHandler = Oskari.requestBuilder('GetInfoPlugin.ResultHandlerRequest')(function (content, data, formatters, params) {
@@ -257,7 +257,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * Oskari.mapframework.bundle.selected-featuredata.Tile
          */
         startExtension: function () {
-          	this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.Flyout', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.Flyout', this);
         },
         /**
          * @method stopExtension

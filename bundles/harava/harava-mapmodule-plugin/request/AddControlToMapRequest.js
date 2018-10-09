@@ -12,30 +12,30 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.AddControlToMapReque
  * @static
  */
 function(control) {
-	this._creator = null;
-	this._control = control;
+    this._creator = null;
+    this._control = control;
 }, {
     /** @static @property __name request name */
-	__name : 'AddControlToMapRequest',
+    __name : 'AddControlToMapRequest',
     /**
      * @method getName
      * @return {String} request name
      */
-	getName : function() {
-		return this.__name;
-	},
-	/**
-	 * @method getControl
-	 * @returns {OpenLayers.Control} control
-	 */
-	getControl: function(){
-		return this._control;
-	}
+    getName : function() {
+        return this.__name;
+    },
+    /**
+     * @method getControl
+     * @returns {OpenLayers.Control} control
+     */
+    getControl: function(){
+        return this._control;
+    }
 
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-	'protocol' : ['Oskari.mapframework.request.Request']
+    'protocol' : ['Oskari.mapframework.request.Request']
 });

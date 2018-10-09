@@ -18,7 +18,7 @@ function(searchMode) {
     }
     this._searchMode = searchMode;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'StartGeometrySearchRequest',
     /**
      * @method getName
@@ -34,9 +34,9 @@ function(searchMode) {
         point : 'point',
         line : 'line',
         polygon : 'polygon',
-    	regularPolygon: 'regularPolygon',
-    	mapextent: 'mapextent',
-    	pan: 'pan'
+        regularPolygon: 'regularPolygon',
+        mapextent: 'mapextent',
+        pan: 'pan'
     },
     /**
      * @method getSearchMode
@@ -46,7 +46,7 @@ function(searchMode) {
         return this._searchMode;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

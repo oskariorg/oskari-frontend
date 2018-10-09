@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.Transport
  * @static
  */
 function(transport) {
-	this._transport = transport;
+    this._transport = transport;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'TransportChangedRequest',
     /**
      * @method getName
@@ -30,7 +30,7 @@ function(transport) {
         return this._transport;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

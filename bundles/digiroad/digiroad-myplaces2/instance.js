@@ -66,14 +66,14 @@ function() {
      */
     showMessage : function(title, message) {
         var loc = this.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.buttons.ok);
-    	okBtn.addClass('primary');
-    	okBtn.setHandler(function() {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
             dialog.close(true);
-    	});
-    	dialog.show(title, message, [okBtn]);
+        });
+        dialog.show(title, message, [okBtn]);
     },
     /**
      * @method enableGfi

@@ -11,21 +11,21 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.UpdateMapRequest',
  * @static
  */
 function() {
-	this._creator = null;
+    this._creator = null;
 }, {
     /** @static @property __name request name */
-	__name : 'UpdateMapRequest',
+    __name : 'UpdateMapRequest',
     /**
      * @method getName
      * @return {String} request name
      */
-	getName : function() {
-		return this.__name;
-	}
+    getName : function() {
+        return this.__name;
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-	'protocol' : ['Oskari.mapframework.request.Request']
+    'protocol' : ['Oskari.mapframework.request.Request']
 });

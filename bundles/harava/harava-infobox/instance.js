@@ -14,128 +14,128 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.InfoBoxBundleInstance',
  * @static
  */
 function() {
-	this.sandbox = null;
-	this.started = false;
-	this.mediator = null;
+    this.sandbox = null;
+    this.started = false;
+    this.mediator = null;
 }, {
-	/**
-	 * @static
-	 * @property __name
-	 */
-	__name : 'HaravaInfobox',
+    /**
+     * @static
+     * @property __name
+     */
+    __name : 'HaravaInfobox',
 
-	/**
-	 * @method getName
-	 * @return {String} the name for the component
-	 */
-	getName : function() {
-		return this.__name;
-	},
-	/**
-	 * @method setSandbox
-	 * @param {Oskari.Sandbox} sandbox
-	 * Sets the sandbox reference to this component
-	 */
-	setSandbox : function(sbx) {
-		this.sandbox = sbx;
-	},
-	/**
-	 * @method getSandbox
-	 * @return {Oskari.Sandbox}
-	 */
-	getSandbox : function() {
-		return this.sandbox;
-	},
-	/**
-	 * @method update
-	 * implements BundleInstance protocol update method - does nothing atm
-	 */
-	update : function() {
-	},
-	/**
-	 * @method start
-	 * implements BundleInstance protocol start methdod
-	 */
-	start : function() {
-		var me = this;
-		if(me.started) {
-			return;
-		}
-		me.started = true;
-		// Should this not come as a param?
-		var sandbox = Oskari.getSandbox();
-		sandbox.register(me);
-		me.setSandbox(sandbox);
+    /**
+     * @method getName
+     * @return {String} the name for the component
+     */
+    getName : function() {
+        return this.__name;
+    },
+    /**
+     * @method setSandbox
+     * @param {Oskari.Sandbox} sandbox
+     * Sets the sandbox reference to this component
+     */
+    setSandbox : function(sbx) {
+        this.sandbox = sbx;
+    },
+    /**
+     * @method getSandbox
+     * @return {Oskari.Sandbox}
+     */
+    getSandbox : function() {
+        return this.sandbox;
+    },
+    /**
+     * @method update
+     * implements BundleInstance protocol update method - does nothing atm
+     */
+    update : function() {
+    },
+    /**
+     * @method start
+     * implements BundleInstance protocol start methdod
+     */
+    start : function() {
+        var me = this;
+        if(me.started) {
+            return;
+        }
+        me.started = true;
+        // Should this not come as a param?
+        var sandbox = Oskari.getSandbox();
+        sandbox.register(me);
+        me.setSandbox(sandbox);
 
-		for(var p in me.eventHandlers) {
-			if(p) {
-				sandbox.registerForEventByName(me, p);
-			}
-		}
+        for(var p in me.eventHandlers) {
+            if(p) {
+                sandbox.registerForEventByName(me, p);
+            }
+        }
 
-		// register plugin for map (drawing for my places)
-		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-		mapModule.registerPlugin(this.popupPlugin);
-		mapModule.startPlugin(this.popupPlugin);
-		sandbox.requestHandler('HaravaInfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
-		sandbox.requestHandler('HaravaInfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
+        // register plugin for map (drawing for my places)
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        mapModule.registerPlugin(this.popupPlugin);
+        mapModule.startPlugin(this.popupPlugin);
+        sandbox.requestHandler('HaravaInfoBox.ShowInfoBoxRequest', this.requestHandlers.showInfoHandler);
+        sandbox.requestHandler('HaravaInfoBox.HideInfoBoxRequest', this.requestHandlers.hideInfoHandler);
 
         sandbox.registerAsStateful(this.mediator.bundleId, this);
-	},
-	/**
-	 * @method init
-	 * implements Module protocol init method - initializes request handlers
-	 */
-	init : function() {
-		var me = this;
-		// register plugin for map (actual popup implementation handling)
-		this.popupPlugin = Oskari.clazz.create('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.OpenlayersPopupPlugin');
+    },
+    /**
+     * @method init
+     * implements Module protocol init method - initializes request handlers
+     */
+    init : function() {
+        var me = this;
+        // register plugin for map (actual popup implementation handling)
+        this.popupPlugin = Oskari.clazz.create('Oskari.harava.bundle.haravaInfobox.plugin.mapmodule.OpenlayersPopupPlugin');
 
-		this.requestHandlers = {
-			showInfoHandler : Oskari.clazz.create('Oskari.harava.bundle.haravaInfobox.request.ShowInfoBoxRequestHandler', this.popupPlugin),
-			hideInfoHandler : Oskari.clazz.create('Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxRequestHandler', this.popupPlugin)
+        this.requestHandlers = {
+            showInfoHandler : Oskari.clazz.create('Oskari.harava.bundle.haravaInfobox.request.ShowInfoBoxRequestHandler', this.popupPlugin),
+            hideInfoHandler : Oskari.clazz.create('Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxRequestHandler', this.popupPlugin)
 
-		};
-		return null;
-	},
-	/**
-	 * @method onEvent
-	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
-	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-	 */
-	onEvent : function(event) {
-		var me = this;
-		var handler = me.eventHandlers[event.getName()];
-		if(!handler) {
-			return;
-		}
+        };
+        return null;
+    },
+    /**
+     * @method onEvent
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+     */
+    onEvent : function(event) {
+        var me = this;
+        var handler = me.eventHandlers[event.getName()];
+        if(!handler) {
+            return;
+        }
 
-		return handler.apply(this, [event]);
-	},
+        return handler.apply(this, [event]);
+    },
     /**
      * @property {Object} eventHandlers
      * @static
      */
-	eventHandlers : {
+    eventHandlers : {
 
-	},
+    },
 
-	/**
-	 * @method stop
-	 * implements BundleInstance protocol stop method
-	 */
-	stop : function() {
-		var me = this;
+    /**
+     * @method stop
+     * implements BundleInstance protocol stop method
+     */
+    stop : function() {
+        var me = this;
         var sandbox = this.sandbox;
         sandbox.unregisterStateful(this.mediator.bundleId);
-		for(var p in me.eventHandlers) {
-			if(p) {
-				sandbox.unregisterFromEventByName(me, p);
-			}
-		}
-		me.sandbox.unregister(me);
-		me.started = false;
-	},
+        for(var p in me.eventHandlers) {
+            if(p) {
+                sandbox.unregisterFromEventByName(me, p);
+            }
+        }
+        me.sandbox.unregister(me);
+        me.started = false;
+    },
     /**
      * @method setState
      * @param {Object} state bundle state as JSON
@@ -176,9 +176,9 @@ function() {
         return state;
     }
 }, {
-	/**
-	 * @property {String[]} protocol
-	 * @static
-	 */
-	protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+    /**
+     * @property {String[]} protocol
+     * @static
+     */
+    protocol : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });

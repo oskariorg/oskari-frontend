@@ -57,7 +57,7 @@ function() {
      * @return {Oskari.Sandbox}
      */
     getSandbox : function() {
-    	var me = this;
+        var me = this;
         return me.sandbox;
     },
 
@@ -150,17 +150,17 @@ function() {
         me._createUI();
 
         // request
-    	this.requestHandlers = {
-    		AddToBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile']),
-    		ClearBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile']),
-    		RefreshBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile'])
-    	};
+        this.requestHandlers = {
+            AddToBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.AddToBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile']),
+            ClearBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile']),
+            RefreshBasketRequest : Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.RefreshBasketRequestHandler', me.sandbox, me.plugins['Oskari.userinterface.Flyout'], me.plugins['Oskari.userinterface.Tile'])
+        };
 
-    	me.sandbox.requestHandler('AddToBasketRequest', this.requestHandlers.AddToBasketRequest);
-    	me.sandbox.requestHandler('ClearBasketRequest', this.requestHandlers.ClearBasketRequest);
-    	me.sandbox.requestHandler('RefreshBasketRequest', this.requestHandlers.RefreshBasketRequest);
+        me.sandbox.requestHandler('AddToBasketRequest', this.requestHandlers.AddToBasketRequest);
+        me.sandbox.requestHandler('ClearBasketRequest', this.requestHandlers.ClearBasketRequest);
+        me.sandbox.requestHandler('RefreshBasketRequest', this.requestHandlers.RefreshBasketRequest);
 
-    	me.sandbox.registerAsStateful(me.mediator.bundleId, me);
+        me.sandbox.registerAsStateful(me.mediator.bundleId, me);
     },
 
     /**

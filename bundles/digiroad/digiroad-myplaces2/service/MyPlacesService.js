@@ -318,15 +318,15 @@ function(url, uuid, sandbox, defaultName) {
      * @param {Function} callback eventually gets called
      */
     saveEditedFeature: function(layerName, feature, callback) {
-    	var me = this;
-    	var callbackWrapper = function(success) {
-    		if(success) {
-    			me.getAllEditedFeatures();
-    			callback(true);
-    		} else {
-    			callback(false);
-    		}
-    	};
+        var me = this;
+        var callbackWrapper = function(success) {
+            if(success) {
+                me.getAllEditedFeatures();
+                callback(true);
+            } else {
+                callback(false);
+            }
+        };
 
         this.wfstStore.commitEditedFeatures('edited_elements', feature, layerName, callbackWrapper);
     },
@@ -375,7 +375,7 @@ function(url, uuid, sandbox, defaultName) {
         var me = this;
         var callbackWrapper = function(success) {
             if(success) {
-            	me.getAllNewRestrictions();
+                me.getAllNewRestrictions();
                 callback(true);
             } else {
                 callback(false);

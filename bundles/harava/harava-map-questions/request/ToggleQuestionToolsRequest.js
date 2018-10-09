@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ToggleQuestionToo
  */
 function() {
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'ToggleQuestionToolsRequest',
     /**
      * @method getName
@@ -23,7 +23,7 @@ function() {
         return this.__name;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
