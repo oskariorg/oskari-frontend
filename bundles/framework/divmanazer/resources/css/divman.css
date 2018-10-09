@@ -118,7 +118,7 @@ body {
 .oskari-flyout {
     background-color: #fafafa;
     position: absolute;
-    z-index: 16000;
+    z-index: 20000;
     margin: 0px;
     padding: 0px;
     border: 1px solid rgba(0, 0, 0, 0.2);
@@ -171,7 +171,7 @@ body {
 
     /* For some reason sass didn't like this in one line... */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#30302e', endColorstr='#2a2a2c');
-    background: linear-gradient(top, #30302e, #2a2a2c);
+    background: linear-gradient(#30302e, #2a2a2c);
 }
 
 .oskari-tile-closed:hover, .oskari-tile-minimized:hover {
@@ -183,7 +183,7 @@ body {
 
     /* For some reason sass didn't like this in one line... */
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#40403e', endColorstr='#3a3a3c');
-    background: linear-gradient(top, #40403e, #3a3a3c);
+    background: linear-gradient(#40403e, #3a3a3c);
 }
 
 .oskari-tile-container {
