@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         this._overlays = null;
         this._resizingWorkaround = null;
         this.__listeners = {};
+        this._baseZIndex = 100000;
     }, {
         /**
          * @method overlay
@@ -80,6 +81,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
                     me.followResizing();
                 }, 500);
             }
+        },
+        getZIndexForModal: function () {
+            return this._baseZIndex + 1;
         },
         close: function () {
             var me = this;

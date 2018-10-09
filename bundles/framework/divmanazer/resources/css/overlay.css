@@ -1,7 +1,7 @@
 div.oskarioverlay {
   position: absolute;
   background-color: black;
-  z-index: 17000; }
+  z-index: 100000; }
 
 .transparent {
   zoom: 1;
