@@ -13,7 +13,7 @@ Oskari.clazz
      *
      * @param {Function} filterFunction layer list filter function
      */
-        function(callback) {
+        function (callback) {
             this._callback = callback;
         }, {
         /** @static @property __name request name */
@@ -22,14 +22,14 @@ Oskari.clazz
          * @method getName
          * @return {String} request name
          */
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
             /**
          * @method getCallback
          * @return {Function} a callback
          */
-            getCallback : function() {
+            getCallback : function () {
                 return this._callback;
             }
         }, {

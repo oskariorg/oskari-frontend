@@ -5,7 +5,7 @@
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
 
-    function(sandbox) {
+    function (sandbox) {
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
         this.service = null;
@@ -15,15 +15,15 @@ Oskari.clazz.define(
          * Add featuredata filter.
          * @method  @public _registerForLayerFiltering
          */
-        _registerForLayerFiltering: function() {
+        _registerForLayerFiltering: function () {
             var me = this;
             Oskari.on('app.start', function (details) {
                 var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
-                if ( !layerlistService ) {
+                if (!layerlistService) {
                     return;
                 }
-                
+
                 layerlistService.registerLayerlistFilterButton(me.localization.layerFilter.featuredata,
                     me.localization.layerFilter.tooltip, {
                         active: 'layer-stats',
@@ -38,7 +38,7 @@ Oskari.clazz.define(
          * @param {Object} mapLayerJson JSON presentation of the layer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
-        parseLayerData: function(layer, mapLayerJson, maplayerService) {
+        parseLayerData: function (layer, mapLayerJson, maplayerService) {
             var me = this;
 
             if (layer.isLayerOfType('WFS')) {
@@ -48,7 +48,7 @@ Oskari.clazz.define(
                 toolOwnStyle.setTitle(locOwnStyle);
                 toolOwnStyle.setIconCls('show-own-style-tool');
                 toolOwnStyle.setTooltip(locOwnStyle);
-                toolOwnStyle.setCallback(function() {
+                toolOwnStyle.setCallback(function () {
                     me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId()]);
                 });
                 layer.addTool(toolOwnStyle);

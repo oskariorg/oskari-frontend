@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
         disableButtons: function () {
             var sandbox = this.instance.sandbox,
                 stateReqBuilder = Oskari.requestBuilder('Toolbar.ToolButtonStateRequest');
-            if(stateReqBuilder) {
+            if (stateReqBuilder) {
                 sandbox.request(this, stateReqBuilder(undefined, this.buttonGroup, false));
             }
         },

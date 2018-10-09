@@ -89,9 +89,9 @@ Oskari.clazz.define(
             '    <h3></h3>' +
             '  </div>' +
             '  <div class="content">' +
-            '   <div class="returnTosearch"></div>'+
+            '   <div class="returnTosearch"></div>' +
             '       <div class="info"></div>' +
-            '           <div class="showOnMapBtns"></div>'+
+            '           <div class="showOnMapBtns"></div>' +
             '               <div class="resultList"></div>' +
             '  </div>' +
             '  </div>' +
@@ -384,8 +384,8 @@ Oskari.clazz.define(
                 var searchKey = field.getValue(me.safeChars);
                 var channelIds = [];
 
-                me.optionPanel.find("input[name='channelChkBox']").each( function () {
-                    if(jQuery(this).is(':checked')){
+                me.optionPanel.find("input[name='channelChkBox']").each(function () {
+                    if (jQuery(this).is(':checked')) {
                         channelIds.push(jQuery(this).val());
                     }
                 });
@@ -465,7 +465,7 @@ Oskari.clazz.define(
          * @param  {[type]} createTab                   [description]
          * @return {[type]}                             [description]
          */
-        _getChannelsForAdvancedUi: function(searchFromChannelsContainer,advancedContainer,moreLessLink, createTab) {
+        _getChannelsForAdvancedUi: function (searchFromChannelsContainer,advancedContainer,moreLessLink, createTab) {
             var me = this;
             me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
             me._progressSpinner.insertTo(jQuery('.searchFromChannelsOptions'));
@@ -473,8 +473,8 @@ Oskari.clazz.define(
 
             me.optionService.getOptions(function (data) {
 
-                if(data.channels.length > 0){
-                    if(createTab){
+                if (data.channels.length > 0) {
+                    if (createTab) {
                     // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
                         var title = me.getLocalization('tabTitle'),
                             content = searchFromChannelsContainer,
@@ -546,8 +546,8 @@ Oskari.clazz.define(
                 mapDiv = jQuery('#contentMap'),
                 types = [];
 
-            jQuery.each(result.locations, function(index, val) {
-                if(jQuery.inArray(val.type, types) === -1) {
+            jQuery.each(result.locations, function (index, val) {
+                if (jQuery.inArray(val.type, types) === -1) {
                     types.push(val.type);
                 }
             });
@@ -625,11 +625,11 @@ Oskari.clazz.define(
             var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
                 panel = null;
 
-            jQuery.each(types, function(index, type) {
-                var results = jQuery.grep(result.locations, function(r, i){
+            jQuery.each(types, function (index, type) {
+                var results = jQuery.grep(result.locations, function (r, i) {
                     return r.type === type;
                 });
-                if(results.length>0) {
+                if (results.length > 0) {
 
                     panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     panel.setTitle(type);
@@ -684,7 +684,7 @@ Oskari.clazz.define(
                     panel.setContent(table);
                     panel.setVisible(true);
 
-                    if(types.length == 1){
+                    if (types.length == 1) {
                         panel.open();
                     }
 
@@ -743,10 +743,10 @@ Oskari.clazz.define(
          * @param  {[type]} optionPanel [description]
          * @return {[type]}             [description]
          */
-        toggleParentFlyout: function(optionPanel, searchResultWindow, mapDiv){
+        toggleParentFlyout: function (optionPanel, searchResultWindow, mapDiv) {
             var me = this;
             var menuBtn = jQuery('.oskari-tile.search');
-            if(optionPanel.parents('.oskari-flyout').is(':visible')){
+            if (optionPanel.parents('.oskari-flyout').is(':visible')) {
                 optionPanel.parents('.oskari-flyout').removeClass('oskari-attached').addClass('oskari-closed');
                 menuBtn.removeClass('oskari-tile-attached').addClass('oskari-tile-closed');
 
@@ -771,13 +771,13 @@ Oskari.clazz.define(
         _updateMapModuleSize: function (mapDiv, searchResultWindow) {
             var me = this;
 
-            if(searchResultWindow.find('div.resultList').is(':visible')){
+            if (searchResultWindow.find('div.resultList').is(':visible')) {
                 mapDiv.css('margin-left',searchResultWindow.width());
-                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width()-searchResultWindow.width());
+                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width() - searchResultWindow.width());
                 jQuery('.fullscreenDiv').hide();
-            }else{
+            } else {
                 mapDiv.css('margin-left',jQuery('#maptools').width());
-                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width()+searchResultWindow.width());
+                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width() + searchResultWindow.width());
                 jQuery('.fullscreenDiv').show();
             }
 
@@ -797,7 +797,7 @@ Oskari.clazz.define(
          * @param  {[type]} layer      [description]
          * @return {[type]}            [description]
          */
-        _clearMapFromResults: function(identifier, value, layer){
+        _clearMapFromResults: function (identifier, value, layer) {
             var me = this,
                 rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
 
@@ -808,7 +808,7 @@ Oskari.clazz.define(
          * [_getVectorLayerStyle description] Vector layer styles
          * @return {[type]} [description]
          */
-        _getVectorLayerStyle: function(){
+        _getVectorLayerStyle: function () {
 
             var featureStyle = {
                 fill: {
@@ -838,7 +838,7 @@ Oskari.clazz.define(
          * @param  {[type]} tableBody [description]
          * @return {[type]}           [description]
          */
-        _zoomMapToResults: function(result, showAll, tableBody) {
+        _zoomMapToResults: function (result, showAll, tableBody) {
             var me = this;
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 
@@ -855,17 +855,17 @@ Oskari.clazz.define(
                 center,
                 isSelected = false;
 
-            jQuery.each(result.locations, function( i, value ){
-                if(showAll){
+            jQuery.each(result.locations, function (i, value) {
+                if (showAll) {
                     me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                     feature = format.readFeature(value.GEOMETRY);
                     source.addFeatures([feature]);
                     olLayer.setSource(source);
                     isSelected = true;
-                }else{
-                    var row = tableBody.find('tr[name='+value.id+']');
+                } else {
+                    var row = tableBody.find('tr[name=' + value.id + ']');
                     var firstCell = row.find('td:first-child');
-                    if(firstCell.find('input').is(':checked')){
+                    if (firstCell.find('input').is(':checked')) {
                         me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                         feature = format.readFeature(value.GEOMETRY);
                         source.addFeatures([feature]);
@@ -876,13 +876,13 @@ Oskari.clazz.define(
 
             });
 
-            if(isSelected){
+            if (isSelected) {
 
                 bounds = source.getExtent();
                 center = olExtent.getCenter(bounds);
 
-                var topLeft =  olExtent.getTopLeft(bounds);
-                var bottomRight =  olExtent.getBottomRight(bounds);
+                var topLeft = olExtent.getTopLeft(bounds);
+                var bottomRight = olExtent.getBottomRight(bounds);
 
                 var zoom = {
                     top: topLeft[1],
@@ -894,7 +894,7 @@ Oskari.clazz.define(
                 mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
                 me.sandbox.request(me, mapmoveRequest);
 
-            }else{
+            } else {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var okBtn = dialog.createCloseButton('OK');
                 var title = me.getLocalization('no_selected_rows_alert_title');
@@ -914,9 +914,9 @@ Oskari.clazz.define(
             // row reference needs some closure magic to work here
             var closureMagic = function (scopedValue) {
                 return function () {
-                    if(resultsTableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').hasClass('active')){
+                    if (resultsTableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').hasClass('active')) {
                         me._resultClicked(scopedValue, false);
-                    }else{
+                    } else {
                         me._resultClicked(scopedValue, true);
                     }
 
@@ -957,7 +957,7 @@ Oskari.clazz.define(
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
             var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
-            if(result.zoomScale) {
+            if (result.zoomScale) {
                 zoom = {scale : result.zoomScale};
             }
 
@@ -966,7 +966,7 @@ Oskari.clazz.define(
                 moveReqBuilder(result.lon, result.lat, zoom)
             );
 
-            if(drawVector){
+            if (drawVector) {
                 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
                 sandbox.postRequestByName(rn, [result.GEOMETRY, {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), false]);
             }
@@ -979,7 +979,7 @@ Oskari.clazz.define(
                     actions: [{
                         name: loc.close,
                         type: 'link',
-                        action: function(){
+                        action: function () {
                             var rN = 'InfoBox.HideInfoBoxRequest',
                                 rB = Oskari.requestBuilder(rN),
                                 request = rB(popupId);
@@ -1009,7 +1009,7 @@ Oskari.clazz.define(
          * [_closeMapPopup description] Close map popup
          * @return {[type]} [description]
          */
-        _closeMapPopup: function (){
+        _closeMapPopup: function () {
             var me = this;
             var request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(me.popupId);
             me.sandbox.request(this, request);
@@ -1040,13 +1040,13 @@ Oskari.clazz.define(
         * @method _sortAdvanced
         * @private
         */
-        _sortAdvanced: function(a, b){
+        _sortAdvanced: function (a, b) {
             var topicA = a.locale.name;
             var topicB = b.locale.name;
-            if(topicA === null){
+            if (topicA === null) {
                 topicA = '';
             }
-            if(topicB === null){
+            if (topicB === null) {
                 topicB = '';
             }
 

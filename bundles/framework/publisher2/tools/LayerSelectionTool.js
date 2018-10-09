@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
-    function() {
+    function () {
     }, {
         index : 1,
         allowedLocations: ['top left', 'top center', 'top right'],
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
                 title: 'LayerSelectionPlugin',
@@ -42,7 +42,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 var pluginConfig = { id: this.getTool().id, config: this.getPlugin().getConfig()};
                 var layerSelection = me._getLayerSelection();
 
@@ -67,18 +67,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * Check layer selections
      * @method  @private _checkLayerSelections
      */
-        _checkLayerSelections: function(){
+        _checkLayerSelections: function () {
             var me = this,
                 layers = me._getLayersList();
 
-            for(var i=0;i<layers.length;i++){
+            for (var i = 0;i < layers.length;i++) {
                 var layer = layers[i];
-                var selected = jQuery('.background-layers[data-id='+layer.getId()+'] input:checked');
-                if(selected.length>0){
+                var selected = jQuery('.background-layers[data-id=' + layer.getId() + '] input:checked');
+                if (selected.length > 0) {
                     me.__plugin.addBaseLayer(layer);
                 }
             }
-            jQuery('.background-layers[data-id='+layer.getId()+'] input:checked').trigger('change');
+            jQuery('.background-layers[data-id=' + layer.getId() + '] input:checked').trigger('change');
 
         },
         _getLayerSelection: function () {
@@ -103,11 +103,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
         getExtraOptions: function () {
             var me = this;
             backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
-            if(!me._backgroundLayerSelector) {
+            if (!me._backgroundLayerSelector) {
                 backgroundLayerSelector.find('.header').html(me.__loc.layerselection.info);
                 me._backgroundLayerSelector = backgroundLayerSelector;
                 var layers = me._getLayersList();
-                for(var i=0;i<layers.length;i++){
+                for (var i = 0;i < layers.length;i++) {
                     var layer = layers[i];
                     me._addLayer(layer);
                 }
@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * @method  @private _addLayer Add layer to UI
      * @param {Object} layer added layer
      */
-        _addLayer: function(layer) {
+        _addLayer: function (layer) {
             var me = this;
             if (!this.hasPublishRight(layer)) {
                 return;
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             var layerDiv = me._templates.backgroundCheckbox.clone(),
                 foundedLayerDiv = me._backgroundLayerSelector.find('.layers').find('[data-id=' + layer.getId() + ']');
 
-            if(foundedLayerDiv.length>0) {
+            if (foundedLayerDiv.length > 0) {
                 return;
             }
 
@@ -211,18 +211,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * @param  {Integer} id layer id
      * @return {Boolean} true if layer must be preselect, other false
      */
-        shouldPreselectLayer: function(id){
+        shouldPreselectLayer: function (id) {
 
             var me = this;
             var isConfig = (me.data && me.data.configuration) ? true : false;
             var isPlugins = (isConfig && me.data.configuration.mapfull
             && me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
-            if(isPlugins) {
+            if (isPlugins) {
                 var plugins = me.data.configuration.mapfull.conf.plugins;
                 var toolPlugin = null;
-                for(var i=0; i<plugins.length;i++) {
+                for (var i = 0; i < plugins.length;i++) {
                     var plugin = plugins[i];
-                    if(plugin.id === me.getTool().id) {
+                    if (plugin.id === me.getTool().id) {
                         toolPlugin = plugin;
                         break;
                     }
@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 var isPluginConfig = (toolPlugin && toolPlugin.config
                 && toolPlugin.config.baseLayers) ? true : false;
 
-                if(isPluginConfig) {
+                if (isPluginConfig) {
                     var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
                     return isFound !== -1;
                 } else {
@@ -245,7 +245,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * @method  @private handleMapLayerAdd
      * @param  {Object} layer added layer
      */
-        _handleMapLayerAdd: function(layer){
+        _handleMapLayerAdd: function (layer) {
             var me = this;
             me._addLayer(layer);
         },
@@ -254,7 +254,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * @method  @private handleMapLayerRemove
      * @param  {Object} layer removed layer
      */
-        _handleMapLayerRemove: function(layer){
+        _handleMapLayerRemove: function (layer) {
             var me = this,
                 layerDiv = me._backgroundLayerSelector.find('.layers').find('[data-id=' + layer.getId() + ']');
             // TODO checked handling
@@ -287,7 +287,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 }
             }
         },
-        getName: function() {
+        getName: function () {
             return 'Oskari.mapframework.publisher.tool.LayerSelectionTool';
         },
         /**
@@ -307,7 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
     * @method stop
     * @public
     **/
-        stop: function(){
+        stop: function () {
             var me = this;
 
             jQuery('.background-layers input:checked').prop('checked', false);
@@ -318,8 +318,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                     me.__sandbox.unregisterFromEventByName(me, p);
                 }
             }
-            if(me.__plugin) {
-                if(me.__sandbox){
+            if (me.__plugin) {
+                if (me.__sandbox) {
                     me.__plugin.stopPlugin(me.__sandbox);
                 }
                 me.__mapmodule.unregisterPlugin(me.__plugin);

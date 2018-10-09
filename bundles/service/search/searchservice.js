@@ -15,17 +15,17 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
      * @param {String}
      *            searchUrl ajax URL to actual search implementation (optional)
      */
-    function(sandbox, searchUrl) {
+    function (sandbox, searchUrl) {
         this._searchUrl = searchUrl;
         this.sandbox = sandbox;
-        if(sandbox && typeof sandbox.getService == 'function') {
+        if (sandbox && typeof sandbox.getService == 'function') {
             var service = sandbox.getService(this.getQName());
-            if(service) {
+            if (service) {
                 // already registered
                 return service;
             }
             // else setup this instance
-            if(!searchUrl) {
+            if (!searchUrl) {
                 this._searchUrl = Oskari.urls.getRoute('GetSearchResult');
             }
             sandbox.requestHandler('SearchRequest', this);
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @method getQName
          * @return {String} fully qualified name for service
          */
-        getQName: function() {
+        getQName: function () {
             return this.__qname;
         },
         /** @static @property __name service name */
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @method getName
          * @return {String} service name
          */
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -58,10 +58,10 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Oskari.mapframework.bundle.search.request.SearchRequest} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             var params = request.getSearchParams();
             // backward compatibility code, can be removed in Oskari 1.36
-            if(typeof params === 'object') {
+            if (typeof params === 'object') {
                 params = params.searchKey;
             }
             this.doSearch(params);
@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Function}
          *            onComplete callback method for search completion
          */
-        doSearch: function(searchString, onSuccess, onError) {
+        doSearch: function (searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
             var evtBuilder = Oskari.eventBuilder('SearchResultEvent');
@@ -91,22 +91,22 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     'epsg': sb.getMap().getSrsName(),
                     'autocomplete': false
                 },
-                success: function(response) {
+                success: function (response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
-                    if(typeof onSuccess === 'function') {
+                    if (typeof onSuccess === 'function') {
                         onSuccess(response);
                     }
                 },
-                error: function(response) {
+                error: function (response) {
                     sb.notifyAll(evtBuilder(false, searchString, response));
-                    if(typeof onError === 'function') {
+                    if (typeof onError === 'function') {
                         onError(response);
                     }
                 }
             });
         },
-        doAutocompleteSearch: function(searchKey, onSuccess) {
-            if(typeof onSuccess !== 'function') {
+        doAutocompleteSearch: function (searchKey, onSuccess) {
+            if (typeof onSuccess !== 'function') {
                 return;
             }
             var lang = Oskari.getLang();
@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
                     'epsg': sb.getMap().getSrsName(),
                     'autocomplete': true
                 },
-                success: function(response) {
+                success: function (response) {
                     onSuccess(response);
                 }
             });

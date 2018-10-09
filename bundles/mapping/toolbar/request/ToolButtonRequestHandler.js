@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonReques
  * @param {Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance} toolbar
  *          reference to toolbarInstance that handles the buttons
  */
-    function(toolbar) {
+    function (toolbar) {
         this._toolbar = toolbar;
     }, {
     /**
@@ -24,21 +24,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonReques
      * @param {Oskari.mapframework.bundle.toolbar.request.AddToolButtonRequest/Oskari.mapframework.bundle.toolbar.request.RemoveToolButtonRequest/Oskari.mapframework.bundle.toolbar.request.ToolButtonStateRequest} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             var requestName = request.getName();
-            if(requestName === 'Toolbar.AddToolButtonRequest') {
+            if (requestName === 'Toolbar.AddToolButtonRequest') {
                 this._toolbar.addToolButton(
                     request.getId(), request.getGroup(), request.getConfig());
             }
-            else if(requestName === 'Toolbar.RemoveToolButtonRequest') {
+            else if (requestName === 'Toolbar.RemoveToolButtonRequest') {
                 this._toolbar.removeToolButton(
                     request.getId(), request.getGroup(), request.getToolbarId());
             }
-            else if(requestName === 'Toolbar.ToolButtonStateRequest') {
+            else if (requestName === 'Toolbar.ToolButtonStateRequest') {
                 this._toolbar.changeToolButtonState(
                     request.getId(), request.getGroup(), request.getState());
             }
-            else if(requestName === 'Toolbar.SelectToolButtonRequest') {
+            else if (requestName === 'Toolbar.SelectToolButtonRequest') {
                 this._toolbar._clickButton(
                     request.getId(), request.getGroup());
             }

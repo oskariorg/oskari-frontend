@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
  * @method create called automatically on construction
  * @static
  */
-    function() {
+    function () {
         this._creator = null;
 
     }, {
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         }
     }, {

@@ -17,7 +17,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================== */
-! function ($) {
+!function ($) {
 
     /* TOOLTIP PUBLIC CLASS DEFINITION
      * =============================== */
@@ -166,7 +166,7 @@
 
             $tip.removeClass('in');
 
-            function removeWithAnimation() {
+            function removeWithAnimation () {
                 var timeout = setTimeout(function () {
                     $tip.off($.support.transition.end).remove();
                 }, 500);

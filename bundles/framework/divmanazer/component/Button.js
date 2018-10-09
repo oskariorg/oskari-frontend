@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             this._element.focus();
         },
 
-        isFocus: function(){
+        isFocus: function () {
 
             return this._element === document.activeElement;
         },
@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Adds this button to given container.
          * @param {Boolean} focus
          */
-        setFocus: function(focus) {
+        setFocus: function (focus) {
 
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: setFocus is deprecated, please use focus instead.');
             if (focus && focus === true) {

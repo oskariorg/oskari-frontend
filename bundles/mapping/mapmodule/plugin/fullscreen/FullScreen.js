@@ -26,7 +26,7 @@ Oskari.clazz.define(
          * @return {jQuery}
          * Plugin jQuery element
          */
-        _createControlElement: function() {
+        _createControlElement: function () {
             var me = this;
             el = jQuery(
                 '<div class="mapplugin fullscreenDiv">' +
@@ -49,7 +49,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        _startPluginImpl : function(sandbox) {
+        _startPluginImpl : function (sandbox) {
             var me = this;
             me.setEnabled(me._enabled);
             return me.setVisible(me._visible);
@@ -60,11 +60,11 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        _stopPluginImpl : function(sandbox) {
+        _stopPluginImpl : function (sandbox) {
             this.removeFromPluginContainer(this.getElement());
         },
 
-        _getImagePath: function(image) {
+        _getImagePath: function (image) {
             return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/' + image;
         },
 
@@ -82,23 +82,23 @@ Oskari.clazz.define(
                     )
             };
         },
-        setState: function(state){
+        setState: function (state) {
             var me = this;
             me.state = state || {};
 
-            if(me.state.fullscreen) {
+            if (me.state.fullscreen) {
                 me._hideNavigation();
             } else {
                 me._showNavigation();
             }
         },
-        getState: function() {
+        getState: function () {
             var me = this;
             return me.state;
         },
-        _showNavigation: function(){
+        _showNavigation: function () {
             var me = this;
-            if(!me._element) {
+            if (!me._element) {
                 return;
             }
             me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('hide-navigation.png'));
@@ -112,9 +112,9 @@ Oskari.clazz.define(
             }
             me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         },
-        _hideNavigation: function(){
+        _hideNavigation: function () {
             var me = this;
-            if(!me._element) {
+            if (!me._element) {
                 return;
             }
             me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('show-navigation.png'));

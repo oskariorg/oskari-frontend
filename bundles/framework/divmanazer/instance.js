@@ -681,7 +681,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             }
             extensionsByName = this.extensionsByName;
             extensionInfo = extensionsByName[extension.getName()];
-            if(!extensionInfo) {
+            if (!extensionInfo) {
                 // tried to control non-existing extension
                 return;
             }
@@ -1094,7 +1094,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 };
                 me.applyTransition(flyout, 'close', me.flyoutTransitions);
 
-                if(flyoutPlugin.onClose) {
+                if (flyoutPlugin.onClose) {
                     flyoutPlugin.onClose();
                 }
             }

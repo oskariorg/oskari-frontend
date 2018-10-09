@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.LayerToolsEditMo
  * @method create called automatically on construction
  * @static
  */
-    function(inMode) {
+    function (inMode) {
         this._isInMode = inMode;
     }, {
     /** @static @property __name event name */
@@ -17,14 +17,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.LayerToolsEditMo
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getName
      * @return {String} the name for the event
      */
-        isInMode : function() {
+        isInMode : function () {
             return this._isInMode;
         }
     }, {

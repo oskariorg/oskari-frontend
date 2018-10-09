@@ -108,10 +108,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             me.backendConfiguration.formatProducers['application/pdf'] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers['application/pdf'] : null) || '';
             me.backendConfiguration.formatProducers['image/png'] = (conf && !jQuery.isEmptyObject(conf.backendConfiguration) ? conf.backendConfiguration.formatProducers['image/png'] : null) || '';
 
-            if (!me.backendConfiguration.formatProducers['application/pdf']){
+            if (!me.backendConfiguration.formatProducers['application/pdf']) {
                 me.backendConfiguration.formatProducers['application/pdf'] = Oskari.urls.getRoute('GetPrint') + '&format=application/pdf&';
             }
-            if (!me.backendConfiguration.formatProducers['image/png']){
+            if (!me.backendConfiguration.formatProducers['image/png']) {
                 me.backendConfiguration.formatProducers['image/png'] = Oskari.urls.getRoute('GetPrint') + '&format=image/png&';
             }
             // requesthandler

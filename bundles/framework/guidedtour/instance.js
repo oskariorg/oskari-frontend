@@ -127,7 +127,7 @@ Oskari.clazz.define(
             me._showGuideContentForStep(me.guideStep, dialog);
         },
 
-        _initSteps: function() {
+        _initSteps: function () {
             var me = this;
             var delegate = {
                 bundleName: me.getName(),
@@ -144,71 +144,71 @@ Oskari.clazz.define(
             this.addStep(delegate);
         },
 
-        addStep: function(delegate){
+        addStep: function (delegate) {
             var me = this;
-            if(this.conf && this.conf.steps) {
+            if (this.conf && this.conf.steps) {
                 // step ordering
                 var stepSpec = this.conf.steps;
-                var index = stepSpec.map(function(s){return s.bundleName;}).indexOf(delegate.bundleName);
-                if(delegate.bundleName !== me.getName()) {
-                    if(index < 0) {
+                var index = stepSpec.map(function (s) {return s.bundleName;}).indexOf(delegate.bundleName);
+                if (delegate.bundleName !== me.getName()) {
+                    if (index < 0) {
                         return;
                     }
                     delegate.priority = index + 1;
                 }
 
                 // custom content
-                if(index >= 0) {
+                if (index >= 0) {
                     var content = stepSpec[index].content;
                     var reRenderTarget = null;
-                    if(content){
-                        delegate.getContent = function() { // empty placeholder while loading
+                    if (content) {
+                        delegate.getContent = function () { // empty placeholder while loading
                             reRenderTarget = jQuery('<div></div>');
                             return reRenderTarget;
                         };
-                        this._getGuideContent(content, function(success, response){
-                            if(success){
-                                delegate.getContent = function() {return jQuery('<div>' + response.body + '</div>');};
-                                if(reRenderTarget) {
+                        this._getGuideContent(content, function (success, response) {
+                            if (success) {
+                                delegate.getContent = function () {return jQuery('<div>' + response.body + '</div>');};
+                                if (reRenderTarget) {
                                     reRenderTarget.prepend(response.body);
                                 }
-                                delegate.getTitle = function() {return response.title;};
+                                delegate.getTitle = function () {return response.title;};
                             } else {
-                                Oskari.log(me.getName()).error('Failed to load guided tour content for step "' +  stepSpec[index].bundleName + '" with tags: ' + content);
+                                Oskari.log(me.getName()).error('Failed to load guided tour content for step "' + stepSpec[index].bundleName + '" with tags: ' + content);
                             }
                         });
                     }
                 }
             }
-            if(typeof delegate.priority === 'number') {
-                var priorities = this._guideSteps.map(function(d){return d.priority;});
+            if (typeof delegate.priority === 'number') {
+                var priorities = this._guideSteps.map(function (d) {return d.priority;});
                 var insertLocation = _.sortedIndex(priorities, delegate.priority);
                 this._guideSteps.splice(insertLocation, 0, delegate);
-                if(this.guideStep >= insertLocation && this._guideSteps.length !== 1) { // correct current location
+                if (this.guideStep >= insertLocation && this._guideSteps.length !== 1) { // correct current location
                     this.guideStep++;
                 }
             } else {
-                delegate.priority = this._guideSteps[this._guideSteps.length-1].priority + 1;
+                delegate.priority = this._guideSteps[this._guideSteps.length - 1].priority + 1;
                 this._guideSteps.push(delegate);
             }
 
-            if(this._dialog) {
+            if (this._dialog) {
                 this._showGuideContentForStep(this.guideStep, this._dialog);
             }
         },
 
         _showGuideContentForStep: function (stepIndex, dialog) {
             var step = this._guideSteps[stepIndex];
-            if(step.show) {
+            if (step.show) {
                 step.show();
             }
             var buttons = this._getDialogButton(dialog);
-            var title = step.getTitle() +  (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length-1) + '</span>' : '');
+            var title = step.getTitle() + (stepIndex > 0 ? '<span>' + stepIndex + '/' + (this._guideSteps.length - 1) + '</span>' : '');
             var content = step.getContent();
-            if(typeof step.getLinks === 'function' && step.getLinks() !== null) {
+            if (typeof step.getLinks === 'function' && step.getLinks() !== null) {
                 var links = step.getLinks();
                 content.append('<br /><br />');
-                links.forEach(function(l){content.append(l);});
+                links.forEach(function (l) {content.append(l);});
             }
             if (stepIndex === 0 || stepIndex === this._guideSteps.length - 1) {
                 content.append('<br><br>');
@@ -222,7 +222,7 @@ Oskari.clazz.define(
                 checkbox.on(
                     'change',
                     function () {
-                        if ( jQuery(this).is(':checked') ) {
+                        if (jQuery(this).is(':checked')) {
                             // Set cookie not to show guided tour again
                             jQuery.cookie(
                                 'pti_tour_seen', '1', {
@@ -249,9 +249,9 @@ Oskari.clazz.define(
                 dialog.resetPosition();
             }
         },
-        _moveGuideStep: function(delta, dialog) {
+        _moveGuideStep: function (delta, dialog) {
             var currentStep = this._guideSteps[this.guideStep];
-            if(currentStep.hide) {
+            if (currentStep.hide) {
                 currentStep.hide();
             }
             this.guideStep += delta;
@@ -263,7 +263,7 @@ Oskari.clazz.define(
                 bn = 'Oskari.userinterface.component.Button',
                 closeTxt = me._localization.button.close;
 
-            if(this.guideStep !== this._guideSteps.length - 1){
+            if (this.guideStep !== this._guideSteps.length - 1) {
                 var closeBtn = dialog.createCloseButton(closeTxt);
                 closeBtn.setId('oskari_guidedtour_button_close');
                 buttons.push(closeBtn);
@@ -360,7 +360,7 @@ Oskari.clazz.define(
             // unregister module from sandbox
             this.sandbox.unregister(this);
         },
-        _getGuideContent: function(tags, callback){
+        _getGuideContent: function (tags, callback) {
             jQuery.ajax({
                 url: Oskari.urls.getRoute('GetArticlesByTag'),
                 data: {

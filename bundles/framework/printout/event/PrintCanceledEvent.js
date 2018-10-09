@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintCanceledEven
  * @method create called automatically on construction
  * @static
  */
-    function(state) {
+    function (state) {
         this._state = state;
     }, {
     /**
@@ -16,11 +16,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintCanceledEven
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function() {
+        getName : function () {
             return 'Printout.PrintCanceledEvent';
         },
 
-        getState: function() {
+        getState: function () {
             return this._state;
         }
     }, {

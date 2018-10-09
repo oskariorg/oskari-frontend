@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.event.BackendStatu
  * @method create called automatically on construction
  * @static
  */
-    function(layerId, status) {
+    function (layerId, status) {
         this._layerId = layerId;
         this._status = status;
     }, {
@@ -18,21 +18,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.event.BackendStatu
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getLayerId
      * @return {String/Number}
      */
-        getLayerId: function() {
+        getLayerId: function () {
             return this._layerId;
         },
         /**
      * @method getStatus
      * @return {String}
      */
-        getStatus: function() {
+        getStatus: function () {
             return this._status;
         }
     }, {

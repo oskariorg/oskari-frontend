@@ -67,7 +67,7 @@ Oskari.clazz.define(
          */
         eventHandlers: {
         },
-        stop: function() {
+        stop: function () {
             var me = this,
                 p;
             for (p in me.eventHandlers) {
@@ -79,16 +79,16 @@ Oskari.clazz.define(
         /**
          * @method createPopup Creates a popup and adds to internal bookkeeping
          */
-        createPopup: function() {
+        createPopup: function () {
             var me = this,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-            popup.onShow(function() {
+            popup.onShow(function () {
                 //add the popup to bookkeeping
                 me.popups.push(popup);
             });
 
-            popup.onClose(function() {
+            popup.onClose(function () {
                 var found = false,
                     i;
                 for (i = 0; i < me.popups.length; i++) {
@@ -112,8 +112,8 @@ Oskari.clazz.define(
          * @method closeAllPopups Close all registered popups.
          * @param {bool} closeFlyouts Optional. If provided, closes all open flyouts as well.
          */
-        closeAllPopups: function(closeFlyouts) {
-            _.each(this.popups, function(popup) {
+        closeAllPopups: function (closeFlyouts) {
+            _.each(this.popups, function (popup) {
                 //publisher toolbar seems to need this for the tools to stay intact...
                 popup.getJqueryContent().detach();
                 popup.close();

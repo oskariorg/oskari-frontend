@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Tile',
             this.refresh();
         },
 
-        _addTileStyleClasses: function() {
+        _addTileStyleClasses: function () {
             var isContainer = (this.container && this.instance.mediator) ? true : false;
             var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
             var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;

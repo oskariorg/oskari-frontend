@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.service.LicenseService
  */
 Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
-    function(instance, licenseServiceUrl) {
+    function (instance, licenseServiceUrl) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._licenseServiceUrl = licenseServiceUrl;
@@ -151,18 +151,18 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 dataType : 'json',
                 type : 'GET',
                 data: data,
-                beforeSend: function(x) {
+                beforeSend: function (x) {
                     me._pendingAjaxQuery['licenseInformation'].jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl,
-                error : function() {
+                error : function () {
                     me._finishAjaxRequest('licenseInformation');
                     errorCb();
                 },
-                success : function(data) {
+                success : function (data) {
                     me._finishAjaxRequest('licenseInformation');
                     successCb(data);
                 },
@@ -203,18 +203,18 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 dataType : 'json',
                 type : 'POST',
                 data: data,
-                beforeSend: function(x) {
+                beforeSend: function (x) {
                     me._pendingAjaxQuery['getPrice'].jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl,
-                error : function(jqXHR) {
+                error : function (jqXHR) {
                     me._finishAjaxRequest('getPrice');
                     errorCb(jqXHR);
                 },
-                success : function(data) {
+                success : function (data) {
                     me._finishAjaxRequest('getPrice');
                     successCb(data);
                 },
@@ -255,18 +255,18 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
                 dataType : 'json',
                 type : 'PUT',
                 data: data,
-                beforeSend: function(x) {
+                beforeSend: function (x) {
                     me._pendingAjaxQuery['concludeLicense'].jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl,
-                error : function(jqXHR) {
+                error : function (jqXHR) {
                     me._finishAjaxRequest('concludeLicense');
                     errorCb(jqXHR);
                 },
-                success : function(data) {
+                success : function (data) {
                     me._finishAjaxRequest('concludeLicense');
                     successCb(data);
                 },
@@ -306,18 +306,18 @@ Oskari.clazz.define('Oskari.elf.license.service.LicenseService',
             jQuery.ajax({
                 dataType : 'json',
                 type : 'DELETE',
-                beforeSend: function(x) {
+                beforeSend: function (x) {
                     me._pendingAjaxQuery['deactivateLicense'].jqhr = x;
                     if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url : me._licenseServiceUrl + '&' + jQuery.param(data),
-                error : function(jqXHR) {
+                error : function (jqXHR) {
                     me._finishAjaxRequest('deactivateLicense');
                     errorCb(jqXHR);
                 },
-                success : function(data) {
+                success : function (data) {
                     me._finishAjaxRequest('deactivateLicense');
                     successCb(data);
                 },

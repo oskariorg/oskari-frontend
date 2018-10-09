@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
  * @param {String}
  *            toolId id for the tool to select
  */
-    function(toolId) {
+    function (toolId) {
         this._toolId = toolId;
     }, {
     /** @static @property tools available tools to select */
@@ -31,21 +31,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getToolId
      * @return {String}
      */
-        getToolId : function() {
+        getToolId : function () {
             return this._toolId;
         },
         /**
      * @method setToolId
      * @param {String} toolId
      */
-        setToolId : function(toolId) {
+        setToolId : function (toolId) {
             this._toolId = toolId;
         },
         /**
@@ -53,8 +53,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
      * If the toolId has . this returns the first part of the toolId, otherwise returns empty string
      * @return {String}
      */
-        getNamespace : function() {
-            if(this._toolId.indexOf('.') == -1) {
+        getNamespace : function () {
+            if (this._toolId.indexOf('.') == -1) {
                 return '';
             }
             // This should basically be the this._name of the sender
@@ -65,8 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ToolSelectionR
      * If the toolId has . this returns the last part of the toolId, otherwise returns the toolId as is
      * @return {String}
      */
-        getToolName : function() {
-            if(this._toolId.indexOf('.') == -1) {
+        getToolName : function () {
+            if (this._toolId.indexOf('.') == -1) {
                 return this._toolId;
             }
             return this._toolId.substring(this._toolId.lastIndexOf('.'));

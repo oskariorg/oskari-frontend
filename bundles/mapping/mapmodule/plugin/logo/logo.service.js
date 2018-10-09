@@ -6,13 +6,13 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
  * @method create called automatically on construction
  * @static
  */
-    function(sandbox) {
-        if(!sandbox) {
+    function (sandbox) {
+        if (!sandbox) {
             return null;
         }
         this.sandbox = sandbox;
         var me = sandbox.getService(this.getQName());
-        if(me) {
+        if (me) {
             return me;
         }
         this.labels = [];
@@ -21,13 +21,13 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
     }, {
         __name: 'map.logo.service',
         __qname : 'Oskari.map.LogoPluginService',
-        getQName : function() {
+        getQName : function () {
             return this.__qname;
         },
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
-        getLabels: function() {
+        getLabels: function () {
             var currentLabels = this.labels;
             this.labels = [];
             return currentLabels;
@@ -37,8 +37,8 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
    * @param {String} title
    * @param {Object} options {id, callback}
    */
-        addLabel: function( title, options) {
-            if(typeof title === undefined) {
+        addLabel: function (title, options) {
+            if (typeof title === undefined) {
                 return;
             }
             this.labels.push({ title: title, options: options || {} });

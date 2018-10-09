@@ -6,28 +6,28 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
     this.helper = helper;
     Oskari.makeObservable(this);
 }, {
-    getName: function() {
+    getName: function () {
         return 'Oskari.coordinatetransformation.CoordinateDataHandler';
     },
     getInputCoords: function () {
         return this.inputCoords;
     },
-    addInputCoord: function (coord){
+    addInputCoord: function (coord) {
         this.inputCoords.push(coord);
         //this.trigger('InputCoordAdded', coord);
         this.trigger('InputCoordsChanged', this.inputCoords);
     },
-    setInputCoords: function (coords, suppressEvent){
+    setInputCoords: function (coords, suppressEvent) {
         this.inputCoords = coords;
         //don't render input table
-        if (suppressEvent !== true){
+        if (suppressEvent !== true) {
             this.trigger('InputCoordsChanged', coords);
         }
     },
     hasInputCoords: function () {
         return this.inputCoords.length !== 0;
     },
-    getResultCoords: function() {
+    getResultCoords: function () {
         return this.resultCoords;
     },
     hasResultCoords: function () {
@@ -55,8 +55,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         this.mapCoords.push(coord);
         return id;
     },
-    removeMapCoord: function (id){
-        var checkId = function (coord){
+    removeMapCoord: function (id) {
+        var checkId = function (coord) {
             return coord.id !== id;
         };
         this.mapCoords = this.mapCoords.filter(checkId);
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         var mapCoord;
         var markerId;
         var label;
-        this.inputCoords.forEach(function(coord){
+        this.inputCoords.forEach(function (coord) {
             mapCoord = me.helper.getLonLatObj(coord, lonFirst);
             markerId = me.addMapCoord(mapCoord);
             label = me.helper.getLabelForMarker(mapCoord);
@@ -80,18 +80,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
      * @method validateData
      * check different conditions if data matches to them
      */
-    validateData: function( data ) {
+    validateData: function (data) {
         var lonlatKeyMatch = new RegExp(/(?:lon|lat)[\:][0-9.]+[\,].*,?/g);
         var numericWhitespaceMatch = new RegExp(/^[0-9.]+,+\s[0-9.]+,/gmi);
-        
-        var matched = data.match( lonlatKeyMatch );
-        var numMatch = data.match( numericWhitespaceMatch );
 
-        if( matched !== null ) {
-            return this.constructObjectFromRegExpMatch( matched, true );
+        var matched = data.match(lonlatKeyMatch);
+        var numMatch = data.match(numericWhitespaceMatch);
+
+        if (matched !== null) {
+            return this.constructObjectFromRegExpMatch(matched, true);
         } else {
-            if( numMatch !== null ) {
-                return this.constructObjectFromRegExpMatch( numMatch, false );
+            if (numMatch !== null) {
+                return this.constructObjectFromRegExpMatch(numMatch, false);
             }
         }
     },
@@ -99,15 +99,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
      * @method constructObjectFromRegExpMatch
      * @description constructs a object from string with lon lat keys
      */
-    constructObjectFromRegExpMatch: function ( data, lonlat ) {
+    constructObjectFromRegExpMatch: function (data, lonlat) {
         var matchLonLat = new RegExp(/(lon|lat)[\:][0-9.]+[\,]?/g);
         var matchNumericComma = new RegExp(/([0-9.])+\s*,?/g);
         var numeric = new RegExp(/[0-9.]+/);
         var array = [];
-        for ( var i = 0; i < data.length; i++ ) {
+        for (var i = 0; i < data.length; i++) {
             var lonlatObject = {};
 
-            if( lonlat ) {
+            if (lonlat) {
                 var match = data[i].match(matchLonLat);
             } else {
                 var match = data[i].match(matchNumericComma);
@@ -125,12 +125,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
      * @method constructLonLatObjectFromArray
      * @description array -> object with lon lat keys
      */
-    constructLonLatObjectFromArray: function ( data ) {
+    constructLonLatObjectFromArray: function (data) {
         var obj = {};
-        if ( Array.isArray( data ) ) {
-            for ( var i in data ) {
-                if( Array.isArray(data[i]) ) {
-                    for ( var j = 0; j < data[i].length; j++ ) {
+        if (Array.isArray(data)) {
+            for (var i in data) {
+                if (Array.isArray(data[i])) {
+                    for (var j = 0; j < data[i].length; j++) {
                         obj[i] = {
                             lon: data[i][0],
                             lat: data[i][1]
@@ -144,12 +144,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
 
     //generic -> to helper??
     //lonLatCoordToArray or addLonLatCoordToArray (array,..)
-    lonLatCoordToArray: function ( coord, lonFirst){
+    lonLatCoordToArray: function (coord, lonFirst) {
         var arr = [];
-        if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number'){
+        if (typeof coord.lon !== 'number' && typeof coord.lat !== 'number') {
             return arr;
         }
-        if (lonFirst === true){
+        if (lonFirst === true) {
             arr.push(coord.lon);
             arr.push(coord.lat);
         } else {
@@ -159,23 +159,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         return arr;
     },
     //generic -> to helper??
-    arrayCoordToLonLat: function (coord, lonFirst){
+    arrayCoordToLonLat: function (coord, lonFirst) {
         var obj = {};
-        if (lonFirst === true){
+        if (lonFirst === true) {
             obj.lon = coord[0];
             obj.lat = coord[1];
-        }else{
+        } else {
             obj.lat = coord[0];
             obj.lon = coord[1];
         }
         return obj;
     },
-    addMapCoordsToInput: function (addBln){
+    addMapCoordsToInput: function (addBln) {
         var mapCoords = this.getMapCoords();
         var coords = [];
         var lonFirst = this.helper.getMapEpsgValues().lonFirst;
-        if (addBln === true){
-            for (var i = 0 ; i < mapCoords.length ; i++ ) {
+        if (addBln === true) {
+            for (var i = 0 ; i < mapCoords.length ; i++) {
                 coords.push(this.lonLatCoordToArray(mapCoords[i], lonFirst));
             }
             this.setInputCoords(coords);
@@ -191,10 +191,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         this.trigger('InputCoordsChanged', this.inputCoords);
         this.trigger('ResultCoordsChanged', this.resultCoords);
     },
-    checkCoordsArrays: function(){
+    checkCoordsArrays: function () {
         var input = this.inputCoords.length,
             result = this.resultCoords.length;
-        if (input !== 0 && result !==0){
+        if (input !== 0 && result !== 0) {
             return input === output;
         }
     }

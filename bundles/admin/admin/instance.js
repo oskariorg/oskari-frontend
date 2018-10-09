@@ -19,15 +19,15 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminBundleInstance',
          * @param  {[Oskari.userinterface.component.Button]} buttons  [description]
          * @param  {Object} location where to show dialog - should have keys 'target' for selector and 'align' for alignment around target
          */
-        showMessage: function(title, content, buttons, location) {
+        showMessage: function (title, content, buttons, location) {
             this.closeDialog();
             this._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this._dialog.show(title, content, buttons);
-            if(location) {
+            if (location) {
                 this._dialog.moveTo(location.target, location.align);
             }
         },
-        afterStart : function() {
+        afterStart : function () {
 
             // register request handler
             this.getSandbox().requestHandler('Admin.AddTabRequest', this.getFlyout());
@@ -35,8 +35,8 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminBundleInstance',
         /**
          * Closes the message dialog if one is open
          */
-        closeDialog : function() {
-            if(this._dialog) {
+        closeDialog : function () {
+            if (this._dialog) {
                 this._dialog.close(true);
                 this._dialog = null;
             }

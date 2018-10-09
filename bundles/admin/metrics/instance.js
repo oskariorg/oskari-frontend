@@ -12,10 +12,10 @@ Oskari.clazz.define('Oskari.admin.bundle.metrics.MetricsAdminBundleInstance',
 
     function () {
     }, {
-        getName : function() {
+        getName : function () {
             return 'AdminMetrics';
         },
-        start : function() {
+        start : function () {
             var me = this;
             var sandbox = Oskari.getSandbox();
             sandbox.register(this);
@@ -25,10 +25,10 @@ Oskari.clazz.define('Oskari.admin.bundle.metrics.MetricsAdminBundleInstance',
                 dataType : 'json',
                 type : 'GET',
                 url : Oskari.urls.getRoute('Metrics'),
-                error : function() {
+                error : function () {
                     content.append('Error loading metrics');
                 },
-                success : function(response) {
+                success : function (response) {
                     content.tree({ 'data' : me.formatData(response)});
                 }
             });
@@ -38,13 +38,13 @@ Oskari.clazz.define('Oskari.admin.bundle.metrics.MetricsAdminBundleInstance',
                 sandbox.request(this, request);
             }
         },
-        formatData : function(metricsData) {
+        formatData : function (metricsData) {
             var me = this;
-            return _.map(metricsData, function(value, key) {
+            return _.map(metricsData, function (value, key) {
                 var res = {
                     label : key
                 };
-                if(typeof value === 'object') {
+                if (typeof value === 'object') {
                     res.children = me.formatData(value);
                 }
                 else {
@@ -54,13 +54,13 @@ Oskari.clazz.define('Oskari.admin.bundle.metrics.MetricsAdminBundleInstance',
             });
         },
         // module boilerplate methods
-        init: function() {
+        init: function () {
 
         },
-        stop : function() {
+        stop : function () {
 
         },
-        update : function() {
+        update : function () {
 
         }
     }, {

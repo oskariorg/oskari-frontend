@@ -19,12 +19,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
         this.ui = this._createLayerContainer(layer);
     }, {
         __template: '<div class="layer"><input type="checkbox" /> ' +
-                    '<div class="layer-tools">'+
+                    '<div class="layer-tools">' +
                     '   <div class="layer-not-supported icon-warning-light" title="" ></div>' +
                     '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
-                    '   <div class="layer-icon-secondary"></div>'+
-                    '   <div class="layer-icon"></div>'+
-                    '   <div class="layer-info"></div>'+
+                    '   <div class="layer-icon-secondary"></div>' +
+                    '   <div class="layer-icon"></div>' +
+                    '   <div class="layer-info"></div>' +
                     '</div>' +
                     '<div class="layer-title"></div>' +
         '</div>',
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
                 // I'll just leave this like it was on old implementation
                 icon.attr('title', tooltips['type-wms']);
             } else if (layer.isLayerOfType('WFS')) {
-                if(layer.isManualRefresh()) {
+                if (layer.isManualRefresh()) {
                     icon.attr('title', tooltips['type-wfs-manual']);
                 }
                 else {
@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
             layerDiv.find('input').attr('id', 'oskari_layerselector2_layerlist_checkbox_layerid_' + layer.getId());
             layerDiv.find('.layer-title')
                 .append(layer.getName())
-                .on('click', function(){
+                .on('click', function () {
                     layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
                 })
                 .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));

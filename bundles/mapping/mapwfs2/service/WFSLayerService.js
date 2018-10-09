@@ -123,7 +123,7 @@ Oskari.clazz.define(
                 layers = me.sandbox.findAllSelectedMapLayers(),
                 topWFSLayer;
 
-            for (i=0; i < layers.length; i++ ) {
+            for (i = 0; i < layers.length; i++) {
                 var layer = layers[i];
                 if (layer.hasFeatureData()) {
                     topWFSLayer = layer._id;
@@ -154,7 +154,7 @@ Oskari.clazz.define(
                     existingFeatureSelections.push(featureIds);
                 } else {
                     //existing selections found -> just add the features that weren't previously selected
-                    _.each(featureIds, function(featureId) {
+                    _.each(featureIds, function (featureId) {
                         // add the features that weren't previously selected
                         if (existingFeatureSelections[0].indexOf(featureId) < 0) {
                             existingFeatureSelections[0].push(featureId);
@@ -219,9 +219,9 @@ Oskari.clazz.define(
          *
          * Convenience function to clear selections from all WFS layers
          */
-        emptyAllWFSFeatureSelections: function() {
+        emptyAllWFSFeatureSelections: function () {
             var me = this;
-            _.each(this.WFSFeatureSelections, function(selection) {
+            _.each(this.WFSFeatureSelections, function (selection) {
                 var layer = me.sandbox.findMapLayerFromSelectedMapLayers(selection.layerId);
                 me.emptyWFSFeatureSelections(layer);
             });
@@ -267,10 +267,10 @@ Oskari.clazz.define(
             return this.selectionToolsActive;
         },
 
-        getAnalysisWFSLayerId: function() {
+        getAnalysisWFSLayerId: function () {
             return this.analysisWFSLayerId;
         },
-        setAnalysisWFSLayerId: function(layerId) {
+        setAnalysisWFSLayerId: function (layerId) {
             this.analysisWFSLayerId = layerId;
         }
     });

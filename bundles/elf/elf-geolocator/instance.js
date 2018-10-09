@@ -2,7 +2,7 @@
  * @class Oskari.elf.geolocator.BundleInstance
  */
 Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
-    function() {
+    function () {
         this.searchUrl = undefined;
     }, {
         __name : 'elf-geolocator',
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
             }
 
             var sandbox = this.getSandbox(),
-                zoom =  sandbox.getMap().getZoom(),
+                zoom = sandbox.getMap().getZoom(),
                 srsName = sandbox.getMap().getSrsName(),
                 lonlat = {
                     lon: result.lon,

@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
  * @method create called automatically on construction
  * @static
  */
-    function(name,viewClazz) {
+    function (name,viewClazz) {
         this.sandbox = null;
         this.plugins = {};
         this._localization = null;
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * Extension protocol method
      * @return {String} localized text for the title of the component
      */
-        getTitle : function() {
+        getTitle : function () {
             return this.getLocalization('title');
         },
         /**
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * Extension protocol method
      * @return {String} localized text for the description of the component
      */
-        getDescription : function() {
+        getDescription : function () {
             return this.getLocalization('desc');
         },
         /**
@@ -63,14 +63,14 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * Convenience method to call from Tile and Flyout
      * @return {Oskari.Sandbox}
      */
-        getSandbox : function() {
+        getSandbox : function () {
             return this.sandbox;
         },
         /**
      * @method update
      * BundleInstance protocol method
      */
-        update : function() {
+        update : function () {
         },
         /**
      * @method getLocalization
@@ -83,11 +83,11 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      *      JSON object for complete data depending on localization
      *      structure and if parameter key is given
      */
-        getLocalization : function(key) {
-            if(!this._localization) {
+        getLocalization : function (key) {
+            if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
-            if(key) {
+            if (key) {
                 return this._localization[key];
             }
             return this._localization;
@@ -96,10 +96,10 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * @method start
      * BundleInstance protocol method
      */
-        start : function() {
+        start : function () {
             var me = this;
             var conf = me.conf ;
-            var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+            var sandboxName = (conf ? conf.sandbox : null) || 'sandbox' ;
             var sandbox = Oskari.getSandbox(sandboxName);
 
             me.sandbox = sandbox;
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * @method stop
      * BundleInstance protocol method
      */
-        stop : function() {
+        stop : function () {
             var sandbox = this.sandbox;
 
             /* sandbox cleanup */
@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * @method startExtension
      * Extension protocol method
      */
-        startExtension : function() {
+        startExtension : function () {
             var me = this;
             var sandbox = me.sandbox;
             var locFlyout = me.getLocalization('flyout');
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
             var view = Oskari.clazz.create(viewCls,this.getLocalization('view'),this,this.getConfiguration());
             this.view = view;
 
-            for(p in view.eventHandlers) {
+            for (p in view.eventHandlers) {
                 sandbox.registerForEventByName(view, p);
             }
 
@@ -162,15 +162,15 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * @method stopExtension
      * Extension protocol method
      */
-        stopExtension : function() {
+        stopExtension : function () {
             var me = this;
             var sandbox = me.sandbox;
             var view = me.view;
-            for(p in view.eventHandlers) {
+            for (p in view.eventHandlers) {
                 sandbox.unregisterFromEventByName(view, p);
             }
-            for(var pluginType in me.plugins) {
-                if(pluginType) {
+            for (var pluginType in me.plugins) {
+                if (pluginType) {
                     me.plugins[pluginType] = null;
                 }
             }
@@ -179,25 +179,25 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
      * @method getPlugins
      * Extension protocol method
      */
-        getPlugins : function() {
+        getPlugins : function () {
             return this.plugins;
         },
 
-        'init' : function() {
+        'init' : function () {
             return null;
         },
         /**
      * @method getName
      * Module protocol method
      */
-        getName : function() {
+        getName : function () {
             return this._name;
         },
 
         /**
      * @method getConfiguration
      */
-        getConfiguration : function() {
+        getConfiguration : function () {
             return this.conf;
         }
 

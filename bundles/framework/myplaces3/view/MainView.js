@@ -41,11 +41,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          * @method getPopupId
          * @return {String} popupid
          */
-        getPopupId: function (){
+        getPopupId: function () {
             return this.popupId;
         },
 
-        getForm: function(){
+        getForm: function () {
             return this.form;
         },
         /**
@@ -114,15 +114,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
 
             'DrawingEvent': function (event) {
                 if (event.getId() === this.instance.getName()) {
-                    if (this.instance.isEditPlace()){
-                        if (event.getIsFinished()){
+                    if (this.instance.isEditPlace()) {
+                        if (event.getIsFinished()) {
                             this.drawing = event.getGeoJson();
                             this.drawingData = event.getData();
                         } else {
                             //update measurement result
                             this._setMeasurementResult(event.getData());
                         }
-                    }else if(this.instance.isFinishedDrawing()){
+                    } else if (this.instance.isFinishedDrawing()) {
                         this._handleFinishedDrawingEvent (event);
                     }
                 }
@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
          */
         _handleFinishedDrawingEvent: function (event) {
             this.drawing = event.getGeoJson();
-            if (this.drawing.features && this.drawing.features.length === 0){
+            if (this.drawing.features && this.drawing.features.length === 0) {
                 //no features, user clicks save my place without valid geometry
                 this.instance.showMessage(this.loc('notification.error.title'), this.loc('notification.error.savePlace'));
                 //should we start new drawing?? and inform user that line should have atleast 2 points and area 3 points
@@ -147,11 +147,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             this.drawingData = event.getData();
             this.showPlaceForm(location);
         },
-        _setMeasurementResult: function (drawingData){
-            if (this.form && drawingData){
-                if (drawingData.shape === 'LineString'){
+        _setMeasurementResult: function (drawingData) {
+            if (this.form && drawingData) {
+                if (drawingData.shape === 'LineString') {
                     this.form.setMeasurementResult(drawingData.length, 'line');
-                } else if (drawingData.shape === 'Polygon'){
+                } else if (drawingData.shape === 'Polygon') {
                     this.form.setMeasurementResult(drawingData.area, 'area');
                 }
             }
@@ -269,7 +269,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
                 ret = 'point';
             } else if (type === 'MultiLineString' || type === 'LineString') {
                 ret = 'line';
-            } else if (type === 'MultiPolygon'|| type === 'Polygon') {
+            } else if (type === 'MultiPolygon' || type === 'Polygon') {
                 ret = 'area';
             }
             return ret;
@@ -419,12 +419,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
             place.setDescription(Oskari.util.sanitize(values.desc));
             place.setAttentionText(Oskari.util.sanitize(values.attention_text));
             place.setCategoryId(values.category);
-            if (drawing){
+            if (drawing) {
                 place.setDrawToolsMultiGeometry(drawing);
             } else if (this.tempGeom) {
                 place.setGeometry(this.tempGeom); // if not edited
             }
-            if (values.category !== oldCategory){
+            if (values.category !== oldCategory) {
                 isMovePlace = true;
             }
 

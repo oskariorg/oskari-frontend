@@ -1,6 +1,6 @@
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFilterPlugin.request.StartDrawFilteringRequest',
 
-    function(config) {
+    function (config) {
         if (config.geometry) {
         // editing existing
             this._geometry = config.geometry;
@@ -22,11 +22,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
 
     }, {
         __name : 'DrawFilterPlugin.StartDrawFilteringRequest',
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
-        isModify : function() {
+        isModify : function () {
             if (this._continueCurrent) {
                 return true;
             }
@@ -40,15 +40,15 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
             remove : 'remove'
         },
 
-        getMode : function() {
+        getMode : function () {
             return this._mode;
         },
 
-        getGeometry : function() {
+        getGeometry : function () {
             return this._geometry;
         },
 
-        getSourceGeometry : function() {
+        getSourceGeometry : function () {
             return this._sourceGeometry;
         }
     }, {

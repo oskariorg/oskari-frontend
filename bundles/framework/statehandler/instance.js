@@ -329,7 +329,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                             allInvisible = false;
                         }
                     }
-                    if(allInvisible){
+                    if (allInvisible) {
                         //Don't save state when all are invisible
                         return false;
                     }

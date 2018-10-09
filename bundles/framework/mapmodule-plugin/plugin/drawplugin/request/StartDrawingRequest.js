@@ -1,6 +1,6 @@
 Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.request.StartDrawingRequest',
 
-    function(config) {
+    function (config) {
     // TODO: do we pass selected category colors here?
         if (config.geometry) {
         // editing existing
@@ -18,11 +18,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.r
 
     }, {
         __name : 'DrawPlugin.StartDrawingRequest',
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
 
-        isModify : function() {
+        isModify : function () {
             return this._continueCurrent;
         },
 
@@ -34,11 +34,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.r
             box : 'box'
         },
 
-        getDrawMode : function() {
+        getDrawMode : function () {
             return this._drawMode;
         },
 
-        getGeometry : function() {
+        getGeometry : function () {
             return this._geometry;
         }
     }, {

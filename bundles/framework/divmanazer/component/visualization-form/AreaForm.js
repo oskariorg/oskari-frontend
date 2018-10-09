@@ -21,8 +21,8 @@ Oskari.clazz.define(
             lineWidth: this.defaultValues.line.width,
             lineCorner: this.defaultValues.line.corner,
             lineStyle: this.defaultValues.line.style,
-            lineColor: '#'+this.defaultValues.line.color,
-            fillColor: '#'+this.defaultValues.fill.color,
+            lineColor: '#' + this.defaultValues.line.color,
+            fillColor: '#' + this.defaultValues.fill.color,
             fillStyle: this.defaultValues.fill.style
         };
 
@@ -268,20 +268,20 @@ Oskari.clazz.define(
             me._colorPickers[0].setValue(me.values['lineColor']);
             me._colorPickers[1].setValue(me.values['fillColor']);
 
-            colorPickerLineWrapper.on('change', function() {
+            colorPickerLineWrapper.on('change', function () {
                 me.values['lineColor'] = me._colorPickers[0].getValue();
                 me._updatePreview(dialogContent);
             });
 
-            colorPickerFillWrapper.on('change', function() {
+            colorPickerFillWrapper.on('change', function () {
                 me.values['fillColor'] = me._colorPickers[1].getValue();
                 me._updatePreview(dialogContent);
             });
 
             // remove color links
-            ['line', 'fill'].forEach(function(type, index){
+            ['line', 'fill'].forEach(function (type, index) {
                 content = dialogContent.find('.remove-color-' + type);
-                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).on('click', function(e){
+                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).on('click', function (e) {
                     e.preventDefault();
 
                     if (me.activeColorCell[index] > -1) {
@@ -298,7 +298,7 @@ Oskari.clazz.define(
                     jQuery('#color-checkbox-' + index).prop('checked', false);
                     jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
 
-                    if(type === 'fill'){
+                    if (type === 'fill') {
                         me._colorPickers[1].setValue(null);
                         if (me.values.fillStyle !== -1) {
                             me._styleUnselectedButton(jQuery('div#' + me.values.fillStyle + 'fillstyle.icon-button'));
@@ -550,7 +550,7 @@ Oskari.clazz.define(
          * Creates an array of color picker components
          * @private
          */
-        _createColorPickers: function() {
+        _createColorPickers: function () {
             var options = {allowEmpty: true};
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),

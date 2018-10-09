@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
      * @method create called automatically on construction
      */
     function () {
-        
+
         var me = this;
         me._clazz = 'Oskari.userinterface.component.MultiLevelSelect';
         me._element = document.createElement('fieldset');
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
             // Call destroy on selects
             var i;
             if (!cleanup) {
-                for (i = this._selects.length -1; i >= 0; i -= 1) {
+                for (i = this._selects.length - 1; i >= 0; i -= 1) {
                     this._selects.pop().destroy(true);
                 }
             }
@@ -36,14 +36,14 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * Focuses the component
          */
         focus: function () {
-            
+
             if (this._selects) {
                 this._selects[0].focus();
             }
         },
 
         isEnabled: function () {
-            
+
             return !this.getElement().disabled;
         },
 
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          *     Top level title is optional, it's used as a label for the select.
          */
         setOptions: function (optionsArray) {
-            
+
             if (!Array.isArray(optionsArray)) {
                 throw new TypeError(
                     this.getClazz() +
@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @return {Element}            Select element
          */
         _createSelect: function (options, value) {
-            
+
             if (!Array.isArray(options.options)) {
                 throw new TypeError(
                     this.getClazz() +
@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @param {String}     value
          */
         _setSelectOptions: function (select, options, value) {
-            
+
             if (options.title) {
                 select.setTitle(options.title);
             }
@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * Called when selection is changed in any of the selects
          */
         _valueChanged: function () {
-            
+
             // Call user set handler if available
             if (!this._handlerInvactive && this.getHandler()) {
                 this.getHandler()(this.getValue());
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @private
          */
         _setEnabledImpl: function (enabled) {
-            
+
             /* We can just disable the fieldset as disable is inherited from
                parent form element.... */
             this.getElement().disabled = !enabled;
@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @param {String} name
          */
         setName: function (name) {
-            
+
             var me = this;
 
             me._name = name;
@@ -231,7 +231,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method getTitle
          */
         getTitle: function () {
-            
+
             return this._titleEl.textContent;
         },
 
@@ -239,7 +239,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method setTitle
          */
         setTitle: function (title) {
-            
+
             this._titleEl.textContent = '';
             if (title !== null && title !== undefined) {
                 this._titleEl.style.display = '';
@@ -253,7 +253,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method getTooltip
          */
         getTooltip: function () {
-            
+
             return this.getElement().title;
         },
 
@@ -261,7 +261,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method setTooltip
          */
         setTooltip: function (tooltip) {
-            
+
             this.getElement().title = tooltip;
         },
 
@@ -269,7 +269,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method getValue
          */
         getValue: function () {
-            
+
             return this._selects.map(function (select) {
                 return select.getValue();
             });
@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @method setValue
          */
         setValue: function (value) {
-            
+
             var i,
                 select,
                 me = this,
@@ -319,7 +319,7 @@ Oskari.clazz.define('Oskari.userinterface.component.MultiLevelSelect',
          * @param {Boolean} visible
          */
         _setVisibleImpl: function (visible) {
-            
+
             this._element.style.display = this._visible ? '' : 'none';
         }
     }, {

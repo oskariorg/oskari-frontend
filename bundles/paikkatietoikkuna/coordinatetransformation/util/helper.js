@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
+Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
     this.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
     this.sb = Oskari.getSandbox();
     this.removeMarkersReq = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
@@ -16,13 +16,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         listItem: jQuery('<li></li>')
     };
 }, {
-    getName: function() {
+    getName: function () {
         return 'Oskari.coordinatetransformation.helper';
     },
     init: function () {},
     addMarkerForCoords: function (id, lonlat, label, color) {
         var color = color || 'ff0000';
-        if ( this.addMarkerReq ) {
+        if (this.addMarkerReq) {
             var data = {
                 x: lonlat.lon,
                 y: lonlat.lat,
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
     },
 
-    showMarkersOnMap: function (mapCoords, inputCoords, srs){
+    showMarkersOnMap: function (mapCoords, inputCoords, srs) {
         var coords = mapCoords;
         var coordsForLabel = inputCoords;
         var epsgValuesForLabel;
@@ -48,12 +48,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         if (srs) {
             epsgValuesForLabel = this.getEpsgValues(srs);
         }
-        if (coordsForLabel && epsgValuesForLabel && coords.length === coordsForLabel.length){
+        if (coordsForLabel && epsgValuesForLabel && coords.length === coordsForLabel.length) {
             addLabelFromInput = true;
         }
-        for (var i = 0; i < coords.length; i++){
+        for (var i = 0; i < coords.length; i++) {
             lonlat = this.getLonLatObj(coords[i], mapEpsgValues.lonFirst);
-            if (addLabelFromInput){
+            if (addLabelFromInput) {
                 labelLonLat = this.getLonLatObj(coordsForLabel[i], epsgValuesForLabel.lonFirst);
                 label = this.getLabelForMarker(labelLonLat, epsgValuesForLabel);
             } else {
@@ -63,18 +63,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
         this.moveMapToMarkers(coords);
     },
-    moveMapToMarkers: function(points){
+    moveMapToMarkers: function (points) {
         var closestZoom = 6;
-        if (!Array.isArray(points) || points.length === 0 ){
+        if (!Array.isArray(points) || points.length === 0) {
             return;
-        } else if (points.length === 1 ){
+        } else if (points.length === 1) {
             var x;
             var y;
             var point = points[0];
-            if (this.mapEpsgValues.lonFirst){
+            if (this.mapEpsgValues.lonFirst) {
                 x = point[0];
                 y = point[1];
-            }else{
+            } else {
                 x = point[1];
                 y = point[0];
             }
@@ -82,14 +82,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         } else {
             var extent = this.mapmodule.getExtentForPointsArray(points);
             this.mapmodule.zoomToExtent(extent);
-            if (this.mapmodule.getMapZoom() > closestZoom){
+            if (this.mapmodule.getMapZoom() > closestZoom) {
                 this.mapmodule.setZoomLevel(closestZoom);
             }
         }
     },
-    getLonLatObj: function (coord, lonFirst){
+    getLonLatObj: function (coord, lonFirst) {
         var lonlat = {};
-        if (lonFirst === true){
+        if (lonFirst === true) {
             lonlat.lon = coord[0];
             lonlat.lat = coord[1];
         } else {
@@ -98,11 +98,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
         return lonlat;
     },
-    getLabelForMarker: function(lonlat, epsgValues){
+    getLabelForMarker: function (lonlat, epsgValues) {
         var epsgValues = epsgValues || this.mapEpsgValues,
             lonLabel,
             latLabel;
-        if (epsgValues.coord === 'COORD_GEOG_2D' || epsgValues.coord === 'COORD_GEOG_3D'){
+        if (epsgValues.coord === 'COORD_GEOG_2D' || epsgValues.coord === 'COORD_GEOG_3D') {
             lonLabel = this.loc('mapMarkers.show.lon');
             latLabel = this.loc('mapMarkers.show.lat');
         } else {
@@ -112,26 +112,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         //TODO do we need to localize decimal separator for label
         // Oskari.getDecimalSeparator();
         //lon = coords[].replace('.', Oskari.getDecimalSeparator());
-        if (epsgValues.lonFirst){
-            return lonLabel + ': ' + lonlat.lon + ', '+ latLabel +': ' + lonlat.lat;
+        if (epsgValues.lonFirst) {
+            return lonLabel + ': ' + lonlat.lon + ', ' + latLabel + ': ' + lonlat.lat;
         } else {
             return latLabel + ': ' + lonlat.lat + ', ' + lonLabel + ': ' + lonlat.lon;
         }
     },
     removeMarkers: function () {
-        if( this.removeMarkersReq ) {
+        if (this.removeMarkersReq) {
             this.sb.request('MainMapModule', this.removeMarkersReq());
         }
     },
-    validateCrsSelections: function (crs){
+    validateCrsSelections: function (crs) {
         //source crs and target crs should be always selected
-        if (!crs.sourceCrs || !crs.targetCrs){
+        if (!crs.sourceCrs || !crs.targetCrs) {
             this.showPopup(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.crs'));
             return false;
         }
         return true;
     },
-    validateFileSelections: function (settings){
+    validateFileSelections: function (settings) {
         if (Object.keys(settings).length === 0) {
             this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.noFileSettings'));
             return false;
@@ -141,43 +141,43 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         //var type = settings.type;
         //var file = settings.file;
         var errors = [];
-        if (selects.decimalSeparator === ',' && selects.coordinateSeparator === 'comma'){
+        if (selects.decimalSeparator === ',' && selects.coordinateSeparator === 'comma') {
             errors.push(this.loc('flyout.transform.validateErrors.doubleComma'));
         }
-        if (selects.coordinateSeparator === 'space' && (selects.unit === 'DD MM SS' || selects.unit === 'DD MM')){
+        if (selects.coordinateSeparator === 'space' && (selects.unit === 'DD MM SS' || selects.unit === 'DD MM')) {
             errors.push(this.loc('flyout.transform.validateErrors.doubleSpace'));
         }
-        if (selects.coordinateSeparator === ''){
+        if (selects.coordinateSeparator === '') {
             errors.push(this.loc('flyout.transform.validateErrors.noCoordinateSeparator'));
         }
-        if (selects.decimalSeparator === ''){
+        if (selects.decimalSeparator === '') {
             errors.push(this.loc('flyout.transform.validateErrors.noDecimalSeparator'));
         }
-        if (settings.type === 'import'){
-            if (!settings.file ){ // && settings.file.constructor !== File
+        if (settings.type === 'import') {
+            if (!settings.file) { // && settings.file.constructor !== File
                 errors.push(this.loc('flyout.transform.validateErrors.noInputFile'));
             }
-            if (!(parseInt(selects.headerLineCount)>=0)){
+            if (!(parseInt(selects.headerLineCount) >= 0)) {
                 errors.push(this.loc('flyout.transform.validateErrors.headerCount'));
             }
         } else if (settings.type === 'export') {
-            if (!selects.fileName && selects.fileName === ''){
+            if (!selects.fileName && selects.fileName === '') {
                 errors.push(this.loc('flyout.transform.validateErrors.noFileName'));
             }
-            if (!(parseInt(selects.decimalCount)>=0)){
+            if (!(parseInt(selects.decimalCount) >= 0)) {
                 errors.push(this.loc('flyout.transform.validateErrors.decimalCount'));
             }
         }
 
-        if (errors.length !== 0){
+        if (errors.length !== 0) {
             this.showPopup(this.loc('flyout.transform.validateErrors.title'),this.loc('flyout.transform.validateErrors.message'), errors);
             return false;
         }
         return true;
     },
-    exportToFile: function ( data, filename, type ) {
+    exportToFile: function (data, filename, type) {
         var blob = new Blob([data], {type: type});
-        if( window.navigator.msSaveOrOpenBlob ) {
+        if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, filename);
         }
         else {
@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             document.body.removeChild(elem);
         }
     },
-    checkDimensions: function (crs, callback){
+    checkDimensions: function (crs, callback) {
         var message;
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             cancelBtn = dialog.createCloseButton(this.loc('actions.cancel')),
@@ -197,34 +197,34 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         okBtn.setTitle(this.loc('actions.ok'));
         okBtn.addClass('primary');
 
-        okBtn.setHandler(function() {
+        okBtn.setHandler(function () {
             callback();
             dialog.close();
         });
 
-        if (crs.sourceDimension === 2 && crs.targetCrs === 'EPSG:4936'){
+        if (crs.sourceDimension === 2 && crs.targetCrs === 'EPSG:4936') {
             message = this.loc('flyout.transform.warnings.xyz');
             cancelBtn.setTitle(this.loc('actions.ok'));
             dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn]);
-        } else if (crs.sourceDimension === 2 && crs.targetDimension === 3){
+        } else if (crs.sourceDimension === 2 && crs.targetDimension === 3) {
             message = this.loc('flyout.transform.warnings.2DTo3D');
             dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
-        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2){
+        } else if (crs.sourceDimension === 3 && crs.targetDimension === 2) {
             message = this.loc('flyout.transform.warnings.3DTo2D');
             dialog.show(this.loc('flyout.transform.warnings.title'), message, [cancelBtn, okBtn]);
         } else {
             callback();
         }
     },
-    showPopup: function (title, message, errorList){
+    showPopup: function (title, message, errorList) {
         var me = this,
             dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
             btn = dialog.createCloseButton(this.loc('actions.close'));
-        if (errorList && errorList.length !== 0){
+        if (errorList && errorList.length !== 0) {
             var content = this._templates.content.clone();
             content.find('.error-message').html(message);
             var list = content.find('.error-list');
-            errorList.forEach(function (error){
+            errorList.forEach(function (error) {
                 var listItem = me._templates.listItem.clone();
                 listItem.text(error);
                 list.append(listItem);
@@ -241,21 +241,21 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
      * @param {String} epsgNumber
      * @return {Object} epsgValues, return null if not found
      */
-    findEpsg: function(epsgNumber) {
+    findEpsg: function (epsgNumber) {
         var epsgValues = null;
         var srs;
         var compound;
-        if (epsgNumber.length === 4 || epsgNumber.length === 5 ){
+        if (epsgNumber.length === 4 || epsgNumber.length === 5) {
             srs = 'EPSG:' + epsgNumber;
             //check first if is's compound system
             compound = this.getCompoundSystem(srs);
-            if (compound !== null){
+            if (compound !== null) {
                 epsgValues = this.getEpsgValues(compound.geodetic);
                 epsgValues.heigthSrs = compound.height;
                 epsgValues.srs = compound.geodetic;
             } else {
                 epsgValues = this.getEpsgValues(srs);
-                if(epsgValues){
+                if (epsgValues) {
                     epsgValues.srs = srs;
                 }
             }
@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         return epsgValues;
     },
     getEpsgValues: function (srs) {
-        if (srs && this.epsgValues.hasOwnProperty(srs)){
+        if (srs && this.epsgValues.hasOwnProperty(srs)) {
             return this.epsgValues[srs];
         }
         return null;
@@ -273,30 +273,30 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         epsg.srs = this.mapSrs;
         return epsg;
     },
-    isGeogSystem: function(srs){
+    isGeogSystem: function (srs) {
         var epsgValues = this.getEpsgValues(srs);
-        if (epsgValues.coord === 'COORD_GEOG_2D' || epsgValues.coord === 'COORD_GEOG_3D'){
+        if (epsgValues.coord === 'COORD_GEOG_2D' || epsgValues.coord === 'COORD_GEOG_3D') {
             return true;
         } else {
             return false;
         }
     },
-    is3DSystem: function (srs){
+    is3DSystem: function (srs) {
         var epsgValues = this.getEpsgValues(srs);
-        if (epsgValues.coord === 'COORD_PROJ_3D' || epsgValues.coord === 'COORD_GEOG_3D'){
+        if (epsgValues.coord === 'COORD_PROJ_3D' || epsgValues.coord === 'COORD_GEOG_3D') {
             return true;
         } else {
             return false;
         }
     },
-    isCoordInBounds: function (srs, coord){
+    isCoordInBounds: function (srs, coord) {
         var epsgValues = this.getEpsgValues(srs),
             x,
             y;
-        if (!epsgValues){
+        if (!epsgValues) {
             return;
         }
-        if (epsgValues.lonFirst === true){
+        if (epsgValues.lonFirst === true) {
             x = coord[0];
             y = coord[1];
         } else {
@@ -305,19 +305,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
         return this.mapmodule.isPointInExtent(epsgValues.bounds, x, y);
     },
-    getDimension: function(srs, elevation){
+    getDimension: function (srs, elevation) {
         var srsValues = this.getEpsgValues(srs);
         var dimension;
-        if (srsValues && (srsValues.coord === 'COORD_PROJ_3D' || srsValues.coord === 'COORD_GEOG_3D')){
+        if (srsValues && (srsValues.coord === 'COORD_PROJ_3D' || srsValues.coord === 'COORD_GEOG_3D')) {
             dimension = 3;
-        } else if (this.elevationSystems.hasOwnProperty(elevation)){
+        } else if (this.elevationSystems.hasOwnProperty(elevation)) {
             dimension = 3;
         } else {
             dimension = 2;
         }
         return dimension;
     },
-    getOptionsJSON: function() {
+    getOptionsJSON: function () {
         var geoCoords = this.getGeodeticCoordinateOptions();
         this.createCls(geoCoords);
         return {
@@ -329,7 +329,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         };
 
     },
-    getDatumOptions: function() {
+    getDatumOptions: function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.noFilter'),
@@ -345,7 +345,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             }
         };
     },
-    getCoordinateOptions: function() {
+    getCoordinateOptions: function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.noFilter'),
@@ -373,7 +373,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             }
         };
     },
-    getProjectionOptions: function() {
+    getProjectionOptions: function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.noFilter'),
@@ -402,7 +402,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         };
     },
     //bounds:[minx, miny, maxx, maxy], lonFirst: true -> lonlat, EN, XY
-    getGeodeticCoordinateOptions: function() {
+    getGeodeticCoordinateOptions: function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.geodeticCoordinateSystem.choose'),
@@ -680,7 +680,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             }
         };
     },
-    getElevationOptions: function(){
+    getElevationOptions: function () {
         return {
             'DEFAULT': {
                 'title': this.loc('flyout.coordinateSystem.heightSystem.none'),
@@ -700,8 +700,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
             }
         };
     },
-    getCompoundSystem: function (epsg){
-        switch(epsg) {
+    getCompoundSystem: function (epsg) {
+        switch (epsg) {
         case 'EPSG:3091': //YKJ + N60
             return {
                 geodetic: 'EPSG:2393',
@@ -730,10 +730,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function() {
         }
         return null;
     },
-    createCls: function(json){
-        Object.keys( json ).forEach( function ( key ) {
+    createCls: function (json) {
+        Object.keys(json).forEach(function (key) {
             var geoCoord = json[key];
-            if (key === 'DEFAULT'){
+            if (key === 'DEFAULT') {
                 geoCoord.cls = '';
             } else {
                 geoCoord.cls = geoCoord.datum + ' ' + geoCoord.proj + ' ' + geoCoord.coord;

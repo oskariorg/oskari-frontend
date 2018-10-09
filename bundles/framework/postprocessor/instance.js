@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
             // allow the map to settle before asking for highlight. We could also wait after map move events stop coming
             // The whole feature should be rewritten using RPC and pushing the data on the map.
             // Currently it uses Oskari and transport "creatively" and isn't all that stable
-            setTimeout(function() {
+            setTimeout(function () {
                 // request for highlight image, note that the map must be in correct
                 // location BEFORE this or we get a blank image
                 var builder = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
@@ -105,32 +105,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
         _showPoints: function (points) {
             var olPoints = {
                     _points: [],
-                    addPoint: function(lon, lat) {
+                    addPoint: function (lon, lat) {
                         this._points.push({lon:parseFloat(lon), lat:parseFloat(lat)});
                     },
-                    getBounds: function() {
-                        var top=0,
-                            left=0,
-                            bottom=0,
-                            right=0;
+                    getBounds: function () {
+                        var top = 0,
+                            left = 0,
+                            bottom = 0,
+                            right = 0;
 
                         // Calculate bbox
                         left = this._points[0].lon;
                         bottom = this._points[0].lat;
 
-                        for(var i=0;i<this._points.length;i++){
+                        for (var i = 0;i < this._points.length;i++) {
                             var point = this._points[i];
-                            if(point.lon > right) {
+                            if (point.lon > right) {
                                 right = point.lon;
                             }
-                            if(point.lat > top) {
+                            if (point.lat > top) {
                                 top = point.lat;
                             }
 
-                            if(point.lon < left) {
+                            if (point.lon < left) {
                                 left = point.lon;
                             }
-                            if(point.lat < bottom) {
+                            if (point.lat < bottom) {
                                 bottom = point.lat;
                             }
                         }
@@ -142,11 +142,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                             top: top
                         };
                     },
-                    getCentroid: function() {
+                    getCentroid: function () {
                         var bbox = this.getBounds();
                         return {
-                            x: bbox.left + (bbox.right - bbox.left)/2,
-                            y: bbox.bottom + (bbox.top - bbox.bottom)/2
+                            x: bbox.left + (bbox.right - bbox.left) / 2,
+                            y: bbox.bottom + (bbox.top - bbox.bottom) / 2
                         };
 
                     }

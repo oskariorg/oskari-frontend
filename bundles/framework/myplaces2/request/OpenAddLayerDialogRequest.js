@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDi
  * @param {jQuery}
  *            Originating jQuery element
  */
-    function(originator, side) {
+    function (originator, side) {
         this._originator = originator;
         this._side = side;
     }, {
@@ -23,14 +23,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.OpenAddLayerDi
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {jQuery} Originating jQuery element
      */
-        getOriginator : function() {
+        getOriginator : function () {
             return this._originator;
         },
         getSide: function () {

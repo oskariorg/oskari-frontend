@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
-    function() {
+    function () {
     }, {
         index : 1,
         allowedLocations : ['bottom left', 'bottom right'],
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
                 title: 'IndexMapPlugin',
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         mapfull: {

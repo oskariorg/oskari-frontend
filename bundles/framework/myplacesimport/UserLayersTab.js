@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                     return;
                 }
                 var idDouble = false;
-                for (i=0; i < gridModel.data.length; i++) {
+                for (i = 0; i < gridModel.data.length; i++) {
                     if (layer.getId() === gridModel.data[i].id) {
                         idDouble = true;
                         break;
@@ -252,7 +252,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @private
          * @param {Object} data
          */
-        _editUserLayer: function(data){
+        _editUserLayer: function (data) {
             var me = this,
                 styleForm,
                 form,
@@ -285,7 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                     fadeout;
                 values.id = idParam;
 
-                if (!values.name){
+                if (!values.name) {
                     me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.styleName'), false);
                     return;
                 }
@@ -337,7 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @param {String} id
          * @param {Object} form
          */
-        _setStyleValuesToStyleForm: function (id, form){
+        _setStyleValuesToStyleForm: function (id, form) {
             var me = this,
                 action = this.instance.getService().getGetUserLayerStyleUrl();
 
@@ -347,11 +347,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 success: function (response) {
                     if (typeof response === 'object') {
                         form.setStyleValues(response);
-                    }else{
+                    } else {
                         me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.getStyle'), false);
                     }
                 },
-                error: function (jqXHR, textStatus){
+                error: function (jqXHR, textStatus) {
                     me._showMessage(me.loc('tab.error.title'), me.loc('tab.error.getStyle'), false);
                 }
             });
@@ -365,7 +365,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @param  {String} message
          * @param  {Boolean} fadeout optional default true
          */
-        _showMessage: function (title, message, fadeout){
+        _showMessage: function (title, message, fadeout) {
             fadeout = fadeout !== false;
             var me = this,
                 dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),

@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          * Initialise tool
          * @method init
          */
-        init: function(data) {
+        init: function (data) {
             var me = this;
             me.selectedTools = {};
             me._storedData = {};
@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var pluginConf = null || {};
 
             if (conf.mapfull.conf && conf.mapfull.conf.plugins) {
-                _.each(conf.mapfull.conf.plugins, function(plugin) {
+                _.each(conf.mapfull.conf.plugins, function (plugin) {
                     if (me.getTool().id === plugin.id) {
                         me.setEnabled(true);
                         pluginConf = plugin.config || {};
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 measurearea : true
             };
 
-            if(pluginConf.buttons) {
+            if (pluginConf.buttons) {
                 //if there are no selected tools in configuration, select them all when tools are selected
                 for (toolName in me.selectedTools) {
                     if (me.selectedTools.hasOwnProperty(toolName) && pluginConf.buttons.indexOf(toolName) === -1) {
@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         getValues: function () {
             var me = this,
                 buttons = [];
-            if(!me.state.enabled) {
+            if (!me.state.enabled) {
                 return null;
             }
 
@@ -370,7 +370,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             }
 
         },
-        _checkAdminDrawControls: function(){
+        _checkAdminDrawControls: function () {
             // show drawing controls for admin users
             //TODO: PublishedMyPlaces is not supported with ol3!
         },
@@ -470,7 +470,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         * @param  {Object}  toolButton the tool button
         */
 
-        _toggleDrawToolButton: function(isToolChecked, toolName, buttonGroupName, toolButton) {
+        _toggleDrawToolButton: function (isToolChecked, toolName, buttonGroupName, toolButton) {
             var me = this;
 
             if (isToolChecked) {
@@ -613,17 +613,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             return false;
         },
 
-        stop: function() {
+        stop: function () {
             var me = this;
 
-            if(me.__plugin) {
+            if (me.__plugin) {
                 //send remove request per active button
                 for (toolName in me.selectedTools) {
                     if (me.selectedTools.hasOwnProperty(toolName) && toolName) {
                         me.__plugin.removeToolButton(toolName);
                     }
                 }
-                if(me.__sandbox){
+                if (me.__sandbox) {
                     me.__plugin.stopPlugin(me.__sandbox);
                 }
                 me.__mapmodule.unregisterPlugin(me.__plugin);

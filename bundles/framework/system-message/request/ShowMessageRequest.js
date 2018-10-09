@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.request.ShowMessageR
  * @method create called automatically on construction
  * @static
  */
-    function( message, level ) {
+    function (message, level) {
         this._message = message;
         this._level = level;
     }, {
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.request.ShowMessageR
         /**
    * @method getUrgency
    */
-        getUrgencyLevel: function() {
+        getUrgencyLevel: function () {
             return this.colors[this._level] || 'gray';
         }
     }, {

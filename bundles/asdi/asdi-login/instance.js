@@ -2,7 +2,7 @@
  * @class Oskari.asdi.login.BundleInstance
  */
 Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
-    function() {
+    function () {
         this.templates = {
             'loginButton': jQuery('<input id="loginbutton" type="submit" value="">')
         };
@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
          * @method afterStart
          * implements BundleInstance protocol start methdod
          */
-        afterStart: function() {
+        afterStart: function () {
             var me = this;
             if (Oskari.user().isLoggedIn()) {
                 // no need for login UI
@@ -29,12 +29,12 @@ Oskari.clazz.define('Oskari.asdi.login.BundleInstance',
 
             var loginButton = this.templates.loginButton.clone();
             loginButton.val(this.locale.flyout.login);
-            loginButton.on('click', function() {
+            loginButton.on('click', function () {
                 me.showLoginFlyout();
             });
             jQuery('#maptools').find('#login').append(loginButton);
         },
-        showLoginFlyout: function() {
+        showLoginFlyout: function () {
             Oskari.getSandbox().postRequestByName(
                 'userinterface.UpdateExtensionRequest',[this, 'attach']
             );

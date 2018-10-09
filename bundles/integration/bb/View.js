@@ -2,7 +2,7 @@
  * @class Oskari.integration.bundle.bb.View
  *
  */
-Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instance,conf) {
+Oskari.clazz.define('Oskari.integration.bundle.bb.View', function (locale,instance,conf) {
     this.locale = locale;
     this.view = null;
     this.instance = instance;
@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * @method setEl
      * sets the (jQuery) element for this view
      */
-    'setEl' : function(el) {
+    'setEl' : function (el) {
         this.container = el;
     },
 
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * @method getEl
      * gets the (jQuery) element for this view
      */
-    'getEl' : function() {
+    'getEl' : function () {
         return this.container;
     },
 
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * in requirements property
      *
      */
-    'render' : function() {
+    'render' : function () {
         throw 'Abstract';
     },
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      *
      * returns localised Json object defined with 'view' key in locale/*.js
      */
-    'getLocalization' : function() {
+    'getLocalization' : function () {
         return this.locale;
     },
 
@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      *
      * gets configuration for this bundle
      */
-    'getConfiguration' : function() {
+    'getConfiguration' : function () {
         return this.conf;
     },
 
@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * returns sandbox for binding to Oskari app functionality
      *
      */
-    'getSandbox' : function() {
+    'getSandbox' : function () {
         return this.instance.getSandbox();
     },
 
@@ -74,7 +74,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * helper to get current language from Oskari
      *
      */
-    'getLang' : function()  {
+    'getLang' : function () {
         return Oskari.getLang();
     },
     /**
@@ -82,9 +82,9 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      *
      * Dispatches events to eventhandlers declared
      */
-    onEvent : function(event) {
+    onEvent : function (event) {
         var handler = this.eventHandlers[event.getName()];
-        if(!handler) {
+        if (!handler) {
             return;
         }
 
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      *
      * helper function to wrap passing requests
      */
-    request: function() {
+    request: function () {
         return this.getSandbox().requestByName(this.instance,arguments[0],this.slicer.apply(arguments,1));
     },
 
@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function(locale,instanc
      * @method getName
      * returns identifier used to connect to sandbox (borrowed from instance)
      */
-    getName : function() {
+    getName : function () {
         return this.instance.getName();
     }
 

@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
  * @param {JSON} requestParameters request parameters
  * @param {JSON} feedback response data
  */
-    function(success, requestParameters, data) {
+    function (success, requestParameters, data) {
         this._success = success;
         this._requestParameters = requestParameters;
         this._data = data;
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns the success  info
      * @return {Boolean}
      */
-        getSuccess : function() {
+        getSuccess : function () {
             return this._success;
         },
         /**
@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns the response data JSON
      * @return {JSON}
      */
-        getData : function() {
+        getData : function () {
             return this._data;
         },
         /**
@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.event.FeedbackRe
      * Returns request paremeters
      * @return {JSON}
      */
-        getRequestParameters : function() {
+        getRequestParameters : function () {
             return this._requestParameters;
         },
 

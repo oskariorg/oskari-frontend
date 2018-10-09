@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisual
  * @param {Object} Id of myplaces layer for visualizing changes in myplaces extra layers.
  * @param {boolean} forced redraw forced
  */
-    function(layerId, forced) {
+    function (layerId, forced) {
         this._layerId = layerId;
         this._forced = forced;
     }, {
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisual
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function() {
+        getName : function () {
             return 'MapMyPlaces.MyPlacesVisualizationChangeEvent';
         },
         /**
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisual
     * Returns  id of myplaces layer.
     * @return {Object}
     */
-        getLayerId: function() {
+        getLayerId: function () {
             return this._layerId;
         },
         /**
@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.event.MyPlacesVisual
      * Returns forced for redraw
      * @return {boolean}
      */
-        isForced : function() {
+        isForced : function () {
             return this._forced;
         }
     }, {

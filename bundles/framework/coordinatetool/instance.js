@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         /**
          * Needed by sandbox.register()
          */
-        init : function() {},
+        init : function () {},
 
         /**
          * @method setSandbox
@@ -107,7 +107,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @method  @public isOpen
          * @return {Boolean} is popup open
          */
-        isOpen: function(){
+        isOpen: function () {
             var me = this;
             return (me.plugin) ? me.plugin.isOpen() : false;
         },
@@ -119,7 +119,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @param  {}  configuration   conf.reverseGeocodingIds is in use
          * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
          */
-        createService: function(sandbox, conf) {
+        createService: function (sandbox, conf) {
             var coordinateToolService = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
                 this, conf || {}
@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @method getService
          * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
          */
-        getService: function() {
+        getService: function () {
             return this.coordinateToolService;
         },
         /**

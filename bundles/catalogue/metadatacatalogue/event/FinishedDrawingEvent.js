@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
  * @param {OpenLayers.Geometry} geometry the drawing that was finished
  * @param {Boolean} blnEdit true if the geometry was opened in edit mode
  */
-    function(geometry, blnEdit) {
+    function (geometry, blnEdit) {
         this._drawing = geometry;
         this._modification = (blnEdit == true);
     }, {
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function() {
+        getDrawing : function () {
             return this._drawing;
         },
         /**
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.metadatacatalogue.event.Finished
      * Returns true if drawing was initially opened for editing (not a new one)
      * @return {Boolean}
      */
-        isModification : function() {
+        isModification : function () {
             return this._modification;
         }
     }, {

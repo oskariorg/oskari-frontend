@@ -5,7 +5,7 @@ import {listen as olEventsListen} from 'ol/events';
 import olEventsEventType from 'ol/events/EventType';
 
 export default class OskariAsyncTileImage extends olSourceTileImage {
-    constructor(options) {
+    constructor (options) {
         super({
             attributions: options.attributions,
             extent: options.extent,
@@ -48,7 +48,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
      * OL computation (init grid in tilesizes)  is inaccurate in last decimal
      * @return {string}
      */
-    bboxkeyStrip_(bbox) {
+    bboxkeyStrip_ (bbox) {
         var stripbox = [];
         if (!bbox) return '';
         for (var i = bbox.length; i--;) {
@@ -60,14 +60,14 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
     /**
      * @return {!Object.<string, *>}
      */
-    getWFSTileCache_() {
+    getWFSTileCache_ () {
         return this.tileLayerCache;
     };
 
     /**
      * @api
      */
-    getNonCachedGrid(grid) {
+    getNonCachedGrid (grid) {
         var result = [],
             i,
             me = this,
@@ -119,7 +119,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
      * @param {string} key The key set on the tile.
      * @return {ol/Tile}
      */
-    createOskariAsyncTile(z, x, y, pixelRatio, projection, key) {
+    createOskariAsyncTile (z, x, y, pixelRatio, projection, key) {
         var tileCoordKey = olTilecoordGetKeyZXY(z, x, y);
         if (this.tileCache.containsKey(tileCoordKey)) {
             return /**@type {!ol/Tile}*/(this.tileCache.get(tileCoordKey));
@@ -154,7 +154,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
      * @param  {boolean}        boundaryTile  true if this an incomplete tile
      * @api
      */
-    setupImageContent(boundsObj, imageData, layer, map, boundaryTile) {
+    setupImageContent (boundsObj, imageData, layer, map, boundaryTile) {
         var me = this,
             bboxKey = this.bboxkeyStrip_(boundsObj);
         if (!bboxKey) {
@@ -193,7 +193,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
         }
     };
 
-    __fixTile(tile, imageData, layer, map) {
+    __fixTile (tile, imageData, layer, map) {
         tile.PLACEHOLDER = false;
         tile.getImage().src = imageData;
         tile.setState(olTileState.LOADED);
@@ -202,7 +202,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
      * Note! Always uses the non-projected internal tile getter
      * @inheritDoc
      */
-    getTile(z, x, y, pixelRatio, projection) {
+    getTile (z, x, y, pixelRatio, projection) {
         //    var paramsKey = this.getKeyParams();
         return this.createOskariAsyncTile(z, x, y, pixelRatio, projection, '');
     }

@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method setTemplate
          * @param {jQuery} template
          */
-        setTemplate: function(template) {
+        setTemplate: function (template) {
             if (this.template && template) {
                 this.template.replaceWith(template);
             }
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method getTemplate
          * @return {jQuery}
          */
-        getTemplate: function() {
+        getTemplate: function () {
             return this.template;
         },
         /**
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          *
          * @method refresh
          */
-        refresh: function() {
+        refresh: function () {
             this.setTemplate(this.createUi());
         },
         /**
@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Object} locale
          * @return {jQuery}
          */
-        __createFileImportTemplate: function(locale) {
+        __createFileImportTemplate: function (locale) {
             var me = this,
                 file = jQuery(this.__templates.file).clone(),
                 action = this.instance.getService().getFileImportUrl(),
@@ -190,24 +190,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file.find('div.style-form').html(styleForm.getForm());
             file.find('input[type=button]').val(locale.file.submit);
 
-            file.find('input[name=file-import]').on('change', function(e){
+            file.find('input[name=file-import]').on('change', function (e) {
                 var file = this.files[0],
                     maxFileSizeMb = me.instance.conf.maxFileSizeMb;
-                if ((file.size / 1048576) > maxFileSizeMb){ //size in mb
+                if ((file.size / 1048576) > maxFileSizeMb) { //size in mb
                     me.container.find('form input[type=button]').prop('disabled', true);
                     me.__showMessage(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), false);
-                }else{
+                } else {
                     me.container.find('form input[type=button]').prop('disabled', false);
                 }
             });
 
-            file.find('input[type=button]').on('click', function (e){
+            file.find('input[type=button]').on('click', function (e) {
                 var styleJson = JSON.stringify(me.__getStyleValues(styleForm)),
                     form = file.find('form'); //jQuery(this).parent()
                 // Set the value of the hidden style field
                 form.find('input[name=layer-style]').val(styleJson);
                 // Prevent from sending if there were missing fields
-                if (me.__validateForm (form, locale)){
+                if (me.__validateForm (form, locale)) {
                     return; //e.preventDefault()
                 }
 
@@ -222,11 +222,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     //dataType: 'json',
                     xhr: function () {
                         var myXhr = jQuery.ajaxSettings.xhr();//new XMLHttpRequest()
-                        if (myXhr.upload ){
-                            myXhr.upload.addEventListener('loadstart', function(e) {
+                        if (myXhr.upload) {
+                            myXhr.upload.addEventListener('loadstart', function (e) {
                                 me.progressSpinner.start();
                             });
-                            myXhr.upload.addEventListener('progress', function(e){
+                            myXhr.upload.addEventListener('progress', function (e) {
                                 if (e.lengthComputable) {
                                     me.progressBarFile.show();
                                     me.progressBarFile.updateProgressBar(e.total,e.loaded);
@@ -236,22 +236,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         return myXhr;
                     },
 
-                    success: function (data, textStatus, jqXHR){
+                    success: function (data, textStatus, jqXHR) {
                         me.progressSpinner.stop();
                         me.__finish(data,locale);
                     },
-                    error: function (jqXHR, textStatus, errorThrown){
+                    error: function (jqXHR, textStatus, errorThrown) {
                         var msg = null,
                             title = locale.finish.failure.title,
                             error = null,
                             warning = null;
                         me.progressSpinner.stop();
-                        if (textStatus === 'error'){
+                        if (textStatus === 'error') {
                             try {
                                 err = JSON.parse(jqXHR.responseText);
                                 if (err.error !== null && err.error !== undefined) {
                                     error = err.error;
-                                    if (err.error.warning !== undefined && err.error.warning.featuresSkipped){
+                                    if (err.error.warning !== undefined && err.error.warning.featuresSkipped) {
                                         warning = locale.warning.features_skipped.replace(/<xx>/g, err.warning.featuresSkipped);
                                     }
                                 }
@@ -259,16 +259,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                                 Oskari.log(me.getName())
                                     .warn('Error whilst parsing json',e);
                             }
-                        }else if (textStatus === 'timeout'){
+                        } else if (textStatus === 'timeout') {
                             error = textStatus;
-                        }else if (textStatus === 'abort'){
+                        } else if (textStatus === 'abort') {
                             error = textStatus;
-                        }else if (textStatus === 'parsererror'){
+                        } else if (textStatus === 'parsererror') {
                             error = textStatus;
                         }
 
                         // textual portion of the HTTP status
-                        if (errorThrown){
+                        if (errorThrown) {
                             Oskari.log(me.getName()).warn('Error whilst importing userlayer: ' + errorThrown);
                         }
 
@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         } else {
                             msg = locale.error.generic;
                         }
-                        if (warning){
+                        if (warning) {
                             msg = msg + ' ' + warning;
                         }
                         me.__showMessage(title, msg, false);
@@ -297,7 +297,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Oskari.userinterface.component.VisualizationForm} styleForm
          * @return {Object}
          */
-        __getStyleValues: function(styleForm) {
+        __getStyleValues: function (styleForm) {
             var formValues = styleForm.getValues(),
                 values = {};
 
@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Object} locale
          * @return {Boolean}
          */
-        __validateForm: function(form, locale) {
+        __validateForm: function (form, locale) {
             var fileInput = form.find('input[type=file]'),
                 nameInput = form.find('input[name=layer-name]'),
                 errors = false,
@@ -359,12 +359,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param {Object} json
          * @param {Object} locale
          */
-        __finish: function(json, locale){
+        __finish: function (json, locale) {
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
                 fadeout = true;
 
-            if (json.warning !== undefined && json.warning.featuresSkipped){
+            if (json.warning !== undefined && json.warning.featuresSkipped) {
                 msg = msg + ' ' + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
                 fadeout = false;
             }
@@ -384,7 +384,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {boolean} fadeout
          */
         __showMessage: function (title, message, fadeout) {
-            fadeout =  fadeout !== false;
+            fadeout = fadeout !== false;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = dialog.createCloseButton(this.locale.actions.close);
 

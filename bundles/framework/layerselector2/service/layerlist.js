@@ -1,6 +1,6 @@
-(function(Oskari) {
+(function (Oskari) {
     Oskari.clazz.define('Oskari.mapframework.service.LayerlistService',
-        function() {
+        function () {
             this.layerlistFilterButtons = {};
             Oskari.makeObservable(this);
         },
@@ -13,17 +13,17 @@
          * @method getQName
          * @return {String} fully qualified name for service
          */
-            getQName: function() {
+            getQName: function () {
                 return this.__qname;
             },
             /**
          * @method getName
          * @return {String} service name
          */
-            getName: function() {
+            getName: function () {
                 return this.__name;
             },
-            registerLayerlistFilterButton: function(text, tooltip, cls, filterId) {
+            registerLayerlistFilterButton: function (text, tooltip, cls, filterId) {
                 var me = this;
 
                 if (me.layerlistFilterButtons[filterId]) {
@@ -42,7 +42,7 @@
                     properties: properties
                 });
             },
-            getLayerlistFilterButton: function(filterId) {
+            getLayerlistFilterButton: function (filterId) {
                 var me = this;
                 if (filterId) {
                     return me.layerlistFilterButtons[filterId];

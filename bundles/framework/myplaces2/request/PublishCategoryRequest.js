@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.PublishCategor
  * @param {Boolean}
  *            isPublic true to make layer publishable, false to make it private
  */
-    function(categoryId, isPublic) {
+    function (categoryId, isPublic) {
         this._categoryId = categoryId;
         this._isPublic = isPublic == true;
     }, {
@@ -25,21 +25,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.PublishCategor
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {Number} id of category to be edited
      */
-        getId : function() {
+        getId : function () {
             return this._categoryId;
         },
         /**
      * @method getId
      * @return {Number} id of category to be edited
      */
-        isPublic : function() {
+        isPublic : function () {
             return this._isPublic;
         }
     }, {

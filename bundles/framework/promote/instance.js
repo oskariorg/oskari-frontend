@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
  * @static
  */
 
-    function() {
+    function () {
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * @method getName
      * @return {String} the name for the component
      */
-        'getName': function() {
+        'getName': function () {
             return this.conf.__name;
         },
         /**
@@ -38,14 +38,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * @param {Oskari.Sandbox} sandbox
      * Sets the sandbox reference to this component
      */
-        setSandbox: function(sandbox) {
+        setSandbox: function (sandbox) {
             this.sandbox = sandbox;
         },
         /**
      * @method getSandbox
      * @return {Oskari.Sandbox}
      */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
         /**
@@ -61,17 +61,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      *      JSON object for complete data depending on localization
      *      structure and if parameter key is given
      */
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (this.conf && this.conf[key]) {
                 return Oskari.getLocalized(this.conf[key]);
             }
-            if(!this._localization) {
+            if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.__name);
             }
-            if(key && this._localization[key]) {
+            if (key && this._localization[key]) {
                 return this._localization[key];
             }
-            if(!this.localization) {
+            if (!this.localization) {
                 return {};
             }
             return this._localization;
@@ -80,10 +80,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * @method start
      * implements BundleInstance protocol start methdod
      */
-        'start': function() {
+        'start': function () {
             var me = this;
 
-            if(me.started) {
+            if (me.started) {
                 return;
             }
 
@@ -111,15 +111,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
             if (this.conf && this.conf.toolbarButtons) {
             // request toolbar to add buttons
                 reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-                for(var group in this.conf.toolbarButtons) {
-                    for(var tool in this.conf.toolbarButtons[group]) {
+                for (var group in this.conf.toolbarButtons) {
+                    for (var tool in this.conf.toolbarButtons[group]) {
                         var toolConfig = this.conf.toolbarButtons[group][tool];
                         // pick the tooltip in the current language
                         toolConfig.tooltip = Oskari.getLocalized(toolConfig.tooltip);
                         // disable button
                         toolConfig.enabled = false;
                         // set null
-                        toolConfig.callback = function() {};
+                        toolConfig.callback = function () {};
                         sandbox.request(me, reqBuilder(tool, group, toolConfig));
                     }
                 }
@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * @method init
      * implements Module protocol init method - does nothing atm
      */
-        'init': function() {
+        'init': function () {
             return null;
         },
         /**
@@ -137,7 +137,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * implements BundleInstance protocol update method - does
      * nothing atm
      */
-        'update': function() {
+        'update': function () {
 
         },
         /**
@@ -147,10 +147,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * Event is handled forwarded to correct #eventHandlers if found
      * or discarded if not.
      */
-        onEvent: function(event) {
+        onEvent: function (event) {
 
             var handler = this.eventHandlers[event.getName()];
-            if(!handler) return;
+            if (!handler) return;
 
             return handler.apply(this, [event]);
 
@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * @method stop
      * implements BundleInstance protocol stop method
      */
-        'stop': function() {
+        'stop': function () {
             var sandbox = this.sandbox;
 
             var reqName = 'userinterface.RemoveExtensionRequest';
@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * Oskari.mapframework.bundle.promote.Flyout
      * Oskari.mapframework.bundle.promote.Tile
      */
-        startExtension: function() {
+        startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.promote.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.promote.Tile', this);
         },
@@ -195,7 +195,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * stopExtension method
      * Clears references to flyout and tile
      */
-        stopExtension: function() {
+        stopExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = null;
             this.plugins['Oskari.userinterface.Tile'] = null;
         },
@@ -205,14 +205,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * method
      * @return {Object} references to flyout and tile
      */
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
         /**
      * @method getTitle
      * @return {String} localized text for the title of the component
      */
-        getTitle: function() {
+        getTitle: function () {
             return this.getLocalization('title');
         },
         /**
@@ -220,14 +220,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
      * @return {String} localized text for the description of the
      * component
      */
-        getDescription: function() {
+        getDescription: function () {
             return this.getLocalization('desc');
         },
         /**
      * @method createUi
      * (re)creates the UI for "selected layers" functionality
      */
-        createUi: function() {
+        createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         }

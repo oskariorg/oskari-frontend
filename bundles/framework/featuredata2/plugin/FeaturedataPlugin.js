@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @private
          * Check whether there are layers with featuredata present -> determine the control element's visibility
          */
-        _hasFeaturedataLayers: function() {
+        _hasFeaturedataLayers: function () {
             var me = this,
                 sandbox = me.getMapModule().getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),
@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
+        redrawUI: function (mapInMobileMode, forced) {
             var isMobile = mapInMobileMode || Oskari.util.isMobile();
             var me = this;
             var mobileDefs = this.getMobileDefs();
@@ -104,7 +104,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             }
         },
 
-        teardownUI : function() {
+        teardownUI : function () {
             //remove old element
             this.removeFromPluginContainer(this.getElement());
             this._instance.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this._instance, 'close']);
@@ -130,13 +130,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
          * @method  @public mapStatusChanged map status changed
          * @param  {Boolean} changed is map status changed
          */
-        mapStatusChanged: function(changed){
+        mapStatusChanged: function (changed) {
             var me = this,
                 statusChanged = changed;
             me._mapStatusChanged = statusChanged;
         },
 
-        getMapStatusChanged: function() {
+        getMapStatusChanged: function () {
             var me = this;
             return me._mapStatusChanged;
         },
@@ -147,13 +147,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 linkElement = link || (element ? element.find('a') : null),
                 sandbox = me.getSandbox();
 
-            if(!linkElement) {
+            if (!linkElement) {
                 return;
             }
 
             linkElement.on('click', function () {
-                if(!me._flyoutOpen) {
-                    if(me._mapStatusChanged) {
+                if (!me._flyoutOpen) {
+                    if (me._mapStatusChanged) {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
                         var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')();
                         sandbox.notifyAll(event);
@@ -218,30 +218,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for(var c=0;c<classList.length;c++){
+            for (var c = 0;c < classList.length;c++) {
                 var className = classList[c];
-                if(className.indexOf('toolstyle-') > -1){
+                if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
                 }
             }
             el.addClass(styleClass);
         },
-        showLoadingIndicator : function(blnLoad) {
-            if(!this.getElement()) {
+        showLoadingIndicator : function (blnLoad) {
+            if (!this.getElement()) {
                 return;
             }
-            if(blnLoad) {
+            if (blnLoad) {
                 this.getElement().addClass('loading');
             }
             else {
                 this.getElement().removeClass('loading');
             }
         },
-        showErrorIndicator : function(blnLoad) {
-            if(!this.getElement()) {
+        showErrorIndicator : function (blnLoad) {
+            if (!this.getElement()) {
                 return;
             }
-            if(blnLoad) {
+            if (blnLoad) {
                 this.getElement().addClass('error');
             }
             else {
@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 mobileDiv = mapModule.getMobileDiv(),
                 top = jQuery(mobileDiv).offset().top,
                 height = jQuery(mobileDiv).outerHeight(true),
-                flyoutTop = parseInt(top)+parseInt(height);
+                flyoutTop = parseInt(top) + parseInt(height);
 
             flyout.container.parentElement.parentElement.style.top = flyoutTop + 'px';
         },

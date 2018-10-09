@@ -33,11 +33,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             return this.__name;
         },
 
-        openProfileTab: function() {
+        openProfileTab: function () {
             Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
             var flyout = this.plugins['Oskari.userinterface.Flyout'];
-            flyout.tabsContainer.panels.forEach(function(panel){
-                if(panel.id === 'account') {
+            flyout.tabsContainer.panels.forEach(function (panel) {
+                if (panel.id === 'account') {
                     flyout.tabsContainer.select(panel);
                 }
             });
@@ -249,10 +249,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          */
         __guidedTourDelegateTemplate: {
             priority: 50,
-            show: function(){
+            show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
             },
-            hide: function(){
+            hide: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
             },
             getTitle: function () {
@@ -263,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 content.append(this.getLocalization().guidedTour.message);
                 return content;
             },
-            getLinks: function() {
+            getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization().guidedTour;
                 var linkTemplate = jQuery('<a href="#"></a>');
@@ -293,16 +293,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(var prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -312,14 +312,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);

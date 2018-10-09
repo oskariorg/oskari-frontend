@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditCategoryRe
  * @param {Number}
  *            categoryId id of category to be edited
  */
-    function(categoryId) {
+    function (categoryId) {
         this._categoryId = categoryId;
     }, {
         __name : 'MyPlaces.EditCategoryRequest',
@@ -22,14 +22,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditCategoryRe
      * @method getName
      * @return {String} request name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
      * @method getId
      * @return {Number} id of category to be edited
      */
-        getId : function() {
+        getId : function () {
             return this._categoryId;
         }
     }, {

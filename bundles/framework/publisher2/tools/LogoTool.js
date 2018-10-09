@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
-    function() {
+    function () {
     }, {
         index : 1,
         allowedLocations : ['bottom left', 'bottom right'],
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
                 title: 'LogoPlugin',
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         mapfull: {
@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LogoTool',
                 return null;
             }
         },
-        isShownInToolsPanel: function() {
+        isShownInToolsPanel: function () {
             return false;
         }
     }, {

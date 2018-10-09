@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.request.rotate.map',
  * @method create called automatically on construction
  * @static
  */
-    function( degrees ) {
+    function (degrees) {
         this._degrees = degrees;
     }, {
         /** @static @property __name request name */

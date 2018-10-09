@@ -135,7 +135,7 @@ Oskari.clazz.define(
                  * Changes selector into dropdown if map is too narrow to fit buttons
                  */
                 MapSizeChangedEvent: function (evt) {
-                    if(this._config.showAsDropdown) {
+                    if (this._config.showAsDropdown) {
                         return; // already shown as dropdown
                     }
                     var el = this.getElement();
@@ -332,7 +332,7 @@ Oskari.clazz.define(
             }
             var me = this,
                 element = me.getElement();
-            if(!element) {
+            if (!element) {
                 return;
             }
             var layer,

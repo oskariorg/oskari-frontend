@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
-    function() {
+    function () {
     }, {
         index : 9,
         // Disabled for now, need to fix config reading first allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
     *
     * @returns {Object} tool
     */
-        getTool: function() {
+        getTool: function () {
             var featureData = this.__sandbox.findRegisteredModuleInstance('FeatureData2') || null;
             return {
                 id: 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
      * Initialise tool
      * @method init
      */
-        init: function(data) {
+        init: function (data) {
             var me = this;
             if (data.configuration[me.bundleName]) {
                 me.setEnabled(true);
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
     */
         getValues: function () {
             var me = this;
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 var pluginConfig = this.getPlugin().getConfig();
                 pluginConfig.instance = null;
                 var json = {
@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
                 return null;
             }
         },
-        isDisplayed: function() {
+        isDisplayed: function () {
         // Check if selected layers include wfs layers
             var wfs = false,
                 layers = this.__sandbox.findAllSelectedMapLayers(),

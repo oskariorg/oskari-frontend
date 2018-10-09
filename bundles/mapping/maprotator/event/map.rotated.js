@@ -4,7 +4,7 @@
  */
 Oskari.clazz.define('Oskari.mapping.event.map.rotated',
 
-    function( degrees ) {
+    function (degrees) {
         this.degrees = degrees;
     }, {
     /** @static @property __name event name */
@@ -13,10 +13,10 @@ Oskari.clazz.define('Oskari.mapping.event.map.rotated',
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getRotationDegrees: function(){
+        getRotationDegrees: function () {
             return this.degrees;
         }
     }, {

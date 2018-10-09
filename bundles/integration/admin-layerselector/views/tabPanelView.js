@@ -9,7 +9,7 @@ define([
     '_bundle/views/adminLayerSettingsView',
     '_bundle/views/layerView'
 ],
-function(FilterLayersTemplate,
+function (FilterLayersTemplate,
     AddGroupingButtonTemplate,
     AddGroupingTemplate,
     AdminAddLayerBtnTemplate,
@@ -48,7 +48,7 @@ function(FilterLayersTemplate,
              *
              * @method initialize
              */
-        initialize: function() {
+        initialize: function () {
             this.layerGroupingModel = this.options.layerGroupingModel;
             this.instance = this.options.instance;
             this.allowDeleteWhenNotEmpty = (this.options.tabId === 'inspire');
@@ -57,10 +57,10 @@ function(FilterLayersTemplate,
             // If model triggers change event we need to re-render this view
             // listenTo will remove dead listeners, use it instead of on()
             var me = this;
-            this.listenTo(this.layerGroupingModel, 'change:layerGroups', function() {
+            this.listenTo(this.layerGroupingModel, 'change:layerGroups', function () {
                 me.render();
             });
-            this.listenTo(this.layerGroupingModel, 'adminAction', function(e) {
+            this.listenTo(this.layerGroupingModel, 'adminAction', function (e) {
                 // route adminAction from model to an ui element that View.js listens
                 this.$el.trigger(e);
             });
@@ -85,7 +85,7 @@ function(FilterLayersTemplate,
              * They are used by AdminLayerSettingsView directly from this View for new layers and passed through LayerView
              * for existing layers
              */
-        __setupSupportedLayerTypes: function() {
+        __setupSupportedLayerTypes: function () {
             // generic list of layertypes supported
             this.supportedTypes = [{
                 id: 'wfslayer',
@@ -116,29 +116,29 @@ function(FilterLayersTemplate,
             // filter out ones that are not registered in current appsetup
             var sandbox = this.instance.sandbox,
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            this.supportedTypes = _.filter(this.supportedTypes, function(type) {
+            this.supportedTypes = _.filter(this.supportedTypes, function (type) {
                 return mapLayerService.hasSupportForLayerType(type.id);
             });
             // setup templates for layer types/require only ones supported
-            _.each(this.supportedTypes, function(type) {
+            _.each(this.supportedTypes, function (type) {
                 if (type.header === false) {
                     return;
                 }
                 var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateHeader.html';
-                window.require([file], function(header) {
+                window.require([file], function (header) {
                     type.headerTemplate = _.template(header);
-                }, function() {
+                }, function () {
                     sandbox.printWarn('No admin header template for layertype: ' + type.id + ' file was: ' + file);
                 });
             });
-            _.each(this.supportedTypes, function(type) {
+            _.each(this.supportedTypes, function (type) {
                 if (type.footer === false) {
                     return;
                 }
                 var file = 'text!_bundle/templates/layer/' + type.id + 'SettingsTemplateFooter.html';
-                window.require([file], function(footer) {
+                window.require([file], function (footer) {
                     type.footerTemplate = _.template(footer);
-                }, function() {
+                }, function () {
                     sandbox.printWarn('No admin footer template for layertype: ' + type.id + ' file was: ' + file);
                 });
             });
@@ -149,7 +149,7 @@ function(FilterLayersTemplate,
              *
              * @method render
              */
-        render: function() {
+        render: function () {
             this.$el.addClass(this.options.tabId);
             this.$el.empty();
             var me = this;
@@ -238,7 +238,7 @@ function(FilterLayersTemplate,
              * @param  {Object} model data to populate the form with
              * @return {DOMElement}  element ready to be added to UI
              */
-        __createGroupingPanel: function(tabId, model) {
+        __createGroupingPanel: function (tabId, model) {
             var instance = this.options.instance,
                 adminLoc = instance.getLocalization('admin'),
                 groupingConfig = {
@@ -278,7 +278,7 @@ function(FilterLayersTemplate,
              *
              * @method filterLayers
              */
-        filterLayers: function(e) {
+        filterLayers: function (e) {
             e.stopPropagation();
         },
         /**
@@ -287,7 +287,7 @@ function(FilterLayersTemplate,
              *
              * @method toggleGroupingSettings
              */
-        toggleGroupingSettings: function(e) {
+        toggleGroupingSettings: function (e) {
             //show grouping settings
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -314,7 +314,7 @@ function(FilterLayersTemplate,
              *
              * @method hideGroupingSettings
              */
-        hideGroupingSettings: function() {
+        hideGroupingSettings: function () {
             jQuery('.admin-add-class').removeClass('show-add-class');
         },
 
@@ -324,7 +324,7 @@ function(FilterLayersTemplate,
              *
              * @method toggleAddLayerGrouping
              */
-        toggleAddLayerGrouping: function(e) {
+        toggleAddLayerGrouping: function (e) {
             var elem = jQuery(e.currentTarget).parent().find('.admin-add-class');
             if (elem.hasClass('show-add-class')) {
                 elem.removeClass('show-add-class');
@@ -338,7 +338,7 @@ function(FilterLayersTemplate,
              * @param  {Boolean}        emptyCache empty cache
              * @param  {Function}       callback   callback function
              */
-        getDataproviders: function(emptyCache, callback) {
+        getDataproviders: function (emptyCache, callback) {
             var me = this;
             if (!me.dataProviders || emptyCache === true) {
                 jQuery.ajax({
@@ -346,21 +346,21 @@ function(FilterLayersTemplate,
                     dataType: 'json',
                     contentType: 'application/json; charset=UTF-8',
                     url: Oskari.urls.getRoute('GetMapLayerGroups'),
-                    error: function() {
+                    error: function () {
                         var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
                         errorDialog.fadeout();
                     },
-                    success: function(response) {
+                    success: function (response) {
                         me.dataProviders = [];
-                        response.organization.forEach(function(org) {
+                        response.organization.forEach(function (org) {
                             me.dataProviders.push({
                                 id: org.id,
                                 name: Oskari.getLocalized(org.name)
                             });
                         });
 
-                        me.dataProviders.sort(function(a, b) {
+                        me.dataProviders.sort(function (a, b) {
                             return Oskari.util.naturalSort(a.name, b.name);
                         });
                         callback();
@@ -378,11 +378,11 @@ function(FilterLayersTemplate,
              * @return  {Array}           groups
              * @private
              */
-        _getMaplayerGroups: function() {
+        _getMaplayerGroups: function () {
             var me = this;
             var groups = [];
 
-            me.layerService.getAllLayerGroups().forEach(function(group) {
+            me.layerService.getAllLayerGroups().forEach(function (group) {
                 groups.push({
                     id: group.id,
                     cls: 'group',
@@ -390,7 +390,7 @@ function(FilterLayersTemplate,
                 });
 
                 // subgroups
-                group.groups.forEach(function(subgroup) {
+                group.groups.forEach(function (subgroup) {
                     groups.push({
                         id: subgroup.id,
                         cls: 'subgroup',
@@ -398,7 +398,7 @@ function(FilterLayersTemplate,
                     });
 
                     // subgroup subgroups
-                    subgroup.groups.forEach(function(subgroupsubgroup) {
+                    subgroup.groups.forEach(function (subgroupsubgroup) {
                         groups.push({
                             id: subgroupsubgroup.id,
                             cls: 'subgroupsubgroup',
@@ -416,20 +416,20 @@ function(FilterLayersTemplate,
              *
              * @method toggleAddLayer
              */
-        toggleAddLayer: function(e) {
+        toggleAddLayer: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
                 layer = element.parent(),
                 me = this;
 
-            me.getDataproviders(false, function() {
+            me.getDataproviders(false, function () {
                 var dataProviderId = element.parents('.accordion').attr('lcid');
                 if (!layer.find('.admin-add-layer').hasClass('show-add-layer')) {
                     // create layer settings view for adding or editing layer
 
                     var groupDetails = me.layerService.getAllLayerGroups()[0];
                     var layerModel = null;
-                    if(!me.instance.locale) {
+                    if (!me.instance.locale) {
                         me.instance.locale = Oskari.getMsg.bind(null, 'admin-layerselector');
                     }
                     var settings = new AdminLayerSettingsView({
@@ -453,14 +453,14 @@ function(FilterLayersTemplate,
                         min: 0,
                         max: 100,
                         value: 100,
-                        slide: function(event, ui) {
+                        slide: function (event, ui) {
                             jQuery(ui.handle).parents('.left-tools').find('#opacity-slider').val(ui.value);
                         }
                     });
                     // change the title of the button
                     element.html(me.options.instance.getLocalization('cancel'));
                     element.attr('title', me.options.instance.getLocalization('cancel'));
-                    setTimeout(function() {
+                    setTimeout(function () {
                         layer.find('.admin-add-layer').addClass('show-add-layer');
                     }, 30);
                 } else {
@@ -476,7 +476,7 @@ function(FilterLayersTemplate,
              *
              * @method hideAddLayer
              */
-        hideAddLayer: function(e) {
+        hideAddLayer: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget);
             if (element.parents('.admin-add-layer').hasClass('show-add-layer')) {
@@ -490,7 +490,7 @@ function(FilterLayersTemplate,
              *
              * @method toggleLayerGroup
              */
-        toggleLayerGroup: function(e) {
+        toggleLayerGroup: function (e) {
             var element = jQuery(e.currentTarget),
                 panel = element.parents('.accordion:first'),
                 headerIcon = panel.find('.headerIcon');
@@ -512,7 +512,7 @@ function(FilterLayersTemplate,
              *
              * @method saveLayerGrouping
              */
-        saveLayerGrouping: function(e) {
+        saveLayerGrouping: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 addClass = element.parents('.admin-add-class');
@@ -522,12 +522,12 @@ function(FilterLayersTemplate,
                 locales: {}
             };
 
-            addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function() {
+            addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function () {
                 lang = this.id.substring(10, this.id.indexOf('-name'));
                 data.locales[lang] = this.value;
             });
 
-            this.layerGroupingModel.save(data, function(err) {
+            this.layerGroupingModel.save(data, function (err) {
                 if (err) {
                     // TODO: handle error
                     me._showDialog(me.instance.getLocalization('admin')['errorTitle'], err);
@@ -541,7 +541,7 @@ function(FilterLayersTemplate,
              *
              * @method removeLayerGrouping
              */
-        removeLayerGrouping: function(e) {
+        removeLayerGrouping: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 groupId = element.attr('data-id'),
@@ -560,9 +560,9 @@ function(FilterLayersTemplate,
 
             btn.addClass('primary');
             cancelBtn.setTitle(loc.cancel);
-            btn.setHandler(function() {
+            btn.setHandler(function () {
                 dialog.close();
-                me.layerGroupingModel.remove(groupId, function(err, info) {
+                me.layerGroupingModel.remove(groupId, function (err, info) {
                     if (info && info.responseText) {
                         var obj = JSON.parse(info.responseText);
                         if (obj.info && obj.info.code && loc.errors[obj.info.code]) {
@@ -577,7 +577,7 @@ function(FilterLayersTemplate,
                 });
             });
 
-            cancelBtn.setHandler(function() {
+            cancelBtn.setHandler(function () {
                 dialog.close();
             });
 
@@ -590,12 +590,12 @@ function(FilterLayersTemplate,
              * @param title the dialog title
              * @param message the dialog message
              */
-        _showDialog: function(title, message) {
+        _showDialog: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(title, message);
             dialog.fadeout(5000);
         },
-        __showDialog: function(title, content, elRef, alignment) {
+        __showDialog: function (title, content, elRef, alignment) {
             var me = this;
             if (this.__dialog) {
                 // close previous one if any
@@ -609,7 +609,7 @@ function(FilterLayersTemplate,
                 this.__dialog.moveTo(elRef, alignment);
             }
             // clear reference this.__dialog on close
-            this.__dialog.onClose(function() {
+            this.__dialog.onClose(function () {
                 me.__dialog = null;
             });
         },
@@ -618,7 +618,7 @@ function(FilterLayersTemplate,
              *
              * @method catchClicks
              */
-        catchClicks: function(e) {
+        catchClicks: function (e) {
             e.stopPropagation();
         }
 

@@ -4,23 +4,23 @@
  */
 Oskari.clazz.define(
     'Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.event.SelectedDrawingEvent',
-    function(pPlace, dblClick, creatorId) {
+    function (pPlace, dblClick, creatorId) {
         this._creator = null;
         this._place = pPlace;
         this._dblClick = dblClick;
         this._creatorId = creatorId;
     }, {
         __name : 'DrawPlugin.SelectedDrawingEvent',
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getPlace : function() {
+        getPlace : function () {
             return this._place;
         },
-        isDblClick : function() {
+        isDblClick : function () {
             return this._dblClick;
         },
-        getCreatorId: function() {
+        getCreatorId: function () {
             return this._creatorId;
         }
     },

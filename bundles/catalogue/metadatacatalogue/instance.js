@@ -334,7 +334,7 @@ Oskari.clazz.define(
                 var me = this,
                     coverageFeature;
 
-                if(event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage){
+                if (event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage) {
                     return;
                 }
 
@@ -368,7 +368,7 @@ Oskari.clazz.define(
                     me.drawCoverage = true;
 
                     var input = document.getElementById('oskari_metadatacatalogue_forminput_searchassistance');
-                    if(input) {
+                    if (input) {
                         input.focus();
                     }
 
@@ -688,7 +688,7 @@ Oskari.clazz.define(
                 this.coverageButton = this._initCoverageButton(me, newButton);
                 this.drawCoverage = true;
 
-                this.coverageButton.on('click', function (){
+                this.coverageButton.on('click', function () {
                     if (me.drawCoverage === true) {
                         me.coverageButton.prop('disabled', true).css({
                             'border-color': '#0099CB'
@@ -696,7 +696,7 @@ Oskari.clazz.define(
                         me.coverageButton.val(me.getLocalization('startDraw'));
                         me._getCoverage();
                         me.drawCoverage = false;
-                    }else {
+                    } else {
                         me.drawCoverage = true;
                         me._stopCoverage();
                         me.coverageButton.val(me.getLocalization('delimitArea'));
@@ -713,7 +713,7 @@ Oskari.clazz.define(
 
             me._updateOptions(advancedContainer);
         },
-        _initCoverageButton: function(me, newButton){
+        _initCoverageButton: function (me, newButton) {
             this.coverageButton = newButton.find('.metadataCoverageDef');
             this.coverageButton.attr('value', me.getLocalization('delimitArea'));
             this.coverageButton.attr('name', 'coverage');
@@ -747,7 +747,7 @@ Oskari.clazz.define(
             }]);
         },
 
-        _stopCoverage: function() {
+        _stopCoverage: function () {
             this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
         },
 
@@ -919,17 +919,17 @@ Oskari.clazz.define(
 
 
             //filter functionality
-            resultHeader.find('.filter-link').on('click', function(event) {
+            resultHeader.find('.filter-link').on('click', function (event) {
                 var filterValues = jQuery(event.currentTarget).data('value').split(',');
                 //hide filterlinks and show "show all"-link
                 resultHeader.find('.filter-link').hide();
                 resultHeader.find('.showLink').show();
 
                 var allRows = table.find('tr[class*=filter-]');
-                _.each(allRows, function(item) {
+                _.each(allRows, function (item) {
                     var classNameFound = false;
                     for (var i = 0; i < filterValues.length; i++) {
-                        if (jQuery(item).hasClass('filter-'+filterValues[i])) {
+                        if (jQuery(item).hasClass('filter-' + filterValues[i])) {
                             classNameFound = true;
                         }
                     }
@@ -977,7 +977,7 @@ Oskari.clazz.define(
 
                     //resultcontainer filtering
                     if (row.natureofthetarget) {
-                        resultContainer.addClass('filter-'+row.natureofthetarget);
+                        resultContainer.addClass('filter-' + row.natureofthetarget);
                     }
                     resultContainer.data('resultId', row.id);
                     cells = resultContainer.find('td').not('.spacer');
@@ -989,12 +989,12 @@ Oskari.clazz.define(
 
                     // Include identification
                     var identification = row.identification;
-                    var isIdentificationCode = (identification && identification.code && identification.code.length>0) ? true : false;
-                    var isIdentificationDate = (identification && identification.date && identification.date.length>0) ? true : false;
+                    var isIdentificationCode = (identification && identification.code && identification.code.length > 0) ? true : false;
+                    var isIdentificationDate = (identification && identification.date && identification.date.length > 0) ? true : false;
                     var isUpdateFrequency = (identification && identification.updateFrequency && identification.updateFrequency.length > 0) ? true : false;
-                    if(isIdentificationCode && isIdentificationDate) {
+                    if (isIdentificationCode && isIdentificationDate) {
                         var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
-                        if(!locIdentificationCode) {
+                        if (!locIdentificationCode) {
                             locIdentificationCode = identification.code;
                         }
 
@@ -1002,7 +1002,7 @@ Oskari.clazz.define(
                         if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
-                                titleText += ', '+me.getLocalization('updated')+': '+identification.updateFrequency;
+                                titleText += ', ' + me.getLocalization('updated') + ': ' + identification.updateFrequency;
                             }
                             titleText += ')';
                         }
@@ -1056,9 +1056,9 @@ Oskari.clazz.define(
                         //jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if(me._isAction() == true){
-                            jQuery.each(me.searchResultActions, function(index, action){
-                                if(action.showAction(row)) {
+                        if (me._isAction() == true) {
+                            jQuery.each(me.searchResultActions, function (index, action) {
+                                if (action.showAction(row)) {
                                     var actionElement = action.actionElement.clone(),
                                         callbackElement = null,
                                         actionTextEl = null;
@@ -1067,33 +1067,33 @@ Oskari.clazz.define(
                                     actionElement.css('margin-right','6px');
 
                                     // Set action callback
-                                    if(action.callback && typeof action.callback == 'function') {
+                                    if (action.callback && typeof action.callback == 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
-                                        if(action.bindCallbackTo) {
+                                        if (action.bindCallbackTo) {
                                             callbackElement = licenseElement.find(action.bindCallbackTo);
                                         }
                                         // Bind action click to root element if bindCallbackTo is null
                                         else {
-                                            callbackElement =  actionElement.first();
+                                            callbackElement = actionElement.first();
                                         }
-                                        callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function(event){
+                                        callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function (event) {
                                             action.callback(event.data.metadata);
                                         });
                                     }
 
                                     // Set action text
-                                    if(action.actionTextElement) {
+                                    if (action.actionTextElement) {
                                         actionTextEl = actionElement.find(action.actionTextElement);
                                     } else {
                                         actionTextEl = actionElement.first();
                                     }
 
-                                    if(actionTextEl.is('input') ||
+                                    if (actionTextEl.is('input') ||
                                         actionTextEl.is('select') ||
                                         actionTextEl.is('button') ||
                                         actionTextEl.is('textarea')) {
 
-                                        if(action.actionText && action.actionText != null){
+                                        if (action.actionText && action.actionText != null) {
                                             actionTextEl.val(action.actionText);
                                         }
                                         else {
@@ -1101,7 +1101,7 @@ Oskari.clazz.define(
                                         }
                                     }
                                     else {
-                                        if(action.actionText && action.actionText != null){
+                                        if (action.actionText && action.actionText != null) {
                                             actionTextEl.html(action.actionText);
                                         }
                                         else {
@@ -1115,12 +1115,12 @@ Oskari.clazz.define(
                         }
 
                         // Show bbox icon
-                        if(row.geom && row.geom != null) {
+                        if (row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
                             jQuery(cells[3]).find('div.showBbox').on('click', function () {
                                 // If show info area is active, remove geom from map
-                                if(jQuery(this).hasClass('icon-info-area-active')){
+                                if (jQuery(this).hasClass('icon-info-area-active')) {
                                     me._removeFeaturesFromMap();
                                     jQuery(this).parent().attr('title', me.getLocalization('grid').showBBOX);
                                 }
@@ -1171,7 +1171,7 @@ Oskari.clazz.define(
         * @method _unactiveShowInfoAreaIcons
         * @private
         */
-        _unactiveShowInfoAreaIcons: function(){
+        _unactiveShowInfoAreaIcons: function () {
             jQuery('table.metadataSearchResult tr.resultRow td.showBbox div.showBbox')
                 .removeClass('icon-info-area-active')
                 .removeClass('icon-info-area')
@@ -1297,7 +1297,7 @@ Oskari.clazz.define(
         * @param {String} actionText action text
         * @param {Function} showAction function. If return true then shows action text. Optional.
         */
-        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction){
+        addSearchResultAction: function (actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction) {
             var me = this,
                 status = null;
 
@@ -1307,10 +1307,10 @@ Oskari.clazz.define(
                 callback: callback,
                 bindCallbackTo: bindCallbackTo,
                 actionText: actionText,
-                showAction: function(metadata){return true;}
+                showAction: function (metadata) {return true;}
             };
 
-            if(showAction && showAction !== null) {
+            if (showAction && showAction !== null) {
                 status.showAction = showAction;
             }
 
@@ -1321,7 +1321,7 @@ Oskari.clazz.define(
         * @private
         * @return {Boolean} is action
         */
-        _isAction: function(){
+        _isAction: function () {
             var me = this;
             return me.searchResultActions.length > 0;
         },

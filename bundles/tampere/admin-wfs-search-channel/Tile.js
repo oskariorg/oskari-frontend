@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile',
  * instance
  *      reference to component that created the tile
  */
-    function(instance) {
+    function (instance) {
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile',
      * @method getName
      * @return {String} the name for the component
      */
-        getName : function() {
+        getName : function () {
             return 'Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile';
         },
         /**
@@ -37,42 +37,42 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile',
      *
      * Interface method implementation
      */
-        setEl : function(el, width, height) {
+        setEl : function (el, width, height) {
             this.container = jQuery(el);
         },
         /**
      * @method startPlugin
      * Interface method implementation, calls #refresh()
      */
-        startPlugin : function() {
+        startPlugin : function () {
             this.refresh();
         },
         /**
      * @method stopPlugin
      * Interface method implementation, clears the container
      */
-        stopPlugin : function() {
+        stopPlugin : function () {
             this.container.empty();
         },
         /**
      * @method getTitle
      * @return {String} localized text for the title of the tile
      */
-        getTitle : function() {
+        getTitle : function () {
             return this.instance.getLocalization('title');
         },
         /**
      * @method getDescription
      * @return {String} localized text for the description of the tile
      */
-        getDescription : function() {
+        getDescription : function () {
             return this.instance.getLocalization('desc');
         },
         /**
      * @method getOptions
      * Interface method implementation, does nothing atm
      */
-        getOptions : function() {
+        getOptions : function () {
 
         },
         /**
@@ -81,13 +81,13 @@ Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile',
      *      state that this component should use
      * Interface method implementation, does nothing atm
      */
-        setState : function(state) {
+        setState : function (state) {
         },
         /**
      * @method refresh
      * Creates the UI for a fresh start
      */
-        refresh : function() {
+        refresh : function () {
 
         }
     }, {

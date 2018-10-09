@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
-    function() {
+    function () {
     }, {
         index : 4,
         allowedLocations : ['top left', 'top right', 'bottom left', 'bottom right'],
@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
                 title: 'MyLocationPlugin',
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         mapfull: {

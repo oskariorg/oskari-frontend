@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
  *          [ { bbox: [<left>, <bottom>, <right>, <top>], url: "<image url>" }, ... ]
  * @param {Object} geojsonData
  */
-    function(contentId, layer, tileData, geojsonData) {
+    function (contentId, layer, tileData, geojsonData) {
         this._contentId = contentId;
         this._layer = layer;
         this._tileData = tileData;
@@ -25,11 +25,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function() {
+        getName : function () {
             return 'Printout.PrintableContentEvent';
         },
 
-        getContentId: function() {
+        getContentId: function () {
             return this._contentId;
         },
         /**
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
     * @method getLayer
     * @return {Object}
     */
-        getLayer: function() {
+        getLayer: function () {
             return this._layer;
         },
         /**
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
     * @method setLayer
     * @param {Object} layer
     */
-        setLayer: function(layer) {
+        setLayer: function (layer) {
             this._layer = layer;
         },
         /**
@@ -56,14 +56,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
      * @method getData
      * @return {Array[Object]}
      */
-        getTileData : function() {
+        getTileData : function () {
             return this._tileData;
         },
         /**
      * @method setData
      * @param {Array[Object]} data [{ bbox: [l,b,r,t], url: "" }, ... ]
      */
-        setTileData : function(data) {
+        setTileData : function (data) {
             this._tileData = data;
         },
         /**
@@ -72,14 +72,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintableContentE
      * @method getGeoJsonData
      * @return {Object}
      */
-        getGeoJsonData : function() {
+        getGeoJsonData : function () {
             return this._geojsonData;
         },
         /**
      * @method setData
      * @param {Object} geojson
      */
-        setGeoJsonData : function(data) {
+        setGeoJsonData : function (data) {
             this._geojsonData = data;
         }
     }, {

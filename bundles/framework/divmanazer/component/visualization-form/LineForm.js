@@ -21,7 +21,7 @@ Oskari.clazz.define(
             cap: this.defaultValues.cap,
             corner: this.defaultValues.corner,
             width: this.defaultValues.width,
-            color: '#'+this.defaultValues.color
+            color: '#' + this.defaultValues.color
         };
 
         this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
@@ -252,7 +252,7 @@ Oskari.clazz.define(
             colorPickerWrapper.append(me._colorPicker.getElement());
             me._colorPicker.setValue(me.values.color);
 
-            colorPickerWrapper.on('change', function() {
+            colorPickerWrapper.on('change', function () {
                 me.values.color = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
             });
@@ -306,7 +306,7 @@ Oskari.clazz.define(
          * @method createColorPicker
          * Creates a color picker component
          */
-        _createColorPicker: function() {
+        _createColorPicker: function () {
             this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput');
         },
 

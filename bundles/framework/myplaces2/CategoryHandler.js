@@ -403,7 +403,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          * @private
          */
         _isColor: function (value) {
-            if(value === null) {
+            if (value === null) {
                 return true;
             }
             return this.validateTool.validateHexColor(value);
@@ -513,7 +513,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                         var layerId = me._getMapLayerId(category.getId()),
                             request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true),
                             layerIsSelected = me.instance.sandbox.isLayerAlreadySelected(layerId);
-                        if (layerIsSelected){
+                        if (layerIsSelected) {
                             me.instance.sandbox.request(me, request);
                         }
                     } else {

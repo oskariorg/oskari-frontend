@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
  * @static
  * @param {OpenLayers.Geometry} geometry the feature geometry that was finished
  */
-    function(geometry, drawingMode) {
+    function (geometry, drawingMode) {
         this._drawing = geometry;
         this._drawingMode = drawingMode;
     }, {
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
      * Returns event name
      * @return {String}
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-        getDrawing : function() {
+        getDrawing : function () {
             return this._drawing;
         },
         /**
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.AddedFeatureE
      * Returns the current drawing mode
      * @return {String}
      */
-        getDrawingMode : function() {
+        getDrawingMode : function () {
             return this._drawingMode;
         }
     }, {

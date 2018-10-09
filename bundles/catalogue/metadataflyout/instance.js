@@ -24,22 +24,22 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          */
         __name: 'catalogue.bundle.metadataflyout',
 
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
 
         /**
          * @method getSandbox
          */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
 
-        getLocale: function() {
+        getLocale: function () {
             return this._locale;
         },
 
-        getLoader: function() {
+        getLoader: function () {
             return this.loader;
         },
 
@@ -192,19 +192,19 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
          */
-        getLayerService: function() {
+        getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
 
         /**
          * Adds tools for all layers
          */
-        _setupLayerTools: function() {
+        _setupLayerTools: function () {
             var me = this;
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function(layer) {
+            _.each(layers, function (layer) {
                 me._addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          * @param  {String| Number} layerId layer to process
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
-        _addTool: function(layer, suppressEvent) {
+        _addTool: function (layer, suppressEvent) {
             var me = this;
             var service = me.getLayerService();
             if (typeof layer !== 'object') {
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
                     }
                 }
             }
-            tool.setCallback(function() {
+            tool.setCallback(function () {
                 me.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
                     uuid: layer.getMetadataIdentifier()
                 },
@@ -259,7 +259,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
             service.addToolForLayer(layer, tool, suppressEvent);
         },
 
-        init: function() {
+        init: function () {
             return null;
         },
 
@@ -268,12 +268,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          *
          * implements bundle instance update method
          */
-        update: function() {},
+        update: function () {},
 
         /**
          * @method onEvent
          */
-        onEvent: function(event) {
+        onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -289,14 +289,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          *
          */
         eventHandlers: {
-            AfterMapLayerAddEvent: function(event) {
+            AfterMapLayerAddEvent: function (event) {
                 /* this might react when layer added */
                 /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
             },
             /**
              * @method AfterMapLayerRemoveEvent
              */
-            AfterMapLayerRemoveEvent: function(event) {
+            AfterMapLayerRemoveEvent: function (event) {
                 /* this might react when layer removed */
                 /* this.scheduleShowMetadata(event.getMapLayer().getMetadataResourceUUID(); */
             },
@@ -304,7 +304,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
              * @method userinterface.ExtensionUpdatedEvent
              * Fetch when flyout is opened
              */
-            'userinterface.ExtensionUpdatedEvent': function(event) {
+            'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this;
                 if (event.getExtension().getName() !== me.getName()) {
                     // not me -> do nothing
@@ -315,7 +315,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
                     this.state = {};
                 }
             },
-            'MapLayerEvent': function(event) {
+            'MapLayerEvent': function (event) {
                 if (event.getOperation() !== 'add') {
                     // only handle add layer
                     return;
@@ -393,7 +393,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.MetadataFlyoutBundle
          * @method scheduleShowMetadata
          * schedules a refresh of the UI to load metadata asynchronously
          */
-        scheduleShowMetadata: function(allMetadata) {
+        scheduleShowMetadata: function (allMetadata) {
             /** update flyout content */
             this.plugins['Oskari.userinterface.Flyout'].scheduleShowMetadata(allMetadata);
 

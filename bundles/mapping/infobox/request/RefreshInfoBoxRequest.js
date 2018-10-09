@@ -40,14 +40,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
          * @method getOperation
          * @return {String}
          */
-        getOperation: function() {
+        getOperation: function () {
             return this._operation;
         },
         /**
          * @method getContentId
          * @return {String/Number}
          */
-        getContentId: function() {
+        getContentId: function () {
             return this._contentId;
         }
     }, {

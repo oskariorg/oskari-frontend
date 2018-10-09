@@ -20,7 +20,7 @@ Oskari.clazz.define(
         /** @static @property layerType type of layers this plugin handles */
         layertype : 'userlayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector : function () {
             return this.layertype;
         },
         /**
@@ -76,12 +76,12 @@ Oskari.clazz.define(
                 opacity: layer.getOpacity() / 100
             };
             //minresolution === maxscale and vice versa...
-            if(layer.getMaxScale() && layer.getMaxScale() !== -1) {
+            if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
                 model.minResolution = map.getResolutionForScale(layer.getMaxScale());
             }
-            if(layer.getMinScale() && layer.getMinScale() !== -1) {
+            if (layer.getMinScale() && layer.getMinScale() !== -1) {
                 var maxResolution = map.getResolutionForScale(layer.getMinScale());
-                if(maxResolution !== map.getResolutionArray()[0]) {
+                if (maxResolution !== map.getResolutionArray()[0]) {
                     // ol3 maxReso is exclusive so don't set if it's the map max resolution
                     model.maxResolution = maxResolution;
                 }
@@ -105,20 +105,20 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
             var source = layer.getSource();
 
-            source.on('imageloadstart', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            source.on('imageloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            source.on('imageloadend', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            source.on('imageloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            source.on('imageloaderror', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on('imageloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
         }
 

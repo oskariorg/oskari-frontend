@@ -1,10 +1,10 @@
 /**
  * @class Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler
  */
-Oskari.clazz.define('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', function(tourInstance) {
+Oskari.clazz.define('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', function (tourInstance) {
     this.tour = tourInstance;
 }, {
-    handleRequest: function(core, request) {
+    handleRequest: function (core, request) {
         var delegate = request.getDelegate();
 
         this.tour.addStep(delegate);

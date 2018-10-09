@@ -25,20 +25,20 @@ Oskari.clazz.define(
             dataSourceGroup: jQuery('<div class="data-sources-group"><h4 class="data-sources-heading"></h4></div>'),
             extend: jQuery('<div style="display: inline-block;"><a href="#"></a></div>')
         },
-        _initImpl : function() {
+        _initImpl : function () {
             this._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.LogoPlugin;
         },
-        getService : function() {
-            if(!this._service) {
+        getService : function () {
+            if (!this._service) {
                 this._service = Oskari.clazz.create('Oskari.map.DataProviderInfoService', this.getSandbox());
 
-                if(this._service) {
+                if (this._service) {
                     var me = this;
                     // init group for layers
                     this._service.addGroup(me.constLayerGroupId, me._loc.layersHeader);
                     var layers = me.getSandbox().findAllSelectedMapLayers();
                     // add initial layers
-                    layers.forEach(function(layer) {
+                    layers.forEach(function (layer) {
                         me._service.addItemToGroup(me.constLayerGroupId, {
                             'id' : layer.getId(),
                             'name' : layer.getName(),
@@ -47,7 +47,7 @@ Oskari.clazz.define(
                         });
                     });
                     // if service was created, add a change listener
-                    this._service.on('change', function() {
+                    this._service.on('change', function () {
                         me.updateDialog();
                     });
                 }
@@ -78,17 +78,17 @@ Oskari.clazz.define(
         _createEventHandlers: function () {
             //TODO: listen to MapLayerEvent and if(event.getOperation() === 'update') -> update layer name in ui?
             return {
-                'AfterMapLayerRemoveEvent' : function(event) {
+                'AfterMapLayerRemoveEvent' : function (event) {
                     var service = this.getService();
-                    if(!service || !event.getMapLayer()) {
+                    if (!service || !event.getMapLayer()) {
                         return;
                     }
                     service.removeItemFromGroup(this.constLayerGroupId, event.getMapLayer().getId());
                 },
-                'AfterMapLayerAddEvent' : function(event) {
+                'AfterMapLayerAddEvent' : function (event) {
                     var layer = event.getMapLayer();
                     var service = this.getService();
-                    if(!service || !layer) {
+                    if (!service || !layer) {
                         return;
                     }
                     service.addItemToGroup(this.constLayerGroupId, {
@@ -165,7 +165,7 @@ Oskari.clazz.define(
                 element = el || me.getElement(),
                 mapUrl = me.__getMapUrl(),
                 linkParams;
-            if(!element) {
+            if (!element) {
                 return;
             }
 
@@ -187,7 +187,7 @@ Oskari.clazz.define(
          * @private
          * @return {String} base URL for state parameters
          */
-        __getMapUrl : function() {
+        __getMapUrl : function () {
             var sandbox = this.getSandbox();
             var url = Oskari.getLocalized(this.getConfig().mapUrlPrefix);
 
@@ -197,7 +197,7 @@ Oskari.clazz.define(
         _createTermsLink: function (termsUrl, el) {
             var me = this,
                 element = el || me.getElement();
-            if(!element || !termsUrl) {
+            if (!element || !termsUrl) {
                 return;
             }
             var options = {
@@ -218,12 +218,12 @@ Oskari.clazz.define(
                 conf = me.getConfig() || {},
                 element = el || me.getElement();
 
-            if(!element || conf.hideDataSourceLink) {
+            if (!element || conf.hideDataSourceLink) {
                 return;
             }
             var options = {
                 id:'data-sources',
-                callback: function(e) {
+                callback: function (e) {
                     if (!me.inLayerToolsEditMode() && !me.dataSourcesDialog) {
                         me._openDataSourcesDialog(e.target);
                     } else if (me.dataSourcesDialog) {
@@ -260,27 +260,27 @@ Oskari.clazz.define(
             this.changeCssClasses(classToAdd, testRegex, [div]);
         },
 
-        updateDialog : function() {
-            if(!this.dataSourcesDialog) {
+        updateDialog : function () {
+            if (!this.dataSourcesDialog) {
                 return;
             }
             this.dataSourcesDialog.setContent(this.getDialogContent());
             this.dataSourcesDialog.moveTo(this.getElement().find('div.data-sources'), 'top');
         },
 
-        getDialogContent : function() {
+        getDialogContent : function () {
             var service = this.getService();
-            if(!service) {
+            if (!service) {
                 return;
             }
             var me = this;
             var content = this.templates.dataSourcesDialog.clone();
             var groups = this._service.getNonEmptyGroups();
-            groups.forEach(function(group) {
+            groups.forEach(function (group) {
                 var tpl = me.templates.dataSourceGroup.clone();
                 tpl.addClass(group.id);
                 tpl.find('h4').html(group.name);
-                group.items.forEach(function(item) {
+                group.items.forEach(function (item) {
                     var itemTpl = jQuery('<div></div>');
                     itemTpl.append(item.name);
                     itemTpl.append(me.__formatItemSources(item.source));
@@ -295,16 +295,16 @@ Oskari.clazz.define(
          * @param  {String|Object|Object[]} src datasources for item to show on the UI
          * @return {String|jQuery} appendable presentation of datasources for an UI item.
          */
-        __formatItemSources : function(src) {
-            if(!src) {
+        __formatItemSources : function (src) {
+            if (!src) {
                 return '';
             }
             var SEPARATOR = ' - ';
-            var formatSrc = function(item) {
-                if(typeof item ==='string') {
+            var formatSrc = function (item) {
+                if (typeof item === 'string') {
                     return item;
                 }
-                if(!item.url) {
+                if (!item.url) {
                     return item.name;
                 }
                 var link = jQuery('<a target="_blank"></a>');
@@ -313,14 +313,14 @@ Oskari.clazz.define(
                 return link;
             };
             var tpl = jQuery('<span></span>');
-            if(typeof src.forEach !== 'function') {
+            if (typeof src.forEach !== 'function') {
                 tpl.append(SEPARATOR);
                 tpl.append(formatSrc(src));
                 return tpl;
             }
 
-            src.forEach(function(item) {
-                if(item) {
+            src.forEach(function (item) {
+                if (item) {
                     tpl.append(SEPARATOR);
                     tpl.append(formatSrc(item));
                 }
@@ -341,7 +341,7 @@ Oskari.clazz.define(
             var me = this;
             var popupTitle = me._loc.dataSources;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            me.dataSourcesDialog= dialog;
+            me.dataSourcesDialog = dialog;
 
             var closeButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
             closeButton.setHandler(function () {
@@ -370,7 +370,7 @@ Oskari.clazz.define(
             this._service.removeGroup('indicators');
             this._service.addGroup('indicators', me._loc.indicatorsHeader);
             // add initial layers
-            Object.keys(indicators).forEach(function(id) {
+            Object.keys(indicators).forEach(function (id) {
                 me._service.addItemToGroup('indicators', {
                     'id' : id,
                     'name' : indicators[id].title,
@@ -388,23 +388,23 @@ Oskari.clazz.define(
         updateLabels: function (el) {
             var me = this;
             var template = el || this.getElement();
-            if(!template) {
+            if (!template) {
                 return;
             }
             var labels = this._extendService.getLabels();
 
-            labels.forEach( function( link ) {
+            labels.forEach(function (link) {
                 var extend = me.templates.extend.clone();
-                if(link.options.id) {
+                if (link.options.id) {
                     extend.addClass(link.options.id.toLowerCase());
                 }
-                if(link.options.id !== 'icon') {
+                if (link.options.id !== 'icon') {
                     extend.css('margin','5px');
                 }
                 extend.find('a').text(link.title);
                 template.append(extend);
-                if(typeof link.options.callback === 'function') {
-                    extend.on('click', function(e) {
+                if (typeof link.options.callback === 'function') {
+                    extend.on('click', function (e) {
                         link.options.callback(e);
                     });
                 }

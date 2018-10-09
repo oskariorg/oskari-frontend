@@ -14,7 +14,7 @@ Oskari.clazz.define(
      * @param {Oskari.mapframework.ui.module.common.MapModule}
      *            mapModule reference to mapmodule
      */
-    function(sandbox, mapModule) {
+    function (sandbox, mapModule) {
         this.sandbox = sandbox;
         this.mapModule = mapModule;
     }, {
@@ -28,7 +28,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.request.common.MapMoveRequest} request
          *      request to handle
          */
-        handleRequest: function(core, request) {
+        handleRequest: function (core, request) {
             var zoom = request.getZoom(),
                 srsName = request.getSrsName(),
                 lonlat = {

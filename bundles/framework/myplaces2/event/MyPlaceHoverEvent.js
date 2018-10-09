@@ -6,23 +6,23 @@
 
 Oskari.clazz.define(
     'Oskari.mapframework.myplaces.event.MyPlaceHoverEvent',
-    function(pLonlat, pEvent, zoomLevel) {
+    function (pLonlat, pEvent, zoomLevel) {
         this._creator = null;
         this._lonlat = pLonlat;
         this._hoverEvent = pEvent;
         this._zoom = zoomLevel; // 0-12
     }, {
         __name : 'MyPlaces.MyPlaceHoverEvent',
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getHoverEvent : function() {
+        getHoverEvent : function () {
             return this._hoverEvent;
         },
-        getLonLat : function() {
+        getLonLat : function () {
             return this._lonlat;
         },
-        getZoomLevel : function() {
+        getZoomLevel : function () {
             return this._zoom;
         }
     },

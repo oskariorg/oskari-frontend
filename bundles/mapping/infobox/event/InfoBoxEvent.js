@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent',
  * @method create called automatically on construction
  * @static
  */
-    function(_popupId, _popupOpen, _contentId) {
+    function (_popupId, _popupOpen, _contentId) {
         this._popupId = _popupId;
         this._isOpen = _popupOpen;
         this._contentId = _contentId;
@@ -18,16 +18,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent',
      * @method getName
      * @return {String} the name for the event
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
-        getId : function() {
+        getId : function () {
             return this._popupId;
         },
-        isOpen : function() {
+        isOpen : function () {
             return this._isOpen;
         },
-        getContentId : function() {
+        getContentId : function () {
             return this._contentId;
         },
         /**

@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
  * @param {String}
  *            searchUrl ajax URL to actual metadata catalogue search implementation
  */
-    function(searchUrl) {
+    function (searchUrl) {
 
     /* searchUrl url that will give us results */
         this._searchUrl = searchUrl;
@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
      * @method getQName
      * @return {String} fully qualified name for service
      */
-        getQName : function() {
+        getQName : function () {
             return this.__qname;
         },
         /** @static @property __name service name */
@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
      * @method getName
      * @return {String} service name
      */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.searchfromchannels.service.ChannelOpt
 	 * @param {Function}
 	 *            onComplete callback method for search completion
      */
-        getOptions : function(onSuccess, onError) {
+        getOptions : function (onSuccess, onError) {
             jQuery.ajax({
                 dataType : 'json',
                 type : 'GET',

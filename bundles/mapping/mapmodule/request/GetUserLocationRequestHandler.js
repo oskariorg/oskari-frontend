@@ -12,9 +12,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
         var mapmodule = this.mapmodule;
         var cb = undefined;
         // if request.getCenterMap() is truthy: also move map
-        if(request.getCenterMap()) {
-        	cb = function(lon, lat) {
-                if(!lon || !lat) {
+        if (request.getCenterMap()) {
+        	cb = function (lon, lat) {
+                if (!lon || !lat) {
                     // error getting location
                     return;
                 }

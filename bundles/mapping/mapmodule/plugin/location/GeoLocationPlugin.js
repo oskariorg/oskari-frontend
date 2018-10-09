@@ -50,8 +50,8 @@ Oskari.clazz.define(
         _setupLocation: function () {
             var me = this;
             var mapmodule = this.getMapModule();
-            mapmodule.getUserLocation(function(lon, lat) {
-                if(!lon || !lat) {
+            mapmodule.getUserLocation(function (lon, lat) {
+                if (!lon || !lat) {
                     // error getting location
                     return;
                 }

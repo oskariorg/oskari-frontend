@@ -103,12 +103,12 @@ Oskari.clazz.define(
                 lat = null,
                 marker = null;
 
-            if(position.marker && me.markers[position.marker]) {
+            if (position.marker && me.markers[position.marker]) {
                 lon = me.markers[position.marker].data.x;
                 lat = me.markers[position.marker].data.y;
                 marker = me.markers[position.marker];
                 me.markerPopups[position.marker] = id;
-            } else if(position.lon && position.lat){
+            } else if (position.lon && position.lat) {
                 lon = position.lon;
                 lat = position.lat;
             } else {
@@ -260,7 +260,7 @@ Oskari.clazz.define(
             };
 
             // Fix popup header height to match title content height if using desktop popup
-            if(title && !isInMobileMode) {
+            if (title && !isInMobileMode) {
                 var popupEl = jQuery(popup.div);
                 var popupHeaderEl = popupEl.find('.popupHeader');
 
@@ -271,7 +271,7 @@ Oskari.clazz.define(
                 };
 
                 var popupHeaderChildrens = popupHeaderEl.children();
-                popupHeaderChildrens.each(function(){
+                popupHeaderChildrens.each(function () {
                     var popupHeaderChildren = jQuery(this);
                     fixSize.top += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().top : 0;
                     fixSize.left += (popupEl.length > 0 && popupHeaderEl.length > 0 && popupHeaderChildren.length > 0) ? popupHeaderChildren.position().left : 0;
@@ -340,7 +340,7 @@ Oskari.clazz.define(
             headerWrapper.append(closeButton);
 
             //add additional btns
-            jQuery.each( additionalTools, function( index, key ){
+            jQuery.each(additionalTools, function (index, key) {
                 var additionalButton = me._headerAdditionalButton.clone();
                 additionalButton.attr({
                     'id': key.name,
@@ -417,7 +417,7 @@ Oskari.clazz.define(
                         }
                         group = currentGroup;
                     });
-                } else if(typeof actions === 'object') {
+                } else if (typeof actions === 'object') {
                     me.log.warn('Popup actions must be an Array. Cannot add tools.');
                 }
 
@@ -473,8 +473,8 @@ Oskari.clazz.define(
                 }
             }
 
-            if(additionalTools.length > 0){
-                jQuery.each( additionalTools, function( index, key ){
+            if (additionalTools.length > 0) {
+                jQuery.each(additionalTools, function (index, key) {
                     if (link.hasClass(key.iconCls)) {
                         me.close(id);
                         key.callback(key.params);
@@ -482,7 +482,7 @@ Oskari.clazz.define(
                 });
             }
 
-            if(!link.is('a') || link.parents('.getinforesult_table').length) {
+            if (!link.is('a') || link.parents('.getinforesult_table').length) {
                 evt.stopPropagation();
             }
         },
@@ -547,7 +547,7 @@ Oskari.clazz.define(
                 popup = jQuery('#' + olPopupId),
                 left = parseFloat(popup.css('left'));
 
-            if(isNaN(left)) {
+            if (isNaN(left)) {
                 left = 0;
             }
             // popup needs to move 10 pixels to the right
@@ -593,7 +593,7 @@ Oskari.clazz.define(
             content.css({
                 'height': height
             });
-            if(!isOverThanMax) {
+            if (!isOverThanMax) {
                 popup.css('min-height', 'inherit');
             }
 
@@ -803,7 +803,7 @@ Oskari.clazz.define(
                     if (this._popups.hasOwnProperty(pid)) {
                         popup = this._popups[pid];
                         delete this._popups[pid];
-                        if(popup.type === 'mobile') {
+                        if (popup.type === 'mobile') {
                             popup.popup.close(true);
                         } else {
                             popup.popup.destroy();
@@ -821,7 +821,7 @@ Oskari.clazz.define(
                 if (!popup.popup) {
                     return;
                 }
-                if(popup.type === 'mobile') {
+                if (popup.type === 'mobile') {
                     popup.popup.close();
                 } else {
                     popup.popup.destroy();

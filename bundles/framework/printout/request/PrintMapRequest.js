@@ -1,15 +1,15 @@
 Oskari.clazz
     .define(
         'Oskari.mapframework.bundle.printout.request.PrintMapRequest',
-        function(selections) {
+        function (selections) {
             this._creator = null;
             this._selections = selections;
         }, {
             __name : 'printout.PrintMapRequest',
-            getName : function() {
+            getName : function () {
                 return this.__name;
             },
-            getSelections : function() {
+            getSelections : function () {
                 return this._selections;
             }
         },

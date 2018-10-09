@@ -9,37 +9,37 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.Tile',
  *
  * Always extend this class, never use as is.
  */
-    function(instance, locale) {
+    function (instance, locale) {
 
         this.instance = instance;
         this.locale = locale;
         this.container = null;
         this.template = null;
     }, {
-        getName : function() {
+        getName : function () {
             return 'Oskari.integration.bundle.backbone.Tile';
         },
-        setEl : function(el) {
+        setEl : function (el) {
             this.container = $(el);
         },
-        startPlugin : function() {
+        startPlugin : function () {
             this.refresh();
         },
-        stopPlugin : function() {
+        stopPlugin : function () {
             this.container.empty();
         },
-        getTitle : function() {
+        getTitle : function () {
             return this.locale['title'];
         },
-        getDescription : function() {
+        getDescription : function () {
         },
-        getOptions : function() {
+        getOptions : function () {
 
         },
-        setState : function(state) {
+        setState : function (state) {
             this.state = state;
         },
-        refresh : function() {
+        refresh : function () {
         }
     }, {
         'protocol' : ['Oskari.userinterface.Tile']

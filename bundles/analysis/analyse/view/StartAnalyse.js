@@ -684,7 +684,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * -By default only select numeric fields.
          * -Add infotext, if text type fields are selected
          */
-        _preselectPropertiesAggregate: function(propertyList) {
+        _preselectPropertiesAggregate: function (propertyList) {
             var me = this,
                 maxNumOfFields = me.max_analyse_layer_fields,
                 count = 0;
@@ -701,11 +701,11 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                     }
 
 
-                    jQuery(input).on('change', function(event) {
+                    jQuery(input).on('change', function (event) {
                         var checked = propertyList.find('li input:checked'),
                             fieldSelectionInfo = me.mainPanel.find('div.analysis_additional_info'),
                             textFields = false;
-                        checked.each(function(index, element) {
+                        checked.each(function (index, element) {
                             var field = jQuery(element).val();
                             if (!me._isNumericField(field)) {
                                 textFields = true;
@@ -771,7 +771,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 contentPanel = panel.getContainer(),
                 tooltipCont = me.template.help.clone(),
                 visualizationForm = Oskari.clazz.create(
-                    'Oskari.userinterface.component.VisualizationForm', {saveCallback: function() {
+                    'Oskari.userinterface.component.VisualizationForm', {saveCallback: function () {
                         me.ownStyleSaved();
                     }}
                 );
@@ -1151,7 +1151,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * Add analyse data layer to selection box
          *
          */
-        _determineAnalysisWFSLayer: function(contentOptions) {
+        _determineAnalysisWFSLayer: function (contentOptions) {
             var me = this,
                 option;
 
@@ -1181,7 +1181,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          * @return {OpenLayers.Feature.Vector} or null
          */
-        setContentPanelSelectedGeometry: function() {
+        setContentPanelSelectedGeometry: function () {
             var me = this,
                 analysisWFSLayerId = me.WFSLayerService.getAnalysisWFSLayerId(),
                 analysisWFSLayer,
@@ -1398,7 +1398,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
                 contentPanel.parent().find('input[name=showFeatureData]').prop('checked', true);
 
-                if(me._getNoDataValue()){
+                if (me._getNoDataValue()) {
                     toolContainer.append(me._param_footer);
                 }
 
@@ -2393,7 +2393,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          * @private @method _getSelectedMethod
          * Convenience method for getting the analysis method currently selected.
          */
-        _getSelectedMethod: function() {
+        _getSelectedMethod: function () {
             var me = this,
                 container = me.mainPanel,
                 selectedMethod = container.find('input[name=method]:checked').val();
@@ -2659,7 +2659,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          *
          */
         _analyseMap: function () {
-            var data= {},
+            var data = {},
                 me = this,
                 sandbox = me.instance.getSandbox(),
                 selections = me._gatherSelections(),
@@ -2873,18 +2873,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
          */
         _showAggregateResultPopup: function (resultJson, geojson, noDataCnt) {
             var me = this,
-                popup =  Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel'),
                 content = this.template.wrapper.clone(),
                 contentPanel = me.contentPanel,
                 tmpfea = {},
                 fields;
             // Array Array is used for to keep order of rows and cols
-            _.forEach(resultJson, function(feature, key) {
+            _.forEach(resultJson, function (feature, key) {
                 tmpfea = {};
-                _.forEach(feature, function(sfeature, skey) {
-                    _.forEach(sfeature, function(ssfeature, sskey) {
-                        _.forEach(ssfeature, function(value, ssskey) {
+                _.forEach(feature, function (sfeature, skey) {
+                    _.forEach(sfeature, function (ssfeature, sskey) {
+                        _.forEach(ssfeature, function (value, ssskey) {
                             tmpfea[ssskey] = value;
                         });
                     });
@@ -2916,7 +2916,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 me.instance.sandbox.postRequestByName(rq);
                 //Store temp geometry layer
                 var title = me.mainPanel.find('.settings_name_field').val() ? me.mainPanel.find('.settings_name_field').val() : '_';
-                contentPanel.addGeometry(me._getOLGeometry(geojson), title );
+                contentPanel.addGeometry(me._getOLGeometry(geojson), title);
                 me._showFeatureDataWithoutSaving = false;
                 popup.close(true);
 
@@ -3048,7 +3048,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                         layer._isLayerSelected = false;
                     }
 
-                    me.filterDialog.createFilterDialog(layer, prevJson, function() {
+                    me.filterDialog.createFilterDialog(layer, prevJson, function () {
                         me.instance.analyseService._returnAnalysisOfTypeAggregate(_.bind(me.aggregateAnalyseFilter.addAggregateFilterFunctionality, me));
                     }, boolSelectedFeatures, boolSelectedGeometry);
 

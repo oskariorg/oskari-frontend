@@ -28,15 +28,15 @@ Oskari.clazz.category(
          * @return {String} current view uuid, if public view. Otherwise returns uuid of system default view with same srs as current view.
          */
         _getLinkUuid: function () {
-            if(Oskari.app.isPublic()) {
+            if (Oskari.app.isPublic()) {
                 return Oskari.app.getUuid();
             }
             // not public -> get the a system appsetup with matching srs
             var srs = Oskari.getSandbox().getMap().getSrsName();
-            var matchingSystemAppsetup = Oskari.app.getSystemDefaultViews().find(function(appsetup) {
+            var matchingSystemAppsetup = Oskari.app.getSystemDefaultViews().find(function (appsetup) {
                 return appsetup.srsName === srs;
             });
-            if(!matchingSystemAppsetup) {
+            if (!matchingSystemAppsetup) {
                 return null;
             }
             return matchingSystemAppsetup.uuid;
@@ -107,7 +107,7 @@ Oskari.clazz.category(
                         sticky: true,
                         callback: function () {
                             var toolname = 'map_control_zoom_tool';
-                            if(gfiReqBuilder) {
+                            if (gfiReqBuilder) {
                                 me.getSandbox().request(
                                     me,
                                     gfiReqBuilder(false)
@@ -123,7 +123,7 @@ Oskari.clazz.category(
                         sticky: true,
                         callback: function () {
                             var toolname = 'map_control_navigate_tool';
-                            if(gfiReqBuilder) {
+                            if (gfiReqBuilder) {
                                 me.getSandbox().request(
                                     me,
                                     gfiReqBuilder(true)
@@ -138,7 +138,7 @@ Oskari.clazz.category(
                         sticky: true,
                         callback: function () {
                             var toolname = 'map_control_measure_tool';
-                            if(gfiReqBuilder) {
+                            if (gfiReqBuilder) {
                                 me.getSandbox().request(
                                     me,
                                     gfiReqBuilder(false)
@@ -153,7 +153,7 @@ Oskari.clazz.category(
                         sticky: true,
                         callback: function () {
                             var toolname = 'map_control_measure_area_tool';
-                            if(gfiReqBuilder) {
+                            if (gfiReqBuilder) {
                                 me.getSandbox().request(
                                     me,
                                     gfiReqBuilder(false)
@@ -171,20 +171,20 @@ Oskari.clazz.category(
                         tooltip: loc.link.tooltip,
                         sticky: false,
                         callback: function () {
-                            if( me.dialog ){
+                            if (me.dialog) {
                                 me.dialog.close(true);
                                 me.dialog = null;
                                 return;
                             }
                             me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            me.dialog.onClose(function(){
+                            me.dialog.onClose(function () {
                                 me.dialog = null;
                             });
                             var mapUrlPrefix = me.__getMapUrl();
                             var linkParams = me.getSandbox().generateMapLinkParameters({});
 
                             var viewUuid = me._getLinkUuid();
-                            if(!viewUuid) {
+                            if (!viewUuid) {
                                 var closeBtn = me.dialog.createCloseButton();
                                 me.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
                                 return;
@@ -232,10 +232,10 @@ Oskari.clazz.category(
          * @private
          * @return {String} base URL for state parameters
          */
-        __getMapUrl : function() {
+        __getMapUrl : function () {
             var sandbox = this.getSandbox();
             var url = null;
-            if(this.conf) {
+            if (this.conf) {
                 url = Oskari.getLocalized(this.conf.mapUrlPrefix);
             }
 

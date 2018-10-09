@@ -199,7 +199,7 @@ Oskari.clazz.define(
                 scale = sandbox.getMap().getScale(),
                 conf = me._config;
 
-            if(this.getElement()) {
+            if (this.getElement()) {
                 this.getElement().hide();
             }
             // Check, if there's any manual refresh wfs layers, show element if so
@@ -222,12 +222,12 @@ Oskari.clazz.define(
                     }
                 }
 
-                if (countInscale === countManu && loc.refresh_alert ) {
+                if (countInscale === countManu && loc.refresh_alert) {
                     this.getElement().attr('refresh_status', refresh_status2);
                     this.getElement().css({'background-color': '#FF007F'});
                     this.getElement().attr('title', loc.refresh_alert[refresh_status2]);
                 } else {
-                    if (countInvisi === countManu && loc.refresh_alert ) {
+                    if (countInvisi === countManu && loc.refresh_alert) {
                         this.getElement().attr('refresh_status', refresh_status1);
                         this.getElement().css({'background-color': '#FF007F'});
                         this.getElement().attr('title', loc.refresh_alert[refresh_status1]);
@@ -239,7 +239,7 @@ Oskari.clazz.define(
                 }
 
             }
-            if(isVisible && this.getElement()) {
+            if (isVisible && this.getElement()) {
                 this.getElement().show();
             }
             me.setVisible(isVisible);
@@ -271,9 +271,9 @@ Oskari.clazz.define(
             var styleClass = 'toolstyle-' + (style ? style : 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for(var c=0;c<classList.length;c++){
+            for (var c = 0;c < classList.length;c++) {
                 var className = classList[c];
-                if(className.indexOf('toolstyle-') > -1){
+                if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
                 }
             }
@@ -288,10 +288,10 @@ Oskari.clazz.define(
                 refresh_status,
                 loc = me.getLocalization();
 
-            if(me.getElement()) {
+            if (me.getElement()) {
                 refresh_status = me.getElement().attr('refresh_status');
             }
-            if(refresh_status && loc.refresh_alert){
+            if (refresh_status && loc.refresh_alert) {
                 //  refresh_status values = "all_invisible", "all_not_in_scale",
                 me.showMessage(loc.refresh_alert.title, loc.refresh_alert[refresh_status]);
                 return true;
@@ -313,17 +313,17 @@ Oskari.clazz.define(
                 count = 0,
                 render = false;
 
-            if(config){
+            if (config) {
                 render = config.isPublished;
             }
 
             // see if there's any wfs layers, show  if so
             for (i = 0; i < layers.length; i++) {
-                if (layers[i].hasFeatureData() &&  layers[i].isManualRefresh() ) {
+                if (layers[i].hasFeatureData() && layers[i].isManualRefresh()) {
                     count++;
                 }
             }
-            if(count === 1 && layer.isManualRefresh()){
+            if (count === 1 && layer.isManualRefresh()) {
                 me.showMessage(me.getLocalization().information.title, me.getLocalization().information.info, me.getLocalization().button.close, render);
             }
         },
@@ -525,14 +525,14 @@ Oskari.clazz.define(
          * @param  {String} reqLayerId optional id
          * @return {Oskari.mapframework.domain.AbstractLayer}  layers array
          */
-        _getLayers : function(reqLayerId) {
+        _getLayers : function (reqLayerId) {
             var sb = this.getSandbox();
 
-            if(!reqLayerId) {
+            if (!reqLayerId) {
                 return sb.findAllSelectedMapLayers();
             }
             var layer = sb.findMapLayerFromSelectedMapLayers(reqLayerId);
-            if(layer) {
+            if (layer) {
                 return [layer];
             }
             return [];
@@ -602,7 +602,7 @@ Oskari.clazz.define(
          *
          * Transforms an ol2 - style extent object to an ol3 - style array. If extent is already in the array form, return the original.
          */
-        ol2ExtentOl3Transform: function(ol2Extent) {
+        ol2ExtentOl3Transform: function (ol2Extent) {
             if (ol2Extent && ol2Extent.hasOwnProperty('left') && ol2Extent.hasOwnProperty('bottom') && ol2Extent.hasOwnProperty('right') && ol2Extent.hasOwnProperty('top')) {
                 return [
                     ol2Extent.left,
@@ -792,7 +792,7 @@ Oskari.clazz.define(
                 var OLLayer = this.getOLMapLayer(
                     event.getMapLayer()
                 );
-                if (typeof OLLayer.getSource().refresh ==='function'){
+                if (typeof OLLayer.getSource().refresh === 'function') {
                     OLLayer.getSource().refresh();
                 }
 
@@ -869,11 +869,11 @@ Oskari.clazz.define(
             grid = me.getGrid();
 
             // inform user, if no manual refresh wfs layer visible or  not in scale --> return
-            if (me.checkManualRefreshState()){
+            if (me.checkManualRefreshState()) {
                 return;
             }
 
-            if(event.getLayerId()){
+            if (event.getLayerId()) {
 
                 layers.push(me.getSandbox().findMapLayerFromSelectedMapLayers(event.getLayerId()));
             }
@@ -935,7 +935,7 @@ Oskari.clazz.define(
                 // clean features lists
                 layer.setActiveFeatures([]);
                 var ollayer = me.getOLMapLayer(layer);
-                if(!ollayer) {
+                if (!ollayer) {
                     return;
                 }
                 var tiles = ollayer.getSource().getNonCachedGrid(grid);
@@ -1078,11 +1078,11 @@ Oskari.clazz.define(
             var me = this;
             var result = [];
             var normallayer = me.getOLMapLayer(layer, this.__typeNormal);
-            if(normallayer) {
+            if (normallayer) {
                 result.push(normallayer);
             }
             var highlightlayer = me.getOLMapLayer(layer, this.__typeHighlight);
-            if(highlightlayer) {
+            if (highlightlayer) {
                 result.push(highlightlayer);
             }
 
@@ -1107,7 +1107,7 @@ Oskari.clazz.define(
          * Creates the base tilegrid for use with any Grid operations
          *
          */
-        createTileGrid: function() {
+        createTileGrid: function () {
             var tileSize = this.getTileSize();
             this._tileGrid = new olTilegridTileGrid({
                 extent: this.ol2ExtentOl3Transform(this.getMapModule().getMaxExtent()),
@@ -1291,7 +1291,7 @@ Oskari.clazz.define(
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 me = this,
                 sandbox = me.getSandbox();
-            if(ok) {
+            if (ok) {
                 okBtn.setTitle(ok);
                 okBtn.addClass('primary');
                 okBtn.setHandler(function () {
@@ -1303,7 +1303,7 @@ Oskari.clazz.define(
                 });
                 dialog.show(title, message, [okBtn]);
             }
-            else{
+            else {
                 dialog.show(title, message);
                 dialog.fadeout(5000);
             }
@@ -1337,7 +1337,7 @@ Oskari.clazz.define(
          * sends message to /highlight*
          */
         getHighlightImage: function (layer, srs, bbox, zoom, featureIds) {
-            if(!featureIds || !featureIds.length) {
+            if (!featureIds || !featureIds.length) {
                 return;
             }
             // helper function for visibleFields
@@ -1395,24 +1395,24 @@ Oskari.clazz.define(
         setHighlighted: function (highlighted) {
             this._highlighted = highlighted;
         },
-        hasUI: function() {
+        hasUI: function () {
             return false;
         },
-        updateScale: function(layer, minscale, maxscale) {
+        updateScale: function (layer, minscale, maxscale) {
             var me = this;
             layer.setMinScale(minscale);
             layer.setMaxScale(maxscale);
             var olLayer = this.getOLMapLayers(layer);
             var layerResolutions = this.getMapModule().calculateLayerResolutions(maxscale, minscale);
             olLayer[0].setMinResolution(layerResolutions[0]);
-            olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length -1]);
+            olLayer[0].setMaxResolution(layerResolutions[layerResolutions.length - 1]);
 
             this._dialog = Oskari.clazz.create(
                 'Oskari.userinterface.component.Popup'
             );
             var btn = this._dialog.createCloseButton('OK');
 
-            btn.setHandler(function() {
+            btn.setHandler(function () {
                 me._dialog.close();
             });
             this._dialog.show(me._loc.scale_dialog.title, me._loc.scale_dialog.msg, [btn]);
@@ -1471,20 +1471,20 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this;
             var source = layer.getSource();
 
-            source.on('tileloadstart', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), true);
+            source.on('tileloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            source.on('tileloadend', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), false);
+            source.on('tileloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            source.on('tileloaderror', function() {
-                me.getMapModule().loadingState( oskariLayer.getId(), null, true );
+            source.on('tileloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
 
         },
@@ -1507,7 +1507,7 @@ Oskari.clazz.define(
                 return;
             }
             if (layerType === me.__typeHighlight) {
-                ols = [imageSize.width,imageSize.height];  // ol/size
+                ols = [imageSize.width,imageSize.height]; // ol/size
 
                 wfsMapImageLayer = new olLayerImage({
                     source: new olSourceImageStatic({
@@ -1545,12 +1545,12 @@ Oskari.clazz.define(
                 ollayer.getSource().setupImageContent(boundsObj, imageUrl, ollayer, map, boundaryTile);
             }
         },
-        getLayerName : function(layer, type) {
+        getLayerName : function (layer, type) {
             type = type || this.__typeNormal;
             return this.__layerPrefix + layer.getId() + '_' + type;
         },
-        layerByName : function(name, value) {
-            if(!value) {
+        layerByName : function (name, value) {
+            if (!value) {
                 return this.__layersByName[name];
             }
             this.__layersByName[name] = value;

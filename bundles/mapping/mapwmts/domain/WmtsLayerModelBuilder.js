@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder', fu
     /**
      * parses any additional fields to model
      */
-    parseLayerData: function(layer, mapLayerJson, maplayerService) {
+    parseLayerData: function (layer, mapLayerJson, maplayerService) {
         maplayerService.populateStyles(layer, mapLayerJson);
 
         if (mapLayerJson.formats) {

@@ -71,11 +71,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             }
         },
 
-        addTabsAsync: function(data) {
+        addTabsAsync: function (data) {
             var me = this;
 
             if (me.panels && me.panels.length) {
-                _.each(me.panels, function(panel) {
+                _.each(me.panels, function (panel) {
                     panel.addTabsAsync(data);
                 });
             } else {
@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 data.lineageStatements[index] = me._prettify(lineage);
             });
 
-            data.dataQualities.forEach(function(dataQuality) {
+            data.dataQualities.forEach(function (dataQuality) {
                 dataQuality.UIlabel = me.locale.heading[dataQuality.nodeName];
             });
 

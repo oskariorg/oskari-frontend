@@ -95,7 +95,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 //Let's extend UI after we have the role data
                 var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
-            }, function(){
+            }, function () {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     btn = dialog.createCloseButton('Ok'),
                     request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);

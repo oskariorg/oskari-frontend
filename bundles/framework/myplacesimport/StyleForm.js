@@ -14,30 +14,30 @@ Oskari.clazz.define(
     function (instance) {
         this.instance = instance;
         this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
-            
+
         this.visualizationForm = Oskari.clazz.create(
             'Oskari.userinterface.component.VisualizationForm'
         );
         this.template = jQuery(
         	'<div class="myplacesimportstyleform">' +
-            '   <div class="field name">' + 
-            '       <label for="userlayername">'+ this.loc('flyout.layer.name') +'</label><br clear="all" />' +
-            '       <input type="text" data-name="userlayername" />' + 
+            '   <div class="field name">' +
+            '       <label for="userlayername">' + this.loc('flyout.layer.name') + '</label><br clear="all" />' +
+            '       <input type="text" data-name="userlayername" />' +
             '   </div>' +
-            '   <div class="field desc">' + 
-            '       <label for="description">'+ this.loc('flyout.layer.desc') +'</label><br clear="all" />' +
+            '   <div class="field desc">' +
+            '       <label for="description">' + this.loc('flyout.layer.desc') + '</label><br clear="all" />' +
             '       <input type="text" data-name="userlayerdesc" />' +
             '   </div>' +
-            '   <div class="field source">' + 
-            '       <label for ="datasource">'+ this.loc('flyout.layer.source') +'</label><br clear="all" />' +
+            '   <div class="field source">' +
+            '       <label for ="datasource">' + this.loc('flyout.layer.source') + '</label><br clear="all" />' +
             '       <input type="text" data-name="userlayersource" />' +
             '   </div>' +
             '   <div class="field visualization">' +
                     '<label for=style>' + this.loc('flyout.layer.style') + '</label><br clear="all" />' +
                     '<div class="rendering"></div>' +
-            '   </div>'+
+            '   </div>' +
             '</div>');
-    }, {               
+    }, {
         start: function () {},
 
     	/**
@@ -52,12 +52,12 @@ Oskari.clazz.define(
 
             return ui;
         },
-        
+
         /**
          * @method setStyleValues
          * @param {Object} style
          */
-        setStyleValues: function (style){
+        setStyleValues: function (style) {
             style.dot.color = this._formatColorFromServer(style.dot.color);
             style.line.color = this._formatColorFromServer(style.line.color);
             style.area.lineColor = (typeof style.area.lineColor === 'string' ? this._formatColorFromServer(style.area.lineColor) : null);
@@ -87,7 +87,7 @@ Oskari.clazz.define(
          * @private
          * @return {Object} styleJson
          */
-        _getStyleValues: function(form){
+        _getStyleValues: function (form) {
             var formValues = form.getValues(),
                 styleJson = {};
 
@@ -122,7 +122,7 @@ Oskari.clazz.define(
          * @method getValues
          * @return {Object} values
          */
-        getValues: function (){
+        getValues: function () {
             var values = {},
                 me = this;
             // infobox will make us lose our reference so search
@@ -148,4 +148,4 @@ Oskari.clazz.define(
             return jQuery('div.myplacesimportstyleform');
         }
 
-    });	
+    });

@@ -9,7 +9,7 @@ Oskari.clazz.define(
      * @method create called automatically on construction
      * @static
      */
-    function(instance, title, id) {
+    function (instance, title, id) {
         this.instance = instance;
         this.service = this.instance.layerlistExtenderService;
         this.title = title;
@@ -64,17 +64,17 @@ Oskari.clazz.define(
          * @method  _bindExtenderServiceListeners
          * @private
          */
-        _bindExtenderServiceListeners: function() {
+        _bindExtenderServiceListeners: function () {
             var me = this;
 
             // Main tool added
-            me.service.on('maintool.added', function(data) {
+            me.service.on('maintool.added', function (data) {
                 var tool = me.templates.mainTool.clone();
                 tool.attr('data-id', data.id);
                 tool.attr('title', data.options.tooltip);
                 tool.addClass(data.options.cls);
 
-                tool.on('click', function(evt) {
+                tool.on('click', function (evt) {
                     evt.stopPropagation();
                     tool.addClass('active');
                     data.handler(tool);
@@ -83,37 +83,37 @@ Oskari.clazz.define(
             });
 
             // Group tool added
-            me.service.on('grouptool.added', function(data) {
+            me.service.on('grouptool.added', function (data) {
                 me._addGroupTools();
             });
 
             // Subgroup tool added
-            me.service.on('subgrouptool.added', function(data) {
+            me.service.on('subgrouptool.added', function (data) {
                 me._addSubgroupTools();
             });
 
             // Subgroup tool added
-            me.service.on('subgroupsubgrouptool.added', function(data) {
+            me.service.on('subgroupsubgrouptool.added', function (data) {
                 me._addSubgroupSubgroupTools();
             });
 
             // Layer tool added
-            me.service.on('layertool.added', function(data) {
+            me.service.on('layertool.added', function (data) {
                 me._addLayerTools();
             });
 
             // conditional select changed
-            me.service.on('conditional.select', function(data) {
+            me.service.on('conditional.select', function (data) {
                 me.selectNodeFromTree(data.node, data.event);
             });
 
-            me.service.on('order.changed', function(data) {
+            me.service.on('order.changed', function (data) {
                 if (!data.ajax) {
                     me._updateAllTools();
                 }
             });
 
-            me.service.on('search', function(data) {
+            me.service.on('search', function (data) {
                 // if nothing results found then hide jstree and show no results text
                 if (data.str.res.length == 0) {
                     me.getJsTreeElement().hide();
@@ -124,7 +124,7 @@ Oskari.clazz.define(
                 }
             });
 
-            me.service.on('search.clear', function() {
+            me.service.on('search.clear', function () {
                 me.setNoResultMessageVisible(false);
             });
         },
@@ -136,35 +136,35 @@ Oskari.clazz.define(
          * @param   {Booelan}           search is search
          * @private
          */
-        _updateLayerCountsAndGroupsVisibility: function(search) {
+        _updateLayerCountsAndGroupsVisibility: function (search) {
             var me = this;
             var jstree = me.getJsTreeElement().jstree(true);
 
-            var getNodesByType = function(type, childrens) {
+            var getNodesByType = function (type, childrens) {
                 var nodes = childrens || jstree.get_json('#', { flat: true });
-                return nodes.filter(function(node){
+                return nodes.filter(function (node) {
                     return node.type === type;
                 });
             };
 
-            var calculateLayerCounts = function(node) {
-                var getLayersCount = function(group){
+            var calculateLayerCounts = function (node) {
+                var getLayersCount = function (group) {
                     var node = jstree.get_node(group.id);
                     var count = {
                         visible: 0,
                         all: 0
                     };
 
-                    node.children.forEach(function(child){
+                    node.children.forEach(function (child) {
                         var childNode = jstree.get_node(child);
-                        if(childNode.type === 'layer' && childNode.state.hidden === false) {
+                        if (childNode.type === 'layer' && childNode.state.hidden === false) {
                             count.visible++;
                         }
 
-                        if(childNode.type === 'layer') {
+                        if (childNode.type === 'layer') {
                             count.all++;
                         }
-                        if(childNode.type !== 'layer') {
+                        if (childNode.type !== 'layer') {
                             var subCount = getLayersCount(childNode);
                             count.visible += subCount.visible;
                             count.all += subCount.all;
@@ -179,19 +179,19 @@ Oskari.clazz.define(
                 return getLayersCount(node);
             };
 
-            var updateLayerCounts = function(type){
+            var updateLayerCounts = function (type) {
                 var groups = getNodesByType(type);
-                groups.forEach(function(groupNode){
+                groups.forEach(function (groupNode) {
                     var count = calculateLayerCounts(groupNode);
                     var node = jstree.get_node(groupNode);
-                    if((count.all === 0 && !me.service.hasEmptyGroupsVisible()) || node.state.hidden) {
+                    if ((count.all === 0 && !me.service.hasEmptyGroupsVisible()) || node.state.hidden) {
                         jstree.hide_node(groupNode);
                     } else {
                         jstree.show_node(groupNode);
                     }
                     var nodeText = jstree.get_text(groupNode);
                     var el = jQuery('<div>' + nodeText + '</div>');
-                    if(!search){
+                    if (!search) {
                         el.find('.layer-count').html('(' + count.all + ')');
                     } else {
                         el.find('.layer-count').html('(' + count.visible + '/' + count.all + ')');
@@ -211,12 +211,12 @@ Oskari.clazz.define(
          * @method  _updateAllTools
          * @private
          */
-        _updateAllTools: function() {
+        _updateAllTools: function () {
             var me = this;
             // ugly timeout, need remove in future
             // wait at js tree is rendered
             clearTimeout(me.toolsTimeout);
-            me.toolsTimeout = setTimeout(function() {
+            me.toolsTimeout = setTimeout(function () {
                 me._addGroupTools();
                 me._addSubgroupTools();
                 me._addSubgroupSubgroupTools();
@@ -230,19 +230,19 @@ Oskari.clazz.define(
          * @param {Object} element jquery element, if not defined find all group-tools
          * @private
          */
-        _addGroupTools: function(element) {
+        _addGroupTools: function (element) {
             var me = this;
             var el = element || me.getJsTreeElement();
             var groupTools = el.find('.group-tools');
             groupTools.empty();
-            Object.keys(me.service.getGroupTool()).forEach(function(key) {
+            Object.keys(me.service.getGroupTool()).forEach(function (key) {
                 var grouptool = me.service.getGroupTool(key);
                 var tool = me.templates.groupTool.clone();
                 tool.attr('data-id', key);
                 tool.attr('title', grouptool.options.tooltip);
                 tool.addClass(grouptool.options.cls);
 
-                tool.on('click', function(evt) {
+                tool.on('click', function (evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -259,19 +259,19 @@ Oskari.clazz.define(
          * @param {Object} element jquery element, if not defined find all subgroup-tools
          * @private
          */
-        _addSubgroupTools: function(element) {
+        _addSubgroupTools: function (element) {
             var me = this;
             var el = element || me.getJsTreeElement();
             var subgroupTools = el.find('.subgroup-tools');
             subgroupTools.empty();
-            Object.keys(me.service.getSubgroupTool()).forEach(function(key) {
+            Object.keys(me.service.getSubgroupTool()).forEach(function (key) {
                 var subgrouptool = me.service.getSubgroupTool(key);
                 var tool = me.templates.subgroupTool.clone();
                 tool.attr('data-id', key);
                 tool.attr('title', subgrouptool.options.tooltip);
                 tool.addClass(subgrouptool.options.cls);
 
-                tool.on('click', function(evt) {
+                tool.on('click', function (evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -289,19 +289,19 @@ Oskari.clazz.define(
          * @param {Object} element jquery element, if not defined find all subgroup-tools
          * @private
          */
-        _addSubgroupSubgroupTools: function(element) {
+        _addSubgroupSubgroupTools: function (element) {
             var me = this;
             var el = element || me.getJsTreeElement();
             var subgroupSubgroupTools = el.find('.subgroup-subgroup-tools');
             subgroupSubgroupTools.empty();
-            Object.keys(me.service.getSubgroupSubgroupTool()).forEach(function(key) {
+            Object.keys(me.service.getSubgroupSubgroupTool()).forEach(function (key) {
                 var subgrouptool = me.service.getSubgroupSubgroupTool(key);
                 var tool = me.templates.subgroupSubgroupTool.clone();
                 tool.attr('data-id', key);
                 tool.attr('title', subgrouptool.options.tooltip);
                 tool.addClass(subgrouptool.options.cls);
 
-                tool.on('click', function(evt) {
+                tool.on('click', function (evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -319,19 +319,19 @@ Oskari.clazz.define(
          * @param {Object} element jquery element, if not defined find all layer-tools
          * @private
          */
-        _addLayerTools: function(element) {
+        _addLayerTools: function (element) {
             var me = this;
             var el = element || me.getJsTreeElement();
             var layerTools = el.find('span.layer-tools');
             layerTools.find('.layer-tool').remove();
-            Object.keys(me.service.getLayerTool()).forEach(function(key) {
+            Object.keys(me.service.getLayerTool()).forEach(function (key) {
                 var layertool = me.service.getLayerTool(key);
                 var tool = me.templates.layerTool.clone();
                 tool.attr('data-id', key);
                 tool.attr('title', layertool.options.tooltip);
                 tool.addClass(layertool.options.cls);
 
-                tool.on('click', function(evt) {
+                tool.on('click', function (evt) {
                     evt.stopPropagation();
                     jQuery(this).addClass('active');
                     var parent = jQuery(this).parents('a.jstree-anchor');
@@ -352,7 +352,7 @@ Oskari.clazz.define(
          * @return  {Object}                Jstree node conf
          * @private
          */
-        _getJsTreeObject: function(text, type, opts, children, tools) {
+        _getJsTreeObject: function (text, type, opts, children, tools) {
 
             var jstreeObject = {
                 text: text + '<div class="' + type + '-tools"></div>',
@@ -360,7 +360,7 @@ Oskari.clazz.define(
                 children: children
             };
 
-            if(tools === false) {
+            if (tools === false) {
                 jstreeObject.text = text;
             }
 
@@ -379,7 +379,7 @@ Oskari.clazz.define(
          *      container for the icon
          * Creates info icon for given oskarifield
          */
-        _createInfoIcon: function(oskarifield) {
+        _createInfoIcon: function (oskarifield) {
             //"use strict";
             var me = this,
                 infoIcon = jQuery('<div class="icon-info"></div>'),
@@ -389,7 +389,7 @@ Oskari.clazz.define(
             // append this indicator
             indicatorCont.append(infoIcon);
             // show metadata
-            infoIcon.on('click', function() {
+            infoIcon.on('click', function () {
                 var desc = me.templates.description.clone(),
                     dialog = Oskari.clazz.create(
                         'Oskari.userinterface.component.Popup'
@@ -400,7 +400,7 @@ Oskari.clazz.define(
 
                 desc.find('p').text(me.instance.getLocalization('filter').description);
                 okBtn.addClass('primary');
-                okBtn.setHandler(function() {
+                okBtn.setHandler(function () {
                     dialog.close(true);
                 });
                 dialog.show(me.instance.getLocalization('filter').text, desc, [okBtn]);
@@ -413,7 +413,7 @@ Oskari.clazz.define(
          *
          * @param  {String} oskarifieldId oskari field id
          */
-        _createUI: function(oskarifieldId) {
+        _createUI: function (oskarifieldId) {
             var me = this,
                 oskarifield,
                 layerFilter;
@@ -466,7 +466,7 @@ Oskari.clazz.define(
          * @param   {Object}           layer oskari layer
          * @private
          */
-        _showLayerMetaData: function(layer) {
+        _showLayerMetaData: function (layer) {
             var me = this,
                 rn = 'catalogue.ShowMetadataRequest',
                 uuid = layer.getMetadataIdentifier(),
@@ -497,7 +497,7 @@ Oskari.clazz.define(
          * @param   {Object}          layer Oskari layer
          * @private
          */
-        _showMapLayerBackendStatus: function(layer) {
+        _showMapLayerBackendStatus: function (layer) {
             var me = this,
                 mapLayerId = layer.getId();
             me.sb.postRequestByName('ShowMapLayerInfoRequest', [
@@ -511,7 +511,7 @@ Oskari.clazz.define(
          * @return  {String}       node id
          * @private
          */
-        _getNodeRealId: function(node) {
+        _getNodeRealId: function (node) {
             return node.a_attr['data-layer-id'];
         },
         /**
@@ -520,7 +520,7 @@ Oskari.clazz.define(
          * Creates the layer containers
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} layer to render
          */
-        _createLayerContainer: function(layer) {
+        _createLayerContainer: function (layer) {
             var me = this,
                 // create from layer template
                 // (was clone-from-template but template was only used once so there was some overhead)
@@ -602,7 +602,7 @@ Oskari.clazz.define(
          * @param   {Integer}               height map heigt
          * @private
          */
-        _updateContainerHeight: function(height) {
+        _updateContainerHeight: function (height) {
             var me = this;
             me.getJsTreeElement().css('max-height', (height * 0.5) + 'px');
         },
@@ -612,22 +612,22 @@ Oskari.clazz.define(
          * @method  _bindOskariEvents
          * @private
          */
-        _bindOskariEvents: function() {
+        _bindOskariEvents: function () {
             var me = this;
 
-            me._notifierService.on('AfterMapLayerAddEvent', function(evt) {
+            me._notifierService.on('AfterMapLayerAddEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
 
-            me._notifierService.on('AfterMapLayerRemoveEvent', function(evt) {
+            me._notifierService.on('AfterMapLayerRemoveEvent', function (evt) {
                 var layer = evt.getMapLayer();
                 me._toggleLayerCheckboxes(layer.getId(), false);
             });
 
 
-            me._notifierService.on('MapSizeChangedEvent', function(evt) {
+            me._notifierService.on('MapSizeChangedEvent', function (evt) {
                 me._updateContainerHeight(evt.getHeight());
             });
         },
@@ -639,11 +639,11 @@ Oskari.clazz.define(
          * @param   {Boolean}         checked need layer checked
          * @private
          */
-        _toggleLayerCheckboxes: function(layerId, checked) {
+        _toggleLayerCheckboxes: function (layerId, checked) {
             var me = this;
             var layers = [];
             var modelData = me.getJsTreeElement().jstree(true)._model.data;
-            Object.keys(modelData).forEach(function(key) {
+            Object.keys(modelData).forEach(function (key) {
                 var node = modelData[key];
                 if (node.type === 'layer' && node.a_attr['data-layer-id'] === layerId) {
                     layers.push(node.id);
@@ -665,7 +665,7 @@ Oskari.clazz.define(
          * @method getTitle
          * @return {Strin} title
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.title;
         },
 
@@ -674,7 +674,7 @@ Oskari.clazz.define(
          * @method getTabPanel
          * @return {Object}    tab panel
          */
-        getTabPanel: function() {
+        getTabPanel: function () {
             return this.tabPanel;
         },
 
@@ -683,7 +683,7 @@ Oskari.clazz.define(
          * @method getState
          * @return {Object} state
          */
-        getState: function() {
+        getState: function () {
             var state = {
                 tab: this.getTitle(),
                 filter: this.filterField.getValue()
@@ -696,7 +696,7 @@ Oskari.clazz.define(
          * @method setState
          * @param  {Object} state state
          */
-        setState: function(state) {
+        setState: function (state) {
             //"use strict";
             if (!state) {
                 return;
@@ -713,7 +713,7 @@ Oskari.clazz.define(
          *
          *
          */
-        focus: function() {
+        focus: function () {
             this.getFilterField().getField().find('input').focus();
         },
 
@@ -723,7 +723,7 @@ Oskari.clazz.define(
          *
          * @return {Oskari.userinterface.component.FormInput} field
          */
-        getFilterField: function() {
+        getFilterField: function () {
             var me = this,
                 field,
                 timer = 0;
@@ -735,12 +735,12 @@ Oskari.clazz.define(
             field.setPlaceholder(me.instance.getLocalization('filter').text);
             field.addClearButton();
 
-            field.bindChange(function(event) {
+            field.bindChange(function (event) {
                 event.stopPropagation(); // JUST BECAUSE TEST ENVIRONMENT FAILS
                 if (timer) {
                     clearTimeout(timer);
                 }
-                timer = setTimeout(function() {
+                timer = setTimeout(function () {
                     me.getJsTreeElement().jstree(true).search(field.getValue());
                     timer = null;
                 }, 300);
@@ -757,7 +757,7 @@ Oskari.clazz.define(
          * @param  {Object}           node  jstree node
          * @param  {Object}           event event
          */
-        selectNodeFromTree: function(node, event) {
+        selectNodeFromTree: function (node, event) {
             var me = this;
             var tree = jQuery(event.delegateTarget);
             var isChecked = tree.jstree().is_checked(node);
@@ -765,14 +765,14 @@ Oskari.clazz.define(
             var nodeChildren = node.children_d;
 
             var layersChecked = [];
-            nodeChildren.forEach(function(nodeId) {
+            nodeChildren.forEach(function (nodeId) {
                 var node = tree.jstree().get_node(nodeId);
                 if (node.type === 'layer') {
                     layersChecked.push(node.a_attr['data-layer-id']);
                 }
             });
 
-            if(node.type.indexOf('group') > -1 && !jQuery(event.target).hasClass('jstree-checkbox')) {
+            if (node.type.indexOf('group') > -1 && !jQuery(event.target).hasClass('jstree-checkbox')) {
                 return;
             }
 
@@ -814,7 +814,7 @@ Oskari.clazz.define(
                     if (allSelectedLayersLength > 10) {
                         desc.find('p').text(me.instance.getLocalization('manyLayersWarning').text);
                         okBtn.addClass('primary');
-                        okBtn.setHandler(function() {
+                        okBtn.setHandler(function () {
                             dialog.close(true);
                             tree.jstree().check_node(node);
                             var layerId = me._getNodeRealId(node);
@@ -823,7 +823,7 @@ Oskari.clazz.define(
                             }
                         });
                         cancelBtn.addClass('secondary');
-                        cancelBtn.setHandler(function() {
+                        cancelBtn.setHandler(function () {
                             dialog.close(true);
                         });
                         dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
@@ -845,7 +845,7 @@ Oskari.clazz.define(
             case 'group':
                 if (isChecked) {
                     tree.jstree().uncheck_node(node);
-                    layersChecked.forEach(function(layerId) {
+                    layersChecked.forEach(function (layerId) {
                         if (me.sb.isLayerAlreadySelected(layerId)) {
                             me.sb.postRequestByName('RemoveMapLayerRequest', [layerId]);
                         }
@@ -863,25 +863,25 @@ Oskari.clazz.define(
 
                         desc.find('p').text(text);
                         okBtn.addClass('primary');
-                        okBtn.setHandler(function() {
+                        okBtn.setHandler(function () {
                             dialog.close(true);
                             tree.jstree().open_node(node);
                             tree.jstree().check_node(node);
-                            layersChecked.forEach(function(layerId) {
+                            layersChecked.forEach(function (layerId) {
                                 if (!me.sb.isLayerAlreadySelected(layerId)) {
                                     me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                                 }
                             });
                         });
                         cancelBtn.addClass('secondary');
-                        cancelBtn.setHandler(function() {
+                        cancelBtn.setHandler(function () {
                             dialog.close(true);
                         });
                         dialog.show(me.instance.getLocalization('manyLayersWarning').title, desc, [okBtn, cancelBtn]);
                     } else {
                         tree.jstree().open_node(node);
                         tree.jstree().check_node(node);
-                        layersChecked.forEach(function(layerId) {
+                        layersChecked.forEach(function (layerId) {
                             if (!me.sb.isLayerAlreadySelected(layerId)) {
                                 me.sb.postRequestByName('AddMapLayerRequest', [layerId]);
                             }
@@ -896,7 +896,7 @@ Oskari.clazz.define(
          * @method getJsTreeElement
          * @return {Object}       jQuery element
          */
-        getJsTreeElement: function() {
+        getJsTreeElement: function () {
             return this.tabPanel.getContainer().find('.hierarchical-layerlist-tree');
         },
 
@@ -907,7 +907,7 @@ Oskari.clazz.define(
          *
          * @param  {Array} groups
          */
-        showLayerGroups: function(groups) {
+        showLayerGroups: function (groups) {
             var me = this,
                 jsTreeData = [];
 
@@ -916,8 +916,8 @@ Oskari.clazz.define(
             }
             var layerTree = me.templates.layerTree.clone();
 
-            var getLayerConf = function(layer,group) {
-                if(layer) {
+            var getLayerConf = function (layer,group) {
+                if (layer) {
                     var opts = {
                         a_attr: {
                             'data-group-id': group.getId(),
@@ -933,8 +933,8 @@ Oskari.clazz.define(
                 return null;
             };
 
-            var getSubgroupConf = function(maplayerGroup, parentGroup, groupPrefix) {
-                if(maplayerGroup) {
+            var getSubgroupConf = function (maplayerGroup, parentGroup, groupPrefix) {
+                if (maplayerGroup) {
                     var subgroupChildren = [];
 
                     var opts = {
@@ -945,7 +945,7 @@ Oskari.clazz.define(
                         }
                     };
 
-                    addChildren(maplayerGroup,subgroupChildren, groupPrefix+'subgroup-');
+                    addChildren(maplayerGroup,subgroupChildren, groupPrefix + 'subgroup-');
 
                     return me._getJsTreeObject(Oskari.getLocalized(maplayerGroup.getName()) + ' <span class="layer-count"></span>',
                         groupPrefix + 'subgroup',
@@ -957,7 +957,7 @@ Oskari.clazz.define(
 
             me.tabPanel.getContainer().append(layerTree);
 
-            if(me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults').length === 0) {
+            if (me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults').length === 0) {
                 var noSearchResults = me.templates.noSearchResults.clone();
                 noSearchResults.html(me.instance.getLocalization('errors.noResults')).hide();
                 me.tabPanel.getContainer().append(noSearchResults);
@@ -966,10 +966,10 @@ Oskari.clazz.define(
 
             me.layerGroups = groups;
 
-            var addChildren = function(group, groupChildren, groupPrefix) {
+            var addChildren = function (group, groupChildren, groupPrefix) {
                 var childrens = group.getChildren();
-                childrens.forEach(function(children){
-                    if(children.type==='layer') {
+                childrens.forEach(function (children) {
+                    if (children.type === 'layer') {
                         var layerConf = getLayerConf(me.sb.findMapLayerFromAllAvailable(children.id), group);
                         if (layerConf) {
                             groupChildren.push(layerConf);
@@ -984,7 +984,7 @@ Oskari.clazz.define(
                 });
             };
 
-            groups.forEach(function(group) {
+            groups.forEach(function (group) {
                 var groupChildren = [];
 
                 var extraOpts = {
@@ -1007,7 +1007,7 @@ Oskari.clazz.define(
 
             var jsTreeDiv = me.getJsTreeElement();
 
-            me.service.getEventHandler().forEach(function(event) {
+            me.service.getEventHandler().forEach(function (event) {
                 jsTreeDiv.on(event.name, event.handler);
             });
 
@@ -1018,38 +1018,38 @@ Oskari.clazz.define(
             me._updateContainerHeight(jQuery('#mapdiv').height());
 
             // check selected layers
-            me.sb.findAllSelectedMapLayers().forEach(function(layer) {
+            me.sb.findAllSelectedMapLayers().forEach(function (layer) {
                 me._toggleLayerCheckboxes(layer.getId(), true);
             });
 
             // JStree is ready
-            me.getJsTreeElement().on('ready.jstree', function() {
+            me.getJsTreeElement().on('ready.jstree', function () {
                 me._updateLayerCountsAndGroupsVisibility(false);
                 me._addGroupTools();
                 me._addSubgroupTools();
             });
 
             // When open node then updata tools also
-            me.getJsTreeElement().on('open_node.jstree', function() {
+            me.getJsTreeElement().on('open_node.jstree', function () {
                 me._addSubgroupTools();
                 me._addSubgroupSubgroupTools();
                 me._addLayerTools();
 
                 // check selected layers
-                me.sb.findAllSelectedMapLayers().forEach(function(layer) {
+                me.sb.findAllSelectedMapLayers().forEach(function (layer) {
                     me._toggleLayerCheckboxes(layer.getId(), true);
                 });
             });
 
 
-            me.getJsTreeElement().on('redraw.jstree',function(){
+            me.getJsTreeElement().on('redraw.jstree',function () {
                 me._updateAllTools();
                 me._updateLayerCountsAndGroupsVisibility(true);
             });
 
             // Add click handler for toggle groups open/close state
-            me.getJsTreeElement().on('click', function(evt) {
-                if(!jQuery(evt.target).hasClass('jstree-checkbox') && !jQuery(evt.target).hasClass('jstree-ocl')) {
+            me.getJsTreeElement().on('click', function (evt) {
+                if (!jQuery(evt.target).hasClass('jstree-checkbox') && !jQuery(evt.target).hasClass('jstree-ocl')) {
                     me.getJsTreeElement().jstree(true).toggle_node(evt.target);
                 }
             });
@@ -1060,10 +1060,10 @@ Oskari.clazz.define(
          * @method setNoResultMessageVisible
          * @param  {Boolean}                  visible has message visible
          */
-        setNoResultMessageVisible: function(visible) {
+        setNoResultMessageVisible: function (visible) {
             var me = this;
             var noResultsElement = me.tabPanel.getContainer().find('.hierarchical-layerlist-search-noresults');
-            if(!visible) {
+            if (!visible) {
                 noResultsElement.hide();
                 return;
             }
@@ -1079,7 +1079,7 @@ Oskari.clazz.define(
          *      dom object to be cleared
          * Clears related keywords popup
          */
-        clearRelatedKeywordsPopup: function(keyword, oskarifield) {
+        clearRelatedKeywordsPopup: function (keyword, oskarifield) {
             // clear only if sent keyword has changed or it is not null
             if (this.sentKeyword && this.sentKeyword !== keyword) {
                 oskarifield.find('.related-keywords').html('').hide();

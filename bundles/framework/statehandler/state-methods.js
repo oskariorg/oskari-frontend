@@ -96,7 +96,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     _getStartupState: function () {
         var ret;
         if (this._startupState) {
-            ret =  jQuery.extend(true, {}, this._startupState);
+            ret = jQuery.extend(true, {}, this._startupState);
         } else {
             ret = this._startupState;
         }

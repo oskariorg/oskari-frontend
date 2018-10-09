@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var getCapsUrl = Oskari.urls.getRoute('GetLayerCapabilities');
 
         var caps = this.getCapabilities(url);
-        if(caps) {
+        if (caps) {
             // return with cached capabilities
             success(this.__createWMTSLayer(caps, layer));
             return;
@@ -57,13 +57,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         // gather capabilities requests
         // make ajax call just once and invoke all callbacks once finished
         var triggerAjaxBln = false;
-        if(!this.requestsMap[url]) {
+        if (!this.requestsMap[url]) {
             this.requestsMap[url] = [];
             triggerAjaxBln = true;
         }
         this.requestsMap[url].push(arguments);
 
-        if(triggerAjaxBln) {
+        if (triggerAjaxBln) {
             jQuery.ajax({
                 data: {
                     id : layer.getId()
@@ -71,12 +71,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 dataType : 'xml',
                 type : 'GET',
                 url : getCapsUrl,
-                success : function(response) {
+                success : function (response) {
                     var responseXml = response;
 
                     // Fixed IE9 issue when getting capabilities XML.
                     // If IE9 then response capabilities XML is in reposne.xml
-                    if(response.xml){
+                    if (response.xml) {
                         responseXml = response.xml;
                     }
 
@@ -85,13 +85,13 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                     // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
                     // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}
                     var isTileMatrixSets = (caps && caps.Contents && caps.Contents.TileMatrixSet) ? true : false;
-                    if(isTileMatrixSets) {
+                    if (isTileMatrixSets) {
                         var matrixSets = caps.Contents.TileMatrixSet;
-                        for(var index = 0; index < matrixSets.length; index++) {
+                        for (var index = 0; index < matrixSets.length; index++) {
                             var key = matrixSets[index].Identifier;
                             var isReverseAttribute = (typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]) ? true : false;
 
-                            if(isReverseAttribute ) {
+                            if (isReverseAttribute) {
                                 var matrixSet = matrixSets[index];
                                 for (var i = 0; i < matrixSet.TileMatrix.length; i++) {
                                     var matrix = matrixSet.TileMatrix[i];
@@ -104,7 +104,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                     me.setCapabilities(url, caps);
                     me.__handleCallbacksForLayerUrl(url);
                 },
-                error: function() {
+                error: function () {
                     me.__handleCallbacksForLayerUrl(url, true);
                 }
             });
@@ -116,11 +116,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
      * @param  {String}  url           layerUrl
      * @param  {Boolean} invokeFailure true to call the error callback (optional)
      */
-    __handleCallbacksForLayerUrl : function(url, invokeFailure) {
+    __handleCallbacksForLayerUrl : function (url, invokeFailure) {
         var me = this;
         var caps = this.getCapabilities(url);
-        _.each(this.requestsMap[url], function(args) {
-            if(!invokeFailure) {
+        _.each(this.requestsMap[url], function (args) {
+            if (!invokeFailure) {
                 var layer = args[0];
                 args[1](me.__createWMTSLayer(caps, layer));
             }
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         var options = optionsFromCapabilities(caps, config);
         //this doesn't get merged automatically by ol3
         options.crossOrigin = config.crossOrigin;
-        if(config.url) {
+        if (config.url) {
             // override capabilities url with the configured one
             options.urls = [config.url];
         }
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     },
 
 
-    __getLayerConfig : function(caps, layer) {
+    __getLayerConfig : function (caps, layer) {
 
         // default params and options
         // URL is tuned serverside so we use the correct one
@@ -166,11 +166,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
         };
 
             // override default params and options from layer
-        _.each(layer.getOptions(), function(value, key) {
+        _.each(layer.getOptions(), function (value, key) {
             config[key] = value;
         });
 
-        _.each(layer.getParams(), function(value, key) {
+        _.each(layer.getParams(), function (value, key) {
             config.params[key] = value;
         });
 

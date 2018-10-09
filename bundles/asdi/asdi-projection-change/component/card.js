@@ -5,13 +5,13 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
  * @param function() callback - callback function to call when element is clicked
  */
     function (view, callback) {
-        this.card = _.template('<div class="projection-card" data-srs="${srs}">'+
-                        '<img class="card-image" src="${imgPath}"></img> '+
-                        '<div class="info-row">'+
-                            '<p class="card-header"> ${projectionName} </p>'+
-                            '<div class="projection-info icon-info"></div>'+
-                            '<div class="projection-warning icon-warning-light oskari-hidden" title="${tooltip}"></div>'+
-                        '</div>'+
+        this.card = _.template('<div class="projection-card" data-srs="${srs}">' +
+                        '<img class="card-image" src="${imgPath}"></img> ' +
+                        '<div class="info-row">' +
+                            '<p class="card-header"> ${projectionName} </p>' +
+                            '<div class="projection-info icon-info"></div>' +
+                            '<div class="projection-warning icon-warning-light oskari-hidden" title="${tooltip}"></div>' +
+                        '</div>' +
                         '</div>');
         this.element = null;
         this.loc = Oskari.getLocalization('projection-change');
@@ -45,21 +45,21 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
         setElement: function (el) {
             this.element = el;
         },
-        getImagePath: function ( epsg ) {
+        getImagePath: function (epsg) {
             var name = epsg.replace(':', '');
             return '/Oskari/bundles/asdi/asdi-projection-change/resources/images/' + name + '.png';
         },
         getUnsupportedLayers: function () {
             var me = this;
             var layers = Oskari.getSandbox().getMap().getLayers();
-            var unsupportedLayers = layers.filter( function (layer) {
+            var unsupportedLayers = layers.filter(function (layer) {
                 return !layer.isSupported(me.view.srsName);
             });
             return unsupportedLayers;
         },
         toggleWarningElement: function () {
             var element = this.getElement().find('.projection-warning');
-            if ( this.getUnsupportedLayers().length !== 0 ) {
+            if (this.getUnsupportedLayers().length !== 0) {
                 element.removeClass('oskari-hidden');
             } else {
                 element.addClass('oskari-hidden');
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
             var me = this;
             var tpl = this.card;
 
-            var card = jQuery( tpl ({
+            var card = jQuery(tpl ({
                 imgPath: me.getImagePath(view.srsName),
                 srs: view.srsName,
                 projectionName: me.loc.projectionCode[view.srsName].displayName,
@@ -78,17 +78,17 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
 
             card.find('.card-image').on('click', function (event) {
                 event.stopPropagation();
-                me.projectionChangeHandler( view.uuid,  view.srsName );
+                me.projectionChangeHandler(view.uuid, view.srsName);
             });
             //infolink
-            card.find('.projection-info').on('click', function ( event ) {
+            card.find('.projection-info').on('click', function (event) {
                 event.stopPropagation();
-                me.infoView.show( jQuery(this) );
+                me.infoView.show(jQuery(this));
             });
             //warningLink
-            card.find('.projection-warning').on('click', function ( event ) {
+            card.find('.projection-warning').on('click', function (event) {
                 event.stopPropagation();
-                me.errorListing.show( jQuery(this), me.getUnsupportedLayers() );
+                me.errorListing.show(jQuery(this), me.getUnsupportedLayers());
             });
             this.setElement(card);
             this.toggleWarningElement();

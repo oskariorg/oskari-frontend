@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
  * @param {Oskari.mapframework.bundle.personaldata.StateHandlerBundleInstance} personaldata
  *          reference to personaldata
  */
-    function(sandbox, personaldata) {
+    function (sandbox, personaldata) {
         this.sandbox = sandbox;
         this.personaldata = personaldata;
     }, {
@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.request.AddTabReque
      * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
      *      request to handle
      */
-        handleRequest : function(core, request) {
+        handleRequest : function (core, request) {
             this.personaldata.addTab({'title': request.getTitle(), 'content': request.getContent(), 'first': request.isFirst(), 'id': request.getId()});
         }
     }, {

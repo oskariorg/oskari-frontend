@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * @param {Boolean} blnEnabled true to enable.
          */
         setEnabled: function (blnEnabled) {
-            if(!!blnEnabled) {
+            if (!!blnEnabled) {
                 this.container.removeClass('disabled');
             }
             else {

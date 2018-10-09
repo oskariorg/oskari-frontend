@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
             _.forEach(me._overlays, function (overlay) {
                 overlay.target.append(overlay.overlay);
-                if(addSpinner) {
+                if (addSpinner) {
                     var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
                     spinner.insertTo(overlay.overlay);
                     spinner.start();
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             var me = this;
             _.forEach(me._overlays, function (overlay) {
                 overlay.overlay.remove();
-                if(overlay.spinner) {
+                if (overlay.spinner) {
                     overlay.spinner.stop();
                 }
             });
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         bindClickToClose: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
-                overlay.overlay.on('click', function() {
+                overlay.overlay.on('click', function () {
                     me.close();
                 });
             });

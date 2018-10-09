@@ -138,7 +138,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
         },
 
         handleRequest: function (core, request) {
-            if(request.getName() !== 'ShowMapLayerInfoRequest') {
+            if (request.getName() !== 'ShowMapLayerInfoRequest') {
                 return false;
             }
 

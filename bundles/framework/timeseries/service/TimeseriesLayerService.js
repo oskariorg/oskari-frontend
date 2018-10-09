@@ -139,7 +139,7 @@ Oskari.clazz.define(
             var me = this,
                 layers = me._sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
-                if (!layers[i].hasTimeseries() || !layers[i].isVisible() || !layers[i].isSupported(me._sandbox.getMap().getSrsName()) ) {
+                if (!layers[i].hasTimeseries() || !layers[i].isVisible() || !layers[i].isSupported(me._sandbox.getMap().getSrsName())) {
                     continue;
                 }
                 var layer = layers[i];

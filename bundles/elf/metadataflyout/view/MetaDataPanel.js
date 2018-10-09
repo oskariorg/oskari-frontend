@@ -60,9 +60,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% _.forEach(identification.abstractText, function (paragraph) { %>' +
                     '            <p><%= paragraph %></p>' +
                     '        <% }); %>' +
-                    '           <% if (identification.type === "service") {%>'+
-                    '               <p><%=identification.serviceType%></p>'+
-                    '           <% } %>'+
+                    '           <% if (identification.type === "service") {%>' +
+                    '               <p><%=identification.serviceType%></p>' +
+                    '           <% } %>' +
                     '    <% } %>' +
 
                     '    <% if (onlineResources.length) { %>' +
@@ -74,30 +74,30 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        <% }); %>' +
                     '        </ul>' +
                     '    <% } %>' +
-                    '   <hr class="elf-metadata-divider">'+
+                    '   <hr class="elf-metadata-divider">' +
 
-                    '   <h2>'+this.locale.heading.datasetInformation+'</h2>'+
-                    '   <table class="elf-metadata-table-no-border">'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.referenceDate+'</td>'+
-                    '           <td>'+
+                    '   <h2>' + this.locale.heading.datasetInformation + '</h2>' +
+                    '   <table class="elf-metadata-table-no-border">' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.datasetInformation.referenceDate + '</td>' +
+                    '           <td>' +
                     '               <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
                     '               (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
                     '               %>)</p>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.temporalInformation+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.datasetInformation.temporalInformation + '</td>' +
+                    '           <td>' +
                     '           <% _.forEach(identification.temporalExtents, function (temporalExtent) { %>' +
                     '               <p><%= temporalExtent.begin %> - <%= temporalExtent.end %></p>' +
                     '           <% }); %>' +
                     //TODO: "updated:" + maintenanceAndUpdateFrequency
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.heading.descriptiveKeyword+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.heading.descriptiveKeyword + '</td>' +
+                    '           <td>' +
                     '               <ul>' +
                     '               <% _.forEach(identification.descriptiveKeywords, function (keyword) { %>' +
                     '                   <% if (keyword.length) { %>' +
@@ -105,50 +105,50 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% } %>' +
                     '               <% }); %>' +
                     '               </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.datasetInformation.resourceLanguage+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.datasetInformation.resourceLanguage + '</td>' +
+                    '           <td>' +
                     '               <ul>' +
                     '               <% _.forEach(identification.languages, function (language) { %>' +
                     '                   <li><%= locale.languages[language] || language %></li>' +
                     '               <% }); %>' +
                     '               </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <% if (geom) { %>'+
-                    '           <tr>'+
-                    '               <td>'+this.locale.tableHeaders.datasetInformation.bbox+'</td>'+
-                    '               <td>'+
-                    '                   <a href="javascript:void(0)" class="metadata_coverage_bbox_link">'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <% if (geom) { %>' +
+                    '           <tr>' +
+                    '               <td>' + this.locale.tableHeaders.datasetInformation.bbox + '</td>' +
+                    '               <td>' +
+                    '                   <a href="javascript:void(0)" class="metadata_coverage_bbox_link">' +
                                             this.locale.coverage.showBBOX +
-                    '                   </a>'+
-                    '               </td>'+
-                    '           </tr>'+
-                    '       <% } %>'+
+                    '                   </a>' +
+                    '               </td>' +
+                    '           </tr>' +
+                    '       <% } %>' +
 
-                    '       <% if (typeof referenceSystems !== "undefined" && referenceSystems.length) {%>'+
-                    '       <tr>'+
-                    '           <td>'+
-                                    this.locale.tableHeaders.datasetInformation.crs+
-                    '           </td>'+
-                    '           <td>'+
+                    '       <% if (typeof referenceSystems !== "undefined" && referenceSystems.length) {%>' +
+                    '       <tr>' +
+                    '           <td>' +
+                                    this.locale.tableHeaders.datasetInformation.crs +
+                    '           </td>' +
+                    '           <td>' +
                     '               <ul>' +
-                    '               <% _.forEach(referenceSystems, function(referenceSystem) { %>'+
+                    '               <% _.forEach(referenceSystems, function(referenceSystem) { %>' +
                     '                   <li><%=referenceSystem%></li>' +
-                    '               <% }); %>'+
+                    '               <% }); %>' +
                     '               </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <% } %>'+
-                    '   </table>'+
-                    '   <hr class="elf-metadata-divider">'+
-                    '   <h2>'+this.locale.heading.contactInformation+'</h2>'+
-                    '   <table class="elf-metadata-table-no-border">'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.contactInformation.pointOfContact+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <% } %>' +
+                    '   </table>' +
+                    '   <hr class="elf-metadata-divider">' +
+                    '   <h2>' + this.locale.heading.contactInformation + '</h2>' +
+                    '   <table class="elf-metadata-table-no-border">' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.contactInformation.pointOfContact + '</td>' +
+                    '           <td>' +
                     '               <ul>' +
                     '               <% _.forEach(identification.responsibleParties, function (responsibleParty) { %>' +
                     '                   <li><%- responsibleParty.organisationName %></li>' +
@@ -162,15 +162,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   </li>' +
                     '               <% }); %>' +
                     '               </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '   </table>'+
-                    '   <hr class="elf-metadata-divider">'+
-                    '   <h2>'+this.locale.heading.metadataContact+'</h2>'+
-                    '   <table class="elf-metadata-table-no-border">'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.metadataContact.pointOfContact+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '   </table>' +
+                    '   <hr class="elf-metadata-divider">' +
+                    '   <h2>' + this.locale.heading.metadataContact + '</h2>' +
+                    '   <table class="elf-metadata-table-no-border">' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.metadataContact.pointOfContact + '</td>' +
+                    '           <td>' +
                     '               <ul>' +
                     '                   <% _.forEach(metadataResponsibleParties, function (metadataResponsibleParty) { %>' +
                     '                       <li><%- metadataResponsibleParty.organisationName %>' +
@@ -184,15 +184,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                       </li>' +
                     '                   <% }); %>' +
                     '                </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '   </table>'+
-                    '   <hr class="elf-metadata-divider">'+
-                    '   <h2>'+this.locale.heading.technicalInformation+'</h2>'+
-                    '   <table class="elf-metadata-table-no-border">'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.technicalInformation.accessConstraintInformation+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '   </table>' +
+                    '   <hr class="elf-metadata-divider">' +
+                    '   <h2>' + this.locale.heading.technicalInformation + '</h2>' +
+                    '   <table class="elf-metadata-table-no-border">' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.technicalInformation.accessConstraintInformation + '</td>' +
+                    '           <td>' +
                     '               <% _.forEach(identification.useLimitations, function (useLimitation) { %>' +
                     '                   <% _.forEach(useLimitation, function (paragraph) { %>' +
                     '                       <p><%= paragraph %></p>' +
@@ -203,65 +203,65 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                       <p><%= paragraph %></p>' +
                     '                   <% }); %>' +
                     '               <% }); %>' +
-                    '               <ul>'+
+                    '               <ul>' +
                     '               <% _.forEach(identification.classifications, function (classification) { %>' +
                     '                   <li title="<%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {description: classification}).description %>"><%= (locale.codeLists["gmd:MD_ClassificationCode"][classification] || {label: classification}).label %></li>' +
                     '               <% }); %>' +
-                    '               </ul>'+
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.heading.spatialRepresentationType+'</td>'+
-                    '           <td>'+
+                    '               </ul>' +
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.heading.spatialRepresentationType + '</td>' +
+                    '           <td>' +
                     '               <ul>' +
                     '                   <% _.forEach(identification.spatialRepresentationTypes, function (spatialRepresentationType) { %>' +
                     '                       <li title="<%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {description: spatialRepresentationType}).description %>"><%= (locale.codeLists["gmd:MD_SpatialRepresentationTypeCode"][spatialRepresentationType] || {label: spatialRepresentationType}).label %></li>' +
                     '                   <% }); %>' +
                     '               </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.heading.spatialResolution+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.heading.spatialResolution + '</td>' +
+                    '           <td>' +
                     '               <ul>' +
                     '                   <% _.forEach(identification.spatialResolutions, function (resolution) { %>' +
                     '                       <li>1: <%- resolution %></li>' +
                     '                   <% }); %>' +
                     '               </ul>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.technicalInformation.lineage+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.technicalInformation.lineage + '</td>' +
+                    '           <td>' +
                     '               <% _.forEach(lineageStatements, function (lineage) { %>' +
                     '                   <% _.forEach(lineage, function (paragraph) { %>' +
                     '                       <p><%= paragraph %></p>' +
                     '                   <% }); %>' +
                     '               <% }); %>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '       <tr>'+
-                    '           <td>'+this.locale.tableHeaders.technicalInformation.metadataChangeDate+' / '+this.locale.tableHeaders.technicalInformation.uniqueIdentifier+'</td>'+
-                    '           <td>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '       <tr>' +
+                    '           <td>' + this.locale.tableHeaders.technicalInformation.metadataChangeDate + ' / ' + this.locale.tableHeaders.technicalInformation.uniqueIdentifier + '</td>' +
+                    '           <td>' +
                     '               <%- metadataDateStamp %> / <%- fileIdentifier %></p>' +
-                    '           </td>'+
-                    '       </tr>'+
-                    '   </table>'+
+                    '           </td>' +
+                    '       </tr>' +
+                    '   </table>' +
 
-                    '   <% if (typeof score !== "undefined" && typeof amount !== "undefined") { %>'+
-                    '       <div class="metadatatab-rating-container">'+
-                    '       <hr class="elf-metadata-divider">'+
-                    '       <h2>'+this.locale.heading.dataQuality+'</h2>'+
-                    '       <table class="elf-metadata-table-no-border">'+
-                    '           <tr>'+
-                    '               <td>'+this.locale.tableHeaders.dataQuality.conformance+'</td>'+
-                    '               <td>'+
-                    '                   <div class="metadata-feedback-rating ratingInfo"></div>'+
-                    '               </td>'+
-                    '           </tr>'+
-                    '       </table>'+
-                    '       </div>'+
-                    '   <% } %>'+
+                    '   <% if (typeof score !== "undefined" && typeof amount !== "undefined") { %>' +
+                    '       <div class="metadatatab-rating-container">' +
+                    '       <hr class="elf-metadata-divider">' +
+                    '       <h2>' + this.locale.heading.dataQuality + '</h2>' +
+                    '       <table class="elf-metadata-table-no-border">' +
+                    '           <tr>' +
+                    '               <td>' + this.locale.tableHeaders.dataQuality.conformance + '</td>' +
+                    '               <td>' +
+                    '                   <div class="metadata-feedback-rating ratingInfo"></div>' +
+                    '               </td>' +
+                    '           </tr>' +
+                    '       </table>' +
+                    '       </div>' +
+                    '   <% } %>' +
                     '</article>'
                 ),
                 'quality': _.template(
@@ -300,7 +300,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                   <% if (dateTime) { %>' +
                                             this.locale.qualityContent.dateTime + ': <%= dateTime %> <br>' +
                     '                   <% } %>' +
-                    '               <% }); %> '+
+                    '               <% }); %> ' +
                     '           <% } %>' +
                     '           <% if (dataQuality.conformanceResultList.length) { %>' +
                     '               <h3>' + this.locale.qualityContent.conformanceResult + '</h3>' +
@@ -309,11 +309,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                                             this.locale.qualityContent.specification + ': <%= conformanceResult.specification %> <br>' +
                     '                   <% } %>' +
                     '                   <% if (conformanceResult.pass === true) {%> <%=locale.qualityContent.qualityPassTrue%><br><%}' +
-                    '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> '+
+                    '                       else { %> <%=locale.qualityContent.qualityPassFalse%> <br> <% } %> ' +
                     '                   <% if (conformanceResult.explanation) { %>' +
                                             this.locale.qualityContent.explanation + ': <%= conformanceResult.explanation %> <br>' +
                     '                   <% } %>' +
-                    '               <% }); %> '+
+                    '               <% }); %> ' +
                     '           <% } %>' +
                     '           <% if (dataQuality.quantitativeResultList.length) { %>' +
                     '               <h3>' + this.locale.qualityContent.quantitativeResult + '</h3>' +
@@ -332,36 +332,36 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '                           <% if (value) { %>' +
                                                     this.locale.qualityContent.value + ': <%= value %> <br>' +
                     '                           <% } %>' +
-                    '                       <% }); %> '+
+                    '                       <% }); %> ' +
                     '                   <% } %>' +
-                    '               <% }); %> '+
+                    '               <% }); %> ' +
                     '           <% } %>' +
-                    '       <% }); %> '+
-                    '    <% } %> '+
+                    '       <% }); %> ' +
+                    '    <% } %> ' +
                     '</article>'
                 ),
                 'actions': _.template(
-                    '<article>'+
+                    '<article>' +
                     '</article>'
                 )
             },
             'layerList': _.template(
-                '<table class="metadataSearchResult">'+
-                '   <tr>'+
-                '       <td>'+
-                '           <div class="layerListHeader"><h2></h2></div>'+
-                '           <ul class="layerList">'+
-                '           </ul>'+
-                '       </td>'+
-                '   </tr>'+
+                '<table class="metadataSearchResult">' +
+                '   <tr>' +
+                '       <td>' +
+                '           <div class="layerListHeader"><h2></h2></div>' +
+                '           <ul class="layerList">' +
+                '           </ul>' +
+                '       </td>' +
+                '   </tr>' +
                 '</table>'
             ),
             'layerItem': _.template(
-                '<li>'+
-                '   <%=layer.getName()%>&nbsp;&nbsp;'+
-                '   <a href="JavaScript:void(0);" class="layerLink">'+
-                '       <%=hidden ? locale.layerList.show : locale.layerList.hide%>'+
-                '   </a>'+
+                '<li>' +
+                '   <%=layer.getName()%>&nbsp;&nbsp;' +
+                '   <a href="JavaScript:void(0);" class="layerLink">' +
+                '       <%=hidden ? locale.layerList.show : locale.layerList.hide%>' +
+                '   </a>' +
                 '</li>'
             )
         };
@@ -405,10 +405,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             AfterMapLayerRemoveEvent: function (event) {
                 this.renderMapLayerList();
             },
-            MapLayerVisibilityChangedEvent: function(event) {
+            MapLayerVisibilityChangedEvent: function (event) {
                 this.renderMapLayerList();
             },
-            MapLayerEvent: function(event) {
+            MapLayerEvent: function (event) {
                 /*add + no layerid -> mass load -> all map layers probably loaded*/
                 if (event.getOperation() === 'add' && event.getLayerId() === null) {
                     this.renderMapLayerList();
@@ -499,7 +499,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
 
             /*add the tab change event listener only once.*/
             if (asyncTabsFound) {
-                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                me._tabContainer.addTabChangeListener(function (previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
                         if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
                             me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
@@ -548,14 +548,14 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          * }
          *
          */
-        addTabs: function(tabsJSON) {
+        addTabs: function (tabsJSON) {
             var me = this;
             me.asyncTabs = tabsJSON;
             for (var tabId in tabsJSON) {
                 me._templates.tabs[tabId] = tabsJSON[tabId].template ? tabsJSON[tabId].template : null;
             }
         },
-        addTabsAsync: function(tabsJSON) {
+        addTabsAsync: function (tabsJSON) {
             var me = this,
                 model = me._model;
 
@@ -594,7 +594,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
 
             if (!me._tabContainer.tabChangeListeners || me._tabContainer.tabChangeListeners.length === 0) {
-                me._tabContainer.addTabChangeListener(function(previousTab, newTab) {
+                me._tabContainer.addTabChangeListener(function (previousTab, newTab) {
                     if (newTab && newTab.getId() && !newTab.content) {
                         if (me.asyncTabs[newTab.getId()] && me.asyncTabs[newTab.getId()].tabActivatedCallback) {
                             me.asyncTabs[newTab.getId()].tabActivatedCallback(me._model.uuid, newTab, me._model);
@@ -604,12 +604,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
         },
 
-        addActionLinks: function() {
+        addActionLinks: function () {
             var me = this,
                 locale = me.locale,
                 model = me._model,
                 links;
-            if(!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
+            if (!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
                 entry = jQuery('<a></a>');
                 entry.html(locale.xml);
                 entry.attr('href', model.metadataURL);
@@ -617,7 +617,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 links = entry;
             }
 
-            if(!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
+            if (!me.instance.conf.hideMetaDataPrintLink || me.instance.conf.hideMetaDataPrintLink !== true) {
                 entry = jQuery('<a></a>');
                 entry.html(locale.pdf);
                 entry.attr(
@@ -628,13 +628,13 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '&metadataresourceuuid=' + me._model.fileIdentifier
                 );
                 entry.attr('target', '_blank');
-                if(links){
+                if (links) {
                     links = links.add(entry);
                 } else {
                     links = entry;
                 }
             }
-            if(!me.instance.conf.hideShowCoverageLink || me.instance.conf.hideShowCoverageLink !== true) {
+            if (!me.instance.conf.hideShowCoverageLink || me.instance.conf.hideShowCoverageLink !== true) {
                 if (me._model.geom) {
                     entry = jQuery('<a/>');
                     entry.addClass('metadata_coverage_bbox_link');
@@ -642,7 +642,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     entry.html(me.instance._locale.flyout.coverage.showBBOX);
 
 
-                    if(links){
+                    if (links) {
                         links = links.add(entry);
                     } else {
                         links = entry;
@@ -652,7 +652,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             me.addActions(links);
 
             //Add click handler for the show coverage - link (under both metadata tab & actions tab)
-            jQuery('.metadata_coverage_bbox_link').on('click', function() {
+            jQuery('.metadata_coverage_bbox_link').on('click', function () {
                 me.toggleCoverage(jQuery(this));
             });
 
@@ -661,12 +661,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 me.getMetadataTabRatingStars();
             }
         },
-        getMetadataTabRatingStars: function() {
+        getMetadataTabRatingStars: function () {
             var me = this;
             //obtain a reference to metadatafeedback bundle, which contains the rating functionality... Update rating stars if exists...
             var metadataFeedbackBundle = me.instance.sandbox.findRegisteredModuleInstance('catalogue.bundle.metadatafeedback');
             if (metadataFeedbackBundle) {
-                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating)+'&nbsp;');
+                jQuery('div.metadata-feedback-rating').html(metadataFeedbackBundle._getAdminMetadataRating(me._model.latestAdminRating) + '&nbsp;');
                 jQuery('div.metadatatab-rating-container').show();
             } else {
                 jQuery('div.metadatatab-rating-container').hide();
@@ -677,15 +677,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          *
          * set up actions tab content based on conf
          */
-        addActions: function(links) {
+        addActions: function (links) {
             var me = this,
                 container = me._tabs['actions'].getContainer();
-            _.each(links, function(link) {
+            _.each(links, function (link) {
                 container.append(link);
                 container.append('<br/>');
             });
         },
-        toggleCoverage: function(entry) {
+        toggleCoverage: function (entry) {
             var me = this,
                 coverageVisible = entry.hasClass('metadata-coverage-visible');
             var style = {
@@ -721,7 +721,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
 
         },
-        renderMapLayerList: function() {
+        renderMapLayerList: function () {
             var me = this,
                 container = me._tabs['actions'].getContainer(),
                 layers = me._maplayerService.getLayersByMetadataId(me._model.uuid),
@@ -733,7 +733,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             container.find('h2').html(layerListHeader);
 
             layerListElement = container.find('ul.layerList');
-            _.each(layers, function(layer) {
+            _.each(layers, function (layer) {
                 var layerListItem = jQuery(me._templates['layerItem']({
                     layer: layer,
                     hidden: (!me.isLayerSelected(layer) || !layer.isVisible()),
@@ -741,7 +741,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                 }));
                 layerListElement.append(layerListItem);
 
-                jQuery(layerListItem).find('a.layerLink').on('click', function() {
+                jQuery(layerListItem).find('a.layerLink').on('click', function () {
                     var labelText = me._toggleMapLayerVisibility(layer);
                     jQuery(this).html(labelText);
                 });
@@ -753,7 +753,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
          * add / remove map layer from map and turn visible.
          * return labeltext to show / hide maplayer
          */
-        _toggleMapLayerVisibility: function(layer) {
+        _toggleMapLayerVisibility: function (layer) {
             var me = this,
                 labelText;
             //not added -> add.
@@ -771,7 +771,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             }
             return labelText;
         },
-        isLayerSelected: function(layer) {
+        isLayerSelected: function (layer) {
             var me = this,
                 selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
             for (var k = 0; k < selectedLayers.length; k += 1) {

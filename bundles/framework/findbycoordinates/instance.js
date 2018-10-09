@@ -7,7 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
      * @static @method create called automatically on construction
      *
      */
-    function() {
+    function () {
         this.buttonGroup = 'selectiontools';
         this.toolName = 'findbycoordinates';
         this.tool = {
@@ -23,34 +23,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         __name : 'findbycoordinates',
         __templates : {
             item : jQuery('<div>' +
-                '   <div class="channel_header">'+
-                '       <h3 class="channel_id"></h3>'+
-                '   </div>'+
-                '   <div class="channel_description icon-info"></div>'+
-                '   <div class="none"></div>'+
-                '   <div class="result">'+
+                '   <div class="channel_header">' +
+                '       <h3 class="channel_id"></h3>' +
+                '   </div>' +
+                '   <div class="channel_description icon-info"></div>' +
+                '   <div class="none"></div>' +
+                '   <div class="result">' +
                 '       <div class="name"></div>' +
                 '       <div class="info"></div>' +
                 '       <div class="lonlat"></div>' +
-                '   </div>'+
+                '   </div>' +
                 '</div>'),
             popup: jQuery('<div class="findbycoordinates__popup__content"></div>'),
-            popupChannelResult: jQuery('<div class="channel_result">'+
-                '   <div class="channel_header">'+
-                '       <h3 class="channel_id"></h3>'+
-                '   </div>'+
-                '   <div class="channel_description icon-info"></div>'+
-                '   <div class="none"></div>'+
-                '   <div class="channel__results"></div>'+
+            popupChannelResult: jQuery('<div class="channel_result">' +
+                '   <div class="channel_header">' +
+                '       <h3 class="channel_id"></h3>' +
+                '   </div>' +
+                '   <div class="channel_description icon-info"></div>' +
+                '   <div class="none"></div>' +
+                '   <div class="channel__results"></div>' +
                 '</div>'),
-            popupResult: jQuery('<div class="resultmarker">'+
-                '   <img alt="marker"></img>'+
-                '</div>'+
-                '<div class="nameinfo">'+
-                '   <div class="name"></div>'+
-                '   <div class="info"></div>'+
-                '   <div class="lonlat"></div>'+
-                '</div>'+
+            popupResult: jQuery('<div class="resultmarker">' +
+                '   <img alt="marker"></img>' +
+                '</div>' +
+                '<div class="nameinfo">' +
+                '   <div class="name"></div>' +
+                '   <div class="info"></div>' +
+                '   <div class="lonlat"></div>' +
+                '</div>' +
                 '<div class="none"></div>')
         },
         __colors: ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
@@ -114,7 +114,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 request,
                 reqBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
 
-            this.tool.callback = function() {
+            this.tool.callback = function () {
                 me.startTool();
             };
             this.tool.tooltip = loc.tool.tooltip;
@@ -148,7 +148,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             var me = this,
                 sandbox = this.getSandbox(),
                 spinnerRequestBuilder = Oskari.requestBuilder('ShowProgressSpinnerRequest');
-            if(spinnerRequestBuilder) {
+            if (spinnerRequestBuilder) {
                 sandbox.request(this, spinnerRequestBuilder(false));
             }
             me.tool.active = false;
@@ -196,15 +196,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         /**
          * @method  @private _hidePopups Hide popups
          */
-        _hidePopups: function(){
+        _hidePopups: function () {
             var me = this,
                 sandbox = this.getSandbox(),
                 infoBoxHideReqBuilder = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest');
 
-            if(me._popup){
+            if (me._popup) {
                 me._popup.close();
             }
-            if(infoBoxHideReqBuilder) {
+            if (infoBoxHideReqBuilder) {
                 sandbox.request(this, infoBoxHideReqBuilder(me.POPUP_ID));
             }
         },
@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 sandbox = this.getSandbox(),
                 spinnerRequestBuilder = Oskari.requestBuilder('ShowProgressSpinnerRequest');
 
-            if(spinnerRequestBuilder) {
+            if (spinnerRequestBuilder) {
                 sandbox.request(this, spinnerRequestBuilder(true));
             }
 
@@ -260,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 result;
 
             // If there is only one response then show Infobox
-            if(results.totalCount === 1) {
+            if (results.totalCount === 1) {
                 result = results.locations[0];
                 var lonlat = {
                         lon: result.lon,
@@ -306,7 +306,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
 
                 // Close button
                 closeBtn.setTitle(loc.close);
-                closeBtn.setHandler(function() {
+                closeBtn.setHandler(function () {
                     me._popup.close();
                 });
 
@@ -315,7 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 me._popup.createCloseIcon();
                 me._popup.onClose(function () {
                     if (removeMarkerRequestBuilder) {
-                        for(var i=0;i<=me._markerMaxIndex;i++) {
+                        for (var i = 0;i <= me._markerMaxIndex;i++) {
                             sandbox.request(me, removeMarkerRequestBuilder(MARKER_ID_PREFIX + i));
                         }
                     }
@@ -332,33 +332,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 me._popup.makeDraggable();
 
                 // If there is more than 2 results then add scrolls
-                if(results.locations.length>2) {
+                if (results.locations.length > 2) {
                     me._popup.getJqueryContent().addClass('show-scroll');
                 }
 
                 // Loop results
-                for(var i=0, resultsCount=results.locations.length; i<resultsCount;i++) {
-                    if(i >= markersLength * colorsLength) {
+                for (var i = 0, resultsCount = results.locations.length; i < resultsCount;i++) {
+                    if (i >= markersLength * colorsLength) {
                         // If all markers and colors are used hten log warn and break results.
                         this._logger.warn('Find nearest places return more than ' + (markersLength * colorsLength) + 'results, breaking.');
                         break;
                     }
                     result = results.locations[i];
                     var channelId = result.channelId,
-                        lang = (result.lang && typeof result.lang ==='string') ? result.lang.toUpperCase() : '',
-                        langText = (lang !== '') ? ' (' + lang + ')': '',
-                        channelResults = popupContent.find('.channel_result[data-channel-id="'+channelId+lang +'"]'),
+                        lang = (result.lang && typeof result.lang === 'string') ? result.lang.toUpperCase() : '',
+                        langText = (lang !== '') ? ' (' + lang + ')' : '',
+                        channelResults = popupContent.find('.channel_result[data-channel-id="' + channelId + lang + '"]'),
                         color = me.__colors[colorIndex];
 
-                    if(channelResults.length === 0) {
+                    if (channelResults.length === 0) {
                         channelResults = me.__templates.popupChannelResult.clone();
-                        channelResults.find('.channel_id').html((loc.channels[channelId] || channelId || '') + langText );
-                        if(loc.channelDescriptions[channelId]) {
+                        channelResults.find('.channel_id').html((loc.channels[channelId] || channelId || '') + langText);
+                        if (loc.channelDescriptions[channelId]) {
                             channelResults.find('.channel_description').attr('title', loc.channelDescriptions[channelId]);
                         } else {
                             channelResults.find('.channel_description').hide();
                         }
-                        channelResults.attr('data-channel-id', channelId+lang);
+                        channelResults.attr('data-channel-id', channelId + lang);
                         popupContent.append(channelResults);
                     }
 
@@ -389,10 +389,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                         sandbox.request(this, addMarkerRequestBuilder(markerData, MARKER_ID_PREFIX + i));
                         me._markerMaxIndex = i;
                     }
-                    colorIndex+=1;
-                    if(colorIndex>colorsLength-1) {
+                    colorIndex += 1;
+                    if (colorIndex > colorsLength - 1) {
                         colorIndex = 0;
-                        shapeIndex+=1;
+                        shapeIndex += 1;
                     }
 
                 }
@@ -414,11 +414,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          */
         __getInfoBoxHtml: function (result) {
             var loc = this.getLocalization(),
-                lang = (result.lang && typeof result.lang ==='string') ? ' (' + result.lang.toUpperCase() + ')' : '';
+                lang = (result.lang && typeof result.lang === 'string') ? ' (' + result.lang.toUpperCase() + ')' : '';
 
             var item = this.__templates.item.clone();
             item.find('.channel_id').html((loc.channels[result.channelId] || result.channelId || '') + lang);
-            if(loc.channelDescriptions[result.channelId]) {
+            if (loc.channelDescriptions[result.channelId]) {
                 item.find('.channel_description').attr('title', loc.channelDescriptions[result.channelId]);
             } else {
                 item.find('.channel_description').hide();

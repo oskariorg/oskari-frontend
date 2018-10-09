@@ -2,7 +2,7 @@
  * @class Oskari.elf.geolocator.service.GeoLocatorSearchService
  */
 Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
-    function(instance, url) {
+    function (instance, url) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.url = url;
@@ -42,8 +42,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
             jQuery.ajax({
                 dataType : 'json',
                 type : 'GET',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
@@ -56,8 +56,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
             jQuery.ajax({
                 dataType : 'json',
                 type : 'GET',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },
@@ -66,12 +66,12 @@ Oskari.clazz.define('Oskari.elf.geolocator.service.GeoLocatorSearchService',
                 success : successCb
             });
         },
-        getLocationType: function( url, successCb, errorCb) {
+        getLocationType: function (url, successCb, errorCb) {
             jQuery.ajax({
                 dataType : 'json',
                 type : 'GET',
-                beforeSend: function(x) {
-                    if(x && x.overrideMimeType) {
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
                         x.overrideMimeType('application/json');
                     }
                 },

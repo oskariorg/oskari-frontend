@@ -2,7 +2,7 @@ import olStyleStyle from 'ol/style/Style';
 
 const invisible = new olStyleStyle();
 
-export default function styleGenerator(styleFactory, styleDef) {
+export default function styleGenerator (styleFactory, styleDef) {
     const styleCache = {};
     Object.keys(styleDef).forEach((layerName) => {
         const styles = {};

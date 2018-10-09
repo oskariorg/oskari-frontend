@@ -8,7 +8,7 @@ define([
     '_bundle/collections/userRoleCollection',
     '_bundle/models/layerModel'
 ],
-function(
+function (
     TypeSelectTemplate,
     LayerSettingsTemplate,
     GroupSettingsTemplate,
@@ -65,19 +65,19 @@ function(
              * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
              * @private
              */
-        _saveDataprovider: function(data, popup) {
+        _saveDataprovider: function (data, popup) {
             var me = this;
 
             jQuery.ajax({
                 type: 'PUT',
                 url: Oskari.urls.getRoute('SaveOrganization'),
                 data: data,
-                error: function() {
+                error: function () {
                     var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     errorDialog.show(me.instance.locale('errors.dataproviderSave.title'), me.instance.locale('errors.dataproviderSave.message'));
                     errorDialog.fadeout();
                 },
-                success: function(response) {
+                success: function (response) {
                     popup.close();
                     var successDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     successDialog.show(me.instance.locale('successMessages.dataproviderSave.title'), me.instance.locale('successMessages.dataproviderSave.message'));
@@ -93,7 +93,7 @@ function(
              * Add dataprovider
              * @method addDataprovider
              */
-        addDataprovider: function() {
+        addDataprovider: function () {
             var me = this;
             var buttons = [];
 
@@ -102,7 +102,7 @@ function(
             errorDialog.setId('admin-layerlist-group-error-popup');
             var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
             btnCancel.addClass('cancel');
-            btnCancel.setHandler(function() {
+            btnCancel.setHandler(function () {
                 popup.close();
             });
             buttons.push(btnCancel);
@@ -113,11 +113,11 @@ function(
             var loc = (Oskari.getMsg('DivManazer', 'LanguageSelect').languages) ? Oskari.getMsg('DivManazer', 'LanguageSelect').languages : {};
             btnOk.addClass('add');
             btnOk.setTitle(me.instance.locale('buttons.add'));
-            btnOk.setHandler(function() {
+            btnOk.setHandler(function () {
                 var data = {};
                 var hasValidLocales = true;
                 var localesCount = 0;
-                popup.getJqueryContent().find('.oskari-textinput.group-name').each(function() {
+                popup.getJqueryContent().find('.oskari-textinput.group-name').each(function () {
                     var el = jQuery(this);
                     localesCount++;
                     var value = el.find('input').val().trim();
@@ -142,12 +142,12 @@ function(
             var message = jQuery('<div class="group-names"></div>');
             // locale inputs
             var supportedLocales = Oskari.getSupportedLanguages();
-            supportedLocales.forEach(function(locale) {
+            supportedLocales.forEach(function (locale) {
                 var input = Oskari.clazz.create('Oskari.userinterface.component.TextInput');
                 input.setTitle(me.instance.locale('groupTitles.localePrefix') + ' ' + (loc[locale] || locale));
                 input.addClass('group-name');
                 var el = jQuery(input.getElement());
-                el.find('input').on('keyup', function() {
+                el.find('input').on('keyup', function () {
                     var inputEl = jQuery(this);
                     var value = inputEl.val().trim();
                     if (value.length < 4) {
@@ -164,7 +164,7 @@ function(
             popup.makeModal();
         },
 
-        selectMaplayerGroups: function() {
+        selectMaplayerGroups: function () {
             var me = this;
             var buttons = [];
 
@@ -174,7 +174,7 @@ function(
             var btnCancel = Oskari.clazz.create('Oskari.userinterface.component.buttons.CancelButton');
 
             btnCancel.addClass('cancel');
-            btnCancel.setHandler(function() {
+            btnCancel.setHandler(function () {
                 popup.close();
             });
             buttons.push(btnCancel);
@@ -183,10 +183,10 @@ function(
             popup.addClass('admin-layerlist-group');
 
             btnOk.addClass('add');
-            btnOk.setHandler(function() {
+            btnOk.setHandler(function () {
                 var selected = [];
                 var ids = [];
-                popup.getJqueryContent().find('.admin-maplayer-group input:checked').each(function() {
+                popup.getJqueryContent().find('.admin-maplayer-group input:checked').each(function () {
                     var el = jQuery(this).parents('label');
                     var name = el.attr('data-name');
                     var id = el.attr('data-id');
@@ -206,7 +206,7 @@ function(
                     var list = jQuery('.admin-add-layer .admin-maplayer-groups-list');
                     list.empty();
                     var template = jQuery('<div class="admin-maplayer-group"></div>');
-                    selected.forEach(function(sel) {
+                    selected.forEach(function (sel) {
                         var selected = template.clone();
                         selected.attr('data-group-id', sel.id);
                         selected.html(sel.name);
@@ -221,15 +221,15 @@ function(
 
             var message = jQuery('<div class="maplayer-groups"></div>');
 
-            var isInGroup = function(groupId) {
-                var grepped = jQuery.grep(me.options.maplayerGroups, function(g) {
+            var isInGroup = function (groupId) {
+                var grepped = jQuery.grep(me.options.maplayerGroups, function (g) {
                     return g.id == groupId;
                 });
                 return grepped.length > 0;
             };
 
                 // groups
-            me.options.allMaplayerGroups.forEach(function(group) {
+            me.options.allMaplayerGroups.forEach(function (group) {
                 var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
                 checkbox.setTitle(group.name);
                 checkbox.setChecked(isInGroup(group.id));
@@ -248,7 +248,7 @@ function(
 
         },
 
-        recheckCapabilities: function(e) {
+        recheckCapabilities: function (e) {
             var me = this;
             var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
 
@@ -268,7 +268,7 @@ function(
                 url: Oskari.urls.getRoute('UpdateCapabilities'),
                 success: function (resp) {
                     xhr = null;
-                    if(resp.success.length === 1) {
+                    if (resp.success.length === 1) {
                         content = jQuery('<span>' + loc('recheckSucceeded') + '<span>');
                         jQuery(e.currentTarget).parents('.accordion').trigger({
                             type: 'adminAction',
@@ -296,13 +296,13 @@ function(
 
             var forcedSRS = jQuery(e.target)
                 .parent().parent()
-                .find('.add-layer-forced-proj').map(function() {
+                .find('.add-layer-forced-proj').map(function () {
                     return this.getAttribute('data-proj');
                 })
                 .get();
             var input = jQuery(e.target).siblings('.add-layer-forced-proj-input');
             var value = input.val().trim();
-            if(value === '' || forcedSRS.includes(value)) {
+            if (value === '' || forcedSRS.includes(value)) {
                 input.focus();
                 return;
             }
@@ -313,11 +313,11 @@ function(
             input.val('');
             input.focus();
         },
-        removeForcedProj: function(e) {
+        removeForcedProj: function (e) {
             e.stopPropagation();
             jQuery(e.target).parent().remove();
         },
-        showCapabilitiesPopup: function() {
+        showCapabilitiesPopup: function () {
             var caps = this.model.getCapabilities();
             if (!caps) {
                 return;
@@ -336,7 +336,7 @@ function(
              *
              * @method initialize
              */
-        initialize: function() {
+        initialize: function () {
             var me = this;
 
             this.instance = this.options.instance;
@@ -364,7 +364,7 @@ function(
 
             if (this.model) {
                 // listenTo will remove dead listeners, use it instead of on()
-                this.listenTo(this.model, 'change', function() {
+                this.listenTo(this.model, 'change', function () {
                     me.render();
                 });
             }
@@ -377,7 +377,7 @@ function(
              *
              * @method render
              */
-        render: function() {
+        render: function () {
             var me = this;
 
             // set id for this layer
@@ -420,7 +420,7 @@ function(
              * @private
              * Updates user roles.
              */
-        _rolesUpdateHandler: function() {
+        _rolesUpdateHandler: function () {
             var roles = Oskari.user().getRoles();
 
             this.roles = new userRoleCollection(roles).getRoles();
@@ -431,7 +431,7 @@ function(
              *
              * @method createLayerSelect
              */
-        createLayerSelect: function(e) {
+        createLayerSelect: function (e) {
             var element = jQuery(e.currentTarget),
                 addLayerWrappers = element.parents('.add-layer-wrapper'),
                 addGroups = element.parents('.admin-add-group'),
@@ -450,18 +450,18 @@ function(
                 this.createLayerForm(layerType);
             }
         },
-        __isSupportedLayerType: function(layerType) {
-            var types = _.map(this.supportedTypes, function(type) {
+        __isSupportedLayerType: function (layerType) {
+            var types = _.map(this.supportedTypes, function (type) {
                 return type.id;
             });
             return _.contains(types, layerType);
         },
-        __getLayerTypeData: function(layerType) {
-            return _.find(this.supportedTypes, function(type) {
+        __getLayerTypeData: function (layerType) {
+            return _.find(this.supportedTypes, function (type) {
                 return type.id === layerType;
             });
         },
-        createLayerForm: function(layerType) {
+        createLayerForm: function (layerType) {
             var me = this,
                 sandbox = Oskari.getSandbox(),
                 lcId,
@@ -511,12 +511,12 @@ function(
                     min: 0,
                     max: 100,
                     value: me.model.getOpacity(),
-                    slide: function(event, ui) {
+                    slide: function (event, ui) {
                         var input = jQuery(ui.handle).parents('.left-tools').find('input.opacity-slider.opacity');
                         input.val(ui.value);
                     }
                 });
-                me.$el.find('input.opacity-slider.opacity').on('change paste keyup', function() {
+                me.$el.find('input.opacity-slider.opacity').on('change paste keyup', function () {
                     var sldr = me.$el.find('.layout-slider');
                     sldr.slider('value', jQuery(this).val());
                 });
@@ -562,10 +562,10 @@ function(
              * @method getDataProviders
              * @return {Array}         dataproviders
              */
-        getDataProviders: function() {
+        getDataProviders: function () {
             return this.options.dataProviders;
         },
-        _createNewModel: function(type) {
+        _createNewModel: function (type) {
             var sandbox = this.instance.sandbox,
                 mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                 layer = null;
@@ -583,7 +583,7 @@ function(
             return new this.modelObj(layer);
         },
 
-        createGroupForm: function(groupTitle) {
+        createGroupForm: function (groupTitle) {
             var me = this;
             if (!me.model) {
                 if (groupTitle === 'baseName') {
@@ -612,7 +612,7 @@ function(
              *
              * @method hideLayerSettings
              */
-        hideLayerSettings: function(e) {
+        hideLayerSettings: function (e) {
             e.stopPropagation();
             var me = this;
             var element = jQuery(e.currentTarget);
@@ -624,7 +624,7 @@ function(
                 element.parents('.admin-add-layer').removeClass('show-edit-layer');
                 element.parents('.admin-add-layer').remove();
             }
-            if(me.options.flyout) {
+            if (me.options.flyout) {
                 me.options.flyout.hide();
             }
         },
@@ -633,7 +633,7 @@ function(
              *
              * @method handleInterfaceVersionChange
              */
-        handleInterfaceVersionChange: function(e) {
+        handleInterfaceVersionChange: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
                 form = element.parents('.admin-add-layer'),
@@ -651,7 +651,7 @@ function(
              *
              * @method importSldStyle
              */
-        importSldStyle: function(e) {
+        importSldStyle: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
                 form = element.parents('.add-style-send'),
@@ -669,7 +669,7 @@ function(
              *
              * @method cancelSldStyle
              */
-        cancelSldStyle: function(e) {
+        cancelSldStyle: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
                 form = element.parents('.add-style-send'),
@@ -688,7 +688,7 @@ function(
              *
              * @method saveSldStyle
              */
-        saveSldStyle: function(e) {
+        saveSldStyle: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 form = element.parents('.add-style-send'),
@@ -718,7 +718,7 @@ function(
              *
              * @method checkXml
              */
-        _checkXml: function(xml) {
+        _checkXml: function (xml) {
             var me = this,
                 isValid = true;
 
@@ -741,7 +741,7 @@ function(
              *
              * @method handleSldStylesChange
              */
-        handleSldStylesChange: function(e) {
+        handleSldStylesChange: function (e) {
             e.stopPropagation();
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -756,12 +756,12 @@ function(
              *
              * @method selectedSldStyles
              */
-        selectedSldStyles: function(form) {
+        selectedSldStyles: function (form) {
 
             var selectedStyles = {},
                 styles = [];
 
-            form.find('#add-layer-sld-style option:selected').each(function() {
+            form.find('#add-layer-sld-style option:selected').each(function () {
                 var sel = jQuery(this);
                 if (sel.length) {
                     var style = {};
@@ -773,7 +773,7 @@ function(
             selectedStyles.selectedStyles = styles;
             return selectedStyles;
         },
-        _DefaultStylesUI: function(element, selection) {
+        _DefaultStylesUI: function (element, selection) {
             var form = element.parents('.admin-add-layer'),
                 defaelem = form.find('#add-layer-style');
 
@@ -788,7 +788,7 @@ function(
              *
              * @method handleLayerLegendUrlChange
              */
-        handleLayerLegendUrlChange: function(e) {
+        handleLayerLegendUrlChange: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
                 form = element.parents('.admin-add-layer'),
@@ -800,7 +800,7 @@ function(
              *
              * @method removeLayer
              */
-        removeLayer: function(e, callback) {
+        removeLayer: function (e, callback) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();
             }
@@ -818,7 +818,7 @@ function(
             }
 
             btn.addClass('primary');
-            btn.setHandler(function() {
+            btn.setHandler(function () {
                 dialog.close();
 
                 jQuery.ajax({
@@ -827,7 +827,7 @@ function(
                         layer_id: me.model.getId()
                     },
                     url: Oskari.urls.getRoute('DeleteLayer'),
-                    success: function(resp) {
+                    success: function (resp) {
                         if (!resp) {
                             if (addLayerDiv.hasClass('show-edit-layer')) {
                                 addLayerDiv.removeClass('show-edit-layer');
@@ -847,17 +847,17 @@ function(
                             }
                         }
 
-                        if(me.options.flyout) {
+                        if (me.options.flyout) {
                             me.options.flyout.hide();
                         }
-                        if(me.options.instance.service) {
+                        if (me.options.instance.service) {
                             me.options.instance.service.trigger('admin.layer', {
                                 mode: 'delete',
                                 id: me.model.getId()
                             });
                         }
                     },
-                    error: function(jqXHR) {
+                    error: function (jqXHR) {
                         if (jqXHR.status !== 0) {
                             me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').errorRemoveLayer);
                         }
@@ -865,7 +865,7 @@ function(
                 });
 
             });
-            cancelBtn.setHandler(function() {
+            cancelBtn.setHandler(function () {
                 dialog.close();
             });
 
@@ -879,7 +879,7 @@ function(
              * @param title the dialog title
              * @param message the dialog message
              */
-        _showDialog: function(title, message) {
+        _showDialog: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(title, message);
             dialog.fadeout(5000);
@@ -890,7 +890,7 @@ function(
              * @param {Object} data saved data
              * @param {jQuery} element jQuery element
              */
-        _addLayerAjax: function(data, element, callback) {
+        _addLayerAjax: function (data, element, callback) {
             var me = this,
                 form = element.parents('.admin-add-layer'),
                 accordion = element.parents('.accordion'),
@@ -906,7 +906,7 @@ function(
                 data: data,
                 dataType: 'json',
                 url: Oskari.urls.getRoute('SaveLayer'),
-                success: function(resp) {
+                success: function (resp) {
                     var success = true;
                     me.progressSpinner.stop();
                     // response should be a complete JSON for the new layer
@@ -940,7 +940,7 @@ function(
                                 mode: 'edit',
                                 layerData: resp
                             });
-                        } else if(me.options.instance.service){
+                        } else if (me.options.instance.service) {
                             me.options.instance.service.trigger('admin.layer', {
                                 mode: 'add',
                                 layerData: resp
@@ -965,7 +965,7 @@ function(
                         me._showDialog(me.instance.getLocalization('admin').successTitle, me.instance.getLocalization('admin').success);
                     }
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     me.progressSpinner.stop();
                     if (jqXHR.status !== 0) {
                         var loc = me.instance.getLocalization('admin'),
@@ -1008,7 +1008,7 @@ function(
              *
              * @method addLayer
              */
-        addLayer: function(e, callback) {
+        addLayer: function (e, callback) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();
             }
@@ -1036,12 +1036,12 @@ function(
                 data.layer_id = me.model.getId();
             }
 
-            form.find('[id$=-name]').filter('[id^=add-layer-]').each(function() {
+            form.find('[id$=-name]').filter('[id^=add-layer-]').each(function () {
                 var lang = this.id.substring(10, this.id.indexOf('-name'));
                 data['name_' + lang] = this.value;
             });
 
-            form.find('[id$=-title]').filter('[id^=add-layer-]').each(function() {
+            form.find('[id$=-title]').filter('[id^=add-layer-]').each(function () {
                 var lang = this.id.substring(10, this.id.indexOf('-title'));
                 data['title_' + lang] = this.value;
             });
@@ -1064,10 +1064,10 @@ function(
                 var attrJson = JSON.parse(form.find('#add-layer-attributes').val().trim() || '{}');
 
                 // overwrite forcedSRS with form values
-                var forcedSRS = form.find('.add-layer-forced-proj').map(function() {
+                var forcedSRS = form.find('.add-layer-forced-proj').map(function () {
                     return this.getAttribute('data-proj');
                 }).get();
-                if(forcedSRS.length) {
+                if (forcedSRS.length) {
                     attrJson.forcedSRS = forcedSRS;
                 } else {
                     delete attrJson.forcedSRS;
@@ -1094,7 +1094,7 @@ function(
                 admin = me.model.getAdmin();
                 // in insert all wfs properties are behind passthrough
                 if ((admin) && (admin.passthrough)) {
-                    _.forEach(admin.passthrough, function(value, key) {
+                    _.forEach(admin.passthrough, function (value, key) {
                         data[key] = typeof value === 'object' ? JSON.stringify(value) : value;
                     });
                 }
@@ -1157,12 +1157,12 @@ function(
                 btn.addClass('primary');
                 cancelBtn.setTitle(me.instance.getLocalization().cancel);
 
-                btn.setHandler(function() {
+                btn.setHandler(function () {
                     dialog.close();
                     me._addLayerAjax(data, element, callback);
                 });
 
-                cancelBtn.setHandler(function() {
+                cancelBtn.setHandler(function () {
                     dialog.close();
                 });
 
@@ -1177,7 +1177,7 @@ function(
              *
              * @method saveCollectionLayer
              */
-        saveCollectionLayer: function(e) {
+        saveCollectionLayer: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 groupElement = element.parents('.admin-add-group'),
@@ -1196,7 +1196,7 @@ function(
                 data.layer_id = me.model.getId();
             }
 
-            groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function() {
+            groupElement.find('[id$=-name]').filter('[id^=add-group-]').each(function () {
                 var lang = this.id.substring(10, this.id.indexOf('-name'));
                 data['name_' + lang] = this.value;
             });
@@ -1204,7 +1204,7 @@ function(
             // permissions
             if (!me.model.getId()) {
                 var checkedPermissions = [];
-                groupElement.find('.layer-view-role').filter(':checked').each(function() {
+                groupElement.find('.layer-view-role').filter(':checked').each(function () {
                     checkedPermissions.push(jQuery(this).data('role-id'));
                 });
 
@@ -1218,13 +1218,13 @@ function(
                 type: 'POST',
                 dataType: 'json',
                 data: data,
-                beforeSend: function() {
+                beforeSend: function () {
                     jQuery('body').css({
                         cursor: 'wait'
                     });
                 },
                 url: Oskari.urls.getRoute('SaveLayer'),
-                success: function(resp) {
+                success: function (resp) {
                     jQuery('body').css('cursor', '');
                     if (!me.model.getId()) {
                         //trigger event to View.js so that it can act accordingly
@@ -1242,13 +1242,13 @@ function(
                         });
                     }
                 },
-                error: function() {
+                error: function () {
                     jQuery('body').css('cursor', '');
                     me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').errorSaveGroupLayer);
                 }
             });
         },
-        removeLayerCollection: function(e) {
+        removeLayerCollection: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 //                    editForm = element.parents('.admin-add-layer').attr('data-id'),
@@ -1261,14 +1261,14 @@ function(
                     layer_id: me.model.getId()
                 },
                 url: Oskari.urls.getRoute('DeleteLayer'),
-                success: function(resp) {
+                success: function (resp) {
                     accordion.trigger({
                         type: 'adminAction',
                         command: 'removeLayer',
                         modelId: me.model.getId()
                     });
                 },
-                error: function() {
+                error: function () {
                     me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').errorRemoveGroupLayer);
                 }
             });
@@ -1278,7 +1278,7 @@ function(
              *
              * @method fetchCapabilities
              */
-        fetchCapabilities: function(e) {
+        fetchCapabilities: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
                 form = element.parents('.add-layer-wrapper');
@@ -1322,11 +1322,11 @@ function(
                     crs: crs
                 },
                 url: Oskari.urls.getRoute('GetWSCapabilities'),
-                success: function(resp) {
+                success: function (resp) {
                     me.progressSpinner.stop();
                     me.__capabilitiesResponseHandler(layerType, resp);
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     me.progressSpinner.stop();
                     if (jqXHR.status !== 0) {
                         me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').metadataReadFailure);
@@ -1339,7 +1339,7 @@ function(
              * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
              * @param  {String} response  GetWSCapabilities response
              */
-        __capabilitiesResponseHandler: function(layerType, response) {
+        __capabilitiesResponseHandler: function (layerType, response) {
             var me = this,
                 warningDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 warningDialogOkBtn = warningDialog.createCloseButton(me.instance.getLocalization().ok),
@@ -1358,7 +1358,7 @@ function(
                 }
             }
         },
-        handleCapabilitiesSelection: function(e) {
+        handleCapabilitiesSelection: function (e) {
             var me = this,
                 current = jQuery(e.currentTarget);
                 // stop propagation so handler on outer tags won't be triggered as well
@@ -1383,7 +1383,7 @@ function(
              *
              * @method getValue
              */
-        getValue: function(object, key) {
+        getValue: function (object, key) {
             var k,
                 ret;
             if (key && object[key]) {
@@ -1399,7 +1399,7 @@ function(
             }
             return ret;
         },
-        clearInput: function(e) {
+        clearInput: function (e) {
             var element = jQuery(e.currentTarget),
                 input = element.parent().children(':input');
             if (input.length === 1) {
@@ -1411,7 +1411,7 @@ function(
              *
              * @method __setupSldStyles
              */
-        _setupSldStyles: function() {
+        _setupSldStyles: function () {
             var me = this,
                 elem = me.$el;
 
@@ -1424,11 +1424,11 @@ function(
                 dataType: 'json',
                 data: {},
                 url: Oskari.urls.getRoute('SldStyles'),
-                success: function(resp) {
+                success: function (resp) {
                     me.sldStyles = resp.sldStyles;
                     me._SldStylesUI(elem);
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     if (jqXHR.status !== 0) {
                         me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').sldStylesFetchError);
                     }
@@ -1440,7 +1440,7 @@ function(
              *
              * @method _saveSldStyle
              */
-        _saveSldStyle: function(sldName, sldXml) {
+        _saveSldStyle: function (sldName, sldXml) {
             var me = this;
 
             jQuery.ajax({
@@ -1451,20 +1451,20 @@ function(
                     xml: encodeURIComponent(sldXml)
                 },
                 url: Oskari.urls.getRoute('SldStyles'),
-                success: function(resp) {
+                success: function (resp) {
                     me._showDialog('title', 'New sld saved success / ' + sldName);
                     //Update UI
                     me._SldStylesAppendUI(resp.id, sldName);
 
                 },
-                error: function(jqXHR) {
+                error: function (jqXHR) {
                     if (jqXHR.status !== 0) {
                         me._showDialog('title', 'Save of new sld xml failed');
                     }
                 }
             });
         },
-        _SldStylesUI: function(elem) {
+        _SldStylesUI: function (elem) {
             var me = this,
                 sldSele = elem.find('#add-layer-sld-style');
 
@@ -1473,7 +1473,7 @@ function(
             }
 
         },
-        _SldStylesAppendUI: function(id, name) {
+        _SldStylesAppendUI: function (id, name) {
             var me = this,
                 elem = me.$el,
                 sldSele = elem.find('#add-layer-sld-style');
@@ -1488,7 +1488,7 @@ function(
              *
              * @method addLayer
              */
-        clickLayerSettings: function(e) {
+        clickLayerSettings: function (e) {
             e.stopPropagation();
         }
     });

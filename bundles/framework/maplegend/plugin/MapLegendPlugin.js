@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin',
-    function(config, plugins) {
+    function (config, plugins) {
         var me = this;
         me._config = config || {};
         me._plugins = plugins;
@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     iconCls: 'mobile-maplegend',
                     tooltip: '',
                     show: true,
-                    callback: function() {
+                    callback: function () {
                         me._toggleToolState();
                     },
                     sticky: true,
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             buttonGroup: 'mobile-toolbar'
         };
     }, {
-        _createControlElement: function() {
+        _createControlElement: function () {
             var me = this,
                 loc = Oskari.getLocalization('maplegend', Oskari.getLang());
             var isMobile = Oskari.util.isMobile();
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 return this.createDesktopElement();
             }
         },
-        createMobileElement: function() {
+        createMobileElement: function () {
             var me = this;
             var el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-maplegend');
             var topOffsetElement = jQuery('div.mobileToolbarDiv');
@@ -58,20 +58,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             popupService.closeAllPopups(true);
 
             var legends = me.getLegends();
-            if( legends.length === 1 ) {
+            if (legends.length === 1) {
                 singleLegend = true;
             }
             var content = me._popup.getJqueryContent();
             var legendContent = me.generateLegendContainer(singleLegend);
 
-            if( !singleLegend ) {
+            if (!singleLegend) {
                 dropdown = legendContent.find('.oskari-select');
             }
 
             var title = singleLegend ? me._loc.singleLegend + legends[0].title : me._loc.title;
             me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
 
-            me.getLayerLegend( function( img ) {
+            me.getLayerLegend(function (img) {
                 content.find('.imgDiv').remove();
                 content.find('.legendLink').remove();
                 content.find('.error').remove();
@@ -89,7 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 } else {
                     me._popup.moveTo(me.getMapModule().getMapEl(), 'center', true, null);
                 }
-            }, function() {
+            }, function () {
                 // move popup if el and topOffsetElement
                 if (el && el.length > 0 && topOffsetElement && topOffsetElement.length > 0) {
                     me._popup.moveTo(el, 'bottom', true, topOffsetElement);
@@ -98,19 +98,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 }
                 content.find('.error').remove();
                 content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
-            }, singleLegend, dropdown );
+            }, singleLegend, dropdown);
 
-            if( !singleLegend ) {
+            if (!singleLegend) {
                 dropdown.trigger('change');
             }
 
-            if ( me._isVisible ) {
-                me._popup.show( title, null );
-                popupCloseIcon = ( Oskari.util.isDarkColor( themeColours.activeColour ) ) ? 'icon-close-white' : undefined;
+            if (me._isVisible) {
+                me._popup.show(title, null);
+                popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                 me._popup.createCloseIcon();
-                me._popup.onClose(function() {
+                me._popup.onClose(function () {
                     me._isVisible = false;
-                    me._resetMobileIcon( el, me._mobileDefs.buttons['mobile-maplegend'].iconCls );
+                    me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-maplegend'].iconCls);
                 });
                 me._popup.setColourScheme({
                     'bgColour': themeColours.activeColour,
@@ -128,7 +128,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
          * @param {Object} style
          * @param {jQuery} div
          */
-        changeToolStyle: function(style, div) {
+        changeToolStyle: function (style, div) {
             var me = this,
                 el = div || me.getElement();
 
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
             el.addClass(styleClass);
         },
-        createDesktopElement: function() {
+        createDesktopElement: function () {
             var me = this;
             var legend = me._templates.maplegend.clone();
             var popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
@@ -162,13 +162,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
             var popupLocation = this.getPopupPosition();
 
-            legend.on('click', function() {
-                if( me._toggleToolState() === false){
+            legend.on('click', function () {
+                if (me._toggleToolState() === false) {
                     return;
                 }
                 var legends = me.getLegends();
                 var title = me._loc.title;
-                if(legends.length === 1) {
+                if (legends.length === 1) {
                     title = me._loc.singleLegend + legends[0].title;
                     singleLegend = true;
                     me._popup.show(title, null);
@@ -179,7 +179,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
                 var content = me._popup.getJqueryContent();
                 var legendContent = me.generateLegendContainer(singleLegend);
-                if( !singleLegend ) {
+                if (!singleLegend) {
                     dropdown = legendContent.find('.oskari-select');
                 }
                 content.append(legendContent);
@@ -194,14 +194,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 });
 
                 me._popup.makeDraggable();
-                me._popup.onClose(function() {
+                me._popup.onClose(function () {
                     me._popup.dialog.children().empty();
                     me._isVisible = false;
                     me._popup.close();
                 });
                 me._popup.adaptToMapSize(me.getSandbox(), 'maplegend');
                 me._isVisible = true;
-                me.getLayerLegend( function( img ) {
+                me.getLayerLegend(function (img) {
                     content.find('.imgDiv').remove();
                     content.find('.legendLink').remove();
                     content.find('.error').remove();
@@ -213,20 +213,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                     content.append(legendLink);
                     content.append(legendImage);
                     me._popup.moveTo(legend, popupLocation, true);
-                }, function( ) {
+                }, function () {
                     me._popup.moveTo(legend, popupLocation, true);
                     content.find('.imgDiv').remove();
                     content.find('.error').remove();
                     content.append('<div class="error">' + me._loc.invalidLegendUrl + '</div>');
                 }, singleLegend, dropdown);
 
-                if( !singleLegend ) {
+                if (!singleLegend) {
                     dropdown.trigger('change');
                 }
             });
             return legend;
         },
-        getPopupPosition: function() {
+        getPopupPosition: function () {
             var popupLocation;
 
             if (this._config.location && this._config.location.classes === 'top left') {
@@ -236,7 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             }
             return popupLocation;
         },
-        generateLegendContainer: function( singleLegend ) {
+        generateLegendContainer: function (singleLegend) {
             var me = this;
             var legendContainer = this._templates.legendContainer.clone();
             var legendInfo = this._templates.legendInfo.clone();
@@ -244,7 +244,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
 
             legendInfo.text(me._loc.infotext);
 
-            if( !singleLegend ) {
+            if (!singleLegend) {
                 var dropdown = me.createDropdown();
                 legendContainer.append(legendInfo);
                 legendContainer.append(legendDivider);
@@ -255,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             return legendContainer;
 
         },
-        createDropdown: function() {
+        createDropdown: function () {
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
 
             var legendLayers = this.getLegends();
@@ -274,12 +274,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             select.selectFirstValue();
             return dropdown;
         },
-        getLayerLegend: function(successCb, errorCb, singleLegend, dropdown) {
+        getLayerLegend: function (successCb, errorCb, singleLegend, dropdown) {
 
             var layer,
                 me = this;
 
-            if( singleLegend ) {
+            if (singleLegend) {
                 var legendLayer = me.getLegends();
                 layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(legendLayer[0].id);
 
@@ -289,45 +289,45 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 var legendImg = jQuery('<img id="legendImg"></img>');
                 legendImg.attr('src', layer.getLegendImage());
 
-                if(typeof successCb === 'function') {
-                    legendImg.on('load', function() {
+                if (typeof successCb === 'function') {
+                    legendImg.on('load', function () {
                         successCb(this);
                     });
                 }
-                if(typeof errorCb === 'function') {
-                    legendImg.on('error', function() {
+                if (typeof errorCb === 'function') {
+                    legendImg.on('error', function () {
                         errorCb(this);
                     });
                 }
 
             } else {
 
-                dropdown.on('change', function(e, params) {
+                dropdown.on('change', function (e, params) {
 
                     var id = e.target.value ? e.target.value : jQuery(e.target).find(':selected').val();
                     layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(id);
 
-                    if ( !layer ) {
+                    if (!layer) {
                         return;
                     }
                     var legendImg = jQuery('<img id="legendImg"></img>');
                     legendImg.attr('src', layer.getLegendImage());
-                    legendImg.on('load', function() {
+                    legendImg.on('load', function () {
                         // do stuff on success
                         successCb(this);
                     });
-                    legendImg.on('error', function() {
+                    legendImg.on('error', function () {
                         errorCb(this);
                     });
 
                 });
             }
         },
-        getLegends: function() {
+        getLegends: function () {
             var layers = this.getSandbox().findAllSelectedMapLayers().slice(0);
             var legendLayers = [];
 
-            layers.forEach(function(layer) {
+            layers.forEach(function (layer) {
                 if (!layer.getLegendImage()) {
                     return;
                 }
@@ -339,7 +339,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             });
             return legendLayers;
         },
-        _createUI: function() {
+        _createUI: function () {
             var me = this,
                 conf = me._config;
             this._element = this._createControlElement();
@@ -354,11 +354,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
                 me.changeToolStyle(toolStyle, me.getElement());
             }
         },
-        isOpen: function() {
+        isOpen: function () {
             return this._isVisible;
         },
 
-        redrawUI: function(mapInMobileMode, forced) {
+        redrawUI: function (mapInMobileMode, forced) {
             if (this.getElement()) {
                 this.teardownUI(true);
             }
@@ -373,7 +373,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             this._createUI();
 
         },
-        teardownUI: function() {
+        teardownUI: function () {
             //detach old element from screen
             if (this.getElement() !== undefined) {
                 this.getElement().detach();
@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
          * Toggle tool state.
          * @method @private _toggleToolState
          */
-        _toggleToolState: function() {
+        _toggleToolState: function () {
             var me = this,
                 isMobile = Oskari.util.isMobile();
 
@@ -407,10 +407,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
          * Get jQuery element.
          * @method @public getElement
          */
-        getElement: function() {
+        getElement: function () {
             return this._element;
         },
-        stopPlugin: function() {
+        stopPlugin: function () {
             this.teardownUI();
         }
     }, {

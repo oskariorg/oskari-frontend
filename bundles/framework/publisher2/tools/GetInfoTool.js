@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
-    function() {
+    function () {
     }, {
         index : 8,
         allowedLocations : [],
@@ -92,14 +92,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
             }
         },
-        init: function(data) {
+        init: function (data) {
             var me = this;
             var isConf = (data && data.configuration && data.configuration.mapfull) ? true : false;
             if (isConf && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
                 var tool = this.getTool();
-                _.each(data.configuration.mapfull.conf.plugins, function(plugin) {
+                _.each(data.configuration.mapfull.conf.plugins, function (plugin) {
                     if (tool.id === plugin.id) {
-                        if(plugin.config && plugin.config.colourScheme) {
+                        if (plugin.config && plugin.config.colourScheme) {
                             me.values.colourScheme = plugin.config.colourScheme;
                             me._sendColourSchemeChangedEvent(me.values.colourScheme);
                         }
@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 }
             }
         },
-        getName: function() {
+        getName: function () {
             return 'Oskari.mapframework.publisher.tool.GetInfoTool';
         },
         /**
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     *
     * @returns {Object} tool description
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.mapmodule.GetInfoPlugin',
                 title: 'GetInfoPlugin',
@@ -151,7 +151,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     *
     * @returns {Boolean} is the tool toggled on by default.
     */
-        isDefaultTool: function() {
+        isDefaultTool: function () {
             return true;
         },
 
@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-        setEnabled : function(enabled) {
+        setEnabled : function (enabled) {
             var me = this,
                 tool = me.getTool();
 
@@ -174,21 +174,21 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             }
 
             me.state.enabled = enabled;
-            if(!me.__plugin && enabled) {
+            if (!me.__plugin && enabled) {
                 me.__plugin = Oskari.clazz.create(tool.id, tool.config);
                 me.__mapmodule.registerPlugin(me.__plugin);
             }
 
-            if(enabled === true) {
+            if (enabled === true) {
                 me.__plugin.startPlugin(me.__sandbox);
                 me.__started = true;
             } else {
-                if(me.__started === true) {
+                if (me.__started === true) {
                     me.__plugin.stopPlugin(me.__sandbox);
                 }
             }
 
-            if(enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function'){
+            if (enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function') {
                 me.__plugin.setMode(me.state.mode);
             }
         },
@@ -203,7 +203,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     *
     * @returns {Object} jQuery element
     */
-        getExtraOptions: function() {
+        getExtraOptions: function () {
             var me = this,
                 template = me.templates.colours.clone(),
                 selectedColour = me.values.colourScheme || {},
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             // Set the button handler
             template.find('button').html(buttonLabel).on('click', function () {
-                if(me.isColourDialogOpen === false) {
+                if (me.isColourDialogOpen === false) {
                     me._openColourDialog(jQuery(this));
                 }
             });
@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         mapfull: {
@@ -314,7 +314,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 if ('custom' === colours[i].val) {
                     content.find('div#publisher-colour-inputs').append(me._createCustomColoursInputs());
                     // Color picker value or icon changed
-                    content.find('div#publisher-custom-colours').on('change',function() {
+                    content.find('div#publisher-custom-colours').on('change',function () {
                         jQuery('#publisher-colour-inputs input[id=custom]').prop('checked', true);
                         jQuery('div.basic_publisher').find('input[name=publisher-colour]').val(me.__instance._localization.BasicView.layout.fields.colours['custom']).attr('data-colour-code', 'custom');
                         me._updatePreviewFromCustomValues(content);
@@ -478,13 +478,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
 
             iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
             iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
-        
+
             me._createColorPickers();
 
             var colorPickerBackground = me.templates.colorPickers.background.clone(),
                 colorPickerTitle = me.templates.colorPickers.title.clone(),
                 colorPickerHeader = me.templates.colorPickers.header.clone();
-        
+
             colorPickerBackground.append(me._colorPickers[0].getElement());
             colorPickerTitle.append(me._colorPickers[1].getElement());
             colorPickerHeader.append(me._colorPickers[2].getElement());
@@ -493,7 +493,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             template.find('div#publisher-custom-colours-title').append(titleLoc).append(colorPickerTitle);
             template.find('div#publisher-custom-colours-header').append(headerLoc).append(colorPickerHeader);
             template.find('div#publisher-custom-colours-iconcls').append(iconClsLoc).append(iconClsInputs);
-        
+
             this._prepopulateCustomColoursTemplate(template);
 
             template.find('input[type=text]').on('change', function () {
@@ -524,7 +524,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
             me._colorPickers[0].setValue(customColours.bg || me.initialValues.colours[6].bgColour);
             me._colorPickers[1].setValue(customColours.title || me.initialValues.colours[6].titleColour);
             me._colorPickers[2].setValue(customColours.header || me.initialValues.colours[6].headerColour);
-        
+
             iconClsInputs.find('input[type=radio]').prop('checked', false);
             var iconCls = customColours.iconCls || 'icon-close-white';
             iconClsInputs.find('input[value=' + iconCls + ']').prop('checked', true);
@@ -630,7 +630,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * Creates an array of color picker components
      * @private
      */
-        _createColorPickers: function() {
+        _createColorPickers: function () {
             var options = {className: 'oskari-colorpickerinput'};
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput',options),
@@ -645,7 +645,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @param {Object} content
      */
 
-        _updatePreviewFromCustomValues: function(content) {
+        _updatePreviewFromCustomValues: function (content) {
             var selectedColour = {};
             selectedColour.bgColour = this._colorPickers[0].getValue();
             selectedColour.titleColour = this._colorPickers[1].getValue();
@@ -706,9 +706,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     * @method stop
     * @public
     */
-        stop: function(){
+        stop: function () {
             var me = this;
-            if(me.__plugin) {
+            if (me.__plugin) {
                 if (me.__sandbox && me.__plugin.getSandbox()) {
                     me.__plugin.stopPlugin(me.__sandbox);
                 }

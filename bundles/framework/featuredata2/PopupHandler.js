@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
                 content = me.template.wrapper.clone();
 
             // Safety check at not show more than one popup
-            if(jQuery('.tools_selection').is(':visible')) {
+            if (jQuery('.tools_selection').is(':visible')) {
                 return;
             }
 
@@ -230,7 +230,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
                 btnContainer.addClass('tool');
                 btnContainer.on('click', function (evt, deselect) {
                     me.removeButtonSelection(content);
-                    if( deselect ) {
+                    if (deselect) {
                         activeTool = null;
                         startDrawing = false;
                         me.selectionPlugin.clearDrawing();
@@ -258,7 +258,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
          * Handles active-class of tool buttons
          */
         removeButtonSelection: function (content) {
-            if(!content) {
+            if (!content) {
                 content = jQuery('.selectionToolsDiv');
             }
             var me = this,

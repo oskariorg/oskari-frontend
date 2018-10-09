@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
             me.progressSpinner.insertTo(me.popupContent);
 
             // Safety check at not show more than one popup
-            if(jQuery('.tools_routing_selection').is(':visible')) {
+            if (jQuery('.tools_routing_selection').is(':visible')) {
                 return;
             }
 
@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
          * @param {String} value the identifier value
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
-        _removeFeaturesFromMap: function(identifier, value, layer){
+        _removeFeaturesFromMap: function (identifier, value, layer) {
             var me = this,
                 rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
 
@@ -146,13 +146,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
         /**
          * @method  @public removeMarkersFromMap remove markers from map
          */
-        removeMarkersFromMap: function(){
-            var me=this,
+        removeMarkersFromMap: function () {
+            var me = this,
                 reqBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.RemoveMarkersRequest'
                 );
 
-            if(reqBuilder) {
+            if (reqBuilder) {
                 me.sandbox.request(me.instance.getName(), reqBuilder([me.markerIds.start]));
                 me.sandbox.request(me.instance.getName(), reqBuilder([me.markerIds.end]));
             }
@@ -218,7 +218,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
          * @param {String} msg       marker message
          * @param {String} markerId marker id
          */
-        _setMarker: function(lon, lat, removeOld, color, msg, markerId) {
+        _setMarker: function (lon, lat, removeOld, color, msg, markerId) {
             var me = this,
                 reqBuilder,
                 sandbox = me.sandbox;

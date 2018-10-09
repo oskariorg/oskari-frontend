@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.elements.ParamEnumElement
  */
 Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
-    function(instance, validator) {
+    function (instance, validator) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._templates = {
@@ -52,19 +52,19 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 readOnlyElement = jQuery('<span></span>'),
                 showInput = true;
 
-            if(readOnly) {
+            if (readOnly) {
                 showInput = false;
             }
 
-            if(title === null) {
+            if (title === null) {
                 title = param.name;
             }
 
-            if(showInput) {
+            if (showInput) {
                 // Radio button list
-                if(!param.multi) {
-                    jQuery.each(param.options, function(index, value){
-                        data.append('<input type="radio" name="'+param.name+'" value="'+value+'">' + me.getElementLabel(param, value) + '<br>');
+                if (!param.multi) {
+                    jQuery.each(param.options, function (index, value) {
+                        data.append('<input type="radio" name="' + param.name + '" value="' + value + '">' + me.getElementLabel(param, value) + '<br>');
                     });
 
                     data.find('input').first().prop('checked', true);
@@ -72,21 +72,21 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
                 }
                 // Checkbox list
                 else {
-                    jQuery.each(param.options, function(index, value){
-                        data.append('<input type="checkbox" name="'+param.name+'" value="'+value+'">' + me.getElementLabel(param, value) + '<br>');
+                    jQuery.each(param.options, function (index, value) {
+                        data.append('<input type="checkbox" name="' + param.name + '" value="' + value + '">' + me.getElementLabel(param, value) + '<br>');
                     });
                 }
             } else {
-                if(param.selections.length>0) {
+                if (param.selections.length > 0) {
                     var list = jQuery('<div class="license_enum_list"></div>');
 
-                    jQuery.each(param.selections, function(index, value){
+                    jQuery.each(param.selections, function (index, value) {
                         var valueEl = readOnlyElement.clone();
                         var textValue = me.getElementLabel(param, value);
                         valueEl.attr('data-value', value);
                         valueEl.html(textValue);
                         list.append(valueEl);
-                        if(param.multi && index < param.selections.length-1) {
+                        if (param.multi && index < param.selections.length - 1) {
                             list.append(', ');
                         }
                     });
@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamEnumElement',
         /**
          * Returns a localised label for the license's duration options. The original value is returned for everything else.
          */
-        getElementLabel: function(param, value) {
+        getElementLabel: function (param, value) {
             if (param.name === 'LICENSE_DURATION' && value && value.length) {
                 //value is of form P[int][D/W/M/Y]
                 var me = this,

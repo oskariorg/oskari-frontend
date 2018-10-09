@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
      *
      * @params {Object}
      */
-    function(params) {
+    function (params) {
         this._searchparams = params;
     }, {
         /** @static @property __name request name */
@@ -21,14 +21,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.SearchRequest',
          * @method getName
          * @return {String} request name
          */
-        getName : function() {
+        getName : function () {
             return this.__name;
         },
         /**
          * @method getSearchParams
          * @return {Object} parameters given for search
          */
-        getSearchParams : function() {
+        getSearchParams : function () {
             return this._searchparams;
         }
     }, {

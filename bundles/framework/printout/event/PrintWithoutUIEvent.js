@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintWithoutUIEve
  *          Parameters for to send backend print service
  * @param {Object} geojsonData
  */
-    function(contentId, printParams, geojsonData) {
+    function (contentId, printParams, geojsonData) {
         this._contentId = contentId;
         this._printParams = printParams;
         this._geojsonData = geojsonData;
@@ -23,11 +23,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintWithoutUIEve
      * Returns event name
      * @return {String} The event name.
      */
-        getName : function() {
+        getName : function () {
             return 'Printout.PrintWithoutUIEvent';
         },
 
-        getContentId: function() {
+        getContentId: function () {
             return this._contentId;
         },
 
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintWithoutUIEve
      * @method getPrintParams
      * @return {Array[Object]}
      */
-        getPrintParams : function() {
+        getPrintParams : function () {
             return this._printParams;
         },
 
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.event.PrintWithoutUIEve
      * @method getGeoJsonData
      * @return {Object}
      */
-        getGeoJsonData : function() {
+        getGeoJsonData : function () {
             return this._geojsonData;
         }
 

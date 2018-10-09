@@ -12,7 +12,7 @@ Oskari.clazz
 	   * @param {Oskari.mapframework.bundle.promote.PromoteBundleInstance} instance
 	   * 		reference to component that created the tile
 	   */
-	  function(instance) {
+	  function (instance) {
 	    this.instance = instance;
 	    this.container = null;
 	    this.template = null;
@@ -21,7 +21,7 @@ Oskari.clazz
 	     * @method getName
 	     * @return {String} the name for the component
 	     */
-	    getName : function() {
+	    getName : function () {
 	      return 'Oskari.mapframework.bundle.promote.Tile';
 	    },
 	    /**
@@ -35,14 +35,14 @@ Oskari.clazz
 	     *
 	     * Interface method implementation
 	     */
-	    setEl : function(el, width, height) {
+	    setEl : function (el, width, height) {
 	      this.container = jQuery(el);
 	    },
 	    /**
 	     * @method startPlugin
 	     * Interface method implementation, calls #refresh()
 	     */
-	    startPlugin : function() {
+	    startPlugin : function () {
 	    	var isContainer = (this.container && this.instance.mediator) ? true : false;
                 var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
                 var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
@@ -61,35 +61,35 @@ Oskari.clazz
 	     * @method stopPlugin
 	     * Interface method implementation, clears the container
 	     */
-	    stopPlugin : function() {
+	    stopPlugin : function () {
 	      this.container.empty();
 	    },
 	    /**
 	     * @method getTitle
 	     * @return {String} localized text for the title of the tile
 	     */
-	    getTitle : function() {
+	    getTitle : function () {
 	      return this.instance.getLocalization('title');
 	    },
 	    /**
 	     * @method getDescription
 	     * @return {String} localized text for the description of the tile
 	     */
-	    getDescription : function() {
+	    getDescription : function () {
 	      return this.instance.getLocalization('desc');
 	    },
 	    /**
 	     * @method getOptions
 	     * Interface method implementation, does nothing atm
 	     */
-	    getOptions : function() {
+	    getOptions : function () {
 
 	    },
 	    /**
 	     * @method refresh
 	     * Creates the UI for a fresh start
 	     */
-	    refresh : function() {
+	    refresh : function () {
 
 	    }
 	  }, {

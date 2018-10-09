@@ -150,17 +150,17 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.BundleInstance',
 
                 }
             },
-            'MapClickedEvent' : function(evt) {
+            'MapClickedEvent' : function (evt) {
                 var me = this,
                     x = evt.getMouseX(),
                     y = evt.getMouseY(),
                     tagPipe = me.plugins['Oskari.userinterface.Flyout'].tabsContainer.panels[0];
 
-                if(tagPipe.getStateTagPipe()){
+                if (tagPipe.getStateTagPipe()) {
                     tagPipe.findPipesRequest(x,y);
                     tagPipe.state.tagPipeClickLonLat = evt.getLonLat();
                 }
-                if(tagPipe.getStateMustache()){
+                if (tagPipe.getStateMustache()) {
                     tagPipe.mustachePointOnMap(evt.getLonLat());
                 }
             }

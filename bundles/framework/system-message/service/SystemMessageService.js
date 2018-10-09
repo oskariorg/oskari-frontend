@@ -6,17 +6,17 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.service.SystemMessag
  * @method create called automatically on construction
  * @static
  */
-    function(instance) {
+    function (instance) {
         this._instance = instance;
         this._sandbox = instance.sandbox;
         this.urls = {};
     },{
         __name: 'system.message.SystemMessageService',
         __qname : 'Oskari.framework.bundle.system.message.service.SystemMessageService',
-        getQName : function() {
+        getQName : function () {
             return this.__qname;
         },
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -24,9 +24,9 @@ Oskari.clazz.define('Oskari.framework.bundle.system.message.service.SystemMessag
    *
    * @method init
    */
-        init: function() {
+        init: function () {
         },
-        getStatusMessages: function() {
+        getStatusMessages: function () {
             // this._instance.messages.push();
             this._instance.showStatusMessage();
         }

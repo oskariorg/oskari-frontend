@@ -70,14 +70,14 @@ Oskari.clazz.define(
                 '        <select name="choose-wfs-layer" required="required"></select>' +
                 '    </label>' +
                 '       <h4></h4>' +
-                '           <div class="no-span-text default-checkbox">'+
+                '           <div class="no-span-text default-checkbox">' +
                 '               <span></span>' +
                 '               <input type="checkbox" name="details-default"/>' +
-                '           </div>'+
-                '           <div class="no-span-text isaddress-checkbox">'+
+                '           </div>' +
+                '           <div class="no-span-text isaddress-checkbox">' +
                 '               <span></span>' +
                 '               <input type="checkbox" name="details-isaddress"/>' +
-                '           </div>'+
+                '           </div>' +
                 '               <div class="details--wrapper"></div>' +
                 '    <label>' +
                 '        <span></span>' +
@@ -89,31 +89,31 @@ Oskari.clazz.define(
                 '</form>'
             );
 
-            jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
+            jQuery.each(Oskari.getSupportedLanguages(), function (index, item) {
                 me.templates.form.detailinputs = jQuery(
                     '    <label>' +
                 '        <span></span>' +
-                '        <input type="text" name="details-topic-'+item+'" class="details-topic" language="details-name-'+item+'" required="required" />' +
+                '        <input type="text" name="details-topic-' + item + '" class="details-topic" language="details-name-' + item + '" required="required" />' +
                 '    </label>' +
                 '    <label>' +
-                '        <input type="text" name="details-desc-'+item+'" class="no-span-text details-desc" language="details-desc-'+item+'" required="required" />' +
+                '        <input type="text" name="details-desc-' + item + '" class="no-span-text details-desc" language="details-desc-' + item + '" required="required" />' +
                 '    </label>'
                 );
                 me.templates.form.find('.details--wrapper').append(me.templates.form.detailinputs);
             });
 
-            me.templates.form.find('input[name=details-isaddress]').on('change', function() {
-                if(jQuery(this).is(':checked')) {
+            me.templates.form.find('input[name=details-isaddress]').on('change', function () {
+                if (jQuery(this).is(':checked')) {
                     jQuery(this).parents('form').find('.remove--param').not('.hidden').parent('label').remove();
                 }
             });
 
-            me.templates.form.find('.remove--param').on('click', function(event){
+            me.templates.form.find('.remove--param').on('click', function (event) {
                 jQuery(this).parent().remove();
                 event.preventDefault;
             });
 
-            me.templates.form.find('select[name=choose-wfs-layer]').on('change', function(event) {
+            me.templates.form.find('select[name=choose-wfs-layer]').on('change', function (event) {
                 me.getWFSLayerColumns(jQuery(this).val(), jQuery(this).parents('fieldset'));
                 event.preventDefault;
             });
@@ -121,7 +121,7 @@ Oskari.clazz.define(
             me.templates.form.find('input,select').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
-                if(el.attr('language') != null){
+                if (el.attr('language') != null) {
                     el.attr('placeholder', me._getLocalization(el.attr('language')));
                 }
             });
@@ -138,7 +138,7 @@ Oskari.clazz.define(
             btn.addClass('btn--center new-params-btn');
             jQuery(btn.getElement()).on('click',
                 function (event) {
-                    if(jQuery(this).parents('form').find('input[name=details-isaddress]').is(':checked') && jQuery(this).parents('form').find('select[name=choose-param-for-search]').length == 2){
+                    if (jQuery(this).parents('form').find('input[name=details-isaddress]').is(':checked') && jQuery(this).parents('form').find('select[name=choose-param-for-search]').length == 2) {
                         me._openPopup(
                             me._getLocalization('is_address_topic'),
                             me._getLocalization('is_address_info')
@@ -208,17 +208,17 @@ Oskari.clazz.define(
          * @method [createWfsLayerSelect], reads wfs layers from Oskari and loops them into select
          * @return {[type]}
          */
-        createWfsLayerSelect: function (){
+        createWfsLayerSelect: function () {
             var me = this;
 
             var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var allLayers = mapLayerService.getAllLayers();
 
-            var wfsLayers = allLayers.filter(function(layer){
+            var wfsLayers = allLayers.filter(function (layer) {
                 return layer.getLayerType() === 'wfs';
             });
 
-            wfsLayers.forEach(function(layer){
+            wfsLayers.forEach(function (layer) {
                 me.templates.form.find('select[name=choose-wfs-layer]').append(jQuery('<option>', {
                     value: layer.getId(),
                     text : layer.getName()
@@ -234,7 +234,7 @@ Oskari.clazz.define(
          */
         getWFSLayerColumns: function (layer_id, el) {
             var me = this;
-            if(layer_id != '' && layer_id != null){
+            if (layer_id != '' && layer_id != null) {
                 var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&layer_id=' + layer_id;
                 jQuery.ajax({
                     type: 'GET',
@@ -243,7 +243,7 @@ Oskari.clazz.define(
                     success: function (data) {
                         jQuery(el).find('select[name=choose-param-for-search]').empty();
 
-                        if(data.propertyTypes == null){
+                        if (data.propertyTypes == null) {
 
                             me._openPopup(
                                 me._getLocalization('columns_failed'),
@@ -252,7 +252,7 @@ Oskari.clazz.define(
                             return false;
                         }
 
-                        jQuery.each(data.propertyTypes, function(name, type){
+                        jQuery.each(data.propertyTypes, function (name, type) {
                             jQuery(el).find('select[name=choose-param-for-search]').append(jQuery('<option>', {
                                 type: type,
                                 value: name,
@@ -315,7 +315,7 @@ Oskari.clazz.define(
                 matches;
 
             me.channels = channels;
-            if(channels) {
+            if (channels) {
                 for (i = 0; i < channels.length; i += 1) {
                     channel = channels[i];
                     matches = !hasFilter || channel.locale[Oskari.getLang()].name.toLowerCase().indexOf(filter.toLowerCase()) > -1;
@@ -330,9 +330,9 @@ Oskari.clazz.define(
                 }
             }
             // Add list to container
-            if(list.children().length > 0){
+            if (list.children().length > 0) {
                 me.container.append(list);
-            }else{
+            } else {
                 me._openPopup(
                     me._getLocalization('search-channels'),
                     me._getLocalization('noMatch')
@@ -522,18 +522,18 @@ Oskari.clazz.define(
             };
 
             // TODO: setup config properly instead of isAddress
-            if(frm.find('[name=details-isaddress]').is(':checked')) {
+            if (frm.find('[name=details-isaddress]').is(':checked')) {
                 dataObject.config.handler = 'SimpleAddress';
             }
 
-            jQuery.each(Oskari.getSupportedLanguages(), function(index, item) {
+            jQuery.each(Oskari.getSupportedLanguages(), function (index, item) {
                 dataObject.locale[item] = {
-                    name : frm.find('[name=details-topic-'+item+']').val(),
-                    desc : frm.find('[name=details-desc-'+item+']').val()
+                    name : frm.find('[name=details-topic-' + item + ']').val(),
+                    desc : frm.find('[name=details-desc-' + item + ']').val()
                 };
             });
 
-            jQuery.each(frm.find('[name=choose-param-for-search]'), function(index, item) {
+            jQuery.each(frm.find('[name=choose-param-for-search]'), function (index, item) {
                 dataObject.paramsForSearch.push(jQuery(this).val());
             });
 
@@ -569,29 +569,29 @@ Oskari.clazz.define(
          * @param  {String} method 'GET' | 'POST' | 'PUT'  | 'DELETE'
          * @param  {Object} config for jQuery.ajax() - method will be overridden with value of method param
          */
-        __tryRestMethods : function(method, config) {
+        __tryRestMethods : function (method, config) {
             var me = this;
             config.type = method;
-            var errorHandler = function(jqXHR, textStatus, errorThrown) {
+            var errorHandler = function (jqXHR, textStatus, errorThrown) {
                 var origType = config.type;
-                if(errorThrown === 'Method Not Allowed' &&
+                if (errorThrown === 'Method Not Allowed' &&
                     (origType === 'PUT' || origType === 'DELETE')) {
                     // PUT/DELETE not allowed -> try POST instead
                     var origBefore = config.beforeSend;
-                    config.beforeSend = function(req) {
+                    config.beforeSend = function (req) {
                         req.setRequestHeader('X-HTTP-Method-Override', origType);
-                        if(origBefore) {
+                        if (origBefore) {
                             origBefore(req);
                         }
                     };
                     me.__tryRestMethods('POST', config);
                 }
-                else if(config.__oskariError) {
+                else if (config.__oskariError) {
                     config.__oskariError(jqXHR, textStatus, errorThrown);
                 }
             };
 
-            if(!config.__oskariError) {
+            if (!config.__oskariError) {
                 config.__oskariError = config.error;
                 config.error = errorHandler;
             }
@@ -613,16 +613,16 @@ Oskari.clazz.define(
                 fragment.find('[name=details-default]').prop('checked', channel.is_default);
                 // TODO: setup config properly
                 fragment.find('[name=details-isaddress]').prop('checked', !!channel.config.handler);
-                $.each(channel.locale, function(lang, text) {
-                    fragment.find('[name=details-topic-'+lang+']').val(text.name);
-                    fragment.find('[name=details-desc-'+lang+']').val(text.desc);
+                $.each(channel.locale, function (lang, text) {
+                    fragment.find('[name=details-topic-' + lang + ']').val(text.name);
+                    fragment.find('[name=details-desc-' + lang + ']').val(text.desc);
                 });
-                $.each(channel.params_for_search, function(index, text) {
-                    if(index > 0){
+                $.each(channel.params_for_search, function (index, text) {
+                    if (index > 0) {
                         fragment.find('.new-params-btn').trigger('click');
                     }
                     //FIXME Dynamic option adding needs it
-                    setTimeout(function(){
+                    setTimeout(function () {
                         fragment.find('[name=choose-param-for-search]').eq(index).val(text);
                         me._progressSpinner.stop();
                     },600);

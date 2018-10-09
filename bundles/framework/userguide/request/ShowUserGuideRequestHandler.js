@@ -2,7 +2,7 @@
  * @class Oskari.catalogue.bundle.metadataflyout.request.ShowMetadataRequestHandler
  *
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler', function(sandbox, instance) {
+Oskari.clazz.define('Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler', function (sandbox, instance) {
 
     this.sandbox = sandbox;
 
@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.request.ShowUserGuideR
 }, {
 
     /** @method handleRequest dispatches processing to instance */
-    handleRequest : function(core, request) {
+    handleRequest : function (core, request) {
         this._log.debug('Show UserGuide: ' + request.getUuid());
         this.instance.scheduleShowUserGuide(request);
     }

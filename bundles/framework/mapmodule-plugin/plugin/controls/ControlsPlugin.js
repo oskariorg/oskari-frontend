@@ -142,7 +142,7 @@ Oskari.clazz.define(
                  */
                 'Toolbar.ToolSelectedEvent': function (event) {
                     // changed tool -> cancel any current tool
-                    if (event.getToolId() === this.activeTool){
+                    if (event.getToolId() === this.activeTool) {
                         this._deactivateControls(this.activeTool);
                     } else {
                         //deactivate all
@@ -152,16 +152,16 @@ Oskari.clazz.define(
                 }
             };
         },
-        _deactivateControls: function (skipTool){
+        _deactivateControls: function (skipTool) {
             if (this.getConfig().zoomBox !== false && skipTool !== 'zoombox') {
                 this._zoomBoxTool.deactivate();
             }
             if (this.getConfig().measureControls !== false) {
                 this.getMapModule().orderLayersByZIndex();
-                if(skipTool !== 'measureline') {
+                if (skipTool !== 'measureline') {
                     this._measureControls.line.deactivate();
                 }
-                if (skipTool !== 'measurearea'){
+                if (skipTool !== 'measurearea') {
                     this._measureControls.area.deactivate();
                 }
             }
@@ -258,7 +258,7 @@ Oskari.clazz.define(
                 };
             }
 
-            function measurementsHandler(event, finished) {
+            function measurementsHandler (event, finished) {
                 var sandbox = me.getSandbox(),
                     geometry = event.geometry,
                     order = event.order,

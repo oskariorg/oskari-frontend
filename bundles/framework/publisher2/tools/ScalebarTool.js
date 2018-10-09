@@ -1,5 +1,5 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
-    function() {
+    function () {
     }, {
         index : 0,
         allowedLocations : ['bottom left', 'bottom right'],
@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
     *
     * @returns {Object} tool
     */
-        getTool: function(){
+        getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
                 title: 'ScaleBarPlugin',
@@ -36,7 +36,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
         getValues: function () {
             var me = this;
 
-            if(me.state.enabled) {
+            if (me.state.enabled) {
                 return {
                     configuration: {
                         mapfull: {

@@ -22,7 +22,7 @@ Oskari.clazz.define(
 
         this.values = {
             size: this.defaultValues.size || 1,
-            color: '#'+(this.defaultValues.color || 'ffde00'),
+            color: '#' + (this.defaultValues.color || 'ffde00'),
             shape: this.defaultValues.shape || 2,
             message: ''
         };
@@ -142,7 +142,7 @@ Oskari.clazz.define(
                 content = dialogContent.find('div.symbols'),
                 btnContainer;
 
-            var btnHandler = function(buttonId){
+            var btnHandler = function (buttonId) {
                 me.values.shape = buttonId;
                 me._selectButton(me.values.shape);
                 me._updatePreview(dialogContent);
@@ -150,7 +150,7 @@ Oskari.clazz.define(
 
             var markers = Oskari.getMarkers();
 
-            for (var i=0;i<markers.length;i++) {
+            for (var i = 0;i < markers.length;i++) {
                 btnContainer = this.templateSymbolButton.clone();
 
                 var svgObj = jQuery(markers[i].data);
@@ -166,7 +166,7 @@ Oskari.clazz.define(
 
                 btnContainer.html(svgObj.outerHTML());
 
-                if(i == this.values.shape) {
+                if (i == this.values.shape) {
                     btnContainer.css('border', '2px solid');
                 }
 
@@ -222,7 +222,7 @@ Oskari.clazz.define(
             colorPickerWrapper.append(me._colorPicker.getElement());
             me._colorPicker.setValue(me.values.color);
 
-            colorPickerWrapper.on('change', function() {
+            colorPickerWrapper.on('change', function () {
                 me.values.color = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
             });
@@ -241,7 +241,7 @@ Oskari.clazz.define(
                 messageContainer.find('label.message-label').html(this.loc.message.label);
                 var input = messageContainer.find('input.message-text');
                 input.attr('placeholder',this.loc.message.hint);
-                input.on('input', function() {
+                input.on('input', function () {
                     me.values.message = jQuery(this).val();
                 });
                 input.on('keypress' ,function (evt) {
@@ -282,7 +282,7 @@ Oskari.clazz.define(
          * Returns reference to the render dialog of the dot form
          * @private
          */
-        getDialog: function() {
+        getDialog: function () {
             return this.renderDialog;
         },
 
@@ -312,7 +312,7 @@ Oskari.clazz.define(
          * Sets a user defined handler for the cancel button
          * @param {function} handler Cancel button handler
          */
-        setCancelHandler: function(handler) {
+        setCancelHandler: function (handler) {
             this.cancelButtonHandler = handler;
             if (this.cancelButton !== null) {
                 this.cancelButton.setHandler(handler);
@@ -323,7 +323,7 @@ Oskari.clazz.define(
          * @method createColorPicker
          * Creates a color picker component
          */
-        _createColorPicker: function() {
+        _createColorPicker: function () {
             this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput');
         },
 
@@ -345,10 +345,10 @@ Oskari.clazz.define(
             var marker = previewTemplate.find('#marker');
 
             var iconObj = Oskari.getMarkers()[me.values.shape];
-            if(!iconObj) {
+            if (!iconObj) {
                 iconObj = Oskari.getDefaultMarker();
             }
-            if(!iconObj){
+            if (!iconObj) {
                 preview.empty();
                 return;
             }
@@ -361,8 +361,8 @@ Oskari.clazz.define(
                 y: 0
             });
 
-            var x = (me._previewSize - size)/2;
-            var y = (me._previewSize - size)/2;
+            var x = (me._previewSize - size) / 2;
+            var y = (me._previewSize - size) / 2;
 
             iconSvg.find('path').attr({
                 'stroke-width': 1,

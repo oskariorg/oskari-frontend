@@ -350,12 +350,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
         createProjectionChangeDialog: function (cb) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var btn = dialog.createCloseButton(this.loc('projectionError').ok);
-            var cancel = dialog.createCloseButton( this.loc('projectionError').cancel );
-            cancel.setHandler( function () {
+            var cancel = dialog.createCloseButton(this.loc('projectionError').cancel);
+            cancel.setHandler(function () {
                 dialog.close(true);
             });
             btn.addClass('primary');
-            btn.setHandler( function () {
+            btn.setHandler(function () {
                 cb();
                 dialog.close(true);
             });
@@ -394,7 +394,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from name field
             var nameRenderer = function (name, data) {
                 var url = sandbox.createURL(data.url);
-                if(!url) {
+                if (!url) {
                     // no url, no link just plain text
                     return name;
                 }
