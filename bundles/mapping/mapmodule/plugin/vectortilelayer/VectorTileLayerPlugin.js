@@ -7,12 +7,7 @@ import { createDefaultStyle } from 'ol/style/Style';
 import VectorTileModelBuilder from './VectorTileModelBuilder';
 import VectorTileLayer from './VectorTileLayer';
 import styleGenerator from './styleGenerator';
-
-const LAYER_ID = 'oskariId';
-const LAYER_TYPE = 'oskariLayerType';
-const LAYER_HOVER = 'oskariHoverOptions';
-
-const PROPERTY_ID = 'id';
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../domain/constants';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 
@@ -132,7 +127,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             if (feature && layer) {
                 var hoverOptions = layer.get(LAYER_HOVER);
                 if (hoverOptions) {
-                    const propertyId = feature.get(PROPERTY_ID);
+                    const propertyId = feature.get(FTR_PROPERTY_ID);
                     if (this.hoverState.layer && this.hoverState.layer !== layer) {
                         // clear highlight from previously highlighted layer.
                         this.hoverState.propertyId = null;

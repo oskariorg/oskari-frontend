@@ -9,10 +9,7 @@ import {BufferOp} from 'jsts/org/locationtech/jts/operation/buffer';
 import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
-
-const LAYER_ID = 'oskariId';
-const LAYER_TYPE = 'oskariLayerType';
-const LAYER_HOVER = 'oskariHoverOptions';
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
 
 const olParser = new jstsOL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
@@ -172,7 +169,7 @@ Oskari.clazz.define(
          * Registers vector layer type to feature service for tooltip, click and layer requests.
          */
         _registerToFeatureService: function () {
-            var defaultHandlerDef = ['layerRequest'];
+            var defaultHandlerDef = [SERVICE_LAYER_REQUEST];
             var vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
             vectorFeatureService.registerLayerType('vector', this, defaultHandlerDef);
         },
@@ -624,11 +621,11 @@ Oskari.clazz.define(
                 });
             }
             features.forEach(function (feature) {
-                if (typeof feature.getId() === 'undefined' && typeof feature.get('id') === 'undefined') {
+                if (typeof feature.getId() === 'undefined' && typeof feature.get(FTR_PROPERTY_ID) === 'undefined') {
                     var id = 'F' + me._nextFeatureId++;
                     feature.setId(id);
                     // setting id using set(key, value) to make id-property asking by get('id') possible
-                    feature.set('id', id);
+                    feature.set(FTR_PROPERTY_ID, id);
                 }
                 me.setupFeatureStyle(options, feature, false);
                 me.setupFeatureHover(layer, feature);

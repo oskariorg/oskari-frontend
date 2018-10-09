@@ -3,14 +3,10 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olFeature from 'ol/Feature';
 import olRenderFeature from 'ol/render/Feature';
 import { fromExtent } from 'ol/geom/Polygon';
-
-const PROPERTY_ID = 'id';
-const LAYER_ID = 'oskariId';
-const LAYER_TYPE = 'oskariLayerType';
-const LAYER_HOVER = 'oskariHoverOptions';
-const HOVER = 'hover';
-const CLICK = 'click';
-const LAYER_REQUEST = 'layerRequest';
+import {
+    LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID,
+    SERVICE_HOVER, SERVICE_CLICK, SERVICE_LAYER_REQUEST
+} from '../domain/constants';
 
 /**
  * @class Oskari.mapframework.service.VectorFeatureService
@@ -108,13 +104,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             }
             if (handlerImpl) {
                 if (typeof handlerImpl.onMapClicked === 'function') {
-                    layerTypeHandlers[CLICK] = handlerImpl.onMapClicked.bind(handlerImpl);
+                    layerTypeHandlers[SERVICE_CLICK] = handlerImpl.onMapClicked.bind(handlerImpl);
                 }
                 if (typeof handlerImpl.onMapHover === 'function') {
-                    layerTypeHandlers[HOVER] = handlerImpl.onMapHover.bind(handlerImpl);
+                    layerTypeHandlers[SERVICE_HOVER] = handlerImpl.onMapHover.bind(handlerImpl);
                 }
                 if (typeof handlerImpl.onLayerRequest === 'function') {
-                    layerTypeHandlers[LAYER_REQUEST] = handlerImpl.onLayerRequest.bind(handlerImpl);
+                    layerTypeHandlers[SERVICE_LAYER_REQUEST] = handlerImpl.onLayerRequest.bind(handlerImpl);
                 }
                 if (Array.isArray(defaultHandlerDef)) {
                     defaultHandlerDef.forEach(handlerType => {
@@ -160,7 +156,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          */
         handleVectorLayerRequest (request) {
             const layerId = request.getOptions().layerId;
-            const defaultHandler = this._getDefaultHandler(LAYER_REQUEST);
+            const defaultHandler = this._getDefaultHandler(SERVICE_LAYER_REQUEST);
             if (!layerId) {
                 if (defaultHandler) {
                     defaultHandler(request);
@@ -170,7 +166,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 const layer = mapLayerService.findMapLayer(layerId);
-                const handler = layer ? this._getRegisteredHandler(layer.getLayerType(), LAYER_REQUEST) : defaultHandler;
+                const handler = layer ? this._getRegisteredHandler(layer.getLayerType(), SERVICE_LAYER_REQUEST) : defaultHandler;
                 if (handler) {
                     handler(request, layer);
                 }
@@ -319,7 +315,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
 
             // No feature hits for these layer types. Call hover handlers without feature or layer.
             Object.keys(this.layerTypeHandlers).forEach(layerType => {
-                const handler = this._getRegisteredHandler(layerType, HOVER);
+                const handler = this._getRegisteredHandler(layerType, SERVICE_HOVER);
                 const featureHit = feature && layer.get(LAYER_TYPE) === layerType;
                 if (!featureHit && handler) {
                     handler(event);
@@ -331,7 +327,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 const hoverOptions = layer.get(LAYER_HOVER);
                 const contentOptions = hoverOptions ? hoverOptions.content : null;
                 this._updateTooltip(event, contentOptions, feature);
-                const handler = this._getRegisteredHandler(layerType, HOVER);
+                const handler = this._getRegisteredHandler(layerType, SERVICE_HOVER);
                 if (handler) {
                     handler(event, feature, layer);
                 }
@@ -374,7 +370,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 const layerType = layer.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];
                 if (isRegisteredLayerType) {
-                    const handler = me._getRegisteredHandler(layerType, CLICK);
+                    const handler = me._getRegisteredHandler(layerType, SERVICE_CLICK);
                     if (handler) {
                         handler(event, feature, layer);
                     }
@@ -386,7 +382,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 clickHits.forEach(obj => {
                     const { feature, layer } = obj;
                     const geojson = me._getGeojson(feature, layer);
-                    const propertyId = feature.get(PROPERTY_ID);
+                    const propertyId = feature.get(FTR_PROPERTY_ID);
                     const layerId = layer.get(LAYER_ID);
                     clickEvent.addFeature(propertyId, geojson, layerId);
                 });
