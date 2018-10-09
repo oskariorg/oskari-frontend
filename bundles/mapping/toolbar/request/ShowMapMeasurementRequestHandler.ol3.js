@@ -61,7 +61,6 @@ Oskari.clazz.define(
                 // if there is no content container, show the data in dialog
                 if (!me._dialogShown) {
                     dialog.show(me._title, '', me._buttons);
-                    dialog.makeDraggable();
                     var cancelBtn = me._buttons[0];
                     cancelBtn.setHandler(function () {
                         if (me._toolbar.currentMeasureTool) {
