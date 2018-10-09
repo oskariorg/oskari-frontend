@@ -17,9 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         this.popupId = 'myplacesForm3';
         this.form = undefined;
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
-        this.drawing;
-        this.drawingData;
-        this.tempGeom; // for editPlace
     }, {
         __name: 'MyPlacesMainView',
         /**

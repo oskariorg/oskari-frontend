@@ -359,7 +359,7 @@ Oskari.clazz.define(
          */
         stopDrawing: function (id, clearCurrent, supressEvent) {
             var me = this;
-            if (typeof supressEvent === undefined) {
+            if (typeof supressEvent === 'undefined') {
                 supressEvent = false;
             }
             var options = {
@@ -614,7 +614,8 @@ Oskari.clazz.define(
                 measures,
                 jsonObject,
                 buffer,
-                i;
+                i,
+                feature;
 
             if (!features || features.length === 0) {
                 return geoJsonObject;
@@ -625,7 +626,7 @@ Oskari.clazz.define(
                 var geometries = [];
 
                 for (i = 0; i < features.length; i++) {
-                    var feature = features[i];
+                    feature = features[i];
                     if (!buffer && feature.buffer) {
                         buffer = feature.buffer;
                     }
@@ -635,7 +636,7 @@ Oskari.clazz.define(
 
                 var multiGeometry = me.createMultiGeometry(geometries);
 
-                var feature = new olFeature({geometry: multiGeometry});
+                feature = new olFeature({geometry: multiGeometry});
                 feature.setId(me.generateNewFeatureId());
 
                 jsonObject = me.formJsonObject(feature, measures, buffer);

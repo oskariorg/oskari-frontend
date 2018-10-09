@@ -464,13 +464,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
         _toggleDrawToolButton: function (isToolChecked, toolName, buttonGroupName, toolButton) {
             var me = this;
+            var request;
 
             if (isToolChecked) {
-                var request = me.__sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroupName, toolButton);
+                request = me.__sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroupName, toolButton);
                 me.__sandbox.request(me.__instance, request);
                 me.drawOptions[toolName] = true;
             } else {
-                var request = me.__sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroupName, toolButton.toolbarid);
+                request = me.__sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroupName, toolButton.toolbarid);
                 me.__sandbox.request(me.__instance, request);
                 me.drawOptions[toolName] = false;
             }

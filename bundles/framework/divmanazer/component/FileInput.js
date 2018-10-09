@@ -209,9 +209,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
          */
     // TODO do we need this?? If we want to check that unknown file type is text file, then this should help
     _readFilesInBrowser: function (files, cb) {
-        var files = files; // FileList object
-
-        for (var i = 0, f; f = files[i]; i++) {
+        for (var i = 0, f; files[i]; i++) {
+            f = files[i];
             var reader = new FileReader();
 
             // Closure to capture the file information.

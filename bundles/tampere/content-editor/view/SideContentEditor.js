@@ -743,6 +743,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         _handleInfoResult: function (data, mode, editableFeatureFid) {
             var me = this;
+            var i;
 
             if (me.operationMode === 'delete') {
                 me._handleDeleteGeometry();
@@ -775,7 +776,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
 
             me.highlightFeaturesIds = [];
             if (data.features) {
-                for (var i = 0; i < data.features.length; i++) {
+                for (i = 0; i < data.features.length; i++) {
                     if ((editableFeatureFid === undefined || data.features[i][0] == editableFeatureFid) && (data.features[i] != '')) { me.highlightFeaturesIds.push(data.features[i][0].split('.')[1]); }
                 }
             }
@@ -783,7 +784,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
             this._highlighGeometries(me.highlightFeaturesIds, layer, true);
 
             var isVisibleLayer = false;
-            for (var i = 0; i < this.allVisibleLayers.length; i++) {
+            for (i = 0; i < this.allVisibleLayers.length; i++) {
                 if (this.allVisibleLayers[i].getId() == data.layerId) {
                     isVisibleLayer = true;
                     break;

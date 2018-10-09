@@ -1152,7 +1152,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             option = _.find(contentOptions, {checked: 'checked'}, 'layerId');
             if (option && option.layerId) {
                 var layer = me.instance.sandbox.findMapLayerFromSelectedMapLayers(option.layerId);
-                if (layer && layer.isLayerOfType('WFS') || layer.isLayerOfType('analysis')) {
+                if (layer && (layer.isLayerOfType('WFS') || layer.isLayerOfType('analysis'))) {
                     me.WFSLayerService.setAnalysisWFSLayerId(layer.getId());
                 }
             }
@@ -1578,12 +1578,13 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
              * @return {undefined}
              */
             layer_union: function (me, contentPanel) {
-                var me = this,
-                    selectedLayer = me._getSelectedMapLayer(),
+                var selectedLayer = me._getSelectedMapLayer(),
                     i,
                     option,
                     toolContainer,
                     label;
+
+                me = this;
 
                 if (!selectedLayer || (selectedLayer && !selectedLayer.isLayerOfType('ANALYSIS'))) {
                     contentPanel.append(jQuery(

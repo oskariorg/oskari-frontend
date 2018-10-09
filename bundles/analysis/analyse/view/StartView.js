@@ -50,7 +50,6 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
         this.appendAlwaysCheckbox = true;
         this.content = undefined;
         this.buttons = {};
-        this.emptySelectionsFromLayers;
         this.alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
         this.WFSLayerService = this.instance.sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
     }, {
@@ -194,8 +193,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartView',
         },
 
         getLayerName: function (layerId) {
-            var layerId = layerId,
-                layerName,
+            var layerName,
                 layers;
 
             layers = this.instance.sandbox.findAllSelectedMapLayers();

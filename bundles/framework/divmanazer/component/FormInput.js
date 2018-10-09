@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._contentCheckMsg = 'illegal characters';
         this._bindFocusAndBlur();
         // word characters, digits, whitespace and chars '-,.?!' allowed
-        this._regExp = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*/;
+        this._regExp = /[\s\w\d.,?!\-äöåÄÖÅ]*/;
         this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
     }, {
         /**

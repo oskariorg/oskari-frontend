@@ -7,9 +7,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         me.element = null;
         me.type = type; // import, export
         me.infoPopup = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
-        me.fileInput;
         me.settings = {};
-        me.dialog;
         me.degreeSystem = true; // show degree systems options by default
         me._template = {
             settings: _.template('<div class="coordinatetransformation-file-form">' +

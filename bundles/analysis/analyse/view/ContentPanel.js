@@ -708,16 +708,16 @@ Oskari.clazz.define(
         },
 
         _startNewDrawFiltering: function (config) {
-            if (this.helpDialog) {
-                me._cancelDrawFilter();
-                return;
-            }
-
             var me = this,
                 diaLoc = this.loc.content.drawFilter.dialog,
                 controlButtons = [],
                 dialogTitle,
                 dialogText;
+
+            if (this.helpDialog) {
+                me._cancelDrawFilter();
+                return;
+            }
 
             // Enable and disable correct buttons
             if (config.mode === 'remove') {

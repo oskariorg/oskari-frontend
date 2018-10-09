@@ -700,7 +700,7 @@ Oskari.clazz.define(
             btn.insertTo(buttonFieldset);
 
             form.find('.allownumericwithdecimal').on('keypress keyup blur', function (event) {
-                jQuery(this).val(jQuery(this).val().replace(/[^0-9\.\-\+]/g, ''));
+                jQuery(this).val(jQuery(this).val().replace(/[^0-9.\-+]/g, ''));
                 if (event.key == 'Backspace' || event.key == 'Tab') { return; }
                 if ((event.which != 46 || jQuery(this).val().indexOf('.') != -1) && (event.which < 48 || event.which > 57) && (event.which != 45 || jQuery(this).val().indexOf('-') != -1) && (event.which != 43 || jQuery(this).val().indexOf('+') != -1)) {
                     event.preventDefault();

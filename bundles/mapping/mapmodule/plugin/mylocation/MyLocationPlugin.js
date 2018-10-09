@@ -50,8 +50,7 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var me = this,
-                el = me._templates.plugin.clone(),
-                me = this;
+                el = me._templates.plugin.clone();
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
 

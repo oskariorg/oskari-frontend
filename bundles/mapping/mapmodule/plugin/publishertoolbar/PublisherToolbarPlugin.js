@@ -21,7 +21,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         me.toolbarContent = 'publishedToolbarContent';
         me.toolbarPopupContent = 'publishedToolbarPopupContent';
         me.toolbarContainer = 'publishedToolbarContainer'; // Note! this needs to match styles and templates
-        me.activeTool;
 
         me._mobileDefs = {
             buttons: {
@@ -102,11 +101,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             sticky: false,
                             callback: function () {
                                 if (sandbox.mapMode !== 'mapPublishMode') {
-                                    if (!reqBuilder) {
-                                        var reqBuilder = Oskari.requestBuilder(
-                                            'ToolSelectionRequest'
-                                        );
-                                    }
+                                    var reqBuilder = Oskari.requestBuilder(
+                                        'ToolSelectionRequest'
+                                    );
                                     sandbox.request(
                                         me,
                                         reqBuilder('map_control_tool_prev')
@@ -121,11 +118,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             sticky: false,
                             callback: function () {
                                 if (sandbox.mapMode !== 'mapPublishMode') {
-                                    if (!reqBuilder) {
-                                        var reqBuilder = Oskari.requestBuilder(
-                                            'ToolSelectionRequest'
-                                        );
-                                    }
+                                    var reqBuilder = Oskari.requestBuilder(
+                                        'ToolSelectionRequest'
+                                    );
                                     sandbox.request(
                                         me,
                                         reqBuilder('map_control_tool_next')
@@ -156,11 +151,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                         if (gfiReqBuilder) {
                                             sandbox.request(me, gfiReqBuilder(false));
                                         }
-                                        if (!reqBuilder) {
-                                            var reqBuilder = Oskari.requestBuilder(
-                                                'ToolSelectionRequest'
-                                            );
-                                        }
+                                        var reqBuilder = Oskari.requestBuilder(
+                                            'ToolSelectionRequest'
+                                        );
                                         sandbox.request(me, reqBuilder(rn));
                                         me.activeTool = 'measureline';
                                     }
@@ -190,11 +183,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                                         if (gfiReqBuilder) {
                                             sandbox.request(me, gfiReqBuilder(false));
                                         }
-                                        if (!reqBuilder) {
-                                            var reqBuilder = Oskari.requestBuilder(
-                                                'ToolSelectionRequest'
-                                            );
-                                        }
+                                        var reqBuilder = Oskari.requestBuilder(
+                                            'ToolSelectionRequest'
+                                        );
                                         sandbox.request(me, reqBuilder(rn));
                                         me.activeTool = 'measurearea';
                                     }
@@ -322,8 +313,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             me._element = me._createControlElement(isMobile);
 
             var changeToolStyle = function (toolstyle, div) {
-                var div = div || me.getElement(),
-                    toolStyle = toolstyle || me.getToolStyleFromMapModule();
+                var toolStyle = toolstyle || me.getToolStyleFromMapModule();
+                div = div || me.getElement();
 
                 if (!div) {
                     return;
@@ -508,11 +499,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             if (sandbox.mapMode === 'mapPublishMode') {
                 var request,
-                    builder = Oskari.requestBuilder('Toolbar.ToolbarRequest'),
-                    mapmodule = me.getMapModule(),
-                    theme = mapmodule.getTheme(),
-                    wantedTheme = (theme === 'dark') ? 'light' : 'dark',
-                    themeColours = mapmodule.getThemeColours(wantedTheme);
+                    builder = Oskari.requestBuilder('Toolbar.ToolbarRequest');
 
                 if (builder) {
                     request = builder(

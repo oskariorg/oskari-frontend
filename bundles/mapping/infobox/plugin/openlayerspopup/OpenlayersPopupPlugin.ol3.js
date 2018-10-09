@@ -661,7 +661,7 @@ Oskari.clazz.define(
          * @param {Array} lonlat where to show the popup
          */
         _panMapToShowPopup: function (lonlatArray, positioning, margins) {
-            var margins = margins || this._viewportMargins;
+            margins = margins || this._viewportMargins;
             // don't try to pan the map if gfi popup position isn't in the viewport (extended with isInViewport margin)
             if (!this.getMapModule().isLonLatInViewport(lonlatArray, margins.isInViewport)) {
                 return;
@@ -754,7 +754,7 @@ Oskari.clazz.define(
             if (id) {
                 div = div || jQuery('div#' + id);// || jQuery('.olPopup:visible');
             } else {
-                div = div;// || jQuery('.olPopup:visible');
+                // div = div || jQuery('.olPopup:visible');
             }
             if (!colourScheme || !div) {
                 return;

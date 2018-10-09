@@ -76,7 +76,7 @@ Oskari.clazz.define(
             );
         },
         updateLayerParams: function (layer, forced, params) {
-            var params = params || {};
+            params = params || {};
             params.SLD_BODY = this.__getSLD(layer);
 
             var updateLayer = this.getOLMapLayers(layer.getId());

@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
             var zoomToExtent = request.getZoomToExtent();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             var newZoom;
+            var center;
             if (!layer) {
                 return;
             }
@@ -44,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                     var bounds = this.layersPlugin.getGeometryBounds(layer.getGeometry()[0]);
                     // suppress mapmove-event
                     this.layersPlugin.getMapModule().zoomToExtent(bounds, true, true);
-                    var center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
+                    center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
                     this.layersPlugin.getMapModule().moveMapToLonLat(center);
 
                     if (!layer.isInScale()) {
@@ -65,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                     var containsGeometry = this.layersPlugin.isInGeometry(layer);
                     // only move if not currently in geometry
                     if (!containsGeometry) {
-                        var center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
+                        center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
                         this.layersPlugin.getMapModule().moveMapToLonLat(center);
                     }
                 }

@@ -134,7 +134,7 @@ Oskari.clazz.define(
 	            field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
 
 	            if (this.instance.safeChars) {
-	                var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
+	                var regex = /[\s\w\d.,?!\-äöåÄÖÅ]*\*?$/;
 	                field.setContentCheck(true, this.instance.getLocalization('invalid_characters'), regex);
 	            }
 
@@ -264,7 +264,7 @@ Oskari.clazz.define(
 
             // invalid characters (or a star in the wrong place...)
             if (me.instance.safeChars) {
-                if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+                if (!/^[a-zåäöA-ZÅÄÖ .,?!0-9]+\**$/.test(key)) {
                     me._showError(me.instance.getLocalization('invalid_characters'));
                     return false;
                 }

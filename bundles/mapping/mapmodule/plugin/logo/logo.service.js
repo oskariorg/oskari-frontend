@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.map.LogoPluginService',
    * @param {Object} options {id, callback}
    */
         addLabel: function (title, options) {
-            if (typeof title === undefined) {
+            if (typeof title === 'undefined') {
                 return;
             }
             this.labels.push({ title: title, options: options || {} });

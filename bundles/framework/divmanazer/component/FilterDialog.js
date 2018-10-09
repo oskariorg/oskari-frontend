@@ -100,14 +100,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 layerAttributes,
                 popupTitle,
                 popupContent,
-                prevJson,
                 filterErrors;
 
             if (typeof layer !== 'undefined') {
                 me._layer = layer;
             }
 
-            if (typeof me._layer === null) {
+            if (me._layer === null) {
                 return;
             }
             // Create filter dialog content
@@ -164,7 +163,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                     // Else close the dialog
                     me.popup.close(true);
                     if (me._updateButtonHandler) {
-                        me._updateButtonHandler.call(me, filtersJson);
+                        me._updateButtonHandler(filtersJson);
                     }
                 }
             });
@@ -934,8 +933,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {JSON} propertyJson properties and property types of WFS layer JSON returned by server.
          */
         _handleWFSLayerPropertiesAndTypesResponse: function (propertyJson, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
-            var prevJson,
-                fields = propertyJson.propertyTypes;
+            var fields = propertyJson.propertyTypes;
             var layerAttributes = [];
             for (var key in fields) {
                 if (fields.hasOwnProperty(key)) {

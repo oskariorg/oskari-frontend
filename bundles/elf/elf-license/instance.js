@@ -1019,7 +1019,8 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             var element = jQuery(this),
                 type = element.attr('data-element-type'),
                 readOnly = element.attr('data-read-only'),
-                multi = element.attr('data-multi');
+                multi = element.attr('data-multi'),
+                val;
 
             var value = {
                 name: element.attr('data-name'),
@@ -1033,7 +1034,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
                     inputValues = parseInt(element.find('input').val(), 10);
                 } else if (type === 'text') {
                     inputValues = [];
-                    var val = element.find('input').val();
+                    val = element.find('input').val();
                     if (val !== null && val !== '') {
                         inputValues.push(val);
                     }
@@ -1052,7 +1053,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
                     inputValues = parseInt(element.find('div').attr('data-value'), 10);
                 } else if (type === 'text') {
                     inputValues = [];
-                    var val = element.find('div').attr('data-value');
+                    val = element.find('div').attr('data-value');
                     if (val !== null && val !== '') {
                         inputValues.push(val);
                     }

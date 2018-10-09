@@ -202,7 +202,6 @@ Oskari.clazz.define(
             var me = this,
             	i,
             	olLayerList,
-                count,
                 count = 0,
                 proxyUrl = null;
             if (!layer) {

@@ -833,7 +833,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         _stringifyGeoJson: function (geoJson) {
             var ret = null;
             if (geoJson) {
-                ret = JSON.stringify(geoJson).replace('\"', '"');
+                ret = JSON.stringify(geoJson).replace('"', '"');
             }
             return ret;
         },

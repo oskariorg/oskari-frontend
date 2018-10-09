@@ -199,7 +199,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                     start = 0.01 + i / lines * 100,
                     z = Math.max(1 - (1 - alpha) / trail * (100 - start), alpha),
                     prefix = useCssAnimations.substring(0, useCssAnimations.indexOf('Animation')).toLowerCase(),
-                    pre = prefix && '-' + prefix + '-' || '';
+                    pre = prefix && ('-' + prefix + '-' || '');
 
                 if (!animations[name]) {
                     sheet.insertRule('@' + pre + 'keyframes ' + name + '{' + '0%{opacity:' + z + '}' + start + '%{opacity:' + alpha + '}' + (start + 0.01) + '%{opacity:1}' + (start + trail) % 100 + '%{opacity:' + alpha + '}' + '100%{opacity:' + z + '}' + '}', sheet.cssRules.length);

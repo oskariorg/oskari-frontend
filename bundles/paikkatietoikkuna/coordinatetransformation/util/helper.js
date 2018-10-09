@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
     },
     init: function () {},
     addMarkerForCoords: function (id, lonlat, label, color) {
-        var color = color || 'ff0000';
+        color = color || 'ff0000';
         if (this.addMarkerReq) {
             var data = {
                 x: lonlat.lon,
@@ -99,9 +99,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         return lonlat;
     },
     getLabelForMarker: function (lonlat, epsgValues) {
-        var epsgValues = epsgValues || this.mapEpsgValues,
-            lonLabel,
+        var lonLabel,
             latLabel;
+        epsgValues = epsgValues || this.mapEpsgValues;
+
         if (epsgValues.coord === 'COORD_GEOG_2D' || epsgValues.coord === 'COORD_GEOG_3D') {
             lonLabel = this.loc('mapMarkers.show.lon');
             latLabel = this.loc('mapMarkers.show.lat');

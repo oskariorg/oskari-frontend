@@ -28,8 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          */
         afterStart: function (sandbox) {
             var conf = this.getConfiguration(),
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
+                sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
+            sandbox = Oskari.getSandbox(sandboxName);
 
             // request
             this._requestHandlers['userguide.ShowUserGuideRequest'] = Oskari.clazz.create('Oskari.mapframework.bundle.userguide.request.ShowUserGuideRequestHandler', sandbox, this);
