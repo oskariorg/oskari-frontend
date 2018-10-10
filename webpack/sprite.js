@@ -1,11 +1,12 @@
-var fs = require('fs-extra');
-var path = require('path');
-var _ = require('lodash');
-var gm = require('gm');
-var async = require('async');
+const fs = require('fs-extra');
+const { lstatSync, readdirSync, existsSync } = require('fs');
+const path = require('path');
+const _ = require('lodash');
+const gm = require('gm');
+const async = require('async');
 // constants
-var HOVERPOSTFIX = '_hover';
-var COMBINEDPOSTFIX = '_combined';
+const HOVERPOSTFIX = '_hover';
+const COMBINEDPOSTFIX = '_combined';
 
 function failWarn (msg) {
     console.error(msg);
@@ -33,9 +34,7 @@ function validateIconDirectories (cfg) {
         appOverrideDirStats = fs.statSync(cfg.appIconsDir);
     } catch (e) {
         // doesn't exist -> act as not given 
-        console.warn('Application icons override directory (' + cfg.appIconsDir + ') was NOT found. Please provide a proper appIconsDir!');
-        delete cfg.appIconsDir;
-        return;
+        failWarn('Application icons override directory (' + cfg.appIconsDir + ') was NOT found. Please provide a proper appIconsDir!');
     }
     if (!appOverrideDirStats) {
         // no app overrides
@@ -59,7 +58,7 @@ function copyPngIcons (src, dest) {
             }
         });
     } catch (e) {
-        console.log('Error copying icon files from ' + src);
+        failWarn('Error copying icon files from ' + src);
     }
 }
 
@@ -116,7 +115,7 @@ function getConfig (opts) {
     return options;
 }
 
-function runSprite (opts) {
+function runSprite (opts, cb) {
     var starttime = (new Date()).getTime();
     var cfg = getConfig(opts);
 
@@ -170,7 +169,7 @@ function runSprite (opts) {
             if (!err && results) {
                 next();
             } else {
-                console.log("createHoverCombinedIcons didn't work. Error", err);
+                failWarn("createHoverCombinedIcons didn't work. Error:" + err);
             }
         });
     }
@@ -233,7 +232,7 @@ function runSprite (opts) {
             if (!err) {
                 writeSpriteCSS(iconImages, cssFile, relativeUrlToSprite, next);
             } else {
-                console.log("writeSpriteImage didn't work. Error", err);
+                failWarn("writeSpriteImage didn't work. Error:" + err);
             }
         });
     }
@@ -267,7 +266,7 @@ function runSprite (opts) {
                 next();
             } else {
                 console.log("writeSpriteCSS didn't work. ", err);
-                console.log('You probably need to manually remove the temporary directory.');
+                failWarn('You probably need to manually remove the temporary directory.');
             }
         });
     }
@@ -293,12 +292,53 @@ function runSprite (opts) {
             if (!err) {
                 var endtime = (new Date()).getTime();
                 console.log('CSS Sprite completed in ' + ((endtime - starttime) / 1000) + ' seconds');
+                cb();
             } else {
                 console.log("cleanUp didn't work. ", err);
-                console.log('You probably need to manually remove the temporary directory ', tmpDirectory);
+                failWarn('You probably need to manually remove the temporary directory ' + tmpDirectory);
             }
         });
     }
 }
 
-runSprite({});
+const isDirectory = source => lstatSync(source).isDirectory();
+const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
+
+const param = process.argv[2];
+
+if (!param) {
+    failWarn('Version & appsetup directory must be given as param, eg. 1.48:applications/paikkatietoikkuna.fi');
+}
+
+const [version, appsetupPath] = param.split(':');
+
+const targets = getDirectories(path.resolve(appsetupPath)).map((dirPath) => {
+    const appName = dirPath.split(path.sep).pop();
+    return {
+        appIconsDir: dirPath + path.sep + 'icons',
+        targetDir: path.resolve(__dirname, `../dist/${version}/${appName}`)
+    };
+}).filter((target) => {
+    return existsSync(target.appIconsDir) && isDirectory(target.appIconsDir);
+});
+
+if (targets.length === 0) {
+    failWarn('No icons found for app. Make sure your icons are in directory "icons" under appsetup.');
+}
+
+targets.forEach((target) => {
+    if (!existsSync(target.targetDir) || !isDirectory(target.targetDir)) {
+        failWarn(`Target directory "${target.targetDir}" missing. Have you run the app build step?`);
+    };
+});
+
+function processNext (targets) {
+    if (targets.length === 0) {
+        return;
+    }
+    runSprite(targets[0], () => {
+        processNext(targets.slice(1));
+    });
+}
+
+processNext(targets);

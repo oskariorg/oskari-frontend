@@ -11,7 +11,8 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --hot",
     "paikkis": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi",
-    "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi"
+    "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi",
+    "sprite": "node webpack/sprite.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
