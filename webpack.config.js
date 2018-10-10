@@ -125,7 +125,6 @@ module.exports = (env, argv) => {
         config.optimization = {
             minimizer: [
                 new UglifyJsPlugin({
-                    sourceMap: true,
                     parallel: true
                 })
             ]
