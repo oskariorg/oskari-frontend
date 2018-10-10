@@ -1400,22 +1400,8 @@ Oskari.clazz.define(
 
             var me = this;
             var layerName =
-                this.__layerPrefix + _layer.getId() + '_' + layerType,
-                key,
-                layerParams = _layer.getParams(),
-                layerOptions = _layer.getOptions();
+                this.__layerPrefix + _layer.getId() + '_' + layerType;
 
-            // override default params and options from layer
-            for (key in layerParams) {
-                if (layerParams.hasOwnProperty(key)) {
-                    defaultParams[key] = layerParams[key];
-                }
-            }
-            for (key in layerOptions) {
-                if (layerOptions.hasOwnProperty(key)) {
-                    defaultOptions[key] = layerOptions[key];
-                }
-            }
             var projection = olProj.get(me.getMapModule().getProjection());
 
             // var tileSrc = new olSourceTileImage({

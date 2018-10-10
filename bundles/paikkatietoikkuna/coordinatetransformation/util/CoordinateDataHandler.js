@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         var input = this.inputCoords.length,
             result = this.resultCoords.length;
         if (input !== 0 && result !== 0) {
-            return input === output;
+            return input === result;
         }
     }
     /**

@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.ViewChange
             var me = this;
 
             me._popup = popup;
-            keys = _.keys(me._config.supportedProjections);
+            var keys = _.keys(me._config.supportedProjections);
 
             if (keys && keys.length > 1) {
                 me._popup.dialog.find('.actions').after(me._templates.projectionSelect.clone());

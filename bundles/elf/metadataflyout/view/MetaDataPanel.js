@@ -604,7 +604,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             var me = this,
                 locale = me.locale,
                 model = me._model,
-                links;
+                links,
+                entry;
             if (!me.instance.conf.hideMetadataXMLLink || me.instance.conf.hideMetadataXMLLink !== true) {
                 entry = jQuery('<a></a>');
                 entry.html(locale.xml);
@@ -727,7 +728,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             layerListHeader = (layers && layers.length > 0) ? me.locale.layerList.title : '';
             container.find('h2').html(layerListHeader);
 
-            layerListElement = container.find('ul.layerList');
+            var layerListElement = container.find('ul.layerList');
             _.each(layers, function (layer) {
                 var layerListItem = jQuery(me._templates['layerItem']({
                     layer: layer,
@@ -767,8 +768,9 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
             return labelText;
         },
         isLayerSelected: function (layer) {
-            var me = this,
-                selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+            var me = this;
+            var selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
+            var selectedLayer;
             for (var k = 0; k < selectedLayers.length; k += 1) {
                 selectedLayer = selectedLayers[k];
                 if (layer.getId() === selectedLayer.getId()) {

@@ -140,7 +140,6 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             // Add placeholder for the layer
             var wmtsHolderLayer = this._getPlaceHolderWmtsLayer(layer);
             map.addLayer(wmtsHolderLayer);
-            index = map.layers.length;
             this.service.getCapabilitiesForLayer(layer, function (wmtsLayer) {
                 me._log.debug('created WMTS layer ' + wmtsLayer);
                 // Get the reserved current index for wmts layer

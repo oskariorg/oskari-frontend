@@ -380,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
             var instance = this.instance;
             var sandbox = instance.getSandbox();
             // faking to be module with getName/onEvent methods
-            for (p in this.eventHandlers) {
+            for (var p in this.eventHandlers) {
                 sandbox.registerForEventByName(this, p);
             }
         },
@@ -392,7 +392,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
             var instance = this.instance;
             var sandbox = instance.getSandbox();
             // faking to be module with getName/onEvent methods
-            for (p in this.eventHandlers) {
+            for (var p in this.eventHandlers) {
                 sandbox.unregisterFromEventByName(this, p);
             }
         }

@@ -88,13 +88,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
             var sandbox = this.sandbox,
                 p;
 
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+            for (p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(this, p);
                 }
             }
-            for (p in me.requestHandlers) {
-                if (me.requestHandlers.hasOwnProperty(p)) {
+            for (p in this.requestHandlers) {
+                if (this.requestHandlers.hasOwnProperty(p)) {
                     sandbox.removeRequestHandler(p, this);
                 }
             }

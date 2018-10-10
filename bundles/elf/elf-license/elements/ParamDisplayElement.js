@@ -51,10 +51,6 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamDisplayElement',
                 data = me._templates.licenseInput.clone(),
                 valueElement = jQuery('<div></div>');
 
-            if (readOnly) {
-                showInput = false;
-            }
-
             if (title === null) {
                 title = param.name;
             }

@@ -264,7 +264,6 @@ function (
                 },
                 url: Oskari.urls.getRoute('UpdateCapabilities'),
                 success: function (resp) {
-                    xhr = null;
                     if (resp.success.length === 1) {
                         content = jQuery('<span>' + loc('recheckSucceeded') + '<span>');
                         jQuery(e.currentTarget).parents('.accordion').trigger({
@@ -715,7 +714,7 @@ function (
 
             if (xml) {
                 try {
-                    oDOM = jQuery.parseXML(xml);
+                    jQuery.parseXML(xml);
                 } catch (e) {
                     isValid = false;
                 }
@@ -737,7 +736,7 @@ function (
                 element = jQuery(e.currentTarget),
                 form = element.parents('.admin-add-layer');
 
-            styles = me.selectedSldStyles(form);
+            var styles = me.selectedSldStyles(form);
             me._DefaultStylesUI(element, styles);
         },
         /**

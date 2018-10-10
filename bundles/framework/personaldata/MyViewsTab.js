@@ -270,7 +270,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 i,
                 view,
                 isPublic,
-                data;
+                data,
+                isDefault;
             gridModel.setIdField('id');
             for (i = 0; i < views.length; ++i) {
                 view = views[i];

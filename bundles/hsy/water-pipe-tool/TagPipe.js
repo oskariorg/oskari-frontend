@@ -632,7 +632,7 @@ Oskari.clazz.define(
             var firstFieldset = form.find('fieldset:nth-of-type(1)');
             var innerFieldset = firstFieldset.find('fieldset:nth-of-type(1)');
 
-            btn = Oskari.clazz.create(
+            var btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
 

@@ -31,14 +31,9 @@ Oskari.clazz.define(
                     FORMAT: 'image/png',
                     SLD_BODY: this.__getSLD(layer)
                 },
-                layerParams = layer.getParams();
-            layerAttributes = layer.getAttributes() || undefined;
+                layerParams = layer.getParams(),
+                layerAttributes = layer.getAttributes() || undefined;
 
-            if (layer.getMaxScale() || layer.getMinScale()) {
-                // use resolutions instead of scales to minimize chance of transformation errors
-                var layerResolutions = this.getMapModule().calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
-                defaultOptions.resolutions = layerResolutions;
-            }
             // override default params and options from layer
             for (key in layerParams) {
                 if (layerParams.hasOwnProperty(key)) {
@@ -50,7 +45,7 @@ Oskari.clazz.define(
 
             if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
                 // use reverse coordinate order for this layer!
-                if (layerAttributes.reverseXY[projectionCode]) {
+                if (layerAttributes.reverseXY[projection]) {
                     reverseProjection = this._createReverseProjection(projection);
                 }
             }

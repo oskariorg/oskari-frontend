@@ -976,8 +976,8 @@ Oskari.clazz.define(
          */
         zoomToFeatures: function (layer, options) {
             var me = this,
-                layers = me.getLayerIds(layer);
-            features = me.getFeaturesMatchingQuery(layers, options);
+                layers = me.getLayerIds(layer),
+                features = me.getFeaturesMatchingQuery(layers, options);
             if (!_.isEmpty(features)) {
                 var vector = new olSourceVector({
                     features: features
@@ -1008,7 +1008,7 @@ Oskari.clazz.define(
             var input = olParser.read(geometry);
             var bufferGeometry = BufferOp.bufferOp(input, buffer);
             bufferGeometry.CLASS_NAME = 'jsts.geom.Polygon';
-            bufferGeometry = parser.write(bufferGeometry);
+            bufferGeometry = olParser.write(bufferGeometry);
             return bufferGeometry.getExtent();
         },
         /**

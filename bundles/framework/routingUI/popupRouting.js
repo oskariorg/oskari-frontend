@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.PopupRouting',
         this.loc = this.instance._localization.popup;
 
         this.template = {};
-        for (p in this.__templates) {
+        for (var p in this.__templates) {
             if (this.__templates.hasOwnProperty(p)) {
                 this.template[p] = jQuery(this.__templates[p]);
             }

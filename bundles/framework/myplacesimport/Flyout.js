@@ -243,7 +243,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                         var msg = null,
                             title = locale.finish.failure.title,
                             error = null,
-                            warning = null;
+                            warning = null,
+                            err;
                         me.progressSpinner.stop();
                         if (textStatus === 'error') {
                             try {

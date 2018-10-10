@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var target = this.outputSystem;
             var dimensions = this.instance.getDimensions();
 
-            return options = {
+            return {
                 sourceCrs: input.getSrs(),
                 sourceElevationCrs: input.getElevation(),
                 targetCrs: target.getSrs(),

@@ -1036,14 +1036,7 @@ Oskari.clazz.define(
 
                                     // Set action callback
                                     if (action.callback && typeof action.callback == 'function') {
-                                        // Bind action click to bindCallbackTo if bindCallbackTo param exist
-                                        if (action.bindCallbackTo) {
-                                            callbackElement = licenseElement.find(action.bindCallbackTo);
-                                        }
-                                        // Bind action click to root element if bindCallbackTo is null
-                                        else {
-                                            callbackElement = actionElement.first();
-                                        }
+                                        callbackElement = actionElement.first();
                                         callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
                                             action.callback(event.data.metadata);
                                         });

@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     getOptions: function () {
         return this.options;
     },
-    setOptions: function () {
+    setOptions: function (options) {
         this.options = options;
     },
     /**

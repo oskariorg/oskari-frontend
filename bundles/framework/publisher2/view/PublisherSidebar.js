@@ -210,10 +210,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
         _createMapLayersPanel: function () {
             var me = this,
                 sandbox = this.instance.getSandbox(),
-                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
-                sandbox, mapModule, me.loc, me.instance
-            );
+                mapModule = sandbox.findRegisteredModuleInstance('MainMapModule'),
+                form = Oskari.clazz.create('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
+                    sandbox, mapModule, me.loc, me.instance
+                );
 
             // initialize form (restore data when editing)
             form.init(me.data, function (value) {});

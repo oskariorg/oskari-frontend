@@ -29,6 +29,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {String} id id for the panel
          */
         setId: function (id) {
+            var header;
             this.id = id;
             this.html.addClass(id);
             if (!this.header) {
@@ -86,6 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
          * @param {String} icon
          */
         setTitleIcon: function (iconClass, clickHandler) {
+            var header;
             if (!this.header) {
                 header = this.templateTabHeader.clone();
                 this.header = header;

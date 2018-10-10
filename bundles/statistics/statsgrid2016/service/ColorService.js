@@ -149,7 +149,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             return result;
         },
         getAvailableTypes: function () {
-            return limits.type.slice(0);
+            return this.limits.type.slice(0);
         },
         /**
          * Returns the min/max amount of colors for a type

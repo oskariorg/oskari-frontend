@@ -71,7 +71,7 @@ Oskari.clazz.define(
                 p;
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    this.sandbox.unregisterFromEventByName(me, p);
                 }
             }
         },

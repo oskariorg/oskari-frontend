@@ -395,7 +395,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
         __savePlace: function (values) {
             var me = this,
                 drawing = this.drawing,
-                isMovePlace = false;
+                isMovePlace = false,
+                oldPlace;
             // form not open, nothing to do
             if (!values) {
                 // should not happen

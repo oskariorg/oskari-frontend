@@ -427,6 +427,7 @@ Oskari.clazz.define(
 
                 if (actions && _.isArray(actions)) {
                     _.forEach(actions, function (action) {
+                        var actionTemplateWrapper;
                         var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === 'link') {
                             actionTemplate = me._actionLink.clone();

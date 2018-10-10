@@ -414,7 +414,7 @@ Oskari.clazz.define(
          */
         addToTempBasket: function (croppingLength) {
             var el = jQuery('.oskari__download-basket-temp-basket');
-            p = el.find('p');
+            var p = el.find('p');
 
             if (croppingLength > 0) {
                 p.find('strong').text(croppingLength);

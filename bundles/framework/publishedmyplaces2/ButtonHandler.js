@@ -303,6 +303,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.ButtonHandler'
              */
             'DrawPlugin.AddedFeatureEvent': function (event) {
                 var me = this;
+                var toolContainerRequest;
                 if (typeof event.getDrawingMode() !== 'undefined') {
                     if (event.getDrawingMode() !== null) {
                         var loc = this.instance.getLocalization('tools'),

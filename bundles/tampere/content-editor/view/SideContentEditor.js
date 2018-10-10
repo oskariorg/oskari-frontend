@@ -929,7 +929,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     if (key == '__fid' || readonly) {
                         valColumn.append(value);
                     } else {
-                        valInput = jQuery(this.templates.tableInput);
+                        var valInput = jQuery(this.templates.tableInput);
                         switch (this.fieldsTypes[key]) {
                         case 'xsd:numeric':
                             valInput.prop('type', 'number');

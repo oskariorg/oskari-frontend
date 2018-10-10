@@ -386,7 +386,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
 
-            for (group in me.buttonGroups) {
+            for (var group in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(group)) {
                     var buttonGroup = me.buttonGroups[group],
                         tool;
@@ -410,7 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
 
-            for (group in me.buttonGroups) {
+            for (var group in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(group)) {
                     var buttonGroup = me.buttonGroups[group];
                     if (buttonGroup.buttons[toolName]) {
@@ -436,7 +436,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 return;
             }
 
-            for (group in me.buttonGroups) {
+            for (var group in me.buttonGroups) {
                 if (me.buttonGroups.hasOwnProperty(group)) {
                     var buttonGroup = me.buttonGroups[group];
                     if (buttonGroup.buttons[toolName]) {

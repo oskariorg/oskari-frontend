@@ -463,10 +463,11 @@ Oskari.clazz.define(
                 uuid = layer.getMetadataIdentifier(),
                 additionalUuids = [],
                 additionalUuidsCheck = {},
-                subLayers = layer.getSubLayers();
+                subLayers = layer.getSubLayers(),
+                subUuid;
             additionalUuidsCheck[uuid] = true;
             if (subLayers && subLayers.length > 0) {
-                for (s = 0; s < subLayers.length; s += 1) {
+                for (var s = 0; s < subLayers.length; s += 1) {
                     subUuid = subLayers[s].getMetadataIdentifier();
                     if (subUuid && subUuid !== '' && !additionalUuidsCheck[subUuid]) {
                         additionalUuidsCheck[subUuid] = true;
@@ -523,7 +524,8 @@ Oskari.clazz.define(
                 s,
                 subUuid,
                 elBackendStatus,
-                layerInfo;
+                layerInfo,
+                subLmeta;
 
             icon.addClass(layer.getIconClassname());
 

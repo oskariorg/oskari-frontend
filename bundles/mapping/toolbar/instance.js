@@ -559,7 +559,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for (prop in me.__guidedTourDelegateTemplate) {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
                         if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {

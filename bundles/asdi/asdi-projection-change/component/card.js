@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.projection.change.component.card',
             this.setElement(card);
             this.toggleWarningElement();
 
-            for (p in this.eventHandlers) {
+            for (var p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     Oskari.getSandbox().registerForEventByName(this, p);
                 }

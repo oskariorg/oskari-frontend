@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      */
         getExtraOptions: function () {
             var me = this;
-            backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
+            var backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
             if (!me._backgroundLayerSelector) {
                 backgroundLayerSelector.find('.header').html(me.__loc.layerselection.info);
                 me._backgroundLayerSelector = backgroundLayerSelector;
