@@ -141,7 +141,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
             var view = Oskari.clazz.create(viewCls, this.getLocalization('view'), this, this.getConfiguration());
             this.view = view;
 
-            for (p in view.eventHandlers) {
+            for (var p in view.eventHandlers) {
                 sandbox.registerForEventByName(view, p);
             }
 
@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.AdapterBundleInstance',
             var me = this;
             var sandbox = me.sandbox;
             var view = me.view;
-            for (p in view.eventHandlers) {
+            for (var p in view.eventHandlers) {
                 sandbox.unregisterFromEventByName(view, p);
             }
             for (var pluginType in me.plugins) {

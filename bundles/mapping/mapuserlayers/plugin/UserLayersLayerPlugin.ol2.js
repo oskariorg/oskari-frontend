@@ -165,7 +165,7 @@ Oskari.clazz.define(
             }
 
             if (jQuery.isArray(oLayer)) {
-                for (i = 0; i < oLayer.length; i += 1) {
+                for (var i = 0; i < oLayer.length; i += 1) {
                     if (typeof oLayer[i].mergeNewParams === 'function') {
                         oLayer[i].mergeNewParams(params);
                     }

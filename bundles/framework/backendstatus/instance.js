@@ -460,7 +460,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.backendstatus.BackendStatusBundl
             this.backendExtendedStatus = extendedStatuses;
 
             var eventData = [],
-                edLen;
+                edLen,
+                evt;
 
             for (p in changeNotifications) {
                 if (changeNotifications.hasOwnProperty(p)) {

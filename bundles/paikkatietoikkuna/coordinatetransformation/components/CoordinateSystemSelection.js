@@ -284,7 +284,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 this.resetAndUpdateCoordSelect();
                 break;
             case 'projection':
-                showProjSystem = true;
                 this.resetAndUpdateCoordSelect();
                 break;
             case 'elevation':
@@ -393,8 +392,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.updateAllDropdowns();
         },
         updateAllDropdowns: function () {
-            coordSelector = this.makeClassSelectorFromSelections();
-            datumSelector = this.makeClassSelectorFromDatum();
+            var coordSelector = this.makeClassSelectorFromSelections();
+            var datumSelector = this.makeClassSelectorFromDatum();
             // Filter dropdowns with clsSelector if selector is "" then show all options
             this.updateDropdownOptions('geodetic-coordinate', coordSelector);
             this.updateDropdownOptions('projection', datumSelector);

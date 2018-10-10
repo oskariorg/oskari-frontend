@@ -878,7 +878,7 @@ Oskari.clazz.define(
                     bottom: bottomRight[1]
                 };
 
-                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
+                var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
                 me.sandbox.request(me, mapmoveRequest);
             } else {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -1078,7 +1078,6 @@ Oskari.clazz.define(
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];
 
-                value = dataField.id;
                 text = dataField.locale.name;
                 newCheckbox = me.templates.checkbox.clone();
                 newCheckboxDef = newCheckbox.find(':checkbox');

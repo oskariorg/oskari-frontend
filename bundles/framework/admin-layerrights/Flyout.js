@@ -288,7 +288,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 table = me._templates.table.clone(),
                 thead = table.find('thead'),
                 tbody = table.find('tbody'),
-                service = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService'),
                 headerRow = me._templates.row.clone(),
                 controlRow = me._templates.row.clone(),
                 columnsLoc = this.instance.getLocalization('rights');
@@ -319,14 +318,9 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             // Create rows
             jQuery.each(layerRightsJSON, function (index, layerRight) {
-                var layer = service.findMapLayer(layerRight.id),
-                    dataRow = me._templates.row.clone(),
+                var dataRow = me._templates.row.clone(),
                     cell = null,
                     dataCell = me._templates.cellTd.clone();
-
-                if (layer) {
-                    tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
-                }
 
                 cell = me._templates.name.clone();
                 cell.attr('data-resource', layerRight.resourceName);

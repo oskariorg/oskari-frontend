@@ -200,7 +200,7 @@ Oskari.clazz.define(
 
                 var features = new olFormatGeoJSON().readFeatures(event.getGeoJson());
 
-                for (i = 0; i < features.length; i++) {
+                for (var i = 0; i < features.length; i++) {
                     this.addFeature(features[i], mode);
                 }
 

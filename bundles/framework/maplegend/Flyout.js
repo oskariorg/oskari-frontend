@@ -122,7 +122,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
 
             for (n = layers.length - 1; n >= 0; n -= 1) {
                 layer = layers[n];
-                groupAttr = layer.getName();
                 layerContainer = this._createLayerContainer(layer);
 
                 if (layerContainer !== null) {

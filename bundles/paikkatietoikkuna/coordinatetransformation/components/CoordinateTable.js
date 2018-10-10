@@ -303,7 +303,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             break;
         }
         if (!lonFirst) {
-            temp = y;
+            var temp = y;
             y = x;
             x = temp;
         }

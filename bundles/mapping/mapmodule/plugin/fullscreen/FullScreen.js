@@ -27,12 +27,12 @@ Oskari.clazz.define(
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var me = this;
-            el = jQuery(
-                '<div class="mapplugin fullscreenDiv">' +
-                '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
-                '</div>'
-            );
+            var me = this,
+                el = jQuery(
+                    '<div class="mapplugin fullscreenDiv">' +
+                    '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
+                    '</div>'
+                );
             el.find('.fullscreenDivImg').on('click', function (event) {
                 event.preventDefault();
                 if (me.state.fullscreen) {

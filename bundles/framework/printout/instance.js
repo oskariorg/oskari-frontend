@@ -373,7 +373,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          */
         setPublishMode: function (blnEnabled) {
             var me = this,
-                map = jQuery('#contentMap');
+                map = jQuery('#contentMap'),
+                request;
 
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');

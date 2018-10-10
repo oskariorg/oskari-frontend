@@ -253,8 +253,8 @@ Oskari.clazz.define(
                 var me = this;
                 var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
-                mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
-                mapResolutions = mapModule.getResolutionArray();
+                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
                     if (layer.getMaxScale() && layer.getMinScale()) {
                         var layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());

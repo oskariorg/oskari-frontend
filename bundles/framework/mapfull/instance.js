@@ -308,7 +308,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
-            window.epsgConfs = _.keys(defs);
+            var epsgConfs = _.keys(defs);
             _.forEach(epsgConfs, function (conf) {
                 if (!_.has(defaultDefs, conf)) {
                     defaultDefs[conf] = defs[conf];

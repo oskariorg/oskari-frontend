@@ -353,7 +353,8 @@ Oskari.clazz.define(
         addFeaturesToMap: function (geometry, options) {
             var me = this,
                 olLayer,
-                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                mapLayerService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService'),
+                i;
 
             options = options || {};
 
@@ -523,7 +524,7 @@ Oskari.clazz.define(
                     center = new OpenLayers.LonLat((right - ((right - left) / 2)), (top - ((top - bottom) / 2)));
                 }
 
-                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+                var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
                 me._sandbox.request(me, mapmoveRequest);
 
                 // Check scale if defined so. Scale decreases when the map is zoomed in. Scale increases when the map is zoomed out.

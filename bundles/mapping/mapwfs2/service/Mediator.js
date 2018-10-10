@@ -248,9 +248,10 @@ Oskari.clazz.define(
             }
             var orderedFieldsIndexes = [],
                 orderedFields = layer.getFeatureProperties(),
-                unOrderedFields = fields;
+                unOrderedFields = fields,
+                index;
 
-            for (i = 0; i < orderedFields.length; i++) {
+            for (var i = 0; i < orderedFields.length; i++) {
                 index = unOrderedFields.indexOf(orderedFields[i]);
                 if (index !== -1) {
                     orderedFieldsIndexes.push(index);
@@ -270,7 +271,7 @@ Oskari.clazz.define(
             var arrangedFields = [];
             var orderedFieldsIndexes = layer.getFeaturePropertyIndexes();
             if (orderedFieldsIndexes.length > 0 && array.length > 0) {
-                for (i = 0; i < orderedFieldsIndexes.length; i++) {
+                for (var i = 0; i < orderedFieldsIndexes.length; i++) {
                     arrangedFields.push(array[orderedFieldsIndexes[i]]);
                 }
                 return arrangedFields;
@@ -398,7 +399,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
             if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder() && data.data.features !== 'empty') {
                 // this is a "userlayer" type layer - props are sorted to match the original order
-                features = data.data.features;
+                var features = data.data.features;
                 for (var i = 0; i < features.length; i++) {
                     features[i] = this.sortArrayByFeaturePropertyIndexes(layer, features[i]);
                 }

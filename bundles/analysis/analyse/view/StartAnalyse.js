@@ -1887,7 +1887,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
                 if (targetLayer && targetLayer.getFields) {
                     featureList = me.template.featureList.clone();
                     featureList.attr('id', 'analyse-layer1-field');
-                    firstField = me._addFeatureList(
+                    me._addFeatureList(
                         targetLayer,
                         featureList.find('ul'),
                         'analyse-layer1-field-property',
@@ -3273,7 +3273,8 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
 
         _checkMethodSelection: function () {
             var selectedLayer = this._getSelectedMapLayer(),
-                methodLabels = jQuery('.accordion').find('.method_radiolabel');
+                methodLabels = jQuery('.accordion').find('.method_radiolabel'),
+                layerType;
             if (selectedLayer) {
                 layerType = selectedLayer.getLayerType();
                 if (layerType === 'temp') {

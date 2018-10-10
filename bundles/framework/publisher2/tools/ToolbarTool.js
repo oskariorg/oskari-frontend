@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
          */
         init: function (data) {
             var me = this;
+            var toolName;
             me.selectedTools = {};
             me._storedData = {};
             if (!data || !data.configuration) {
@@ -177,7 +178,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                 return null;
             }
 
-            for (toolName in me.selectedTools) {
+            for (var toolName in me.selectedTools) {
                 if (me.selectedTools.hasOwnProperty(toolName) && me.selectedTools[toolName]) {
                     buttons.push(toolName);
                 }
@@ -585,7 +586,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         _hasActiveTools: function () {
             var me = this;
 
-            for (toolName in me.selectedTools) {
+            for (var toolName in me.selectedTools) {
                 if (me.selectedTools.hasOwnProperty(toolName) && me.selectedTools[toolName]) {
                     return true;
                 }
@@ -597,7 +598,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         _hasSelectedDrawTool: function () {
             var me = this;
 
-            for (toolName in me.drawOptions) {
+            for (var toolName in me.drawOptions) {
                 if (me.drawOptions.hasOwnProperty(toolName) && me.drawOptions[toolName]) {
                     return true;
                 }
@@ -611,7 +612,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
 
             if (me.__plugin) {
                 // send remove request per active button
-                for (toolName in me.selectedTools) {
+                for (var toolName in me.selectedTools) {
                     if (me.selectedTools.hasOwnProperty(toolName) && toolName) {
                         me.__plugin.removeToolButton(toolName);
                     }

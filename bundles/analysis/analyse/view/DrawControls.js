@@ -15,8 +15,8 @@ Oskari.clazz.define(
                 id: 'FeatureData'
             };
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, this.sandbox);
-            this.mapModule.registerPlugin(me.selectionPlugin);
-            this.mapModule.startPlugin(me.selectionPlugin);
+            this.mapModule.registerPlugin(this.selectionPlugin);
+            this.mapModule.startPlugin(this.selectionPlugin);
         }
     }, {
         /**

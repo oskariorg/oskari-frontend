@@ -2015,7 +2015,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         lastIndex = postLineStrings.lastIndex;
 
         // Create boundary markers
-        this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
+        // this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
 
         // Update boundary info
         this.updateBoundaryInfo(olNewFeatures);

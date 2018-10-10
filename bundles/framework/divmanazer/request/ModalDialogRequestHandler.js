@@ -59,7 +59,7 @@ Oskari
                 buttondiv.append(bcont);
             }
             if (request.onshow) {
-                this._args.onShow = onshow;
+                this._args.onShow = request.onshow;
             }
             $.modal = tpl.modal(this._args);
         }

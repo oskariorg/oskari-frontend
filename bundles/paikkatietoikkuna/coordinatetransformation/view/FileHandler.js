@@ -214,7 +214,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             var me = this;
             var elem = this.getElement();
             var formatRow = elem.find('.unitFormat');
-            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var title = this.type === 'import' ? this.loc('fileSettings.import.title') : this.loc('fileSettings.export.title');
             var btnText = this.type === 'import' ? this.loc('actions.done') : this.loc('actions.export');
             var cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));

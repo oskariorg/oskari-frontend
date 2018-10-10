@@ -982,7 +982,7 @@ Oskari.clazz.define(
                 return false;
             }
 
-            return plugin.getName().match(regex) && plugin.getName() !== me.drawPlugin.getName();
+            return plugin.getName().match(regex) && plugin.getName() !== this.drawPlugin.getName();
         },
 
         /**

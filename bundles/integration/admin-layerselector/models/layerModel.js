@@ -374,7 +374,7 @@
                     legends = [];
 
                 if (capabilitiesBlock && this.getStyles()) {
-                    for (i = 0; i < this.getStyles().length; i += 1) {
+                    for (var i = 0; i < this.getStyles().length; i += 1) {
                         styleName = this.getStyles()[i].getName();
 
                         if (styleName && capabilitiesBlock.styles) {

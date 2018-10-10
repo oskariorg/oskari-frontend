@@ -122,7 +122,7 @@ Oskari.clazz.define(
                 layers = me.sandbox.findAllSelectedMapLayers(),
                 topWFSLayer;
 
-            for (i = 0; i < layers.length; i++) {
+            for (var i = 0; i < layers.length; i++) {
                 var layer = layers[i];
                 if (layer.hasFeatureData()) {
                     topWFSLayer = layer._id;

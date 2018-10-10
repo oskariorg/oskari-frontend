@@ -134,12 +134,13 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
         },
         _getDropdownValue: function (advancedContainer) {
             var dropdownRows = advancedContainer.find('.dropdownRow');
-            for (i = 0; i < dropdownRows.length; i += 1) {
+            var dropdownDefs;
+            for (var i = 0; i < dropdownRows.length; i += 1) {
                 dropdownDefs = jQuery(dropdownRows[i]).find('.geolocatorDef');
                 if (dropdownDefs.length === 0) {
                     continue;
                 }
-                for (j = 0; j < dropdownDefs.length; j += 1) {
+                for (var j = 0; j < dropdownDefs.length; j += 1) {
                     dropdownDefs = jQuery(dropdownDefs[j]);
                     if (dropdownDefs.find(':selected')) {
                         this.selections.push(dropdownDefs);
@@ -160,8 +161,8 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                 },
                 regionInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput', 'elf-geolocator-region', this.sandbox),
                 countryInput = this.templates.countryAutoInput.clone(),
-                newCheckBoxRow = me.__templates.checkboxRow.clone();
-            filterRow = me.__templates.nearestFilterRow.clone();
+                newCheckBoxRow = me.__templates.checkboxRow.clone(),
+                filterRow = me.__templates.nearestFilterRow.clone();
 
             countryInput.find('div.rowLabel')
                 .text(this.loc.countryFilter);
@@ -285,7 +286,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
                     // open advanced/toggle link text
                     moreLessLink.html(me.loc.showLess);
                     if (advancedContainer.is(':empty')) {
-                        me._createAdvancedPanel(data, advancedContainer);
+                        me._createAdvancedPanel(null, advancedContainer);
                     } else {
                         advancedContainer.show();
                     }

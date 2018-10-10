@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                     return;
                 }
                 var idDouble = false;
-                for (i = 0; i < gridModel.data.length; i++) {
+                for (var i = 0; i < gridModel.data.length; i++) {
                     if (layer.getId() === gridModel.data[i].id) {
                         idDouble = true;
                         break;

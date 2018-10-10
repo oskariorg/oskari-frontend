@@ -1265,7 +1265,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _getMapXY: function () {
             var me = this;
             var map = me._sandbox.getMap();
-            data = {
+            var data = {
                 'lonlat': {
                     'lat': parseFloat(map.getY()),
                     'lon': parseFloat(map.getX())

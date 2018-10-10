@@ -100,9 +100,11 @@ Oskari.clazz.define(
         forceFinishDraw: function () {
             var activeControls = this._getActiveDrawControls(),
                 drawControls = this.drawControls,
-                drawLayer = this.drawLayer;
+                drawLayer = this.drawLayer,
+                activeControl,
+                components;
 
-            for (i = 0; i < activeControls.length; i += 1) {
+            for (var i = 0; i < activeControls.length; i += 1) {
                 activeControl = activeControls[i];
                 switch (activeControl) {
                 case 'point':

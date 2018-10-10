@@ -178,7 +178,6 @@ function (FilterLayersTemplate,
                                 instance: this.options.instance
                             });
 
-                            visibleLayerCount++;
                             // Add layerView to group container
                             groupContainer.append(layerView.$el);
                             // store reference to dom
@@ -518,7 +517,7 @@ function (FilterLayersTemplate,
             };
 
             addClass.find('[id$=-name]').filter('[id^=add-class-]').each(function () {
-                lang = this.id.substring(10, this.id.indexOf('-name'));
+                var lang = this.id.substring(10, this.id.indexOf('-name'));
                 data.locales[lang] = this.value;
             });
 

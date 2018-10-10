@@ -475,21 +475,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             if (me._svg) {
                 if ((typeof data.iconUrl !== 'undefined') && (data.iconUrl !== null)) {
                     iconSrc = data.iconUrl;
-                    if (jQuery.isNumeric(markerData.size)) {
-                        size = data.size;
-                    } else {
-                        size = me._defaultIconUrlSize;
-                    }
-                } else {
-                    // Construct image
-                    // iconSrc = this.constructImage(data);
-                    // size = this._getSizeInPixels(data.size);
-                    size = data.size;
                 }
             } else {
                 iconSrc = me.getDefaultIconUrl();
-                // size = this._getSizeInPixels(data.size);
-                size = data.size;
             }
             if (typeof data.color === 'string') {
                 if (data.color.charAt(0) !== '#') {

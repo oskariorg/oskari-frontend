@@ -275,9 +275,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
         _getMetadataRating: function (metadata) {
             var me = this;
             var ratingContainer = me.templates.ratingContainer.clone();
+            var starContainer;
             if (typeof metadata.score !== 'undefined') {
                 var ratingSymbols = me._generateRatingSymbols(metadata.score);
-                for (j = 0; j < 5; j++) {
+                for (var j = 0; j < 5; j++) {
                     starContainer = me.templates.starItem.clone();
                     starContainer.addClass(ratingSymbols[j]);
                     starContainer.data('starId', 'rating-star-' + metadata.id + '-' + j);

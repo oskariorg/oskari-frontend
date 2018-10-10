@@ -44,6 +44,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         var label;
         var addLabelFromInput = false;
         var mapEpsgValues = this.getMapEpsgValues();
+        var lonlat;
+        var labelLonLat;
 
         if (srs) {
             epsgValuesForLabel = this.getEpsgValues(srs);

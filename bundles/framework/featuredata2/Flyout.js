@@ -54,7 +54,7 @@ Oskari.clazz.define(
 
         for (var t in this.eventHandlers) {
             if (this.eventHandlers.hasOwnProperty(t)) {
-                me.sandbox.registerForEventByName(me, t);
+                this.sandbox.registerForEventByName(this, t);
             }
         }
 
@@ -222,7 +222,7 @@ Oskari.clazz.define(
 
                 // this is needed to add the functionality to filter with aggregate analyse values
                 // if value is true, the link to filter with aggregate analyse values is added to dialog
-            isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
+            var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
 
             var fixedOptions = {
                 bboxSelection: true,
@@ -477,9 +477,6 @@ Oskari.clazz.define(
                     container.css('height', (newContainerHeight - resizerHeight).toString() + 'px');
 
                     var tabTools = jQuery('div.oskari-flyoutcontent.featuredata').find('div.grid-tools');
-                    if (tabTools.length > 0) {
-                        newMaxHeight = newMaxHeight - tabTools.height();
-                    }
 
                     // FIXME Need calculate different way or only use styles
                     var paddings = tabTools.height() +
@@ -808,8 +805,8 @@ Oskari.clazz.define(
                 return;
             }
             var panel = this.layers['' + layer.getId()],
-                tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content');
-            isOk = this.tabsContainer.isSelected(panel);
+                tabContent = jQuery('div.oskari-flyoutcontent.featuredata').find('div.tab-content'),
+                isOk = this.tabsContainer.isSelected(panel);
 
             if (isOk && panel.grid) {
                 tabContent.css({ 'opacity': opacity });
@@ -1053,6 +1050,7 @@ Oskari.clazz.define(
          * @param  {String} strClass class to toggle
          */
         __addOrRemoveClassFromHeader: function (panel, blnAdd, strClass) {
+            var link;
             if (panel) {
                 link = panel.getHeader().find('a');
             }

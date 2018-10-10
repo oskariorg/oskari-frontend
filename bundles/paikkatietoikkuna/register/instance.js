@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
 
             me.popupContent = me.wrapper.clone();
 
-            registerInfo = me.registerInfo.clone();
+            var registerInfo = me.registerInfo.clone();
             registerInfo.append(me.loc.popup.registerInfo);
 
             var linkInfo = me.linkToTermsOfUse.clone();
@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             me.popupContent.append(registerInfo);
             me.popupContent.append(linkInfo);
 
-            cancelBtn = Oskari.clazz.create(
+            var cancelBtn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.CancelButton'
             );
 
@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.register.RegisterBundleInstance'
             });
             buttons.push(cancelBtn);
 
-            continueBtn = Oskari.clazz.create(
+            var continueBtn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
             continueBtn.addClass('primary');
