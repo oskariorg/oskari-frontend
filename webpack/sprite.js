@@ -93,8 +93,8 @@ function getIconArrays (files) {
 
 function getConfig (opts) {
     var defaultOptions = {
-        baseIconsDir: './resources/icons',
-        targetDir: './resources',
+        baseIconsDir: path.resolve(__dirname, '../resources/icons'),
+        targetDir: path.resolve(__dirname, '../resources'),
         result: {
             css: 'icons.css',
             img: 'icons.png'
