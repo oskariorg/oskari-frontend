@@ -19,7 +19,7 @@ Oskari.clazz.define(
             'Oskari.userinterface.component.VisualizationForm'
         );
         this.template = jQuery(
-        	'<div class="myplacesimportstyleform">' +
+            '<div class="myplacesimportstyleform">' +
             '   <div class="field name">' +
             '       <label for="userlayername">' + this.loc('flyout.layer.name') + '</label><br clear="all" />' +
             '       <input type="text" data-name="userlayername" />' +
@@ -40,11 +40,11 @@ Oskari.clazz.define(
     }, {
         start: function () {},
 
-    	/**
+        /**
          * @method getForm
          * @return {jQuery} jquery reference for the form
          */
-    	getForm: function () {
+        getForm: function () {
             var ui = this.template.clone();
             // populate the rendering fields
             var content = ui.find('div.rendering');

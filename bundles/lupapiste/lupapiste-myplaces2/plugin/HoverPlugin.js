@@ -68,9 +68,9 @@ Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.plugin.HoverPlugin', func
             },
 
             onPause: function(evt) {
-            	var lonlat = me._map.getLonLatFromPixel(evt.xy);
-		        var event = sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceHoverEvent')(lonlat, evt, me._map.getZoom());
-		        sandbox.notifyAll(event);
+                var lonlat = me._map.getLonLatFromPixel(evt.xy);
+                var event = sandbox.getEventBuilder('LupaPisteMyPlaces.MyPlaceHoverEvent')(lonlat, evt, me._map.getZoom());
+                sandbox.notifyAll(event);
             }
         });
         this._map.addControl(this.hoverControl);

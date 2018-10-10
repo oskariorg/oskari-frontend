@@ -94,24 +94,24 @@ function(instance, title) {
 
             var serviceMetaDataUrl = null;
             try{
-            	serviceMetaDataUrl = me.instance.conf.serviceMetadatas[group.getTitle()];
+                serviceMetaDataUrl = me.instance.conf.serviceMetadatas[group.getTitle()];
             } catch(err){}
 
 
 
             if(serviceMetaDataUrl){
-	            groupPanel.html.find('.headerText').after('<a href="#" class="layer-info icon-info livi-layerselector-service-info"></a>');
-	            groupPanel.html.find('.livi-layerselector-service-info').attr('data-uuid', serviceMetaDataUrl);
-	            groupPanel.html.find('.livi-layerselector-service-info').attr('title', me.instance._localization.tooltip['type-service-info']);
-	            groupPanel.html.find('.livi-layerselector-service-info').bind('click',function(evt){
-	            	var uuid = jQuery(this).attr('data-uuid');
-	            	if(uuid!=null || uuid!=''){
-	            		me.instance.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
-	            			uuid : uuid
-	            		}]);
-	            	}
-	            	evt.stopPropagation();
-	            });
+                groupPanel.html.find('.headerText').after('<a href="#" class="layer-info icon-info livi-layerselector-service-info"></a>');
+                groupPanel.html.find('.livi-layerselector-service-info').attr('data-uuid', serviceMetaDataUrl);
+                groupPanel.html.find('.livi-layerselector-service-info').attr('title', me.instance._localization.tooltip['type-service-info']);
+                groupPanel.html.find('.livi-layerselector-service-info').bind('click',function(evt){
+                    var uuid = jQuery(this).attr('data-uuid');
+                    if(uuid!=null || uuid!=''){
+                        me.instance.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [{
+                            uuid : uuid
+                        }]);
+                    }
+                    evt.stopPropagation();
+                });
             }
 
             this.accordion.addPanel(groupPanel);

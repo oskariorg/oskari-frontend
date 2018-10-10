@@ -2,55 +2,55 @@
  * @class Oskari.liikenenvirasto.bundle.lakapa.HelpFlyoutBundleInstance
  */
 Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstance', function() {
-	this.map = null;
-	this.core = null;
-	this.sandbox = null;
-	this.mapmodule = null;
-	this.started = false;
-	this.plugins = {};
-	this._locale = null;
-	this._requestHandlers = {};
+    this.map = null;
+    this.core = null;
+    this.sandbox = null;
+    this.mapmodule = null;
+    this.started = false;
+    this.plugins = {};
+    this._locale = null;
+    this._requestHandlers = {};
 
-	this.layerPlugin = null;
-	this.layer = null;
+    this.layerPlugin = null;
+    this.layer = null;
 }, {
-	/**
-	 * @static
-	 * @property __name
-	 *
-	 */
-	__name : 'LakapaHelpBundle',
-	'getName' : function() {
-		return this.__name;
-	},
-	/**
-	 * @method getSandbox
-	 */
-	getSandbox : function() {
-		return this.sandbox;
-	},
-	getLocale : function() {
-		return this._locale;
-	},
-	/**
-	 * @method implements BundleInstance start methdod
-	 *
-	 */
-	'start' : function() {
-		var me = this;
-		if(me.started)
-			return;
+    /**
+     * @static
+     * @property __name
+     *
+     */
+    __name : 'LakapaHelpBundle',
+    'getName' : function() {
+        return this.__name;
+    },
+    /**
+     * @method getSandbox
+     */
+    getSandbox : function() {
+        return this.sandbox;
+    },
+    getLocale : function() {
+        return this._locale;
+    },
+    /**
+     * @method implements BundleInstance start methdod
+     *
+     */
+    'start' : function() {
+        var me = this;
+        if(me.started)
+            return;
 
-		me.started = true;
+        me.started = true;
 
-		/* locale */
-		me._locale = Oskari.getLocalization(this.getName());
+        /* locale */
+        me._locale = Oskari.getLocalization(this.getName());
 
-		var conf = me.conf;
+        var conf = me.conf;
 
-		/* sandbox */
-		var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
-		var sandbox = Oskari.getSandbox(sandboxName);
+        /* sandbox */
+        var sandboxName = ( conf ? conf.sandbox : null ) || 'sandbox' ;
+        var sandbox = Oskari.getSandbox(sandboxName);
         me.sandbox = sandbox;
 
         // register to sandbox as a module
@@ -65,130 +65,130 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.HelpFlyoutBundleInstan
                 tooltip: me._locale.tooltips.helptool,
                 sticky: false,
                 callback : function() {
-                	me.showHelp();
+                    me.showHelp();
                 }
             }));
         }
 
-		for(p in this.eventHandlers) {
-			sandbox.registerForEventByName(this, p);
-		}
+        for(p in this.eventHandlers) {
+            sandbox.registerForEventByName(this, p);
+        }
 
-		/* request handler */
-		this._requestHandlers['TransportChangedRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.TransportChangedRequestHandler', sandbox, this);
-		sandbox.requestHandler('TransportChangedRequest', this._requestHandlers['TransportChangedRequest']);
-		this._requestHandlers['ShowHelpRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequestHandler', sandbox, this);
-		sandbox.requestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
-		this._requestHandlers['ChangeLanguageRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLanguageRequestHandler', sandbox, this);
-		sandbox.requestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
+        /* request handler */
+        this._requestHandlers['TransportChangedRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.TransportChangedRequestHandler', sandbox, this);
+        sandbox.requestHandler('TransportChangedRequest', this._requestHandlers['TransportChangedRequest']);
+        this._requestHandlers['ShowHelpRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequestHandler', sandbox, this);
+        sandbox.requestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
+        this._requestHandlers['ChangeLanguageRequest'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLanguageRequestHandler', sandbox, this);
+        sandbox.requestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
 
-		var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
-		var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+        var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
 
-		sandbox.request(this, request);
+        sandbox.request(this, request);
 
-		/* stateful */
-		sandbox.registerAsStateful(this.mediator.bundleId, this);
+        /* stateful */
+        sandbox.registerAsStateful(this.mediator.bundleId, this);
 
 
 
-	},
-	'init' : function() {
-		return null;
-	},
-	/**
-	 * @method update
-	 *
-	 * implements bundle instance update method
-	 */
-	'update' : function() {
+    },
+    'init' : function() {
+        return null;
+    },
+    /**
+     * @method update
+     *
+     * implements bundle instance update method
+     */
+    'update' : function() {
 
-	},
-	/**
-	 * @method onEvent
-	 */
-	onEvent : function(event) {
-		var handler = this.eventHandlers[event.getName()];
-		if(!handler)
-			return;
-		return handler.apply(this, [event]);
+    },
+    /**
+     * @method onEvent
+     */
+    onEvent : function(event) {
+        var handler = this.eventHandlers[event.getName()];
+        if(!handler)
+            return;
+        return handler.apply(this, [event]);
 
-	},
-	/**
-	 * @property eventHandlers
-	 * @static
-	 *
-	 */
-	eventHandlers : {},
+    },
+    /**
+     * @property eventHandlers
+     * @static
+     *
+     */
+    eventHandlers : {},
 
-	/**
-	 * @method stop
-	 *
-	 * implements bundle instance stop method
-	 */
-	'stop' : function() {
+    /**
+     * @method stop
+     *
+     * implements bundle instance stop method
+     */
+    'stop' : function() {
 
-		var sandbox = this.sandbox;
+        var sandbox = this.sandbox;
 
-		/* request handler cleanup */
-		sandbox.removeRequestHandler('TransportChangedRequest', this._requestHandlers['TransportChangedRequest']);
-		sandbox.removeRequestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
-		sandbox.removeRequestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
-		/* sandbox cleanup */
+        /* request handler cleanup */
+        sandbox.removeRequestHandler('TransportChangedRequest', this._requestHandlers['TransportChangedRequest']);
+        sandbox.removeRequestHandler('ShowHelpRequest', this._requestHandlers['ShowHelpRequest']);
+        sandbox.removeRequestHandler('ChangeLanguageRequest', this._requestHandlers['ChangeLanguageRequest']);
+        /* sandbox cleanup */
 
-		for(p in this.eventHandlers) {
-			sandbox.unregisterFromEventByName(this, p);
-		}
+        for(p in this.eventHandlers) {
+            sandbox.unregisterFromEventByName(this, p);
+        }
 
-		var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+        var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
 
-		sandbox.request(this, request);
+        sandbox.request(this, request);
 
-		this.sandbox.unregisterStateful(this.mediator.bundleId);
-		this.sandbox.unregister(this);
-		this.started = false;
-	},
-	setSandbox : function(sandbox) {
-		this.sandbox = null;
-	},
-	startExtension : function() {
-		this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.Flyout', this, this.getLocale()['flyout'], this.conf);
-	},
-	stopExtension : function() {
-		this.plugins['Oskari.userinterface.Flyout'] = null;
-	},
-	getTitle : function() {
-		return this.getLocale()['title'];
-	},
-	getDescription : function() {
-		return 'Help';
-	},
-	getPlugins : function() {
-		return this.plugins;
-	},
-	/**
-	 * @method showHelp
-	 */
-	showHelp : function() {
-		/** update flyout content */
-		this.plugins['Oskari.userinterface.Flyout'].showHelp();
-		this.getSandbox().requestByName(this, 'userinterface.UpdateExtensionRequest', [this, 'detach']);
-	},
-	/**
-	 * @method setState
-	 * @param {Object} state bundle state as JSON
-	 */
-	setState : function(state) {
-		this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
-	},
-	/**
-	 * @method getState
-	 * @return {Object} bundle state as JSON
-	 */
-	getState : function() {
-		return this.plugins['Oskari.userinterface.Flyout'].getContentState();
-	}
+        this.sandbox.unregisterStateful(this.mediator.bundleId);
+        this.sandbox.unregister(this);
+        this.started = false;
+    },
+    setSandbox : function(sandbox) {
+        this.sandbox = null;
+    },
+    startExtension : function() {
+        this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.liikennevirasto.bundle.lakapa.help.Flyout', this, this.getLocale()['flyout'], this.conf);
+    },
+    stopExtension : function() {
+        this.plugins['Oskari.userinterface.Flyout'] = null;
+    },
+    getTitle : function() {
+        return this.getLocale()['title'];
+    },
+    getDescription : function() {
+        return 'Help';
+    },
+    getPlugins : function() {
+        return this.plugins;
+    },
+    /**
+     * @method showHelp
+     */
+    showHelp : function() {
+        /** update flyout content */
+        this.plugins['Oskari.userinterface.Flyout'].showHelp();
+        this.getSandbox().requestByName(this, 'userinterface.UpdateExtensionRequest', [this, 'detach']);
+    },
+    /**
+     * @method setState
+     * @param {Object} state bundle state as JSON
+     */
+    setState : function(state) {
+        this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
+    },
+    /**
+     * @method getState
+     * @return {Object} bundle state as JSON
+     */
+    getState : function() {
+        return this.plugins['Oskari.userinterface.Flyout'].getContentState();
+    }
 }, {
-	'protocol' : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+    'protocol' : ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
 });

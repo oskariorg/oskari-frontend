@@ -6,16 +6,16 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpR
     this.sandbox = sandbox;
     this.instance = instance;
 }, {
-	/**
-	 * @method handleRequest
-	 * Add to basket
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.liikennevirasto.bundle.lakapa.help.selector.ShowHelpRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * Add to basket
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.liikennevirasto.bundle.lakapa.help.selector.ShowHelpRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
-    	var me = this;
+        var me = this;
         me.sandbox.printDebug('[Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpRequest] show help called');
         me.sandbox.printDebug(request);
         me.instance.showHelp();
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ShowHelpR
 
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

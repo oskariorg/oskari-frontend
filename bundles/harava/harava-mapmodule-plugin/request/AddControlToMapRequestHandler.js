@@ -16,20 +16,20 @@ function(sandbox, mapModule) {
     this.sandbox = sandbox;
     this.mapModule = mapModule;
 }, {
-	/**
-	 * @method handleRequest
-	 * Add control to map
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * Add control to map
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
-    	var openlayersMap = this.mapModule.getMap();
-    	var control = request.getControl();
-    	if(control!=null){
-    		openlayersMap.addControl(control);
-    	}
+        var openlayersMap = this.mapModule.getMap();
+        var control = request.getControl();
+        if(control!=null){
+            openlayersMap.addControl(control);
+        }
    }
 }, {
     /**

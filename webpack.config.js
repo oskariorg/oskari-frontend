@@ -37,6 +37,7 @@ module.exports = (env, argv) => {
             ]
         );
         entries[appName] = [
+            path.resolve(__dirname, './webpack/polyfill.js'),
             path.resolve(__dirname, './webpack/oskari-core.js'),
             path.resolve(appDir + path.sep + 'minifierAppSetup.json')
         ];
@@ -62,7 +63,15 @@ module.exports = (env, argv) => {
                     use: {
                         loader: 'babel-loader',
                         options: {
-                            presets: ['es2015'],
+                            presets: [
+                                [
+                                    '@babel/preset-env',
+                                    {
+                                        useBuiltIns: 'entry',
+                                        targets: '> 0.25%, not dead, ie 11'
+                                    }
+                                ]
+                            ],
                             plugins: ['transform-remove-strict-mode']
                         }
                     }

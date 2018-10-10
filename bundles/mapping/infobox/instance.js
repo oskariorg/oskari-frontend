@@ -19,43 +19,43 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
         this.mediator = null;
     }, {
         /**
-	 * @static
-	 * @property __name
-	 */
+     * @static
+     * @property __name
+     */
         __name: 'Infobox',
 
         /**
-	 * @method getName
-	 * @return {String} the name for the component
-	 */
+     * @method getName
+     * @return {String} the name for the component
+     */
         getName: function () {
             return this.__name;
         },
         /**
-	 * @method setSandbox
-	 * @param {Oskari.Sandbox} sandbox
-	 * Sets the sandbox reference to this component
-	 */
+     * @method setSandbox
+     * @param {Oskari.Sandbox} sandbox
+     * Sets the sandbox reference to this component
+     */
         setSandbox: function (sbx) {
             this.sandbox = sbx;
         },
         /**
-	 * @method getSandbox
-	 * @return {Oskari.Sandbox}
-	 */
+     * @method getSandbox
+     * @return {Oskari.Sandbox}
+     */
         getSandbox: function () {
             return this.sandbox;
         },
         /**
-	 * @method update
-	 * implements BundleInstance protocol update method - does nothing atm
-	 */
+     * @method update
+     * implements BundleInstance protocol update method - does nothing atm
+     */
         update: function () {
         },
         /**
-	 * @method start
-	 * implements BundleInstance protocol start methdod
-	 */
+     * @method start
+     * implements BundleInstance protocol start methdod
+     */
         start: function () {
             var me = this;
             if (me.started) {
@@ -82,9 +82,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             sandbox.requestHandler('InfoBox.RefreshInfoBoxRequest', this.requestHandlers.refreshInfoHandler);
         },
         /**
-	 * @method init
-	 * implements Module protocol init method - initializes request handlers
-	 */
+     * @method init
+     * implements Module protocol init method - initializes request handlers
+     */
         init: function () {
             var adaptable = this.conf && this.conf.adaptable === true;
             // register plugin for map (actual popup implementation handling)
@@ -100,10 +100,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             return null;
         },
         /**
-	 * @method onEvent
-	 * @param {Oskari.mapframework.event.Event} event a Oskari event object
-	 * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-	 */
+     * @method onEvent
+     * @param {Oskari.mapframework.event.Event} event a Oskari event object
+     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+     */
         onEvent: function (event) {
             var me = this;
             var handler = me.eventHandlers[event.getName()];
@@ -119,8 +119,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
      */
         eventHandlers: {
             /**
-		 * @method MapClickedEvent
-		 */
+         * @method MapClickedEvent
+         */
             MapClickedEvent: function (e) {
             },
             'Publisher2.ColourSchemeChangedEvent': function (evt) {
@@ -130,21 +130,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
                 this._handleColourSchemeChangedEvent(evt);
             },
             'AfterAddMarkerEvent': function (evt) {
-        	if (evt.getID()) {
-        		this.popupPlugin.markers[evt.getID()] = {
-        			data: evt.getData(),
-        			params: evt.getParams()
-        		};
-        	}
+                if (evt.getID()) {
+                    this.popupPlugin.markers[evt.getID()] = {
+                        data: evt.getData(),
+                        params: evt.getParams()
+                    };
+                }
             },
             'AfterRemoveMarkersEvent': function (evt) {
-        	if (evt.getId() && this.popupPlugin.markers[evt.getId()]) {
-        		delete this.popupPlugin.markers[evt.getId()];
-        		this.popupPlugin.close(this.popupPlugin.markerPopups[evt.getId()]);
-        		delete this.popupPlugin.markerPopups[evt.getId()];
-        	} else if (!evt.getId()) {
-        		this.popupPlugin.markers = {};
-        	}
+                if (evt.getId() && this.popupPlugin.markers[evt.getId()]) {
+                    delete this.popupPlugin.markers[evt.getId()];
+                    this.popupPlugin.close(this.popupPlugin.markerPopups[evt.getId()]);
+                    delete this.popupPlugin.markerPopups[evt.getId()];
+                } else if (!evt.getId()) {
+                    this.popupPlugin.markers = {};
+                }
             },
             MapSizeChangedEvent: function (evt) {
                 this.popupPlugin._handleMapSizeChanges(evt.getWidth(), evt.getHeight());
@@ -155,9 +155,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             this.popupPlugin._changeColourScheme(evt.getColourScheme());
         },
         /**
-	 * @method stop
-	 * implements BundleInstance protocol stop method
-	 */
+     * @method stop
+     * implements BundleInstance protocol stop method
+     */
         stop: function () {
             var me = this;
             var sandbox = this.sandbox;
@@ -196,23 +196,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
             var popups = this.popupPlugin.getPopups();
 
             for (var id in popups) {
-        	if (popups.hasOwnProperty(id)) {
-	            var popup = popups[id];
-	            var data = {
-	                id: id,
-	                title: popup.title,
-	                data: popup.contentData,
-	                lonlat: popup.lonlat
-	            };
-	            state.popups.push(data);
-        	}
+                if (popups.hasOwnProperty(id)) {
+                    var popup = popups[id];
+                    var data = {
+                        id: id,
+                        title: popup.title,
+                        data: popup.contentData,
+                        lonlat: popup.lonlat
+                    };
+                    state.popups.push(data);
+                }
             }
             return state;
         }
     }, {
         /**
-	 * @property {String[]} protocol
-	 * @static
-	 */
+     * @property {String[]} protocol
+     * @static
+     */
         protocol: ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

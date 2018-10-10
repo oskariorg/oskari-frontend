@@ -524,8 +524,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                         color: '#000000'
                     },
                     stroke: {
-                    	color: '#ffffff',
-                    	width: 1
+                        color: '#ffffff',
+                        width: 1
                     }
                 }
             };

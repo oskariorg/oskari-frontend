@@ -36,9 +36,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.event.InfoBoxEvent',
      */
         getParams: function () {
             return {
-        	id: this._popupId,
-        	isOpen: this._isOpen,
-        	contentId: this._contentId
+                id: this._popupId,
+                isOpen: this._isOpen,
+                contentId: this._contentId
             };
         }
     }, {

@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeatures
      * @param {Oskari.mapframework.mapmodule.VectorLayerPlugin} vectorLayerPlugin reference to vectorlayer plugin
      */
     function (sandbox, vectorLayerPlugin) {
-	    this.sandbox = sandbox;
+        this.sandbox = sandbox;
         this.vectorLayerPlugin = vectorLayerPlugin;
         this._log = Oskari.log('RemoveFeaturesFromMapRequestHandler');
     }, {
@@ -21,15 +21,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeatures
          * @param {Oskari.mapframework.core.Core} core reference to the application core (reference sandbox core.getSandbox())
          * @param {Oskari.mapframework.bundle.mapmodule.request.RemoveFeaturesFromMapRequest} request request to handle
          */
-	    handleRequest: function (core, request) {
-	        this._log.debug('Remove Features');
-	        this.vectorLayerPlugin.removeFeaturesFromMap(request.getIdentifier(), request.getValue(), request.getLayer());
-	    }
+        handleRequest: function (core, request) {
+            this._log.debug('Remove Features');
+            this.vectorLayerPlugin.removeFeaturesFromMap(request.getIdentifier(), request.getValue(), request.getLayer());
+        }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-	    protocol: ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     }
 );

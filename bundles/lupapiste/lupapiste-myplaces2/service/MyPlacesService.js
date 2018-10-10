@@ -48,9 +48,9 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         var loadedPlaces = false;
         var initialLoadCallBackCategories = function(categories) {
             if(categories) {
-            	for(var i = 0; i < categories.length; ++i) {
-            		me._addCategory(categories[i]);
-            	}
+                for(var i = 0; i < categories.length; ++i) {
+                    me._addCategory(categories[i]);
+                }
                 //me._categoryList = categories;
             }
             loadedCategories = true;
@@ -84,7 +84,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * Creates a default category for the user
      */
     _createDefaultCategory : function() {
-    	var me = this;
+        var me = this;
         var defaultCategory = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
         defaultCategory.setName(me.defaultCategoryName);
         if(!me.defaultCategoryName) {

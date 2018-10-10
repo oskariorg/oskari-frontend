@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             usedefinedscale: {
                 label: me.loc.scale.definedScale,
                 selected: false,
-                scales: me.instance.conf.scales || me.mapmodule.getScaleArray().reverse()
+                scales: me.instance.conf.scales || me.mapmodule.getScaleArray().slice().reverse()
             }
         };
 

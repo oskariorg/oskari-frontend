@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.BundleInstance',
                 }
             }
 
-		 	var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
         },
         /**
@@ -191,7 +191,7 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.BundleInstance',
          * Oskari.mapframework.bundle.layerselection2.Tile
          */
         startExtension: function () {
-          	this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.hsy.bundle.waterPipeTool.Flyout', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.hsy.bundle.waterPipeTool.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.hsy.bundle.waterPipeTool.Tile', this);
         },
         /**

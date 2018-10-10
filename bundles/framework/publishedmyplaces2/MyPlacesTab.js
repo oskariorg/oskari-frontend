@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
  * @static
  * @param {Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance}
  * instance
- * 		reference to component that created the tile
+ *         reference to component that created the tile
  */
     function (instance, localization) {
         this.instance = instance;
@@ -174,27 +174,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
      * @private
      */
         _deletePlace: function (data) {
-    	var me = this;
-    	var sandbox = this.instance.sandbox;
+            var me = this;
+            var sandbox = this.instance.sandbox;
             var loc = this.loc.notification['delete'];
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.btnDelete);
-    	okBtn.addClass('primary');
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            okBtn.setTitle(loc.btnDelete);
+            okBtn.addClass('primary');
 
-    	okBtn.setHandler(function () {
+            okBtn.setHandler(function () {
                 dialog.close();
                 var service = sandbox.getService('Oskari.mapframework.bundle.publishedmyplaces.service.MyPlacesService');
                 var callback = function (isSuccess) {
-            	/* let's refresh map also if there */
-            	var categoryId = data.categoryId;
-            	var layerId = 'myplaces_' + categoryId;
-        		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-        		if (layer) {
-        			var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
-        			var updateRequest = updateRequestBuilder(layerId, true);
+                /* let's refresh map also if there */
+                    var categoryId = data.categoryId;
+                    var layerId = 'myplaces_' + categoryId;
+                    var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+                    if (layer) {
+                        var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest');
+                        var updateRequest = updateRequestBuilder(layerId, true);
                         sandbox.request(me.instance, updateRequest);
-        		}
+                    }
 
                     if (isSuccess) {
                         dialog.show(loc.title, loc.success);
@@ -204,11 +204,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
                     dialog.fadeout();
                 };
                 service.deleteMyPlace(data.id, callback);
-    	});
-    	var cancelBtn = dialog.createCloseButton(loc.btnCancel);
+            });
+            var cancelBtn = dialog.createCloseButton(loc.btnCancel);
             var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
-    	dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
-    	dialog.makeModal();
+            dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
+            dialog.makeModal();
         },
         /**
      * @method _getDrawModeFromGeometry
@@ -221,11 +221,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publishedmyplaces.MyPlacesTab',
             if (geometry === null) return null;
             var olClass = geometry.CLASS_NAME;
             if ((olClass === 'OpenLayers.Geometry.MultiPoint') || (olClass === 'OpenLayers.Geometry.Point')) {
-        	return 'point';
+                return 'point';
             } else if ((olClass === 'OpenLayers.Geometry.MultiLineString') || (olClass === 'OpenLayers.Geometry.LineString')) {
-        	return 'line';
+                return 'line';
             } else if ((olClass === 'OpenLayers.Geometry.MultiPolygon') || (olClass === 'OpenLayers.Geometry.Polygon')) {
-        	return 'area';
+                return 'area';
             }
             return null;
         },

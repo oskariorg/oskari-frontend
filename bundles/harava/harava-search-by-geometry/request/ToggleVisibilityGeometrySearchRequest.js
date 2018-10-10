@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityGeom
 function(visible) {
     this._visible = visible;
 }, {
-	/** @static @property __name request name */
+    /** @static @property __name request name */
     __name : 'ToggleVisibilityGeometrySearchRequest',
     /**
      * @method getName
@@ -32,7 +32,7 @@ function(visible) {
         return this._visible;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

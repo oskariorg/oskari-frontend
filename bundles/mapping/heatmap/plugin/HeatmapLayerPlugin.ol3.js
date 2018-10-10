@@ -20,7 +20,7 @@ Oskari.clazz.define(
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             var layerIdPrefix = 'layer_',
-            	key;
+                key;
 
             // default params and options
             var defaultParams = {

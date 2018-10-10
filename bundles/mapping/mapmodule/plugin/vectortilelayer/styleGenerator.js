@@ -1,5 +1,5 @@
 import olStyleStyle from 'ol/style/Style';
-import FTR_PROPERTY_ID from '../../domain/constants';
+import {FTR_PROPERTY_ID} from '../../domain/constants';
 
 const invisible = new olStyleStyle();
 
@@ -12,7 +12,7 @@ const isHovered = (feature, hoverState) => {
         }
     }
     return false;
-}
+};
 
 export default function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState) {
     const styleCache = {};

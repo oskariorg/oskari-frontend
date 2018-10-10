@@ -43,9 +43,9 @@ Oskari.clazz.define(
             this.instance.getLocalization('searchResults') + ' ${count} ' +
             this.instance.getLocalization('searchResultsDescription') + ' ${search}</h3></div>');
     }, {
-    	__templates: {
+        __templates: {
             main: _.template(
-			    '<div class="searchContainer">' +
+                '<div class="searchContainer">' +
                 '  <div class="searchDescription">${desc}</div>' +
                 '  <div class="controls">' +
                 '  </div>' +
@@ -55,7 +55,7 @@ Oskari.clazz.define(
                 '  <div class="resultList"></div>' +
                 '</div>'),
             resultTable: _.template(
-            	'<table class="search_result oskari-grid">' +
+                '<table class="search_result oskari-grid">' +
                 '  <thead><tr></tr></thead>' +
                 '  <tbody></tbody>' +
                 '</table>'),
@@ -66,7 +66,7 @@ Oskari.clazz.define(
                 '  <td>${region}</td>' +
                 '  <td>${type}</td>' +
                 '</tr>')
-    	},
+        },
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -83,7 +83,7 @@ Oskari.clazz.define(
             var doSearch = function () {
                 field.setEnabled(false);
                 button.setEnabled(false);
-            	me.__doSearch();
+                me.__doSearch();
             };
 
             var doAutocompleteSearch = function (e) {
@@ -112,49 +112,49 @@ Oskari.clazz.define(
             ui.append(searchContainer);
         },
         getContainer: function () {
-        	if (!this._searchContainer) {
-	            var searchContainer = this.__templates.main({
-	            	desc: this.instance.getLocalization('searchDescription')
-	            });
-	            this._searchContainer = jQuery(searchContainer);
-	        }
-        	return this._searchContainer;
+            if (!this._searchContainer) {
+                var searchContainer = this.__templates.main({
+                    desc: this.instance.getLocalization('searchDescription')
+                });
+                this._searchContainer = jQuery(searchContainer);
+            }
+            return this._searchContainer;
         },
         /**
          * The search field
          * @return {Oskari.userinterface.component.FormInput}
          */
         getField: function () {
-        	var me = this;
-        	if (!this._searchField) {
-        		// TODO: change to TextInput, but it doesn't have setIds()
-	            var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-	            this._searchField = field;
-	            field.setPlaceholder(this.instance.getLocalization('searchAssistance'));
-	            field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
+            var me = this;
+            if (!this._searchField) {
+                // TODO: change to TextInput, but it doesn't have setIds()
+                var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+                this._searchField = field;
+                field.setPlaceholder(this.instance.getLocalization('searchAssistance'));
+                field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
 
-	            if (this.instance.safeChars) {
-	                var regex = /[\s\w\d.,?!\-äöåÄÖÅ]*\*?$/;
-	                field.setContentCheck(true, this.instance.getLocalization('invalid_characters'), regex);
-	            }
+                if (this.instance.safeChars) {
+                    var regex = /[\s\w\d.,?!\-äöåÄÖÅ]*\*?$/;
+                    field.setContentCheck(true, this.instance.getLocalization('invalid_characters'), regex);
+                }
 
-	            field.bindChange(function (event) {
-	            	me.__searchTextChanged(field.getValue());
-	            });
-	            field.addClearButton('oskari_search_forminput_clearbutton');
-        	}
-        	return this._searchField;
+                field.bindChange(function (event) {
+                    me.__searchTextChanged(field.getValue());
+                });
+                field.addClearButton('oskari_search_forminput_clearbutton');
+            }
+            return this._searchField;
         },
         /**
          * The search field
          * @return {Oskari.userinterface.component.FormInput}
          */
         getButton: function () {
-        	if (!this._searchBtn) {
-	            var button = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
-	            button.setId('oskari_search_button_search');
-	            this._searchBtn = button;
-        	}
+            if (!this._searchBtn) {
+                var button = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
+                button.setId('oskari_search_button_search');
+                this._searchBtn = button;
+            }
             return this._searchBtn;
         },
         __searchTextChanged: function (value) {
@@ -179,7 +179,7 @@ Oskari.clazz.define(
         },
 
         __doSearch: function () {
-        	var me = this;
+            var me = this;
             var field = this.getField();
             var button = this.getButton();
             var searchContainer = this.getContainer();
@@ -285,14 +285,14 @@ Oskari.clazz.define(
             );
         },
         __getSearchResultHeader: function (count, hasMore) {
-        	var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
-        	var msg = intro({count: count});
-        	msg = msg + '<br/>';
+            var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
+            var msg = intro({count: count});
+            msg = msg + '<br/>';
 
             if (hasMore) {
                 // more results available
-        		msg = msg + this.instance.getLocalization('searchResultDescriptionMoreResults');
-        		msg = msg + '<br/>';
+                msg = msg + this.instance.getLocalization('searchResultDescriptionMoreResults');
+                msg = msg + '<br/>';
             }
             return msg + this.instance.getLocalization('searchResultDescriptionOrdering');
         },
@@ -317,16 +317,16 @@ Oskari.clazz.define(
             // error handling
             if (result.totalCount === -1) {
                 resultList.append(
-                	this.instance.getLocalization('searchservice_search_alert_title') + ': ' +
-                	this.instance.getLocalization(result.errorText));
+                    this.instance.getLocalization('searchservice_search_alert_title') + ': ' +
+                    this.instance.getLocalization(result.errorText));
                 return;
             } else if (result.totalCount === 0) {
                 resultList.append(
-                	inst.getLocalization('searchservice_search_alert_title') + ': ' +
-                	inst.getLocalization('searchservice_search_not_found_anything_text'));
+                    inst.getLocalization('searchservice_search_alert_title') + ': ' +
+                    inst.getLocalization('searchservice_search_not_found_anything_text'));
                 return;
             } else {
-            	info.append(this.__getSearchResultHeader(result.totalCount, result.hasMore));
+                info.append(this.__getSearchResultHeader(result.totalCount, result.hasMore));
             }
 
             if (result.totalCount === 1) {
@@ -371,8 +371,8 @@ Oskari.clazz.define(
 
             this._populateResultTable(tableBody, result.locations);
             resultList.append(this.__templates.resultheading({
-            	count: result.totalCount,
-            	search: searchKey
+                count: result.totalCount,
+                search: searchKey
             }));
             resultList.append(table);
         },
@@ -493,7 +493,7 @@ Oskari.clazz.define(
             delete this.resultActions[name];
         },
         getSandbox: function () {
-        	return this.sandbox;
+            return this.sandbox;
         },
         /**
          * @method setState

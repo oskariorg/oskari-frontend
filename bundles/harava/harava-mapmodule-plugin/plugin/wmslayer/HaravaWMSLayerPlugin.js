@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
     this._map = null;
     this._supportedFormats = {};
 }, {
-	/** @static @property __name plugin name */
+    /** @static @property __name plugin name */
     __name : 'HaravaWMSLayerPlugin',
     /**
      * @method getName
@@ -210,7 +210,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         }
 
         if(layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap == true) {
-			if(layer.getSubLayers().length > 0) {
+            if(layer.getSubLayers().length > 0) {
                 /**
                  * loop all basemap layers and add these on the map
                  */
@@ -357,12 +357,12 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
             var baseLayerId = '';
             if(layer.getSubLayers().length > 0) {
                 for(var i = 0; i < layer.getSubLayers().length; i++) {
-		    var subtmp = layer.getSubLayers()[i];
+            var subtmp = layer.getSubLayers()[i];
                     var remLayer =
-			this._map.getLayersByName('basemap_' + subtmp.getId());
-		    if (remLayer && remLayer[0] && remLayer[0].destroy) {
-			remLayer[0].destroy();
-		    }
+            this._map.getLayersByName('basemap_' + subtmp.getId());
+            if (remLayer && remLayer[0] && remLayer[0].destroy) {
+            remLayer[0].destroy();
+            }
                 }
             } else {
                 var remLayer = this._map.getLayersByName('layer_' + layer.getId());
@@ -457,7 +457,7 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.plugin.HaravaWMSLayerPlugin'
         }
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

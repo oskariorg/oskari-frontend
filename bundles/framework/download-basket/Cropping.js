@@ -310,16 +310,16 @@ Oskari.clazz.define(
                     srs: mapVO.getSrsName()
                 },
                 success: function (data) {
-                	var uniqueColumn = null;
-                	var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
-                	if (layer.getAttributes().unique) {
-                		uniqueColumn = layer.getAttributes().unique;
-                	}
+                    var uniqueColumn = null;
+                    var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
+                    if (layer.getAttributes().unique) {
+                        uniqueColumn = layer.getAttributes().unique;
+                    }
                     var geojson_format = new OpenLayers.Format.GeoJSON();
                     var features = geojson_format.read(data.features[0]);
                     var uniqueValue = (uniqueColumn) ? data.features[0].properties[uniqueColumn] : data.features[0].id;
                     if (!uniqueValue) {
-                    	uniqueValue = data.features[0].id;
+                        uniqueValue = data.features[0].id;
                     }
                     var founded = me.croppingVectorLayer.getFeaturesByAttribute('cropid', uniqueValue);
 
@@ -538,7 +538,7 @@ Oskari.clazz.define(
             // Finds layers that are active and loop cropping areas to them, collect are important values
             jQuery.each(selectedLayers, function (layer_key, layer_value) {
                 jQuery.each(croppedAreaFeatures, function (feature_key, feature_value) {
-                	var basketObject = {};
+                    var basketObject = {};
                     basketObject.layerNameLang = layer_value.getName();
                     basketObject.layerName = layer_value.getLayerName();
                     basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(), 'id');

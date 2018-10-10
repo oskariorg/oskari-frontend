@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.digiroad.bundle.personaldata.MyPlacesTab',
  * @static
  * @param {Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance}
  * instance
- * 		reference to component that created the tile
+ *         reference to component that created the tile
  */
 function(instance, localization) {
     this.instance = instance;
@@ -125,27 +125,27 @@ function(instance, localization) {
      * @private
      */
     _deletePlace : function(data) {
-    	var me = this;
-    	var sandbox = this.instance.sandbox;
+        var me = this;
+        var sandbox = this.instance.sandbox;
         var loc = this.loc.notification['delete'];
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.btnDelete);
-    	okBtn.addClass('primary');
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.btnDelete);
+        okBtn.addClass('primary');
 
-    	okBtn.setHandler(function() {
-			dialog.close();
+        okBtn.setHandler(function() {
+            dialog.close();
             var service = sandbox.getService('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService');
             var callback = function(isSuccess) {
 
-            	/* let's refresh map also if there */
-            	var layerId = 'uudet_kohteet';
-        		var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
-        		if(layer) {
-        			var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
-        			var updateRequest = updateRequestBuilder(layerId, true);
+                /* let's refresh map also if there */
+                var layerId = 'uudet_kohteet';
+                var layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
+                if(layer) {
+                    var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
+                    var updateRequest = updateRequestBuilder(layerId, true);
                     sandbox.request(me.instance, updateRequest);
-        		}
+                }
 
                 if(isSuccess) {
                     dialog.show(loc.title, loc.success);
@@ -156,11 +156,11 @@ function(instance, localization) {
                 dialog.fadeout();
             };
             service.deleteMyPlace(data.id, callback);
-    	});
-    	var cancelBtn = dialog.createCloseButton(loc.btnCancel);
+        });
+        var cancelBtn = dialog.createCloseButton(loc.btnCancel);
         var confirmMsg = loc.confirm + '"' + data.name + '"' + '?';
-    	dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
-    	dialog.makeModal();
+        dialog.show(loc.title, confirmMsg, [cancelBtn, okBtn]);
+        dialog.makeModal();
     },
     /**
      * @method getDrawModeFromGeometry
@@ -170,13 +170,13 @@ function(instance, localization) {
     _getDrawModeFromGeometry : function(geometry) {
         var olClass = geometry.CLASS_NAME;
         if('OpenLayers.Geometry.Point' === olClass) {
-        	return 'point';
+            return 'point';
         }
         else if('OpenLayers.Geometry.LineString' === olClass) {
-        	return 'line';
+            return 'line';
         }
         else if('OpenLayers.Geometry.Polygon' === olClass){
-        	return 'area';
+            return 'area';
         }
         return null;
     },

@@ -14,29 +14,29 @@ Oskari.clazz.define('Oskari.harava.bundle.haravaInfobox.request.HideInfoBoxReque
  *            id for popup/infobox (optional)
  */
 function(id) {
-	this._creator = null;
-	this._id = id;
+    this._creator = null;
+    this._id = id;
 }, {
     /** @static @property __name request name */
-	__name : 'HaravaInfoBox.HideInfoBoxRequest',
+    __name : 'HaravaInfoBox.HideInfoBoxRequest',
     /**
      * @method getName
      * @return {String} request name
      */
-	getName : function() {
-		return this.__name;
-	},
+    getName : function() {
+        return this.__name;
+    },
     /**
      * @method getId
      * @return {String} popup/infobox id
      */
-	getId : function() {
-		return this._id;
-	}
+    getId : function() {
+        return this._id;
+    }
 }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-	'protocol' : ['Oskari.mapframework.request.Request']
+    'protocol' : ['Oskari.mapframework.request.Request']
 });
