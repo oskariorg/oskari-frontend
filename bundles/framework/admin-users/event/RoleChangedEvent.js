@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.event.RoleChangedEve
         this._creator = null;
         this._role = role;
         if (!this.operations[operation]) {
-            throw "Unknown operation '" + operation + "'";
+            throw new Error("Unknown operation '" + operation + "'");
         }
         this._operation = operation;
     }, {

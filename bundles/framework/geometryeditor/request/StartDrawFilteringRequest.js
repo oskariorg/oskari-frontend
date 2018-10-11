@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.GeometryEditor.DrawFil
         } else {
         // start drawing new
             if (!this.modes[config.mode]) {
-                throw "Unknown draw filter mode '" + config.mode + "'";
+                throw new Error("Unknown draw filter mode '" + config.mode + "'");
             }
             this._mode = config.mode;
         }

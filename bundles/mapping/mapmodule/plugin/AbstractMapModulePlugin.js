@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         getMapModule: function () {
             // Throw a fit if mapmodule is not set, it'd probably break things.
             if (this._mapModule === null || this._mapModule === undefined) {
-                throw 'No mapmodule provided!';
+                throw new Error('No mapmodule provided!');
             }
             return this._mapModule;
         },

@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.r
         } else {
         // start drawing new
             if (!this.drawModes[config.drawMode]) {
-                throw "Unknown draw mode '" + config.drawMode + "'";
+                throw new Error("Unknown draw mode '" + config.drawMode + "'");
             }
             this._drawMode = config.drawMode;
         }

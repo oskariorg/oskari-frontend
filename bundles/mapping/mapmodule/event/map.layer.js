@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapLayerEvent',
         this._creator = null;
         this._layerId = layerId;
         if (!this.operations[operation]) {
-            throw "Unknown operation '" + operation + "'";
+            throw new Error("Unknown operation '" + operation + "'");
         }
         this._operation = operation;
     }, {

@@ -525,13 +525,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          */
         handleLayerOrderChanged: function (layer, fromPosition, toPosition) {
             if (!layer) {
-                throw 'handleLayerOrderChanged: No layer provided';
+                throw new Error('handleLayerOrderChanged: No layer provided');
             }
             if (isNaN(fromPosition)) {
-                throw 'handleLayerOrderChanged: fromPosition is Not a Number: ' + fromPosition;
+                throw new Error('handleLayerOrderChanged: fromPosition is Not a Number: ' + fromPosition);
             }
             if (isNaN(toPosition)) {
-                throw 'handleLayerOrderChanged: toPosition is Not a Number: ' + toPosition;
+                throw new Error('handleLayerOrderChanged: toPosition is Not a Number: ' + toPosition);
             }
 
             if (fromPosition === toPosition) {

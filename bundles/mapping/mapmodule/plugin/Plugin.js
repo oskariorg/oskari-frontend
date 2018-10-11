@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
  * Always extend this class, never use as is.
  */
     function () {
-        throw 'Oskari.mapframework.ui.module.common.mapmodule.Plugin should not be instantiated';
+        throw new Error('Oskari.mapframework.ui.module.common.mapmodule.Plugin should not be instantiated');
     }, {
     /**
      * @method getName
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * @throws always override this
      */
         getName: function () {
-            throw 'Implement your own';
+            throw new Error('Implement your own');
         },
 
         /**
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * @param {Oskari.mapframework.ui.module.common.MapModule} mapModule
      */
         setMapModule: function (mapModule) {
-            throw 'Implement your own';
+            throw new Error('Implement your own');
         },
 
         /**
@@ -37,14 +37,14 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      * Interface method for the module protocol
      */
         register: function () {
-            throw 'Implement your own';
+            throw new Error('Implement your own');
         },
         /**
      * @method unregister
      * Interface method for the module protocol
      */
         unregister: function () {
-            throw 'Implement your own';
+            throw new Error('Implement your own');
         },
 
         /**
@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      *          reference to application sandbox
      */
         startPlugin: function (sandbox) {
-            throw 'Implement your own';
+            throw new Error('Implement your own');
         },
         /**
      * @method stopPlugin
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.Plugin',
      *          reference to application sandbox
      */
         stopPlugin: function (sandbox) {
-            throw 'Implement your own';
+            throw new Error('Implement your own');
         },
 
         /**
