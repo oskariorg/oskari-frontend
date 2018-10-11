@@ -6,6 +6,8 @@ messes up location on Oskari.
 Note! Windows Phone pinch zoom requires fractionalZoom to be used and an additional css-class to be added
 to map div.
 */
+
+// eslint-disable-next-line no-global-assign
 OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 
     /**
