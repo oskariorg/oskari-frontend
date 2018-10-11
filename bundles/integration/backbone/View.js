@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.View', function (locale,
      *
      */
     'render': function () {
-        throw 'Abstract';
+        throw new Error('Abstract');
     },
 
     /**

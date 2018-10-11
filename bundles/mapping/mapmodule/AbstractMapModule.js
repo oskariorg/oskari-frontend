@@ -10,7 +10,7 @@
 Oskari.AbstractFunc = function () {
     var name = arguments[0];
     return function () {
-        throw 'AbstractFuncCalled: ' + name;
+        throw new Error('AbstractFuncCalled: ' + name);
     };
 };
 
@@ -758,7 +758,7 @@ Oskari.clazz.define(
                 return this._getExactResolutionImpl(scale);
             }
 
-            throw 'Not implemented _getExactResolutionImpl function.';
+            throw new Error('Not implemented _getExactResolutionImpl function.');
         },
 
         /**
@@ -2153,16 +2153,16 @@ Oskari.clazz.define(
             var curr;
 
             if (!element) {
-                throw 'Element is non-existent.';
+                throw new Error('Element is non-existent.');
             }
             if (!containerClasses) {
-                throw 'No container classes.';
+                throw new Error('No container classes.');
             }
             if (!content || !content.length) {
-                throw 'Container with classes "' + containerClasses + '" not found.';
+                throw new Error('Container with classes "' + containerClasses + '" not found.');
             }
             if (content.length > 1) {
-                throw 'Found more than one container with classes "' + containerClasses + '".';
+                throw new Error('Found more than one container with classes "' + containerClasses + '".');
             }
 
             // Add slot to element

@@ -135,7 +135,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var clazz = this._clazz;
             // Throw a fit if clazz is not set, it'd probably break things.
             if (clazz === null || clazz === undefined || clazz.length < 1) {
-                throw 'No clazz provided for ' + this.getName() + '!';
+                throw new Error('No clazz provided for ' + this.getName() + '!');
             }
             return clazz;
         },

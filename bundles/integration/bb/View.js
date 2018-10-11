@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.View', function (locale, insta
      *
      */
     'render': function () {
-        throw 'Abstract';
+        throw new Error('Abstract');
     },
 
     /**

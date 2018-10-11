@@ -6,6 +6,7 @@
  * See Oskari.mapframework.bundle.rpc.RemoteProcedureCall for bundle definition.
  *
  */
+/* eslint-disable no-throw-literal */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {

@@ -1394,7 +1394,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         checkForDuplicateId: function (id, name) {
             if (this._reservedLayerIds[id] === true) {
                 var foundLayer = this.findMapLayer(id);
-                throw "Trying to add map layer with id '" + id + ' (' + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
+                throw new Error("Trying to add map layer with id '" + id + ' (' + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'");
             }
         },
         /**
