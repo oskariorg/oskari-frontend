@@ -70,13 +70,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                 me.element.html(me.loc.statsgrid.noValues);
                 return;
             }
+            var classificationOpts = me.service.getStateService().getClassificationOpts(me.getIndicator().hash);
+            var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
+            var formatter = Oskari.getNumberFormatter(fractionDigits);
+            var chartOpts = {
+                colors: me.getColorScale(),
+                valueRenderer: function (val) {
+                    if (typeof val !== 'number') {
+                        return null;
+                    }
+                    return formatter.format(val);
+                }
+            };
+
             if (!me._chartElement) {
-                me._chartElement = me.createBarCharts(data);
+                me._chartElement = me.createBarCharts(data, chartOpts);
                 el.html(me._chartElement);
             } else {
-                me.getChartInstance().redraw(data, {
-                    colors: me.getColorScale()
-                });
+                me.getChartInstance().redraw(data, chartOpts);
             }
 
             var labels = me.getChartHeaderElement();
@@ -107,17 +118,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * @method createBarCharts
      * Creates the barchart component if chart is not initialized
      */
-    createBarCharts: function (data) {
-        var me = this;
+    createBarCharts: function (data, chartOpts) {
         if (data === undefined || data.length === 0) {
             Oskari.log('statsgrid.DiagramVisualizer').debug('no indicator data');
             return null;
         }
 
         if (!this.getChartInstance().chartIsInitialized()) {
-            var barchart = this.getChartInstance().createBarChart(data, {
-                colors: me.getColorScale()
-            });
+            var barchart = this.getChartInstance().createBarChart(data, chartOpts);
             var el = jQuery(barchart);
             el.css({
                 'width': '100%'
