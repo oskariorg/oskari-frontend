@@ -70,13 +70,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                 me.element.html(me.loc.statsgrid.noValues);
                 return;
             }
+            var classificationOpts = me.service.getStateService().getClassificationOpts(me.getIndicator().hash);
+            var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
+            var formatter = Oskari.getNumberFormatter(fractionDigits);
             var chartOpts = {
                 colors: me.getColorScale(),
                 valueRenderer: function (val) {
                     if (typeof val !== 'number') {
                         return null;
                     }
-                    return val.toFixed(4);
+                    return formatter.format(val);
                 }
             };
 
