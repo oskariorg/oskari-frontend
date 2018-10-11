@@ -200,6 +200,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         if (options.width) {
             this.containerWidth = options.width;
         }
+        this.valueRenderer = options.valueRenderer;
     },
     dataHasNegativeValues: function () {
         var dataset = this.getDatasetMinMax();
@@ -250,7 +251,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element
      * @method createBarChart
      * @param [Array] data
-     * @param { Object } options if options color is passed it needs to be an array for d3 to apply it
+     * @param { Object } options keys: colors -> color scale, valueRenderer -> function for rendering bar values
      */
     createBarChart: function (data, options) {
         if (data != undefined && this.svg === null) {
@@ -325,6 +326,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
                 return 'translate(0,' + (me.y(d.name) + me.y.bandwidth() / 2) + ')';
             });
 
+        function barWidth (d) {
+            return d.value ? Math.abs(me.x(d.value) - me.x(0)) : 0;
+        };
+
         // append rects
         bars.append('rect')
             .attr('class', 'bar')
@@ -333,22 +338,34 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             .attr('y', -8) // 7 is half of 15 height (pixel aligned)
             .attr('x', function (d) { return d.value ? me.x(Math.min(0, d.value)) : 0; })
             .attr('height', 17)
-            .attr('width', function (d) {
-                return d.value ? Math.abs(me.x(d.value) - me.x(0)) : 0;
-            });
+            .attr('width', barWidth);
         // append text
-        bars.each(function (d) {
-            if (typeof d.value === 'number') {
+        bars.each(function (d, i) {
+            var isNumber = typeof d.value === 'number';
+            if (!me.valueRenderer && isNumber) {
                 return;
+            }
+            var xLocation = isNumber ? me.x(d.value) : 0;
+            var width = barWidth(d);
+            var rendered = me.valueRenderer ? me.valueRenderer(d.value) : null;
+            var renderedLength = typeof rendered === 'string' ? rendered.length * 8 : 0; // 8px per char (generous)
+            var fitsInBar = renderedLength < width - 10; // padding of 5px + 5px
+            var color;
+            if (fitsInBar) {
+                color = Oskari.util.isDarkColor(me.colorScale(i)) ? '#fff' : '#000';
+            } else {
+                color = '#333';
             }
             d3.select(this)
                 .append('text')
-                .attr('x', me.x(0) + 10)
+                .attr('x', xLocation)
+                .attr('text-anchor', fitsInBar ? 'end' : 'start')
+                .attr('dx', fitsInBar ? '-5px' : '5px')
                 .attr('y', 0)
-                .attr('dy', '0.32em')
+                .attr('dy', isNumber ? '0.425em' : '0.32em')
                 .style('font-size', '11px')
-                .attr('fill', '#999')
-                .text(me.noValStr);
+                .attr('fill', rendered !== null ? color : '#999')
+                .text(rendered !== null ? rendered : me.noValStr);
         });
 
         this.chartType = 'barchart';
