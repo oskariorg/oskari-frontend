@@ -95,13 +95,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.AdminLayerRightsB
 
             me.localization = Oskari.getLocalization(me.getName());
 
-            // TODO ajaxUrl can only have the baseUrl as we have multiple actionroutes
-            if (conf && conf.url) {
-                ajaxUrl = this.conf.url;
-            } else {
-                ajaxUrl = Oskari.urls.getRoute('GetAllRoles');
-            }
-
             sandbox.register(me);
             for (var p in me.eventHandlers) {
                 sandbox.registerForEventByName(me, p);
