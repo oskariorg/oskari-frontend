@@ -1,6 +1,8 @@
 /**
 Wraps pinchDone to hook a call to mapmodule notifyMoveEnd().
 */
+
+// eslint-disable-next-line no-global-assign
 OskariPinchZoom = OpenLayers.Class(OpenLayers.Control.PinchZoom, {
 
     /**
