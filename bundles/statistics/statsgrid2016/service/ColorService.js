@@ -97,53 +97,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         getColorset: function (count, type, name) {
             type = type || this.limits.defaultType;
             name = name || this.limits.defaultName;
-            var log = Oskari.log('StatsGrid.ColorService');
+
             // 2 colors is the first set and index starts at 0 -> -2
             var arrayIndex = count - 2;
 
-            var getArray = function (item) {
-                if (arrayIndex < 0 || arrayIndex >= item.colors.length) {
-                    throw new Error('Invalid number of colors requester for colorset!');
-                }
-                return item.colors[arrayIndex].split(',');
-            };
-            var value;
-            var typeMatch;
-            var nameMatch;
-            this.colorsets.forEach(function (item) {
-                if (item.name === name && item.type === type && arrayIndex < item.colors.length) {
-                    value = item;
-                }
-                if (!typeMatch && item.type === type && arrayIndex < item.colors.length) {
-                    typeMatch = item;
-                }
-                if (!nameMatch && item.name === name && arrayIndex < item.colors.length) {
-                    nameMatch = item;
-                }
+            var countTypeMatch = this.colorsets.filter(function (item) {
+                return arrayIndex < item.colors.length && item.type === type;
             });
-            var result;
-            if (value) {
-                result = getArray(value);
-                log.debug('Requested set found, requested colors found: ' + !!result);
-                // found requested item, check if it has the colorset for requested count
-                return result;
+            var item = countTypeMatch.find(function (item) {
+                return item.name === name;
+            });
+
+            if (!item) {
+                item = countTypeMatch[0];
             }
-            // get first to match type?
-            log.debug('Requested set not found, using type matching');
-            if (typeMatch) {
-                result = getArray(typeMatch);
-                log.debug('Type matched set found, requested colors found: ' + !!result);
-                // found requested item, check if it has the colorset for requested count
-                return result;
+
+            if (!item) {
+                throw new Error('No matching colorset found!');
             }
-            log.debug('Requested set not found, using name matching');
-            if (nameMatch) {
-                result = getArray(nameMatch);
-                log.debug('Name matched set found, requested colors found: ' + !!result);
-                // found requested item, check if it has the colorset for requested count
-                return result;
-            }
-            throw new Error('No matching colorset found!');
+
+            return item.colors[arrayIndex].split(',');
         },
         getAvailableTypes: function () {
             return this.limits.type.slice(0);
