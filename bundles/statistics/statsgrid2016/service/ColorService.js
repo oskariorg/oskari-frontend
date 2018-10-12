@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         },
         /**
          * Tries to return an array of colors where length equals count parameter.
-         * If such set is not available, returns null if array with requested count is not available
+         * If such set is not available, throws Error
          * @param  {Number} count number of colors requested
          * @param  {String} type  optional type, supports 'div', 'seq' or 'qual', defaults to 'div'
          * @param  {String} name  optional name, defaults to 'BrBG'
@@ -98,27 +98,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
             type = type || this.limits.defaultType;
             name = name || this.limits.defaultName;
             var log = Oskari.log('StatsGrid.ColorService');
+            // 2 colors is the first set and index starts at 0 -> -2
+            var arrayIndex = count - 2;
 
             var getArray = function (item) {
-                // 2 colors is the first set and index starts at 0 -> -2
-                var index = count - 2;
-                if (index < 0 || index >= item.colors.length) {
-                    // might want to throw an exception here
-                    return null;
+                if (arrayIndex < 0 || arrayIndex >= item.colors.length) {
+                    throw new Error('Invalid number of colors requester for colorset!');
                 }
-                return item.colors[index].split(',');
+                return item.colors[arrayIndex].split(',');
             };
             var value;
             var typeMatch;
             var nameMatch;
             this.colorsets.forEach(function (item) {
-                if (item.name === name && item.type === type) {
+                if (item.name === name && item.type === type && arrayIndex < item.colors.length) {
                     value = item;
                 }
-                if (!typeMatch && item.type === type) {
+                if (!typeMatch && item.type === type && arrayIndex < item.colors.length) {
                     typeMatch = item;
                 }
-                if (!nameMatch && item.name === name) {
+                if (!nameMatch && item.name === name && arrayIndex < item.colors.length) {
                     nameMatch = item;
                 }
             });
@@ -130,23 +129,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 return result;
             }
             // get first to match type?
-            log.warn('Requested set not found, using type matching');
+            log.debug('Requested set not found, using type matching');
             if (typeMatch) {
                 result = getArray(typeMatch);
                 log.debug('Type matched set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
                 return result;
             }
-            log.warn('Requested set not found, using name matching');
+            log.debug('Requested set not found, using name matching');
             if (nameMatch) {
                 result = getArray(nameMatch);
                 log.debug('Name matched set found, requested colors found: ' + !!result);
                 // found requested item, check if it has the colorset for requested count
                 return result;
             }
-            // no matches, just use the first one
-            result = getArray(this.colorsets[0]);
-            return result;
+            throw new Error('No matching colorset found!');
         },
         getAvailableTypes: function () {
             return this.limits.type.slice(0);
@@ -186,33 +183,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * Options to show in classification UI for selected type and count
          * @param  {String} type  Colorset type. Defaults to this.limits.defaultType
          * @param  {Number} count amount of colors (throws an error if out of range)
-         * @return {Object[]} Returns an array of objects like { name : "nameOfSet", value : [.. array of hex colors...]}
+         * @return {Object[]} Returns an array of objects like { id : "nameOfSet", value : [.. array of hex colors...]}
          */
         getOptionsForType: function (type, count, reverse) {
-            var me = this;
-            var colors = [];
             type = type || this.limits.defaultType;
             var range = this.getRange(type);
             if (typeof count !== 'number' || range.min > count || range.max < count) {
                 throw new Error('Invalid color count provided: ' + count +
                     '. Should be between ' + range.min + '-' + range.max + ' for type ' + type);
             }
+            // 2 colors is the first set and index starts at 0 -> -2
+            var arrayIndex = count - 2;
 
-            this.colorsets.forEach(function (set) {
-                if (set.type !== type) {
-                    return;
-                }
-                var colorset = me.getColorset(count, type, set.name);
-                colors.push({
-                    id: set.name,
-                    value: colorset
+            return this.colorsets
+                .filter(function (item) {
+                    return item.type === type && arrayIndex < item.colors.length;
+                })
+                .map(function (item) {
+                    var colorset = item.colors[arrayIndex].split(',');
+                    if (reverse) {
+                        colorset.reverse();
+                    }
+                    return {
+                        id: item.name,
+                        value: colorset
+                    };
                 });
-                if (reverse) {
-                    colorset.reverse();
-                }
-            });
-
-            return colors;
         },
 
         colorsets: [{

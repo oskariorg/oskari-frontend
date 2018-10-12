@@ -306,6 +306,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
 
+        this._validateSelections(values);
+
         if (values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
@@ -314,6 +316,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
 
         return values;
+    },
+
+    /**
+     * @method  @private _validateSelections fix illegal value combinations
+     * @return {Object} values selected values object
+     */
+    _validateSelections: function (values) {
+        var range = this.service.getColorService().getRange(values.type, values.mapStyle);
+        if (values.count > range.max) {
+            values.count = range.max;
+        }
     },
 
     /**
