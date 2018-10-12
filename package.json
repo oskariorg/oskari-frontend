@@ -11,7 +11,8 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --hot",
     "paikkis": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi",
-    "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi"
+    "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi",
+    "sprite": "node webpack/sprite.js"
   },
   "dependencies": {
     "@babel/polyfill": "^7.0.0",
@@ -43,7 +44,10 @@
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
     "eslint-plugin-standard": "^3.0.1",
-    "merge": "^1.2.0"
+    "merge": "^1.2.0",
+    "fs-extra": "^0.26.7",
+    "lodash": "^4.12.0",
+    "gm": "^1.21.1"
   },
   "private": true
 }
