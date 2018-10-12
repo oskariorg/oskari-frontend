@@ -306,6 +306,44 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         return params;
     }
+
+    /**
+     * Creates style based on JSON
+     * @return {Cesium.Cesium3DTileStyle} style Cesium specific!
+     */
+    get3DStyle (styleDef, opacity) {
+        if (!styleDef) {
+            return;
+        }
+        var style = jQuery.extend(true, {}, styleDef);
+        var cesiumStyle = new Cesium.Cesium3DTileStyle();
+        // Set light brown default color;
+        var color = '#ffd2a6';
+        if (Oskari.util.keyExists(style, 'fill.color')) {
+            color = style.fill.color;
+            if (style.effect) {
+                switch (style.effect) {
+                case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
+                case 'lighten' : color = Oskari.util.alterBrightness(color, 50); break;
+                }
+            }
+            if (color.indexOf('rgb(') > -1) {
+                // else check at if color is rgb
+                color = '#' + Oskari.util.rgbToHex(color);
+            }
+        }
+
+        opacity = opacity === undefined ? 1 : opacity;
+        if (opacity > 1) {
+            opacity = opacity / 100.0;
+        }
+        cesiumStyle.color = `color('${color}', ${opacity})`;
+
+        if (Oskari.util.keyExists(style, 'image.sizePx')) {
+            cesiumStyle.pointSize = `${styleDef.image.sizePx}`;
+        }
+        return cesiumStyle;
+    }
 }
 
 Oskari.clazz.defineES(

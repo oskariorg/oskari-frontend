@@ -1061,8 +1061,21 @@ function (
             }
 
             try {
-                var optsJson = JSON.parse(form.find('.add-layer-input.layer-options').val().trim() || '{}');
-                data.options = JSON.stringify(optsJson);
+                const optionsElement = form.find('.add-layer-input.layer-options');
+                if (optionsElement.length !== 0) {
+                    var optsJson = JSON.parse(optionsElement.val().trim() || '{}');
+                    data.options = JSON.stringify(optsJson);
+                } else {
+                    const options = {};
+                    const stylesElement = form.find('.add-layer-input.layer-options-styles');
+                    if (stylesElement.length !== 0) {
+                        var stylesJson = JSON.parse(stylesElement.val().trim());
+                        if (stylesJson) {
+                            options.styles = stylesJson;
+                        }
+                    }
+                    data.options = JSON.stringify(options);
+                }
             } catch (error) {
                 // don't include "options" in data if malformed JSON
             }

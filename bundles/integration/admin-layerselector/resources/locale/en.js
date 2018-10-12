@@ -85,6 +85,8 @@ Oskari.registerLocalization(
             "editWfs": "Edit WFS",
             "options": "Options JSON",
             "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
+            "oskariStyles": "Styles",
+            "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "selectClass": "Select theme",
             "selectClassDesc": "Select a theme describing the map layer from the list.",
             "baseName": "Background Map Layer Name",

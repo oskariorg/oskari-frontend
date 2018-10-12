@@ -85,6 +85,8 @@ Oskari.registerLocalization(
             "editWfs": "Editera WFS",
             "options": "Options JSON",
             "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
+            "oskariStyles": "Stilar",
+            "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "selectClass": "Välj tema",
             "selectClassDesc": "Välj tema",
             "baseName": "Bakgrundsnivåns namn",
