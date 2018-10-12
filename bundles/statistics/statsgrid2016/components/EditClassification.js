@@ -320,7 +320,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
     /**
      * @method  @private _validateSelections fix illegal value combinations
-     * @return {Object} values selected values object
+     * @param {Object} values selected values object
      */
     _validateSelections: function (values) {
         var range = this.service.getColorService().getRange(values.type, values.mapStyle);
