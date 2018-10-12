@@ -25,6 +25,9 @@
                     "oskariui": {
                         "bundlePath": "../../../packages/framework/bundle/"
                     },
+                    "mapwfs2": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    },
                     "mapuserlayers": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
