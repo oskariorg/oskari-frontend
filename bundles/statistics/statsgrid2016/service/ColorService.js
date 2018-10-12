@@ -351,6 +351,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 '9e0142,d53e4f,f46d43,fdae61,fee08b,ffffbf,e6f598,abdda4,66c2a5,3288bd,5e4fa2'
             ]
         }, {
+            'name': 'TKDiv1',
+            'type': 'div',
+            'colors': [
+                '0073b0,a40084',
+                '0073b0,eeecf4,a40084',
+                '0073b0,b0c2dd,daa9ce,a40084',
+                '0073b0,92aed2,eeecf4,ce89bb,a40084',
+                '0073b0,7ea2cb,c9d2e6,e3c5dd,c775b0,a40084',
+                '0073b0,7099c7,b0c2dd,eeecf4,daa9ce,c167a8,a40084',
+                '0073b0,6693c3,9fb6d7,d4daea,e6d0e3,d497c3,bd5ca3,a40084',
+                '0073b0,5e90c1,92aed2,c1cce3,eeecf4,e0bbd7,ce89bb,bb559f,a40084',
+                '0073b0,588dbf,86a6ce,b0c2dd,d9deec,e8d5e7,daa9ce,ca7db5,b84f9c,a40084',
+                '0073b0,5289be,7ea2cb,a4b9d9,c9d2e6,eeecf4,e3c5dd,d59dc6,c775b0,b64a9a,a40084'
+            ]
+        }, {
             'name': 'Blues',
             'type': 'seq',
             'colors': [
@@ -585,6 +600,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 'ffffcc,ffeda0,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,bd0026,800026'
             ]
         }, {
+            'name': 'TKSeq1',
+            'type': 'seq',
+            'colors': [
+                'e5f1f7,0073b0',
+                'e5f1f7,8cb0d3,0073b0',
+                'e5f1f7,aac5df,6b9ac8,0073b0',
+                'e5f1f7,b9cfe5,8cb0d3,5a90c2,0073b0',
+                'e5f1f7,c2d6e9,9ebcdb,79a3cc,4f8bbe,0073b0',
+                'e5f1f7,c7dbeb,aac5df,8cb0d3,6b9ac8,4787bc,0073b0',
+                'e5f1f7,ccdeed,b3cbe3,99b9d8,7ea6ce,6295c4,4084ba,0073b0',
+                'e5f1f7,cfe0ee,b9cfe5,a3c0dc,8cb0d3,74a0ca,5a90c2,3c81b9,0073b0'
+            ]
+        }, {
+            'name': 'TKSeq2',
+            'type': 'seq',
+            'colors': [
+                'f6e7f2,a40084',
+                'f6e7f2,d185ba,a40084',
+                'f6e7f2,dea6cd,c364a8,a40084',
+                'f6e7f2,e5b7d6,d185ba,bc529f,a40084',
+                'f6e7f2,e8c1dc,d999c5,c972af,b74799,a40084',
+                'f6e7f2,ebc7df,dea6cd,d185ba,c364a8,b43f96,a40084',
+                'f6e7f2,eccbe2,e2b0d2,d793c2,cb77b2,bf5aa3,b23a93,a40084',
+                'f6e7f2,eecfe4,e5b7d6,db9fc8,d185ba,c76cac,bc529f,b03691,a40084'
+            ]
+        }, {
             'name': 'Accent',
             'type': 'qual',
             'colors': [
@@ -689,6 +730,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 '8dd3c7,ffffb3,bebada,fb8072,80b1d3,fdb462,b3de69,fccde5,d9d9d9,bc80bd',
                 '8dd3c7,ffffb3,bebada,fb8072,80b1d3,fdb462,b3de69,fccde5,d9d9d9,bc80bd,ccebc5',
                 '8dd3c7,ffffb3,bebada,fb8072,80b1d3,fdb462,b3de69,fccde5,d9d9d9,bc80bd,ccebc5,ffed6f'
+            ]
+        }, {
+            'name': 'TKQual1',
+            'type': 'qual',
+            'colors': [
+                '0073b0,c0d730',
+                '0073b0,c0d730,a40084',
+                '0073b0,c0d730,a40084,33c1ba',
+                '0073b0,c0d730,a40084,33c1ba,f8941e',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666,8e58b7',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666,8e58b7,fecb00',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666,8e58b7,fecb00,63b1e5'
             ]
         }]
     }, {
