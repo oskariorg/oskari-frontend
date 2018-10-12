@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
 
             flyout.append(container);
             // We're only supporting ROLE ATM, USER support might be added later
-            me.getExternalIdsAjaxRequest('ROLE', 0);
+            me.getExternalIdsAjaxRequest('ROLE');
 
             /* progress */
             this.progressSpinner.insertTo(container);
@@ -505,7 +505,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} externalType
          * @param {String} selectedId
          */
-        getExternalIdsAjaxRequest: function (externalType, selectedId) {
+        getExternalIdsAjaxRequest: function (externalType) {
             var me = this;
 
             // ajaxRequestGoing = true;
@@ -515,7 +515,7 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 timestamp: new Date().getTime(),
                 getExternalIds: externalType
             }, function (result) {
-                me.makeExternalIdsSelect(result, externalType, selectedId);
+                me.makeExternalIdsSelect(result);
             });
         },
 
@@ -524,28 +524,20 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          * @param {String} externalType
          * @param {String} selectedId
          */
-        makeExternalIdsSelect: function (result, externalType, selectedId) {
+        makeExternalIdsSelect: function (result) {
             var externalIdSelect = jQuery(this.container).find('select.admin-layerrights-role');
             var rightsLoc = this.instance._localization.rights;
 
             externalIdSelect.html('');
-            if (externalType === '0') {
-                return;
-            }
             var optionEl = document.createElement('option');
             optionEl.value = '0';
             optionEl.textContent = '-- ' + rightsLoc.selectValue + ' --';
-            if ('' + selectedId === '0') {
-                optionEl.setAttribute('selected', 'selected');
-            }
+            optionEl.setAttribute('selected', 'selected');
             externalIdSelect.append(optionEl);
             for (var d = 0; d < result.external.length; d += 1) {
                 optionEl = document.createElement('option');
                 optionEl.value = result.external[d].id;
                 optionEl.textContent = result.external[d].name;
-                if (result.external[d].id === selectedId) {
-                    optionEl.setAttribute('selected', 'selected');
-                }
                 externalIdSelect.append(optionEl);
             }
         }
