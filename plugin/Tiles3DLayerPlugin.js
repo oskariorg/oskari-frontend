@@ -1,3 +1,5 @@
+import Tiles3DModelBuilder from './Tiles3DModelBuilder';
+
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
@@ -27,36 +29,15 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             return layer.isLayerOfType(this.layertype);
         },
         /**
-         * @private @method _initImpl
-         * Interface method for the module protocol.
-         */
-        _initImpl: function () {
-            // register domain builder
-            var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-            if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    'tiles3dlayer',
-                    'Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer'
-                );
-                this._extendCesium3DTileset();
-            }
-        },
-        /**
          * @private @method _extendCesium3DTileset
          * Extend Cesium3DTileset with ol layer functions.
          */
         _extendCesium3DTileset: function () {
-            var proto = Cesium.Cesium3DTileset.prototype;
-            // Set light brown default color;
-            proto._color = '#ffd2a6';
+            var styleFactory = this.getMapModule().get3DStyle;
 
-            proto.setInitialStyle = function (layer) {
-                var opacity = layer.getOpacity();
-                if (opacity > 1) {
-                    opacity = opacity / 100.0;
-                }
-                this.setOpacity(opacity);
-            };
+            var proto = Cesium.Cesium3DTileset.prototype;
+            proto._oskariStyle = {};
+
             proto.setVisible = function (visible) {
                 this.show = visible === true;
             };
@@ -65,16 +46,8 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             };
             proto.setOpacity = function (opacity) {
                 if (!isNaN(opacity)) {
-                    var colorDef = 'color("' + this._color + '", ' + opacity + ')';
-                    this._opacity = opacity;
-                    if (this.style) {
-                        this.style.color = colorDef;
-                        this.makeStyleDirty();
-                    } else {
-                        this.style = new Cesium.Cesium3DTileStyle({
-                            color: colorDef
-                        });
-                    }
+                    this._opacity = opacity > 1 ? opacity / 100.0 : opacity;
+                    this.style = styleFactory(this._oskariStyle, this._opacity);
                 }
             };
             proto.getOpacity = function () {
@@ -82,6 +55,45 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                     return 1;
                 }
                 return this._opacity;
+            };
+            proto.setOskariStyle = function (style) {
+                this._oskariStyle = style;
+                this.style = styleFactory(this._oskariStyle, this._opacity);
+            };
+            proto.getOskariStyle = function () {
+                return this._oskariStyle;
+            };
+        },
+        /**
+         * @private @method _initImpl
+         * Interface method for the module protocol.
+         */
+        _initImpl: function () {
+            this._extendCesium3DTileset();
+            // register domain builder
+            var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            if (mapLayerService) {
+                mapLayerService.registerLayerModel(
+                    this.layertype + 'layer',
+                    'Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer'
+                );
+                mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
+            }
+        },
+        /**
+         * @private @method _createPluginEventHandlers
+         * Called by superclass to create event handlers
+         */
+        _createPluginEventHandlers: function () {
+            return {
+                AfterChangeMapLayerStyleEvent (event) {
+                    const oskariLayer = event.getMapLayer();
+                    const tilesets = this.getOLMapLayers(oskariLayer);
+
+                    if (tilesets && tilesets.length > 0) {
+                        tilesets[0].setOskariStyle(oskariLayer.getCurrentStyleDef());
+                    }
+                }
             };
         },
         /**
@@ -100,7 +112,6 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 dynamicScreenSpaceErrorFactor: 4.0,
                 dynamicScreenSpaceErrorHeightFalloff: 0.25
             });
-            tileset.setInitialStyle(layer);
 
             this.getMapModule().addLayer(tileset);
             layer.setQueryable(false);
