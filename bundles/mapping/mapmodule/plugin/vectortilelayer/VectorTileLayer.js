@@ -31,9 +31,12 @@ export default class VectorTileLayer extends AbstractLayer {
     }
     /**
      * @method getCurrentStyleDef
-     * @return {Object}
+     * @return {Object/null}
      */
     getCurrentStyleDef () {
+        if (!this._currentStyle) {
+            return null;
+        }
         return this.getStyleDef(this._currentStyle.getName());
     }
 }
