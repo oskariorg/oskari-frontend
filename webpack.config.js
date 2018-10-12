@@ -4,7 +4,7 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LocalizationPlugin = require('./webpack/localizationPlugin');
 const parseParams = require('./webpack/parseParams.js');
-const { lstatSync, readdirSync } = require('fs');
+const { lstatSync, readdirSync, existsSync } = require('fs');
 
 const proxyPort = 8081;
 
@@ -26,6 +26,12 @@ module.exports = (env, argv) => {
     ];
 
     appsetupPaths.forEach(appDir => {
+        const minifierFile = path.resolve(appDir + path.sep + 'minifierAppSetup.json');
+        if (!existsSync(minifierFile)) {
+            // skip
+            console.log('No minifierAppSetup.json file in ' + appDir + '. Skipping!');
+            return;
+        }
         const dirParts = appDir.split(path.sep);
         const appName = dirParts[dirParts.length - 1];
         const copyPlugin = new CopyWebpackPlugin(
@@ -39,7 +45,7 @@ module.exports = (env, argv) => {
         entries[appName] = [
             path.resolve(__dirname, './webpack/polyfill.js'),
             path.resolve(__dirname, './webpack/oskari-core.js'),
-            path.resolve(appDir + path.sep + 'minifierAppSetup.json')
+            minifierFile
         ];
         plugins.push(copyPlugin);
         plugins.push(new LocalizationPlugin(appName));
