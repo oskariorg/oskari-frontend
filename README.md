@@ -4,7 +4,7 @@
 
 Documentation available at [http://www.oskari.org].
 
-This repository holds the front-end code for Oskari. Developing the front-end requires an oskari-server to be running that responds to the XHR requests made by the front-end. You can download a pre-compiled copy of the server from  [http://www.oskari.org/download] or checkout the source code in the oskari-server repository. Any customized application should use the oskari-server-extension template as base for customized server. The front-end code is build using Webpack.
+This repository holds the front-end code for Oskari. Developing the front-end requires an oskari-server to be running that responds to the XHR requests made by the front-end. You can download a pre-compiled copy of the server from  [http://www.oskari.org/download] or checkout the source code in the oskari-server repository. Any customized application should use the oskari-server-extension template as base for customized server. The front-end code is built using Webpack.
 
 ## Preparations
 
@@ -37,9 +37,9 @@ The number before the colon sets the directory name, here producing files under 
 
 Note: The version number given for the build command needs to match the client version (`oskari.client.version`) in Oskari-server `oskari-ext.properties`.
 
-### Customized application icons
+### Customized application icons (optional)
 
-For customizing icons include a folder named `icons` under the application folder (for example in sample app `applications/sample/servlet/icons`) with files named similarly (and with same pixel size for maximum compatibility) as in `oskari-frontend/resources/icons`. You can do a partial customization by for example just having icon-arrow-down.png in the application icons folder and the build will create an icon-set with default icons only overriding the icon-arrow-down.png.
+It's possible to override any icon in `oskari-frontend/resources/icons` with app-specific icons. To add icons for your application or to override icons: include a folder named `icons` under the application folder (for example in sample app `applications/sample/servlet/icons`). To replace an icon provide a png-file with the same name as in `oskari-frontend/resources/icons`. For maximum compatibility the pixel size for overridden icon should match the original. Any png-files in the app-specific icons folder will be included in the sprite that is generated so this can be used to add icons for app-specific bundles.
 
 After running the production build it's possible to create a customized set of icons for the application by running a command `npm run sprite -- [version]:[application path]` like
 
