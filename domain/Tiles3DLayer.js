@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer',
          * @return {Object}
          */
         getStyleDef: function (styleName) {
-            if (this._options.styles) {
+            if (this._options && this._options.styles) {
                 return this._options.styles[styleName];
             }
         },

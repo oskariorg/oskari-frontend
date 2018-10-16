@@ -1,5 +1,4 @@
 import Tiles3DModelBuilder from './Tiles3DModelBuilder';
-import * as olProj from 'ol/proj';
 
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
