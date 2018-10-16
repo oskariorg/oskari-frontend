@@ -257,7 +257,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         if (data != undefined && this.svg === null) {
             this.handleData(data);
         }
-        var opts = options || this._options;
+        if (options) {
+            this._options = options;
+        }
+
+        var opts = this._options;
 
         if (Object.keys(opts).length !== 0) {
             this.parseOptions(opts);
@@ -380,7 +384,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             this.handleData(data);
         }
 
-        var opts = options || this._options;
+        if (options) {
+            this._options = options;
+        }
+
+        var opts = this._options;
         if (Object.keys(opts).length !== 0) {
             this.parseOptions(opts);
         }
@@ -432,14 +440,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             this.handleData(data);
         }
 
-        var opts = options || {};
-        opts.width = this.defaultWidth;
+        if (options) {
+            this._options = options;
+        }
+        this._options.width = this.defaultWidth;
         // Clear previous graphs
         this.clear();
         if (this.chartType === 'barchart') {
-            chart = this.createBarChart(this.data, opts);
+            chart = this.createBarChart(this.data);
         } else if (this.chartType === 'linechart') {
-            chart = this.createLineChart(this.data, opts);
+            chart = this.createLineChart(this.data);
         }
 
         return chart;
