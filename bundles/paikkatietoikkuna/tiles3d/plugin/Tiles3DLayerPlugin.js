@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
      * @static
      */
     function () {
+        this.tilesetPropsById = {};
     }, {
         __name: 'Tiles3DLayerPlugin',
         _clazz: 'Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
@@ -29,47 +30,22 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             return layer.isLayerOfType(this.layertype);
         },
         /**
-         * @private @method _extendCesium3DTileset
-         * Extend Cesium3DTileset with ol layer functions.
+         * Applies currently selected Oskari style to tileset.
+         * 
+         * @method  _applyOskariStyle
+         * @param  {Cesium.Cesium3DTileset}  tileset
          */
-        _extendCesium3DTileset: function () {
-            var styleFactory = this.getMapModule().get3DStyle;
-
-            var proto = Cesium.Cesium3DTileset.prototype;
-            proto._oskariStyle = {};
-
-            proto.setVisible = function (visible) {
-                this.show = visible === true;
-            };
-            proto.isVisible = proto.getVisible = function () {
-                return this.show === true;
-            };
-            proto.setOpacity = function (opacity) {
-                if (!isNaN(opacity)) {
-                    this._opacity = opacity > 1 ? opacity / 100.0 : opacity;
-                    this.style = styleFactory(this._oskariStyle, this._opacity);
-                }
-            };
-            proto.getOpacity = function () {
-                if (this._opacity === null || this._opacity === undefined) {
-                    return 1;
-                }
-                return this._opacity;
-            };
-            proto.setOskariStyle = function (style) {
-                this._oskariStyle = style;
-                this.style = styleFactory(this._oskariStyle, this._opacity);
-            };
-            proto.getOskariStyle = function () {
-                return this._oskariStyle;
-            };
+        _applyOskariStyle: function (tileset, layer) {
+            if (!tileset || !layer) {
+                return;
+            }
+            tileset.style = this.getMapModule().get3DStyle(layer.getCurrentStyleDef(), layer.getOpacity());
         },
         /**
          * @private @method _initImpl
          * Interface method for the module protocol.
          */
         _initImpl: function () {
-            this._extendCesium3DTileset();
             // register domain builder
             var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
@@ -81,20 +57,34 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             }
         },
         /**
-         * @private @method _createPluginEventHandlers
-         * Called by superclass to create event handlers
+         * @method _afterChangeMapLayerOpacityEvent
+         * Handle AfterChangeMapLayerOpacityEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
+         *            event
          */
-        _createPluginEventHandlers: function () {
-            return {
-                AfterChangeMapLayerStyleEvent (event) {
-                    const oskariLayer = event.getMapLayer();
-                    const tilesets = this.getOLMapLayers(oskariLayer);
+        _afterChangeMapLayerOpacityEvent: function (event) {
+            const layer = event.getMapLayer();
+            const tilesets = this.getOLMapLayers(layer);
 
-                    if (tilesets && tilesets.length > 0) {
-                        tilesets[0].setOskariStyle(oskariLayer.getCurrentStyleDef());
-                    }
-                }
-            };
+            if (!tilesets || tilesets.length === 0) {
+                return;
+            }
+            tilesets.forEach(tileset => this._applyOskariStyle(tileset, layer));
+        },
+        /**
+         * Handle AfterChangeMapLayerStyleEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent} event
+         */
+        _afterChangeMapLayerStyleEvent: function (event) {
+            const layer = event.getMapLayer();
+            const tilesets = this.getOLMapLayers(layer);
+
+            if (!tilesets || tilesets.length === 0) {
+                return;
+            }
+            tilesets.forEach(tileset => this._applyOskariStyle(tileset, layer));
         },
         /**
          * Adds a single 3d tileset to this map
