@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
      * @static
      */
     function () {
-        this.tilesetPropsById = {};
+
     }, {
         __name: 'Tiles3DLayerPlugin',
         _clazz: 'Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
