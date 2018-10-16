@@ -4,10 +4,11 @@ import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import OLCesium from 'ol-cesium';
-import MapModuleOl from '../../mapping/mapmodule/MapModule.ol';
+import MapModuleOl from '../../mapping/mapmodule/MapModuleClass.ol';
 import 'ol-cesium/css/olcs.css';
 
 const TERRAIN_SERVICE_URL = 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/';
+const TILESET_DEFAULT_COLOR = '#ffd2a6';
 
 class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
@@ -318,15 +319,9 @@ class MapModuleOlCesium extends MapModuleOl {
         var style = jQuery.extend(true, {}, styleDef);
         var cesiumStyle = new Cesium.Cesium3DTileStyle();
         // Set light brown default color;
-        var color = '#ffd2a6';
+        var color = TILESET_DEFAULT_COLOR;
         if (Oskari.util.keyExists(style, 'fill.color')) {
             color = style.fill.color;
-            if (style.effect) {
-                switch (style.effect) {
-                case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
-                case 'lighten' : color = Oskari.util.alterBrightness(color, 50); break;
-                }
-            }
             if (color.indexOf('rgb(') > -1) {
                 // else check at if color is rgb
                 color = '#' + Oskari.util.rgbToHex(color);

@@ -1,7 +1,7 @@
 
-const LayersPluginOl3Impl = Oskari.clazz.get('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin');
+import LayersPlugin from '../../../mapping/mapmodule/plugin/layers/LayersPluginClass.ol';
 
-class LayersPluginOlcsImpl extends LayersPluginOl3Impl {
+class LayersPluginOlcs extends LayersPlugin {
     /**
      * @method _isLayerImplVisible Tells if given layer is visible or not. 
      * @param {Cesium.Cesium3DTileset | olLayer} layer 
@@ -61,4 +61,12 @@ class LayersPluginOlcsImpl extends LayersPluginOl3Impl {
     }
 }
 
-Oskari.clazz.defineES('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin3D', LayersPluginOlcsImpl);
+Oskari.clazz.defineES('Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin',
+    LayersPluginOlcs,
+    {
+        'protocol': [
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
+        ]
+    }
+);
