@@ -1,4 +1,5 @@
 import Tiles3DModelBuilder from './Tiles3DModelBuilder';
+import * as olProj from 'ol/proj';
 
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
@@ -11,7 +12,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
      * @static
      */
     function () {
-
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
     }, {
         __name: 'Tiles3DLayerPlugin',
         _clazz: 'Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
@@ -55,6 +56,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 );
                 mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
             }
+            this._initTilesetClickHandler();
         },
         /**
          * @method _afterChangeMapLayerOpacityEvent
@@ -86,6 +88,33 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             }
             tilesets.forEach(tileset => this._applyOskariStyle(tileset, layer));
         },
+
+        /**
+         * Handle 3D tile feature clicks
+         * @private
+         */
+        _initTilesetClickHandler: function () {
+            const me = this;
+            const scene = me.getMapModule().getCesiumScene();
+            const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+            handler.setInputAction(movement => {
+                const feature = scene.pick(movement.position);
+                if (!(feature instanceof Cesium.Cesium3DTileFeature)) {
+                    return;
+                }
+                let tableContent = '';
+                feature.getPropertyNames().forEach(name => {
+                    tableContent += `<tr><td>${name}</td><td>${feature.getProperty(name)}</td></tr>`;
+                });
+                let content = [{html: `<table>${tableContent}</table>`}];
+                const location = me.getMapModule().getMouseLocation(movement.position);
+                // Request info box
+                const infoRequestBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest');
+                const title = me.loc('plugin.GetInfoPlugin.title');
+                this._sandbox.request(me, infoRequestBuilder('tilesetFeatureAttributes', title, content, location));
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        },
+
         /**
          * Adds a single 3d tileset to this map
          *
