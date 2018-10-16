@@ -40,6 +40,10 @@ module.exports = {
   ],
   // add your custom rules here
   "rules": {
+    "no-restricted-properties": ["error", 
+      {"property": "getRequestBuilder", "message": "Please use Oskari.requestBuilder() instead."},
+      {"property": "getEventBuilder", "message": "Please use Oskari.eventBuilder() instead."}
+    ],
     "indent": ["error", 4],
     // semicolons
     "semi": ["error", "always"],
