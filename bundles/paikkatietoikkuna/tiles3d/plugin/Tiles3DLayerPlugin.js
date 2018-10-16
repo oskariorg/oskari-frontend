@@ -106,6 +106,9 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 feature.getPropertyNames().forEach(name => {
                     tableContent += `<tr><td>${name}</td><td>${feature.getProperty(name)}</td></tr>`;
                 });
+                if (tableContent.length === 0) {
+                    return;
+                }
                 let content = [{html: `<table>${tableContent}</table>`}];
                 const location = me.getMapModule().getMouseLocation(movement.position);
                 // Request info box
