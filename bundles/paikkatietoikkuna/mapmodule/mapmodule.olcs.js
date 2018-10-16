@@ -339,6 +339,35 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         return cesiumStyle;
     }
+
+    /**
+     * To get Cesium scene object.
+     * @return {Cesium.Scene} scene
+     */
+    getCesiumScene () {
+        return this._map3d.getCesiumScene();
+    }
+
+    /**
+     * To get mouse location on map
+     * @param {Cesium.Cartesian2} position x,y on window
+     * @return lonlat in map projection
+     */
+    getMouseLocation (position) {
+        const ellipsoid = this.getCesiumScene().globe.ellipsoid;
+        const cartesian = this.getCesiumScene().camera.pickEllipsoid(position, ellipsoid);
+        if (!cartesian) {
+            return;
+        }
+        const cartographic = ellipsoid.cartesianToCartographic(cartesian);
+        let location = [
+            Cesium.Math.toDegrees(cartographic.longitude),
+            Cesium.Math.toDegrees(cartographic.latitude)
+        ];
+        location = olProj.transform(location, 'EPSG:4326', this.getProjection());
+        const lonlat = { lon: location[0], lat: location[1] };
+        return lonlat;
+    }
 }
 
 Oskari.clazz.defineES(
