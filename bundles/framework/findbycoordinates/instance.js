@@ -184,8 +184,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
         selectDefaultTool: function () {
             // ask toolbar to select default tool
             var sandbox = this.getSandbox(),
-                toolbarReqBuilder = sandbox
-                    .getRequestBuilder('Toolbar.SelectToolButtonRequest'),
+                toolbarReqBuilder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest'),
                 toolBarReq;
 
             if (toolbarReqBuilder) {

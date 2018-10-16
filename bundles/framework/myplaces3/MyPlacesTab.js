@@ -188,8 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
 
                     if (isSuccess) {
                         dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                        request = me.instance.sandbox
-                            .getRequestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
+                        request = Oskari.requestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
 
                         me.instance.sandbox.request(me.instance, request);
                     } else {

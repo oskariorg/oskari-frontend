@@ -381,7 +381,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 }
             });
             if (clickHits.length > 0) {
-                const clickEvent = me.getSandbox().getEventBuilder('FeatureEvent')().setOpClick();
+                const clickEvent = Oskari.eventBuilder('FeatureEvent')().setOpClick();
                 clickHits.forEach(obj => {
                     const { feature, layer } = obj;
                     const geojson = me._getGeojson(feature, layer);

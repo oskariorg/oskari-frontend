@@ -692,7 +692,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @param {Whatever} eventData the data we want to send with the event
      */
         _sendEvent: function (eventName, eventData) {
-            var eventBuilder = this.__sandbox.getEventBuilder(eventName),
+            var eventBuilder = Oskari.eventBuilder(eventName),
                 evt;
 
             if (eventBuilder) {

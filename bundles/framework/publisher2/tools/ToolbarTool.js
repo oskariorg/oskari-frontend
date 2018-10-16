@@ -442,7 +442,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
                     if (me.drawOptions.hasOwnProperty(toolName)) {
                         toolButton = me.drawButtons[toolName];
                         toolButton.toolbarid = toolOption.toolbarId;
-                        var request = me.__sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, groupName, toolButton.toolbarid);
+                        var request = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, groupName, toolButton.toolbarid);
                         me.__sandbox.request(me.__instance, request);
                     }
                 }
@@ -468,11 +468,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             var request;
 
             if (isToolChecked) {
-                request = me.__sandbox.getRequestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroupName, toolButton);
+                request = Oskari.requestBuilder('Toolbar.AddToolButtonRequest')(toolName, buttonGroupName, toolButton);
                 me.__sandbox.request(me.__instance, request);
                 me.drawOptions[toolName] = true;
             } else {
-                request = me.__sandbox.getRequestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroupName, toolButton.toolbarid);
+                request = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest')(toolName, buttonGroupName, toolButton.toolbarid);
                 me.__sandbox.request(me.__instance, request);
                 me.drawOptions[toolName] = false;
             }
@@ -530,7 +530,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             addLayerButton.setTitle(me.__loc.layers.add);
             addLayerButton.setHandler(function () {
                 // send OpenAddLayerDialogEvent
-                var request = me.__sandbox.getRequestBuilder('MyPlaces.OpenAddLayerDialogRequest')('.publisher-select-layer', 'right');
+                var request = Oskari.requestBuilder('MyPlaces.OpenAddLayerDialogRequest')('.publisher-select-layer', 'right');
                 me.__sandbox.request(me.__instance, request);
             });
             return addLayerButton;
@@ -547,7 +547,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             addSelectLayerButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             addSelectLayerButton.setTitle(this.__loc.layers.addselect);
             addSelectLayerButton.setHandler(function () {
-                var request = me.__sandbox.getRequestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer);
+                var request = Oskari.requestBuilder('AddMapLayerRequest')(me.publishedmyplaces2Config.layer);
                 me.__sandbox.request(me.__instance, request);
                 // this intentionally refers to the current DOM element
                 this.blur();
