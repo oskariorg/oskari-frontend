@@ -1,4 +1,4 @@
-import MapModuleOl from './MapModule.ol';
+import MapModuleOl from './MapModuleClass.ol';
 
 /**
  * @class Oskari.mapframework.ui.module.common.MapModule

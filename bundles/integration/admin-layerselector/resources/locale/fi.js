@@ -85,6 +85,8 @@ Oskari.registerLocalization(
             "editWfs": "Muokkaa WFS-tietoja",
             "options": "Options JSON",
             "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
+            "oskariStyles": "Tyylit",
+            "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "selectClass": "Valitse aihe",
             "selectClassDesc": "Valitse listalta karttatasoa kuvaava aihe.",
             "baseName": "Taustakarttatason nimi",

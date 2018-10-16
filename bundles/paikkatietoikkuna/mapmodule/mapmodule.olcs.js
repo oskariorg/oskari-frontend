@@ -4,10 +4,11 @@ import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import OLCesium from 'ol-cesium';
-import MapModuleOl from '../../mapping/mapmodule/MapModule.ol';
+import MapModuleOl from '../../mapping/mapmodule/MapModuleClass.ol';
 import 'ol-cesium/css/olcs.css';
 
 const TERRAIN_SERVICE_URL = 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/';
+const TILESET_DEFAULT_COLOR = '#ffd2a6';
 
 class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
@@ -305,6 +306,67 @@ class MapModuleOlCesium extends MapModuleOl {
             }
         }
         return params;
+    }
+
+    /**
+     * Creates style based on JSON
+     * @return {Cesium.Cesium3DTileStyle} style Cesium specific!
+     */
+    get3DStyle (styleDef, opacity) {
+        if (!styleDef) {
+            return;
+        }
+        var style = jQuery.extend(true, {}, styleDef);
+        var cesiumStyle = new Cesium.Cesium3DTileStyle();
+        // Set light brown default color;
+        var color = TILESET_DEFAULT_COLOR;
+        if (Oskari.util.keyExists(style, 'fill.color')) {
+            color = style.fill.color;
+            if (color.indexOf('rgb(') > -1) {
+                // else check at if color is rgb
+                color = '#' + Oskari.util.rgbToHex(color);
+            }
+        }
+
+        opacity = opacity === undefined ? 1 : opacity;
+        if (opacity > 1) {
+            opacity = opacity / 100.0;
+        }
+        cesiumStyle.color = `color('${color}', ${opacity})`;
+
+        if (Oskari.util.keyExists(style, 'image.sizePx')) {
+            cesiumStyle.pointSize = `${styleDef.image.sizePx}`;
+        }
+        return cesiumStyle;
+    }
+
+    /**
+     * To get Cesium scene object.
+     * @return {Cesium.Scene} scene
+     */
+    getCesiumScene () {
+        return this._map3d.getCesiumScene();
+    }
+
+    /**
+     * To get mouse location on map
+     * @param {Cesium.Cartesian2} position x,y on window
+     * @return lonlat in map projection
+     */
+    getMouseLocation (position) {
+        const ellipsoid = this.getCesiumScene().globe.ellipsoid;
+        const cartesian = this.getCesiumScene().camera.pickEllipsoid(position, ellipsoid);
+        if (!cartesian) {
+            return;
+        }
+        const cartographic = ellipsoid.cartesianToCartographic(cartesian);
+        let location = [
+            Cesium.Math.toDegrees(cartographic.longitude),
+            Cesium.Math.toDegrees(cartographic.latitude)
+        ];
+        location = olProj.transform(location, 'EPSG:4326', this.getProjection());
+        const lonlat = { lon: location[0], lat: location[1] };
+        return lonlat;
     }
 }
 

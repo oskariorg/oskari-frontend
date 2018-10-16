@@ -1,3 +1,5 @@
+import Tiles3DModelBuilder from './Tiles3DModelBuilder';
+
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
@@ -9,6 +11,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
      * @static
      */
     function () {
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
     }, {
         __name: 'Tiles3DLayerPlugin',
         _clazz: 'Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
@@ -27,6 +30,18 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             return layer.isLayerOfType(this.layertype);
         },
         /**
+         * Applies currently selected Oskari style to tileset.
+         * 
+         * @method  _applyOskariStyle
+         * @param  {Cesium.Cesium3DTileset}  tileset
+         */
+        _applyOskariStyle: function (tileset, layer) {
+            if (!tileset || !layer) {
+                return;
+            }
+            tileset.style = this.getMapModule().get3DStyle(layer.getCurrentStyleDef(), layer.getOpacity());
+        },
+        /**
          * @private @method _initImpl
          * Interface method for the module protocol.
          */
@@ -35,55 +50,73 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
                 mapLayerService.registerLayerModel(
-                    'tiles3dlayer',
+                    this.layertype + 'layer',
                     'Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer'
                 );
-                this._extendCesium3DTileset();
+                mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
             }
+            this._initTilesetClickHandler();
         },
         /**
-         * @private @method _extendCesium3DTileset
-         * Extend Cesium3DTileset with ol layer functions.
+         * @method _afterChangeMapLayerOpacityEvent
+         * Handle AfterChangeMapLayerOpacityEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerOpacityEvent}
+         *            event
          */
-        _extendCesium3DTileset: function () {
-            var proto = Cesium.Cesium3DTileset.prototype;
-            // Set light brown default color;
-            proto._color = '#ffd2a6';
+        _afterChangeMapLayerOpacityEvent: function (event) {
+            const layer = event.getMapLayer();
+            const tilesets = this.getOLMapLayers(layer);
 
-            proto.setInitialStyle = function (layer) {
-                var opacity = layer.getOpacity();
-                if (opacity > 1) {
-                    opacity = opacity / 100.0;
-                }
-                this.setOpacity(opacity);
-            };
-            proto.setVisible = function (visible) {
-                this.show = visible === true;
-            };
-            proto.isVisible = proto.getVisible = function () {
-                return this.show === true;
-            };
-            proto.setOpacity = function (opacity) {
-                if (!isNaN(opacity)) {
-                    var colorDef = 'color("' + this._color + '", ' + opacity + ')';
-                    this._opacity = opacity;
-                    if (this.style) {
-                        this.style.color = colorDef;
-                        this.makeStyleDirty();
-                    } else {
-                        this.style = new Cesium.Cesium3DTileStyle({
-                            color: colorDef
-                        });
-                    }
-                }
-            };
-            proto.getOpacity = function () {
-                if (this._opacity === null || this._opacity === undefined) {
-                    return 1;
-                }
-                return this._opacity;
-            };
+            if (!tilesets || tilesets.length === 0) {
+                return;
+            }
+            tilesets.forEach(tileset => this._applyOskariStyle(tileset, layer));
         },
+        /**
+         * Handle AfterChangeMapLayerStyleEvent
+         * @private
+         * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent} event
+         */
+        _afterChangeMapLayerStyleEvent: function (event) {
+            const layer = event.getMapLayer();
+            const tilesets = this.getOLMapLayers(layer);
+
+            if (!tilesets || tilesets.length === 0) {
+                return;
+            }
+            tilesets.forEach(tileset => this._applyOskariStyle(tileset, layer));
+        },
+
+        /**
+         * Handle 3D tile feature clicks
+         * @private
+         */
+        _initTilesetClickHandler: function () {
+            const me = this;
+            const scene = me.getMapModule().getCesiumScene();
+            const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
+            handler.setInputAction(movement => {
+                const feature = scene.pick(movement.position);
+                if (!(feature instanceof Cesium.Cesium3DTileFeature)) {
+                    return;
+                }
+                let tableContent = '';
+                feature.getPropertyNames().forEach(name => {
+                    tableContent += `<tr><td>${name}</td><td>${feature.getProperty(name)}</td></tr>`;
+                });
+                if (tableContent.length === 0) {
+                    return;
+                }
+                let content = [{html: `<table>${tableContent}</table>`}];
+                const location = me.getMapModule().getMouseLocation(movement.position);
+                // Request info box
+                const infoRequestBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest');
+                const title = me.loc('plugin.GetInfoPlugin.title');
+                this._sandbox.request(me, infoRequestBuilder('tilesetFeatureAttributes', title, content, location));
+            }, Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        },
+
         /**
          * Adds a single 3d tileset to this map
          *
@@ -100,7 +133,6 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 dynamicScreenSpaceErrorFactor: 4.0,
                 dynamicScreenSpaceErrorHeightFalloff: 0.25
             });
-            tileset.setInitialStyle(layer);
 
             this.getMapModule().addLayer(tileset);
             layer.setQueryable(false);
