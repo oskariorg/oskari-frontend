@@ -69,7 +69,6 @@ module.exports = {
     "standard/computed-property-even-spacing": ["warn", "even"],
     "standard/no-callback-literal": "warn",
     "standard/object-curly-even-spacing": ["warn", "either"],
-    "no-unreachable": "warn",
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }],
     "no-return-assign": ["warn", "except-parens"],
     "no-shadow-restricted-names": "warn"
