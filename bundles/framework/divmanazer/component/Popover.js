@@ -198,7 +198,7 @@
             return this.options.title.apply(this.options.scope);
         },
         tip: function () {
-            return this.$tip = this.$tip || $(this.options.template);
+            return (this.$tip = this.$tip || $(this.options.template));
         },
         validate: function () {
             if (!this.$element[0].parentNode) {

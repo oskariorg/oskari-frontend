@@ -70,7 +70,6 @@ module.exports = {
     "standard/no-callback-literal": "warn",
     "standard/object-curly-even-spacing": ["warn", "either"],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }],
-    "no-return-assign": ["warn", "except-parens"],
     "no-shadow-restricted-names": "warn"
   }
 }
