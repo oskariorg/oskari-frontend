@@ -55,6 +55,7 @@ module.exports = {
     "quotes": ["error", "single", {"allowTemplateLiterals": true, "avoidEscape": true}],
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "no-fallthrough": "off",
+    "standard/no-callback-literal": "off",
 
     // Temporary warn level for Travis-CI
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
@@ -67,7 +68,6 @@ module.exports = {
     "one-var": ["warn", { "initialized": "never" }],
     "standard/array-bracket-even-spacing": ["warn", "either"],
     "standard/computed-property-even-spacing": ["warn", "even"],
-    "standard/no-callback-literal": "warn",
     "standard/object-curly-even-spacing": ["warn", "either"],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }]
   }
