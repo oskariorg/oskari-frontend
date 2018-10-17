@@ -67,7 +67,6 @@ module.exports = {
     "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "one-var": ["warn", { "initialized": "never" }],
     "standard/array-bracket-even-spacing": ["warn", "either"],
-    "standard/computed-property-even-spacing": ["warn", "even"],
     "standard/object-curly-even-spacing": ["warn", "either"],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }]
   }

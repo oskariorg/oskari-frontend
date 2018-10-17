@@ -661,18 +661,10 @@ Oskari.clazz.define(
                 me._printTiles[layer.getId()] = [];
 
                 // delete possible error triggers
-                delete me.errorTriggers[
-                    'wfs_no_permissions_' + layer.getId()
-                ];
-                delete me.errorTriggers[
-                    'wfs_configuring_layer_failed_' + layer.getId()
-                ];
-                delete me.errorTriggers[
-                    'wfs_request_failed_' + layer.getId()
-                ];
-                delete me.errorTriggers[
-                    'features_parsing_failed_' + layer.getId()
-                ];
+                delete me.errorTriggers['wfs_no_permissions_' + layer.getId()];
+                delete me.errorTriggers['wfs_configuring_layer_failed_' + layer.getId()];
+                delete me.errorTriggers['wfs_request_failed_' + layer.getId()];
+                delete me.errorTriggers['features_parsing_failed_' + layer.getId()];
             }
         },
 
