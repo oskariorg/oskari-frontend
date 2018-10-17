@@ -86,10 +86,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             return this.element;
         },
         _makeDraggable: function () {
-            this.getElement().prepend('<div class="stats-series-handle oskari-flyoutheading"></div>');
             this.getElement().draggable({
                 scroll: false,
-                handle: '.stats-series-handle'
+                cancel: '.flyout-resizer,button,select'
             });
         },
         /**
