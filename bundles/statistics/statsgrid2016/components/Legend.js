@@ -94,21 +94,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             headerContainer.empty();
             legendContainer.empty();
             container.find('.legend-noactive').empty();
-
             // create inidicator dropdown if we have more than one indicator
-            if (me.service.getStateService().getIndicators().length > 1) {
+            var hasMultiple = me.service.getStateService().getIndicators().length > 1;
+
+            if (hasMultiple) {
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
                 indicatorMenu.render(headerContainer);
                 indicatorMenu.setWidth('94%');
+                headerContainer.addClass('multi-select-legend');
             } else {
-                me._getLabels(activeIndicator, function (labels) {
-                    var header = me.__templates.activeHeader({
-                        label: labels.label
-                    });
-                    headerContainer.empty();
-                    headerContainer.append(header);
-                }); // _getLabels
+                headerContainer.removeClass('multi-select-legend');
             }
+            me._getLabels(activeIndicator, function (labels) {
+                if (hasMultiple) {
+                    headerContainer.attr('data-selected-indicator', labels.label);
+                    return;
+                }
+                var header = me.__templates.activeHeader({
+                    label: labels.label
+                });
+                headerContainer.empty();
+                headerContainer.append(header);
+            });
+
             if (!classificationOpts) {
                 // didn't get classification options so not enough data to classify or other error
                 container.find('.edit-legend').hide();
