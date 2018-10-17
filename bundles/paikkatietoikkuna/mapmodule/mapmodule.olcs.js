@@ -123,6 +123,26 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     /**
+     * @param {ol/layer/Layer | Cesium.Cesium3DTileset} layer
+     */
+    setLayerIndex (layerImpl, index) {
+        if (layerImpl instanceof Cesium.Cesium3DTileset) {
+            return;
+        }
+        return super.setLayerIndex(layerImpl, index);
+    }
+
+    /**
+     * @param {ol/layer/Layer | Cesium.Cesium3DTileset} layer
+     */
+    getLayerIndex (layerImpl) {
+        if (layerImpl instanceof Cesium.Cesium3DTileset) {
+            return;
+        }
+        return super.getLayerIndex(layerImpl);
+    }
+
+    /**
      * @param {Object} layerImpl ol/layer/Layer or Cesium.Cesium3DTileset, olcs specific!
      */
     removeLayer (layerImpl) {
