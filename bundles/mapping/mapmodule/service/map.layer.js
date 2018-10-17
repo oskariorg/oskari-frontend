@@ -348,8 +348,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (newLayerConf.groups) {
                 var groups = [];
-                newLayerConf.groups.forEach(function (groupId) {
-                    var group = me.getAllLayerGroups(groupId);
+                newLayerConf.groups.forEach(function (cur) {
+                    var group = me.getAllLayerGroups(cur.id);
                     groups.push({
                         id: group.getId(),
                         name: Oskari.getLocalized(group.getName())
@@ -494,7 +494,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // for each group on the layer
                 newLayerConf.groups.forEach(function (group) {
                     // find the group details
-                    var groupConf = me.getAllLayerGroups(group);
+                    var groupConf = me.getAllLayerGroups(group.id);
                     var groupChildren = groupConf.getChildren() || [];
                     // check if the layer is referenced in the group details
                     var layer = groupChildren.find(function (children) {
@@ -502,7 +502,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     });
                     // if layer is not part of the groups layers -> add it
                     if (!layer) {
-                        me.getAllLayerGroups(group).addChildren({
+                        me.getAllLayerGroups(group.id).addChildren({
                             type: 'layer',
                             id: newLayerConf.id,
                             order: 1000000
