@@ -66,7 +66,6 @@ module.exports = {
     "no-unmodified-loop-condition": "warn",
     "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "one-var": ["warn", { "initialized": "never" }],
-    "standard/object-curly-even-spacing": ["warn", "either"],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }]
   }
 }

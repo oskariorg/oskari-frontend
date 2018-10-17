@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me._sortTools();
             // Add tools to panel
             _.each(tools, function (tool) {
-                var ui = jQuery(me.templates.tool({title: tool.getTitle() }));
+                var ui = jQuery(me.templates.tool({title: tool.getTitle()}));
                 // setup values when editing an existing map
                 ui.find('input').prop('checked', !!tool.isEnabled());
                 ui.find('input').prop('disabled', !!tool.isDisabled());
