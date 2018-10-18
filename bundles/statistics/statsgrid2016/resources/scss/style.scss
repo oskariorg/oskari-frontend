@@ -8,6 +8,15 @@ $buttonWidth: 86%;
 
 $flyoutPadding: 16px;
 
+/* overrides for geostats CSS */
+.statsgrid-legend-container .active-legend div {
+    clear: both;
+}
+
+.statsgrid-legend-container .geostats-legend-title {
+    display: none;
+}
+
 
 /* ********************************************
  * These are for common code in statsgrid
