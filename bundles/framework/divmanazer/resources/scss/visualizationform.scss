@@ -86,6 +86,13 @@ div.renderdialog {
         margin: 5px;
     }
 
+    .areaform-preview {
+        width: 80px;
+        height: 80px;
+        border: 1px solid;
+        margin: 5px;
+    }
+
     div.actions input {
         float: right;
     }
@@ -242,7 +249,7 @@ div.areaform {
 
     div.column2 {
         float: right;
-        width: 235px;
+        width: 250px;
     }
 
     div.custom-fill {
@@ -313,7 +320,7 @@ div.lineform div.column2 {
 
 div.areaform div.column22 {
     float: right;
-    width: 65px;
+    width: 95px;
 }
 
 div.renderdialog div.column21,

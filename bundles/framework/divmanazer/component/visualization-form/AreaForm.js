@@ -98,7 +98,7 @@ Oskari.clazz.define(
             '</div>' +
             '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
-            '<div class="preview"></div>' +
+            '<div class="areaform-preview"></div>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -118,14 +118,14 @@ Oskari.clazz.define(
         this.minWidth = 1;
         this.maxWidth = 5;
         this.templateWidthValue = jQuery('<input type="number" name="width" class="linewidth" min="' + this.minWidth + '" max="' + this.maxWidth + '" step=1 value="' + this.values.lineWidth + '">');
-        this.previewSize = 50;
+        this.previewSize = 80;
         this.selectColor = '#dddddd';
 
-        this._previewSize = 50;
+        this._previewSize = 80;
         this._previewTemplates = [
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path><path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: miter; stroke-linecap: butt;" fill="#ffde00" stroke="#000000" d="M15.618650138979566,19.104939575319182L35.30776005884479,15.739369510308894L28.003552181094584,34.08332088547988Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path><path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: miter; stroke-linecap: butt;" fill="#ffde00" stroke="#000000" d="M15.618650138979566,19.104939575319182L35.30776005884479,15.739369510308894L28.003552181094584,34.08332088547988Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
         ];
     }, {
         /**
@@ -347,7 +347,7 @@ Oskari.clazz.define(
         _updatePreview: function (dialog) {
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery('.areaform') : dialog,
-                preview = view.find('.preview');
+                preview = view.find('.areaform-preview');
 
             if (preview.length === 0) {
                 return;
