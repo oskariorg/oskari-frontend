@@ -113,11 +113,11 @@ function(url, uuid) {
             category.setDefault('true' === featAtts['default']);
             category.setName(featAtts['category_name']);
             category.setLineWidth(featAtts['stroke_width']);
-            category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
+            category.setLineColor(featAtts['stroke_color']);
             category.setAreaLineWidth(featAtts['border_width']);
-            category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
-            category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
-            category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
+            category.setAreaLineColor(featAtts['border_color']);
+            category.setAreaFillColor(featAtts['fill_color']);
+            category.setDotColor(featAtts['dot_color']);
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
             if(featAtts['publisher_name']) {
@@ -177,11 +177,11 @@ function(url, uuid) {
                 'category_name' : m.getName(),
                 'default' : m.isDefault(),
                 'stroke_width' : m.getLineWidth(),
-                'stroke_color' : this._prefixColorForServer(m.getLineColor()),
+                'stroke_color' : m.getLineColor(),
                 'border_width' : m.getAreaLineWidth(),
-                'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
-                'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
-                'dot_color' : this._prefixColorForServer(m.getDotColor()),
+                'border_color' : m.getAreaLineColor(),
+                'fill_color' : m.getAreaFillColor(),
+                'dot_color' : m.getDotColor(),
                 'dot_size' : m.getDotSize(),
                 'uuid' : uuid
             };

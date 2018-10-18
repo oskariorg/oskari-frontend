@@ -130,15 +130,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 category.setLineStyle(featAtts.stroke_dasharray);
                 category.setLineCap(featAtts.stroke_linecap);
                 category.setLineCorner(featAtts.stroke_linejoin);
-                category.setLineColor(this._formatColorFromServer(featAtts.stroke_color));
+                category.setLineColor(eatAtts.stroke_color);
                 category.setAreaLineWidth(featAtts.border_width);
                 category.setAreaLineStyle(featAtts.border_dasharray);
                 category.setAreaLineCorner(featAtts.border_linejoin);
-                category.setAreaLineColor(typeof featAtts.border_color === 'string' ? this._formatColorFromServer(featAtts.border_color) : null);
-                category.setAreaFillColor(typeof featAtts.fill_color === 'string' ? this._formatColorFromServer(featAtts.fill_color) : null);
+                category.setAreaLineColor(typeof featAtts.border_color === 'string' ? featAtts.border_color : null);
+                category.setAreaFillColor(typeof featAtts.fill_color === 'string' ? featAtts.fill_color : null);
                 category.setAreaFillStyle(featAtts.fill_pattern);
                 category.setDotShape(featAtts.dot_shape);
-                category.setDotColor(this._formatColorFromServer(featAtts.dot_color));
+                category.setDotColor(featAtts.dot_color);
                 category.setDotSize(featAtts.dot_size);
                 category.setUUID(uuid);
                 if (featAtts.publisher_name) {
@@ -203,14 +203,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                     'stroke_dasharray': m.getLineStyle(),
                     'stroke_linecap': m.getLineCap(),
                     'stroke_linejoin': m.getLineCorner(),
-                    'stroke_color': this._prefixColorForServer(m.getLineColor()),
+                    'stroke_color': m.getLineColor(),
                     'border_width': m.getAreaLineWidth(),
                     'border_dasharray': m.getAreaLineStyle(),
                     'border_linejoin': m.getAreaLineCorner(),
-                    'border_color': typeof m.getAreaLineColor() === 'string' ? this._prefixColorForServer(m.getAreaLineColor()) : null,
-                    'fill_color': typeof m.getAreaFillColor() === 'string' ? this._prefixColorForServer(m.getAreaFillColor()) : null,
+                    'border_color': typeof m.getAreaLineColor() === 'string' ? m.getAreaLineColor() : null,
+                    'fill_color': typeof m.getAreaFillColor() === 'string' ? m.getAreaFillColor() : null,
                     'fill_pattern': m.getAreaFillStyle(),
-                    'dot_color': this._prefixColorForServer(m.getDotColor()),
+                    'dot_color': m.getDotColor(),
                     'dot_size': m.getDotSize(),
                     'dot_shape': m.getDotShape(),
                     'uuid': uuid
