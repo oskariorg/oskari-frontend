@@ -474,7 +474,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
                 iconCloseLoc = layoutLoc.fields.colours.customLabels.iconCloseLabel,
                 iconCloseWhiteLoc = layoutLoc.fields.colours.customLabels.iconCloseWhiteLabel,
                 rgbValue;
-
             iconClsInputs.find('label[for=icon-close]').html(iconCloseLoc);
             iconClsInputs.find('label[for=icon-close-white]').html(iconCloseWhiteLoc);
 
@@ -630,7 +629,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @private
      */
         _createColorPickers: function () {
-            var options = {className: 'oskari-colorpickerinput'};
+            var options = {className: 'oskari-colorpickerinput',cancelText:this.__instance._localization.BasicView.buttons.cancel};
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),

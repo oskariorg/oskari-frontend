@@ -36,7 +36,8 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
 
         me._colorPickerOptions = {
             color: '#818282',
-            preferredFormat: 'hex',
+            preferredFormat: 'rgb',
+            showInput: true,
             clickoutFiresChange: true,
             chooseText: Oskari.getMsg('DivManazer', 'buttons.ok'),
             cancelText: '',
@@ -153,6 +154,14 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          */
         _setVisibleImpl: function () {
             this.getElement().style.display = this.isVisible() ? '' : 'none';
+        },
+
+        /**
+         * @method reflow
+         * Resets the positioning of the container element.
+         */
+        reflow: function() {
+            jQuery(this._input).spectrum('reflow');
         }
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']

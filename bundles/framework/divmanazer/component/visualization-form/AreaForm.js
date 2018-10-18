@@ -69,15 +69,19 @@ Oskari.clazz.define(
         }
 
         this.fillButtonNames = [
+            'icon-line-solid',
             'icon-line-thin-diagonal',
             'icon-line-wide-diagonal',
             'icon-line-thin-horizontal',
-            'icon-line-wide-horizontal'
+            'icon-line-wide-horizontal',
+            'icon-line-transparent'
         ];
 
         this.templateAreaStyleDialogContent = jQuery('<div class="areaform">' +
             '<div class="container clearfix">' +
             '<div class="column1">' +
+            '<label>' + this.loc.linecolor.label + '</label>' +
+            '<div class="color-picker-area-line-wrapper"></div>' +
             '<label>' + this.loc.linestyle.label + '</label>' +
             '<div class="style icon-buttons"></div>' +
             '<label>' + this.loc.linecorner.label + '</label>' +
@@ -87,22 +91,14 @@ Oskari.clazz.define(
             '</div>' +
             '<div class="column2">' +
             '<div class="column21">' +
-            '<label>' + this.loc.linecolor.label + '</label>' +
-            '<div class="color-picker-area-line-wrapper"></div>' +
-            '<div class="remove-color-line"></div>' +
-            '</div>' +
-            '<div class="column22">' +
-            '<div class="column221">' +
             '<label>' + this.loc.color.label + '</label>' +
             '<div class="color-picker-area-fill-wrapper"></div>' +
             '<label>' + this.loc.fill.label + '</label>' +
             '<div class="fill icon-buttons"></div>' +
-            '<div class="remove-color-fill"></div>' +
             '</div>' +
-            '<div class="column222">' +
+            '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
             '<div class="preview"></div>' +
-            '</div>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -278,39 +274,6 @@ Oskari.clazz.define(
                 me._updatePreview(dialogContent);
             });
 
-            // remove color links
-            ['line', 'fill'].forEach(function (type, index) {
-                content = dialogContent.find('.remove-color-' + type);
-                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).on('click', function (e) {
-                    e.preventDefault();
-
-                    if (me.activeColorCell[index] > -1) {
-                        var activeCell = me.activeColorCell[index].toString();
-                        if (me.activeColorCell[index] < 10) {
-                            activeCell = '0' + activeCell;
-                        }
-                        jQuery('#' + activeCell + index + 'ColorCell').css('border', '1px solid #000000');
-                    }
-
-                    me.activeColorCell[index] = -1;
-                    me.values[type + 'Color'] = null;
-
-                    jQuery('#color-checkbox-' + index).prop('checked', false);
-                    jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
-
-                    if (type === 'fill') {
-                        me._colorPickers[1].setValue(null);
-                        if (me.values.fillStyle !== -1) {
-                            me._styleUnselectedButton(jQuery('div#' + me.values.fillStyle + 'fillstyle.icon-button'));
-                        }
-                        me.values.fillStyle = -1;
-                    } else {
-                        me._colorPickers[0].setValue(null);
-                    }
-                    me._updatePreview(dialogContent);
-                });
-            });
-
             // Fill style
             content = dialogContent.find('div.fill.icon-buttons');
             for (i = 0; i < me.fillButtonNames.length; i += 1) {
@@ -391,8 +354,8 @@ Oskari.clazz.define(
             }
 
             var previewTemplate = me._previewTemplates[me.values.lineStyle].clone();
-            var fill = (parseInt(me.values.fillStyle, 10) < 0) ? me.values.fillColor : 'none';
-            if (me.values.fillStyle >= 0 || me.values.fillColor === null) {
+            var fill = (parseInt(me.values.fillStyle, 10) < 1) ? me.values.fillColor : 'none';
+            if (me.values.fillStyle >= 1 || me.values.fillColor === null) {
                 fill = 'none';
             }
 
@@ -408,10 +371,11 @@ Oskari.clazz.define(
 
             preview.empty();
             // Patterns (IE8 compatible version)
-            if (me.values.fillStyle >= 0) {
+            if (me.values.fillStyle > 0 && me.values.fillStyle < 5) {
+                // Fillstyle 0 = solid and fillstyle 5 = transparent (no need to create svg)
                 var pathSvg = jQuery('<path></path>');
                 switch (parseInt(me.values.fillStyle)) {
-                case 0:
+                case 1:
                     var p01a = [10.5, 17.5];
                     var p02a = [12.3, 19.7];
                     var p03a = [14.1, 21.9];
@@ -443,7 +407,7 @@ Oskari.clazz.define(
                         'fill': 'none'
                     });
                     break;
-                case 1:
+                case 2:
                     var p11a = [14.8, 16.2];
                     var p12a = [23.2, 14.8];
                     var p13a = [31.6, 13.4];
@@ -465,7 +429,7 @@ Oskari.clazz.define(
                         'fill': 'none'
                     });
                     break;
-                case 2:
+                case 3:
                     var p21a = [19, 15.5];
                     var p22a = [12.1, 19.5];
                     var p23a = [15.4, 23.5];
@@ -489,7 +453,7 @@ Oskari.clazz.define(
                         'fill': 'none'
                     });
                     break;
-                case 3:
+                case 4:
                     var p31a = [16.1, 16.0];
                     var p32a = [13.4, 21.0];
                     var p33a = [17.5, 26.0];
@@ -550,7 +514,7 @@ Oskari.clazz.define(
          * @private
          */
         _createColorPickers: function () {
-            var options = {allowEmpty: true};
+            var options = {allowEmpty: true, cancelText: this.loc.buttons.cancel};
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options)
