@@ -130,7 +130,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 category.setLineStyle(featAtts.stroke_dasharray);
                 category.setLineCap(featAtts.stroke_linecap);
                 category.setLineCorner(featAtts.stroke_linejoin);
-                category.setLineColor(eatAtts.stroke_color);
+                category.setLineColor(featAtts.stroke_color);
                 category.setAreaLineWidth(featAtts.border_width);
                 category.setAreaLineStyle(featAtts.border_dasharray);
                 category.setAreaLineCorner(featAtts.border_linejoin);

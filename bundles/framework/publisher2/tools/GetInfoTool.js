@@ -629,7 +629,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
      * @private
      */
         _createColorPickers: function () {
-            var options = {className: 'oskari-colorpickerinput',cancelText:this.__instance._localization.BasicView.buttons.cancel};
+            var options = {className: 'oskari-colorpickerinput', cancelText: this.__instance._localization.BasicView.buttons.cancel};
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),

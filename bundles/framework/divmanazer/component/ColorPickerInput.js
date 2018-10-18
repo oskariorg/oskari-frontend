@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          * @method reflow
          * Resets the positioning of the container element.
          */
-        reflow: function() {
+        reflow: function () {
             jQuery(this._input).spectrum('reflow');
         }
     }, {
