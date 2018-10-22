@@ -271,6 +271,13 @@ Oskari.clazz.define(
 
             colorPickerFillWrapper.on('change', function () {
                 me.values['fillColor'] = me._colorPickers[1].getValue();
+                if (me.values.fillStyle === 4) {
+                    // Color has been selected but fill style is transparent
+                    // Change fill style to solid color
+                    me.values.fillStyle = 5;
+                    me._styleUnselectedButton(jQuery('div#4fillstyle.icon-button'));
+                    me._styleSelectedButton(jQuery('div#5fillstyle.icon-button'));
+                }
                 me._updatePreview(dialogContent);
             });
 
@@ -294,10 +301,28 @@ Oskari.clazz.define(
                         }
                         me._styleSelectedButton(jQuery('div#' + newValue + 'fillstyle.icon-button'));
                         me.values.fillStyle = newValue;
+                        // Set color picker and fill color value to empty/null when transparent is selected
+                        if (newValue === 4) {
+                            me._colorPickers[1].setValue('');
+                            me.values.fillColor = null;
+                        }
                     }
                     me._updatePreview(dialogContent);
                 });
                 content.append(fillBtnContainer);
+            }
+
+            if (me.values.fillStyle === -1) {
+                // Transparent or solid color is chosen
+                if (me.values.fillColor != null) {
+                    // Fill color exist, use solid color as style
+                    me.values.fillStyle = 5;
+                    me._styleSelectedButton(content.find('div#5fillstyle.icon-button'));
+                } else {
+                    // No fill color, style must be transparent
+                    me.values.fillStyle = 4;
+                    me._styleSelectedButton(content.find('div#4fillstyle.icon-button'));
+                }
             }
 
             this._updatePreview(dialogContent);
@@ -306,6 +331,10 @@ Oskari.clazz.define(
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
+                // Transparent and solid color fill styles are both saved as -1
+                if (me.values.fillStyle === 4 || me.values.fillStyle === 5) {
+                    me.values.fillStyle = -1;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
