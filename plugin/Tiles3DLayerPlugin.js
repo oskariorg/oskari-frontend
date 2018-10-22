@@ -1,5 +1,23 @@
 import Tiles3DModelBuilder from './Tiles3DModelBuilder';
 
+const oldUpdate = Cesium.Model.prototype.update;
+
+Cesium.Model.prototype.update = function (frameState) {
+    if (!this._oskariOverride && this.gltf) {
+        if (Array.isArray(this.gltf.materials)) {
+            this.gltf.materials.forEach(function (mat) {
+                if (!mat.pbrMetallicRoughness) {
+                    return;
+                }
+                mat.pbrMetallicRoughness.metallicFactor = 0;
+                mat.pbrMetallicRoughness.roughnessFactor = 1;
+            });
+        }
+        this._oskariOverride = true;
+    }
+    oldUpdate.call(this, frameState);
+};
+
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
