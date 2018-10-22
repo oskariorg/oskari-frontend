@@ -60,11 +60,13 @@ class MapModuleOlCesium extends MapModuleOl {
         this._map3d = new OLCesium({
             map: map,
             sceneOptions: {
-                showCredit: false
+                showCredit: false,
+                shadows: true
             }
         });
 
         var scene = this._map3d.getCesiumScene();
+        scene.shadowMap.darkness = 0.7;
         var terrainProvider = new Cesium.CesiumTerrainProvider({
             url: TERRAIN_SERVICE_URL
         });
