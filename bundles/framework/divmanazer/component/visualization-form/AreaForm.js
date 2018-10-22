@@ -69,12 +69,12 @@ Oskari.clazz.define(
         }
 
         this.fillButtonNames = [
-            'icon-line-solid',
             'icon-line-thin-diagonal',
             'icon-line-wide-diagonal',
             'icon-line-thin-horizontal',
             'icon-line-wide-horizontal',
-            'icon-line-transparent'
+            'areaform-fill-transparent',
+            'areaform-fill-solid'
         ];
 
         this.templateAreaStyleDialogContent = jQuery('<div class="areaform">' +
@@ -354,12 +354,17 @@ Oskari.clazz.define(
             }
 
             var previewTemplate = me._previewTemplates[me.values.lineStyle].clone();
-            var fill = (parseInt(me.values.fillStyle, 10) < 1) ? me.values.fillColor : 'none';
-            if (me.values.fillStyle >= 1 || me.values.fillColor === null) {
+            var fill = (parseInt(me.values.fillStyle, 10) < 0) ? me.values.fillColor : 'none';
+            if (me.values.fillStyle >= 0 || me.values.fillColor === null) {
                 fill = 'none';
             }
 
             var line = me.values.lineColor !== null ? me.values.lineColor : 'none';
+
+            if (me.values.fillStyle === 5 && me.values.fillColor !== null) {
+                // Solid fill style chosen, using current fill color
+                fill = me.values.fillColor;
+            }
 
             previewTemplate.find('path').attr({
                 'fill': fill,
@@ -371,11 +376,11 @@ Oskari.clazz.define(
 
             preview.empty();
             // Patterns (IE8 compatible version)
-            if (me.values.fillStyle > 0 && me.values.fillStyle < 5) {
-                // Fillstyle 0 = solid and fillstyle 5 = transparent (no need to create svg)
+            if (me.values.fillStyle >= 0 && me.values.fillStyle < 4) {
+                // Fillstyle 4 = transparent and fillstyle 5 = solid (no need to create svg)
                 var pathSvg = jQuery('<path></path>');
                 switch (parseInt(me.values.fillStyle)) {
-                case 1:
+                case 0:
                     var p01a = [10.5, 17.5];
                     var p02a = [12.3, 19.7];
                     var p03a = [14.1, 21.9];
@@ -407,7 +412,7 @@ Oskari.clazz.define(
                         'fill': 'none'
                     });
                     break;
-                case 2:
+                case 1:
                     var p11a = [14.8, 16.2];
                     var p12a = [23.2, 14.8];
                     var p13a = [31.6, 13.4];
@@ -429,7 +434,7 @@ Oskari.clazz.define(
                         'fill': 'none'
                     });
                     break;
-                case 3:
+                case 2:
                     var p21a = [19, 15.5];
                     var p22a = [12.1, 19.5];
                     var p23a = [15.4, 23.5];
@@ -453,7 +458,7 @@ Oskari.clazz.define(
                         'fill': 'none'
                     });
                     break;
-                case 4:
+                case 3:
                     var p31a = [16.1, 16.0];
                     var p32a = [13.4, 21.0];
                     var p33a = [17.5, 26.0];
@@ -547,7 +552,7 @@ Oskari.clazz.define(
          */
         _styleUnselectedButton: function (unselectedButton) {
             unselectedButton.css('border', '1px solid');
-            unselectedButton.css('background-color', 'transparent');
+            unselectedButton.css('background-color', '');
         }
     }
 );
