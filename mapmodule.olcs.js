@@ -57,8 +57,10 @@ class MapModuleOlCesium extends MapModuleOl {
 
         me._setupMapEvents(map);
 
+        var time = Cesium.JulianDate.fromIso8601('2017-07-11T12:00:00Z');
         this._map3d = new OLCesium({
             map: map,
+            time: () => time,
             sceneOptions: {
                 showCredit: false,
                 shadows: true
