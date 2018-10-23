@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "title": "Koordinaattimuunnos",
         "tile": {
-            "title": "Koordinaattimuunnos"
+            "title": "Koordinaatti- muunnos"
         },
         "flyout": {
             "title":"Koordinaattimuunnos",
@@ -71,22 +71,21 @@ Oskari.registerLocalization(
                     "title": "Huomio!",
                     "3DTo2D": "Valitsemissasi lähtötiedoissa on mukana korkeusarvoja, mutta tulostiedoissa ei. Tuloskoordinaatteihin ei siis tule korkeusarvoja mukaan. Haluatko jatkaa?",
                     "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?",
-                    "xyz": "Lähtökoordinaattijärjestelmän valinnoissa ei ole korkeusjärjestelmää. Muunnos suorakulmaiseen 3D -järjestelmään ei ole mahdollinen."
+                    "xyz": "Lähtökoordinaattijärjestelmän valinnoissa ei ole korkeusjärjestelmää. Muunnos suorakulmaiseen 3D -järjestelmään ei ole mahdollinen.",
+                    "largeFile": "Isojen tiedostojen muuntaminen voi kestää useita minuutteja."
                 },
                 "validateErrors": {
                     "title": "Virhe!",
                     "message": "Valinnoissa on puutteita tai virheitä. Ota huomioon seuraavat vaatimukset ja yritä uudelleen.",
                     "crs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna sekä lähtö- että tulostiedoissa.",
-                    //"sourceHeight": "Lähtötietojen korkeusjärjestelmää ei ole valittu.",
-                    //"targetHeight": "Tulostietojen korkeusjärjestelmää ei ole valittu.",
                     "noInputData": "Ei muunnettavia koordinaatteja.",
                     "noInputFile": "Lähtöaineiston sisältävä tiedosto pitää olla valittuna.",
                     "noFileName": "Muodostettavalle tiedostolle pitää antaa tiedostonimi.",
-                    "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
+                    "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivinen kokonaisluku.",
                     "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
                     "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
                     "doubleSpace": "Kulman muoto/yksikkö ei voi sisältää välilyöntejä, jos koordinaattierotin on Välilyönti.",
-                    "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
+                    "noFileSettings": "Tiedostoasetuksia ei ole annettu.",
                     "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
                     "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
                 },
@@ -95,16 +94,16 @@ Oskari.registerLocalization(
                     "titleRead": "Virhe tiedoston lukemisessa!",
                     "readFileError" : "Tiedostosta ei onnistuttu lukemaan kaikkia rivejä.",
                     "transformFileError": "Tiedoston koordinaatteja ei onnistuttu muuntamaan.",
-                    "invalidLine": "Tiedostossa on rivillä: {index, number} virheellinen koordinaattirivi: {line} <br> Tarkasta, että kyseinen rivi on kelvollinen ja vastaa valintoja.",
-                    //error codes
+                    "invalidLine": "Tiedostossa on rivillä: {index, number} virheellinen koordinaattirivi: {line} <br> Tarkasta, että kyseinen rivi on kelvollinen ja vastaa -- valintoja.", //TODO
                     "generic": "Koordinaattimuunnos epäonnistui...",
+                    //error codes
                     "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
-                    "invalid_number": "Koordinaatti virheellinen. Tarkasta..", //can we get row number from file
-                    "invalid_coord_in_array": "Koordinaatti virheellinen. Tarkasta..", //can user input invalid coords in array??
+                    "invalid_number": "Koordinaatti virheellinen.",
+                    "invalid_coord_in_array": "Koordinaatti virheellinen.",
                     "no_coordinates": "Tiedostosta ei löytynyt koordinaatteja. Tarkasta tiedosto sekä asetettu otsakerivien määrä.",
-                    "invalid_file_settings": "Tiedoston asetukset virheelliset.", //can't be user's fault
-                    "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.", //can't be user's fault
-                    "invalid_first_coord": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaatti erotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) valinnat vastaavat tiedoston sisältöä.",
+                    "invalid_file_settings": "Tiedoston asetukset virheelliset.",
+                    "no_file": "Lähetetystä pyynnöstä ei löytynyt tiedostoa.",
+                    "invalid_first_coord": "Tiedostosta ei saatu muodostettua koordinaattia annetuilla asetuksilla. Tarkasta, että koordinaattierotin, otsakerivien määrä, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä (dimensio) -valinnat vastaavat tiedoston sisältöä.",
                     "transformation_error": "Koordinaattimuunnos epäonnistui. Koordinaattimuunnospalvelusta palautui virhe:"
                 },
                 "responseFile": {
@@ -127,7 +126,7 @@ Oskari.registerLocalization(
             },
             "map": {
                 "label": "Valitse sijainnit kartalta",
-                "info": "Voit valita muunnettavia koordinaatteja kartalta sijainteja klikkaamalla.",
+                "info": "Voit valita muunnettavia koordinaatteja kartalta klikkaamalla.",
                 "action": "valitse lisää"
             }
         },
@@ -135,7 +134,7 @@ Oskari.registerLocalization(
             "show":{
                 "title": "Näytä sijainnit kartalla",
                 "info": "Kartta on ETRS89-TM35FIN -projektiossa. Koordinaatit on sijoitettu kartalle kyseistä koordinaattijärjestelmää käyttäen. Sijaintimerkinnän yhteydessä näytään lähtö- ja/tai tuloskoordinaattijärjestelmän mukaiset koordinaatit lukemina. ",
-                //"errorTitle": "Virhe sijaintien näyttämisessä",
+                "errorTitle": "Virhe sijaintien näyttämisessä",
                 "noCoordinates": "Ei koordinaatteja näytettäväksi kartalla",
                 "noSrs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna lähtötiedoissa, jotta pisteet voidaan näyttää kartalla.",
                 "lon": "Lon",
@@ -145,18 +144,15 @@ Oskari.registerLocalization(
             },
             "select":{
                 "title": "Valitse sijainnit kartalta",
-                "info": "Valitse yksi tai useampi piste kartalta klikkaamalla. Kartta on {mapSrs} -projektiossa. Tämä koordinaattijärjestelmä valitaan automaattisesti eikä sitä voi muutta. Valinnoissa on syytä huomioida, että kartalta sijaintien valinta ei ole kovin tarkkaa ja valitut koordinaatit pyöristetään kokonaisluvuiksi.",
+                "info": "Valitse yksi tai useampi piste kartalta klikkaamalla. Kartta on ETRS-TM35FIN-projektiossa. Tämä koordinaattijärjestelmä valitaan automaattisesti eikä sitä voi muutta. Valinnoissa on syytä huomioida, että kartalta sijaintien valinta ei ole kovin tarkkaa ja valitut koordinaatit pyöristetään kokonaisluvuiksi.",
                 "add": "Lisää merkintöjä",
                 "remove": "Poista merkintöjä"
             }
         },
         "actions": {
             "convert": "Muunna",
-            //"clearTable": "Tyhjennä taulukot",
-            //"showMarkers": "Näytä sijainnit kartalla",
             "export": "Muunna tiedostoon",
             "select": "Valitse",
-            //"selectFromMap": "Siirry valitsemaan.",
             "cancel": "Peruuta",
             "done": "Valmis",
             "ok": "Ok",
@@ -167,9 +163,13 @@ Oskari.registerLocalization(
                 "decimalSeparator": "Desimaalierotin",
                 "coordinateSeparator": "Koordinaattierotin",
                 "headerCount": "Otsakerivien määrä",
-                "decimalCount": "Desimaalien tarkkuus",
-                "reverseCoords": "Koordinaatit käänteisesti",
-                "useId": "Käytä tunnistetta",
+                "decimalPrecision": "Desimaalien tarkkuus",
+                "reverseCoordinates": "Koordinaatit käänteisesti",
+                "useId": {
+                    "input": "Koordinaatit sisältää tunnisteet",
+                    "generate": "Luo tunnisteet",
+                    "fromFile": "Lisää lähtötiedoston tunnisteet"
+                },
                 "writeHeader": "Kirjoita otsakerivi tiedostoon",
                 "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
                 "lineEnds": "Rivin loput tulokseen",
@@ -254,13 +254,21 @@ Oskari.registerLocalization(
                 "paragraphs" : [],
                 "listItems" : []
             },
-            "decimalCount":{
-                "title":"Desimaalien määrä",
-                "info": "Tukokseen tulevien desimaalien määrä",
+            "decimalPrecision":{
+                "title":"Desimaalien tarkkuus",
+                "info": "Tulokseen tulevien desimaalien määrä",
                 "paragraphs": [
-                    "Ominaisuuden avulla kerrotaan ohjelmalle kuinka monen desimaalin tarkkuudella koordinaatit halutaan tulokseen."
+                    "Ominaisuuden avulla kerrotaan ohjelmalle millä tarkkuudella koordinaatit halutaan tulokseen. Oletusarvona lomakkeella on 1mm tarkkuutta vastaava desimaalimäärä. Asteen esitysmuodoille oletusarvo on metristä järjestelmää vastaava lähin desimaalimäärä 1mm tarkkuuteen."
                 ],
-                "listItems" : []
+                "listItems": [],
+                "precisionTable": {
+                    "title": "Metristen tarkkuuksien desimaalien määrä kulman muotojen/yksikkö",
+                    "unit": "Kulman muoto/yksikkö",
+                    "deg": "Asteet, goonit ja DD",
+                    "rad": "Radiaaneissa",
+                    "min": "DDMM ja DD MM",
+                    "sec": "DDMMSS ja DD MM SS"
+                }
             },
             "coordinateSeparator":{
                 "title":"Sarake-erotin",
@@ -293,8 +301,8 @@ Oskari.registerLocalization(
                 "title":"Desimaalierotin",
                 "info": "Desimaaliosan erottamiseen käytetty merkki",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy kertomaan mikä merkki toimii desimaalierotin.",
-                    "Desimaalierottimen tulee poiketa koordinaattiarvot erottavasta merkistä. Kun koordinaattiarvot erottaa esimerkiksi pilkku sekä joukko välilyöntejä, niin desimaalierottimen on oltava piste!"
+                    "Ominaisuuden avulla pystyy kertomaan mikä merkki toimii desimaalierotin.", //TODO
+                    "Desimaalierottimen tulee poiketa koordinaattiarvot erottavasta merkistä. Kun koordinaattiarvot erottaa esimerkiksi pilkku sekä joukko välilyöntejä, niin desimaalierottimen on oltava piste."
                 ],
                 "listItems" : []
             },
@@ -312,6 +320,7 @@ Oskari.registerLocalization(
                 "paragraphs": [
                     "Ominaisuuden avulla pystyy ohjelmalle kertomaan, että jokaisen pisteen koordinaattiarvoja edeltää samalla rivillä pisteen tunniste (ID).",
                     "Pisteen tunnisteen tulee olla erotettuna koordinaattiarvoista samalla merkkijonolla kuin koordinaattiarvot ovat erotettuina toisistaan.",
+                    "Jos tuodussa tiedostossa ei ole pisteiden tunnisteita tai pisteet on tuotu taulukosta tai kartalta, niin tulostiedoston pisteiden tunnisteiksi luodaan yhdellä arvolla kasvava kokonaisluku alkaen arvosta 1.",
                     "Tunnisteen ei tarvitse olla numeerinen."
                 ],
                 "listItems" : []
@@ -321,12 +330,12 @@ Oskari.registerLocalization(
                 "info": "X- ja Y-Koordinaattiakselien järjestys poikkeaa määritetystä järjestyksestä",
                 "paragraphs": [
                     "Ominaisuuden avulla pystyy määrittämään ovatko tiedoston pisteiden kaksi ensimmäistä koordinaattiarvoa käänteisessä järjestyksessä suhteessa koordinaatiston kuvailussa annettuun järjestykseen.",
-                    "Esimerkiksi kkj:n koordinaatit ovat lähtökohtaisesti jäjestyksessä, jossa ensimmäisenä on x-koordinaatti ja sitä seuraa y-koordinaatti. x-akseli osoittaa pohjoiseen ja y-akseli itään. Kun valitsee käänteisen järjestyksen, tulee tiedostossa y-koordinaatin edeltää x-koordinaattia."
+                    "Esimerkiksi kkj:n koordinaatit ovat lähtökohtaisesti järjestyksessä, jossa ensimmäisenä on x-koordinaatti ja sitä seuraa y-koordinaatti. x-akseli osoittaa pohjoiseen ja y-akseli itään. Kun valitsee käänteisen järjestyksen, tulee tiedostossa y-koordinaatin edeltää x-koordinaattia."
                 ],
                 "listItems" : []
             },
             "writeHeader":{
-                "title":"Otsakerivin tulostaminen tiedostoon",
+                "title":"Lisää otsakerivit",
                 "info": "Tuloksen alkuun otsakerivit mukaan",
                 "paragraphs": [
                     "Ominaisuuden avulla käyttäjä voi kertoa haluaako tulostiedostoon metatietoa koordinaateista otsakeriville.",

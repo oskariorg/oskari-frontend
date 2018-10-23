@@ -3,132 +3,137 @@ Oskari.registerLocalization(
     "lang": "sv",
     "key": "coordinatetransformation",
     "value": {
-        "title": "Coordinateconversion",
+        "title": "Koordinatomvandling",
         "tile": {
-            "title": "Coordinateconversion"
+            "title": "Koordinatomvandling"
         },
         "flyout": {
-            "title":"Coordinateconversion",
+            "title":"Koordinatomvandling",
             "filterSystems": {
-                "title": "Suodata koordinaattijärjestelmiä",
-                "epsg": "EPSG-koodilla",
-                "systems": "Datumilla ja koordinaatistolla"
+                "title": "Filtrera referenssystem för koordinater",
+                "epsg": "Med EPSG-kod",
+                "systems": "Med datum och koordinatsystem"
             },
             "coordinateSystem": {
-                "title": "Koordinaattijärjestelmän tiedot",
+                "title": "Uppgifter om referenssystemet för koordinater",
                 "input": {
-                    "title": "Från-system"
+                    "title": "Utgångsuppgifter om referenssystemet för koordinater"
                 },
                 "output": {
-                    "title": "Till-system"
+                    "title": "Resultatuppgifter om referenssystemet för koordinater"
                 },
-                "noFilter": "Mikä tahansa",
+                "noFilter": "Vad som helst",
                 "epsgSearch": {
-                    "label": "Hae EPSG-koodilla"
+                    "label": "Sök med EPSG-kod"
                 },
                 "geodeticDatum": {
                     "label": "Geodetiskt datum"
                 },
                 "coordinateSystem":{
                     "label": "Koordinatsystem",
-                    "proj2D": "Suorakulmainen 2D (Taso)",
-                    "proj3D": "Suorakulmainen 3D",
-                    "geo2D": "Maantieteellinen 2D",
-                    "geo3D": "Maantieteellinen 3D"
+                    "proj2D": "Projicerat 2D (Plan)",
+                    "proj3D": "Projicerat 3D",
+                    "geo2D": "Geografiskt 2D",
+                    "geo3D": "Geografiskt 3D"
                 },
                 "mapProjection":{
                     "label": "Kartprojektionssystem"
                 },
                 "geodeticCoordinateSystem":{
-                    "label": "Geodetiskt koordinatsystem",
+                    "label": "Geodetiskt referenssystem för koordinater", // Geodetiskt koordinatsystem
                     "choose": "Valitse",
                     "kkj": "KKS zon {zone, number}",
-                    "ykj": "KKS zon 3 / ?YKJ?"
+                    "ykj": "KKS zon 3 / EKS"
                 },
                 "heightSystem":{
-                    "label": "Höjdsystemet",
-                    "none": "Ei mitään"
+                    "label": "Höjdsystem",
+                    "none": "Ingenting"
                 }
             },
             "coordinateTable": {
-                "input": "Muunnettavat koordinaatit",
-                "output": "Tuloskoordinaatit",
-                "north":"Pohjois-koordinaatti [m]",
-                "east":"Itä-koordinaatti [m]",
-                "lat":"Leveysaste",
-                "lon":"Pituusaste",
-                "elevation": "Korkeus [m]",
-                "geoX":"Geosentrinen X [m]",
-                "geoY":"Geosentrinen Y [m]",
-                "geoZ":"Geosentrinen Z [m]",
-                "ellipseElevation":"Ellipsoidinen korkeus [m]",
+                "input": "Koordinater som ska omvandlas",
+                "output": "Resultatkoordinater",
+                "north":"Nord-koordinat [m]",
+                "east":"Öst-koordinat [m]",
+                "lat":"Latitud",
+                "lon":"Longitud",
+                "elevation": "Höjd [m]",
+                "geoX":"Geocentriskt X [m]",
+                "geoY":"Geocentriskt Y [m]",
+                "geoZ":"Geocentriskt Z [m]",
+                "ellipseElevation":"Höjd över ellipsoiden [m]",
                 "rows": "Rader",
-                "clearTables": "Haluatko tyhjentää taulukot?",
-                "confirmClear": "Haluatko tyhjentää taulukot?"
+                "clearTables": "Töm tabellerna",
+                "confirmClear": "Är du säker på att du vill tömma tabellerna?"
             },
             "transform": {
                 "warnings": {
-                    "title": "Huomio!",
-                    "3DTo2D": "Valitsemissasi lähtötiedoissa on mukana korkeusarvoja, mutta tulostiedoissa ei. Tuloskoordinaatteihin ei siis tule korkeusarvoja mukaan. Haluatko jatkaa?",
-                    "2DTo3D": "Valitsemissasi lähtötiedoissa ei ole korkeusarvoja, mutta tulostiedoissa on. Lähtöaineiston korkeusarvoiksi lisätään 0 ja korkeusjärjestelmäksi N2000. Haluatko jatkaa?"
+                    "title": "Observera!",
+                    "3DTo2D": "I de utgångsuppgifter du valt finns höjdvärden, men inte i resultatuppgifterna. Höjvärden ingår alltså inte i resultatkoordinaterna. Vill du fortsätta?",
+                    "2DTo3D": "I de resultatuppgifter du valt finns höjdvärden, men inte i utgångsuppgifterna. Utgångsmaterialet ges höjdvärdet 0 och höjdsystemet N2000. Vill du fortsätta?",
+                    "xyz": "I valen som berör utgångsreferenssystemet för koordinater finns inget höjdsystem. En omvandling till ett rätvinkligt 3D-system kan inte göras.",
+                    "largeFile": "Isojen tiedostojen muuntaminen voi kestää useita minuutteja."
                 },
                 "validateErrors": {
-                    "title": "Virhe!",
-                    "message": "Valinnoissa on puutteita tai virheitä. Ota huomioon seuraavat vaatimukset ja yritä uudelleen.",
-                    "crs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna sekä lähtö- että tulostiedoissa.",
-                    "sourceHeight": "Lähtötietojen korkeusjärjestelmää ei ole valittu.",
-                    "targetHeight": "Tulostietojen korkeusjärjestelmää ei ole valittu.",
-                    "noInputData": "Ei muunnettavia koordinaatteja.",
-                    "noInputFile": "Lähtöaineiston sisältävä tiedosto pitää olla valittuna.",
-                    "noFileName": "Muodostettavalle tiedostolle pitää antaa tiedostonimi.",
-                    "decimalCount": "Desimaalien tarkkuus pitää olla 0 tai positiivnen kokonaisluku.",
-                    "headerCount": "Otsakerivien määrä pitää olla 0 tai positiivinen kokonaisluku.",
-                    "doubleComma": "Desimaali- ja koordinaattierotin eivät voi molemmat olla pilkkuja.",
+                    "title": "Fel!",
+                    "message": "Det finns brister eller fel i valen. Beakta följande krav och försök på nytt.",
+                    "crs": "Ett geodetiskt referenssystem för koordinater ska vara valt både i utgångs- och resultatuppgifterna.",
+                    "noInputData": "Det finns inga koordinater som kan omvandlas.",
+                    "noInputFile": "Filen som innehåller utgångsmaterial ska vara vald.",
+                    "noFileName": "Filen som bildas ska ges ett filnamn.",
+                    "decimalCount": "Decimalernas noggrannhet ska vara 0 eller ett positivt heltal.",
+                    "headerCount": "Antalet rubrikrader ska vara 0 eller ett positivt heltal.",
+                    "doubleComma": "Skiljetecknen för decimaler och koordinater kan inte båda vara kommatecken.",
                     "doubleSpace": "Kulman muoto/yksikkö ei voi sisältää välilyöntejä, jos koordinaattierotin on Välilyönti.",
-                    "noFileSettings": "Tiedosto asetuksia ei ole annettu.",
-                    "noCoordinateSeparator": "Koordinaattierotin pitää olla valittuna.",
-                    "noDecimalSeparator":"Desimaalierotin pitää olla valittuna."
+                    "noFileSettings": "Inga filinställningar har angetts..",
+                    "noCoordinateSeparator": "Skiljetecknet för koordinater ska vara valt.",
+                    "noDecimalSeparator": "Skiljetecknet för decimaler ska vara valt."
                 },
                 "responseErrors": {
-                    "title": "Virhe muunnoksessa!",
-                    "generic": "Koordinaattimuunnos epäonnistui...",
+                    "titleTransform": "Fel i omvandlingen!",
+                    "titleRead": "Virhe tiedoston lukemisessa!",
+                    "readFileError" : "Tiedostosta ei onnistuttu lukemaan kaikkia rivejä.",
+                    "transformFileError": "Tiedoston koordinaatteja ei onnistuttu muuntamaan.",
+                    "invalidLine": "I filen finns på rad: {index, number} felaktig koordinatrad: {line} Kontrollera att valen av skiljetecknen för decimaler och koordinater samt antalet rubrikrader motsvarar filens innehåll.",
+                    "generic": "Koordinatomvandlingen misslyckades...",
+                    //error codes
                     "invalid_coord": "Koordinaatti virheellinen. Tarkasta, että muunnettavat koordinaatit on oikeassa muodossa sekä geodeettinen koordinaatti- ja kokeusjärjestelmä ovat oikein.",
                     "invalid_number": "Koordinaatti virheellinen. Tarkasta..",
                     "invalid_coord_in_array": "Koordinaatti virheellinen. Tarkasta..",
                     "no_coordinates": "Ei koordinaatteja",
-                    "invalid_file_settings": "Invalid file settings",
-                    "no_file": "No file entry",
-                    "invalid_first_coord": "Tiedostossa virheellinen koordinaatti. Tarkasta, että otsakerivit, käytä tunnistetta sekä geoodeettinen koordinaatti- ja korkeusjärjestelmä ovat määritetty oikein.",
-                    "invalid_coord_in_line": "Tiedostossa virheellinen koordinaatti {line} rivillä {index, number}."
+                    "invalid_file_settings": "Felaktiga filinställningar.",
+                    "no_file": "Det fanns ingen fil för begäran.",
+                    "invalid_first_coord": "Det var inte möjligt att bilda en koordinat med de angivna inställningarna. Kontrollera att valen av skiljetecken för koordinater, antalet rubrikrader, huruvida identifierare används eller inte samt geodetiska referenssystem för koordinater och höjdsystem (dimension) motsvarar filens innehåll.",
+                    "transformation_error": "Koordinaattimuunnos epäonnistui. Koordinaattimuunnospalvelusta palautui virhe:"
                 },
                 "responseFile": {
-                    "title": "Huomio!",
-                    "hasMoreCoordinates": "Lähtöaineistosta ei voida muuntaa taulukkoon yli {maxCoordsToArray, number} koordinaattia. Jos haluat muuntaa kaikki koordinaatit, käytä Vie tulokset tiedostoon -toimintoa."
+                    "title": "Observera!",
+                    "hasMoreCoordinates": "Det är inte möjligt att från utgångsmaterialet omvandla fler än {maxCoordsToArray, number} koordinater i tabellen. Om du vill omvandla alla koordinater, använd funktionen För in resultaten i en fil."
                 }
             }
         },
         "dataSource": {
-            "title": "Koordinaattitietojen lähde",
-            "confirmChange": "Muunnettavat koordinaatit tyhjennetään ja koordinaattijärjestelmän tiedot poistetaan. Haluatko jatkaa?",
+            "title": "Källa för koordinatuppgifter",
+            "confirmChange": "Koordinaterna som ska omvandlas töms och uppgifterna om referenssystemet för koordinater tas bort. Vill du fortsätta?",
             "file": {
-                "label": "Tiedostosta",
-                "info":  "Valitse lähtöaineiston sisältävä tiedosto ja sen asetukset.",
-                "action": "Muokkaa"
+                "label": "Från fil",
+                "info":  "Välj filen med utgångsmaterialet och dess inställningar.",
+                "action": "redigera dina val"
             },
             "keyboard": {
-                "label": "Näppäimistöltä",
-                "info": "Syötä lähtötiedot Muunnettavat koordinaatit -taulukkoon."
+                "label": "Med tangentbordet",
+                "info": "Mata in utgångsuppgifter i tabellen Koordinater som ska omvandlas."
             },
             "map": {
-                "label": "Valitse sijainnit kartalta",
-                "info": "Valitse yksi tai useampi piste kartalta klikkaamalla.",
-                "action": "Valitse"
+                "label": "Välj lägen på kartan",
+                "info": "Du kan välja koordinater som ska omvandlas genom att klicka på kartan",
+                "action": "välj fler"
             }
         },
         "mapMarkers":{
             "show":{
-                "title": "Näytä sijainnit kartalla",
-                "info" : "Tarkastele muunnettuja koordinaatteja kartalla.",
+                "title": "Visa lägen på kartan",
+                "info" : "Kartans projektion är ETRS-TM35FIN. Koordinaterna har placerats på kartan med hjälp av detta referenssystem för koordinater. I samband med lägesanteckningen anges koordinaterna enligt utgångs- och/eller resultatreferenssystemet i siffror.",
                 "errorTitle": "Virhe sijaintien näyttämisessä",
                 "noCoordinates": "Ei koordinaatteja näytettäväksi kartalla",
                 "noSrs": "Geodeettinen koordinaattijärjestelmä pitää olla valittuna lähtötiedoissa, jotta pisteet voidaan näyttää kartalla.",
@@ -138,44 +143,45 @@ Oskari.registerLocalization(
                 "east": "E"
             },
             "select":{
-                "title": "Näytä sijainnit kartalla",
-                "info": "Valitse yksi tai useampia pisteitä kartalta klikkaamalla.",
+                "title": "Välj lägen på kartan",
+                "info": "Välj en eller flera punkter på kartan genom att klicka på dem. Kartans projektion är ETRS-TM35FIN. Detta referenssystem för koordinater väljs automatiskt för de koordinater som omvandlas och kan inte ändras. Beakta vid val av koordinater att valet av läge inte är exakt.",
                 "add": "Lisää merkintöjä",
                 "remove": "Poista merkintöjä"
             }
         },
         "actions": {
-            "convert": "Transformera",
-            "clearTable": "Tyhjennä taulukot",
-            "showMarkers": "Näytä sijainnit kartalla",
-            "export": "Muunna tiedostoon",
-            "select": "Valitse",
-            "selectFromMap": "Siirry valitsemaan.",
-            "cancel": "Ångra",
+            "convert": "Omvandla", //Transformera
+            "export": "Omvandla i en fil",
+            "select": "Välj",
+            "cancel": "Avbryt", //Ångra
             "done": "Färdig",
             "ok": "Ok",
-            "close": "Sulje"
+            "close": "Stäng"
         },
         "fileSettings": {
             "options": {
-                "decimalSeparator": "Desimaalierotin",
-                "coordinateSeparator": "Koordinaattierotin",
-                "headerCount": "Otsakerivien määrä",
-                "decimalCount": "Desimaalien tarkkuus",
-                "reverseCoords": "Koordinaatit käänteisesti",
-                "useId": "Käytä tunnistetta",
-                "writeHeader": "Kirjoita otsakerivi tiedostoon",
-                "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
-                "lineEnds": "Tulosteeseen rivin loput",
-                "choose": "Valitse",
+                "decimalSeparator": "Skiljetecken för decimaler",
+                "coordinateSeparator": "Skiljetecken för koordinater",
+                "headerCount": "Antal rubrikrader",
+                "decimalCount": "Decimalernas precision",
+                "reverseCoordinates": "Omvända koordinater",
+                "useId": { // Använd identifierare
+                    "input": "Koordinaatit sisältää tunnisteet",
+                    "generate": "Luo tunnisteet",
+                    "fromFile": "Lisää lähtötiedoston tunnisteet"
+                },
+                "writeHeader": "Skriv rubrikraden i filen",
+                "useCardinals": "Använd kardinalväderstreck (N,E,W,S)",
+                "lineEnds": "Ta med radavslutningarna i resultatet",
+                "choose": "Välj",
                 "degreeFormat":{
-                    "label": "Kulman muoto/yksikkö",
-                    "degree": "Aste",
-                    "gradian": "Gooni (graadi)",
-                    "radian": "Radiaani"
+                    "label": "Vinkelns form/enhet",
+                    "degree": "Grad",
+                    "gradian": "Gon (nygrad)",
+                    "radian": "Radian"
                 },
                 "lineSeparator": {
-                    "label": "Rivin erotin",
+                    "label": "Radavskiljare",
                     "win": "Windows / DOS",
                     "unix": "Unix",
                     "mac": "MacOS"
@@ -183,166 +189,175 @@ Oskari.registerLocalization(
                 "delimeters":{
                     "point": "Punkt",
                     "comma": "Kommatecken",
-                    "tab": "Tabulaattori",
-                    "space": "Utslutning",
+                    "tab": "Tabulator",
+                    "space": "Mellanslag", //Utslutning
                     "semicolon": "Semikolon"
                 }
             },
             "export": {
-                "title": "Aineiston muodostaminen",
+                "title": "Bildande av datamaterial",
                 "fileName": "Filnamn"
             },
             "import": {
-                "title": "Lähtöaineiston ominaisuudet"
+                "title": "Utgångsmaterialets egenskaper"
             }
         },
         "infoPopup": {
-            "description": "Kuvaus",
+            "description": "Beskrivning",
             "epsgSearch": {
-                "title": "Haku EPSG-koodin perusteella",
-                "info": "Voit hakea geodeettisen koordinaattijärjestelmän EPSG-koodin avulla. Syötä koodi pelkkänä numerona esim. 3067.",
+                "title": "Sök med EPSG-kod",
+                "info": "Du kan söka ett geodetiskt referenssystem för koordinater med EPSG-kod. Mata in koden enbart i sifferform, t.ex. 3067.",
                 "listItems": []
             },
             "geodeticDatum": {
                 "title": "Geodetiskt datum",
-                "info": "Geodeettinen datumi: datumi, joka kuvaa kaksi- tai kolmiulotteisen koordinaatiston suhdetta Maahan.",
+                "info": "Ett datum som beskriver förhållandet mellan jorden och ett två- eller tredimensionellt koordinatsystem.",
                 "listItems" : [
-                    "Suhde voidaan luoda määrittelemällä joukolle pisteitä konventionaaliset koordinaattiarvot",
-                    "Esimerkkejä geodeettisesta datumista ovat mm. EUREF-FIN ja kartastokoordinaattijärjestelmä."
+                    "Datum: en parameter eller parametermängd som definierar koordinatsystemets origo, skala och orientation.",
+                    "Exempel på geodetiska datum är bl.a. EUREF-FIN och kartverkskoordinatsystemet."
                 ]
             },
             "coordinateSystem":{
                 "title": "Koordinatsystem",
-                "info": "Koordinaatisto: matemaattisten sääntöjen joukko, jolla määritellään se, miten pisteille annetaan koordinaatit.",
+                "info": "En mängd matematiska regler som bestämmer hur koordinater för punkter definieras.",
                 "listItems" : [
-                    "Koordinaatisto voidaan hahmottaa koordinaattiakselien muodostamaksi mitta-akselistoksi.",
-                    "Erityyppisiä koordinaatistoja ovat esimerkiksi suorakulmainen koordinaatisto, tasokoordinaatisto, napakoordinaatisto, geodeettinen koordinaatisto, pallokoordinaatisto ja lieriökoordinaatisto.",
-                    "Geodesian alalla termi terrestrinen vertauskehys korvaa aiemmin käytetyn koordinaatisto-termin."
+                    "Olika typer av koordinatsystem är bl.a. rätvinkligt koordinatsystem, plankoordinatsystem, polärt koordinatsystem, geodetiskt koordinatsystem, sfäriskt koordinatsystem och cylindriskt koordinatsystem."
                 ]
             },
             "mapProjection":{
                 "title": "Kartprojektionssystem",
-                "info": "Karttaprojektiojärjestelmä: joukko sääntöjä, joiden avulla määrätään, kuinka haluttu alue kuvataan joukolla karttaprojektioita",
+                "info": "En mängd regler som bestämmer hur ett önskat område beskrivs med hjälp av en mängd kartprojektioner.",
                 "listItems" : [
-                    "Säännöillä voidaan esimerkiksi sitoa käytettävät karttaprojektiot ja projektiokaistat. Projektiokaistojen osalta järjestelmä voi määrittää kaistoille esimerkiksi tunnisteet, keskimeridiaanien tai -paralleelien mittakaavan, leveyden, pituuden ja päällekkäisyyden."
+                    "Kartprojektion: en metod för att beskriva jordklotets tredimensionella yta på ett tvådimensionellt kartplan.",
+                    "Med hjälp av reglerna kan man bestämma kartprojektioner och projektionszoner. För projektionszoner kan systemet bestämma identiferare, medelmeridianernas eller medelparallellernas skala, bredd, längd och överlappning."
                 ]
             },
             "geodeticCoordinateSystem":{
                 "title": "Geodetiskt koordinatsystem",
-                "info": "Geodeettinen koordinaattijärjestelmä: koordinaattijärjestelmä, joka perustuu geodeettiseen datumiin.",
+                "info": "Ett referenssystem för koordinater som baserar sig på ett geodetiskt datum.",
                 "listItems" : [
-                    "Koordinaattijärjestelmä: järjestelmä, joka muodostuu datumin avulla reaalimaailmaan kiinnitetystä koordinaatistosta.",
-                    "Koordinaattijärjestelmän avulla kohteen sijainti voidaan ilmaista yksikäsitteisesti.",
-                    "Koordinaattijärjestelmä voi olla globaali, alueellinen (käytössä esim. yhden mantereen alueella) tai paikallinen (käytössä esim. yhden valtion tai kunnan alueella).",
-                    "Suomen valtakunnallinen tasokoordinaattijärjestelmä on ETRS-TM35FIN."
+                    "Referenssystem för koordinater: ett koordinatsystem som har bundits till den verkliga världen med hjälp av ett datum.",
+                    "Finlands riksomfattande projicerade koordinatsystem är ETRS-TM35FIN."
                 ]
             },
             "heightSystem":{
-                "title":"Höjdsystemet",
-                "info": "Korkeusjärjestelmä: yksiulotteinen koordinaattijärjestelmä, joka perustuu korkeusdatumiin.",
+                "title":"Höjdsystem",
+                "info": "Ett endimensionerat koordinatsystem som baserar sig på ett höjddatum.",
                 "listItems" : [
-                    "Suomessa käytetään valtakunnallisissa töissä JHS 163-suosituksen mukaista N2000-korkeusjärjestelmää."
+                    "Höjddatum: datum som definierar förhållandet mellan höjder och djup i anslutning till tyngdkraften och Jorden.",
+                    "I Finland används höjdsystemet N2000 som är förenlig med rekommendationen JHS 163 i riksomfattande arbeten."
                 ]
             },
             "fileName":{
-                "title":"Tiedoston nimi",
+                "title":"Filnamn",
                 "info": "",
                 "paragraphs" : [],
                 "listItems" : []
             },
-            "decimalCount":{
-                "title":"Desimaalien määrä",
-                "info": "",
+            "decimalPrecision":{
+                "title":"Decimalernas precision",
+                "info": "Antalet decimaler som visas i resultatet.",
                 "paragraphs": [
-                    "Ominaisuuden avulla kerrotaan ohjelmalle kuinka monta desimaalia tulosteessa halutaan olevan."
+                    "Med denna egenskap kan man ange med hur många decimalers noggrannhet koordinaterna visas i resultatet. Det förvalda värdet på blanketten motsvarar ett antal decimaler som ger en 1 mm precision. Det förvalda värdet för gradangivelser är det närmaste antalet decimaler som i det metriska sytemet motsvarar 1 mm."
                 ],
-                "listItems" : []
+                "listItems" : [],
+                "precisionTable": {
+                    "title": "Metristen tarkkuuksien desimaalien määrä kulman muotojen/yksikkö",
+                    "unit": "Kulman muoto/yksikkö",
+                    "deg": "Asteet, goonit ja DD",
+                    "rad": "Radiaaneissa",
+                    "min": "DDMM ja DD MM",
+                    "sec": "DDMMSS ja DD MM SS"
+                }
             },
             "coordinateSeparator":{
-                "title":"Sarake-erotin",
-                "info": "",
+                "title":"Skiljetecken för koordinater",
+                "info": "Skiljetecken för koordinater", // TODO
                 "paragraphs": [
-                    "Ominaisuuden avulla määritetään millainen merkkijono erottaa syötteessä koordinaattiarvot toisistaan.",
-                    "Jos koordinaatteja edeltää jokin tunniste tai seuraa jokin merkkijono, tulee nämäkin olla erotettuna samalla erottimella."
+                    "Med denna egenskap anges vilket skiljetecken som använts för kolumner i utgångsmaterialet mellan koordinatvärden. I utgångsmaterialet får det finnas endast ett sådant skiljetecken mellan två koordinatvärden.",
+                    "Om koordinaterna föregås av en identifierare eller följs av en teckensträng, ska även dessa vara åtskilda med samma skiljetecken."
                 ],
                 "listItems" : []
             },
             "headerLineCount":{
-                "title":"Otsakerivien määrä",
-                "info": "",
+                "title":"Antal rubrikrader",
+                "info": "Antalet rader i början av filen före den första koordinatraden.",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy ohjelmalle kertomaan kuinka monta riviä tiedoston alusta ohitetaan.",
-                    "Ohittamisen syynä voi olla, että tiedoston alussa on esimerkiksi sanallinen kuvaus tiedoston sisällöstä."
+                    "Med denna egenskap kan man ange hur många rader i början av filen som applikationen kan förbise innan den ska läsa in den första koordinatraden.",
+                    "Orsaken till förbiseendet kan vara exempelvis en beskrivning i ord av filens innehåll i början av filen."
                 ],
                 "listItems" : []
             },
             "unitFormat":{
-                "title":"Kulman muoto/yksikkö",
-                "info": "",
+                "title":"Vinkelns form/enhet",
+                "info": "Enhet för geografiska koordinater i gradformat",
                 "paragraphs": [
-                    "Ominaisuuden avulla kerrotaan ohjelmalle missä muodossa kulma-arvot ovat. Tuettuja kulmayksikköjä ovat: Aste, Gooni (graadi) ja Radiaani.",
-                    "Lisäksi asteesta johdetut sexagesimaalimuodot ovat tuettuja. Jos näissä muodoissa esimerkiksi asteet, kaariminuutit ja kaarisekunnit ovat erotettuina, hyväksyy ohjelma erottimena tabulaattorin, pilkun ja puolipisteen, mutta ei välilyöntiä."
+                    "Med denna egenskap anges formatet för gradvärden. Gradenheter som applikationen stöder: Grad, Gon (nygrad) och Radian.",
+                    "Dessutom stöds sexagesimalformat som härletts ur grader. Om man i dessa format har avskiljt grader, bågminuter och bågsekunder med mellanslag (DD MM och DD MM SS), kan mellanslaget inte användas som skiljetecken för koordinater."
                 ],
                 "listItems" : []
             },
             "decimalSeparator":{
-                "title":"Desimaalierotin",
-                "info": "",
+                "title":"Skiljetecken för decimaler",
+                "info": "Med denna egenskap anges skiljetecknet för decimaler.",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy kertomaan mikä merkki toimii desimaalierotin.",
-                    "Desimaalierottimen tulee poiketa koordinaattiarvot erottavasta merkistä. Kun koordinaattiarvot erottaa esimerkiksi pilkku sekä joukko välilyöntejä, niin desimaalierottimen on oltava piste!"
+                    "Skiljetecknet för decimaler får inte vara samma som skiljetecknet för koordinatvärden. Om kommatecken använts som skiljetecken för koordinatvärden, ska skiljetecknet för decimaler vara en punkt."
                 ],
                 "listItems" : []
             },
             "lineSeparator":{
-                "title":"Rivin erotin",
-                "info": "",
+                "title":"Radavskiljare",
+                "info": "Tecken som i filen anger radbyte.",
                 "paragraphs": [
-                    "Ominaisuuden avulla kerrotaan ohjelmalle mitä merkkiä/merkkijonoa käytetään erottamaan toisistaan rivit (pisteet)."
+                    "Med denna egenskap anges vilket tecken eller vilken teckensträng används för att ange radbyte. Detta tecken eller denna teckensträng läggs alltså till slutet av varje rad."
                 ],
                 "listItems" : []
             },
             "prefixId":{
-                "title":"Koordinaattiarvoja edeltää pisteen tunniste",
-                "info": "",
+                "title":"Använd identifierare",
+                "info": "Koordinatraden börjar med identifieraruppgift",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy ohjelmalle kertomaan, että jokaisen pisteen koordinaattiarvoja edeltää samalla rivillä pisteen tunniste (ID).",
-                    "Pisteen tunnisteen tulee olla erotettuna koordinaattiarvoista samalla merkkijonolla kuin koordinaattiarvot ovat erotettuina toisistaan.",
-                    "Tunnisteen ei tarvitse olla numeerinen."
+                    "Med denna egenskap anges att koordinatvärdena för respektive punkt föregås av punktens identifierare (ID) på samma rad",
+                    "Punktens identifierare ska vara avskilt från koordinatvärdena med samma teckensträng som skiljer koordinatvärdena från varandra.",
+                    "Om den importerade filen saknar punktidentifierare eller punkterna har hämtats från en tabell eller karta, ges resultatfilernas punkter identifierare som börjar från 1 och växer med ett heltal per punkt.",
+                    "I utgångsfilen behöver identifierare inte vara numeriska."
                 ],
                 "listItems" : []
             },
             "reverseCoordinates":{
-                "title":"Koordinaatit käänteisesti",
-                "info": "",
+                "title":"Omvända koordinater",
+                "info": "X- och Y-koordinataxlarnas ordning avviker från den definierade ordningen.",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy määrittämään ovatko tiedoston pisteiden kaksi ensimmäistä koordinaattiarvoa käänteisessä järjestyksessä suhteessa koordinaatiston kuvailussa annettuun järjestykseen.",
-                    "Esimerkiksi kkj:n koordinaatit ovat lähtökohtaisesti jäjestyksessä, jossa ensimmäisenä on x-koordinaatti ja sitä seuraa y-koordinaatti. x-akseli osoittaa pohjoiseen ja y-akseli itään. Kun valitsee käänteisen järjestyksen, tulee tiedostossa y-koordinaatin edeltää x-koordinaattia."
+                    "Med denna egenskap kan man definiera om de två första koordinatvärdena för punkterna i filen är i motsatt ordning jämfört med den ordning som anges i koordinatsystemets beskrivning.",
+                    "Exempelvis visas KKS-koordinater så att nordkoordinaten är först och östkoordinaten följer. När man väljer omvänd ordning, ska östkoordinaten vara först i filen och sedan nordkoordinaten."
                 ],
                 "listItems" : []
             },
             "writeHeader":{
-                "title":"Otsakerivin tulostaminen tiedostoon",
-                "info": "",
+                "title":"Skriv rubrikraden i filen",
+                "info": "Inkludera rubrikraderna i början av resultatfilen",
                 "paragraphs": [
-                    "Ominaisuuden avulla käyttäjä voi kertoa haluaako tulostiedostoon metatietoa koordinaateista otsakeriville."
+                    "Med denna egenskap kan användaren ta med metadata om koordinaterna på rubrikraden i resultatfilen. Namnet på referenssystemet för koordinater läggs till på rubrikraden.",
+                    "I omvandlingen från en fil till en annan läggs utöver uppgifterna om referenssystemet för koordinater även eventuella rubrikrader i utgångsfilen till i resultatfilen."
                 ],
                 "listItems" : []
             },
             "lineEnds":{
-                "title":"Tulosteeseen rivin loput",
-                "info": "",
+                "title":"Ta med radavslutningarna i resultatet",
+                "info": "Inkludera radsluten i utgångsfilen i resultatfilen",
                 "paragraphs": [
-                    "Ominaisuuden avulla pystyy kertomaan haluaako tulosteeseen kirjoitettavan myös jokaisella rivillä annetun pisteen koordinaatteja seuraavan merkkijonon."
+                    "Med denna egenskap kan man ange om man vill ha eventuella radslut i utgångsfilen i resultatfilen. Som radslut läser applikationen in alla tecken efter punktens koordinatvärden på raden. Radslutet ska vara avskilt från koordinatvärdena med samma tecken som skiljer koordinatvärdena från varandra.",
+                    "Denna egenskap påverkar endast omvandlingar från en fil till en annan."
+                    
                 ],
                 "listItems" : []
             },
             "useCardinals":{
-                "title":"Kardinaalien käyttö",
-                "info": "",
+                "title":"Använd kardinalväderstreck",
+                "info": "Lägg till väderstrecken (N, E, W eller S) efter koordinatvärdena",
                 "paragraphs": [
-                    "Ominaisuudella määritetään kirjoitetaanko tulosteeseen koordinaattiarvojen perään niiden ilmansuunnat. Tällöin miinusmerkit poistetaan koordinaattiarvoista.",
-                    "Ilmansuunnat annetaan kirjoittamalla joko N, E, W tai S koordinaattiarvon perään."
+                    "Med denna egenskap anges om koordinatvärdenas väderstreck skrivs ut efter koordinatvärdena i en utskrift. På värden med förtecknet minus läggs det motsatta väderstrecket till och minustecknen tas bort från koordinatvärdena. Exempel: värdet på östkoordinaten 325418 blir 325418E och på östkoordinaten -325418 blir värdet 325418W.",
+                    "Väderstrecken anges genom att skriva N, E, W eller S efter respektive koordinatvärde."
                 ],
                 "listItems" : []
             }
