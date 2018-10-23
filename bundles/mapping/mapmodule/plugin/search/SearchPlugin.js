@@ -408,10 +408,7 @@ Oskari.clazz.define(
                         i,
                         clickFunction = function () {
                             me._resultClicked(
-                                me.results[parseInt(
-                                    jQuery(this).attr('data-location'),
-                                    10
-                                )]
+                                me.results[parseInt(jQuery(this).attr('data-location'), 10)]
                             );
                             return false;
                         };

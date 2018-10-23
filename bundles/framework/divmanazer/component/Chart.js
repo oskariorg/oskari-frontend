@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         var xScaleDomain;
 
         if (!this.dataHasNegativeValues()) {
-            xScaleDomain = [ 0, dataset.max];
+            xScaleDomain = [0, dataset.max];
         } else {
             xScaleDomain = d3.extent(this.data, function (d) { return d.value; });
         }

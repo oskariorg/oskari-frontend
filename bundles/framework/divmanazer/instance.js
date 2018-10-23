@@ -448,8 +448,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         createTile: function (extension, plugin, count, extensionInfo) {
             var me = this,
                 // container = jQuery('#menubar'),
-                tile = this.compiledTemplates[
-                    'Oskari.userinterface.Tile'].clone(true, true),
+                tile = this.compiledTemplates['Oskari.userinterface.Tile'].clone(true, true),
                 tilePlugin = extension.plugins['Oskari.userinterface.Tile'],
                 title = tile.children('.oskari-tile-title'),
                 tileClick = function () {
@@ -1191,9 +1190,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 if (me.extensionsByName.hasOwnProperty(e)) {
                     extensionInfo = me.extensionsByName[e];
 
-                    flyoutInfo = extensionInfo.plugins[
-                        'Oskari.userinterface.Flyout'
-                    ];
+                    flyoutInfo = extensionInfo.plugins['Oskari.userinterface.Flyout'];
                     if (flyoutInfo) {
                         // flyoutPlugin = flyoutInfo.plugin;
                         flyout = flyoutInfo.el;
@@ -1233,9 +1230,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     extensionInfo = me.extensionsByName[e];
                     // extension = extensionInfo.extension;
 
-                    flyoutInfo = extensionInfo.plugins[
-                        'Oskari.userinterface.Flyout'
-                    ];
+                    flyoutInfo = extensionInfo.plugins['Oskari.userinterface.Flyout'];
                     if (flyoutInfo) {
                         flyoutPlugin = flyoutInfo.plugin;
                         flyout = flyoutInfo.el;
@@ -1255,9 +1250,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                             [flyout, flyoutPlugin, extensionInfo, extensions]
                         );
                     }
-                    tileInfo = extensionInfo.plugins[
-                        'Oskari.userinterface.Tile'
-                    ];
+                    tileInfo = extensionInfo.plugins['Oskari.userinterface.Tile'];
                     if (tileInfo) {
                         // tilePlugin = tileInfo.plugin;
                         tile = tileInfo.el;
@@ -1318,9 +1311,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 if (me.extensionsByName.hasOwnProperty(e)) {
                     extensionInfo = me.extensionsByName[e];
                     // extension = extensionInfo.extension;
-                    flyoutInfo = extensionInfo.plugins[
-                        'Oskari.userinterface.Flyout'
-                    ];
+                    flyoutInfo = extensionInfo.plugins['Oskari.userinterface.Flyout'];
                     if (flyoutInfo) {
                         // flyoutPlugin = flyoutInfo.plugin;
                         flyout = flyoutInfo.el;

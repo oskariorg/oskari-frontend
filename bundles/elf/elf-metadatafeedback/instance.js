@@ -245,9 +245,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadatafeedback.MetadataFeedbackBu
          * @return {Object} bundle state as JSON
          */
         getState: function () {
-            return this.plugins[
-                'Oskari.userinterface.Flyout'
-            ].getContentState();
+            return this.plugins['Oskari.userinterface.Flyout'].getContentState();
         },
         eventHandlers: {},
 

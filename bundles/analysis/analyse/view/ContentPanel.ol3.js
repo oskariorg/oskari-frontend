@@ -979,6 +979,7 @@ Oskari.clazz.define(
 
         _operateDrawFilters: function () {
             // TODO: enable when geometryeditor is integrated
+            /*
             return;
 
             var preSelector = 'div.drawFilter.analysis-selection-',
@@ -1013,6 +1014,7 @@ Oskari.clazz.define(
                 removeButton.addClass('disabled');
                 break;
             }
+            */
         },
 
         _disableAllDrawFilterButtons: function () {

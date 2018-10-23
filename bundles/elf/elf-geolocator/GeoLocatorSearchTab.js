@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.elf.geolocator.GeoLocatorSeachTab',
             // generate dropdown rows from data
             var count = _.keys(this.results).length;
             var tmp = [];
-            var resultArray = {locationtypes: {id: [], name: []}, namelanguages: [] };
+            var resultArray = {locationtypes: {id: [], name: []}, namelanguages: []};
             for (i = 0; i < count; i++) {
                 if (i === 0) {
                     for (var k = 0; k < _.keys(this.results.locationtypes.id).length; k++) {
