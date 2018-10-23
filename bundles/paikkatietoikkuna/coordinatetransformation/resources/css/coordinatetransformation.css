@@ -112,7 +112,7 @@
 /* Coordinate system selections */
 .coordinatetransformation-flyout .coordinate-systems-wrapper {
     display: flex;
-    padding-bottom: 12px;
+    padding-bottom: 24px;
 }
 .coordinatetransformation-flyout .transformation-system {
     min-width: 360px;
@@ -348,6 +348,19 @@
 .coordinatetransformation-file-form .without-infolink {
     padding-right: 16px;
 }
+.precision-table-wrapper .precisionTable {
+    width: 420px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.precision-table-wrapper table th:first-child, .precision-table-wrapper table td:first-child {
+    text-align: left;
+}
+.precision-table-wrapper table th, .precision-table-wrapper table td {
+    text-align: center;
+    min-width: 50px;
+}
+
 /* Helper popup */
 .coordinatetransformation-helper-popup ul {
     padding-left: 20px;
@@ -369,10 +382,15 @@
     .coordinatetransformation-flyout {
         max-width: 560px;
     }
+    .coordinatetransformation-flyout .systems-filter-wrapper {
+        width: 360px;
+        margin: 0 auto;
+    }
     .coordinatetransformation-flyout .datasource-wrapper{
         width: 360px;
         margin-left: auto;
         margin-right: auto;
+        padding-bottom: 12px;
     }
     .coordinatetransformation-flyout .coordinate-datasources-wrapper {
         flex-direction: column;
@@ -390,13 +408,18 @@
     }
     .coordinatetransformation-flyout .coordinate-tables-wrapper {
         flex-direction: column;
-        width: 322px;
+        width: 360px;
         margin-left: auto;
         margin-right: auto;
         /*align-items: center;
         flex-wrap: wrap;*/
     }
+    .coordinatetransformation-flyout .coordinate-table-wrapper {
+        width: 322px;
+        margin-right: 38px;
+    }
     .coordinate-tables-wrapper .transformation-button {
+        margin-right: 40px;
         margin-top: 12px;
         margin-bottom: 12px;
     }
