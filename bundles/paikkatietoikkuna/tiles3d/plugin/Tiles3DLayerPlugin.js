@@ -1,5 +1,7 @@
 import Tiles3DModelBuilder from './Tiles3DModelBuilder';
 
+import '../util/overrideCesiumMaterial'; // for side effects only
+
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
