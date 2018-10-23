@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         container: jQuery('<div></div>')
     },
     /**
-     * @method  @public render Render datatable
+     * @method  @public render Render diagram
      * @param  {Object} el jQuery element
      */
     render: function (el) {

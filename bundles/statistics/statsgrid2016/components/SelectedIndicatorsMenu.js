@@ -42,6 +42,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         };
         this._getIndicatorUILabels(function (options) {
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+            me._select = select;
             var dropdown = select.create(options, dropdownOptions);
             me.dropdown = dropdown;
             dropdown.css({
@@ -52,7 +53,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var activeIndicator = me.service.getStateService().getActiveIndicator();
             if (activeIndicator) {
                 activeIndicator.hash ? select.setValue(activeIndicator.hash) : select.selectFirstValue();
-                me._select = select;
             }
 
             container.append(dropdown);
