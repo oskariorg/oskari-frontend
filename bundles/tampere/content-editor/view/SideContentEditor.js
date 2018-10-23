@@ -277,7 +277,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                 featureData[0].push('');
             });
 
-            me._handleInfoResult({layerId: me.layerId, features: featureData }, 'create');
+            me._handleInfoResult({layerId: me.layerId, features: featureData}, 'create');
         },
         /**
          * Edit feature
@@ -1170,7 +1170,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
                     val = jQuery(this).find('td').eq(1).html();
                 }
 
-                result.push({key: key, value: val });
+                result.push({key: key, value: val});
             });
 
             return result;
@@ -1334,7 +1334,7 @@ Oskari.clazz.define('Oskari.tampere.bundle.content-editor.view.SideContentEditor
          */
         setClickCoords: function (coords) {
             this.clickCoords = coords;
-            this._handleInfoResult({layerId: this.layerId, features: [] });
+            this._handleInfoResult({layerId: this.layerId, features: []});
         },
 
         /**

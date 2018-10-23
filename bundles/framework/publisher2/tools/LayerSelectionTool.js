@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             var me = this;
 
             if (me.state.enabled) {
-                var pluginConfig = { id: this.getTool().id, config: this.getPlugin().getConfig()};
+                var pluginConfig = {id: this.getTool().id, config: this.getPlugin().getConfig()};
                 var layerSelection = me._getLayerSelection();
 
                 if (layerSelection && !jQuery.isEmptyObject(layerSelection)) {

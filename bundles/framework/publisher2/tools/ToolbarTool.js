@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             };
 
             // we want toolbar always with no default tools
-            retValue.configuration.toolbar = { conf: {'history': false, 'basictools': false, 'viewtools': false } };
+            retValue.configuration.toolbar = { conf: {'history': false, 'basictools': false, 'viewtools': false} };
 
             // PublishedMyPlaces is not supported with ol3
 

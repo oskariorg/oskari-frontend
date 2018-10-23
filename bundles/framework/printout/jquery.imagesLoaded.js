@@ -8,6 +8,7 @@
 /* jshint curly: true, eqeqeq: true, noempty: true, strict: true, undef: true, browser: true */
 /* global jQuery: false */
 
+/* eslint-disable */
 ;(function ($, undefined) {
     'use strict';
 

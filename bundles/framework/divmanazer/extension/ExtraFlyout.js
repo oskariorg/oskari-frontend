@@ -236,7 +236,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
             var textWidth = function (el) {
                 // Only create the dummy element once
-                var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap' }).appendTo('body');
+                var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap'}).appendTo('body');
                 var width = calc.html(el.html()).width();
                 // Empty out the content until next time - not needed, but cleaner
                 calc.remove();

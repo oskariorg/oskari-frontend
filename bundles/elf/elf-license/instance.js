@@ -320,7 +320,7 @@ Oskari.clazz.define('Oskari.elf.license.BundleInstance', function () {
             }, function (response) {
                 me._progressSpinner.stop();
                 if (response) {
-                    userInfo.css({ 'margin-top': '6px', 'margin-bottom': '6px'});
+                    userInfo.css({'margin-top': '6px', 'margin-bottom': '6px'});
                     userInfo.html(me._locale.dialog.licenceConcluded.message);
                     me._showLicenseDeactivateDialog(response, me._metadata, userInfo);
                 } else {
