@@ -987,6 +987,33 @@ function (
                 }
             });
         },
+        _readLayerOptions: function (data, form) {
+            const optionsElement = form.find('.add-layer-input.layer-options');
+            if (optionsElement.length !== 0) {
+                // Master options element. Read only this element's value to options.
+                try {
+                    var optsJson = JSON.parse(optionsElement.val().trim() || '{}');
+                    data.options = JSON.stringify(optsJson);
+                } catch (error) {
+                    // don't include "options" in data if malformed JSON
+                }
+            } else {
+                // Gather options object by reading multiple layer options elements.
+                const parseOptionQuietly = className => {
+                    const element = form.find(className);
+                    if (element.length !== 0) {
+                        try {
+                            return JSON.parse(element.val().trim());
+                        } catch (e) {}
+                    }
+                };
+                const options = {
+                    styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
+                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles')
+                };
+                data.options = JSON.stringify(options);
+            }
+        },
         /**
              * Add layer
              *
@@ -1060,25 +1087,7 @@ function (
                 // don't include "attributes" in data if malformed JSON
             }
 
-            try {
-                const optionsElement = form.find('.add-layer-input.layer-options');
-                if (optionsElement.length !== 0) {
-                    var optsJson = JSON.parse(optionsElement.val().trim() || '{}');
-                    data.options = JSON.stringify(optsJson);
-                } else {
-                    const options = {};
-                    const stylesElement = form.find('.add-layer-input.layer-options-styles');
-                    if (stylesElement.length !== 0) {
-                        var stylesJson = JSON.parse(stylesElement.val().trim());
-                        if (stylesJson) {
-                            options.styles = stylesJson;
-                        }
-                    }
-                    data.options = JSON.stringify(options);
-                }
-            } catch (error) {
-                // don't include "options" in data if malformed JSON
-            }
+            this._readLayerOptions(data, form);
 
             // layer type specific
             // TODO: maybe something more elegant?

@@ -87,6 +87,8 @@ Oskari.registerLocalization(
             "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
             "oskariStyles": "Stilar",
             "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
+            "tiles3dStyles": "Cesium stilar",
+            "tiles3dStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "selectClass": "Välj tema",
             "selectClassDesc": "Välj tema",
             "baseName": "Bakgrundsnivåns namn",

@@ -25,12 +25,27 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer',
             }
         },
         /**
-         * @method getCurrentStyleDef
+         * @method getStyleDef
+         * @param {String} styleName
          * @return {Object}
          */
-        getCurrentStyleDef: function () {
+        getExternalStyleDef: function (styleName) {
+            if (this._options && this._options.externalStyles) {
+                return this._options.externalStyles[styleName];
+            }
+        },
+        /**
+         * @method getCurrentStyleDefs
+         * @return {Object}
+         */
+        getCurrentStyleDefs: function () {
             if (this._currentStyle) {
-                return this.getStyleDef(this._currentStyle.getName());
+                const styleName = this._currentStyle.getName();
+                const style = {
+                    oskari: this.getStyleDef(styleName),
+                    external: this.getExternalStyleDef(styleName)
+                };
+                return style;
             }
         }
     }, {
