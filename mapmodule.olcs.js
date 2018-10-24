@@ -329,19 +329,44 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     /**
+     * Returns color expressions modified with layer opacity
+     * @param {String | Object} colorDef Cesium style expression or object containing conditions array 
+     * @param {Number} opacity Layer opacity
+     */
+    _getColorExpressionsWithOpacity (colorDef, opacity) {
+        if (!colorDef || isNaN(opacity)) {
+            return colorDef;
+        }
+        const modifyExpression = expression => `(${expression}) * color('#FFF',${opacity})`;
+
+        if (colorDef.conditions) {
+            colorDef.conditions = colorDef.conditions.map(condition => {
+                let cond = condition[0];
+                let expression = modifyExpression(condition[1]);
+                return [cond, expression];
+            });
+        } else {
+            colorDef = modifyExpression(colorDef);
+        }
+        return colorDef;
+    }
+    /**
      * Creates style based on JSON
      * @return {Cesium.Cesium3DTileStyle} style Cesium specific!
      */
-    get3DStyle (styleDef, opacity) {
-        if (!styleDef) {
-            return;
+    get3DStyle (styleDefs, opacity) {
+        const oskariStyle = {};
+        const extStyle = {};
+        if (styleDefs) {
+            jQuery.extend(true, oskariStyle, styleDefs.oskari);
+            jQuery.extend(true, extStyle, styleDefs.external);
         }
-        var style = jQuery.extend(true, {}, styleDef);
-        var cesiumStyle = new Cesium.Cesium3DTileStyle();
+
+        const cesiumStyle = {};
         // Set light brown default color;
-        var color = TILESET_DEFAULT_COLOR;
-        if (Oskari.util.keyExists(style, 'fill.color')) {
-            color = style.fill.color;
+        let color = TILESET_DEFAULT_COLOR;
+        if (Oskari.util.keyExists(oskariStyle, 'fill.color')) {
+            color = oskariStyle.fill.color;
             if (color.indexOf('rgb(') > -1) {
                 // else check at if color is rgb
                 color = '#' + Oskari.util.rgbToHex(color);
@@ -354,10 +379,21 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         cesiumStyle.color = `color('${color}', ${opacity})`;
 
-        if (Oskari.util.keyExists(style, 'image.sizePx')) {
-            cesiumStyle.pointSize = `${styleDef.image.sizePx}`;
+        if (Oskari.util.keyExists(oskariStyle, 'image.sizePx')) {
+            cesiumStyle.pointSize = `${oskariStyle.image.sizePx}`;
         }
-        return cesiumStyle;
+
+        // override and extend with external styles
+        Object.keys(extStyle).forEach(key => {
+            let styleProp = extStyle[key];
+            if (key === 'color') {
+                // make a copy and modify it by setting the opacity
+                styleProp = this._getColorExpressionsWithOpacity(styleProp, opacity);
+            }
+            cesiumStyle[key] = styleProp;
+        });
+
+        return new Cesium.Cesium3DTileStyle(cesiumStyle);
     }
 
     /**
