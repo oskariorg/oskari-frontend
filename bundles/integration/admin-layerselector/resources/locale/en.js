@@ -87,6 +87,8 @@ Oskari.registerLocalization(
             "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
             "oskariStyles": "Styles",
             "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
+            "tiles3dStyles": "Cesium styles",
+            "tiles3dStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "selectClass": "Select theme",
             "selectClassDesc": "Select a theme describing the map layer from the list.",
             "baseName": "Background Map Layer Name",

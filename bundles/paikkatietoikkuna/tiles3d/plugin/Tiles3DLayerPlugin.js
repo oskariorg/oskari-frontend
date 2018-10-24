@@ -41,7 +41,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             if (!tileset || !layer) {
                 return;
             }
-            tileset.style = this.getMapModule().get3DStyle(layer.getCurrentStyleDef(), layer.getOpacity());
+            tileset.style = this.getMapModule().get3DStyle(layer.getCurrentStyleDefs(), layer.getOpacity());
         },
         /**
          * @private @method _initImpl
@@ -136,7 +136,9 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 dynamicScreenSpaceErrorHeightFalloff: 0.25
             });
 
+            this._applyOskariStyle(tileset, layer);
             this.getMapModule().addLayer(tileset);
+
             layer.setQueryable(false);
 
             // store reference to layers

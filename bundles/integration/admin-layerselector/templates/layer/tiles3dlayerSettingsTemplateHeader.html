@@ -22,8 +22,18 @@
         <label class="add-layer-label" title="<%= instance.getLocalization('admin').oskariStyles %>"><%= instance.getLocalization('admin').oskariStyles %></label>
     </div>
     <div class="add-layer-input-area">
-        <% var options = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().styles)) ? "" : JSON.stringify(model.getOptions().styles); %>
+        <% var styles = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().styles)) ? "" : JSON.stringify(model.getOptions().styles); %>
         <textarea rows="3" cols="50" class="add-layer-input long layer-options-styles" 
-            placeholder="<%- instance.getLocalization('admin').oskariStylesDesc %>"><%=options%></textarea>
+            placeholder="<%- instance.getLocalization('admin').oskariStylesDesc %>"><%=styles%></textarea>
+    </div>
+</div>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').tiles3dStyles %>"><%= instance.getLocalization('admin').tiles3dStyles %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <% var extStyles = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().externalStyles)) ? "" : JSON.stringify(model.getOptions().externalStyles); %>
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-ext-styles" 
+            placeholder="<%- instance.getLocalization('admin').tiles3dStylesDesc %>"><%=extStyles%></textarea>
     </div>
 </div>
