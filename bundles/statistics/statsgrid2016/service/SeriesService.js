@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         getSelectedIndex: function () {
             return this.values.indexOf(this.selectedValue);
         },
-        getValue: function (index) {
+        getValue: function () {
             return this.selectedValue;
         },
         setValues: function (values) {
