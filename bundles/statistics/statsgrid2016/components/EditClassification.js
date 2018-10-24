@@ -187,12 +187,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
         classification = classification || state.getClassificationOpts(ind.hash);
 
-        me._element.find('select.map-style').bind('change', function () {
-            var el = jQuery(this);
-            var value = el.val();
-            me._toggleMapStyle(value);
-        });
-
         var mapStyle = classification.mapStyle || 'choropleth';
         me._element.find('select.map-style').val(mapStyle);
         me._toggleMapStyle(mapStyle);
@@ -267,7 +261,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 max = me._rangeSlider.defaultValues[1];
                 updateClassification = true;
             }
-            me._rangeSlider.element.slider('values', [min, max]);
+            me._rangeSlider.element.slider('option', 'values', [min, max]);
             me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         }
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
@@ -399,6 +393,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         this.setEnabled(this.__enabled);
 
         me._colorSelect.setHandler(updateClassification);
+        me._element.find('select.map-style').on('change', function () {
+            var el = jQuery(this);
+            var value = el.val();
+            me._toggleMapStyle(value);
+        });
         me._element.find('select').on('change', updateClassification);
         me._element.find('select.decimal-place').on('change', function () {
             var stateService = me.service.getStateService();
