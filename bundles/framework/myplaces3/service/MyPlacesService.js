@@ -857,37 +857,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     }
                 }
             });
-        },
-        /**
-         * @method  _formatColorFromServer
-         * @private
-         * Removes prefix #-character if present
-         */
-        _formatColorFromServer: function (color) {
-            if (typeof color === 'string') {
-                if (color.length === 0) {
-                    return null;
-                } else if (color.charAt(0) === '#') {
-                    return color.substring(1);
-                } else {
-                    return color;
-                }
-            } else {
-                return null;
-            }
-        },
-        /**
-         * @method  _prefixColorForServer
-         * @private
-         * Adds prefix #-character if not present
-         */
-        _prefixColorForServer: function (color) {
-            if (color.charAt(0) !== '#') {
-                return '#' + color;
-            }
-            return color;
         }
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

@@ -152,28 +152,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesWFSTSt
                 cb(list);
             }
         },
-        /**
-         * @method  _formatColorFromServer
-         * @private
-         * Removes prefix #-character if present
-         */
-        _formatColorFromServer: function (color) {
-            if (color.charAt(0) === '#') {
-                return color.substring(1);
-            }
-            return color;
-        },
-        /**
-         * @method  _prefixColorForServer
-         * @private
-         * Adds prefix #-character if not present
-         */
-        _prefixColorForServer: function (color) {
-            if (color.charAt(0) !== '#') {
-                return '#' + color;
-            }
-            return color;
-        },
 
         /**
          * @method commitCategories

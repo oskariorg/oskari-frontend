@@ -64,21 +64,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * Removes prefix #-character if present
-         *
-         * @method  _formatColorFromServer
-         * @private
-         * @param {String} color
-         * @return {String} color
-         */
-        _formatColorFromServer: function (color) {
-            if (color.charAt(0) === '#') {
-                return color.substring(1);
-            }
-            return color;
-        },
-
-        /**
          * Returns visualization form values as an object
          *
          * @method _getStyleValues
