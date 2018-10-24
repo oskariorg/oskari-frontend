@@ -49,22 +49,28 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             template = _.extend({}, data);
             delete template.identifications;
-            // Create a panel for each identification
-            for (i = 0; i < data.identifications.length; i += 1) {
-                model = _.extend({}, template);
-                model.identification = data.identifications[i];
-                panel = Oskari.clazz.create(
-                    'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
-                    me.instance,
-                    me.locale,
-                    model
-                );
-                if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
-                    panel.addTabs(me.asyncTabs);
-                }
 
-                me.addPanel(panel);
-                panel.init(i === 0);
+            if (data.identifications.length === 0) {
+                //  No identifications, show metadata not found message
+                me._showMetadataNotFoundMessage();
+            } else {
+                // Create a panel for each identification
+                for (i = 0; i < data.identifications.length; i += 1) {
+                    model = _.extend({}, template);
+                    model.identification = data.identifications[i];
+                    panel = Oskari.clazz.create(
+                        'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
+                        me.instance,
+                        me.locale,
+                        model
+                    );
+                    if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
+                        panel.addTabs(me.asyncTabs);
+                    }
+
+                    me.addPanel(panel);
+                    panel.init(i === 0);
+                }
             }
         },
 
@@ -240,7 +246,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 function (data) {
                     me._processJSON(uuid, data);
                 },
-                function (jqXHR, exception) {}
+                function (jqXHR, exception) {
+                    // Request failed, show generic message to user
+                    me._showMetadataNotFoundMessage();
+                }
             );
             return true;
         },
@@ -326,7 +335,16 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             // );
 
             return replacedText;
+        },
+
+        /**
+         * @method showErrorMessage
+         * Render 'metadata not found' message to ui
+         */
+        _showMetadataNotFoundMessage: function () {
+            jQuery(this.ui[0]).text(this.locale.notFound);
         }
+
     }, {
         extend: ['Oskari.userinterface.component.Accordion']
     });
