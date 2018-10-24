@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         // remove layer
         sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
 
-        if (!ind) {
+        if (!ind || !currentRegion) {
             return;
         }
         me._updateLayerProperties();
@@ -327,9 +327,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             }
 
             // resolve region
-            var features = event.getParams().features[0];
-            var region = features.geojson.features[0].properties.id;
-
+            var topmostFeature = event.getParams().features[0];
+            if (topmostFeature.layerId !== me.LAYER_ID) {
+                return;
+            }
+            var region = topmostFeature.geojson.features[0].properties.id;
             state.toggleRegion(region, 'map');
         });
     }
