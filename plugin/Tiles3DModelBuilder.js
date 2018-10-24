@@ -5,14 +5,14 @@ export default class Tiles3DModelBuilder {
         if (!mapLayerJson.options) {
             return;
         }
-        if (mapLayerJson.options.styles) {
-            Object.keys(mapLayerJson.options.styles).forEach((styleName) => {
-                const style = new Style();
-                style.setName(styleName);
-                style.setTitle(styleName);
-                layer.addStyle(style);
-            });
-            layer.selectStyle('default');
-        }
+        const options = mapLayerJson.options;
+        const styles = jQuery.extend({}, options.styles || {}, options.externalStyles || {});
+        Object.keys(styles).forEach((styleName) => {
+            const style = new Style();
+            style.setName(styleName);
+            style.setTitle(styleName);
+            layer.addStyle(style);
+        });
+        layer.selectStyle('default');
     }
 }
