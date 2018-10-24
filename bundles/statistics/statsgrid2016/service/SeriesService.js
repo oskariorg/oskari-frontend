@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         getSelectedIndex: function () {
             return this.values.indexOf(this.selectedValue);
         },
-        getValue: function () {
+        getValue: function (index) {
             return this.selectedValue;
         },
         setValues: function (values) {
@@ -136,10 +136,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             if (shouldAnimate !== this.animating) {
                 if (shouldAnimate) {
                     // check possibility to start animation
-                    if (this.getSelectedIndex() !== -1 && this.getSelectedIndex() !== this.values.length - 1) {
-                        this.animating = shouldAnimate;
-                        this._throttleAnimation();
+                    if (this.getSelectedIndex() === -1) {
+                        return;
                     }
+                    if (this.getSelectedIndex() === this.values.length - 1) {
+                        this.setSelectedValue(this.values[0]);
+                    }
+                    this.animating = shouldAnimate;
+                    this._throttleAnimation();
                     return;
                 }
                 this.animating = shouldAnimate;
