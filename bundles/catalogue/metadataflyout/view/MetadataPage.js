@@ -342,7 +342,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * Render 'metadata not found' message to ui
          */
         _showMetadataNotFoundMessage: function () {
-            jQuery(this.ui[0]).text(this.locale.notFound);
+            this.ui.text(this.locale.notFound);
         }
 
     }, {

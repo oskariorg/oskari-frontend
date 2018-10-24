@@ -176,7 +176,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </ul>' +
                     '    <% } %>' +
 
-                    '    <% if (identification.citation.date.date != null && identification.citation.date.date.length) { %>' +
+                    '    <% if (identification.citation.date.date) { %>' +
                     '        <h2>' + this.locale.heading.citationDate + '</h2>' +
                     '        <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
                     '        (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
@@ -342,7 +342,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
                     '        </ul>' +
                     '    <% } %>' +
 
-                    '    <% if (identification.citation.date.date != null && identification.citation.date.date.length) { %>' +
+                    '    <% if (identification.citation.date.date) { %>' +
                     '        <h2>' + this.locale.heading.citationDate + '</h2>' +
                     '        <p title="<%= (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {description: identification.citation.date.dateType}).description %>"><%- identification.citation.date.date %> (<%=' +
                     '        (locale.codeLists["gmd:CI_DateTypeCode"][identification.citation.date.dateType] || {label: identification.citation.date.dateType}).label' +
