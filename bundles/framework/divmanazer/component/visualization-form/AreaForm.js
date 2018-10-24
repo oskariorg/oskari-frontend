@@ -72,12 +72,16 @@ Oskari.clazz.define(
             'icon-line-thin-diagonal',
             'icon-line-wide-diagonal',
             'icon-line-thin-horizontal',
-            'icon-line-wide-horizontal'
+            'icon-line-wide-horizontal',
+            'areaform-fill-transparent',
+            'areaform-fill-solid'
         ];
 
         this.templateAreaStyleDialogContent = jQuery('<div class="areaform">' +
             '<div class="container clearfix">' +
             '<div class="column1">' +
+            '<label>' + this.loc.linecolor.label + '</label>' +
+            '<div class="color-picker-area-line-wrapper"></div>' +
             '<label>' + this.loc.linestyle.label + '</label>' +
             '<div class="style icon-buttons"></div>' +
             '<label>' + this.loc.linecorner.label + '</label>' +
@@ -87,22 +91,14 @@ Oskari.clazz.define(
             '</div>' +
             '<div class="column2">' +
             '<div class="column21">' +
-            '<label>' + this.loc.linecolor.label + '</label>' +
-            '<div class="color-picker-area-line-wrapper"></div>' +
-            '<div class="remove-color-line"></div>' +
-            '</div>' +
-            '<div class="column22">' +
-            '<div class="column221">' +
             '<label>' + this.loc.color.label + '</label>' +
             '<div class="color-picker-area-fill-wrapper"></div>' +
             '<label>' + this.loc.fill.label + '</label>' +
             '<div class="fill icon-buttons"></div>' +
-            '<div class="remove-color-fill"></div>' +
             '</div>' +
-            '<div class="column222">' +
+            '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
-            '<div class="preview"></div>' +
-            '</div>' +
+            '<div class="areaform-preview"></div>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -122,14 +118,14 @@ Oskari.clazz.define(
         this.minWidth = 1;
         this.maxWidth = 5;
         this.templateWidthValue = jQuery('<input type="number" name="width" class="linewidth" min="' + this.minWidth + '" max="' + this.maxWidth + '" step=1 value="' + this.values.lineWidth + '">');
-        this.previewSize = 50;
+        this.previewSize = 80;
         this.selectColor = '#dddddd';
 
-        this._previewSize = 50;
+        this._previewSize = 80;
         this._previewTemplates = [
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path><path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: miter; stroke-linecap: butt;" fill="#ffde00" stroke="#000000" d="M15.618650138979566,19.104939575319182L35.30776005884479,15.739369510308894L28.003552181094584,34.08332088547988Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path><path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: miter; stroke-linecap: butt;" fill="#ffde00" stroke="#000000" d="M15.618650138979566,19.104939575319182L35.30776005884479,15.739369510308894L28.003552181094584,34.08332088547988Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
         ];
     }, {
         /**
@@ -275,40 +271,14 @@ Oskari.clazz.define(
 
             colorPickerFillWrapper.on('change', function () {
                 me.values['fillColor'] = me._colorPickers[1].getValue();
+                if (me.values.fillStyle === 4) {
+                    // Color has been selected but fill style is transparent
+                    // Change fill style to solid color
+                    me.values.fillStyle = 5;
+                    me._styleUnselectedButton(jQuery('div#4fillstyle.icon-button'));
+                    me._styleSelectedButton(jQuery('div#5fillstyle.icon-button'));
+                }
                 me._updatePreview(dialogContent);
-            });
-
-            // remove color links
-            ['line', 'fill'].forEach(function (type, index) {
-                content = dialogContent.find('.remove-color-' + type);
-                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).on('click', function (e) {
-                    e.preventDefault();
-
-                    if (me.activeColorCell[index] > -1) {
-                        var activeCell = me.activeColorCell[index].toString();
-                        if (me.activeColorCell[index] < 10) {
-                            activeCell = '0' + activeCell;
-                        }
-                        jQuery('#' + activeCell + index + 'ColorCell').css('border', '1px solid #000000');
-                    }
-
-                    me.activeColorCell[index] = -1;
-                    me.values[type + 'Color'] = null;
-
-                    jQuery('#color-checkbox-' + index).prop('checked', false);
-                    jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
-
-                    if (type === 'fill') {
-                        me._colorPickers[1].setValue(null);
-                        if (me.values.fillStyle !== -1) {
-                            me._styleUnselectedButton(jQuery('div#' + me.values.fillStyle + 'fillstyle.icon-button'));
-                        }
-                        me.values.fillStyle = -1;
-                    } else {
-                        me._colorPickers[0].setValue(null);
-                    }
-                    me._updatePreview(dialogContent);
-                });
             });
 
             // Fill style
@@ -331,10 +301,28 @@ Oskari.clazz.define(
                         }
                         me._styleSelectedButton(jQuery('div#' + newValue + 'fillstyle.icon-button'));
                         me.values.fillStyle = newValue;
+                        // Set color picker and fill color value to empty/null when transparent is selected
+                        if (newValue === 4) {
+                            me._colorPickers[1].setValue('');
+                            me.values.fillColor = null;
+                        }
                     }
                     me._updatePreview(dialogContent);
                 });
                 content.append(fillBtnContainer);
+            }
+
+            if (me.values.fillStyle === -1) {
+                // Transparent or solid color is chosen
+                if (me.values.fillColor != null) {
+                    // Fill color exist, use solid color as style
+                    me.values.fillStyle = 5;
+                    me._styleSelectedButton(content.find('div#5fillstyle.icon-button'));
+                } else {
+                    // No fill color, style must be transparent
+                    me.values.fillStyle = 4;
+                    me._styleSelectedButton(content.find('div#4fillstyle.icon-button'));
+                }
             }
 
             this._updatePreview(dialogContent);
@@ -343,6 +331,10 @@ Oskari.clazz.define(
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
+                // Transparent and solid color fill styles are both saved as -1
+                if (me.values.fillStyle === 4 || me.values.fillStyle === 5) {
+                    me.values.fillStyle = -1;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -384,7 +376,7 @@ Oskari.clazz.define(
         _updatePreview: function (dialog) {
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery('.areaform') : dialog,
-                preview = view.find('.preview');
+                preview = view.find('.areaform-preview');
 
             if (preview.length === 0) {
                 return;
@@ -398,6 +390,11 @@ Oskari.clazz.define(
 
             var line = me.values.lineColor !== null ? me.values.lineColor : 'none';
 
+            if (me.values.fillStyle === 5 && me.values.fillColor !== null) {
+                // Solid fill style chosen, using current fill color
+                fill = me.values.fillColor;
+            }
+
             previewTemplate.find('path').attr({
                 'fill': fill,
                 'stroke': line,
@@ -408,7 +405,8 @@ Oskari.clazz.define(
 
             preview.empty();
             // Patterns (IE8 compatible version)
-            if (me.values.fillStyle >= 0) {
+            if (me.values.fillStyle >= 0 && me.values.fillStyle < 4) {
+                // Fillstyle 4 = transparent and fillstyle 5 = solid (no need to create svg)
                 var pathSvg = jQuery('<path></path>');
                 switch (parseInt(me.values.fillStyle)) {
                 case 0:
@@ -550,7 +548,7 @@ Oskari.clazz.define(
          * @private
          */
         _createColorPickers: function () {
-            var options = {allowEmpty: true};
+            var options = {allowEmpty: true, cancelText: this.loc.buttons.cancel};
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options)
@@ -583,7 +581,7 @@ Oskari.clazz.define(
          */
         _styleUnselectedButton: function (unselectedButton) {
             unselectedButton.css('border', '1px solid');
-            unselectedButton.css('background-color', 'transparent');
+            unselectedButton.css('background-color', '');
         }
     }
 );

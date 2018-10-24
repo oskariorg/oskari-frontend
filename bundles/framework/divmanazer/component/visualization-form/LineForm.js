@@ -284,6 +284,7 @@ Oskari.clazz.define(
 
             me._updatePreview();
             saveBtn.focus();
+            me._colorPicker.reflow();
             return renderDialog;
         },
         setSaveHandler: function (param) {
@@ -307,7 +308,8 @@ Oskari.clazz.define(
          * Creates a color picker component
          */
         _createColorPicker: function () {
-            this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput');
+            var options = {flat: true};
+            this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options);
         },
 
         _updatePreview: function (dialog) {

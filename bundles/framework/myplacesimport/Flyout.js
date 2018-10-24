@@ -304,20 +304,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             if (formValues) {
                 values.dot = {
                     size: formValues.dot.size,
-                    color: '#' + formValues.dot.color,
+                    color: formValues.dot.color,
                     shape: formValues.dot.shape
                 };
                 values.line = {
                     width: formValues.line.width,
-                    color: '#' + formValues.line.color,
+                    color: formValues.line.color,
                     cap: formValues.line.cap,
                     corner: formValues.line.corner,
                     style: formValues.line.style
                 };
                 values.area = {
                     lineWidth: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : '#' + formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : '#' + formValues.area.fillColor,
+                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
+                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
                     lineStyle: formValues.area.lineStyle,
                     fillStyle: formValues.area.fillStyle,
                     lineCorner: formValues.area.lineCorner

@@ -58,26 +58,9 @@ Oskari.clazz.define(
          * @param {Object} style
          */
         setStyleValues: function (style) {
-            style.dot.color = this._formatColorFromServer(style.dot.color);
-            style.line.color = this._formatColorFromServer(style.line.color);
-            style.area.lineColor = (typeof style.area.lineColor === 'string' ? this._formatColorFromServer(style.area.lineColor) : null);
-            style.area.fillColor = (typeof style.area.fillColor === 'string' ? this._formatColorFromServer(style.area.fillColor) : null);
+            style.area.lineColor = (typeof style.area.lineColor === 'string' ? style.area.lineColor : null);
+            style.area.fillColor = (typeof style.area.fillColor === 'string' ? style.area.fillColor : null);
             this.visualizationForm.setValues(style);
-        },
-
-        /**
-         * Removes prefix #-character if present
-         *
-         * @method  _formatColorFromServer
-         * @private
-         * @param {String} color
-         * @return {String} color
-         */
-        _formatColorFromServer: function (color) {
-            if (color.charAt(0) === '#') {
-                return color.substring(1);
-            }
-            return color;
         },
 
         /**
@@ -94,20 +77,20 @@ Oskari.clazz.define(
             if (formValues) {
                 styleJson.dot = {
                     size: formValues.dot.size,
-                    color: '#' + formValues.dot.color,
+                    color: formValues.dot.color,
                     shape: formValues.dot.shape
                 };
                 styleJson.line = {
                     width: formValues.line.width,
-                    color: '#' + formValues.line.color,
+                    color: formValues.line.color,
                     cap: formValues.line.cap,
                     corner: formValues.line.corner,
                     style: formValues.line.style
                 };
                 styleJson.area = {
                     lineWidth: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : '#' + formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : '#' + formValues.area.fillColor,
+                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
+                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
                     lineStyle: formValues.area.lineStyle,
                     fillStyle: formValues.area.fillStyle,
                     lineCorner: formValues.area.lineCorner

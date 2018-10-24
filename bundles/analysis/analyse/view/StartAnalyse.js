@@ -904,20 +904,20 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             if (formValues) {
                 values.dot = {
                     size: formValues.dot.size,
-                    color: '#' + formValues.dot.color,
+                    color: formValues.dot.color,
                     shape: formValues.dot.shape
                 };
                 values.line = {
                     size: formValues.line.width,
-                    color: '#' + formValues.line.color,
+                    color: formValues.line.color,
                     cap: formValues.line.cap,
                     corner: formValues.line.corner,
                     style: formValues.line.style
                 };
                 values.area = {
                     size: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : '#' + formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : '#' + formValues.area.fillColor,
+                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
+                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
                     lineStyle: formValues.area.lineStyle,
                     fillStyle: formValues.area.fillStyle,
                     lineCorner: formValues.area.lineCorner
@@ -3353,18 +3353,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.view.StartAnalyse',
             }
 
             var line_point_border_colors = [
-                    'e31a1c', '2171b5', '238b45', '88419d',
-                    '2b8cbe', '238b45', 'd94801', 'd7301f',
-                    '0570b0', '02818a', 'ce1256', '6a51a3',
-                    'ae017e', 'cb181d', '238443', '225ea8',
-                    'cc4c02'
+                    '#e31a1c', '#2171b5', '#238b45', '#88419d',
+                    '#2b8cbe', '#238b45', '#d94801', '#d7301f',
+                    '#0570b0', '#02818a', '#ce1256', '#6a51a3',
+                    '#ae017e', '#cb181d', '#238443', '#225ea8',
+                    '#cc4c02'
                 ],
                 fill_colors = [
-                    'fd8d3c', '6baed6', '66c2a4', '8c96c6',
-                    '7bccc4', '74c476', 'fd8d3c', 'fc8d59',
-                    '74a9cf', '67a9cf', 'df65b0', '9e9ac8',
-                    'f768a1', 'fb6a4a', '78c679', '41b6c4',
-                    'fe9929'
+                    '#fd8d3c', '#6baed6', '#66c2a4', '#8c96c6',
+                    '#7bccc4', '#74c476', '#fd8d3c', '#fc8d59',
+                    '#74a9cf', '#67a9cf', '#df65b0', '#9e9ac8',
+                    '#f768a1', '#fb6a4a', '#78c679', '#41b6c4',
+                    '#fe9929'
                 ],
                 values = {
                     point: {

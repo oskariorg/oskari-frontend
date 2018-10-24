@@ -35,7 +35,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
         this._bindFocusAndBlur();
         // word characters, digits, whitespace and chars '-,.?!' allowed
         this._regExp = /[\s\w\d.,?!\-äöåÄÖÅ]*/;
-        this._colorRegExp = /^([A-Fa-f0-9]{6})$/;
+        this._colorRegExp = /^#?([A-Fa-f0-9]{6})$/;
     }, {
         /**
          * @method bindOnFloatingLabelInput
@@ -377,7 +377,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
 
         /**
          * @method validateHexColor
-         * Validates a color hex-string with out the starting #-character
+         * Validates a color hex-string with #-character as an optional prefix
          * @param {String} value hex-string to validate
          */
         validateHexColor: function (value) {
