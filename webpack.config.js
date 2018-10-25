@@ -11,14 +11,11 @@ const proxyPort = 8081;
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
-    const parts = parseParams(env);
-
-    const version = parts.length > 1 ? parts[0] : 'devapp';
-    const appsetupPath = parts.length > 1 ? parts[1] : parts[0];
+    const {version, pathParam} = parseParams(env);
 
     const isDirectory = source => lstatSync(source).isDirectory();
     const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
-    const appsetupPaths = getDirectories(path.resolve(appsetupPath));
+    const appsetupPaths = getDirectories(path.resolve(pathParam));
 
     const entries = {};
     const plugins = [
