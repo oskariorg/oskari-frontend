@@ -9,7 +9,7 @@
   "scripts": {
     "test": "eslint . --quiet",
     "build": "webpack --mode production",
-    "start": "webpack-dev-server --hot",
+    "start": "webpack-dev-server --hot --env.appdef=applications/sample",
     "paikkis": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi",
     "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi",
     "sprite": "node webpack/sprite.js"
