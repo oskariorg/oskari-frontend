@@ -58,7 +58,7 @@ module.exports = (env, argv) => {
         devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
         output: {
             path: path.resolve(`dist/${version}/`),
-            publicPath: `Oskari/dist/${version}/`,
+            publicPath: `/Oskari/dist/${version}/`,
             filename: '[name]/oskari.min.js'
         },
         module: {
