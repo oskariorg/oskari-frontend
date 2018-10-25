@@ -114,7 +114,7 @@ Oskari.registerLocalization(
         },
         "dataSource": {
             "title": "Koordinaattitietojen lähde",
-            "confirmChange": "Muunnettavat koordinaatit tyhjennetään ja koordinaattijärjestelmän tiedot poistetaan. Haluatko jatkaa?",
+            "confirmChange": "Muunnettavat koordinaatit tyhjennetään. Haluatko jatkaa?",
             "file": {
                 "label": "Tiedostosta",
                 "info":  "Valitse lähtöaineiston sisältävä tiedosto ja sen asetukset.",
@@ -127,6 +127,7 @@ Oskari.registerLocalization(
             "map": {
                 "label": "Valitse sijainnit kartalta",
                 "info": "Voit valita muunnettavia koordinaatteja kartalta klikkaamalla.",
+                "confirmSelect": "Lähtökoordinaattijärjestelmän tiedot valitaan automaattisesti kartan käyttämän ETRS-TM35FIN -projektion mukaisiksi. Tekemäsi lähtökoordinaattijärjestelmän valinnat korvataan. Haluatko jatkaa?",
                 "action": "valitse lisää"
             }
         },
@@ -168,7 +169,7 @@ Oskari.registerLocalization(
                 "useId": {
                     "input": "Koordinaatit sisältää tunnisteet",
                     "generate": "Luo tunnisteet",
-                    "fromFile": "Lisää lähtötiedoston tunnisteet"
+                    "fromFile": "Lisää tunnisteet"
                 },
                 "writeHeader": "Kirjoita otsakerivi tiedostoon",
                 "useCardinals": "Käytä kardinaaleja (N,E,W,S)",
@@ -262,10 +263,10 @@ Oskari.registerLocalization(
                 ],
                 "listItems": [],
                 "precisionTable": {
-                    "title": "Metristen tarkkuuksien desimaalien määrä kulman muotojen/yksikkö",
+                    "title": "Kulman muodon/yksikön desimaalien määrä metrisenä tarkkuutena",
                     "unit": "Kulman muoto/yksikkö",
-                    "deg": "Asteet, goonit ja DD",
-                    "rad": "Radiaaneissa",
+                    "deg": "Aste, gooni ja DD",
+                    "rad": "Radiaanit",
                     "min": "DDMM ja DD MM",
                     "sec": "DDMMSS ja DD MM SS"
                 }

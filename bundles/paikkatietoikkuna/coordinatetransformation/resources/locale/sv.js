@@ -114,7 +114,7 @@ Oskari.registerLocalization(
         },
         "dataSource": {
             "title": "Källa för koordinatuppgifter",
-            "confirmChange": "Koordinaterna som ska omvandlas töms och uppgifterna om referenssystemet för koordinater tas bort. Vill du fortsätta?",
+            "confirmChange": "Koordinaterna som ska omvandlas töms. Vill du fortsätta?",
             "file": {
                 "label": "Från fil",
                 "info":  "Välj filen med utgångsmaterialet och dess inställningar.",
@@ -127,6 +127,7 @@ Oskari.registerLocalization(
             "map": {
                 "label": "Välj lägen på kartan",
                 "info": "Du kan välja koordinater som ska omvandlas genom att klicka på kartan",
+                "confirmSelect": "Lähtökoordinaattijärjestelmän tiedot valitaan automaattisesti kartan käyttämän ETRS-TM35FIN -projektion mukaisiksi. Tekemäsi lähtökoordinaattijärjestelmän valinnat korvataan. Haluatko jatkaa?",
                 "action": "välj fler"
             }
         },
@@ -262,12 +263,12 @@ Oskari.registerLocalization(
                 ],
                 "listItems" : [],
                 "precisionTable": {
-                    "title": "Metristen tarkkuuksien desimaalien määrä kulman muotojen/yksikkö",
-                    "unit": "Kulman muoto/yksikkö",
-                    "deg": "Asteet, goonit ja DD",
-                    "rad": "Radiaaneissa",
-                    "min": "DDMM ja DD MM",
-                    "sec": "DDMMSS ja DD MM SS"
+                    "title": "Kulman muodon/yksikön desimaalien määrä metrisenä tarkkuutena",
+                    "unit": "Vinkelns form/enhet",
+                    "deg": "Grad, gon och DD",
+                    "rad": "Radian",
+                    "min": "DDMM och DD MM",
+                    "sec": "DDMMSS och DD MM SS"
                 }
             },
             "coordinateSeparator":{

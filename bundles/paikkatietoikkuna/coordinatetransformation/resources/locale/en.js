@@ -114,7 +114,7 @@ Oskari.registerLocalization(
         },
         "dataSource": {
             "title": "Coordinate information source",
-            "confirmChange": "Input coordinates will be removed and the coordinate reference system information deleted. Do you want to continue?",
+            "confirmChange": "Input coordinates will be removed. Do you want to continue?",
             "file": {
                 "label": "From file",
                 "info":  "Select the file containing the input information and its settings.",
@@ -127,6 +127,7 @@ Oskari.registerLocalization(
             "map": {
                 "label": "Select locations on the map",
                 "info": "Select coordinates to be transformed on the map by clicking them.",
+                "confirmSelect": "Lähtökoordinaattijärjestelmän tiedot valitaan automaattisesti kartan käyttämän ETRS-TM35FIN -projektion mukaisiksi. Tekemäsi lähtökoordinaattijärjestelmän valinnat korvataan. Haluatko jatkaa?",
                 "action": "select more"
             }
         },
@@ -262,12 +263,12 @@ Oskari.registerLocalization(
                 ],
                 "listItems" : [],
                 "precisionTable": {
-                    "title": "Metristen tarkkuuksien desimaalien määrä kulman muotojen/yksikkö",
-                    "unit": "Kulman muoto/yksikkö",
-                    "deg": "Asteet, goonit ja DD",
-                    "rad": "Radiaaneissa",
-                    "min": "DDMM ja DD MM",
-                    "sec": "DDMMSS ja DD MM SS"
+                    "title": "Kulman muodon/yksikön desimaalien määrä metrisenä tarkkuutena",
+                    "unit": "Angle pattern", // Angle shape/unit
+                    "deg": "Degree, Grade and DD",
+                    "rad": "Radian",
+                    "min": "DDMM and DD MM",
+                    "sec": "DDMMSS and DD MM SS"
                 }
             },
             "coordinateSeparator":{
