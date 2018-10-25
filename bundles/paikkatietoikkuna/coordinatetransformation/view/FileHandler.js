@@ -8,7 +8,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
         me.type = type; // import, export
         me.infoPopup = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
         me.settings = {};
-        me.degreeSystem = true; // show degree systems options by default
+        me.metricSystem = false; // show degree systems options by default
+        me.isFileInput = false;
+        me.selections = {};
         me._template = {
             settings: _.template('<div class="coordinatetransformation-file-form">' +
                                     '<% if (obj.export === true) { %> ' +
@@ -42,10 +44,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                         '<div class="infolink icon-info" data-selection="unitFormat"></div>' +
                                     '</div>' +
                                     '<% if (obj.export === true) { %> ' +
-                                        '<div class="selection-wrapper decimalCount">' +
-                                            '<b class="title">${decimalCount}</b>' +
-                                            '<input type="number" value="0" min="0" max = "20" required> ' +
-                                            '<div class="infolink icon-info" data-selection="decimalCount"></div>' +
+                                        '<div class="selection-wrapper decimalPrecision">' +
+                                            '<b class="title">${decimalPrecision}</b>' +
+                                            '<div class="settingsSelect">' +
+                                            '<select>' +
+                                                '<option value="0">~1 m</option>' +
+                                                '<option value="1">~0.1 m</option>' +
+                                                '<option value="2">~1 cm</option>' +
+                                                '<option value="3" selected>~1 mm</option>' +
+                                                '<option value="4">~0.1 mm</option>' +
+                                            '</select>' +
+                                        '</div>' +
+                                            '<div class="infolink icon-info" data-selection="decimalPrecision"></div>' +
                                         '</div>' +
                                     '<% } %> ' +
                                     '<div class="selection-wrapper decimalSeparator">' +
@@ -87,7 +97,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                                     '<% } %> ' +
                                     '<label class="lbl prefixId">' +
                                         '<input class="chkbox" type="checkbox">' +
-                                        '<span>${prefixId}</span>' +
+                                        '<span></span>' +
                                         '<div class="infolink icon-info" data-selection="prefixId"></div>' +
                                     '</label>' +
                                     '<label class="lbl reverseCoordinates">' +
@@ -127,14 +137,21 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             return 'Oskari.coordinatetransformation.view.FileHandler';
         },
         getSettings: function () {
+            this.settings.selects = this.getFormSelections();
             // force unit to metric for non-degree systems
-            if (this.degreeSystem === false && this.settings.selects) {
+            if (this.metricSystem && this.settings.selects) {
                 this.settings.selects.unit = 'metric';
             }
+            // get decimal count
+            this.settings.selects.decimalCount = this.helper.getDecimalCount(this.settings.selects.decimalPrecision, this.settings.selects.unit);
+            delete this.settings.selects.decimalPrecision;
             return this.settings;
         },
-        setIsDegreeSystem: function (isDegree) {
-            this.degreeSystem = !!isDegree;
+        setIsMetricSystem: function (isMetric) {
+            this.metricSystem = !!isMetric;
+        },
+        setIsFileInput: function (isFile) {
+            this.isFileInput = isFile;
         },
         create: function () {
             var fileSettings,
@@ -142,12 +159,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             fileSettings = {
                 export: false,
                 fileName: this.loc('fileSettings.export.fileName'),
+                options: this.loc('fileSettings.options'),
                 decimalSeparator: this.loc('fileSettings.options.decimalSeparator'),
                 coordinateSeparator: this.loc('fileSettings.options.coordinateSeparator'),
-                prefixId: this.loc('fileSettings.options.useId'),
-                reverseCoords: this.loc('fileSettings.options.reverseCoords'),
+                reverseCoords: this.loc('fileSettings.options.reverseCoordinates'),
                 headerCount: this.loc('fileSettings.options.headerCount'),
-                decimalCount: this.loc('fileSettings.options.decimalCount'),
+                decimalPrecision: this.loc('fileSettings.options.decimalPrecision'),
                 units: this.loc('fileSettings.options.degreeFormat'),
                 delimeters: this.loc('fileSettings.options.delimeters'),
                 writeHeader: this.loc('fileSettings.options.writeHeader'),
@@ -199,7 +216,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
                 axisFlip: element.find('.reverseCoordinates input').is(':checked'),
                 headerLineCount: element.find('.headerLineCount input').val(),
                 lineSeparator: element.find('.lineSeparator option:checked').val(),
-                decimalCount: element.find('.decimalCount input').val(),
+                decimalPrecision: element.find('.decimalPrecision option:checked').val(),
                 writeHeader: element.find('.writeHeader input').is(':checked'),
                 writeLineEndings: element.find('.lineEnds').is(':checked'),
                 writeCardinals: element.find('.useCardinals input').is(':checked')
@@ -219,38 +236,54 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.FileHandler',
             var btnText = this.type === 'import' ? this.loc('actions.done') : this.loc('actions.export');
             var cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));
             var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            var decimalInput = elem.find('.decimalCount input');
+            var useId = elem.find('.prefixId span');
+            // var decimalInput = elem.find('.decimalCount input');
             btn.addClass('primary');
             btn.setTitle(btnText);
             btn.setHandler(function () {
-                me.settings.selects = me.getFormSelections();
+                var settings = me.getSettings();
                 if (me.type === 'import') {
-                    me.settings.file = me.fileInput.getFiles();
+                    settings.file = me.fileInput.getFiles();
                 }
                 me.settings.type = me.type;
-                if (me.helper.validateFileSelections(me.getSettings()) === false) {
+                if (me.helper.validateFileSelections(settings) === false) {
                     return;
                 }
                 if (typeof callback === 'function') {
-                    callback(me.getSettings());
+                    callback(settings);
                 }
                 dialog.close();
             });
             dialog.createCloseIcon();
             dialog.makeDraggable();
-            if (this.degreeSystem === false) {
+            if (this.metricSystem) {
                 formatRow.css('display', 'none');
-                decimalInput.val(3);
+                // decimalInput.val(3);
             } else {
                 formatRow.css('display', '');
-                decimalInput.val(8);
+                // decimalInput.val(8);
+            }
+            if (this.type === 'export') {
+                var lineEnds = elem.find('.lineEnds');
+                if (this.isFileInput) {
+                    useId.text(this.loc('fileSettings.options.useId.fromFile'));
+                    lineEnds.css('display', '');
+                } else {
+                    useId.text(this.loc('fileSettings.options.useId.generate'));
+                    lineEnds.css('display', 'none');
+                }
+            } else {
+                useId.text(this.loc('fileSettings.options.useId.input'));
             }
             this.bindInfoLinks();
+            /*
             // when degree unit is changed, change also default decimal value
             elem.find('.unitFormat select').on('change', function () {
                 var decimals = jQuery(this).find(':checked').data('decimals');
                 decimalInput.val(decimals);
             });
+            */
+
             // HACK //
             // TODO handle listeners if fileinput is moved to file settings form instead of flyout
             if (this.type === 'import' && jQuery._data(this.fileInput.getElement().get(0), 'events') === undefined) {
