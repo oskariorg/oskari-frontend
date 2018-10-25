@@ -755,6 +755,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
     },
     getDecimalCount: function (decimals, unit) {
         decimals = parseInt(decimals);
+        if (isNaN(decimals)) {
+            return 0;
+        }
         switch (unit) {
         case 'metric':
             return decimals;
