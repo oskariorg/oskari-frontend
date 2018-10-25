@@ -174,6 +174,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.instance',
                 } else if (state === 'close' || state === 'minimize') {
                     this.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
                 }
+            },
+            'MapSizeChangedEvent': function (event) {
+                this.plugins['Oskari.userinterface.Flyout'].setContainerMaxHeight(event.getHeight());
             }
         }
     }, {

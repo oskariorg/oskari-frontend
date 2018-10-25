@@ -193,8 +193,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.CoordinateDataHandler', fun
         this.trigger('ResultCoordsChanged', this.resultCoords);
     },
     checkCoordsArrays: function () {
-        var input = this.inputCoords.length,
-            result = this.resultCoords.length;
+        var input = this.inputCoords.length;
+        var result = this.resultCoords.length;
         if (input !== 0 && result !== 0) {
             return input === result;
         }
