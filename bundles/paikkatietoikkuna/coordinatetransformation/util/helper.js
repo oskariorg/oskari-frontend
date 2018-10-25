@@ -27,7 +27,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 x: lonlat.lon,
                 y: lonlat.lat,
                 color: color,
-                shape: 3
+                shape: 3,
+                size: 3
             };
             if (label) {
                 data.msg = label;
@@ -37,7 +38,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         }
     },
 
-    showMarkersOnMap: function (mapCoords, inputCoords, srs) {
+    showMarkersOnMap: function (mapCoords, inputCoords, srs, isAxisFlip) {
         var coords = mapCoords;
         var coordsForLabel = inputCoords;
         var epsgValuesForLabel;
@@ -54,26 +55,27 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             addLabelFromInput = true;
         }
         for (var i = 0; i < coords.length; i++) {
-            lonlat = this.getLonLatObj(coords[i], mapEpsgValues.lonFirst);
+            lonlat = this.getLonLatObj(coords[i], isAxisFlip ? !mapEpsgValues.lonFirst : mapEpsgValues.lonFirst);
             if (addLabelFromInput) {
-                labelLonLat = this.getLonLatObj(coordsForLabel[i], epsgValuesForLabel.lonFirst);
-                label = this.getLabelForMarker(labelLonLat, epsgValuesForLabel);
+                labelLonLat = this.getLonLatObj(coordsForLabel[i], isAxisFlip ? !epsgValuesForLabel.lonFirst : epsgValuesForLabel.lonFirst);
+                label = this.getLabelForMarker(labelLonLat, epsgValuesForLabel, isAxisFlip);
             } else {
-                label = this.getLabelForMarker(lonlat, mapEpsgValues);
+                label = this.getLabelForMarker(lonlat, mapEpsgValues, isAxisFlip);
             }
             this.addMarkerForCoords(null, lonlat, label); // null id -> generate
         }
-        this.moveMapToMarkers(coords);
+        this.moveMapToMarkers(coords, isAxisFlip);
     },
-    moveMapToMarkers: function (points) {
+    moveMapToMarkers: function (points, isAxisFlip) {
         var closestZoom = 6;
+        var lonFirst = isAxisFlip ? !this.mapEpsgValues.lonFirst : this.mapEpsgValues.lonFirst;
         if (!Array.isArray(points) || points.length === 0) {
 
         } else if (points.length === 1) {
             var x;
             var y;
             var point = points[0];
-            if (this.mapEpsgValues.lonFirst) {
+            if (lonFirst) {
                 x = point[0];
                 y = point[1];
             } else {
@@ -98,14 +100,20 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             lonlat.lon = coord[1];
             lonlat.lat = coord[0];
         }
+        if (coord.length === 3) {
+            lonlat.height = coord[2];
+        }
         return lonlat;
     },
-    getLabelForMarker: function (lonlat, epsgValues) {
-        var lonLabel,
-            latLabel;
-        epsgValues = epsgValues || this.mapEpsgValues;
-
-        if (epsgValues.coord === 'COORD_GEOG_2D' || epsgValues.coord === 'COORD_GEOG_3D') {
+    getLabelForMarker: function (lonlat, epsgValues, isAxisFlip) {
+        var lonLabel;
+        var latLabel;
+        var val = epsgValues || this.mapEpsgValues;
+        var lonFirst = isAxisFlip ? !val.lonFirst : val.lonFirst;
+        if (val.coord === 'COORD_PROJ_3D') {
+            return 'X: ' + lonlat.lon + ', Y: ' + lonlat.lat + ', Z: ' + lonlat.height;
+        }
+        if (val.coord === 'COORD_GEOG_2D' || val.coord === 'COORD_GEOG_3D') {
             lonLabel = this.loc('mapMarkers.show.lon');
             latLabel = this.loc('mapMarkers.show.lat');
         } else {
@@ -115,7 +123,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         // TODO do we need to localize decimal separator for label
         // Oskari.getDecimalSeparator();
         // lon = coords[].replace('.', Oskari.getDecimalSeparator());
-        if (epsgValues.lonFirst) {
+        if (lonFirst) {
             return lonLabel + ': ' + lonlat.lon + ', ' + latLabel + ': ' + lonlat.lat;
         } else {
             return latLabel + ': ' + lonlat.lat + ', ' + lonLabel + ': ' + lonlat.lon;
@@ -193,9 +201,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
     },
     checkDimensions: function (crs, callback) {
         var message;
-        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            cancelBtn = dialog.createCloseButton(this.loc('actions.cancel')),
-            okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         okBtn.setTitle(this.loc('actions.ok'));
         okBtn.addClass('primary');
 
@@ -219,9 +227,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         }
     },
     showPopup: function (title, message, errorList) {
-        var me = this,
-            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            btn = dialog.createCloseButton(this.loc('actions.close'));
+        var me = this;
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var btn = dialog.createCloseButton(this.loc('actions.close'));
         if (errorList && errorList.length !== 0) {
             var content = this._templates.content.clone();
             content.find('.error-message').html(message);
@@ -244,29 +252,58 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
      * @return {Object} epsgValues, return null if not found
      */
     findEpsg: function (epsgNumber) {
-        var epsgValues = null;
         var srs;
         var compound;
         if (epsgNumber.length === 4 || epsgNumber.length === 5) {
             srs = 'EPSG:' + epsgNumber;
-            // check first if is's compound system
+            // check dropdown's epsgs
+            if (this.epsgValues.hasOwnProperty(srs)) {
+                return {
+                    srs: srs
+                };
+            }
+            // check compound systems
             compound = this.getCompoundSystem(srs);
             if (compound !== null) {
-                epsgValues = this.getEpsgValues(compound.geodetic);
-                epsgValues.heigthSrs = compound.height;
-                epsgValues.srs = compound.geodetic;
-            } else {
-                epsgValues = this.getEpsgValues(srs);
-                if (epsgValues) {
-                    epsgValues.srs = srs;
+                var compoundValues = {
+                    srs: compound.geodetic,
+                    heightSrs: compound.height
+                };
+                if (compound.reversed) {
+                    compoundValues.isAxisFlip = true;
+                    compoundValues.reversed = compound.reversed;
                 }
+                return compoundValues;
             }
+            // finally try hidden (reversed or replaced) epsg, returns null if not found
+            return this.getHiddenEpsg(srs);
         }
-        return epsgValues;
+        return null;
     },
     getEpsgValues: function (srs) {
         if (srs && this.epsgValues.hasOwnProperty(srs)) {
             return this.epsgValues[srs];
+        }
+        return null;
+    },
+    // reversed or replaced epsgs aren't in the dropdown but can be used with find epsg
+    getHiddenEpsg: function (srs) {
+        var epsgs = this.epsgValues;
+        // for (var key in epsgs) {
+        for (let key of Object.keys(epsgs)) {
+            var epsg = epsgs[key];
+            if (srs === epsg.reversedEpsg) {
+                return {
+                    srs: key,
+                    replaced: srs,
+                    isAxisFlip: true
+                };
+            } else if (srs === epsg.replacedEpsg) {
+                return {
+                    srs: key,
+                    replaced: srs
+                };
+            }
         }
         return null;
     },
@@ -292,9 +329,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
         }
     },
     isCoordInBounds: function (srs, coord) {
-        var epsgValues = this.getEpsgValues(srs),
-            x,
-            y;
+        var epsgValues = this.getEpsgValues(srs);
+        var x;
+        var y;
         if (!epsgValues) {
             return;
         }
@@ -412,13 +449,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'coord': ''
             },
             // newer GK EPSG-codes which have false easting 500000 prefixed with zone number -> GK19 19500000
+            // replacedEpsg is the old one, which have always false easting 500000
             'EPSG:3873': {
                 'title': 'ETRS-GK19',
                 'datum': 'DATUM_EUREF-FIN',
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [16136220.08, 4245436.94, 19729336.74, 9392386.51],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3126'
             },
             'EPSG:3874': {
                 'title': 'ETRS-GK20',
@@ -426,7 +465,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [17036139.71, 4284384.64, 20718673.04, 9388493.84],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3127'
             },
             'EPSG:3875': {
                 'title': 'ETRS-GK21',
@@ -434,7 +474,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [17935765.83, 4324906.92, 21707943.90, 9384787.32],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3128'
             },
             'EPSG:3876': {
                 'title': 'ETRS-GK22',
@@ -442,7 +483,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [18835101.07, 4367049.45, 22697152.55, 9381268.03],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3129'
             },
             'EPSG:3877': {
                 'title': 'ETRS-GK23',
@@ -450,7 +492,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [19734149.31, 4410859.98, 23686302.23, 9377936.99],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3130'
             },
             'EPSG:3878': {
                 'title': 'ETRS-GK24',
@@ -458,7 +501,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [20632915.73, 4456388.39, 24675396.21, 9374795.15],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3131'
             },
             'EPSG:3879': {
                 'title': 'ETRS-GK25',
@@ -466,7 +510,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [21531406.93, 4503686.78, 25664437.76, 9371843.41],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3132'
             },
             'EPSG:3880': {
                 'title': 'ETRS-GK26',
@@ -474,7 +519,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [22429630.98, 4552809.52, 26653430.17, 9369082.63],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3133'
             },
             'EPSG:3881': {
                 'title': 'ETRS-GK27',
@@ -482,7 +528,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [23327597.57, 4603813.37, 27642376.73, 9366513.60],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3134'
             },
             'EPSG:3882': {
                 'title': 'ETRS-GK28',
@@ -490,7 +537,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [24225318.05, 4656757.53, 28631280.76, 9364137.06],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3135'
             },
             'EPSG:3883': {
                 'title': 'ETRS-GK29',
@@ -498,7 +546,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [25122805.55, 4711703.72, 29620145.58, 9361953.68],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3136'
             },
             'EPSG:3884': {
                 'title': 'ETRS-GK30',
@@ -506,7 +555,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [26020075.09, 4768716.31, 30608974.53, 9359964.10],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3137'
             },
             'EPSG:3885': {
                 'title': 'ETRS-GK31',
@@ -514,7 +564,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_GK',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [26917143.71, 4827862.39, 31597770.94, 9358168.88],
-                'lonFirst': false
+                'lonFirst': false,
+                'replacedEpsg': 'EPSG:3138'
             },
             'EPSG:3035': {
                 'title': 'ETRS-LAEA',
@@ -538,7 +589,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_TM',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [-3062460.04, 4323108.17, 707860.72, 9381033.40],
-                'lonFirst': false
+                'lonFirst': false,
+                'reversedEpsg': 'EPSG:25834'
             },
             'EPSG:3047': {
                 'title': 'ETRS-TM35',
@@ -546,7 +598,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_TM',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [-3669433.90, 4601644.86, 642319.78, 9362767.00],
-                'lonFirst': false
+                'lonFirst': false,
+                'reversedEpsg': 'EPSG:25835'
             },
             'EPSG:3048': {
                 'title': 'ETRS-TM36',
@@ -554,7 +607,8 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_TM',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [-4283197.87, 4949558.27, 575249.45, 9351421.46],
-                'lonFirst': false
+                'lonFirst': false,
+                'reversedEpsg': 'EPSG:25836'
             },
             'EPSG:3067': {
                 'title': 'ETRS-TM35FIN', // (E,N)
@@ -562,43 +616,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
                 'proj': 'PROJECTION_TM',
                 'coord': 'COORD_PROJ_2D',
                 'bounds': [-3669433.90, 4601644.86, 642319.78, 9362767.00],
-                'lonFirst': true
+                'lonFirst': true,
+                'reversedEpsg': 'EPSG:5048'
             },
-            // TODO: add when transformation service supports these
-            // and add possibility to search with 5 digits
-            /* "EPSG:5048":{
-                "title": "ETRS-TM35FIN (N,E)",
-                "datum": "DATUM_EUREF-FIN",
-                "proj": "PROJECTION_TM",
-                "coord": "COORD_PROJ_2D",
-                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
-                "lonFirst": false
-            },
-            "EPSG:25834":{
-                "title": "ETRS-TM34 (E,N)",
-                "datum": "DATUM_EUREF-FIN",
-                "proj": "PROJECTION_TM",
-                "coord": "COORD_PROJ_2D",
-                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
-                "lonFirst": true
-            },
-            "EPSG:25835":{
-                "title": "ETRS-TM35(E,N)",
-                "datum": "DATUM_EUREF-FIN",
-                "proj": "PROJECTION_TM",
-                "coord": "COORD_PROJ_2D",
-                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
-                "lonFirst": true
-            },
-            "EPSG:5048":{
-                "title": "ETRS-TM35FIN (E,N)",
-                "datum": "DATUM_EUREF-FIN",
-                "proj": "PROJECTION_TM",
-                "coord": "COORD_PROJ_2D",
-                "bounds": [-3669433.90, 4601644.86, 648181, 9364104.12],
-                "lonFirst": true
-            },
-            */
             'EPSG:4258': {
                 'title': 'EUREF-FIN-GRS80',
                 'datum': 'DATUM_EUREF-FIN',
@@ -703,20 +723,22 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
     },
     getCompoundSystem: function (epsg) {
         switch (epsg) {
-        case 'EPSG:3091': // YKJ + N60
+        case 'EPSG:3901': // YKJ + N60
             return {
                 geodetic: 'EPSG:2393',
                 height: 'EPSG:5717'
             };
-        case 'EPSG:3092': // ETRS-TM35FIN (N,E) + N60
+        case 'EPSG:3902': // ETRS-TM35FIN (N,E) + N60
             return {
-                geodetic: 'EPSG:3047', // CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
-                height: 'EPSG:5717'
+                geodetic: 'EPSG:3067', // CoordTrans service doesn't support EPSG:5048, use EPSG:3047 (Identical except for area of use) or 3067 and axisFlip
+                height: 'EPSG:5717',
+                reversed: 'EPSG:5048'
             };
-        case 'EPSG:3093': // ETRS-TM35FIN (N,E) + N2000
+        case 'EPSG:3903': // ETRS-TM35FIN (N,E) + N2000
             return {
-                geodetic: 'EPSG:3047', // CoordTrans service doesn't support EPSG:5048, use EPSG:3047 for now (Identical except for area of use)
-                height: 'EPSG:3900'
+                geodetic: 'EPSG:3067', // CoordTrans service doesn't support EPSG:5048, use EPSG:3047 (Identical except for area of use) or 3067 and axisFlip
+                height: 'EPSG:3900',
+                reversed: 'EPSG:5048'
             };
         case 'EPSG:7409': // ETRS89 + EVRF2000 (EUREF-FIN-GRS80 + N60)
             return {
@@ -730,6 +752,28 @@ Oskari.clazz.define('Oskari.coordinatetransformation.helper', function () {
             };
         }
         return null;
+    },
+    getDecimalCount: function (decimals, unit) {
+        decimals = parseInt(decimals);
+        switch (unit) {
+        case 'metric':
+            return decimals;
+        case 'DD MM SS':
+        case 'DDMMSS':
+            return decimals + 1;
+        case 'DD MM':
+        case 'DDMM':
+            return decimals + 3;
+        case 'degree':
+        case 'gradian':
+        case 'DD':
+            return decimals + 5;
+        case 'radian':
+            return decimals + 7;
+        default:
+            Oskari.log(this.getName()).warn('Invalid unit - cannot get decimal count');
+            return 0;
+        }
     },
     createCls: function (json) {
         Object.keys(json).forEach(function (key) {

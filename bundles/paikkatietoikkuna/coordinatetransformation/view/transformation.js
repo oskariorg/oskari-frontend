@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         me.outputSystem = Oskari.clazz.create('Oskari.coordinatetransformation.component.CoordinateSystemSelection', this, me.loc, 'output', me.helper);
 
         me.sourceSelect = Oskari.clazz.create('Oskari.coordinatetransformation.component.SourceSelect', me.loc);
-
+        me.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         me.importFileHandler.create();
         me.exportFileHandler.create();
         // TODO move to bind listeners
@@ -35,11 +35,16 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
         });
         me.sourceSelect.on('SourceSelectChange', function (value) {
             if (me.dataHandler.hasInputCoords()) {
-                // me.confirmResetFlyout(true, me.handleSourceSelection.bind(me, value), me.sourceSelect );
-                me.confirmResetFlyout(true, value);
-            } else {
-                me.handleSourceSelection(value);
+                // Now doesn't clear selections because source selection is after crs selections in ui
+                me.showConfirm(me.loc('dataSource.title'), me.loc('dataSource.confirmChange'), me.changeSourceAndResetCoords.bind(me, value));
+                return;
+            } else if (value === 'map') {
+                if ((me.inputSystem.isGeodeticSystemSelected() && !me.inputSystem.isMapProjectionSelected()) || me.inputSystem.isHeightSystemSelected()) {
+                    me.showConfirm(me.loc('dataSource.title'), me.loc('dataSource.map.confirmSelect'), me.handleSourceSelection.bind(me, value));
+                    return;
+                }
             }
+            me.handleSourceSelection(value);
         });
         me.sourceSelect.on('SourceSelectClick', function (value) {
             me.handleSourceClick(value);
@@ -114,9 +119,6 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
 
             var wrapper = this._template.wrapper.clone();
 
-            if (this.sourceSelect.getElement()) {
-                wrapper.append(this.sourceSelect.getElement());
-            }
             var sourceFilter = this._template.filterSystems({
                 title: this.loc('flyout.filterSystems.title'),
                 systems: this.loc('flyout.filterSystems.systems'),
@@ -141,6 +143,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
             wrapper.append(systems);
 
+            if (this.sourceSelect.getElement()) {
+                wrapper.append(this.sourceSelect.getElement());
+            }
+
             // this.fileInput.setVisible(false);
             // wrapper.find( '.datasource-info' ).append( this.fileInput.getElement() );
             var tables = this._template.tables.clone();
@@ -155,7 +161,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.handleButtons();
             // this.handleRadioButtons();
             // preselect radio button here beceause event listeners are not ready
-            this.handleSourceSelection(this.sourceSelect.sources[0]);// me.sourceSelect.sourceSelection);
+            this.handleSourceSelection(this.sourceSelect.sources[0]);
             this.bindFilterRadioButtons();
             this.bindTableScroll();
         },
@@ -218,18 +224,43 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var dimensions = this.instance.getDimensions();
 
             return {
-                sourceCrs: input.getSrs(),
+                sourceCrs: input.getSrsForTransformation(),
                 sourceElevationCrs: input.getElevation(),
-                targetCrs: target.getSrs(),
+                targetCrs: target.getSrsForTransformation(),
                 targetElevationCrs: target.getElevation(),
                 sourceDimension: dimensions.input,
                 targetDimension: dimensions.output
             };
         },
         showMessage: function (title, message) {
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                btn = dialog.createCloseButton(this.loc('actions.close'));
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var btn = dialog.createCloseButton(this.loc('actions.close'));
             dialog.show(title, message, [btn]);
+            dialog.fadeout(5000);
+        },
+        showConfirm: function (title, message, confirmedCb) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));
+            okBtn.setTitle(this.loc('actions.ok'));
+            okBtn.addClass('primary');
+            okBtn.setHandler(function () {
+                if (typeof confirmedCb === 'function') {
+                    confirmedCb();
+                }
+                dialog.close();
+            });
+            dialog.show(title, message, [cancelBtn, okBtn]);
+        },
+        resetFlyout: function (value) {
+            this.dataHandler.clearCoords();
+            this.inputSystem.resetAllSelections();
+            this.outputSystem.resetAllSelections();
+            this.handleSourceSelection(this.sourceSelect.sources[0]);
+        },
+        changeSourceAndResetCoords: function (value) {
+            this.dataHandler.clearCoords();
+            this.handleSourceSelection(value);
         },
         onSystemSelectionChange: function (type) {
             var selections,
@@ -255,12 +286,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.instance.setDimension(type, srs, heightSystem);
             epsgValues = this.helper.getEpsgValues(srs);
             if (epsgValues) {
-                table.updateHeader(epsgValues, heightSystem);
+                table.updateHeader(epsgValues, heightSystem, selections.isAxisFlip);
                 if (this.helper.isGeogSystem(srs)) {
-                    fileHandler.setIsDegreeSystem(true);
+                    fileHandler.setIsMetricSystem(false);
                 } else {
                     systemSelection.disableElevationSelection(false);
-                    fileHandler.setIsDegreeSystem(false);
+                    fileHandler.setIsMetricSystem(true);
                 }
                 if (this.helper.is3DSystem(srs)) {
                     systemSelection.disableElevationSelection(true);
@@ -269,42 +300,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 }
             } else {
                 table.updateHeader(); // remove header
-                fileHandler.setIsDegreeSystem(true); // show degree systems options
+                fileHandler.setIsMetricSystem(false); // show degree systems options
             }
             dimension = this.instance.getDimension(type);
             table.handleDisplayingElevationRows(dimension);
-        },
-        confirmResetFlyout: function (blnSystems, value, resetCb, cancelCb) {
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));
-            okBtn.setTitle(this.loc('actions.ok'));
-            okBtn.addClass('primary');
-            okBtn.setHandler(function () {
-                me.dataHandler.clearCoords();
-                me.inputSystem.resetAllSelections();
-                me.outputSystem.resetAllSelections();
-                me.handleSourceSelection(value);
-                if (typeof resetCb === 'function') {
-                    resetCb();
-                }
-                dialog.close();
-            });
-            dialog.show(this.loc('dataSource.title'), this.loc('dataSource.confirmChange'), [cancelBtn, okBtn]);
-        },
-        confirmResetTable: function () {
-            var me = this;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                cancelBtn = dialog.createCloseButton(this.loc('actions.cancel'));
-            okBtn.setTitle(this.loc('actions.ok'));
-            okBtn.addClass('primary');
-            okBtn.setHandler(function () {
-                me.dataHandler.clearCoords();
-                dialog.close();
-            });
-            dialog.show(this.loc('flyout.coordinateTable.clearTables'), this.loc('flyout.coordinateTable.confirmClear'), [cancelBtn, okBtn]);
         },
         handleSourceSelection: function (value) {
             // this.sourceSelection = value;
@@ -313,10 +312,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             // var keyboardInfoElement = container.find('.coordinateconversion-keyboardinfo');
             // var mapSelectInfoElement = container.find('.coordinateconversion-mapinfo')
             me.sourceSelect.selectSource(value);
-
             if (value === 'file') {
                 me.inputTable.setIsEditable(false);
                 me.importFileHandler.showFileDialogue(me.readFileToArray.bind(me));
+                me.exportFileHandler.setIsFileInput(true);
                 // keyboardInfoElement.hide();
                 // mapSelectInfoElement.hide();
                 // this.fileInput.setVisible(true);
@@ -328,6 +327,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 // mapSelectInfoElement.hide();
                 // keyboardInfoElement.show();
                 me.inputSystem.disableAllSelections(false);
+                me.exportFileHandler.setIsFileInput(false);
                 me.bindInputTableHandler(true);
             } else if (value === 'map') {
                 me.inputTable.setIsEditable(false);
@@ -337,6 +337,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 // mapSelectInfoElement.show();
                 me.inputSystem.selectMapProjection();
                 me.inputSystem.disableAllSelections(true);
+                me.exportFileHandler.setIsFileInput(false);
                 me.bindInputTableHandler(false);
             }
         },
@@ -364,46 +365,52 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var me = event.data.meRef;
             var dimension = me.instance.getDimension('input');
             var rows = jQuery(event.currentTarget).find('tr');
-            var cells;
-            var coord;
             var inputCoords = [];
-
+            var addCoordinates = true;
             rows.each(function () {
-                coord = [];
-                cells = jQuery(this).find('td');
+                var cells = jQuery(this).find('.cellContent');
+                var coord = [];
+                var content;
+                var cell;
+                var emptyRow = true;
                 for (var i = 0; i < dimension; i++) {
-                    if (me.handleCell(coord, cells[i]) === false) {
-                        // add only valid row
-                        return false;
+                    cell = jQuery(cells[i]);
+                    content = cell.text();
+                    if (content !== '') {
+                        emptyRow = false;
+                        content = parseFloat(content.replace(',', '.'));
+                        if (isNaN(content)) {
+                            cell.addClass('invalid-coord');
+                            addCoordinates = false; // stop adding coordinates on first invalid coord to keep input and result table in sync
+                        } else {
+                            cell.text(content); // update cell content with parsed float
+                            cell.removeClass('invalid-coord');
+                            coord[i] = content;
+                        }
+                    } else {
+                        cell.addClass('invalid-coord');
+                        addCoordinates = false;
                     }
                 }
-                inputCoords.push(coord);
-                // Check that coord is in bounds
-                /*
-                if (me.helper.isCoordInBounds(srs, coord) === false){
-                    me.showMessage("Error", "Coordinate: " + coord + " isn't inside bounds.");
-                    return false;
-                }else{
+                if (emptyRow) {
+                    cells.removeClass('invalid-coord');
+                    return false; // break at first empty row
+                }
+                if (addCoordinates) {
                     inputCoords.push(coord);
-                } */
+                    // Check that coord is in bounds
+                    /*
+                    if (me.helper.isCoordInBounds(srs, coord) === false){
+                        me.showMessage("Error", "Coordinate: " + coord + " isn't inside bounds.");
+                        return false;
+                    }else{
+                        inputCoords.push(coord);
+                    } */
+                }
             });
             // update input coordinates and don't render input table
             me.dataHandler.setInputCoords(inputCoords, true);
             me.inputTable.handleTableSize(inputCoords.length);
-        },
-        // TODO to table
-        handleCell: function (coord, cell) { // or handleRow
-            cell = jQuery(cell).find('.cellContent');
-            var cellValue = cell.text().replace(',', '.');
-            var num = parseFloat(cellValue);
-            if (isNaN(num)) { // do not update input coords
-                cell.addClass('invalid-coord');
-                return false;
-            }
-            cell.text(num); // update cell content with parsed float
-            cell.removeClass('invalid-coord');
-            coord.push(num);
-            return true;
         },
         /**
          * @method handleButtons
@@ -418,7 +425,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             });
 
             container.find('.clear').on('click', function () {
-                me.confirmResetTable();
+                me.showConfirm(me.loc('flyout.coordinateTable.clearTables'), me.loc('flyout.coordinateTable.confirmClear'), me.dataHandler.clearCoords.bind(me.dataHandler));
             });
             container.find('.show').on('click', function () {
                 me.showMarkersOnMap();
@@ -447,7 +454,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             var me = this;
             var source = this.sourceSelect.getSourceSelection();
             var srs = this.inputSystem.getSrs();
+            var isAxisFlip = this.inputSystem.getIsAxisFlip();
             var transformCb = function (response) {
+                me.showSpinner(false);
                 var mapCoords;
                 var inputCoords;
                 // if response contains input coordinates then sync input table
@@ -457,18 +466,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 if (response.resultCoordinates) {
                     mapCoords = response.resultCoordinates;
                     inputCoords = me.dataHandler.getInputCoords();
-                    me.helper.showMarkersOnMap(mapCoords, inputCoords, srs);
+                    me.helper.showMarkersOnMap(mapCoords, inputCoords, srs, isAxisFlip);
                     me.instance.toggleViews('mapmarkers');
                 }
                 if (response.hasMoreCoordinates === true) {
                     me.showMessage(this.loc('flyout.transform.responseFile.title'), this.loc('flyout.transform.responseFile.hasMoreCoordinates', {maxCoordsToArray: 100}));
                 }
             };
+            if (srs === '') {
+                this.helper.showPopup(this.loc('mapMarkers.show.title'), this.loc('mapMarkers.show.noSrs'));
+                return;
+            }
             if (source === 'file') {
-                if (srs === '') {
-                    this.helper.showPopup(this.loc('mapMarkers.show.title'), this.loc('mapMarkers.show.noSrs'));
-                    return;
-                }
                 this.transformToMapCoords(transformCb);
             } else { // keyboard and map
                 if (!this.dataHandler.hasInputCoords()) {
@@ -476,7 +485,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     return;
                 }
                 if (srs === this.helper.mapSrs) {
-                    this.helper.showMarkersOnMap(this.dataHandler.getInputCoords());
+                    this.helper.showMarkersOnMap(this.dataHandler.getInputCoords(), null, srs, isAxisFlip);
                     this.instance.toggleViews('mapmarkers');
                 } else {
                     this.transformToMapCoords(transformCb);
@@ -487,7 +496,12 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             this.exportFileHandler.showFileDialogue(this.transformToFile.bind(this));
         },
         readFileToArray: function (settings) {
+            this.showSpinner(true);
             var crsSettings = this.getCrsOptions();
+            // force to read file with dimension 3 if file is selected before crs selections
+            if (crsSettings.sourceCrs === '') {
+                crsSettings.sourceDimension = 3;
+            }
             var fileSettings = settings;
             if (this.helper.validateFileSelections(fileSettings)) {
                 this.dataHandler.clearCoords(); // reset tables
@@ -495,6 +509,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
         },
         transformToMapCoords: function (callback) {
+            this.showSpinner(true);
             var crsSettings = {
                 sourceCrs: this.inputSystem.getSrs(),
                 sourceDimension: this.instance.getDimensions().input,
@@ -512,13 +527,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
         },
         transformToTable: function () {
+            this.showSpinner(true);
             var crsSettings = this.getCrsOptions();
             var source = this.sourceSelect.getSourceSelection();
             var coords;
             var fileSettings;
             if (source === 'file') {
                 fileSettings = this.importFileHandler.getSettings();
-                // file = this.fileInput.getFiles();
                 if (this.helper.validateFileSelections(fileSettings)) {
                     this.instance.getService().transformFileToArray(crsSettings, fileSettings, this.handleArrayResponse.bind(this), this.handleErrorResponse.bind(this));
                 }
@@ -530,22 +545,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                     this.showMessage(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.noInputData'));
                 }
             }
-            /*
-            if (source === "file"){
-                this.instance.getService().transformFileToArray( file, crsSettings, fileSettings, this.handleArrayResponse.bind( this ), this.handleErrorResponse.bind(this) ); //callback
-            } else {
-                this.instance.getService().transformArrayToArray( coords, crsSettings, this.handleArrayResponse.bind( this ), this.handleErrorResponse.bind(this) ); //callback
-            } */
         },
         transformToFile: function (settings) {
+            this.showSpinner(true);
             var crsSettings = this.getCrsOptions();
             var exportSettings = settings;
             var coords;
             var source = this.sourceSelect.getSourceSelection();
             if (source === 'file') {
                 var importSettings = this.importFileHandler.getSettings();
-                // file = this.fileInput.getFiles();
                 if (this.helper.validateFileSelections(importSettings)) {
+                    if (importSettings.file.size > 5 * 1024 * 1024) {
+                        this.showMessage(this.loc('flyout.transform.warning.title'), this.loc('flyout.transform.warning.largeFile'));
+                    }
                     this.instance.getService().transformFileToFile(crsSettings, importSettings, exportSettings, this.handleFileResponse.bind(this), this.handleErrorResponse.bind(this));
                 }
             } else {
@@ -555,14 +567,10 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 } else {
                     this.showMessage(this.loc('flyout.transform.validateErrors.title'), this.loc('flyout.transform.validateErrors.noInputData'));
                 }
-            }/*
-            if (source === "file"){
-                this.instance.getService().transformFileToFile(file, crsSettings, importSettings, exportSettings, this.handleFileResponse.bind( this ), this.handleErrorResponse.bind(this) );
-            } else {
-                this.instance.getService().transformArrayToFile( coords, crsSettings, exportSettings, this.handleFileResponse.bind( this ), this.handleErrorResponse.bind(this) );
-            } */
+            }
         },
         handleReadFileResponse: function (response) {
+            this.showSpinner(false);
             var inputCoords = response.inputCoordinates;
             var error = response.error;
             var hasMoreCoordinates = response.hasMoreCoordinates;
@@ -576,6 +584,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
         },
         handleArrayResponse: function (response) {
+            this.showSpinner(false);
             var resultCoords = response.resultCoordinates;
             var inputCoords = response.inputCoordinates;
             var hasMoreCoordinates = response.hasMoreCoordinates;
@@ -590,10 +599,11 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
             }
         },
         handleFileResponse: function (data, filename, type) {
-            // TODO exportToFile should be moved from fileInput to helper
+            this.showSpinner(false);
             this.helper.exportToFile(data, filename, type);
         },
         handleErrorResponse: function (errorInfo, isReadFile) {
+            this.showSpinner(false);
             var title = isReadFile ? this.loc('flyout.transform.responseErrors.titleRead') : this.loc('flyout.transform.responseErrors.titleTransform');
             var errors = this.loc('flyout.transform.responseErrors');
             var errorMsg = errors.generic;
@@ -611,6 +621,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.view.transformation',
                 }
             }
             this.showMessage(title, errorMsg);
+        },
+        showSpinner: function (bln) {
+            var container = this.getContainer();
+            var buttons = container.find('input[type=button]');
+            if (bln) {
+                buttons.prop('disabled', true);
+                this.spinner.insertTo(container);
+                this.spinner.start();
+                return;
+            }
+            buttons.prop('disabled', false);
+            this.spinner.stop();
         }
     }
 );

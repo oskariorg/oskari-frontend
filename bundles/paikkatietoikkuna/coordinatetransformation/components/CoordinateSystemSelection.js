@@ -5,10 +5,13 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         this.helper = helper;
         this.type = type;
         this.element = null;
+        this.epsgInput = null;
         this.select = Oskari.clazz.create('Oskari.coordinatetransformation.component.select', view);
         this.systemInfo = Oskari.clazz.create('Oskari.coordinatetransformation.view.CoordinateSystemInformation');
         this.selectInstances = {};
         this.dropdowns = {};
+        this.replacedEpsg = null;
+        this.isAxisFlip = false;
         this._template = {
             systemWrapper: jQuery('<div class="coordinate-system-wrapper"></div>'),
             coordinateSystemSelection: _.template(
@@ -173,24 +176,33 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             });
             inputElem.on('focus', function (evt) {
                 inputElem.select();
-                me.searchEpsg(inputElem, evt.target.value);
             });
+            this.epsgInput = inputElem;
+        },
+        setEpsgInputValue: function (val) {
+            if (typeof val === 'string' && val.indexOf('EPSG:') === 0) {
+                this.epsgInput.val(val.substring(5));
+            } else {
+                this.epsgInput.val('');
+            }
         },
         searchEpsg: function (inputElem, value) {
             var epsgValues;
-            if (value.length === 4) {
+            if (value.length === 4 || value.length === 5) {
                 epsgValues = this.helper.findEpsg(value);
                 if (epsgValues) {
                     this.selectInstances['geodetic-coordinate'].setValue(epsgValues.srs);
                     inputElem.css('color', '#444');
                     // compound epsg contains heightSrs
-                    if (epsgValues.heigthSrs) {
-                        this.selectInstances.elevation.setValue(epsgValues.heigthSrs);
-                    // "normal" epsg doesn't contain height system -> reset height system
+                    if (epsgValues.heightSrs) {
+                        this.selectInstances.elevation.setValue(epsgValues.heightSrs);
                     } else {
                         this.disableElevationSelection(false);
-                        this.selectInstances.elevation.setValue('');
+                        // "normal" epsg doesn't contain height system -> reset height system ??
+                        // this.selectInstances.elevation.setValue('');
                     }
+                    this.isAxisFlip = epsgValues.isAxisFlip === true;
+                    this.replacedEpsg = epsgValues.replaced || null;
                     this.trigger('CoordSystemChanged', this.type);
                 } else {
                     inputElem.css('color', '#F00');
@@ -209,17 +221,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 epsgSearch: this.loc('infoPopup.epsgSearch.info')
             };
         },
-        toggleFilter: function (filter, preventReset) {
+        toggleFilter: function (filter, fromMap) {
+            if (fromMap !== true) {
+                this.resetFilters();
+            }
             if (filter === 'epsg') {
-                if (preventReset !== true) {
-                    this.resetFilters();
-                }
                 this.showSystemFilters(false);
                 this.showEpsgSearch(true);
+                this.showProjectionSelect(false, fromMap);
             } else if (filter === 'systems') {
                 this.showEpsgSearch(false);
                 this.showSystemFilters(true);
-                this.showProjectionSelect(false);
+                this.showProjectionSelect(fromMap);
             }
         },
         showEpsgSearch: function (display) {
@@ -252,6 +265,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 options.css('display', '');
                 if (dropdownId === 'geodetic-coordinate' && options.length === 1) {
                     this.selectInstances['geodetic-coordinate'].setValue(options.val());
+                    this.setEpsgInputValue(options.val());
                     this.trigger('CoordSystemChanged', this.type);
                 }
             } else {
@@ -287,13 +301,19 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 this.resetAndUpdateCoordSelect();
                 break;
             case 'elevation':
+                // do common stuff
                 break;
             case 'geodetic-coordinate':
-                // do common stuff
+                this.setEpsgInputValue(currentValue);
                 break;
             default:
                 Oskari.log(this.getName()).warn('Invalid select');
                 return;
+            }
+            // replaced epsg can't be selected from dropdown, only from epsg search
+            if (selectId !== 'elevation') {
+                this.replacedEpsg = null;
+                this.isAxisFlip = false;
             }
             this.disableElevationSelection(disableElevSystem);
             this.trigger('CoordSystemChanged', this.type);
@@ -311,7 +331,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         },
         disableAllSelections: function (disable) {
             var selects = this.selectInstances;
-            var epsgSearch = this.getElement().find('.epsgSearch input');
+            var epsgSearch = this.epsgInput;
             if (disable === true) {
                 Object.keys(selects).forEach(function (key) {
                     selects[key].setEnabled(false, true);
@@ -323,6 +343,26 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 });
                 epsgSearch.prop('disabled', false);
             }
+        },
+        isGeodeticSystemSelected: function () {
+            if (this.selectInstances['geodetic-coordinate'].getValue() !== '') {
+                return true;
+            }
+            return false;
+        },
+        isHeightSystemSelected: function () {
+            if (this.selectInstances.elevation.getValue() !== '') {
+                return true;
+            }
+            return false;
+        },
+        isMapProjectionSelected: function () {
+            var mapEpsg = this.helper.getMapEpsgValues();
+            var srs = this.selectInstances['geodetic-coordinate'].getValue();
+            if (srs === mapEpsg.srs) {
+                return true;
+            }
+            return false;
         },
         selectMapProjection: function () {
             var srsOptions = this.helper.getMapEpsgValues();
@@ -342,7 +382,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
             this.updateAllDropdowns();
             this.trigger('CoordSystemChanged', this.type);
         },
-        showProjectionSelect: function (display) {
+        showProjectionSelect: function (display, preventReset) {
             var elem = jQuery(this.getElement()).find('.projection');
             if (display === true) {
                 elem.css('display', '');
@@ -350,12 +390,17 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 elem.css('display', 'none');
                 // TODO
                 // this.selectInstances.projection.resetSelectToPlaceholder();
-                this.selectInstances.projection.setValue('');
+                if (preventReset !== true) {
+                    this.selectInstances.projection.setValue('');
+                }
             }
         },
         getSelections: function () {
             var selects = this.selectInstances;
-            var selections = {};
+            var selections = {
+                isAxisFlip: this.isAxisFlip,
+                replacedEpsg: this.replacedEpsg
+            };
             Object.keys(selects).forEach(function (key) {
                 selections[key] = selects[key].getValue();
             });
@@ -364,8 +409,14 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
         getSrs: function () {
             return this.selectInstances['geodetic-coordinate'].getValue();
         },
+        getSrsForTransformation: function () {
+            return this.replacedEpsg || this.getSrs();
+        },
         getElevation: function () {
             return this.selectInstances.elevation.getValue();
+        },
+        getIsAxisFlip: function () {
+            return this.isAxisFlip;
         },
         resetAllSelections: function () {
             this.disableElevationSelection(false);
@@ -388,6 +439,9 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateSystemS
                 // selects[key].resetToPlaceholder();
                 selects[key].setValue('');
             });
+            if (skipCoordSys !== true) {
+                this.setEpsgInputValue();
+            }
             this.showProjectionSelect(false);
             this.updateAllDropdowns();
         },

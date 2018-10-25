@@ -182,15 +182,15 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
          */
     render: function (coords, dimension) {
         var table = this.getElements().table;
-        var row,
-            rowData = {},
-            coord;
+        var row;
+        var rowData = {};
+        var coord;
         this.emptyTableCells();
         for (var i = coords.length - 1; i >= 0; i--) {
             coord = coords[i];
             rowData.col1 = coord[0];
             rowData.col2 = coord[1];
-            if (dimension === 3) {
+            if (coord.length === 3) {
                 rowData.elev = coord[2];
             }
             row = jQuery(this.template.row({coords: rowData}));
@@ -271,17 +271,18 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
                 me.displayNumberOfDataRows( number );
             });
         }, */
-    updateHeader: function (epsgValues, elevSystem) {
+    updateHeader: function (epsgValues, elevSystem, isAxisFlip) {
         this.getElements().header.remove();
         if (!epsgValues || !epsgValues.coord) {
             return;
         }
-        var x = '',
-            y = '',
-            z = '',
-            lonFirst = epsgValues.lonFirst,
-            coordSystem = epsgValues.coord;
+        var x = '';
+        var y = '';
+        var z = '';
+        var lonFirst = isAxisFlip === true ? !epsgValues.lonFirst : epsgValues.lonFirst;
+        var coordSystem = epsgValues.coord;
         var header;
+        var temp;
 
         switch (coordSystem) {
         case 'COORD_PROJ_3D':
@@ -303,7 +304,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.component.CoordinateTable',
             break;
         }
         if (!lonFirst) {
-            var temp = y;
+            temp = y;
             y = x;
             x = temp;
         }
