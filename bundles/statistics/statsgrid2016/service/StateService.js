@@ -220,6 +220,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 // get a default if requested was not found
                 if (!me.activeIndicator) {
                     me.activeIndicator = me.getActiveIndicator();
+                } else {
+                    if (me.activeIndicator.classification) {
+                        me._defaults.classification = me.activeIndicator.classification;
+                    }
                 }
                 // notify
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
