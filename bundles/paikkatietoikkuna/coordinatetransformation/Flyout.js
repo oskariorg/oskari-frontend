@@ -5,6 +5,7 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
         me.instance = instance;
         me.loc = Oskari.getMsg.bind(null, 'coordinatetransformation');
         me.container = null;
+        me.flyout = null;
     }, {
         getName: function () {
             return 'Oskari.coordinatetransformation.Flyout';
@@ -24,17 +25,23 @@ Oskari.clazz.define('Oskari.coordinatetransformation.Flyout',
         createUi: function () {
             this.instance.getViews().transformation.createUI(this.container);
         },
-        toggleFlyout: function (visible) {
-            if (!visible) {
-                jQuery(this.container).parent().parent().hide();
-            } else {
-                jQuery(this.container).parent().parent().show();
-            }
-        },
         startPlugin: function () {
             this.template = jQuery();
-            var elParent = this.container.parentElement.parentElement;
-            jQuery(elParent).addClass('coordinatetransformation-flyout');
+            this.flyout = jQuery(this.container.parentElement.parentElement);
+            this.flyout.addClass('coordinatetransformation-flyout');
+            this.setContainerMaxHeight(Oskari.getSandbox().getMap().getHeight());
+        },
+        setContainerMaxHeight: function (mapHeight) {
+            // calculate max-height based on map size
+            var container = this.flyout.find('.oskari-flyoutcontentcontainer');
+            var toolbarHeight = this.flyout.find('.oskari-flyouttoolbar').outerHeight(true);
+            var maxHeight = mapHeight - toolbarHeight;
+            if (container) {
+                container.css('max-height', maxHeight + 'px');
+            }
+            if (container.outerHeight(true) >= maxHeight) {
+                this.flyout.css('top', '0px');
+            }
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']
