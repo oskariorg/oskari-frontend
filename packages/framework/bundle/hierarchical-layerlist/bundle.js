@@ -89,7 +89,7 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js"
             },{
                 "type": "text/css",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/resources/css/style.css"
+                "src": "../../../../bundles/framework/hierarchical-layerlist/resources/scss/style.scss"
             }],
             "locales": [{
                 "lang": "fi",

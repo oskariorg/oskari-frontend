@@ -59,7 +59,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
                 "src": "../../../../bundles/mapping/toolbar/request/ToolbarRequestHandler.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/toolbar/resources/css/toolbar.css"
+                "src": "../../../../bundles/mapping/toolbar/resources/scss/toolbar.scss"
             }],
             "locales": [{
                 "lang": "hy",

@@ -55,7 +55,7 @@ Oskari.clazz.define("Oskari.elf.license.Bundle", function() {
             },
             {
                 "type" : "text/css",
-                "src" : "../../../../bundles/elf/elf-license/resources/css/style.css"
+                "src" : "../../../../bundles/elf/elf-license/resources/scss/style.scss"
             }
         ],
         "locales" : [

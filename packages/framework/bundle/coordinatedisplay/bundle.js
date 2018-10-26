@@ -45,7 +45,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "src": "../../../../bundles/framework/coordinatedisplay/plugin/CoordinatesPlugin.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/coordinatedisplay/resources/css/coordinatedisplay.css"
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/scss/coordinatedisplay.scss"
         }],
         "locales": [{
             "lang": "bg",

@@ -75,7 +75,7 @@ function() {
 			/* Resources */
 			{
 				"type" : "text/css",
-				"src" : "../../../../bundles/harava/harava-map-questions/resources/css/mapquestions.css"	  
+				"src" : "../../../../bundles/harava/harava-map-questions/resources/scss/mapquestions.scss"	  
 			}]
 	},
 	"bundle" : {

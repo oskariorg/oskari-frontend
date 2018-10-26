@@ -52,7 +52,7 @@ function() {
         },
         {
 		    "type" : "text/css",
-		    "src" : "../../../../bundles/harava/harava-mapmodule-plugin/resources/css/style.css"	  
+		    "src" : "../../../../bundles/harava/harava-mapmodule-plugin/resources/scss/style.scss"	  
 		},
 		{
 			"type" : "text/javascript",

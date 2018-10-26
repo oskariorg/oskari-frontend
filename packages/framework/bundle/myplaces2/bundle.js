@@ -129,7 +129,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces2.MyPlacesBundle", funct
             // css
             {
                 "type": "text/css",
-                "src": "../../../../bundles/framework/myplaces2/resources/css/myplaces.css"
+                "src": "../../../../bundles/framework/myplaces2/resources/scss/myplaces.scss"
             }
         ],
 

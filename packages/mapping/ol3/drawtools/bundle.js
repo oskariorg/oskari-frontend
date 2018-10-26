@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
     		/*CSS*/
     		{
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/drawtools/resources/css/drawtools.css"
+                "src": "../../../../bundles/mapping/drawtools/resources/scss/drawtools.scss"
             }],
             "locales": [{
               "lang": "fi",

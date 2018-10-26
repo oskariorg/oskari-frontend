@@ -54,7 +54,7 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/catalogue/metadataflyout/request/AddTabRequestHandler.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/catalogue/metadataflyout/resources/css/style.css"
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/scss/style.scss"
             }],
             "locales": [{
                 "lang": "fi",

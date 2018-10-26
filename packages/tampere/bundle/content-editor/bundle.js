@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.content-editor.ContentEditorBundle", 
             "src": "../../../../libraries/datepicker/resources/locale/datepicker-en-GB.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/tampere/content-editor/resources/css/style.css"
+            "src": "../../../../bundles/tampere/content-editor/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "en",
