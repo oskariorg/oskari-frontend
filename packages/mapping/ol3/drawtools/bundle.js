@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
                 "src": "../../../../bundles/mapping/drawtools/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol3.js"
+                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"
@@ -44,7 +44,7 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
     		/*CSS*/
     		{
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/drawtools/resources/css/drawtools.css"
+                "src": "../../../../bundles/mapping/drawtools/resources/scss/drawtools.scss"
             }],
             "locales": [{
               "lang": "fi",

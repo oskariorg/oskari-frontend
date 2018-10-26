@@ -24,7 +24,7 @@ Oskari.clazz.define("Oskari.arcgis.bundle.arcgis.MapArcGisBundle", function() {
 	"source" : {
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/maparcgis/plugin/ArcGisLayerPlugin.ol3.js"
+			"src" : "../../../../bundles/mapping/maparcgis/plugin/ArcGisLayerPlugin.ol.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/mapping/maparcgis/domain/ArcGisLayer.js"

@@ -151,7 +151,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
         },
         {
             "type": "text/css",
-            "src": "../../../../bundles/framework/publisher2/resources/css/style.css"
+            "src": "../../../../bundles/framework/publisher2/resources/scss/style.scss"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/framework/publisher2/request/PublishMapEditorRequest.js"

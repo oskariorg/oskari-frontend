@@ -124,7 +124,16 @@ Oskari.clazz.define(
         hasData: function () {
             return !!this.statsService.getDatasource().length;
         },
+        /**
+         * Update visibility of classification / legend based on idicators length & stats layer visibility
+         */
+        _updateClassficationViewVisibility: function () {
+            var indicatorsExist = this.statsService.getStateService().getIndicators().length > 0;
+            var layer = this.getLayerService().findMapLayer('STATS_LAYER');
+            var layerVisible = layer ? layer.isVisible() : true;
 
+            this.createClassficationView(indicatorsExist && layerVisible);
+        },
         /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
@@ -191,19 +200,7 @@ Oskari.clazz.define(
                     evt.getSeries(),
                     evt.isRemoved());
 
-                if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
-                    if (this.classificationPlugin) {
-                        this.classificationPlugin.redrawUI();
-                    } else {
-                        this.createClassficationView(true);
-                    }
-                    return;
-                }
-                if (this.statsService.getStateService().getIndicators().length === 0) {
-                    if (this.classificationPlugin) {
-                        this.classificationPlugin.teardownUI();
-                    }
-                }
+                this._updateClassficationViewVisibility();
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -258,14 +255,9 @@ Oskari.clazz.define(
                 }
                 if (wasClosed) {
                     me.getTile().hideExtensions();
-                    if (!this.isEmbedded()) {
-                        me.createClassficationView(false);
-                    }
+                    this._updateClassficationViewVisibility();
                 } else {
                     me.getTile().showExtensions();
-                    if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
-                        this.createClassficationView(true);
-                    }
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
@@ -298,6 +290,13 @@ Oskari.clazz.define(
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
+            },
+            MapLayerVisibilityChangedEvent: function (event) {
+                var layer = event.getMapLayer();
+                if (!layer || layer.getId() !== 'STATS_LAYER') {
+                    return;
+                }
+                this._updateClassficationViewVisibility();
             },
             FeatureEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);

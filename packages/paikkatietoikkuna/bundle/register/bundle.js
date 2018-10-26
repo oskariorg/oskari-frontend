@@ -19,7 +19,7 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/paikkatietoikkuna/register/instance.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/paikkatietoikkuna/register/resources/css/register.css"
+                "src": "../../../../bundles/paikkatietoikkuna/register/resources/scss/register.scss"
             }],
 
             "locales": [{

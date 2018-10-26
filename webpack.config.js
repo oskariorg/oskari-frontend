@@ -11,14 +11,11 @@ const proxyPort = 8081;
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
-    const parts = parseParams(env);
-
-    const version = parts.length > 1 ? parts[0] : 'devapp';
-    const appsetupPath = parts.length > 1 ? parts[1] : parts[0];
+    const {version, pathParam, publicPathPrefix} = parseParams(env);
 
     const isDirectory = source => lstatSync(source).isDirectory();
     const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
-    const appsetupPaths = getDirectories(path.resolve(appsetupPath));
+    const appsetupPaths = getDirectories(path.resolve(pathParam));
 
     const entries = {};
     const plugins = [
@@ -58,7 +55,7 @@ module.exports = (env, argv) => {
         devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
         output: {
             path: path.resolve(`dist/${version}/`),
-            publicPath: `/Oskari/dist/${version}/`,
+            publicPath: `${publicPathPrefix}Oskari/dist/${version}/`,
             filename: '[name]/oskari.min.js'
         },
         module: {

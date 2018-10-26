@@ -37,6 +37,8 @@ The number before the colon sets the directory name, here producing files under 
 
 Note: The version number given for the build command needs to match the client version (`oskari.client.version`) in Oskari-server `oskari-ext.properties`.
 
+Special case: If on your production server your application index.jsp location is mapped to something else than the root (eg. `http://yourdomain.com/my-oskari-app/`), but the assets are mapped relative to the root (eg. `http://yourdomain.com/Oskari/dist/...`), you need to add the build parameter `--env.absolutePublicPath=true`.
+
 ### Customized application icons (optional)
 
 It's possible to override any icon in `oskari-frontend/resources/icons` with app-specific icons. To add icons for your application or to override icons: include a folder named `icons` under the application folder (for example in sample app `applications/sample/servlet/icons`). To replace an icon provide a png-file with the same name as in `oskari-frontend/resources/icons`. For maximum compatibility the pixel size for overridden icon should match the original. Any png-files in the app-specific icons folder will be included in the sprite that is generated so this can be used to add icons for app-specific bundles.

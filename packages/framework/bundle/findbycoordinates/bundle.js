@@ -29,7 +29,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             "src": "../../../../bundles/framework/findbycoordinates/instance.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/findbycoordinates/resources/css/style.css"
+            "src": "../../../../bundles/framework/findbycoordinates/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "en",
