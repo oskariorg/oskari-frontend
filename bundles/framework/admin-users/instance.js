@@ -127,7 +127,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
+            if (this.plugins['Oskari.userinterface.Flyout']) {
+                this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
+            }
 
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
