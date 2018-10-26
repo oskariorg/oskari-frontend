@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var element = this.getElement();
             // detach old element from screen
             if (element) {
-                this.removeFromPluginContainer(element);
+                this.removeFromPluginContainer(element, true);
                 this.element = null;
             }
         },
