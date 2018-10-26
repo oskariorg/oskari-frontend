@@ -220,6 +220,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 // get a default if requested was not found
                 if (!me.activeIndicator) {
                     me.activeIndicator = me.getActiveIndicator();
+                } else {
+                    if (me.activeIndicator.classification) {
+                        me._defaults.classification = me.activeIndicator.classification;
+                    }
                 }
                 // notify
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
@@ -276,7 +280,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 ind.selections[series.id] = this.seriesService.getValue();
                 // Discontinuos mode is problematic for series data,
                 // because each class has to get at least one hit -> set distinct mode.
-                ind.classification = jQuery.extend({}, indicator.classification || {}, {mode: 'distinct'});
+                ind.classification = jQuery.extend({}, ind.classification || {}, {mode: 'distinct'});
             }
             this.indicators.push(ind);
 
