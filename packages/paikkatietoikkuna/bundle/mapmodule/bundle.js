@@ -80,7 +80,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ControlsPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ControlsPlugin.ol.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/DisableMapKeyboardMovementRequest.js"
