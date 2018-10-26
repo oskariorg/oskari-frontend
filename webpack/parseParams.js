@@ -23,6 +23,7 @@ module.exports = function parseParams(env) {
 
     return {
         version,
-        pathParam
+        pathParam,
+        publicPathPrefix: env.absolutePublicPath === 'true' ? '/' : ''
     };
 }
