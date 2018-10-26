@@ -405,15 +405,16 @@ Oskari.clazz.define(
         _renderContentData: function (id, contentData) {
             var me = this;
             return _.foldl(contentData, function (contentDiv, datum, index) {
-                var contentWrapper = me._contentWrapper.clone(),
-                    actions = datum.actions,
-                    actionTemplate,
-                    btn,
-                    link,
-                    currentGroup,
-                    group = -1,
-                    sanitizedHtml,
-                    targetElem;
+                var contentWrapper = me._contentWrapper.clone();
+                var actions = datum.actions;
+                var actionTemplate;
+                var btn;
+                var link;
+                var currentGroup;
+                var group;
+                var sanitizedHtml;
+                var targetElem;
+                var actionTemplateWrapper;
 
                 if (typeof datum.html === 'string') {
                     sanitizedHtml = Oskari.util.sanitize(datum.html);
@@ -427,7 +428,6 @@ Oskari.clazz.define(
 
                 if (actions && _.isArray(actions)) {
                     _.forEach(actions, function (action) {
-                        var actionTemplateWrapper;
                         var sanitizedActionName = Oskari.util.sanitize(action.name);
                         if (action.type === 'link') {
                             actionTemplate = me._actionLink.clone();
@@ -451,7 +451,7 @@ Oskari.clazz.define(
                         }
                         if (targetElem instanceof jQuery) {
                             targetElem.prepend(actionTemplate);
-                        } else if (currentGroup && currentGroup === group) {
+                        } else if (currentGroup !== undefined && currentGroup === group) {
                             actionTemplateWrapper.append(actionTemplate);
                         } else {
                             actionTemplateWrapper = me._actionTemplateWrapper.clone();
