@@ -65,7 +65,7 @@ function() {
         },
         {
             "type" : "text/css",
-            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/css/style.css"
+            "src" : "../../../../bundles/elf/elf-metadatafeedback/resources/scss/style.scss"
         }
         ],
         "locales" : [{

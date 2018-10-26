@@ -24,7 +24,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.routingUI.RoutingUIBundle",
             "src" : "../../../../libraries/moment/2.10.6/moment-with-locales.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/routingUI/resources/css/style.css"
+            "src": "../../../../bundles/framework/routingUI/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "fi",

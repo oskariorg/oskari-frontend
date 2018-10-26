@@ -162,7 +162,7 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/DiagramTool.js"
             }, {
                 "type": "text/css",
-                "src": "../../../bundles/statistics/statsgrid2016/resources/css/style.css"
+                "src": "../../../bundles/statistics/statsgrid2016/resources/scss/style.scss"
             }, {
                 "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/seriesplayback.css"
