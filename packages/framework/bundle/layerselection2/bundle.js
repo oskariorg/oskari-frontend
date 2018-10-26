@@ -32,7 +32,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselection2.LayerSelectionBu
             "src": "../../../../bundles/framework/layerselection2/Tile.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/layerselection2/resources/css/style.css"
+            "src": "../../../../bundles/framework/layerselection2/resources/scss/style.scss"
         }],
 
         "locales": [{

@@ -52,7 +52,7 @@ Oskari.clazz.define("Oskari.integration.bundle.todo.ToDoBundle", function() {
 
         }, {
             "type" : "text/css",
-            "src" : "../../../../bundles/integration/todo/resources/css/style.css"
+            "src" : "../../../../bundles/integration/todo/resources/scss/style.scss"
         }],
         "locales" : [{
             "lang" : "fi",

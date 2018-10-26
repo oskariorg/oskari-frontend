@@ -54,7 +54,7 @@ function() {
         },
 		{
             "type" : "text/css",
-            "src" : "../../../../bundles/framework/metadata/resources/css/buttons.css"
+            "src" : "../../../../bundles/framework/metadata/resources/scss/buttons.scss"
         }]
     },
     "bundle" : {
