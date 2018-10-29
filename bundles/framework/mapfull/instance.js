@@ -321,14 +321,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     window.proj4.defs(srs, defs);
                 });
             }
-            // OL2 uses Proj4js
-            else {
-                if (!Proj4js) {
-                    window.Proj4js = {};
-                }
-                // ensure static projections are defined
-                Proj4js.defs = defaultDefs;
-            }
         },
 
         /**
