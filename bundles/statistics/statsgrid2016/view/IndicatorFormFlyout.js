@@ -2,6 +2,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     this.instance = instance;
     this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
+    this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.service = instance.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
     this.indicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.locale);
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
@@ -142,6 +143,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.addPanel(dataPanel);
         this._accordion.insertTo(this.element);
 
+        var spinnerHolder = $('<div class="spinner-holder"></div>');
+        this.element.append(spinnerHolder);
+        this.spinner.insertTo(spinnerHolder);
         this.element.append(this.indicatorDataForm.createUi());
 
         me.indicatorDataForm.getButtons().forEach(function (btn) {
@@ -181,6 +185,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         // explicit call to move() the flyout opens in seemingly random locations (out of screen etc)
         this.move(this.options.pos.x, this.options.pos.y, true);
     },
+    setSpinnerVisible: function (show) {
+        this.element.find('.spinner-holder').css('height', show ? '100px' : '0');
+        show ? this.spinner.start() : this.spinner.stop();
+    },
     /**
      * Opens a form for user to add or edit data for indicators year/regionset
      */
@@ -195,8 +203,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         var labels = {};
         labels[selectors.regionset] = regionset.name;
 
-        // TODO: show spinner as getting regions might take a while?
+        me.setSpinnerVisible(true);
         me.service.getRegions(regionset.id, function (err, regions) {
+            me.setSpinnerVisible(false);
             if (err) {
                 me.errorService.show(locale('errors.title'), locale('errors.regionsDataError'));
                 return;
