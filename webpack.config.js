@@ -35,8 +35,7 @@ module.exports = (env, argv) => {
             [
                 { from: '*.js', to: appName, context: appDir },
                 { from: 'css/**', to: appName, context: appDir },
-                { from: 'resources/icons.css', to: appName, context: __dirname },
-                { from: 'resources/icons.png', to: appName, context: __dirname }
+                { from: 'resources/*', to: appName, context: __dirname }
             ]
         );
         entries[appName] = [
