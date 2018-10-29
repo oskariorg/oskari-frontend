@@ -38,7 +38,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
 }, {
     _templates: {
         main: '<div class="stats-user-indicator-form"></div>',
-        notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>')
+        notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>'),
+        spinner: '<div class="spinner-holder"></div>'
     },
     /**
      * Main external API function - shows the form for given indicator
@@ -143,7 +144,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this._accordion.addPanel(dataPanel);
         this._accordion.insertTo(this.element);
 
-        var spinnerHolder = $('<div class="spinner-holder"></div>');
+        var spinnerHolder = jQuery(this._templates.spinner);
         this.element.append(spinnerHolder);
         this.spinner.insertTo(spinnerHolder);
         this.element.append(this.indicatorDataForm.createUi());
