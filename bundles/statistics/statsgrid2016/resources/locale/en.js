@@ -265,6 +265,10 @@ Oskari.registerLocalization({
                 'edit': 'Edit',
                 'remove': 'Remove'
             }
+        },
+        'indicatorList': {
+            'title': 'Indicators',
+            'removeAll': 'Remove all'
         }
     }
 });

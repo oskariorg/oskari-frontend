@@ -135,6 +135,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             btn.setEnabled(enabled);
         });
 
+        var indicatorList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorList', me.instance, me.sandbox);
+        container.append(indicatorList.getElement());
+
         return container;
     }
 }, {

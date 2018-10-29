@@ -266,6 +266,10 @@ Oskari.registerLocalization({
                 'edit': 'Muokkaa',
                 'remove': 'Poista'
             }
+        },
+        'indicatorList': {
+            'title': 'Indikaattorit',
+            'removeAll': 'Poista kaikki'
         }
     }
 });
