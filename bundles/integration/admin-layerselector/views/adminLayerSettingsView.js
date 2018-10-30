@@ -988,7 +988,7 @@ function (
             });
         },
         _readLayerOptions: function (data, form) {
-            const optionsElement = form.find('.add-layer-input.layer-options');
+            var optionsElement = form.find('.add-layer-input.layer-options');
             if (optionsElement.length !== 0) {
                 // Master options element. Read only this element's value to options.
                 try {
@@ -999,15 +999,15 @@ function (
                 }
             } else {
                 // Gather options object by reading multiple layer options elements.
-                const parseOptionQuietly = className => {
-                    const element = form.find(className);
+                var parseOptionQuietly = function (className) {
+                    var element = form.find(className);
                     if (element.length !== 0) {
                         try {
                             return JSON.parse(element.val().trim());
                         } catch (e) {}
                     }
                 };
-                const options = {
+                var options = {
                     styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
                     externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles')
                 };

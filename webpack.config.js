@@ -33,8 +33,7 @@ module.exports = (env, argv) => {
         const appName = dirParts[dirParts.length - 1];
         const copyPlugin = new CopyWebpackPlugin(
             [
-                { from: '*.js', to: appName, context: appDir },
-                { from: 'css/**', to: appName, context: appDir },
+                { from: appDir, to: appName },
                 { from: 'resources/icons.css', to: appName, context: __dirname },
                 { from: 'resources/icons.png', to: appName, context: __dirname }
             ]
