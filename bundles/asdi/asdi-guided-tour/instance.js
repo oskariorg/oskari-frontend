@@ -3,14 +3,7 @@
  *
  * Add this to startupsequence to get this bundle started
  {
-   bundlename : 'asdi-guided-tour',
-   metadata : {
-   "Import-Bundle" : {
-   "asdi-guided-tour" : {
-   bundlePath : '/Oskari/packages/asdi/bundle/'
-   }
-   }
-   }
+   bundlename : 'asdi-guided-tour'
  }
  */
 Oskari.clazz.define(

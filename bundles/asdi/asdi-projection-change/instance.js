@@ -2,10 +2,7 @@
  * @class Oskari.projection.change.instance
  * 
  *      var obj = {
-            "bundlename":"asdi-projection-change" ,
-            "metadata": {
-                "Import-Bundle": { "asdi-projection-change": { "bundlePath": "/Oskari/packages/asdi/bundle/" } }
-            }
+            "bundlename":"asdi-projection-change"
         }
         appSetup.startupSequence.push(obj);
  */
