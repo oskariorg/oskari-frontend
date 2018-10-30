@@ -268,7 +268,8 @@ Oskari.registerLocalization({
         },
         'indicatorList': {
             'title': 'Indicators',
-            'removeAll': 'Remove all'
+            'removeAll': 'Remove all',
+            'emptyMsg': 'No selected indicators'
         }
     }
 });

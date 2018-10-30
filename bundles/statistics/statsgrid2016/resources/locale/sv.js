@@ -266,7 +266,8 @@ Oskari.registerLocalization({
         },
         'indicatorList': {
             'title': 'Indikator',
-            'removeAll': 'Ta bort alla'
+            'removeAll': 'Ta bort alla',
+            'emptyMsg': 'Inga valda indikatorer'
         }
     }
 });

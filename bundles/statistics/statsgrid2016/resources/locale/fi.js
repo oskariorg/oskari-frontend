@@ -269,7 +269,8 @@ Oskari.registerLocalization({
         },
         'indicatorList': {
             'title': 'Indikaattorit',
-            'removeAll': 'Poista kaikki'
+            'removeAll': 'Poista kaikki',
+            'emptyMsg': 'Ei valittuja indikaattoreita'
         }
     }
 });
