@@ -22,6 +22,10 @@ module.exports = function(source) {
     });
 
     let output = bundlePaths.map(bundlePath => `import 'oskaribundle-loader!${bundlePath}';`).join('\n') + '\n';
-    output += dynamicBundles.map(b => `Oskari.bundle_manager.registerDynamic('${b.name}', () => [\n${b.paths.map(p => `    import(/* webpackChunkName: "chunk_${b.name}" */'oskaribundle-loader!${p}')`).join(',\n')}\n]);`).join('\n');
+    output += dynamicBundles.map(b => {
+        const dependencies = b.paths.map(p => `    import(/* webpackChunkName: "chunk_${b.name}" */'oskaribundle-loader!${p}')`);
+        return `Oskari.bundle_manager.registerDynamic('${b.name}', () => [\n${dependencies.join(',\n')}\n]);`
+    }).join('\n');
+    
     return output;
 }
