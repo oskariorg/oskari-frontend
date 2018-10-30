@@ -372,6 +372,7 @@
             }
         }, {
             "bundlename": "admin-layerselector",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "admin-layerselector": {
@@ -384,6 +385,7 @@
             }
         }, {
             "bundlename": "admin-layerrights",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "admin-layerrights": {
