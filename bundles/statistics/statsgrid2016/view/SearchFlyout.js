@@ -1,4 +1,5 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (title, options, instance) {
+    this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.instance = instance;
     this.element = null;
     this.sandbox = this.instance.getSandbox();
@@ -30,11 +31,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
      * Creates the UI for a fresh start.
      */
     createUi: function (isEmbedded) {
-        var locale = this.instance.getLocalization();
         // empties all
         this.clearUi();
         this.setElement(jQuery('<div class="statsgrid-search-container"></div>'));
-        var title = locale.flyout.title;
+        var title = this.loc('flyout.title');
         var parent = this.getElement().parent().parent();
         if (isEmbedded) {
             parent.find('.oskari-flyout-title p').html(title);
@@ -57,7 +57,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     getNewSearchElement: function () {
         var me = this;
         var container = jQuery('<div></div>');
-        var locale = this.instance.getLocalization();
 
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
         container.append(selectionComponent.getPanelContent());
@@ -65,7 +64,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
         btn.setPrimary(true);
-        btn.setTitle(locale.panels.newSearch.addButtonTitle);
+        btn.setTitle(this.loc('panels.newSearch.addButtonTitle'));
         btn.setEnabled(false);
         btn.insertTo(container);
 
@@ -123,7 +122,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         clearBtn.addClass('margintopLarge');
-        clearBtn.setTitle(locale.panels.newSearch.clearButtonTitle);
+        clearBtn.setTitle(this.loc('panels.newSearch.clearButtonTitle'));
         clearBtn.insertTo(container);
 
         clearBtn.setHandler(function (event) {
@@ -135,8 +134,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             btn.setEnabled(enabled);
         });
 
-        var indicatorList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorList', me.instance, me.sandbox);
-        container.append(indicatorList.getElement());
+        // Create accordion and add indicator list to its panel
+        var indicatorListAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+        var indicatorListAccordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+        var indicatorList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorList', this.service);
+
+        indicatorListAccordionPanel.setTitle(this.loc('indicatorList.title'));
+        indicatorListAccordionPanel.setContent(indicatorList.getElement());
+        indicatorListAccordion.addPanel(indicatorListAccordionPanel);
+
+        indicatorListAccordion.insertTo(container);
 
         return container;
     }

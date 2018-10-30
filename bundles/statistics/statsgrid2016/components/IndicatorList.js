@@ -1,15 +1,15 @@
-Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (instance, sandbox) {
-    this.instance = instance;
+Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (service) {
+    this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
-    this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this._accordionPanel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
+    this.service = service;
     this._removeAllBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     this._wrapper = jQuery('<div class="statsgrid-indicator-list-wrapper"></div>');
     this._content = jQuery('<div class="statsgrid-indicator-list-content"><ol class="statsgrid-indicator-list"></ol></div>');
     this._bindToEvents();
 }, {
     __templates: {
-        indicator: _.template('<li><div>${name} <div class="indicator-list-remove icon-close" data-ind-hash="${indHash}"/></div></li>')
+        indicator: _.template('<li><div>${name} <div class="indicator-list-remove icon-close" data-ind-hash="${indHash}"/></div></li>'),
+        empty: _.template('<li>${emptyMsg}</li>')
     },
     /**
      * @method getElement
@@ -72,27 +72,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (insta
      */
     _initializeElement: function () {
         var me = this;
-        var locale = me.instance.getLocalization();
-        // Create wrapper element with accordion and accordion panel
+        // Create wrapper element
         this.element = me._wrapper;
-        var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-        var panel = me._accordionPanel;
         // Create indicator list content
         var content = me._content;
         // Create 'remove all' button
         var removeAllBtn = me._removeAllBtn;
-        removeAllBtn.setTitle(locale.indicatorList.removeAll);
+        removeAllBtn.setTitle(me.loc('indicatorList.removeAll'));
         removeAllBtn.setHandler(function () {
             me._removeAllIndicators();
         });
         // Add button to content
         removeAllBtn.insertTo(content);
-        // Set title and content to panel
-        panel.setTitle(locale.indicatorList.title);
-        panel.setContent(content);
-        // Set panel to accordion and insert accordion into element
-        accordion.addPanel(panel);
-        accordion.insertTo(me.element);
+        // Add content to element
+        this.element.append(content);
         // Update indicator list
         me._updateIndicatorList();
     },
@@ -110,13 +103,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (insta
      */
     _updateIndicatorList: function () {
         var me = this;
-        var panel = me._accordionPanel;
         var indicators = me._getIndicatorList();
-        panel.content.find('.statsgrid-indicator-list-content').replaceWith(indicators);
+        me.element.find('.statsgrid-indicator-list-content').replaceWith(indicators);
         if (indicators.find('li').length === 0) {
-            // No indicators in the list. Hide 'remove all' button and close panel
+            // No indicators in the list. Hide 'remove all' button and display message
+            indicators.find('.statsgrid-indicator-list').append(jQuery(me.__templates.empty({
+                emptyMsg: me.loc('indicatorList.emptyMsg')
+            })));
             me._removeAllBtn.setVisible(false);
-            me._accordionPanel.close();
         } else {
             me._removeAllBtn.setVisible(true);
         }
