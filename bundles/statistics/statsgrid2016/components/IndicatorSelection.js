@@ -72,6 +72,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             if (hasRegionSetRestriction) {
                 select.disableOptions(disabledIndicatorIDs);
             }
+            // SumoSelect
+            var sumoselect = me.getElement().find('select.sumoselect');
+            sumoselect.find('option').remove();
+            sumoselect.append(results.map(opt => `<option value="${opt.id}">${opt.title}</option>`).join(''));
+            sumoselect[0].sumo.reload();
+            sumoselect.parent().css({width: '100%', 'font-size': '13px'});
+            //sumoselect.parent().find('.optWrapper > .options').css({'max-height': '130px'});
+
             if (result.complete) {
                 me.spinner.stop();
                 var userDatasource = me.service.getUserDatasource();
@@ -158,6 +166,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         dsSelector.append(dropdown);
         dsSelect.adjustChosen();
 
+        var sumoselect = $('<div><b>Indicator</b> (SumoSelect demo)</div><select multiple class="sumoselect"></select>');
+        main.append(sumoselect);
+        sumoselect.SumoSelect({ selectAll: true, up: false });
+        sumoselect.parent().css({width: '100%'});
+
         // Indicator list
         main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.indicatorTitle, clazz: 'stats-ind-selector'})));
         // chosen works better when it has context for the element, get a new reference for chosen
@@ -181,29 +194,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             tooltip2: panelLoc.refineSearchTooltip2 || ''
         }));
         main.append(dataLabelWithTooltips);
-
-        main.append(
-            $('<select class="ui multiple selection"></select>')
-                .dropdown({
-                    clearable: true,
-                    placeholder: 'any',
-                    values: [
-                        {
-                            name: '1',
-                            value: '1'
-                        }, {
-                            name: '2',
-                            value: '2'
-                        }, {
-                            name: '3',
-                            value: '3'
-                        }, {
-                            name: '4',
-                            value: '4'
-                        }
-                    ]
-                })
-        );
 
         // Refine data selections
         var selectionsContainer = jQuery(this.__templates.selections());

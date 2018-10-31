@@ -9,6 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             me.createUi();
             me.addClass('statsgrid-search-flyout');
             me.setContent(me.getElement());
+            me._popup.find('.oskari-flyoutcontentcontainer').css({overflow: 'visible'});
         }
     });
 }, {
@@ -46,6 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             parent.find('.oskari-flyouttools').show();
         }
         this.addContent(this.getElement(), isEmbedded);
+        this.getElement().parent().css({overflow: 'visible'});
     },
     addContent: function (el, isEmbedded) {
         if (isEmbedded) {
