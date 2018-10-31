@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         var sumoselect = $('<div><b>Indicator</b> (SumoSelect demo)</div><select multiple class="sumoselect"></select>');
         main.append(sumoselect);
-        sumoselect.SumoSelect({ selectAll: true, up: false });
+        sumoselect.SumoSelect({ selectAll: true, up: false, search: true });
         sumoselect.parent().css({width: '100%'});
 
         // Indicator list
