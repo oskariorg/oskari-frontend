@@ -182,6 +182,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         }));
         main.append(dataLabelWithTooltips);
 
+        main.append(
+            $('<select class="ui multiple selection"></select>')
+                .dropdown({
+                    clearable: true,
+                    placeholder: 'any',
+                    values: [
+                        {
+                            name: '1',
+                            value: '1'
+                        }, {
+                            name: '2',
+                            value: '2'
+                        }, {
+                            name: '3',
+                            value: '3'
+                        }, {
+                            name: '4',
+                            value: '4'
+                        }
+                    ]
+                })
+        );
+
         // Refine data selections
         var selectionsContainer = jQuery(this.__templates.selections());
         main.append(selectionsContainer);

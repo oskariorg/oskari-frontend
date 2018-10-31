@@ -179,6 +179,18 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
+            }, {
+                "src": "../../../libraries/semantic-ui/dropdown/2.4.1/dropdown.js",
+                "type": "text/javascript"
+            }, {
+                "src": "../../../libraries/semantic-ui/dropdown/2.4.1/dropdown.css",
+                "type": "text/css"
+            }, {
+                "src": "../../../libraries/semantic-ui/transition/2.3.1/transition.js",
+                "type": "text/javascript"
+            }, {
+                "src": "../../../libraries/semantic-ui/transition/2.3.1/transition.css",
+                "type": "text/css"
             }
         ],
             "locales": [{
