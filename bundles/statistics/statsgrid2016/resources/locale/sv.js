@@ -263,6 +263,11 @@ Oskari.registerLocalization({
                 'edit': 'Redigera',
                 'remove': 'Ta bort'
             }
+        },
+        'indicatorList': {
+            'title': 'Indikator',
+            'removeAll': 'Ta bort alla',
+            'emptyMsg': 'Inga valda indikatorer'
         }
     }
 });

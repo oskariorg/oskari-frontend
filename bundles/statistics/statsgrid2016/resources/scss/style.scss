@@ -1137,3 +1137,13 @@ background-color: #888888;
 .user-dataset-edit, .user-dataset-delete {
     text-align: center;
 }
+/* ********************************************
+ * Indicator list
+ * ********************************************/
+ ol.statsgrid-indicator-list li:nth-child(2n) {
+    background-color: #f3f3f3;
+}
+.indicator-list-remove {
+    cursor: pointer;
+    float: right;
+}
