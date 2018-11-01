@@ -29,7 +29,10 @@
     };
 }(Oskari));
 /**
- * File loader/startupsequence processor for Oskari.
+ * Startupsequence processor for Oskari. Bundles have ether been bundled/minfied
+ * into the application JS file or separate chunks. In both cases bundles must be
+ * declared in miniferAppSetup.json
+ * 
  * Usage:
  *
  *     var startupSequence = [...bundles to load/start... ];
@@ -40,10 +43,6 @@
  *         // application started
  *     });
  *
- * Also provides file linking like:
- *
- *     Oskari.loader.linkFile('/my.css');
- *     Oskari.loader.linkFile('/my.html', 'import', 'text/html');
  */
 (function (o) {
     if (!o) {
@@ -66,6 +65,10 @@
     /**
      * Loader
      * @param  {Object[]} startupSequence sequence of bundles to load/start
+     *         {
+     *              "bundleinstancename": "openlayers-default-theme",
+     *              "bundlename": "openlayers-default-theme"
+     *         }
      * @param  {Object}   config          configuration for bundles
      */
     var loader = function (startupSequence, config) {
@@ -91,12 +94,8 @@
         });
 
         return {
-            /**
-             * {
-                    "bundleinstancename": "openlayers-default-theme",
-                    "bundlename": "openlayers-default-theme"
-                }
-             * @param  {Object} sequence see above
+            /** 
+             * @param  {Function} done callback
              */
             processSequence: function (done) {
                 var me = this;
