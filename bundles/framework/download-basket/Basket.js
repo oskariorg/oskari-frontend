@@ -143,12 +143,15 @@ Oskari.clazz.define(
                 var details = {
                     croppingMode: parent.attr('data-cropping-mode'),
                     layer: parent.attr('data-layer-name'),
+                    // FIXME KORJAA TÄMÄ
+                    /*
                     bbox: {
                         left: parent.attr('data-bbox-left'),
                         bottom: parent.attr('data-bbox-bottom'),
                         right: parent.attr('data-bbox-right'),
                         top: parent.attr('data-bbox-top')
                     },
+                    */
                     croppingUrl: parent.attr('data-cropping-url'),
                     croppingLayer: parent.attr('data-cropping-layer'),
                     id: parent.attr('data-layer-id'),
@@ -337,25 +340,24 @@ Oskari.clazz.define(
                 el.find('.oskari__download-basket-user-info').hide();
                 el.find('.oskari__download-basket-wrapper').show();
 
-                me._selected.forEach(function(basketItem, index){
+                me._selected.forEach(function(basketItem, index) {
+                    var feature = basketItem.feature;
+
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
                     basketEl.attr('data-layer-id',basketItem.layerUrl);
-                    basketEl.attr('data-bbox-bottom',basketItem.bbox.bottom);
-                    basketEl.attr('data-bbox-left',basketItem.bbox.left);
-                    basketEl.attr('data-bbox-right',basketItem.bbox.right);
-                    basketEl.attr('data-bbox-top',basketItem.bbox.top);
-                    basketEl.attr('data-cropping-layer',basketItem.cropLayerName);
-                    basketEl.attr('data-cropping-url',basketItem.cropLayerUrl);
-                    basketEl.attr('data-cropping-mode',basketItem.cropMode);
+
+                    basketEl.attr('data-cropping-layer',feature.properties.layerName);
+                    basketEl.attr('data-cropping-url',feature.properties.layerUrl);
+                    basketEl.attr('data-cropping-mode',feature.properties.croppingMode);
                     basketEl.attr('data-index', index);
                     var identifiers = [];
                     var identifier = {
                         layerName: basketItem.cropLayerName,
-                        uniqueColumn: basketItem.cropUniqueKey,
-                        geometryColumn : basketItem.cropGeometryColumn,
-                        geometryName : basketItem.cropGeometryName,
-                        uniqueValue: basketItem.cropUniqueKeyValue
+                        uniqueColumn: feature.properties.uniqueKey,
+                        geometryColumn : feature.properties.geometryColumn,
+                        geometryName : feature.properties.geometryName,
+                        uniqueValue: feature.properties[feature.properties.uniqueKey]
                     };
                     identifiers.push(identifier);
 
@@ -363,14 +365,14 @@ Oskari.clazz.define(
 
                     basketEl.find('.download-basket__component-layer-name').text(basketItem.layerNameLang);
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
-                    basketEl.find('.basket__content-cropping>span').text(basketItem.cropLayerNameLang);
-                    
+                    basketEl.find('.basket__content-cropping>span').text(feature.properties.layerNameLang);
+
 
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
                     var licenseLink = basketEl.find('.basket__content-license>a');
                     var layerId = basketItem.layerUrl;
-                    
+
 	                if (me.instance.conf.licenseByLayers && me.instance.conf.licenseByLayers[layerId]) {
 	                	licenseTitle.text(me._getLocalization('basket-license-title'));
 	                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseName) ||

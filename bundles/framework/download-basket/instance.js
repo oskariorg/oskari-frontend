@@ -181,9 +181,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
             'AfterMapLayerAddEvent' : function(event) {
                 var me = this;
                 var map = me.mapModule.getMap();
-
-                if(me.cropping.croppingVectorLayer != null){
-                    map.setLayerIndex(me.cropping.croppingVectorLayer, 1000000);
+            },
+            'DrawingEvent': function(event) {
+                if(event.getId() === this.cropping.DOWNLOAD_BASKET_DRAW_ID) {
+                    this.cropping.handleDrawingEvent(event);
                 }
             }
         },
