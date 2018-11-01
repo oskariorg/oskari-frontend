@@ -4,7 +4,7 @@ import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import OLCesium from 'ol-cesium';
-import MapModuleOl from '../../mapping/mapmodule/MapModuleClass.ol';
+import MapModuleOl from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
 import 'ol-cesium/css/olcs.css';
 
 const TERRAIN_SERVICE_URL = 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/';
