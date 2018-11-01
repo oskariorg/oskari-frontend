@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     Oskari.makeObservable(this);
 }, {
     __templates: {
-        main: _.template('<div class="user-indicator-main"><div class="my-indicator"></div><div class="new-indicator-dataset-params"><div class="util-row"></div></div></div>'),
+        main: _.template('<div class="user-indicator-main"><div class="my-indicator"></div><div class="new-indicator-dataset-params"></div></div>'),
         table: '<table><tbody></tbody></table>',
         tableHeader: _.template(
             '<thead>' +
@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             '</tr>'
         ),
         form: '<div class="userchoice-container"></div>',
-        input: _.template('<input type="text" style="width: 40%; height: 1.6em" name="${name}" placeholder="${label}"><br />')
+        input: _.template('<input type="text" name="${name}" placeholder="${label}"><br />')
     },
     getElement: function () {
         return this.element;
@@ -121,10 +121,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             name: 'year',
             label: this.locale('parameters.year')
         }));
-        var formContainer = this.removeAddDatasetForm();
-        var userChoiceContainer = jQuery(this.__templates.form);
+        var userChoiceContainer = this.removeAddDatasetForm();
         userChoiceContainer.append(input);
-        formContainer.append(userChoiceContainer);
 
         var regionsetContainer = jQuery('<div class="regionset-container"></div>');
         regionsetContainer.append('<div>' + this.locale('panels.newSearch.selectRegionsetPlaceholder') + '</div>');
@@ -138,8 +136,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         userChoiceContainer.append(regionsetContainer);
 
         // create buttons
-        var btnContainer = jQuery('<div style="display:flex"></div>');
-        formContainer.append(btnContainer);
+        var btnContainer = jQuery('<div></div>');
+        userChoiceContainer.append(btnContainer);
 
         var me = this;
         var showTableBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.AddButton');
