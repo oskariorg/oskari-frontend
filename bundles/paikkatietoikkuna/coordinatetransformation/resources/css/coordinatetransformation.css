@@ -237,9 +237,9 @@
     padding-top: 7px;
 }
 .coordinatetransformation-flyout .cell.control {
-    border: inherit; 
+    border: inherit;
     border-bottom: 1px solid black;
-    display: none; 
+    display: none;
     position: relative;
 }
 .transformation-wrapper .cell-disabled {
@@ -262,7 +262,7 @@
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
   animation: float 5s infinite;
 }
-.coordinatetransformation-flyout .hoverable td { 
+.coordinatetransformation-flyout .hoverable td {
     padding: 0px;
     border:#4e95f4 1px solid;
     width:33% !important;
@@ -287,6 +287,7 @@
   border-top: 1px solid #22262e;
   border-bottom: 1px solid #22262e;
 }
+/*
 .coordinatetransformation-flyout .removerow {
     border-radius: 50%;
     height:1.3em;
@@ -295,7 +296,7 @@
     right:-5em;
     position: absolute;
 }
-
+*/
 /* Util row */
 .util-row-wrapper {
     display: flex;
