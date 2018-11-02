@@ -3,22 +3,8 @@
  *
  * Add this to startupsequence to get this bundle started
      {
-     title : 'guidedtour',
-     fi : 'guidedtour',
-     sv : '?',
-     en : '?',
      bundlename : 'guidedtour',
-     bundleinstancename : 'guidedtour',
-     metadata : {
-     "Import-Bundle" : {
-     "guidedtour" : {
-     bundlePath : '/<path to>/packages/framework/bundle/'
-     }
-     },
-     "Require-Bundle-Instance" : []
-     },
-     instanceProps : {}
-     }
+     bundleinstancename : 'guidedtour'
  */
 Oskari.clazz.define(
     'Oskari.framework.bundle.guidedtour.GuidedTourBundleInstance',

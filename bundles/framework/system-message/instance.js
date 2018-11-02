@@ -1,14 +1,7 @@
 /* Add this to startupsequence to get this bundle started
 Oskari.app.playBundle(
 {
-  bundlename : 'system-message',
-  metadata : {
-  "Import-Bundle" : {
-  "system-message" : {
-  bundlePath : '/Oskari/packages/framework/bundle/'
-  }
-  }
-  }
+  bundlename : 'system-message'
 });
 */
 /*
