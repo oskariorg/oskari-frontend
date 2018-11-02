@@ -103,6 +103,16 @@
             }
         }
     }, {
+        "bundlename": "statsgrid",
+        "lazy": true,
+        "metadata": {
+            "Import-Bundle": {
+                "statsgrid": {
+                    "bundlePath": "../../../packages/statistics/"
+                }
+            }
+        }
+    }, {
         "bundlename" : "rpc",
         "metadata" : {
             "Import-Bundle" : {
