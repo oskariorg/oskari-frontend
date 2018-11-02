@@ -1,3 +1,6 @@
+import 'sumoselect/jquery.sumoselect.js';
+import 'sumoselect/sumoselect.css';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
     this.sb = sandbox;

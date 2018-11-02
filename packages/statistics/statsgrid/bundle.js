@@ -179,13 +179,6 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
-            }, {
-                // SUMO SELECT
-                "src": "../../../libraries/sumoselect/sumoselect.min.css",
-                "type": "text/css"
-            }, {
-                "src": "../../../libraries/sumoselect/jquery.sumoselect.js",
-                "type": "text/javascript"
             }
         ],
             "locales": [{
