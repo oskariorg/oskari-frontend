@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                             '</div>'),
         row: _.template('<tr data-id="${regionId}">' +
                             '<td class="region" style=" border: 1px solid black ;">${regionName}</td>' +
-                            '<td class="uservalue" style="border: 1px solid black ;"> <div contenteditable="true">${value}</div></td>' +
+                            '<td class="uservalue" style="border: 1px solid black ;"><div contenteditable="true">${value}</div></td>' +
                         '</tr> '),
         import: _.template('<div class="user-indicator-import"><textarea placeholder="${placeholder}"></textarea></div>')
     },
@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             tableRef.append(me.__templates.row({
                 regionId: region.id,
                 regionName: region.name,
-                value: region.value || '<br>' // firefox uses <br> for empty contenteditable
+                value: region.value === undefined ? '<br>' : region.value // firefox uses <br> for empty contenteditable
             }));
         });
         this.getElement().append(tableRef);
@@ -177,13 +177,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             // separator can be tabulator, comma or colon
             var matches = line.match(/([^\t;,]+) *[\t;,]+ *(.*)/);
             if (matches && matches.length === 3) {
-                area = matches[1];
+                area = matches[1].trim();
                 value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
+
+                validRows.push({
+                    'name': area,
+                    'value': value
+                });
             }
-            validRows.push({
-                'name': area.trim(),
-                'value': value
-            });
         });
         return validRows;
     }
