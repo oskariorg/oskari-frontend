@@ -26,6 +26,7 @@ Oskari.clazz.define(
     function () {
         this._clazz = 'Oskari.mapframework.mapmodule.ControlsPlugin';
         this._name = 'ControlsPlugin';
+        this.boxZoom = null;
         this.removedInteractions = [];
         this.addedInteractions = [];
     }, {
@@ -102,6 +103,7 @@ Oskari.clazz.define(
             });
             this.removedInteractions = [];
             this.addedInteractions = [];
+            this.boxZoom = null;
         },
         disableDragPan: function () {
             var me = this;
@@ -119,19 +121,24 @@ Oskari.clazz.define(
             });
         },
         mouseDragZoomInteraction: function () {
-            var boxzoom = this.getMap().getInteractions().forEach(function (interaction) {
+            var me = this;
+            if (this.boxZoom) {
+                return; // button clicked again
+            }
+            this.getMap().getInteractions().forEach(function (interaction) {
                 if (interaction instanceof olInteractionDragZoom) {
-                    return interaction;
+                    me.getMap().removeInteraction(interaction);
+                    me.removedInteractions.push(interaction);
                 }
             });
-            if (!boxzoom) {
-                boxzoom = new olInteractionDragZoom({
-                    condition: function (mapBrowserEvent) {
-                        return olEventsCondition.mouseOnly(mapBrowserEvent);
-                    }
-                });
-            }
-            this.getMap().addInteraction(boxzoom);
+
+            this.boxZoom = new olInteractionDragZoom({
+                condition: function (mapBrowserEvent) {
+                    return olEventsCondition.mouseOnly(mapBrowserEvent);
+                }
+            });
+            this.addedInteractions.push(this.boxZoom);
+            this.getMap().addInteraction(this.boxZoom);
         },
         /**
          * @private @method _createMapControls
