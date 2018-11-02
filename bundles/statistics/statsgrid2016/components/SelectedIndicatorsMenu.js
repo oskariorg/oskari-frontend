@@ -46,7 +46,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var dropdown = select.create(options, dropdownOptions);
             me.dropdown = dropdown;
             dropdown.css({
-                width: '100%'
+                width: '100%',
+                'max-width': '400px'
             });
             select.adjustChosen();
 

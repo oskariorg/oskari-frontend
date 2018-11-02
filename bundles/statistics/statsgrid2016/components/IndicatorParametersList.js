@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             '</tr>'
         ),
         form: '<div class="userchoice-container"></div>',
-        input: _.template('<input type="text" name="${name}" placeholder="${label}"><br />')
+        input: _.template('<input type="text" name="${name}" placeholder="${label}">')
     },
     getElement: function () {
         return this.element;
@@ -145,8 +145,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
         showTableBtn.insertTo(btnContainer);
         showTableBtn.setHandler(function (event) {
             var errors = false;
-
-            if (input.val().length === 0) {
+            var year = input.val().trim();
+            if (year.length === 0 || isNaN(year)) {
                 me.errorService.show(me.locale('errors.title'), me.locale('errors.myIndicatorYearInput'));
                 errors = true;
             }
@@ -158,7 +158,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
             if (!errors) {
                 me.removeAddDatasetForm();
                 me.trigger('insert.data', {
-                    year: input.val(),
+                    year: year,
                     regionset: Number(me.select.getValue())
                 });
             }
