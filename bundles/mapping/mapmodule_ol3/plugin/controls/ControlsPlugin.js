@@ -105,21 +105,6 @@ Oskari.clazz.define(
             this.addedInteractions = [];
             this.boxZoom = null;
         },
-        disableDragPan: function () {
-            var me = this;
-            var disable = me.getMap().getInteractions().getArray().filter(function (interaction) {
-                if (interaction instanceof olInteractionDragZoom) {
-                    return interaction;
-                }
-                if (interaction instanceof olInteractionDragPan) {
-                    return interaction;
-                }
-            });
-            disable.forEach(function (toDisable) {
-                me.getMap().removeInteraction(toDisable);
-                me.removedInteractions.push(toDisable);
-            });
-        },
         mouseDragZoomInteraction: function () {
             var me = this;
             if (this.boxZoom) {
