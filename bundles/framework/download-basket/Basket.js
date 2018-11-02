@@ -143,15 +143,12 @@ Oskari.clazz.define(
                 var details = {
                     croppingMode: parent.attr('data-cropping-mode'),
                     layer: parent.attr('data-layer-name'),
-                    // FIXME KORJAA TÄMÄ
-                    /*
                     bbox: {
                         left: parent.attr('data-bbox-left'),
                         bottom: parent.attr('data-bbox-bottom'),
                         right: parent.attr('data-bbox-right'),
                         top: parent.attr('data-bbox-top')
                     },
-                    */
                     croppingUrl: parent.attr('data-cropping-url'),
                     croppingLayer: parent.attr('data-cropping-layer'),
                     id: parent.attr('data-layer-id'),
@@ -325,6 +322,7 @@ Oskari.clazz.define(
                             '<p class="basket__content-license"><strong></strong><a target="_blank"></a></p>'+
                         '</div>'+
                 '</div>');
+            var geojsonParser = new jsts.io.GeoJSONParser();
             if(me._selected.length > 0) {
                 var el = me.container;
                 var buttons = el.find('.oskari__download-basket-buttons');
@@ -346,6 +344,13 @@ Oskari.clazz.define(
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
                     basketEl.attr('data-layer-id',basketItem.layerUrl);
+                    var parsed = geojsonParser.read(feature);
+                    var bbox = parsed.geometry.getEnvelope().getCoordinates();
+
+                    basketEl.attr('data-bbox-left', bbox[0].x);
+                    basketEl.attr('data-bbox-bottom', bbox[0].y);
+                    basketEl.attr('data-bbox-right', bbox[2].x);
+                    basketEl.attr('data-bbox-top', bbox[2].y);
 
                     basketEl.attr('data-cropping-layer',feature.properties.layerName);
                     basketEl.attr('data-cropping-url',feature.properties.layerUrl);
@@ -353,7 +358,7 @@ Oskari.clazz.define(
                     basketEl.attr('data-index', index);
                     var identifiers = [];
                     var identifier = {
-                        layerName: basketItem.cropLayerName,
+                        layerName: feature.properties.layerName,
                         uniqueColumn: feature.properties.uniqueKey,
                         geometryColumn : feature.properties.geometryColumn,
                         geometryName : feature.properties.geometryName,
