@@ -181,8 +181,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                 value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
 
                 validRows.push({
-                    'name': area,
-                    'value': value
+                    name: area,
+                    value: value
                 });
             }
         });
