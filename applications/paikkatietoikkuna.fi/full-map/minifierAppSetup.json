@@ -395,6 +395,7 @@
             }
         }, {
             "bundlename" : "admin",
+            "lazy": true,
             "metadata" : {
                 "Import-Bundle" : {
                     "admin" : {
@@ -404,6 +405,7 @@
             }
         }, {
             "bundlename" : "metrics",
+            "lazy": true,
             "metadata" : {
                 "Import-Bundle" : {
                     "metrics" : {
@@ -413,10 +415,21 @@
             }
         }, {
             "bundlename" : "appsetup",
+            "lazy": true,
             "metadata" : {
                 "Import-Bundle" : {
                     "appsetup" : {
                         "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename" : "coordinatetransformation",
+            "lazy": true,
+            "metadata" : {
+                "Import-Bundle" : {
+                    "coordinatetransformation" : {
+                        "bundlePath" : "../../../packages/paikkatietoikkuna/bundle/"
                     }
                 }
             }
