@@ -126,11 +126,10 @@ module.exports = (env, argv) => {
         },
         resolve: {
             alias: {
-                'goog': path.resolve(__dirname, 'node_modules/ol-cesium/src/goog'), // needed for ol-cesium. Can be removed when v 2.3 will be released
-                'oskari-frontend': path.resolve(__dirname), // allow path refs like import('oskari-frontend/bundles/framework...')
-                'oskari-frontend-contrib': path.resolve(__dirname, '../oskari-frontend-contrib') // allow path refs like import('oskari-frontend-contrib/bundles/analysis..)
+                'goog': path.resolve(__dirname, 'node_modules/ol-cesium/src/goog') // needed for ol-cesium. Can be removed when v 2.3 will be released
             },
-            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'] // allow use of oskari-frontend node_modules from external projects
+            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
+            symlinks: false
         }
     };
 
