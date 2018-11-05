@@ -165,8 +165,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
                     if(!me.startedTabs){
-                        me.cropping.startCropping();
-                        me.basket.startBasket();
+                        me.cropping.createUI();
+                        me.basket.createUI();
                         me.startedTabs = true;
                     }
                     // flyouts eventHandlers are registered
@@ -182,9 +182,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                 var me = this,
                 x = evt.getMouseX(),
                 y = evt.getMouseY();
-                if(me.cropping.isCroppingToolActive()){
-                    me.cropping.croppingLayersHighlight(x, y);
-                }
+                me.cropping.croppingLayersHighlight(x, y);
             },
             'AfterMapLayerAddEvent' : function(event) {
                 var me = this;

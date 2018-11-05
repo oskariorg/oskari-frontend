@@ -26,16 +26,21 @@ Oskari.clazz.define(
         this.croppingLayerId = null;
         this._features = {};
         this._croppingFeatures = [];
-        this.CROPPING_LAYER_ID = 'download-basket-cropping-layer';
         this._drawing = false;
+        this.CROPPING_LAYER_ID = 'download-basket-cropping-layer';
         this.DOWNLOAD_BASKET_DRAW_ID = 'download-basket-drawing';
     },{
-        startCropping: function(){
+        /**
+         * Creates UI for cropping tab
+         * @method createUI
+         */
+        createUI: function(){
              this.setContent(this.createUi());
         },
         /**
-         * Creates ui for cropping items
-         * @private @method _initTemplates
+         * Init templates, creates ui for cropping items
+         * @method _initTemplates
+         * @private
          */
         _initTemplates: function () {
             var me = this;
@@ -49,7 +54,6 @@ Oskari.clazz.define(
 
                 jQuery(croppingBtn.getElement()).data('layerId', croppingLayer.getId());
                 jQuery(croppingBtn.getElement()).data('layerName', croppingLayer.getLayerName());
-                jQuery(croppingBtn.getElement()).data('layerUrl', croppingLayer.getLayerUrl());
                 var layerAttributes = croppingLayer.getAttributes();
                 if(layerAttributes.unique !== null){
                     jQuery(croppingBtn.getElement()).data('uniqueKey',layerAttributes.unique);
@@ -77,8 +81,7 @@ Oskari.clazz.define(
                     }
                     // Cropping btn is allready selected
                     if(el.hasClass('selected')) {
-                        me.activateNormalGFI(true);
-                        me.activateNormalWFSReq(true);
+                        me._toggleGFIAndWFSHighlight(true);
                         jQuery('.cropping-btn').removeClass('selected');
                         me.removeSelectedCroppingLayer();
                         me.removeFeatures();
@@ -111,8 +114,7 @@ Oskari.clazz.define(
                             jQuery(this).addClass('primary');
 
                             //Fresh user selection
-                            me.activateNormalGFI(false);
-                            me.activateNormalWFSReq(false);
+                            me._toggleGFIAndWFSHighlight(false);
                             jQuery('.cropping-btn').removeClass('selected');
                             el.addClass('selected');
                             toggleLayers();
@@ -160,6 +162,11 @@ Oskari.clazz.define(
             me._templates.tempbasket.hide();
         },
 
+        /**
+         * Removes selected cropping layer
+         * @method removeSelectedCroppingLayer
+         * @public
+         */
         removeSelectedCroppingLayer: function(){
             var me = this;
             if(me._croppingLayerId) {
@@ -167,46 +174,22 @@ Oskari.clazz.define(
                 me._croppingLayerId = null;
             }
         },
-        /**
-         * [disableNormalGFI disables normal GFI cause using mapclick in cropping]
-         * @param  {[type]} state [true/false]
-         * @return {[none]}
-         */
-        activateNormalGFI: function(state){
-            var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
-
-            if (reqBuilder) {
-                var request = reqBuilder(state);
-                me._sandbox.request(me.instance, request);
-            }
-        },
-        /**
-         * [activateNormalWFSReq disables normal WFS click cause using mapclick in cropping]
-         * @param  {[type]} state [true/false]
-         * @return {[none]}
-         */
-        activateNormalWFSReq: function(state){
-            var me = this,
-            reqBuilder = me._sandbox.getRequestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
-
-            if (reqBuilder) {
-                var request = reqBuilder(state);
-                me._sandbox.request(me.instance, request);
-            }
-        },
 
         /**
-         * [isCroppingToolActive checks if some cropping btn is selected]
-         * @return {Boolean} [true/false]
+         * Toggle GFI and WFS hightlight requests
+         * @method _toggleGFIAndWFSHighlight
+         * @public
+         * @param  {Boolean}          enabled has enabled?
          */
-        isCroppingToolActive: function(){
-            return jQuery('.cropping-btn').hasClass("selected");
+        _toggleGFIAndWFSHighlight: function(enabled){
+            this._sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [enabled]);
+            this._sandbox.postRequestByName('WfsLayerPlugin.ActivateHighlightRequest', [enabled]);
         },
 
         /**
          * Gets layers that has attribute cropping
-         * @method  @public getCroppingLayers
+         * @method getCroppingLayers
+         * @public
          * @return {Array} Layers that has attribute cropping: true
          */
         getCroppingLayers: function(){
@@ -227,16 +210,16 @@ Oskari.clazz.define(
                     return this.name;
                 },
                 getLayerName: function(){
-                    return "";
+                    return '';
                 },
                 getLayerUrl: function(){
-                    return "";
+                    return '';
                 },
                 getAttributes: function(){
-                    return "";
+                    return '';
                 },
                 getId: function(){
-                    return "";
+                    return '';
                 }
             };
 
@@ -244,31 +227,19 @@ Oskari.clazz.define(
 
             return croppingLayers;
         },
+
         /**
-         * [getUrlParams find parameters by name]
-         * @param  {[String]} uri       [uri for search]
-         * @param  {[String]} paramName [parameters name]
-         * @return {[String]}           [right parameter value]
-         */
-        getUrlParams: function(uri, paramName){
-            var me = this;
-            var queryString = {};
-            uri.replace(
-                new RegExp("([^?=&]+)(=([^&]*))?", "g"),
-                function($0, $1, $2, $3) { queryString[$1] = $3; }
-            );
-            return  queryString[paramName];
-        },
-        /**
-         * [croppingLayersHighlight Highlights clicked cropping area/areas]
-         * @param  {[string]} x      [Clicked on map X]
-         * @param  {[string]} y      [Clicked on map Y]
-         * @return {[none]}
+         * Highlight selected cropping feature
+         * @method croppingLayersHighlight
+         * @public
+         * @param  {Double}                x x-coordinate
+         * @param  {Double}                y y-coordinate
          */
         croppingLayersHighlight: function (x, y) {
             var me = this;
-            // Not get cropping features when drawing selected
-            if (me._drawing) {
+
+            // Not get cropping features when drawing selected or not any cropping selected
+            if (me._drawing || !me.container.find('.cropping-btn').hasClass('selected')) {
                 return;
             }
             var mapVO = me._sandbox.getMap();
@@ -279,7 +250,6 @@ Oskari.clazz.define(
             var layerGeometry = jQuery('.cropping-btn.selected').data('geometry');
             var layerName = jQuery('.cropping-btn.selected').data('layerName');
             var layerId = jQuery('.cropping-btn.selected').data('layerId');
-            var layerUrl = me.getUrlParams(jQuery('.cropping-btn.selected').data('layerUrl'),'id');
             var layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode');
             var layerNameLang = jQuery('.cropping-btn.selected').val();
 
@@ -289,7 +259,6 @@ Oskari.clazz.define(
                 url: ajaxUrl + 'action_route=GetFeatureForCropping',
                 data : {
                     layers : layerName,
-                    url : layerUrl,
                     x : x,
                     y : y,
                     id : layerId,
@@ -320,7 +289,7 @@ Oskari.clazz.define(
                             me._features[uniqueValue] = true;
                             feature.properties.cropid = uniqueValue;
                             feature.properties.layerName= layerName;
-                            feature.properties.layerUrl = layerUrl;
+                            feature.properties.layerId = layerId;
                             feature.properties.uniqueKey = layerUniqueKey;
                             feature.properties.geometryColumn = layerGeometryColumn;
                             feature.properties.geometryName = layerGeometry;
@@ -352,6 +321,13 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Opens popup
+         * @method  _openPopup
+         * @param   {String}   title   title
+         * @param   {String}   message message
+         * @private
+         */
         _openPopup: function(title, message) {
             var me = this;
             if(me._popup) {
@@ -365,7 +341,8 @@ Oskari.clazz.define(
 
         /**
          * Removes features from cropping layer
-         * @method  @public removeFeatures
+         * @method removeFeatures
+         * @public
          */
         removeFeatures: function(property, value){
             var me = this;
@@ -409,7 +386,8 @@ Oskari.clazz.define(
 
         /**
          * Updates temp basket
-         * @method @public addToTempBasket
+         * @method addToTempBasket
+         * @public
          * @param {Array} cropping features
          */
         addToTempBasket: function(croppingFeatures) {
@@ -424,6 +402,12 @@ Oskari.clazz.define(
             me._updateBasketText(me._croppingFeatures.length);
         },
 
+        /**
+         * Toggle basket help visibility
+         * @method  _toggleBasketHelpVisibility
+         * @param   {Boolean}                    visible is visible or not?
+         * @private
+         */
         _toggleBasketHelpVisibility: function(visible) {
             var el = jQuery('.oskari__download-basket-help');
             if (visible) {
@@ -463,8 +447,7 @@ Oskari.clazz.define(
                     me._toggleBasketHelpVisibility(false);
                 } else {
                     me._toggleDrawControl(false);
-                    me.activateNormalGFI(false);
-                    me.activateNormalWFSReq(false);
+                    me._toggleGFIAndWFSHighlight(false);
                     me._toggleBasketHelpVisibility(true);
                 }
                 dialog.close();
@@ -488,8 +471,7 @@ Oskari.clazz.define(
                     me._toggleBasketHelpVisibility(false);
                 } else {
                     me._toggleDrawControl(false);
-                    me.activateNormalGFI(false);
-                    me.activateNormalWFSReq(false);
+                    me._toggleGFIAndWFSHighlight(false);
                     me._toggleBasketHelpVisibility(true);
                 }
                 dialog.close();
@@ -503,6 +485,13 @@ Oskari.clazz.define(
             dialog.makeModal();
         },
 
+        /**
+         * Remove drawings
+         * @method  _removeDrawings
+         * @param   {String}        property identifier property
+         * @param   {String}        value    identifier value
+         * @private
+         */
         _removeDrawings: function(property, value) {
             var me = this;
             me._isRemove = true;
@@ -515,6 +504,12 @@ Oskari.clazz.define(
 
         },
 
+        /**
+         * Toggle draw control
+         * @method  _toggleDrawControl
+         * @param   {Boolean}           enable is enabled or not?
+         * @private
+         */
         _toggleDrawControl: function (enable) {
             var me = this;
             me._drawing = enable;
@@ -526,6 +521,11 @@ Oskari.clazz.define(
             }
         },
 
+        /**
+         * Handle drawing events
+         * @method handleDrawingEvent
+         * @param  {Oskari.mapping.drawtools.event.DrawingEvent}           event drawing event
+         */
         handleDrawingEvent: function(event) {
             var me = this;
             if(event.getIsFinished() && !me._isRemove) {
@@ -545,18 +545,22 @@ Oskari.clazz.define(
         },
 
         /**
+         * Gets localization
          * @method _getLocalization
+         * @private
          */
         _getLocalization: function (key) {
             return this._localization[key];
         },
 
         /**
-         * [_getErrorText text for ajax errors]
-         * @param  {[jqXHR]}       [jqXHR]
-         * @param  {[textStatus]}  [textStatus]
-         * @param  {[errorThrown]} [errorThrown]
-         * @return {[error]}       [error]
+         * Gets error text
+         * @method  _getErrorText
+         * @param   {Object}      jqXHR       jqxhr
+         * @param   {String}      textStatus  status text
+         * @param   {Object}      errorThrown error
+         * @return  {String}                  error text
+         * @private
          */
         _getErrorText: function (jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown;
@@ -572,8 +576,9 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method createUi
          * Creates the UI for a fresh start
+         * @method createUi
+         * @public
          */
         createUi: function () {
             var me = this;
@@ -582,14 +587,20 @@ Oskari.clazz.define(
             return me.container;
         },
 
+        /**
+         * Set basket
+         * @method setBasket
+         * @param  {Oskari.mapframework.bundle.downloadBasket.Basket}  basket basket
+         */
         setBasket: function(basket){
             var me = this;
             me.basket = basket;
         },
 
         /**
-         * [addToBasket Collects all needed information for basket object]
-         * @param {[type]} map [description]
+         * Collects all needed information for basket object
+         * @method addToBasket
+         * @public
          */
         addToBasket: function(){
             var me = this;
@@ -603,11 +614,12 @@ Oskari.clazz.define(
 
                     me._croppingFeatures.forEach(function(feature){
 
-                    	var basketObject = {};
-                        basketObject.layerNameLang = layer.getName();
-                        basketObject.layerName = layer.getLayerName();
-                        basketObject.layerUrl = me.getUrlParams(layer.getLayerUrl(),'id');
-                        basketObject.feature = feature;
+                    	var basketObject = {
+                            layerNameLang: layer.getName(),
+                            layerName: layer.getLayerName(),
+                            layerId: layer.getId(),
+                            feature: feature
+                        };
 
                         me.basket.addToBasket(basketObject);
                     });
@@ -619,6 +631,13 @@ Oskari.clazz.define(
         /**
         * [_buildLayerList finds layer that user has chowsen to be cropped]
         * @return {[layer]} [array of layers]
+        */
+
+       /**
+        * Builds layerlist
+        * @method  _buildLayerList
+        * @return  {Array}   layer ids array
+        * @private
         */
         _buildLayerList: function()  {
             var me = this;

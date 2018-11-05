@@ -40,16 +40,16 @@ Oskari.clazz.define(
     },{
 
         /**
-         * Starts basket
-         * @method startBasket
+         * Creates UI for basket tab
+         * @method createUI
          * @public
          */
-        startBasket: function(){
+        createUI: function(){
             this.setContent(this.createUi());
         },
 
         /**
-         * Init templates, creates ui for cropping items
+         * Init templates, creates ui for basket items
          * @method  _initTemplates
          * @private
          */
@@ -142,7 +142,7 @@ Oskari.clazz.define(
         gatherDownloadDetails: function() {
             var details = [];
 
-            var el = me.getContainer();
+            var el = this.getContainer();
 
             el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
 
@@ -157,7 +157,6 @@ Oskari.clazz.define(
                         right: parent.attr('data-bbox-right'),
                         top: parent.attr('data-bbox-top')
                     },
-                    croppingUrl: parent.attr('data-cropping-url'),
                     croppingLayer: parent.attr('data-cropping-layer'),
                     id: parent.attr('data-layer-id'),
                     identifiers: parent.attr('data-identifiers')
@@ -179,7 +178,7 @@ Oskari.clazz.define(
             var downloadDetails = me.gatherDownloadDetails();
 
             var userDetails = {
-                    email: el.find('.oskari__download-basket-user-info').find('input.email').val()
+                    email: this.getContainer().find('.oskari__download-basket-user-info').find('input.email').val()
             };
             var strUserDetails = JSON.stringify(userDetails);
 
@@ -393,7 +392,7 @@ Oskari.clazz.define(
 
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name',basketItem.layerName);
-                    basketEl.attr('data-layer-id',basketItem.layerUrl);
+                    basketEl.attr('data-layer-id',basketItem.layerId);
                     var parsed = geojsonParser.read(feature);
                     var bbox = parsed.geometry.getEnvelope().getCoordinates();
 
@@ -403,7 +402,7 @@ Oskari.clazz.define(
                     basketEl.attr('data-bbox-top', bbox[2].y);
 
                     basketEl.attr('data-cropping-layer',feature.properties.layerName);
-                    basketEl.attr('data-cropping-url',feature.properties.layerUrl);
+                    basketEl.attr('data-cropping-layer-id',feature.properties.layerId);
                     basketEl.attr('data-cropping-mode',feature.properties.croppingMode);
                     basketEl.attr('data-index', index);
                     var identifiers = [];
@@ -426,7 +425,7 @@ Oskari.clazz.define(
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
                     var licenseLink = basketEl.find('.basket__content-license>a');
-                    var layerId = basketItem.layerUrl;
+                    var layerId = basketItem.layerId;
 
 	                if (me.instance.conf.licenseByLayers && me.instance.conf.licenseByLayers[layerId]) {
 	                	licenseTitle.text(me._getLocalization('basket-license-title'));
@@ -477,7 +476,7 @@ Oskari.clazz.define(
          * {
          *     layerNameLang: 'localized layer name',
          *     layerName: 'layer name',
-         *     layerUrl:  'layer url',
+         *     layerId:  'layer id',
          *     feature: 'geojson feature object'
          * }
          */
