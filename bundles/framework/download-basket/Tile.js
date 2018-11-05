@@ -20,81 +20,87 @@ function(instance) {
     this.shownLayerCount = null;
 }, {
     /**
+     * Gets name
      * @method getName
+     * @public
      * @return {String} the name for the component
      */
     getName : function() {
         return 'Oskari.mapframework.bundle.downloadBasket.Tile';
     },
     /**
-     * @method setEl
-     * @param {Object} el
-     *      reference to the container in browser
-     * @param {Number} width
-     *      container size(?) - not used
-     * @param {Number} height
-     *      container size(?) - not used
-     *
      * Interface method implementation
+     * @method setEl
+     * @public
+     * @param {Object} el reference to the container in browser
      */
-    setEl : function(el, width, height) {
+    setEl : function(el) {
         this.container = jQuery(el);
     },
     /**
-     * @method startPlugin
      * Interface method implementation, calls #refresh()
+     * @method startPlugin
+     * @public
      */
     startPlugin : function() {
         //this.refresh();
         this.createUI();
     },
     /**
-     * @method stopPlugin
      * Interface method implementation, clears the container
+     * @method stopPlugin
+     * @public
      */
     stopPlugin : function() {
         this.container.empty();
     },
     /**
-     * @method _createUI
      * Creates the UI for a fresh start
+     * @method _createUI
+     * @public
      */
     createUI : function() {
         this.container.addClass('download-basket-tile');
         this.container.find('.oskari-tile-status').addClass('icon-bubble-right').html(0);
     },
     /**
+     * Gets tile
      * @method getTitle
+     * @public
      * @return {String} localized text for the title of the tile
      */
     getTitle : function() {
         return this.instance.getLocalization('title');
     },
     /**
+     * Gets description
      * @method getDescription
+     * @public
      * @return {String} localized text for the description of the tile
      */
     getDescription : function() {
         return this.instance.getLocalization('desc');
     },
     /**
-     * @method getOptions
      * Interface method implementation, does nothing atm
+     * @method getOptions
+     * @public
      */
     getOptions : function() {
 
     },
     /**
-     * @method setState
-     * @param {Object} state
-     *      state that this component should use
      * Interface method implementation, does nothing atm
+     * @method setState
+     * @public
+     * @param {Object} state state that this component should use
      */
     setState : function(state) {
     },
     /**
-     * @method refresh
      * Creates the UI for a fresh start
+     * @method refresh
+     * @public
      */
     refresh: function(){
         var me = this;
@@ -102,10 +108,18 @@ function(instance) {
         jQuery('.download-basket-tile .oskari-tile-status').html(basketItems);
         me.notifyUser();
     },
+    /**
+     * Clears tile
+     * @method clear
+     */
     clear: function(){
         var me = this;
         me.refresh();
     },
+    /**
+     * Notify user
+     * @method notifyUser
+     */
     notifyUser : function() {
         var me = this;
         var status = this.container.children('.oskari-tile-status');
@@ -115,6 +129,13 @@ function(instance) {
         // blink 2 times
         this._blink(status, 2);
     },
+    /**
+     * Blinks icon
+     * @method  _blink
+     * @param   {Object} element jQuery element
+     * @param   {Integer} count   blink coun
+     * @private
+     */
     _blink : function(element, count) {
         var me = this;
         if(!element) {
