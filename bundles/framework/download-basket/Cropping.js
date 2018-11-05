@@ -214,14 +214,12 @@ Oskari.clazz.define(
 
             var mapService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var allLayers = mapService.getAllLayers();
-            var croppingLayers = jQuery.grep(allLayers, function(n) {
-              var attributes = n.getAttributes();
-              if(attributes.cropping){
-                return n;
-              }
+            var croppingLayers = allLayers.filter(function(layer){
+              var attributes = layer.getAttributes();
+              return !!attributes.cropping;
             });
 
-            //Rect cropping mode
+            // Rect cropping mode
             var regular = {
                 name : me._getLocalization('rect-cropping'),
                 rect : true,
@@ -531,7 +529,6 @@ Oskari.clazz.define(
         handleDrawingEvent: function(event) {
             var me = this;
             if(event.getIsFinished() && !me._isRemove) {
-                console.log(event);
                 me._features = {};
                 me._croppingFeatures = [];
 
