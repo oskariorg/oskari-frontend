@@ -83,33 +83,38 @@ Oskari.clazz.define(
                         me.removeSelectedCroppingLayer();
                         me.removeFeatures();
                         jQuery('.oskari__download-basket-temp-basket').hide();
-                        jQuery('.oskari__download-basket-help').hide();
+                        me._toggleBasketHelpVisibility(false);
                         jQuery(this).removeClass('primary');
                         me._toggleDrawControl(false);
                     } else {
-                        var toggleLayers = function(){
+                        var toggleLayers = function() {
                             me.removeSelectedCroppingLayer();
                             if(croppingLayer.rect){
                                 me._toggleDrawControl(true);
                                 me.removeFeatures();
+                                me._toggleBasketHelpVisibility(false);
                             } else {
                                 me._toggleDrawControl(false);
                                 me._sandbox.postRequestByName('AddMapLayerRequest', [croppingLayer.getId()]);
                                 me._croppingLayerId = croppingLayer.getId();
+                                me._toggleBasketHelpVisibility(true);
                             }
                         };
+
+
+
                         // User has some cropping going on
                         if(jQuery('.oskari__download-basket-temp-basket').is(':visible')){
                             me.confirmCroppingAreaChange(croppingLayer, el, croppingLayer.rect, toggleLayers);
                         } else {
                             jQuery('.oskari__download-basket-cropping-buttons input.cropping-btn').removeClass('primary');
                             jQuery(this).addClass('primary');
+
                             //Fresh user selection
                             me.activateNormalGFI(false);
                             me.activateNormalWFSReq(false);
                             jQuery('.cropping-btn').removeClass('selected');
                             el.addClass('selected');
-                            jQuery('.oskari__download-basket-help').show();
                             toggleLayers();
                         }
                     }
@@ -366,8 +371,7 @@ Oskari.clazz.define(
          */
         removeFeatures: function(property, value){
             var me = this;
-            var rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
-            me._sandbox.postRequestByName(rn, [property, value, me.CROPPING_LAYER_ID]);
+            me._removeDrawings();
             if(property && value) {
                 delete me._features[value];
 
@@ -398,10 +402,10 @@ Oskari.clazz.define(
             if(selectedCount > 0) {
                 p.find('strong').text(selectedCount);
                 el.show();
-                jQuery('.oskari__download-basket-help').hide();
+                me._toggleBasketHelpVisibility(false);
             } else {
                 el.hide();
-                jQuery('.oskari__download-basket-help').show();
+                me._toggleBasketHelpVisibility(true);
             }
         },
 
@@ -420,6 +424,15 @@ Oskari.clazz.define(
             });
 
             me._updateBasketText(me._croppingFeatures.length);
+        },
+
+        _toggleBasketHelpVisibility: function(visible) {
+            var el = jQuery('.oskari__download-basket-help');
+            if (visible) {
+                el.show();
+            } else {
+                el.hide();
+            }
         },
 
         /**
@@ -446,13 +459,15 @@ Oskari.clazz.define(
                 el.addClass('primary');
                 jQuery('.oskari__download-basket-temp-basket').hide();
                 me.removeFeatures();
-                jQuery('.oskari__download-basket-help').show();
+
                 if(drawing) {
                     me._toggleDrawControl(true);
+                    me._toggleBasketHelpVisibility(false);
                 } else {
                     me._toggleDrawControl(false);
                     me.activateNormalGFI(false);
                     me.activateNormalWFSReq(false);
+                    me._toggleBasketHelpVisibility(true);
                 }
                 dialog.close();
 
@@ -469,13 +484,15 @@ Oskari.clazz.define(
                 el.addClass('primary');
                 jQuery('.oskari__download-basket-temp-basket').hide();
                 me.removeFeatures();
-                jQuery('.oskari__download-basket-help').show();
+
                 if(drawing) {
                     me._toggleDrawControl(true);
+                    me._toggleBasketHelpVisibility(false);
                 } else {
                     me._toggleDrawControl(false);
                     me.activateNormalGFI(false);
                     me.activateNormalWFSReq(false);
+                    me._toggleBasketHelpVisibility(true);
                 }
                 dialog.close();
 
@@ -488,11 +505,23 @@ Oskari.clazz.define(
             dialog.makeModal();
         },
 
+        _removeDrawings: function() {
+            var me = this;
+            me._isRemove = true;
+            me._sandbox.postRequestByName('DrawTools.StopDrawingRequest', [me.DOWNLOAD_BASKET_DRAW_ID, true]);
+            me._sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.CROPPING_LAYER_ID]);
+
+            if(me._drawing) {
+                me._toggleDrawControl(me._drawing);
+            }
+
+        },
+
         _toggleDrawControl: function (enable) {
             var me = this;
             me._drawing = enable;
             if(enable) {
-                var data = [me.DOWNLOAD_BASKET_DRAW_ID, 'Box', { allowMultipleDrawing:false, modifyControl: true }];
+                var data = [me.DOWNLOAD_BASKET_DRAW_ID, 'Box', { allowMultipleDrawing:true, modifyControl: true }];
                 me._sandbox.postRequestByName('DrawTools.StartDrawingRequest', data);
             } else {
                 me._sandbox.postRequestByName('DrawTools.StopDrawingRequest', [me.DOWNLOAD_BASKET_DRAW_ID, true]);
@@ -501,9 +530,21 @@ Oskari.clazz.define(
 
         handleDrawingEvent: function(event) {
             var me = this;
-            if(event.getIsFinished()) {
+            if(event.getIsFinished() && !me._isRemove) {
                 console.log(event);
+                me._features = {};
+                me._croppingFeatures = [];
+
+                // Add cropping mode to feature attributes
+                var features = event.getGeoJson().features;
+                features.forEach(function(feature) {
+                    feature.properties.croppingMode = 'rectangle';
+                });
+                me.addToTempBasket(event.getGeoJson().features);
+            } else if(event.getIsFinished() && me._isRemove) {
+                me._isRemove = false;
             }
+
         },
 
         /**
