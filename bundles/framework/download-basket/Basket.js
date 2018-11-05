@@ -38,6 +38,7 @@ Oskari.clazz.define(
         };
 
     },{
+
         startBasket: function(){
             this.setContent(this.createUi());
         },
@@ -50,23 +51,23 @@ Oskari.clazz.define(
         _initTemplates: function () {
             var me = this;
 
-            //Wrapper
+            // Wrapper
             me._templates.basketWrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
             me._templates.main.append(me._templates.basketWrapper);
 
-            //Basket user info
+            // Basket user info
             me._templates.basketUserInfo.append(me._templates.basketForm);
-	    me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
+	        me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
             me._templates.basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr("href",me._getLocalization('privacy-policy-url'));
             me._templates.main.append(me._templates.basketUserInfo);
             me._templates.basketUserInfo.hide();
 
-            me._templates.basketUserInfo.find('input,select').each(function (index) {
+            me._templates.basketUserInfo.find('input,select').each(function () {
                 var curEl = jQuery(this);
                 curEl.prev('span').html(me._getLocalization(curEl.attr('name')));
             });
 
-            //Basket wizard buttons
+            // Basket wizard buttons
             me.emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
