@@ -39,14 +39,19 @@ Oskari.clazz.define(
 
     },{
 
+        /**
+         * Starts basket
+         * @method startBasket
+         * @public
+         */
         startBasket: function(){
             this.setContent(this.createUi());
         },
 
         /**
-         * @private @method _initTemplates, creates ui for cropping items
-         *
-         *
+         * Init templates, creates ui for cropping items
+         * @method  _initTemplates
+         * @private
          */
         _initTemplates: function () {
             var me = this;
@@ -130,18 +135,20 @@ Oskari.clazz.define(
         },
 
         /**
-         * [loadBasketItem sends Ajax to download user selections]
-         * @return {[none]}
+         * Gather download details
+         * @method gatherDownloadDetails
+         * @return {Object}              download details
          */
-        loadBasketItem: function(){
-            var me = this;
-            var downloadDetails = [];
+        gatherDownloadDetails: function() {
+            var details = [];
+
             var el = me.getContainer();
-            el.find('.oskari__download-basket-buttons').find('input.send').attr("disabled",true);
+
+            el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
 
             el.find('.download-basket__component').each(function(){
                 var parent = jQuery(this);
-                var details = {
+                var detail = {
                     croppingMode: parent.attr('data-cropping-mode'),
                     layer: parent.attr('data-layer-name'),
                     bbox: {
@@ -156,10 +163,20 @@ Oskari.clazz.define(
                     identifiers: parent.attr('data-identifiers')
                 };
 
-                downloadDetails.push(details);
+                details.push(detail);
 
             });
-            var strDownloadDetails = JSON.stringify(downloadDetails);
+            return JSON.stringify(details);
+        },
+
+        /**
+         * Send ajax download message to server
+         * @method loadBasketItem
+         * @public
+         */
+        loadBasketItem: function(){
+            var me = this;
+            var downloadDetails = me.gatherDownloadDetails();
 
             var userDetails = {
                     email: el.find('.oskari__download-basket-user-info').find('input.email').val()
@@ -207,7 +224,7 @@ Oskari.clazz.define(
                     );
                 },
                 data : {
-                    downloadDetails : strDownloadDetails,
+                    downloadDetails : downloadDetails,
                     lang: Oskari.getLang(),
                     userDetails: strUserDetails
                 },
@@ -218,6 +235,13 @@ Oskari.clazz.define(
 
         },
 
+        /**
+         * Open popup
+         * @method  _openPopup
+         * @param   {String}   title   title
+         * @param   {String}   message message
+         * @private
+         */
         _openPopup: function(title, message) {
             var me = this;
             if(me._popup) {
@@ -230,12 +254,25 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _getLocalization
+         * Gets localization
+         * @method  _getLocalization
+         * @param   {String}         key loacalization key
+         * @return  {String}         localized text
+         * @private
          */
         _getLocalization: function (key) {
             return this._localization[key];
         },
 
+        /**
+         * Gets error text
+         * @method  _getErrorText
+         * @param   {Object}      jqXHR       jqxhr
+         * @param   {String}      textStatus  status text
+         * @param   {Object}      errorThrown error
+         * @return  {String}                  error text
+         * @private
+         */
         _getErrorText: function (jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown;
             try {
@@ -250,15 +287,17 @@ Oskari.clazz.define(
         },
 
         /**
-         * [validateUserInputs validate user inputs]
-         * @param  {[form]} form [jQuery form element]
-         * @return {[error]}      [true/false]
+         * Validates user input
+         * @method validateUserInputs
+         * @public
+         * @param  {Object}           form jQuery form object
+         * @return {Boolean}                has error
          */
         validateUserInputs: function(form){
-            var me = this,
-            dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-            errorText = me._getLocalization('check-form-error')+" ",
-            error = false;
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var errorText = me._getLocalization('check-form-error')+" ";
+            var error = false;
 
             form.find('input,select').each(function (index) {
                 var el = jQuery(this);
@@ -288,9 +327,11 @@ Oskari.clazz.define(
         },
 
         /**
-         * [validateEmail email checker]
-         * @param  {[string]} email [Users email]
-         * @return {[none]}
+         * Valitades email address
+         * @method validateEmail
+         * @public
+         * @param  {String}      email valitaded email address
+         * @return {Boolean}     is email valid
          */
         validateEmail: function (email) {
             var re = /\S+@\S+\.\S+/;
@@ -298,8 +339,10 @@ Oskari.clazz.define(
         },
 
         /**
+         * Creates ui
          * @method createUi
-         * Creates the UI for a fresh start
+         * @public
+         * @return {Object} jQuery element
          */
         createUi: function () {
             var me = this;
@@ -309,6 +352,12 @@ Oskari.clazz.define(
 
             return me.container;
         },
+
+        /**
+         * Creates basket
+         * @method createBasket
+         * @public
+         */
         createBasket: function(){
             var me = this;
             var template = jQuery(
@@ -421,6 +470,17 @@ Oskari.clazz.define(
                 });
             }
         },
+        /**
+         * Add to basket
+         * @method addToBasket
+         * @param  {Object}    item download detail onject:
+         * {
+         *     layerNameLang: 'localized layer name',
+         *     layerName: 'layer name',
+         *     layerUrl:  'layer url',
+         *     feature: 'geojson feature object'
+         * }
+         */
         addToBasket: function(item){
             var me = this;
             me._selected.push(item);
