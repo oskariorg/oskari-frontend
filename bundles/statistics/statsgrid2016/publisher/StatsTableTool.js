@@ -15,13 +15,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
      * @public
      */
     init: function (pdata) {
-        var me = this;
-
-        if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
-            me.setEnabled(true);
-        } else {
-            me.setEnabled(false);
-        }
+        var enabled = pdata &&
+            Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') &&
+            pdata.configuration.statsgrid.conf.grid === true;
+        this.setEnabled(enabled);
     },
     /**
     * Get tool object.
@@ -74,10 +71,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
 
     setEnabled: function (enabled) {
         var me = this;
+        var changed = me.state.enabled !== enabled;
         me.state.enabled = enabled;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats) {
+        if (!stats || !changed) {
             return;
         }
         if (enabled) {
