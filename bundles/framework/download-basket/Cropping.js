@@ -284,7 +284,7 @@ Oskari.clazz.define(
             var layerNameLang = jQuery('.cropping-btn.selected').val();
 
             jQuery.ajax({
-                type: "POST",
+                type: 'POST',
                 dataType: 'json',
                 url: ajaxUrl + 'action_route=GetFeatureForCropping',
                 data : {
@@ -369,7 +369,7 @@ Oskari.clazz.define(
          */
         removeFeatures: function(property, value){
             var me = this;
-            me._removeDrawings();
+            me._removeDrawings(property, value);
             if(property && value) {
                 delete me._features[value];
 
@@ -503,11 +503,11 @@ Oskari.clazz.define(
             dialog.makeModal();
         },
 
-        _removeDrawings: function() {
+        _removeDrawings: function(property, value) {
             var me = this;
             me._isRemove = true;
             me._sandbox.postRequestByName('DrawTools.StopDrawingRequest', [me.DOWNLOAD_BASKET_DRAW_ID, true]);
-            me._sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.CROPPING_LAYER_ID]);
+            me._sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [property, value, me.CROPPING_LAYER_ID]);
 
             if(me._drawing) {
                 me._toggleDrawControl(me._drawing);
