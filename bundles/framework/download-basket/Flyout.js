@@ -81,6 +81,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
             }
         },
 
+         /**
+         * Gets event handlers
+         * @method getEventHandlers
+         * @public
+         */
+        getEventHandlers: function () {
+
+        },
+
+        /**
+         * On event
+         * @method onEvent
+         * @param  {Object} event
+         */
+        onEvent: function (event) {
+
+        },
+
+        /**
+         * Interface method implementation, does nothing atm
+         * @method stopPlugin
+         * @public
+         */
+        stopPlugin: function () {
+
+        },
+
         /**
          * Gets localization
          * @method _getLocalization
