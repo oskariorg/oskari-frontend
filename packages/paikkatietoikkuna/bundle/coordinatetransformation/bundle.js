@@ -18,9 +18,6 @@ Oskari.clazz.define("Oskari.coordinatetransformation.bundle", function () {
 
         "scripts": [
         {
-            "type": "text/json",
-            "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/resources/values.json"
-        }, {
             "type": "text/javascript",
             "src": "../../../../bundles/paikkatietoikkuna/coordinatetransformation/instance.js"
         }, {

@@ -170,6 +170,7 @@
             }
         }, {
             "bundlename": "admin-layerselector",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "admin-layerselector": {
@@ -182,6 +183,7 @@
             }
         }, {
             "bundlename": "admin-layerrights",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "admin-layerrights": {
@@ -191,6 +193,7 @@
             }
         }, {
             "bundlename" : "admin-users",
+            "lazy": true,
             "metadata" : {
                 "Import-Bundle" : {
                     "admin-users" : {
@@ -200,10 +203,21 @@
             }
         }, {
             "bundlename" : "admin",
+            "lazy": true,
             "metadata" : {
                 "Import-Bundle" : {
                     "admin" : {
                         "bundlePath" : "../../../packages/admin/bundle/"
+                    }
+                }
+            }
+        }, {
+            "bundlename": "statsgrid",
+            "lazy": true,
+            "metadata": {
+                "Import-Bundle": {
+                    "statsgrid": {
+                        "bundlePath": "../../../packages/statistics/"
                     }
                 }
             }

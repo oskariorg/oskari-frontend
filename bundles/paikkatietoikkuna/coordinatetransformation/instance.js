@@ -2,20 +2,10 @@
 Ways to start the bundle in console:
 * Oskari.app.playBundle(
     {
-    bundlename : 'coordinatetransformation',
-        metadata : {
-            "Import-Bundle" : {
-                "coordinatetransformation" : {
-                    bundlePath : '/Oskari/packages/paikkatietoikkuna/bundle/'
-                }
-            }
-        }
+    bundlename : 'coordinatetransformation'
 });
        var obj = {
-            "bundlename":"coordinatetransformation" ,
-            "metadata": {
-                "Import-Bundle": { "coordinatetransformation": { "bundlePath": "/Oskari/packages/paikkatietoikkuna/bundle/" } }
-            }
+            "bundlename":"coordinatetransformation"
         }
         appSetup.startupSequence.push(obj);
 */

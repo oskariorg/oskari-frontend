@@ -9,21 +9,8 @@
  *
  * Add this to startupsequence to get this bundle started
  {
- title : 'bb',
- fi : 'bb',
- sv : '?',
- en : '?',
  bundlename : 'bb',
- bundleinstancename : 'bb',
- metadata : {
- "Import-Bundle" : {
- "bb" : {
- bundlePath : '/<path to>/packages/integration/bundle/'
- }
- },
- "Require-Bundle-Instance" : []
- },
- instanceProps : {}
+ bundleinstancename : 'bb'
  }
  */
 Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',

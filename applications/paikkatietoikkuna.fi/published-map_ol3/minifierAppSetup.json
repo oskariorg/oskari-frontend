@@ -159,14 +159,23 @@
             }
         }
     }, {
-            "bundlename": "postprocessor",
-            "metadata": {
-                "Import-Bundle": {
-                    "postprocessor": {
-                        "bundlePath": "../../../packages/framework/bundle/"
-                    }
+        "bundlename": "postprocessor",
+        "metadata": {
+            "Import-Bundle": {
+                "postprocessor": {
+                    "bundlePath": "../../../packages/framework/bundle/"
                 }
             }
         }
+    }, {
+        "bundlename": "statsgrid",
+        "metadata": {
+            "Import-Bundle": {
+                "statsgrid": {
+                    "bundlePath": "../../../packages/statistics/"
+                }
+            }
+        }
+    }
 ]
 }

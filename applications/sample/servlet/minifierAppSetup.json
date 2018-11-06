@@ -209,6 +209,7 @@
         }
     }, {
         "bundlename": "postprocessor",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "postprocessor": {
@@ -254,6 +255,7 @@
         }
     }, {
         "bundlename": "search-from-channels",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "search-from-channels": {
@@ -299,6 +301,7 @@
         }
     }, {
         "bundlename": "content-editor",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "content-editor": {
@@ -308,6 +311,7 @@
         }
     }, {
         "bundlename": "admin-layerselector",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-layerselector": {
@@ -320,6 +324,7 @@
         }
     }, {
         "bundlename": "admin-layerrights",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-layerrights": {
@@ -329,6 +334,7 @@
         }
     }, {
         "bundlename": "admin",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin": {
@@ -338,6 +344,7 @@
         }
     }, {
         "bundlename": "admin-users",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-users": {
@@ -347,6 +354,7 @@
         }
     }, {
         "bundlename": "admin-wfs-search-channel",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-wfs-search-channel": {
