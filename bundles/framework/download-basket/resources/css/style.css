@@ -1,57 +1,48 @@
-.download-basket__component {
+div.oskari-flyoutcontent.download-basket .download-basket__component {
   margin-top: 10px; }
-
-.download-basket__component-title {
+div.oskari-flyoutcontent.download-basket .download-basket__component-title {
   border-top: 1px solid #ccc;
   border-right: 1px solid #ccc;
   border-left: 1px solid #ccc;
   background: #ffde00;
   color: #000; }
-
-.download-basket__component-layer-name {
+div.oskari-flyoutcontent.download-basket .download-basket__component-layer-name {
   float: left;
   padding: 5px; }
-
-.download-basket__component-title-close {
+div.oskari-flyoutcontent.download-basket .download-basket__component-title-close {
   float: right;
   margin-top: 5px;
   margin-right: 4px; }
-
-.download-basket__component-title-clear {
+div.oskari-flyoutcontent.download-basket .download-basket__component-title-clear {
   clear: both; }
-
-.download-basket__component-content {
+div.oskari-flyoutcontent.download-basket .download-basket__component-content {
   border: 1px solid #ccc;
   padding: 10px; }
-
-.oskari__download-basket-buttons {
+div.oskari-flyoutcontent.download-basket .oskari__download-basket-buttons {
   float: right;
   padding-top: 13px; }
-
-.oskari__download-basket-user-info form {
+div.oskari-flyoutcontent.download-basket .oskari__download-basket-user-info form {
   margin-top: 10px; }
-  .oskari__download-basket-user-info form label {
+  div.oskari-flyoutcontent.download-basket .oskari__download-basket-user-info form label {
     clear: both;
     display: block;
     margin-bottom: 8px; }
-    .oskari__download-basket-user-info form label:after {
+    div.oskari-flyoutcontent.download-basket .oskari__download-basket-user-info form label:after {
       content: "";
       display: table;
       clear: both; }
-  .oskari__download-basket-user-info form span {
+  div.oskari-flyoutcontent.download-basket .oskari__download-basket-user-info form span {
     display: block;
     float: left;
     width: 12em;
     line-height: 34px; }
-  .oskari__download-basket-user-info form input {
+  div.oskari-flyoutcontent.download-basket .oskari__download-basket-user-info form input {
     display: block;
     float: left;
     width: 15em; }
-
-div.download-basket-cropping-tab input[type="button"].primary {
+div.oskari-flyoutcontent.download-basket div.download-basket-cropping-tab input[type="button"].primary, div.oskari-flyoutcontent.download-basket div.download-basket-tab input[type="button"].primary {
   background-color: #217ad4;
-  background-image: url(../images/blue_button_liuku.png);
-  border-color: #0000BF #0000DE #0000DE #0000BF;
+  background-image: url(../../../../../resources/images/blue_button_liuku.png);
   color: #FFF; }
 
 /*# sourceMappingURL=style.css.map */

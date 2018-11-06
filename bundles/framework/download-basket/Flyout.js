@@ -41,6 +41,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
          */
         setEl: function (el) {
             this.container = jQuery(el[0]);
+            this.container.addClass('download-basket');
+
         },
         /**
         * Interface method implementation, assigns the HTML templates

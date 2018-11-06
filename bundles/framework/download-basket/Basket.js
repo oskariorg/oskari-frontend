@@ -40,98 +40,145 @@ Oskari.clazz.define(
     },{
 
         /**
-         * Creates UI for basket tab
-         * @method createUI
+         * Creates ui for basket tab
+         * @method createUi
          * @public
          */
-        createUI: function(){
-            this.setContent(this.createUi());
-        },
-
-        /**
-         * Init templates, creates ui for basket items
-         * @method  _initTemplates
-         * @private
-         */
-        _initTemplates: function () {
+        createUi: function(){
             var me = this;
 
+            var main = me._templates.main.clone();
+            var container = me.getContainer();
+
             // Wrapper
-            me._templates.basketWrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
-            me._templates.main.append(me._templates.basketWrapper);
+            var wrapper = me._templates.basketWrapper.clone();
+            wrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
+            main.append(wrapper);
 
             // Basket user info
-            me._templates.basketUserInfo.append(me._templates.basketForm);
-	        me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
-            me._templates.basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr("href",me._getLocalization('privacy-policy-url'));
-            me._templates.main.append(me._templates.basketUserInfo);
-            me._templates.basketUserInfo.hide();
+            var basketUserInfo = me._templates.basketUserInfo.clone();
+            var basketForm = me._templates.basketForm.clone();
+            basketUserInfo.append(basketForm);
+            basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
+            basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr('href',me._getLocalization('privacy-policy-url'));
+            main.append(basketUserInfo);
+            basketUserInfo.hide();
 
-            me._templates.basketUserInfo.find('input,select').each(function () {
+            basketUserInfo.find('input,select').each(function () {
                 var curEl = jQuery(this);
                 curEl.prev('span').html(me._getLocalization(curEl.attr('name')));
             });
 
             // Basket wizard buttons
+            var basketButtons = me._templates.basketButtons.clone();
             me.emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.sendBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-            me.emptyBtn.addClass('primary empty');
+            me.emptyBtn.addClass('approve empty');
             me.emptyBtn.setTitle(me._getLocalization('basket-empty'));
-            jQuery(me.emptyBtn.getElement()).on('click', function () {
-                var el = me.container;
-                el.find('.download-basket__component').remove();
-                el.find('.empty-basket').show();
-                jQuery(el.find('input.empty')).hide();
-                jQuery(el.find('input.next')).hide();
+            me.emptyBtn.setHandler(function() {
+                container.find('.download-basket__component').remove();
+                container.find('.empty-basket').show();
                 me._selected = [];
                 me.instance.addBasketNotify();
-            });
-            me.emptyBtn.insertTo(me._templates.basketButtons);
 
-            me.prevBtn.addClass('primary prev');
-            me.prevBtn.setTitle(me._getLocalization('basket-prev'));
-            jQuery(me.prevBtn.getElement()).on('click', function () {
-                var el = me.container;
-                jQuery(el.find('input.empty')).show();
-                jQuery(el.find('input.next')).show();
-                el.find('.oskari__download-basket-wrapper').show();
-                jQuery(el.find('input.prev')).hide();
-                jQuery(el.find('input.send')).hide();
-                el.find('.oskari__download-basket-user-info').hide();
+                me._buttonsVisible({
+                    empty: false,
+                    next: false,
+                    prev: false,
+                    send: false
+                });
             });
-            me.prevBtn.insertTo(me._templates.basketButtons);
+            me.emptyBtn.insertTo(basketButtons);
+
+            me.prevBtn.addClass('approve prev');
+            me.prevBtn.setTitle(me._getLocalization('basket-prev'));
+            me.prevBtn.setHandler(function() {
+                container.find('.oskari__download-basket-wrapper').show();
+                container.find('.oskari__download-basket-user-info').hide();
+
+                me._buttonsVisible({
+                    empty: true,
+                    next: true,
+                    prev: false,
+                    send: false
+                });
+            });
+            me.prevBtn.insertTo(basketButtons);
 
             me.nextBtn.addClass('primary next');
             me.nextBtn.setTitle(me._getLocalization('basket-next'));
-            jQuery(me.nextBtn.getElement()).on('click', function() {
-                var el = me.container;
-                jQuery(el.find('input.empty')).hide();
-                jQuery(el.find('input.next')).hide();
-                el.find('.oskari__download-basket-wrapper').hide();
-                jQuery(el.find('input.prev')).show();
-                jQuery(el.find('input.send')).show();
-                el.find('.oskari__download-basket-user-info').show();
-            });
-            me.nextBtn.insertTo(me._templates.basketButtons);
+            me.nextBtn.setHandler(function() {
+                container.find('.oskari__download-basket-wrapper').hide();
+                container.find('.oskari__download-basket-user-info').show();
 
-            me.sendBtn.addClass('approve send');
+                me._buttonsVisible({
+                    empty: false,
+                    next: false,
+                    prev: true,
+                    send: true
+                });
+            });
+            me.nextBtn.insertTo(basketButtons);
+
+            me.sendBtn.addClass('primary send');
             me.sendBtn.setTitle(me._getLocalization('basket-send'));
-            jQuery(me.sendBtn.getElement()).on('click', function () {
-                if(!me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'))){
+            me.sendBtn.setHandler(function() {
+                if(!me.validateUserInputs(container.find('.oskari__download-basket-user-info').find('form'))){
                     me.loadBasketItem();
                 }
             });
-            me.sendBtn.insertTo(me._templates.basketButtons);
+            me.sendBtn.insertTo(basketButtons);
 
-            me._templates.main.append(me._templates.basketButtons);
-            var el = me.container || me.getContainer();
-            jQuery(el.find('input.empty')).show();
-            jQuery(el.find('input.next')).show();
-            jQuery(el.find('input.prev')).hide();
-            jQuery(el.find('input.send')).hide();
+            main.append(basketButtons);
+
+            me._buttonsVisible({
+                empty: false,
+                next: false,
+                prev: false,
+                send: false
+            });
+
+            me.container = main;
+            this.setContent(me.container);
+        },
+
+
+        /**
+         * Toggle buttons visibilities
+         * @method  _buttonsVisible
+         * @param   {Object}       visibilities buttons visibilities
+         * @private
+         */
+        _buttonsVisible: function(visibilities) {
+            var me = this;
+
+            if(visibilities.empty) {
+                me.emptyBtn.setVisible(true);
+            } else {
+                me.emptyBtn.setVisible(false);
+            }
+
+            if(visibilities.next) {
+                me.nextBtn.setVisible(true);
+            } else {
+                me.nextBtn.setVisible(false);
+            }
+
+            if(visibilities.prev) {
+                me.prevBtn.setVisible(true);
+            } else {
+                me.prevBtn.setVisible(false);
+            }
+
+            if(visibilities.send) {
+                me.sendBtn.setVisible(true);
+            } else {
+                me.sendBtn.setVisible(false);
+            }
+
         },
 
         /**
@@ -142,24 +189,24 @@ Oskari.clazz.define(
         gatherDownloadDetails: function() {
             var details = [];
 
-            var el = this.getContainer();
+            var container = this.getContainer();
 
-            el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
+            container.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
 
-            el.find('.download-basket__component').each(function(){
-                var parent = jQuery(this);
+            container.find('.download-basket__component').each(function(){
+                var basketComponent = jQuery(this);
                 var detail = {
-                    croppingMode: parent.attr('data-cropping-mode'),
-                    layer: parent.attr('data-layer-name'),
+                    croppingMode: basketComponent.attr('data-cropping-mode'),
+                    layer: basketComponent.attr('data-layer-name'),
                     bbox: {
-                        left: parent.attr('data-bbox-left'),
-                        bottom: parent.attr('data-bbox-bottom'),
-                        right: parent.attr('data-bbox-right'),
-                        top: parent.attr('data-bbox-top')
+                        left: basketComponent.attr('data-bbox-left'),
+                        bottom: basketComponent.attr('data-bbox-bottom'),
+                        right: basketComponent.attr('data-bbox-right'),
+                        top: basketComponent.attr('data-bbox-top')
                     },
-                    croppingLayer: parent.attr('data-cropping-layer'),
-                    id: parent.attr('data-layer-id'),
-                    identifiers: parent.attr('data-identifiers')
+                    croppingLayer: basketComponent.attr('data-cropping-layer'),
+                    id: basketComponent.attr('data-layer-id'),
+                    identifiers: basketComponent.attr('data-identifiers')
                 };
 
                 details.push(detail);
@@ -187,21 +234,31 @@ Oskari.clazz.define(
             jQuery.ajax({
                 beforeSend : function(x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/json;charset=UTF-8");
+                        x.overrideMimeType('application/json;charset=UTF-8');
                     }
                 },
                 success : function(resp) {
                     if(resp.success){
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                         btn = dialog.createCloseButton('OK');
+                        var container = me.getContainer();
                         btn.setHandler(function() {
-                            var buttons = el.find('.oskari__download-basket-buttons');
-                            buttons.find('input.send').attr("disabled",false);
-                            el.find('.oskari__download-basket-user-info').find('input').val('');
-                            buttons.find('input.prev').trigger('click');
-                            buttons.find('input.empty').trigger('click');
-                            el.find('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
-                            el.find('.cropping-btn.selected').trigger('click');
+                            container.find('.oskari__download-basket-wrapper').show();
+                            container.find('.oskari__download-basket-user-info').hide();
+
+                            container.find('.download-basket__component').remove();
+                            container.find('.empty-basket').show();
+                            me._selected = [];
+                            me.instance.addBasketNotify();
+
+                            me._buttonsVisible({
+                                empty: false,
+                                next: false,
+                                prev: false,
+                                send: false
+                            });
+                            container.find('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
+                            container.find('.cropping-btn.selected').trigger('click');
                             dialog.close();
                         });
                         btn.addClass('primary');
@@ -338,21 +395,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * Creates ui
-         * @method createUi
-         * @public
-         * @return {Object} jQuery element
-         */
-        createUi: function () {
-            var me = this;
-
-            me._initTemplates();
-            me.container = me._templates.main.clone(true);
-
-            return me.container;
-        },
-
-        /**
          * Creates basket
          * @method createBasket
          * @public
@@ -373,14 +415,18 @@ Oskari.clazz.define(
                 '</div>');
             var geojsonParser = new jsts.io.GeoJSONParser();
             if(me._selected.length > 0) {
-                var el = me.container;
+                var el = jQuery(me.container);
                 var buttons = el.find('.oskari__download-basket-buttons');
                 // Change basket to visible
                 el.find('.oskari__download-basket-wrapper').find('.empty-basket').hide();
-                jQuery(el.find('input.empty')).show();
-                jQuery(el.find('input.next')).show();
-                jQuery(el.find('input.prev')).hide();
-                jQuery(el.find('input.send')).hide();
+
+                me._buttonsVisible({
+                    empty: true,
+                    next: true,
+                    prev: false,
+                    send: false
+                });
+
                 el.find('.oskari__download-basket-help').show();
                 el.find('.download-basket__component').remove();
 

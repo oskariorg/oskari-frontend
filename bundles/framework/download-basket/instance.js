@@ -165,8 +165,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
                     if(!me.startedTabs){
-                        me.cropping.createUI();
-                        me.basket.createUI();
+                        me.cropping.createUi();
+                        me.basket.createUi();
                         me.startedTabs = true;
                     }
                     // flyouts eventHandlers are registered
