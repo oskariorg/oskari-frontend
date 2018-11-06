@@ -120,6 +120,23 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
         },
 
         /**
+         * Disable shadows for tilesets containing point cloud tiles.
+         * Improves rendering performance.
+         * @private
+         *
+         * @method disablePointCloudShadows
+         * @param {Cesium.Cesium3DTileset} tileset
+         */
+        _disablePointCloudShadows: function (tileset) {
+            const tileTypeCheck = tile => {
+                if (tile.content.pointsLength > 0) {
+                    tileset.shadows = Cesium.ShadowMode.DISABLED;
+                    tileset.tileLoad.removeEventListener(tileTypeCheck);
+                }
+            };
+            tileset.tileLoad.addEventListener(tileTypeCheck);
+        },
+        /**
          * Adds a single 3d tileset to this map
          *
          * @method addMapLayerToMap
@@ -136,6 +153,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 dynamicScreenSpaceErrorHeightFalloff: 0.25
             });
 
+            this._disablePointCloudShadows(tileset);
             this._applyOskariStyle(tileset, layer);
             this.getMapModule().addLayer(tileset);
 
