@@ -30,10 +30,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                     '<div class="label">' + this.locale('classify.classifymethod') + '</div>' +
                     '<div class="method value">' +
                         '<select class="method">' +
-                            // FIXME: use classificationService.getAvailableMethods()
-                            '<option value="jenks" selected="selected">' + this.locale('classify.methods.jenks') + '</option>' +
-                            '<option value="quantile">' + this.locale('classify.methods.quantile') + '</option>' +
-                            '<option value="equal">' + this.locale('classify.methods.equal') + '</option>' +
+                            this.classificationService.getAvailableMethods()
+                                .map((method, i) => `<option value="${method}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.methods.' + method)}</option>`).join() +
                         '</select>' +
                     '</div>' +
                 '</div>' +
@@ -53,10 +51,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                     '<div class="label">' + this.locale('classify.mode') + '</div>' +
                     '<div class="classify-mode value">' +
                         '<select class="classify-mode">' +
-                            // FIXME: use classificationService.getAvailableModes()
-                            '<option value="distinct" selected="selected">' + this.locale('classify.modes.distinct') + '</option>' +
-                            '<option value="discontinuous">' + this.locale('classify.modes.discontinuous') + '</option>' +
+                        this.classificationService.getAvailableModes()
+                            .map((mode, i) => `<option value="${mode}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.modes.' + mode)}</option>`).join() +
                         '</select>' +
+                    '</div>' +
+                '</div>' +
+
+                // manual classification
+                '<div class="classification-manual visible-map-style-choropleth visible-map-style-points">' +
+                    '<div class="label">' + this.locale('classify.manual') + '</div>' +
+                    '<div class="classify-manual value">' +
+                        '<input >' +
                     '</div>' +
                 '</div>' +
 
@@ -192,6 +197,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         me._toggleMapStyle(mapStyle);
 
         me._element.find('select.method').val(classification.method);
+        me._element.find('.classification-manual').toggle(classification.method === 'manual');
 
         var amountRange = service.getColorService().getRange(classification.type, mapStyle);
         // TODO: handle missing data: if we have data for 3 regions count can be 2.
@@ -299,6 +305,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
+        var manualClass = me._element.find('.classify-manual input').val();
+        if (values.method === 'manual' && manualClass) {
+            values.manualBounds = JSON.parse(manualClass);
+        }
 
         this._validateSelections(values);
 

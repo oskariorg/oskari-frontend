@@ -112,7 +112,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Luonnolliset välit',
                 'quantile': 'Kvantiilit',
-                'equal': 'Tasavälit'
+                'equal': 'Tasavälit',
+                'manual': 'Oma luokittelu'
             },
             'manual': 'Luokittelu käsin',
             'manualPlaceholder': 'Erota luvut pilkuilla.',

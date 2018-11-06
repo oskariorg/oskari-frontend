@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 def: 5
             },
             // values recognized by the code (and geostats)
-            method: ['jenks', 'quantile', 'equal'], // , 'manual'
+            method: ['jenks', 'quantile', 'equal', 'manual'],
             // values recognized by the code (and geostats)
             mode: ['distinct', 'discontinuous']
         },
@@ -113,6 +113,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                         response.bounds = groupStats.getQuantile(opts.count);
                     } else if (opts.method === 'equal') {
                         response.bounds = groupStats.getEqInterval(opts.count);
+                    } else if (opts.method === 'manual') {
+                        response.bounds = groupStats.setClassManually(opts.manualBounds || [stats.min(), stats.mean(), stats.max()]);
                     }
                     groupOpts.method = opts.method;
                     groupOpts.count = opts.count;
@@ -137,6 +139,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 } else if (opts.method === 'equal') {
                     // Tasavälit
                     response.bounds = stats.getEqInterval(opts.count);
+                } else if (opts.method === 'manual') {
+                    response.bounds = stats.setClassManually(opts.manualBounds || [stats.min(), stats.mean(), stats.max()]);
                 }
             }
 
