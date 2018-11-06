@@ -2,23 +2,10 @@
  * @class Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance
  *
  * Add this to startupsequence to get this bundle started
- {
-            title : 'mythirdbundle',
-            fi : 'mythirdbundle',
-            sv : '?',
-            en : '?',
-            bundlename : 'mythirdbundle',
-            bundleinstancename : 'mythirdbundle',
-            metadata : {
-                "Import-Bundle" : {
-                    "mythirdbundle" : {
-                        bundlePath : '/<path to>/packages/sample/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        }
+    {  
+        bundlename : 'mythirdbundle',
+        bundleinstancename : 'mythirdbundle'
+    }
  */
 Oskari.clazz.define('Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance',
 

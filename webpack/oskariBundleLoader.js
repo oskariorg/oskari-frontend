@@ -1,8 +1,9 @@
 const path = require('path');
 
 module.exports = function (source) {
-
-    dependencies = [];
+    const callback = this.async();
+    const dependencies = [];
+    let localePromises = [];
 
     const Oskari = {
         clazz: {
@@ -18,8 +19,16 @@ module.exports = function (source) {
                 }
 
                 if (metadata.source.locales) {
-                    metadata.source.locales.forEach(l => {
-                        this.addDependency(path.join(this.context, l.src));
+                    localePromises = metadata.source.locales.map(l => {
+                        return new Promise((resolve, reject) => {
+                            this.resolve(this.context, l.src, (err, result) => {
+                                if (err) {
+                                    reject(err);
+                                } else {
+                                    resolve(result);
+                                }
+                            });
+                        });
                     })
                 }
             }
@@ -30,10 +39,19 @@ module.exports = function (source) {
     }
     eval(source);
 
-    return source + '\n' + dependencies.map(d => {
+    const output = source + '\n' + dependencies.map(d => {
         if (d.expose) {
             return `import 'expose-loader?${d.expose}!${d.src}'`;
         }
         return `import '${d.src}'`;
     }).join('\n');
+
+    Promise.all(localePromises)
+        .then((localePaths) => {
+            localePaths.forEach(p => this.addDependency(p));
+            callback(null, output);
+        })
+        .catch((err) => {
+            callback(err);
+        });
 }

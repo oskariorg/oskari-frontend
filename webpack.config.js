@@ -67,14 +67,14 @@ module.exports = (env, argv) => {
                         options: {
                             presets: [
                                 [
-                                    '@babel/preset-env',
+                                    require.resolve('@babel/preset-env'), // Resolve path for use from external porojects
                                     {
                                         useBuiltIns: 'entry',
                                         targets: '> 0.25%, not dead, ie 11'
                                     }
                                 ]
                             ],
-                            plugins: ['transform-remove-strict-mode']
+                            plugins: [require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external porojects
                         }
                     }
                 },
@@ -117,7 +117,7 @@ module.exports = (env, argv) => {
         },
         plugins,
         resolveLoader: {
-            modules: ['node_modules'],
+            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow external projects to use loaders in oskari-frontend node_modules
             extensions: ['.js', '.json'],
             mainFields: ['loader', 'main'],
             alias: {
@@ -126,8 +126,10 @@ module.exports = (env, argv) => {
         },
         resolve: {
             alias: {
-                'goog': path.join(__dirname, 'node_modules/ol-cesium/src/goog') // needed for ol-cesium. Can be removed when v 2.3 will be released
-            }
+
+            },
+            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
+            symlinks: false
         }
     };
 

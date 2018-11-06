@@ -62,6 +62,7 @@
             }
         }, {
             "bundlename": "statsgrid",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "statsgrid": {
@@ -107,6 +108,7 @@
             }
         }, {
             "bundlename": "routingService",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "routingService": {
@@ -116,6 +118,7 @@
             }
         }, {
             "bundlename": "maprotator",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "maprotator": {
