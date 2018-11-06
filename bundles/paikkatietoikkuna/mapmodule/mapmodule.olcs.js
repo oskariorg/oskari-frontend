@@ -63,12 +63,22 @@ class MapModuleOlCesium extends MapModuleOl {
             time: () => time,
             sceneOptions: {
                 showCredit: false,
-                shadows: true
+                shadows: true,
+                contextOptions: {
+                    allowTextureFilterAnisotropic: false
+                }
             }
         });
 
         var scene = this._map3d.getCesiumScene();
         scene.shadowMap.darkness = 0.7;
+        scene.skyBox = this._createSkyBox();
+
+        // Performance optimization
+        this._map3d.enableAutoRenderLoop();
+        scene.fog.density = 0.0005;
+        scene.fog.screenSpaceErrorFactor = 10;
+
         var terrainProvider = new Cesium.CesiumTerrainProvider({
             url: TERRAIN_SERVICE_URL
         });
@@ -84,6 +94,20 @@ class MapModuleOlCesium extends MapModuleOl {
         scene.postRender.addEventListener(updateReadyStatus);
 
         return map;
+    }
+
+    _createSkyBox () {
+        const skyboxIconsDir = 'Oskari/libraries/ol-cesium/Cesium/Assets/Textures/SkyBox/';
+        return new Cesium.SkyBox({
+            sources: {
+                positiveX: `${skyboxIconsDir}/tycho2t3_80_px.jpg`,
+                negativeX: `${skyboxIconsDir}/tycho2t3_80_mx.jpg`,
+                positiveY: `${skyboxIconsDir}/tycho2t3_80_py.jpg`,
+                negativeY: `${skyboxIconsDir}/tycho2t3_80_my.jpg`,
+                positiveZ: `${skyboxIconsDir}/tycho2t3_80_pz.jpg`,
+                negativeZ: `${skyboxIconsDir}/tycho2t3_80_mz.jpg`
+            }
+        });
     }
 
     /**
