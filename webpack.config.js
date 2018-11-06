@@ -126,10 +126,10 @@ module.exports = (env, argv) => {
         },
         resolve: {
             alias: {
-                'oskari-frontend': path.resolve(__dirname), // allow path refs like import('oskari-frontend/bundles/framework...')
-                'oskari-frontend-contrib': path.resolve(__dirname, '../oskari-frontend-contrib') // allow path refs like import('oskari-frontend-contrib/bundles/analysis..)
+
             },
-            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'] // allow use of oskari-frontend node_modules from external projects
+            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
+            symlinks: false
         }
     };
 
