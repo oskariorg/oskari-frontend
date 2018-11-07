@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
         this.flyout = null;
         this.loc = Oskari.getMsg.bind(null, 'TerrainProfile');
 
-        function requestFunction(requestName, args) {
+        function requestFunction (requestName, args) {
             var builder = Oskari.requestBuilder(requestName);
             if (!builder) {
                 return false;
@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
                 return;
             }
             this.feature.properties = { numPoints: 100 };
-            var url = this.sandbox.getAjaxUrl() + 'action_route=TerrainProfile&route=' + encodeURIComponent(JSON.stringify(this.feature));
+            var url = Oskari.urls.getRoute('TerrainProfile') + '&route=' + encodeURIComponent(JSON.stringify(this.feature));
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainProfileBu
             if (this.flyout) {
                 this.flyout.update(data);
             } else {
-                var p = jQuery("#mapdiv");
+                var p = jQuery('#mapdiv');
                 var position = p.position().left;
                 var offset = 40;
                 this.flyout = Oskari.clazz.create('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout', this.loc('terrainHeightProfile'), {

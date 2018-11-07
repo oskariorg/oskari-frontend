@@ -27,12 +27,12 @@ function(url, uuid, sandbox, defaultName, pInstance) {
     this.defaultCategoryName = defaultName;
     this._instance = pInstance;
 }, {
-    __qname : "Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService",
+    __qname : 'Oskari.lupapiste.bundle.myplaces2.service.MyPlacesService',
     getQName : function() {
         return this.__qname;
     },
 
-    __name : "MyPlacesService",
+    __name : 'MyPlacesService',
     getName : function() {
         return this.__name;
     },
@@ -48,9 +48,9 @@ function(url, uuid, sandbox, defaultName, pInstance) {
         var loadedPlaces = false;
         var initialLoadCallBackCategories = function(categories) {
             if(categories) {
-            	for(var i = 0; i < categories.length; ++i) {
-            		me._addCategory(categories[i]);
-            	}
+                for(var i = 0; i < categories.length; ++i) {
+                    me._addCategory(categories[i]);
+                }
                 //me._categoryList = categories;
             }
             loadedCategories = true;
@@ -84,7 +84,7 @@ function(url, uuid, sandbox, defaultName, pInstance) {
      * Creates a default category for the user
      */
     _createDefaultCategory : function() {
-    	var me = this;
+        var me = this;
         var defaultCategory = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
         defaultCategory.setName(me.defaultCategoryName);
         if(!me.defaultCategoryName) {
@@ -576,13 +576,13 @@ function(url, uuid, sandbox, defaultName, pInstance) {
             return;
         }
         var me = this;
-        var ajaxUrl = this._sandbox.getAjaxUrl();
+        var ajaxUrl = Oskari.urls.getRoute();
         jQuery.ajax({
             type : 'POST',
             dataType : 'json',
             beforeSend : function(x) {
                 if (x && x.overrideMimeType) {
-                    x.overrideMimeType("application/j-son;charset=UTF-8");
+                    x.overrideMimeType('application/j-son;charset=UTF-8');
                 }
             },
             data : {

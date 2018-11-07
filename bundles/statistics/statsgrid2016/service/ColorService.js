@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         },
         /**
          * Tries to return an array of colors where length equals count parameter.
-         * If such set is not available, returns null if array with requested count is not available
+         * If such set is not available, throws Error
          * @param  {Number} count number of colors requested
          * @param  {String} type  optional type, supports 'div', 'seq' or 'qual', defaults to 'div'
          * @param  {String} name  optional name, defaults to 'BrBG'
@@ -97,59 +97,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
         getColorset: function (count, type, name) {
             type = type || this.limits.defaultType;
             name = name || this.limits.defaultName;
-            var log = Oskari.log('StatsGrid.ColorService');
 
-            var getArray = function (item) {
-                // 2 colors is the first set and index starts at 0 -> -2
-                var index = count - 2;
-                if (index < 0 || index >= item.colors.length) {
-                    // might want to throw an exception here
-                    return null;
-                }
-                return item.colors[index].split(',');
-            };
-            var value;
-            var typeMatch;
-            var nameMatch;
-            this.colorsets.forEach(function (item) {
-                if (item.name === name && item.type === type) {
-                    value = item;
-                }
-                if (!typeMatch && item.type === type) {
-                    typeMatch = item;
-                }
-                if (!nameMatch && item.name === name) {
-                    nameMatch = item;
-                }
+            // 2 colors is the first set and index starts at 0 -> -2
+            var arrayIndex = count - 2;
+
+            var countTypeMatch = this.colorsets.filter(function (item) {
+                return arrayIndex < item.colors.length && item.type === type;
             });
-            var result;
-            if (value) {
-                result = getArray(value);
-                log.debug('Requested set found, requested colors found: ' + !!result);
-                // found requested item, check if it has the colorset for requested count
-                return result;
+            var item = countTypeMatch.find(function (item) {
+                return item.name === name;
+            });
+
+            if (!item) {
+                item = countTypeMatch[0];
             }
-            // get first to match type?
-            log.warn('Requested set not found, using type matching');
-            if (typeMatch) {
-                result = getArray(typeMatch);
-                log.debug('Type matched set found, requested colors found: ' + !!result);
-                // found requested item, check if it has the colorset for requested count
-                return result;
+
+            if (!item) {
+                throw new Error('No matching colorset found!');
             }
-            log.warn('Requested set not found, using name matching');
-            if (nameMatch) {
-                result = getArray(nameMatch);
-                log.debug('Name matched set found, requested colors found: ' + !!result);
-                // found requested item, check if it has the colorset for requested count
-                return result;
-            }
-            // no matches, just use the first one
-            result = getArray(this.colorsets[0]);
-            return result;
+
+            return item.colors[arrayIndex].split(',');
         },
         getAvailableTypes: function () {
-            return limits.type.slice(0);
+            return this.limits.type.slice(0);
         },
         /**
          * Returns the min/max amount of colors for a type
@@ -186,35 +156,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * Options to show in classification UI for selected type and count
          * @param  {String} type  Colorset type. Defaults to this.limits.defaultType
          * @param  {Number} count amount of colors (throws an error if out of range)
-         * @return {Object[]} Returns an array of objects like { name : "nameOfSet", value : [.. array of hex colors...]}
+         * @return {Object[]} Returns an array of objects like { id : "nameOfSet", value : [.. array of hex colors...]}
          */
         getOptionsForType: function (type, count, reverse) {
-            var me = this,
-                i,
-                set;
-            var colors = [];
             type = type || this.limits.defaultType;
             var range = this.getRange(type);
             if (typeof count !== 'number' || range.min > count || range.max < count) {
                 throw new Error('Invalid color count provided: ' + count +
                     '. Should be between ' + range.min + '-' + range.max + ' for type ' + type);
             }
+            // 2 colors is the first set and index starts at 0 -> -2
+            var arrayIndex = count - 2;
 
-            this.colorsets.forEach(function (set) {
-                if (set.type !== type) {
-                    return;
-                }
-                var colorset = me.getColorset(count, type, set.name);
-                colors.push({
-                    id: set.name,
-                    value: colorset
+            return this.colorsets
+                .filter(function (item) {
+                    return item.type === type && arrayIndex < item.colors.length;
+                })
+                .map(function (item) {
+                    var colorset = item.colors[arrayIndex].split(',');
+                    if (reverse) {
+                        colorset.reverse();
+                    }
+                    return {
+                        id: item.name,
+                        value: colorset
+                    };
                 });
-                if (reverse) {
-                    colorset.reverse();
-                }
-            });
-
-            return colors;
         },
 
         colorsets: [{
@@ -351,6 +318,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 'd53e4f,f46d43,fdae61,fee08b,ffffbf,e6f598,abdda4,66c2a5,3288bd',
                 '9e0142,d53e4f,f46d43,fdae61,fee08b,e6f598,abdda4,66c2a5,3288bd,5e4fa2',
                 '9e0142,d53e4f,f46d43,fdae61,fee08b,ffffbf,e6f598,abdda4,66c2a5,3288bd,5e4fa2'
+            ]
+        }, {
+            'name': 'TKDiv1',
+            'type': 'div',
+            'colors': [
+                '0073b0,a40084',
+                '0073b0,eeecf4,a40084',
+                '0073b0,b0c2dd,daa9ce,a40084',
+                '0073b0,92aed2,eeecf4,ce89bb,a40084',
+                '0073b0,7ea2cb,c9d2e6,e3c5dd,c775b0,a40084',
+                '0073b0,7099c7,b0c2dd,eeecf4,daa9ce,c167a8,a40084',
+                '0073b0,6693c3,9fb6d7,d4daea,e6d0e3,d497c3,bd5ca3,a40084',
+                '0073b0,5e90c1,92aed2,c1cce3,eeecf4,e0bbd7,ce89bb,bb559f,a40084',
+                '0073b0,588dbf,86a6ce,b0c2dd,d9deec,e8d5e7,daa9ce,ca7db5,b84f9c,a40084',
+                '0073b0,5289be,7ea2cb,a4b9d9,c9d2e6,eeecf4,e3c5dd,d59dc6,c775b0,b64a9a,a40084'
             ]
         }, {
             'name': 'Blues',
@@ -587,6 +569,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 'ffffcc,ffeda0,fed976,feb24c,fd8d3c,fc4e2a,e31a1c,bd0026,800026'
             ]
         }, {
+            'name': 'TKSeq1',
+            'type': 'seq',
+            'colors': [
+                'e5f1f7,0073b0',
+                'e5f1f7,8cb0d3,0073b0',
+                'e5f1f7,aac5df,6b9ac8,0073b0',
+                'e5f1f7,b9cfe5,8cb0d3,5a90c2,0073b0',
+                'e5f1f7,c2d6e9,9ebcdb,79a3cc,4f8bbe,0073b0',
+                'e5f1f7,c7dbeb,aac5df,8cb0d3,6b9ac8,4787bc,0073b0',
+                'e5f1f7,ccdeed,b3cbe3,99b9d8,7ea6ce,6295c4,4084ba,0073b0',
+                'e5f1f7,cfe0ee,b9cfe5,a3c0dc,8cb0d3,74a0ca,5a90c2,3c81b9,0073b0'
+            ]
+        }, {
+            'name': 'TKSeq2',
+            'type': 'seq',
+            'colors': [
+                'f6e7f2,a40084',
+                'f6e7f2,d185ba,a40084',
+                'f6e7f2,dea6cd,c364a8,a40084',
+                'f6e7f2,e5b7d6,d185ba,bc529f,a40084',
+                'f6e7f2,e8c1dc,d999c5,c972af,b74799,a40084',
+                'f6e7f2,ebc7df,dea6cd,d185ba,c364a8,b43f96,a40084',
+                'f6e7f2,eccbe2,e2b0d2,d793c2,cb77b2,bf5aa3,b23a93,a40084',
+                'f6e7f2,eecfe4,e5b7d6,db9fc8,d185ba,c76cac,bc529f,b03691,a40084'
+            ]
+        }, {
             'name': 'Accent',
             'type': 'qual',
             'colors': [
@@ -691,6 +699,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
                 '8dd3c7,ffffb3,bebada,fb8072,80b1d3,fdb462,b3de69,fccde5,d9d9d9,bc80bd',
                 '8dd3c7,ffffb3,bebada,fb8072,80b1d3,fdb462,b3de69,fccde5,d9d9d9,bc80bd,ccebc5',
                 '8dd3c7,ffffb3,bebada,fb8072,80b1d3,fdb462,b3de69,fccde5,d9d9d9,bc80bd,ccebc5,ffed6f'
+            ]
+        }, {
+            'name': 'TKQual1',
+            'type': 'qual',
+            'colors': [
+                '0073b0,c0d730',
+                '0073b0,c0d730,a40084',
+                '0073b0,c0d730,a40084,33c1ba',
+                '0073b0,c0d730,a40084,33c1ba,f8941e',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666,8e58b7',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666,8e58b7,fecb00',
+                '0073b0,c0d730,a40084,33c1ba,f8941e,e21776,666666,8e58b7,fecb00,63b1e5'
             ]
         }]
     }, {

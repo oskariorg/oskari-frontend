@@ -88,7 +88,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
                 data.isDefault = view.isDefault ? view.isDefault : false;
             }
 
-            var builder = me._sandbox.getEventBuilder('StateSavedEvent');
+            var builder = Oskari.eventBuilder('StateSavedEvent');
             var event = builder(data.viewName, state);
 
             // Create Cookie of map state save

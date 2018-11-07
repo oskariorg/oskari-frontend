@@ -93,21 +93,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             var legendContainer = container.find('.active-legend');
             headerContainer.empty();
             legendContainer.empty();
-
+            container.find('.legend-noactive').empty();
             // create inidicator dropdown if we have more than one indicator
-            if (me.service.getStateService().getIndicators().length > 1) {
+            var hasMultiple = me.service.getStateService().getIndicators().length > 1;
+
+            if (hasMultiple) {
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
                 indicatorMenu.render(headerContainer);
                 indicatorMenu.setWidth('94%');
+                headerContainer.addClass('multi-select-legend');
             } else {
-                me._getLabels(activeIndicator, function (labels) {
-                    var header = me.__templates.activeHeader({
-                        label: labels.label
-                    });
-                    headerContainer.empty();
-                    headerContainer.append(header);
-                }); // _getLabels
+                headerContainer.removeClass('multi-select-legend');
             }
+            me._getLabels(activeIndicator, function (labels) {
+                if (hasMultiple) {
+                    headerContainer.attr('data-selected-indicator', labels.label);
+                    return;
+                }
+                var header = me.__templates.activeHeader({
+                    label: labels.label
+                });
+                headerContainer.empty();
+                headerContainer.append(header);
+            });
+
             if (!classificationOpts) {
                 // didn't get classification options so not enough data to classify or other error
                 container.find('.edit-legend').hide();
@@ -181,10 +190,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      */
     _createAccordionPanel: function (title) {
         var me = this;
+
+        function _overflowCheck () {
+            var pluginEl = me._element.parent();
+            if (pluginEl.css('position') === 'absolute') {
+                var top = pluginEl.offset().top;
+                var bottom = top + pluginEl.height();
+                var offsetToWindowBottom = jQuery(window).height() - bottom;
+                if (offsetToWindowBottom < 0) {
+                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
+                }
+            }
+        }
+
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
             me._element.find('.edit-legend').addClass('edit-active');
+            _overflowCheck();
         });
         panel.on('close', function () {
             me._setPanelState(panel);

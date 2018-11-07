@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 '        <div class="layers"></div>' +
                 '    </div>' +
                 '  </div>');
-            //same as in main, only used when returning from some other layout to default (publisher)
+            // same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             me.templates.layer = jQuery(
                 '<div class="layer"><label><span></span></label></div>'
@@ -162,19 +162,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 },
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanged({width:evt.getWidth(), height:evt.getHeight()});
+                    this._handleMapSizeChanged({width: evt.getWidth(), height: evt.getHeight()});
                 }
             };
         },
-        _handleMapSizeChanged: function(size, isMobile){
+        _handleMapSizeChanged: function (size, isMobile) {
             var me = this,
                 mobile = isMobile || Oskari.util.isMobile();
-            if(!mobile &&  me.layerContent) {
+            if (!mobile && me.layerContent) {
                 me.layerContent.find('div.layers-content').css('max-height', (0.75 * size.height) + 'px');
             }
         },
         _setLayerToolsEditModeImpl: function () {
-            if(!this.getElement()) {
+            if (!this.getElement()) {
                 return;
             }
             var header = this.getElement().find('div.header');
@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param {String} layerId id for layer to select
          */
         selectBaseLayer: function (layerId) {
-            if(!this.layerContent) {
+            if (!this.layerContent) {
                 return;
             }
             var baseLayersDiv = this.layerContent.find(
@@ -283,26 +283,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
-        _rebindCheckboxes: function(){
+        _rebindCheckboxes: function () {
             var me = this,
                 sandbox = this.getSandbox();
 
-            var reBind = function(el){
+            var reBind = function (el) {
                 var layerId = el.attr('value');
                 var layer = sandbox.findMapLayerFromAllAvailable(layerId);
-                if(layer) {
+                if (layer) {
                     el.off('change');
-                    me._bindCheckbox(el,layer);
+                    me._bindCheckbox(el, layer);
                 }
             };
-            me.layerContent.find('input[type=radio]').each(function(){
+            me.layerContent.find('input[type=radio]').each(function () {
                 var input = jQuery(this);
                 input.off('change');
                 input.on('change', function (evt) {
                     me._changedBaseLayer();
                 });
             });
-            me.layerContent.find('input[type=checkbox]').each(function(){
+            me.layerContent.find('input[type=checkbox]').each(function () {
                 reBind(jQuery(this));
             });
         },
@@ -337,7 +337,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _setLayerVisible: function (layer, blnVisible) {
             var sandbox = this.getSandbox(),
-                visibilityRequestBuilder = sandbox.getRequestBuilder(
+                visibilityRequestBuilder = Oskari.requestBuilder(
                     'MapModulePlugin.MapLayerVisibilityRequest'
                 ),
                 request = visibilityRequestBuilder(layer.getId(), blnVisible);
@@ -478,7 +478,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // FIXME values.defaultBaseLayer is sometimes empty...
             // send Request to rearrange layers
             var reqName = 'RearrangeSelectedMapLayerRequest',
-                builder = sandbox.getRequestBuilder(reqName),
+                builder = Oskari.requestBuilder(reqName),
                 request = builder(values.defaultBaseLayer, 0);
 
             sandbox.request(me, request);
@@ -490,16 +490,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * changed every time the active one is changed.
          */
         sortLayers: function (forced) {
-            if(!this.layerContent) {
+            if (!this.layerContent) {
                 // not on screen yet
                 return;
             }
             var me = this;
-            if(!forced) {
+            if (!forced) {
                 // this is called multiple times in sequence.
                 // just do it once after calls have stopped for a while
                 clearTimeout(this._sortTimer);
-                this._sortTimer = setTimeout(function() {
+                this._sortTimer = setTimeout(function () {
                     me.sortLayers(true);
                 }, 500);
                 return;
@@ -557,7 +557,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 layerId = selectedBaseLayers[i].getId() + '';
                 baseLayers.each(insertBaseLayer);
             }
-
         },
 
         /**
@@ -598,6 +597,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     el = jQuery(me.getMapModule().getMobileDiv()).find('#oskari_toolbar_mobile-toolbar_mobile-layerselection'),
                     topOffsetElement = jQuery('div.mobileToolbarDiv'),
                     themeColours = mapmodule.getThemeColours();
+                var popupCloseIcon;
 
                 me.popup = popupService.createPopup();
                 popupService.closeAllPopups(true);
@@ -607,10 +607,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.popup.addClass('mapplugin layerselectionpopup');
                 if (isMobile && el.length) {
                     me.popup.moveTo(el, 'bottom', true, topOffsetElement);
-                    me.popup.onClose(function() {
+                    me.popup.onClose(function () {
                         me._resetMobileIcon(el, me._mobileDefs.buttons['mobile-layerselection'].iconCls);
                     });
-                    var popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
+                    popupCloseIcon = (Oskari.util.isDarkColor(themeColours.activeColour)) ? 'icon-close-white' : undefined;
                     me.popup.setColourScheme({
                         'bgColour': themeColours.activeColour,
                         'titleColour': themeColours.activeTextColour,
@@ -620,7 +620,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.popup.addClass('mobile-popup');
                 } else {
                     me.popup.moveTo(me.getElement(), 'bottom', true);
-                    var popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
+                    popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
                     me.popup.setColourScheme({
                         'bgColour': themeColours.backgroundColour,
                         'titleColour': themeColours.textColour,
@@ -630,8 +630,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me.changeFont(conf.font || this.getToolFontFromMapModule(), me.popup.getJqueryContent().parent().parent());
             } else {
                 var icon = div.find('div.header div.header-icon'),
-                    header = div.find('div.header'),
-                    mapmodule = me.getMapModule(),
                     size = mapmodule.getSize();
 
                 icon.removeClass('icon-arrow-white-right');
@@ -642,15 +640,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 me._handleMapSizeChanged(size, false);
 
                 var layersTitle = div.find('.content-header');
-                var layersTitleHeight = 0;
 
-                if(layersTitle.length==0){
+                if (layersTitle.length == 0) {
                     layersTitle = div.find('.header');
                 }
 
                 // Get layers title height
-                if(layersTitle.length>0){
-                    layersTitleHeight = layersTitle.outerHeight() + layersTitle.position().top + layersTitle.offset().top;
+                if (layersTitle.length > 0) {
                 }
             }
 
@@ -692,7 +688,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     me.popup.getJqueryContent().detach();
                     me.popup.close(true);
                     me.popup = null;
-                    return;
                 } else if (me.getElement().find('.content')[0]) {
                     me.closeSelection();
                 } else {
@@ -712,7 +707,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         _createControlElement: function () {
             var me = this,
-                el  = me.templates.main.clone(),
+                el = me.templates.main.clone(),
                 header = el.find('div.header');
 
             header.append(this._loc.title);
@@ -727,8 +722,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             return el;
         },
 
-        teardownUI : function() {
-            //remove old element
+        teardownUI: function () {
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
             if (this.popup) {
                 this.popup.close(true);
@@ -743,11 +738,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         closeSelection: function (el) {
             var element = el || this.getElement();
-            if(!element) {
+            if (!element) {
                 return;
             }
             var icon = element.find('div.header div.header-icon');
-            var header = element.find('div.header');
 
             icon.removeClass('icon-arrow-white-down');
             icon.addClass('icon-arrow-white-right');
@@ -762,20 +756,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
+        redrawUI: function (mapInMobileMode, forced) {
             var isMobile = mapInMobileMode || Oskari.util.isMobile();
-            if(!this.isVisible()) {
+            if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
@@ -793,14 +786,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
         refresh: function () {
             var me = this,
                 conf = me.getConfig(),
-                element = me.getElement(),
-                mapModule = me.getMapModule();
+                element = me.getElement();
 
             if (conf) {
                 if (conf.toolStyle) {
                     me.changeToolStyle(conf.toolStyle, element);
                 } else {
-                    //not found -> use the style config obtained from the mapmodule.
+                    // not found -> use the style config obtained from the mapmodule.
                     var toolStyle = me.getToolStyleFromMapModule();
                     if (toolStyle !== null && toolStyle !== undefined) {
                         me.changeToolStyle(toolStyle, me.getElement());
@@ -832,8 +824,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            var self = this,
-                header = div.find('div.header'),
+            var header = div.find('div.header'),
                 contentHeader = this.templates.contentHeader.clone(),
                 resourcesPath = this.getMapModule().getImageUrl(),
                 imgPath = resourcesPath + '/mapping/mapmodule/resources/images/',
@@ -854,7 +845,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 header.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
-
             } else {
                 header.append(me.templates.defaultArrow.clone());
                 header.append(me._loc.title);

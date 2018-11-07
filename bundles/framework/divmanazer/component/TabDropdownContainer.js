@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                     break;
                 }
             }
-            //remove header
+            // remove header
             var headerContainer = this.ui.find('ul li select :selected');
             for (i = 0; i < headerContainer.length; i++) {
                 header = jQuery(headerContainer[i]);
@@ -182,5 +182,5 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             return false;
         }
     }, {
-        extend : ['Oskari.userinterface.component.TabContainer']
+        extend: ['Oskari.userinterface.component.TabContainer']
     });

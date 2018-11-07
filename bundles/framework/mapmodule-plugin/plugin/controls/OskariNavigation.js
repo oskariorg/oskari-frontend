@@ -6,38 +6,39 @@ messes up location on Oskari.
 Note! Windows Phone pinch zoom requires fractionalZoom to be used and an additional css-class to be added
 to map div.
 */
+
+// eslint-disable-next-line no-global-assign
 OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
 
     /**
      * OpenLayers Constructor
      */
-    initialize: function(bounds, options) {
+    initialize: function (bounds, options) {
         // Call the super constructor
         OpenLayers.Control.Navigation.prototype.initialize.apply(this, [bounds, options]);
     },
-      /* @method setup */
-    setup : function(mapmodule) {
+    /* @method setup */
+    setup: function (mapmodule) {
         this.mapmodule = mapmodule;
         this.sandbox = this.mapmodule.getSandbox();
         this._hoverEventBuilder = Oskari.eventBuilder('MouseHoverEvent');
         this._hoverEvent = this._hoverEventBuilder();
     },
 
-    draw: function() {
+    draw: function () {
         // disable right mouse context menu for support of right click events
         if (this.handleRightClicks) {
             this.map.viewPortDiv.oncontextmenu = OpenLayers.Function.False;
         }
         // <custom hooking>
         OpenLayers.Control.DragPan.prototype.enableKinetic = false;
-        if (window.navigator.msPointerEnabled)
-        {
+        if (window.navigator.msPointerEnabled) {
             // setup class for mobile IE
             jQuery(this.mapmodule.getMapEl()).css('ms-touch-action', 'none');
         }
         var me = this;
-        var movementHook = function(actualmethod, ctx) {
-            return function() {
+        var movementHook = function (actualmethod, ctx) {
+            return function () {
                 var c = ctx || me;
                 var value = actualmethod.apply(c, arguments);
                 me.mapmodule.notifyMoveEnd();
@@ -45,11 +46,10 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             };
         };
 
-
         var clickCallbacks = {
             'dblclick': movementHook(this.defaultDblClick),
             'dblrightclick': movementHook(this.defaultDblRightClick),
-            'click': function(evt) {
+            'click': function (evt) {
                 if (me.mapmodule.getDrawingMode()) {
                     return;
                 }
@@ -79,13 +79,12 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         var originalPanDone = this.dragPan.panMapDone;
         this.dragPan.panMapDone = movementHook(originalPanDone, this.dragPan);
 
-
         // used by MouseWheel up/down
         this.wheelChange = movementHook(this.wheelChange);
         // </custom hooking>
 
         this.zoomBox = new OpenLayers.Control.ZoomBox(
-                    {map: this.map, keyMask: this.zoomBoxKeyMask});
+            {map: this.map, keyMask: this.zoomBoxKeyMask});
 
         // <custom hooking>
         var originalzoomBox = this.zoomBox.zoomBox;
@@ -100,14 +99,14 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
             maxDelta: 6
         };
         this.handlers.wheel = new OpenLayers.Handler.MouseWheel(
-            this, {up : this.wheelUp, down: this.wheelDown},
+            this, {up: this.wheelUp, down: this.wheelDown},
             OpenLayers.Util.extend(wheelOptions, this.mouseWheelOptions)
         );
 
         if (OpenLayers.Control.PinchZoom) {
             // <custom hooking>
             this.pinchZoom = new OskariPinchZoom(OpenLayers.Util.extend(
-                    {map: this.map}, this.pinchZoomOptions));
+                {map: this.map}, this.pinchZoomOptions));
             this.pinchZoom.setup(this.mapmodule);
             // </custom hooking>
         }
@@ -116,21 +115,21 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         this.__addHoverSupport();
         // </custom hooking>
     },
-    __addHoverSupport : function() {
+    __addHoverSupport: function () {
         var hoverCallbacks = {
-            'move' : this.__defaultHoverMove,
-            'pause' : this.__defaultHoverPause
+            'move': this.__defaultHoverMove,
+            'pause': this.__defaultHoverPause
         };
         // trying to prevent IE8 from dying to hover events
         var hoverOptions = {
-            pixelTolerance : 1.1,
+            pixelTolerance: 1.1,
             // minor hack to support IE performance
-            passesTolerance : function(px) {
+            passesTolerance: function (px) {
                 var passes = true;
-                if(this.pixelTolerance && this.px) {
+                if (this.pixelTolerance && this.px) {
                     var dpx = Math.sqrt(Math.pow(this.px.x - px.x, 2) + Math.pow(this.px.y - px.y, 2));
 
-                    if(dpx < this.pixelTolerance) {
+                    if (dpx < this.pixelTolerance) {
                         passes = false;
                     }
                 }
@@ -140,15 +139,14 @@ OskariNavigation = OpenLayers.Class(OpenLayers.Control.Navigation, {
         this.handlers.hover = new OpenLayers.Handler.Hover(this, hoverCallbacks, hoverOptions);
         this.handlers.hover.activate();
     },
-    __defaultHoverMove : function(evt) {
+    __defaultHoverMove: function (evt) {
         var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
         this._hoverEvent.set(lonlat.lon, lonlat.lat, false, evt.pageX, evt.pageY);
         this.sandbox.notifyAll(this._hoverEvent, true);
     },
-    __defaultHoverPause : function(evt) {
+    __defaultHoverPause: function (evt) {
         var lonlat = this.map.getLonLatFromViewPortPx(evt.xy);
         this._hoverEvent.set(lonlat.lon, lonlat.lat, true, evt.pageX, evt.pageY);
         this.sandbox.notifyAll(this._hoverEvent);
     }
 });
-

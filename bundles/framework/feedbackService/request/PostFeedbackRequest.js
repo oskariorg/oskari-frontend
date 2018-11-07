@@ -13,23 +13,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.request.PostFeed
      * @params {Object} lang, serviceId
      *
      */
-    function(params) {
+    function (params) {
         this._feedbackparams = params;
     }, {
         /** @static @property __name request name */
-        __name : "PostFeedbackRequest",
+        __name: 'PostFeedbackRequest',
         /**
          * @method getName
          * @return {String} request name
          */
-        getName : function() {
+        getName: function () {
             return this.__name;
         },
         /**
          * @method getFeedbackParams
          * @return {Object} parameters of current feedback request
          */
-        getFeedbackParams : function() {
+        getFeedbackParams: function () {
             return this._feedbackparams;
         }
     }, {
@@ -37,5 +37,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.feedbackService.request.PostFeed
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol' : ['Oskari.mapframework.request.Request']
+        'protocol': ['Oskari.mapframework.request.Request']
     });

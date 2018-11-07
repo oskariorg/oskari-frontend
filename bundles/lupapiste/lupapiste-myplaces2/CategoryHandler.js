@@ -3,7 +3,7 @@
  *
  * Handles category related functionality for my places (map layers etc)
  */
-Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.CategoryHandler',
 
     /**
      * @method create called automatically on construction
@@ -107,7 +107,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
                 if (!found) {
                     // remove maplayer from selected
                     // TODO: do we need to check if the layer is selected or just send this out every time?
-                    sandbox.requestByName(this.getName(), "RemoveMapLayerRequest", [layer.getId()]);
+                    sandbox.requestByName(this.getName(), 'RemoveMapLayerRequest', [layer.getId()]);
                     // remove maplayer from all layers
                     mapLayerService.removeLayer(layer.getId());
 
@@ -200,17 +200,17 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
          */
         _getMapLayerJson: function (categoryModel) {
             var baseJson = this._getMapLayerJsonBase();
-            baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + "&";
+            baseJson.wmsUrl = this.instance.conf.wmsUrl + categoryModel.getId() + '&';
             //baseJson.wmsUrl = "/karttatiili/myplaces?myCat=" + categoryModel.getId() + "&";
             baseJson.name = categoryModel.getName();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             if (categoryModel.isPublic()) {
                 baseJson.permissions = {
-                    "publish": "publication_permission_ok"
+                    'publish': 'publication_permission_ok'
                 };
             } else {
                 baseJson.permissions = {
-                    "publish": "no_publication_permission"
+                    'publish': 'no_publication_permission'
                 };
             }
             return baseJson;
@@ -225,7 +225,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
             var catLoc = this.instance.getLocalization('category');
             var json = {
                 wmsName: 'ows:my_places_categories',
-                type: "wmslayer",
+                type: 'wmslayer',
                 isQueryable: true,
                 opacity: 50,
                 metaType: this.instance.idPrefix,
@@ -240,15 +240,15 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
         _processStartupLinkLayers: function (sandbox) {
             var mapLayers = Oskari.util.getRequestParam('mapLayers');
 
-            if (mapLayers === null || mapLayers === "") {
+            if (mapLayers === null || mapLayers === '') {
                 // no linked layers
                 return;
             }
-            var layerStrings = mapLayers.split(",");
+            var layerStrings = mapLayers.split(',');
             var keepLayersOrder = true;
 
             for (var i = 0; i < layerStrings.length; i++) {
-                var splitted = layerStrings[i].split("+");
+                var splitted = layerStrings[i].split('+');
                 var layerId = splitted[0];
                 var opacity = splitted[1];
                 //var style = splitted[2];
@@ -567,7 +567,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
         _formatMessage: function (msg, params) {
             var formatted = msg;
             for (var i = 0; i < params.length; ++i) {
-                formatted = formatted.replace("{" + i + "}", params[i]);
+                formatted = formatted.replace('{' + i + '}', params[i]);
             }
             return formatted;
         },
@@ -652,7 +652,7 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
         _handlePublishCategory: function (category, makePublic, wasSuccess) {
             var loc;
             if (!wasSuccess) {
-                loc = this.instance.getLocalization("notification");
+                loc = this.instance.getLocalization('notification');
                 this._showMessage(loc.error.title, loc.error.generic);
                 return;
             }
@@ -663,14 +663,14 @@ Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.CategoryHandler",
                 mapLayer = mapLayerService.findMapLayer(layerId);
             if (!mapLayer) {
                 // maplayer not found, this should not be possible
-                loc = this.instance.getLocalization("notification");
+                loc = this.instance.getLocalization('notification');
                 this._showMessage(loc.error.title, loc.error.generic);
                 return;
             }
             if (makePublic) {
-                mapLayer.addPermission("publish", "publication_permission_ok");
+                mapLayer.addPermission('publish', 'publication_permission_ok');
             } else {
-                mapLayer.addPermission("publish", "no_publication_permission");
+                mapLayer.addPermission('publish', 'no_publication_permission');
             }
             // send an event to notify other bundles of updated permissions
             var event = sandbox.getEventBuilder('MapLayerEvent')(layerId, 'update');

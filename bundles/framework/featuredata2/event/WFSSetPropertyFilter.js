@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetPropert
         this._layerId = layerId;
     }, {
         /** @static @property __name event name */
-        __name: "WFSSetPropertyFilter",
+        __name: 'WFSSetPropertyFilter',
         /**
          * @method getName
          * @return {String} event name

@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
      * @param {Oskari.mapframework.bundle.featuredata2.plugin.mapmodule.OpenlayersPopupPlugin} featureData
      *          reference to featureData
      */
-    function(sandbox, instance) {
+    function (sandbox, instance) {
         this.sandbox = sandbox;
         this.instance = instance;
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
@@ -23,16 +23,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.AddLayerL
          * @param {Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequest} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest: function (core, request) {
             this.layerlistService.registerLayerlistFilterButton(request.getToolText(), request.getTooltip(), {
-                    active: request.getIconClassActive(),
-                    deactive: request.getIconClassDeactive()
-                }, request.getFilterName());
+                active: request.getIconClassActive(),
+                deactive: request.getIconClassDeactive()
+            }, request.getFilterName());
         }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

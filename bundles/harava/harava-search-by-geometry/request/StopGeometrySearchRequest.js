@@ -13,8 +13,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.StopGeometrySearchRe
  */
 function() {
 }, {
-	/** @static @property __name request name */
-    __name : "StopGeometrySearchRequest",
+    /** @static @property __name request name */
+    __name : 'StopGeometrySearchRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -23,7 +23,7 @@ function() {
         return this.__name;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

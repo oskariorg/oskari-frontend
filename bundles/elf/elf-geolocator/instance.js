@@ -1,12 +1,12 @@
 /**
  * @class Oskari.elf.geolocator.BundleInstance
  */
-Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
-    function() {
+Oskari.clazz.define('Oskari.elf.geolocator.BundleInstance',
+    function () {
         this.searchUrl = undefined;
     }, {
-        __name : 'elf-geolocator',
-        getName : function () {
+        __name: 'elf-geolocator',
+        getName: function () {
             return this.__name;
         },
         eventHandlers: {
@@ -22,8 +22,7 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             if (conf && conf.searchUrl) {
                 this.searchUrl = conf.searchUrl;
             } else {
-                this.searchUrl = sandbox.getAjaxUrl() +
-                    'action_route=GetGeoLocatorSearchResult';
+                this.searchUrl = Oskari.urls.getRoute('GetGeoLocatorSearchResult');
             }
 
             // Create the search service
@@ -58,30 +57,22 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
             }
 
             var sandbox = this.getSandbox(),
-                zoom =  sandbox.getMap().getZoom(),
+                zoom = sandbox.getMap().getZoom(),
                 srsName = sandbox.getMap().getSrsName(),
                 lonlat = {
                     lon: result.lon,
                     lat: result.lat
                 },
-                popupId = "elf-geolocator-search-result",
-                moveReqBuilder = sandbox
-                    .getRequestBuilder('MapMoveRequest'),
-                infoBoxReqBuilder = sandbox
-                    .getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
-                moveReq,
-                infoBoxReq,
+                popupId = 'elf-geolocator-search-result',
+                moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
+                infoBoxReqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest'),
                 infoBoxContent;
 
-            if(result.zoomScale) {
-                zoom = {scale : result.zoomScale};
+            if (result.zoomScale) {
+                zoom = { scale: result.zoomScale };
             }
 
-            if (moveReqBuilder) {
-                moveReq = moveReqBuilder(
-                    lonlat.lon, lonlat.lat, zoom, false, srsName);
-                sandbox.request(this, moveReq);
-            }
+            sandbox.request(this, moveReqBuilder(lonlat.lon, lonlat.lat, zoom, false, srsName));
 
             var options = {
                 hidePrevious: true
@@ -92,10 +83,9 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
                     html: this.__getInfoBoxHtml(result),
                     actions: {}
                 };
-                infoBoxReq = infoBoxReqBuilder(
+                sandbox.request(this, infoBoxReqBuilder(
                     popupId, this.getLocalization('tab').resultsTitle,
-                    [infoBoxContent], lonlat, options);
-                sandbox.request(this, infoBoxReq);
+                    [infoBoxContent], lonlat, options));
             }
         },
         /**
@@ -107,12 +97,12 @@ Oskari.clazz.define("Oskari.elf.geolocator.BundleInstance",
          * @return {String}
          */
         __getInfoBoxHtml: function (result) {
-            var template = '<h3><%= name %></h3>'
-                    + '<p><%= village %></p>'
-                    + '<p><%= type %></p>';
+            var template = '<h3><%= name %></h3>' +
+                    '<p><%= village %></p>' +
+                    '<p><%= type %></p>';
 
             return _.template(template, result);
         }
     }, {
-        "extend" : ["Oskari.userinterface.extension.DefaultExtension"]
-});
+        'extend': ['Oskari.userinterface.extension.DefaultExtension']
+    });

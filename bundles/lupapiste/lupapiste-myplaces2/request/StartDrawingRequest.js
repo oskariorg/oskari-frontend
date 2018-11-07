@@ -17,7 +17,7 @@ function(config) {
     }
 
 }, {
-    __name : "LupaPisteMyPlaces.StartDrawingRequest",
+    __name : 'LupaPisteMyPlaces.StartDrawingRequest',
     getName : function() {
         return this.__name;
     },

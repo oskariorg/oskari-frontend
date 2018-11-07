@@ -34,27 +34,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
             var zoomToExtent = request.getZoomToExtent();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             var newZoom;
+            var center;
             if (!layer) {
                 return;
             }
 
-            if (zoomToExtent){
+            if (zoomToExtent) {
                 // move and zoom map to layer extent
-                if (layer.getGeometry().length > 0){
+                if (layer.getGeometry().length > 0) {
                     var bounds = this.layersPlugin.getGeometryBounds(layer.getGeometry()[0]);
                     // suppress mapmove-event
                     this.layersPlugin.getMapModule().zoomToExtent(bounds, true, true);
-                    var center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
+                    center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
                     this.layersPlugin.getMapModule().moveMapToLonLat(center);
 
-                    if (!layer.isInScale()){
+                    if (!layer.isInScale()) {
                         // set zoom level by layer scales
                         newZoom = this.layersPlugin.getMapModule().getClosestZoomLevel(layer.getMinScale(), layer.getMaxScale());
                         // suppress mapmove-event here and send it after we have possibly also moved the map
                         this.layersPlugin.getMapModule().setZoomLevel(newZoom, true);
                     }
                 }
-            } else{
+            } else {
                 // set zoom level by layer scales
                 newZoom = this.layersPlugin.getMapModule().getClosestZoomLevel(layer.getMinScale(), layer.getMaxScale());
                 // suppress mapmove-event here and send it after we have possibly also moved the map
@@ -65,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                     var containsGeometry = this.layersPlugin.isInGeometry(layer);
                     // only move if not currently in geometry
                     if (!containsGeometry) {
-                        var center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
+                        center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
                         this.layersPlugin.getMapModule().moveMapToLonLat(center);
                     }
                 }

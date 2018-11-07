@@ -3,7 +3,8 @@ Oskari.registerLocalization(
         "lang": "sv",
         "key": "DemoLink",
         "value": {
-            "tooltip": "Flytta till 3D kartvy."
+            "to3Dview": "Gå till 3D-kartvyn. Endast en del av kartnivåer och kartverktyg tillgängliga.",
+            "backTo2Dview": "Gå tillbaka till geodataportalens standardvy."
         }
     }
 );

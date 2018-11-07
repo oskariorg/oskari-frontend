@@ -1,9 +1,9 @@
-﻿/**
+/**
 * @class Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance
 *
 * Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance.
 */
-Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance",
+Oskari.clazz.define('Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -88,9 +88,8 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
                 }
             }
 
-		 	var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
-
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            sandbox.request(me, request);
         },
         /**
          * @method init
@@ -118,7 +117,6 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -131,8 +129,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
                 var me = this,
-                    doOpen = event.getViewState() !== 'close',
-                    p;
+                    doOpen = event.getViewState() !== 'close';
                 if (event.getExtension().getName() !== me.getName() || !this.plugins['Oskari.userinterface.Flyout']) {
                     // not me -> do nothing
                     return;
@@ -157,9 +154,8 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
-
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -172,7 +168,7 @@ Oskari.clazz.define("Oskari.tampere.bundle.tampere.AdminWfsSearchChannelBundleIn
          * Oskari.mapframework.bundle.layerselection2.Tile
          */
         startExtension: function () {
-          	this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.tampere.bundle.tampere.AdminWfsSearchChannel.Tile', this);
         },
         /**

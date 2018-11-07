@@ -57,7 +57,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .range([graphHeight - graphMargin.bottom, graphMargin.top]);
 
             var area = d3.area()
-                .defined(function(d) {return d.height !== null})
+                .defined(function (d) { return d.height !== null; })
                 .x(function (d) {
                     return x(d.distance);
                 })
@@ -72,14 +72,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                     if (d > 1000) {
                         return me.loc('legendValue', { value: d / 1000 }) + ' km';
                     } else {
-                        return me.loc('legendValue', { value: d }) + ' m'
+                        return me.loc('legendValue', { value: d }) + ' m';
                     }
                 });
             var yAxis = d3.axisLeft(y)
                 .tickSizeOuter(0)
                 .ticks(4)
                 .tickSizeInner(-graphWidth + graphMargin.right + graphMargin.left)
-                .tickFormat(function (d) { return me.loc('legendValue', { value: d }) + ' m' });
+                .tickFormat(function (d) { return me.loc('legendValue', { value: d }) + ' m'; });
 
             // Set up container groups (for draw ordering)
 
@@ -134,7 +134,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 .classed('axis-brush', true)
                 .call(brush);
 
-            function brushed() {
+            function brushed () {
                 var selection = d3.event.selection;
                 if (!selection) {
                     return;
@@ -181,7 +181,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
 
             var bisectX = d3.bisector(function (d) { return d.distance; }).left;
 
-            function mousemove() {
+            function mousemove () {
                 var x0 = x.invert(d3.mouse(this)[0]),
                     i = bisectX(processed[0], x0, 1),
                     d0 = processed[0][i - 1],
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
                 cursor.select('line').attr('y1', y(d.height));
                 focus.attr('transform', 'translate(0 ' + y(d.height) + ')');
                 var text;
-                if(d.height !== null) {
+                if (d.height !== null) {
                     text = me.numberFormatter.format(d.height);
                 } else {
                     text = me.loc('noValue');
@@ -208,8 +208,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
 
             var processed;
 
-            function recalculateYDomain() {
-                var extent = d3.extent(processed[0], function (d) { return d.height });
+            function recalculateYDomain () {
+                var extent = d3.extent(processed[0], function (d) { return d.height; });
                 if (extent[0] > 0) {
                     extent[0] = 0;
                 }
@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
             this._updateGraph = function (data) {
                 if (data) {
                     processed = this._processData(data);
-                    x.domain([0, d3.max(processed[0], function (d) { return d.distance })]);
+                    x.domain([0, d3.max(processed[0], function (d) { return d.distance; })]);
                     recalculateYDomain();
                     resetScalingButton.style('display', 'none');
                 }
@@ -240,7 +240,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.terrain-profile.TerrainFlyout',
 
                 xAxisContainer.call(xAxis);
                 yAxisContainer.call(yAxis);
-            }
+            };
             this._updateGraph(data);
             this.setContent(wrapper);
         },

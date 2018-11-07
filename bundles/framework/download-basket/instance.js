@@ -3,7 +3,7 @@
 *
 * Oskari.mapframework.bundle.downloadBasket.
 */
-Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -107,11 +107,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
 
             me.cropping.setBasket(me.basket);
 
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            sandbox.request(me, request);
 
             this.mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-
         },
         /**
          * Implements Module protocol init method - does nothing atm
@@ -175,16 +174,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
+                } else {
+                    me.basket.removePopup();
                 }
             },
-            'MapClickedEvent' : function(evt) {
+            'MapClickedEvent': function (evt) {
                 var me = this,
                 x = evt.getMouseX(),
                 y = evt.getMouseY();
                 me.cropping.croppingLayersHighlight(x, y);
             },
-            'AfterMapLayerAddEvent' : function(event) {
+            'AfterMapLayerAddEvent': function (event) {
                 var me = this;
                 var map = me.mapModule.getMap();
             },
@@ -209,7 +209,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
             this.sandbox.unregister(this);
@@ -264,6 +264,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.BundleInstance",
         getDescription: function () {
             return this.getLocalization('desc');
         },
+
         /**
          * Adds basket notify
          * @method addBasketNotify

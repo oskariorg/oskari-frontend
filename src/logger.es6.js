@@ -89,7 +89,7 @@ export default class Logger {
         }
         deprecatedMessagesSent[name]++;
         if (deprecatedMessagesSent[name] > 1) {
-            // Fall silent after 2 warnings/deprecation
+            // Fall silent after 1 warnings/deprecation
             return;
         }
         _doLogging(this.name, 'warn',

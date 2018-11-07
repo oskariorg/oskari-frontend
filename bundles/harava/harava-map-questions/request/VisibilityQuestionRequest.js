@@ -15,12 +15,12 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.VisibilityQuestio
  * @param {Boolean} enabled is tool enabled
  */
 function(moduleId, questionId, enabled) {
-	this.moduleId = moduleId;
-	this.questionId = questionId;
-	this.enabled = enabled;
+    this.moduleId = moduleId;
+    this.questionId = questionId;
+    this.enabled = enabled;
 }, {
-	/** @static @property __name request name */
-    __name : "VisibilityQuestionRequest",
+    /** @static @property __name request name */
+    __name : 'VisibilityQuestionRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -50,7 +50,7 @@ function(moduleId, questionId, enabled) {
         return this.enabled;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

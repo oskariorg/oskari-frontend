@@ -12,7 +12,7 @@ Oskari.clazz.define(
 
         /** @method handleRequest dispatches processing to instance */
         handleRequest: function (core, request) {
-            this.instance.plugins["Oskari.userinterface.Flyout"].updateFeedbackUI(request.getMetadata());
+            this.instance.plugins['Oskari.userinterface.Flyout'].updateFeedbackUI(request.getMetadata());
             this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'detach']);
         }
     }, {

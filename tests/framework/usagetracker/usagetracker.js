@@ -93,7 +93,7 @@ describe('Test Suite for UsageTracker', function() {
 				done();
 			});
 
-			var event = sandbox.getEventBuilder('AfterMapMoveEvent')(517280, 6873538, 9, 5669.2944);
+			var event = Oskari.eventBuilder('AfterMapMoveEvent')(517280, 6873538, 9, 5669.2944);
 	        sandbox.notifyAll(event);
 		});
 
@@ -107,7 +107,7 @@ describe('Test Suite for UsageTracker', function() {
 			});
 
 			var layer = sandbox.findMapLayerFromAllAvailable('base_35'),
-				event = sandbox.getEventBuilder('AfterMapLayerAddEvent')(layer, false, false);
+				event = Oskari.eventBuilder('AfterMapLayerAddEvent')(layer, false, false);
 	        sandbox.notifyAll(event);
 		});
 
@@ -121,7 +121,7 @@ describe('Test Suite for UsageTracker', function() {
 			});
 
 			var layer = sandbox.findMapLayerFromAllAvailable('base_35'),
-				event = sandbox.getEventBuilder('AfterMapLayerRemoveEvent')(layer);
+				event = Oskari.eventBuilder('AfterMapLayerRemoveEvent')(layer);
 	        sandbox.notifyAll(event);
 		});
 
@@ -135,7 +135,7 @@ describe('Test Suite for UsageTracker', function() {
 			});
 
 			var layer = sandbox.findMapLayerFromAllAvailable('base_35'),
-				event = sandbox.getEventBuilder('MapLayerVisibilityChangedEvent')(layer, false, false);
+				event = Oskari.eventBuilder('MapLayerVisibilityChangedEvent')(layer, false, false);
 	        sandbox.notifyAll(event);
 		});
 

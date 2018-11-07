@@ -13,7 +13,6 @@
                  */
                 initialize: function () {},
 
-
                 /**
                  * returns layer groups so that they are grouped with given grouping method
                  *
@@ -24,7 +23,6 @@
                         me = this,
                         layers = this.models;
 
-
                     // sort layers by grouping & name
                     this.models.sort(function (a, b) {
                         return me._layerListComparator(a, b, groupingMethod);
@@ -33,9 +31,10 @@
                     var group = null;
                     for (var n = 0; n < layers.length; ++n) {
                         var layer = layers[n];
-                        if (layer.getMetaType &&
+                        if (layer.getMetaType && (
                             layer.getMetaType() === 'published' ||
-                            layer.getMetaType() === 'myplaces') {
+                            layer.getMetaType() === 'myplaces')
+                        ) {
                             // skip published layers
                             continue;
                         }
@@ -45,7 +44,6 @@
                             groupList.push(group);
                         }
                         group.addLayer(layer);
-
                     }
                     return groupList;
                 },
@@ -79,12 +77,11 @@
                  */
                 removeLayer: function (id) {
                     var model = this.get(id);
-                    if(model) {
+                    if (model) {
                         this.remove(model);
                     }
                 }
 
             });
-
         });
 }).call(this);

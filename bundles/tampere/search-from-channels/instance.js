@@ -1,3 +1,8 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+import * as olExtent from 'ol/extent';
+import olFormatWKT from 'ol/format/WKT';
+
 /**
  * @Oskari.tampere.bundle.searchfromchannels.SearchFromChannelsBundleInstance
  *
@@ -25,20 +30,20 @@ Oskari.clazz.define(
         this.conditions = [];
         this.safeChars = false;
         this.resultHeaders = [
-                {
-                    title: '',
-                    prop: 'check'
-                },
-                {
-                    title: this.getLocalization('grid').name,
-                    prop: 'name'
-                }, {
-                    title: this.getLocalization('grid').village,
-                    prop: 'village'
-                }, {
-                    title: this.getLocalization('grid').type,
-                    prop: 'type'
-                }
+            {
+                title: '',
+                prop: 'check'
+            },
+            {
+                title: this.getLocalization('grid').name,
+                prop: 'name'
+            }, {
+                title: this.getLocalization('grid').village,
+                prop: 'village'
+            }, {
+                title: this.getLocalization('grid').type,
+                prop: 'type'
+            }
         ];
     }, {
         /**
@@ -77,16 +82,16 @@ Oskari.clazz.define(
                 '</div>'
             ),
             templateSearchResultsWindow: jQuery(
-            '<div class="searchFromChannels_window_search_results">' +
+                '<div class="searchFromChannels_window_search_results">' +
             '  <div class="header">' +
             '    <div class="icon-close">' +
             '    </div>' +
             '    <h3></h3>' +
             '  </div>' +
             '  <div class="content">' +
-            '   <div class="returnTosearch"></div>'+
+            '   <div class="returnTosearch"></div>' +
             '       <div class="info"></div>' +
-            '           <div class="showOnMapBtns"></div>'+
+            '           <div class="showOnMapBtns"></div>' +
             '               <div class="resultList"></div>' +
             '  </div>' +
             '  </div>' +
@@ -181,14 +186,14 @@ Oskari.clazz.define(
             if (me.conf && me.conf.optionUrl) {
                 optionAjaxUrl = me.conf.optionUrl;
             } else {
-                optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=SearchOptions';
+                optionAjaxUrl = Oskari.urls.getRoute('SearchOptions');
             }
 
             var searchAjaxUrl = null;
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetSearchResult';
+                searchAjaxUrl = Oskari.urls.getRoute('GetSearchResult');
             }
 
             // Default tab priority
@@ -196,7 +201,7 @@ Oskari.clazz.define(
                 me.tabPriority = me.conf.priority;
             }
 
-              // Filter special characters?
+            // Filter special characters?
             if (this.conf && this.conf.safeChars === true) {
                 this.safeChars = true;
             }
@@ -244,14 +249,12 @@ Oskari.clazz.define(
          * or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -268,12 +271,12 @@ Oskari.clazz.define(
                     return;
                 }
                 if (event.getViewState() !== 'close') {
-                    var searchFromChannelsContainer = jQuery(".searchFromChannelsContainer"),
-                    advancedContainer = searchFromChannelsContainer.find('div.advanced'),
-                    moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
+                    var searchFromChannelsContainer = jQuery('.searchFromChannelsContainer'),
+                        advancedContainer = searchFromChannelsContainer.find('div.advanced'),
+                        moreLessLink = searchFromChannelsContainer.find('a.moreLessLink');
 
                     advancedContainer.empty();
-                    me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,false);
+                    me._getChannelsForAdvancedUi(searchFromChannelsContainer, advancedContainer, moreLessLink, false);
                 }
             }
         },
@@ -291,7 +294,7 @@ Oskari.clazz.define(
             }
 
             var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder(reqName),
                 request = reqBuilder(this);
 
             sandbox.request(this, request);
@@ -320,7 +323,6 @@ Oskari.clazz.define(
          * (re)creates the UI for "metadata catalogue" functionality
          */
         createUi: function () {
-
             var me = this,
                 searchFromChannelsContainer = me.templates.searchFromChannelsTab.clone();
 
@@ -379,8 +381,8 @@ Oskari.clazz.define(
                 var searchKey = field.getValue(me.safeChars);
                 var channelIds = [];
 
-                me.optionPanel.find("input[name='channelChkBox']").each( function () {
-                    if(jQuery(this).is(":checked")){
+                me.optionPanel.find("input[name='channelChkBox']").each(function () {
+                    if (jQuery(this).is(':checked')) {
                         channelIds.push(jQuery(this).val());
                     }
                 });
@@ -392,7 +394,7 @@ Oskari.clazz.define(
                 }
 
                 me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-                me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));
+                me._progressSpinner.insertTo(jQuery('.searchFromChannelsOptions'));
                 me._progressSpinner.start();
 
                 me.searchService.doSearch(
@@ -434,7 +436,7 @@ Oskari.clazz.define(
             var moreLessLink = this.templates.moreLessLink.clone();
             moreLessLink.html(me.getLocalization('showMore'));
 
-            me._getChannelsForAdvancedUi(searchFromChannelsContainer,advancedContainer,moreLessLink,true);
+            me._getChannelsForAdvancedUi(searchFromChannelsContainer, advancedContainer, moreLessLink, true);
             advancedContainer.hide();
 
             moreLessLink.on('click', function () {
@@ -442,7 +444,7 @@ Oskari.clazz.define(
                     // open advanced/toggle link text
                     moreLessLink.html(me.getLocalization('showLess'));
                     if (!advancedContainer.is(':empty')) {
-                         advancedContainer.show();
+                        advancedContainer.show();
                     }
                 } else {
                     // close advanced/toggle link text
@@ -460,32 +462,30 @@ Oskari.clazz.define(
          * @param  {[type]} createTab                   [description]
          * @return {[type]}                             [description]
          */
-        _getChannelsForAdvancedUi: function(searchFromChannelsContainer,advancedContainer,moreLessLink, createTab) {
+        _getChannelsForAdvancedUi: function (searchFromChannelsContainer, advancedContainer, moreLessLink, createTab) {
             var me = this;
             me._progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-            me._progressSpinner.insertTo(jQuery(".searchFromChannelsOptions"));
+            me._progressSpinner.insertTo(jQuery('.searchFromChannelsOptions'));
             me._progressSpinner.start();
 
             me.optionService.getOptions(function (data) {
-
-            if(data.channels.length > 0){
-                if(createTab){
+                if (data.channels.length > 0) {
+                    if (createTab) {
                     // Wfs search from channels tab OBS. this will be in UI if user has rights into channels
-                    var title = me.getLocalization('tabTitle'),
-                        content = searchFromChannelsContainer,
-                        priority = me.tabPriority,
-                        id = 'oskari_searchfromchannels_tabpanel_header',
-                        reqName = 'Search.AddTabRequest',
-                        reqBuilder = me.sandbox.getRequestBuilder(reqName),
-                        req = reqBuilder(title, content, priority, id);
+                        var title = me.getLocalization('tabTitle'),
+                            content = searchFromChannelsContainer,
+                            priority = me.tabPriority,
+                            id = 'oskari_searchfromchannels_tabpanel_header',
+                            reqName = 'Search.AddTabRequest',
+                            reqBuilder = Oskari.requestBuilder(reqName),
+                            req = reqBuilder(title, content, priority, id);
 
-                    me.sandbox.request(me, req);
+                        me.sandbox.request(me, req);
+                    }
+
+                    me._createAdvancedPanel(data, advancedContainer, moreLessLink);
+                    me._progressSpinner.stop();
                 }
-
-                me._createAdvancedPanel(data, advancedContainer, moreLessLink);
-                me._progressSpinner.stop();
-            }
-
             }, function (data) {
                 me._progressSpinner.stop();
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -494,7 +494,6 @@ Oskari.clazz.define(
                 var msg = me.getLocalization('channeloptionservice_not_found_anything_text');
                 dialog.show(title, msg, [okBtn]);
             });
-
         },
         /**
          * [_validateSearchKey description] Validate string that user is searching
@@ -521,7 +520,7 @@ Oskari.clazz.define(
 
             // invalid characters (or a star in the wrong place...)
             if (me.safeChars) {
-                if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+                if (!/^[a-zåäöA-ZÅÄÖ .,?!0-9]+\**$/.test(key)) {
                     me._showError(me.getLocalization('invalid_characters'));
                     return false;
                 }
@@ -538,11 +537,11 @@ Oskari.clazz.define(
             var me = this,
                 searchResultWindow = me.templates.templateSearchResultsWindow.clone(),
                 resultList = null,
-                mapDiv = jQuery("#contentMap"),
+                mapDiv = jQuery('#contentMap'),
                 types = [];
 
-            jQuery.each(result.locations, function(index, val) {
-                if(jQuery.inArray(val.type, types) === -1) {
+            jQuery.each(result.locations, function (index, val) {
+                if (jQuery.inArray(val.type, types) === -1) {
                     types.push(val.type);
                 }
             });
@@ -564,8 +563,8 @@ Oskari.clazz.define(
                     me._closeMapPopup();
 
                     me.sandbox.postRequestByName(
-                    'userinterface.UpdateExtensionRequest',
-                    [me.instance, 'close']
+                        'userinterface.UpdateExtensionRequest',
+                        [me.instance, 'close']
                     );
                 }
             );
@@ -585,7 +584,6 @@ Oskari.clazz.define(
                 resultList.append(nf);
                 return;
             } else {
-
                 me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
 
                 info.append(me.getLocalization('searchResultCount') + ' ' +
@@ -610,23 +608,21 @@ Oskari.clazz.define(
                 resultList.empty();
                 me.lastResult = result;
 
-             if (result.totalCount === 1) {
+                if (result.totalCount === 1) {
                     // move map etc
                     me._resultClicked(result.locations[0], true);
                 }
             }
 
-            //Accordion
+            // Accordion
             var accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion'),
-                container = jQuery('div.myAccordion'),
                 panel = null;
 
-            jQuery.each(types, function(index, type) {
-                var results = jQuery.grep(result.locations, function(r, i){
+            jQuery.each(types, function (index, type) {
+                var results = jQuery.grep(result.locations, function (r, i) {
                     return r.type === type;
                 });
-                if(results.length>0) {
-
+                if (results.length > 0) {
                     panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
                     panel.setTitle(type);
 
@@ -680,7 +676,7 @@ Oskari.clazz.define(
                     panel.setContent(table);
                     panel.setVisible(true);
 
-                    if(types.length == 1){
+                    if (types.length == 1) {
                         panel.open();
                     }
 
@@ -697,7 +693,7 @@ Oskari.clazz.define(
             var btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle(me.getLocalization("show-all-on-map"));
+            btn.setTitle(me.getLocalization('show-all-on-map'));
             btn.addClass('show-on-map');
             jQuery(btn.getElement()).on('click',
                 function (event) {
@@ -711,7 +707,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle(me.getLocalization("show-selected-on-map"));
+            btn.setTitle(me.getLocalization('show-selected-on-map'));
             btn.addClass('show-on-map');
             jQuery(btn.getElement()).on('click',
                 function (event) {
@@ -724,10 +720,10 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.Button'
             );
-            btn.setTitle(me.getLocalization("back-to-search"));
+            btn.setTitle(me.getLocalization('back-to-search'));
             jQuery(btn.getElement()).on('click',
                 function (event) {
-                   me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
+                    me.toggleParentFlyout(me.optionPanel, searchResultWindow, mapDiv);
                 }
             );
             var returnTosearch = searchResultWindow.find('div.returnTosearch');
@@ -739,13 +735,12 @@ Oskari.clazz.define(
          * @param  {[type]} optionPanel [description]
          * @return {[type]}             [description]
          */
-        toggleParentFlyout: function(optionPanel, searchResultWindow, mapDiv){
+        toggleParentFlyout: function (optionPanel, searchResultWindow, mapDiv) {
             var me = this;
             var menuBtn = jQuery('.oskari-tile.search');
-            if(optionPanel.parents('.oskari-flyout').is(':visible')){
+            if (optionPanel.parents('.oskari-flyout').is(':visible')) {
                 optionPanel.parents('.oskari-flyout').removeClass('oskari-attached').addClass('oskari-closed');
                 menuBtn.removeClass('oskari-tile-attached').addClass('oskari-tile-closed');
-
             } else {
                 optionPanel.parents('.oskari-flyout').removeClass('oskari-closed').addClass('oskari-attached');
                 menuBtn.removeClass('oskari-tile-closed').addClass('oskari-tile-attached');
@@ -755,7 +750,6 @@ Oskari.clazz.define(
                 me._clearMapFromResults();
                 me._closeMapPopup();
             }
-
         },
 
         /**
@@ -764,25 +758,25 @@ Oskari.clazz.define(
          * @param  {[type]} searchResultWindow [description]
          * @return {[type]}                    [description]
          */
-         _updateMapModuleSize: function (mapDiv, searchResultWindow) {
+        _updateMapModuleSize: function (mapDiv, searchResultWindow) {
             var me = this;
 
-            if(searchResultWindow.find('div.resultList').is(":visible")){
-                mapDiv.css("margin-left",searchResultWindow.width());
-                jQuery(".oskariui-center").width(jQuery(".oskariui-center").width()-searchResultWindow.width());
-                jQuery(".fullscreenDiv").hide();
-            }else{
-                mapDiv.css("margin-left",jQuery("#maptools").width());
-                jQuery(".oskariui-center").width(jQuery(".oskariui-center").width()+searchResultWindow.width());
-                jQuery(".fullscreenDiv").show();
+            if (searchResultWindow.find('div.resultList').is(':visible')) {
+                mapDiv.css('margin-left', searchResultWindow.width());
+                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width() - searchResultWindow.width());
+                jQuery('.fullscreenDiv').hide();
+            } else {
+                mapDiv.css('margin-left', jQuery('#maptools').width());
+                jQuery('.oskariui-center').width(jQuery('.oskariui-center').width() + searchResultWindow.width());
+                jQuery('.fullscreenDiv').show();
             }
 
-            var reqBuilder = me.sandbox.getRequestBuilder(
-                 'MapFull.MapSizeUpdateRequest'
+            var reqBuilder = Oskari.requestBuilder(
+                'MapFull.MapSizeUpdateRequest'
             );
 
             if (reqBuilder) {
-                 me.sandbox.request(me, reqBuilder(true));
+                me.sandbox.request(me, reqBuilder(true));
             }
         },
 
@@ -793,9 +787,9 @@ Oskari.clazz.define(
          * @param  {[type]} layer      [description]
          * @return {[type]}            [description]
          */
-        _clearMapFromResults: function(identifier, value, layer){
+        _clearMapFromResults: function (identifier, value, layer) {
             var me = this,
-             rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
 
             me.sandbox.postRequestByName(rn, [identifier, value, layer]);
         },
@@ -804,28 +798,27 @@ Oskari.clazz.define(
          * [_getVectorLayerStyle description] Vector layer styles
          * @return {[type]} [description]
          */
-        _getVectorLayerStyle: function(){
-
+        _getVectorLayerStyle: function () {
             var featureStyle = {
                 fill: {
-                  color: 'rgb(153,204,0,0.3)',
+                    color: 'rgb(153,204,0,0.3)'
                 },
                 stroke: {
-                  color: '#FF0000',
-                  width: 1
+                    color: '#FF0000',
+                    width: 1
                 },
-                text : {
-                  scale : 1.3,
-                  fill : {
-                    color : 'rgba(0,0,0,1)'
-                  },
-                  stroke : {
-                    color : 'rgba(255,255,255,0.8)',
-                    width : 2
-                  }
+                text: {
+                    scale: 1.3,
+                    fill: {
+                        color: 'rgba(0,0,0,1)'
+                    },
+                    stroke: {
+                        color: 'rgba(255,255,255,0.8)',
+                        width: 2
+                    }
                 }
-              };
-              return featureStyle;
+            };
+            return featureStyle;
         },
         /**
          * [_zoomMapToResults description] Zooms map into results
@@ -834,65 +827,60 @@ Oskari.clazz.define(
          * @param  {[type]} tableBody [description]
          * @return {[type]}           [description]
          */
-        _zoomMapToResults: function(result, showAll, tableBody) {
+        _zoomMapToResults: function (result, showAll, tableBody) {
             var me = this;
             var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
 
             me._clearMapFromResults();
             me._closeMapPopup();
 
-            var source = new ol.source.Vector({useSpatialIndex:true});
+            var source = new olSourceVector({useSpatialIndex: true});
 
-            //Fake layer for zoomin event
-            var olLayer = new ol.layer.Vector('templayer'),
-                format = new ol.format.WKT({}),
+            // Fake layer for zoomin event
+            var olLayer = new olLayerVector('templayer'),
+                format = new olFormatWKT({}),
                 feature,
-                geometry,
-                mapMoveRequest,
                 bounds,
                 center,
                 isSelected = false;
 
-            jQuery.each(result.locations, function( i, value ){
-                if(showAll){
-                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
+            jQuery.each(result.locations, function (i, value) {
+                if (showAll) {
+                    me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id: value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                     feature = format.readFeature(value.GEOMETRY);
                     source.addFeatures([feature]);
                     olLayer.setSource(source);
                     isSelected = true;
-                }else{
-                    var row = tableBody.find("tr[name="+value.id+"]");
-                    var firstCell = row.find("td:first-child");
-                    if(firstCell.find("input").is(":checked")){
-                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id:value.id}, null, null, true, me._getVectorLayerStyle(), false]);
+                } else {
+                    var row = tableBody.find('tr[name=' + value.id + ']');
+                    var firstCell = row.find('td:first-child');
+                    if (firstCell.find('input').is(':checked')) {
+                        me.sandbox.postRequestByName(rn, [value.GEOMETRY, {id: value.id}, null, null, true, me._getVectorLayerStyle(), false]);
                         feature = format.readFeature(value.GEOMETRY);
                         source.addFeatures([feature]);
                         olLayer.setSource(source);
                         isSelected = true;
                     }
                 }
-
             });
 
-            if(isSelected){
+            if (isSelected) {
+                bounds = source.getExtent();
+                center = olExtent.getCenter(bounds);
 
-            bounds = source.getExtent();
-            center = ol.extent.getCenter(bounds);
+                var topLeft = olExtent.getTopLeft(bounds);
+                var bottomRight = olExtent.getBottomRight(bounds);
 
-            var topLeft =  ol.extent.getTopLeft(bounds);
-            var bottomRight =  ol.extent.getBottomRight(bounds);
+                var zoom = {
+                    top: topLeft[1],
+                    left: topLeft[0],
+                    right: bottomRight[0],
+                    bottom: bottomRight[1]
+                };
 
-            var zoom = {
-                top: topLeft[1],
-                left: topLeft[0],
-                right: bottomRight[0],
-                bottom: bottomRight[1]
-            }
-
-            mapmoveRequest = me.sandbox.getRequestBuilder('MapMoveRequest')(center[0], center[1], zoom);
-            me.sandbox.request(me, mapmoveRequest);
-
-            }else{
+                var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center[0], center[1], zoom);
+                me.sandbox.request(me, mapmoveRequest);
+            } else {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var okBtn = dialog.createCloseButton('OK');
                 var title = me.getLocalization('no_selected_rows_alert_title');
@@ -900,7 +888,6 @@ Oskari.clazz.define(
                 dialog.show(title, msg, [okBtn]);
                 tableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').removeClass('active');
             }
-
         },
         /**
          * [_populateResultTable description] Populate results into UI
@@ -912,9 +899,9 @@ Oskari.clazz.define(
             // row reference needs some closure magic to work here
             var closureMagic = function (scopedValue) {
                 return function () {
-                    if(resultsTableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').hasClass('active')){
+                    if (resultsTableBody.parents('.searchFromChannels_window_search_results').find('.show-on-map').hasClass('active')) {
                         me._resultClicked(scopedValue, false);
-                    }else{
+                    } else {
                         me._resultClicked(scopedValue, true);
                     }
 
@@ -931,7 +918,7 @@ Oskari.clazz.define(
             for (i = 0; i < data.length; i += 1) {
                 row = data[i];
                 resultContainer = me.templates.templateResultTableRow.clone();
-                resultContainer.attr("name",row.id);
+                resultContainer.attr('name', row.id);
                 cells = resultContainer.find('td');
                 titleCell = jQuery(cells[1]);
                 title = titleCell.find('a');
@@ -953,20 +940,20 @@ Oskari.clazz.define(
                 sandbox = me.sandbox;
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
-            if(result.zoomScale) {
-                 zoom = {scale : result.zoomScale};
+            if (result.zoomScale) {
+                zoom = {scale: result.zoomScale};
             }
 
-           sandbox.request(
+            sandbox.request(
                 me.getName(),
                 moveReqBuilder(result.lon, result.lat, zoom)
             );
 
-            if(drawVector){
+            if (drawVector) {
                 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-                sandbox.postRequestByName(rn, [result.GEOMETRY, {id:result.id}, null, 'replace', true, me._getVectorLayerStyle(), false]);
+                sandbox.postRequestByName(rn, [result.GEOMETRY, {id: result.id}, null, 'replace', true, me._getVectorLayerStyle(), false]);
             }
 
             var loc = me.getLocalization('resultBox');
@@ -977,9 +964,9 @@ Oskari.clazz.define(
                     actions: [{
                         name: loc.close,
                         type: 'link',
-                        action: function(){
+                        action: function () {
                             var rN = 'InfoBox.HideInfoBoxRequest',
-                                rB = sandbox.getRequestBuilder(rN),
+                                rB = Oskari.requestBuilder(rN),
                                 request = rB(popupId);
                             sandbox.request(me.getName(), request);
                         }
@@ -992,12 +979,12 @@ Oskari.clazz.define(
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = sandbox.getRequestBuilder(rN),
+                rB = Oskari.requestBuilder(rN),
                 request = rB(
                     popupId,
                     loc.title,
                     content,
-                    {lon: result.lon,lat: result.lat},
+                    {lon: result.lon, lat: result.lat},
                     options
                 );
 
@@ -1007,9 +994,9 @@ Oskari.clazz.define(
          * [_closeMapPopup description] Close map popup
          * @return {[type]} [description]
          */
-        _closeMapPopup: function (){
+        _closeMapPopup: function () {
             var me = this;
-            var request = me.sandbox.getRequestBuilder('InfoBox.HideInfoBoxRequest')(me.popupId);
+            var request = Oskari.requestBuilder('InfoBox.HideInfoBoxRequest')(me.popupId);
             me.sandbox.request(this, request);
         },
 
@@ -1020,7 +1007,7 @@ Oskari.clazz.define(
          */
         _showError: function (error) {
             var me = this;
-           /* me.searchPanel.hide();*/
+            /* me.searchPanel.hide(); */
             me.optionPanel.show();
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 okButton = dialog.createCloseButton('OK');
@@ -1038,13 +1025,13 @@ Oskari.clazz.define(
         * @method _sortAdvanced
         * @private
         */
-        _sortAdvanced: function(a, b){
+        _sortAdvanced: function (a, b) {
             var topicA = a.locale.name;
             var topicB = b.locale.name;
-            if(topicA === null){
+            if (topicA === null) {
                 topicA = '';
             }
-            if(topicB === null){
+            if (topicB === null) {
                 topicB = '';
             }
 
@@ -1073,8 +1060,6 @@ Oskari.clazz.define(
                 i,
                 dataField,
                 newRow,
-                newLabel,
-                value,
                 text,
                 newCheckbox,
                 newCheckboxDef;
@@ -1093,11 +1078,10 @@ Oskari.clazz.define(
             for (i = 0; i < dataFields.length; i += 1) {
                 dataField = dataFields[i];
 
-                value = dataField.id;
                 text = dataField.locale.name;
                 newCheckbox = me.templates.checkbox.clone();
                 newCheckboxDef = newCheckbox.find(':checkbox');
-                newCheckboxDef.attr('name', "channelChkBox");
+                newCheckboxDef.attr('name', 'channelChkBox');
                 newCheckboxDef.attr('value', dataField.id);
                 newCheckboxDef.prop('checked', !!dataField.isDefault);
                 newCheckbox.find('label.searchFromChannelsTypeText').append(text);
@@ -1131,10 +1115,9 @@ Oskari.clazz.define(
             data.sort(function (a, b) {
                 return me._searchResultComparator(a, b, pAttribute, pDescending);
             });
-
         },
 
-         /**
+        /**
          * @private @method _searchResultComparator
          * Compares the given attribute on given objects for sorting
          * search result objects.
@@ -1150,7 +1133,7 @@ Oskari.clazz.define(
             var nameA = a[pAttribute].toLowerCase(),
                 nameB = b[pAttribute].toLowerCase(),
                 value = 0;
-            if (nameA === nameB || 'name' === pAttribute) {
+            if (nameA === nameB || pAttribute === 'name') {
                 // Because problem with address 1 and address 10 then
                 // id are ranked right
                 nameA = a.id;

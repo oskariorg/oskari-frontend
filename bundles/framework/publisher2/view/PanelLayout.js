@@ -208,13 +208,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
                 }
             }
 
-            // Set the initial values
+            // Use current tool style as default
+            var mapToolStyle = me.mapModule.getToolStyle() || 'default';
 
+            // Set the initial values
             me.values = {
                 metadata: {
                     style: {
                         font: me.data && me.data.metadata && me.data.metadata.style && me.data.metadata.style.font ? me.data.metadata.style.font : me.initialValues.fonts[0],
-                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : me.initialValues.toolStyles[0]
+                        toolStyle: me.data && me.data.metadata && me.data.metadata.style ? me.data.metadata.style.toolStyle : mapToolStyle
                     }
                 }
             };
@@ -261,8 +263,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelLayout',
         getValues: function () {
             var me = this;
 
-            //metadata currently saved to two places. The publisher uses the values from metadata to restore a published map's state whereas a published map itself uses
-            //the values stored under mapfull's conf.
+            // metadata currently saved to two places. The publisher uses the values from metadata to restore a published map's state whereas a published map itself uses
+            // the values stored under mapfull's conf.
             me.values = {
                 metadata: {
                     style: {

@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 this.virtualVertices = [];
                 var control = this;
 
-                function collectComponentVertices(geometry) {
+                function collectComponentVertices (geometry) {
                     var i,
                         vertex,
                         component,
@@ -316,19 +316,19 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this._updateLayerOrder();
 
         switch (params.drawMode) {
-            case 'point':
-                this._pointSplit(params);
-                break;
-            case 'line':
-                this._lineSplit(params);
-                break;
-            case 'edit':
-                this._editSplit(params);
-                break;
-            case 'remove':
-                // Nothing to do
-                break;
-            default:
+        case 'point':
+            this._pointSplit(params);
+            break;
+        case 'line':
+            this._lineSplit(params);
+            break;
+        case 'edit':
+            this._editSplit(params);
+            break;
+        case 'remove':
+            // Nothing to do
+            break;
+        default:
         }
     },
 
@@ -631,7 +631,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      */
     getDistance: function (p1, p2) {
         var x1;
-        var isNumber = function isNumber(n) {
+        var isNumber = function isNumber (n) {
             return (!isNaN(parseFloat(n))) && (isFinite(n));
         };
 
@@ -844,7 +844,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             k,
             l,
             m,
-            n,
             marker = this.activeMarker,
             markers = this.markers;
 
@@ -861,14 +860,12 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         if (pInd < 0) { // This should not happen
             return;
         }
-        var remPolygon = null;
 
         // Remove the point from old polygon
         var features = this.targetLayer.features,
             fInd;
         for (i = 0; i < features.length; i += 1) {
             if (features[i].geometry.id === p[pInd].references[0]) {
-                remPolygon = features[i].geometry;
                 fInd = i;
                 break;
             }
@@ -899,7 +896,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 if (j === features[fInd].geometry.components[0].components[i].markerPoint) {
                     markerIndexes[0].push([features[fInd].geometry.components[0].components[i].markerPoint,i]);
                 }
-                }*/
+                } */
                 if (removed) {
                     break;
                 }
@@ -954,7 +951,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                     if (markerIndexes[1][k][0].id !== features[j].geometry.components[0].components[markerIndexes[1][k][1]]) {
                         markerIndexes[1][k][0] = features[j].geometry.components[0].components[markerIndexes[1][k][1]+1];
                     }
-                    }*/
+                    } */
                     break addPoint;
                 }
             }
@@ -1048,7 +1045,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * Finishes operation of geometry filtering by drawing
      */
     finishDrawFiltering: function () {
-        var evtBuilder = this._sandbox.getEventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
+        var evtBuilder = Oskari.eventBuilder('DrawFilterPlugin.FinishedDrawFilteringEvent');
         var event = evtBuilder(this.getFiltered(), this.editMode, this.creatorId);
         this._sandbox.notifyAll(event);
     },
@@ -1129,7 +1126,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                 }
             }
             // Update also the split line
-            if(me.sourceLayer.features[0].geometry) {
+            if (me.sourceLayer.features[0].geometry) {
                 var lines = me.sourceLayer.features[0].geometry.components;
                 for (i = 0; i < lines.length; i += 1) {
                     points = lines[i].components;
@@ -1854,7 +1851,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
                         clipTargetPolygons = [];
                         clipTargetPolygons.push(clipSolutionPolygons[k]);
                         for (l = 0; l < polygonIndexes.length; l += 1) {
-
                             // Check which polygon contains the hole
                             cpr = new ClipperLib.Clipper();
                             clipSubjectPolygons = [];
@@ -1906,8 +1902,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @private
      */
     _splitGeometryByLine: function (polygons, splitGeom) {
-        var me = this,
-            // Transform and scale coordinates
+        var // Transform and scale coordinates
             origin = new OpenLayers.Geometry.Point(0.0, 0.0),
             reference = [polygons.geometry.components[0].components[0].components[0].x,
                 polygons.geometry.components[0].components[0].components[0].y
@@ -1941,8 +1936,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             olLinearRingPoints = [],
             olLinearRings,
             olLineStringPoints = [],
-            olPolygon,
-
             // JSTS variables
             jstsParser = new jsts.io.OpenLayersParser(),
             jstsPoints,
@@ -1982,11 +1975,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             epsilon = 1.0e6, // about 10 cm x 10 cm
 
             // Scaling factor for integer operations
-            scale = 1,
-            marker;
-
-        // IE8 compatibility
-        this._enableIE8();
+            scale = 1;
 
         // Preprocess geometry
         var preProcessed = this.preProcessGeometry(olOldFeatures, jstsOldPolygon, jstsParser, jstsOldPolygons, finished, clipPolygon, olLinearRings, olPoints, clipPoint, clipSourcePolygons, clipHole, scale, jstsLine);
@@ -2023,96 +2012,11 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         lastIndex = postLineStrings.lastIndex;
 
         // Create boundary markers
-        var createdMarkers = this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
+        // this.createBoundaryMarkers(olSolutionLineStrings, olEndPoints, marker, olSolutionPolygons, olPolygon, olPoints, lastIndex, olPoint, sharedEdge, found);
 
         // Update boundary info
         this.updateBoundaryInfo(olNewFeatures);
         return olNewFeatures;
-    },
-
-
-    /**
-     * @method _enableIE8
-     * Enable functions needed by libraries for older browsers
-     * @private
-     */
-    _enableIE8: function () {
-        // IE8 compatibility
-        if (!Array.prototype.indexOf) {
-            Array.prototype.indexOf = function (elt /*, from*/ ) {
-                var len = this.length >>> 0;
-
-                var from = Number(arguments[1]) || 0;
-                from = (from < 0) ? Math.ceil(from) : Math.floor(from);
-                if (from < 0) {
-                    from += len;
-                }
-                for (; from < len; from += 1) {
-                    if (from in this && this[from] === elt) {
-                        return from;
-                    }
-                }
-                return -1;
-            };
-        }
-        // From https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
-        // Production steps of ECMA-262, Edition 5, 15.4.4.18
-        // Reference: http://es5.github.com/#x15.4.4.18
-        if (!Array.prototype.forEach) {
-
-            Array.prototype.forEach = function forEach(callback, thisArg) {
-                
-                var T, k;
-
-                if (this === null) {
-                    throw new TypeError('this is null or not defined');
-                }
-
-                var kValue,
-                    // 1. Let O be the result of calling ToObject passing the |this| value as the argument.
-                    O = Object(this),
-
-                    // 2. Let lenValue be the result of calling the Get internal method of O with the argument "length".
-                    // 3. Let len be ToUint32(lenValue).
-                    len = O.length >>> 0; // Hack to convert O.length to a UInt32
-
-                // 4. If IsCallable(callback) is false, throw a TypeError exception.
-                // See: http://es5.github.com/#x9.11
-                if ({}.toString.call(callback) !== '[object Function]') {
-                    throw new TypeError(callback + ' is not a function');
-                }
-
-                // 5. If thisArg was supplied, let T be thisArg; else let T be undefined.
-                if (arguments.length >= 2) {
-                    T = thisArg;
-                }
-
-                // 6. Let k be 0
-                k = 0;
-
-                // 7. Repeat, while k < len
-                while (k < len) {
-
-                    // a. Let Pk be ToString(k).
-                    //   This is implicit for LHS operands of the in operator
-                    // b. Let kPresent be the result of calling the HasProperty internal method of O with argument Pk.
-                    //   This step can be combined with c
-                    // c. If kPresent is true, then
-                    if (k in O) {
-
-                        // i. Let kValue be the result of calling the Get internal method of O with argument Pk.
-                        kValue = O[k];
-
-                        // ii. Call the Call internal method of callback with T as the this value and
-                        // argument list containing kValue, k, and O.
-                        callback.call(T, kValue, k, O);
-                    }
-                    // d. Increase k by 1.
-                    k += 1;
-                }
-                // 8. return undefined
-            };
-        }
     },
 
     /*
@@ -2225,7 +2129,6 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
         this.targetLayer.redraw();
     },
 
-
     /**
      * @method getFiltered
      * Returns filtered geometry
@@ -2325,7 +2228,7 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
      * @param {Boolean} blnEnable true to enable, false to disable
      */
     _enableGfi: function (blnEnable) {
-        var gfiReqBuilder = this._sandbox.getRequestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
+        var gfiReqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
         if (gfiReqBuilder) {
             this._sandbox.request(this.getName(), gfiReqBuilder(blnEnable));
         }
@@ -2357,8 +2260,8 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.geometryeditor.DrawFil
             p;
         this._sandbox = sandbox;
         sandbox.register(this);
-        sandbox.addRequestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
-        sandbox.addRequestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
+        sandbox.requestHandler('DrawFilterPlugin.StartDrawFilteringRequest', this.requestHandlers.startDrawFilteringHandler);
+        sandbox.requestHandler('DrawFilterPlugin.StopDrawFilteringRequest', this.requestHandlers.stopDrawFilteringHandler);
         for (p in me.eventHandlers) {
             if (me.eventHandlers.hasOwnProperty(p)) {
                 me._sandbox.registerForEventByName(me, p);

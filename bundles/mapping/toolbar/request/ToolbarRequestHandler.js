@@ -40,7 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHa
             } else if (requestOperation === 'update') {
                 this._toolbar._updateToolbar(request.getId(), request.getData());
             }
-
         },
         _handleAdd: function (sandbox, request) {
             this._toolbar.addToolButton(request.getId(), request.getGroup(), request.getConfig());

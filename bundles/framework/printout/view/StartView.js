@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             var me = this;
             var content = this.template.clone();
             this.content = content;
-            /*content.find('div.content').before(txt);*/
+            /* content.find('div.content').before(txt); */
             container.append(content);
 
             this.alert.insertTo(container);
@@ -85,6 +85,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             this.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
-
         }
     });

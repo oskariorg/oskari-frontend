@@ -19,14 +19,14 @@ Oskari.clazz.category(
             var me = this;
             // set selectedColumn in either case so render will use it immediately
             this.__selectedColumn = value;
-            if ( !me._fullFieldNames ) {
+            if (!me._fullFieldNames) {
                 return;
             }
-            var columnIndex = me._fullFieldNames.map( function( name ) {
-               return name.key;
-           }).indexOf( value );
+            var columnIndex = me._fullFieldNames.map(function (name) {
+                return name.key;
+            }).indexOf(value);
 
-            if(!this.table || columnIndex === -1) {
+            if (!this.table || columnIndex === -1) {
                 return;
             }
             // remove selection from headers
@@ -53,11 +53,11 @@ Oskari.clazz.category(
          */
         select: function (value, keepPrevious, scrollable) {
             var me = this;
-            if(!me.model) {
+            if (!me.model) {
                 return;
             }
             var isArray = Array.isArray(value);
-            if(!isArray) {
+            if (!isArray) {
                 value = [value];
             }
 
@@ -65,21 +65,21 @@ Oskari.clazz.category(
                 me.table.find('tbody tr').removeClass('selected');
             }
 
-            value.forEach(function(val) {
-                me.table.find('tbody tr[data-id="'+val+'"]').addClass('selected');
+            value.forEach(function (val) {
+                me.table.find('tbody tr[data-id="' + val + '"]').addClass('selected');
             });
 
             // Move selected rows top if configured
-            if(me.sortOptions.moveSelectedRowsTop) {
+            if (me.sortOptions.moveSelectedRowsTop) {
                 me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
             }
 
-            if(scrollable && scrollable.element) {
+            if (scrollable && scrollable.element) {
                 scrollable.element.scrollTop(0);
-                var row = scrollable.element.find('tr[data-id="'+value+'"]');
+                var row = scrollable.element.find('tr[data-id="' + value + '"]');
                 var fixTopPosition = scrollable.fixTopPosition || 0;
 
-                if(row.length > 0) {
+                if (row.length > 0) {
                     scrollable.element.scrollTop(row.position().top - fixTopPosition);
                 }
             }
@@ -136,12 +136,12 @@ Oskari.clazz.category(
          * @method @public moveSelectedRowsTop
          * @param {Boolean} move is wanted move selected rows on the top of grid?
          */
-        moveSelectedRowsTop: function(move){
+        moveSelectedRowsTop: function (move) {
             var me = this;
             me.sortOptions.moveSelectedRowsTop = !!move;
 
             // If there is sort then keep rows order when selected keep selected rows on the top
-            if(me._getSelectedRows().values && me._getSelectedRows().values.length > 0 && me.lastSort) {
+            if (me._getSelectedRows().values && me._getSelectedRows().values.length > 0 && me.lastSort) {
                 me.sortBy(me.lastSort.attr, me.lastSort.descending);
             }
             // Otherwise do only moving selected rows to top
@@ -170,14 +170,14 @@ Oskari.clazz.category(
          * @method  @private _getSelectedRows
          * @return {Object} selected elements and values {elements:[],values:[]}
          */
-        _getSelectedRows: function(){
+        _getSelectedRows: function () {
             var me = this;
             var selected = {
                 elements: [],
-                values : []
+                values: []
             };
-            if(me.table){
-                me.table.find('tr.selected').each(function(){
+            if (me.table) {
+                me.table.find('tr.selected').each(function () {
                     var el = jQuery(this);
                     selected.elements.push(el);
                     selected.values.push(el.attr('data-id'));
@@ -190,29 +190,29 @@ Oskari.clazz.category(
          * Move selected rows to top of grid
          * @method  @private _moveSelectedRowsTop
          */
-        _moveSelectedRowsTop: function(){
+        _moveSelectedRowsTop: function () {
             var me = this;
-            if(me.sortOptions.moveSelectedRowsTop) {
+            if (me.sortOptions.moveSelectedRowsTop) {
                 me.table.hide();
                 var selected = me._getSelectedRows();
-                var moveRow = function(rowEl) {
+                var moveRow = function (rowEl) {
                     me.table.prepend(rowEl);
                 };
-                selected.elements.reverse().forEach(function(el){
+                selected.elements.reverse().forEach(function (el) {
                     moveRow(el);
                 });
 
                 // Also sort model data
                 var idField = me.model.getIdField();
                 var data = [];
-                var moveData = function(item){
-                    if(selected.values.indexOf(item[idField]) > -1) {
+                var moveData = function (item) {
+                    if (selected.values.indexOf(item[idField]) > -1) {
                         data.unshift(item);
                     } else {
                         data.push(item);
                     }
                 };
-                me.model.getData().forEach(function(item){
+                me.model.getData().forEach(function (item) {
                     moveData(item);
                 });
 

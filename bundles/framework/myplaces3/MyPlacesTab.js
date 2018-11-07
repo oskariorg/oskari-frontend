@@ -139,8 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * @private
          */
         _showPlace: function (geometry, categoryId) {
-            // center map on selected place
-            var me = this;
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
             var bounds = mapModule.getBoundsFromGeoJSON(geometry);
@@ -164,7 +162,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             // focus on map
             this._showPlace(data.geometry, data.categoryId);
             // request form
-            var request = this.instance.sandbox.getRequestBuilder('MyPlaces.EditPlaceRequest')(data.id);
+            var request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
             this.instance.sandbox.request(this.instance, request);
         },
         /**
@@ -190,8 +188,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
 
                     if (isSuccess) {
                         dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                        request = me.instance.sandbox
-                            .getRequestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
+                        request = Oskari.requestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
 
                         me.instance.sandbox.request(me.instance, request);
                     } else {

@@ -71,7 +71,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.featuredata2.FeatureDataBundle",
             "src": "../../../bundles/framework/featuredata2/request/ShowFeatureDataRequestHandler.js"
         }, {
             "type": "text/css",
-            "src": "../../../bundles/framework/featuredata2/resources/css/style.css"
+            "src": "../../../bundles/framework/featuredata2/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "cs",

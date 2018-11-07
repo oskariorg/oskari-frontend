@@ -16,18 +16,18 @@ function(sandbox, mapModule) {
     this.sandbox = sandbox;
     this.mapModule = mapModule;
 }, {
-	/**
-	 * @method handleRequest
-	 * Update map
-	 * @param {Oskari.mapframework.core.Core} core
-	 * 		reference to the application core (reference sandbox core.getSandbox())
-	 * @param {Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest} request
-	 * 		request to handle
-	 */
+    /**
+     * @method handleRequest
+     * Update map
+     * @param {Oskari.mapframework.core.Core} core
+     *         reference to the application core (reference sandbox core.getSandbox())
+     * @param {Oskari.harava.bundle.havaraInfobox.request.ShowInfoBoxRequest} request
+     *         request to handle
+     */
     handleRequest : function(core, request) {
-    	var openlayersMap = this.mapModule.getMap();
-    	openlayersMap.updateSize();
-    	this.mapModule._updateDomain();
+        var openlayersMap = this.mapModule.getMap();
+        openlayersMap.updateSize();
+        this.mapModule._updateDomain();
    }
 }, {
     /**

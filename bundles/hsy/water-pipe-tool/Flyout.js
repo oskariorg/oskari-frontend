@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Flyout',
         this.tabsContainer = null;
         this._localization = this.instance.getLocalization('flyout');
     }, {
-         tabs: [{
+        tabs: [{
             'id': 'water-pipe-tool-tab',
             'clazz': 'Oskari.hsy.bundle.waterPipeTool.TagPipe'
         }],
@@ -100,7 +100,6 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Flyout',
                         return;
                     }
                     handler.apply(tabDef.instance, [event]);
-
                 }
             });
         },
@@ -160,7 +159,6 @@ Oskari.clazz.define('Oskari.hsy.bundle.waterPipeTool.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

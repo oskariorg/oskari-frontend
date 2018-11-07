@@ -7,14 +7,14 @@
  *
  * See Oskari.mapframework.bundle.maplegend.MapLegendBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.MapLegendBundleInstance',
 
     /**
      * @method create called automatically on construction
      * @static
      */
 
-    function() {
+    function () {
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -38,14 +38,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
-        setSandbox: function(sandbox) {
+        setSandbox: function (sandbox) {
             this.sandbox = sandbox;
         },
         /**
          * @method getSandbox
          * @return {Oskari.Sandbox}
          */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
 
@@ -59,7 +59,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          *      JSON object for complete data depending on localization
          *      structure and if parameter key is given
          */
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
@@ -72,7 +72,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method start
          * implements BundleInstance protocol start method
          */
-        start: function() {
+        start: function () {
             var me = this;
 
             if (me.started) {
@@ -86,14 +86,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             this.setSandbox(sandbox);
 
             sandbox.register(me);
-            Object.keys(me.eventHandlers).forEach(function(eventName) {
+            Object.keys(me.eventHandlers).forEach(function (eventName) {
                 sandbox.registerForEventByName(me, eventName);
             });
 
             if (this.isEmbedded()) {
                 this.createPlugin();
             } else {
-                //Let's extend UI
+                // Let's extend UI
                 var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
                 sandbox.request(this, request);
 
@@ -106,14 +106,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        init: function() {
+        init: function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        update: function() {
+        update: function () {
 
         },
         /**
@@ -121,15 +121,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @param {Oskari.mapframework.event.Event} event a Oskari event object
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
-        onEvent: function(event) {
-
+        onEvent: function (event) {
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -142,7 +140,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerRemoveEvent': function() {
+            'AfterMapLayerRemoveEvent': function () {
                 this.refreshUI();
             },
             /**
@@ -150,23 +148,23 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
              *
              * Calls flyouts handleLayerSelectionChanged() method
              */
-            'AfterMapLayerAddEvent': function() {
+            'AfterMapLayerAddEvent': function () {
                 this.refreshUI();
             },
             /**
              * @method AfterChangeMapLayerStyleEvent
              */
-            'AfterChangeMapLayerStyleEvent': function() {
+            'AfterChangeMapLayerStyleEvent': function () {
                 this.refreshUI();
             },
-            'AfterRearrangeSelectedMapLayerEvent': function() {
+            'AfterRearrangeSelectedMapLayerEvent': function () {
                 this.refreshUI();
             },
             /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
-            'MapLayerEvent': function(event) {
+            'MapLayerEvent': function (event) {
                 if (event.getOperation() === 'update') {
                     this.plugins['Oskari.userinterface.Flyout'].refresh();
                 }
@@ -189,10 +187,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        stop: function() {
+        stop: function () {
             var me = this;
             var sandbox = this.sandbox();
-            Object.keys(this.eventHandlers).forEach(function(eventName) {
+            Object.keys(this.eventHandlers).forEach(function (eventName) {
                 sandbox.unregisterFromEventByName(me, eventName);
             });
 
@@ -210,7 +208,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * Oskari.mapframework.bundle.maplegend.Flyout
          * Oskari.mapframework.bundle.maplegend.Tile
          */
-        startExtension: function() {
+        startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.Tile', this);
         },
@@ -219,7 +217,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * implements Oskari.userinterface.Extension protocol stopExtension method
          * Clears references to flyout and tile
          */
-        stopExtension: function() {
+        stopExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = null;
             this.plugins['Oskari.userinterface.Tile'] = null;
         },
@@ -228,27 +226,27 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * implements Oskari.userinterface.Extension protocol getPlugins method
          * @return {Object} references to flyout and tile
          */
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
         /**
          * @method getTitle
          * @return {String} localized text for the title of the component
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.getLocalization('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
-        getDescription: function() {
+        getDescription: function () {
             return this.getLocalization('desc');
         },
-        isEmbedded: function() {
+        isEmbedded: function () {
             return jQuery('#contentMap').hasClass('published');
         },
-        refreshUI: function() {
+        refreshUI: function () {
             var uicomponent = this.isEmbedded() ? this.plugin : this.plugins['Oskari.userinterface.Flyout'];
             if (uicomponent) {
                 uicomponent.refresh();
@@ -258,11 +256,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @method createUi
          * (re)creates the UI for "all layers" functionality
          */
-        createUi: function() {
+        createUi: function () {
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
-        createPlugin: function() {
+        createPlugin: function () {
             var conf = this.conf || {};
 
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin', conf, this.plugins);
@@ -272,7 +270,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
             mapmodule.startPlugin(plugin);
             this.plugin = plugin;
         },
-        stopPlugin: function() {
+        stopPlugin: function () {
             if (!this.plugin) {
                 return;
             }
@@ -285,22 +283,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
          */
-        getLayerService: function() {
+        getLayerService: function () {
             return this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         },
         /**
          * Adds tools for all layers
          */
-        _setupLayerTools: function() {
+        _setupLayerTools: function () {
             var me = this;
             // add tools for feature data layers
             var service = this.getLayerService();
             var layers = service.getAllLayers();
-            _.each(layers, function(layer) {
+            _.each(layers, function (layer) {
                 me._addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
         /**
@@ -308,7 +306,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @param  {String| Number} layerId layer to process
          * @param  {Boolean} suppressEvent true to not send event about updated layer (optional)
          */
-        _addTool: function(layer, suppressEvent) {
+        _addTool: function (layer, suppressEvent) {
             var me = this;
             var service = this.getLayerService();
             if (typeof layer !== 'object') {
@@ -319,13 +317,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
                 return;
             }
 
-
             var tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('show-layer-legend-tool');
             tool.setIconCls('show-layer-legend-tool');
             tool.setTitle(me.getLocalization().title);
             tool.setTooltip(me.getLocalization().tooltip);
-            tool.setCallback(function() {
+            tool.setCallback(function () {
                 me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'maplegend']);
             });
 
@@ -336,5 +333,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.maplegend.MapLegendBundleInstanc
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

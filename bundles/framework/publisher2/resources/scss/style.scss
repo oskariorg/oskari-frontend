@@ -221,6 +221,9 @@ div.basic_publisher {
             position: absolute;
         }
     }
+    label.oskari-languageselect {
+        clear: left;
+    }
 }
 
 div.publisher {
@@ -294,6 +297,10 @@ div#publisher-colour-inputs {
     margin-bottom: 15px;
 }
 
+div.publisher-color-picker-group-wrapper {
+    display: flex;
+}
+
 div#publisher-custom-colours {
     padding: 10px 20px;
 
@@ -302,6 +309,7 @@ div#publisher-custom-colours {
     div#publisher-custom-colours-header,
     div#publisher-custom-colours-iconcls {
         margin-bottom: 12px;
+        padding: 1%;
     }
 
     div.rgbInput {
@@ -317,20 +325,15 @@ div#publisher-custom-colours {
 
 /* I don't think this is needed anymore?
 .maincontainer {
-
     ul.selectedLayersList {
         margin-left: 0px;
-
         li {
             list-style: none;
         }
-
     }
-
     .block {
         display: block;
     }
-
 }
 */
 

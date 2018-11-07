@@ -7,7 +7,7 @@
  * See Oskari.mapframework.bundle.postprocessor.PostProcessorBundle for bundle definition.
  *
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -26,15 +26,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
         /**
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
-            var me = this;
+        'start': function () {
             var conf = this.conf;
             var sandboxName = (conf ? conf.sandbox : null) || 'sandbox';
             var sandbox = Oskari.getSandbox(sandboxName);
@@ -67,10 +66,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
             // allow the map to settle before asking for highlight. We could also wait after map move events stop coming
             // The whole feature should be rewritten using RPC and pushing the data on the map.
             // Currently it uses Oskari and transport "creatively" and isn't all that stable
-            setTimeout(function() {
+            setTimeout(function () {
                 // request for highlight image, note that the map must be in correct
                 // location BEFORE this or we get a blank image
-                var builder = sb.getEventBuilder('WFSFeaturesSelectedEvent');
+                var builder = Oskari.eventBuilder('WFSFeaturesSelectedEvent');
                 var featureIdList = [];
                 // check if the param is already an array
                 if (Object.prototype.toString.call(featureId) === '[object Array]') {
@@ -94,7 +93,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
                 dummyLayer.setOpacity(100);
                 var event = builder(featureIdList, dummyLayer, true);
                 sb.notifyAll(event);
-
             }, 500);
         },
         /**
@@ -105,56 +103,54 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          */
         _showPoints: function (points) {
             var olPoints = {
-                _points: [],
-                addPoint: function(lon, lat) {
-                    this._points.push({lon:parseFloat(lon), lat:parseFloat(lat)});
-                },
-                getBounds: function() {
-                    var top=0,
-                        left=0,
-                        bottom=0,
-                        right=0;
+                    _points: [],
+                    addPoint: function (lon, lat) {
+                        this._points.push({lon: parseFloat(lon), lat: parseFloat(lat)});
+                    },
+                    getBounds: function () {
+                        var top = 0,
+                            left = 0,
+                            bottom = 0,
+                            right = 0;
 
-                    // Calculate bbox
-                    left = this._points[0].lon;
-                    bottom = this._points[0].lat;
+                        // Calculate bbox
+                        left = this._points[0].lon;
+                        bottom = this._points[0].lat;
 
-                    for(var i=0;i<this._points.length;i++){
-                        var point = this._points[i];
-                        if(point.lon > right) {
-                            right = point.lon;
-                        }
-                        if(point.lat > top) {
-                            top = point.lat;
+                        for (var i = 0; i < this._points.length; i++) {
+                            var point = this._points[i];
+                            if (point.lon > right) {
+                                right = point.lon;
+                            }
+                            if (point.lat > top) {
+                                top = point.lat;
+                            }
+
+                            if (point.lon < left) {
+                                left = point.lon;
+                            }
+                            if (point.lat < bottom) {
+                                bottom = point.lat;
+                            }
                         }
 
-                        if(point.lon < left) {
-                            left = point.lon;
-                        }
-                        if(point.lat < bottom) {
-                            bottom = point.lat;
-                        }
+                        return {
+                            left: left,
+                            bottom: bottom,
+                            right: right,
+                            top: top
+                        };
+                    },
+                    getCentroid: function () {
+                        var bbox = this.getBounds();
+                        return {
+                            x: bbox.left + (bbox.right - bbox.left) / 2,
+                            y: bbox.bottom + (bbox.top - bbox.bottom) / 2
+                        };
                     }
-
-                    return {
-                        left: left,
-                        bottom: bottom,
-                        right: right,
-                        top: top
-                    };
                 },
-                getCentroid: function() {
-                    var bbox = this.getBounds();
-                    return {
-                        x: bbox.left + (bbox.right - bbox.left)/2,
-                        y: bbox.bottom + (bbox.top - bbox.bottom)/2
-                    };
-
-                }
-            },
                 count,
-                point,
-                olPoint;
+                point;
             for (count = 0; count < points.length; ++count) {
                 point = points[count];
                 olPoints.addPoint(point.lon, point.lat);
@@ -162,7 +158,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
             var bounds = olPoints.getBounds();
             var centroid = olPoints.getCentroid();
 
-            var rb = this.sandbox.getRequestBuilder('MapMoveRequest'),
+            var rb = Oskari.requestBuilder('MapMoveRequest'),
                 req;
             if (rb && count > 0) {
                 if (count === 1) {
@@ -181,7 +177,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
@@ -201,7 +196,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
              */
             'MapLayerEvent': function (event) {
                 // layerId in event is null for initial ajax load
-                if ('add' === event.getOperation() && !event.getLayerId()) {
+                if (event.getOperation() === 'add' && !event.getLayerId()) {
                     this._highlightFeature(this.state.highlightFeatureLayerId, this.state.highlightFeatureId);
                 }
             }
@@ -210,25 +205,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {}
+        'stop': function () {}
     }, {
         /**
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
     });

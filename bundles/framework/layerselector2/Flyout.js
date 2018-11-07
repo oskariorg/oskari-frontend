@@ -13,7 +13,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
      */
 
     function (instance) {
-        var me = this;
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -227,7 +226,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             );
 
             // Add filter tab change listener
-            me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
+            me.tabContainer.addTabChangeListener(function (previousTab, newTab) {
                 if (me._currentFilter) {
                     me.setActiveFilter(me._currentFilter);
                 }
@@ -239,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
 
             me.tabContainer.addTabChangeListener(
-                function(previousTab, newTab) {
+                function (previousTab, newTab) {
                     // Make sure this fires only when the flyout is open
                     if (!cel.parents('.oskari-flyout.oskari-closed').length) {
                         var searchInput = newTab.getContainer().find('input[type=text]');
@@ -261,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          *
          */
-        focus: function() {
+        focus: function () {
             if (this.layerTabs && this.layerTabs.length) {
                 this.layerTabs[0].focus();
             }
@@ -273,7 +272,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         populateLayers: function () {
             var me = this;
-            var sandbox = this.instance.getSandbox();
             // populate layer list
             var layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers();
             this.layerTabs.forEach(function (tab) {
@@ -302,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 groupAttr;
 
             // sort layers by grouping & name
-            layers.sort(function(a, b) {
+            layers.sort(function (a, b) {
                 return me._layerListComparator(a, b, groupingMethod);
             });
 
@@ -323,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
                 group.addLayer(layer);
             }
-            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
+            var sortedGroupList = jQuery.grep(groupList, function (group, index) {
                 return group.getLayers().length > 0;
             });
             return sortedGroupList;

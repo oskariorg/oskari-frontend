@@ -42,16 +42,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         };
         this._getIndicatorUILabels(function (options) {
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+            me._select = select;
             var dropdown = select.create(options, dropdownOptions);
             me.dropdown = dropdown;
             dropdown.css({
-                width: '100%'
+                width: '100%',
+                'max-width': '400px'
             });
             select.adjustChosen();
 
-            if (me.service.getStateService().activeIndicator) {
-                me.service.getStateService().activeIndicator.hash ? select.setValue(me.service.getStateService().activeIndicator.hash) : select.selectFirstValue();
-                me._select = select;
+            var activeIndicator = me.service.getStateService().getActiveIndicator();
+            if (activeIndicator) {
+                activeIndicator.hash ? select.setValue(activeIndicator.hash) : select.selectFirstValue();
             }
 
             container.append(dropdown);

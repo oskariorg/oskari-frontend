@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Du kan förstora förhandsgranskningsbilden genom att klicka på den.",
                 "pending": "Förhandsgransningsvyn uppdateras inom kort.",
                 "notes": {
-                    "extent": "Du kan kontrollera kartans omfattning för utskriften i förhandsgranskningsbilden.",
-                    "restriction": "Alla kartlager visas inte i förhandsgransningsvyn"
+                    "extent": "Du kan kontrollera kartans omfattning för utskriften i förhandsgranskningsbilden."
                 }
             },
             "buttons": {

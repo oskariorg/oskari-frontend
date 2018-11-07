@@ -17,14 +17,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * ========================================================== */
-! function ($) {
-
+(function ($) {
     /* TOOLTIP PUBLIC CLASS DEFINITION
      * =============================== */
 
     var Tooltip = function (element, options) {
-        this.init('oskariTooltip', element, options);
-    },
+            this.init('oskariTooltip', element, options);
+        },
         Popover = function (element, options) {
             this.init('oskariPopover', element, options);
         };
@@ -107,7 +106,7 @@
                 if (this.options.animation) {
                     $tip.addClass('fade');
                 }
-                placement = /*typeof this.options.placement == 'function' ? this.options.placement.call(this, $tip[0], this.$element[0]) : this.options.placement*/
+                placement = /* typeof this.options.placement == 'function' ? this.options.placement.call(this, $tip[0], this.$element[0]) : this.options.placement */
                     this.options.placement.apply(this.options.scope);
                 inside = /in/.test(placement);
 
@@ -148,12 +147,11 @@
                 }
 
                 $tip.css(tp).addClass(placement).addClass('in');
-
             }
         },
         isHTML: function (text) {
             // html string detection logic adapted from jQuery
-            return typeof text !== 'string' || (text.charAt(0) === "<" && text.charAt(text.length - 1) === ">" && text.length >= 3) || /^(?:[^<]*<[\w\W]+>[^>]*$)/.exec(text);
+            return typeof text !== 'string' || (text.charAt(0) === '<' && text.charAt(text.length - 1) === '>' && text.length >= 3) || /^(?:[^<]*<[\w\W]+>[^>]*$)/.exec(text);
         },
         setContent: function () {
             var $tip = this.tip(),
@@ -166,7 +164,7 @@
 
             $tip.removeClass('in');
 
-            function removeWithAnimation() {
+            function removeWithAnimation () {
                 var timeout = setTimeout(function () {
                     $tip.off($.support.transition.end).remove();
                 }, 500);
@@ -200,7 +198,8 @@
             return this.options.title.apply(this.options.scope);
         },
         tip: function () {
-            return this.$tip = this.$tip || $(this.options.template);
+            this.$tip = this.$tip || $(this.options.template);
+            return this.$tip;
         },
         validate: function () {
             if (!this.$element[0].parentNode) {
@@ -331,10 +330,9 @@
             this.data = null;
             this.shown = false;
             this.placement = 'bottom';
-
         }, {
             templates: {
-                "container": '<div class="oskari-popover-container"/>'
+                'container': '<div class="oskari-popover-container"/>'
             },
             hide: function () {
                 if (!this.shown) {
@@ -367,7 +365,6 @@
                         'trigger': 'manual',
                         'placement': me.getPlacement
                     });
-
                 } else {
                     me.data.attach(me.$container);
                 }
@@ -404,5 +401,4 @@
                 return this.placement;
             }
         });
-
-}(window.jQuery);
+}(window.jQuery));

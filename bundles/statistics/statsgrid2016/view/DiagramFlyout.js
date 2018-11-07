@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
     });
 }, {
     _template: {
-        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div> <div class="chart"> <div class="axisLabel"></div> </div></div>')
+        container: jQuery('<div class="stats-diagram-holder"><div class="chart-controls"></div><div class="oskari-datacharts"> <div class="chart"> <div class="axisLabel"></div> </div></div></div>')
     },
     setElement: function (el) {
         this.element = el;
@@ -28,17 +28,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         return this.element;
     },
     scroll: function () {
-        var me = this;
         var axisLabel = jQuery('.axisLabel');
-        jQuery(jQuery('.statsgrid-diagram-flyout > .oskari-flyoutcontentcontainer')).scroll(function () {
+        jQuery(jQuery('.statsgrid-diagram-flyout .oskari-datacharts')).scroll(function () {
             var scrollAmount = jQuery(this).scrollTop();
             // 14 is the 2% padding-bottom
-            var chartControlHeight = jQuery('.chart-controls').outerHeight() + 14;
-            if (scrollAmount > 50) {
+            if (scrollAmount >= 14) {
                 axisLabel.addClass('sticky');
                 axisLabel.css('margin-top', function () {
-                    var el = jQuery('.statsgrid-diagram-flyout > .oskari-flyouttoolbar');
-                    return scrollAmount - chartControlHeight;
+                    return scrollAmount - 15;
                 });
             } else {
                 if (axisLabel.hasClass('sticky')) {

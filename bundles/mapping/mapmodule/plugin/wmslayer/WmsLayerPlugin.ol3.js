@@ -1,3 +1,11 @@
+import olLayerTile from 'ol/layer/Tile';
+import olLayerImage from 'ol/layer/Image';
+import olProjProjection from 'ol/proj/Projection';
+import * as olProj from 'ol/proj';
+
+import OskariImageWMS from './OskariImageWMS';
+import OskariTileWMS from './OskariTileWMS';
+
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
@@ -9,13 +17,14 @@ Oskari.clazz.define(
      * @static @method create called automatically on construction
      */
     function () {
+        this._log = Oskari.log(this.getName());
     },
     {
-        __name : 'WmsLayerPlugin',
-        _clazz : 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
-        layertype : 'wmslayer',
+        __name: 'WmsLayerPlugin',
+        _clazz: 'Oskari.mapframework.mapmodule.WmsLayerPlugin',
+        layertype: 'wmslayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return 'WMS';
         },
 
@@ -34,19 +43,17 @@ Oskari.clazz.define(
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        addMapLayerToMap : function(layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!this.isLayerSupported(layer)) {
                 return;
             }
 
             var layers = [],
-                olLayers = [],
-                layerIdPrefix = 'layer_';
+                olLayers = [];
             // insert layer or sublayers into array to handle them identically
             if ((layer.isGroupLayer() || layer.isBaseLayer() || isBaseMap === true) && (layer.getSubLayers().length > 0)) {
                 // replace layers with sublayers
                 layers = layer.getSubLayers();
-                layerIdPrefix = 'basemap_';
             } else {
                 // add layer into layers
                 layers.push(layer);
@@ -61,13 +68,13 @@ Oskari.clazz.define(
                         'ID': _layer.getId(),
                         'STYLES': _layer.getCurrentStyle().getName(),
                         'FORMAT': 'image/png',
-                        'VERSION' : _layer.getVersion() || '1.3.0'
+                        'VERSION': _layer.getVersion() || '1.3.0'
                     },
                     layerParams = _layer.getParams() || {},
                     layerOptions = _layer.getOptions() || {},
                     layerAttributes = _layer.getAttributes() || undefined;
-                
-                if(!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
+
+                if (!layerOptions.hasOwnProperty('singleTile') && layerAttributes && layerAttributes.times) {
                     layerOptions.singleTile = true;
                 }
 
@@ -86,7 +93,7 @@ Oskari.clazz.define(
                 var reverseProjection;
                 if (layerAttributes && layerAttributes.reverseXY && (typeof layerAttributes.reverseXY === 'object')) {
                     var projectionCode = this.getMapModule().getProjection();
-                    //use reverse coordinate order for this layer!
+                    // use reverse coordinate order for this layer!
                     if (layerAttributes.reverseXY[projectionCode]) {
                         reverseProjection = this._createReverseProjection(projectionCode);
                     }
@@ -99,18 +106,16 @@ Oskari.clazz.define(
                     projection: reverseProjection ? reverseProjection : undefined
                 };
                 if (layerOptions.singleTile === true) {
-                    sourceImpl = ol.source.OskariImageWMS
-                        ? new ol.source.OskariImageWMS(sourceOpts) : new ol.source.ImageWMS(sourceOpts);
-                    layerImpl = new ol.layer.Image({
+                    sourceImpl = new OskariImageWMS(sourceOpts);
+                    layerImpl = new olLayerImage({
                         source: sourceImpl,
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
                     });
                     this._registerLayerEvents(layerImpl, _layer, 'image');
                 } else {
-                    sourceImpl = ol.source.OskariTileWMS
-                        ? new ol.source.OskariTileWMS(sourceOpts) : new ol.source.TileWMS(sourceOpts);
-                    layerImpl = new ol.layer.Tile({
+                    sourceImpl = new OskariTileWMS(sourceOpts);
+                    layerImpl = new olLayerTile({
                         source: sourceImpl,
                         visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
                         opacity: layer.getOpacity() / 100
@@ -118,39 +123,37 @@ Oskari.clazz.define(
                     this._registerLayerEvents(layerImpl, _layer, 'tile');
                 }
                 // Set min max Resolutions
-                if (_layer.getMaxScale() && _layer.getMaxScale() !== -1 ) {
+                if (_layer.getMaxScale() && _layer.getMaxScale() !== -1) {
                     layerImpl.setMinResolution(this.getMapModule().getResolutionForScale(_layer.getMaxScale()));
                 }
                 // No definition, if scale is greater than max resolution scale
-                if (_layer.getMinScale()  && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0] )) {
+                if (_layer.getMinScale() && _layer.getMinScale() !== -1 && (_layer.getMinScale() < this.getMapModule().getScaleArray()[0])) {
                     layerImpl.setMaxResolution(this.getMapModule().getResolutionForScale(_layer.getMinScale()));
                 }
-                this.mapModule.addLayer(layerImpl,!keepLayerOnTop);
+                this.mapModule.addLayer(layerImpl, !keepLayerOnTop);
                 // gather references to layers
                 olLayers.push(layerImpl);
 
-                this.getSandbox().printDebug("#!#! CREATED ol.layer.TileLayer for " + _layer.getId());
+                this._log.debug('#!#! CREATED ol/layer/TileLayer for ' + _layer.getId());
             }
             // store reference to layers
             this.setOLMapLayers(layer.getId(), olLayers);
-
         },
-        _registerLayerEvents: function(layer, oskariLayer, prefix){
-          var me = this;
-          var source = layer.getSource();
+        _registerLayerEvents: function (layer, oskariLayer, prefix) {
+            var me = this;
+            var source = layer.getSource();
 
-          source.on(prefix + 'loadstart', function() {
-            me.getMapModule().loadingState( oskariLayer._id, true);
-          });
+            source.on(prefix + 'loadstart', function () {
+                me.getMapModule().loadingState(oskariLayer._id, true);
+            });
 
-          source.on(prefix + 'loadend', function() {
-            me.getMapModule().loadingState( oskariLayer._id, false);
-          });
+            source.on(prefix + 'loadend', function () {
+                me.getMapModule().loadingState(oskariLayer._id, false);
+            });
 
-          source.on(prefix + 'loaderror', function() {
-            me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-          });
-
+            source.on(prefix + 'loaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
         },
         /**
          *
@@ -158,21 +161,21 @@ Oskari.clazz.define(
          *
          */
         _createReverseProjection: function (projectionCode) {
-            var originalProjection = ol.proj.get(projectionCode);
+            var originalProjection = olProj.get(projectionCode);
 
             if (!originalProjection) {
                 return null;
             }
 
-            var reverseProjection = new ol.proj.Projection({
-                "code": projectionCode,
-                "units": originalProjection.getUnits(),
-                "extent": originalProjection.getExtent(),
-                "axisOrientation": "neu",
-                "global": originalProjection.isGlobal(),
-                "metersPerUnit": originalProjection.getMetersPerUnit(),
-                "worldExtent": originalProjection.getWorldExtent(),
-                "getPointResolution": originalProjection.getPointResolution
+            var reverseProjection = new olProjProjection({
+                'code': projectionCode,
+                'units': originalProjection.getUnits(),
+                'extent': originalProjection.getExtent(),
+                'axisOrientation': 'neu',
+                'global': originalProjection.isGlobal(),
+                'metersPerUnit': originalProjection.getMetersPerUnit(),
+                'worldExtent': originalProjection.getWorldExtent(),
+                'getPointResolution': originalProjection.getPointResolution
             });
             return reverseProjection;
         },
@@ -183,62 +186,59 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.event.common.AfterChangeMapLayerStyleEvent}
          *            event
          */
-        _afterChangeMapLayerStyleEvent : function(event) {
+        _afterChangeMapLayerStyleEvent: function (event) {
             var layer = event.getMapLayer();
             var layerList = this.getOLMapLayers(layer);
-            if(!layerList) {
+            if (!layerList) {
                 return;
             }
-            layerList.forEach(function(openlayer) {
+            layerList.forEach(function (openlayer) {
                 openlayer.getSource().updateParams({
-                    styles : layer.getCurrentStyle().getName()
+                    styles: layer.getCurrentStyle().getName()
                 });
             });
         },
-        updateLayerParams: function(layer, forced, params) {
+        updateLayerParams: function (layer, forced, params) {
             var me = this,
-            	sandbox = this.getSandbox(),
-            	i,
-            	olLayerList,
-                count,
-                usePostMethod = false,
+                i,
+                olLayerList,
                 count = 0,
                 proxyUrl = null;
             if (!layer) {
                 return;
             }
 
-            if (params && layer.isLayerOfType("WMS")) {
+            if (params && layer.isLayerOfType('WMS')) {
                 olLayerList = this.mapModule.getOLMapLayers(layer.getId());
 
                 if (olLayerList) {
                     count = olLayerList.length;
                     for (i = 0; i < count; i++) {
-                    		var layerSource = olLayerList[i].getSource();
-                    		//TileWMS -> original is ol.source.TileWMS.getTileLoadFunction
-                    		if (layerSource.getTileLoadFunction && typeof(layerSource.getTileLoadFunction) === 'function') {
-                    			var originalTileLoadFunction = new ol.source.OskariTileWMS().getTileLoadFunction();
-								layerSource.setTileLoadFunction(function(image, src) {
-									if (src.length >= 2048) {
-										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
-										me._imagePostFunction(image, src, proxyUrl);
-									} else {
-										originalTileLoadFunction.apply(this, arguments);
-									}
-								});
-                    		}
-                    		//ImageWMS -> original is ol.source.ImageWMS.getImageLoadFunction
-                    		else if (layerSource.getImageLoadFunction && typeof(layerSource.getImageLoadFunction) === 'function') {
-                    			var originalImageLoadFunction = new ol.source.OskariImageWMS().getImageLoadFunction();
-								layerSource.setImageLoadFunction(function(image, src) {
-									if (src.length >= 2048) {
-										proxyUrl = sandbox.getAjaxUrl()+"id="+layer.getId()+"&action_route=GetLayerTile";
-										me._imagePostFunction(image, src, proxyUrl);
-									} else {
-										originalImageLoadFunction.apply(this, arguments);
-									}
-								});
-                    		}
+                        var layerSource = olLayerList[i].getSource();
+                        // TileWMS -> original is olSourceTileWMS.getTileLoadFunction
+                        if (layerSource.getTileLoadFunction && typeof (layerSource.getTileLoadFunction) === 'function') {
+                            var originalTileLoadFunction = new OskariTileWMS().getTileLoadFunction();
+                            layerSource.setTileLoadFunction(function (image, src) {
+                                if (src.length >= 2048) {
+                                    proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
+                                    me._imagePostFunction(image, src, proxyUrl);
+                                } else {
+                                    originalTileLoadFunction.apply(this, arguments);
+                                }
+                            });
+                        }
+                        // ImageWMS -> original is olSourceImageWMS.getImageLoadFunction
+                        else if (layerSource.getImageLoadFunction && typeof (layerSource.getImageLoadFunction) === 'function') {
+                            var originalImageLoadFunction = new OskariImageWMS().getImageLoadFunction();
+                            layerSource.setImageLoadFunction(function (image, src) {
+                                if (src.length >= 2048) {
+                                    proxyUrl = Oskari.urls.getRoute('GetLayerTile') + '&id=' + layer.getId();
+                                    me._imagePostFunction(image, src, proxyUrl);
+                                } else {
+                                    originalImageLoadFunction.apply(this, arguments);
+                                }
+                            });
+                        }
                         olLayerList[i].getSource().updateParams(params);
                     }
                 }
@@ -250,47 +250,47 @@ Oskari.clazz.define(
          *
          * http://gis.stackexchange.com/questions/175057/openlayers-3-wms-styling-using-sld-body-and-post-request
          */
-		_imagePostFunction: function(image, src, proxyUrl) {
-			var img = image.getImage();
-			if (typeof window.btoa === 'function') {
-				var xhr = new XMLHttpRequest();
-			  	//GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
-			  	var dataEntries = src.split("&");
-			  	var params = "";
-			  	//i === 0 -> the actual url, skip. Everything after that is params.
-			  	for (var i = 1 ; i< dataEntries.length ; i++){
-			    	params = params + "&"+dataEntries[i];
-			  	}
-			 	xhr.open('POST', proxyUrl, true);
+        _imagePostFunction: function (image, src, proxyUrl) {
+            var img = image.getImage();
+            if (typeof window.btoa === 'function') {
+                var xhr = new XMLHttpRequest();
+                // GET ALL THE PARAMETERS OUT OF THE SOURCE URL**
+                var dataEntries = src.split('&');
+                var params = '';
+                // i === 0 -> the actual url, skip. Everything after that is params.
+                for (var i = 1; i < dataEntries.length; i++) {
+                    params = params + '&' + dataEntries[i];
+                }
+                xhr.open('POST', proxyUrl, true);
 
-			  	xhr.responseType = 'arraybuffer';
-			  	xhr.onload = function(e) {
-		    		if (this.status === 200) {
-						var uInt8Array = new Uint8Array(this.response);
-						var i = uInt8Array.length;
-						var binaryString = new Array(i);
-						while (i--) {
-							binaryString[i] = String.fromCharCode(uInt8Array[i]);
-						}
-						var data = binaryString.join('');
-						var type = xhr.getResponseHeader('content-type');
-						if (type.indexOf('image') === 0) {
-							img.src = 'data:' + type + ';base64,' + window.btoa(data);
-						}
-					}
-				};
-				xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-				xhr.send(params);
-			} else {
-			  img.src = src;
-			}
-		}
+                xhr.responseType = 'arraybuffer';
+                xhr.onload = function (e) {
+                    if (this.status === 200) {
+                        var uInt8Array = new Uint8Array(this.response);
+                        var i = uInt8Array.length;
+                        var binaryString = new Array(i);
+                        while (i--) {
+                            binaryString[i] = String.fromCharCode(uInt8Array[i]);
+                        }
+                        var data = binaryString.join('');
+                        var type = xhr.getResponseHeader('content-type');
+                        if (type.indexOf('image') === 0) {
+                            img.src = 'data:' + type + ';base64,' + window.btoa(data);
+                        }
+                    }
+                };
+                xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+                xhr.send(params);
+            } else {
+                img.src = src;
+            }
+        }
     }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol' : ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"],
-        "extend" : ["Oskari.mapping.mapmodule.AbstractMapLayerPlugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin'],
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
     }
 );

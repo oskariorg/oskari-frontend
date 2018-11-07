@@ -96,7 +96,7 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Gender',
             'year': 'Year',
-            'regionset': 'Area',
+            'regionset': 'Regional division',
             'from': 'from',
             'to': 'to'
         },
@@ -265,6 +265,11 @@ Oskari.registerLocalization({
                 'edit': 'Edit',
                 'remove': 'Remove'
             }
+        },
+        'indicatorList': {
+            'title': 'Indicators',
+            'removeAll': 'Remove all',
+            'emptyMsg': 'No selected indicators'
         }
     }
 });

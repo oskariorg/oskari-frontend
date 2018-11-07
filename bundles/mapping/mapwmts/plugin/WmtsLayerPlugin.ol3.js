@@ -1,15 +1,19 @@
+import olSourceVector from 'ol/source/Vector';
+import olLayerVector from 'ol/layer/Vector';
+
 /**
  * A Plugin to manage WMTS OpenLayers map layers
  *
  */
 Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
     function () {
+        this._log = Oskari.log(this.getName());
     }, {
-        __name : 'WmtsLayerPlugin',
-        _clazz : 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
-        layertype : 'wmtslayer',
+        __name: 'WmtsLayerPlugin',
+        _clazz: 'Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
+        layertype: 'wmtslayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return 'WMTS';
         },
 
@@ -40,7 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */
-        addMapLayerToMap: function(layer, keepLayerOnTop, isBaseMap) {
+        addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
             if (!this.isLayerSupported(layer)) {
                 return;
             }
@@ -50,26 +54,24 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             var wmtsHolderLayer = this._getPlaceHolderWmtsLayer(layer);
             map.addLayer(wmtsHolderLayer);
             this.setOLMapLayers(layer.getId(), wmtsHolderLayer);
-            this.service.getCapabilitiesForLayer(layer, function(wmtsLayer) {
-                me.getSandbox().printDebug("[WmtsLayerPlugin] created WMTS layer " + wmtsLayer);
+            this.service.getCapabilitiesForLayer(layer, function (wmtsLayer) {
+                me._log.debug('created WMTS layer ' + wmtsLayer);
                 me._registerLayerEvents(wmtsLayer, layer);
 
                 // Get the reserved current index for wmts layer
                 var holderLayerIndex = mapModule.getLayerIndex(wmtsHolderLayer);
                 map.removeLayer(wmtsHolderLayer);
                 wmtsLayer.setVisible(layer.isVisible());
-                    if (keepLayerOnTop) {
-                        // use the index as it was when addMapLayer was called
-                        // bringing layer on top causes timing errors, because of async capabilities load
-                        map.getLayers().insertAt(holderLayerIndex, wmtsLayer);
-                    } else {
-                        map.getLayers().insertAt(0, wmtsLayer);
-                    }
-                    me.setOLMapLayers(layer.getId(), wmtsLayer);
-            }, function() {
+                if (keepLayerOnTop) {
+                    // use the index as it was when addMapLayer was called
+                    // bringing layer on top causes timing errors, because of async capabilities load
+                    map.getLayers().insertAt(holderLayerIndex, wmtsLayer);
+                } else {
+                    map.getLayers().insertAt(0, wmtsLayer);
+                }
+                me.setOLMapLayers(layer.getId(), wmtsLayer);
+            }, function () {
             });
-
-
         },
         /**
          * Reserves correct position for wmts layer, which will be added async later
@@ -79,12 +81,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @private
          */
         _getPlaceHolderWmtsLayer: function (layer) {
-
-            var layerHolder = new ol.layer.Vector({
-                    source: new ol.source.Vector({}),
-                    title: 'layer_' + layer.getId(),
-                    visible: false
-                }
+            var layerHolder = new olLayerVector({
+                source: new olSourceVector({}),
+                title: 'layer_' + layer.getId(),
+                visible: false
+            }
             );
 
             return layerHolder;
@@ -95,22 +96,21 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-        _registerLayerEvents: function(layer, oskariLayer){
-        var me = this;
-        var source = layer.getSource();
+        _registerLayerEvents: function (layer, oskariLayer) {
+            var me = this;
+            var source = layer.getSource();
 
-        source.on('tileloadstart', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), true);
-        });
+            source.on('tileloadstart', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            });
 
-        source.on('tileloadend', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), false);
-        });
+            source.on('tileloadend', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            });
 
-        source.on('tileloaderror', function() {
-          me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-        });
-
+            source.on('tileloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],

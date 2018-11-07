@@ -71,6 +71,15 @@
                 }
             }
         }, {
+            "bundlename": "maprotator",
+            "metadata": {
+                "Import-Bundle": {
+                    "maprotator": {
+                        "bundlePath": "../../../packages/mapping/ol3/"
+                    }
+                }
+            }
+        }, {
             "bundlename": "statehandler",
             "metadata": {
                 "Import-Bundle": {
@@ -226,6 +235,7 @@
             }
         }, {
             "bundlename": "admin-layerselector",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "admin-layerselector": {
@@ -238,6 +248,7 @@
             }
         }, {
             "bundlename": "admin-layerrights",
+            "lazy": true,
             "bundleinstancename": "admin-layerrights",
             "metadata": {
                 "Import-Bundle": {

@@ -12,16 +12,16 @@ Oskari.clazz.define('Oskari.harava.bundle.mapmodule.request.ToggleVisibilityHara
  * @static
  *
  * @param {Boolean}
- *            	visible is tool visible
+ *                visible is tool visible
  * @param {Boolean}
- * 				deleteAll delete all orher drawings
+ *                 deleteAll delete all orher drawings
  */
 function(visible, deleteAll) {
     this._visible = visible;
     this._deleteAll = deleteAll;
 }, {
-	/** @static @property __name request name */
-    __name : "ToggleVisibilityHaravaDrawRequest",
+    /** @static @property __name request name */
+    __name : 'ToggleVisibilityHaravaDrawRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -44,7 +44,7 @@ function(visible, deleteAll) {
         return this._deleteAll;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

@@ -10,13 +10,14 @@ Oskari.clazz.define(
      *
      */
     function () {
+        this._log = Oskari.log(this.getName());
     }, {
-        __name : 'UserLayersLayerPlugin',
-        _clazz : 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
+        __name: 'UserLayersLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.myplacesimport.plugin.UserLayersLayerPlugin',
         /** @static @property layerType type of layers this plugin handles */
-        layertype : 'userlayer',
+        layertype: 'userlayer',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return this.layertype;
         },
         /**
@@ -26,8 +27,8 @@ Oskari.clazz.define(
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+                'Oskari.mapframework.service.MapLayerService'
+            );
 
             if (!mapLayerService) {
                 return;
@@ -74,7 +75,6 @@ Oskari.clazz.define(
                     buffer: 0
                 });
 
-
             openLayer.opacity = layer.getOpacity() / 100;
             this._registerLayerEvents(openLayer, layer);
             this.getMapModule().addLayer(openLayer, !keepLayerOnTop);
@@ -82,7 +82,7 @@ Oskari.clazz.define(
             // store reference to layers
             this.setOLMapLayers(layer.getId(), openLayer);
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 '#!#! CREATED OPENLAYER.LAYER.WMS for UserLayer ' +
                 layer.getId()
             );
@@ -93,22 +93,21 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
-           var me = this;
+        _registerLayerEvents: function (layer, oskariLayer) {
+            var me = this;
 
-           layer.events.register("tileloadstart", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), true);
-           });
+            layer.events.register('tileloadstart', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), true);
+            });
 
-           layer.events.register("tileloaded", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), false);
-           });
+            layer.events.register('tileloaded', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), false);
+            });
 
-          layer.events.register("tileerror", layer, function(){
-             me.getMapModule().loadingState( oskariLayer.getId(), null, true );
-
-         });
-       },
+            layer.events.register('tileerror', layer, function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
+            });
+        },
 
         /**
          * Make use of the layer bounding box information to set appropriate map view
@@ -133,7 +132,7 @@ Oskari.clazz.define(
                 bounds = olPolygon.getBounds(),
                 centroid = olPolygon.getCentroid(),
                 epsilon = 1.0,
-                rb = sandbox.getRequestBuilder('MapMoveRequest'),
+                rb = Oskari.requestBuilder('MapMoveRequest'),
                 req;
 
             if (rb) {
@@ -147,33 +146,33 @@ Oskari.clazz.define(
                 }
             }
         },
-         /**
+        /**
          * Used when layer is modified. Just trigger an update.
          * @param  {Oskari.mapframework.domain.AbstractLayer} layer  [description]
          * @param  {Boolean} forced
          * @param  {Object} params
          */
-        updateLayerParams : function(layer, forced, params) {
-            //var openLayerId = 'layer_' + layer.getId();
-            var ol = this.getOLMapLayers(layer);
+        updateLayerParams: function (layer, forced, params) {
+            // var openLayerId = 'layer_' + layer.getId();
+            var oLayer = this.getOLMapLayers(layer);
 
-            if(!ol) {
+            if (!oLayer) {
                 return;
             }
             params = params || {};
-            if(forced) {
+            if (forced) {
                 params._ts = Date.now();
             }
 
-            if (jQuery.isArray(ol)){
-                for (i=0; i < ol.length; i+=1){
-                    if (typeof ol[i].mergeNewParams ==='function'){
-                        ol[i].mergeNewParams(params);
+            if (jQuery.isArray(oLayer)) {
+                for (var i = 0; i < oLayer.length; i += 1) {
+                    if (typeof oLayer[i].mergeNewParams === 'function') {
+                        oLayer[i].mergeNewParams(params);
                     }
                 }
             } else {
-                if (typeof ol.mergeNewParams ==='function'){
-                    ol.mergeNewParams(params);
+                if (typeof oLayer.mergeNewParams === 'function') {
+                    oLayer.mergeNewParams(params);
                 }
             }
         },

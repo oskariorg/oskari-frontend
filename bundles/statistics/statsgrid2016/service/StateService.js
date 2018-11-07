@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.activeIndicator = null;
         this.activeRegion = null;
         this.selectedSeriesValue = null;
+        this.lastSelectedClassification = {};
         this._defaults = {
             classification: {
                 count: 5,
@@ -65,6 +66,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         setRegionset: function (regionset) {
             var previousSet = this.regionset;
             this.regionset = Number(regionset);
+
+            if (isNaN(this.regionset)) {
+                this.regionset = null;
+            }
 
             // notify if regionset changed
             if (previousSet !== this.regionset) {
@@ -135,7 +140,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         getClassificationOpts: function (indicatorHash) {
             var indicator = this.getIndicator(indicatorHash) || {};
-            return jQuery.extend({}, this._defaults.classification, indicator.classification || {});
+            return jQuery.extend({}, this._defaults.classification, this.lastSelectedClassification, indicator.classification || {});
         },
         /**
          * Returns an wanted indicator.
@@ -193,6 +198,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         /**
          * Sets the active indicator and sends an event about the change
+         * Note! Timeseries relies on this so the event need to be sent even if the indicator doesn't change.
          * @param {String} indicatorHash the unique hash from selected indicators details. See getHash()
          */
         setActiveIndicator: function (indicatorHash) {
@@ -215,6 +221,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 // get a default if requested was not found
                 if (!me.activeIndicator) {
                     me.activeIndicator = me.getActiveIndicator();
+                } else {
+                    if (me.activeIndicator.classification) {
+                        me.lastSelectedClassification = me.activeIndicator.classification;
+                    }
                 }
                 // notify
                 var eventBuilder = Oskari.eventBuilder('StatsGrid.ActiveIndicatorChangedEvent');
@@ -271,7 +281,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 ind.selections[series.id] = this.seriesService.getValue();
                 // Discontinuos mode is problematic for series data,
                 // because each class has to get at least one hit -> set distinct mode.
-                ind.classification = jQuery.extend({}, indicator.classification || {}, {mode: 'distinct'});
+                ind.classification = jQuery.extend({}, ind.classification || {}, {mode: 'distinct'});
             }
             this.indicators.push(ind);
 

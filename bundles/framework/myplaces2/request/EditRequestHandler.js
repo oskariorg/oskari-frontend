@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
     function (sandbox, instance) {
         this.sandbox = sandbox;
         this.instance = instance;
+        this._log = Oskari.log('myplaces2.request.EditRequestHandler');
     }, {
         /**
          * @method handleRequest
@@ -40,7 +41,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
             }
         },
         _handleEditPlace: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] edit requested for place " + request.getId());
+            this._log.debug('edit requested for place ' + request.getId());
             var service = this.instance.getService(),
                 place = service.findMyPlace(request.getId());
             if (place) {
@@ -63,18 +64,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
             }
         },
         _handleDeletePlace: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.DeleteRequestHandler] delete requested for place " + request.getId());
+            this._log.debug('delete requested for place ' + request.getId());
             /* let's refresh map also if there */
             var categoryId = request.getId(),
                 layerId = 'myplaces_' + categoryId,
                 layer = sandbox.findMapLayerFromSelectedMapLayers(layerId);
 
             if (layer) {
-                var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
+                var updateRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest'),
                     updateRequest = updateRequestBuilder(layerId, true);
                 sandbox.request(this.instance, updateRequest);
                 // Update myplaces extra layers
-                var eventBuilder = sandbox.getEventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
+                var eventBuilder = Oskari.eventBuilder('MapMyPlaces.MyPlacesVisualizationChangeEvent');
                 if (eventBuilder) {
                     var event = eventBuilder(layerId, true);
                     sandbox.notifyAll(event);
@@ -85,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
             this.instance.getMainView().cleanupPopup();
         },
         _handleEditCategory: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] edit requested for category " + request.getId());
+            this._log.debug('edit requested for category ' + request.getId());
             var service = this.instance.getService(),
                 category = service.findCategory(request.getId());
             if (category) {
@@ -93,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
             }
         },
         _handleDeleteCategory: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] delete requested for category " + request.getId());
+            this._log.debug('delete requested for category ' + request.getId());
             var service = this.instance.getService(),
                 category = service.findCategory(request.getId());
             if (category) {
@@ -101,7 +102,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.request.EditRequestHan
             }
         },
         _handlePublishCategory: function (sandbox, request) {
-            this.sandbox.printDebug("[Oskari.mapframework.bundle.myplaces2.request.EditRequestHandler] (un/)publish requested for category " + request.getId());
+            this._log.debug('(un/)publish requested for category ' + request.getId());
             var service = this.instance.getService(),
                 category = service.findCategory(request.getId());
             if (category) {

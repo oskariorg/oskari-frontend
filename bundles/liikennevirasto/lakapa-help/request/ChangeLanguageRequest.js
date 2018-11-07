@@ -11,10 +11,10 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.request.ChangeLan
  * @static
  */
 function(language) {
-	this._language = language;
+    this._language = language;
 }, {
-	/** @static @property __name request name */
-    __name : "ChangeLanguageRequest",
+    /** @static @property __name request name */
+    __name : 'ChangeLanguageRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -30,7 +30,7 @@ function(language) {
         return this._language;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

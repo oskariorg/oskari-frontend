@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
                 deniedLayers = [],
                 selectedLayers = this.__sandbox.findAllSelectedMapLayers();
 
-            _.each(selectedLayers, function(layer) {
+            _.each(selectedLayers, function (layer) {
                 if (!me.hasPublishRight(layer)) {
                     deniedLayers.push(layer);
                 }
@@ -48,14 +48,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          * Stores references to layers that are not available for publishing
          * @param {Oskari.mapframework.domain.AbstractLayer[]} deniedList
          */
-        setNonPublisherLayers : function(deniedList) {
+        setNonPublisherLayers: function (deniedList) {
             this.disabledLayers = deniedList;
         },
         /**
          * Returns layers that are not available for publishing
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
-        getNonPublisherLayers : function() {
+        getNonPublisherLayers: function () {
             if (!this.disabledLayers) {
                 return [];
             }
@@ -67,7 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          */
         addLayers: function () {
             var sandbox = this.__sandbox;
-            _.each(this.getNonPublisherLayers(), function(layer) {
+            _.each(this.getNonPublisherLayers(), function (layer) {
                 sandbox.postRequestByName('AddMapLayerRequest', [layer.getId(), true]);
             });
         },
@@ -78,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
          */
         removeLayers: function () {
             var sandbox = this.__sandbox;
-            _.each(this.getNonPublisherLayers(), function(layer) {
+            _.each(this.getNonPublisherLayers(), function (layer) {
                 sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
             });
         }

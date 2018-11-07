@@ -1,3 +1,5 @@
+import olInteractionDragRotate from 'ol/interaction/DragRotate';
+
 Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
     function (config) {
         var me = this;
@@ -28,12 +30,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
     }, {
-        isSupported: function () {
-            return typeof ol !== 'undefined';
-        },
         handleEvents: function () {
             var me = this;
-            var DragRotate = new ol.interaction.DragRotate();
+            var DragRotate = new olInteractionDragRotate();
             this._map.addInteraction(DragRotate);
             var degrees;
             var eventBuilder = Oskari.eventBuilder('map.rotated');
@@ -70,10 +69,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
-            if (!this.isSupported() && this.hasUi()) {
-                return compass;
-            }
-
             compass.attr('title', this._locale.tooltip.tool);
 
             if (!this.hasUi()) {
@@ -88,9 +83,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         _createUI: function () {
             this._element = this._createControlElement();
-            if (this.isSupported()) {
-                this.handleEvents();
-            }
+            this.handleEvents();
             this.addToPluginContainer(this._element);
         },
         _createMobileUI: function () {
@@ -100,9 +93,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.handleEvents();
         },
         setRotation: function (deg) {
-            if (!this.isSupported()) {
-                return;
-            }
             // if deg is number then transform degrees to radians otherwise use 0
             var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
             // if deg is number use it for degrees otherwise use 0
@@ -224,4 +214,4 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-  });
+    });

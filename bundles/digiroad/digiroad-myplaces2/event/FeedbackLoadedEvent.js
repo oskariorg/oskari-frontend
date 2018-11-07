@@ -6,7 +6,7 @@ Oskari.clazz.define(
     function(features) {
         this._features = features;
     }, {
-        __name : "DigiroadMyPlaces.FeedbackLoadedEvent",
+        __name : 'DigiroadMyPlaces.FeedbackLoadedEvent',
         getName : function() {
             return this.__name;
         },

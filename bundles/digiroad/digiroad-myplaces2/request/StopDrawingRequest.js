@@ -3,9 +3,9 @@ Oskari.clazz
                 'Oskari.digiroad.myplaces.request.StopDrawingRequest',
                 function(isCancel) {
                     this._creator = null;
-                	this._isCancel = (isCancel == true);
+                    this._isCancel = (isCancel == true);
                 }, {
-                    __name : "DigiroadMyPlaces.StopDrawingRequest",
+                    __name : 'DigiroadMyPlaces.StopDrawingRequest',
                     getName : function() {
                         return this.__name;
                     },

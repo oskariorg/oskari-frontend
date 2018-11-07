@@ -1,3 +1,11 @@
+import olInteractionDragZoom from 'ol/interaction/DragZoom';
+import olInteractionDragPan from 'ol/interaction/DragPan';
+import olInteractionKeyboardPan from 'ol/interaction/KeyboardPan';
+import olInteractionKeyboardZoom from 'ol/interaction/KeyboardZoom';
+import olInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
+import olInteractionDoubleClickZoom from 'ol/interaction/DoubleClickZoom';
+import * as olEventsCondition from 'ol/events/condition';
+
 /**
  * @class Oskari.mapframework.mapmodule.ControlsPlugin
  *
@@ -18,6 +26,7 @@ Oskari.clazz.define(
     function () {
         this._clazz = 'Oskari.mapframework.mapmodule.ControlsPlugin';
         this._name = 'ControlsPlugin';
+        this.boxZoom = null;
         this.removedInteractions = [];
         this.addedInteractions = [];
     }, {
@@ -94,36 +103,27 @@ Oskari.clazz.define(
             });
             this.removedInteractions = [];
             this.addedInteractions = [];
-        },
-        disableDragPan: function () {
-            var me = this;
-            var disable = me.getMap().getInteractions().getArray().filter(function (interaction) {
-                if (interaction instanceof ol.interaction.DragZoom) {
-                    return interaction;
-                }
-                if (interaction instanceof ol.interaction.DragPan) {
-                    return interaction;
-                }
-            });
-            disable.forEach(function (toDisable) {
-                me.getMap().removeInteraction(toDisable);
-                me.removedInteractions.push(toDisable);
-            });
+            this.boxZoom = null;
         },
         mouseDragZoomInteraction: function () {
-            var boxzoom = this.getMap().getInteractions().forEach(function (interaction) {
-                if (interaction instanceof ol.interaction.DragZoom) {
-                    return interaction;
+            var me = this;
+            if (this.boxZoom) {
+                return; // button clicked again
+            }
+            this.getMap().getInteractions().forEach(function (interaction) {
+                if (interaction instanceof olInteractionDragZoom) {
+                    me.getMap().removeInteraction(interaction);
+                    me.removedInteractions.push(interaction);
                 }
             });
-            if (!boxzoom) {
-                boxzoom = new ol.interaction.DragZoom({
-                    condition: function (mapBrowserEvent) {
-                        return ol.events.condition.mouseOnly(mapBrowserEvent);
-                    }
-                });
-            }
-            this.getMap().addInteraction(boxzoom);
+
+            this.boxZoom = new olInteractionDragZoom({
+                condition: function (mapBrowserEvent) {
+                    return olEventsCondition.mouseOnly(mapBrowserEvent);
+                }
+            });
+            this.addedInteractions.push(this.boxZoom);
+            this.getMap().addInteraction(this.boxZoom);
         },
         /**
          * @private @method _createMapControls
@@ -141,7 +141,7 @@ Oskari.clazz.define(
             // Map movement/keyboard control
             if (conf.keyboardControls === false) {
                 interactions.forEach(function (interaction) {
-                    if (interaction instanceof ol.interaction.KeyboardPan || interaction instanceof ol.interaction.KeyboardZoom) {
+                    if (interaction instanceof olInteractionKeyboardPan || interaction instanceof olInteractionKeyboardZoom) {
                         kbInteractionRemove.push(interaction);
                     }
                 });
@@ -153,7 +153,7 @@ Oskari.clazz.define(
             // mouse control
             if (conf.mouseControls === false) {
                 interactions.forEach(function (interaction) {
-                    if (interaction instanceof ol.interaction.DragPan || interaction instanceof ol.interaction.MouseWheelZoom || interaction instanceof ol.interaction.DoubleClickZoom || interaction instanceof ol.interaction.DragZoom) {
+                    if (interaction instanceof olInteractionDragPan || interaction instanceof olInteractionMouseWheelZoom || interaction instanceof olInteractionDoubleClickZoom || interaction instanceof olInteractionDragZoom) {
                         mouseInteractionRemove.push(interaction);
                     }
                 });

@@ -3,7 +3,7 @@
 *
 * Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance.
 */
-Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.selected-featuredata.SelectedFeatureDataBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -89,14 +89,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 }
             }
 
-		 	var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
-                sandbox.request(me, request);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
+            sandbox.request(me, request);
 
-            var reqGetInfoResultHandler = sandbox.getRequestBuilder('GetInfoPlugin.ResultHandlerRequest')(function(content, data, formatters, params) {
+            var reqGetInfoResultHandler = Oskari.requestBuilder('GetInfoPlugin.ResultHandlerRequest')(function (content, data, formatters, params) {
                 me.resultHandler(content, data, formatters, params);
             });
             sandbox.request(me, reqGetInfoResultHandler);
-
         },
         /**
          * [resultHandler handles requests from infobox when "Go big" is pressed]
@@ -105,7 +104,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * @param  {[Object]} formatters [formatters]
          * @param  {[Object]} params     [params]
          */
-        resultHandler: function(content, data, formatters, params){
+        resultHandler: function (content, data, formatters, params) {
             // show infobox
             var me = this;
 
@@ -117,37 +116,37 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 font: params.font
             };
 
-            if(flyout.isFlyoutVisible() && content.length > 0){
+            if (flyout.isFlyoutVisible() && content.length > 0) {
                 flyout.createUI(content, data);
             } else {
-                var reqBuilder = this.getSandbox().getRequestBuilder('InfoBox.ShowInfoBoxRequest'),
+                var reqBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest'),
                     request;
 
                 if (reqBuilder) {
                     request = reqBuilder(
-                    params.infoboxId,
-                    params.title,
-                    content,
-                    data.lonlat,
-                    options
-                );
+                        params.infoboxId,
+                        params.title,
+                        content,
+                        data.lonlat,
+                        options
+                    );
 
-                var def = {
-                    name : 'selected-featuredata-btn',
-                    iconCls: 'icon-selected-featuredata',
-                    tooltip: '',
-                    styles: '',
-                    params: {
-                        content: content,
-                        data:data,
-                        formatters:formatters,
-                        params:params
-                    },
-                    callback : function(params) {
-                        flyout.createUI(params.content, params.data);
-                        Oskari.getSandbox().requestByName(me, 'userinterface.UpdateExtensionRequest', [me, 'detach']);
-                    }
-                };
+                    var def = {
+                        name: 'selected-featuredata-btn',
+                        iconCls: 'icon-selected-featuredata',
+                        tooltip: '',
+                        styles: '',
+                        params: {
+                            content: content,
+                            data: data,
+                            formatters: formatters,
+                            params: params
+                        },
+                        callback: function (params) {
+                            flyout.createUI(params.content, params.data);
+                            Oskari.getSandbox().requestByName(me, 'userinterface.UpdateExtensionRequest', [me, 'detach']);
+                        }
+                    };
 
                     request.addAdditionalTool(def);
                     this.getSandbox().request(this, request);
@@ -174,14 +173,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -201,7 +198,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     return;
                 }
                 if (event.getViewState() === 'close') {
-                     this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
+                    this.plugins['Oskari.userinterface.Flyout'].clearFlyout();
                 }
                 if (doOpen) {
                     // flyouts eventHandlers are registered
@@ -212,22 +209,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                     }
                 }
             },
-            'MapClickedEvent': function (){
-                //if show many or one accordions is clicked
-                if(jQuery('.selected_featuredata_howmany_show').attr("data-many") === "one"){
+            'MapClickedEvent': function () {
+                // if show many or one accordions is clicked
+                if (jQuery('.selected_featuredata_howmany_show').attr('data-many') === 'one') {
                     this.plugins['Oskari.userinterface.Flyout'].clearTabsLayout();
                 }
             },
-            'AfterMapLayerRemoveEvent': function(event) {
-                //get layer that was removed from layers
+            'AfterMapLayerRemoveEvent': function (event) {
+                // get layer that was removed from layers
                 var layer = event.getMapLayer(),
-                layerId = layer.getId();
+                    layerId = layer.getId();
                 this.plugins['Oskari.userinterface.Flyout'].layerRemovedOrAddedFromMapMergeTabs(layerId, true);
             },
-            'AfterMapLayerAddEvent': function(event) {
-                //get layer that was added to layers
+            'AfterMapLayerAddEvent': function (event) {
+                // get layer that was added to layers
                 var layer = event.getMapLayer(),
-                layerId = layer.getId();
+                    layerId = layer.getId();
                 this.plugins['Oskari.userinterface.Flyout'].layerRemovedOrAddedFromMapMergeTabs(layerId, false);
             }
         },
@@ -246,9 +243,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
-
 
             this.sandbox.unregister(this);
             this.started = false;
@@ -261,7 +257,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.selected-featuredata.SelectedFea
          * Oskari.mapframework.bundle.selected-featuredata.Tile
          */
         startExtension: function () {
-          	this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.Flyout', this);
+            this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create('Oskari.mapframework.bundle.selected-featuredata.Flyout', this);
         },
         /**
          * @method stopExtension

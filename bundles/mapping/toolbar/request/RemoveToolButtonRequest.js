@@ -15,41 +15,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.RemoveToolButton
  * @param {String}
  *            group identifier for organizing buttons
  */
-function(id, group, toolbarId) {
-    this._id = id;
-    this._group = group;
-    this._toolbarId = toolbarId;
-}, {
+    function (id, group, toolbarId) {
+        this._id = id;
+        this._group = group;
+        this._toolbarId = toolbarId;
+    }, {
     /** @static @property __name request name */
-    __name : "Toolbar.RemoveToolButtonRequest",
-    /**
+        __name: 'Toolbar.RemoveToolButtonRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getId
      * @return {String} identifier so we can manage the button with subsequent requests
      */
-    getId : function() {
-        return this._id;
-    },
-    /**
+        getId: function () {
+            return this._id;
+        },
+        /**
      * @method getGroup
      * @return {String} identifier for organizing buttons
      */
-    getGroup : function() {
-        return this._group;
-    },
-    /**
+        getGroup: function () {
+            return this._group;
+        },
+        /**
      * @method getGroup
      * @return {String} identifier for organizing buttons
      */
-    getToolbarId : function() {
-        return this._toolbarId;
-    }
-}, {
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        getToolbarId: function () {
+            return this._toolbarId;
+        }
+    }, {
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

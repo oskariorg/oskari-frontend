@@ -88,15 +88,15 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             viewTabs: "<li class='metadataflyout_content_tabs'></li>",
             viewTab: "<ul class='metadataflyout_content_tab'></ul>",
             titles: {
-                "abstract": "<div class='metadataflyout_content_abstract_title'></div>",
-                "jhs": "<div class='metadataflyout_content_jhs_title'></div>",
-                "inspire": "<div class='metadataflyout_content_inspire_title'></div>"
+                'abstract': "<div class='metadataflyout_content_abstract_title'></div>",
+                'jhs': "<div class='metadataflyout_content_jhs_title'></div>",
+                'inspire': "<div class='metadataflyout_content_inspire_title'></div>"
 
             },
             views: {
-                "abstract": "<div class='metadataflyout_content_abstract'></div>",
-                "jhs": "<div class='metadataflyout_content_jhs'></div>",
-                "inspire": "<div class='metadataflyout_content_inspire'></div>"
+                'abstract': "<div class='metadataflyout_content_abstract'></div>",
+                'jhs': "<div class='metadataflyout_content_jhs'></div>",
+                'inspire': "<div class='metadataflyout_content_inspire'></div>"
             }
         },
 
@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 for (t in tabTexts) {
                     tab = viewTab.clone();
 
-                    if (typeof tabTexts[t] === "string") {
+                    if (typeof tabTexts[t] === 'string') {
 
                         tab.append(tabTexts[t]);
                         tabs.append(tab);
@@ -147,7 +147,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         tab.append(text);
                         tabs.append(tab);
 
-                        tab.on('click', ({
+                        tab.on('click', {
                             viewId: t,
                             target: target
                         }, function (arg) {
@@ -243,7 +243,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          * shows metadata subset view. this changes state.
          */
         showMetadataView: function (viewId, target) {
-            this.instance.getSandbox().printDebug("ShowMetadataView " + viewId);
+            this.instance.getSandbox().printDebug('ShowMetadataView ' + viewId);
             var tabs = this.tabs,
                 views = this.views,
                 titles = this.titles,
@@ -319,11 +319,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     var newContainerPart = jQuery('<td class="metadataContent"/>');
 
                     /* hack to fix ultraloooong URLs */
-                    if (part.hasClass("MD_DigitalTransferOptions")) {
-                        newContainerPart.addClass("MD_DigitalTransferOptions");
+                    if (part.hasClass('MD_DigitalTransferOptions')) {
+                        newContainerPart.addClass('MD_DigitalTransferOptions');
                     }
 
-                    var partSplice = part.text().split("\.\n");
+                    var partSplice = part.text().split('\.\n');
                     jQuery.each(partSplice, function (nn, txtPart) {
 
                         var trimmed = jQuery.trim(txtPart);
@@ -333,7 +333,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
                         var newPart = jQuery('<div class="metadataflyout_content_section"/>');
                         if (partSplice.length > 1) {
-                            newPart.text(trimmed + ".");
+                            newPart.text(trimmed + '.');
                         } else {
                             newPart.text(trimmed);
                         }
@@ -346,8 +346,8 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 /* Let's fix HREFs to click events */
                 /* We cannot modify the source */
 
-                var links = newContent.find("a[href]"),
-                    isMetaLink = new RegExp("^\\?.*");
+                var links = newContent.find('a[href]'),
+                    isMetaLink = new RegExp('^\\?.*');
 
                 jQuery.each(links, function (index, ahref) {
                     var el = jQuery(ahref),
@@ -360,10 +360,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                         return;
                     }
 
-                    var splits = href.split("&"),
+                    var splits = href.split('&'),
                         argMap = {};
                     jQuery.each(splits, function (index, part) {
-                        var keyVal = part.split("=");
+                        var keyVal = part.split('=');
                         argMap[keyVal[0]] = keyVal[1];
                     });
 
@@ -375,7 +375,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 /* HACK END */
 
                 views[viewId].append(newContent);
-                views[viewId].css("display", "");
+                views[viewId].css('display', '');
 
                 me._updatePanel();
             }
@@ -394,7 +394,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             if (title) {
                 this.panel.setTitle(title);
             } else {
-                this.panel.setTitle("");
+                this.panel.setTitle('');
             }
         },
         /**
@@ -478,7 +478,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             this.contentState.metadata.uuid = uuid;
             this.contentState.metadata.RS_Identifier_Code = RS_Identifier_Code;
             this.contentState.metadata.RS_Identifier_CodeSpace = RS_Identifier_CodeSpace;
-            this.instance.getSandbox().printDebug("showMetadata { uuid=" + uuid + ", view=" + this.contentState.view + "}");
+            this.instance.getSandbox().printDebug('showMetadata { uuid=' + uuid + ', view=' + this.contentState.view + '}');
             this.loadMetadataJSONForState();
             this.showMetadataView(this.contentState.view);
         },

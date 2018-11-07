@@ -5,7 +5,7 @@ Oskari.clazz
             this._creator = null;
             this._isCancel = (isCancel == true);
         }, {
-            __name: "DrawFilterPlugin.StopDrawFilteringRequest",
+            __name: 'DrawFilterPlugin.StopDrawFilteringRequest',
             getName: function () {
                 return this.__name;
             },

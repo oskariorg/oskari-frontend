@@ -38,7 +38,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.downloadBasket.Bundle", function
             "src": "../../../../bundles/framework/download-basket/Tile.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/download-basket/resources/css/style.css"
+            "src": "../../../../bundles/framework/download-basket/resources/scss/style.scss"
         }],
 
         "locales": [{

@@ -39,7 +39,7 @@ Oskari.clazz.define("Oskari.admin.bundle.admin.HierarchicalLayerListBundle",
                 "src": "../../../../bundles/admin/admin-hierarchical-layerlist/components/Layer.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/css/style.css"
+                "src": "../../../../bundles/admin/admin-hierarchical-layerlist/resources/scss/style.scss"
             }],
             "locales": [
                 {

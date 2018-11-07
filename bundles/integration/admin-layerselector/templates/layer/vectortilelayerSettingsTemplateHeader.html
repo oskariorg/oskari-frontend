@@ -1,0 +1,16 @@
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label for="add-layer-url" class="add-layer-label" title="<%= instance.getLocalization('admin').wmsInterfaceAddressDesc %>"><%= instance.getLocalization('admin').wmsInterfaceAddress %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="40" id="add-layer-url" class="add-layer-input long" required><%= model.getInterfaceUrl() %></textarea>
+    </div>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').options %>"><%= instance.getLocalization('admin').options %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <% var options = _.isEmpty(model.getOptions()) ? "" : JSON.stringify(model.getOptions()); %>
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options" 
+            placeholder="<%- instance.getLocalization('admin').mvtilesOptionsDesc %>"><%=options%></textarea>
+    </div>
+</div>

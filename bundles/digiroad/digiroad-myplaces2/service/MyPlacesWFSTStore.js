@@ -44,47 +44,47 @@ function(url, uuid) {
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "SEGMENTIT_UUDET",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'SEGMENTIT_UUDET',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['edited_elements'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "LIIKENNE_ELEMENTTI_MUUTOS",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'LIIKENNE_ELEMENTTI_MUUTOS',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['edited_segments'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "SEGMENTTI_MUUTOS",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'SEGMENTTI_MUUTOS',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['feedback_area'] = new OpenLayers.Protocol.WFS({
             version : '1.1.0',
             srsName : 'EPSG:3067',
             geometryName : 'GEOMETRY',
-            featureType : "PALAUTE",
-            featureNS: "http://localhost/LiVi",
-            featurePrefix: "LiVi",
-            outputFormat: "json",
+            featureType : 'PALAUTE',
+            featureNS: 'http://localhost/LiVi',
+            featurePrefix: 'LiVi',
+            outputFormat: 'json',
             url : url
         });
         this.protocols['turning_restrictions'] = new OpenLayers.Protocol.WFS({
             version: '1.1.0',
             srsName: 'EPSG:3067',
             geometryName: 'GEOMETRY',
-            featureType: "KAANTYMISMAARAYS_UUDET",
+            featureType: 'KAANTYMISMAARAYS_UUDET',
             featureNS: 'http://localhost/LiVi',
             featurePrefix: 'LiVi',
             outputFormat: 'json',
@@ -99,22 +99,22 @@ function(url, uuid) {
      * Removes prefix #-character if present
      */
     _formatColorFromServer : function(color) {
-    	if(color && color.charAt(0) == '#') {
-    		return color.substring(1);
-    	}
-    	return color;
-  	},
+        if(color && color.charAt(0) == '#') {
+            return color.substring(1);
+        }
+        return color;
+      },
     /**
      * @method  _prefixColorForServer
      * @private
      * Adds prefix #-character if not present
      */
     _prefixColorForServer : function(color) {
-    	if(color.charAt(0) != '#') {
-    		return '#' + color;
-    	}
-    	return color;
-  	},
+        if(color.charAt(0) != '#') {
+            return '#' + color;
+        }
+        return color;
+      },
 
     /**
      * @method _parseNumericId
@@ -141,7 +141,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -167,9 +167,9 @@ function(url, uuid) {
         var uuid = this.uuid;
         var feats = response.features;
         if (feats == null || feats.length == 0) {
-	        if (cb) {
-	            cb();
-	        }
+            if (cb) {
+                cb();
+            }
             return;
         }
 
@@ -316,9 +316,9 @@ function(url, uuid) {
         var filter = this._createUuidFidFilter([fid]);
 
         p.filterDelete(filter, {
-        	callback: function(resp) {
-        		me._handleDeleteMyPlacesResponse(resp, list, callback);
-        	}
+            callback: function(resp) {
+                me._handleDeleteMyPlacesResponse(resp, list, callback);
+            }
         });
     },
 
@@ -356,7 +356,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -440,9 +440,9 @@ function(url, uuid) {
 
         var me = this;
         p.commit(features, {
-        	headers: {
-        		"Content-Type": "application/xml; charset=utf-8"
-        	},
+            headers: {
+                'Content-Type': 'application/xml; charset=utf-8'
+            },
             callback : function(response) {
                 me._handleCommitEditedFeaturesResponse(response, p, uuid, callback);
             }
@@ -480,13 +480,13 @@ function(url, uuid) {
         var filter = this._createUuidFidFilter([fid]);
 
         p.filterDelete(filter, {
-        	callback: function(resp) {
-        		if(resp.error) {
-        			callback(false);
-        		} else {
-        			callback(true);
-        		}
-        	}
+            callback: function(resp) {
+                if(resp.error) {
+                    callback(false);
+                } else {
+                    callback(true);
+                }
+            }
         });
     },
 
@@ -500,7 +500,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -543,9 +543,9 @@ function(url, uuid) {
         features.push(feat);
 
         p.commit(features, {
-        	headers: {
-        		"Content-Type": "application/xml; charset=utf-8"
-        	},
+            headers: {
+                'Content-Type': 'application/xml; charset=utf-8'
+            },
             callback : function(response) {
                 me._handleCommitFeedbackResponse(response, callback);
             }
@@ -598,7 +598,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : uuid.toString()
         });
 
@@ -646,7 +646,7 @@ function(url, uuid) {
     _createUuidFidFilter: function(fids) {
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "KAYTTAJA_ID",
+            property : 'KAYTTAJA_ID',
             value : this.uuid
         });
         var fidFilter = new OpenLayers.Filter.FeatureId({

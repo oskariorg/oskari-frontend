@@ -13,9 +13,8 @@
  * Inherits from: - <OpenLayers.Strategy>
  */
 
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrategy',
     function (options) {
-
         this.debugGridFeatures = true;
 
         this.options = options;
@@ -37,7 +36,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
         }
 
         this.active = false;
-
     }, {
 
         getGrid: function () {
@@ -63,7 +61,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                 this.layer.destroyFeatures(tileFeatures);
             }
             this.tileQueue.flushQueue();
-
         },
 
         /**
@@ -93,7 +90,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             this.active = true;
 
             this.grid = Oskari.clazz.create(
-                "Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid", {
+                'Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesGrid', {
                     map: this.layer.map,
                     layer: this.layer,
                     maxExtent: this.layer.map.getMaxExtent(),
@@ -101,7 +98,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
 
                 });
             this.layer.events.on({
-                "refresh": this.updateRefresh,
+                'refresh': this.updateRefresh,
                 scope: this
             });
 
@@ -120,7 +117,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             }
 
             this.layer.events.un({
-                "refresh": this.update,
+                'refresh': this.update,
                 scope: this
             });
             this.grid.destroy();
@@ -154,7 +151,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                 return;
             }
             this.triggerRead();
-
         },
 
         /**
@@ -177,9 +173,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          * the right thing to do
          */
         triggerUnload: function (bounds) {
-
             this.layer.destroyFeatures();
-
         },
 
         /**
@@ -189,7 +183,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
          * object returned by the layer protocol.
          */
         triggerRead: function () {
-
             var gridGrid = this.grid.grid;
             var gridFeatures = [];
             var debugGridFeatures = this.debugGridFeatures;
@@ -204,49 +197,45 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
                         bottom: bs.bottom
                     };
 
-
                     // just for debugging
                     //  gridcalc bundle supports this as well
                     var boundsFeature = null;
                     if (debugGridFeatures) {
                         var ptFromA = new
-                        OpenLayers.Geometry.Point(bs.left, bs.bottom);
+                            OpenLayers.Geometry.Point(bs.left, bs.bottom);
                         var
-                        ptToA = new OpenLayers.Geometry.Point(bs.right,
-                            bs.top);
+                            ptToA = new OpenLayers.Geometry.Point(bs.right,
+                                bs.top);
 
                         var ptFromB = new
-                        OpenLayers.Geometry.Point(bs.left, bs.top);
+                            OpenLayers.Geometry.Point(bs.left, bs.top);
                         var ptToB =
                             new OpenLayers.Geometry.Point(bs.right, bs.bottom);
                         var boundGeomArea = new
-                        OpenLayers.Geometry.LineString([ptFromA, ptToB,
-                            ptToA, ptFromB, ptFromA
-                        ]);
+                            OpenLayers.Geometry.LineString([ptFromA, ptToB,
+                                ptToA, ptFromB, ptFromA
+                            ]);
                         boundsFeature = new
-                        OpenLayers.Feature.Vector(boundGeomArea, {
-                            featureClassName: this.CLASS_NAME,
-                            description: ""
-                        });
+                            OpenLayers.Feature.Vector(boundGeomArea, {
+                                featureClassName: this.CLASS_NAME,
+                                description: ''
+                            });
                         boundsFeature.renderIntent =
-                            "tile";
+                            'tile';
                         gridFeatures.push(boundsFeature);
                     }
                     var qObj = Oskari.clazz.create(
-                        "Oskari.mapframework.bundle.mapwfs2.domain.QueuedTile", {
+                        'Oskari.mapframework.bundle.mapwfs2.domain.QueuedTile', {
                             bounds: tileBounds,
                             tileFeature: boundsFeature
                         });
                     this.tileQueue.pushJob(qObj);
-
                 }
             }
 
             if (debugGridFeatures) {
                 this.layer.addFeatures(gridFeatures);
             }
-
-
         },
 
         /**
@@ -265,5 +254,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.QueuedTilesStrate
             }
         },
 
-        CLASS_NAME: "NLSFI.OpenLayers.Strategy.QueuedTilesStrategy"
+        CLASS_NAME: 'NLSFI.OpenLayers.Strategy.QueuedTilesStrategy'
     });

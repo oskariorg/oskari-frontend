@@ -67,7 +67,7 @@ function(url, uuid) {
         var uuid = this.uuid;
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
+            property : 'uuid',
             value : uuid
         });
         var p = this.protocols['categories'];
@@ -110,14 +110,14 @@ function(url, uuid) {
 
             var category = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.model.MyPlacesCategory');
             category.setId(id);
-            category.setDefault("true" === featAtts['default']);
+            category.setDefault('true' === featAtts['default']);
             category.setName(featAtts['category_name']);
             category.setLineWidth(featAtts['stroke_width']);
-            category.setLineColor(this._formatColorFromServer(featAtts['stroke_color']));
+            category.setLineColor(featAtts['stroke_color']);
             category.setAreaLineWidth(featAtts['border_width']);
-            category.setAreaLineColor(this._formatColorFromServer(featAtts['border_color']));
-            category.setAreaFillColor(this._formatColorFromServer(featAtts['fill_color']));
-            category.setDotColor(this._formatColorFromServer(featAtts['dot_color']));
+            category.setAreaLineColor(featAtts['border_color']);
+            category.setAreaFillColor(featAtts['fill_color']);
+            category.setDotColor(featAtts['dot_color']);
             category.setDotSize(featAtts['dot_size']);
             category.setUUID(uuid);
             if(featAtts['publisher_name']) {
@@ -133,28 +133,6 @@ function(url, uuid) {
         }
 
     },
-    /**
-     * @method  _formatColorFromServer
-     * @private
-     * Removes prefix #-character if present
-     */
-    _formatColorFromServer : function(color) {
-    	if(color.charAt(0) == '#') {
-    		return color.substring(1);
-    	}
-    	return color;
-  	},
-    /**
-     * @method  _prefixColorForServer
-     * @private
-     * Adds prefix #-character if not present
-     */
-    _prefixColorForServer : function(color) {
-    	if(color.charAt(0) != '#') {
-    		return '#' + color;
-    	}
-    	return color;
-  	},
 
     /**
      * @method commitCategories
@@ -177,11 +155,11 @@ function(url, uuid) {
                 'category_name' : m.getName(),
                 'default' : m.isDefault(),
                 'stroke_width' : m.getLineWidth(),
-                'stroke_color' : this._prefixColorForServer(m.getLineColor()),
+                'stroke_color' : m.getLineColor(),
                 'border_width' : m.getAreaLineWidth(),
-                'border_color' : this._prefixColorForServer(m.getAreaLineColor()),
-                'fill_color' : this._prefixColorForServer(m.getAreaFillColor()),
-                'dot_color' : this._prefixColorForServer(m.getDotColor()),
+                'border_color' : m.getAreaLineColor(),
+                'fill_color' : m.getAreaFillColor(),
+                'dot_color' : m.getDotColor(),
                 'dot_size' : m.getDotSize(),
                 'uuid' : uuid
             };
@@ -320,7 +298,7 @@ function(url, uuid) {
 
         var uuidFilter = new OpenLayers.Filter.Comparison({
             type : OpenLayers.Filter.Comparison.EQUAL_TO,
-            property : "uuid",
+            property : 'uuid',
             value : uuid
         });
 
@@ -346,9 +324,9 @@ function(url, uuid) {
         var uuid = this.uuid;
         var feats = response.features;
         if (feats == null || feats.length == 0) {
-	        if (cb) {
-	            cb();
-	        }
+            if (cb) {
+                cb();
+            }
             return;
         }
 
@@ -395,7 +373,7 @@ function(url, uuid) {
             type : OpenLayers.Filter.Logical.AND,
             filters : [new OpenLayers.Filter.Comparison({
                 type : OpenLayers.Filter.Comparison.EQUAL_TO,
-                property : "uuid",
+                property : 'uuid',
                 value : uuid
             }), new OpenLayers.Filter.FeatureId({
                 fids : idList

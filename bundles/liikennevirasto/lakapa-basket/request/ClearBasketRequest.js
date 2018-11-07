@@ -12,8 +12,8 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.ClearBasketRequest',
  */
 function() {
 }, {
-	/** @static @property __name request name */
-    __name : "ClearBasketRequest",
+    /** @static @property __name request name */
+    __name : 'ClearBasketRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -22,7 +22,7 @@ function() {
         return this.__name;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

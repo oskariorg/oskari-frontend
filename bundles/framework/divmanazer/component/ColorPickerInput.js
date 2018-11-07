@@ -11,9 +11,9 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
      */
     function (options) {
         var me = this;
-        
+
         if (!options) {
-            options = {}
+            options = {};
         }
 
         me._clazz = 'Oskari.userinterface.component.ColorPickerInput';
@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
         me._element.appendChild(me._input);
         me._element.appendChild(me._titleEl);
 
-        me._element.className = 'oskari-formcomponent oskari-colorpickerinput';
+        me._element.className = options.className ? options.className : 'oskari-formcomponent oskari-colorpickerinput';
         me._input.type = 'text';
 
         me._input.onchange = function () {
@@ -36,21 +36,22 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
 
         me._colorPickerOptions = {
             color: '#818282',
-            preferredFormat: 'hex',
+            preferredFormat: 'rgb',
+            showInput: true,
             clickoutFiresChange: true,
             chooseText: Oskari.getMsg('DivManazer', 'buttons.ok'),
             cancelText: '',
             localStorageKey: 'colorpicker',
             showPalette: true,
-            hideAfterPaletteSelect:true,
+            hideAfterPaletteSelect: true,
             showAlpha: false,
             palette: [
-                ['#ffffff','#666666'],
-                ['#ffde00','#f8931f'],
-                ['#ff3334','#bf2652'],
-                ['#000000','#cccccc'],
-                ['#652d90','#3233ff'],
-                ['#26bf4b','#00ff01']
+                ['#ffffff', '#666666'],
+                ['#ffde00', '#f8931f'],
+                ['#ff3334', '#bf2652'],
+                ['#000000', '#cccccc'],
+                ['#652d90', '#3233ff'],
+                ['#26bf4b', '#00ff01']
             ],
             maxSelectionSize: 2
         };
@@ -138,7 +139,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
         },
 
         getValue: function () {
-            return jQuery(this._input).spectrum('get').toHexString();
+            return jQuery(this._input).spectrum('get') != null ? jQuery(this._input).spectrum('get').toHexString() : null;
         },
 
         /**
@@ -153,8 +154,16 @@ Oskari.clazz.define('Oskari.userinterface.component.ColorPickerInput',
          */
         _setVisibleImpl: function () {
             this.getElement().style.display = this.isVisible() ? '' : 'none';
+        },
+
+        /**
+         * @method reflow
+         * Resets the positioning of the container element.
+         */
+        reflow: function () {
+            jQuery(this._input).spectrum('reflow');
         }
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

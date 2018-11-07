@@ -78,7 +78,7 @@ Oskari.clazz.define(
                 this.listeners[i](geometry);
             }
             // create event
-            event = this.getSandbox().getEventBuilder(
+            event = Oskari.eventBuilder(
                 'Metadata.MapSelectionEvent'
             )(geometry);
             this.getSandbox().notifyAll(event);
@@ -124,12 +124,12 @@ Oskari.clazz.define(
             me.drawLayer = new OpenLayers.Layer.Vector(
                 'Metadata Draw Layer',
                 {
-                    /*style: {
+                    /* style: {
                      strokeColor: "#ff00ff",
                      strokeWidth: 3,
                      fillOpacity: 0,
                      cursor: "pointer"
-                     },*/
+                     }, */
                     eventListeners: {
                         featuresadded: function (layer) {
                             // send an event that the drawing has been completed

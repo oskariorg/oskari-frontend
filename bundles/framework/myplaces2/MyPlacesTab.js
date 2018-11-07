@@ -77,14 +77,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
 
                 var editLinkClosure = function (id) {
                     return function () {
-                        var request = me.instance.sandbox.getRequestBuilder('MyPlaces.EditCategoryRequest')(id);
+                        var request = Oskari.requestBuilder('MyPlaces.EditCategoryRequest')(id);
                         me.instance.sandbox.request(me.instance, request);
                         return false;
                     };
                 };
                 var deletelinkClosure = function (id) {
                     return function () {
-                        var request = me.instance.sandbox.getRequestBuilder('MyPlaces.DeleteCategoryRequest')(id);
+                        var request = Oskari.requestBuilder('MyPlaces.DeleteCategoryRequest')(id);
                         me.instance.sandbox.request(me.instance, request);
                         return false;
                     };
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                         this.tabsContainer.addPanel(panel);
                         this.tabPanels[id] = panel;
                     } else {
-                        //lets set a name for the panel
+                        // lets set a name for the panel
                         panel.setTitle(categories[i].name);
                         // update panel graphics
                         me.tabsContainer.updatePanel(panel);
@@ -124,7 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     deleteLink.append(this.loc('tab.deleteCategory'));
                     deleteLink.on('click', deletelinkClosure(id));
                     panel.getContainer().append(deleteLink);
-
                 }
                 this._removeObsoleteCategories();
 
@@ -150,13 +149,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             var me = this,
                 center = geometry.getCentroid(),
                 bounds = me._fitBounds(geometry.getBounds()),
-                mapmoveRequest = this.instance.sandbox.getRequestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+                mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
             var layerId = 'myplaces_' + categoryId,
                 layer = this.instance.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
-                var request = this.instance.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+                var request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
                 this.instance.sandbox.request(this.instance, request);
             }
         },
@@ -170,7 +169,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             // focus on map
             this._showPlace(data.geometry, data.categoryId);
             // request form
-            var request = this.instance.sandbox.getRequestBuilder('MyPlaces.EditPlaceRequest')(data.id);
+            var request = Oskari.requestBuilder('MyPlaces.EditPlaceRequest')(data.id);
             this.instance.sandbox.request(this.instance, request);
         },
         /**
@@ -196,8 +195,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
 
                     if (isSuccess) {
                         dialog.show(me.loc('tab.notification.delete.title'), me.loc('tab.notification.delete.success'));
-                        request = me.instance.sandbox
-                            .getRequestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
+                        request = Oskari.requestBuilder('MyPlaces.DeletePlaceRequest')(data.categoryId);
 
                         me.instance.sandbox.request(me.instance, request);
                     } else {
@@ -225,11 +223,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             }
             var olClass = geometry.CLASS_NAME,
                 ret = null;
-            if (('OpenLayers.Geometry.MultiPoint' === olClass) || ('OpenLayers.Geometry.Point' === olClass)) {
+            if ((olClass === 'OpenLayers.Geometry.MultiPoint') || (olClass === 'OpenLayers.Geometry.Point')) {
                 ret = 'point';
-            } else if (('OpenLayers.Geometry.MultiLineString' === olClass) || ('OpenLayers.Geometry.LineString' === olClass)) {
+            } else if ((olClass === 'OpenLayers.Geometry.MultiLineString') || (olClass === 'OpenLayers.Geometry.LineString')) {
                 ret = 'line';
-            } else if (('OpenLayers.Geometry.MultiPolygon' === olClass) || ('OpenLayers.Geometry.Polygon' === olClass)) {
+            } else if ((olClass === 'OpenLayers.Geometry.MultiPolygon') || (olClass === 'OpenLayers.Geometry.Polygon')) {
                 ret = 'area';
             }
             return ret;
@@ -374,14 +372,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @method bindEvents
@@ -397,7 +393,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
                     sandbox.registerForEventByName(this, p);
                 }
             }
-
         },
         /**
          * @method unbindEvents
@@ -415,7 +410,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
             }
         },
 
-        _informOfMaxFeatures: function(container) {
+        _informOfMaxFeatures: function (container) {
             var alert = Oskari.clazz.create('Oskari.userinterface.component.Alert');
             alert.insertTo(container);
             alert.setContent(this.loc('tab.maxFeaturesExceeded'));
@@ -428,10 +423,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.MyPlacesTab',
          * TODO: maybe config for expansion frame size
          */
         _fitBounds: function (gbounds) {
-
             if (gbounds.bottom === gbounds.top &&
-                gbounds.left === gbounds.right)
-            {
+                gbounds.left === gbounds.right) {
                 gbounds.bottom = gbounds.bottom - 100;
                 gbounds.left = gbounds.left - 100;
                 gbounds.top = gbounds.top + 100;

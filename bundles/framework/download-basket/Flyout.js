@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
             tabsContainer.addPanel(me.instance.basket);
             tabsContainer.insertTo(me.container);
         },
+
         /**
          * Handles tab changes
          * @method tabChanged
@@ -78,8 +79,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
          * @param  {Object}   current  current tab
          */
         tabChanged: function(previous, current){
-            if(current.getId() === 'download-basket-tab'){
+            if(current.getId() === 'download-basket-tab' && current.getId() !== previous.getId()) {
                 current.createBasket();
+            } else if(previous !== null && previous.getId() === 'download-basket-tab' && current.getId() !== 'download-basket-tab') {
+                previous.removePopup();
             }
         },
 
@@ -157,7 +160,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
         /**
          * @method refresh

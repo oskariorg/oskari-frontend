@@ -28,14 +28,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.ZoomToFeatures
          * @method getLayer
          * @return {Object} layer
          */
-        getLayer: function(){
+        getLayer: function () {
             return this._layer;
         },
         /**
          * @method getOptions
          * @return {Object} options
          */
-        getOptions: function(){
+        getOptions: function () {
             return this._options;
         }
     }, {

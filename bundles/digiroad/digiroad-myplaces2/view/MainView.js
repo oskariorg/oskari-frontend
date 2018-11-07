@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.myplaces2.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.digiroad.bundle.myplaces2.view.MainView",
+Oskari.clazz.define('Oskari.digiroad.bundle.myplaces2.view.MainView',
 
 /**
  * @method create called automatically on construction
@@ -149,9 +149,9 @@ function(instance) {
         if(place && !drawMode) {
             drawMode = me._getDrawModeFromGeometry(place.getGeometry());
         }
-        if(drawMode === "line") {
+        if(drawMode === 'line') {
             this.form = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.view.PlaceForm', this.instance);
-        } else if(drawMode === "area" || drawMode === "point") {
+        } else if(drawMode === 'area' || drawMode === 'point') {
             this.form = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.view.FeedbackForm', this.instance);
         }
         if(place) {
@@ -160,10 +160,10 @@ function(instance) {
                     id: place.getId()
                 }
             };
-            if(drawMode === "line") {
+            if(drawMode === 'line') {
                 param.place.dyntype = place.getDynType();
                 param.place.dynvalue = place.getDynValue();
-            } else if(drawMode === "area" || drawMode === "point") {
+            } else if(drawMode === 'area' || drawMode === 'point') {
                 param.place.name = place.getName();
                 param.place.description = place.getDescription();
             }
@@ -237,15 +237,15 @@ function(instance) {
     },
     _showValidationErrorMessage : function(errors) {
         var loc = this.instance.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = dialog.createCloseButton(loc.buttons.ok);
-    	var content = jQuery('<ul></ul>');
-    	for(var i = 0 ; i < errors.length; ++i) {
-    		var row = jQuery('<li></li>');
-    		row.append(errors[i]['error'])
-    		content.append(row);
-    	}
-    	dialog.show(loc.validation.title, content, [okBtn]);
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = dialog.createCloseButton(loc.buttons.ok);
+        var content = jQuery('<ul></ul>');
+        for(var i = 0 ; i < errors.length; ++i) {
+            var row = jQuery('<li></li>');
+            row.append(errors[i]['error'])
+            content.append(row);
+        }
+        dialog.show(loc.validation.title, content, [okBtn]);
     },
     /**
      * @method _saveForm
@@ -264,9 +264,9 @@ function(instance) {
 
         // validation
         var errors = null;
-        if(drawMode === "line") {
+        if(drawMode === 'line') {
             errors = this._validateForm(formValues);
-        } else if(drawMode === "area" || drawMode === "point") {
+        } else if(drawMode === 'area' || drawMode === 'point') {
             errors = this._validateFeedbackForm(formValues);
         }
         if(errors.length != 0) {
@@ -288,7 +288,7 @@ function(instance) {
         if(!values) {
             // should not happen
             var loc = me.instance.getLocalization('notification')['error'];
-    		me.instance.showMessage(loc.title, loc.savePlace);
+            me.instance.showMessage(loc.title, loc.savePlace);
             return;
         }
         var place = Oskari.clazz.create('Oskari.digiroad.bundle.myplaces2.model.MyPlace');
@@ -296,10 +296,10 @@ function(instance) {
             place = this.instance.getService().findMyPlace(values.id);
         }
         place.setId(values.id);
-        if(drawMode === "line") {
+        if(drawMode === 'line') {
             place.setDynType(values.dyntype);
             place.setDynValue(values.dynvalue);
-        } else if(drawMode === "area" || drawMode === "point") {
+        } else if(drawMode === 'area' || drawMode === 'point') {
             place.setName(values.name);
             place.setDescription(values.description);
         }
@@ -310,8 +310,8 @@ function(instance) {
         var serviceCallback = function(blnSuccess, model, blnNew) {
             if(blnSuccess) {
                 // add map layer to map (we could check if its already there but core will handle that)
-                var layerId = drawMode === "line" ? "uudet_kohteet" : "palautekuviot";
-				var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
+                var layerId = drawMode === 'line' ? 'uudet_kohteet' : 'palautekuviot';
+                var requestBuilder = sandbox.getRequestBuilder('AddMapLayerRequest');
                 var updateRequestBuilder = sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')
 
                 var request = requestBuilder(layerId, true);
@@ -337,12 +337,12 @@ function(instance) {
             }
             else {
                 var loc = me.instance.getLocalization('notification')['error'];
-        		me.instance.showMessage(loc.title, loc.savePlace);
+                me.instance.showMessage(loc.title, loc.savePlace);
             }
         };
-        if(drawMode === "line") {
+        if(drawMode === 'line') {
             this.instance.getService().saveMyPlace(place,serviceCallback);
-        } else if(drawMode === "area" || drawMode === "point") {
+        } else if(drawMode === 'area' || drawMode === 'point') {
             this.instance.getService().saveFeedback(place,serviceCallback);
         }
     },

@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.elements.ParamBlnElement
  */
 Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
-    function(instance, validator) {
+    function (instance, validator) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._templates = {
@@ -53,7 +53,7 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
                 readOnlyElement = jQuery('<div></div>'),
                 showInput = true;
 
-            if(readOnly) {
+            if (readOnly) {
                 showInput = false;
             }
 
@@ -61,11 +61,11 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamBlnElement',
                 title = param.name;
             }
 
-            if(showInput) {
+            if (showInput) {
                 data.append('<input type="checkbox"></input>');
                 input = data.find('input');
 
-                if(param.value) {
+                if (param.value) {
                     input.prop('checked', true);
                 }
             } else {

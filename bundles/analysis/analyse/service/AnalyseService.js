@@ -46,7 +46,7 @@ Oskari.clazz.define(
          *
          */
         sendAnalyseData: function (data, success, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=CreateAnalysisLayer';
+            var url = Oskari.urls.getRoute('CreateAnalysisLayer');
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
@@ -71,7 +71,7 @@ Oskari.clazz.define(
          *
          */
         _getAnalysisLayers: function (mysuccess, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetAnalysisLayers';
+            var url = Oskari.urls.getRoute('GetAnalysisLayers');
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -93,10 +93,7 @@ Oskari.clazz.define(
          *
          */
         loadAnalyseLayers: function () {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = sandbox.getAjaxUrl(),
-                loc = Oskari.getLocalization(me.instance.getName());
+            var me = this;
 
             // Request analyis layers via the backend
             me._getAnalysisLayers(
@@ -111,7 +108,6 @@ Oskari.clazz.define(
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayersFailed);
                 }
             );
-
         },
 
         /**
@@ -127,8 +123,6 @@ Oskari.clazz.define(
                 sandbox = me.instance.getSandbox(),
                 mapLayerService,
                 mapLayer,
-                requestBuilder,
-                request,
                 layerarr = analysislayersJson.analysislayers,
                 i,
                 analyseJson;
@@ -148,14 +142,13 @@ Oskari.clazz.define(
                         mapLayer = mapLayerService.createMapLayer(analyseJson);
                         // Add the layer to the map layer service
                         mapLayerService.addLayer(mapLayer, true);
-
                     }
                 }
             }
 
             if (layerarr && layerarr.length > 0) {
                 // notify components of added layer if not suppressed
-                var evt = sandbox.getEventBuilder('MapLayerEvent')(null, 'add');
+                var evt = Oskari.eventBuilder('MapLayerEvent')(null, 'add');
                 sandbox.notifyAll(evt); // add the analysis layers programmatically since normal link processing
             }
         },
@@ -188,7 +181,7 @@ Oskari.clazz.define(
          *
          */
         _getWFSLayerPropertiesAndTypes: function (layer_id, success2, failure) {
-            var url = this.sandbox.getAjaxUrl() + 'action_route=GetWFSDescribeFeature&simple=true&layer_id=' + layer_id;
+            var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&simple=true&layer_id=' + layer_id;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -210,10 +203,7 @@ Oskari.clazz.define(
          *
          */
         loadWFSLayerPropertiesAndTypes: function (layer_id) {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                url = sandbox.getAjaxUrl(),
-                loc = Oskari.getLocalization(me.instance.getName());
+            var me = this;
 
             // Request analyis layers via the backend
             me._getWFSLayerPropertiesAndTypes(layer_id,
@@ -227,7 +217,6 @@ Oskari.clazz.define(
                 function (jqXHR, textStatus, errorThrown) {
                     me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
                 });
-
         },
 
         /**
@@ -246,7 +235,7 @@ Oskari.clazz.define(
             }
             if (layer) {
                 layer.setPropertyTypes(propertyJson.propertyTypes);
-                if(propertyJson.wps_params) {
+                if (propertyJson.wps_params) {
                     layer.setWpsLayerParams(propertyJson.wps_params);
                 }
             }

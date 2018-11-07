@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.ShowMapLayerInfoRequest'
         this._mapLayerId = mapLayerId;
     }, {
         /** @static @property __name request name */
-        __name: "ShowMapLayerInfoRequest",
+        __name: 'ShowMapLayerInfoRequest',
         /**
          * @method getName
          * @return {String} request name

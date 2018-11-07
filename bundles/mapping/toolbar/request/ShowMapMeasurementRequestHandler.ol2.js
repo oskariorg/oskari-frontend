@@ -67,7 +67,7 @@ Oskari.clazz.define(
                         // ask toolbar to select default tool
                         var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                         me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
-                        //enable gfi
+                        // enable gfi
                         if (me.gfiReqBuilder) {
                             me._toolbar.getSandbox().request(me._toolbar, me.gfiReqBuilder(true));
                         }
@@ -84,7 +84,6 @@ Oskari.clazz.define(
             }
         },
 
-
         /**
          * @method update
          * implements Module protocol update method
@@ -96,10 +95,10 @@ Oskari.clazz.define(
                 var cancelBtn = me._buttons[0];
                 cancelBtn.setHandler(function () {
                     // ask toolbar to select default tool
-                    var toolbarRequest =Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
+                    var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
                     me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
                     me._hideResultsInPlugin(true);
-                    //enable gfi
+                    // enable gfi
                     if (me.gfiReqBuilder) {
                         me._toolbar.getSandbox().request(me._toolbar, me.gfiReqBuilder(true));
                     }

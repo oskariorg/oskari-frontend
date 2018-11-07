@@ -6,34 +6,34 @@ Oskari.clazz.define('Oskari.projection.change.view.ProjectionInformation', funct
     this.loc = Oskari.getLocalization('projection-change');
     this.infoView = _.template('<div class="oskari-projection-information"><i>${desc}</i><br/><img class="projection-preview-image" src="/Oskari/bundles/asdi/asdi-projection-change/resources/images/${img}"></img></div>');
 }, {
-    setElement: function(dialog) {
+    setElement: function (dialog) {
         this.dialog = dialog;
     },
-    getElement: function() {
+    getElement: function () {
         return this.dialog;
     },
-    createClassSelector: function ( srs ) {
-       return srs.replace(':', '');
+    createClassSelector: function (srs) {
+        return srs.replace(':', '');
     },
     constructTitle: function () {
         var title = this.loc.projectionCode[this.projection.srsName].name + ' [' + this.projection.srsName + ']';
         return title;
     },
-    show: function( parentElement ) {
+    show: function (parentElement) {
         var me = this;
 
-        if ( this.getElement() ) {
+        if (this.getElement()) {
             return;
         }
 
-        var info = jQuery( this.infoView ({
+        var info = jQuery(this.infoView({
             desc: this.loc.projectionCode[this.projection.srsName].desc,
-            img: this.createClassSelector( this.projection.srsName ) + '.png'
+            img: this.createClassSelector(this.projection.srsName) + '.png'
         }));
         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
         var btn = dialog.createCloseButton(this.loc.infoPopup.ok);
         btn.addClass('primary');
-        btn.setHandler( function () {
+        btn.setHandler(function () {
             dialog.close(true);
             me.dialog = null;
         });

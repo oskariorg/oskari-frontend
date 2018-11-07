@@ -133,17 +133,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             return true;
         },
         setAnimating: function (shouldAnimate) {
-            if (shouldAnimate !== this.animating) {
-                if (shouldAnimate) {
-                    // check possibility to start animation
-                    if (this.getSelectedIndex() !== -1 && this.getSelectedIndex() !== this.values.length - 1) {
-                        this.animating = shouldAnimate;
-                        this._throttleAnimation();
-                    }
-                    return;
-                }
-                this.animating = shouldAnimate;
+            if (shouldAnimate === this.animating) {
+                return;
             }
+            if (!shouldAnimate) {
+                this.animating = false;
+                return;
+            }
+            // check possibility to start animation
+            if (this.getSelectedIndex() === -1) {
+                return;
+            }
+            // Step to the beginning, if the series is on the last value
+            const isLastValue = this.getSelectedIndex() === this.values.length - 1;
+            if (isLastValue) {
+                this._setSelectedValue(this.values[0]);
+                this.animating = true;
+                // Wait frameInterval before starting the animation
+                setTimeout(this._throttleAnimation, this.frameInterval);
+                return;
+            }
+            this.animating = true;
+            this._throttleAnimation();
         },
         isAnimating: function () {
             return this.animating;

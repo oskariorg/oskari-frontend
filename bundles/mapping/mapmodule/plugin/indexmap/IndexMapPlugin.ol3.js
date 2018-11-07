@@ -1,3 +1,6 @@
+import olView from 'ol/View';
+import olControlOverviewMap from 'ol/control/OverviewMap';
+
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
  *
@@ -62,13 +65,12 @@ Oskari.clazz.define(
 
             icon.off('click');
             icon.on('click', function (event) {
-
-                //Add index map control - remove old one
+                // Add index map control - remove old one
                 if (!me._indexMap || me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
                     var layer = me._getBaseLayer();
                     if (layer) {
-                        if(typeof layer.createIndexMapLayer === 'function') {
+                        if (typeof layer.createIndexMapLayer === 'function') {
                             // this is used for statslayer to create a copied layer as indexmap
                             // as using it directly results in weird behavior:
                             // - the normal map not refreshing on move after indexmap is opened
@@ -79,28 +81,24 @@ Oskari.clazz.define(
                         var controlOptions = {
                             target: me._indElement[0],
                             layers: [ layer ],
-                            view: new ol.View({
+                            view: new olView({
                                 center: me.getMap().getView().getCenter(),
                                 projection: me.getMap().getView().getProjection(),
                                 zoom: me.getMap().getView().getZoom()
                             })
                         };
                         // initialize control, pass container
-                        if(me._indexMap) {
+                        if (me._indexMap) {
                             me.getMap().removeControl(me._indexMap);
                         }
-                        me._indexMap = new ol.control.OverviewMap(controlOptions);
+                        me._indexMap = new olControlOverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
                         me.getMap().addControl(me._indexMap);
-
                     }
                     me._indexMap.setCollapsed(false);
-                }
-
-                else {
+                } else {
                     me._indexMap.setCollapsed(true);
                 }
-
             });
         },
 
@@ -148,7 +146,7 @@ Oskari.clazz.define(
             var layer = null;
             for (var i = 0; i < this._map.getLayers().getLength(); i += 1) {
                 layer = this._map.getLayers().item(i);
-                if(layer.getVisible()){
+                if (layer.getVisible()) {
                     return layer;
                 }
             }

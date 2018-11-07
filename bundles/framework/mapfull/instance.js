@@ -72,7 +72,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     // FIXME: this must be done different way in future
                     statsgrid = jQuery('.statsgrid:visible:not(.oskari-tile):not(.oskari-flyoutcontent)'),
 
-                    maxWidth = jQuery(window).width()-sidebar.width()-statsgrid.width(),
+                    maxWidth = jQuery(window).width() - sidebar.width() - statsgrid.width(),
                     mapTools = jQuery('#maptools:visible');
 
                 contentMap.height(mapHeight);
@@ -95,16 +95,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     dataContent.addClass('oskari-closed');
                 }
 
-                if(contentMap.hasClass('oskari-map-window-fullscreen')){
+                if (contentMap.hasClass('oskari-map-window-fullscreen')) {
                     maxWidth += mapTools.width();
                     maxWidth += sidebar.width();
                     var position = sidebar.position();
-                    if(position && position.left){
+                    if (position && position.left) {
                         maxWidth += position;
                     }
                 }
 
-                if(mapWidth>maxWidth){
+                if (mapWidth > maxWidth) {
                     mapWidth = maxWidth;
                 }
 
@@ -162,15 +162,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 );
             });
 
-
             me.adjustMapSize();
 
             // startup plugins
             if (me.conf.plugins) {
-                var plugins = this.conf.plugins,
-                    i;
+                let plugins = this.conf.plugins;
 
-                for (i = 0; i < plugins.length; i += 1) {
+                let vectorTilePlugin = plugins.find(cur => cur.id === 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin');
+                if (!vectorTilePlugin) {
+                    plugins.push({
+                        id: 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
+                        config: {},
+                        state: {}
+                    });
+                }
+
+                for (let i = 0; i < plugins.length; i += 1) {
                     try {
                         plugins[i].instance = Oskari.clazz.create(
                             plugins[i].id,
@@ -218,7 +225,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
 
             // create services & enhancements
             var services = me._createServices(conf);
-            services.forEach(function(service) {
+            services.forEach(function (service) {
                 sandbox.registerService(service);
             });
 
@@ -287,7 +294,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'MapFull.MapSizeUpdateRequest',
                 me.mapSizeUpdateRequestHandler
             );
-
         },
 
         /**
@@ -302,22 +308,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 'EPSG:4326': '+title=WGS 84 +proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs'
             };
 
-            window.epsgConfs = _.keys(defs);
+            var epsgConfs = _.keys(defs);
             _.forEach(epsgConfs, function (conf) {
                 if (!_.has(defaultDefs, conf)) {
                     defaultDefs[conf] = defs[conf];
                 }
             });
             // OL3 uses proj4
-            if(window.proj4) {
+            if (window.proj4) {
                 // ensure static projections are defined
-                jQuery.each(defaultDefs, function(srs, defs) {
+                jQuery.each(defaultDefs, function (srs, defs) {
                     window.proj4.defs(srs, defs);
                 });
             }
             // OL2 uses Proj4js
             else {
-                if(!Proj4js) {
+                if (!Proj4js) {
                     window.Proj4js = {};
                 }
                 // ensure static projections are defined
@@ -337,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 // remove all current layers
                 rbRemove = Oskari.requestBuilder(
-                        'RemoveMapLayerRequest'
+                    'RemoveMapLayerRequest'
                 ),
                 i;
 
@@ -482,7 +488,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 if (plugin && plugin.setState) {
                     plugin.setState(state.plugins[pluginName]);
                 }
-            }*/
+            } */
 
             // Hackhack
             if (!state.plugins) {
@@ -518,8 +524,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          */
         getState: function () {
             // get applications current state
-            var me = this,
-                map = this.getSandbox().getMap(),
+            var map = this.getSandbox().getMap(),
                 selectedLayers = this.getSandbox().findAllSelectedMapLayers(),
                 mapmodule = this.getMapModule(),
                 i,
@@ -535,7 +540,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     },
                     mapmodule.getState()
                 );
-
 
             for (i = 0; i < selectedLayers.length; i += 1) {
                 layer = selectedLayers[i];
@@ -610,7 +614,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
          *
          */
         toggleFullScreen: function () {
-
             this.adjustMapSize();
         },
 

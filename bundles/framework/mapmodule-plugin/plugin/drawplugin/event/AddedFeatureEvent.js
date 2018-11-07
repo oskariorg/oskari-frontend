@@ -9,44 +9,44 @@ Oskari.clazz.define('Oskari.mapframework.ui.module.common.mapmodule.DrawPlugin.e
  * @static
  * @param {OpenLayers.Geometry} geometry the feature geometry that was finished
  */
-function(geometry, drawingMode, creatorId) {
-    this._drawing = geometry;
-    this._drawingMode = drawingMode;
-    this._creatorId = creatorId;
-}, {
+    function (geometry, drawingMode, creatorId) {
+        this._drawing = geometry;
+        this._drawingMode = drawingMode;
+        this._creatorId = creatorId;
+    }, {
     /** @static @property __name event name */
-    __name : "DrawPlugin.AddedFeatureEvent",
-    /**
+        __name: 'DrawPlugin.AddedFeatureEvent',
+        /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getDrawing
      * Returns the drawings geometry
      * @return {OpenLayers.Geometry}
      */
-    getDrawing : function() {
-        return this._drawing;
-    },
-    /**
+        getDrawing: function () {
+            return this._drawing;
+        },
+        /**
      * @method getDrawing
      * Returns the current drawing mode
      * @return {String}
      */
-    getDrawingMode : function() {
-        return this._drawingMode;
-    },
-    getCreatorId: function() {
-        return this._creatorId;
-    }
-}, {
+        getDrawingMode: function () {
+            return this._drawingMode;
+        },
+        getCreatorId: function () {
+            return this._creatorId;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+        'protocol': ['Oskari.mapframework.event.Event']
+    });

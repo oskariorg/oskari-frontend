@@ -11,58 +11,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.SearchResultEvent',
  * @param {JSON} requestParameters request parameters
  * @param {JSON} search result
  */
-function(success, requestParameters, result) {
-    this._success = success;
-    this._requestParameters = requestParameters;
-    this._result = result;
-}, {
+    function (success, requestParameters, result) {
+        this._success = success;
+        this._requestParameters = requestParameters;
+        this._result = result;
+    }, {
     /** @static @property __name event name */
-    __name : "SearchResultEvent",
+        __name: 'SearchResultEvent',
 
-    /**
+        /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getSuccess
      * Returns the successfully routing info
      * @return {Boolean}
      */
-    getSuccess : function() {
-        return this._success;
-    },
-    /**
+        getSuccess: function () {
+            return this._success;
+        },
+        /**
      * @method getResult
      * Returns the search result JSON
      * @return {JSON}
      */
-    getResult : function() {
-        return this._result;
-    },
-    /**
+        getResult: function () {
+            return this._result;
+        },
+        /**
      * @method getRequestParameters
      * Returns request paremeters
      * @return {JSON}
      */
-    getRequestParameters : function() {
-        return this._requestParameters;
-    },
+        getRequestParameters: function () {
+            return this._requestParameters;
+        },
 
-    getParams: function () {
-        return {
-            success: this._success,
-            result: this._result,
-            requestParameters: this._requestParameters
-        };
-    }
-}, {
+        getParams: function () {
+            return {
+                success: this._success,
+                result: this._result,
+                requestParameters: this._requestParameters
+            };
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+        'protocol': ['Oskari.mapframework.event.Event']
+    });

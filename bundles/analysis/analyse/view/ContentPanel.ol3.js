@@ -1,3 +1,8 @@
+import olFeature from 'ol/Feature';
+import * as olGeom from 'ol/geom';
+import olFormatWKT from 'ol/format/WKT';
+import olFormatGeoJSON from 'ol/format/GeoJSON';
+
 Oskari.clazz.define(
     'Oskari.analysis.bundle.analyse.view.ContentPanel',
     function (view) {
@@ -25,60 +30,58 @@ Oskari.clazz.define(
         me.WFSLayerService = undefined;
         me.stopDrawing = false;
 
-        //styles for drawing request
+        // styles for drawing request
         me._defaultStyle = {
-            draw : {
-                fill : {
-                     color: 'rgba(255,255,255,0.4)'
+            draw: {
+                fill: {
+                    color: 'rgba(255,255,255,0.4)'
                 },
-                stroke : {
-                      color: '#3399CC',
-                      width: 2
+                stroke: {
+                    color: '#3399CC',
+                    width: 2
                 },
-                image : {
-                      radius: 4,
-                      fill: {
+                image: {
+                    radius: 4,
+                    fill: {
                         color: '#3399CC'
-                      }
+                    }
                 }
             },
-            modify : {
-                fill : {
-                     color: 'rgba(255,255,255,0.4)'
+            modify: {
+                fill: {
+                    color: 'rgba(255,255,255,0.4)'
                 },
-                stroke : {
-                      color: '#3399CC',
-                      width: 2
+                stroke: {
+                    color: '#3399CC',
+                    width: 2
                 },
-                image : {
-                      radius: 4,
-                      fill: {
+                image: {
+                    radius: 4,
+                    fill: {
                         color: 'rgba(0,0,0,1)'
-                      }
+                    }
                 }
             },
-            intersect : {
-                fill : {
-                     color: 'rgba(255,255,255,0.4)'
+            intersect: {
+                fill: {
+                    color: 'rgba(255,255,255,0.4)'
                 },
-                stroke : {
-                      color: '#3399CC',
-                      width: 2,
-                      lineDash: 5
+                stroke: {
+                    color: '#3399CC',
+                    width: 2,
+                    lineDash: 5
                 },
-                image : {
-                      radius: 4,
-                      fill: {
+                image: {
+                    radius: 4,
+                    fill: {
                         color: 'rgba(0,0,0,1)'
-                      }
+                    }
                 }
             }
         };
 
-
         me.init(view);
         me.start();
-
     }, {
 
         /**
@@ -120,14 +123,14 @@ Oskari.clazz.define(
          *
          * @return {OpenLayers.Feature.Vector}
          */
-        parseFeatureFromClickedFeature: function(clickedGeometry) {
+        parseFeatureFromClickedFeature: function (clickedGeometry) {
             var data = clickedGeometry[1],
-                wkt = new ol.format.WKT(),
+                wkt = new olFormatWKT(),
                 feature = wkt.readFeature(data),
                 geom = feature.getGeometry();
 
-            if (geom instanceof ol.geom.LineString || geom instanceof ol.geom.Polygon || geom instanceof ol.geom.MultiPolygon) {
-                return new ol.Feature({
+            if (geom instanceof olGeom.LineString || geom instanceof olGeom.Polygon || geom instanceof olGeom.MultiPolygon) {
+                return new olFeature({
                     geometry: geom
                 });
             }
@@ -195,13 +198,13 @@ Oskari.clazz.define(
 
                 var mode = event.getData().shape;
 
-                var features = new ol.format.GeoJSON().readFeatures(event.getGeoJson());
+                var features = new olFormatGeoJSON().readFeatures(event.getGeoJson());
 
-                for (i=0; i < features.length; i++) {
+                for (var i = 0; i < features.length; i++) {
                     this.addFeature(features[i], mode);
                 }
 
-                //remove drawLayer since we have added the features to analyseFeatureLayer
+                // remove drawLayer since we have added the features to analyseFeatureLayer
                 this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.drawLayerId, true]);
             },
 
@@ -215,7 +218,6 @@ Oskari.clazz.define(
                 }
                 this.addFeature(geometries);
                 this.drawFilterPlugin.stopDrawFiltering();
-
             },
 
             'WFSFeatureGeometriesEvent': function (event) {
@@ -237,7 +239,7 @@ Oskari.clazz.define(
                 // if there are selected features, unselect them
                 me.selectInteraction.getFeatures().clear();
 
-                //set selected geometry for filter json
+                // set selected geometry for filter json
                 var geometries = [];
                 _.forEach(event.getGeometries(), function (geometry) {
                     geometries.push(geometry[1]);
@@ -263,8 +265,8 @@ Oskari.clazz.define(
                 }
                 if (event.getWfsFeatureIds().length === 0 && layerId === me.WFSLayerService.getAnalysisWFSLayerId()) {
                     me.selectedGeometry = null;
-                    //TODO: enable when geometryeditor is integrated
-                    //me._disableAllDrawFilterButtons();
+                    // TODO: enable when geometryeditor is integrated
+                    // me._disableAllDrawFilterButtons();
                     this.drawControls.toggleEmptySelectionBtn(false);
                 }
             },
@@ -273,10 +275,9 @@ Oskari.clazz.define(
                 if (this.drawFilterMode || !this.instance.analyse.isEnabled) {
                     return;
                 }
-                var olMap = this.mapModule.getMap();
                 this.mapModule.bringToTop(this.featureLayer);
             },
-            'AfterMapLayerAddEvent': function(event) {
+            'AfterMapLayerAddEvent': function (event) {
                 if (!this.instance.analyse.isEnabled) {
                     return;
                 }
@@ -284,7 +285,7 @@ Oskari.clazz.define(
                 this.drawControls.toggleEmptySelectionBtn((this.WFSLayerService.getWFSSelections() && this.WFSLayerService.getWFSSelections().length > 0));
                 this.mapModule.bringToTop(this.featureLayer);
             },
-            'AfterMapLayerRemoveEvent': function(event) {
+            'AfterMapLayerRemoveEvent': function (event) {
                 if (!this.instance.analyse.isEnabled) {
                     return;
                 }
@@ -320,15 +321,15 @@ Oskari.clazz.define(
                 area: 0
             };
             me.drawControls = Oskari.clazz.create('Oskari.analysis.bundle.analyse.view.DrawControls',
-                                me.instance,
-                                me.loc,
-                                function (isCancel) {me._stopDrawing(isCancel);},
-                                function (drawMode) {me._startNewDrawing(drawMode);});
+                me.instance,
+                me.loc,
+                function (isCancel) { me._stopDrawing(isCancel); },
+                function (drawMode) { me._startNewDrawing(drawMode); });
 
             me.dataPanel = me.drawControls.createDataPanel(me.loc);
             me.drawToolsPanel = me.drawControls.createDrawToolsPanel(me.loc);
             me.drawFilterPluginId = me.instance.getName();
-            //me.drawFilterPlugin = me._createDrawFilterPlugin();
+            // me.drawFilterPlugin = me._createDrawFilterPlugin();
 
             me.analyseHelper = Oskari.clazz.create('Oskari.analysis.bundle.analyse.service.AnalyseHelper');
             me.featureLayer = me.analyseHelper.createFeatureLayer();
@@ -355,33 +356,24 @@ Oskari.clazz.define(
          *
          */
         start: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                rn = 'Search.AddSearchResultActionRequest',
-                reqBuilder,
-                request;
+            var me = this;
+            var sandbox = me.sandbox;
+            var rn = 'Search.AddSearchResultActionRequest';
 
             // Already started so nothing to do here
             if (me.isStarted) {
                 return;
             }
-
-            //me._toggleDrawFilterPlugins(false);
             me.mapModule.getMap().addLayer(me.featureLayer);
 
-            //me.mapModule.registerPlugin(me.drawFilterPlugin);
-            //me.mapModule.startPlugin(me.drawFilterPlugin);
-
-            reqBuilder = Oskari.requestBuilder(rn);
-            if (reqBuilder) {
-                request = reqBuilder(
-                    me.linkAction, me._getSearchResultAction(), me);
+            if (sandbox.hasHandler(rn)) {
+                var reqBuilder = Oskari.requestBuilder(rn);
+                var request = reqBuilder(me.linkAction, me._getSearchResultAction(), me);
                 sandbox.request(me.instance, request);
             }
 
             me.isStarted = true;
         },
-
 
         getDrawToolsPanel: function () {
             return this.drawToolsPanel;
@@ -411,7 +403,6 @@ Oskari.clazz.define(
         getDataPanelContainer: function () {
             return this.getDataPanel().getContainer();
         },
-
 
         /**
          * @method destroy
@@ -458,29 +449,23 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                rn = 'Search.RemoveSearchResultActionRequest',
-                reqBuilder,
-                request;
+            var me = this;
+            var sandbox = me.sandbox;
+            var requestName = 'Search.RemoveSearchResultActionRequest';
 
             // Already stopped so nothing to do here
             if (!me.isStarted) {
                 return;
             }
 
-            //me.mapModule.stopPlugin(me.drawFilterPlugin);
-            //me.mapModule.unregisterPlugin(me.drawFilterPlugin);
-
             me.mapModule.getMap().removeLayer(me.featureLayer);
             me._deactivateSelectControls();
             me.drawControls.deactivateSelectTools();
             me.drawControls.closeHelpDialog();
-            //me._toggleDrawFilterPlugins(true);
 
-            reqBuilder = Oskari.requestBuilder(rn);
-            if (reqBuilder) {
-                request = reqBuilder(me.linkAction);
+            if (sandbox.hasHandler(requestName)) {
+                var reqBuilder = Oskari.requestBuilder(requestName);
+                var request = reqBuilder(me.linkAction);
                 sandbox.request(me.instance, request);
             }
 
@@ -509,14 +494,12 @@ Oskari.clazz.define(
          * Adds the given geometry to the feature layer
          * and to the internal list of features.
          *
-         * @param {ol.Feature} feature to add
+         * @param {ol/Feature} feature to add
          * @param {String} mode geometry type
          * @param {String} name optional name for the temp feature
          *
          */
         addFeature: function (feature, mode, name) {
-            var me = this;
-
             feature.setId(this.drawLayerId);
 
             this.featureSource.addFeature(feature);
@@ -561,8 +544,6 @@ Oskari.clazz.define(
          * PRIVATE METHODS *
          *******************
          */
-
-
 
         /**
          * @private @method _startNewDrawing
@@ -640,7 +621,7 @@ Oskari.clazz.define(
                 layerType = this.getLayerType(),
                 featureLayer = this.featureLayer,
                 featureSource = this.featureSource,
-                formatter = new ol.format.GeoJSON(),
+                formatter = new olFormatGeoJSON(),
                 geometryMode = this.analyseHelper.getInternalType(mode);
 
             var nonNullName = name || (loc[geometryMode] + ' ' + (this.featCounts[geometryMode] += 1));
@@ -704,20 +685,20 @@ Oskari.clazz.define(
             me.selectInteraction = me.analyseHelper.createSelectInteraction(me.featureLayer);
 
             me.selectInteraction.on('select', function (evt) {
-              if (evt.selected.length > 0) {
-                  var wkt = new ol.format.WKT();
-                      featureWKT = wkt.writeFeature(evt.selected[0]);
+                if (evt.selected.length > 0) {
+                    var wkt = new olFormatWKT();
+                    var featureWKT = wkt.writeFeature(evt.selected[0]);
 
-                  //set geometry for drawFilter
-                  me.selectedGeometry = featureWKT;
-                  //set geometry for filter Json
-                  var geometries = [];
-                  geometries.push(featureWKT);
-                  me.view.setFilterGeometry(geometries);
-                  me.WFSLayerService.emptyAllWFSFeatureSelections();
-              } else if (evt.deselected.length) {
-                  me.selectedGeometry = undefined;
-              }
+                    // set geometry for drawFilter
+                    me.selectedGeometry = featureWKT;
+                    // set geometry for filter Json
+                    var geometries = [];
+                    geometries.push(featureWKT);
+                    me.view.setFilterGeometry(geometries);
+                    me.WFSLayerService.emptyAllWFSFeatureSelections();
+                } else if (evt.deselected.length) {
+                    me.selectedGeometry = undefined;
+                }
             });
         },
 
@@ -763,7 +744,7 @@ Oskari.clazz.define(
          * Sets the selection tools' status after a map layer has been added or removed. Disables controls if no wfs layers selected, enables tools otherwise
          *
          */
-        toggleSelectionTools: function() {
+        toggleSelectionTools: function () {
             var me = this,
                 selectionToolsToolContainer = jQuery('div.toolContainerToolDiv'),
                 analysisWFSLayerSelected = (me.WFSLayerService.getAnalysisWFSLayerId() !== undefined && me.WFSLayerService.getAnalysisWFSLayerId() !== null);
@@ -788,9 +769,9 @@ Oskari.clazz.define(
          * @param  {String}  regex  regex
          * @return {Boolean}        is plugin not named
          */
-        _isPluginNamed: function(plugin, regex) {
+        _isPluginNamed: function (plugin, regex) {
             // Check at puligin has name
-            if(!plugin || !plugin.getName()) {
+            if (!plugin || !plugin.getName()) {
                 return false;
             }
 
@@ -812,12 +793,12 @@ Oskari.clazz.define(
 
             return function (result) {
                 return function () {
-                    var geometry = new ol.geom.Point(
+                    var geometry = new olGeom.Point(
                             result.lon, result.lat
                         ),
                         name = (result.name + ' (' + result.village + ')');
 
-                    var feature = new ol.Feature({
+                    var feature = new olFeature({
                         geometry: geometry
                     });
 
@@ -827,7 +808,6 @@ Oskari.clazz.define(
                 };
             };
         },
-
 
         // Next functions are related to drawFilter functionality --->
 
@@ -885,7 +865,6 @@ Oskari.clazz.define(
             return [cancelBtn, finishBtn];
         },
 
-
         /**
          * Either starts or stops draw filter plugins which are added to the map module
          *
@@ -894,14 +873,13 @@ Oskari.clazz.define(
          * @param  {Boolean} enabled
          */
         _toggleDrawFilterPlugins: function (enabled) {
-            var me = this,
-                sandbox = this.sandbox,
-                mapModule = this.mapModule;
+            var me = this;
+            var mapModule = this.mapModule;
 
             var drawFilterPlugins = _.filter(
                 mapModule.getPluginInstances(),
                 function (plugin) {
-                    return  me._isPluginNamed(plugin, /DrawFilterPlugin$/);
+                    return me._isPluginNamed(plugin, /DrawFilterPlugin$/);
                 }
             );
 
@@ -916,13 +894,11 @@ Oskari.clazz.define(
 
         _startNewDrawFiltering: function (config) {
             if (this.drawControls.helpDialog) {
-                me._cancelDrawFilter();
+                this._cancelDrawFilter();
                 return;
             }
 
-
-            var me = this,
-                diaLoc = this.loc.content.drawFilter.dialog,
+            var diaLoc = this.loc.content.drawFilter.dialog,
                 controlButtons = [],
                 dialogTitle,
                 dialogText;
@@ -946,8 +922,7 @@ Oskari.clazz.define(
                 controlButtons = this._createDrawFilterControls();
                 this.drawControls.helpDialog.addClass('drawfilterdialog');
                 this.drawControls.helpDialog.show(dialogTitle, dialogText, controlButtons);
-                this.drawControls.helpDialog.
-                moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
+                this.drawControls.helpDialog.moveTo('div.drawFilter.analysis-selection-' + config.mode, 'bottom');
             }
 
             // Disable WFS highlight and GFI dialog
@@ -980,16 +955,11 @@ Oskari.clazz.define(
          * @param {Object} config params for StartDrawFilteringRequest
          */
         _sendDrawFilterRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawFilterPlugin.StartDrawFilteringRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('DrawFilterPlugin.StartDrawFilteringRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('DrawFilterPlugin.StartDrawFilteringRequest');
+            this.sandbox.request(this.instance, reqBuilder(config));
         },
 
         /**
@@ -1000,20 +970,16 @@ Oskari.clazz.define(
          * @param {Object} config params for StopDrawFilteringRequest
          */
         _sendStopDrawFilterRequest: function (config) {
-            var sandbox = this.sandbox,
-                reqBuilder = sandbox.getRequestBuilder(
-                    'DrawFilterPlugin.StopDrawFilteringRequest'
-                ),
-                request;
-
-            if (reqBuilder) {
-                request = reqBuilder(config);
-                sandbox.request(this.instance, request);
+            if (!this.sandbox.hasHandler('DrawFilterPlugin.StopDrawFilteringRequest')) {
+                return;
             }
+            var reqBuilder = Oskari.requestBuilder('DrawFilterPlugin.StopDrawFilteringRequest');
+            this.sandbox.request(this.instance, reqBuilder(config));
         },
 
         _operateDrawFilters: function () {
-            //TODO: enable when geometryeditor is integrated
+            // TODO: enable when geometryeditor is integrated
+            /*
             return;
 
             var preSelector = 'div.drawFilter.analysis-selection-',
@@ -1025,30 +991,30 @@ Oskari.clazz.define(
             if ((typeof this.selectedGeometry === 'undefined') || (this.selectedGeometry === null)) {
                 // Disable all buttons
                 this._disableAllDrawFilterButtons();
-                return;
             }
             var type = this.selectedGeometry.geometry.GeometryType;
             // Enable or disable buttons depending on the selected feature type
             switch (type) {
-                case 'LineString':
-                    pointButton.removeClass('disabled');
-                    lineButton.addClass('disabled');
-                    editButton.addClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
-                case 'MultiPolygon':
-                    pointButton.addClass('disabled');
-                    lineButton.removeClass('disabled');
-                    editButton.removeClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
-                default:
-                    pointButton.addClass('disabled');
-                    lineButton.addClass('disabled');
-                    editButton.addClass('disabled');
-                    removeButton.addClass('disabled');
-                    break;
+            case 'LineString':
+                pointButton.removeClass('disabled');
+                lineButton.addClass('disabled');
+                editButton.addClass('disabled');
+                removeButton.addClass('disabled');
+                break;
+            case 'MultiPolygon':
+                pointButton.addClass('disabled');
+                lineButton.removeClass('disabled');
+                editButton.removeClass('disabled');
+                removeButton.addClass('disabled');
+                break;
+            default:
+                pointButton.addClass('disabled');
+                lineButton.addClass('disabled');
+                editButton.addClass('disabled');
+                removeButton.addClass('disabled');
+                break;
             }
+            */
         },
 
         _disableAllDrawFilterButtons: function () {

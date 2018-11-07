@@ -7,7 +7,7 @@ Oskari.clazz.define(
         },
         {
             handleRequest: function(core,request) {
-                this.sandbox.printDebug("[Oskari.lupapiste.bundle.myplaces2.request.StopDrawingRequestPluginHandler] Stop drawing");
+                this.sandbox.printDebug('[Oskari.lupapiste.bundle.myplaces2.request.StopDrawingRequestPluginHandler] Stop drawing');
                 if(request.isCancel()) {
                     // we wish to clear the drawing without sending further events
                     this.drawPlugin.stopDrawing();

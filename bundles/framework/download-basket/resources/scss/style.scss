@@ -65,6 +65,10 @@ div.oskari-flyoutcontent {
                     display: block;
                     float: left;
                     width: 15em;
+
+                    &.error {
+                        border-bottom: 2px solid #ff0000;
+                    }
                 }
             }
         }

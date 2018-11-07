@@ -79,10 +79,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this._isVisible = true;
 
-            if(contentDiv.width() > screenWidth) {
+            if (contentDiv.width() > screenWidth) {
                 this.dialog.css('max-width', screenWidth + 'px');
             }
-            if (this.dialog.outerHeight(true) > screenHeight){
+            if (this.dialog.outerHeight(true) > screenHeight) {
                 contentDiv.css({
                     'max-height': this._getMaxHeights().content + 'px',
                     'overflow-y': 'auto'
@@ -92,21 +92,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
-
         },
         /**
          * @method _getMaxHeights
          * Calculates max heights for popup and content.
          * @param {boolean} fromMapDiv calculates from mapdiv instead of window (optional)
          */
-        _getMaxHeights: function (fromMapDiv){
+        _getMaxHeights: function (fromMapDiv) {
             var headerHeight = this.dialog.find('.popupHeader').first().outerHeight(true);
             var actionsHeight = this.dialog.find('.actions').outerHeight(true);
             var contentsMargin = 20;
             var popupMargins = 4;
             var margin = 20;
             var height;
-            if (fromMapDiv === true){
+            if (fromMapDiv === true) {
                 height = Oskari.getSandbox().getMap().getHeight();
             } else {
                 height = window.innerHeight;
@@ -115,7 +114,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             return {
                 content: height - headerHeight - actionsHeight - contentsMargin - margin - popupMargins,
                 popup: height - margin
-            }
+            };
         },
 
         /**
@@ -123,19 +122,19 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * Adjusts the zIndex of this popup, in case there are other (mobile) popups open at the moment
          * TODO: get rid of this, once we have a mechanism of identifying and killing all other open popups reliably
          */
-        _bringMobilePopupToTop: function() {
+        _bringMobilePopupToTop: function () {
             var zIndex = 0;
             if (jQuery(this.dialog).hasClass('mobile-popup')) {
                 var openPopups = jQuery('.mobile-popup');
 
-                _.each(openPopups, function(openPopup) {
+                _.each(openPopups, function (openPopup) {
                     if (parseInt(jQuery(openPopup).css('z-index')) > zIndex) {
                         zIndex = parseInt(jQuery(openPopup).css('z-index')) + 1;
                     }
                 });
             }
             if (zIndex && zIndex > 0) {
-                this.dialog.css('z-index',zIndex);
+                this.dialog.css('z-index', zIndex);
             }
         },
         /**
@@ -181,17 +180,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
             }
 
-            /*buttons and actionlinks*/
+            /* buttons and actionlinks */
             if (colourScheme) {
                 if (colourScheme.linkColour) {
                     this.dialog.find('span.infoboxActionLinks').find('a').css('color', colourScheme.linkColour);
                 }
                 if (colourScheme.buttonBgColour) {
-                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background','none');
-                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color',colourScheme.buttonBgColour);
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background', 'none');
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('background-color', colourScheme.buttonBgColour);
                 }
                 if (colourScheme.buttonLabelColour) {
-                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color',colourScheme.buttonLabelColour);
+                    this.dialog.find('span.infoboxActionLinks').find('input:button').css('color', colourScheme.buttonLabelColour);
                 }
             }
         },
@@ -210,7 +209,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         createCloseButton: function (label) {
             var me = this,
                 okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
-            if(label) {
+            if (label) {
                 okBtn.setTitle(label);
             }
             okBtn.setHandler(function () {
@@ -228,11 +227,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 header = this.dialog.find('h3');
 
             jQuery(header).after('<div class="icon-close icon-close:hover close-icon"></div>');
-            this.dialog.find('.close-icon').on('click', function() {
+            this.dialog.find('.close-icon').on('click', function () {
                 me.close(true);
             });
             this.dialog.off('click');
-
         },
 
         /**
@@ -241,7 +239,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {Boolean} noAnimation true to close immediately (optional, defaults to fade out animation)
          */
         close: function (noAnimation) {
-            if(this._closingInProgress) {
+            if (this._closingInProgress) {
                 return;
             }
             this._closingInProgress = true;
@@ -266,7 +264,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
             this._isVisible = false;
         },
-        isVisible: function() {
+        isVisible: function () {
             return this._isVisible;
         },
         /**
@@ -286,7 +284,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         moveTo: function (target, alignment, noArrow, topOffsetElement) {
             var me = this,
                 align = 'right',
-                //get the position of the target element
+                // get the position of the target element
                 tar = jQuery(target),
                 pos = tar.offset(),
                 parent = jQuery(window);
@@ -341,16 +339,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             me.dialog.addClass(alignment);
 
             // Check at if popup is outside screen from right
-            if(parent.width() < (me.dialog.width() + left)) {
+            if (parent.width() < (me.dialog.width() + left)) {
                 left = parent.width() - me.dialog.width();
             }
             // Check at if popup is outside screen from bottom
-            if(windowHeight < (me.dialog.outerHeight() + top)) {
-              //set the popup top-position to be the original top position - amount which is outside of screen
+            if (windowHeight < (me.dialog.outerHeight() + top)) {
+                // set the popup top-position to be the original top position - amount which is outside of screen
                 top = top - ((me.dialog.outerHeight() + top) - windowHeight);
             }
 
-            //move dialog to correct location
+            // move dialog to correct location
             me.dialog.css({
                 'left': left + 'px',
                 'top': top + 'px',
@@ -361,7 +359,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (topOffsetElement) {
                 me._adjustPopupTop(topOffsetElement);
             }
-
         },
         /**
          * @method @private _adjustPopupTop
@@ -369,15 +366,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {jQuery} topOffsetElement
          *
          */
-        _adjustPopupTop: function(topOffsetElement) {
+        _adjustPopupTop: function (topOffsetElement) {
             if (topOffsetElement) {
                 var top = jQuery(topOffsetElement).offset().top,
                     height = jQuery(topOffsetElement).outerHeight(true),
-                    popupTop = parseInt(top)+parseInt(height);
-                this.dialog.css('top',popupTop+'px');
+                    popupTop = parseInt(top) + parseInt(height);
+                this.dialog.css('top', popupTop + 'px');
             }
         },
-        adjustHeight: function() {
+        adjustHeight: function () {
             this.dialog.find('.content').css({
                 'max-height': this._getMaxHeights().content,
                 'overflow-y': 'auto'
@@ -529,9 +526,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeDraggable: function (options) {
             var me = this,
                 dragOptions = options ? options : {
-                scroll: false,
-                handle: '.popupHeader'
-            };
+                    scroll: false,
+                    handle: '.popupHeader'
+                };
             me.dialog.css('position', 'absolute');
             me.dialog.draggable(dragOptions);
         },
@@ -548,7 +545,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this.eventHandlers = {
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanges({width:evt.getWidth(), height:evt.getHeight()});
+                    this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
                 }
             };
 
@@ -588,7 +585,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @method  @private _handleMapSizeChanges handle map size changes
          * @param  {Object} size {width:100, height:200} (optional, if not given gets the map size from ???)
          */
-        _handleMapSizeChanges: function(size) {
+        _handleMapSizeChanges: function (size) {
             var me = this,
                 popup = me.dialog,
                 wWidth = window.innerWidth,
@@ -599,7 +596,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 top = parseInt(popup[0].style.top),
                 cHeight = popup.find('.content').outerHeight(true);
             // if content can be higher then adjust height
-            if (cHeight < this._getMaxHeights().content){
+            if (cHeight < this._getMaxHeights().content) {
                 this.adjustHeight();
             }
             /*
@@ -613,7 +610,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             */
             // set max-height if popup would go out of screen
             // else if dialog ends up offscreen, move it back to the screen
-            if(popup.outerHeight(true) > wHeight){
+            if (popup.outerHeight(true) > wHeight) {
                 this.adjustHeight();
                 popup.css('top', '10px');
             } else if (top > (wHeight - pHeight)) {

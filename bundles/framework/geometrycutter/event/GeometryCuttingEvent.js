@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCuttingEv
         this._finished = isFinished;
     }, {
         /** @static @property __name event name */
-        __name: "GeometryCuttingEvent",
+        __name: 'GeometryCuttingEvent',
         /**
          * @method getName
          * Returns event name
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCuttingEv
          * @method getFinished
          * @return {Boolean} is the editing finished?
          */
-        getFinished: function() {
+        getFinished: function () {
             return this._finished;
         },
         /**

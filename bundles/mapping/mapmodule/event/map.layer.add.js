@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapLayerAddEvent',
         this._mapLayer = mapLayer;
     }, {
         /** @static @property __name event name */
-        __name: "AfterMapLayerAddEvent",
+        __name: 'AfterMapLayerAddEvent',
 
         /**
          * @method getName

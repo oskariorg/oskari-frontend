@@ -33,10 +33,9 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
         this._pageX = pageX;
 
         this._pageY = pageY;
-
     }, {
         /** @static @property __name event name */
-        __name: "MouseHoverEvent",
+        __name: 'MouseHoverEvent',
         /**
          * @method getName
          * @return {String} event name

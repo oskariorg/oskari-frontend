@@ -156,7 +156,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.Filter', function (instanc
         var row = this._template.tablerow({ options: options });
         table.find('#oskari-active-filters').append(row);
         table.find('#active-filters-row').on('click', function () {
-            me.editFilter.call(me, this);
+            me.editFilter(this);
         });
         table.find('.removerow').on('click', this.clearFilter);
     },

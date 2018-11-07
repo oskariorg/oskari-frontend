@@ -104,9 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getActiveFilters: function () {
             var me = this;
             var registeredFilters = [];
-            Object.keys(this.layerFilters).forEach( function( key ) {
-                if ( me.filterHasLayers(key) ) {
-                    registeredFilters.push( key );
+            Object.keys(this.layerFilters).forEach(function (key) {
+                if (me.filterHasLayers(key)) {
+                    registeredFilters.push(key);
                 }
             });
             return registeredFilters;
@@ -348,8 +348,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
             if (newLayerConf.groups) {
                 var groups = [];
-                newLayerConf.groups.forEach(function(groupId){
-                    var group = me.getAllLayerGroups(groupId);
+                newLayerConf.groups.forEach(function (cur) {
+                    var group = me.getAllLayerGroups(cur.id);
                     groups.push({
                         id: group.getId(),
                         name: Oskari.getLocalized(group.getName())
@@ -494,7 +494,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // for each group on the layer
                 newLayerConf.groups.forEach(function (group) {
                     // find the group details
-                    var groupConf = me.getAllLayerGroups(group);
+                    var groupConf = me.getAllLayerGroups(group.id);
                     var groupChildren = groupConf.getChildren() || [];
                     // check if the layer is referenced in the group details
                     var layer = groupChildren.find(function (children) {
@@ -502,10 +502,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     });
                     // if layer is not part of the groups layers -> add it
                     if (!layer) {
-                        me.getAllLayerGroups(group).addChildren({
-                            type:'layer',
+                        me.getAllLayerGroups(group.id).addChildren({
+                            type: 'layer',
                             id: newLayerConf.id,
-                            order:1000000
+                            order: 1000000
                         });
                     }
                 });
@@ -784,7 +784,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 } else {
                     layersWithoutCreatedDate.push(layer);
                 }
-            })
+            });
 
             layersWithCreatedDate.sort(function (a, b) {
                 if (a.getCreated() > b.getCreated()) {
@@ -870,8 +870,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var allLayerGroups = me.getAllLayerGroups();
             var filteredLayers = me.getFilteredLayers(filterId);
 
-            var hasFilteredLayer = function(groupLayer) {
-                var layers = filteredLayers.filter(function(l) {
+            var hasFilteredLayer = function (groupLayer) {
+                var layers = filteredLayers.filter(function (l) {
                     return groupLayer.getId() === l.getId();
                 });
                 return layers.length > 0;
@@ -916,11 +916,11 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *
          * @param {String} type
          *            Mapping from map-layer json "type" parameter to a class as in #typeMapping
-         * @param {String} modelName
-         *            layer model name (like 'Oskari.mapframework.domain.WmsLayer')
+         * @param {String|Function} modelRef
+         *            layer model clazz name (like 'Oskari.mapframework.domain.WmsLayer') or constructor function
          */
-        registerLayerModel: function (type, modelName) {
-            this.typeMapping[type] = modelName;
+        registerLayerModel: function (type, modelRef) {
+            this.typeMapping[type] = modelRef;
         },
         /**
          * @method unregisterLayerModel
@@ -931,7 +931,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            Mapping from map-layer json "type" parameter to a class as in #typeMapping
          */
         unregisterLayerModel: function (type) {
-            this.typeMapping[type] = undefined;
             delete this.typeMapping[type];
         },
 
@@ -1120,11 +1119,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @return {Oskari.mapframework.domain.AbstractLayer} empty layer model for the layer type
          */
         createLayerTypeInstance: function (type, params, options) {
-            var clazz = this.typeMapping[type];
-            if (!clazz) {
+            var modelRef = this.typeMapping[type];
+            if (!modelRef) {
                 return null;
             }
-            return Oskari.clazz.create(clazz, params, options);
+            if (typeof modelRef === 'function') {
+                return new modelRef(params, options);
+            }
+            return Oskari.clazz.create(modelRef, params, options);
         },
         /**
          * @method _createActualMapLayer
@@ -1283,7 +1285,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            /*prefer url - param, fall back to wmsUrl if not available */
+            /* prefer url - param, fall back to wmsUrl if not available */
             if (jsonLayer.url) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.url));
             } else if (jsonLayer.wmsUrl) {
@@ -1392,7 +1394,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         checkForDuplicateId: function (id, name) {
             if (this._reservedLayerIds[id] === true) {
                 var foundLayer = this.findMapLayer(id);
-                throw "Trying to add map layer with id '" + id + ' (' + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
+                throw new Error("Trying to add map layer with id '" + id + ' (' + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'");
             }
         },
         /**

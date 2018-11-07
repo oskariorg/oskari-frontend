@@ -11,10 +11,10 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ShowFeatur
  * @static
  */
 function(feature) {
-	this._feature = feature;
+    this._feature = feature;
 }, {
-	/** @static @property __name request name */
-    __name : "ShowFeatureRequest",
+    /** @static @property __name request name */
+    __name : 'ShowFeatureRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -30,7 +30,7 @@ function(feature) {
         return this._feature;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

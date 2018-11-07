@@ -27,7 +27,7 @@ Oskari.clazz.define(
         this._drawing = false;
         this.CROPPING_LAYER_ID = 'download-basket-cropping-layer';
         this.DOWNLOAD_BASKET_DRAW_ID = 'download-basket-drawing';
-    },{
+    }, {
         /**
          * Creates Ui for cropping tab
          * @method createUi
@@ -67,9 +67,9 @@ Oskari.clazz.define(
                     var selectedLayers = me._buildLayerList();
 
                     // User has not selected any layers
-                    if(selectedLayers.length === 0){
+                    if(selectedLayers.length === 0) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        btn = dialog.createCloseButton('OK');
+                            btn = dialog.createCloseButton('OK');
                         btn.addClass('primary');
                         dialog.show(me._getLocalization('no-layers-selected-title'), me._getLocalization('no-layers-selected-message'), [btn]);
                         return false;
@@ -138,6 +138,7 @@ Oskari.clazz.define(
             var moveToBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             moveToBasketBtn.addClass('primary');
             moveToBasketBtn.setTitle(me._getLocalization('move-to-basket'));
+
             moveToBasketBtn.setHandler(function () {
                 me.addToBasket();
                 me._updateBasketText(0);
@@ -149,7 +150,6 @@ Oskari.clazz.define(
             main.append(tempBasket);
 
             me.container = main;
-
             this.setContent(me.container);
         },
 
@@ -183,11 +183,12 @@ Oskari.clazz.define(
          * @public
          * @return {Array} Layers that has attribute cropping: true
          */
-        getCroppingLayers: function(){
+        getCroppingLayers: function () {
             var me = this;
 
             var mapService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var allLayers = mapService.getAllLayers();
+
             var croppingLayers = allLayers.filter(function(layer){
               var attributes = layer.getAttributes();
               return !!attributes.cropping;
@@ -200,9 +201,9 @@ Oskari.clazz.define(
 
             // regular draw cropping mode
             var regular = {
-                name : me._getLocalization('rect-cropping'),
-                rect : true,
-                getName: function(){
+                name: me._getLocalization('rect-cropping'),
+                rect: true,
+                getName: function () {
                     return this.name;
                 },
                 getLayerName: function(){
@@ -305,7 +306,6 @@ Oskari.clazz.define(
                         }]);
                         me.addToTempBasket(geojson.features);
                     }
-
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
@@ -325,14 +325,14 @@ Oskari.clazz.define(
          * @param   {String}   message message
          * @private
          */
-        _openPopup: function(title, message) {
+        _openPopup: function (title, message) {
             var me = this;
-            if(me._popup) {
+            if (me._popup) {
                 me._popup.close(true);
             } else {
                 me._popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             }
-            me._popup.show(title,message);
+            me._popup.show(title, message);
             me._popup.fadeout();
         },
 
@@ -534,7 +534,6 @@ Oskari.clazz.define(
             } else if(event.getIsFinished() && me._isRemove) {
                 me._isRemove = false;
             }
-
         },
 
         /**
@@ -573,7 +572,7 @@ Oskari.clazz.define(
          * @method setBasket
          * @param  {Oskari.mapframework.bundle.downloadBasket.Basket}  basket basket
          */
-        setBasket: function(basket){
+        setBasket: function(basket) {
             var me = this;
             me.basket = basket;
         },
@@ -609,10 +608,6 @@ Oskari.clazz.define(
             });
             me.instance.addBasketNotify();
         },
-        /**
-        * [_buildLayerList finds layer that user has chowsen to be cropped]
-        * @return {[layer]} [array of layers]
-        */
 
        /**
         * Builds layerlist
@@ -620,7 +615,7 @@ Oskari.clazz.define(
         * @return  {Array}   layer ids array
         * @private
         */
-        _buildLayerList: function()  {
+        _buildLayerList: function() {
             var me = this;
             var selected = me._sandbox.findAllSelectedMapLayers();
             var layerIds = [];
@@ -631,33 +626,32 @@ Oskari.clazz.define(
                 var layer = selected[i];
                 var attributes = layer.getAttributes();
 
-                if(!layer.isInScale(mapScale)) {
+                if (!layer.isInScale(mapScale)) {
                     continue;
                 }
-                if(!layer.isVisible()) {
+                if (!layer.isVisible()) {
                     continue;
                 }
-                if(layer._type=='BASE_LAYER'){
+                if (layer._type == 'BASE_LAYER') {
                     continue;
                 }
 
-                if(layer._layerType=='WMTS'){
+                if (layer._layerType == 'WMTS') {
                     continue;
                 }
-                if(attributes.basemap){
+                if (attributes.basemap) {
                     continue;
                 }
-                if(attributes.raster){
+                if (attributes.raster) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    btn = dialog.createCloseButton('OK');
+                        btn = dialog.createCloseButton('OK');
                     btn.addClass('primary');
                     dialog.show(me._getLocalization('basket-raster-problem-title'),
-                        layer.getName()+' '+me._getLocalization('basket-raster-problem'), [btn]);
+                        layer.getName() + ' ' + me._getLocalization('basket-raster-problem'), [btn]);
                     continue;
                 }
 
                 layerIds.push(layer);
-
             }
             return layerIds;
         }

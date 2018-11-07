@@ -24,8 +24,8 @@ function(bbox, selectedLayers,croppingMode, transport, identifier,features) {
     this._identifier = identifier;
     this._features = features;
 }, {
-	/** @static @property __name request name */
-    __name : "AddToBasketRequest",
+    /** @static @property __name request name */
+    __name : 'AddToBasketRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -76,7 +76,7 @@ function(bbox, selectedLayers,croppingMode, transport, identifier,features) {
         return this._features;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

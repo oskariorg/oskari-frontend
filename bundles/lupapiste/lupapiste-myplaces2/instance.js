@@ -3,7 +3,7 @@
  *
  * My places functionality
  */
-Oskari.clazz.define("Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance",
+Oskari.clazz.define('Oskari.lupapiste.bundle.myplaces2.MyPlacesBundleInstance',
 
 /**
  * @method create called automatically on construction
@@ -64,14 +64,14 @@ function() {
      */
     showMessage : function(title, message) {
         var loc = this.getLocalization();
-    	var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-    	var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-    	okBtn.setTitle(loc.buttons.ok);
-    	okBtn.addClass('primary');
-    	okBtn.setHandler(function() {
+        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+        var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+        okBtn.setTitle(loc.buttons.ok);
+        okBtn.addClass('primary');
+        okBtn.setHandler(function() {
             dialog.close(true);
-    	});
-    	dialog.show(title, message, [okBtn]);
+        });
+        dialog.show(title, message, [okBtn]);
     },
     /**
      * @method forceDisable
@@ -145,10 +145,10 @@ function() {
         this.sandbox = sandbox;
 
         var me = this;
-        sandbox.printDebug("Initializing my places module...");
+        sandbox.printDebug('Initializing my places module...');
 
         // handles toolbar buttons related to my places
-        this.buttons = Oskari.clazz.create("Oskari.lupapiste.bundle.myplaces2.ButtonHandler", this);
+        this.buttons = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.ButtonHandler', this);
         this.buttons.start();
 
         var user = Oskari.user();
@@ -174,14 +174,14 @@ function() {
         this.myPlacesService.init();
 
         // handles my places insert form etc
-        this.view = Oskari.clazz.create("Oskari.lupapiste.bundle.myplaces2.view.MainView", this);
+        this.view = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.view.MainView', this);
         this.view.start();
 
         this.editRequestHandler = Oskari.clazz.create('Oskari.lupapiste.bundle.myplaces2.request.EditRequestHandler', sandbox, me);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.EditPlaceRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.EditCategoryRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.DeleteCategoryRequest', this.editRequestHandler);
-        sandbox.addRequestHandler('LupaPisteMyPlaces.PublishCategoryRequest', this.editRequestHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.EditPlaceRequest', this.editRequestHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.EditCategoryRequest', this.editRequestHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.DeleteCategoryRequest', this.editRequestHandler);
+        sandbox.requestHandler('LupaPisteMyPlaces.PublishCategoryRequest', this.editRequestHandler);
     },
     /**
      * @method stop

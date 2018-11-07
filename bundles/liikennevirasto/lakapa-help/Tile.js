@@ -11,42 +11,42 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.lakapa.help.Tile',
  */
 function(instance,locale) {
 
-	this.instance = instance;
-	this.locale = locale;
-	this.container = null;
-	this.template = null;
+    this.instance = instance;
+    this.locale = locale;
+    this.container = null;
+    this.template = null;
 }, {
-	getName : function() {
-		return 'Oskari.liikennevirasto.bundle.lakapa.help.Tile';
-	},
-	setEl : function(el, width, height) {
-		this.container = $(el);
-	},
-	startPlugin : function() {
-		this.refresh();
-	},
-	stopPlugin : function() {
-		this.container.empty();
-	},
-	getTitle : function() {
-		return this.locale['title'];
-	},
-	getDescription : function() {
-	},
-	getOptions : function() {
+    getName : function() {
+        return 'Oskari.liikennevirasto.bundle.lakapa.help.Tile';
+    },
+    setEl : function(el, width, height) {
+        this.container = $(el);
+    },
+    startPlugin : function() {
+        this.refresh();
+    },
+    stopPlugin : function() {
+        this.container.empty();
+    },
+    getTitle : function() {
+        return this.locale['title'];
+    },
+    getDescription : function() {
+    },
+    getOptions : function() {
 
-	},
-	setState : function(state) {
-		this.state = state;
-	},
-	refresh : function() {
-		var me = this;
-		var instance = me.instance;
-		var cel = this.container;
-		var tpl = this.template;
-		var sandbox = instance.getSandbox();
+    },
+    setState : function(state) {
+        this.state = state;
+    },
+    refresh : function() {
+        var me = this;
+        var instance = me.instance;
+        var cel = this.container;
+        var tpl = this.template;
+        var sandbox = instance.getSandbox();
 
-	}
+    }
 }, {
-	'protocol' : ['Oskari.userinterface.Tile']
+    'protocol' : ['Oskari.userinterface.Tile']
 });

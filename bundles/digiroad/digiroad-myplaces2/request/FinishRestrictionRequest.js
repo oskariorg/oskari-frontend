@@ -6,7 +6,7 @@ Oskari.clazz.define(
         this._data = data;
         this._callback = callback;
     }, {
-        __name : "DigiroadMyPlaces.FinishRestrictionRequest",
+        __name : 'DigiroadMyPlaces.FinishRestrictionRequest',
         getName : function() {
             return this.__name;
         },

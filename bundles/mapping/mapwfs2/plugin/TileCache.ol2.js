@@ -1,4 +1,4 @@
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.plugin.TileCache',
     function () {
         this.data = {};
         this.ts = {};
@@ -50,7 +50,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.plugin.TileCache",
             if (!dataByLayerId) {
                 return;
             }
-            if(style === undefined) {
+            if (style === undefined) {
                 this.data[layerId] = null;
                 delete this.data[layerId];
             }

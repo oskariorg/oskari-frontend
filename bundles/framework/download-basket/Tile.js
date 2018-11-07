@@ -13,12 +13,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Tile',
  * instance
  *      reference to component that created the tile
  */
-function(instance) {
-    this.instance = instance;
-    this.container = null;
-    this.template = null;
-    this.shownLayerCount = null;
-}, {
+    function (instance) {
+        this.instance = instance;
+        this.container = null;
+        this.template = null;
+        this.shownLayerCount = null;
+    }, {
     /**
      * Gets name
      * @method getName
@@ -43,7 +43,6 @@ function(instance) {
      * @public
      */
     startPlugin : function() {
-        //this.refresh();
         this.createUI();
     },
     /**
@@ -86,8 +85,7 @@ function(instance) {
      * @method getOptions
      * @public
      */
-    getOptions : function() {
-
+    getOptions: function () {
     },
     /**
      * Interface method implementation, does nothing atm
@@ -149,21 +147,21 @@ function(instance) {
             opacity: 0.25
         }, 500, function() {
             // on complete, animate back to fully visible
-             element.animate({
+            element.animate({
                 opacity: 1
-            }, 500,function() {
+            }, 500, function () {
                 // on complete, check and adjust the count parameter
                 // recurse if count has not been reached yet
-                if(count > 1) {
-                    me._blink(element, --count);
-                }
+                    if (count > 1) {
+                        me._blink(element, --count);
+                    }
+                });
             });
-        });
-    }
-}, {
+        }
+    }, {
     /**
      * @property {String[]} protocol
      * @static
      */
-    'protocol' : ['Oskari.userinterface.Tile']
-});
+        'protocol': ['Oskari.userinterface.Tile']
+    });

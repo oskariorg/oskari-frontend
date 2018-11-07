@@ -11,10 +11,10 @@ Oskari.clazz.define('Oskari.liikennevirasto.bundle.transport.selector.ToggleTran
  * @static
  */
 function(show) {
-	this._show = show;
+    this._show = show;
 }, {
-	/** @static @property __name request name */
-    __name : "ToggleTransportSelectorRequest",
+    /** @static @property __name request name */
+    __name : 'ToggleTransportSelectorRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -30,7 +30,7 @@ function(show) {
         return this._show;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

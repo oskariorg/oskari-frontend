@@ -2,7 +2,7 @@
  * @class Oskari.elf.license.elements.ParamTextElement
  */
 Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
-    function(instance, validator) {
+    function (instance, validator) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this._templates = {
@@ -54,24 +54,24 @@ Oskari.clazz.define('Oskari.elf.license.elements.ParamTextElement',
                 readOnlyElement = jQuery('<div></div>'),
                 showInput = true;
 
-            if(readOnly) {
+            if (readOnly) {
                 showInput = false;
             }
 
-            if(title === null) {
+            if (title === null) {
                 title = param.name;
             }
 
-            if(showInput) {
+            if (showInput) {
                 data.append('<input type="text"></input>');
                 input = data.find('input');
-                if(param.values[0] && param.values[0] !== null) {
+                if (param.values[0] && param.values[0] !== null) {
                     value = param.values[0];
                 }
                 input.val(value);
                 title += ' <span class="elf_license_required">*</span>';
             } else {
-                jQuery.each(param.values, function(index, value){
+                jQuery.each(param.values, function (index, value) {
                     var valueEl = readOnlyElement.clone();
                     valueEl.attr('data-value', value);
                     valueEl.html(value);

@@ -3,7 +3,7 @@
  * JSON-parsing for vector layer (digiroad edition)
  */
 Oskari.clazz.define('Oskari.digiroad.bundle.featureselector.domain.VectorLayerModelBuilder', function(sandbox) {
-    this.localization = Oskari.getLocalization("FeatureSelector");
+    this.localization = Oskari.getLocalization('FeatureSelector');
     this.sandbox = sandbox;
 }, {
     /**

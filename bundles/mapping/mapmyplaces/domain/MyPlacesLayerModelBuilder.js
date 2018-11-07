@@ -4,7 +4,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder',
     function (sandbox) {
-        this.localization = Oskari.getLocalization("MapMyPlaces");
+        this.localization = Oskari.getLocalization('MapMyPlaces');
         this.sandbox = sandbox;
         this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder', sandbox);
     }, {
@@ -38,8 +38,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             }
             if (loclayer.inspire) {
                 layer.setGroups([{
-                    id:layer.getId(),
-                    name:loclayer.inspire
+                    id: layer.getId(),
+                    name: loclayer.inspire
                 }]);
             }
         }

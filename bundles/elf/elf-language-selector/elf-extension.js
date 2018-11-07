@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
+Oskari.clazz.define('Oskari.elf.extension.EnhancedExtension',
 
     /**
      * @method create called automatically on construction
@@ -48,7 +48,6 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          */
         update: function () {},
 
-
         /**
          *@method setLocalization
          *
@@ -86,15 +85,13 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * BundleInstance protocol method
          */
         start: function () {
-            var me = this,
-                conf = this.conf,
-                sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName);
-
+            var me = this;
+            var conf = this.conf || {};
+            var sandbox = Oskari.getSandbox(conf.sandbox);
             me.sandbox = sandbox;
 
             /* stateful */
-            if (conf && conf.stateful) {
+            if (conf.stateful) {
                 sandbox.registerAsStateful(this.mediator.bundleId, this);
             }
 
@@ -102,13 +99,12 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
 
             this.setDefaultFlyout(this.getTitle());
 
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             this.getFlyout().getEl()
                 .addClass('elf-lang-selector')
                 .append(this.getFlyoutContent());
-
         },
         /**
          * @method stop
@@ -119,7 +115,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
 
             /* sandbox cleanup */
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
             sandbox.unregisterStateful(this.mediator.bundleId);
@@ -132,15 +128,15 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * Extension protocol method
          */
         startExtension: function () {
-            var me = this,
-                sandbox = me.sandbox,
-                p;
+            var me = this;
+            var sandbox = me.sandbox;
+            var p;
 
             me.startPlugin();
 
             for (p in me.requestHandlers) {
                 if (me.requestHandlers.hasOwnProperty(p)) {
-                    sandbox.addRequestHandler(p, this);
+                    sandbox.requestHandler(p, this);
                 }
             }
             for (p in me.eventHandlers) {
@@ -148,7 +144,6 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
                     sandbox.registerForEventByName(me, p);
                 }
             }
-
         },
 
         /* hook */
@@ -187,7 +182,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
         getPlugins: function () {
             return this.plugins;
         },
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
@@ -208,11 +203,11 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
          * @property eventHandlers
          * may be overridden in derived classes to get some events
          */
-        "eventHandlers": {
+        'eventHandlers': {
 
         },
 
-        "requestHandlers": {
+        'requestHandlers': {
 
         },
 
@@ -299,7 +294,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
         issue: function () {
             var requestName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getRequestBuilder(requestName);
+            var builder = Oskari.requestBuilder(requestName);
             var request = builder.apply(builder, args);
             return this.getSandbox().request(this.getExtension(), request);
         },
@@ -310,7 +305,7 @@ Oskari.clazz.define("Oskari.elf.extension.EnhancedExtension",
         notify: function () {
             var eventName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getEventBuilder(eventName);
+            var builder = Oskari.eventBuilder(eventName);
             var evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
         }

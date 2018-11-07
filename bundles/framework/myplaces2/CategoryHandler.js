@@ -144,7 +144,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
 
             if (this.initialLoad) {
                 // notify components of added layer if not suppressed
-                var event = sandbox.getEventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
+                var event = Oskari.eventBuilder('MapLayerEvent')(null, 'add'); // to-do: check if null is valid parameter here
                 sandbox.notifyAll(event); // add the myplaces layers programmatically since normal link processing
                 // cant do this (run before the bundle adds the layers)
                 this._processStartupLinkLayers(sandbox);
@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             var layerId = this._getMapLayerId(categoryId),
                 layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
             if (!layer) {
-                var request = this.sandbox.getRequestBuilder('AddMapLayerRequest')(layerId, true);
+                var request = Oskari.requestBuilder('AddMapLayerRequest')(layerId, true);
                 this.sandbox.request(this.getName(), request);
             }
         },
@@ -180,7 +180,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 // default to default category id(?)
                 var defCat = this.myPlacesService.getDefaultCategory();
                 if (defCat) {
-
                     categoryId = defCat.getId();
                 } else {
                     categoryId = '-99';
@@ -200,9 +199,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             baseJson.name = categoryModel.getName();
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             //  Permission is always ok for user's own data
-                baseJson.permissions = {
-                    'publish': 'publication_permission_ok'
-                };
+            baseJson.permissions = {
+                'publish': 'publication_permission_ok'
+            };
             return baseJson;
         },
         /**
@@ -213,14 +212,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          */
         _getMapLayerJsonBase: function () {
             var json = {
-                    wmsName: 'oskari:my_places_categories',
-                    type: 'myplaceslayer',
-                    isQueryable: true,
-                    opacity: 50,
-                    metaType: this.instance.idPrefix,
-                    orgName: this.loc('category.organization'),
-                    inspire: this.loc('category.inspire')
-                };
+                wmsName: 'oskari:my_places_categories',
+                type: 'myplaceslayer',
+                isQueryable: true,
+                opacity: 50,
+                metaType: this.instance.idPrefix,
+                orgName: this.loc('category.organization'),
+                inspire: this.loc('category.inspire')
+            };
             if (this.instance.conf &&
                 this.instance.conf.layerDefaults &&
                 typeof this.instance.conf.layerDefaults === 'object') {
@@ -261,10 +260,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 if (layerId !== null && layerId.indexOf(this.instance.idPrefix) !== -1) {
                     rb = null;
                     r = null;
-                    rb = sandbox.getRequestBuilder('AddMapLayerRequest');
+                    rb = Oskari.requestBuilder('AddMapLayerRequest');
                     r = rb(layerId, keepLayersOrder);
                     sandbox.request(this.getName(), r);
-                    rb = sandbox.getRequestBuilder('ChangeMapLayerOpacityRequest');
+                    rb = Oskari.requestBuilder('ChangeMapLayerOpacityRequest');
                     r = rb(layerId, opacity);
                     sandbox.request(this.getName(), r);
                 }
@@ -334,9 +333,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             dialog.makeModal();
             dialog.show(me.loc('categoryform.edit.title'), content, buttons);
             dialog.moveTo('div.personaldata ul li select', 'right');
-            //bind listeners etc. for category form
+            // bind listeners etc. for category form
             form.start();
-
         },
         showValidationErrorMessage: function (errors) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -356,7 +354,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
             }
             dialog.makeModal();
             dialog.show(this.loc('validation.title'), content, [okBtn]);
-
         },
         /**
          * @method _showMessage
@@ -403,7 +400,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
          * @private
          */
         _isColor: function (value) {
-            if(value === null) {
+            if (value === null) {
                 return true;
             }
             return this.validateTool.validateHexColor(value);
@@ -511,9 +508,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                         dialog.fadeout();
                         // refresh map layer on map -> send update request
                         var layerId = me._getMapLayerId(category.getId()),
-                            request = me.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true),
+                            request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true),
                             layerIsSelected = me.instance.sandbox.isLayerAlreadySelected(layerId);
-                        if (layerIsSelected){
+                        if (layerIsSelected) {
                             me.instance.sandbox.request(me, request);
                         }
                     } else {
@@ -577,7 +574,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 var locParams = [category.getName(), places.length, defaultCategory.getName()];
                 content = me.loc('notification.categoryDelete.deleteConfirmMove', locParams);
             } else {
-
                 deleteBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
                 deleteBtn.setTitle(me.loc('buttons.deleteCategory'));
                 deleteBtn.addClass('primary');
@@ -623,7 +619,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                     // places moved to default category -> update it
                     var defCat = service.getDefaultCategory(),
                         layerId = this._getMapLayerId(defCat.getId()),
-                        request = this.instance.sandbox.getRequestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
+                        request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
                     this.instance.sandbox.request(this, request);
                 }
                 // NOTE OK
@@ -688,7 +684,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.CategoryHandler',
                 mapLayer.addPermission('publish', 'no_publication_permission');
             }
             // send an event to notify other bundles of updated permissions
-            var evt = sandbox.getEventBuilder('MapLayerEvent')(layerId, 'update');
+            var evt = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
             sandbox.notifyAll(evt);
         }
     }, {

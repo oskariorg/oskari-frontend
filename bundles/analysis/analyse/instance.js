@@ -30,6 +30,7 @@ Oskari.clazz.define(
         this.state = undefined;
         this.conf = {};
         this.personalDataTab = undefined;
+        this._log = Oskari.log(this.getName());
     }, {
         /**
          * @static @property __name
@@ -112,7 +113,7 @@ Oskari.clazz.define(
                 'Oskari.analysis.bundle.analyse.request.AnalyseRequestHandler',
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'analyse.AnalyseRequest',
                 me.analyseHandler
             );
@@ -126,10 +127,9 @@ Oskari.clazz.define(
                 'Oskari.mapframework.service.MapLayerService'
             );
 
-            //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            // Let's extend UI
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
-
 
             // draw ui
             me._createUi();
@@ -185,19 +185,17 @@ Oskari.clazz.define(
         /**
          * Adds a tab for analysis layers in PersonalData
          */
-        __addTab : function() {
-            if(this.personalDataTab) {
+        __addTab: function () {
+            if (this.personalDataTab) {
                 // already added
                 return;
             }
-            var reqBuilder = this.sandbox.getRequestBuilder(
-                'PersonalData.AddTabRequest'
-            );
 
-            if (!reqBuilder) {
+            if (!this.sandbox.hasHandler('PersonalData.AddTabRequest')) {
                 // request not ready
                 return;
             }
+            var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             // Request tab to be added to personal data
             var tab = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.analyse.view.PersonalDataTab',
@@ -224,14 +222,14 @@ Oskari.clazz.define(
             MapLayerVisibilityChangedEvent: function (event) {
                 if (this.analyse && this.analyse.isEnabled && this.isMapStateChanged) {
                     this.isMapStateChanged = false;
-                    this.getSandbox().printDebug('ANALYSE REFRESH');
-                    //this.analyse.refreshAnalyseData();
+                    this._log.debug('ANALYSE REFRESH');
+                    // this.analyse.refreshAnalyseData();
                 }
             },
             AfterMapMoveEvent: function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    //this.analyse.refreshAnalyseData();
+                    // this.analyse.refreshAnalyseData();
                 }
             },
             AfterMapLayerAddEvent: function (event) {
@@ -252,7 +250,7 @@ Oskari.clazz.define(
             AfterChangeMapLayerStyleEvent: function (event) {
                 this.isMapStateChanged = true;
                 if (this.analyse && this.analyse.isEnabled) {
-                    //this.analyse.refreshAnalyseData();
+                    // this.analyse.refreshAnalyseData();
                 }
             },
             /**
@@ -305,7 +303,7 @@ Oskari.clazz.define(
             );
             me.analyseHandler = null;
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(me);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(me);
             sandbox.request(me, request);
 
             me.sandbox.unregisterStateful(me.mediator.bundleId);
@@ -395,23 +393,13 @@ Oskari.clazz.define(
          */
         setAnalyseMode: function (blnEnabled) {
             var me = this,
-                map = jQuery('#contentMap'),
-                mapmodule = me.sandbox.findRegisteredModuleInstance(
-                    'MainMapModule'
-                ),
-                tools = jQuery('#maptools');
-
+                map = jQuery('#contentMap');
 
             if (blnEnabled) {
                 map.addClass('mapAnalyseMode');
                 me.sandbox.mapMode = 'mapAnalyseMode';
                 // Hide flyout, it's not needed...
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container)
-                    .parent().parent().hide();
-                /* Why would we close analyse here?
-                // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                me.sandbox.request(me.getName(), request);*/
+                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().hide();
 
                 // proceed with analyse view
                 if (!this.analyse) {
@@ -439,17 +427,15 @@ Oskari.clazz.define(
                 }
                 if (this.analyse) {
                     // Reset tile state
-                    var request = me.sandbox.getRequestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
+                    var request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
                     me.sandbox.request(me.getName(), request);
                     this.analyse.setEnabled(false);
                     this.analyse.hide();
                 }
                 me.WFSLayerService.setAnalysisWFSLayerId(null);
             }
-            var reqBuilder = me.sandbox.getRequestBuilder(
-                'MapFull.MapSizeUpdateRequest'
-            );
-
+            // resize map to fit screen with expanded/normal sidebar
+            var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
             if (reqBuilder) {
                 me.sandbox.request(me, reqBuilder(true));
             }
@@ -516,7 +502,6 @@ Oskari.clazz.define(
             dialog.show(title, message);
             dialog.fadeout(5000);
         },
-
 
         /**
          * @private @method _afterMapLayerEvent

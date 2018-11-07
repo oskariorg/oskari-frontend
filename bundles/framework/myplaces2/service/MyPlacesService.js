@@ -1,6 +1,5 @@
 /**
- * @clas
-s Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
+ * @class Oskari.mapframework.bundle.myplaces2.service.MyPlacesService
  *
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
@@ -18,7 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
      */
 
     function (url, uuid, sandbox, defaults, pInstance, options) {
-
         // list of loaded categories & myplaces
         this._categoryList = [];
         this._placesList = [];
@@ -31,12 +29,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
         this._instance = pInstance;
         this.skipLoading = false;
     }, {
-        __qname: "Oskari.mapframework.bundle.myplaces2.service.MyPlacesService",
+        __qname: 'Oskari.mapframework.bundle.myplaces2.service.MyPlacesService',
         getQName: function () {
             return this.__qname;
         },
 
-        __name: "MyPlacesService",
+        __name: 'MyPlacesService',
         getName: function () {
             return this.__name;
         },
@@ -49,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             // preload stuff
             var me = this;
             this.wfstStore.connect();
-            if(blnSkipLoad === true) {
+            if (blnSkipLoad === true) {
                 this.skipLoading = blnSkipLoad;
                 return;
             }
@@ -85,7 +83,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                     categoriesLoaded();
                 }
             };
-
 
             var initialLoadCallBackPlaces = function (places) {
                 if (places) {
@@ -137,7 +134,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                     // something went wrong and we should propably just show error
                     // message instead of my places functionality
                     me._instance.forceDisable();
-
                 } else {
                     callback();
                 }
@@ -181,8 +177,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             }
             var callBackWrapper = function (success, list) {
                 // update models updateDate in store
-                //var myplace = me.findMyPlace(list[0].get('id'));
-                //myplace.set('updateDate', list[0].get('updateDate'));
+                // var myplace = me.findMyPlace(list[0].get('id'));
+                // myplace.set('updateDate', list[0].get('updateDate'));
                 me._notifyDataChanged();
                 callback(success);
             };
@@ -450,7 +446,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
          * Notifies components that places/categories have changed with 'MyPlaces.MyPlacesChangedEvent'
          */
         _notifyDataChanged: function () {
-            var event = this._sandbox.getEventBuilder('MyPlaces.MyPlacesChangedEvent')();
+            var event = Oskari.eventBuilder('MyPlaces.MyPlacesChangedEvent')();
             this._sandbox.notifyAll(event);
         },
 
@@ -471,7 +467,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             };
 
             this.wfstStore.deleteMyPlaces([placeId], callBackWrapper);
-
         },
 
         /**
@@ -495,7 +490,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 hoverOnPlace = false;
                 // point geometry needs too exact hover to be usable without some
                 // tolerance
-                if ('OpenLayers.Geometry.Point' === olGeometry.CLASS_NAME) {
+                if (olGeometry.CLASS_NAME === 'OpenLayers.Geometry.Point') {
                     // TODO: figure out some Perfect(tm) math for scale
                     tolerance = 720 - (zoom * zoom * 5);
                     if (zoom > 10) {
@@ -616,7 +611,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
             return this._placesList;
         },
 
-
         /**
          * @method publishCategory
          * Method marks the category published or unpublished
@@ -632,20 +626,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces2.service.MyPlacesServic
                 callback(false);
                 return;
             }
-            var ajaxUrl = me._sandbox.getAjaxUrl();
             jQuery.ajax({
                 type: 'POST',
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 data: {
                     id: category.getId(),
                     makePublic: makePublic
                 },
-                url: ajaxUrl + 'action_route=PublishMyPlaceLayer',
+                url: Oskari.urls.getRoute('PublishMyPlaceLayer'),
                 success: function (pResp) {
                     if (pResp) {
                         category.setPublic(makePublic);

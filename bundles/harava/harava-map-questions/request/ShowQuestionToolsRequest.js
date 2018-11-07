@@ -17,8 +17,8 @@ Oskari.clazz.define('Oskari.harava.bundle.mapquestions.request.ShowQuestionTools
 function(fast) {
     this._fast = fast;
 }, {
-	/** @static @property __name request name */
-    __name : "ShowQuestionToolsRequest",
+    /** @static @property __name request name */
+    __name : 'ShowQuestionToolsRequest',
     /**
      * @method getName
      * @return {String} request name
@@ -34,7 +34,7 @@ function(fast) {
         return this._fast;
     }
 }, {
-	/**
+    /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */

@@ -60,7 +60,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerselector2.LayerSelectorBund
         },
         {
             "type": "text/css",
-            "src": "../../../../bundles/framework/layerselector2/resources/css/style.css"
+            "src": "../../../../bundles/framework/layerselector2/resources/scss/style.scss"
         }],
 
         "locales": [{

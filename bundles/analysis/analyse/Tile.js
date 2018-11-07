@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Tile',
             this.refresh();
         },
 
-        _addTileStyleClasses: function() {
+        _addTileStyleClasses: function () {
             var isContainer = (this.container && this.instance.mediator) ? true : false;
             var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
             var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
@@ -109,18 +109,18 @@ Oskari.clazz.define('Oskari.analysis.bundle.analyse.Tile',
             if (extensionState === 'close') {
                 // Close statsgrid... trying to close all breaks things.
                 s.postRequestByName(
-                                'userinterface.UpdateExtensionRequest',
-                                [{
-                                    getName: function () {
-                                        return 'StatsGrid';
-                                    }
-                                }, 'close']
-                            );
+                    'userinterface.UpdateExtensionRequest',
+                    [{
+                        getName: function () {
+                            return 'StatsGrid';
+                        }
+                    }, 'close']
+                );
             }
             s.postRequestByName(
-                            'userinterface.UpdateExtensionRequest',
-                            [i, 'toggle']
-                        );
+                'userinterface.UpdateExtensionRequest',
+                [i, 'toggle']
+            );
         }
     }, {
         /**

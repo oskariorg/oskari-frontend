@@ -1,3 +1,6 @@
+import olLayerImage from 'ol/layer/Image';
+import olSourceImageWMS from 'ol/source/ImageWMS';
+
 /**
  * Provides functionality to draw MyPlaces layers on the map
  *
@@ -13,12 +16,12 @@ Oskari.clazz.define(
      */
     function () {
     }, {
-        _clazz : 'Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin',
-        __name : 'MyPlacesLayerPlugin',
+        _clazz: 'Oskari.mapframework.bundle.mapmyplaces.plugin.MyPlacesLayerPlugin',
+        __name: 'MyPlacesLayerPlugin',
         /** @static @property layertype type of layers this plugin handles */
         layertype: 'myplaces',
 
-        getLayerTypeSelector : function() {
+        getLayerTypeSelector: function () {
             return this.layertype;
         },
         /**
@@ -58,10 +61,9 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            var openLayerId = 'layer_' + layer.getId(),
-                map = this.getMapModule();
-            var openlayer = new ol.layer.Image({
-                source: new ol.source.ImageWMS({
+            var map = this.getMapModule();
+            var openlayer = new olLayerImage({
+                source: new olSourceImageWMS({
                     url: layer.getWmsUrl(),
                     params: {
                         'LAYERS': layer.getWmsName(),
@@ -73,20 +75,20 @@ Oskari.clazz.define(
                 opacity: layer.getOpacity() / 100
 
             });
-            //minresolution === maxscale and vice versa...
-            if(layer.getMaxScale() && layer.getMaxScale() !== -1) {
+            // minresolution === maxscale and vice versa...
+            if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
                 openlayer.setMinResolution(map.getResolutionForScale(layer.getMaxScale()));
             }
-            if(layer.getMinScale() && layer.getMinScale() !== -1) {
+            if (layer.getMinScale() && layer.getMinScale() !== -1) {
                 var maxResolution = map.getResolutionForScale(layer.getMinScale());
-                if(maxResolution !== map.getResolutionArray()[0]) {
+                if (maxResolution !== map.getResolutionArray()[0]) {
                     // ol3 maxReso is exclusive so don't set if it's the map max resolution
                     openlayer.setMaxResolution(maxResolution);
                 }
             }
 
             this._registerLayerEvents(openlayer, layer);
-        
+
             map.addLayer(openlayer, !keepLayerOnTop);
             this.setOLMapLayers(layer.getId(), openlayer);
 
@@ -101,23 +103,22 @@ Oskari.clazz.define(
          * @param {Oskari layerconfig} oskariLayer
          *
          */
-         _registerLayerEvents: function(layer, oskariLayer){
+        _registerLayerEvents: function (layer, oskariLayer) {
             var me = this,
                 source = layer.getSource();
 
-            source.on('imageloadstart', function(){
+            source.on('imageloadstart', function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), true);
             });
 
-            source.on('imageloadend', function() {
+            source.on('imageloadend', function () {
                 me.getMapModule().loadingState(oskariLayer.getId(), false);
             });
 
-            source.on('imageloaderror', function() {
-                me.getMapModule().loadingState(oskariLayer.getId(), null, true );
+            source.on('imageloaderror', function () {
+                me.getMapModule().loadingState(oskariLayer.getId(), null, true);
             });
-        
-       }
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin'],
         /**
