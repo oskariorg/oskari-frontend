@@ -197,8 +197,6 @@ Oskari.clazz.define(
 
             var container = this.getContainer();
 
-            container.find('.oskari__download-basket-buttons').find('input.send').attr('disabled',true);
-
             container.find('.download-basket__component').each(function(){
                 var basketComponent = jQuery(this);
                 var detail = {
@@ -232,6 +230,7 @@ Oskari.clazz.define(
                 email: this.getContainer().find('.oskari__download-basket-user-info').find('input.email').val()
             };
             var strUserDetails = JSON.stringify(userDetails);
+            me.sendBtn.setEnabled(false);
 
             jQuery.ajax({
                 beforeSend: function (x) {
@@ -263,6 +262,7 @@ Oskari.clazz.define(
                             container.find('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
                             container.find('.cropping-btn.selected').trigger('click');
                             dialog.close();
+                            me.sendBtn.setEnabled(true);
                         });
                         btn.addClass('primary');
                         dialog.show(me._getLocalization('basket-thank-you'), me._getLocalization('basket-email-will-be'), [btn]);
