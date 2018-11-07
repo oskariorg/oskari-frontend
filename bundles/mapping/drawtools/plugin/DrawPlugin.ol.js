@@ -897,6 +897,8 @@ Oskari.clazz.define(
 
                 // stop drawing without modifying
                 if (options.allowMultipleDrawing === false && options.modifyControl === false) {
+                    // sketch needs to be nulled here if modify is not selected or the geometry loses the last drawn point
+                    me._sketch = null;
                     me.stopDrawing(me._id, false);
                 } else if (options.allowMultipleDrawing === false) {
                     // stop drawing and start modifying
