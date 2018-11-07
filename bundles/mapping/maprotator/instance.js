@@ -1,14 +1,7 @@
 /*
 Oskari.app.playBundle(
 {
-  bundlename : 'maprotator',
-  metadata : {
-  "Import-Bundle" : {
-  "maprotator" : {
-  bundlePath : '/Oskari/packages/mapping/ol3/'
-  }
-  }
-  }
+  bundlename : 'maprotator'
 });
 */
 Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',

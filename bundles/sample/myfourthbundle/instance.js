@@ -6,21 +6,8 @@
  *
  * Add this to startupsequence to get this bundle started
  {
-            title : 'myfourthbundle',
-            fi : 'myfourthbundle',
-            sv : '?',
-            en : '?',
             bundlename : 'myfourthbundle',
-            bundleinstancename : 'myfourthbundle',
-            metadata : {
-                "Import-Bundle" : {
-                    "myfourthbundle" : {
-                        bundlePath : '/<path to>/packages/sample/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
+            bundleinstancename : 'myfourthbundle'
         }
  */
 Oskari.clazz.define('Oskari.sample.bundle.myfourthbundle.ToolbarRequestBundleInstance',

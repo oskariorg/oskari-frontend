@@ -195,7 +195,7 @@ Oskari.clazz.define(
                 me.cometd.batch(function () {
                     me._errorSub = me.cometd.subscribe(
                         '/error',
-                        me.getError
+                        me.getError.bind(me)
                     );
                     me.plugin.getIO().subscribe();
                     me.plugin.getIO().startup({

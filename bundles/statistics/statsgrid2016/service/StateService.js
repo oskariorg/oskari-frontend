@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         this.activeIndicator = null;
         this.activeRegion = null;
         this.selectedSeriesValue = null;
+        this.lastSelectedClassification = {};
         this._defaults = {
             classification: {
                 count: 5,
@@ -139,7 +140,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         getClassificationOpts: function (indicatorHash) {
             var indicator = this.getIndicator(indicatorHash) || {};
-            return jQuery.extend({}, this._defaults.classification, indicator.classification || {});
+            return jQuery.extend({}, this._defaults.classification, this.lastSelectedClassification, indicator.classification || {});
         },
         /**
          * Returns an wanted indicator.
@@ -222,7 +223,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     me.activeIndicator = me.getActiveIndicator();
                 } else {
                     if (me.activeIndicator.classification) {
-                        me._defaults.classification = me.activeIndicator.classification;
+                        me.lastSelectedClassification = me.activeIndicator.classification;
                     }
                 }
                 // notify

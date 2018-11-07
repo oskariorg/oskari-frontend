@@ -96,7 +96,7 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Sukupuoli',
             'year': 'Vuosi',
-            'regionset': 'Aluevalinta',
+            'regionset': 'Aluejako',
             'from': 'alkaen',
             'to': 'päättyen'
         },
@@ -266,6 +266,11 @@ Oskari.registerLocalization({
                 'edit': 'Muokkaa',
                 'remove': 'Poista'
             }
+        },
+        'indicatorList': {
+            'title': 'Indikaattorit',
+            'removeAll': 'Poista kaikki',
+            'emptyMsg': 'Ei valittuja indikaattoreita'
         }
     }
 });
