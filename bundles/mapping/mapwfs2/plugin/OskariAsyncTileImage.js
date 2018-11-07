@@ -197,6 +197,8 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
         tile.PLACEHOLDER = false;
         tile.getImage().src = imageData;
         tile.setState(olTileState.LOADED);
+
+        this.changed();
     };
     /**
      * Note! Always uses the non-projected internal tile getter
