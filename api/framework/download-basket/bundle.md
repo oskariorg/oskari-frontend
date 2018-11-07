@@ -48,6 +48,46 @@ Some configuration is needed for license info:
 }
 ```
 
+* licence url and name can also be a layer specific. If layer specific licence has defined then used it, else use defaults (upper).
+```javascript
+"conf": {
+  "licenseByLayers": {
+    // layer, whose id is 1 is specific license
+    1: {
+      "licenseName": {
+        "en": "Creative Common 4.0",
+        "fi": "Creative Common 4.0",
+        "sv": "Creative Common 4.0"
+      },
+      "licenseUrl": {
+        "en": "http://your.license.url",
+        "fi": "http://your.license.url",
+        "sv": "http://your.license.url"
+      }
+    }
+  }
+}
+
+```
+
+Optional configuration:
+* privacyPolicyUrl is used for show privacy policy text and link. Can be localized or only one.
+```javascript
+// Localized
+"conf": {
+  "privacyPolicyUrl": {
+    "en": "http://privacy.policy.url.com",
+    "fi": "http://privacy.policy.url.fi",
+    "sv": "http://privacy.policy.url.se"
+  }
+}
+
+// Only one
+"conf": {
+  "privacyPolicyUrl": "http://privacy.policy.url.fi"
+}
+```
+
 ## Bundle state
 
 No statehandling has been implemented.
@@ -67,6 +107,12 @@ This bundle doesn't handle any requests.
   </tr>
   <tr>
     <td>`userinterface.RemoveExtensionRequest`</td><td> Unregister from the UI in stop()-method.</td>
+  </tr>
+  <tr>
+    <td>`DrawTools.StartDrawingRequest`</td><td> Start drawing rectangle cropping area.</td>
+  </tr>
+  <tr>
+    <td>`DrawTools.StopDrawingRequest`</td><td> Stop drawing rectangle cropping area.</td>
   </tr>
 </table>
 
@@ -88,6 +134,10 @@ This bundle doesn't handle any requests.
   <tr>
     <td>`AfterMapLayerAddEvent`</td>
     <td>Listens to layer add event, needed when user wants to download map data from certain map layer</td>
+  </tr>
+  <tr>
+    <td>`DrawingEvent`</td>
+    <td>Listens to drawing, needed when drawing rectangle cropping area</td>
   </tr>
 </table>
 
