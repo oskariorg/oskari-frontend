@@ -897,6 +897,7 @@ Oskari.clazz.define(
 
                 // stop drawing without modifying
                 if (options.allowMultipleDrawing === false && options.modifyControl === false) {
+                    me._sketch = null;
                     me.stopDrawing(me._id, false);
                 } else if (options.allowMultipleDrawing === false) {
                     // stop drawing and start modifying
