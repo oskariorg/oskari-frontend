@@ -148,13 +148,13 @@ module.exports = (env, argv) => {
             port: proxyPort,
             proxy: [{
                 context: ['/transport/cometd'],
-                target: 'ws://localhost:9904',
+                target: 'ws://localhost:8080',
                 secure: false,
                 changeOrigin: true,
                 ws: true
             }, {
                 context: ['**', `!/Oskari/dist/${version}/**`, '!/Oskari/bundles/bundle.js'],
-                target: 'http://localhost:9904',
+                target: 'http://localhost:8080',
                 secure: false,
                 changeOrigin: true,
                 headers: {
