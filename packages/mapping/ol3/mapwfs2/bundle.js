@@ -46,7 +46,7 @@ function() {
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol3.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureEvent.js"

@@ -74,7 +74,7 @@
         "metadata": {
             "Import-Bundle": {
                 "featuredata2": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                    "bundlePath": "../../../packages/framework/"
                 }
             }
         }
