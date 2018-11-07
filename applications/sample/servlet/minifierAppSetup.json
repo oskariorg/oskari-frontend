@@ -291,15 +291,6 @@
             }
         }
     }, {
-        "bundlename": "selected-featuredata",
-        "metadata": {
-            "Import-Bundle": {
-                "selected-featuredata": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
         "bundlename": "content-editor",
         "lazy": true,
         "metadata": {
