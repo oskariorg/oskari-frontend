@@ -22,7 +22,7 @@ Oskari.clazz.define(
             main: jQuery('<div class="oskari__download-basket"></div>'),
             basketWrapper : jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
             basketButtons : jQuery('<div class="oskari__download-basket-buttons"></div>'),
-            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"><p></p><a target="_blank"></a></div>'),
+            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"><p class="email-info"></p><div class="basket-form"></div><p><a target="_blank"></a></p></div>'),
             basketForm : jQuery(
                 '<form method="" action="">' +
                 '<fieldset>' +
@@ -59,10 +59,16 @@ Oskari.clazz.define(
             // Basket user info
             var basketUserInfo = me._templates.basketUserInfo.clone();
             var basketForm = me._templates.basketForm.clone();
-            basketUserInfo.append(basketForm);
-            basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
+            basketUserInfo.find('div.basket-form').append(basketForm);
+            basketUserInfo.find('p.email-info').text(me._getLocalization('insert-email-for-download'));
 
-            basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr('href',me._getLocalization('privacy-policy-url'));
+            // check privacy policy url
+            var privacyPolicyUrl = me._sandbox.getLocalizedProperty(me.instance.conf.privacyPolicyUrl) ||  me.instance.conf.privacyPolicyUrl;
+            if(privacyPolicyUrl) {
+                basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr('href',privacyPolicyUrl);
+            } else {
+                basketUserInfo.find('a').remove();
+            }
 
             main.append(basketUserInfo);
             basketUserInfo.hide();
@@ -381,7 +387,6 @@ Oskari.clazz.define(
             if (error) {
                 me._errorPopup.show(null, errorText);
                 me._errorPopup.moveTo(me.sendBtn.getElement(), 'bottom');
-                //me._errorPopup.fadeout();
                 form.find('input').addClass('error');
             } else {
                 form.find('input').removeClass('error');
