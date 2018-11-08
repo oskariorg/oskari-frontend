@@ -242,7 +242,6 @@ Oskari.clazz.define(
             }
             var mapVO = me._sandbox.getMap();
             var ajaxUrl = me._sandbox.getAjaxUrl();
-            var map = me.mapModule.getMap();
             var layerUniqueKey = me.container.find('.cropping-btn.selected').data('uniqueKey');
             var layerGeometryColumn = me.container.find('.cropping-btn.selected').data('geometryColumn');
             var layerGeometry = me.container.find('.cropping-btn.selected').data('geometry');
@@ -266,11 +265,11 @@ Oskari.clazz.define(
                     srs: mapVO.getSrsName()
                 },
                 success: function (geojson) {
-                	var uniqueColumn = null;
-                	var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
-                	if (layer.getAttributes().unique) {
-                		uniqueColumn = layer.getAttributes().unique;
-                	}
+                    var uniqueColumn = null;
+                    var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
+                    if (layer.getAttributes().unique) {
+                        uniqueColumn = layer.getAttributes().unique;
+                    }
 
                     // check features
                     var tempFeatures = [];
@@ -590,7 +589,7 @@ Oskari.clazz.define(
                 // not allow load cropping layers
                 if (layer.getAttributes().cropping !== 'true' && layer.getAttributes().cropping !== true) {
                     me._croppingFeatures.forEach(function (feature) {
-                    	var basketObject = {
+                        var basketObject = {
                             layerNameLang: layer.getName(),
                             layerName: layer.getLayerName(),
                             layerId: layer.getId(),
