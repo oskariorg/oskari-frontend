@@ -42,7 +42,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
         setEl: function (el) {
             this.container = jQuery(el[0]);
             this.container.addClass('download-basket');
-
         },
         /**
         * Interface method implementation, assigns the HTML templates
@@ -78,15 +77,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
          * @param  {Object}   previous previous tab
          * @param  {Object}   current  current tab
          */
-        tabChanged: function(previous, current){
-            if(current.getId() === 'download-basket-tab' && current.getId() !== previous.getId()) {
+        tabChanged: function (previous, current) {
+            if (current.getId() === 'download-basket-tab' && current.getId() !== previous.getId()) {
                 current.createBasket();
-            } else if(previous !== null && previous.getId() === 'download-basket-tab' && current.getId() !== 'download-basket-tab') {
+            } else if (previous !== null && previous.getId() === 'download-basket-tab' && current.getId() !== 'download-basket-tab') {
                 previous.removePopup();
             }
         },
 
-         /**
+        /**
          * Gets event handlers
          * @method getEventHandlers
          * @public
@@ -121,7 +120,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.Flyout',
         _getLocalization: function (key) {
             return this._localization[key];
         },
-
 
         /**
          * Gets title

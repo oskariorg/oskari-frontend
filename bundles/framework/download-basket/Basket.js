@@ -20,10 +20,10 @@ Oskari.clazz.define(
         this._el = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket"></div>'),
-            basketWrapper : jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
-            basketButtons : jQuery('<div class="oskari__download-basket-buttons"></div>'),
-            basketUserInfo : jQuery('<div class="oskari__download-basket-user-info"><p class="email-info"></p><div class="basket-form"></div><p><a target="_blank"></a></p></div>'),
-            basketForm : jQuery(
+            basketWrapper: jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
+            basketButtons: jQuery('<div class="oskari__download-basket-buttons"></div>'),
+            basketUserInfo: jQuery('<div class="oskari__download-basket-user-info"><p class="email-info"></p><div class="basket-form"></div><p><a target="_blank"></a></p></div>'),
+            basketForm: jQuery(
                 '<form method="" action="">' +
                 '<fieldset>' +
                 '    <label>' +
@@ -63,9 +63,9 @@ Oskari.clazz.define(
             basketUserInfo.find('p.email-info').text(me._getLocalization('insert-email-for-download'));
 
             // check privacy policy url
-            var privacyPolicyUrl = me._sandbox.getLocalizedProperty(me.instance.conf.privacyPolicyUrl) ||  me.instance.conf.privacyPolicyUrl;
-            if(privacyPolicyUrl) {
-                basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr('href',privacyPolicyUrl);
+            var privacyPolicyUrl = me._sandbox.getLocalizedProperty(me.instance.conf.privacyPolicyUrl) || me.instance.conf.privacyPolicyUrl;
+            if (privacyPolicyUrl) {
+                basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr('href', privacyPolicyUrl);
             } else {
                 basketUserInfo.find('a').remove();
             }
@@ -88,7 +88,7 @@ Oskari.clazz.define(
 
             me.emptyBtn.addClass('approve empty');
             me.emptyBtn.setTitle(me._getLocalization('basket-empty'));
-            me.emptyBtn.setHandler(function() {
+            me.emptyBtn.setHandler(function () {
                 container.find('.download-basket__component').remove();
                 container.find('.empty-basket').show();
                 me._selected = [];
@@ -105,7 +105,7 @@ Oskari.clazz.define(
 
             me.prevBtn.addClass('approve prev');
             me.prevBtn.setTitle(me._getLocalization('basket-prev'));
-            me.prevBtn.setHandler(function() {
+            me.prevBtn.setHandler(function () {
                 container.find('.oskari__download-basket-wrapper').show();
                 container.find('.oskari__download-basket-user-info').hide();
 
@@ -122,7 +122,7 @@ Oskari.clazz.define(
             me.nextBtn.addClass('primary next');
             me.nextBtn.setTitle(me._getLocalization('basket-next'));
 
-            me.nextBtn.setHandler(function() {
+            me.nextBtn.setHandler(function () {
                 container.find('.oskari__download-basket-wrapper').hide();
                 container.find('.oskari__download-basket-user-info').show();
 
@@ -137,8 +137,8 @@ Oskari.clazz.define(
 
             me.sendBtn.addClass('primary send');
             me.sendBtn.setTitle(me._getLocalization('basket-send'));
-            me.sendBtn.setHandler(function() {
-                if(!me.validateUserInputs(container.find('.oskari__download-basket-user-info').find('form'))) {
+            me.sendBtn.setHandler(function () {
+                if (!me.validateUserInputs(container.find('.oskari__download-basket-user-info').find('form'))) {
                     me.loadBasketItem();
                 }
             });
@@ -157,40 +157,38 @@ Oskari.clazz.define(
             this.setContent(me.container);
         },
 
-
         /**
          * Toggle buttons visibilities
          * @method  _buttonsVisible
          * @param   {Object}       visibilities buttons visibilities
          * @private
          */
-        _buttonsVisible: function(visibilities) {
+        _buttonsVisible: function (visibilities) {
             var me = this;
 
-            if(visibilities.empty) {
+            if (visibilities.empty) {
                 me.emptyBtn.setVisible(true);
             } else {
                 me.emptyBtn.setVisible(false);
             }
 
-            if(visibilities.next) {
+            if (visibilities.next) {
                 me.nextBtn.setVisible(true);
             } else {
                 me.nextBtn.setVisible(false);
             }
 
-            if(visibilities.prev) {
+            if (visibilities.prev) {
                 me.prevBtn.setVisible(true);
             } else {
                 me.prevBtn.setVisible(false);
             }
 
-            if(visibilities.send) {
+            if (visibilities.send) {
                 me.sendBtn.setVisible(true);
             } else {
                 me.sendBtn.setVisible(false);
             }
-
         },
 
         /**
@@ -198,12 +196,12 @@ Oskari.clazz.define(
          * @method gatherDownloadDetails
          * @return {Object}              download details
          */
-        gatherDownloadDetails: function() {
+        gatherDownloadDetails: function () {
             var details = [];
 
             var container = this.getContainer();
 
-            container.find('.download-basket__component').each(function(){
+            container.find('.download-basket__component').each(function () {
                 var basketComponent = jQuery(this);
                 var detail = {
                     croppingMode: basketComponent.attr('data-cropping-mode'),
@@ -228,7 +226,7 @@ Oskari.clazz.define(
          * @method loadBasketItem
          * @public
          */
-        loadBasketItem: function(){
+        loadBasketItem: function () {
             var me = this;
             var downloadDetails = me.gatherDownloadDetails();
 
@@ -246,11 +244,10 @@ Oskari.clazz.define(
                 },
                 success: function (resp) {
                     if (resp.success) {
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-
-                        btn = dialog.createCloseButton('OK');
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        var btn = dialog.createCloseButton('OK');
                         var container = me.getContainer();
-                        btn.setHandler(function() {
+                        btn.setHandler(function () {
                             container.find('.oskari__download-basket-wrapper').show();
                             container.find('.oskari__download-basket-user-info').hide();
 
@@ -287,8 +284,8 @@ Oskari.clazz.define(
                         error
                     );
                 },
-                data : {
-                    downloadDetails : downloadDetails,
+                data: {
+                    downloadDetails: downloadDetails,
                     lang: Oskari.getLang(),
                     userDetails: strUserDetails
                 },
@@ -305,7 +302,7 @@ Oskari.clazz.define(
          * @param   {String}   message message
          * @private
          */
-        _openPopup: function(title, message) {
+        _openPopup: function (title, message) {
             var me = this;
             if (me._popup) {
                 me._popup.close(true);
@@ -356,9 +353,9 @@ Oskari.clazz.define(
          * @param  {Object}           form jQuery form object
          * @return {Boolean}                has error
          */
-        validateUserInputs: function(form){
+        validateUserInputs: function (form) {
             var me = this;
-            if(!me._errorPopup) {
+            if (!me._errorPopup) {
                 me._errorPopup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             } else {
                 me._errorPopup.close(true);
@@ -383,7 +380,6 @@ Oskari.clazz.define(
                 }
             });
 
-
             if (error) {
                 me._errorPopup.show(null, errorText);
                 me._errorPopup.moveTo(me.sendBtn.getElement(), 'bottom');
@@ -401,7 +397,7 @@ Oskari.clazz.define(
          * @public
          */
         removePopup: function () {
-            if(this._errorPopup) {
+            if (this._errorPopup) {
                 this._errorPopup.close(true);
             }
         },
@@ -423,7 +419,7 @@ Oskari.clazz.define(
          * @method createBasket
          * @public
          */
-        createBasket: function(){
+        createBasket: function () {
             var me = this;
             var template = jQuery(
                 '<div class="download-basket__component">' +
@@ -438,9 +434,8 @@ Oskari.clazz.define(
                         '</div>' +
                 '</div>');
 
-            if(me._selected.length > 0) {
+            if (me._selected.length > 0) {
                 var el = jQuery(me.container);
-                var buttons = el.find('.oskari__download-basket-buttons');
 
                 // Change basket to visible
                 el.find('.oskari__download-basket-wrapper').find('.empty-basket').hide();
@@ -458,12 +453,12 @@ Oskari.clazz.define(
                 el.find('.oskari__download-basket-user-info').hide();
                 el.find('.oskari__download-basket-wrapper').show();
 
-                me._selected.forEach(function(basketItem, index) {
+                me._selected.forEach(function (basketItem, index) {
                     var feature = basketItem.feature;
 
                     var basketEl = template.clone();
-                    basketEl.attr('data-layer-name',basketItem.layerName);
-                    basketEl.attr('data-layer-id',basketItem.layerId);
+                    basketEl.attr('data-layer-name', basketItem.layerName);
+                    basketEl.attr('data-layer-id', basketItem.layerId);
                     var parsed = geoJsonReader.read(feature);
                     var bbox = parsed.geometry.getEnvelope().getCoordinates();
 
@@ -472,16 +467,16 @@ Oskari.clazz.define(
                     basketEl.attr('data-bbox-right', bbox[2].x);
                     basketEl.attr('data-bbox-top', bbox[2].y);
 
-                    basketEl.attr('data-cropping-layer',feature.properties.layerName);
-                    basketEl.attr('data-cropping-layer-id',feature.properties.layerId);
-                    basketEl.attr('data-cropping-mode',feature.properties.croppingMode);
+                    basketEl.attr('data-cropping-layer', feature.properties.layerName);
+                    basketEl.attr('data-cropping-layer-id', feature.properties.layerId);
+                    basketEl.attr('data-cropping-mode', feature.properties.croppingMode);
                     basketEl.attr('data-index', index);
                     var identifiers = [];
                     var identifier = {
                         layerName: feature.properties.layerName,
                         uniqueColumn: feature.properties.uniqueKey,
-                        geometryColumn : feature.properties.geometryColumn,
-                        geometryName : feature.properties.geometryName,
+                        geometryColumn: feature.properties.geometryColumn,
+                        geometryName: feature.properties.geometryName,
                         uniqueValue: feature.properties[feature.properties.uniqueKey]
 
                     };
@@ -492,22 +487,21 @@ Oskari.clazz.define(
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
                     basketEl.find('.basket__content-cropping>span').text(feature.properties.layerNameLang);
 
-
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
                     var licenseLink = basketEl.find('.basket__content-license>a');
 
                     var layerId = basketItem.layerId;
 
-	                if (me.instance.conf.licenseByLayers && me.instance.conf.licenseByLayers[layerId]) {
-	                	licenseTitle.text(me._getLocalization('basket-license-title'));
-	                    licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseName) ||
-	                        me.instance.conf.licenseName ||
-	                        me._getLocalization('basket-license-name'));
-	                    licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseUrl) ||
-	                        me.instance.conf.licenseUrl);
-	                } else if(me.instance.conf.licenseUrl) {
-                    	licenseTitle.text(me._getLocalization('basket-license-title'));
+                    if (me.instance.conf.licenseByLayers && me.instance.conf.licenseByLayers[layerId]) {
+                        licenseTitle.text(me._getLocalization('basket-license-title'));
+                        licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseName) ||
+                            me.instance.conf.licenseName ||
+                            me._getLocalization('basket-license-name'));
+                        licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseUrl) ||
+                            me.instance.conf.licenseUrl);
+                    } else if (me.instance.conf.licenseUrl) {
+                        licenseTitle.text(me._getLocalization('basket-license-title'));
                         licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseName) ||
                             me.instance.conf.licenseName ||
                             me._getLocalization('basket-license-name'));
@@ -552,7 +546,7 @@ Oskari.clazz.define(
          *     feature: 'geojson feature object'
          * }
          */
-        addToBasket: function(item){
+        addToBasket: function (item) {
             var me = this;
             me._selected.push(item);
         }

@@ -132,10 +132,6 @@ This bundle doesn't handle any requests.
     <td>Listens to map click, needed when cropping area is selected from the map</td>
   </tr>
   <tr>
-    <td>`AfterMapLayerAddEvent`</td>
-    <td>Listens to layer add event, needed when user wants to download map data from certain map layer</td>
-  </tr>
-  <tr>
     <td>`DrawingEvent`</td>
     <td>Listens to drawing, needed when drawing rectangle cropping area</td>
   </tr>

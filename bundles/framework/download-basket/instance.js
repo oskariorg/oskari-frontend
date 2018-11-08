@@ -163,7 +163,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
                 }
                 if (doOpen) {
                     this.plugins['Oskari.userinterface.Flyout'].createUI();
-                    if(!me.startedTabs){
+                    if (!me.startedTabs) {
                         me.cropping.createUi();
                         me.basket.createUi();
                         me.startedTabs = true;
@@ -180,16 +180,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
             },
             'MapClickedEvent': function (evt) {
                 var me = this,
-                x = evt.getMouseX(),
-                y = evt.getMouseY();
+                    x = evt.getMouseX(),
+                    y = evt.getMouseY();
                 me.cropping.croppingLayersHighlight(x, y);
             },
-            'AfterMapLayerAddEvent': function (event) {
-                var me = this;
-                var map = me.mapModule.getMap();
-            },
-            'DrawingEvent': function(event) {
-                if(event.getId() === this.cropping.DOWNLOAD_BASKET_DRAW_ID) {
+            'DrawingEvent': function (event) {
+                if (event.getId() === this.cropping.DOWNLOAD_BASKET_DRAW_ID) {
                     this.cropping.handleDrawingEvent(event);
                 }
             }
@@ -270,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.downloadBasket.BundleInstance',
          * @method addBasketNotify
          * @public
          */
-        addBasketNotify:function(){
+        addBasketNotify: function () {
             this.plugins['Oskari.userinterface.Tile'].refresh();
         }
 
