@@ -34,17 +34,18 @@ Oskari.registerLocalization({
                 "basket-prev" : "Föregående",
                 "basket-next" : "Nästa",
                 "basket-send" : "Ladda data",
-                "insert-email-for-download" : "Fyll i din e-postadress för nedladdning",
+                "insert-email-for-download" : "Fyll i din e-postadress för nedladdning:",
+                "privacy-policy" : "Dataskyddsbeskrivning",
                 "basket-user-email" : "E-postadress",
                 "basket-user-email-sure" : "Bekräfta e-postadress",
-                "check-form-error-huom" : "Observera",
-                "check-form-error" : "Kontrollera",
+                "check-form-error" : "Kontrollera e-postadresser",
                 "error-in-downloading" : "Nedladdning av data misslyckades",
                 "basket-thank-you" : "Tack för nedladdningen!",
                 "basket-email-will-be" : "u får till den givna e-postadressen en länk genom vilken du kommer åt att ladda ner din data. Det kan dröja en stund att skicka länken för nedladdning ifall din data är stor.",
                 "basket-cropping-layer-title" : "Avgränsningsdata: ",
                 "basket-license-title" : "Bruksanvisning: ",
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –licens"
+                "basket-license-name" : "Creative Commons BY 4.0",
+                "basket-license-url" : "https://creativecommons.org/licenses/by/4.0/deed.sv"
             }
         }
     }

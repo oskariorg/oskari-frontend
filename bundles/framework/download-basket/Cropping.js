@@ -10,58 +10,62 @@ Oskari.clazz.define(
         this.instance = parent;
         this._sandbox = parent.getSandbox();
         this._localization = localization;
-        this.templates = {};
         this.setTitle(localization.title);
         this.mapModule = this._sandbox.findRegisteredModuleInstance('MainMapModule');
         this.state = {};
-        this._map = null;
-        this.croppingVectorLayer = null;
-        this.reqularControl = null;
         this.basket = null;
         this._templates = {
             main: jQuery('<div class="oskari__download-basket-cropping"></div>'),
             buttons: jQuery('<div class="oskari__download-basket-cropping-buttons"><p></p></div>'),
-            helptemplate: jQuery('<div class="oskari__download-basket-help"><p></p></div>'),
-            tempbasket: jQuery('<div class="oskari__download-basket-temp-basket"><p></p></div>')
+            help: jQuery('<div class="oskari__download-basket-help"><p></p></div>'),
+            tempBasket: jQuery('<div class="oskari__download-basket-temp-basket"><p></p></div>')
         };
-    }, {
-        startCropping: function () {
-            this.setContent(this.createUi());
-        },
-        /**
-         * @private @method _initTemplates, creates ui for cropping items
-         *
-         *
-         */
-        _initTemplates: function () {
-            var me = this;
-            var map = me.mapModule.getMap();
 
-            // Loop cropping layers and create cropping btns
-            jQuery.each(me.getCroppingLayers(), function (key, value) {
+        this.croppingLayerId = null;
+        this._features = {};
+        this._croppingFeatures = [];
+        this._drawing = false;
+        this.CROPPING_LAYER_ID = 'download-basket-cropping-layer';
+        this.DOWNLOAD_BASKET_DRAW_ID = 'download-basket-drawing';
+    }, {
+        /**
+         * Creates Ui for cropping tab
+         * @method createUi
+         */
+        createUi: function () {
+            var me = this;
+
+            var main = me._templates.main.clone();
+            var buttons = me._templates.buttons.clone();
+
+            // Loop cropping layers and create cropping buttons
+            me.getCroppingLayers().forEach(function (croppingLayer) {
                 // Initialize cropping btns
                 var croppingBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                croppingBtn.addClass('primary cropping-btn');
-                croppingBtn.setTitle(value.getName());
-                jQuery(croppingBtn.getElement()).data('layerId', value.getId());
-                jQuery(croppingBtn.getElement()).data('layerName', value.getLayerName());
-                jQuery(croppingBtn.getElement()).data('layerUrl', value.getLayerUrl());
-                var layerAttributes = value.getAttributes();
+                croppingBtn.addClass('cropping-btn');
+                croppingBtn.setTitle(croppingLayer.getName());
+
+                var croppingBtnEl = jQuery(croppingBtn.getElement());
+
+                croppingBtnEl.data('layerId', croppingLayer.getId());
+                croppingBtnEl.data('layerName', croppingLayer.getLayerName());
+
+                var layerAttributes = croppingLayer.getAttributes();
                 if (layerAttributes.unique !== null) {
-                    jQuery(croppingBtn.getElement()).data('uniqueKey', layerAttributes.unique);
-                    jQuery(croppingBtn.getElement()).data('geometryColumn', layerAttributes.geometryColumn);
-                    jQuery(croppingBtn.getElement()).data('geometry', layerAttributes.geometry);
+                    croppingBtnEl.data('uniqueKey', layerAttributes.unique);
+                    croppingBtnEl.data('geometryColumn', layerAttributes.geometryColumn);
+                    croppingBtnEl.data('geometry', layerAttributes.geometry);
                 }
 
-                if (value.rect) {
-                    jQuery(croppingBtn.getElement()).data('croppingMode', 'rectangle');
+                if (croppingLayer.rect) {
+                    croppingBtnEl.data('croppingMode', 'rectangle');
                 } else {
-                    jQuery(croppingBtn.getElement()).data('croppingMode', 'polygon');
+                    croppingBtnEl.data('croppingMode', 'polygon');
                 }
 
-                jQuery(croppingBtn.getElement()).on('click', function (event) {
-                    var el = jQuery(this);
+                croppingBtn.setHandler(function () {
                     var selectedLayers = me._buildLayerList();
+
                     // User has not selected any layers
                     if (selectedLayers.length === 0) {
                         var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -71,171 +75,131 @@ Oskari.clazz.define(
                         return false;
                     }
                     // Cropping btn is allready selected
-                    if (el.hasClass('selected')) {
-                        me.activateNormalGFI(true);
-                        me.activateNormalWFSReq(true);
-                        jQuery('.cropping-btn').removeClass('selected');
-                        me.disableAllCroppingLayers(map);
-                        me.removeAllFeaturesFromCroppingLayer(map);
-                        jQuery('.oskari__download-basket-temp-basket').hide();
-                        jQuery('.oskari__download-basket-help').hide();
-                        me.reqularControl.deactivate();
+                    if (croppingBtnEl.hasClass('selected')) {
+                        me._toggleGFIAndWFSHighlight(true);
+                        me.container.find('.cropping-btn').removeClass('selected');
+                        me.removeSelectedCroppingLayer();
+                        me.removeFeatures();
+                        me._updateBasketText(0);
+                        croppingBtnEl.removeClass('primary');
+                        me._toggleDrawControl(false, false);
                     } else {
-                        // User has some cropping going on
-                        if (jQuery('.oskari__download-basket-temp-basket').is(':visible')) {
-                            me.confirmCroppingAreaChange(value, map, el, value.rect);
-                        } else {
-                            // Fresh user selection
-                            me.activateNormalGFI(false);
-                            me.activateNormalWFSReq(false);
-                            jQuery('.cropping-btn').removeClass('selected');
-                            el.addClass('selected');
-                            jQuery('.oskari__download-basket-help').show();
-                            if (value.rect) {
-                                me.reqularControl.activate();
-                                me.removeAllFeaturesFromCroppingLayer(map);
-                                me.disableAllCroppingLayers(map);
+                        var toggleLayers = function () {
+                            me.removeSelectedCroppingLayer();
+                            if (croppingLayer.rect) {
+                                me._toggleDrawControl(true);
+                                me.removeFeatures();
                             } else {
-                                me.reqularControl.deactivate();
-                                me.createCroppingWMSLayer(value.getLayerName(), value.getLayerUrl(), map);
-                                me.removeAllFeaturesFromCroppingLayer(map);
+                                me._toggleDrawControl(false);
+                                me._sandbox.postRequestByName('AddMapLayerRequest', [croppingLayer.getId()]);
+                                me._croppingLayerId = croppingLayer.getId();
                             }
+                        };
+
+                        // User has some cropping going on
+                        if (me.container.find('.oskari__download-basket-temp-basket').is(':visible')) {
+                            me.confirmCroppingAreaChange(croppingLayer, croppingBtnEl, croppingLayer.rect, toggleLayers);
+                        } else {
+                            me.container.find('.oskari__download-basket-cropping-buttons input.cropping-btn').removeClass('primary');
+                            croppingBtnEl.addClass('primary');
+
+                            // Fresh user selection
+                            me._toggleGFIAndWFSHighlight(false);
+                            me.container.find('.cropping-btn').removeClass('selected');
+                            croppingBtnEl.addClass('selected');
+                            toggleLayers();
                         }
-                    }
-                    event.preventDefault();
-                }
-                );
-
-                croppingBtn.insertTo(me._templates.buttons);
-            });
-
-            me._templates.buttons.find('p').text(me._getLocalization('choose-cropping-mode'));
-            me._templates.main.append(me._templates.buttons);
-
-            // Help text
-            me._templates.main.append(me._templates.helptemplate);
-            me._templates.helptemplate.find('p').text(me._getLocalization('choose-wanted-areas-from-map'));
-            me._templates.helptemplate.hide();
-
-            // Create Temp basket
-            var moveToBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            moveToBasketBtn.addClass('approve');
-            moveToBasketBtn.setTitle(me._getLocalization('move-to-basket'));
-            jQuery(moveToBasketBtn.getElement()).on('click', function () {
-                me.addToBasket(map);
-                jQuery('.oskari__download-basket-temp-basket').hide();
-                me.removeAllFeaturesFromCroppingLayer(map);
-            });
-            moveToBasketBtn.insertTo(me._templates.tempbasket);
-            me._templates.tempbasket.find('p').html(me._getLocalization('users-temp-basket'));
-
-            var clearTempBasket = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            clearTempBasket.addClass('primary');
-            clearTempBasket.setTitle(me._getLocalization('temp-basket-empty'));
-            jQuery(clearTempBasket.getElement()).on('click',
-                function (event) {
-                    jQuery('.oskari__download-basket-temp-basket').hide();
-                    me.removeAllFeaturesFromCroppingLayer(map);
-                    event.preventDefault();
-                }
-            );
-            clearTempBasket.insertTo(me._templates.tempbasket);
-
-            me._templates.main.append(me._templates.tempbasket);
-            me._templates.tempbasket.hide();
-
-            // Create vector layer for  user selections
-            if (me.croppingVectorLayer === null) {
-                me.createCroppingVectorLayer();
-            }
-        },
-
-        /**
-         * [disableNormalGFI disables normal GFI cause using mapclick in cropping]
-         * @param  {[type]} state [true/false]
-         * @return {[none]}
-         */
-        activateNormalGFI: function (state) {
-            var me = this,
-                reqBuilder = Oskari.requestBuilder('MapModulePlugin.GetFeatureInfoActivationRequest');
-
-            if (reqBuilder) {
-                var request = reqBuilder(state);
-                me._sandbox.request(me.instance, request);
-            }
-        },
-        /**
-         * [activateNormalWFSReq disables normal WFS click cause using mapclick in cropping]
-         * @param  {[type]} state [true/false]
-         * @return {[none]}
-         */
-        activateNormalWFSReq: function (state) {
-            var me = this,
-                reqBuilder = Oskari.requestBuilder('WfsLayerPlugin.ActivateHighlightRequest');
-
-            if (reqBuilder) {
-                var request = reqBuilder(state);
-                me._sandbox.request(me.instance, request);
-            }
-        },
-
-        /**
-         * [isCroppingToolActive checks if some cropping btn is selected]
-         * @return {Boolean} [true/false]
-         */
-        isCroppingToolActive: function () {
-            return jQuery('.cropping-btn').hasClass('selected');
-        },
-
-        /**
-         * [createCroppingVectorLayer creates cropping vector layer to map]
-         * @return {[none]}
-         */
-        createCroppingVectorLayer: function () {
-            var me = this,
-                _map = me.mapModule.getMap();
-
-            me.croppingVectorLayer = new OpenLayers.Layer.Vector('cropping-areas', {
-                eventListeners: {
-                    'featuresadded': function (layer) {
-                        var layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode');
-                        var index = me.croppingVectorLayer.features.length - 1;
-                        me.croppingVectorLayer.features[index].attributes.croppingMode = layerCroppingMode;
-                        me.addToTempBasket(me.croppingVectorLayer.features.length);
-                    }
-                }
-            });
-
-            _map.addLayers([me.croppingVectorLayer]);
-
-            me.reqularControl = new OpenLayers.Control.DrawFeature(me.croppingVectorLayer,
-                OpenLayers.Handler.RegularPolygon, {
-                    handlerOptions: {
-                        sides: 4,
-                        irregular: true
                     }
                 });
 
-            _map.addControl(me.reqularControl);
+                croppingBtn.insertTo(buttons);
+            });
+
+            buttons.find('p').text(me._getLocalization('choose-cropping-mode'));
+            main.append(buttons);
+
+            // Help text
+            var help = me._templates.help.clone();
+            help.find('p').text(me._getLocalization('choose-wanted-areas-from-map'));
+            help.hide();
+            main.append(help);
+
+            // Create Temp basket
+            var tempBasket = me._templates.tempBasket.clone();
+            var clearTempBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            clearTempBasketBtn.addClass('approve');
+            clearTempBasketBtn.setTitle(me._getLocalization('temp-basket-empty'));
+            clearTempBasketBtn.setHandler(function () {
+                me._updateBasketText(0);
+                me.removeFeatures();
+            });
+            clearTempBasketBtn.insertTo(tempBasket);
+
+            var moveToBasketBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            moveToBasketBtn.addClass('primary');
+            moveToBasketBtn.setTitle(me._getLocalization('move-to-basket'));
+
+            moveToBasketBtn.setHandler(function () {
+                me.addToBasket();
+                me._updateBasketText(0);
+                me.removeFeatures();
+            });
+            moveToBasketBtn.insertTo(tempBasket);
+            tempBasket.find('p').html(me._getLocalization('users-temp-basket'));
+            tempBasket.hide();
+            main.append(tempBasket);
+
+            me.container = main;
+            this.setContent(me.container);
         },
 
         /**
-         * [getCroppingLayers: Gets layers that has attribute rajaus: true]
-         * @return {[array]} [Layers that has attribute rajaus: true]
+         * Removes selected cropping layer
+         * @method removeSelectedCroppingLayer
+         * @public
+         */
+        removeSelectedCroppingLayer: function () {
+            var me = this;
+            if (me._croppingLayerId) {
+                me._sandbox.postRequestByName('RemoveMapLayerRequest', [me._croppingLayerId]);
+                me._croppingLayerId = null;
+            }
+        },
+
+        /**
+         * Toggle GFI and WFS hightlight requests
+         * @method _toggleGFIAndWFSHighlight
+         * @public
+         * @param  {Boolean}          enabled has enabled?
+         */
+        _toggleGFIAndWFSHighlight: function (enabled) {
+            this._sandbox.postRequestByName('MapModulePlugin.GetFeatureInfoActivationRequest', [enabled]);
+            this._sandbox.postRequestByName('WfsLayerPlugin.ActivateHighlightRequest', [enabled]);
+        },
+
+        /**
+         * Gets layers that has attribute cropping
+         * @method getCroppingLayers
+         * @public
+         * @return {Array} Layers that has attribute cropping: true
          */
         getCroppingLayers: function () {
             var me = this;
 
             var mapService = me._sandbox.getService('Oskari.mapframework.service.MapLayerService');
             var allLayers = mapService.getAllLayers();
-            var croppingLayers = jQuery.grep(allLayers, function (n) {
-                var attributes = n.getAttributes();
-                if (attributes.cropping) {
-                    return n;
-                }
+
+            var croppingLayers = allLayers.filter(function (layer) {
+                var attributes = layer.getAttributes();
+                return !!attributes.cropping;
             });
 
-            // Rect cropping mode
+            // sort cropping layers
+            croppingLayers.sort(function (a, b) {
+                return Oskari.util.naturalSort(a.getName(), b.getName());
+            });
+
+            // regular draw cropping mode
             var regular = {
                 name: me._getLocalization('rect-cropping'),
                 rect: true,
@@ -256,43 +220,35 @@ Oskari.clazz.define(
                 }
             };
 
+            // regular draw is always latest
             croppingLayers.push(regular);
 
             return croppingLayers;
         },
+
         /**
-         * [getUrlParams find parameters by name]
-         * @param  {[String]} uri       [uri for search]
-         * @param  {[String]} paramName [parameters name]
-         * @return {[String]}           [right parameter value]
-         */
-        getUrlParams: function (uri, paramName) {
-            var queryString = {};
-            uri.replace(
-                new RegExp('([^?=&]+)(=([^&]*))?', 'g'),
-                function ($0, $1, $2, $3) { queryString[$1] = $3; }
-            );
-            return queryString[paramName];
-        },
-        /**
-         * [croppingLayersHighlight Highlights clicked cropping area/areas]
-         * @param  {[string]} x      [Clicked on map X]
-         * @param  {[string]} y      [Clicked on map Y]
-         * @return {[none]}
+         * Highlight selected cropping feature
+         * @method croppingLayersHighlight
+         * @public
+         * @param  {Double}                x x-coordinate
+         * @param  {Double}                y y-coordinate
          */
         croppingLayersHighlight: function (x, y) {
-            var me = this,
-                mapVO = me._sandbox.getMap(),
-                ajaxUrl = Oskari.urls.getRoute(),
-                map = me.mapModule.getMap(),
-                layerUniqueKey = jQuery('.cropping-btn.selected').data('uniqueKey'),
-                layerGeometryColumn = jQuery('.cropping-btn.selected').data('geometryColumn'),
-                layerGeometry = jQuery('.cropping-btn.selected').data('geometry'),
-                layerName = jQuery('.cropping-btn.selected').data('layerName'),
-                layerId = jQuery('.cropping-btn.selected').data('layerId'),
-                layerUrl = me.getUrlParams(jQuery('.cropping-btn.selected').data('layerUrl'), 'id'),
-                layerCroppingMode = jQuery('.cropping-btn.selected').data('croppingMode'),
-                layerNameLang = jQuery('.cropping-btn.selected').val();
+            var me = this;
+
+            // Not get cropping features when drawing selected or not any cropping selected
+            if (me._drawing || !me.container.find('.cropping-btn').hasClass('selected')) {
+                return;
+            }
+            var mapVO = me._sandbox.getMap();
+            var ajaxUrl = me._sandbox.getAjaxUrl();
+            var layerUniqueKey = me.container.find('.cropping-btn.selected').data('uniqueKey');
+            var layerGeometryColumn = me.container.find('.cropping-btn.selected').data('geometryColumn');
+            var layerGeometry = me.container.find('.cropping-btn.selected').data('geometry');
+            var layerName = me.container.find('.cropping-btn.selected').data('layerName');
+            var layerId = me.container.find('.cropping-btn.selected').data('layerId');
+            var layerCroppingMode = me.container.find('.cropping-btn.selected').data('croppingMode');
+            var layerNameLang = me.container.find('.cropping-btn.selected').val();
 
             jQuery.ajax({
                 type: 'POST',
@@ -300,7 +256,6 @@ Oskari.clazz.define(
                 url: ajaxUrl + 'action_route=GetFeatureForCropping',
                 data: {
                     layers: layerName,
-                    url: layerUrl,
                     x: x,
                     y: y,
                     id: layerId,
@@ -309,36 +264,47 @@ Oskari.clazz.define(
                     height: mapVO.getHeight(),
                     srs: mapVO.getSrsName()
                 },
-                success: function (data) {
+                success: function (geojson) {
                     var uniqueColumn = null;
                     var layer = me._sandbox.findMapLayerFromAllAvailable(layerId);
                     if (layer.getAttributes().unique) {
                         uniqueColumn = layer.getAttributes().unique;
                     }
-                    var geojson_format = new OpenLayers.Format.GeoJSON();
-                    var features = geojson_format.read(data.features[0]);
-                    var uniqueValue = (uniqueColumn) ? data.features[0].properties[uniqueColumn] : data.features[0].id;
-                    if (!uniqueValue) {
-                        uniqueValue = data.features[0].id;
-                    }
-                    var founded = me.croppingVectorLayer.getFeaturesByAttribute('cropid', uniqueValue);
 
-                    if (founded !== null && founded.length > 0) {
-                        me.croppingVectorLayer.removeFeatures(founded);
-                    } else {
-                        features[0].attributes.cropid = uniqueValue;
-                        features[0].attributes.layerName = layerName;
-                        features[0].attributes.layerUrl = layerUrl;
-                        features[0].attributes.uniqueKey = layerUniqueKey;
-                        features[0].attributes.geometryColumn = layerGeometryColumn;
-                        features[0].attributes.geometryName = layerGeometry;
-                        features[0].attributes.croppingMode = layerCroppingMode;
-                        features[0].attributes.layerNameLang = layerNameLang;
+                    // check features
+                    var tempFeatures = [];
+                    geojson.features.forEach(function (feature) {
+                        var uniqueValue = feature.id;
+                        if (uniqueColumn && feature.properties[uniqueColumn]) {
+                            uniqueValue = feature.properties[uniqueColumn];
+                        }
 
-                        me.croppingVectorLayer.addFeatures(features);
-                        map.setLayerIndex(me.croppingVectorLayer, 1000000);
+                        if (me._features[uniqueValue]) {
+                            me.removeFeatures('cropid', uniqueValue);
+                            me._updateBasketText(me._croppingFeatures.length);
+                        } else {
+                            me._features[uniqueValue] = true;
+                            feature.properties.cropid = uniqueValue;
+                            feature.properties.layerName = layerName;
+                            feature.properties.layerId = layerId;
+                            feature.properties.uniqueKey = layerUniqueKey;
+                            feature.properties.geometryColumn = layerGeometryColumn;
+                            feature.properties.geometryName = layerGeometry;
+                            feature.properties.croppingMode = layerCroppingMode;
+                            feature.properties.layerNameLang = layerNameLang;
+                            tempFeatures.push(feature);
+                        }
+                    });
+
+                    if (tempFeatures.length > 0) {
+                        geojson.features = tempFeatures;
+
+                        var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
+                        Oskari.getSandbox().postRequestByName(rn, [geojson, {
+                            layerId: me.CROPPING_LAYER_ID
+                        }]);
+                        me.addToTempBasket(geojson.features);
                     }
-                    me.addToTempBasket(me.croppingVectorLayer.features.length);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
@@ -351,6 +317,13 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Opens popup
+         * @method  _openPopup
+         * @param   {String}   title   title
+         * @param   {String}   message message
+         * @private
+         */
         _openPopup: function (title, message) {
             var me = this;
             if (me._popup) {
@@ -363,78 +336,89 @@ Oskari.clazz.define(
         },
 
         /**
-         * [removeAllFeaturesFromCroppingLayer removes all features from cropping layer]
-         * @return {[none]}
+         * Removes features from cropping layer
+         * @method removeFeatures
+         * @public
          */
-        removeAllFeaturesFromCroppingLayer: function (map) {
-            var layer = map.getLayersByName('cropping-areas')[0];
-            if (layer !== null) {
-                layer.destroyFeatures();
-            }
-        },
-
-        /**
-         * [_disableAllCroppingLayers removes cropping layer]
-         * @param  {[type]} map [object]
-         * @return none
-         */
-        disableAllCroppingLayers: function (map) {
-            var layer = map.getLayersByName('download-basket-cropping-layer');
-            if (layer.length > 0) {
-                map.removeLayer(layer[0]);
-            }
-        },
-
-        /**
-         * [createCroppingWMSLayer creates WMS layer by users click and shows it on map]
-         * @param  {[string]} layerName [Layers name in geoserver]
-         * @param  {[string]} layerUrl  [Layers url in geoserver]
-         * @param  {[object]} map       [Openlayers map object]
-         * @return none
-         */
-        createCroppingWMSLayer: function (layerName, layerUrl, map) {
+        removeFeatures: function (property, value) {
             var me = this;
-            me.disableAllCroppingLayers(map);
+            me._removeDrawings(property, value);
+            if (property && value) {
+                delete me._features[value];
 
-            var layer = new OpenLayers.Layer.WMS('download-basket-cropping-layer', layerUrl, {
-                layers: layerName,
-                transparent: 'true'
-            },
-            {
-                isBaseLayer: false,
-                visibility: true
-            });
-
-            map.addLayer(layer);
+                var tempCroppingFeatures = [];
+                me._croppingFeatures.forEach(function (feature) {
+                    if (feature.properties[property] !== value) {
+                        tempCroppingFeatures.push(feature);
+                    }
+                });
+                me._croppingFeatures = tempCroppingFeatures;
+            } else {
+                me._features = {};
+                me._croppingFeatures = [];
+            }
         },
 
         /**
-         * [addToTempBasket updates temp basket]
-         * @param {[type]} croppingLength [How many areas user has selected]
+         * Updates basket text
+         * @method  _updateBasketText
+         * @param   {Integer}          selectedCount selected area count
+         * @private
          */
-        addToTempBasket: function (croppingLength) {
-            var el = jQuery('.oskari__download-basket-temp-basket');
+        _updateBasketText: function (selectedCount) {
+            var me = this;
+            var el = me.container.find('.oskari__download-basket-temp-basket');
             var p = el.find('p');
-
-            if (croppingLength > 0) {
-                p.find('strong').text(croppingLength);
+            if (selectedCount > 0) {
+                p.find('strong').text(selectedCount);
                 el.show();
-                jQuery('.oskari__download-basket-help').hide();
+                me._toggleBasketHelpVisibility(false);
             } else {
                 el.hide();
-                jQuery('.oskari__download-basket-help').show();
+                me._toggleBasketHelpVisibility(true);
             }
         },
 
         /**
-         * [confirmCroppingAreaChange description]
-         * @param  {[type]} value [Selected cropping layer values]
-         * @param  {[type]} _map  [Openlayers map]
-         * @param  {[type]} el    [Button element]
-         * @param  {[type]} rect  [Is rectangle selection]
-         * @return {[none]}
+         * Updates temp basket
+         * @method addToTempBasket
+         * @public
+         * @param {Array} cropping features
          */
-        confirmCroppingAreaChange: function (value, _map, el, rect) {
+        addToTempBasket: function (croppingFeatures) {
+            var me = this;
+
+            croppingFeatures.forEach(function (feature) {
+                me._croppingFeatures.push(feature);
+            });
+
+            me._updateBasketText(me._croppingFeatures.length);
+        },
+
+        /**
+         * Toggle basket help visibility
+         * @method  _toggleBasketHelpVisibility
+         * @param   {Boolean}                    visible is visible or not?
+         * @private
+         */
+        _toggleBasketHelpVisibility: function (visible) {
+            var el = this.container.find('.oskari__download-basket-help');
+            if (visible) {
+                el.show();
+            } else {
+                el.hide();
+            }
+        },
+
+        /**
+         * Confirma cropping area selection change
+         * @public @method confirmCroppingAreaChange
+         * @param  {String} value selected cropping layer values
+         * @param  {Object} croppingButton    button jQuery element
+         * @param  {Boolean} drawing  drawing selection
+         * @param {Function} action action function
+         */
+        confirmCroppingAreaChange: function (value, croppingButton, drawing, action) {
             var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = Oskari.clazz.create('Oskari.userinterface.component.Button'),
@@ -443,39 +427,47 @@ Oskari.clazz.define(
             btn.addClass('primary');
             btn.setTitle(me._getLocalization('yes'));
             btn.setHandler(function () {
-                me.addToBasket(_map);
-                jQuery('.cropping-btn').removeClass('selected');
-                el.addClass('selected');
-                jQuery('.oskari__download-basket-temp-basket').hide();
-                me.removeAllFeaturesFromCroppingLayer(_map);
-                jQuery('.oskari__download-basket-help').show();
-                if (rect) {
-                    me.reqularControl.activate();
+                me.addToBasket();
+                me.container.find('.cropping-btn').removeClass('selected');
+                me.container.find('.cropping-btn').removeClass('primary');
+                croppingButton.addClass('selected');
+                croppingButton.addClass('primary');
+                me._updateBasketText(0);
+                me.removeFeatures();
+
+                if (drawing) {
+                    me._toggleDrawControl(true);
                 } else {
-                    me.reqularControl.deactivate();
-                    me.createCroppingWMSLayer(value.getLayerName(), value.getLayerUrl(), _map);
-                    me.activateNormalGFI(false);
-                    me.activateNormalWFSReq(false);
+                    me._toggleDrawControl(false);
+                    me._toggleGFIAndWFSHighlight(false);
                 }
                 dialog.close();
+
+                if (typeof action === 'function') {
+                    action();
+                }
             });
 
             alertBtn.setTitle(me._getLocalization('no'));
             alertBtn.setHandler(function () {
-                jQuery('.cropping-btn').removeClass('selected');
-                el.addClass('selected');
-                jQuery('.oskari__download-basket-temp-basket').hide();
-                me.removeAllFeaturesFromCroppingLayer(_map);
-                jQuery('.oskari__download-basket-help').show();
-                if (rect) {
-                    me.reqularControl.activate();
+                me.container.find('.cropping-btn').removeClass('selected');
+                me.container.find('.cropping-btn').removeClass('primary');
+                croppingButton.addClass('selected');
+                croppingButton.addClass('primary');
+                me._updateBasketText(0);
+                me.removeFeatures();
+
+                if (drawing) {
+                    me._toggleDrawControl(true);
                 } else {
-                    me.reqularControl.deactivate();
-                    me.createCroppingWMSLayer(value.getLayerName(), value.getLayerUrl(), _map);
-                    me.activateNormalGFI(false);
-                    me.activateNormalWFSReq(false);
+                    me._toggleDrawControl(false);
+                    me._toggleGFIAndWFSHighlight(false);
                 }
                 dialog.close();
+
+                if (typeof action === 'function') {
+                    action();
+                }
             });
 
             dialog.show(me._getLocalization('want-to-move-basket'), me._getLocalization('notify-move-to-basket'), [alertBtn, btn]);
@@ -483,18 +475,82 @@ Oskari.clazz.define(
         },
 
         /**
+         * Remove drawings
+         * @method  _removeDrawings
+         * @param   {String}        property identifier property
+         * @param   {String}        value    identifier value
+         * @private
+         */
+        _removeDrawings: function (property, value) {
+            var me = this;
+            me._isRemove = true;
+            me._sandbox.postRequestByName('DrawTools.StopDrawingRequest', [me.DOWNLOAD_BASKET_DRAW_ID, true]);
+            me._sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [property, value, me.CROPPING_LAYER_ID]);
+
+            if (me._drawing) {
+                me._toggleDrawControl(me._drawing);
+            }
+        },
+
+        /**
+         * Toggle draw control
+         * @method  _toggleDrawControl
+         * @param   {Boolean}           enable is enabled or not?
+         * @param   {Boolean}           helpVisibility not change help visibility
+         * @private
+         */
+        _toggleDrawControl: function (enable, helpVisibility) {
+            var me = this;
+            me._drawing = enable;
+            var helpVisible = (typeof helpVisibility !== 'undefined') ? helpVisibility : !enable;
+            if (enable) {
+                var data = [me.DOWNLOAD_BASKET_DRAW_ID, 'Box', { allowMultipleDrawing: true, modifyControl: false }];
+                me._sandbox.postRequestByName('DrawTools.StartDrawingRequest', data);
+            } else {
+                me._sandbox.postRequestByName('DrawTools.StopDrawingRequest', [me.DOWNLOAD_BASKET_DRAW_ID, true]);
+            }
+            me._toggleBasketHelpVisibility(helpVisible);
+        },
+
+        /**
+         * Handle drawing events
+         * @method handleDrawingEvent
+         * @param  {Oskari.mapping.drawtools.event.DrawingEvent}           event drawing event
+         */
+        handleDrawingEvent: function (event) {
+            var me = this;
+            if (event.getIsFinished() && !me._isRemove) {
+                me._features = {};
+                me._croppingFeatures = [];
+
+                // Add cropping mode to feature attributes
+                var features = event.getGeoJson().features;
+                features.forEach(function (feature) {
+                    feature.properties.croppingMode = 'rectangle';
+                });
+                me.addToTempBasket(event.getGeoJson().features);
+            } else if (event.getIsFinished() && me._isRemove) {
+                me._isRemove = false;
+            }
+        },
+
+        /**
+         * Gets localization
          * @method _getLocalization
+         * @private
          */
         _getLocalization: function (key) {
             return this._localization[key];
         },
 
         /**
-         * [_getErrorText text for ajax errors]
-         * @param  {[jqXHR]}       [jqXHR]
-         * @param  {[textStatus]}  [textStatus]
-         * @param  {[errorThrown]} [errorThrown]
-         * @return {[error]}       [error]
+         * Gets error text
+         * @method  _getErrorText
+         * @param   {Object}      jqXHR       jqxhr
+         * @param   {String}      textStatus  status text
+         * @param   {Object}      errorThrown error
+         * @return  {String}                  error text
+         * @private
          */
         _getErrorText: function (jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown;
@@ -510,61 +566,48 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method createUi
-         * Creates the UI for a fresh start
+         * Set basket
+         * @method setBasket
+         * @param  {Oskari.mapframework.bundle.downloadBasket.Basket}  basket basket
          */
-        createUi: function () {
-            var me = this;
-            me._initTemplates();
-            me.container = me._templates.main.clone(true);
-
-            return me.container;
-        },
-
         setBasket: function (basket) {
             var me = this;
             me.basket = basket;
         },
 
         /**
-         * [addToBasket Collects all needed information for basket object]
-         * @param {[type]} map [description]
+         * Collects all needed information for basket object
+         * @method addToBasket
+         * @public
          */
-        addToBasket: function (map) {
+        addToBasket: function () {
             var me = this;
             var selectedLayers = me._buildLayerList();
-            var croppedAreaFeatures = me.croppingVectorLayer.features;
 
             // Finds layers that are active and loop cropping areas to them, collect are important values
-            jQuery.each(selectedLayers, function (layer_key, layer_value) {
-                jQuery.each(croppedAreaFeatures, function (feature_key, feature_value) {
-                    var basketObject = {};
-                    basketObject.layerNameLang = layer_value.getName();
-                    basketObject.layerName = layer_value.getLayerName();
-                    basketObject.layerUrl = me.getUrlParams(layer_value.getLayerUrl(), 'id');
-                    basketObject.cropLayerName = feature_value.attributes.layerName;
-                    basketObject.cropLayerNameLang = feature_value.attributes.layerNameLang;
-                    basketObject.cropLayerUrl = feature_value.attributes.layerUrl;
-                    basketObject.cropUniqueKey = feature_value.attributes.uniqueKey;
-                    basketObject.cropGeometryColumn = feature_value.attributes.geometryColumn;
-                    basketObject.cropGeometryName = feature_value.attributes.geometryName;
-                    basketObject.cropUniqueKeyValue = feature_value.attributes[feature_value.attributes.uniqueKey];
-                    basketObject.bbox = {
-                        bottom: feature_value.geometry.bounds.bottom,
-                        left: feature_value.geometry.bounds.left,
-                        right: feature_value.geometry.bounds.right,
-                        top: feature_value.geometry.bounds.top
-                    };
-                    basketObject.cropMode = feature_value.attributes.croppingMode;
+            selectedLayers.forEach(function (layer) {
+                // not allow load cropping layers
+                if (layer.getAttributes().cropping !== 'true' && layer.getAttributes().cropping !== true) {
+                    me._croppingFeatures.forEach(function (feature) {
+                        var basketObject = {
+                            layerNameLang: layer.getName(),
+                            layerName: layer.getLayerName(),
+                            layerId: layer.getId(),
+                            feature: feature
+                        };
 
-                    me.basket.addToBasket(basketObject);
-                });
+                        me.basket.addToBasket(basketObject);
+                    });
+                }
             });
             me.instance.addBasketNotify();
         },
+
         /**
-        * [_buildLayerList finds layer that user has chowsen to be cropped]
-        * @return {[layer]} [array of layers]
+        * Builds layerlist
+        * @method  _buildLayerList
+        * @return  {Array}   layer ids array
+        * @private
         */
         _buildLayerList: function () {
             var me = this;
