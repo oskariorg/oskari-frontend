@@ -236,15 +236,6 @@
             }
         }
     }, {
-        "bundlename": "analyse",
-        "metadata": {
-            "Import-Bundle": {
-                "analyse": {
-                    "bundlePath": "../../../packages/analysis/ol3/"
-                }
-            }
-        }
-    }, {
         "bundlename": "myplacesimport",
         "metadata": {
             "Import-Bundle": {
@@ -287,15 +278,6 @@
             "Import-Bundle": {
                 "maprotator": {
                     "bundlePath": "../../../packages/mapping/ol3/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "selected-featuredata",
-        "metadata": {
-            "Import-Bundle": {
-                "selected-featuredata": {
-                    "bundlePath": "../../../packages/framework/bundle/"
                 }
             }
         }
