@@ -42,6 +42,10 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
             tileInfos: {
             }
         };
+
+        this.throttledChange = Oskari.util.throttle(() => {
+            this.changed();
+        }, 100);
     }
     /**
      * Strip bbox for unique key because of some inaccucate cases
@@ -198,7 +202,7 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
         tile.getImage().src = imageData;
         tile.setState(olTileState.LOADED);
 
-        this.changed();
+        this.throttledChange();
     };
     /**
      * Note! Always uses the non-projected internal tile getter
