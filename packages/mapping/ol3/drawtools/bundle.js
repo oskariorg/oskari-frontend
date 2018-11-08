@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.mapping.drawtools.DrawToolsBundle",
                 "src": "../../../../bundles/mapping/drawtools/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol3.js"
+                "src": "../../../../bundles/mapping/drawtools/plugin/DrawPlugin.ol.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/drawtools/request/StartDrawingRequest.js"

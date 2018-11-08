@@ -126,7 +126,7 @@ module.exports = (env, argv) => {
         },
         resolve: {
             alias: {
-                'goog': path.resolve(__dirname, 'node_modules/ol-cesium/src/goog') // needed for ol-cesium. Can be removed when v 2.3 will be released
+
             },
             modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
             symlinks: false
