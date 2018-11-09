@@ -3,7 +3,7 @@ const height = 300;
 const margin = 10;
 const histoHeight = 200;
 
-export default function manualClassificationEditor (el, manualBounds, indicatorData, changeCallback) {
+export default function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -58,6 +58,35 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         .on('end', notify);
 
     function update () {
+        // BAND BLOCKS
+
+        const blockData = handlesData
+            .sort((a, b) => {
+                return a.value - b.value;
+            })
+            .slice(0, -1) // skip last
+            .map((b, i) => {
+                return {
+                    x0: b.value,
+                    x1: handlesData[i + 1].value
+                };
+            });
+
+        const blocks = histoGroup.selectAll('.block')
+            .data(blockData);
+
+        const blocksEnter = blocks.enter()
+            .append('rect')
+            .attr('class', 'block')
+            .attr('y', 0)
+            .attr('height', histoHeight)
+            .attr('fill', (d, i) => `#${colorSet[i]}`)
+            .merge(blocks)
+            .attr('x', (d) => x(d.x0))
+            .attr('width', d => x(d.x1) - x(d.x0));
+
+        /// HANDLES
+
         const handles = dragHandles.selectAll('.handle')
             .data(handlesData.slice(1, -1), (d) => d.id);
 

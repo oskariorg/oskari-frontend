@@ -2,13 +2,16 @@ import manualClassificationEditor from './ManualClassificationEditor';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
 
-export default class ManualClassificationHandler {
-    constructor (classificationService, classificationOpts) {
-        this.classificationService = classificationService;
+export default class ManualClassificationView {
+    constructor (statsService, classificationOpts) {
+        this.classificationService = statsService.getClassificationService();
+        this.colorService = statsService.getColorService();
         if (classificationOpts.method !== 'manual') {
             return;
         }
         this.classCount = classificationOpts.count;
+        this.colorSetName = classificationOpts.name;
+        this.classType = classificationOpts.type;
         this.manualBounds = classificationOpts.manualBounds;
     }
     setData (indicatorData) {
@@ -42,7 +45,9 @@ export default class ManualClassificationHandler {
 
         editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(this.classCount, d3.min(this.indicatorData), d3.max(this.indicatorData));
 
-        manualClassificationEditor(content.get(0), editedBounds, this.indicatorData, (bounds) => {
+        const colorSet = this.colorService.getColorset(this.classCount, this.classType, this.colorSetName);
+
+        manualClassificationEditor(content.get(0), editedBounds, this.indicatorData, colorSet, (bounds) => {
             editedBounds = bounds;
         });
 
