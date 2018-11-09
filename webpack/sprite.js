@@ -316,7 +316,7 @@ const targets = getDirectories(path.resolve(appsetupPath)).map((dirPath) => {
     const appName = dirPath.split(path.sep).pop();
     return {
         appIconsDir: dirPath + path.sep + 'icons',
-        targetDir: path.resolve(__dirname, `../dist/${version}/${appName}`)
+        targetDir: path.resolve(`./dist/${version}/${appName}`)
     };
 }).filter((target) => {
     return existsSync(target.appIconsDir) && isDirectory(target.appIconsDir);

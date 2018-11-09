@@ -8,10 +8,8 @@
   "main": "grunt.js",
   "scripts": {
     "test": "eslint . --quiet",
-    "build": "webpack --mode production",
-    "start": "webpack-dev-server --hot",
-    "paikkis": "webpack-dev-server --hot --env.appdef=applications/paikkatietoikkuna.fi",
-    "asdi": "webpack-dev-server --hot --env.appdef=applications/asdi",
+    "build": "webpack --mode production --env.appdef=applications/sample",
+    "start": "webpack-dev-server --hot --env.appdef=applications/sample",
     "sprite": "node webpack/sprite.js"
   },
   "dependencies": {
