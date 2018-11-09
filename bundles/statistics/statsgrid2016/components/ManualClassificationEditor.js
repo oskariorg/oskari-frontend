@@ -9,7 +9,8 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         .attr('width', width)
         .attr('height', height);
 
-    const histoGroup = svg.append('g');
+    const clipPath = svg.append('defs').append('clipPath').attr('id', 'histoClip');
+    const histoGroup = svg.append('g').attr('clip-path', 'url(#histoClip)');
     const dragHandles = svg.append('g');
 
     const histogramGenerator = d3.histogram().thresholds(20);
@@ -35,9 +36,8 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         .curve(d3.curveBasis);
 
     // TODO use as clipping path!
-    histoGroup.append('path')
+    clipPath.append('path')
         .datum(histoData)
-        .attr('fill', 'steelblue')
         .attr('d', area);
 
     const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
@@ -75,7 +75,7 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         const blocks = histoGroup.selectAll('.block')
             .data(blockData);
 
-        const blocksEnter = blocks.enter()
+        blocks.enter()
             .append('rect')
             .attr('class', 'block')
             .attr('y', 0)
@@ -83,7 +83,7 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
             .attr('fill', (d, i) => `#${colorSet[i]}`)
             .merge(blocks)
             .attr('x', (d) => x(d.x0))
-            .attr('width', d => x(d.x1) - x(d.x0));
+            .attr('width', d => 1 + x(d.x1) - x(d.x0));
 
         /// HANDLES
 
@@ -98,7 +98,8 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
             .append('circle')
             .attr('r', 10)
             .attr('cy', height - 50)
-            .attr('fill', 'red');
+            .attr('fill', '#6baed6')
+            .attr('stroke', '#4f819e');
 
         handlesEnter
             .call(dragBehavior)
