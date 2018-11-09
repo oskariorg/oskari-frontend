@@ -1,3 +1,5 @@
+import ManualClassificationHandler from './ManualClassificationHandler';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (sandbox, locale) {
     this.sb = sandbox;
     this.LAYER_ID = 'STATS_LAYER';
@@ -11,6 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
         me.setLayerOpacityValue(event.getMapLayer().getId(), event.getMapLayer().getOpacity());
     });
+    this.manualClassHandler = null;
     this.__templates = {
         classification: jQuery('<div class="classifications">' +
             '<div class="classification-options">' +
@@ -34,6 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                                 .map((method, i) => `<option value="${method}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.methods.' + method)}</option>`).join() +
                         '</select>' +
                     '</div>' +
+                    `<div class="classification-manual"><input class="oskari-formcomponent oskari-button" type="button" value="${this.locale('classify.editClassifyTitle')}"></div>` +
                 '</div>' +
 
                 // classes
@@ -54,14 +58,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                         this.classificationService.getAvailableModes()
                             .map((mode, i) => `<option value="${mode}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.modes.' + mode)}</option>`).join() +
                         '</select>' +
-                    '</div>' +
-                '</div>' +
-
-                // manual classification
-                '<div class="classification-manual visible-map-style-choropleth visible-map-style-points">' +
-                    '<div class="label">' + this.locale('classify.manual') + '</div>' +
-                    '<div class="classify-manual value">' +
-                        '<input >' +
                     '</div>' +
                 '</div>' +
 
@@ -230,12 +226,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         var decimalSelect = me._element.find('select.decimal-place');
         decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
 
+        me.manualClassHandler = new ManualClassificationHandler(classification);
+
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
             if (err) {
                 // propably nothing to tell the user at this point. There will be some invalid choices available on the form
                 return;
             }
+            if (classification.method === 'manual') {
+                me.manualClassHandler.setData(data);
+            }
+
             var validOptions = service.getClassificationService().getAvailableOptions(data);
             if (validOptions.maxCount) {
                 var options = amount.find('option');
@@ -305,19 +307,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
-        var manualClass = me._element.find('.classify-manual input').val();
-        if (values.method === 'manual' && manualClass) {
-            values.manualBounds = JSON.parse(manualClass);
+        const bounds = me.manualClassHandler.getBounds();
+        if (values.method === 'manual' && bounds) {
+            values.manualBounds = bounds;
         }
 
         this._validateSelections(values);
-
-        if (values.mapStyle !== 'points') {
-            delete values.min;
-            delete values.max;
-        } else {
-            delete values.type;
-        }
 
         return values;
     },
@@ -330,6 +325,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         var range = this.service.getColorService().getRange(values.type, values.mapStyle);
         if (values.count > range.max) {
             values.count = range.max;
+        }
+
+        // validate that manualBounds is for right amount of classes
+        if (values.manualBounds && values.manualBounds.length !== values.count + 1) {
+            console.log('wrong count! throwing away');
+            delete values.manualBounds;
+        }
+
+        if (values.mapStyle !== 'points') {
+            delete values.min;
+            delete values.max;
+        } else {
+            delete values.type;
         }
     },
 
@@ -417,6 +425,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();
+        });
+        me._element.find('.classification-manual input').on('click', function () {
+            me.manualClassHandler.openEditor(() => {
+                updateClassification();
+            });
         });
         return me._element;
     },

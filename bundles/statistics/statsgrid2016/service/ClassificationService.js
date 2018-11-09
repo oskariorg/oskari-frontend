@@ -1,3 +1,5 @@
+import equalSizeBands from '../util/equalSizeBands';
+
 /**
  * @class Oskari.statistics.statsgrid.ClassificationService
  */
@@ -114,7 +116,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     } else if (opts.method === 'equal') {
                         response.bounds = groupStats.getEqInterval(opts.count);
                     } else if (opts.method === 'manual') {
-                        response.bounds = groupStats.setClassManually(opts.manualBounds || [stats.min(), stats.mean(), stats.max()]);
+                        response.bounds = groupStats.setClassManually(opts.manualBounds || equalSizeBands(opts.count, stats.min(), stats.max()));
                     }
                     groupOpts.method = opts.method;
                     groupOpts.count = opts.count;
@@ -140,7 +142,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     // Tasavälit
                     response.bounds = stats.getEqInterval(opts.count);
                 } else if (opts.method === 'manual') {
-                    response.bounds = stats.setClassManually(opts.manualBounds || [stats.min(), stats.mean(), stats.max()]);
+                    response.bounds = stats.setClassManually(opts.manualBounds || equalSizeBands(opts.count, stats.min(), stats.max()));
                 }
             }
 
@@ -417,6 +419,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if (this.limits.mode.indexOf(opts.mode) === -1) {
                 throw new Error('Requested mode not allowed: ' + opts.mode + '. Allowed values are: ' + this.limits.mode.join());
             }
+
             return opts;
         },
         /**
