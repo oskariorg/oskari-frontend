@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         var decimalSelect = me._element.find('select.decimal-place');
         decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
 
-        me.manualClassHandler = new ManualClassificationHandler(classification);
+        me.manualClassHandler = new ManualClassificationHandler(me.classificationService, classification);
 
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {

@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
      */
     function (colorService) {
         this._colorService = colorService;
+        this.lastUsedBounds = null;
     }, {
         __name: 'StatsGrid.ClassificationService',
         __qname: 'Oskari.statistics.statsgrid.ClassificationService',
@@ -93,6 +94,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             stats.setPrecision(opts.precision);
 
             var response = {};
+
+            const setBounds = (stats) => {
+                if (opts.method === 'jenks') {
+                    // Luonnolliset välit
+                    response.bounds = stats.getJenks(opts.count);
+                } else if (opts.method === 'quantile') {
+                    // Kvantiilit
+                    response.bounds = stats.getQuantile(opts.count);
+                } else if (opts.method === 'equal') {
+                    // Tasavälit
+                    response.bounds = stats.getEqInterval(opts.count);
+                } else if (opts.method === 'manual') {
+                    response.bounds = stats.setClassManually(opts.manualBounds || this.getBoundsFallback(opts.count, stats.min(), stats.max()));
+                }
+            };
+
             if (groupStats) {
                 if (groupStats.serie.length < 3) {
                     return;
@@ -109,15 +126,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     (!groupOpts.count || groupOpts.count !== opts.count);
 
                 if (calculateBounds) {
-                    if (opts.method === 'jenks') {
-                        response.bounds = groupStats.getJenks(opts.count);
-                    } else if (opts.method === 'quantile') {
-                        response.bounds = groupStats.getQuantile(opts.count);
-                    } else if (opts.method === 'equal') {
-                        response.bounds = groupStats.getEqInterval(opts.count);
-                    } else if (opts.method === 'manual') {
-                        response.bounds = groupStats.setClassManually(opts.manualBounds || equalSizeBands(opts.count, stats.min(), stats.max()));
-                    }
+                    setBounds(groupStats);
                     groupOpts.method = opts.method;
                     groupOpts.count = opts.count;
                     groupStats.classificationOptions = groupOpts;
@@ -132,18 +141,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 if (opts.count >= list.length) {
                     opts.count = list.length - 1;
                 }
-                if (opts.method === 'jenks') {
-                    // Luonnolliset välit
-                    response.bounds = stats.getJenks(opts.count);
-                } else if (opts.method === 'quantile') {
-                    // Kvantiilit
-                    response.bounds = stats.getQuantile(opts.count);
-                } else if (opts.method === 'equal') {
-                    // Tasavälit
-                    response.bounds = stats.getEqInterval(opts.count);
-                } else if (opts.method === 'manual') {
-                    response.bounds = stats.setClassManually(opts.manualBounds || equalSizeBands(opts.count, stats.min(), stats.max()));
-                }
+                setBounds(stats);
             }
 
             response.ranges = stats.ranges;
@@ -221,6 +219,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stats.setColors(colors);
                 return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
+            this.lastUsedBounds = response.bounds;
             return response;
         },
         getPixelForSize: function (index, size, range) {
@@ -250,6 +249,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
 
             return size;
+        },
+        getBoundsFallback: function (count, dataMin, dataMax) {
+            return this._tryLastUsedBounds(count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
+        },
+        _tryLastUsedBounds: function (count, dataMin, dataMax) {
+            if (!this.lastUsedBounds) {
+                return;
+            }
+            if (this.lastUsedBounds[0] !== dataMin || this.lastUsedBounds[this.lastUsedBounds.length - 1] !== dataMax) {
+                return;
+            }
+            if (this.lastUsedBounds.length === count + 1) {
+                return this.lastUsedBounds.slice();
+            }
+            const output = this.lastUsedBounds
+                .slice(0, -1) // remove last
+                .slice(0, count); // take as many as we need
+
+            let last = output.pop();
+            return output.concat(equalSizeBands(count - output.length, last, dataMax));
         },
         _getPointsLegend: function (ranges, opts, color, counter, statsOpts, formatter) {
             var me = this;

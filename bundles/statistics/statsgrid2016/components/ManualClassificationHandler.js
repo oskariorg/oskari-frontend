@@ -1,10 +1,10 @@
 import ManualClassificationEditor from './ManualClassificationEditor';
-import equalSizeBands from '../util/equalSizeBands';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
 
 export default class ManualClassificationHandler {
-    constructor (classificationOpts) {
+    constructor (classificationService, classificationOpts) {
+        this.classificationService = classificationService;
         if (classificationOpts.method !== 'manual') {
             return;
         }
@@ -40,7 +40,7 @@ export default class ManualClassificationHandler {
         const buttons = [dialog.createCloseButton(), okButton];
         const content = jQuery('<div></div>');
 
-        editedBounds = this.manualBounds || equalSizeBands(this.classCount, d3.min(this.indicatorData), d3.max(this.indicatorData));
+        editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(this.classCount, d3.min(this.indicatorData), d3.max(this.indicatorData));
 
         const editor = new ManualClassificationEditor(content.get(0), this.classCount, editedBounds, this.indicatorData, (bounds) => {
             editedBounds = bounds;
