@@ -9,9 +9,6 @@
                     "mapwfs2": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/mapping/ol3/"
-                    },
                     "mapuserlayers": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
@@ -93,7 +90,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "featuredata2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/framework/"
                     }
                 }
             }
