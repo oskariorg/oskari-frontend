@@ -1,4 +1,4 @@
-import ManualClassificationEditor from './ManualClassificationEditor';
+import manualClassificationEditor from './ManualClassificationEditor';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
 
@@ -42,11 +42,12 @@ export default class ManualClassificationHandler {
 
         editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(this.classCount, d3.min(this.indicatorData), d3.max(this.indicatorData));
 
-        const editor = new ManualClassificationEditor(content.get(0), this.classCount, editedBounds, this.indicatorData, (bounds) => {
+        manualClassificationEditor(content.get(0), editedBounds, this.indicatorData, (bounds) => {
             editedBounds = bounds;
         });
 
         dialog.makeModal();
         dialog.show(loc('classify.editClassifyTitle'), content, buttons);
+        content.parent().css('margin', '10px 0');
     }
 }
