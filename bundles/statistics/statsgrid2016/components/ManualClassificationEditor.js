@@ -1,5 +1,5 @@
 const width = 500;
-const height = 300;
+const height = 270;
 const margin = 10;
 const histoHeight = 200;
 
@@ -14,7 +14,6 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
     const dragHandles = svg.append('g');
 
     const histogramGenerator = d3.histogram().thresholds(20);
-
     const histoData = histogramGenerator(indicatorData);
 
     const y = d3.scaleLinear()
@@ -35,24 +34,32 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         .y1(d => y(d.length))
         .curve(d3.curveBasis);
 
-    // TODO use as clipping path!
+    // HISTOGRAM CLIP PATH
     clipPath.append('path')
         .datum(histoData)
         .attr('d', area);
 
     const handlesData = manualBounds.map((d, i) => ({ value: d, id: i }));
 
+    let selectedId = handlesData[1].id;
+    const isSelected = d => d.id === selectedId;
+
     const notify = () => {
         changeCallback(handlesData.map((d) => d.value));
     };
 
     const dragBehavior = d3.drag()
-        .subject(function (d) {
+        .subject((d) => {
             return { x: x(d.value), y: d3.event.y };
         })
-        .on('drag', function (d) {
+        .on('start', (d) => {
+            selectedId = d.id;
+            update();
+        })
+        .on('drag', (d) => {
             var newX = d3.event.x;
             d.value = x.invert(newX);
+            selectedId = d.id;
             update();
         })
         .on('end', notify);
@@ -92,19 +99,25 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
 
         const handlesEnter = handles.enter()
             .append('g')
-            .attr('class', 'handle');
+            .classed('handle', true)
+            .call(dragBehavior);
 
         handlesEnter
             .append('circle')
-            .attr('r', 10)
-            .attr('cy', height - 50)
-            .attr('fill', '#6baed6')
-            .attr('stroke', '#4f819e');
+            .attr('cy', histoHeight + 15);
 
-        handlesEnter
-            .call(dragBehavior)
-            .merge(handles)
-            .attr('transform', (d) => `translate(${x(d.value)} 0)`);
+        const mergedHandles = handlesEnter
+            .merge(handles);
+
+        mergedHandles
+            .attr('transform', (d) => `translate(${x(d.value)} 0)`)
+            .classed('selected', isSelected)
+            .filter(isSelected)
+            .raise();
+
+        mergedHandles
+            .selectAll('circle')
+            .attr('r', d => isSelected(d) ? 10 : 8);
     }
     update();
 }

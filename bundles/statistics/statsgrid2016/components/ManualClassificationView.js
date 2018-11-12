@@ -1,4 +1,5 @@
 import manualClassificationEditor from './ManualClassificationEditor';
+import '../resources/scss/manualClassification.scss';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
 
@@ -39,7 +40,7 @@ export default class ManualClassificationView {
             okCallback();
         });
         const buttons = [dialog.createCloseButton(), okButton];
-        const content = jQuery('<div></div>');
+        const content = jQuery('<div class="manual-class-view"></div>');
         const count = this.classificationOpts.count;
 
         editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(count, d3.min(this.indicatorData), d3.max(this.indicatorData));

@@ -1,0 +1,21 @@
+.manual-class-view {
+    position: relative;
+    svg {
+        .handle {
+            fill: #6baed6;
+            stroke: #4f819e;
+
+            &.selected {
+                fill: #fad500;
+                stroke: #ac9200;
+            }
+        }
+    }
+    div.input-area {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background-color: #aaa;
+    }
+}
