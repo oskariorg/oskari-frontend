@@ -1,6 +1,6 @@
 const width = 500;
-const height = 270;
-const margin = 10;
+const height = 290;
+const margin = 12;
 const histoHeight = 200;
 
 export default function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
@@ -64,7 +64,42 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         })
         .on('end', notify);
 
-    function update () {
+    // VALUE INPUT INIT
+
+    const parseValidateInput = (value) => {
+        const parsed = parseFloat(value);
+        if (isNaN(parsed)) {
+            return null;
+        }
+        if (parsed < x.domain()[0]) {
+            return x.domain()[0];
+        }
+        if (parsed > x.domain()[1]) {
+            return x.domain()[1];
+        }
+        return parsed;
+    };
+
+    const valueInput = d3.select(el).append('div')
+        .classed('input-area', true)
+        .append('input')
+        .attr('type', 'text')
+        .on('input', () => {
+            const value = valueInput.property('value');
+            const validated = parseValidateInput(value);
+            valueInput.classed('fail', validated === null);
+            if (validated === null) {
+                return;
+            }
+            handlesData.find(isSelected).value = validated;
+            update(true);
+            notify();
+        })
+        .on('blur', () => {
+            update();
+        });
+
+    function update (skipInput) {
         // BAND BLOCKS
 
         const blockData = handlesData
@@ -118,6 +153,13 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         mergedHandles
             .selectAll('circle')
             .attr('r', d => isSelected(d) ? 10 : 8);
+
+        if (skipInput) {
+            return;
+        }
+        // VALUE INPUT UPDATE
+
+        valueInput.property('value', handlesData.find(isSelected).value);
     }
     update();
 }
