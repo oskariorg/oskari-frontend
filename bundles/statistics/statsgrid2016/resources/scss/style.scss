@@ -1088,9 +1088,10 @@ max-width: 31.25em; // 500px
 }
 .user-indicator-table {
     display: table;
+
     tbody {
-        //max-width: 430px;
-        overflow: auto;
+        overflow-y: auto;
+        overflow-x: hidden;
         max-height: 33em;
         display: block;
     }
