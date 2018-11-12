@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
         },
         /**
          * Applies currently selected Oskari style to tileset.
-         * 
+         *
          * @method  _applyOskariStyle
          * @param  {Cesium.Cesium3DTileset}  tileset
          */
