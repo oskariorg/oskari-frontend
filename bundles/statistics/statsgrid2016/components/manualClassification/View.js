@@ -1,5 +1,5 @@
-import manualClassificationEditor from './ManualClassificationEditor';
-import '../resources/scss/manualClassification.scss';
+import manualClassificationEditor from './editor';
+import '../../resources/scss/manualClassification.scss';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
 

@@ -1,4 +1,4 @@
-import ManualClassificationView from './ManualClassificationView';
+import ManualClassificationView from './manualClassification/View';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (sandbox, locale) {
     this.sb = sandbox;

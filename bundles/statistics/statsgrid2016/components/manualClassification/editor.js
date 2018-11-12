@@ -1,5 +1,7 @@
+import inputGuide from './inputGuide';
+
 const width = 500;
-const height = 290;
+const height = 293;
 const margin = 12;
 const histoHeight = 200;
 
@@ -9,7 +11,9 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         .attr('width', width)
         .attr('height', height);
 
-    const clipPath = svg.append('defs').append('clipPath').attr('id', 'histoClip');
+    const defs = svg.append('defs');
+    const histoClip = defs.append('clipPath').attr('id', 'histoClip');
+    const guide = svg.append('g');
     const histoGroup = svg.append('g').attr('clip-path', 'url(#histoClip)');
     const dragHandles = svg.append('g');
 
@@ -30,12 +34,12 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
             const delta = d.x1 - d.x0;
             return x(d.x0 + (delta * i / (histoData.length - 1)));
         })
-        .y0(y(0))
+        .y0(height)
         .y1(d => y(d.length))
         .curve(d3.curveBasis);
 
     // HISTOGRAM CLIP PATH
-    clipPath.append('path')
+    histoClip.append('path')
         .datum(histoData)
         .attr('d', area);
 
@@ -64,7 +68,7 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         })
         .on('end', notify);
 
-    // VALUE INPUT INIT
+    // VALUE INPUT INIT & INTERACTION
 
     const parseValidateInput = (value) => {
         const parsed = parseFloat(value);
@@ -159,7 +163,13 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
         }
         // VALUE INPUT UPDATE
 
-        valueInput.property('value', handlesData.find(isSelected).value);
+        const selectedvalue = handlesData.find(isSelected).value;
+
+        valueInput.property('value', selectedvalue);
+
+        // VALUE INPUT GUIDE BOX
+
+        inputGuide(guide, x, 50, histoHeight + 40, x(selectedvalue));
     }
     update();
 }
