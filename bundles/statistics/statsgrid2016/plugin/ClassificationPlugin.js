@@ -57,6 +57,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this.__legend.on('rendered', function () {
             me._calculatePluginSize();
         });
+        this.__legend.on('check-overflow', function (storeOverflow) {
+            me._overflowCheck(storeOverflow);
+        });
+        this.__legend.on('restore-overflow', function () {
+            me._restoreOverflow();
+        });
+        this._overflowedOffset = null;
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (!this.getElement()) {
@@ -68,6 +75,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         'data-location'
                     )
                 );
+                this._overflowCheck();
             }
         },
         _createControlElement: function () {
@@ -171,6 +179,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
             }
+        },
+        _overflowCheck: function (storeOverflow) {
+            var pluginEl = this.getElement();
+            if (!pluginEl) {
+                return;
+            }
+            if (pluginEl.css('position') === 'absolute') {
+                var top = pluginEl.offset().top;
+                var bottom = top + pluginEl.height();
+                var offsetToWindowBottom = jQuery(window).height() - bottom - 10; // add margin 10
+                if (this._defaultLocation.includes('bottom')) {
+                    var pluginContainer = jQuery('.mapplugins.bottom.right');
+                    var containerHeight = pluginContainer.outerHeight();
+                    var offsetToContainer = pluginEl.position().left + pluginEl.outerWidth() + 10;
+                    if (offsetToContainer > 0) {
+                        offsetToWindowBottom = offsetToWindowBottom - containerHeight + 10; // remove margin 10
+                    }
+                }
+                if (offsetToWindowBottom < 0) {
+                    if (storeOverflow === true) {
+                        this._overflowedOffset = offsetToWindowBottom;
+                    }
+                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
+                }
+            }
+        },
+        _restoreOverflow: function () {
+            var pluginEl = this.getElement();
+            if (this._overflowedOffset === null || !pluginEl) {
+                return;
+            }
+            pluginEl.css('top', pluginEl.position().top - this._overflowedOffset + 'px');
+            this._overflowedOffset = null;
         },
         hasUI: function () {
             // Plugin has ui element but returns false, because
