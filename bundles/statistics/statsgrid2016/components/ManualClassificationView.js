@@ -3,15 +3,13 @@ import manualClassificationEditor from './ManualClassificationEditor';
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
 
 export default class ManualClassificationView {
-    constructor (statsService, classificationOpts) {
-        this.classificationService = statsService.getClassificationService();
-        this.colorService = statsService.getColorService();
+    constructor (classificationService, colorService, classificationOpts) {
+        this.classificationService = classificationService;
+        this.colorService = colorService;
         if (classificationOpts.method !== 'manual') {
             return;
         }
-        this.classCount = classificationOpts.count;
-        this.colorSetName = classificationOpts.name;
-        this.classType = classificationOpts.type;
+        this.classificationOpts = classificationOpts;
         this.manualBounds = classificationOpts.manualBounds;
     }
     setData (indicatorData) {
@@ -42,10 +40,11 @@ export default class ManualClassificationView {
         });
         const buttons = [dialog.createCloseButton(), okButton];
         const content = jQuery('<div></div>');
+        const count = this.classificationOpts.count;
 
-        editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(this.classCount, d3.min(this.indicatorData), d3.max(this.indicatorData));
+        editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(count, d3.min(this.indicatorData), d3.max(this.indicatorData));
 
-        const colorSet = this.colorService.getColorset(this.classCount, this.classType, this.colorSetName);
+        const colorSet = this.colorService.getColorsForClassification(this.classificationOpts);
 
         manualClassificationEditor(content.get(0), editedBounds, this.indicatorData, colorSet, (bounds) => {
             editedBounds = bounds;

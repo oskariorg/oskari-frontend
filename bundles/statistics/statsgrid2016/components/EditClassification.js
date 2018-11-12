@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
         me.setLayerOpacityValue(event.getMapLayer().getId(), event.getMapLayer().getOpacity());
     });
-    this.manualClassHandler = null;
+    this.manualClassificationView = null;
     this.__templates = {
         classification: jQuery('<div class="classifications">' +
             '<div class="classification-options">' +
@@ -226,7 +226,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         var decimalSelect = me._element.find('select.decimal-place');
         decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
 
-        me.manualClassHandler = new ManualClassificationView(service, classification);
+        me.manualClassificationView = new ManualClassificationView(this.classificationService, service.getColorService(), classification);
 
         // disable invalid choices
         service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
@@ -235,7 +235,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 return;
             }
             if (classification.method === 'manual') {
-                me.manualClassHandler.setData(data);
+                me.manualClassificationView.setData(data);
             }
 
             var validOptions = service.getClassificationService().getAvailableOptions(data);
@@ -307,7 +307,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
-        const bounds = me.manualClassHandler.getBounds();
+        const bounds = me.manualClassificationView.getBounds();
         if (values.method === 'manual' && bounds) {
             values.manualBounds = bounds;
         }
@@ -427,7 +427,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             updateClassification();
         });
         me._element.find('.classification-manual input').on('click', function () {
-            me.manualClassHandler.openEditor(() => {
+            me.manualClassificationView.openEditor(() => {
                 updateClassification();
             });
         });
