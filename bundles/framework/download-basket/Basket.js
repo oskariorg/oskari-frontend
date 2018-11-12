@@ -1,3 +1,6 @@
+import jstsGeoJsonReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
+const geoJsonReader = new jstsGeoJsonReader();
+
 /**
  * @class Oskari.mapframework.bundle.downloadBasket.Cropping
  *
@@ -19,7 +22,7 @@ Oskari.clazz.define(
             main: jQuery('<div class="oskari__download-basket"></div>'),
             basketWrapper: jQuery('<div class="oskari__download-basket-wrapper"><p class="empty-basket"></p></div>'),
             basketButtons: jQuery('<div class="oskari__download-basket-buttons"></div>'),
-            basketUserInfo: jQuery('<div class="oskari__download-basket-user-info"><p></p></div>'),
+            basketUserInfo: jQuery('<div class="oskari__download-basket-user-info"><p class="email-info"></p><div class="basket-form"></div><p><a target="_blank"></a></p></div>'),
             basketForm: jQuery(
                 '<form method="" action="">' +
                 '<fieldset>' +
@@ -37,130 +40,201 @@ Oskari.clazz.define(
             )
         };
     }, {
-        startBasket: function () {
-            this.setContent(this.createUi());
-        },
-
         /**
-         * @private @method _initTemplates, creates ui for cropping items
-         *
-         *
+         * Creates ui for basket tab
+         * @method createUi
+         * @public
          */
-        _initTemplates: function () {
+        createUi: function () {
             var me = this;
 
+            var main = me._templates.main.clone();
+            var container = me.getContainer();
+
             // Wrapper
-            me._templates.basketWrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
-            me._templates.main.append(me._templates.basketWrapper);
+            var wrapper = me._templates.basketWrapper.clone();
+            wrapper.find('.empty-basket').text(me._getLocalization('basket-is-empty'));
+            main.append(wrapper);
 
             // Basket user info
-            me._templates.basketUserInfo.append(me._templates.basketForm);
-            me._templates.basketUserInfo.find('p').text(me._getLocalization('insert-email-for-download'));
-            me._templates.main.append(me._templates.basketUserInfo);
-            me._templates.basketUserInfo.hide();
+            var basketUserInfo = me._templates.basketUserInfo.clone();
+            var basketForm = me._templates.basketForm.clone();
+            basketUserInfo.find('div.basket-form').append(basketForm);
+            basketUserInfo.find('p.email-info').text(me._getLocalization('insert-email-for-download'));
 
-            me._templates.basketUserInfo.find('input,select').each(function (index) {
+            // check privacy policy url
+            var privacyPolicyUrl = me._sandbox.getLocalizedProperty(me.instance.conf.privacyPolicyUrl) || me.instance.conf.privacyPolicyUrl;
+            if (privacyPolicyUrl) {
+                basketUserInfo.find('a').text(me._getLocalization('privacy-policy')).attr('href', privacyPolicyUrl);
+            } else {
+                basketUserInfo.find('a').remove();
+            }
+
+            main.append(basketUserInfo);
+            basketUserInfo.hide();
+
+            basketUserInfo.find('input,select').each(function () {
                 var curEl = jQuery(this);
                 curEl.prev('span').html(me._getLocalization(curEl.attr('name')));
             });
 
             // Basket wizard buttons
+            var basketButtons = me._templates.basketButtons.clone();
+
             me.emptyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.prevBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.nextBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             me.sendBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
 
-            me.emptyBtn.addClass('primary empty');
+            me.emptyBtn.addClass('approve empty');
             me.emptyBtn.setTitle(me._getLocalization('basket-empty'));
-            jQuery(me.emptyBtn.getElement()).on('click', function () {
-                var el = me.container;
-                el.find('.download-basket__component').remove();
-                el.find('.empty-basket').show();
-                jQuery(el.find('input.empty')).hide();
-                jQuery(el.find('input.next')).hide();
+            me.emptyBtn.setHandler(function () {
+                container.find('.download-basket__component').remove();
+                container.find('.empty-basket').show();
                 me._selected = [];
                 me.instance.addBasketNotify();
-            });
-            me.emptyBtn.insertTo(me._templates.basketButtons);
 
-            me.prevBtn.addClass('primary prev');
-            me.prevBtn.setTitle(me._getLocalization('basket-prev'));
-            jQuery(me.prevBtn.getElement()).on('click', function () {
-                var el = me.container;
-                jQuery(el.find('input.empty')).show();
-                jQuery(el.find('input.next')).show();
-                el.find('.oskari__download-basket-wrapper').show();
-                jQuery(el.find('input.prev')).hide();
-                jQuery(el.find('input.send')).hide();
-                el.find('.oskari__download-basket-user-info').hide();
+                me._buttonsVisible({
+                    empty: false,
+                    next: false,
+                    prev: false,
+                    send: false
+                });
             });
-            me.prevBtn.insertTo(me._templates.basketButtons);
+            me.emptyBtn.insertTo(basketButtons);
+
+            me.prevBtn.addClass('approve prev');
+            me.prevBtn.setTitle(me._getLocalization('basket-prev'));
+            me.prevBtn.setHandler(function () {
+                container.find('.oskari__download-basket-wrapper').show();
+                container.find('.oskari__download-basket-user-info').hide();
+
+                me._buttonsVisible({
+                    empty: true,
+                    next: true,
+                    prev: false,
+                    send: false
+                });
+                me.removePopup();
+            });
+            me.prevBtn.insertTo(basketButtons);
 
             me.nextBtn.addClass('primary next');
             me.nextBtn.setTitle(me._getLocalization('basket-next'));
-            jQuery(me.nextBtn.getElement()).on('click', function () {
-                var el = me.container;
-                jQuery(el.find('input.empty')).hide();
-                jQuery(el.find('input.next')).hide();
-                el.find('.oskari__download-basket-wrapper').hide();
-                jQuery(el.find('input.prev')).show();
-                jQuery(el.find('input.send')).show();
-                el.find('.oskari__download-basket-user-info').show();
-            });
-            me.nextBtn.insertTo(me._templates.basketButtons);
 
-            me.sendBtn.addClass('approve send');
+            me.nextBtn.setHandler(function () {
+                container.find('.oskari__download-basket-wrapper').hide();
+                container.find('.oskari__download-basket-user-info').show();
+
+                me._buttonsVisible({
+                    empty: false,
+                    next: false,
+                    prev: true,
+                    send: true
+                });
+            });
+            me.nextBtn.insertTo(basketButtons);
+
+            me.sendBtn.addClass('primary send');
             me.sendBtn.setTitle(me._getLocalization('basket-send'));
-            jQuery(me.sendBtn.getElement()).on('click', function () {
-                if (!me.validateUserInputs(jQuery('.oskari__download-basket-user-info').find('form'))) {
+            me.sendBtn.setHandler(function () {
+                if (!me.validateUserInputs(container.find('.oskari__download-basket-user-info').find('form'))) {
                     me.loadBasketItem();
                 }
             });
-            me.sendBtn.insertTo(me._templates.basketButtons);
+            me.sendBtn.insertTo(basketButtons);
 
-            me._templates.main.append(me._templates.basketButtons);
-            var el = me.container || me.getContainer();
-            jQuery(el.find('input.empty')).show();
-            jQuery(el.find('input.next')).show();
-            jQuery(el.find('input.prev')).hide();
-            jQuery(el.find('input.send')).hide();
+            main.append(basketButtons);
+
+            me._buttonsVisible({
+                empty: false,
+                next: false,
+                prev: false,
+                send: false
+            });
+
+            me.container = main;
+            this.setContent(me.container);
         },
 
         /**
-         * [loadBasketItem sends Ajax to download user selections]
-         * @return {[none]}
+         * Toggle buttons visibilities
+         * @method  _buttonsVisible
+         * @param   {Object}       visibilities buttons visibilities
+         * @private
+         */
+        _buttonsVisible: function (visibilities) {
+            var me = this;
+
+            if (visibilities.empty) {
+                me.emptyBtn.setVisible(true);
+            } else {
+                me.emptyBtn.setVisible(false);
+            }
+
+            if (visibilities.next) {
+                me.nextBtn.setVisible(true);
+            } else {
+                me.nextBtn.setVisible(false);
+            }
+
+            if (visibilities.prev) {
+                me.prevBtn.setVisible(true);
+            } else {
+                me.prevBtn.setVisible(false);
+            }
+
+            if (visibilities.send) {
+                me.sendBtn.setVisible(true);
+            } else {
+                me.sendBtn.setVisible(false);
+            }
+        },
+
+        /**
+         * Gather download details
+         * @method gatherDownloadDetails
+         * @return {Object}              download details
+         */
+        gatherDownloadDetails: function () {
+            var details = [];
+
+            var container = this.getContainer();
+
+            container.find('.download-basket__component').each(function () {
+                var basketComponent = jQuery(this);
+                var detail = {
+                    croppingMode: basketComponent.attr('data-cropping-mode'),
+                    layer: basketComponent.attr('data-layer-name'),
+                    bbox: {
+                        left: basketComponent.attr('data-bbox-left'),
+                        bottom: basketComponent.attr('data-bbox-bottom'),
+                        right: basketComponent.attr('data-bbox-right'),
+                        top: basketComponent.attr('data-bbox-top')
+                    },
+                    croppingLayer: basketComponent.attr('data-cropping-layer'),
+                    id: basketComponent.attr('data-layer-id'),
+                    identifiers: basketComponent.attr('data-identifiers')
+                };
+                details.push(detail);
+            });
+            return JSON.stringify(details);
+        },
+
+        /**
+         * Send ajax download message to server
+         * @method loadBasketItem
+         * @public
          */
         loadBasketItem: function () {
             var me = this;
-            var downloadDetails = [];
-            var el = me.getContainer();
-            el.find('.oskari__download-basket-buttons').find('input.send').attr('disabled', true);
-
-            el.find('.download-basket__component').each(function () {
-                var parent = jQuery(this);
-                var details = {
-                    croppingMode: parent.attr('data-cropping-mode'),
-                    layer: parent.attr('data-layer-name'),
-                    bbox: {
-                        left: parent.attr('data-bbox-left'),
-                        bottom: parent.attr('data-bbox-bottom'),
-                        right: parent.attr('data-bbox-right'),
-                        top: parent.attr('data-bbox-top')
-                    },
-                    croppingUrl: parent.attr('data-cropping-url'),
-                    croppingLayer: parent.attr('data-cropping-layer'),
-                    id: parent.attr('data-layer-id'),
-                    identifiers: parent.attr('data-identifiers')
-                };
-
-                downloadDetails.push(details);
-            });
-            var strDownloadDetails = JSON.stringify(downloadDetails);
+            var downloadDetails = me.gatherDownloadDetails();
 
             var userDetails = {
-                email: el.find('.oskari__download-basket-user-info').find('input.email').val()
+                email: this.getContainer().find('.oskari__download-basket-user-info').find('input.email').val()
             };
             var strUserDetails = JSON.stringify(userDetails);
+            me.sendBtn.setEnabled(false);
 
             jQuery.ajax({
                 beforeSend: function (x) {
@@ -170,17 +244,28 @@ Oskari.clazz.define(
                 },
                 success: function (resp) {
                     if (resp.success) {
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                            btn = dialog.createCloseButton('OK');
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        var btn = dialog.createCloseButton('OK');
+                        var container = me.getContainer();
                         btn.setHandler(function () {
-                            var buttons = el.find('.oskari__download-basket-buttons');
-                            buttons.find('input.send').attr('disabled', false);
-                            el.find('.oskari__download-basket-user-info').find('input').val('');
-                            buttons.find('input.prev').trigger('click');
-                            buttons.find('input.empty').trigger('click');
-                            el.find('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
-                            el.find('.cropping-btn.selected').trigger('click');
+                            container.find('.oskari__download-basket-wrapper').show();
+                            container.find('.oskari__download-basket-user-info').hide();
+
+                            container.find('.download-basket__component').remove();
+                            container.find('.empty-basket').show();
+                            me._selected = [];
+                            me.instance.addBasketNotify();
+
+                            me._buttonsVisible({
+                                empty: false,
+                                next: false,
+                                prev: false,
+                                send: false
+                            });
+                            container.find('.oskari__download-basket').parents('.oskari-flyoutcontentcontainer').find('.tabsItem>li>a').eq(0).trigger('click');
+                            container.find('.cropping-btn.selected').trigger('click');
                             dialog.close();
+                            me.sendBtn.setEnabled(true);
                         });
                         btn.addClass('primary');
                         dialog.show(me._getLocalization('basket-thank-you'), me._getLocalization('basket-email-will-be'), [btn]);
@@ -200,7 +285,7 @@ Oskari.clazz.define(
                     );
                 },
                 data: {
-                    downloadDetails: strDownloadDetails,
+                    downloadDetails: downloadDetails,
                     lang: Oskari.getLang(),
                     userDetails: strUserDetails
                 },
@@ -210,6 +295,13 @@ Oskari.clazz.define(
             });
         },
 
+        /**
+         * Open popup
+         * @method  _openPopup
+         * @param   {String}   title   title
+         * @param   {String}   message message
+         * @private
+         */
         _openPopup: function (title, message) {
             var me = this;
             if (me._popup) {
@@ -222,12 +314,25 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _getLocalization
+         * Gets localization
+         * @method  _getLocalization
+         * @param   {String}         key loacalization key
+         * @return  {String}         localized text
+         * @private
          */
         _getLocalization: function (key) {
             return this._localization[key];
         },
 
+        /**
+         * Gets error text
+         * @method  _getErrorText
+         * @param   {Object}      jqXHR       jqxhr
+         * @param   {String}      textStatus  status text
+         * @param   {Object}      errorThrown error
+         * @return  {String}                  error text
+         * @private
+         */
         _getErrorText: function (jqXHR, textStatus, errorThrown) {
             var error = errorThrown.message || errorThrown;
             try {
@@ -242,22 +347,27 @@ Oskari.clazz.define(
         },
 
         /**
-         * [validateUserInputs validate user inputs]
-         * @param  {[form]} form [jQuery form element]
-         * @return {[error]}      [true/false]
+         * Validates user input
+         * @method validateUserInputs
+         * @public
+         * @param  {Object}           form jQuery form object
+         * @return {Boolean}                has error
          */
         validateUserInputs: function (form) {
-            var me = this,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                errorText = me._getLocalization('check-form-error') + ' ',
-                error = false;
+            var me = this;
+            if (!me._errorPopup) {
+                me._errorPopup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            } else {
+                me._errorPopup.close(true);
+            }
+            var errorText = me._getLocalization('check-form-error');
+            var error = false;
 
-            form.find('input,select').each(function (index) {
+            form.find('input').each(function () {
                 var el = jQuery(this);
                 if (el.hasClass('email')) {
                     if (!me.validateEmail(el.val())) {
                         error = true;
-                        errorText += el.prev('span').text().toLowerCase();
                         return false;
                     }
                 }
@@ -265,24 +375,39 @@ Oskari.clazz.define(
                     var first = form.find('.email').val();
                     if (el.val() !== first) {
                         error = true;
-                        errorText += el.prev('span').text().toLowerCase();
                         return false;
                     }
                 }
             });
 
             if (error) {
-                dialog.show(me._getLocalization('check-form-error-huom'), errorText);
-                dialog.fadeout();
+                me._errorPopup.show(null, errorText);
+                me._errorPopup.moveTo(me.sendBtn.getElement(), 'bottom');
+                form.find('input').addClass('error');
+            } else {
+                form.find('input').removeClass('error');
             }
 
             return error;
         },
 
         /**
-         * [validateEmail email checker]
-         * @param  {[string]} email [Users email]
-         * @return {[none]}
+         * Removes error popup
+         * @method removePopup
+         * @public
+         */
+        removePopup: function () {
+            if (this._errorPopup) {
+                this._errorPopup.close(true);
+            }
+        },
+
+        /**
+         * Valitades email address
+         * @method validateEmail
+         * @public
+         * @param  {String}      email valitaded email address
+         * @return {Boolean}     is email valid
          */
         validateEmail: function (email) {
             var re = /\S+@\S+\.\S+/;
@@ -290,17 +415,10 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method createUi
-         * Creates the UI for a fresh start
+         * Creates basket
+         * @method createBasket
+         * @public
          */
-        createUi: function () {
-            var me = this;
-
-            me._initTemplates();
-            me.container = me._templates.main.clone(true);
-
-            return me.container;
-        },
         createBasket: function () {
             var me = this;
             var template = jQuery(
@@ -315,14 +433,20 @@ Oskari.clazz.define(
                             '<p class="basket__content-license"><strong></strong><a target="_blank"></a></p>' +
                         '</div>' +
                 '</div>');
+
             if (me._selected.length > 0) {
-                var el = me.container;
+                var el = jQuery(me.container);
+
                 // Change basket to visible
                 el.find('.oskari__download-basket-wrapper').find('.empty-basket').hide();
-                jQuery(el.find('input.empty')).show();
-                jQuery(el.find('input.next')).show();
-                jQuery(el.find('input.prev')).hide();
-                jQuery(el.find('input.send')).hide();
+
+                me._buttonsVisible({
+                    empty: true,
+                    next: true,
+                    prev: false,
+                    send: false
+                });
+
                 el.find('.oskari__download-basket-help').show();
                 el.find('.download-basket__component').remove();
 
@@ -330,43 +454,59 @@ Oskari.clazz.define(
                 el.find('.oskari__download-basket-wrapper').show();
 
                 me._selected.forEach(function (basketItem, index) {
+                    var feature = basketItem.feature;
+
                     var basketEl = template.clone();
                     basketEl.attr('data-layer-name', basketItem.layerName);
-                    basketEl.attr('data-layer-id', basketItem.layerUrl);
-                    basketEl.attr('data-bbox-bottom', basketItem.bbox.bottom);
-                    basketEl.attr('data-bbox-left', basketItem.bbox.left);
-                    basketEl.attr('data-bbox-right', basketItem.bbox.right);
-                    basketEl.attr('data-bbox-top', basketItem.bbox.top);
-                    basketEl.attr('data-cropping-layer', basketItem.cropLayerName);
-                    basketEl.attr('data-cropping-url', basketItem.cropLayerUrl);
-                    basketEl.attr('data-cropping-mode', basketItem.cropMode);
+                    basketEl.attr('data-layer-id', basketItem.layerId);
+                    var parsed = geoJsonReader.read(feature);
+                    var bbox = parsed.geometry.getEnvelope().getCoordinates();
+
+                    basketEl.attr('data-bbox-left', bbox[0].x);
+                    basketEl.attr('data-bbox-bottom', bbox[0].y);
+                    basketEl.attr('data-bbox-right', bbox[2].x);
+                    basketEl.attr('data-bbox-top', bbox[2].y);
+
+                    basketEl.attr('data-cropping-layer', feature.properties.layerName);
+                    basketEl.attr('data-cropping-layer-id', feature.properties.layerId);
+                    basketEl.attr('data-cropping-mode', feature.properties.croppingMode);
                     basketEl.attr('data-index', index);
                     var identifiers = [];
                     var identifier = {
-                        layerName: basketItem.cropLayerName,
-                        uniqueColumn: basketItem.cropUniqueKey,
-                        geometryColumn: basketItem.cropGeometryColumn,
-                        geometryName: basketItem.cropGeometryName,
-                        uniqueValue: basketItem.cropUniqueKeyValue
+                        layerName: feature.properties.layerName,
+                        uniqueColumn: feature.properties.uniqueKey,
+                        geometryColumn: feature.properties.geometryColumn,
+                        geometryName: feature.properties.geometryName,
+                        uniqueValue: feature.properties[feature.properties.uniqueKey]
+
                     };
                     identifiers.push(identifier);
-
                     basketEl.attr('data-identifiers', JSON.stringify(identifiers));
 
                     basketEl.find('.download-basket__component-layer-name').text(basketItem.layerNameLang);
                     basketEl.find('.basket__content-cropping>strong').text(me._getLocalization('basket-cropping-layer-title'));
-                    basketEl.find('.basket__content-cropping>span').text(basketItem.cropLayerNameLang);
+                    basketEl.find('.basket__content-cropping>span').text(feature.properties.layerNameLang);
 
                     // License link handling
                     var licenseTitle = basketEl.find('.basket__content-license>strong');
                     var licenseLink = basketEl.find('.basket__content-license>a');
-                    if (me.instance.conf.licenseUrl) {
+
+                    var layerId = basketItem.layerId;
+
+                    if (me.instance.conf.licenseByLayers && me.instance.conf.licenseByLayers[layerId]) {
                         licenseTitle.text(me._getLocalization('basket-license-title'));
-                        licenseLink.text(Oskari.getLocalized(me.instance.conf.licenseName) ||
+                        licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseName) ||
                             me.instance.conf.licenseName ||
                             me._getLocalization('basket-license-name'));
-                        licenseLink.attr('href', Oskari.getLocalized(me.instance.conf.licenseUrl) ||
+                        licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenseByLayers[layerId].licenseUrl) ||
                             me.instance.conf.licenseUrl);
+                    } else if (me.instance.conf.licenseUrl) {
+                        licenseTitle.text(me._getLocalization('basket-license-title'));
+                        licenseLink.text(me._sandbox.getLocalizedProperty(me.instance.conf.licenseName) ||
+                            me.instance.conf.licenseName ||
+                            me._getLocalization('basket-license-name'));
+                        licenseLink.attr('href', me._sandbox.getLocalizedProperty(me.instance.conf.licenseUrl) ||
+                        me.instance.conf.licenseUrl);
                     } else {
                         licenseTitle.remove();
                         licenseLink.remove();
@@ -395,6 +535,17 @@ Oskari.clazz.define(
                 });
             }
         },
+        /**
+         * Add to basket
+         * @method addToBasket
+         * @param  {Object}    item download detail onject:
+         * {
+         *     layerNameLang: 'localized layer name',
+         *     layerName: 'layer name',
+         *     layerId:  'layer id',
+         *     feature: 'geojson feature object'
+         * }
+         */
         addToBasket: function (item) {
             var me = this;
             me._selected.push(item);
