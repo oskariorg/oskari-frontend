@@ -28,7 +28,7 @@ class MapModuleOlCesium extends MapModuleOl {
         var me = this;
         // this is done BEFORE enhancement writes the values to map domain
         // object... so we will move the map to correct location
-        // by making a MapMoveRequest in application startup      
+        // by making a MapMoveRequest in application startup
         var controls = olControlDefaults({
             zoom: false,
             attribution: false,
@@ -358,7 +358,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
     /**
      * Returns color expressions modified with layer opacity
-     * @param {String | Object} colorDef Cesium style expression or object containing conditions array 
+     * @param {String | Object} colorDef Cesium style expression or object containing conditions array
      * @param {Number} opacity Layer opacity
      */
     _getColorExpressionsWithOpacity (colorDef, opacity) {

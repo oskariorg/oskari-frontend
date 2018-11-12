@@ -3,8 +3,8 @@ import LayersPlugin from 'oskari-frontend/bundles/mapping/mapmodule/plugin/layer
 
 class LayersPluginOlcs extends LayersPlugin {
     /**
-     * @method _isLayerImplVisible Tells if given layer is visible or not. 
-     * @param {Cesium.Cesium3DTileset | olLayer} layer 
+     * @method _isLayerImplVisible Tells if given layer is visible or not.
+     * @param {Cesium.Cesium3DTileset | olLayer} layer
      */
     _isLayerImplVisible (layer) {
         if (layer instanceof Cesium.Cesium3DTileset) {
@@ -15,8 +15,8 @@ class LayersPluginOlcs extends LayersPlugin {
     }
     /**
      * @method _setLayerImplVisible Sets layer visibility on map.
-     * @param {Cesium.Cesium3DTileset | olLayer} layer 
-     * @param {Boolean} visible 
+     * @param {Cesium.Cesium3DTileset | olLayer} layer
+     * @param {Boolean} visible
      */
     _setLayerImplVisible (layer, visible) {
         if (layer instanceof Cesium.Cesium3DTileset) {
