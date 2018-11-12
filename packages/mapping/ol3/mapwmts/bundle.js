@@ -25,7 +25,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 
 		"scripts" : [{
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/mapwmts/plugin/WmtsLayerPlugin.ol3.js"
+			"src" : "../../../../bundles/mapping/mapwmts/plugin/WmtsLayerPlugin.ol.js"
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayer.js"
@@ -34,7 +34,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.MapWmtsBundle", function() {
 			"src" : "../../../../bundles/mapping/mapwmts/domain/WmtsLayerModelBuilder.js"
 		}, {
 			"type" : "text/javascript",
-			"src" : "../../../../bundles/mapping/mapwmts/service/WmtsLayerService.ol3.js"
+			"src" : "../../../../bundles/mapping/mapwmts/service/WmtsLayerService.ol.js"
 		}],
 		"resources" : []
 	},

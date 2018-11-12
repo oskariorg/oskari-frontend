@@ -7,12 +7,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     id: 'diagram',
 
     init: function (data) {
-        var me = this;
-        if (data && Oskari.util.keyExists(data, 'configuration.statsgrid.conf') && data.configuration.statsgrid.conf.diagram !== false) {
-            me.setEnabled(true);
-        } else {
-            me.setEnabled(false);
-        }
+        var enabled = data &&
+            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
+            data.configuration.statsgrid.conf.diagram === true;
+        this.setEnabled(enabled);
     },
     getTool: function (stateData) {
         var me = this;
@@ -29,11 +27,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     },
     setEnabled: function (enabled) {
         var me = this;
-
+        var changed = me.state.enabled !== enabled;
         me.state.enabled = enabled;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats) {
+        if (!stats || !changed) {
             return;
         }
         if (enabled) {

@@ -25,7 +25,7 @@ Oskari.registerLocalization({
                 "no-layers-selected-title" : "Valitse karttataso",
                 "no-layers-selected-message" : "Valitse haluamasi aineistot KARTTATASOT valikosta, joista haluat ladata aineistoa",
                 "basket-raster-problem-title" : "Huomautus",
-                "basket-raster-problem" : "karttatasoa ei voida toistaiseksi ladata palvelusta."
+                "basket-raster-problem" : "Karttatasoa ei voida toistaiseksi ladata palvelusta."
             },
             "download-basket-tab" : {
                 "title" : "Latauskori",
@@ -34,17 +34,18 @@ Oskari.registerLocalization({
                 "basket-prev" : "Edellinen",
                 "basket-next" : "Seuraava",
                 "basket-send" : "Lataa aineistot",
-                "insert-email-for-download" : "Syötä sähköpostiosoitteesi latausta varten",
+                "insert-email-for-download" : "Syötä sähköpostiosoitteesi latausta varten:",
+                "privacy-policy" : "Tietosuojaseloste",
                 "basket-user-email" : "Sähköpostiosoite",
                 "basket-user-email-sure" : "Varmista sähköpostiosoite",
-                "check-form-error-huom" : "Huomautus",
-                "check-form-error" : "Tarkista",
+                "check-form-error" : "Tarkista sähköpostiosoitteet",
                 "error-in-downloading" : "Aineistojen lataus epäonnistui",
                 "basket-thank-you" : "Kiitos latauksesta!",
                 "basket-email-will-be" : "Ilmoittamaasi sähköpostisoitteeseen lähetetään linkki, josta voit käydä lataamassa aineistot. Latauslinkin lähettäminen saattaa kestää hieman, jos ladattavat aineistot ovat kooltaan suuria.",
                 "basket-cropping-layer-title" : "Rajausaineisto: ",
                 "basket-license-title" : "Käyttöehdot: ",
-                "basket-license-name" : "Creative Commons Nimeä 4.0 (BY, ByAttribution) –lisenssi"
+                "basket-license-name" : "Creative Commons BY 4.0",
+                "basket-license-url" : " https://creativecommons.org/licenses/by/4.0/deed.fi"
             }
         }
     }
