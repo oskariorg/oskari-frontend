@@ -119,6 +119,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var current = event.getCurrent();
             if (current && me._select) {
                 me._select.setValue(current.hash);
+            } else if (!current && me._select) {
+                me._select.clearOptions();
             }
         });
         this.service.on('StatsGrid.IndicatorEvent', function (event) {
