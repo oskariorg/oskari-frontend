@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         if (!activeIndicator) {
             container.append(this.__templates.error({ msg: this.locale('legend.noActive') }));
             me._renderDone();
+            this.trigger('content-rendered');
             return;
         }
         // render classification options
@@ -131,7 +132,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             me._createEditClassificationListener();
             // legend
             legendContainer.html(legendUI);
-            me.trigger('check-overflow');
+            me.trigger('content-rendered');
         }); // _createLegend
     },
 
@@ -146,10 +147,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             me._accordion.getPanels().forEach(function (panel) {
                 if (panel.isOpen()) {
                     panel.close();
-                    me.trigger('restore-overflow');
+                    me.trigger('edit-legend', false);
                 } else {
                     panel.open();
-                    me.trigger('check-overflow', true);
+                    me.trigger('edit-legend', true);
                 }
             });
         });

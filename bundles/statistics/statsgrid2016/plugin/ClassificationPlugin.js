@@ -57,11 +57,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this.__legend.on('rendered', function () {
             me._calculatePluginSize();
         });
-        this.__legend.on('check-overflow', function (storeOverflow) {
-            me._overflowCheck(storeOverflow);
+        this.__legend.on('edit-legend', function (isEdit) {
+            if (isEdit) {
+                me._overflowCheck(true);
+            } else {
+                me._restoreOverflow();
+            }
         });
-        this.__legend.on('restore-overflow', function () {
-            me._restoreOverflow();
+        this.__legend.on('content-rendered', function () {
+            me._overflowCheck();
         });
         this._overflowedOffset = null;
     }, {
