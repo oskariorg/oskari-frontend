@@ -30,7 +30,7 @@ Oskari.clazz.define(
             var me = this,
                 el = jQuery(
                     '<div class="mapplugin fullscreenDiv">' +
-                    '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
+                    '<img class="fullscreenDivImg" src="' + me.getImagePath('hide-navigation.png') + '"></img>' +
                     '</div>'
                 );
             el.find('.fullscreenDivImg').on('click', function (event) {
@@ -62,10 +62,6 @@ Oskari.clazz.define(
          */
         _stopPluginImpl: function (sandbox) {
             this.removeFromPluginContainer(this.getElement());
-        },
-
-        _getImagePath: function (image) {
-            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/' + image;
         },
 
         /**
@@ -101,7 +97,7 @@ Oskari.clazz.define(
             if (!me._element) {
                 return;
             }
-            me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('hide-navigation.png'));
+            me._element.find('.fullscreenDivImg').attr('src', me.getImagePath('hide-navigation.png'));
             me.state = {
                 fullscreen: false
             };
@@ -117,7 +113,7 @@ Oskari.clazz.define(
             if (!me._element) {
                 return;
             }
-            me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('show-navigation.png'));
+            me._element.find('.fullscreenDivImg').attr('src', me.getImagePath('show-navigation.png'));
             me.state = {
                 fullscreen: true
             };
