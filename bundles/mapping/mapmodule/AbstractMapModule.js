@@ -42,7 +42,8 @@ Oskari.clazz.define(
         // Id will be a prefix for getName()
         me._id = id;
         me._mapDivId = mapDivId;
-        me._imageUrl = imageUrl || '/Oskari/bundles';
+        // eslint-disable-next-line
+        me._imageUrl = imageUrl || __webpack_public_path__ + 'assets';
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],

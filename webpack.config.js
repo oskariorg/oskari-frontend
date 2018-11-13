@@ -19,7 +19,12 @@ module.exports = (env, argv) => {
 
     const entries = {};
     const plugins = [
-        new webpack.IgnorePlugin(/^\.\/locale$/)
+        new webpack.IgnorePlugin(/^\.\/locale$/),
+        new CopyWebpackPlugin(
+            [
+                { from: 'bundles/mapping/mapmodule/resources/images', to: 'assets/mapping/mapmodule/resources/images', context: __dirname }
+            ]
+        )
     ];
 
     appsetupPaths.forEach(appDir => {
