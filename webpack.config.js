@@ -19,7 +19,12 @@ module.exports = (env, argv) => {
 
     const entries = {};
     const plugins = [
-        new webpack.IgnorePlugin(/^\.\/locale$/)
+        new webpack.IgnorePlugin(/^\.\/locale$/),
+        new CopyWebpackPlugin(
+            [
+                { from: 'resources', to: 'resources', context: __dirname }
+            ]
+        )
     ];
 
     appsetupPaths.forEach(appDir => {
