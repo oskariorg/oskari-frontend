@@ -10,19 +10,13 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Omien aineistojen tuonti",
-            "description": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:<ul><li>Shapefile (.shp, .shx ja .dbf sekä mahdolliset .prj ja .cpg)</li><li>GPX-siirtotiedosto (.gpx)</li><li>MapInfo (.mif ja .mid)</li><li>Google Map (.kml tai .kmz)</li></ul>Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on <xx> Mt.",
+            "description": "Lataa aineisto tietokoneeltasi yhdeksi zip-tiedostoksi pakattuna, joka sisältää tarvittavat tiedostot jostain seuraavasta tiedostomuodosta:<ul><li>Shapefile (.shp, .shx ja .dbf sekä mahdolliset  ja .cpg)</li><li>GPX-siirtotiedosto (.gpx)</li><li>MapInfo (.mif ja .mid)</li><li>Google Map (.kml tai .kmz)</li></ul>Zip-tiedosto saa sisältää vain yhden karttatason ja sen maksimikoko on {maxSize, number} Mt.",
             "help": "Lataa aineisto tietokoneeltasi pakattuna zip-tiedostoon. Tarkista, että aineisto on oikeassa tiedostomuodossa ja koordinaattijärjestelmässä.",
             "actions": {
                 "cancel": "Peruuta",
                 "next": "Seuraava",
-                "close": "Sulje"
-            },
-            "file": {
-                "submit": "Tuo aineisto",
-                "fileOverSizeError": {
-                    "title": "Virhe",
-                    "message": "Valitsemasi tiedosto on liian suuri. Enimmäiskoko on <xx> Mt."
-                }
+                "close": "Sulje",
+                "submit": "Tuo aineisto"
             },
             "layer": {
                 "title": "Tallenna karttatason tiedot:",
@@ -34,13 +28,15 @@ Oskari.registerLocalization(
             "validations": {
                 "error": {
                     "title": "Virhe",
-                    "message": "Aineiston tuonti epäonnistui. Valitse ensin tiedosto ja anna karttatasolle nimi. Yritä sitten uudelleen."
+                    "message": "Aineiston tuonti epäonnistui. Valitse ensin tiedosto ja anna karttatasolle nimi. Yritä sitten uudelleen.",
+                    "name": "Karttatasolla pitää antaa nimi.",
+                    "file": "Valitse aineiston sisältävä tiedosto."
                 }
             },
             "finish": {
                 "success": {
                     "title": "Aineiston tuonti onnistui.",
-                    "message": "Aineistosta tuotiin <xx> kohdetta onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta."
+                    "message": "Aineistosta tuotiin {count, plural, one {# kohde} other {# kohdetta}} onnistuneesti. Voit tarkastella aineistoa Omat tiedot -valikon Omat aineistot -välilehden kautta."
                 },
                 "failure": {
                     "title": "Aineiston tuonti epäonnistui."
@@ -51,9 +47,11 @@ Oskari.registerLocalization(
                 "title": "Aineiston tuonti epäonnistui",
                 "unknown_projection":"Aineiston käyttämää koordinaattijärjestelmää ei tunnistettu. Tarkista, että aineisto on joko kartan käyttämässä koordinaattijärjestelmässä tai varmista, että aineisto sisältää muunnosta varten tarvittavan koordinaattijärjestelmä tiedot.",
                 "invalid_file":"Järjestelmän tukemaa tiedostoa ei löytynyt. Tarkista, että käyttämäsi tiedostomuoto on tuettu ja aineisto on pakattuna zip-tiedostoon.",
+                "too_many_files": "Zip-tiedosto sisälsi ylimääräisiä tiedostoja. Poista ylimääräiset tiedostot ja jätä vain tarvittavat ohjeiden mukaiset tiedostot.",
+                "multiple_extensions": "Zip-tiedostosta löytyi useita samalla tiedostopäätteellä olevia tiedostoja. Zip-tiedosto voi sisältää vain yhden aineiston tiedostot.",
                 "unable_to_store_data":"Aineiston kohteita ei voitu tallentaa. Tarkista, että kaikki tiedostomuodon tarvitsemat tiedostot ovat zip-tiedostossa sekä tarkista ettei aineiston kohdetiedot ole virheellisiä.",
                 "short_file_prefix":"Zip-tiedostosta ei onnistuttu hakemaan aineiston tiedostoja. Tarkista, ettei pakattujen tiedostojen nimet ole alle kolmen merkin pituisia.",
-                "file_over_size":"Valitsemasi tiedosto on liian suuri. Enimmäiskoko on <xx> Mt.",
+                "file_over_size":"Valitsemasi tiedosto on liian suuri. Enimmäiskoko on {maxSize, number} Mt.",
                 "no_features":"Aineistosta ei löytynyt kohdetietoja. Tarkista, että aineiston kohdetiedoilla on koordinaatit määritetty.",
                 "malformed":"Tarkista, ettei tiedostonimissä ole käytetty ääkkösiä.",
                 "kml":"Karttatasoa ei onnistuttu luomaan KML-tiedostosta",
@@ -66,7 +64,7 @@ Oskari.registerLocalization(
                 "generic": "Järjestelmässä tapahtui tunnistamaton virhe."
             },
             "warning":{
-                "features_skipped":"Huomio! Aineiston tuonnissa <xx> kohdetta hylättiin puuttuvien tai viallisten koordinaattien tai geometrian vuoksi."
+                "features_skipped":"Huomio! Aineiston tuonnissa {count, plural, one {# kohde} other {# kohdetta}} hylättiin puuttuvien tai viallisten koordinaattien tai geometrian vuoksi."
             }
         },
         "tab": {

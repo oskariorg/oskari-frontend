@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Načítajte dataset z vášho počítača ako zip súbor. Prosím uistite sa, že všetky súbory sú v správnom súborovom formáte a v správnom referenčnom súradnicovom systéme.",
             "actions": {
                 "cancel": "Zrušiť",
-                "next": "Ďalej"
-            },
-            "file": {
-                "submit": "Import",
-                "fileOverSizeError": {
-                    "title": "Chyba",
-                    "message": "Vybraný súbor je príliš veľký. Môže mať maximálne <xx> mb.",
-                    "close": "Zatvoriť"
-                }
+                "next": "Ďalej",
+                "close": "Zatvoriť",
+                "submit": "Import"
             },
             "layer": {
                 "title": "Informácie o datasete",

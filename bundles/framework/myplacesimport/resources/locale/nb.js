@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Velg en fil eller angi en lenke til datafila. Fila kan være på shp, zip eller kml/kmz format. Du kan lage zipfiler fra shapefiler ved å legge til filer av type shp, shx, dbf og prj til zipfil. kml/kmz-filesrkan zippes på samme måte. Mif/mid data må være i gjeldende map CRS - se gjeldende CRS under zoombar",
             "actions": {
                 "cancel": "Avbryt",
-                "next": "Neste"
-            },
-            "file": {
-                "submit": "Send",
-                "fileOverSizeError": {
-                    "title": "Feil",
-                    "message": "Datasettet er for stort. Maksimal størrelse på importert datasett er <xx> mb.",
-                    "close": "Lukk"
-                }
+                "next": "Neste",
+                "close": "Lukk",
+                "submit": "Send"
             },
             "layer": {
                 "title": "Lagre informasjon om datasett:",

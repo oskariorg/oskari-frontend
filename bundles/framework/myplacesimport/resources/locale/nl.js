@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Selecteer een bestand van uw computer of geef een link naar het bestand dat uw dataset bevat. Het bestand kan in shp, zip of kml / kmz formaat. U kunt zip-bestanden uit shapefiles maken door de bestanden te zippen met suffix shp, SHX, dbf en PRJ naar hetzelfde zip-bestand.\r\n Ook kml / kmz bestanden van Google maps kunnen worden gezipped op dezelfde manier.\r\n Mif / mid gegevens moeten in de huidige CRS kaart - bekijk huidige CRS onder zoombar",
             "actions": {
                 "cancel": "Annuleren",
-                "next": "Volgende"
-            },
-            "file": {
-                "submit": "Versturen",
-                "fileOverSizeError": {
-                    "title": "Fout",
-                    "message": "Uw dataset is te groot. Maximun grootte van de ingevoerde dataset is <xx> mb.",
-                    "close": "Sluiten"
-                }
+                "next": "Volgende",
+                "close": "Sluiten",
+                "submit": "Versturen"
             },
             "layer": {
                 "title": "Opslaan van de dataset informatie:",

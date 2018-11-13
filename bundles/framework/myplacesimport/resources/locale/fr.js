@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Select a file from your computer or give a link to the file that contains your dataset. The file can be in the shp, zip or kml/kmz format. You can create zip files from shapefiles by zipping the files with suffix shp, shx, dbf and prj to the same zip file. \r\nAlso kml/kmz files from Google maps can be zipped same way.\r\nMif/mid data must be in current map CRS - look current CRS under zoombar",
             "actions": {
                 "cancel": "Annuler",
-                "next": "Suivant"
-            },
-            "file": {
-                "submit": "Envoyer",
-                "fileOverSizeError": {
-                    "title": "Error",
-                    "message": "Le fichier sélectionné est trop lourd. Taille maximum autorisée : <xx> Mb.",
-                    "close": "Fermer"
-                }
+                "next": "Suivant",
+                "close": "Fermer",
+                "submit": "Envoyer"
             },
             "layer": {
                 "title": "Enregistrer les informations relatives au jeu de données :",

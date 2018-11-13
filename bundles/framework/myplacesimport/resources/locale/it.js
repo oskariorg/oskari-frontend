@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Seleziona un file dal tuo computer o fornisci un link al file che contiene il dataset. Il file può essere in formato shp, zip o kml/kmz. Puoi comprimere uno shapefile inserendo tutti i suoi file (suffisso shp, shx, dbf e prj) nello stesso file compresso. \r\nAnche i kml / kmz file ottenuti da Google Maps possono essere compressi allo stesso modo._x000D_\r\nI file MIF / MID devono essere nello stesso CRS della mappa - cerca CRS disponibili sotto la barra dello zoom",
             "actions": {
                 "cancel": "Cancella",
-                "next": "Avanti"
-            },
-            "file": {
-                "submit": "Invia",
-                "fileOverSizeError": {
-                    "title": "Errore",
-                    "message": "Il dataset è troppo grande. La dimensione massima del dataset da importare è <xx> mb",
-                    "close": "Chiudi"
-                }
+                "next": "Avanti",
+                "close": "Chiudi"
+                "submit": "Invia"
             },
             "layer": {
                 "title": "Salva le informazioni del dataset",

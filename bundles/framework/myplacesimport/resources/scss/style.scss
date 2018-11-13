@@ -9,6 +9,16 @@ div.myplacesimport {
     cursor: pointer;
   }
   div.info {
-    padding-bottom: 2px;
+    margin-bottom: 12px;
+  }
+  div.file-input-container {
+    margin-bottom: 6px;
+  }
+  ul {
+    list-style: disc inside none;
+    margin-left: 12px
+  }
+  .file-input-container {
+    width: 400px;
   }
 }

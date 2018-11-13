@@ -10,19 +10,13 @@ Oskari.registerLocalization(
         },
         "flyout": {
             "title": "Dataset importering",
-            "description": "Importera en datamängd från din dator som en zip-fil, vilken innehåller alla erforderliga filer utav ett av de följande filformatsalternativen:<ul><li>Shapefile (.shp, .shx och .dbf, frivilligt .prj och .cpg)</li><li>GPX (.gpx)</li><li>MapInfo (.mif och .mid)</li><li>Google Map (.kml eller .kmz)</li></ul>Zip-filen kan innehålla endast en datamängd och dess storlek kan vara högst <xx> Mb.",
+            "description": "Importera en datamängd från din dator som en zip-fil, vilken innehåller alla erforderliga filer utav ett av de följande filformatsalternativen:<ul><li>Shapefile (.shp, .shx och .dbf, frivilligt .prj och .cpg)</li><li>GPX (.gpx)</li><li>MapInfo (.mif och .mid)</li><li>Google Map (.kml eller .kmz)</li></ul>Zip-filen kan innehålla endast en datamängd och dess storlek kan vara högst {maxSize, number} Mb.",
             "help": "Importera en datamängd från din dator som ett zip-paket. Var vänlig och kontrollera, att alla filerna är i ett lämpligt filformat och koordinatsystem.",
             "actions": {
                 "cancel": "Avbryt",
                 "next": "Nästa",
-                "close": "Stäng"
-            },
-            "file": {
-                "submit": "Skicka",
-                "fileOverSizeError": {
-                    "title": "Fel",
-                    "message": "Din datamängd är för stor. Datamängden kan vara högst <xx> mb."
-                }
+                "close": "Stäng",
+                "submit": "Skicka"
             },
             "layer": {
                 "title": "Spara dataset information:",
@@ -40,7 +34,7 @@ Oskari.registerLocalization(
             "finish": {
                 "success": {
                     "title": "Importering av dataset lyckades.",
-                    "message": "Dataset importerade med <xx> objekt. Du kan hitta kartlagret i menyn \"Mina uppgifter\"."
+                    "message": "Dataset importerade med {count, plural, one {# objekt} other {# objekt}}. Du kan hitta kartlagret i menyn \"Mina uppgifter\"."
                 },
                 "failure": {
                     "title": "Dataset importen lyckades inte. Försök på nytt senare."
@@ -52,7 +46,7 @@ Oskari.registerLocalization(
                 "invalid_file": "Lämpliga filer för importeringen kunde inte hittas från zip-filen. Var vänlig och kontrollera att filformatet understött och att datamänderna är packade till en zip-fil.",
                 "unable_to_store_data": "Objekten kunde inte sparas till databasen eller den inmatade datamängden innehöll inga objekt.",
                 "short_file_prefix": "Hämtningen av datamängderna från zip-filen misslyckades. Kontrollera, att prefixerna av de packade filerna innehåller åtminstone tre tecken.",
-                "file_over_size": "Den valda filen är för stor. Den högsta tillåtna storleken är <xx> Mb.",
+                "file_over_size": "Den valda filen är för stor. Den högsta tillåtna storleken är {maxSize, number} Mb.",
                 "malformed": "Kontrollera, att filnamnen inte innehåller diakritiska tecken (t.ex. bokstäverna Å,Ä,Ö).",
                 "kml": "Ett kartlager kunde inte skapas från KML-filen.",
                 "shp": "Ett kartlager kunde inte skapas från SHP-filen.",
@@ -64,7 +58,7 @@ Oskari.registerLocalization(
                 "generic": "Ett okänt fel uppstod i systemet. Importerningen av datamängden misslyckades."
             },
             "warning":{
-                "features_skipped":"OBS! <xx> objekt övergavs vid importeringen på grund av saknande eller felaktiga koordinater eller geometri."
+                "features_skipped":"OBS! {count, plural, one {# objekt} other {# objekt}} objekt övergavs vid importeringen på grund av saknande eller felaktiga koordinater eller geometri."
             }
         },
         "tab": {
@@ -92,7 +86,6 @@ Oskari.registerLocalization(
                 "deletedTitle": "Ta bort dataset",
                 "deletedMsg": "Datasetet har tagits bort",
                 "editedMsg": "Datasetet har uppdaterats"
-
             },
             "error": {
                 "title": "Fel!",
