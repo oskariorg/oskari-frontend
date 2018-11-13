@@ -204,6 +204,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @param  [] data only supports following format: [ { name: "", value: int } ]
      */
     handleData: function (data) {
+        if (!Array.isArray(data)) {
+            return;
+        }
         this.data = data;
         this.sortDataByType();
         var maxNameLength = d3.max(data, function (d) { return d.name.length; });
@@ -268,7 +271,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @param { Object } options keys: colors -> color scale, valueRenderer -> function for rendering bar values
      */
     createBarChart: function (data, options) {
-        if (data !== undefined && this.svg === null) {
+        if (this.svg === null) {
             this.handleData(data);
         }
         if (options) {
@@ -412,9 +415,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @method createLineChart
      */
     createLineChart: function (data, options) {
-        if (data !== undefined) {
-            this.handleData(data);
-        }
+        this.handleData(data);
 
         if (options) {
             this._options = options;
@@ -478,9 +479,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      */
     redraw: function (data, options) {
         var chart;
-        if (data !== undefined) {
-            this.handleData(data);
-        }
+        this.handleData(data);
 
         if (options) {
             this._options = options;
