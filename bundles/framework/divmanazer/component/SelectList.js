@@ -267,6 +267,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         selected.on('chosen:hiding_dropdown', function (event, params) {
             jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
         });
+    },
+    /**
+     * @method clearOptions
+     * Removes all 'select' elements from component
+     */
+    clearOptions: function () {
+        this.element.find('select').empty().trigger('chosen:updated');
     }
 }, {
     extend: ['Oskari.userinterface.component.FormComponent']
