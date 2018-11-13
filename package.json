@@ -14,8 +14,7 @@
   },
   "dependencies": {
     "jsts": "^2.0.0",
-    "ol": "^5.2.0",
-    "ol-cesium": "^2.4.0"
+    "ol": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",
