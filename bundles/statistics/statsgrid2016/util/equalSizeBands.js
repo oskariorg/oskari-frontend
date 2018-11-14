@@ -1,7 +1,7 @@
 export default function equalSizeBands (classCount, min, max) {
     var output = [];
     if (classCount < 1) {
-        return output;
+        return;
     }
     var step = (max - min) / classCount;
 

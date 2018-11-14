@@ -327,12 +327,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             values.count = range.max;
         }
 
-        // validate that manualBounds is for right amount of classes
-        if (values.manualBounds && values.manualBounds.length !== values.count + 1) {
-            console.log('wrong count! throwing away');
-            delete values.manualBounds;
-        }
-
         if (values.mapStyle !== 'points') {
             delete values.min;
             delete values.max;
