@@ -22,7 +22,8 @@ module.exports = (env, argv) => {
         new webpack.IgnorePlugin(/^\.\/locale$/),
         new CopyWebpackPlugin(
             [
-                { from: 'resources', to: 'resources', context: __dirname }
+                { from: 'resources', to: 'resources', context: __dirname },
+                { from: 'bundles/integration/admin-layerselector', to: 'admin-layerselector', context: __dirname }
             ]
         )
     ];
