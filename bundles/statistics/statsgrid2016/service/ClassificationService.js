@@ -106,7 +106,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     // Tasavälit
                     response.bounds = stats.getEqInterval(opts.count);
                 } else if (opts.method === 'manual') {
-                    response.bounds = stats.setClassManually(opts.manualBounds || this.getBoundsFallback(opts.count, stats.min(), stats.max()));
+                    response.bounds = stats.setClassManually(this.getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max()));
                 }
             };
 
@@ -250,24 +250,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
             return size;
         },
-        getBoundsFallback: function (count, dataMin, dataMax) {
-            return this._tryLastUsedBounds(count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
+        getBoundsFallback: function (bounds, count, dataMin, dataMax) {
+            return this._tryKnownBounds(bounds, count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
         },
-        _tryLastUsedBounds: function (count, dataMin, dataMax) {
-            if (!this.lastUsedBounds) {
+        _tryKnownBounds: function (bounds, count, dataMin, dataMax) {
+            return [bounds, this.lastUsedBounds].find((b) => this._tryWithBounds(b, count, dataMin, dataMax));
+        },
+        _tryWithBounds: function (bounds, count, dataMin, dataMax) {
+            if (!bounds) {
                 return;
             }
-            if (this.lastUsedBounds[0] !== dataMin || this.lastUsedBounds[this.lastUsedBounds.length - 1] !== dataMax) {
+            if (bounds[0] !== dataMin || bounds[bounds.length - 1] !== dataMax) {
                 return;
             }
-            if (this.lastUsedBounds.length === count + 1) {
-                return this.lastUsedBounds.slice();
+            if (bounds.length === count + 1) {
+                return bounds.slice();
             }
-            const output = this.lastUsedBounds
+            const output = bounds
                 .slice(0, -1) // remove last
                 .slice(0, count); // take as many as we need
 
-            let last = output.pop();
+            const last = output.pop();
             return output.concat(equalSizeBands(count - output.length, last, dataMax));
         },
         _getPointsLegend: function (ranges, opts, color, counter, statsOpts, formatter) {

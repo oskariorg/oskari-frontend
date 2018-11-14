@@ -43,7 +43,7 @@ export default class ManualClassificationView {
         const content = jQuery('<div class="manual-class-view"></div>');
         const count = this.classificationOpts.count;
 
-        editedBounds = this.manualBounds || this.classificationService.getBoundsFallback(count, d3.min(this.indicatorData), d3.max(this.indicatorData));
+        editedBounds = this.classificationService.getBoundsFallback(this.manualBounds, count, d3.min(this.indicatorData), d3.max(this.indicatorData));
 
         const colorSet = this.colorService.getColorsForClassification(this.classificationOpts);
 
