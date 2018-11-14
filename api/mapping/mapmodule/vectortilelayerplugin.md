@@ -11,7 +11,7 @@ The layer domain object is subclassed from AbstractLayer as usual.
 
 The layer url must be in XYZ-format, eg. `https://mytiles.com/vectortile/{epsg}/{z}/{x}/{y}.pbf`. Placeholder `epsg` is optional and if present, will be replaced with current projection of the map, eg. `EPSG:3067`. Placeholders `x`, `y` and `z` will be replaced with tile coordinates calculated from the map view and tile grid.
 
-The layer model field `options` is of type object having two optional keys `tileGrid` and `styles`.
+The layer model field `options` is of type object having multiple optional keys `tileGrid`, `styles`, `hover` and `attributions`.
 
 ### Tile Grid
 
@@ -86,6 +86,44 @@ And each key has object value with one or both keys `featureStyle`, `optionalSty
         }
     }
 }
+```
+
+### Hover
+
+Hover describes how to visualize features on mouse hover and what kind of tooltip should be shown.
+Hover has two optional keys `featureStyle` and `content`.
+
+Content should tooltip's content as an array. Each object creates a row to the tooltip.
+Each row object has `key` or `keyProperty` and `valueProperty`.
+`key` is a label and will be rendered as is.
+`valueProperty` and `keyProperty` will be fetched from the feature's properties.
+
+```javascript
+"hover": {
+    "featureStyle":  {...},
+    "content": [{...}]
+        { "key": "Feature Data" },
+        { "key": 'Feature ID', "valueProperty": "id" },
+        { "keyProperty": "type", "valueProperty": "name" }
+    ]
+}
+```
+Exampe above would create a tooltip like
+
+Feature Data
+Feature ID: 23098523243
+Road: Main Street
+
+### Attributions
+
+Defines layer attributions to be shown at the bottom of the map.
+If the `link` property is defined, renders an attribution as a link to the given address.
+
+```javascript
+"attributions": [
+    {"label": "© MapTiler", "link":"https://www.maptiler.com/license/maps/"},
+    {"label": "© OpenStreetMap contributors", "link":"https://www.openstreetmap.org/copyright"}
+]
 ```
 
 ## TODO

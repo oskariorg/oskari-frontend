@@ -93,11 +93,13 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             const options = layer.getOptions();
             const sourceOpts = {
                 format: new olFormatMVT(),
-                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection())
+                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
+                attributions: layer.getAttributions()
             };
             if (options.tileGrid) {
                 sourceOpts.tileGrid = new TileGrid(options.tileGrid);
             }
+            sourceOpts.attributions = ["<a href=\"#\">c Testattribution</a>"];
             // Properties id, type and hover are being used in VectorFeatureService.
             const vectorTileLayer = new olLayerVectorTile({
                 opacity: layer.getOpacity() / 100,

@@ -1018,6 +1018,26 @@ Oskari.clazz.define(
             return this._options;
         },
         /**
+         * @method getAttributions
+         * @return {Array<String>} layer attributions
+         */
+        getAttributions: function () {
+            var attributions = this._options.attributions;
+            if (!attributions) {
+                return;
+            }
+            if (!Array.isArray(attributions)) {
+                attributions = [attributions];
+            }
+            return attributions.map(obj => {
+                if (typeof obj === 'string') {
+                    return obj;
+                }
+                const { label, link } = obj;
+                return link ? `<a href="${link}">${label}</a>` : label;
+            });
+        },
+        /**
          * @method getAttributes
          * @param {String} key optional key to get value directly from attributes
          * @return {Object} optional layer attributes like heatmap-parameters
