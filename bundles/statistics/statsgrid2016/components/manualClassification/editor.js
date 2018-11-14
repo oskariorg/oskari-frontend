@@ -1,7 +1,7 @@
 import inputGuide from './inputGuide';
 
 const width = 500;
-const height = 293;
+const height = 303;
 const margin = 12;
 const histoHeight = 200;
 
@@ -15,6 +15,7 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
     const histoClip = defs.append('clipPath').attr('id', 'histoClip');
     const guide = svg.append('g');
     const histoGroup = svg.append('g').attr('clip-path', 'url(#histoClip)');
+    const boundsLines = svg.append('g');
     const dragHandles = svg.append('g');
 
     const histogramGenerator = d3.histogram().thresholds(20);
@@ -67,6 +68,31 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
             update();
         })
         .on('end', notify);
+
+    // BOUNDS EDGES
+
+    const formatter = Oskari.getNumberFormatter(2);
+
+    const bounds = boundsLines.selectAll('.edge')
+        .data([handlesData[0], handlesData[handlesData.length - 1]]);
+
+    const boundsEnter = bounds
+        .enter()
+        .append('g')
+        .classed('edge', true)
+        .attr('transform', (d) => `translate(${x(d.value)} 0)`);
+
+    boundsEnter
+        .append('path')
+        .attr('d', `M0 0 v${histoHeight + 10}`);
+
+    boundsEnter
+        .append('text')
+        .attr('y', histoHeight)
+        .attr('dy', '1em')
+        .attr('x', (d, i) => i ? -3 : 3)
+        .attr('text-anchor', (d, i) => i ? 'end' : 'start')
+        .text((d) => formatter.format(d.value));
 
     // VALUE INPUT INIT & INTERACTION
 
@@ -142,8 +168,13 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
             .call(dragBehavior);
 
         handlesEnter
+            .append('path')
+            .classed('handle-line', true)
+            .attr('d', `M0 0 v${histoHeight + 25}`);
+
+        handlesEnter
             .append('circle')
-            .attr('cy', histoHeight + 15);
+            .attr('cy', histoHeight + 25);
 
         const mergedHandles = handlesEnter
             .merge(handles);
@@ -165,11 +196,11 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
 
         const selectedvalue = handlesData.find(isSelected).value;
 
-        valueInput.property('value', selectedvalue);
+        valueInput.property('value', selectedvalue).classed('fail', false);
 
         // VALUE INPUT GUIDE BOX
 
-        inputGuide(guide, x, 50, histoHeight + 40, x(selectedvalue));
+        inputGuide(guide, x, 50, histoHeight + 50, x(selectedvalue));
     }
     update();
 }
