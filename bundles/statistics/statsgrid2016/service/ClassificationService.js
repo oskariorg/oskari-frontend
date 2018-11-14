@@ -446,7 +446,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             if (this.limits.mode.indexOf(opts.mode) === -1) {
                 throw new Error('Requested mode not allowed: ' + opts.mode + '. Allowed values are: ' + this.limits.mode.join());
             }
-
             return opts;
         },
         /**

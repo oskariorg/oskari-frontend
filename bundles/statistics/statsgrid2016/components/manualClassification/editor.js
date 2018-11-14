@@ -5,6 +5,15 @@ const height = 303;
 const margin = 12;
 const histoHeight = 200;
 
+/**
+ * @function manualClassificationEditor
+ * Creates classification editor into given DOM node
+ * @param {HTMLElement} el DOM node
+ * @param {Number[]} manualBounds class bounds at start of editing
+ * @param {Number[]} indicatorData dataset values 
+ * @param {String[]} colorSet colors corresponding to classes
+ * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
+ */
 export default function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
     const svg = d3.select(el)
         .append('svg')

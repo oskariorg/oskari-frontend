@@ -2,8 +2,17 @@ import manualClassificationEditor from './editor';
 import '../../resources/scss/manualClassification.scss';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
-
+/**
+ * @class ManualClassificationView
+ * Wrapper for classification editor UI
+ */
 export default class ManualClassificationView {
+    /**
+     * 
+     * @param {Object} classificationService 
+     * @param {Object} colorService 
+     * @param {Object} classificationOpts 
+     */
     constructor (classificationService, colorService, classificationOpts) {
         this.classificationService = classificationService;
         this.colorService = colorService;
@@ -13,20 +22,26 @@ export default class ManualClassificationView {
         this.classificationOpts = classificationOpts;
         this.manualBounds = classificationOpts.manualBounds;
     }
+    /**
+     * @method setData
+     * Sets reference to indicator data for use in histogram
+     * @param {Object} indicatorData object withr region ids as keys and indicator data as values
+     */
     setData (indicatorData) {
         this.indicatorData = Object.values(indicatorData);
     }
     /**
      * @method getBounds
+     * Get current bounds or undefined if none exist
      * @return {Number[]} bounds
      */
     getBounds () {
         return this.manualBounds;
     }
-
     /**
      * @method openEditor
-     * @param {Function} okCallback 
+     * Open popup with manual classification editor
+     * @param {Function} okCallback function that is called when user clicks ok button
      */
     openEditor (okCallback) {
         let editedBounds;

@@ -421,9 +421,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             updateClassification();
         });
         me._element.find('.classification-manual input').on('click', function () {
-            me.manualClassificationView.openEditor(() => {
-                updateClassification();
-            });
+            me.manualClassificationView.openEditor(updateClassification);
         });
         return me._element;
     },
