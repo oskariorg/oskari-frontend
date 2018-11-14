@@ -82,6 +82,30 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             return layer.isLayerOfType(this.layertype);
         }
         /**
+         * @method getAttributions
+         * @param  {Oskari.mapframework.domain.AbstractLayer} layer
+         * @return {Array<String>} layer attributions
+         */
+        getAttributions (layer) {
+            if (!layer) {
+                return;
+            }
+            let { attributions } = layer.getOptions();
+            if (!attributions) {
+                return;
+            }
+            if (!Array.isArray(attributions)) {
+                attributions = [attributions];
+            }
+            return attributions.map(obj => {
+                if (typeof obj === 'string') {
+                    return obj;
+                }
+                const { label, link } = obj;
+                return link ? `<a href="${link}">${label}</a>` : label;
+            });
+        }
+        /**
          * @method addMapLayerToMap
          * @private
          * Adds a single vector tile layer to this map
@@ -93,7 +117,8 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             const options = layer.getOptions();
             const sourceOpts = {
                 format: new olFormatMVT(),
-                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection())
+                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
+                attributions: this.getAttributions(layer)
             };
             if (options.tileGrid) {
                 sourceOpts.tileGrid = new TileGrid(options.tileGrid);
