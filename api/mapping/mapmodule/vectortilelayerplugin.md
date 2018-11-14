@@ -93,7 +93,7 @@ And each key has object value with one or both keys `featureStyle`, `optionalSty
 Hover describes how to visualize features on mouse hover and what kind of tooltip should be shown.
 Hover has two optional keys `featureStyle` and `content`.
 
-Content should be content of tooltip a as an array. Each object creates a row to the tooltip.
+Content should be content of tooltip as an array. Each object creates a row to the tooltip.
 Each row object has `key` or `keyProperty` and `valueProperty`.
 `key` is a label and will be rendered as is.
 `valueProperty` and `keyProperty` will be fetched from the feature's properties.
