@@ -17,7 +17,6 @@ Oskari.registerLocalization(
                 "next": "Weiter",
                 "close": "",
                 "submit": "Senden"
-
             },
             "layer": {
                 "title": "Informationen zum Datensatz speichern:",

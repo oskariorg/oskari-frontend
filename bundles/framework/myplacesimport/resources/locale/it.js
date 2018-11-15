@@ -15,7 +15,7 @@ Oskari.registerLocalization(
             "actions": {
                 "cancel": "Cancella",
                 "next": "Avanti",
-                "close": "Chiudi"
+                "close": "Chiudi",
                 "submit": "Invia"
             },
             "layer": {
