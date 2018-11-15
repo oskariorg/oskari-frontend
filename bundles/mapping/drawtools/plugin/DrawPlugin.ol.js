@@ -174,6 +174,8 @@ Oskari.clazz.define(
             // creating layer for drawing (if layer not already added)
             if (!me.getCurrentDrawLayer()) {
                 me.addVectorLayer(me.getCurrentLayerId());
+            } else {
+                me.getCurrentDrawLayer().setStyle(me._styles.draw);
             }
 
             // always assign layerId for functionality id
