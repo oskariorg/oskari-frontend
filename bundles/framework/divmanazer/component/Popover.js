@@ -35,7 +35,7 @@
             var eventIn, eventOut;
 
             this.type = type;
-            this.$element = $(element);
+            this.$element = jQuery(element);
             this.options = this.getOptions(options);
             this.enabled = true;
 
@@ -69,7 +69,7 @@
             return options;
         },
         enter: function (e) {
-            var self = $(e.currentTarget)[this.type](this._options).data(this.type);
+            var self = jQuery(e.currentTarget)[this.type](this._options).data(this.type);
 
             if (!self.options.delay || !self.options.delay.show) {
                 return self.show();
@@ -83,7 +83,7 @@
             }, self.options.delay.show);
         },
         leave: function (e) {
-            var self = $(e.currentTarget)[this.type](this._options).data(this.type);
+            var self = jQuery(e.currentTarget)[this.type](this._options).data(this.type);
 
             if (!self.options.delay || !self.options.delay.hide) {
                 return self.hide();
@@ -198,7 +198,7 @@
             return this.options.title.apply(this.options.scope);
         },
         tip: function () {
-            this.$tip = this.$tip || $(this.options.template);
+            this.$tip = this.$tip || jQuery(this.options.template);
             return this.$tip;
         },
         validate: function () {
@@ -230,7 +230,7 @@
 
     $.fn.oskariTooltip = function (option) {
         return this.each(function () {
-            var $this = $(this),
+            var $this = jQuery(this),
                 data = $this.data('oskariTooltip'),
                 options = typeof option === 'object' && option;
             if (!data) {
@@ -281,7 +281,7 @@
         },
         tip: function () {
             if (!this.$tip) {
-                this.$tip = $(this.options.template);
+                this.$tip = jQuery(this.options.template);
             }
             return this.$tip;
         }
@@ -292,7 +292,7 @@
 
     $.fn.oskariPopover = function (option) {
         return this.each(function () {
-            var $this = $(this),
+            var $this = jQuery(this),
                 data = $this.data('oskariPopover'),
                 options = typeof option === 'object' && option;
             if (!data) {
@@ -356,7 +356,7 @@
             },
             attachTo: function (element) {
                 var me = this;
-                me.$container = $(element);
+                me.$container = jQuery(element);
                 if (!me.data) {
                     me.data = new Popover(element, {
                         'scope': me,

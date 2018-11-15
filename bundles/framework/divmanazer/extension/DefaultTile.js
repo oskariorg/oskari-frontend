@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * tile is to be rendered
          */
         setEl: function (el, width, height) {
-            this.container = $(el);
+            this.container = jQuery(el);
         },
 
         /**

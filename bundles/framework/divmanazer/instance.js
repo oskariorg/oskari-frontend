@@ -396,7 +396,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             extensionInfo.draggableHandle = handle;
             extensionInfo.draggableTarget = flyoutTarget;
 
-            extensionInfo.draggable = $(flyout).draggable({
+            extensionInfo.draggable = jQuery(flyout).draggable({
                 handle: jQuery(handle),
                 helper: useHelper ? function () {
                     el = jQuery('<div />');

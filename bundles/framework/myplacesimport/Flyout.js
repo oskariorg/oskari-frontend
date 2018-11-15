@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     var hasAX = "ActiveXObject" in window;
                     if(hasAX){
                         var objFSO = new ActiveXObject("Scripting.FileSystemObject");
-                        var filePath = $("#" + fileid)[0].value;
+                        var filePath = jQuery("#" + fileid)[0].value;
                         var objFile = objFSO.getFile(filePath);
                         var fileSize = objFile.size; //size in kb
                         fileSize = fileSize / 1048576; //size in mb
