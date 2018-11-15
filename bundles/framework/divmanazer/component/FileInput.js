@@ -13,7 +13,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         // if both types and extensions are empty -> allow all
         'allowedFileTypes': [], // MIME types e.g. "text/plain"
         'allowedFileExtensions': [], // File extensions without dot e.g. "txt"
-        'showNoFile': true // shows error popup when getFiles() is called and file isn't given
+        'showNoFile': true, // shows error popup when getFiles() is called and file isn't given
+        'inputName': ''
     };
     this.visible = true;
 
@@ -42,6 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     };
     this.isAdvancedUpload = this._canUseAdvancedUpload();
     this._createUi();
+    Oskari.makeObservable(this);
 }, {
     getElement: function () {
         return this.element;
@@ -156,6 +158,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         if (this.isAdvancedUpload) {
             this._updateFileList();
         }
+        this.trigger('file-input', this.hasFiles());
     },
     _updateFileList: function () {
         var fileNameElem = this.getElement().find('.box__uploaded');
@@ -188,6 +191,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.fileSize', {size: opts.maxFileSize}));
         }
         return valid;
+    },
+    hasFiles: function () {
+        return this.files.length !== 0;
     },
     getFiles: function () {
         var files = this.files;
@@ -264,6 +270,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             }));
             this.setElement(fileInput);
             this._bindBasicUpload(fileInput);
+        }
+        if (opts.inputName) {
+            this.element.find('input').prop('name', opts.inputName);
         }
     },
     _getAcceptedTypesString: function () {
