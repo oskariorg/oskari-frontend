@@ -41,7 +41,7 @@ Oskari.clazz.define(
         /**
          * @method _scheduleUpdate
          * @private
-         * Schedule update on next tick (in order to do only one update after repeated changes) 
+         * Schedule update on next tick (in order to do only one update after repeated changes)
          */
         _scheduleUpdate: function () {
             var me = this;

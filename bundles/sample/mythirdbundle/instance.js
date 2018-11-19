@@ -2,7 +2,7 @@
  * @class Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance
  *
  * Add this to startupsequence to get this bundle started
-    {  
+    {
         bundlename : 'mythirdbundle',
         bundleinstancename : 'mythirdbundle'
     }

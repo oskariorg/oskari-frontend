@@ -132,8 +132,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-line',
                             tooltip: me._loc.measure.line,
-                            sticky: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
-                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
+                            sticky: (sandbox.mapMode !== 'mapPublishMode'),
+                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode'),
                             activeColour: themeColours.activeColour,
                             callback: function () {
                                 if (sandbox.mapMode !== 'mapPublishMode') {
@@ -164,8 +164,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-area',
                             tooltip: me._loc.measure.area,
-                            sticky: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
-                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
+                            sticky: (sandbox.mapMode !== 'mapPublishMode'),
+                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode'),
                             activeColour: themeColours.activeColour,
                             callback: function () {
                                 if (sandbox.mapMode !== 'mapPublishMode') {

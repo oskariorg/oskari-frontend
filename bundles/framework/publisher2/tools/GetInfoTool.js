@@ -94,7 +94,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
         },
         init: function (data) {
             var me = this;
-            var isConf = (data && data.configuration && data.configuration.mapfull) ? true : false;
+            var isConf = !!((data && data.configuration && data.configuration.mapfull));
             if (isConf && data.configuration.mapfull.conf && data.configuration.mapfull.conf.plugins) {
                 var tool = this.getTool();
                 _.each(data.configuration.mapfull.conf.plugins, function (plugin) {

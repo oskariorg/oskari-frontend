@@ -82,6 +82,30 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             return layer.isLayerOfType(this.layertype);
         }
         /**
+         * @method getAttributions
+         * @param  {Oskari.mapframework.domain.AbstractLayer} layer
+         * @return {Array<String>} layer attributions
+         */
+        getAttributions (layer) {
+            if (!layer) {
+                return;
+            }
+            let { attributions } = layer.getOptions();
+            if (!attributions) {
+                return;
+            }
+            if (!Array.isArray(attributions)) {
+                attributions = [attributions];
+            }
+            return attributions.map(obj => {
+                if (typeof obj === 'string') {
+                    return obj;
+                }
+                const { label, link } = obj;
+                return link ? `<a href="${link}">${label}</a>` : label;
+            });
+        }
+        /**
          * @method addMapLayerToMap
          * @private
          * Adds a single vector tile layer to this map
@@ -93,7 +117,8 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             const options = layer.getOptions();
             const sourceOpts = {
                 format: new olFormatMVT(),
-                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection())
+                url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
+                attributions: this.getAttributions(layer)
             };
             if (options.tileGrid) {
                 sourceOpts.tileGrid = new TileGrid(options.tileGrid);
@@ -118,10 +143,10 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
         /**
          * @method onMapHover VectorFeatureService handler impl method
          * Handles feature highlighting on map hover.
-         * 
-         * @param { Oskari.mapframework.event.common.MouseHoverEvent } event 
-         * @param { olRenderFeature } feature 
-         * @param { olVectorTileLayer } layer 
+         *
+         * @param { Oskari.mapframework.event.common.MouseHoverEvent } event
+         * @param { olRenderFeature } feature
+         * @param { olVectorTileLayer } layer
          */
         onMapHover (event, feature, layer) {
             if (feature && layer) {
@@ -155,7 +180,7 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
          * @method onLayerRequest VectorFeatureService handler impl method
          * Handles VectorLayerRequest to update hover tooltip and feature style.
          * Other request options are not currently supported.
-         * 
+         *
          * @param { Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest } request
          * @param { Oskari.mapframework.domain.AbstractLayer|VectorTileLayer } layer
          */

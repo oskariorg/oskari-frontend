@@ -16,6 +16,7 @@ div.mapplugin.backgroundLayerSelectionPlugin {
     left: 0;
     margin: 10px 0;
     width: 100%;
+    z-index: 15000;
     /* dropdown version */ 
   
     div.currentSelection {
