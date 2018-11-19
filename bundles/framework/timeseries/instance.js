@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         },
         /**
          * @method _registerForLayerFiltering
-         * Registers for creation of ui filter button 
+         * Registers for creation of ui filter button
          * @private
          */
         _registerForLayerFiltering: function () {
