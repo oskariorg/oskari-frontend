@@ -333,6 +333,10 @@ div.oskari-flyout {
             td {
                 text-align: right;
             }
+
+            td:first-child, th:first-child {
+                max-width: 130px;
+            }
         }
 
         label span {
