@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FormInput',
          */
         setValue: function (value) {
             var input = this._field.find('input');
-            input.attr('value', value);
+            input.val(value);
             if (value && input.hasClass('oskarifield_floating_input')) {
                 this._field.addClass('oskarifield--not-empty');
             }
