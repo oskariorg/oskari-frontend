@@ -242,7 +242,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
             };
 
-            var addHoverStyle = (createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) ? true : false;
+            var addHoverStyle = !!((createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]));
 
             c.addClass('toolbar_' + tbid);
             if (addHoverStyle) {
@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
 
             if (!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
-                    createdHover: (addHoverStyle && showHover) ? true : false,
+                    createdHover: !!((addHoverStyle && showHover)),
                     colours: data.colours
                 };
             }

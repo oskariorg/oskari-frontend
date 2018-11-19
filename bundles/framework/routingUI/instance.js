@@ -166,7 +166,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstanc
                     conf = me.conf,
                     lonlat;
 
-                var hasRoundDecimalsConf = (conf && conf.decimals) ? true : false;
+                var hasRoundDecimalsConf = !!((conf && conf.decimals));
                 if (hasRoundDecimalsConf && !conf.decimals[mapModule.getProjection()]) {
                     roundToDecimals = conf.decimals;
                 } else if (hasRoundDecimalsConf && conf.decimals[mapModule.getProjection()]) {
