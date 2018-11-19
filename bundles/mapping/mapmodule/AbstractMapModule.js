@@ -23,7 +23,7 @@ Oskari.clazz.define(
      * @param {String} id
      *      Unigue ID for this map
      * @param {String} imageUrl
-     *      base url for marker etc images
+     *      DEPRECATED
      * @param {Array} map options, example data:
      *  {
      *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -38,11 +38,15 @@ Oskari.clazz.define(
      */
     function (id, imageUrl, options, mapDivId) {
         var me = this;
+        this.log = Oskari.log('AbstractMapModule');
+
+        if (imageUrl) {
+            this.log.warn('Deprecated param "imageUrl" given in AbstractMapModule constructor. It has no effect.');
+        }
 
         // Id will be a prefix for getName()
         me._id = id;
         me._mapDivId = mapDivId;
-        me._imageUrl = imageUrl || '/Oskari/bundles';
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -105,7 +109,6 @@ Oskari.clazz.define(
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
-        this.log = Oskari.log('AbstractMapModule');
 
         this.isDrawing = false;
 
@@ -447,12 +450,13 @@ Oskari.clazz.define(
         },
         /**
          * @method getImageUrl
-         * Returns a base url for plugins to show. Can be set in constructor and
-         * defaults to "/Oskari/bundles" if not set.
+         * @param fileName name of image file
+         * Returns path to image asset from mapmodule bundle resources
+         * NOTE: Webpack build creates a "context module" that includes all the images found under ./resources/images/
          * @return {String}
          */
-        getImageUrl: function () {
-            return this._imageUrl;
+        getImageUrl: function (fileName) {
+            return require('./resources/images/' + fileName);
         },
         /**
          * Get map max extent.

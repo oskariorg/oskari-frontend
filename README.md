@@ -11,6 +11,10 @@ This repository holds the front-end code for Oskari. Developing the front-end re
 Make sure you have at least Node 8.x / NPM 5.x. Run `npm install` in the front-end repository root.
 Make sure you have oskari-server running on localhost port 8080 (can be customized on webpack.config.js).
 
+### App composition
+
+An Oskari frontend application consists of bundles that are defined in the miniferAppSetup.json for each app. Only bundles referenced here can be instantiated at runtime. If some bundles are used only in a limited part of the app (for example admin tools), you can configure these bundles to load dynamically at runtime. This will decrease the size of the main app JS bundle. To enable dynamic loading for a bundle, add `"lazy": true` on the same level as `"bundlename"` in the miniferAppSetup.json.
+
 ## Run in development
 
 Webpack dev server is used to serve the JS bundle and assets when running in local development. XHR calls will be proxied to the Java backend assumed to be running on localhost:8080.

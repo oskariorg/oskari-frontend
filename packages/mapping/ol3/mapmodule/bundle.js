@@ -54,7 +54,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/mapmodule.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/mapmodule.ol.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/Plugin.js"
@@ -80,7 +80,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ControlsPlugin.js"
+                    "src": "../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ControlsPlugin.ol.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/DisableMapKeyboardMovementRequest.js"
@@ -179,23 +179,28 @@ Oskari.clazz.define(
                 // IndexMap
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/indexmap/IndexMapPlugin.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/indexmap/IndexMapPlugin.ol.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/indexmap_ol3.scss"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/indexmap.ol.scss"
                 },
                 // ScaleBar
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/ScaleBarPlugin.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/scalebar/ScaleBarPlugin.ol.js"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/scalebar_ol3.scss"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/scalebar.ol.scss"
+                },
+                // Attribution
+                {
+                    "type": "text/css",
+                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/attribution.ol.scss"
                 },
                 // Markers plugin
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/markers/MarkersPlugin.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/markers/MarkersPlugin.ol.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/AddMarkerRequest.js"
@@ -266,7 +271,7 @@ Oskari.clazz.define(
 
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol.js"
                 },
 
                 {
@@ -275,7 +280,7 @@ Oskari.clazz.define(
                 },
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequestHandler.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequestHandler.ol.js"
                 },
 
                 {
@@ -291,7 +296,7 @@ Oskari.clazz.define(
                 /** Layers backport */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/WmsLayerPlugin.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/WmsLayerPlugin.ol.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/wmslayer/wmslayer.js"
@@ -301,7 +306,7 @@ Oskari.clazz.define(
                  */
                 {
                     "type": "text/javascript",
-                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol3.js"
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/VectorLayerPlugin.ol.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectorlayer/vectorlayer.js"
@@ -529,7 +534,7 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/resources/scss/panbuttons.scss"
                 }, {
                     "type": "text/css",
-                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/mapmodule_ol3.scss"
+                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/mapmodule.ol.scss"
                 }
 
             ],

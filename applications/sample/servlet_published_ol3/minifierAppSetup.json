@@ -9,9 +9,6 @@
                     "mapwfs2": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
-                    "mapanalysis": {
-                        "bundlePath": "../../../packages/mapping/ol3/"
-                    },
                     "mapuserlayers": {
                         "bundlePath": "../../../packages/mapping/ol3/"
                     },
@@ -62,6 +59,7 @@
             }
         }, {
             "bundlename": "statsgrid",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "statsgrid": {
@@ -92,7 +90,7 @@
             "metadata": {
                 "Import-Bundle": {
                     "featuredata2": {
-                        "bundlePath": "../../../packages/framework/bundle/"
+                        "bundlePath": "../../../packages/framework/"
                     }
                 }
             }
@@ -107,6 +105,7 @@
             }
         }, {
             "bundlename": "routingService",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "routingService": {
@@ -116,6 +115,7 @@
             }
         }, {
             "bundlename": "maprotator",
+            "lazy": true,
             "metadata": {
                 "Import-Bundle": {
                     "maprotator": {

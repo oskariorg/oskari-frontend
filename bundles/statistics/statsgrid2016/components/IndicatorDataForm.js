@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                             '</div>'),
         row: _.template('<tr data-id="${regionId}">' +
                             '<td class="region" style=" border: 1px solid black ;">${regionName}</td>' +
-                            '<td class="uservalue" style=" border: 1px solid black ;"> <div style="width:100%; height:100%;" contenteditable="true"> ${value} </div></td>' +
+                            '<td class="uservalue" style="border: 1px solid black ;"><div contenteditable="true">${value}</div></td>' +
                         '</tr> '),
         import: _.template('<div class="user-indicator-import"><textarea placeholder="${placeholder}"></textarea></div>')
     },
@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
         data.forEach(function (iteration) {
             table.find('tr').each(function (index, tr) {
                 if (tr.innerText.trim().toLowerCase() === iteration.name.toLowerCase() || tr.dataset.id === iteration.name) {
-                    var uservalue = jQuery(tr).find('td.uservalue');
+                    var uservalue = jQuery(tr).find('td.uservalue div');
                     uservalue.text(iteration.value);
                 }
             });
@@ -94,12 +94,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             tableRef.append(me.__templates.row({
                 regionId: region.id,
                 regionName: region.name,
-                value: region.value || ''
+                value: region.value === undefined ? '<br>' : region.value // firefox uses <br> for empty contenteditable
             }));
         });
         this.getElement().append(tableRef);
+
+        var inputElems = tableRef.find('tr td.uservalue div');
         // Focus on the first input cell
-        tableRef.find('tr td.uservalue div')[0].focus();
+        inputElems[0].focus();
+        // prevent KeyboardPan
+        inputElems.on('keydown', function (e) {
+            e.stopPropagation();
+        });
+        // prevent KeyboardZoom
+        inputElems.on('keypress', function (e) {
+            e.stopPropagation();
+        });
 
         this.buttons.forEach(function (btn) {
             btn.setVisible(true);
@@ -119,9 +129,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
                 name: columns[0].innerText,
                 value: columns[1].innerText.trim()
             };
-            if (dataItem.value !== '' && !isNaN(dataItem.value)) {
-                // only include rows with values and cast value to number as legend expects it to be a number
-                dataItem.value = dataItem.value.replace(/,/g, '.');
+            // only include rows with values
+            if (dataItem.value === '') {
+                return;
+            }
+            // replace commas and cast value to number as legend expects it to be a number
+            dataItem.value = dataItem.value.replace(/,/g, '.');
+            if (!isNaN(dataItem.value)) {
                 dataItem.value = Number(dataItem.value);
                 data.values.push(dataItem);
             }
@@ -163,13 +177,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorDataForm', function (l
             // separator can be tabulator, comma or colon
             var matches = line.match(/([^\t;,]+) *[\t;,]+ *(.*)/);
             if (matches && matches.length === 3) {
-                area = matches[1];
+                area = matches[1].trim();
                 value = (matches[2] || '').replace(',', '.').replace(/\s/g, '');
+
+                validRows.push({
+                    name: area,
+                    value: value
+                });
             }
-            validRows.push({
-                'name': area.trim(),
-                'value': value
-            });
         });
         return validRows;
     }

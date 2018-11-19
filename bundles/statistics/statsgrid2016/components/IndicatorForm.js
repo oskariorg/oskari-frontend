@@ -5,9 +5,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorForm', function (local
     __templates: {
         form: _.template('<form class="stats-indicator-details">' +
                             // should there be a datasource row here?
-                            '   <input class="stats-indicator-form-item" type="text" name="name" placeholder="${name}"><br>' +
-                            '   <textarea class="stats-indicator-form-item" name="description" form="stats-user-indicator" placeholder="${description}"></textarea> ' +
-                            '   <input class="stats-indicator-form-item" type="text" name="datasource" placeholder="${source}"><br>' +
+                            '   <input class="stats-indicator-form-item" type="text" name="name" placeholder="${name}">' +
+                            '   <textarea class="stats-indicator-form-item" name="description" form="stats-user-indicator" placeholder="${description}"></textarea>' +
+                            '   <input class="stats-indicator-form-item" type="text" name="datasource" placeholder="${source}">' +
                             '</form>')
     },
     getElement: function () {

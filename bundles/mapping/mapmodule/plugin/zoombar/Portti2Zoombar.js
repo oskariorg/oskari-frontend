@@ -299,12 +299,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             } else if (!style.hasOwnProperty('widthCenter')) {
                 style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles['default'];
             }
-            var imgUrl = this.getImagePath();
+
             var styleName = style.val;
-            var zoombarImg = imgUrl + 'zoombar-' + styleName + '.png';
-            var zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png';
-            var zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png';
-            var zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png';
+
+            if (!styleName) {
+                return;
+            }
+
+            var zoombarImg = this.getImagePath('zoombar-' + styleName + '.png');
+            var zoombarCursorImg = this.getImagePath('zoombar-cursor-' + styleName + '.png');
+            var zoombarMinusImg = this.getImagePath('zoombar_minus-' + styleName + '.png');
+            var zoombarPlusImg = this.getImagePath('zoombar_plus-' + styleName + '.png');
             var bar = div.find('.ui-slider-vertical');
             var cursor = div.find('.ui-slider-handle');
             var plus = div.find('.pzbDiv-plus');

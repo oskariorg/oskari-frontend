@@ -24,7 +24,7 @@ Oskari.clazz.define(
                 "src": "../../../../bundles/mapping/mapuserlayers/domain/UserLayerModelBuilder.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/mapuserlayers/plugin/UserLayersLayerPlugin.ol3.js"
+                "src": "../../../../bundles/mapping/mapuserlayers/plugin/UserLayersLayerPlugin.ol.js"
             }],
 
             "locales": [{

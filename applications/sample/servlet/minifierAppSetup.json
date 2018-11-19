@@ -24,9 +24,6 @@
                 "ui-components": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
-                "mapanalysis": {
-                    "bundlePath": "../../../packages/mapping/ol3/"
-                },
                 "mapfull": {
                     "bundlePath": "../../../packages/framework/bundle/"
                 },
@@ -209,6 +206,7 @@
         }
     }, {
         "bundlename": "postprocessor",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "postprocessor": {
@@ -235,29 +233,11 @@
             }
         }
     }, {
-        "bundlename": "analyse",
-        "metadata": {
-            "Import-Bundle": {
-                "analyse": {
-                    "bundlePath": "../../../packages/analysis/ol3/"
-                }
-            }
-        }
-    }, {
         "bundlename": "myplacesimport",
         "metadata": {
             "Import-Bundle": {
                 "myplacesimport": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "search-from-channels",
-        "metadata": {
-            "Import-Bundle": {
-                "search-from-channels": {
-                    "bundlePath": "../../../packages/tampere/bundle/"
                 }
             }
         }
@@ -289,25 +269,8 @@
             }
         }
     }, {
-        "bundlename": "selected-featuredata",
-        "metadata": {
-            "Import-Bundle": {
-                "selected-featuredata": {
-                    "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "content-editor",
-        "metadata": {
-            "Import-Bundle": {
-                "content-editor": {
-                    "bundlePath": "../../../packages/tampere/bundle/"
-                }
-            }
-        }
-    }, {
         "bundlename": "admin-layerselector",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-layerselector": {
@@ -320,6 +283,7 @@
         }
     }, {
         "bundlename": "admin-layerrights",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-layerrights": {
@@ -329,6 +293,7 @@
         }
     }, {
         "bundlename": "admin",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin": {
@@ -338,19 +303,11 @@
         }
     }, {
         "bundlename": "admin-users",
+        "lazy": true,
         "metadata": {
             "Import-Bundle": {
                 "admin-users": {
                     "bundlePath": "../../../packages/framework/bundle/"
-                }
-            }
-        }
-    }, {
-        "bundlename": "admin-wfs-search-channel",
-        "metadata": {
-            "Import-Bundle": {
-                "admin-wfs-search-channel": {
-                    "bundlePath": "../../../packages/tampere/bundle/"
                 }
             }
         }

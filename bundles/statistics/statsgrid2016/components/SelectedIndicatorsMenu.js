@@ -46,7 +46,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var dropdown = select.create(options, dropdownOptions);
             me.dropdown = dropdown;
             dropdown.css({
-                width: '100%'
+                width: '100%',
+                'max-width': '400px'
             });
             select.adjustChosen();
 
@@ -118,6 +119,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var current = event.getCurrent();
             if (current && me._select) {
                 me._select.setValue(current.hash);
+            } else if (!current && me._select) {
+                me._select.clearOptions();
             }
         });
         this.service.on('StatsGrid.IndicatorEvent', function (event) {
