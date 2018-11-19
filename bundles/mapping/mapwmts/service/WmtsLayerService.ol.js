@@ -82,12 +82,12 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                     // Check if need reverse matrixset top left coordinates.
                     // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
                     // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}
-                    var isTileMatrixSets = (caps && caps.Contents && caps.Contents.TileMatrixSet) ? true : false;
+                    var isTileMatrixSets = !!((caps && caps.Contents && caps.Contents.TileMatrixSet));
                     if (isTileMatrixSets) {
                         var matrixSets = caps.Contents.TileMatrixSet;
                         for (var index = 0; index < matrixSets.length; index++) {
                             var key = matrixSets[index].Identifier;
-                            var isReverseAttribute = (typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]) ? true : false;
+                            var isReverseAttribute = !!((typeof layer.getAttributes === 'function' && layer.getAttributes()['reverseMatrixIdsCoordinates'] && layer.getAttributes()['reverseMatrixIdsCoordinates'][key]));
 
                             if (isReverseAttribute) {
                                 var matrixSet = matrixSets[index];

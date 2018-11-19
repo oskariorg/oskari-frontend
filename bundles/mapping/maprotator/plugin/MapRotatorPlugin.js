@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'default');
+            var styleClass = 'toolstyle-' + (style || 'default');
 
             var classList = el.attr('class').split(/\s+/);
             for (var c = 0; c < classList.length; c++) {
@@ -193,7 +193,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         hasUi: function () {
-            return this._config.noUI ? false : true;
+            return !this._config.noUI;
         },
         /**
          * Get jQuery element.

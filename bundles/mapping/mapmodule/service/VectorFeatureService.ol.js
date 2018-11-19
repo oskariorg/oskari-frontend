@@ -64,10 +64,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             return this._sandbox;
         }
 
-        /** 
+        /**
          * @method getTooltipOverlay
          * Get common tooltip overlay.
-         * 
+         *
          * @return {olOverlay}
          */
         getTooltipOverlay () {
@@ -84,11 +84,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
 
         /**
          * @method registerLayerType
-         * 
+         *
          * Registers layer type so layers of the type receive click and hover events and layer requests.
          * Performs common tasks on events. For ex. displaying tooltip and dispatching feature click events.
-         * 
-         * @param { String} layerType 
+         *
+         * @param { String} layerType
          * @param {Object} handlerImpl Object that contains handler functions onMapClicked, onMapHover or onLayerRequest | optional
          * @param {Array<String>} defaultHandlerDef Array of handler types ("click", "hover", "layerRequest")
          *  to be used as default handlers | optional
@@ -122,8 +122,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
 
         /**
          * @method _getRegisteredHandler
-         * @param {String} layerType 
-         * @param {String} handlerType 
+         * @param {String} layerType
+         * @param {String} handlerType
          * @returns Registered handler function for layer type or null
          */
         _getRegisteredHandler (layerType, handlerType) {
@@ -137,7 +137,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         }
         /**
          * @method _getDefaultHandler
-         * @param {String} handlerType 
+         * @param {String} handlerType
          * @returns Default handler function for handlerType or null
          */
         _getDefaultHandler (handlerType) {
@@ -151,8 +151,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         /**
          * @method handleVectorLayerRequest
          * Passes the request to a proper layer handler
-         * 
-         * @param {Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest} request 
+         *
+         * @param {Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest} request
          */
         handleVectorLayerRequest (request) {
             const layerId = request.getOptions().layerId;
@@ -176,8 +176,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         /**
          * @method _onlyRegisteredTypesFilter
          * Filter function to filter only registered layer types
-         * @param {olLayer} layer 
-         * @return {boolean} true if layer's type is registered. 
+         * @param {olLayer} layer
+         * @return {boolean} true if layer's type is registered.
          */
         _onlyRegisteredTypesFilter (layer) {
             const layerType = layer.get(LAYER_TYPE);
@@ -199,8 +199,8 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
 
         /**
          * @method _getTooltipContent
-         * @param {Array} contentOptions 
-         * @param {olFeature | olRenderFeature} feature 
+         * @param {Array} contentOptions
+         * @param {olFeature | olRenderFeature} feature
          * @return {String} html content for tooltip or null
          */
         _getTooltipContent (contentOptions, feature) {
@@ -235,11 +235,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         /**
          * @method _updateTooltipPosition
          * Updates tooltip overlay's position.
-         * 
-         * @param {Number} pageX 
-         * @param {Number} pageY 
-         * @param {Number} lon 
-         * @param {Number} lat 
+         *
+         * @param {Number} pageX
+         * @param {Number} pageY
+         * @param {Number} lon
+         * @param {Number} lat
          */
         _updateTooltipPosition (pageX, pageY, lon, lat) {
             let mapDiv = this._map.getTarget();
@@ -256,9 +256,9 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         /**
          * @method _updateTooltipContent
          * Updates tooltip with feature's data or hides it if content is empty.
-         * 
-         * @param {String} contentOptions 
-         * @param {olFeature | olRenderFeature} feature 
+         *
+         * @param {String} contentOptions
+         * @param {olFeature | olRenderFeature} feature
          */
         _updateTooltipContent (contentOptions, feature) {
             const tooltip = jQuery(this.getTooltipOverlay().getElement());
@@ -285,10 +285,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         /**
          * @method _updateTooltip
          * Updates tooltip's content and position
-         * 
+         *
          * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
-         * @param {Object} contentOptions 
-         * @param {olFeature | olRenderFeature} feature 
+         * @param {Object} contentOptions
+         * @param {olFeature | olRenderFeature} feature
          */
         _updateTooltip (event, contentOptions, feature) {
             const tooltip = jQuery(this.getTooltipOverlay().getElement());
@@ -304,11 +304,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             }
         }
         /**
-         * @method _onMapHover 
+         * @method _onMapHover
          * Finds the topmost feature from the layers controlled by the service and handles hover tooltip for the feature.
          * Calls registered hover handlers for further styling of the layers.
-         * 
-         * @param {Oskari.mapframework.event.common.MouseHoverEvent} event 
+         *
+         * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
          */
         _onMapHover (event) {
             const { feature, layer } = this._getTopmostFeatureAndLayer(event);
@@ -337,11 +337,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         }
 
         /**
-         * @method _getGeojson 
-         * 
+         * @method _getGeojson
+         *
          * Returns geojson for feature.
          * If the feature is read-only (olRenderFeature), creates a geojson of the feature's extent.
-         * 
+         *
          * @param {olFeature | olRenderFeature} feature
          * @return geojson
          */
@@ -357,11 +357,11 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         }
 
         /**
-         *  @method _onMapClicked 
+         *  @method _onMapClicked
          * Find features from the layers controlled by the service and handle clicks for all those features.
          * Calls registered click handlers.
-         * 
-         * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event 
+         *
+         * @param {Oskari.mapframework.bundle.mapmodule.event.MapClickedEvent} event
          */
         _onMapClicked (event) {
             const me = this;

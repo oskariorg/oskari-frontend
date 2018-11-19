@@ -321,7 +321,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          */
         getToolStyleFromMapModule: function () {
             var value = this.getMapModule().getToolStyle();
-            return value ? value : null;
+            return value || null;
         },
         /**
          * @public @method getToolStyleFromMapModule

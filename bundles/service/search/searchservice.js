@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
     function (sandbox, searchUrl) {
         this._searchUrl = searchUrl;
         this.sandbox = sandbox;
-        if (sandbox && typeof sandbox.getService == 'function') {
+        if (sandbox && typeof sandbox.getService === 'function') {
             var service = sandbox.getService(this.getQName());
             if (service) {
                 // already registered

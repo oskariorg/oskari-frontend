@@ -176,7 +176,7 @@ Oskari.clazz.define(
         /**
          * @method onLayerRequest VectorFeatureService handler impl method
          * Handles VectorLayerRequest.
-         * 
+         *
          * @param { Oskari.mapframework.bundle.mapmodule.request.VectorLayerRequest } request
          */
         onLayerRequest: function (request) {
@@ -185,11 +185,11 @@ Oskari.clazz.define(
         /**
          * @method onMapHover VectorFeatureService handler impl method
          * Handles feature highlighting on map hover.
-         * 
-         * @param { Oskari.mapframework.event.common.MouseHoverEvent } event 
-         * @param { olFeature } feature 
-         * @param { olVectorLayer } layer 
-         */ 
+         *
+         * @param { Oskari.mapframework.event.common.MouseHoverEvent } event
+         * @param { olFeature } feature
+         * @param { olVectorLayer } layer
+         */
         onMapHover: function (event, feature, layer) {
             var cursor;
 
@@ -224,9 +224,9 @@ Oskari.clazz.define(
         },
         /**
          * @method _applyHoverStyle
-         * 
+         *
          * Changes feature's style and preserves the original style to go back to.
-         * 
+         *
          * @param {Object} feature ol3 feature
          * @param {Object} hoverStyle Oskari style object
          */
@@ -253,9 +253,9 @@ Oskari.clazz.define(
         },
         /**
          * @method _applyOriginalStyle
-         * 
+         *
          * Switch back to the original style.
-         * 
+         *
          * @param {Object} feature ol3 feature
          */
         _applyOriginalStyle: function (feature) {
@@ -435,9 +435,9 @@ Oskari.clazz.define(
         /**
          * @method _findOskariLayer
          * @private
-         * 
+         *
          * Returns cached Oskari layer by id.
-         * 
+         *
          * @param {String} id layer id
          * @return {Oskari.mapframework.domain.VectorLayer} layer object
          */
@@ -455,7 +455,7 @@ Oskari.clazz.define(
         /**
          * @method prepareVectorLayer
          * @public
-         * 
+         *
          * Creates a new layer or updates an existing one if found by options.layerId.
          *
          * @param {Object} options layer properties
@@ -513,7 +513,7 @@ Oskari.clazz.define(
         /**
          * @method _updateVectorLayer
          * @private
-         * 
+         *
          * Updates layer properties
          *
          * @param {Oskari.mapframework.domain.VectorLayer} layer layer to update
@@ -554,7 +554,7 @@ Oskari.clazz.define(
          * @method _containsLayerOptions
          * @private
          * Check if options contains layer specific settings.
-         * 
+         *
          * @return {boolean} true if options contains layer specific settings
          */
         _containsLayerOptions: function (options) {
@@ -875,12 +875,12 @@ Oskari.clazz.define(
         },
         /**
          * @method setupFeatureHover
-         * 
+         *
          * Set hover options for feature.
-         * 
+         *
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer which hover options are applied to the feature
          * @param {Object} feature ol3 feature
-         * 
+         *
          */
         setupFeatureHover: function (layer, feature) {
             var layerOptions = layer.getHoverOptions();
@@ -941,7 +941,7 @@ Oskari.clazz.define(
             if (feature && options.optionalStyles) {
                 optionalStyle = me.getOptionalStyle(options.optionalStyles, styleDef, feature);
             }
-            return optionalStyle ? optionalStyle : me.getMapModule().getStyle(styleDef);
+            return optionalStyle || me.getMapModule().getStyle(styleDef);
         },
         /**
          * @method getOptionalStyle

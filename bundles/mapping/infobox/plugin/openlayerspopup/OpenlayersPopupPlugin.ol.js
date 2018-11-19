@@ -172,7 +172,7 @@ Oskari.clazz.define(
                 offsetX = 0,
                 offsetY = -20,
                 mapModule = me.getMapModule(),
-                isMarker = (marker && marker.data) ? true : false,
+                isMarker = !!((marker && marker.data)),
                 positioning = options && options.positioning && me._positionClasses && me._positionClasses[options.positioning] ? me._positionClasses[options.positioning] : 'no-position-info',
                 popupType,
                 popupDOM,
@@ -618,7 +618,7 @@ Oskari.clazz.define(
 
             var height = wrapper.height();
             height = height > maxHeight ? (maxHeight + 30) + 'px' : 'auto';
-            var isOverThanMax = height > maxHeight ? true : false;
+            var isOverThanMax = height > maxHeight;
             content.css({
                 'height': height
             });

@@ -101,7 +101,7 @@ Oskari.clazz.define(
 
         /**
          * Returns form values as an object
-         * 
+         *
          * @method getValues
          * @return {Object} values
          */

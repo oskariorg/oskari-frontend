@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CrosshairTool',
             if (mapModule) {
                 mapModule.toggleCrosshair(enabled);
             }
-            me.state.enabled = (enabled === true) ? true : false;
+            me.state.enabled = (enabled === true);
         },
         stop: function () {
         // remove crosshair when exiting
