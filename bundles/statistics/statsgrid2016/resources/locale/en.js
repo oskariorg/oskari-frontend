@@ -69,7 +69,7 @@ Oskari.registerLocalization({
                 'title': 'AREAL DIVISION',
                 'info': 'Redefine areal division for data from dropdown list'
             },
-            'source': 'Data',
+            'source': 'Indicator',
             'orderBy': 'Sort',
             'orderByAscending': 'Sort ascending',
             'orderByDescending': 'Sort descending',
