@@ -1,5 +1,6 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
+import {unByKey} from 'ol/Observable.js';
 import olOverlay from 'ol/Overlay';
 import {fromExtent} from 'ol/geom/Polygon';
 import olFormatWKT from 'ol/format/WKT';
@@ -54,8 +55,9 @@ Oskari.clazz.define(
             }
         };
         this._nextFeatureId = 0;
-        this._hoverFeature = undefined;
+        this._hoverState = null;
         this._log = Oskari.log('VectorLayerPlugin');
+        this._styleCache = {};
     }, {
         /**
          * @method register
@@ -191,35 +193,26 @@ Oskari.clazz.define(
          * @param { olVectorLayer } layer 
          */ 
         onMapHover: function (event, feature, layer) {
-            var cursor;
-
+            const oldHoverState = this._hoverState;
+            this._hoverState = null;
             if (feature) {
-                // Remove highlighting from the previously hovered feature
-                if (this._hoverFeature && this._hoverFeature !== feature) {
-                    this._applyOriginalStyle(this._hoverFeature);
-                }
-                var hover = feature.getProperties()['hover'];
-                if (hover) {
-                    // Highlight hovered feature
-                    if (hover.style) {
-                        this._applyHoverStyle(feature, hover.style);
-                    }
-                }
-                this._hoverFeature = feature;
-                cursor = feature.getProperties()['oskari-cursor'];
-            } else if (this._hoverFeature) {
-                // Remove feature highlighting
-                this._applyOriginalStyle(this._hoverFeature);
-                this._hoverFeature = null;
+                this._applyHoverStyle(feature, layer);
+                this._hoverState = { feature, layer };
             }
-
-            // Update map cursor
-            var mapDiv = this._map.getTarget();
-            mapDiv = typeof mapDiv === 'string' ? jQuery('#' + mapDiv) : jQuery(mapDiv);
-            if (cursor) {
-                mapDiv.css('cursor', cursor);
-            } else {
-                mapDiv.css('cursor', this.getMapModule().getCursorStyle());
+            // Remove highlighting from the previously hovered feature
+            if (oldHoverState && oldHoverState.feature !== feature) {
+                this._applyOriginalStyle(oldHoverState.feature, oldHoverState.layer);
+            }
+            // Update map cursor if feature is/was hovered
+            if (oldHoverState || this._hoverState) {
+                const cursor = this._hoverState ? this._hoverState.feature.get('oskari-cursor') : null;
+                var mapDiv = this._map.getTarget();
+                mapDiv = typeof mapDiv === 'string' ? jQuery('#' + mapDiv) : jQuery(mapDiv);
+                if (cursor) {
+                    mapDiv.css('cursor', cursor);
+                } else {
+                    mapDiv.css('cursor', this.getMapModule().getCursorStyle());
+                }
             }
         },
         /**
@@ -227,43 +220,45 @@ Oskari.clazz.define(
          * 
          * Changes feature's style and preserves the original style to go back to.
          * 
-         * @param {Object} feature ol3 feature
-         * @param {Object} hoverStyle Oskari style object
+         * @param {ol/Feature} feature ol feature
+         * @param {ol/layer/Vector || object} layer ol layer or layer id
          */
-        _applyHoverStyle: function (feature, hoverStyle) {
-            if (!feature.get('hoverStyleOn')) {
-                if (!feature.get('olStyle')) {
-                    // Preserve origial style
-                    feature.set('olStyle', feature.getStyle());
-                }
-                var olHoverStyle = feature.get('hoverStyle');
-                if (!olHoverStyle) {
-                    // Create ol style object for hover
-                    if (hoverStyle.inherit) {
-                        var ftrStyle = feature.get('oskariStyle') || {};
-                        hoverStyle = jQuery.extend(true, {}, ftrStyle, hoverStyle);
-                    }
-                    olHoverStyle = this.getMapModule().getStyle(hoverStyle);
-                    olHoverStyle.setZIndex(10000);
-                    feature.set('hoverStyle', olHoverStyle);
-                }
-                feature.setStyle(olHoverStyle);
-                feature.set('hoverStyleOn', true);
+        _applyHoverStyle: function (feature, layer) {
+            if (typeof layer !== 'object') {
+                layer = this._getOlLayer(layer);
             }
+            const hoverOptions = layer.get(LAYER_HOVER);
+            if (!hoverOptions || !hoverOptions.featureStyle) {
+                return;
+            }
+            const ftrStyles = this.getCachedStyles(layer.get(LAYER_ID), this.getFeatureId(feature));
+            if (!ftrStyles || ftrStyles.hoverActive) {
+                return;
+            }
+            const hoverStyleDef = hoverOptions.featureStyle;
+            if (!ftrStyles.olHover) {
+                let hoverStyle = hoverStyleDef.inherit ? jQuery.extend(true, {}, ftrStyles.oskari || {}, hoverStyleDef) : hoverStyleDef;
+                ftrStyles.olHover = this.getMapModule().getStyle(hoverStyle);
+                ftrStyles.olHover.setZIndex(10000);
+            }
+            ftrStyles.hoverActive = true;
+            feature.setStyle(ftrStyles.olHover);
         },
         /**
          * @method _applyOriginalStyle
          * 
          * Switch back to the original style.
          * 
-         * @param {Object} feature ol3 feature
+         * @param {ol/Feature} feature ol feature
+         * @param {ol/layer/Vector} layer ol layer
          */
-        _applyOriginalStyle: function (feature) {
-            var style = feature.get('olStyle');
-            if (style) {
-                feature.setStyle(style);
-                feature.set('hoverStyleOn', false);
+        _applyOriginalStyle: function (feature, layer) {
+            const ftrStyles = this.getCachedStyles(layer.get(LAYER_ID), this.getFeatureId(feature));
+            if (!ftrStyles || !ftrStyles.ol || !ftrStyles.hoverActive) {
+                return;
             }
+            feature.setStyle(ftrStyles.ol);
+            ftrStyles.hoverActive = false;
         },
         /**
          * @method registerVectorFormat
@@ -570,7 +565,7 @@ Oskari.clazz.define(
          * @public
          * Add feature on the map
          *
-         * @param {Object} geometry the geometry WKT string or GeoJSON object
+         * @param {Object} geometry the geometry WKT string or GeoJSON object or object containing feature properties for updating
          * @param {Object} options additional options
          */
         addFeaturesToMap: function (geometry, options) {
@@ -628,7 +623,6 @@ Oskari.clazz.define(
                     feature.set(FTR_PROPERTY_ID, id);
                 }
                 me.setupFeatureStyle(options, feature, false);
-                me.setupFeatureHover(layer, feature);
             });
 
             olLayer = me._getOlLayer(layer);
@@ -709,23 +703,23 @@ Oskari.clazz.define(
          */
         _updateFeature: function (options, propertyName, value) {
             var layers = {layer: options.layerId};
-            var features = {};
-            features[propertyName] = [value];
-            var featuresMatchingQuery = this.getFeaturesMatchingQuery(layers, features);
-            var feature = featuresMatchingQuery[0];
-            if (feature) {
+            var values = Array.isArray(value) ? value : [value];
+            var searchValues = values.map(cur => typeof cur === 'object' ? cur.value : cur);
+            var searchOptions = {
+                [propertyName]: searchValues
+            };
+            this.getFeaturesMatchingQuery(layers, searchOptions).forEach(feature => {
+                const updateValue = values.find(cur => typeof cur === 'object' && feature.get(propertyName) === cur.value);
+                if (updateValue && updateValue.properties) {
+                    Object.keys(updateValue.properties).forEach(key => feature.set(key, updateValue.properties[key]));
+                }
                 if (options.featureStyle) {
                     this.setupFeatureStyle(options, feature, true);
                 }
                 var formatter = this._supportedFormats.GeoJSON;
                 var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
                 var errorEvent = Oskari.eventBuilder('FeatureEvent')().setOpError('feature has no geometry');
-                var highlighted = feature.get('highlighted');
-                if (highlighted) {
-                    feature.set('highlighted', false);
-                } else {
-                    feature.set('highlighted', true);
-                }
+
                 var geojson = formatter.writeFeaturesObject([feature]);
                 var event = addEvent;
                 if (!feature.getGeometry()) {
@@ -738,6 +732,37 @@ Oskari.clazz.define(
                 if (addEvent.hasFeatures()) {
                     this.getSandbox().notifyAll(addEvent);
                 }
+            });
+        },
+        _animateFillColorChange: function (feature, newStyle) {
+            const hasFillColor = style => style && style.getFill() && style.getFill().getColor();
+            if (!hasFillColor(feature.getStyle()) || !hasFillColor(newStyle)) {
+                // No animation. Just set the style.
+                feature.setStyle(newStyle);
+                return;
+            }
+
+            const duration = 500;
+            const start = new Date().getTime();
+            const map = this.getMapModule().getMap();
+            const listenerKey = map.on('postcompose', animate);
+
+            const oldColor = feature.getStyle().getFill().getColor();
+            const newColor = newStyle.getFill().getColor();
+
+            function animate (event) {
+                const elapsed = event.frameState.time - start;
+                const elapsedRatio = elapsed / duration;
+                const style = feature.getStyle();
+                style.getFill().setColor(d3.interpolateLab(oldColor, newColor)(elapsedRatio));
+                feature.setStyle(style);
+                if (elapsed > duration) {
+                    unByKey(listenerKey);
+                    feature.setStyle(newStyle);
+                    return;
+                }
+                // tell OpenLayers to continue postcompose animation
+                map.render();
             }
         },
         /**
@@ -857,39 +882,49 @@ Oskari.clazz.define(
                 }
             }
         },
-        setupFeatureStyle: function (options, feature, update) {
-            var me = this;
-            var style = this.getStyle(options, feature, update);
-
-            // set up property-based labeling
-            if (update && typeof feature.getId === 'function') {
-                options.featureStyle = me._featureStyles[feature.getId()] || options.featureStyle;
-            }
-            if (Oskari.util.keyExists(options, 'featureStyle.text.labelProperty') && style.getText()) {
-                var label = feature.get(options.featureStyle.text.labelProperty) ? feature.get(options.featureStyle.text.labelProperty) : '';
-                // For ol3 label must be a string so force to it
-                label = label + '';
-                style.getText().setText(label);
-            }
-            feature.setStyle(style);
+        getFeatureId: function (feature) {
+            return feature.getId() || feature.get(FTR_PROPERTY_ID);
         },
-        /**
-         * @method setupFeatureHover
-         * 
-         * Set hover options for feature.
-         * 
-         * @param {Oskari.mapframework.domain.VectorLayer} layer the layer which hover options are applied to the feature
-         * @param {Object} feature ol3 feature
-         * 
-         */
-        setupFeatureHover: function (layer, feature) {
-            var layerOptions = layer.getHoverOptions();
-            if (layerOptions) {
-                var featureOptions = {};
-                if (layerOptions.featureStyle) {
-                    featureOptions.style = layerOptions.featureStyle;
-                }
-                feature.set('hover', featureOptions);
+        _initStyleCache: function (layerId, featureId) {
+            const isUndef = val => typeof val === 'undefined' || val === null;
+            if (isUndef(layerId) || isUndef(featureId)) {
+                return;
+            }
+            const cache = this._styleCache[layerId] || {};
+            cache[featureId] = cache[featureId] || {};
+            this._styleCache[layerId] = cache;
+        },
+        getCachedStyles: function (layerId, featureId) {
+            const cache = this._styleCache[layerId];
+            if (cache) {
+                return cache[featureId];
+            }
+        },
+        setupFeatureStyle: function (options, feature, update) {
+            const me = this;
+            const layerId = options.layerId;
+            const featureId = me.getFeatureId(feature);
+
+            me._initStyleCache(layerId, featureId);
+            const olStyle = this.getStyle(options, feature, update);
+
+            // Setup label
+            const cached = me.getCachedStyles(layerId, featureId);
+            let styleDef = options.featureStyle || {};
+            if (cached && cached.oskari) {
+                styleDef = cached.oskari;
+            }
+            if (Oskari.util.keyExists(styleDef, 'text.labelProperty') && olStyle.getText()) {
+                const label = feature.get(styleDef.text.labelProperty) || '';
+                olStyle.getText().setText('' + label);
+            }
+
+            if (update && cached.hoverActive) {
+                delete cached.hoverActive;
+                delete cached.olHover;
+                this._applyHoverStyle(me._hoverState.feature, me._hoverState.layer);
+            } else {
+                this._animateFillColorChange(feature, olStyle);
             }
         },
         /**
@@ -919,29 +954,24 @@ Oskari.clazz.define(
          * @param {Boolean} update update feature style
          */
         getStyle: function (options, feature, update) {
-            var me = this,
-                optionalStyle = null;
-
-            var styles = options.featureStyle || me._layerStyles[options.layerId] || {};
+            const me = this;
+            const cached = me.getCachedStyles(options.layerId, me.getFeatureId(feature));
 
             // overriding default style with feature/layer style
-            var styleDef = jQuery.extend({}, this._defaultStyle, styles);
-
-            if (update && typeof feature.getId === 'function' && me._featureStyles[feature.getId()] && options.featureStyle) {
-                styleDef = jQuery.extend({}, me._featureStyles[feature.getId()], styles);
-            }
-
-            if (options.featureStyle) {
-                me._featureStyles[feature.getId()] = styleDef;
-            }
-
-            feature.set('oskariStyle', styleDef);
+            const overrideStyle = options.featureStyle || me._layerStyles[options.layerId] || {};
+            const baseStyle = update && cached.oskari ? cached.oskari : this._defaultStyle;
+            cached.oskari = jQuery.extend(true, {}, baseStyle, overrideStyle);
 
             // Optional styles based on property values
             if (feature && options.optionalStyles) {
-                optionalStyle = me.getOptionalStyle(options.optionalStyles, styleDef, feature);
+                const optionalStyleDef = me.getOptionalStyle(options.optionalStyles, cached.oskari, feature);
+                if (optionalStyleDef) {
+                    cached.oskari = optionalStyleDef;
+                }
             }
-            return optionalStyle ? optionalStyle : me.getMapModule().getStyle(styleDef);
+
+            cached.ol = me.getMapModule().getStyle(cached.oskari);
+            return cached.ol;
         },
         /**
          * @method getOptionalStyle
@@ -952,7 +982,6 @@ Oskari.clazz.define(
          * @return
          * */
         getOptionalStyle: function (optionalStyles, defStyle, feature) {
-            var me = this;
             for (var i in optionalStyles) {
                 if (optionalStyles[i].hasOwnProperty('property') && feature.getProperties()) {
                     // check feature property  values and take style, if there is match case
@@ -960,9 +989,7 @@ Oskari.clazz.define(
                     if (property.hasOwnProperty('key') && property.hasOwnProperty('value') && feature.getProperties().hasOwnProperty(property.key)) {
                         if (property.value === feature.getProperties()[property.key]) {
                             // overriding default style with feature style
-                            var styleOpt = jQuery.extend({}, defStyle, optionalStyles[i]);
-                            feature.set('oskariStyle', styleOpt);
-                            return me.getMapModule().getStyle(styleOpt);
+                            return jQuery.extend(true, {}, defStyle, optionalStyles[i]);
                         }
                     }
                 }

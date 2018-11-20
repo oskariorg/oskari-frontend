@@ -8,132 +8,180 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._bindToEvents();
     this._initLayer();
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
+    this._regionsAdded = [];
+    this._mapStyle = null;
 }, {
 /** **** PUBLIC METHODS ******/
-    render: function (highlightRegion) {
-        var me = this;
-        var sandbox = me.sb;
-        var service = me.service;
-        var currentRegion = service.getStateService().getRegionset();
-        var state = service.getStateService();
-        var ind = state.getActiveIndicator();
-        var locale = me.instance.getLocalization();
+    render: function (highlightRegionId) {
+        const me = this;
+        const service = me.service;
+        const state = service.getStateService();
+        const ind = state.getActiveIndicator();
+        const regionset = state.getRegionset();
 
-        // remove layer
-        sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
-
-        if (!ind || !currentRegion) {
+        if (!ind || !regionset) {
             return;
         }
         me._updateLayerProperties();
-        var errorService = service.getErrorService();
 
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
+        const { datasource, indicator, selections, series } = ind;
+        service.getIndicatorData(datasource, indicator, selections, series, regionset, function (err, data) {
             if (err) {
-                Oskari.log('RegionsetViewer').warn('Error getting indicator data', ind.datasource, ind.indicator, ind.selections, state.getRegionset());
+                Oskari.log('RegionsetViewer').warn('Error getting indicator data', datasource, indicator, selections, regionset);
                 return;
             }
 
-            var classification = state.getClassificationOpts(ind.hash);
-            var groupStats = service.getSeriesService().getSeriesStats(ind.hash);
-            var numberFormatter = Oskari.getNumberFormatter(classification.fractionDigits);
-
-            var classify = service.getClassificationService().getClassification(data, classification, groupStats);
-
-            if (!classify) {
-                Oskari.log('RegionsetViewer').warn('Error getting classification', data, classification);
+            const classificationOpts = state.getClassificationOpts(ind.hash);
+            const groupStats = service.getSeriesService().getSeriesStats(ind.hash);
+            const classified = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
+            if (!classified) {
+                Oskari.log('RegionsetViewer').warn('Error getting classification', data, classified);
                 return;
             }
-            var colors = service.getColorService().getColorsForClassification(classification);
+            if (me._mapStyle !== null && me._mapStyle !== classificationOpts.mapStyle) {
+                me._clearRegions();
+            }
+            me._mapStyle = classificationOpts.mapStyle;
 
-            service.getRegions(currentRegion, function (er, regions) {
-                if (err) {
-                    me.log.warn('Cannot get regions for wanted regionset=' + currentRegion);
-                    // notify error!!
-                    errorService.show(locale.errors.title, locale.errors.regionsDataError);
-                    return;
-                }
-                if (regions.length === 0) {
-                    errorService.show(locale.errors.title, locale.errors.regionsDataIsEmpty);
-                }
-                var regiongroups = classify.getGroups();
-
-                regiongroups.forEach(function (regiongroup, index) {
-                    var features = [];
-                    var optionalStyles = [];
-                    var color = colors[index];
-
-                    var iconSizePx = service.getClassificationService().getPixelForSize(index,
-                        {
-                            min: classification.min,
-                            max: classification.max
-                        }, {
-                            min: 0,
-                            max: classification.count - 1
-                        }
-                    );
-
-                    regiongroup.forEach(function (region) {
-                        var wantedRegion = jQuery.grep(regions, function (r) {
-                            return r.id === region;
-                        });
-
-                        if (wantedRegion && wantedRegion.length === 1) {
-                            if (highlightRegion && (highlightRegion.toString() === region.toString())) {
-                                optionalStyles.push(me._getFeatureStyle(classification, region, color, true, iconSizePx));
-                            }
-                            features.push(me._getFeature(classification, wantedRegion[0], numberFormatter.format(data[wantedRegion[0].id])));
-                        }
-                    });
-
-                    // Add group features to map
-                    var geoJSON = {
-                        'type': 'FeatureCollection',
-                        'crs': {
-                            'type': 'name',
-                            'properties': {
-                                'name': sandbox.getMap().getSrsName()
-                            }
-                        },
-                        'features': features
-                    };
-
-                    var defaultFeatureStyle = me._getFeatureStyle(classification, null, color, false, iconSizePx);
-
-                    if (classification.showValues === true) {
-                        var textColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
-                        defaultFeatureStyle.text = {
-                            scale: 1.2,
-                            fill: {
-                                color: textColor
-                            },
-                            stroke: {
-                                width: 0
-                            },
-                            labelProperty: 'regionValue',
-                            offsetX: 0,
-                            offsetY: 0
-                        };
-                    }
-
-                    var params = [geoJSON, {
-                        clearPrevious: false,
-                        featureStyle: defaultFeatureStyle,
-                        optionalStyles: optionalStyles,
-                        layerId: me.LAYER_ID,
-                        prio: index,
-                        opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100
-                    }];
-
-                    sandbox.postRequestByName(
-                        'MapModulePlugin.AddFeaturesToMapRequest',
-                        params
-                    );
-                });
-            });
+            const regionGroups = classified.getGroups();
+            me._viewRegions(classificationOpts, regionGroups, data, highlightRegionId);
         });
     },
     /** **** PRIVATE METHODS ******/
+    _viewRegions: function (classification, regionGroups, regionValues, highlightRegionId) {
+        const me = this;
+        const service = me.service;
+        const errorService = service.getErrorService();
+        const regionset = service.getStateService().getRegionset();
+        const locale = me.instance.getLocalization();
+        service.getRegions(regionset, function (err, regionIds) {
+            if (err) {
+                me.log.warn('Cannot get regions for wanted regionset=' + regionset);
+                // notify error!!
+                errorService.show(locale.errors.title, locale.errors.regionsDataError);
+                return;
+            }
+            if (regionIds.length === 0) {
+                errorService.show(locale.errors.title, locale.errors.regionsDataIsEmpty);
+            }
+            me._addRegionFeatures(classification, regionGroups, regionIds, regionValues, highlightRegionId);
+        });
+    },
+    _addRegionFeatures: function (classification, regiongroups, regions, regionValues, highlightRegionId) {
+        const me = this;
+        const sandbox = me.sb;
+        const service = me.service;
+        const colors = service.getColorService().getColorsForClassification(classification);
+        const numberFormatter = Oskari.getNumberFormatter(classification.fractionDigits);
+        const addFeaturesRequestParams = [];
+        const handledRegions = [];
+
+        regiongroups.forEach(function (regiongroup, index) {
+            const optionalStyles = [];
+            const color = colors[index];
+
+            const iconSizePx = service.getClassificationService().getPixelForSize(index,
+                {
+                    min: classification.min,
+                    max: classification.max
+                }, {
+                    min: 0,
+                    max: classification.count - 1
+                }
+            );
+
+            const updates = [];
+            const adds = [];
+            const regionFeaturesToAdd = [];
+
+            regiongroup.forEach(regionId => {
+                if (highlightRegionId && (highlightRegionId.toString() === regionId.toString())) {
+                    optionalStyles.push(me._getFeatureStyle(classification, regionId, color, true, iconSizePx));
+                }
+                const region = regions.find(r => r.id === regionId);
+                if (!region) {
+                    return;
+                }
+                const regionVal = numberFormatter.format(regionValues[regionId]);
+                if (me._regionsAdded.includes(regionId)) {
+                    updates.push({
+                        value: regionId,
+                        properties: {
+                            regionValue: regionVal
+                        }
+                    });
+                } else {
+                    const feature = me._getFeature(classification, region, regionVal);
+                    regionFeaturesToAdd.push(feature);
+                    adds.push(regionId);
+                }
+                handledRegions.push(regionId);
+            });
+
+            const defaultFeatureStyle = me._getFeatureStyle(classification, null, color, false, iconSizePx);
+
+            if (classification.showValues === true) {
+                const textColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
+                defaultFeatureStyle.text = {
+                    scale: 1.2,
+                    fill: {
+                        color: textColor
+                    },
+                    stroke: {
+                        width: 0
+                    },
+                    labelProperty: 'regionValue',
+                    offsetX: 0,
+                    offsetY: 0
+                };
+            }
+
+            const requestOptions = {
+                clearPrevious: false,
+                featureStyle: defaultFeatureStyle,
+                optionalStyles: optionalStyles,
+                layerId: me.LAYER_ID,
+                prio: index,
+                opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100
+            };
+            if (adds.length !== 0) {
+                me._regionsAdded = me._regionsAdded.concat(adds);
+                const geojson = {
+                    'type': 'FeatureCollection',
+                    'crs': {
+                        'type': 'name',
+                        'properties': {
+                            'name': sandbox.getMap().getSrsName()
+                        }
+                    },
+                    'features': regionFeaturesToAdd
+                };
+                addFeaturesRequestParams.push([geojson, requestOptions]);
+            }
+            if (updates.length !== 0) {
+                const searchOptions = {'id': updates};
+                addFeaturesRequestParams.push([searchOptions, requestOptions]);
+            }
+        });
+
+        // Remove regions missing value
+        if (handledRegions.length !== regions.length) {
+            const regionsWithoutValue = regions.filter(r => !handledRegions.includes(r.id)).map(r => r.id);
+            if (regionsWithoutValue.length > 0) {
+                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', regionsWithoutValue, me.LAYER_ID]);
+            }
+        }
+        addFeaturesRequestParams.forEach(params => {
+            sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
+        });
+    },
+
+    _clearRegions: function () {
+        var me = this;
+        me.sb.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, me.LAYER_ID]);
+        me._regionsAdded = [];
+    },
+
     _getFeatureStyle: function (classification, region, color, highlighted, size) {
         var me = this;
         var mapStyle = classification.mapStyle || 'choropleth';
@@ -306,6 +354,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             // Need to update the map
+            me._clearRegions();
             me.render(state.getRegion());
         });
 
