@@ -9,8 +9,8 @@
   "main": "grunt.js",
   "scripts": {
     "test": "eslint . --quiet",
-    "build": "webpack --mode production --env.appdef=applications/sample",
-    "start": "webpack-dev-server --hot --env.appdef=applications/sample",
+    "build": "webpack --progress --mode production --env.appdef=devapp:applications/sample",
+    "start": "webpack-dev-server --hot --env.appdef=devapp:applications/sample",
     "sprite": "node webpack/sprite.js"
   },
   "bugs": {
