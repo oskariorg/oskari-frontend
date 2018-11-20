@@ -14,7 +14,6 @@
         this.state = Oskari.clazz.create('Oskari.statistics.statsgrid.StateService', sandbox, this.series);
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
-        sandbox.registerService(this.classification);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
 
         // pushed from instance

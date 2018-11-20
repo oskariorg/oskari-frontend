@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     this.sb = sandbox;
     this.LAYER_ID = 'STATS_LAYER';
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
+    this.classificationService = this.service.getClassificationService();
     this.locale = locale;
     var me = this;
     me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
@@ -238,7 +238,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 me.manualClassificationView.setData(data);
             }
 
-            var validOptions = service.getClassificationService().getAvailableOptions(data);
+            var validOptions = me.classificationService.getAvailableOptions(data);
             if (validOptions.maxCount) {
                 var options = amount.find('option');
                 options.each(function (index, opt) {
