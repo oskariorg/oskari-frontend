@@ -222,8 +222,9 @@ Oskari.clazz.define(
          * 
          * @param {ol/Feature} feature ol feature
          * @param {ol/layer/Vector || object} layer ol layer or layer id
+         * @param {function} effectFunc function to activate hover style | optional
          */
-        _applyHoverStyle: function (feature, layer) {
+        _applyHoverStyle: function (feature, layer, effectFunc) {
             if (typeof layer !== 'object') {
                 layer = this._getOlLayer(layer);
             }
@@ -242,7 +243,11 @@ Oskari.clazz.define(
                 ftrStyles.olHover.setZIndex(10000);
             }
             ftrStyles.hoverActive = true;
-            feature.setStyle(ftrStyles.olHover);
+            if (effectFunc) {
+                effectFunc(feature, ftrStyles.olHover);
+            } else {
+                feature.setStyle(ftrStyles.olHover);
+            }
         },
         /**
          * @method _applyOriginalStyle
@@ -734,7 +739,8 @@ Oskari.clazz.define(
                 }
             });
         },
-        _animateFillColorChange: function (feature, newStyle) {
+        _animateFillColorChange: function (feature, newStyle, stopOnHoverOut) {
+            const me = this;
             const hasFillColor = style => style && style.getFill() && style.getFill().getColor();
             if (!hasFillColor(feature.getStyle()) || !hasFillColor(newStyle)) {
                 // No animation. Just set the style.
@@ -744,24 +750,28 @@ Oskari.clazz.define(
 
             const duration = 500;
             const start = new Date().getTime();
-            const map = this.getMapModule().getMap();
+            const map = me.getMapModule().getMap();
             const listenerKey = map.on('postcompose', animate);
 
             const oldColor = feature.getStyle().getFill().getColor();
             const newColor = newStyle.getFill().getColor();
 
             function animate (event) {
+                if (stopOnHoverOut && me._hoverState && me._hoverState.feature !== feature) {
+                    unByKey(listenerKey);
+                    return;
+                }
                 const elapsed = event.frameState.time - start;
                 const elapsedRatio = elapsed / duration;
-                const style = feature.getStyle();
-                style.getFill().setColor(d3.interpolateLab(oldColor, newColor)(elapsedRatio));
-                feature.setStyle(style);
                 if (elapsed > duration) {
                     unByKey(listenerKey);
                     feature.setStyle(newStyle);
                     return;
                 }
-                // tell OpenLayers to continue postcompose animation
+                const style = feature.getStyle();
+                style.getFill().setColor(d3.interpolateLab(oldColor, newColor)(elapsedRatio));
+                feature.setStyle(style);
+                // Continue postcompose animation
                 map.render();
             }
         },
@@ -922,9 +932,9 @@ Oskari.clazz.define(
             if (update && cached.hoverActive) {
                 delete cached.hoverActive;
                 delete cached.olHover;
-                this._applyHoverStyle(me._hoverState.feature, me._hoverState.layer);
+                me._applyHoverStyle(me._hoverState.feature, me._hoverState.layer, (ftr, style) => me._animateFillColorChange(ftr, style, true));
             } else {
-                this._animateFillColorChange(feature, olStyle);
+                me._animateFillColorChange(feature, olStyle);
             }
         },
         /**

@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._initLayer();
     this._pointSymbol = jQuery('<div><svg><circle></circle></svg></div>');
     this._regionsAdded = [];
-    this._mapStyle = null;
+    this._lastRenderCache = {};
 }, {
 /** **** PUBLIC METHODS ******/
     render: function (highlightRegionId) {
@@ -30,7 +30,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 Oskari.log('RegionsetViewer').warn('Error getting indicator data', datasource, indicator, selections, regionset);
                 return;
             }
-
             const classificationOpts = state.getClassificationOpts(ind.hash);
             const groupStats = service.getSeriesService().getSeriesStats(ind.hash);
             const classified = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
@@ -38,11 +37,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 Oskari.log('RegionsetViewer').warn('Error getting classification', data, classified);
                 return;
             }
-            if (me._mapStyle !== null && me._mapStyle !== classificationOpts.mapStyle) {
+            if (me._lastRenderCache.classification &&
+                me._lastRenderCache.classification.mapStyle !== classificationOpts.mapStyle) {
                 me._clearRegions();
             }
-            me._mapStyle = classificationOpts.mapStyle;
-
             const regionGroups = classified.getGroups();
             me._viewRegions(classificationOpts, regionGroups, data, highlightRegionId);
         });
@@ -174,6 +172,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         addFeaturesRequestParams.forEach(params => {
             sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
         });
+
+        me._lastRenderCache = { classification, regiongroups, highlightRegionId };
     },
 
     _clearRegions: function () {
@@ -191,6 +191,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             style = me._getPointStyle(strokeWidth, color, size);
         } else {
             style = me._getPolygonStyle(strokeWidth, color);
+        }
+        if (highlighted) {
+            style.effect = 'darken';
         }
         if (region) {
             style.property = {
@@ -341,6 +344,39 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             ]
         );
     },
+    _updateFeatureStyle: function (regionId, highlight) {
+        const me = this;
+        const { classification, regiongroups } = me._lastRenderCache;
+        if (!regiongroups || !classification) {
+            return;
+        }
+        const group = regiongroups.find(group => group.includes(event.getRegion()));
+        if (!group) {
+            return;
+        }
+        const groupIndex = regiongroups.indexOf(group);
+        const color = me.service.getColorService().getColorsForClassification(classification)[groupIndex];
+
+        const { min, max, count } = classification;
+        const iconSizePx = me.service.getClassificationService().getPixelForSize(
+            groupIndex,
+            { min, max },
+            {
+                min: 0,
+                max: count - 1
+            }
+        );
+        const style = me._getFeatureStyle(me._lastRenderCache.classification, event.getRegion(), color, highlight, iconSizePx);
+        if (highlight) {
+            style.effect = 'darken';
+        }
+        const requestOptions = {
+            featureStyle: style,
+            layerId: me.LAYER_ID
+        };
+        const searchOptions = {'id': regionId};
+        me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
+    },
     /**
      * Listen to events that require re-rendering the UI
      */
@@ -359,10 +395,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         });
 
         me.service.on('StatsGrid.RegionSelectedEvent', function (event) {
-            // FIXME: this needs some serious optimization
-            // we need previous selection from event so we can update the style
-            //  for 2 features instead of ALL the regions
-            me.render(event.getRegion());
+            me._updateFeatureStyle(event.getRegion(), true);
+            // Remove previous highlight
+            if (me._lastRenderCache.highlightRegionId) {
+                me._updateFeatureStyle(event.getRegion(), false);
+            }
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
