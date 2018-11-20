@@ -1,9 +1,9 @@
 /**
  * @function equalSizeBands
  * Creates array of numbers between min & max so that delta between numbers is the same
- * @param {Number} classCount number of classed requested. Array length will be classCount+1 
- * @param {Number} min 
- * @param {Number} max 
+ * @param {Number} classCount number of classed requested. Array length will be classCount+1
+ * @param {Number} min
+ * @param {Number} max
  */
 export default function equalSizeBands (classCount, min, max) {
     var output = [];

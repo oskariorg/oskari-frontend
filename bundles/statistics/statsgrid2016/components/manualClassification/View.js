@@ -8,10 +8,10 @@ const loc = Oskari.getMsg.bind(null, 'StatsGrid');
  */
 export default class ManualClassificationView {
     /**
-     * 
-     * @param {Object} classificationService 
-     * @param {Object} colorService 
-     * @param {Object} classificationOpts 
+     *
+     * @param {Object} classificationService
+     * @param {Object} colorService
+     * @param {Object} classificationOpts
      */
     constructor (classificationService, colorService, classificationOpts) {
         this.classificationService = classificationService;

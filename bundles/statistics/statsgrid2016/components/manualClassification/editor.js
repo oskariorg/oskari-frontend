@@ -13,7 +13,7 @@ const histoHeight = 200;
  * Creates classification editor into given DOM node
  * @param {HTMLElement} el DOM node
  * @param {Number[]} manualBounds class bounds at start of editing
- * @param {Number[]} indicatorData dataset values 
+ * @param {Number[]} indicatorData dataset values
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
