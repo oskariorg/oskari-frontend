@@ -1,6 +1,5 @@
 const arrowSize = 8;
 /**
- * @function inputGuide
  * Creates / updates SVG path making up a box with triagle that points to the given cursor location
  * @param {Object} svg node into which to render
  * @param {Function} xScale d3 scale function
