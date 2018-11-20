@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         if (!activeIndicator) {
             container.append(this.__templates.error({ msg: this.locale('legend.noActive') }));
             me._renderDone();
+            this.trigger('content-rendered');
             return;
         }
         // render classification options
@@ -131,6 +132,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             me._createEditClassificationListener();
             // legend
             legendContainer.html(legendUI);
+            me.trigger('content-rendered');
         }); // _createLegend
     },
 
@@ -143,7 +145,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         this._element.find('.edit-legend').on('click', function (event) {
             // toggle accordion
             me._accordion.getPanels().forEach(function (panel) {
-                panel.isOpen() ? panel.close() : panel.open();
+                if (panel.isOpen()) {
+                    panel.close();
+                    me.trigger('edit-legend', false);
+                } else {
+                    panel.open();
+                    me.trigger('edit-legend', true);
+                }
             });
         });
     },
@@ -190,24 +198,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      */
     _createAccordionPanel: function (title) {
         var me = this;
-
-        function _overflowCheck () {
-            var pluginEl = me._element.parent();
-            if (pluginEl.css('position') === 'absolute') {
-                var top = pluginEl.offset().top;
-                var bottom = top + pluginEl.height();
-                var offsetToWindowBottom = jQuery(window).height() - bottom;
-                if (offsetToWindowBottom < 0) {
-                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
-                }
-            }
-        }
-
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
             me._element.find('.edit-legend').addClass('edit-active');
-            _overflowCheck();
         });
         panel.on('close', function () {
             me._setPanelState(panel);

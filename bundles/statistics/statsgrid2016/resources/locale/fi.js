@@ -62,14 +62,14 @@ Oskari.registerLocalization({
             }
         },
         'statsgrid': {
-            'title': 'HAETUT AINEISTOT',
+            'title': 'HAETTU AINEISTO',
             'noResults': 'Ei valittuja aineistoja',
             'noValues': 'Ei arvoja valitulla aineistolla',
             'areaSelection': {
                 'title': 'ALUEJAKO',
                 'info': 'Määritä uudelleen millä alueilla haluat tarkastella aineistoja valitsemalla alasvetovalikosta'
             },
-            'source': 'Aineisto',
+            'source': 'Indikaattori',
             'orderBy': 'Lajittele',
             'orderByAscending': 'Lajittele nousevasti',
             'orderByDescending': 'Lajittele laskevasti',

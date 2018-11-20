@@ -2,6 +2,7 @@
   "name": "oskari-frontend",
   "version": "0.0.1",
   "description": "Build tools for Oskari core",
+  "homepage": "http://oskari.org",
   "keywords": [
     "Oskari"
   ],
@@ -12,10 +13,17 @@
     "start": "webpack-dev-server --hot --env.appdef=applications/sample",
     "sprite": "node webpack/sprite.js"
   },
+  "bugs": {
+    "url": "https://github.com/oskariorg/oskari-docs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oskariorg/oskari-frontend.git"
+  },
+  "license": "MIT",
   "dependencies": {
     "jsts": "^2.0.0",
-    "ol": "^5.2.0",
-    "ol-cesium": "^2.4.0"
+    "ol": "^5.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.1.2",

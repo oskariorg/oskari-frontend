@@ -456,6 +456,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             if (current && me.grid) {
                 me.grid.selectColumn(current.hash);
             }
+            if (!current) {
+                me.updateModel();
+            }
         });
         me._bindedEvents = true;
     },

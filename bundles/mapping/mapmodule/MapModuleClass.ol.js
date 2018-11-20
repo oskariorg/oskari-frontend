@@ -54,7 +54,10 @@ export default class MapModule extends AbstractMapModule {
         // by making a MapMoveRequest in application startup
         var controls = olControlDefaults({
             zoom: false,
-            attribution: false,
+            attribution: true,
+            attributionOptions: {
+                collapsible: false
+            },
             rotate: false
         });
         var interactions = olInteractionDefaults({

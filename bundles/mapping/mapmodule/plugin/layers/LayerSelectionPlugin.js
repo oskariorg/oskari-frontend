@@ -824,11 +824,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 return;
             }
 
-            var header = div.find('div.header'),
-                contentHeader = this.templates.contentHeader.clone(),
-                resourcesPath = this.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/mapping/mapmodule/resources/images/',
-                bgImg = imgPath + 'map-layer-button-' + styleName + '.png';
+            var header = div.find('div.header');
+            var contentHeader = this.templates.contentHeader.clone();
+            var bgImg = this.getMapModule().getImageUrl('map-layer-button-' + styleName + '.png');
 
             header.empty();
             if (styleName !== null) {

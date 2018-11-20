@@ -906,7 +906,7 @@ Oskari.clazz.define(
                         a_attr: {
                             'data-group-id': group.getId(),
                             'data-layer-id': layer.getId(),
-                            'data-tools-visible': (typeof group.isToolsVisible == 'function') ? group.isToolsVisible() : true
+                            'data-tools-visible': (typeof group.isToolsVisible === 'function') ? group.isToolsVisible() : true
                         }
                     };
 
