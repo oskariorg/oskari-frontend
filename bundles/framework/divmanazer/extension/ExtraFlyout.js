@@ -63,7 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             }
             me._popup.hide();
             me._visible = false;
-            suppressEvent = suppressEvent ? suppressEvent : false;
+            suppressEvent = suppressEvent || false;
             if (!suppressEvent) {
                 this.trigger('hide');
             }

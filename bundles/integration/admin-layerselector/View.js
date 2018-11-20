@@ -143,10 +143,9 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             me: me
         }, me.handleAction);
 
-        var confRequirementsConfig =
-                (this.getConfiguration() || {}).requirementsConfig,
-            requirementsConfig =
-                confRequirementsConfig || this.requirementsConfig;
+        var requirementsConfig = this.requirementsConfig;
+        // eslint-disable-next-line
+        requirementsConfig.paths._bundle = __webpack_public_path__ + 'assets/admin-layerselector'
 
         window.require.config(requirementsConfig);
         window.require(['_bundle/views/layerSelectorView'], function (LayerSelectorView) {

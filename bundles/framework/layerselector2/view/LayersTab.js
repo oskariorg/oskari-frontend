@@ -398,11 +398,9 @@ Oskari.clazz.define(
          */
         _relatedKeywordsPopup: function (keyword, event, me) {
             // event.preventDefault();
-            var oskarifield = jQuery(event.currentTarget).parents(
-                    '.oskarifield'
-                ),
-                relatedKeywordsCont,
-                ajaxUrl;
+            var oskarifield = jQuery(event.currentTarget).parents('.oskarifield');
+            var relatedKeywordsCont;
+            var ajaxUrl;
 
             if (!keyword || keyword.length === 0) {
                 this._showAllLayers();
@@ -529,42 +527,37 @@ Oskari.clazz.define(
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
         _showRelatedKeywords: function (userInput, keywords, oskarifield) {
-            var me = this,
-                relatedKeywordsCont = me.getFilterField().getField().find(
-                    '.related-keywords'
-                ),
-                i,
-                keyword,
-                keywordTmpl,
-                ontologySuggestions = [],
-                ontologyLayers = [];
+            var me = this;
+            var relatedKeywordsCont = me.getFilterField().getField().find('.related-keywords');
+            keywords = keywords || [];
+            var keyword;
+            var keywordTmpl;
+            var ontologySuggestions = [];
+            var ontologyLayers = [];
 
             me.clearRelatedKeywordsPopup(null, oskarifield);
 
             // Go through related keywords, get top 3, show only them
-            if (keywords && keywords.length > 0) {
-                for (i = 0; i < keywords.length; i += 1) {
-                    keyword = keywords[i];
-                    if (keyword.layers.length > 0) {
-                        // check if we want to show matching layers instead of a suggestion
-                        if (me._matchesIgnoreCase(keyword.type, 'syn') || (!me._isDefined(
-                            keyword.type) && me._containsIgnoreCase(
-                                keyword.keyword, userInput))) {
-                            // copy keyword layerids to ontologyLayers, avoid duplicates just because
-                            if (ontologyLayers.size === 0) {
-                                ontologyLayers.concat(keyword.layers);
-                            } else {
-                                me._concatNew(ontologyLayers, keyword.layers);
-                            }
-                        } else {
-                            ontologySuggestions.push({
-                                idx: i,
-                                count: keyword.layers.length
-                            });
-                        }
-                    }
+            keywords.forEach(function (keyword, index) {
+                if (!keyword.layers || !keyword.layers.length) {
+                    return;
                 }
-            }
+                // check if we want to show matching layers instead of a suggestion
+                if (me._matchesIgnoreCase(keyword.type, 'syn') ||
+                    (!me._isDefined(keyword.type) && me._containsIgnoreCase(keyword.keyword, userInput))) {
+                    // copy keyword layerids to ontologyLayers, avoid duplicates just because
+                    if (ontologyLayers.size === 0) {
+                        ontologyLayers.concat(keyword.layers);
+                    } else {
+                        me._concatNew(ontologyLayers, keyword.layers);
+                    }
+                } else {
+                    ontologySuggestions.push({
+                        idx: index,
+                        count: keyword.layers.length
+                    });
+                }
+            });
 
             if (ontologySuggestions.length > 0) {
                 relatedKeywordsCont.prepend(
@@ -572,9 +565,6 @@ Oskari.clazz.define(
                         me._locale.filter.didYouMean
                     )
                 );
-            } else {
-                // Why show an error if we can't find suggestions?
-                // relatedKeywordsCont.prepend(jQuery(me.templates.keywordsTitle).text(me._locale.errors.noResultsForKeyword));
             }
 
             // sort ontology suggestions by layer count
@@ -583,7 +573,7 @@ Oskari.clazz.define(
             });
 
             // show three top suggestions
-            for (i = 0; i < ontologySuggestions.length && i < 3; i += 1) {
+            for (var i = 0; i < ontologySuggestions.length && i < 3; i += 1) {
                 keyword = keywords[ontologySuggestions[i].idx];
                 keywordTmpl = jQuery(me.templates.keywordContainer);
                 keywordTmpl

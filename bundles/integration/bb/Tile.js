@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
             return 'Oskari.integration.bundle.bb.Tile';
         },
         setEl: function (el) {
-            this.container = $(el);
+            this.container = jQuery(el);
             if (this.instance && !this.container.hasClass(this.instance.getName())) {
                 this.container.addClass(this.instance.getName());
             }

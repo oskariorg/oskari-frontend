@@ -350,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 newIndex = -1;
 
             allNodes.each(function (index, el) {
-                if ($(this).attr('layer_id') === movedId) {
+                if (jQuery(this).attr('layer_id') === movedId) {
                     newIndex = index;
                     return false;
                 }

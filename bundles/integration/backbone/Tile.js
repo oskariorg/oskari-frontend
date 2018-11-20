@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.integration.bundle.backbone.Tile',
             return 'Oskari.integration.bundle.backbone.Tile';
         },
         setEl: function (el) {
-            this.container = $(el);
+            this.container = jQuery(el);
         },
         startPlugin: function () {
             this.refresh();

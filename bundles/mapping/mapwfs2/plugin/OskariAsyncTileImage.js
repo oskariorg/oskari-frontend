@@ -153,8 +153,8 @@ export default class OskariAsyncTileImage extends olSourceTileImage {
     /**
      * @param  {Array.<number>} boundsObj     tile bounds
      * @param  {string}         imageData     dataurl or actual url for image
-     * @param  {ol/layer/Tile}  layer 
-     * @param  {ol/Map}         map 
+     * @param  {ol/layer/Tile}  layer
+     * @param  {ol/Map}         map
      * @param  {boolean}        boundaryTile  true if this an incomplete tile
      * @api
      */
