@@ -23,7 +23,7 @@ module.exports = (env, argv) => {
         new CopyWebpackPlugin(
             [
                 { from: 'resources', to: 'resources', context: __dirname },
-                { from: 'bundles/integration/admin-layerselector', to: 'admin-layerselector', context: __dirname }
+                { from: 'bundles/integration/admin-layerselector', to: 'assets/admin-layerselector', context: __dirname }
             ]
         )
     ];

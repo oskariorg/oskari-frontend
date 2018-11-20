@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 delete data.spinner;
             }
             if (opts !== false) {
-                data.spinner = new Spinner($.extend({
+                data.spinner = new Spinner(jQuery.extend({
                     color: $el.css('color')
                 }, opts)).spin($el.get()[0]);
             }

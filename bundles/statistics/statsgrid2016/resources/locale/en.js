@@ -112,7 +112,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Natural intervals',
                 'quantile': 'Quantiles',
-                'equal': 'Equal intervals'
+                'equal': 'Equal intervals',
+                'manual': 'Manual classification'
             },
             'manual': 'Manual interval classification',
             'manualPlaceholder': 'Separate values with commas.',

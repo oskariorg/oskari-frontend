@@ -109,7 +109,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Naturliga brytpunkter',
                 'quantile': 'Kvantiler',
-                'equal': 'Lika intervall'
+                'equal': 'Lika intervall',
+                'manual': 'Egen klassificering'
             },
             'manual': 'Klassificering för hand',
             'manualPlaceholder': 'Avgränsa tal med kommatecken.',
