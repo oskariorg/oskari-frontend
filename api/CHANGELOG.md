@@ -9,6 +9,12 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.49.0
+
+### [add] [rpc] AddFeaturesToMapRequest
+
+Added a new option ``animationDuration`` for animating fill color change on update request.
+
 ## 1.48.0
 
 ### [mod] [rpc] AddFeaturesToMapRequest
