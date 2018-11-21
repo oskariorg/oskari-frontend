@@ -7,8 +7,11 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Make a link to the map view.",
                 "ok": "OK",
+                "copy": "Copy the link to the clipboard",
                 "title": "Link to Map View",
-                "cannot": "This map view cannot be linked to. Create a new map view and try again."
+                "cannot": "This map view cannot be linked to. Create a new map view and try again.",
+                "addMarker": "Show map focal marker",
+                "skipInfo": "Do not show quick guide"
             },
             "history": {
                 "reset": "Move to the default map view.",
