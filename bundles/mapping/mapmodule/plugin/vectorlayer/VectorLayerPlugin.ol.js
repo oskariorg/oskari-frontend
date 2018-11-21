@@ -220,7 +220,7 @@ Oskari.clazz.define(
          * @method _applyHoverStyle
          *
          * Changes feature's style and preserves the original style to go back to.
-         * 
+         *
          * @param {ol/Feature} feature ol feature
          * @param {ol/layer/Vector || object} layer ol layer or layer id
          */

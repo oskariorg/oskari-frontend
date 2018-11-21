@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
     this._regionsAdded = [];
     this._lastRenderCache = {};
 }, {
-/** **** PUBLIC METHODS ******/
     render: function (highlightRegionId) {
         const me = this;
         const service = me.service;
@@ -393,13 +392,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
         me.service.on('StatsGrid.RegionSelectedEvent', function (event) {
             const selectedRegion = event.getRegion();
-            console.log('selected ' + selectedRegion);
             me._updateFeatureStyle(selectedRegion, true);
             // Remove previous highlight
             const previous = me._lastRenderCache.highlightRegionId;
             if (previous && previous !== selectedRegion) {
                 me._updateFeatureStyle(previous, false);
-                console.log('removing ' + previous);
             }
             me._lastRenderCache.highlightRegionId = selectedRegion;
         });
