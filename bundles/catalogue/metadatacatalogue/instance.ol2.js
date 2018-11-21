@@ -957,9 +957,9 @@ Oskari.clazz.define(
 
                     // Include identification
                     var identification = row.identification;
-                    var isIdentificationCode = (identification && identification.code && identification.code.length > 0) ? true : false;
-                    var isIdentificationDate = (identification && identification.date && identification.date.length > 0) ? true : false;
-                    var isUpdateFrequency = (identification && identification.updateFrequency && identification.updateFrequency.length > 0) ? true : false;
+                    var isIdentificationCode = !!((identification && identification.code && identification.code.length > 0));
+                    var isIdentificationDate = !!((identification && identification.date && identification.date.length > 0));
+                    var isUpdateFrequency = !!((identification && identification.updateFrequency && identification.updateFrequency.length > 0));
                     if (isIdentificationCode && isIdentificationDate) {
                         var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
                         if (!locIdentificationCode) {
@@ -1035,7 +1035,7 @@ Oskari.clazz.define(
                                     actionElement.css('margin-right', '6px');
 
                                     // Set action callback
-                                    if (action.callback && typeof action.callback == 'function') {
+                                    if (action.callback && typeof action.callback === 'function') {
                                         callbackElement = actionElement.first();
                                         callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
                                             action.callback(event.data.metadata);

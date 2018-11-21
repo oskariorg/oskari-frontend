@@ -24,7 +24,7 @@ Oskari.clazz.category(
         /**
          * @method _getLinkUuid
          * @private
-         * 
+         *
          * @return {String} current view uuid, if public view. Otherwise returns uuid of system default view with same srs as current view.
          */
         _getLinkUuid: function () {

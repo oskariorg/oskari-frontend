@@ -69,7 +69,7 @@ Oskari.registerLocalization({
                 'title': 'AREAL DIVISION',
                 'info': 'Redefine areal division for data from dropdown list'
             },
-            'source': 'Data',
+            'source': 'Indicator',
             'orderBy': 'Sort',
             'orderByAscending': 'Sort ascending',
             'orderByDescending': 'Sort descending',
@@ -112,7 +112,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Natural intervals',
                 'quantile': 'Quantiles',
-                'equal': 'Equal intervals'
+                'equal': 'Equal intervals',
+                'manual': 'Manual classification'
             },
             'manual': 'Manual interval classification',
             'manualPlaceholder': 'Separate values with commas.',

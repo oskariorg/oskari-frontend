@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
          */
         start: function () {
             var el = this.container,
-                $el = $(el),
+                $el = jQuery(el),
                 data = $el.data(),
                 Spinner = this._Spinner,
                 opts = this.opts;
@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 delete data.spinner;
             }
             if (opts !== false) {
-                data.spinner = new Spinner($.extend({
+                data.spinner = new Spinner(jQuery.extend({
                     color: $el.css('color')
                 }, opts)).spin($el.get()[0]);
             }
@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 return;
             }
             this.spinning = false;
-            $el = $(el);
+            $el = jQuery(el);
             data = $el.data();
 
             if (!data) {

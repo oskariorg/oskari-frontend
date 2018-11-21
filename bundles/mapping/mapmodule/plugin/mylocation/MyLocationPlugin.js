@@ -120,7 +120,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'rounded-dark');
+            var styleClass = 'toolstyle-' + (style || 'rounded-dark');
 
             me.changeCssClasses(styleClass, /^toolstyle-/, [el]);
         },

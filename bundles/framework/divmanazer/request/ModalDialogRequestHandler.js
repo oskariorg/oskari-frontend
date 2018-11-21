@@ -61,7 +61,7 @@ Oskari
             if (request.onshow) {
                 this._args.onShow = request.onshow;
             }
-            $.modal = tpl.modal(this._args);
+            jQuery.modal = tpl.modal(this._args);
         }
     }, {
         protocol: ['Oskari.mapframework.core.RequestHandler']

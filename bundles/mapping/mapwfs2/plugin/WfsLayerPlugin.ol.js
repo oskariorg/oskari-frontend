@@ -261,7 +261,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'default');
+            var styleClass = 'toolstyle-' + (style || 'default');
 
             var classList = el.attr('class').split(/\s+/);
             for (var c = 0; c < classList.length; c++) {

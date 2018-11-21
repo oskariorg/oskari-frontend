@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
 
             var defaultViewTemplate = me.templateDefaultView.clone();
             defaultViewTemplate.find('label').html(me.loc('tabs.myviews.popup.default'));
-            isDefault = isDefault ? isDefault : false;
+            isDefault = isDefault || false;
             defaultViewTemplate.find('#defaultview').prop('checked', isDefault);
             template.append(defaultViewTemplate);
 
