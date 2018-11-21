@@ -67,7 +67,8 @@ Options object
     attributes: null,
     cursor: 'zoom-in',
     prio: 1,
-    minScale: 1451336
+    minScale: 1451336,
+    animationDuration: null
 }
 ```
 <ul>
@@ -97,6 +98,9 @@ Options object
   </li>
   <li>
     <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
+  </li>
+  <li>
+    <b>animationDuration</b> - On update requests it's possible to animate fill color change. Specify animation duration in ms.
   </li>
 </ul>
 
@@ -340,11 +344,14 @@ channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [WKT, {
 }]);
 
 // Now update previously added feature
-// For example change stroke style
+// For example change stroke style and animate 1 second fill color shift to blue
 var featureStyle = {
   stroke: {
     color: '#00FF00',
     width: 5
+  },
+  fill {
+    color: '#0000FF'
   }
 };
 
@@ -352,7 +359,8 @@ var featureStyle = {
 var updatedFeatureAttributes = {'test_property':1};
 var params = [updatedFeatureAttributes, {
     featureStyle: featureStyle,
-    layerId: 'MY_VECTOR_LAYER'
+    layerId: 'MY_VECTOR_LAYER',
+    animationDuration: 1000
 }];
 
 channel.postRequest(

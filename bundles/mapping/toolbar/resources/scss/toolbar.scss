@@ -19,15 +19,23 @@ div.toolrow {
     }
 
 }
-
-div.linkcontent {
-    word-wrap: break-word;
-    border-style: dashed;
-    border-width: 1px;
-    padding: 5px;
-    max-height: 200px;
-    overflow-y: auto;
+.link-wrapper {
+    .oskari-checkboxinput {
+        margin: 0px 6px 6px;
+    }
+    .link-content {
+        word-break: break-all;
+        border-style: dashed;
+        border-width: 1px;
+        padding: 5px;
+        max-height: 200px;
+        max-width: 600px;
+        overflow-y: auto;
+        margin-bottom: 12px;
+    }
 }
+
+
 
 div.tool.disabled {
     cursor: default;

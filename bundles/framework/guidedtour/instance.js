@@ -78,28 +78,27 @@ Oskari.clazz.define(
             if (!this._localization) {
                 this._localization = Oskari.getLocalization(this.getName());
             }
-
+            var state = this.state || {};
             // Check cookie 'pti_tour_seen'. Value '1' means that tour
             // is not to be started
             // jQuery cookie plugin:
             //   resources/framework/bundle/guidedtour/js/jquery.cookie.js
             //   github.com/carhartl/jquery-cookie/
-            if (jQuery.cookie('pti_tour_seen') !== '1') {
-                var me = this,
-                    conf = me.conf, // Should this not come as a param?
-                    sandboxName = (conf ? conf.sandbox : 'sandbox'),
-                    sandbox = Oskari.getSandbox(sandboxName);
-                // register to sandbox as a module
-                sandbox.register(me);
-                // register request handlers
-                sandbox.requestHandler(
-                    'Guidedtour.AddToGuidedTourRequest',
-                    Oskari.clazz.create('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', me)
-                );
-                me.sandbox = sandbox;
-
-                me._startGuide();
+            if (jQuery.cookie('pti_tour_seen') === '1' || state.showIntro === false) {
+                return;
             }
+
+            var sandbox = Oskari.getSandbox();
+            // register to sandbox as a module
+            sandbox.register(this);
+            // register request handlers
+            sandbox.requestHandler(
+                'Guidedtour.AddToGuidedTourRequest',
+                Oskari.clazz.create('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequestHandler', this)
+            );
+            this.sandbox = sandbox;
+
+            this._startGuide();
         },
         _startGuide: function () {
             var me = this,

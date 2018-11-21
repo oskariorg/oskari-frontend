@@ -7,8 +7,11 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Tee linkki karttanäkymään.",
                 "ok": "OK",
+                "copy": "Kopioi linkki leikepöydälle",
                 "title": "Linkki karttanäkymään",
-                "cannot": "Karttalinkkiä ei voida luoda tähän näkymään. Luo uusi näkymä ja yritä uudelleen."
+                "cannot": "Karttalinkkiä ei voida luoda tähän näkymään. Luo uusi näkymä ja yritä uudelleen.",
+                "addMarker": "Näytä kartan keskipisteen merkki",
+                "skipInfo": "Älä näytä pikaopasta"
             },
             "history": {
                 "reset": "Siirry oletusnäkymään.",
