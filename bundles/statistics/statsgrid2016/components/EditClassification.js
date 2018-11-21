@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 '</div>' +
 
                 // numeric value
-                '<div class="numeric-value visible-map-style-points visible-on-vector">' +
+                '<div class="numeric-value visible-map-style-choropleth visible-map-style-points visible-on-vector">' +
                 '</div>' +
 
                 // colors

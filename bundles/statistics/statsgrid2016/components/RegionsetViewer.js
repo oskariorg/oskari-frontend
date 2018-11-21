@@ -118,21 +118,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
             const defaultFeatureStyle = me._getFeatureStyle(classification, null, color, false, iconSizePx);
 
-            if (classification.showValues === true) {
-                const textColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
-                defaultFeatureStyle.text = {
-                    scale: 1.2,
-                    fill: {
-                        color: textColor
-                    },
-                    stroke: {
-                        width: 0
-                    },
-                    labelProperty: 'regionValue',
-                    offsetX: 0,
-                    offsetY: 0
-                };
-            }
+            const textColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
+            defaultFeatureStyle.text = {
+                scale: 1.2,
+                fill: {
+                    color: textColor
+                },
+                stroke: {
+                    width: 0
+                },
+                labelProperty: classification.showValues ? 'regionValue' : '',
+                offsetX: 0,
+                offsetY: 0
+            };
 
             const requestOptions = {
                 clearPrevious: false,
@@ -140,7 +138,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 optionalStyles: optionalStyles,
                 layerId: me.LAYER_ID,
                 prio: index,
-                opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100
+                opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100,
+                animationDuration: 250
             };
             if (adds.length !== 0) {
                 me._regionsAdded = me._regionsAdded.concat(adds);
@@ -350,7 +349,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         if (!regiongroups || !classification) {
             return;
         }
-        const group = regiongroups.find(group => group.includes(event.getRegion()));
+        const group = regiongroups.find(group => group.includes(regionId));
         if (!group) {
             return;
         }
@@ -366,10 +365,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 max: count - 1
             }
         );
-        const style = me._getFeatureStyle(me._lastRenderCache.classification, event.getRegion(), color, highlight, iconSizePx);
-        if (highlight) {
-            style.effect = 'darken';
-        }
+        const style = me._getFeatureStyle(me._lastRenderCache.classification, regionId, color, highlight, iconSizePx);
+        style.effect = highlight ? 'darken' : '';
         const requestOptions = {
             featureStyle: style,
             layerId: me.LAYER_ID
@@ -395,11 +392,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         });
 
         me.service.on('StatsGrid.RegionSelectedEvent', function (event) {
-            me._updateFeatureStyle(event.getRegion(), true);
+            const selectedRegion = event.getRegion();
+            console.log('selected ' + selectedRegion);
+            me._updateFeatureStyle(selectedRegion, true);
             // Remove previous highlight
-            if (me._lastRenderCache.highlightRegionId) {
-                me._updateFeatureStyle(event.getRegion(), false);
+            const previous = me._lastRenderCache.highlightRegionId;
+            if (previous && previous !== selectedRegion) {
+                me._updateFeatureStyle(previous, false);
+                console.log('removing ' + previous);
             }
+            me._lastRenderCache.highlightRegionId = selectedRegion;
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
