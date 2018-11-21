@@ -250,7 +250,7 @@ Oskari.clazz.define(
          * @method _applyOriginalStyle
          *
          * Switch back to the original style.
-         * 
+         *
          * @param {ol/Feature} feature ol feature
          * @param {ol/layer/Vector} layer ol layer
          */
