@@ -2280,7 +2280,7 @@ Oskari.clazz.define(
                 layerFunctions = [],
                 sandbox = this.getSandbox();
 
-            if (!layer.isSupported(sandbox.getMap().getSrsName())) {
+            if (!layer.isSupported(sandbox.getMap().getSrsName()) && sandbox.mapMode !== 'mapPublishMode') {
                 this._mapLayerService.showUnsupportedPopup();
             }
 
