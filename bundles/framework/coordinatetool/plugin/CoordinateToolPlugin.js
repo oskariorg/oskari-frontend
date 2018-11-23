@@ -621,7 +621,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // XY icon click
             el.off('click');
             el.on('click', function (event) {
-                if (me._sandbox.mapMode !== 'mapPublishMode') {
+                var publisherService = me._sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
+                if (!publisherService || !publisherService.getIsActive()) {
                     me._toggleToolState();
                     event.stopPropagation();
                 }

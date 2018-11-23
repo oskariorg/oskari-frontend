@@ -275,8 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
-                // FIXME: not like this! see removing...
-                me.sandbox.mapMode = 'mapPublishMode';
+                me.getService().setIsActive(true);
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                 this.getSandbox().request(this, stateRB(data.configuration));
                 if (data.uuid) {
@@ -316,10 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
                 map.removeClass('published');
-                // FIXME: not like this! see setter...
-                if (me.sandbox.mapMode === 'mapPublishMode') {
-                    delete me.sandbox.mapMode;
-                }
+                me.getService().setIsActive(false);
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
