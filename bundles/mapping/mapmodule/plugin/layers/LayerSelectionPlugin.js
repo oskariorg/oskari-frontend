@@ -826,7 +826,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
 
             var header = div.find('div.header');
             var contentHeader = this.templates.contentHeader.clone();
-            var bgImg = this.getMapModule().getImageUrl('map-layer-button-' + styleName + '.png');
 
             header.empty();
             if (styleName !== null) {
@@ -840,6 +839,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     /oskari-publisher-layers-header-/, [contentHeader]
                 );
 
+                let bgImg = this.getMapModule().getImageUrl('map-layer-button-' + styleName + '.png');
                 header.css({
                     'background-image': 'url("' + bgImg + '")'
                 });
