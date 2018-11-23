@@ -173,19 +173,19 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
             layersCopy.forEach(function (layer) {
                 var group = layer.getGroups()[0];
-                if (group && isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
-                    if (!notLoadedBackend[group.id]) {
-                        notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
-                            id: group.id,
+                if (group && isNaN(group.id) && !me.mapLayerService.getAllLayerGroups(group.name)) {
+                    if (!notLoadedBackend[group.name]) {
+                        notLoadedBackend[group.name] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
+                            id: group.name,
                             name: {},
                             orderNumber: -1,
                             selectable: true,
                             toolsVisible: false
                         });
-                        notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
+                        notLoadedBackend[group.name].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].getChildren().push({id: layer.getId(), type: 'layer'});
-                    notLoadedBackend[group.id].layersModels.push(layer);
+                    notLoadedBackend[group.name].getChildren().push({id: layer.getId(), type: 'layer'});
+                    notLoadedBackend[group.name].layersModels.push(layer);
                 }
             });
 
