@@ -2273,14 +2273,16 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         afterMapLayerAddEvent: function (event) {
-            var layer = event.getMapLayer(),
-                keepLayersOrder = true,
-                isBaseMap = false,
-                layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [],
-                sandbox = this.getSandbox();
+            var layer = event.getMapLayer();
+            var keepLayersOrder = true;
+            var isBaseMap = false;
+            var layerPlugins = this.getLayerPlugins();
+            var layerFunctions = [];
+            var sandbox = this.getSandbox();
+            var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
+            var isPublisherActive = publisherService && publisherService.getIsActive();
 
-            if (!layer.isSupported(sandbox.getMap().getSrsName())) {
+            if (!layer.isSupported(sandbox.getMap().getSrsName()) && !isPublisherActive) {
                 this._mapLayerService.showUnsupportedPopup();
             }
 

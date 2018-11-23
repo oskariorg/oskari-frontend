@@ -275,20 +275,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 blnEnabled ? jQuery(this.getCustomTileRef()).addClass('activePublish') : jQuery(this.getCustomTileRef()).removeClass('activePublish');
             }
             if (blnEnabled) {
+                me.getService().setIsActive(true);
                 var stateRB = Oskari.requestBuilder('StateHandler.SetStateRequest');
                 this.getSandbox().request(this, stateRB(data.configuration));
                 if (data.uuid) {
                     this._showEditNotification();
                 }
 
-                me.getService().setNonPublisherLayers(deniedLayers || this.getLayersWithoutPublishRights());
+                me.getService().setNonPublisherLayers(deniedLayers || this.getNonPublisherLayers());
                 me.getService().removeLayers();
                 me.oskariLang = Oskari.getLang();
 
                 map.addClass('mapPublishMode');
                 map.addClass('published');
-                // FIXME: not like this! see removing...
-                me.sandbox.mapMode = 'mapPublishMode';
 
                 // hide flyout?
                 // TODO: move to default flyout/extension as "mode functionality"?
@@ -316,10 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 // first return all needed plugins before adding the layers back
                 map.removeClass('mapPublishMode');
                 map.removeClass('published');
-                // FIXME: not like this! see setter...
-                if (me.sandbox.mapMode === 'mapPublishMode') {
-                    delete me.sandbox.mapMode;
-                }
+                me.getService().setIsActive(false);
                 // return the layers that were removed for publishing.
                 me.getService().addLayers();
                 me.getFlyout().close();
@@ -381,23 +377,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             dialog.show(this.loc('edit.popup.published.error.title'), this.loc(errorKey));
             setTimeout(function () { dialog.fadeout(); }, 3000);
         },
-        /**
-         * @method hasPublishRight
-         * Checks if the layer can be published.
-         * @param
-         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-         * layer
-         *      layer to check
-         * @return {Boolean} true if the layer can be published
-         */
-        hasPublishRight: function (layer) {
-            // permission might be "no_publication_permission"
-            // or nothing at all
-            return (layer.getPermission('publish') === 'publication_permission_ok');
-        },
 
         /**
-         * @method getLayersWithoutPublishRights
+         * @method getNonPublisherLayers
          * Checks currently selected layers and returns a subset of the list
          * that has the layers that can't be published. If all selected
          * layers can be published, returns an empty list.
@@ -405,11 +387,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * {Oskari.mapframework.domain.WmsLayer[]/Oskari.mapframework.domain.WfsLayer[]/Oskari.mapframework.domain.VectorLayer[]/Mixed}
          * list of layers that can't be published.
          */
-        getLayersWithoutPublishRights: function () {
-            var me = this;
+        getNonPublisherLayers: function () {
             var selectedLayers = this.sandbox.getMap().getLayers();
-            var deniedLayers = selectedLayers.filter(function (layer) {
-                return !me.hasPublishRight(layer);
+            var service = this.getService();
+            var deniedLayers = selectedLayers.filter((layer) => {
+                return !service.hasPublishRight(layer) || !layer.isSupported(this.sandbox.getMap().getSrsName());
             });
             return deniedLayers;
         },

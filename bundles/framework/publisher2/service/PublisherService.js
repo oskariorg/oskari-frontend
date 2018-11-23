@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
      */
     function (sandbox) {
         this.__sandbox = sandbox;
+        this.isActive = false;
     }, {
         /**
          * @method getLayersWithoutPublishRights
@@ -60,6 +61,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherService',
                 return [];
             }
             return this.disabledLayers;
+        },
+        /**
+         * @method setIsActive
+         * Sets publisher into active mode
+         * @param {Boolean} isActive
+         */
+        setIsActive: function (isActive) {
+            this.isActive = isActive;
+        },
+        /**
+         * @method getIsActive
+         * Get publisher active state
+         * @return {Boolean}
+         */
+        getIsActive: function () {
+            return this.isActive;
         },
         /**
          * @method addLayers

@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layers = [];
             var deniedLayers = [];
             me.instance.sandbox.findAllSelectedMapLayers().forEach(function (layer) {
-                if (!me.service.hasPublishRight(layer)) {
+                if (!me.service.hasPublishRight(layer) || !layer.isSupported(me.instance.sandbox.getMap().getSrsName())) {
                     deniedLayers.push(layer);
                 } else {
                     layers.push(layer);
@@ -174,14 +174,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layerList = this.templateLayerList.clone();
             var listElement = layerList.find('ul');
             var listItemTemplate = this.templateListItem;
-            var usercontentDisclaimer = this.loc.myPlacesDisclaimer;
 
-            (list || []).forEach(function (layer) {
+            (list || []).forEach((layer) => {
                 var item = listItemTemplate.clone();
                 var txt = layer.getName();
+                var reasons = [];
                 // TODO: this covers myplaces layers - what about userlayers?
                 if (layer.isLayerOfType('MYPLACES')) {
-                    txt = txt + ' (' + usercontentDisclaimer + ')';
+                    reasons.push(this.loc.myPlacesDisclaimer);
+                }
+                if (!this.service.hasPublishRight(layer)) {
+                    reasons.push(this.loc.noRights);
+                }
+                if (!layer.isSupported(this.instance.sandbox.getMap().getSrsName())) {
+                    reasons.push(this.loc.unsupportedProjection);
+                }
+                if (reasons.length) {
+                    txt += ' (' + reasons.join(', ') + ')';
                 }
                 item.append(txt);
                 listElement.append(item);
