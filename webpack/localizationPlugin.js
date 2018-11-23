@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const merge = require('merge');
 
-const fileRex = /^(.{2})\.js$/;
+const fileRex = /^(.{2,3})\.js$/;
 
 function isLocaleFile(filePath) {
     if (path.basename(path.dirname(filePath)) !== 'locale') {
