@@ -1,31 +1,34 @@
+const path = require('path');
+const { existsSync, writeFileSync } = require('fs');
 
 module.exports = function(source) {
 
     const appSetup = JSON.parse(source);
-    const bundlePaths = [];
-    const dynamicBundles = [];
+    let output = '';
 
     appSetup.startupSequence.forEach(bundle => {
         const imports = bundle.metadata['Import-Bundle'];
-        const dynamicPaths = [];
-        let target = bundlePaths;
-        if (bundle.lazy) {
-            target = dynamicPaths;
-            dynamicBundles.push({
-                name: bundle.bundlename,
-                paths: dynamicPaths
-            });
-        }
+        const name = bundle.bundlename;
         Object.keys(imports).forEach(key => {
-            target.push(imports[key].bundlePath + key + '/bundle.js');
+            const bundlePath  = imports[key].bundlePath + key + '/bundle.js'
+            if (bundle.lazy) {
+                output += `import 'oskari-lazy-loader?${name}!${bundlePath}';\n`;
+            } else {
+                output += `import 'oskari-loader!${bundlePath}';\n`;
+            }
         });
+        output += '\n';
     });
 
-    let output = bundlePaths.map(bundlePath => `import 'oskaribundle-loader!${bundlePath}';`).join('\n') + '\n';
-    output += dynamicBundles.map(b => {
-        const dependencies = b.paths.map(p => `    import(/* webpackChunkName: "chunk_${b.name}" */'oskaribundle-loader!${p}')`);
-        return `Oskari.bundle_manager.registerDynamic('${b.name}', function() { return [\n${dependencies.join(',\n')}\n];});`
-    }).join('\n');
+    const overwrittenCssPath = path.join(this.context, 'css/overwritten.css');
+    if (existsSync(overwrittenCssPath)) {
+        output += `import './css/overwritten.css';\n`;
+    }
+
+    const mainJsPath = path.join(this.context, 'main.js');
+    if (!existsSync(mainJsPath)) {
+        writeFileSync(mainJsPath, output);
+    }
     
     return output;
 }
