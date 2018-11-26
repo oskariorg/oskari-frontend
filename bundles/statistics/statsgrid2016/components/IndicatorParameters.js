@@ -1,3 +1,5 @@
+import SelectList from './SelectList';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
     this.locale = locale;
     this.sb = sandbox;
@@ -96,12 +98,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.container = cont;
         var seriesSelection = null;
         Object.keys(selections).forEach(function (selected, index) {
-            var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
+            var placeholder = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : !selected.id ? String(selected) : selected.id;
             var options = {
-                placeholder_text: placeholderText
+                searchText: placeholder,
+                placeholder
             };
-
             var dropdown;
             if (me.searchSeries && selections[selected].time) {
                 // create time span select
@@ -120,10 +122,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                     options.multi = true;
                 }
                 var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
-                var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
+                var select = new SelectList(select);
                 dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
-                dropdown.css({width: '205px'});
-                select.adjustChosen();
+                dropdown.css({width: '100%'});
                 select.selectFirstValue();
                 tempSelect.find('.label').append(dropdown);
                 cont.append(tempSelect);
@@ -136,7 +137,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 return iter;
             }
         });
-        var regionSelect = me.regionSelector.create(regionsets);
+        var regionSelect = me.regionSelector.create(regionsets, false);
         me.regionSelector.setWidth(205);
         if (regionsets.length === 1) {
             regionSelect.value(regionsets[0]);
@@ -151,8 +152,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             select.disableOptions(optionsToDisable);
             var state = select.getOptions();
             var enabled = state.options.not(':disabled').first();
-            select.setValue(enabled.val());
-            select.element.trigger('change');
+            regionSelect.value(enabled.val());
         }
 
         me._values = {

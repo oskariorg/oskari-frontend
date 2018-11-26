@@ -197,6 +197,10 @@ div.oskari-flyout {
             max-height: 140px;
         }
 
+        div.SumoSelect {
+            width: 100%;
+        }
+
         .statsgrid-ds-selections {
             /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
             max-width : 450px;
@@ -213,7 +217,6 @@ div.oskari-flyout {
 
 
             div.statsgrid-indicator-selections {
-                padding-left: 10px;
                 padding-bottom: 10px;
             }
 

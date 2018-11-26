@@ -1,5 +1,4 @@
-import 'sumoselect/jquery.sumoselect.js';
-import 'sumoselect/sumoselect.css';
+import SelectList from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
@@ -70,18 +69,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 }
             });
             var value = select.getValue();
-            select.updateOptions(results);
+            select.setOptions(results);
             select.setValue(value);
             if (hasRegionSetRestriction) {
                 select.disableOptions(disabledIndicatorIDs);
             }
-            // SumoSelect
-            var sumoselect = me.getElement().find('select.sumoselect');
-            sumoselect.find('option').remove();
-            sumoselect.append(results.map(opt => `<option value="${opt.id}">${opt.title}</option>`).join(''));
-            sumoselect[0].sumo.reload();
-            sumoselect.parent().css({width: '100%', 'font-size': '13px'});
-            //sumoselect.parent().find('.optWrapper > .options').css({'max-height': '130px'});
 
             if (result.complete) {
                 me.spinner.stop();
@@ -135,16 +127,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
-            placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
-            no_results_text: locale.panels.newSearch.noResults,
+            placeholder: locale.panels.newSearch.selectRegionsetPlaceholder,
+            noResultsText: locale.panels.newSearch.noResults,
             multi: true
         };
 
-        var regionFilterSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var regionFilterSelect = new SelectList();
         var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
         regionFilterDropdown.css({width: '100%'});
         regionsetFilterElement.append(regionFilterDropdown);
-        regionFilterSelect.adjustChosen();
+        regionFilterSelect.update();
 
         var datasources = this.service.getDatasource();
         var sources = [];
@@ -160,19 +152,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         // chosen works better when it has context for the element, get a new reference for chosen
         var dsSelector = main.find('.stats-ds-selector');
         var options = {
-            placeholder_text: locale.panels.newSearch.selectDatasourcePlaceholder,
-            no_results_text: locale.panels.newSearch.noResults
+            placeholder: locale.panels.newSearch.selectDatasourcePlaceholder,
+            noResultsText: locale.panels.newSearch.noResults,
+            search: false
         };
-        var dsSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var dsSelect = new SelectList();
         var dropdown = dsSelect.create(sources, options);
         dropdown.css({width: '100%'});
         dsSelector.append(dropdown);
-        dsSelect.adjustChosen();
-
-        var sumoselect = $('<div><b>Indicator</b> (SumoSelect demo)</div><select multiple class="sumoselect"></select>');
-        main.append(sumoselect);
-        sumoselect.SumoSelect({ selectAll: true, up: false, search: true });
-        sumoselect.parent().css({width: '100%'});
 
         // Indicator list
         main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.indicatorTitle, clazz: 'stats-ind-selector'})));
@@ -180,15 +167,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var indicatorSelector = main.find('.stats-ind-selector');
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
-            placeholder_text: locale.panels.newSearch.selectIndicatorPlaceholder,
-            no_results_text: locale.panels.newSearch.noResults,
+            placeholder: locale.panels.newSearch.selectIndicatorPlaceholder,
+            noResultsText: locale.panels.newSearch.noResults,
             multi: true
         };
-        var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var indicSelect = new SelectList();
         var indicDropdown = indicSelect.create(undefined, indicOptions);
         indicDropdown.css({width: '100%'});
         indicatorSelector.append(indicDropdown);
-        indicSelect.adjustChosen();
 
         // Refine data label and tooltips
         var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({
@@ -232,9 +218,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         dsSelector.on('change', function () {
             me._params.clean();
             // If selection was removed -> reset indicator selection
-            if (dsSelect.getValue() === '') {
+            if (dsSelect.getValue() === null) {
                 dataLabelWithTooltips.find('.tooltip').show();
-                indicSelect.updateOptions([]);
+                indicSelect.setOptions(null);
                 indicSelect.reset();
                 regionFilterSelect.reset(true);
                 btnAddIndicator.setVisible(false);
@@ -297,6 +283,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 dsSelect.disableOptions(ids);
             }
 
+/*
             var preselectSingleOption = function (select) {
                 var state = select.getOptions();
                 if (state.options.length - state.disabled.length === 1) {
@@ -307,6 +294,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             };
             preselectSingleOption(dsSelect);
             preselectSingleOption(indicSelect);
+*/
         });
         me._params.on('indicator.changed', function (enabled) {
             dataLabelWithTooltips.find('.tooltip').hide();
