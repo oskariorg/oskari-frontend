@@ -7,7 +7,7 @@ Production (version example 44.6):
 -----------------------------------------------------------
 `;
 
-module.exports = function parseParams(env) {
+module.exports = function parseParams (env) {
     if (!env || !env.appdef) {
         throw new Error('Must give "appdef" env variable, eg.:' + exampleCommand);
     }
@@ -26,4 +26,4 @@ module.exports = function parseParams(env) {
         pathParam,
         publicPathPrefix: env.absolutePublicPath === 'true' ? '/' : ''
     };
-}
+};

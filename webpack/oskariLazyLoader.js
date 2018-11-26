@@ -6,4 +6,4 @@ module.exports = function (source) {
     const bundlePath = this.resourcePath;
 
     return `Oskari.bundle_manager.registerDynamic('${name}', function() {return import(/* webpackChunkName: "chunk_${name}" */'oskari-loader!${bundlePath}');});\n`;
-}
+};

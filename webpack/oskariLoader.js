@@ -1,10 +1,9 @@
-const path = require('path');
-
 module.exports = function (source) {
     const callback = this.async();
     const dependencies = [];
     let localePromises = [];
 
+    /* eslint-disable-next-line */
     const Oskari = {
         clazz: {
             define: (id, constructor, methods, metadata) => {
@@ -29,14 +28,15 @@ module.exports = function (source) {
                                 }
                             });
                         });
-                    })
+                    });
                 }
             }
         },
         bundle_manager: {
             installBundleClass: function (id, path) { }
         }
-    }
+    };
+    /* eslint-disable-next-line */
     eval(source);
 
     const output = source + '\n' + dependencies.map(d => {
@@ -54,4 +54,4 @@ module.exports = function (source) {
         .catch((err) => {
             callback(err);
         });
-}
+};
