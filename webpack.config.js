@@ -29,14 +29,19 @@ module.exports = (env, argv) => {
     ];
 
     appsetupPaths.forEach(appDir => {
-        const minifierFile = path.resolve(appDir + path.sep + 'minifierAppSetup.json');
-        if (!existsSync(minifierFile)) {
+        const minifierPath = path.resolve(appDir, 'minifierAppSetup.json');
+        const mainJsPath = path.resolve(appDir, 'main.js');
+        let targetPath;
+        if (existsSync(minifierPath)) {
+            targetPath = minifierPath;
+        } else if (existsSync(mainJsPath)) {
+            targetPath = mainJsPath;
+        } else {
             // skip
-            console.log('No minifierAppSetup.json file in ' + appDir + '. Skipping!');
+            console.log('No minifierAppSetup.json file or main.js file in ' + appDir + '. Skipping!');
             return;
         }
-        const dirParts = appDir.split(path.sep);
-        const appName = dirParts[dirParts.length - 1];
+        const appName = path.basename(appDir);
         const copyPlugin = new CopyWebpackPlugin(
             [
                 { from: appDir, to: appName },
@@ -47,7 +52,7 @@ module.exports = (env, argv) => {
         entries[appName] = [
             path.resolve(__dirname, './webpack/polyfill.js'),
             path.resolve(__dirname, './webpack/oskari-core.js'),
-            minifierFile
+            targetPath
         ];
         plugins.push(copyPlugin);
         plugins.push(new LocalizationPlugin(appName));
