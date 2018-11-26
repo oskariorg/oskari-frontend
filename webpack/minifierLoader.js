@@ -1,5 +1,5 @@
 const path = require('path');
-const { existsSync } = require('fs');
+const { existsSync, writeFileSync } = require('fs');
 
 module.exports = function(source) {
 
@@ -17,11 +17,17 @@ module.exports = function(source) {
                 output += `import 'oskari-loader!${bundlePath}';\n`;
             }
         });
+        output += '\n';
     });
 
     const overwrittenCssPath = path.join(this.context, 'css/overwritten.css');
     if (existsSync(overwrittenCssPath)) {
-        output += `import '${overwrittenCssPath}';\n`;
+        output += `import './css/overwritten.css';\n`;
+    }
+
+    const mainJsPath = path.join(this.context, 'main.js');
+    if (!existsSync(mainJsPath)) {
+        writeFileSync(mainJsPath, output);
     }
     
     return output;
