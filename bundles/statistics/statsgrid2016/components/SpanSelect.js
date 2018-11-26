@@ -42,20 +42,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
         var from = new SelectList(this.id + '_from');
         var to = new SelectList(this.id + '_to');
 
-        var widthDef = {width: '205px'};
+        var styleDef = {'min-width': '150px'};
+
         var dropdown = to.create(this.values, this.options);
-        dropdown.css(widthDef);
+        dropdown.css(styleDef);
         to.selectFirstValue();
         tempTo.append(dropdown);
-        tempTo.css(widthDef);
+        tempTo.css(styleDef);
         cont.prepend(tempTo);
         this.selections.to = to;
 
         dropdown = from.create(this.values, this.options);
-        dropdown.css(widthDef);
+        dropdown.css(styleDef);
         from.selectLastValue();
         tempFrom.append(dropdown);
-        tempFrom.css(widthDef);
+        tempFrom.css(styleDef);
         cont.prepend(tempFrom);
         this.selections.from = from;
 

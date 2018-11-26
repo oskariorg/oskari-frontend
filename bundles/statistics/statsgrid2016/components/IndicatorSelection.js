@@ -128,7 +128,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
             placeholder: locale.panels.newSearch.selectRegionsetPlaceholder,
-            noResultsText: locale.panels.newSearch.noResults,
             multi: true
         };
 
@@ -149,11 +148,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         });
         // Datasources
         main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.datasourceTitle, clazz: 'stats-ds-selector'})));
-        // chosen works better when it has context for the element, get a new reference for chosen
         var dsSelector = main.find('.stats-ds-selector');
         var options = {
             placeholder: locale.panels.newSearch.selectDatasourcePlaceholder,
-            noResultsText: locale.panels.newSearch.noResults,
             search: false
         };
         var dsSelect = new SelectList();
@@ -163,16 +160,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         // Indicator list
         main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.indicatorTitle, clazz: 'stats-ind-selector'})));
-        // chosen works better when it has context for the element, get a new reference for chosen
         var indicatorSelector = main.find('.stats-ind-selector');
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
             placeholder: locale.panels.newSearch.selectIndicatorPlaceholder,
-            noResultsText: locale.panels.newSearch.noResults,
             multi: true
         };
         var indicSelect = new SelectList();
-        var indicDropdown = indicSelect.create(undefined, indicOptions);
+        var indicDropdown = indicSelect.create(null, indicOptions);
         indicDropdown.css({width: '100%'});
         indicatorSelector.append(indicDropdown);
 

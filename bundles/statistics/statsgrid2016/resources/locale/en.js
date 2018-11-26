@@ -277,7 +277,7 @@ Oskari.registerLocalization({
             'captionFormat': '{0} selected',
             'captionFormatAllSelected': 'All {0} selected!',
             'searchText': 'Search...',
-            'noMatch': 'No matches for "{0}"',
+            'noMatch': 'No results found matching "{0}"',
             'locale': ['OK', 'Cancel', 'Select All']
         }
     }

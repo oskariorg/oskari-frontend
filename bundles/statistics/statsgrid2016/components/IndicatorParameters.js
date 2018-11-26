@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
                 var select = new SelectList(select);
                 dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
-                dropdown.css({width: '100%'});
+                dropdown.css({width: '205px'});
                 select.selectFirstValue();
                 tempSelect.find('.label').append(dropdown);
                 cont.append(tempSelect);

@@ -276,7 +276,7 @@ Oskari.registerLocalization({
             'captionFormatAllSelected': 'Alla {0} valda!',
             'searchText': 'Sök...',
             'noMatch': 'Inga sökresultat hittades med "{0}"',
-            'locale': ['OK', 'Annulera', 'Välj alla']
+            'locale': ['OK', 'Avbryt', 'Välj alla']
         }
     }
 });
