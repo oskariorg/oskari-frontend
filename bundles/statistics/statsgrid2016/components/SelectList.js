@@ -2,9 +2,8 @@ import 'sumoselect/jquery.sumoselect.js';
 import 'sumoselect/sumoselect.css';
 
 const _selectTemplate = jQuery('<div class="oskari-select"><select></select></div>');
-const locale = Oskari.getMsg('StatsGrid', 'sumo');
-
-const defaultOptions = Object.assign({
+let defaultOptions = {
+    csvDispCount: 4,
     okCancelInMulti: true,
     isClickAwayOk: true,
     triggerChangeCombined: true,
@@ -13,7 +12,7 @@ const defaultOptions = Object.assign({
     up: false,
     showTitle: true,
     multi: false
-}, locale);
+};
 
 const FormComponent = Oskari.clazz.get('Oskari.userinterface.component.FormComponent');
 
@@ -22,6 +21,11 @@ export default class SelectList extends FormComponent {
         super();
         this.id = id;
         this._element = null;
+        this._applyLocale();
+    }
+    _applyLocale () {
+        const locale = Oskari.getMsg('StatsGrid', 'sumo');
+        Object.assign(defaultOptions, locale);
     }
 
     /**
@@ -45,17 +49,27 @@ export default class SelectList extends FormComponent {
 
     /**
      * @method _addSumoEventListeners
+     * @private
      * Creates listeners for opening and closing the list.
      * Calculates the opening direction and handles overflow visibility.
     */
     _addSumoEventListeners () {
         const selected = this._element.find('select');
         // check parent element(s) to apply overflow visible if needed
-        selected.on('sumo:opened', function () {
-            jQuery(this).parents('div').each((index, parent) => {
+        const openListCssClass = 'statsgrid-open-list-overflow';
+        selected.on('sumo:opening', (event, params) => {
+            this._element.parents('div').each((index, parent) => {
                 const el = jQuery(parent);
-                if (!el.hasClass('oskari-flyoutcontentcontainer')) {
-                    el.css('overflow', 'visible');
+                if (el.hasClass('oskari-flyoutcontentcontainer') && !el.hasClass(openListCssClass)) {
+                    el.addClass(openListCssClass);
+                }
+            });
+        });
+        selected.on('sumo:closing', (event, params) => {
+            this._element.parents('div').each((index, parent) => {
+                const el = jQuery(parent);
+                if (el.hasClass('oskari-flyoutcontentcontainer')) {
+                    el.removeClass(openListCssClass);
                 }
             });
         });
@@ -83,6 +97,7 @@ export default class SelectList extends FormComponent {
 
     /**
      * @method _getSumoInstance
+     * @private
      * @return {Object} The SumoSelect instance for the select element.
      */
     _getSumoInstance () {
@@ -91,6 +106,7 @@ export default class SelectList extends FormComponent {
 
     /**
      * @method _showEmptySelect
+     * @private
      * Views the noResults placeholder if available.
      * Disables multi select, search and "ok - cancel" functionalities
     */
@@ -107,10 +123,19 @@ export default class SelectList extends FormComponent {
 
     /**
      * @method _setEnabledImpl or disable select
+     * @private
      * @param { boolean } true = enable
      */
     _setEnabledImpl (enableFlag) {
         enableFlag ? this._getSumoInstance().enable() : this._getSumoInstance().disable();
+    }
+
+    /**
+     * @method getId
+     * Returns the id given in the constructor.
+    */
+    getId () {
+        return this.id;
     }
 
     /**
@@ -152,7 +177,7 @@ export default class SelectList extends FormComponent {
      */
     setValue (value) {
         this._element.find('select').val(value);
-        this.update();
+        this.update(false);
     }
 
     /**
@@ -191,35 +216,39 @@ export default class SelectList extends FormComponent {
     /**
      * @method reset
      * Enables all options.
-     * @param {Boolean} resetToPlaceholder If true, removes the selected value. Defaults to true.
+     * @param {Boolean} soft If false, clears selections.
      */
-    reset (resetToPlaceholder = true) {
+    reset (soft = false) {
         this._element.find('select').find('option:disabled').each((index, opt) => {
             jQuery(opt).prop('disabled', false);
         });
-        if (resetToPlaceholder) {
-            this.resetToPlaceholder();
-        } else {
+        if (soft) {
             this._getSumoInstance().reload();
+        } else {
+            this.resetToPlaceholder();
         }
     }
 
     /**
      * @method resetToPlaceholder
      * Resets selected value.
+     * @param silent If false, triggers change event. Defaults to false.
      */
-    resetToPlaceholder () {
+    resetToPlaceholder (silent = false) {
         this._element.find('select').val('');
-        this.update();
+        this.update(silent);
     }
 
     /**
      * @method update
-     * Triggers change on select and reloads UI components.
+     * Reloads UI components.
+     * @param silent If false, triggers change event. Defaults to true.
     */
-    update () {
-        this._element.find('select').trigger('change');
+    update (silent = true) {
         this._getSumoInstance().reload();
+        if (!silent) {
+            this._element.find('select').trigger('change');
+        }
     }
 
     /**
@@ -300,11 +329,11 @@ export default class SelectList extends FormComponent {
                 jQuery(opt).prop('disabled', true);
                 if (opt.value === selectedValue) {
                     select.val('');
-                    select.trigger('change');
                 }
             }
         });
-        this._getSumoInstance().reload();
+        const silentReload = selectedValue === select.val();
+        this.update(silentReload);
     }
 
     /**

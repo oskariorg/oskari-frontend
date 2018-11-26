@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                     options.multi = true;
                 }
                 var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
-                var select = new SelectList(select);
+                var select = new SelectList(selected);
                 dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
                 dropdown.css({width: '205px'});
                 select.selectFirstValue();

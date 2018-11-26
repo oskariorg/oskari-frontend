@@ -216,7 +216,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             if (dsSelect.getValue() === null) {
                 dataLabelWithTooltips.find('.tooltip').show();
                 indicSelect.setOptions(null);
-                indicSelect.reset();
                 regionFilterSelect.reset(true);
                 btnAddIndicator.setVisible(false);
                 btnEditIndicator.setVisible(false);
@@ -278,7 +277,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 dsSelect.disableOptions(ids);
             }
 
-/*
             var preselectSingleOption = function (select) {
                 var state = select.getOptions();
                 if (state.options.length - state.disabled.length === 1) {
@@ -289,7 +287,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             };
             preselectSingleOption(dsSelect);
             preselectSingleOption(indicSelect);
-*/
         });
         me._params.on('indicator.changed', function (enabled) {
             dataLabelWithTooltips.find('.tooltip').hide();
