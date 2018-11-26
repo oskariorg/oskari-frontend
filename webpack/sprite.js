@@ -33,7 +33,7 @@ function validateIconDirectories (cfg) {
     try {
         appOverrideDirStats = fs.statSync(cfg.appIconsDir);
     } catch (e) {
-        // doesn't exist -> act as not given 
+        // doesn't exist -> act as not given
         failWarn('Application icons override directory (' + cfg.appIconsDir + ') was NOT found. Please provide a proper appIconsDir!');
     }
     if (!appOverrideDirStats) {

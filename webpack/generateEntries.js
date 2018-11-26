@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LocalizationPlugin = require('./localizationPlugin.js');
 const { existsSync } = require('fs');
 
-module.exports = function generateEntries(appsetupPaths, context) {
+module.exports = function generateEntries (appsetupPaths, context) {
     const entries = {};
     const plugins = [
         new IgnorePlugin(/^\.\/locale$/),
@@ -47,4 +47,4 @@ module.exports = function generateEntries(appsetupPaths, context) {
     });
 
     return {entries, plugins};
-}
+};
