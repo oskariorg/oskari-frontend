@@ -1,3 +1,5 @@
+const path = require('path');
+const { existsSync } = require('fs');
 
 module.exports = function(source) {
 
@@ -16,6 +18,11 @@ module.exports = function(source) {
             }
         });
     });
+
+    const overwrittenCssPath = path.join(this.context, 'css/overwritten.css');
+    if (existsSync(overwrittenCssPath)) {
+        output += `import '${overwrittenCssPath}';\n`;
+    }
     
     return output;
 }
