@@ -2,30 +2,21 @@
 module.exports = function(source) {
 
     const appSetup = JSON.parse(source);
-    const bundlePaths = [];
-    const dynamicBundles = [];
+    let output = '';
 
     appSetup.startupSequence.forEach(bundle => {
         const imports = bundle.metadata['Import-Bundle'];
-        const dynamicPaths = [];
-        let target = bundlePaths;
-        if (bundle.lazy) {
-            target = dynamicPaths;
-            dynamicBundles.push({
-                name: bundle.bundlename,
-                paths: dynamicPaths
-            });
-        }
+        const name = bundle.bundlename;
         Object.keys(imports).forEach(key => {
-            target.push(imports[key].bundlePath + key + '/bundle.js');
+            const bundlePath  = imports[key].bundlePath + key + '/bundle.js'
+            if (!bundle.lazy) {
+                output += `import 'oskari-loader!${bundlePath}';\n`
+            } else {
+                let loadFunc = `function() {return import(/* webpackChunkName: "chunk_${name}" */'oskari-loader!${bundlePath}');}`
+                output += `Oskari.bundle_manager.registerDynamic('${name}', ${loadFunc});\n`;
+            }
         });
     });
-
-    let output = bundlePaths.map(bundlePath => `import 'oskari-loader!${bundlePath}';`).join('\n') + '\n';
-    output += dynamicBundles.map(b => {
-        const dependencies = b.paths.map(p => `    import(/* webpackChunkName: "chunk_${b.name}" */'oskari-loader!${p}')`);
-        return `Oskari.bundle_manager.registerDynamic('${b.name}', function() { return [\n${dependencies.join(',\n')}\n];});`
-    }).join('\n');
     
     return output;
 }
