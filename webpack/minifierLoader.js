@@ -9,11 +9,10 @@ module.exports = function(source) {
         const name = bundle.bundlename;
         Object.keys(imports).forEach(key => {
             const bundlePath  = imports[key].bundlePath + key + '/bundle.js'
-            if (!bundle.lazy) {
-                output += `import 'oskari-loader!${bundlePath}';\n`
+            if (bundle.lazy) {
+                output += `import 'oskari-lazy-loader?${name}!${bundlePath}';\n`;
             } else {
-                let loadFunc = `function() {return import(/* webpackChunkName: "chunk_${name}" */'oskari-loader!${bundlePath}');}`
-                output += `Oskari.bundle_manager.registerDynamic('${name}', ${loadFunc});\n`;
+                output += `import 'oskari-loader!${bundlePath}';\n`;
             }
         });
     });

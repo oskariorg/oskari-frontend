@@ -127,7 +127,8 @@ module.exports = (env, argv) => {
             extensions: ['.js', '.json'],
             mainFields: ['loader', 'main'],
             alias: {
-                'oskari-loader': path.resolve(__dirname, './webpack/oskariLoader.js')
+                'oskari-loader': path.resolve(__dirname, './webpack/oskariLoader.js'),
+                'oskari-lazy-loader': path.resolve(__dirname, './webpack/oskariLazyLoader.js')
             }
         },
         resolve: {
