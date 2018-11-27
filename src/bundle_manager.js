@@ -261,10 +261,13 @@
          * Register bundle for run-time loading with ES import()
          *
          * @param {string} bundlename Bundle name
-         * @param {Function} loader function that returns an Array of promises that resolve to the modules to be loaded
+         * @param {Function} loader function that returns an promise that resolve to the module to be loaded
          */
         registerDynamic: function(bundlename, loader) {
-            this.dynamicLoaders[bundlename] = loader;
+            if (!this.dynamicLoaders[bundlename]) {
+                this.dynamicLoaders[bundlename] = [];
+            }
+            this.dynamicLoaders[bundlename].push(loader);
         },
         /**
          * @method loadDynamic
@@ -275,9 +278,9 @@
          * @return Promise that resolves when all modules have loaded
          */
         loadDynamic: function(bundlename) {
-            const loader = this.dynamicLoaders[bundlename];
-            if (loader) {
-                return Promise.all(loader());
+            const loaders = this.dynamicLoaders[bundlename];
+            if (loaders) {
+                return Promise.all(loaders.map((l) => l.call()));
             }
             return null;
         }

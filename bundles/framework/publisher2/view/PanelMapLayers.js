@@ -96,9 +96,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
              * Updates the layerlist
              */
             AfterMapLayerAddEvent: function (event) {
-                if (!this.hasPublishRight(event._mapLayer)) {
-                    // TODO: ?
-                }
                 this.handleLayerSelectionChanged();
             },
 
@@ -722,20 +719,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapLayers',
                 requestName,
                 ['publishable', true]
             );
-        },
-        /**
-         * @method hasPublishRight
-         * Checks if the layer can be published.
-         * @param
-         * {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer}
-         * layer
-         *      layer to check
-         * @return {Boolean} true if the layer can be published
-         */
-        hasPublishRight: function (layer) {
-            // permission might be "no_publication_permission"
-            // or nothing at all
-            return (layer.getPermission('publish') === 'publication_permission_ok');
         }
 
     }

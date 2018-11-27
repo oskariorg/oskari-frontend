@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParametersList', funct
     this.select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
     this.service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
     this.errorService = this.service.getErrorService();
-    // this.regionselect = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetSelector', service, locale);
     this.createUi();
     Oskari.makeObservable(this);
 }, {

@@ -261,6 +261,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 // Remove button light and dark icons
                 me._removeIconThemes(button, btn);
                 me._changeButtonIconTheme(btn, button, btn.activeColour);
+            } else if (button.hasClass(btn.iconCls + '-light')) {
+                me._removeIconThemes(button, btn);
+                me._changeButtonIconTheme(btn, button, '#212121');
             }
         }
 
