@@ -19,7 +19,7 @@ export default class VectorTileModelBuilder {
                 layer.addStyle(style);
             });
             if (styles.length > 0) {
-                layer.selectStyle('default');
+                layer.selectStyle(styles.includes('default') ? 'default' : styles[0]);
             }
         }
         if (mapLayerJson.options.hover) {
