@@ -72,6 +72,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.clean();
 
         if (!datasrc || !indId || !indId.length || !indId[0]) {
+            me.trigger('indicator.changed', false);
             return;
         }
         if (!this.regionSelector) {
