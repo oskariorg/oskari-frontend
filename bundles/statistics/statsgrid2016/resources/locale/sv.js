@@ -269,6 +269,14 @@ Oskari.registerLocalization({
             'title': 'Indikator',
             'removeAll': 'Ta bort alla',
             'emptyMsg': 'Inga valda indikatorer'
+        },
+        'sumo': {
+            'placeholder': 'Välj här',
+            'captionFormat': '{0} valda',
+            'captionFormatAllSelected': 'Alla {0} valda!',
+            'searchText': 'Sök...',
+            'noMatch': 'Inga sökresultat hittades med "{0}"',
+            'locale': ['OK', 'Avbryt', 'Välj alla']
         }
     }
 });

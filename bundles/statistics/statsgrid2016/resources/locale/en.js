@@ -271,6 +271,14 @@ Oskari.registerLocalization({
             'title': 'Indicators',
             'removeAll': 'Remove all',
             'emptyMsg': 'No selected indicators'
+        },
+        'sumo': {
+            'placeholder': 'Select Here',
+            'captionFormat': '{0} selected',
+            'captionFormatAllSelected': 'All {0} selected!',
+            'searchText': 'Search...',
+            'noMatch': 'No results found matching "{0}"',
+            'locale': ['OK', 'Cancel', 'Select All']
         }
     }
 });

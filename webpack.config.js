@@ -30,6 +30,10 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
+                    test: require.resolve('sumoselect'),
+                    use: 'imports-loader?define=>undefined,exports=>undefined'
+                },
+                {
                     test: /\.js$/,
                     exclude: [/libraries/, /\.min\.js$/],
                     use: {
