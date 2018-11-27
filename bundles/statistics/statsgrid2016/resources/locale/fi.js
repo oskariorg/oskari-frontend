@@ -272,6 +272,14 @@ Oskari.registerLocalization({
             'title': 'Indikaattorit',
             'removeAll': 'Poista kaikki',
             'emptyMsg': 'Ei valittuja indikaattoreita'
+        },
+        'sumo': {
+            'placeholder': 'Valitse tästä',
+            'captionFormat': '{0} valittu',
+            'captionFormatAllSelected': 'Kaikki {0} valittu!',
+            'searchText': 'Etsi...',
+            'noMatch': 'Yhtään hakutulosta ei löytynyt haulla "{0}"',
+            'locale': ['OK', 'Peruuta', 'Valitse kaikki']
         }
     }
 });
