@@ -66,12 +66,10 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
          */
         _getLayerCurrentStyleFunction (layer) {
             const externalStyleDef = layer.getCurrentExternalStyleDef();
-            if (externalStyleDef) {
-                const olLayers = this.getOLMapLayers(layer.getId());
-                if (olLayers.length !== 0) {
-                    const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
-                    return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
-                }
+            const olLayers = this.getOLMapLayers(layer.getId());
+            if (externalStyleDef && olLayers.length !== 0) {
+                const sourceLayerIds = externalStyleDef.layers.filter(cur => !!cur.source).map(cur => cur.id);
+                return mapboxStyleFunction(olLayers[0], externalStyleDef, sourceLayerIds);
             }
             const styleDef = layer.getCurrentStyleDef();
             const hoverOptions = layer.getHoverOptions();
