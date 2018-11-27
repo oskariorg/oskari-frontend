@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const regionset = state.getRegionset();
 
         if (!ind || !regionset) {
+            me._clearRegions();
             return;
         }
         me._updateLayerProperties();
