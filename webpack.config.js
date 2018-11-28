@@ -19,6 +19,9 @@ module.exports = (env, argv) => {
 
     // Common config for both prod & dev
     const config = {
+        node: {
+            fs: 'empty'
+        },
         mode: isProd ? 'production' : 'development',
         entry: entries,
         devtool: isProd ? 'source-map' : 'cheap-module-eval-source-map',
