@@ -97,6 +97,15 @@
             }
         }
     }, {
+        "bundlename": "guidedtour",
+        "metadata": {
+            "Import-Bundle": {
+                "guidedtour": {
+                    "bundlePath": "../../../packages/framework/bundle/"
+                }
+            }
+        }
+    }, {
         "bundlename": "layerselector2",
         "metadata": {
             "Import-Bundle": {
@@ -196,11 +205,11 @@
             }
         }
     }, {
-        "bundlename": "printout",
+        "bundlename": "sample-info",
         "metadata": {
             "Import-Bundle": {
-                "printout": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "sample-info": {
+                    "bundlePath": "../../../packages/sample/bundle/"
                 }
             }
         }
