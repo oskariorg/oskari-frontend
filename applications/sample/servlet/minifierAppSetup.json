@@ -88,11 +88,11 @@
             }
         }
     }, {
-        "bundlename": "metadatacatalogue",
+        "bundlename": "guidedtour",
         "metadata": {
             "Import-Bundle": {
-                "metadatacatalogue": {
-                    "bundlePath": "../../../packages/catalogue/"
+                "guidedtour": {
+                    "bundlePath": "../../../packages/framework/bundle/"
                 }
             }
         }
@@ -196,11 +196,11 @@
             }
         }
     }, {
-        "bundlename": "printout",
+        "bundlename": "sample-info",
         "metadata": {
             "Import-Bundle": {
-                "printout": {
-                    "bundlePath": "../../../packages/framework/bundle/"
+                "sample-info": {
+                    "bundlePath": "../../../packages/sample/bundle/"
                 }
             }
         }
