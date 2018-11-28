@@ -753,31 +753,23 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method updateLayerStyle
-         * @param {Oskari.mapframework.domain.WfsLayer} layer
-         */
-        updateLayerStyle: function (layer) {
-            if (layer.hasFeatureData()) {
-                // render "normal" layer with new style
-                var OLLayer = this.getOLMapLayer(layer);
-                if (typeof OLLayer.getSource().refresh === 'function') {
-                    OLLayer.getSource().refresh();
-                }
-
-                this.getIO().setMapLayerStyle(
-                    layer.getId(),
-                    layer.getCurrentStyle().getName()
-                );
-            }
-        },
-
-        /**
          * @method changeMapLayerStyleHandler
          * @param {Object} event
          */
         changeMapLayerStyleHandler: function (event) {
             if (event.getMapLayer().hasFeatureData()) {
-                this.updateLayerStyle(event.getMapLayer());
+                // render "normal" layer with new style
+                var OLLayer = this.getOLMapLayer(
+                    event.getMapLayer()
+                );
+                if (typeof OLLayer.getSource().refresh === 'function') {
+                    OLLayer.getSource().refresh();
+                }
+
+                this.getIO().setMapLayerStyle(
+                    event.getMapLayer().getId(),
+                    event.getMapLayer().getCurrentStyle().getName()
+                );
             }
         },
 

@@ -470,20 +470,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                 }
             }
 
-            var plugins = mapmodule.getPluginInstances();
-            var selectedLayers = sandbox.findAllSelectedMapLayers();
-            var plugin;
-            var pluginName;
-            var selectedLayer;
+            /* Change to this once plugins can handle it...
+            var plugins = mapmodule.getPluginInstances(),
+                plugin,
+                pluginName;
 
             for (pluginName in plugins) {
                 plugin = plugins[pluginName];
                 if (plugin && plugin.setState) {
                     plugin.setState(state.plugins[pluginName]);
                 }
-                if (plugin && plugin.updateLayerStyle) {
-                    for (selectedLayer in selectedLayers) {
-                        plugin.updateLayerStyle(selectedLayers[selectedLayer]);
+            } */
+
+            // Hackhack
+            if (!state.plugins) {
+                state.plugins = {};
+            }
+
+            if (!state.plugins.MainMapModuleMarkersPlugin) {
+                state.plugins.MainMapModuleMarkersPlugin = {};
+            }
+
+            var plugins = mapmodule.getPluginInstances(),
+                plugin,
+                pluginName;
+
+            for (pluginName in state.plugins) {
+                if (state.plugins.hasOwnProperty(pluginName)) {
+                    // Not finding the plugin is not that uncommon, just move on
+                    plugin = plugins[pluginName];
+                    if (plugin && plugin.setState) {
+                        plugin.setState(state.plugins[pluginName]);
                     }
                 }
             }
