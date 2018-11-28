@@ -447,6 +447,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     if (oskariLayer) {
                         oskariLayer.setVisible(!layer.hidden);
                     }
+                    if (layer.style && oskariLayer) {
+                        oskariLayer.selectStyle(layer.style);
+                    }
                     sandbox.request(
                         mapModuleName,
                         rbAdd(layer.id, true)
@@ -462,10 +465,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                             mapModuleName,
                             rbOpacity(layer.id, layer.opacity)
                         );
-                    }
-
-                    if (layer.style && oskariLayer) {
-                        oskariLayer.selectStyle(layer.style);
                     }
                 }
             }
