@@ -1,5 +1,6 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
@@ -15,7 +16,17 @@ module.exports = (env, argv) => {
     const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
     const appsetupPaths = getDirectories(path.resolve(pathParam));
 
-    const {entries, plugins} = generateEntries(appsetupPaths, __dirname);
+    const {entries, plugins} = generateEntries(appsetupPaths, isProd, __dirname);
+    plugins.push(new MiniCssExtractPlugin({
+        filename: '[name]/oskari.css'
+    }));
+
+    const styleLoaderImpl = isProd ? {
+        loader: MiniCssExtractPlugin.loader,
+        options: {
+            publicPath: '../'
+        }
+    } : 'style-loader';
 
     // Common config for both prod & dev
     const config = {
@@ -58,14 +69,14 @@ module.exports = (env, argv) => {
                 {
                     test: /\.css$/,
                     use: [
-                        'style-loader', // creates style nodes from JS strings
+                        styleLoaderImpl,
                         { loader: 'css-loader', options: { minimize: true } }
                     ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
-                        'style-loader', // creates style nodes from JS strings
+                        styleLoaderImpl,
                         { loader: 'css-loader', options: { minimize: true } },
                         'sass-loader' // compiles Sass to CSS
                     ]
