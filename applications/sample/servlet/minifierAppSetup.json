@@ -88,6 +88,15 @@
             }
         }
     }, {
+        "bundlename": "metadatacatalogue",
+        "metadata": {
+            "Import-Bundle": {
+                "metadatacatalogue": {
+                    "bundlePath": "../../../packages/catalogue/"
+                }
+            }
+        }
+    }, {
         "bundlename": "guidedtour",
         "metadata": {
             "Import-Bundle": {
