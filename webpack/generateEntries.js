@@ -4,7 +4,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 const LocalizationPlugin = require('./localizationPlugin.js');
 const { existsSync } = require('fs');
 
-module.exports = function generateEntries (appsetupPaths, context) {
+module.exports = function generateEntries (appsetupPaths, isProd, context) {
     const entries = {};
     const plugins = [
         new IgnorePlugin(/^\.\/locale$/),
@@ -30,19 +30,20 @@ module.exports = function generateEntries (appsetupPaths, context) {
             return;
         }
         const appName = path.basename(appDir);
-        const copyPlugin = new CopyWebpackPlugin(
-            [
-                { from: appDir, to: appName },
-                { from: 'resources/icons.css', to: appName, context },
-                { from: 'resources/icons.png', to: appName, context }
-            ]
-        );
+        const copyDef = [
+            { from: appDir, to: appName },
+            { from: 'resources/icons.css', to: appName, context },
+            { from: 'resources/icons.png', to: appName, context }
+        ];
+        if (!isProd) {
+            copyDef.push({ from: 'empty.js', to: path.join(appName, 'oskari.css'), context }); // empty CSS to keep browser happy in dev mode
+        }
         entries[appName] = [
             path.resolve(context, './webpack/polyfill.js'),
             path.resolve(context, './webpack/oskari-core.js'),
             targetPath
         ];
-        plugins.push(copyPlugin);
+        plugins.push(new CopyWebpackPlugin(copyDef));
         plugins.push(new LocalizationPlugin(appName));
     });
 
