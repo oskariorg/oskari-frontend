@@ -1,22 +1,25 @@
+const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 /**
  * @class Oskari.sample.info.SampleInfoBundleInstance
  */
-Oskari.clazz.define('Oskari.sample.info.SampleInfoBundleInstance', function () {
-    this.loc = Oskari.getMsg.bind(null, 'sample-info');
-}, {
-    __name: 'SampleInfoBundleInstance',
-    _startImpl: function (sandbox) {
+Oskari.clazz.defineES('Oskari.sample.info.SampleInfoBundleInstance', class SampleInfoBundleInstance extends BasicBundle {
+    constructor () {
+        super();
+        this.__name = 'SampleInfoBundleInstance';
+        this.loc = Oskari.getMsg.bind(null, 'sample-info');
+    }
+    _startImpl (sandbox) {
         this._registerForGuidedTour();
-    },
+    }
     /**
      * @method _registerForGuidedTour
      * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
      */
-    _registerForGuidedTour: function () {
+    _registerForGuidedTour () {
         const sendRegister = () => {
-            var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+            const requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
             if (requestBuilder && this.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
-                var delegate = {
+                const delegate = {
                     bundleName: this.getName(),
                     priority: 5,
                     getTitle: () => this.loc('guidedTour.title'),
@@ -40,6 +43,5 @@ Oskari.clazz.define('Oskari.sample.info.SampleInfoBundleInstance', function () {
         }
     }
 }, {
-    'extend': ['Oskari.BasicBundle'],
     'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
 });
