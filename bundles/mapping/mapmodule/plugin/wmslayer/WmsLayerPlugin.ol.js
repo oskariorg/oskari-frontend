@@ -189,7 +189,7 @@ Oskari.clazz.define(
         _afterChangeMapLayerStyleEvent: function (event) {
             this.updateLayerStyle(event.getMapLayer());
         },
-        
+
         /**
          * @method updateLayerStyle
          * @param {Oskari.mapframework.domain.WmsLayer} layer

@@ -754,7 +754,7 @@ Oskari.clazz.define(
 
         /**
          * @method updateLayerStyle
-         * @param {Oskari.mapframework.domain.WfsLayer} layer 
+         * @param {Oskari.mapframework.domain.WfsLayer} layer
          */
         updateLayerStyle: function (layer) {
             if (layer.hasFeatureData()) {
