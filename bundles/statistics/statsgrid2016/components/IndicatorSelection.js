@@ -292,6 +292,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             dataLabelWithTooltips.find('.tooltip').hide();
             me.trigger('indicator.changed', enabled);
         });
+        me._params.on('indicator.parameter.changed', e => me.trigger('indicator.parameter.changed', e));
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
             var currentDS = dsSelect.getValue();
