@@ -36,7 +36,7 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
             { from: 'resources/icons.png', to: appName, context }
         ];
         if (!isProd) {
-            copyDef.push({ from: 'empty.js', to: path.join(appName, 'oskari.css'), context }); // empty CSS to keep browser happy in dev mode
+            copyDef.push({ from: 'empty.js', to: path.join(appName, 'oskari.min.css'), context }); // empty CSS to keep browser happy in dev mode
         }
         entries[appName] = [
             path.resolve(context, './webpack/polyfill.js'),
