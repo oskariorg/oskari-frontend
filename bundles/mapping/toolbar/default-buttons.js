@@ -195,7 +195,6 @@ Oskari.clazz.category(
             }
         },
         _createMapLinkPopup: function () {
-            var me = this;
             var sandbox = Oskari.getSandbox();
             var loc = this.getLocalization('buttons');
             var mapUrlPrefix = this.__getMapUrl();
@@ -215,7 +214,7 @@ Oskari.clazz.category(
             var closeBtn = this.dialog.createCloseButton();
             this.dialog.onClose(() => {
                 sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
-                me.dialog = null;
+                this.dialog = null;
             });
             if (!viewUuid) {
                 this.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
@@ -229,18 +228,18 @@ Oskari.clazz.category(
             var addMarker = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
             addMarker.setTitle(loc.link.addMarker);
             addMarker.setChecked(addMarkerBln);
-            addMarker.setHandler(function (checked) {
+            addMarker.setHandler(checked => {
                 addMarkerBln = checked;
-                url = me._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+                url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
                 linkContent.text(url);
             });
             options.append(addMarker.getElement());
             var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
             skipInfo.setTitle(loc.link.skipInfo);
             skipInfo.setChecked(skipInfoBln);
-            skipInfo.setHandler(function (checked) {
+            skipInfo.setHandler(checked => {
                 skipInfoBln = checked;
-                url = me._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+                url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
                 linkContent.text(url);
             });
             options.append(skipInfo.getElement());
@@ -249,8 +248,8 @@ Oskari.clazz.category(
             closeBtn.addClass('primary');
             var copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             copyBtn.setTitle(loc.link.copy);
-            copyBtn.setHandler(function () {
-                me.copyTextToClipboard(url);
+            copyBtn.setHandler(() => {
+                this.copyTextToClipboard(url);
             });
             url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
             linkContent.text(url);
