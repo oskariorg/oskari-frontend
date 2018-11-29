@@ -10,7 +10,7 @@ Oskari.registerLocalization(
                 "copy": "Copy the link to the clipboard",
                 "title": "Link to Map View",
                 "cannot": "This map view cannot be linked to. Create a new map view and try again.",
-                "addMarker": "Show map focal marker",
+                "addMarker": "Show a marker in the center of the map",
                 "skipInfo": "Do not show quick guide"
             },
             "history": {
