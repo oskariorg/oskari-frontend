@@ -211,11 +211,13 @@ Oskari.clazz.category(
             this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             this.dialog.addClass('oskari-maplink');
             this.dialog.makeModal();
-            this.dialog.onClose(function () {
+            sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+            var closeBtn = this.dialog.createCloseButton();
+            this.dialog.onClose(() => {
+                sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
                 me.dialog = null;
             });
             if (!viewUuid) {
-                var closeBtn = this.dialog.createCloseButton();
                 this.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
                 return;
             }
@@ -244,13 +246,7 @@ Oskari.clazz.category(
             options.append(skipInfo.getElement());
             content.append(options);
             // buttons
-            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            okBtn.setTitle(loc.link.ok);
-            okBtn.addClass('primary');
-            okBtn.setHandler(function () {
-                me.dialog.close();
-                me.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest');
-            });
+            closeBtn.addClass('primary');
             var copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             copyBtn.setTitle(loc.link.copy);
             copyBtn.setHandler(function () {
@@ -258,8 +254,7 @@ Oskari.clazz.category(
             });
             url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
             linkContent.text(url);
-            sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
-            this.dialog.show(loc.link.title, content, [copyBtn, okBtn]);
+            this.dialog.show(loc.link.title, content, [copyBtn, closeBtn]);
         },
         _updateUrl: function (baseUrl, addMarker, skipInfo) {
             var url = baseUrl;
