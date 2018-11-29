@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         repaint: false
     };
     this.addEventHandlers();
+    this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
 }, {
     __templates: {
         select: jQuery('<div class="dropdown"></div>')
@@ -34,10 +35,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         var container = me.__templates.select.clone();
         this.element = container;
         var dropdownOptions = {
-            placeholder_text: '',
+            placeholder_text: this.locale('panels.newSearch.selectIndicatorPlaceholder'),
             allow_single_deselect: true,
             disable_search_threshold: 10,
-            no_results_text: 'locale.panels.newSearch.noResults',
+            no_results_text: this.locale('panels.newSearch.noResults'),
             width: '100%'
         };
         this._getIndicatorUILabels(function (options) {
