@@ -18,7 +18,7 @@ module.exports = (env, argv) => {
 
     const {entries, plugins} = generateEntries(appsetupPaths, isProd, __dirname);
     plugins.push(new MiniCssExtractPlugin({
-        filename: '[name]/oskari.css'
+        filename: '[name]/oskari.min.css'
     }));
 
     const styleLoaderImpl = isProd ? {
