@@ -37,10 +37,24 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             // register domain builder
             const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
-                mapLayerService.registerLayerModel(this.layertype + 'layer', VectorTileLayer);
-                mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new VectorTileModelBuilder());
+                mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass());
+                mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
             }
             this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
+        }
+        /**
+         * @private @method _getLayerModelClass
+         * Returns class to be used as mapLayerService layer model
+         */
+        _getLayerModelClass () {
+            return VectorTileLayer;
+        }
+        /**
+         * @private @method _getModelBuilder
+         * Returns object to be used as mapLayerService layer model builder
+         */
+        _getModelBuilder () {
+            return new VectorTileModelBuilder();
         }
         /**
          * @private @method _createPluginEventHandlers
@@ -121,14 +135,15 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
-            const options = layer.getOptions();
             const sourceOpts = {
                 format: new olFormatMVT(),
                 url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
-                attributions: this.getAttributions(layer)
+                attributions: this.getAttributions(layer),
+                tileUrlFunction: this._getTileUrlFunction(layer)
             };
-            if (options.tileGrid) {
-                sourceOpts.tileGrid = new TileGrid(options.tileGrid);
+            const tileGrid = layer.getTileGrid();
+            if (tileGrid) {
+                sourceOpts.tileGrid = new TileGrid(tileGrid);
             }
             // Properties id, type and hover are being used in VectorFeatureService.
             const vectorTileLayer = new olLayerVectorTile({
@@ -146,7 +161,13 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             this.setOLMapLayers(layer.getId(), vectorTileLayer);
             vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
         }
-
+        /**
+         * @private @method _getTileUrlFunction
+         * @param {Oskari.mapframework.domain.VectorTileLayer} layer
+         * Override in subclass
+         */
+        _getTileUrlFunction (layer) {
+        }
         /**
          * @method onMapHover VectorFeatureService handler impl method
          * Handles feature highlighting on map hover.

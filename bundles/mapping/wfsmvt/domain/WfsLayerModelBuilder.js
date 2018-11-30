@@ -1,0 +1,86 @@
+/*
+ * @class
+ * JSON-parsing for wfs layer
+ */
+export default class WfsLayerModelBuilder {
+    constructor (sandbox) {
+        this.localization = Oskari.getLocalization('MapWfs2');
+        this.sandbox = sandbox;
+        this.service = null;
+        this._registerForLayerFiltering();
+    }
+    /**
+     * Add featuredata filter.
+     * @method  @public _registerForLayerFiltering
+     */
+    _registerForLayerFiltering () {
+        var me = this;
+        Oskari.on('app.start', function (details) {
+            var layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+
+            if (!layerlistService) {
+                return;
+            }
+
+            layerlistService.registerLayerlistFilterButton(me.localization.layerFilter.featuredata,
+                me.localization.layerFilter.tooltip, {
+                    active: 'layer-stats',
+                    deactive: 'layer-stats-disabled'
+                },
+                'featuredata');
+        });
+    }
+    /**
+     * parses any additional fields to model
+     * @param {Oskari.mapframework.domain.WfsLayer} layer partially populated layer
+     * @param {Object} mapLayerJson JSON presentation of the layer
+     * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
+     */
+    parseLayerData (layer, mapLayerJson, maplayerService) {
+        var me = this;
+
+        if (layer.isLayerOfType('WFS')) {
+            var locOwnStyle = me.localization['own-style'];
+            var toolOwnStyle = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            toolOwnStyle.setName('ownStyle');
+            toolOwnStyle.setTitle(locOwnStyle);
+            toolOwnStyle.setIconCls('show-own-style-tool');
+            toolOwnStyle.setTooltip(locOwnStyle);
+            toolOwnStyle.setCallback(function () {
+                me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId()]);
+            });
+            layer.addTool(toolOwnStyle);
+        }
+
+        // create a default style
+        var locDefaultStyle = this.localization['default-style'],
+            defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style'),
+            i;
+        defaultStyle.setName('default');
+        defaultStyle.setTitle(locDefaultStyle);
+        defaultStyle.setLegend('');
+
+        // check if default style comes and give localization for it if found
+        if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
+            for (i = 0; i < mapLayerJson.styles.length; i++) {
+                if (mapLayerJson.styles[i].name === 'default') {
+                    mapLayerJson.styles[i].title = locDefaultStyle;
+                    break;
+                }
+            }
+        }
+
+        // default style for WFS is given as last parameter
+        maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
+
+        // Set current Style
+        if (mapLayerJson.style) {
+            layer.selectStyle(mapLayerJson.style);
+        }
+
+        // WMS link layer id for wfs rendering option
+        if (mapLayerJson.WMSLayerId) {
+            layer.setWMSLayerId(mapLayerJson.WMSLayerId);
+        }
+    }
+}

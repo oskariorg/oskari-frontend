@@ -59,4 +59,7 @@ export default class VectorTileLayer extends AbstractLayer {
         }
         return this.getExternalStyleDef(this._currentStyle.getName());
     }
+    getTileGrid () {
+        return this._options.tileGrid;
+    }
 }
