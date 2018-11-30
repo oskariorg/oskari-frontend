@@ -31,9 +31,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file: '<div class="file-import">' +
                     '<form id="myplacesimport-form" enctype="multipart/form-data">' +
                         '<div class="file-input-container"></div>' +
-                        '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
-                        '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
-                        '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +
+                        '<div class="name"><label>Name</label><input type="text" /></div>' +
+                        '<div class="desc"><label>Description</label><input type="text"/></div>' +
+                        '<div class="source"><label>Data source</label><input type="text"/></div>' +
+                        '<div class="source-srs oskari-hidden"><label>Source EPSG</label><input type="text" placeholder="4326"/></div>' +
                         '<div class="style">' +
                             '<label>Layer style</label>' +
                             '<div class="style-form"></div>' +
@@ -83,7 +84,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 'allowMultipleFiles': false,
                 'maxFileSize': parseInt(this.instance.conf.maxFileSizeMb),
                 'allowedFileTypes': ['application/zip', 'application/octet-stream', 'application/x-zip-compressed', 'multipart/x-zip'],
-                'inputName': 'file-import',
                 'allowedFileExtensions': ['zip']
             });
 
@@ -112,6 +112,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          */
         refresh: function () {
             this.setTemplate(this.createUi());
+            this.fileInput.removeFiles();
             this.bindListeners();
         },
         /**
@@ -154,26 +155,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file.find('div.desc label').html(this.loc('flyout.layer.desc'));
             file.find('div.source label').html(this.loc('flyout.layer.source'));
             file.find('div.style label').html(this.loc('flyout.layer.style'));
+            file.find('div.source-srs label').html(this.loc('flyout.layer.srs'));
             file.find('div.style-form').html(this.styleForm.getForm());
             file.find('input[type=button]').val(this.loc('flyout.actions.submit'));
 
             file.find('input[type=button]').on('click', function (e) {
-                var form = file.find('form');
                 // Prevent from sending if there were missing fields
-                if (!me.__validateForm(form)) {
+                if (!me.__validateForm()) {
                     return;
                 }
-                me.submitUserLayer(form);
+                me.submitUserLayer();
             });
             return file;
         },
-        submitUserLayer: function (form) {
+        submitUserLayer: function () {
             var me = this;
-            var formData = new FormData(form[0]);
+            var formValues = this.getFormValues();
+            var formData = new FormData();
+            var url = this._getImportUrl(formValues.epsg);
+            formData.append('layer-name', formValues.name);
+            formData.append('layer-desc', formValues.desc);
+            formData.append('layer-source', formValues.source);
+            formData.append('file-import', this.fileInput.getFiles());
             formData.append('layer-style', JSON.stringify(me.__getStyleValues()));
-
             jQuery.ajax({
-                url: me.instance.getService().getFileImportUrl(),
+                url: url,
                 type: 'POST',
                 data: formData,
                 cache: false,
@@ -202,6 +208,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     me.__error(jqXHR);
                 }
             });
+        },
+        getFormValues: function () {
+            var form = this.getTemplate().find('form');
+            return {
+                name: form.find('.name input').val().trim(),
+                desc: form.find('.desc input').val(),
+                source: form.find('.source input').val(),
+                epsg: form.find('.source-srs input').val().trim()
+            };
         },
         /**
          * Returns the visualization form's values.
@@ -244,24 +259,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          *
          * @method __validateForm
          * @private
-         * @param  {jQuery} form
          * @return {Boolean}
          */
-        __validateForm: function (form) {
-            var nameInput = form.find('input[name=layer-name]');
+        __validateForm: function () {
+            var values = this.getFormValues();
             var errors = [];
-            if (!nameInput.val()) {
+            if (!values.name) {
                 errors.push(this.loc('flyout.validations.error.name'));
             }
             if (!this.fileInput.hasFiles()) {
                 errors.push(this.loc('flyout.validations.error.file'));
             }
+            // if value (string) exists, has to be not NaN and length 4-5
+            if (values.epsg && (isNaN(values.epsg) || values.epsg.length < 4 || values.epsg.length > 5)) {
+                errors.push(this.loc('flyout.validations.error.epsg'));
+            }
             if (errors.length === 0) {
                 return true;
             }
-            var errorTitle = this.loc('flyout.validations.error.title');
-            this.__showMessage(errorTitle, errors);
+            this.__showMessage(this.loc('flyout.validations.error.title'), this.loc('flyout.validations.error.message'), false, errors, 'li');
             return false;
+        },
+        _showEpsgInput: function (bln) {
+            this.getTemplate().find('.source-srs').removeClass('oskari-hidden');
+        },
+        _getImportUrl: function (epsgValue) {
+            var url = this.instance.getService().getFileImportUrl();
+            if (epsgValue) {
+                return url + '&sourceEpsg=EPSG:' + epsgValue;
+            }
+            return url;
         },
         /**
          * Shows a message on success.
@@ -288,40 +315,53 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         },
         __error: function (response) {
             this.progressSpinner.stop();
-            var json = response.responseJSON;
-            var title = this.loc('flyout.finish.failure.title'); // error.title??
             var errors = this.loc('flyout.error');
-            var msg = errors.generic;
-            // TODO response.status === 404
-            if (!json.info) {
-                this.__showMessage(title, msg, false);
-                Oskari.log('MyPlacesImport').error('Error message:', json.error);
+            if (response.status === 404 || !response.responseJSON || !response.responseJSON.info) {
+                this.__showMessage(errors.title, errors.generic, false);
                 return;
             }
-            var errorCode = json.info.error;
-            switch (errorCode) {
+            var list = [];
+            var msg;
+            var errorInfo = response.responseJSON.info;
+            switch (errorInfo.error) {
             case 'multiple_extensions':
-                msg = this.loc('flyout.error.multiple_extensions', {extension: json.info.extension});
+                msg = this.loc('flyout.error.multiple_extensions', {extension: errorInfo.extension});
                 break;
-            case 'no_features':
+            case 'multiple_main':
+                msg = this.loc('flyout.error.multiple_main_file', {extensions: errorInfo.extensions});
                 break;
             case 'file_over_size':
                 msg = this.loc('flyout.error.file_over_size', {maxSize: this.maxFileSize});
                 break;
-            case 'invalid_file':
-                msg = this.loc('flyout.error.invalid_file');
-                // TODO has folders, no zip
+            case 'no_main_file':
+                list.push(errors.no_main_file);
+                if (errorInfo.ignored) {
+                    if (Object.keys(errorInfo.ignored).some(key => errorInfo.ignored[key] === 'folder')) {
+                        list.push(errors.has_folders);
+                    }
+                }
                 break;
             case 'parser_error':
-                msg = [];
-                msg.push(errors.parsererror);
-                msg.push(errors[json.info.parser]);
+                if (errorInfo.cause === 'no_source_crs') {
+                    this._showEpsgInput();
+                    msg = errors.noSrs;
+                    if (errorInfo.parser === 'shp') {
+                        msg = errors.shpNoSrs;
+                    }
+                    break;
+                }
+                // common parser error
+                list.push(errors.parsererror);
+                list.push(errors[errorInfo.parser]);
+                break;
             default:
-                if (errors[errorCode]) {
-                    msg = errors[errorCode];
+                if (errors[errorInfo.error]) {
+                    msg = errors[errorInfo.error];
+                } else {
+                    msg = errors.generic;
                 }
             }
-            this.__showMessage(title, msg, false);
+            this.__showMessage(errors.title, msg, false, list);
         },
 
         /**
@@ -333,18 +373,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {String} message
          * @param  {boolean} fadeout
          */
-        __showMessage: function (title, message, fadeout, list) {
+        __showMessage: function (title, message, fadeout, msgList, listType) {
             fadeout = fadeout !== false;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var btn = dialog.createCloseButton(this.loc('flyout.actions.close'));
-            var content;
-            if (Array.isArray(message)) { // TODO
-                content = message.join('<br>');
-            } else {
-                content = message;
-            }
-            if (Array.isArray(list)) {
-                content += '<ul><li>' + list.join('</li><li>') + '</li></ul>';
+            dialog.addClass('myplacesimport');
+            var content = message === undefined ? '' : message + ' ';
+            if (Array.isArray(msgList)) {
+                if (listType === 'li') {
+                    content += '<ul><li>' + msgList.join('</li><li>') + '</li></ul>';
+                } else if (listType === 'p') {
+                    content += '<p>' + msgList.join('</p><p>') + '</p>';
+                } else {
+                    content += msgList.join(' ');
+                }
             }
             dialog.makeModal();
             dialog.show(title, content, [btn]);
