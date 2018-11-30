@@ -209,6 +209,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             return files;
         }
     },
+    removeFiles: function () {
+        this.files = [];
+        this._updateFileList();
+    },
     /**
          * @method readFilesInBrowser
          * Checks for drag and drop events, on submit makes ajax request
