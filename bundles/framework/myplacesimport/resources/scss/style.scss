@@ -21,4 +21,9 @@ div.myplacesimport {
   .file-input-container {
     width: 400px;
   }
+  &.divmanazerpopup {
+      p {
+          margin-bottom: 12px;
+      }
+  }
 }
