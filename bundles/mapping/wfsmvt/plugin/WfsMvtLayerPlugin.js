@@ -1,7 +1,7 @@
 import WFSLayer from '../domain/WFSLayer';
 import WfsLayerModelBuilder from '../domain/WfsLayerModelBuilder';
 import defaultStyle from './defaultStyle';
-const VectorTileLayerPlugin = Oskari.clazz.get('Oskari.mapframework.mapmodule.VectorTileLayerPlugin');
+import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
 
 Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
     class WfsMvtLayerPlugin extends VectorTileLayerPlugin {
