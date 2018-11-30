@@ -88,7 +88,15 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
             const styleDef = layer.getCurrentStyleDef();
             const hoverOptions = layer.getHoverOptions();
             const factory = this.mapModule.getStyle.bind(this.mapModule);
-            return styleDef ? styleGenerator(factory, styleDef, hoverOptions, this.hoverState) : createDefaultStyle;
+            return styleDef ? styleGenerator(factory, styleDef, hoverOptions, this.hoverState) : this._createDefaultStyle();
+        }
+        /**
+         * @private @method _createDefaultStyle
+         * Creates OL style or style function for default style
+         * @return {ol/style/Style}
+         */
+        _createDefaultStyle () {
+            return createDefaultStyle;
         }
         /**
          * Checks if the layer can be handled by this plugin

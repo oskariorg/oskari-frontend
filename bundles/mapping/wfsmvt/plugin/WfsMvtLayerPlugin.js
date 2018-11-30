@@ -1,5 +1,6 @@
 import WFSLayer from '../domain/WFSLayer';
 import WfsLayerModelBuilder from '../domain/WfsLayerModelBuilder';
+import defaultStyle from './defaultStyle';
 const VectorTileLayerPlugin = Oskari.clazz.get('Oskari.mapframework.mapmodule.VectorTileLayerPlugin');
 
 Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
@@ -29,6 +30,12 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             return function ([z, x, y], resolution, projection) {
                 return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${layer.getId()}&srs=${projection.getCode()}&z=${z}&x=${x}&y=${(-y - 1)}`;
             };
+        }
+        /**
+         * Override, see superclass
+         */
+        _createDefaultStyle () {
+            return defaultStyle;
         }
     }
     , {
