@@ -51,6 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.container.remove();
         this.container = null;
         this._selections = [];
+        this._regionset = null;
     },
     /**
      * @method  @public  attachTo
@@ -165,7 +166,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             me._values.seriesId = seriesSelection;
         }
 
-        me.trigger('indicator.changed', regionsets.length > 0);
+        me._selections.forEach(select => {
+            select.getElement().on('change', () => me.trigger('indicator.parameter.changed', me.validateSelections()));
+        });
+        this._regionsets = regionsets;
+        me.trigger('indicator.changed', this.validateSelections());
+    },
+    validateSelections: function () {
+        if (!this._regionsets || this._regionsets.length === 0) {
+            return false;
+        }
+        const selections = this.getValues().selections;
+        const invalid = Object.keys(selections).filter(key => {
+            const val = selections[key];
+            return !val || (Array.isArray(val) && val.length === 0);
+        });
+        return invalid.length === 0;
     },
     getValues: function () {
         var me = this;

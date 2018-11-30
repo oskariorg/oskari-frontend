@@ -39,12 +39,13 @@ export default class SelectList extends FormComponent {
         }
         const { id, title, name, cls } = data;
         let value = id;
-        let text = title || name;
+        let text = title || name || '';
         if (!value && !text) {
             value = data;
             text = data;
         }
-        return `<option class="${cls || ''}" title="${title || text}" value="${value}">${text}</option>`;
+        const emptyTagContent = '&nbsp;';
+        return `<option class="${cls || ''}" title="${title || text}" value="${value}">${text || emptyTagContent}</option>`;
     }
 
     /**

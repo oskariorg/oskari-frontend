@@ -92,6 +92,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                         var selection = values.selections[key];
                         if (Array.isArray(selection)) {
                             hasMultiselectValues = true;
+                            if (selection.length === 0) {
+                                return;
+                            }
                             selection.forEach(function (item) {
                                 var current = jQuery.extend(true, {}, values.selections);
                                 current[key] = item;
@@ -130,9 +133,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             selectionComponent.clearSelections();
         });
 
-        selectionComponent.on('indicator.changed', function (enabled) {
-            btn.setEnabled(enabled);
-        });
+        selectionComponent.on('indicator.changed', enabled => btn.setEnabled(enabled));
+        selectionComponent.on('indicator.parameter.changed', enabled => btn.setEnabled(enabled));
 
         // Create accordion and add indicator list to its panel
         var indicatorListAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
