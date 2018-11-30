@@ -2,7 +2,7 @@
  * @class
  * JSON-parsing for wfs layer
  */
-export default class WfsLayerModelBuilder {
+class WfsLayerModelBuilder {
     constructor (sandbox) {
         this.localization = Oskari.getLocalization('MapWfs2');
         this.sandbox = sandbox;
@@ -84,3 +84,13 @@ export default class WfsLayerModelBuilder {
         }
     }
 }
+
+/**
+ * Register under old name for MyPlaces, UserLayers, Analysis bundles
+ */
+Oskari.clazz.defineES(
+    'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
+    WfsLayerModelBuilder
+);
+
+export default WfsLayerModelBuilder;
