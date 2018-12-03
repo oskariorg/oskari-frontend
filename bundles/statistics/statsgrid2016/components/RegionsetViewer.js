@@ -1,3 +1,7 @@
+const BORDER_PRIO = 10000;
+const REGION_PRIO = 10;
+const HIGHLIGHT_PRIO = 1;
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (instance, sandbox) {
     this.instance = instance;
     this.sb = sandbox;
@@ -91,6 +95,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             const updates = [];
             const adds = [];
             const regionFeaturesToAdd = [];
+            const borderFeatures = [];
 
             regiongroup.forEach(regionId => {
                 if (highlightRegionId && (highlightRegionId.toString() === regionId.toString())) {
@@ -110,6 +115,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     });
                 } else {
                     const feature = me._getFeature(classification, region, regionVal);
+                    if (classification.mapStyle === 'points') {
+                        borderFeatures.push(me._getBorderFeature(region, regionVal));
+                    }
                     regionFeaturesToAdd.push(feature);
                     adds.push(regionId);
                 }
@@ -137,23 +145,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 featureStyle: defaultFeatureStyle,
                 optionalStyles: optionalStyles,
                 layerId: me.LAYER_ID,
-                prio: index,
+                prio: REGION_PRIO + index,
                 opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100,
                 animationDuration: 250
             };
             if (adds.length !== 0) {
                 me._regionsAdded = me._regionsAdded.concat(adds);
-                const geojson = {
-                    'type': 'FeatureCollection',
-                    'crs': {
-                        'type': 'name',
-                        'properties': {
-                            'name': sandbox.getMap().getSrsName()
-                        }
-                    },
-                    'features': regionFeaturesToAdd
-                };
-                addFeaturesRequestParams.push([geojson, requestOptions]);
+                addFeaturesRequestParams.push([me._getGeoJSON(regionFeaturesToAdd), requestOptions]);
+                // Add border features under the points
+                if (borderFeatures.length > 0) {
+                    const borderRequestOptions = Object.assign({}, requestOptions, {
+                        prio: BORDER_PRIO + index
+                    });
+                    addFeaturesRequestParams.push([me._getGeoJSON(borderFeatures), borderRequestOptions]);
+                }
             }
             if (updates.length !== 0) {
                 const searchOptions = {'id': updates};
@@ -164,8 +169,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         // Remove regions missing value
         if (handledRegions.length !== regions.length) {
             const regionsWithoutValue = regions.filter(r => !handledRegions.includes(r.id)).map(r => r.id);
+            const borders = regionsWithoutValue.map(id => 'border' + id);
+            const removes = regionsWithoutValue.concat(borders);
             if (regionsWithoutValue.length > 0) {
-                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', regionsWithoutValue, me.LAYER_ID]);
+                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, me.LAYER_ID]);
             }
         }
         addFeaturesRequestParams.forEach(params => {
@@ -173,6 +180,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         });
 
         me._lastRenderCache = { classification, regiongroups, highlightRegionId };
+    },
+
+    _getGeoJSON: function (features) {
+        const geojson = {
+            'type': 'FeatureCollection',
+            'crs': {
+                'type': 'name',
+                'properties': {
+                    'name': this.sb.getMap().getSrsName()
+                }
+            },
+            'features': features
+        };
+        return geojson;
     },
 
     _clearRegions: function () {
@@ -225,6 +246,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     y: 0
                 },
                 sizePx: size
+            },
+            stroke: {
+                color: '#000000',
+                width: strokeWidth
+            },
+            fill: {
+                color: 'rgba(255,255,255,0)'
             }
         };
         return style;
@@ -250,7 +278,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         var featureProperties = {
             'id': region.id,
             'name': region.name,
-            'regionValue': label
+            'regionValue': label,
+            'oskari_type': 'region'
         };
         if (classification.mapStyle === 'points') {
             return {
@@ -267,6 +296,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             return geojson;
         }
     },
+
+    _getBorderFeature: function (region, label) {
+        var featureProperties = {
+            'id': 'border' + region.id,
+            'name': region.name,
+            'regionValue': label,
+            'oskari_type': 'border'
+        };
+        var geojson = jQuery.extend(true, {}, region.geojson);
+        geojson.properties = featureProperties;
+        return geojson;
+    },
+
     /**
      * Prepare vectorlayer for features.
      */
@@ -301,6 +343,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         var highlightStrokeWidth = 4;
 
         var hoverOptions = {
+            filter: [{key: 'oskari_type', value: 'region'}],
             content: [
                 {
                     keyProperty: 'name',
@@ -369,7 +412,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         style.effect = highlight ? 'darken' : '';
         const requestOptions = {
             featureStyle: style,
-            layerId: me.LAYER_ID
+            layerId: me.LAYER_ID,
+            prio: highlight ? HIGHLIGHT_PRIO : REGION_PRIO + groupIndex
         };
         const searchOptions = {'id': regionId};
         me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
