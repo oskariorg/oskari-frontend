@@ -46,7 +46,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * Returns class to be used as mapLayerService layer model
      */
     _getLayerModelClass () {
-        return VectorTileLayer;
+        return 'Oskari.mapframework.mapmodule.VectorTileLayer';
     }
     /**
      * @private @method _getModelBuilder
