@@ -55,7 +55,7 @@ hover: {
     // Apply hover style only on features having property "class" with value "building"
     filter: [
         {key: 'class', value: 'building'}
-    ]
+    ],
     featureStyle: {
         inherit: true,
         effect: 'darken',
