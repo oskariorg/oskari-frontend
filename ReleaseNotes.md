@@ -1,5 +1,73 @@
 # Release Notes
 
+## 1.49.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/14?closed=1
+
+### Build script
+
+The build script has now been completely migrated to Webpack and the old tools-scripts have been removed. Changes for the new script from 1.48.0 is that builds no longer point to a single minifierAppsetup.json but a directory hosting apps that can have the json-file OR main.js file as it's a common use case to have at least one app for the geoportal and another for the embedded maps. 
+The parameter for builds changed from "env.appdef=applications/application/guest/minifierAppSetup.json" in 1.48.0
+ to "env.appdef=applications/application" in 1.49.0. The build also generates a "main.js" file when run based on the minifierAppsetup.json. You can remove the json-file after running the build for the
+ first time and start using the main.js as the main entrypoint for the app. 
+
+ Bundles can now be loaded "lazily" meaning "lazy" bundles are not part of oskari.min.js but can be loaded and started as usual when referenced. This can be used to minimize the JavaScript payload users have to download. Bundles that aren't used by all the users like admin bundles should be included in the app as "lazy".
+
+ The devserver now passes additional http headers to Jetty so forwarded requests like logging in work properly with it.
+
+ The separate css-files that were previously referenced on the HTML (forms.css, portal.css and overwritten.css) have all been included in the oskari.min.css file. Icons.css is still a separate file. jQuery is now included in oskari.min.js as well.
+
+#### Other build script improvements
+- Build script now provides a way to be used from another repository while referencing code from  oskari-frontend/oskari-frontend-contrib repositories enabling application specific repositories like nls-oskari/pti-frontend.
+- Added a flag for build script to use absolute paths instead of relative
+- Added a script to create the sprite image for customized/app-specific icons.
+- Polyfills from Babel.js have been added to the build for IE support
+
+### Code quality
+
+The code base has been formatted with ESLint configured settings. Any pull requests made in GitHub are now automatically checked against these rules using Travis CI. You can also check the settings by running "npm run test". 
+
+Most of the calls to deprecated functions inside the oskari-frontend code have been updated to use the new versions of the functions so the developer console should only have warning for customized apps using deprecated functions. Note that the deprecated functions will be removed in a future version and you should update your apps to match the changes (see the browsers developer console for details). If you see no warnings it's all good for your app.
+
+### Cleanup
+
+Much of the app-specific functionalities and unmaintained code have been moved to a new repository: oskari-frontend-contrib. These can still be used with any oskari-applications, but they are not "officially" supported.
+Now everything in the oskari-frontend repository should work with new versions.
+
+Also removed CSS-files that had corresponding SCSS files so it's clear which one to edit.
+
+### Thematic maps improvements
+- Improvements for diagram flyout
+- Selected indicators are now listed on the indicator selection flyout and selections can be removed from that listing without the need to go the data table flyout
+- Performance improvements
+- Flickering reduced on statistical timeseries/indicator switching
+- Color animation added for timeseries
+- Other improvements and error handling added
+- The select component has been changed for indicator selection flyout
+- Area borders are now shown even on point visualization
+
+### Other changes
+- Initial support for vectortiles (the new example app now uses OpenMapTiles as basemap)
+- Vectortilelayers can be styled using the Oskari style definition OR Mapbox styles
+- Openlayers updated to 5.2.0 (as npm dependency so using it has changed to ES6 imports instead of using the global "ol" object)
+- Some of the code like the mapmodule implementation has started migrating towards ES6-modules.
+- User geolocation can no longer move the map outside the map extent
+- Color selection for myplaces etc user generated styles now have a new color picker component
+- The info icon placement has been modified in printout and publisher to match the UI guide 
+- MapLayerService.registerLayerModel() now supports functions/constructors as modelbuilders in addition to name to pass to Oskari.clazz.create()
+- CSS-styles have been streamlined and references to missing resources have been removed.
+- Publisher theme selection and the theme on map are now in sync. Previously you mnight have gotten the geoportal style on preview, but end up with the default style embedded map. This happened if the geoportal had customized style/didn't have the default style
+- Content-editor and Download-basket bundles have been updated to work with current Oskari libraries (OpenLayers 5)
+- Fixed a bug in printout where zoom-levels on the map got mixed up after visiting the printout functionality
+- Admin layerselector now has a field for layer "options" which content is layer type specific (vectortilelayer styles are added using options)
+- Metadata presentation fixes and error handling
+- Fix for customized styles when user draws on the map
+- Link tool now allows user to select if guided tour should be skipped on link and if center marker should be shown
+- Toolbars tool selection color now works better on themes with light background 
+- Fixed https://github.com/oskariorg/oskari-docs/issues/79
+
+
 ## 1.48.0
 
 For a full list of changes see:
