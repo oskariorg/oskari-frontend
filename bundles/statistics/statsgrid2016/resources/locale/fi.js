@@ -96,6 +96,7 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Sukupuoli',
             'year': 'Vuosi',
+            'Vuosi': 'Vuosi',
             'regionset': 'Aluejako',
             'from': 'alkaen',
             'to': 'päättyen'
