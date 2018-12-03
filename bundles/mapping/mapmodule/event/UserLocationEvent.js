@@ -8,9 +8,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.UserLocationEven
      * @method create called automatically on construction
      * @static
      */
-    function (lon, lat) {
+    function (lon, lat, accuracy) {
         this._lon = lon;
         this._lat = lat;
+        this._accuracy = accuracy;
     }, {
         __name: 'UserLocationEvent',
 
@@ -21,9 +22,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.UserLocationEven
         getLon: function () {
             return this._lon;
         },
-
         getLat: function () {
             return this._lat;
+        },
+        getAccuracy: function () {
+            return this._accuracy;
         },
         /**
          * Serialization for RPC
@@ -32,7 +35,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.event.UserLocationEven
         getParams: function () {
             return {
                 lon: this.getLon(),
-                lat: this.getLat()
+                lat: this.getLat(),
+                accuracy: this.getAccuracy()
             };
         }
     }, {

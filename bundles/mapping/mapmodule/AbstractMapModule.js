@@ -565,7 +565,6 @@ Oskari.clazz.define(
                 // timeout after 6 seconds
                 opts.timeout = 6000;
             }
-
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
@@ -573,7 +572,7 @@ Oskari.clazz.define(
                         var lonlat = me.transformCoordinates({
                             lon: position.coords.longitude,
                             lat: position.coords.latitude }, 'EPSG:4326');
-                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat));
+                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat, position.coords.accuracy));
                         // notify callback
                         if (typeof callback === 'function') {
                             callback(lonlat.lon, lonlat.lat);
@@ -592,6 +591,7 @@ Oskari.clazz.define(
                 );
             }
         },
+        //_getCurrentPosition
         /* --------------- /MAP LOCATION ------------------------ */
 
         /* --------------- MAP ZOOM ------------------------ */

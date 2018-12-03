@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
         this._log.debug('Get user location');
         var mapmodule = this.mapmodule;
         var cb;
+        //var opts = {};
         // if request.getCenterMap() is truthy: also move map
         if (request.getCenterMap()) {
             cb = function (lon, lat) {
@@ -22,8 +23,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
                 mapmodule.centerMap({ lon: lon, lat: lat }, 6);
             };
         }
+        /*if (request.getHighAccuracy() === true) {
+            opts.enableHighAccuracy = true;
+        }*/
         // call the getUserLocation() function to trigger an event with or without the cb
-        mapmodule.getUserLocation(cb);
+        mapmodule.getUserLocation(cb, {enableHighAccuracy: request.getHighAccuracy()});
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']
