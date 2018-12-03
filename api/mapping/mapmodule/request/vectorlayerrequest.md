@@ -52,6 +52,10 @@ Options object
 Hover options describes how to visualize features on hover and what kind of tooltip should be shown.
 ```javascript
 hover: {
+    // Apply hover style only on features having property "class" with value "building"
+    filter: [
+        {key: 'class', value: 'building'}
+    ]
     featureStyle: {
         inherit: true,
         effect: 'darken',
