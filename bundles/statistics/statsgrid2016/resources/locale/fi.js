@@ -41,7 +41,7 @@ Oskari.registerLocalization({
                 'refineSearchLabel': 'Tarkenna tarkasteltavan aineiston sisältöä',
                 'refineSearchTooltip1': 'Saat näkyviin vaihtoehtoja kun olet ensin valinnut aineiston tarjoajan ja aineiston.',
                 'refineSearchTooltip2': '',
-                'addButtonTitle': 'Hae aineiston tiedot',
+                'addButtonTitle': 'Hae',
                 'clearButtonTitle': 'Tyhjennä',
                 'defaultPlaceholder': 'Valitse arvo',
                 'selectionValues': {
