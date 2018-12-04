@@ -99,6 +99,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.parentElement.append(cont);
         this.container = cont;
         var seriesSelection = null;
+        var indicators = me.service.getStateService().getIndicators();
         Object.keys(selections).forEach(function (selected, index) {
             var placeholder = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : !selected.id ? String(selected) : selected.id;
@@ -127,7 +128,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 var select = new SelectList(selected);
                 dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
                 dropdown.css({width: '205px'});
-                select.selectFirstValue();
+                var previousSelections = [];
+                for (var i in indicators) {
+                    previousSelections.push(indicators[i].selections[selected]);
+                }
+                if (previousSelections.length) {
+                    if (options.multi) {
+                        select.setValue(previousSelections);
+                    } else { // Use the last item in array to set value
+                        select.setValue(previousSelections.slice(-1));
+                    }
+                }
+                if (!select.getValue() || select.getValue().length === 0) {
+                    select.selectFirstValue();
+                }
                 tempSelect.find('.label').append(dropdown);
                 cont.append(tempSelect);
                 me._selections.push(select);

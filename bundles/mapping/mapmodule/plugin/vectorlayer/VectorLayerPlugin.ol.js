@@ -232,6 +232,12 @@ Oskari.clazz.define(
             if (!hoverOptions || !hoverOptions.featureStyle) {
                 return;
             }
+            if (hoverOptions.filter) {
+                const match = hoverOptions.filter.find(cur => cur.key && feature.get(cur.key) === cur.value);
+                if (!match) {
+                    return;
+                }
+            }
             const ftrStyles = this.getCachedStyles(layer.get(LAYER_ID), this.getFeatureId(feature));
             if (!ftrStyles || ftrStyles.hoverActive) {
                 return;
@@ -240,8 +246,8 @@ Oskari.clazz.define(
             if (!ftrStyles.olHover) {
                 let hoverStyle = hoverStyleDef.inherit ? jQuery.extend(true, {}, ftrStyles.oskari || {}, hoverStyleDef) : hoverStyleDef;
                 ftrStyles.olHover = this.getMapModule().getStyle(hoverStyle);
+                ftrStyles.olHover.setZIndex(ftrStyles.ol.getZIndex());
                 this._setFeatureLabel(feature, hoverStyle, ftrStyles.olHover);
-                ftrStyles.olHover.setZIndex(10000);
             }
             ftrStyles.hoverActive = true;
             feature.setStyle(ftrStyles.olHover);
@@ -483,6 +489,12 @@ Oskari.clazz.define(
                     layer.setOpacity(options.opacity);
                 }
                 layer.setVisible(true);
+
+                if (options.hover && options.hover.filter) {
+                    if (!Array.isArray(options.hover.filter)) {
+                        options.hover.filter = [options.hover.filter];
+                    }
+                }
                 layer.setHoverOptions(options.hover);
 
                 if (options.layerPermissions) {
@@ -595,11 +607,14 @@ Oskari.clazz.define(
             }
 
             layer = me.prepareVectorLayer(options);
+            olLayer = me._getOlLayer(layer);
+            vectorSource = olLayer.getSource();
 
             if (!me.getMapModule().isValidGeoJson(geometry) && typeof geometry === 'object') {
                 for (var key in geometry) {
                     me._updateFeature(options, key, geometry[key]);
                 }
+                me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
                 return;
             }
 
@@ -630,10 +645,6 @@ Oskari.clazz.define(
                 }
                 me.setFeatureStyle(options, feature, false);
             });
-
-            olLayer = me._getOlLayer(layer);
-            vectorSource = olLayer.getSource();
-
             // clear old features if defined so
             if (options.clearPrevious === true) {
                 vectorSource.clear();
@@ -646,23 +657,8 @@ Oskari.clazz.define(
                 prio: prio
             });
 
-            if (options.prio && !isNaN(options.prio)) {
-                // clear any features since we are re-adding the same features sorted by priority
-                vectorSource.clear();
-                me._features[options.layerId].sort(function (a, b) {
-                    return b.prio - a.prio;
-                });
-                var zIndex = 0;
-                me._features[options.layerId].forEach(function (featObj) {
-                    featObj.data.forEach(function (feature) {
-                        feature.getStyle().setZIndex(zIndex);
-                        vectorSource.addFeature(feature);
-                        zIndex++;
-                    });
-                });
-            } else {
-                vectorSource.addFeatures(features);
-            }
+            me._applyPrioOnSource(options.layerId, vectorSource, options.prio);
+            vectorSource.addFeatures(features);
 
             // notify other components that features have been added
             var formatter = this._supportedFormats.GeoJSON;
@@ -699,6 +695,29 @@ Oskari.clazz.define(
             }
         },
         /**
+         * @method _applyPrioOnSource
+         * Set feature zIndexes based on cached prio values.
+         *
+         * @param {String} layerId
+         * @param {olSourceVector} source
+         * @param {Number} prio
+         */
+        _applyPrioOnSource: function (layerId, source, prio) {
+            if (isNaN(prio) || !source) {
+                return;
+            }
+            let zIndex = 0;
+            this._features[layerId].sort((a, b) => b.prio - a.prio);
+            this._features[layerId].forEach(featObj => {
+                featObj.data.forEach(feature => {
+                    this.updateCachedZIndex(layerId, feature, zIndex);
+                    zIndex++;
+                });
+            });
+            // apply changes on map
+            this.getMapModule().getMap().render();
+        },
+        /**
          * @method _updateFeature
          * @public
          * Updates feature's style
@@ -709,7 +728,8 @@ Oskari.clazz.define(
          * @param {Number} animationDuration
          */
         _updateFeature: function (options, propertyName, value) {
-            var layers = {layer: options.layerId};
+            const { prio, layerId, featureStyle } = options;
+            var layers = {layer: layerId};
             var values = Array.isArray(value) ? value : [value];
             var searchValues = values.map(cur => typeof cur === 'object' ? cur.value : cur);
             var searchOptions = {
@@ -720,9 +740,11 @@ Oskari.clazz.define(
                 if (updateValue && updateValue.properties) {
                     Object.keys(updateValue.properties).forEach(key => feature.set(key, updateValue.properties[key]));
                 }
-                if (options.featureStyle) {
+                if (featureStyle) {
                     this.setFeatureStyle(options, feature, true);
                 }
+                this._updateCachedPrio(layerId, feature, prio);
+
                 var formatter = this._supportedFormats.GeoJSON;
                 var addEvent = Oskari.eventBuilder('FeatureEvent')().setOpAdd();
                 var errorEvent = Oskari.eventBuilder('FeatureEvent')().setOpError('feature has no geometry');
@@ -732,7 +754,7 @@ Oskari.clazz.define(
                 if (!feature.getGeometry()) {
                     event = errorEvent;
                 }
-                event.addFeature(feature.getId(), geojson, options.layerId);
+                event.addFeature(feature.getId(), geojson, layerId);
                 if (errorEvent.hasFeatures()) {
                     this.getSandbox().notifyAll(errorEvent);
                 }
@@ -740,6 +762,33 @@ Oskari.clazz.define(
                     this.getSandbox().notifyAll(addEvent);
                 }
             });
+        },
+        /**
+         * @method _updateCachedPrio
+         * Moves the feature to a dataset having the specified prio
+         *
+         * @param {String} layerId
+         * @param {olFeature} feature
+         * @param {Number} prio
+         */
+        _updateCachedPrio: function (layerId, feature, prio) {
+            if (!layerId || !feature || isNaN(prio)) {
+                return;
+            }
+            const datasets = this._features[layerId];
+            const oldDataset = datasets.find(cur => cur.data.find(ftr => ftr === feature));
+            if (oldDataset && oldDataset.prio !== prio) {
+                oldDataset.data.splice(oldDataset.data.indexOf(feature), 1);
+                const newDataset = datasets.find(cur => cur.prio === prio);
+                if (newDataset) {
+                    newDataset.data.push(feature);
+                } else {
+                    datasets.push({
+                        data: [feature],
+                        prio
+                    });
+                }
+            }
         },
         _animateFillColorChange: function (feature, newStyle, duration) {
             const me = this;
@@ -914,6 +963,24 @@ Oskari.clazz.define(
                 return cache[featureId];
             }
         },
+        updateCachedZIndex: function (layerId, feature, zIndex) {
+            if (!layerId || !feature) {
+                return;
+            }
+            const cached = this.getCachedStyles(layerId, this.getFeatureId(feature));
+            if (!cached) {
+                return;
+            }
+            if (cached.ol) {
+                cached.ol.setZIndex(zIndex);
+                if (!cached.hoverActive) {
+                    feature.setStyle(cached.ol);
+                }
+            }
+            if (cached.olHover) {
+                cached.olHover.setZIndex(zIndex);
+            }
+        },
         _setFeatureLabel: function (feature, oskariStyle, olStyle) {
             if (!feature || !oskariStyle || !olStyle) {
                 return;
@@ -992,7 +1059,12 @@ Oskari.clazz.define(
                 }
             }
 
+            let zIndex = 1;
+            if (cached.ol) {
+                zIndex = cached.ol.getZIndex();
+            }
             cached.ol = me.getMapModule().getStyle(cached.oskari);
+            cached.ol.setZIndex(zIndex);
             return cached.ol;
         },
         /**
