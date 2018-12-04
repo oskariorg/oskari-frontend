@@ -22,7 +22,7 @@ The parameter for builds changed from "env.appdef=applications/application/guest
 - Build script now provides a way to be used from another repository while referencing code from  oskari-frontend/oskari-frontend-contrib repositories enabling application specific repositories like nls-oskari/pti-frontend.
 - Added a flag for build script to use absolute paths instead of relative
 - Added a script to create the sprite image for customized/app-specific icons.
-- Polyfills from Babel.js have been added to the build for IE support
+- `babel-polyfill` has been added to the build for IE support
 
 ### Code quality
 
