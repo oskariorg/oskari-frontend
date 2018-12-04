@@ -5,7 +5,6 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
 import VectorTileModelBuilder from './VectorTileModelBuilder';
-import VectorTileLayer from './VectorTileLayer';
 import styleGenerator from './styleGenerator';
 import mapboxStyleFunction from 'ol-mapbox-style/stylefunction';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../domain/constants';
@@ -146,7 +145,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             format: new olFormatMVT(),
             url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
             attributions: this.getAttributions(layer),
-            tileUrlFunction: this._getTileUrlFunction(layer)
+            tileUrlFunction: this._getTileUrlFunction(layer),
+            tileLoadFunction: this._getTileLoadFunction(layer)
         };
         const tileGrid = layer.getTileGrid();
         if (tileGrid) {
@@ -174,6 +174,13 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * Override in subclass
      */
     _getTileUrlFunction (layer) {
+    }
+    /**
+     * @private @method _getTileLoadFunction
+     * @param {Oskari.mapframework.domain.VectorTileLayer} layer
+     * Override in subclass
+     */
+    _getTileLoadFunction (layer) {
     }
     /**
      * @method onMapHover VectorFeatureService handler impl method
