@@ -45,7 +45,7 @@ Also removed CSS-files that had corresponding SCSS files so it's clear which one
 - Color animation added for timeseries
 - Other improvements and error handling added
 - The select component has been changed for indicator selection flyout
-- Area borders are now shown even on point visualization
+- Map region borders are now shown even on point visualization
 
 ### Other changes
 - Initial support for MVT vector tiles (the new example app now uses OpenMapTiles as basemap)
