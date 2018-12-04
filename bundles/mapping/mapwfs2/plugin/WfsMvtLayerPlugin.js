@@ -1,6 +1,7 @@
 import {normalStyle, selectedStyle} from './defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
 import FeatureService, {oskariIdKey} from '../service/FeatureService';
+import olLayerVectorTile from 'ol/layer/VectorTile';
 import {loadFeaturesXhr} from 'ol/featureloader';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
@@ -27,7 +28,26 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             handlers['WFSFeaturesSelectedEvent'] = (event) => {
                 this._updateLayerStyle(event.getMapLayer());
             };
+            handlers['MapClickedEvent'] = (event) => {
+                const keepPrevious = event.getParams().ctrlKeyDown;
+                const ftrAndLyr = this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => ({feature, layer}));
+                if (!ftrAndLyr || !(ftrAndLyr.layer instanceof olLayerVectorTile)) {
+                    return;
+                }
+                const layerId = this._findOlLayerId(ftrAndLyr.layer);
+                if (!layerId) {
+                    return;
+                }
+                const sandbox = this.getSandbox();
+                const layer = sandbox.getMap().getSelectedLayer(layerId);
+                this.WFSLayerService.setWFSFeaturesSelections(layer.getId(), [ftrAndLyr.feature.get(oskariIdKey)], !keepPrevious);
+                const featuresSelectedEvent = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(this.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
+                sandbox.notifyAll(featuresSelectedEvent);
+            };
             return handlers;
+        }
+        _findOlLayerId (olLayer) {
+            return Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
         }
         _getLayerCurrentStyleFunction (layer) {
             const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
