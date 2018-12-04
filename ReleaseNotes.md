@@ -9,7 +9,7 @@ https://github.com/oskariorg/oskari-frontend/milestone/14?closed=1
 
 The build script has now been completely migrated to Webpack and the old tools-scripts have been removed. Changes for the new script from 1.48.0 is that builds no longer point to a single minifierAppsetup.json but a directory hosting apps that can have the json-file OR main.js file as it's a common use case to have at least one app for the geoportal and another for the embedded maps. 
 The parameter for builds changed from "env.appdef=applications/application/guest/minifierAppSetup.json" in 1.48.0
- to "env.appdef=applications/application" in 1.49.0. The build also generates a "main.js" file when run based on the minifierAppsetup.json. You can remove the json-file after running the build for the
+ to "env.appdef=applications/application" in 1.49.0. When the build is run it also generates a "main.js" file based on the minifierAppsetup.json. You can remove the json-file after running the build for the
  first time and start using the main.js as the main entrypoint for the app. 
 
  Bundles can now be loaded "lazily" meaning "lazy" bundles are not part of oskari.min.js but can be loaded and started as usual when referenced. This can be used to minimize the initial JavaScript payload users have to download. Bundles that aren't used by all the users like admin bundles should be included in the app as "lazy".
