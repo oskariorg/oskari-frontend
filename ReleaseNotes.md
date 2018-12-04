@@ -12,7 +12,7 @@ The parameter for builds changed from "env.appdef=applications/application/guest
  to "env.appdef=applications/application" in 1.49.0. The build also generates a "main.js" file when run based on the minifierAppsetup.json. You can remove the json-file after running the build for the
  first time and start using the main.js as the main entrypoint for the app. 
 
- Bundles can now be loaded "lazily" meaning "lazy" bundles are not part of oskari.min.js but can be loaded and started as usual when referenced. This can be used to minimize the JavaScript payload users have to download. Bundles that aren't used by all the users like admin bundles should be included in the app as "lazy".
+ Bundles can now be loaded "lazily" meaning "lazy" bundles are not part of oskari.min.js but can be loaded and started as usual when referenced. This can be used to minimize the initial JavaScript payload users have to download. Bundles that aren't used by all the users like admin bundles should be included in the app as "lazy".
 
  The devserver now passes additional http headers to Jetty so forwarded requests like logging in work properly with it.
 
