@@ -48,7 +48,7 @@ Also removed CSS-files that had corresponding SCSS files so it's clear which one
 - Area borders are now shown even on point visualization
 
 ### Other changes
-- Initial support for vectortiles (the new example app now uses OpenMapTiles as basemap)
+- Initial support for MVT vector tiles (the new example app now uses OpenMapTiles as basemap)
 - Vectortilelayers can be styled using the Oskari style definition OR Mapbox styles
 - Openlayers updated to 5.2.0 (as npm dependency so using it has changed to ES6 imports instead of using the global "ol" object)
 - Some of the code like the mapmodule implementation has started migrating towards ES6-modules.
