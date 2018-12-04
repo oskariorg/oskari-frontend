@@ -156,19 +156,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 return;
             }
             var nextTime = this._getNextTime(this._uiState.currentTime);
-
             if (!nextTime) {
-                var index = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
-                nextTime = this._uiState.times[index];
                 this._setAnimationState(false);
+                return;
             }
-
-            if (this._uiState.currentTime !== nextTime) {
-                this._uiState.currentTime = nextTime;
-                this._requestNewTime();
-                this._renderHandle();
-                this._updateTimeDisplay();
-            }
+            this._uiState.currentTime = nextTime;
+            this._requestNewTime();
+            this._renderHandle();
+            this._updateTimeDisplay();
         },
         /**
          * @method _getNextTime Get time instant for next animation frame
@@ -185,9 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
             }
+            var endIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
             if (targetTime.toISOString() > this._uiState.rangeEnd) {
                 return null;
-            } else if (index >= this._uiState.times.length - 1) {
+            } else if (index > endIndex) {
                 return null;
             }
             return this._uiState.times[index];
@@ -226,7 +222,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 index = index1;
             }
+            index = this._getRangeCheckedIndex(index);
             return this._uiState.times[index];
+        },
+        /**
+         * @method _getRangeCheckedIndex Performs uistate range check for the time index
+         * @param  {Number} index uistate time index
+         * @return {Number} index, rangeStart index or rangeEnd index if given index was outside the range.
+         */
+        _getRangeCheckedIndex: function (index) {
+            var rangeStartIndex = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeStart), 0);
+            var rangeEndIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
+            if (index < rangeStartIndex) {
+                return rangeStartIndex;
+            } else if (index > rangeEndIndex) {
+                return rangeEndIndex;
+            }
+            return index;
         },
         /**
          * @method _doSingleStep Step current time forward/back (in response to step forward/back buttons)
@@ -239,7 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
             var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime);
             var newTime = this._uiState.times[index + delta];
-            if (newTime && newTime > this._uiState.rangeStart && newTime < this._uiState.rangeEnd) {
+            if (newTime && newTime >= this._uiState.rangeStart && newTime <= this._uiState.rangeEnd) {
                 this._uiState.currentTime = newTime;
                 this._throttleNewTime();
                 this._renderHandle();
@@ -413,11 +425,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 dateTime.text(me.loc('dateRender', { val: new Date(me._uiState.currentTime) }));
             };
             template.find('.timeseries-playpause').on('click', function (e) {
-                me._setAnimationState(!me._uiState.isAnimating);
+                if (me._uiState.isAnimating) {
+                    me._setAnimationState(false);
+                    return;
+                }
+                var times = me._uiState.times;
+                var curIndex = Math.max(d3.bisectLeft(times, me._uiState.currentTime), 0);
+                var endIndex = Math.max(d3.bisect(times, me._uiState.rangeEnd) - 1, 0);
+                if (curIndex >= endIndex) {
+                    me._restartAnimation();
+                } else {
+                    me._setAnimationState(true);
+                }
             });
             template.find('.timeseries-back').on('click', this._doSingleStep.bind(this, -1));
             template.find('.timeseries-forward').on('click', this._doSingleStep.bind(this, 1));
             this._element.find('.timeseries-aux').append(template);
+        },
+        /**
+         * @method _restartAnimation Moves the handle to the beginning of the series and starts the animation.
+         */
+        _restartAnimation: function () {
+            const startIndex = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeStart), 0);
+            this._updateCurrentTime(this._uiState.times[startIndex]);
+            setTimeout(() => this._setAnimationState(true), this._uiState.frameInterval);
         },
         /**
          * @method _updateCurrentTime Update current time in response to user input
