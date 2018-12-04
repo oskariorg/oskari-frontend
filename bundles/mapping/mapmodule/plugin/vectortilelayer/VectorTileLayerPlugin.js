@@ -62,13 +62,16 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         return {
             AfterChangeMapLayerStyleEvent (event) {
                 const oskariLayer = event.getMapLayer();
-                const olLayers = this.getOLMapLayers(oskariLayer);
-
-                if (olLayers && olLayers.length > 0) {
-                    olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
-                }
+                this._updateLayerStyle(oskariLayer);
             }
         };
+    }
+    _updateLayerStyle (oskariLayer) {
+        const olLayers = this.getOLMapLayers(oskariLayer);
+
+        if (olLayers && olLayers.length > 0) {
+            olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
+        }
     }
     /**
      * @private @method _getLayerCurrentStyleFunction

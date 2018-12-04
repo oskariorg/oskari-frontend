@@ -1,6 +1,6 @@
-import defaultStyle from './defaultStyle';
+import {normalStyle, selectedStyle} from './defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
-import FeatureService from '../service/FeatureService';
+import FeatureService, {oskariIdKey} from '../service/FeatureService';
 import {loadFeaturesXhr} from 'ol/featureloader';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
@@ -21,6 +21,36 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                 'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
 
             sandbox.registerService(this.WFSLayerService);
+        }
+        _createPluginEventHandlers () {
+            const handlers = super._createPluginEventHandlers();
+            handlers['WFSFeaturesSelectedEvent'] = (event) => {
+                this._updateLayerStyle(event.getMapLayer());
+            };
+            return handlers;
+        }
+        _getLayerCurrentStyleFunction (layer) {
+            const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
+            const superStyle = super._getLayerCurrentStyleFunction(layer);
+            if (!selectedIds.size) {
+                return superStyle;
+            }
+            // Duplicated code for optimization. Check typeof once instead of on every feature.
+            if (typeof superStyle === 'function') {
+                return (feature, resolution) => {
+                    if (selectedIds.has(feature.get(oskariIdKey))) {
+                        return selectedStyle(feature, resolution);
+                    }
+                    return superStyle(feature, resolution);
+                };
+            } else {
+                return (feature, resolution) => {
+                    if (selectedIds.has(feature.get(oskariIdKey))) {
+                        return selectedStyle(feature, resolution);
+                    }
+                    return superStyle;
+                };
+            }
         }
         /**
          * Override, see superclass
@@ -69,7 +99,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
          * Override, see superclass
          */
         _createDefaultStyle () {
-            return defaultStyle;
+            return normalStyle;
         }
     }
     , {

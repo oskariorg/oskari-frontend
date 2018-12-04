@@ -1,7 +1,9 @@
-const hiddenProps = new Set(['layer', '_oid']);
+export const oskariIdKey = '_oid';
+
+const hiddenProps = new Set(['layer', oskariIdKey]);
 
 function getOskariId (feature) {
-    return feature.getProperties()['_oid'];
+    return feature.get(oskariIdKey);
 }
 
 class FeatureCache {
