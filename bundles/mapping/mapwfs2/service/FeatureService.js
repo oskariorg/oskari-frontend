@@ -35,6 +35,20 @@ export function propertiesFromFeature (feature) {
     return propertiesFromFeatureFields(feature, fields);
 }
 
+export function getFieldsAndProperties (features) {
+    if (!features.length) {
+        return {fields: [], properties: []};
+    }
+
+    const fields = sortedFieldsFromFeature(features[0]);
+
+    const properties = features.map(feature => propertiesFromFeatureFields(feature, fields));
+
+    fields.unshift('__fid');
+
+    return {fields, properties};
+}
+
 export class FeatureService {
     constructor () {
         this.caches = new Map();
