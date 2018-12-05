@@ -1,8 +1,8 @@
 import {normalStyle, selectedStyle} from './defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
-import {FeatureService, propertiesFromFeature, oskariIdKey} from '../service/FeatureService';
-import olLayerVectorTile from 'ol/layer/VectorTile';
+import {FeatureService, oskariIdKey} from '../service/FeatureService';
 import {loadFeaturesXhr} from 'ol/featureloader';
+import ReqEventHandler from './ReqEventHandler';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
@@ -14,7 +14,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this.layertype = 'wfs';
             this.featureService = new FeatureService();
-            this.isClickResponsive = true;
+            this.reqEventHandler = new ReqEventHandler();
         }
         _initImpl () {
             super._initImpl();
@@ -25,49 +25,12 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             sandbox.registerService(this.WFSLayerService);
         }
         _createPluginEventHandlers () {
-            return Object.assign(super._createPluginEventHandlers(), {
-                'WFSFeaturesSelectedEvent': (event) => {
-                    this._updateLayerStyle(event.getMapLayer());
-                },
-                'MapClickedEvent': (event) => {
-                    if (!this.isClickResponsive) {
-                        return;
-                    }
-                    const ftrAndLyr = this.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => ({feature, layer}));
-                    if (!ftrAndLyr || !(ftrAndLyr.layer instanceof olLayerVectorTile)) {
-                        return;
-                    }
-                    const layerId = this._findOlLayerId(ftrAndLyr.layer);
-                    if (!layerId) {
-                        return;
-                    }
-                    const sandbox = this.getSandbox();
-                    const layer = sandbox.getMap().getSelectedLayer(layerId);
-                    if (event.getParams().ctrlKeyDown) {
-                        this.WFSLayerService.setWFSFeaturesSelections(layer.getId(), [ftrAndLyr.feature.get(oskariIdKey)], false);
-                        const featuresSelectedEvent = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(this.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
-                        sandbox.notifyAll(featuresSelectedEvent);
-                    } else {
-                        var infoEvent = Oskari.eventBuilder('GetInfoResultEvent')({
-                            layerId,
-                            features: [propertiesFromFeature(ftrAndLyr.feature)],
-                            lonlat: event.getLonLat()
-                        });
-                        sandbox.notifyAll(infoEvent);
-                    }
-                }
-            });
+            return Object.assign(super._createPluginEventHandlers(), this.reqEventHandler.createEventHandlers(this));
         }
         _createRequestHandlers () {
-            return {
-                'WfsLayerPlugin.ActivateHighlightRequest': this
-            };
+            return this.reqEventHandler.createRequestHandlers(this);
         }
-        // handle WfsLayerPlugin.ActivateHighlightRequest
-        handleRequest (oskariCore, request) {
-            this.isClickResponsive = request.isEnabled();
-        }
-        _findOlLayerId (olLayer) {
+        findOlLayerId (olLayer) {
             return Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
         }
         _getLayerCurrentStyleFunction (layer) {
