@@ -1,9 +1,9 @@
-import {normalStyle, selectedStyle} from './util/defaultStyle';
+import {normalStyle, selectedStyle} from './components/defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
-import {oskariIdKey, getFieldsAndProperties} from './util/FeatureUtil';
-import ReqEventHandler from './util/ReqEventHandler';
+import {oskariIdKey, getFieldsAndProperties} from './components/FeatureUtil';
+import ReqEventHandler from './components/ReqEventHandler';
 import TileState from 'ol/TileState';
-import FeatureExposingMVTSource from './util/FeatureExposingMVTSource';
+import FeatureExposingMVTSource from './components/FeatureExposingMVTSource';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
