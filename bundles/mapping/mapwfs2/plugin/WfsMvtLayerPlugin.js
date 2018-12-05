@@ -66,15 +66,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
          * Override, see superclass
          */
         _getModelBuilder () {
-            return new WfsLayerModelBuilder();
-        }
-        /**
-         * Override, see superclass
-         */
-        _getTileUrlFunction (layer) {
-            return function ([z, x, y], resolution, projection) {
-                return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${layer.getId()}&srs=${projection.getCode()}&z=${z}&x=${x}&y=${(-y - 1)}`;
-            };
+            return new WfsLayerModelBuilder(this.getSandbox());
         }
         /**
          * Override, see superclass

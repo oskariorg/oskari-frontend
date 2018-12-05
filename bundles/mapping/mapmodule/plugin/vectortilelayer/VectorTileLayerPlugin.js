@@ -148,7 +148,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             format: new olFormatMVT(),
             url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
             attributions: this.getAttributions(layer),
-            tileUrlFunction: this._getTileUrlFunction(layer),
             tileLoadFunction: this._getTileLoadFunction(layer)
         };
         const tileGrid = layer.getTileGrid();
@@ -170,13 +169,6 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
         vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
-    }
-    /**
-     * @private @method _getTileUrlFunction
-     * @param {Oskari.mapframework.domain.VectorTileLayer} layer
-     * Override in subclass
-     */
-    _getTileUrlFunction (layer) {
     }
     /**
      * @private @method _getTileLoadFunction

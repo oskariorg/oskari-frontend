@@ -301,6 +301,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
                 resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
                 tileSize: [256, 256]
             };
+        },
+        /**
+         * @method getLayerUrl
+         * Superclass override
+         */
+        getLayerUrl: function () {
+            return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
         }
     }, {
         'extend': ['Oskari.mapframework.mapmodule.VectorTileLayer']
