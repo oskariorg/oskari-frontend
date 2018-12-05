@@ -1,8 +1,8 @@
 import {normalStyle, selectedStyle} from './defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
 import {FeatureService, oskariIdKey} from '../service/FeatureService';
-import {loadFeaturesXhr} from 'ol/featureloader';
 import ReqEventHandler from './ReqEventHandler';
+import TileState from 'ol/TileState';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
@@ -71,25 +71,26 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
         /**
          * Override, see superclass
          */
-        _getTileLoadFunction (layer) {
+        createSource (layer, options) {
+            const source = super.createSource(layer, options);
             const featureService = this.featureService;
             const sandbox = this.getSandbox();
-            return function (tile, url) {
-                const loader = loadFeaturesXhr(url, tile.getFormat(), function (features, projection, extent) {
-                    featureService.addFeatures(layer.getId(), features);
-                    const {fields, properties} = featureService.getFieldsAndProperties(layer.getId());
-                    layer.setFields(fields);
-                    layer.setActiveFeatures(properties);
-                    var event = Oskari.eventBuilder('WFSFeatureEvent')(
-                        layer,
-                        []
-                    );
-                    sandbox.notifyAll(event);
-
-                    tile.onLoad(features, projection, extent);
-                }, tile.onError.bind(tile));
-                tile.setLoader(loader);
-            };
+            source.on('tileloadend', ({tile}) => {
+                if (tile.getState() === TileState.ERROR) {
+                    return;
+                }
+                const features = tile.getFeatures();
+                featureService.addFeatures(layer.getId(), features);
+                const {fields, properties} = featureService.getFieldsAndProperties(layer.getId());
+                layer.setFields(fields);
+                layer.setActiveFeatures(properties);
+                var event = Oskari.eventBuilder('WFSFeatureEvent')(
+                    layer,
+                    []
+                );
+                sandbox.notifyAll(event);
+            });
+            return source;
         }
         /**
          * Override, see superclass
