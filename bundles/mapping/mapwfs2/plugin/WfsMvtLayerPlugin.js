@@ -86,7 +86,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             return source;
         }
         _updateLayerProperties (layer, source) {
-            const features = source.getFeaturesIntersecting(/* TODO: extent */);
+            const {left, bottom, right, top} = this.getSandbox().getMap().getBbox();
+            const features = source.getFeaturesIntersecting([left, bottom, right, top]);
             const {fields, properties} = getFieldsAndProperties(features);
             layer.setFields(fields);
             layer.setActiveFeatures(properties);
