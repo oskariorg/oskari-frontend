@@ -19,7 +19,23 @@ class FeatureCache {
     }
 }
 
-export default class FeatureService {
+function sortedFieldsFromFeature (feature) {
+    const fields = Object.keys(feature.getProperties()).filter(key => !hiddenProps.has(key));
+    fields.sort();
+    return fields;
+}
+
+function propertiesFromFeatureFields (feature, fields) {
+    const properties = feature.getProperties();
+    return [properties._oid].concat(fields.map(key => properties[key]));
+}
+
+export function propertiesFromFeature (feature) {
+    const fields = sortedFieldsFromFeature(feature);
+    return propertiesFromFeatureFields(feature, fields);
+}
+
+export class FeatureService {
     constructor () {
         this.caches = new Map();
     }
@@ -38,13 +54,9 @@ export default class FeatureService {
             return {fields: [], properties: []};
         }
 
-        const fields = Object.keys(features[0].getProperties()).filter(key => !hiddenProps.has(key));
-        fields.sort();
+        const fields = sortedFieldsFromFeature(features[0]);
 
-        const properties = features.map(f => {
-            const properties = f.getProperties();
-            return [properties._oid].concat(fields.map(key => properties[key]));
-        });
+        const properties = features.map(feature => propertiesFromFeatureFields(feature, fields));
 
         fields.unshift('__fid');
 

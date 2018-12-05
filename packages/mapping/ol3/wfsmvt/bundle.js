@@ -23,6 +23,9 @@ Oskari.clazz.define("Oskari.wfsmvt.WfsMvtBundle", function () {
                     "src" : "../../../../bundles/mapping/mapwfs2/service/WFSLayerService.js"
                 }, {
                     "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequest.js"
+                }, {
+                    "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeaturesSelectedEvent.js"
                 }, {
                     "type" : "text/javascript",
