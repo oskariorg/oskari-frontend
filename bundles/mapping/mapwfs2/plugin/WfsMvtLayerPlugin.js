@@ -30,8 +30,13 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
         _createRequestHandlers () {
             return this.reqEventHandler.createRequestHandlers(this);
         }
-        findOlLayerId (olLayer) {
-            return Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
+        findLayerByOLLayer (olLayer) {
+            const layerId = Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
+            return this.getSandbox().getMap().getSelectedLayer(layerId);
+        }
+        getAllLayers () {
+            const sandbox = this.getSandbox();
+            return Object.keys(this._layerImplRefs).map(layerId => sandbox.getMap().getSelectedLayer(layerId));
         }
         _getLayerCurrentStyleFunction (layer) {
             const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
@@ -75,7 +80,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             const source = new FeatureExposingMVTSource(options);
 
             const update = Oskari.util.throttle(() => {
-                this._updateLayerProperties(layer, source);
+                this.updateLayerProperties(layer, source);
             }, 300, {leading: false});
             source.on('tileloadend', ({tile}) => {
                 if (tile.getState() === TileState.ERROR) {
@@ -85,7 +90,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             });
             return source;
         }
-        _updateLayerProperties (layer, source) {
+        updateLayerProperties (layer, source = this._sourceFromLayer(layer)) {
             const {left, bottom, right, top} = this.getSandbox().getMap().getBbox();
             const features = source.getFeaturesIntersecting([left, bottom, right, top]);
             const {fields, properties} = getFieldsAndProperties(features);
@@ -96,6 +101,9 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                 []
             );
             this.getSandbox().notifyAll(event);
+        }
+        _sourceFromLayer (layer) {
+            return this.getOLMapLayers(layer.getId())[0].getSource();
         }
         /**
          * Override, see superclass

@@ -18,24 +18,26 @@ export default class ReqEventHandler {
                 if (!ftrAndLyr || !(ftrAndLyr.layer instanceof olLayerVectorTile)) {
                     return;
                 }
-                const layerId = plugin.findOlLayerId(ftrAndLyr.layer);
-                if (!layerId) {
+                const layer = plugin.findLayerByOLLayer(ftrAndLyr.layer);
+                if (!layer) {
                     return;
                 }
                 const sandbox = plugin.getSandbox();
-                const layer = sandbox.getMap().getSelectedLayer(layerId);
                 if (event.getParams().ctrlKeyDown) {
                     plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), [ftrAndLyr.feature.get(oskariIdKey)], false);
                     const featuresSelectedEvent = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
                     sandbox.notifyAll(featuresSelectedEvent);
                 } else {
                     var infoEvent = Oskari.eventBuilder('GetInfoResultEvent')({
-                        layerId,
+                        layerId: layer.getId(),
                         features: [propertiesFromFeature(ftrAndLyr.feature)],
                         lonlat: event.getLonLat()
                     });
                     sandbox.notifyAll(infoEvent);
                 }
+            },
+            'AfterMapMoveEvent': () => {
+                plugin.getAllLayers().forEach(layer => plugin.updateLayerProperties(layer));
             }
         };
     }
