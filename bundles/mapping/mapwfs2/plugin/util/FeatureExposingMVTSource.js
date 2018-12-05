@@ -1,5 +1,5 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
-import {oskariIdKey} from '../service/FeatureService';
+import {oskariIdKey} from './FeatureUtil';
 
 export default class FeatureExposingMVTSource extends olSourceVectorTile {
     getFeaturesIntersecting (extent) {

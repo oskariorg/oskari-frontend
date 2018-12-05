@@ -1,5 +1,5 @@
 import olLayerVectorTile from 'ol/layer/VectorTile';
-import {propertiesFromFeature, oskariIdKey} from '../service/FeatureService';
+import {propertiesFromFeature, oskariIdKey} from './FeatureUtil';
 
 export default class ReqEventHandler {
     constructor () {
