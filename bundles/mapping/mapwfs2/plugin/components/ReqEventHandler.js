@@ -2,7 +2,8 @@ import olLayerVectorTile from 'ol/layer/VectorTile';
 import {propertiesFromFeature, oskariIdKey} from './FeatureUtil';
 
 export default class ReqEventHandler {
-    constructor () {
+    constructor (sandbox) {
+        this.sandbox = sandbox;
         this.isClickResponsive = true;
     }
     createEventHandlers (plugin) {
@@ -22,24 +23,28 @@ export default class ReqEventHandler {
                 if (!layer) {
                     return;
                 }
-                const sandbox = plugin.getSandbox();
                 if (event.getParams().ctrlKeyDown) {
                     plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), [ftrAndLyr.feature.get(oskariIdKey)], false);
-                    const featuresSelectedEvent = Oskari.eventBuilder('WFSFeaturesSelectedEvent')(plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
-                    sandbox.notifyAll(featuresSelectedEvent);
+                    this._notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
                 } else {
-                    var infoEvent = Oskari.eventBuilder('GetInfoResultEvent')({
+                    this._notify('GetInfoResultEvent', {
                         layerId: layer.getId(),
                         features: [propertiesFromFeature(ftrAndLyr.feature)],
                         lonlat: event.getLonLat()
                     });
-                    sandbox.notifyAll(infoEvent);
                 }
             },
             'AfterMapMoveEvent': () => {
                 plugin.getAllLayers().forEach(layer => plugin.updateLayerProperties(layer));
             }
         };
+    }
+    _notify (eventName, ...args) {
+        var builder = Oskari.eventBuilder(eventName);
+        if (!builder) {
+            return;
+        }
+        this.sandbox.notifyAll(builder.apply(null, args));
     }
     createRequestHandlers (plugin) {
         return {

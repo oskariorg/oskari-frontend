@@ -14,7 +14,6 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this.__name = 'WfsMvtLayerPlugin';
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this.layertype = 'wfs';
-            this.reqEventHandler = new ReqEventHandler();
         }
         _initImpl () {
             super._initImpl();
@@ -23,6 +22,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                 'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
 
             sandbox.registerService(this.WFSLayerService);
+            this.reqEventHandler = new ReqEventHandler(sandbox);
         }
         _createPluginEventHandlers () {
             return Object.assign(super._createPluginEventHandlers(), this.reqEventHandler.createEventHandlers(this));
