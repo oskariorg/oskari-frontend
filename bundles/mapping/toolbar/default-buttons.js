@@ -221,7 +221,7 @@ Oskari.clazz.category(
                 return;
             }
 
-            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid;
+            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
 
             content.append(linkContent);
             // checkbox
