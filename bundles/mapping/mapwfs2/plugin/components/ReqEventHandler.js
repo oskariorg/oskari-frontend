@@ -25,9 +25,9 @@ export default class ReqEventHandler {
                 }
                 if (event.getParams().ctrlKeyDown) {
                     plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), [ftrAndLyr.feature.get(oskariIdKey)], false);
-                    this._notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
+                    this.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
                 } else {
-                    this._notify('GetInfoResultEvent', {
+                    this.notify('GetInfoResultEvent', {
                         layerId: layer.getId(),
                         features: [propertiesFromFeature(ftrAndLyr.feature)],
                         lonlat: event.getLonLat()
@@ -39,7 +39,7 @@ export default class ReqEventHandler {
             }
         };
     }
-    _notify (eventName, ...args) {
+    notify (eventName, ...args) {
         var builder = Oskari.eventBuilder(eventName);
         if (!builder) {
             return;

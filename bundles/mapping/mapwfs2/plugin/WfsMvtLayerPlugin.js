@@ -96,11 +96,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             const {fields, properties} = getFieldsAndProperties(features);
             layer.setFields(fields);
             layer.setActiveFeatures(properties);
-            var event = Oskari.eventBuilder('WFSFeatureEvent')(
-                layer,
-                []
-            );
-            this.getSandbox().notifyAll(event);
+            this.reqEventHandler.notify('WFSPropertiesEvent', layer, [/** TODO locales */], fields);
+            this.reqEventHandler.notify('WFSFeatureEvent', layer, properties.length ? properties[properties.length - 1] : []);
         }
         _sourceFromLayer (layer) {
             return this.getOLMapLayers(layer.getId())[0].getSource();
