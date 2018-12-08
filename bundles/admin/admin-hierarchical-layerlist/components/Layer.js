@@ -62,6 +62,8 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
                 '_bundle': '../../../Oskari/bundles/integration/admin-layerselector'
             }
         };
+        // eslint-disable-next-line
+        requirementsConfig.paths._bundle = __webpack_public_path__ + 'assets/admin-layerselector';
         window.require.config(requirementsConfig);
     },
 
