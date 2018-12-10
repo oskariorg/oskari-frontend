@@ -3,7 +3,7 @@ import {oskariIdKey} from './FeatureUtil';
 import {intersects} from 'ol/extent';
 
 export default class FeatureExposingMVTSource extends olSourceVectorTile {
-    getFeaturesIntersecting (extent) {
+    getFeaturesIntersectingExtent (extent) {
         const featuresById = new Map();
         Object.values(this.sourceTiles_)
             .filter(tile => {

@@ -146,7 +146,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         const sourceOpts = {
             format: new olFormatMVT(),
-            url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
+            url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()), // projection code
+            projection: this.getMap().getView().getProjection(), // OL projection object
             attributions: this.getAttributions(layer)
         };
         const tileGrid = layer.getTileGrid();
