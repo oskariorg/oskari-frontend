@@ -11,6 +11,8 @@ export default class ReqEventHandler {
             plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, !keepPrevious);
             this.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
         };
+        const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
+
         return {
             'WFSFeaturesSelectedEvent': (event) => {
                 plugin._updateLayerStyle(event.getMapLayer());
@@ -39,7 +41,10 @@ export default class ReqEventHandler {
                 }
             },
             'AfterMapMoveEvent': () => {
-                plugin.getAllLayers().forEach(layer => plugin.updateLayerProperties(layer));
+                plugin.getAllLayerIds().forEach(layerId => {
+                    const layer = getSelectedLayer(layerId);
+                    plugin.updateLayerProperties(layer);
+                });
             },
             'WFSSetFilter': (event) => {
                 const keepPrevious = Oskari.ctrlKeyDown();
@@ -48,7 +53,9 @@ export default class ReqEventHandler {
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
-                plugin.getAllLayers().forEach(layer => {
+                const targetLayers = plugin.WFSLayerService.isSelectFromAllLayers() ? plugin.getAllLayerIds() : [plugin.WFSLayerService.getTopWFSLayer()];
+                targetLayers.forEach(layerId => {
+                    const layer = getSelectedLayer(layerId);
                     const OLLayer = plugin.getOLMapLayers(layer)[0];
                     const intersecting = OLLayer.getSource().getFeaturesIntersectingGeom(filterFeature.geometry);
                     modifySelection(layer, intersecting.map(f => f.get(oskariIdKey)), keepPrevious);

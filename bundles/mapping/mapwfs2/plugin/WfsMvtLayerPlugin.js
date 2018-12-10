@@ -34,9 +34,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             const layerId = Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
             return this.getSandbox().getMap().getSelectedLayer(layerId);
         }
-        getAllLayers () {
-            const sandbox = this.getSandbox();
-            return Object.keys(this._layerImplRefs).map(layerId => sandbox.getMap().getSelectedLayer(layerId));
+        getAllLayerIds () {
+            return Object.keys(this._layerImplRefs);
         }
         _getLayerCurrentStyleFunction (layer) {
             const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
