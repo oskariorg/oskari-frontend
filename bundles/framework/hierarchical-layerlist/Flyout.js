@@ -171,7 +171,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var layersCopy = layers.slice(0);
             var notLoadedBackend = {};
 
-            // TODO: is this needed anymore? Now that groups are coming with the layers...
+            // layers that come in mapfull.config only have a dummy group with no name until layers have been
+            // loaded by the layerselector -  remove such groups from the result
             layersCopy.forEach(function (layer) {
                 var group = layer.getGroups()[0];
                 if (group && isNaN(group.id) && !me.mapLayerService.getAllLayerGroups(group.name)) {
