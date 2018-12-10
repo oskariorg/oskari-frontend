@@ -7,6 +7,10 @@ export default class ReqEventHandler {
         this.isClickResponsive = true;
     }
     createEventHandlers (plugin) {
+        const modifySelection = (layer, featureIds, keepPrevious) => {
+            plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, !keepPrevious);
+            this.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
+        };
         return {
             'WFSFeaturesSelectedEvent': (event) => {
                 plugin._updateLayerStyle(event.getMapLayer());
@@ -23,9 +27,9 @@ export default class ReqEventHandler {
                 if (!layer) {
                     return;
                 }
-                if (event.getParams().ctrlKeyDown) {
-                    plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), [ftrAndLyr.feature.get(oskariIdKey)], false);
-                    this.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
+                const keepPrevious = event.getParams().ctrlKeyDown;
+                if (keepPrevious) {
+                    modifySelection(layer, [ftrAndLyr.feature.get(oskariIdKey)], keepPrevious);
                 } else {
                     this.notify('GetInfoResultEvent', {
                         layerId: layer.getId(),
@@ -36,6 +40,19 @@ export default class ReqEventHandler {
             },
             'AfterMapMoveEvent': () => {
                 plugin.getAllLayers().forEach(layer => plugin.updateLayerProperties(layer));
+            },
+            'WFSSetFilter': (event) => {
+                const keepPrevious = Oskari.ctrlKeyDown();
+                const fatureCollection = event.getGeoJson();
+                const filterFeature = fatureCollection.features[0];
+                if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
+                    return;
+                }
+                plugin.getAllLayers().forEach(layer => {
+                    const OLLayer = plugin.getOLMapLayers(layer)[0];
+                    const intersecting = OLLayer.getSource().getFeaturesIntersectingGeom(filterFeature.geometry);
+                    modifySelection(layer, intersecting.map(f => f.get(oskariIdKey)), keepPrevious);
+                });
             }
         };
     }
