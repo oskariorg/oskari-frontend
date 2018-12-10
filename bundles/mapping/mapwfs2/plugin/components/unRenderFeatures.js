@@ -11,19 +11,11 @@ import Feature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
 import {equivalent, getTransform} from 'ol/proj';
 import Units from 'ol/proj/Units';
+import {create as createTransform, compose as composeTransform} from 'ol/transform';
+import {transform2D} from 'ol/geom/flat/transform';
+import {getHeight} from 'ol/extent';
 
-const fakeGeometry = {
-    flatCoordinates_: [],
-    transform: RenderFeature.prototype.transform
-};
-
-function createTilePixelTransform (tileProjection, viewProjection) {
-    return (coords) => {
-        fakeGeometry.flatCoordinates_ = coords;
-        fakeGeometry.transform(tileProjection, viewProjection);
-        return coords;
-    };
-};
+const tmpTransform = createTransform();
 
 export default function unRenderFeatures (inputFeatures, tile, source) {
     const viewProjection = source.getProjection();
@@ -31,7 +23,6 @@ export default function unRenderFeatures (inputFeatures, tile, source) {
         return [];
     }
     if (!(inputFeatures[0] instanceof RenderFeature)) {
-        console.warn('Already feature!');
         return inputFeatures.slice();
     }
 
@@ -39,10 +30,18 @@ export default function unRenderFeatures (inputFeatures, tile, source) {
     let transformer = null;
     if (!equivalent(tileProjection, viewProjection)) {
         if (tileProjection.getUnits() === Units.TILE_PIXELS) {
-            // TODO: don't mutate
-            tileProjection.setWorldExtent(source.getTileGrid().getTileCoordExtent(tile.getTileCoord()));
-            tileProjection.setExtent(tile.getExtent());
-            transformer = createTilePixelTransform(tileProjection, viewProjection);
+            transformer = function (coords) {
+                const pixelExtent = tile.getExtent();
+                const projectedExtent = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
+                const scale = getHeight(projectedExtent) / getHeight(pixelExtent);
+                composeTransform(tmpTransform,
+                    projectedExtent[0], projectedExtent[3],
+                    scale, -scale, 0,
+                    0, 0);
+                transform2D(coords, 0, coords.length, 2,
+                    tmpTransform, coords);
+                return coords;
+            };
         } else {
             transformer = getTransform(tileProjection, viewProjection);
         }
@@ -78,13 +77,12 @@ export default function unRenderFeatures (inputFeatures, tile, source) {
                 geom = new Polygon(flatCoordinates, GeometryLayout.XY, ends);
             }
         } else {
-            /* eslint-disable operator-linebreak */
-            geom = geometryType === GeometryType.POINT ? new Point(flatCoordinates, GeometryLayout.XY) :
-                geometryType === GeometryType.LINE_STRING ? new LineString(flatCoordinates, GeometryLayout.XY) :
-                    geometryType === GeometryType.POLYGON ? new Polygon(flatCoordinates, GeometryLayout.XY, ends) :
-                        geometryType === GeometryType.MULTI_POINT ? new MultiPoint(flatCoordinates, GeometryLayout.XY) :
-                            geometryType === GeometryType.MULTI_LINE_STRING ? new MultiLineString(flatCoordinates, GeometryLayout.XY, ends) :
-                                null;
+            geom = geometryType === GeometryType.POINT ? new Point(flatCoordinates, GeometryLayout.XY)
+                : geometryType === GeometryType.LINE_STRING ? new LineString(flatCoordinates, GeometryLayout.XY)
+                    : geometryType === GeometryType.POLYGON ? new Polygon(flatCoordinates, GeometryLayout.XY, ends)
+                        : geometryType === GeometryType.MULTI_POINT ? new MultiPoint(flatCoordinates, GeometryLayout.XY)
+                            : geometryType === GeometryType.MULTI_LINE_STRING ? new MultiLineString(flatCoordinates, GeometryLayout.XY, ends)
+                                : null;
         }
         const feature = new Feature();
         feature.setGeometry(geom);
