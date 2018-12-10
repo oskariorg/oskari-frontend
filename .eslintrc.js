@@ -26,7 +26,8 @@ module.exports = {
     "OskariNavigation": false,
     "OskariPinchZoom": false,
     "Proj4js": false,
-    "turf": false
+    "turf": false,
+    "__webpack_public_path__": false
   },
   "parserOptions": {
     "ecmaVersion": 6,
