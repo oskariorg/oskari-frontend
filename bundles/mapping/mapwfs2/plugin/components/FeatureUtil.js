@@ -2,30 +2,29 @@ export const oskariIdKey = '_oid';
 
 const hiddenProps = new Set(['layer', oskariIdKey]);
 
-function sortedFieldsFromFeature (feature) {
-    const fields = Object.keys(feature.getProperties()).filter(key => !hiddenProps.has(key));
+function sortedFieldsFromProps (properties) {
+    const fields = Object.keys(properties).filter(key => !hiddenProps.has(key));
     fields.sort();
     return fields;
 }
 
-function propertiesFromFeatureFields (feature, fields) {
-    const properties = feature.getProperties();
+function propsArrayFrom (properties, fields) {
     return [properties._oid].concat(fields.map(key => properties[key]));
 }
 
-export function propertiesFromFeature (feature) {
-    const fields = sortedFieldsFromFeature(feature);
-    return propertiesFromFeatureFields(feature, fields);
+export function propsAsArray (properties) {
+    const fields = sortedFieldsFromProps(properties);
+    return propsArrayFrom(properties, fields);
 }
 
-export function getFieldsAndProperties (features) {
-    if (!features.length) {
+export function getFieldsAndPropsArrays (propsList) {
+    if (!propsList.length) {
         return {fields: [], properties: []};
     }
 
-    const fields = sortedFieldsFromFeature(features[0]);
+    const fields = sortedFieldsFromProps(propsList[0]);
 
-    const properties = features.map(feature => propertiesFromFeatureFields(feature, fields));
+    const properties = propsList.map(properties => propsArrayFrom(properties, fields));
 
     fields.unshift('__fid');
 

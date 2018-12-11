@@ -1,7 +1,7 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
 import {oskariIdKey} from './FeatureUtil';
 import {intersects} from 'ol/extent';
-import unRenderFeatures from './unRenderFeatures';
+import convertRenderFeatures from './convertRenderFeatures';
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import LinearRing from 'ol/geom/LinearRing';
@@ -14,8 +14,59 @@ const olParser = new OL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
 
 export default class FeatureExposingMVTSource extends olSourceVectorTile {
-    getFeaturesIntersectingExtent (extent, convertFeatures) {
-        const featuresById = new Map();
+    getFeaturePropsInExtent (extent) {
+        const propertiesById = new Map();
+
+        this._applyInExtent(extent, feature => {
+            const id = feature.get(oskariIdKey);
+            if (propertiesById.has(id)) {
+                return;
+            }
+            propertiesById.set(id, feature.getProperties());
+        });
+
+        return Array.from(propertiesById.values());
+    }
+
+    getPropsIntersectingGeom (geom) {
+        const geomFilter = reader.read(geom);
+        const envelope = geomFilter.getEnvelopeInternal();
+        const propertiesById = new Map();
+
+        let currentTile;
+        let currentFeatures = [];
+        const checkTileChanged = (tile) => {
+            if (!currentTile) {
+                currentTile = tile;
+                return;
+            }
+            if (currentTile === tile) {
+                return;
+            }
+            convertRenderFeatures(currentFeatures, currentTile, this).forEach(converted => {
+                const convertedGeom = olParser.read(converted.getGeometry());
+                if (RelateOp.relate(geomFilter, convertedGeom).isIntersects()) {
+                    propertiesById.set(converted.get(oskariIdKey), converted.getProperties());
+                }
+            });
+            currentTile = tile;
+            currentFeatures = [];
+        };
+
+        this._applyInExtent([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()], (feature, tile) => {
+            const id = feature.get(oskariIdKey);
+            if (propertiesById.has(id)) {
+                return;
+            }
+            checkTileChanged(tile);
+
+            currentFeatures.push(feature);
+        });
+        checkTileChanged();
+        return Array.from(propertiesById.values());
+    }
+
+    _applyInExtent (extent, continuation) {
         Object.values(this.sourceTiles_)
             .filter(tile => {
                 const tileExtent = this._getTileExtent(tile);
@@ -26,30 +77,14 @@ export default class FeatureExposingMVTSource extends olSourceVectorTile {
                 if (!features) {
                     return;
                 }
-                let matchingFeatures = features
-                    .filter(f => intersects(f.getExtent(), extent));
-
-                // TODO: optimize
-                if (convertFeatures) {
-                    matchingFeatures = unRenderFeatures(matchingFeatures, tile, this);
-                }
-
-                matchingFeatures
-                    .forEach(f => {
-                        featuresById.set(f.get(oskariIdKey), f);
+                features
+                    .forEach(feature => {
+                        if (!intersects(feature.getExtent(), extent)) {
+                            return;
+                        }
+                        continuation(feature, tile);
                     });
             });
-
-        return Array.from(featuresById.values());
-    }
-
-    getFeaturesIntersectingGeom (geom) {
-        const geomFilter = reader.read(geom);
-        const envelope = geomFilter.getEnvelopeInternal();
-        const extentMatch = this.getFeaturesIntersectingExtent([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()], true);
-        return extentMatch.filter(f => {
-            return RelateOp.relate(geomFilter, olParser.read(f.getGeometry())).isIntersects();
-        });
     }
 
     _getTileExtent (tile) {

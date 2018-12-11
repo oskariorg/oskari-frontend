@@ -17,7 +17,7 @@ import {getHeight} from 'ol/extent';
 
 const tmpTransform = createTransform();
 
-export default function unRenderFeatures (inputFeatures, tile, source) {
+export default function convertRenderFeatures (inputFeatures, tile, source) {
     const viewProjection = source.getProjection();
     if (!inputFeatures.length) {
         return [];

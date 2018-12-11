@@ -1,6 +1,6 @@
 import {normalStyle, selectedStyle} from './components/defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
-import {oskariIdKey, getFieldsAndProperties} from './components/FeatureUtil';
+import {oskariIdKey, getFieldsAndPropsArrays} from './components/FeatureUtil';
 import ReqEventHandler from './components/ReqEventHandler';
 import TileState from 'ol/TileState';
 import FeatureExposingMVTSource from './components/FeatureExposingMVTSource';
@@ -91,8 +91,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
         }
         updateLayerProperties (layer, source = this._sourceFromLayer(layer)) {
             const {left, bottom, right, top} = this.getSandbox().getMap().getBbox();
-            const features = source.getFeaturesIntersectingExtent([left, bottom, right, top]);
-            const {fields, properties} = getFieldsAndProperties(features);
+            const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
+            const {fields, properties} = getFieldsAndPropsArrays(propsList);
             layer.setFields(fields);
             layer.setActiveFeatures(properties);
             this.reqEventHandler.notify('WFSPropertiesEvent', layer, [/** TODO locales */], fields);

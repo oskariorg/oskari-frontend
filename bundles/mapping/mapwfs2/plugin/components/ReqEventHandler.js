@@ -1,5 +1,5 @@
 import olLayerVectorTile from 'ol/layer/VectorTile';
-import {propertiesFromFeature, oskariIdKey} from './FeatureUtil';
+import {propsAsArray, oskariIdKey} from './FeatureUtil';
 
 export default class ReqEventHandler {
     constructor (sandbox) {
@@ -35,7 +35,7 @@ export default class ReqEventHandler {
                 } else {
                     this.notify('GetInfoResultEvent', {
                         layerId: layer.getId(),
-                        features: [propertiesFromFeature(ftrAndLyr.feature)],
+                        features: [propsAsArray(ftrAndLyr.feature.getProperties())],
                         lonlat: event.getLonLat()
                     });
                 }
@@ -57,8 +57,8 @@ export default class ReqEventHandler {
                 targetLayers.forEach(layerId => {
                     const layer = getSelectedLayer(layerId);
                     const OLLayer = plugin.getOLMapLayers(layer)[0];
-                    const intersecting = OLLayer.getSource().getFeaturesIntersectingGeom(filterFeature.geometry);
-                    modifySelection(layer, intersecting.map(f => f.get(oskariIdKey)), keepPrevious);
+                    const propsList = OLLayer.getSource().getPropsIntersectingGeom(filterFeature.geometry);
+                    modifySelection(layer, propsList.map(props => props[oskariIdKey]), keepPrevious);
                 });
             }
         };
