@@ -8,6 +8,7 @@ import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import * as olGeom from 'ol/geom';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
+import {fromKey} from 'ol/tilecoord';
 
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
@@ -67,11 +68,18 @@ export default class FeatureExposingMVTSource extends olSourceVectorTile {
     }
 
     _applyInExtent (extent, continuation) {
+        const key = this.tileCache.peekFirstKey();
+        const z = fromKey(key)[0]; // most recent zoom level in cache
+
         Object.values(this.sourceTiles_)
             .filter(tile => {
-                const tileExtent = this._getTileExtent(tile);
+                const tileCoord = tile.getTileCoord();
+                if (z !== tileCoord[0]) {
+                    return; // wrong zoom level
+                }
+                const tileExtent = this._getTileExtent(tileCoord);
                 if (!intersects(tileExtent, extent)) {
-                    return;
+                    return; // tile not in extent
                 }
                 const features = tile.getFeatures();
                 if (!features) {
@@ -80,14 +88,14 @@ export default class FeatureExposingMVTSource extends olSourceVectorTile {
                 features
                     .forEach(feature => {
                         if (!intersects(feature.getExtent(), extent)) {
-                            return;
+                            return; // feature not in extent
                         }
                         continuation(feature, tile);
                     });
             });
     }
 
-    _getTileExtent (tile) {
-        return this.getTileGrid().getTileCoordExtent(tile.getTileCoord());
+    _getTileExtent (tileCoord) {
+        return this.getTileGrid().getTileCoordExtent(tileCoord);
     }
 }
