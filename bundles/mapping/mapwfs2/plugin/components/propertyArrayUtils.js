@@ -1,6 +1,6 @@
-export const oskariIdKey = '_oid';
+export const WFS_ID_KEY = '_oid';
 
-const hiddenProps = new Set(['layer', oskariIdKey]);
+const hiddenProps = new Set(['layer', WFS_ID_KEY]);
 
 function sortedFieldsFromProps (properties) {
     const fields = Object.keys(properties).filter(key => !hiddenProps.has(key));

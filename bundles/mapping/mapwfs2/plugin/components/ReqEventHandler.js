@@ -1,5 +1,5 @@
 import olLayerVectorTile from 'ol/layer/VectorTile';
-import {propsAsArray, oskariIdKey} from './FeatureUtil';
+import {propsAsArray, WFS_ID_KEY} from './propertyArrayUtils';
 
 export default class ReqEventHandler {
     constructor (sandbox) {
@@ -31,7 +31,7 @@ export default class ReqEventHandler {
                 }
                 const keepPrevious = event.getParams().ctrlKeyDown;
                 if (keepPrevious) {
-                    modifySelection(layer, [ftrAndLyr.feature.get(oskariIdKey)], keepPrevious);
+                    modifySelection(layer, [ftrAndLyr.feature.get(WFS_ID_KEY)], keepPrevious);
                 } else {
                     this.notify('GetInfoResultEvent', {
                         layerId: layer.getId(),
@@ -58,7 +58,7 @@ export default class ReqEventHandler {
                     const layer = getSelectedLayer(layerId);
                     const OLLayer = plugin.getOLMapLayers(layer)[0];
                     const propsList = OLLayer.getSource().getPropsIntersectingGeom(filterFeature.geometry);
-                    modifySelection(layer, propsList.map(props => props[oskariIdKey]), keepPrevious);
+                    modifySelection(layer, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
                 });
             }
         };

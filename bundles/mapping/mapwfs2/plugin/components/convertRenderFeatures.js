@@ -17,6 +17,14 @@ import {getHeight} from 'ol/extent';
 
 const tmpTransform = createTransform();
 
+/**
+ * @function convertRenderFeatures
+ * Creates Feature instances from RenderFeature instances. Uses OL internal APIs.
+ * @param {ol/render/Feature~RenderFeature[]} inputFeatures
+ * @param {ol/VectorTile} tile
+ * @param {ol/source/VectorTile} source
+ * @return {ol/Feature[]}
+ */
 export default function convertRenderFeatures (inputFeatures, tile, source) {
     const viewProjection = source.getProjection();
     if (!inputFeatures.length) {

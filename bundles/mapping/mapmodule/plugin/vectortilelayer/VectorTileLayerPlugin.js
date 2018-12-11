@@ -66,6 +66,10 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             }
         };
     }
+    /**
+     * @private @method _updateLayerStyle
+     * @param {Oskari.mapframework.mapmodule.VectorTileLayer} oskariLayer
+     */
     _updateLayerStyle (oskariLayer) {
         const olLayers = this.getOLMapLayers(oskariLayer);
 
