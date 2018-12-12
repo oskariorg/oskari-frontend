@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
     this._options = {
         colors: ['#555', '#555']
     };
+    this.resizable = false;
     this.loc = Oskari.getMsg.bind(null, 'DivManazer');
     this.noValStr = this.loc('graph.noValue');
 }, {
@@ -484,13 +485,15 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         if (options) {
             this._options = options;
         }
-        this._options.width = this.defaultWidth;
+        if (!this.resizable) {
+            this._options.width = this.defaultWidth;
+        }
         // Clear previous graphs
         this.clear();
         if (this.chartType === 'barchart') {
-            chart = this.createBarChart(this.data);
+            chart = this.createBarChart(this.data, options);
         } else if (this.chartType === 'linechart') {
-            chart = this.createLineChart(this.data);
+            chart = this.createLineChart(this.data, options);
         }
 
         return chart;

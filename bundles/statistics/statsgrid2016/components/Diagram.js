@@ -18,20 +18,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * @method  @public render Render diagram
      * @param  {Object} el jQuery element
      */
-    render: function (el) {
+    render: function (el, options) {
+        var me = this;
+        if (options) {
+            me._chartInstance.resizable = !!options.resizable;
+        }
         if (this.element) {
             // already rendered, just move the element to new el when needed
             if (el !== this.element.parent()) {
                 this.element.detach();
                 el.append(this.element);
             }
+            // update ui if diagram is resizable
+            if (options && options.resizable) {
+                me.updateUI(options);
+            }
             return;
         }
         this.element = this._template.container.clone();
         el.append(this.element);
-        this.updateUI();
+        this.updateUI(options);
     },
-    updateUI: function () {
+    updateUI: function (options) {
         var me = this;
         var el = this.element;
         if (!el) {
@@ -82,6 +90,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                     return formatter.format(val);
                 }
             };
+
+            if (options) {
+                chartOpts.width = options.width - 49;
+                jQuery(el).closest('.oskari-flyoutcontentcontainer').css('max-height', 'none').height(options.height - 57);
+            }
 
             if (!me._chartElement) {
                 me._chartElement = me.createBarCharts(data, chartOpts);

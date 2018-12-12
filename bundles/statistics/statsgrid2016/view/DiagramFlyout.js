@@ -17,6 +17,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
             me.scroll();
         }
     });
+    this.on('resize', function (options) {
+        me._diagram.render(me.getElement().find('.chart'), options);
+    });
 }, {
     _template: {
         container: jQuery('<div class="stats-diagram-holder"><div class="chart-controls"></div><div class="oskari-datacharts"> <div class="chart"> <div class="axisLabel"></div> </div></div></div>')
@@ -57,7 +60,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         this._diagram.createDataSortOption(el.find('.chart-controls .dropdown'));
         // this.loc.datacharts.descColor
         // Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu');
-        this._diagram.render(el.find('.chart'));
+        var options = {resizable: this.isResizable()};
+        this._diagram.render(el.find('.chart'), options);
         this.setElement(el);
     }
 }, {
