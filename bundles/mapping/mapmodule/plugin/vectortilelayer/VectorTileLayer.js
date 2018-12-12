@@ -56,6 +56,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
             }
             return this.getExternalStyleDef(this._currentStyle.getName());
         },
+        /**
+         * @method getTileGrid
+         * @return {Object} tile grid configuration
+         */
         getTileGrid () {
             return this._options.tileGrid;
         }

@@ -62,13 +62,20 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         return {
             AfterChangeMapLayerStyleEvent (event) {
                 const oskariLayer = event.getMapLayer();
-                const olLayers = this.getOLMapLayers(oskariLayer);
-
-                if (olLayers && olLayers.length > 0) {
-                    olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
-                }
+                this._updateLayerStyle(oskariLayer);
             }
         };
+    }
+    /**
+     * @private @method _updateLayerStyle
+     * @param {Oskari.mapframework.mapmodule.VectorTileLayer} oskariLayer
+     */
+    _updateLayerStyle (oskariLayer) {
+        const olLayers = this.getOLMapLayers(oskariLayer);
+
+        if (olLayers && olLayers.length > 0) {
+            olLayers[0].setStyle(this._getLayerCurrentStyleFunction(oskariLayer));
+        }
     }
     /**
      * @private @method _getLayerCurrentStyleFunction
@@ -143,9 +150,9 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         const sourceOpts = {
             format: new olFormatMVT(),
-            url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()),
-            attributions: this.getAttributions(layer),
-            tileUrlFunction: this._getTileUrlFunction(layer)
+            url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()), // projection code
+            projection: this.getMap().getView().getProjection(), // OL projection object
+            attributions: this.getAttributions(layer)
         };
         const tileGrid = layer.getTileGrid();
         if (tileGrid) {
@@ -155,7 +162,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             renderMode: 'hybrid',
-            source: new olSourceVectorTile(sourceOpts)
+            source: this.createSource(layer, sourceOpts)
         });
         // Set oskari properties for vector feature service functionalities.
         const silent = true;
@@ -167,12 +174,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
         vectorTileLayer.setStyle(this._getLayerCurrentStyleFunction(layer));
     }
-    /**
-     * @private @method _getTileUrlFunction
-     * @param {Oskari.mapframework.domain.VectorTileLayer} layer
-     * Override in subclass
-     */
-    _getTileUrlFunction (layer) {
+    createSource (layer, options) {
+        return new olSourceVectorTile(options);
     }
     /**
      * @method onMapHover VectorFeatureService handler impl method
