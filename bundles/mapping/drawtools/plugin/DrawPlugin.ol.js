@@ -516,11 +516,13 @@ Oskari.clazz.define(
 
             switch (me.getCurrentDrawShape()) {
             case 'Point':
+            case 'LineString':
                 if (requestedBuffer > 0) {
                     me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
                 break;
             case 'Circle':
+            case 'Square':
                 // Do common stuff
                 // buffer is used for circle's radius
                 if (requestedBuffer > 0) {
@@ -528,11 +530,6 @@ Oskari.clazz.define(
                     bufferedFeatures = features; // or = [];
                 } else {
                     features = me.getCircleAsPolygonFeature(features);
-                }
-                break;
-            case 'LineString':
-                if (requestedBuffer > 0) {
-                    me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
                 break;
             }
