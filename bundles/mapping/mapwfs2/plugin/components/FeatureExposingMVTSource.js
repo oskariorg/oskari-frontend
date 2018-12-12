@@ -1,14 +1,16 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
-import {WFS_ID_KEY} from './propertyArrayUtils';
 import {intersects} from 'ol/extent';
-import convertRenderFeatures from './convertRenderFeatures';
-import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
-import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import * as olGeom from 'ol/geom';
+import {fromKey as tileCoordFromKey} from 'ol/tilecoord';
+
+import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
+import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
-import {fromKey} from 'ol/tilecoord';
+
+import {WFS_ID_KEY} from './propertyArrayUtils';
+import convertRenderFeatures from './convertRenderFeatures';
 
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
@@ -28,12 +30,10 @@ export default class FeatureExposingMVTSource extends olSourceVectorTile {
     getFeaturePropsInExtent (extent) {
         const propertiesById = new Map();
 
-        this._applyInExtent(extent, feature => {
-            const id = feature.get(WFS_ID_KEY);
-            if (propertiesById.has(id)) {
-                return;
-            }
-            propertiesById.set(id, feature.getProperties());
+        this._applyInExtent(extent, propertiesById, (features, tile) => {
+            features.forEach((feature) => {
+                propertiesById.set(feature.get(WFS_ID_KEY), feature.getProperties());
+            });
         });
 
         return Array.from(propertiesById.values());
@@ -49,50 +49,30 @@ export default class FeatureExposingMVTSource extends olSourceVectorTile {
         const envelope = geomFilter.getEnvelopeInternal();
         const propertiesById = new Map();
 
-        let currentTile;
-        let currentFeatures = [];
-        const checkTileChanged = (tile) => {
-            if (!currentTile) {
-                currentTile = tile;
-                return;
-            }
-            if (currentTile === tile) {
-                return;
-            }
-            convertRenderFeatures(currentFeatures, currentTile, this).forEach(converted => {
+        this._applyInExtent([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()], propertiesById, (features, tile) => {
+            convertRenderFeatures(features, tile, this).forEach(converted => {
                 const convertedGeom = olParser.read(converted.getGeometry());
                 if (RelateOp.relate(geomFilter, convertedGeom).isIntersects()) {
                     propertiesById.set(converted.get(WFS_ID_KEY), converted.getProperties());
                 }
             });
-            currentTile = tile;
-            currentFeatures = [];
-        };
-
-        this._applyInExtent([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()], (feature, tile) => {
-            const id = feature.get(WFS_ID_KEY);
-            if (propertiesById.has(id)) {
-                return;
-            }
-            checkTileChanged(tile);
-
-            currentFeatures.push(feature);
         });
-        checkTileChanged();
+
         return Array.from(propertiesById.values());
     }
     /**
      * @private @method _applyInExtent
-     * Calls given function for every feature whose extent intersects with the given extent
+     * Calls given function for every tile that has features whose extent intersects with the given extent
      * @param {ol/extent | Number[]} extent requested extent [minx, miny, maxx, maxy]
-     * @param {Function} continuation called with matching feature as argument
+     * @param {Map} skipIds If feature id is found in this map, it is skipped
+     * @param {Function} continuation called with matching features array & tile as arguments
      */
-    _applyInExtent (extent, continuation) {
+    _applyInExtent (extent, skipIds, continuation) {
         const key = this.tileCache.peekFirstKey();
-        const z = fromKey(key)[0]; // most recent zoom level in cache
+        const z = tileCoordFromKey(key)[0]; // most recent zoom level in cache
 
         Object.values(this.sourceTiles_)
-            .filter(tile => {
+            .forEach(tile => {
                 const tileCoord = tile.getTileCoord();
                 if (z !== tileCoord[0]) {
                     return; // wrong zoom level
@@ -105,13 +85,17 @@ export default class FeatureExposingMVTSource extends olSourceVectorTile {
                 if (!features) {
                     return;
                 }
-                features
-                    .forEach(feature => {
-                        if (!intersects(feature.getExtent(), extent)) {
-                            return; // feature not in extent
-                        }
-                        continuation(feature, tile);
-                    });
+                const matching = features.filter(feature => {
+                    const id = feature.get(WFS_ID_KEY);
+                    if (skipIds.has(id)) {
+                        return false;
+                    }
+                    return intersects(feature.getExtent(), extent);
+                });
+                if (!matching.length) {
+                    return;
+                }
+                continuation(matching, tile);
             });
     }
 }
