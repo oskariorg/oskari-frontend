@@ -513,7 +513,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     },
                     stroke: {
                         color: '#ffffff',
-                        width: 1
+                        width: 3
                     }
                 }
             };

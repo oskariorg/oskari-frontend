@@ -25,7 +25,7 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "expose" : "org.cometd",
-            "src" : "../../../../libraries/cometd/comp.js"
+            "src" : "../../../../libraries/cometd/jquery.cometd4.comp.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"

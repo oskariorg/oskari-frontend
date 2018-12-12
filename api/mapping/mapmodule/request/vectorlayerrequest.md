@@ -49,7 +49,7 @@ Options object
     </li>
 </ul>
 
-Hover options describes how to visualize features on hover and what kind of tooltip should be shown.
+Hover options describes how to visualize features on hover and what kind of tooltip should be shown. Note that features isn't hovered while drawing is active (DrawTools).
 ```javascript
 hover: {
     // Apply hover style only on features having property "class" with value "building"

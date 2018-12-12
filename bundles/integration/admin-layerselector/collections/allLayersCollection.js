@@ -5,6 +5,9 @@
 
                 // Reference to this collection's model.
                 model: LayerModel,
+                comparator: function (layer) {
+                    return layer.getName(Oskari.getLang());
+                },
 
                 /**
                  * Initialize
