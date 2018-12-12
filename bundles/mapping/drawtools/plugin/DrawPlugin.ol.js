@@ -516,6 +516,7 @@ Oskari.clazz.define(
 
             switch (me.getCurrentDrawShape()) {
             case 'Point':
+            case 'LineString':
                 if (requestedBuffer > 0) {
                     me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
@@ -529,11 +530,6 @@ Oskari.clazz.define(
                     bufferedFeatures = features; // or = [];
                 } else {
                     features = me.getCircleAsPolygonFeature(features);
-                }
-                break;
-            case 'LineString':
-                if (requestedBuffer > 0) {
-                    me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
                 break;
             }
