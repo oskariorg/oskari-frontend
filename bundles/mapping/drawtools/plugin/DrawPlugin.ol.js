@@ -521,6 +521,7 @@ Oskari.clazz.define(
                 }
                 break;
             case 'Circle':
+            case 'Square':
                 // Do common stuff
                 // buffer is used for circle's radius
                 if (requestedBuffer > 0) {
