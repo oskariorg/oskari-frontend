@@ -65,7 +65,10 @@ export default function convertRenderFeatures (inputFeatures, tile, source) {
         if (transformer) {
             flatCoordinates = transformer(flatCoordinates.slice());
         }
-
+        /**
+         *  Geometry conversion algorithm adapdted from
+         *  https://github.com/openlayers/openlayers/blob/e426af29c20c7b08ee323b2ee0f78d34b61c4c34/src/ol/format/MVT.js#L186-L211
+         * */
         let geom;
         if (geometryType === GeometryType.POLYGON) {
             const endss = [];
