@@ -521,8 +521,12 @@ Oskari.clazz.define(
                     me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
                 break;
-            case 'Circle':
             case 'Square':
+                features.forEach(function (f) {
+                    me._featuresValidity[f.getId()] = true;
+                });
+                break;
+            case 'Circle':
                 // Do common stuff
                 // buffer is used for circle's radius
                 if (requestedBuffer > 0) {
