@@ -265,6 +265,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             .domain([0, this.data.length])
             .range(colors);
     },
+    setResizable: function (resizable) {
+        this.resizable = resizable;
+    },
+    isResizable: function () {
+        return this.resizable;
+    },
     /**
      * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element
      * @method createBarChart
@@ -485,7 +491,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         if (options) {
             this._options = options;
         }
-        if (!this.resizable) {
+        if (!this.isResizable()) {
             this._options.width = this.defaultWidth;
         }
         // Clear previous graphs

@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
     render: function (el, options) {
         var me = this;
         if (options) {
-            me._chartInstance.resizable = !!options.resizable;
+            me._chartInstance.setResizable(!!options.resizable);
         }
         if (this.element) {
             // already rendered, just move the element to new el when needed
@@ -91,9 +91,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                 }
             };
 
-            if (options) {
-                chartOpts.width = options.width - 49;
-                jQuery(el).closest('.oskari-flyoutcontentcontainer').css('max-height', 'none').height(options.height - 57);
+            if (me._chartInstance.isResizable()) {
+                var dataCharts = jQuery(el).closest('.oskari-datacharts');
+                var additionalWidthOffset = 0;
+                if (options && options.height) {
+                    // height for flyout toolbar, defaults to 57px (.oskari-flyouttoolbar height)
+                    const heightOffset = jQuery(el).closest('.oskari-flyout').find('.oskari-flyouttoolbar:first').height() || 57;
+                    jQuery(el).closest('.oskari-flyoutcontentcontainer').css('max-height', 'none').height(options.height - heightOffset);
+                }
+                if (dataCharts.get(0).scrollHeight > dataCharts.innerHeight()) {
+                    additionalWidthOffset = 17; // 17px for scroll bar
+                }
+                if (options && options.width) {
+                    // helps to calculate container width for chart, defaults to 16px + 16px padding + 17px for scroll bar
+                    const widthOffset = (parseInt(dataCharts.css('padding-left').replace(/[^-\d.]/g, '')) +
+                        parseInt(dataCharts.css('padding-right').replace(/[^-\d.]/g, ''))) +
+                        additionalWidthOffset || 49;
+                    chartOpts.width = options.width - widthOffset;
+                }
             }
 
             if (!me._chartElement) {
