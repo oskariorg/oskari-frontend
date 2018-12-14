@@ -519,17 +519,25 @@ Oskari.clazz.define(
                     }
                 }
                 me.lastSearch = field.getValue();
-
-                me.searchService.doSearch(search, function (data) {
-                    me._showResults(metadataCatalogueContainer, data);
-                }, function (data) {
-                    var key = field.getValue();
-                    if (key === null || key === undefined || key.length === 0) {
-                        me._showError(me.getLocalization('cannot_be_empty'));
-                    } else {
-                        me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
-                    }
+                // Check if any search fields has values, otherwise it's useless to send post request
+                var doSearch = false;
+                jQuery.each(search, function (key, value) {
+                    doSearch = value ? true : doSearch;
                 });
+                if (doSearch) {
+                    me.searchService.doSearch(search, function (data) {
+                        me._showResults(metadataCatalogueContainer, data);
+                    }, function (data) {
+                        var key = field.getValue();
+                        if (key === null || key === undefined || key.length === 0) {
+                            me._showError(me.getLocalization('cannot_be_empty'));
+                        } else {
+                            me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
+                        }
+                    });
+                } else {
+                    me._showError(me.getLocalization('cannot_be_empty'));
+                }
             };
 
             button.setHandler(doMetadataCatalogue);
