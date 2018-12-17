@@ -45,6 +45,21 @@ export default class ReqEventHandler {
                     const layer = getSelectedLayer(layerId);
                     plugin.updateLayerProperties(layer);
                 });
+            },
+            'WFSSetFilter': (event) => {
+                const keepPrevious = Oskari.ctrlKeyDown();
+                const fatureCollection = event.getGeoJson();
+                const filterFeature = fatureCollection.features[0];
+                if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
+                    return;
+                }
+                const targetLayers = plugin.WFSLayerService.isSelectFromAllLayers() ? plugin.getAllLayerIds() : [plugin.WFSLayerService.getTopWFSLayer()];
+                targetLayers.forEach(layerId => {
+                    const layer = getSelectedLayer(layerId);
+                    const OLLayer = plugin.getOLMapLayers(layer)[0];
+                    const propsList = OLLayer.getSource().getPropsIntersectingGeom(filterFeature.geometry);
+                    modifySelection(layer, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
+                });
             }
         };
     }
