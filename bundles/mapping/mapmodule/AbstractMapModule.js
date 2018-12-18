@@ -106,7 +106,9 @@ Oskari.clazz.define(
         me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
-
+        // User location
+        this._locationWatch;
+        this._locationPath;
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
 
@@ -244,6 +246,8 @@ Oskari.clazz.define(
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
+                startUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler', sandbox, this),
+                stopUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
                 mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService)
             };
@@ -252,6 +256,8 @@ Oskari.clazz.define(
             sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.requestHandler('StartUserLocationTrackingRequest', this.requestHandlers.startUserLocationRequestHandler);
+            sandbox.requestHandler('StopUserLocationTrackingRequest', this.requestHandlers.stopUserLocationRequestHandler);
             sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
             sandbox.requestHandler('activate.map.layer', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
@@ -551,20 +557,24 @@ Oskari.clazz.define(
          * @param  {Function} callback function that is called with lon, lat as params on happy case
          * @param  {Object}   options  options for navigator.geolocation.getCurrentPosition()
          */
-        getUserLocation: function (callback, options) {
+        getUserLocation: function (callback, options, errorCB) {
             var me = this;
             var sandbox = me.getSandbox();
             var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
+            var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
             // normalize opts with defaults
             var opts = options || {};
-            if (!opts.hasOwnProperty('maximumAge')) {
-                // don't accept cached position
-                opts.maximumAge = 0;
-            }
-            if (!opts.hasOwnProperty('timeout')) {
-                // timeout after 6 seconds
-                opts.timeout = 6000;
-            }
+            var navigatorOpts = {
+                maximumAge: 0,
+                timeout: 6000,
+                enableHighAccuracy: false
+            };
+            // override defaults with given options
+            Object.keys(navigatorOpts).forEach((key) => {
+                if (opts.hasOwnProperty(key)) {
+                    navigatorOpts[key] = opts[key];
+                }
+            });
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
                     function (position) {
@@ -572,26 +582,78 @@ Oskari.clazz.define(
                         var lonlat = me.transformCoordinates({
                             lon: position.coords.longitude,
                             lat: position.coords.latitude }, 'EPSG:4326');
-                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat, position.coords.accuracy));
+                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat, position.coords.accuracy, null));
                         // notify callback
                         if (typeof callback === 'function') {
-                            callback(lonlat.lon, lonlat.lat);
+                            callback(lonlat.lon, lonlat.lat, position.coords.accuracy);
                         }
                     },
                     function (errors) {
-                        // if users just ignores/closes the browser dialog
-                        // -> error handler won't be called in most browsers
                         me.log.warn('Error getting user location', errors);
-                        // notify callback and event without lonlat to signal failure
-                        sandbox.notifyAll(evtBuilder());
-                        if (typeof callback === 'function') {
-                            callback();
+                        // notify event without position to signal failure
+                        var error = errorCodes[errors.code] || errorCodes[2];
+                        sandbox.notifyAll(evtBuilder(null, null, null, error));
+                        if (typeof errorCB === 'function') {
+                            errorCB(error);
                         }
-                    }, opts
+                    }, navigatorOpts
                 );
+            } else {
+                // browser doesn't support
             }
         },
-        //_getCurrentPosition
+        watchUserLocation: function (successCb, errorCB, options) {
+            var me = this;
+            var sandbox = me.getSandbox();
+            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
+            var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
+            var opts = options || {};
+            // default values
+            var navigatorOpts = {
+                maximumAge: 5000,
+                timeout: 10000,
+                enableHighAccuracy: true
+            };
+            // override defaults with given options
+            Object.keys(navigatorOpts).forEach((key) => {
+                if (opts.hasOwnProperty(key)) {
+                    navigatorOpts[key] = opts[key];
+                }
+            });
+            if (navigator.geolocation) {
+                this._locationWatch = navigator.geolocation.watchPosition(
+                    function (position) {
+                        // transform coordinates from browser projection to current
+                        var pos = me.transformCoordinates({
+                            lon: position.coords.longitude,
+                            lat: position.coords.latitude }, 'EPSG:4326');
+                        pos.accuracy = position.coords.accuracy;
+                        sandbox.notifyAll(evtBuilder(pos.lon, pos.lat, pos.accuracy, null));
+                        // notify callback
+                        if (typeof successCb === 'function') {
+                            successCb(pos);
+                        }
+                    },
+                    function (errors) {
+                        me.log.warn('Error getting user location', errors);
+                        // notify event without position to signal failure
+                        var error = errorCodes[errors.code] || errorCodes[2];
+                        sandbox.notifyAll(evtBuilder(null, null, null, error));
+                        // me.stopUserLocationWatch();
+                        if (typeof errorCB === 'function') {
+                            errorCB(error);
+                        }
+                    }, navigatorOpts
+                );
+            } else {
+                // browser doesn't support
+            }
+        },
+        stopUserLocationWatch: function () {
+            if (navigator.geolocation) {
+                navigator.geolocation.clearWatch(this._locationWatch);
+            }
+        },
         /* --------------- /MAP LOCATION ------------------------ */
 
         /* --------------- MAP ZOOM ------------------------ */
@@ -830,6 +892,24 @@ Oskari.clazz.define(
                 }
             }
             return layerResolutions;
+        },
+        /**
+         * @method zoomToFitMeters
+         * Adjusts zoom to closest level where given metric value fits.
+         * @param {Number} meters that must fit to viewport
+         */
+        zoomToFitMeters: function (meters) {
+            var mapSize = this.getSize();
+            var viewportPx = Math.min(mapSize.height, mapSize.width);
+            var zoom = 0;
+            var reso = this.getResolutionArray();
+            for (var i = reso.length - 1; i > 0; i--) {
+                if (meters < viewportPx * reso[i]) {
+                    zoom = i;
+                    break;
+                }
+            }
+            this.setZoomLevel(zoom);
         },
         /* --------------- /MAP ZOOM ------------------------ */
 

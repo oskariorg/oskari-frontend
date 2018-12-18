@@ -16,6 +16,8 @@ import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
+import {fromCircle} from 'ol/geom/Polygon';
+import olFeature from 'ol/Feature';
 
 import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
 
@@ -376,7 +378,56 @@ export default class MapModule extends AbstractMapModule {
 
         return olExtent.containsCoordinate(extent, lonlatArray);
     }
+    getLocationGeoJSON (position) {
+        const coord = [position.lon, position.lat];
+        const accuracy = position.accuracy;
+        var features = [];
+        features.push(new olFeature({
+            geometry: new olGeom.Point(coord),
+            name: 'location'
+        }));
+        if (accuracy) {
+            features.push(new olFeature({
+                geometry: fromCircle(new olGeom.Circle(coord, accuracy), 50),
+                name: 'accuracy'
+            }));
+        }
+        return this.getGeoJSONFromFeatures(features);
+    }
+    updateLocationPath (coordinate) {
+        if (!Array.isArray(coordinate)) {
+            return;
+        }
 
+        if (!this._locationPath) {
+            this._locationPath = new olGeom.LineString([coordinate]);
+            return null;
+            // or return point
+            // return this.getLocationGeoJSON(coordinate[0], coordinate[1]);
+        }
+        this._locationPath.appendCoordinate(coordinate);
+        return this.getLocationPathGeoJSON();
+    }
+    getLocationPathGeoJSON () {
+        var geom = this._locationPath;
+        if (geom) {
+            var feature = new olFeature({
+                geometry: geom,
+                name: 'path'
+            });
+            return this.getGeoJSONFromFeatures([feature]);
+        }
+        return null;
+    }
+    getLocationPathCoordinates () {
+        if (this._locationPath) {
+            return this._locationPath.getCoordinates();
+        }
+        return [];
+    }
+    clearLocationPath () {
+        this._locationPath = null;
+    }
     /* <------------- / OL3 specific ----------------------------------- */
 
     /* Impl specific - found in ol2 AND ol3 modules
@@ -1112,13 +1163,21 @@ export default class MapModule extends AbstractMapModule {
     }
 
     getGeoJSONGeometryFromOL (feature) {
-        var olGeoJSON = new olFormatGeoJSON();
-        var geojsonStr = olGeoJSON.writeFeature(feature);
-        var geojson = JSON.parse(geojsonStr);
-        if (geojson.geometry) {
-            return geojson.geometry;
+        var geojson = this.getGeoJSONFromFeatures([feature]);
+        if (geojson.features & geojson.features.length > 0) {
+            return geojson.features[0].geometry;
         }
         return null;
+    }
+    /**
+     * @method getGeoJSONFromFeatures
+     * @param {Array] features
+     * @return {Object} geojson FeatureCollection
+     */
+    getGeoJSONFromFeatures (features) {
+        var olGeoJSON = new olFormatGeoJSON();
+        var geojsonStr = olGeoJSON.writeFeatures(features);
+        return JSON.parse(geojsonStr);
     }
 
     getOLGeometryFromGeoJSON (geojson) {
