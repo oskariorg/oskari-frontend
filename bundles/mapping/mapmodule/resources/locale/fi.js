@@ -108,7 +108,14 @@ Oskari.registerLocalization(
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Keskitä kartta omaan sijaintiisi."
+                "tooltip": "Keskitä kartta omaan sijaintiisi.",
+                "error": {
+                    "title": "Virhe paikannuksessa!",
+                    "timeout": "Paikannuksessa kestää odotettua kauemmin...",
+                    "denied": "Sivustolta on estetty paikannus. Salli paikannus ja yritä uudelleen",
+                    "noLocation": "Sijainnin määritys epäonnistui",
+                    "close": "Sulje"
+                }
             }
         },
         "guidedTour": {
