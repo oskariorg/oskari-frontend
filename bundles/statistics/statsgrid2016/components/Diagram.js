@@ -248,14 +248,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * @return colors[] containing colors
      */
     getColorScale: function () {
-        /*
+        var me = this;
         var stateService = this.service.getStateService();
         var activeIndicator = stateService.getActiveIndicator();
         var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+        var currentRegionset = stateService.getRegionset();
+        var classification = {};
+        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, this.service.getIndicatorData(activeIndicator.datasource,
+            activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, currentRegionset, function (err, data) {
+                if (err) {
+                    me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
+                    return;
+                }
+                classification = me.service.getClassificationService().getClassification(data, classificationOpts);
+            }));
         var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        */
-        // TODO use ranges from classification to map colors
-        return ['#555', '#555'];
+        return classification.maxBounds && colors ? {bounds: classification.maxBounds, values: colors} : {bounds: [], values: ['#555', '#555']};
     },
     events: function () {
         var me = this;
