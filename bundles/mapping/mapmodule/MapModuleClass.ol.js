@@ -136,7 +136,8 @@ export default class MapModule extends AbstractMapModule {
                     evt.coordinate[1],
                     true,
                     evt.pixel[0],
-                    evt.pixel[1]
+                    evt.pixel[1],
+                    me.getDrawingMode()
                 );
                 sandbox.notifyAll(hoverEvent);
             }, 1000);
@@ -145,7 +146,8 @@ export default class MapModule extends AbstractMapModule {
                 evt.coordinate[1],
                 false,
                 evt.pixel[0],
-                evt.pixel[1]);
+                evt.pixel[1],
+                me.getDrawingMode());
             sandbox.notifyAll(hoverEvent);
         });
     }

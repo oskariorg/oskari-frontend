@@ -311,6 +311,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
          */
         _onMapHover (event) {
+            // don't hover while drawing
+            if (event.isDrawing()) {
+                return;
+            }
             const { feature, layer } = this._getTopmostFeatureAndLayer(event);
 
             // No feature hits for these layer types. Call hover handlers without feature or layer.

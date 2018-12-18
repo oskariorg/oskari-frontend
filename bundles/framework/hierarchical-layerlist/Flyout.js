@@ -162,8 +162,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @private
          */
         _getLayerGroups: function (groupingMethod) {
-            var me = this,
-                groupList = [];
+            var me = this;
+            var groupList = [];
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
 
@@ -171,6 +171,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var layersCopy = layers.slice(0);
             var notLoadedBackend = {};
 
+            // layers that come in mapfull.config only have a dummy group with no name until layers have been
+            // loaded by the layerselector -  remove such groups from the result
             layersCopy.forEach(function (layer) {
                 var group = layer.getGroups()[0];
                 if (group && isNaN(group.id) && !me.mapLayerService.getAllLayerGroups(group.name)) {

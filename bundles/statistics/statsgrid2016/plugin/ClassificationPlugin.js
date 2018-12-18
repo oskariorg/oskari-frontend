@@ -79,7 +79,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         'data-location'
                     )
                 );
-                this._overflowCheck();
             }
         },
         _createControlElement: function () {
@@ -126,6 +125,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this._isMobileVisible = true;
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
+            this._overflowCheck();
         },
         _makeDraggable: function () {
             this.getElement().draggable();
