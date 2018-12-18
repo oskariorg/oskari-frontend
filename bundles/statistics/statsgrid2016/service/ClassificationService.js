@@ -221,6 +221,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
             this.lastUsedBounds = response.bounds;
+            var maxBounds = [];
+            var values = stats.sorted();
+            var j = 1;
+            for (var i = 0; i < values.length; i++) {
+                if (parseFloat(values[i]) > parseFloat(response.bounds[j])) {
+                    maxBounds.push(values[i]);
+                    j++;
+                }
+            }
+            response.maxBounds = maxBounds;
             return response;
         },
         getPixelForSize: function (index, size, range) {
