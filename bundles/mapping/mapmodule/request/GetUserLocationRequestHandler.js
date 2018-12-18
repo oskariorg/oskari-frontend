@@ -9,25 +9,59 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
 }, {
     handleRequest: function (core, request) {
         this._log.debug('Get user location');
+        var me = this;
         var mapmodule = this.mapmodule;
-        var cb;
-        //var opts = {};
-        // if request.getCenterMap() is truthy: also move map
-        if (request.getCenterMap()) {
-            cb = function (lon, lat) {
-                if (!lon || !lat) {
-                    // error getting location
-                    return;
-                }
-                // move map to coordinates
+        var opts = request.getOptions() || {};
+
+        var succesCb = function (lon, lat, accuracy) {
+            // move map to coordinates
+            if (request.getCenterMap()) {
                 mapmodule.centerMap({ lon: lon, lat: lat }, 6);
-            };
-        }
-        /*if (request.getHighAccuracy() === true) {
-            opts.enableHighAccuracy = true;
-        }*/
-        // call the getUserLocation() function to trigger an event with or without the cb
-        mapmodule.getUserLocation(cb, {enableHighAccuracy: request.getHighAccuracy()});
+                if (opts.enableHighAccuracy === true) {
+                    mapmodule.zoomToFitMeters(accuracy * 4);
+                }
+            }
+            if (opts.addToMap === true) {
+                me._addLocationToMap(lon, lat, accuracy);
+            } else {
+                me._clearLocation();
+            }
+        };
+        var errorCb = function () {
+            me._clearLocation();
+        };
+        mapmodule.getUserLocation(succesCb, opts, errorCb);
+    },
+    _addLocationToMap: function (lon, lat, accuracy) {
+        const pos = {
+            lon: lon,
+            lat: lat,
+            accuracy: accuracy
+        };
+        const features = this.mapmodule.getLocationGeoJSON(pos);
+        const featureStyle = {
+            fill: {
+                color: 'rgba(57, 150, 237, 0.3)'
+            },
+            stroke: {
+                color: 'rgba(38, 112, 181, 0.3)'
+            },
+            image: {
+                radius: 5,
+                fill: {
+                    color: '#2670b5'
+                }
+            }
+        };
+        const layerOptions = {
+            layerId: 'USER_LOCATION_LAYER',
+            clearPrevious: true,
+            featureStyle: featureStyle
+        };
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [features, layerOptions]);
+    },
+    _clearLocation: function () {
+        Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'USER_LOCATION_LAYER']);
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']
