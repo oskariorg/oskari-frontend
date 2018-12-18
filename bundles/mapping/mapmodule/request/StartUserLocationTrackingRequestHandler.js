@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
         mapmodule.stopUserLocationWatch();
 
         var succesCb = function (pos) {
-            console.log(pos);
             // move map to coordinates
             if (opts.centerMap === 'single' && !focused) {
                 focused = true;
