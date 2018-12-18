@@ -282,7 +282,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 if (state.options.length - state.disabled.length === 1) {
                     var enabled = state.options.not(':disabled');
                     select.setValue(enabled.val());
-                    select.element.trigger('change');
                 }
             };
             preselectSingleOption(dsSelect);
