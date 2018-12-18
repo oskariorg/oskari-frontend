@@ -57,7 +57,7 @@ Oskari.clazz.define(
                 }
                 mapmodule.centerMap({ lon: lon, lat: lat }, 6);
                 me._locationIsSet = true;
-            });
+            }, {timeout: 30000});
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin'],
