@@ -36,8 +36,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
                 me._addLocationToMap(pos);
             } else if (opts.addToMap === 'path') {
                 me._addLocationToPath(pos);
-            } else {
-                me._clearLocation();
             }
         };
         var errorCb = function (error) {
