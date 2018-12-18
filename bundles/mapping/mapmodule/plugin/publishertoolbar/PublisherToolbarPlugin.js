@@ -75,14 +75,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
          *
          */
         _initImpl: function () {
-            var me = this,
-                sandbox = me.getSandbox(),
-                gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest',
-                gfiReqBuilder = Oskari.requestBuilder(gfiRn),
-                mapmodule = me.getMapModule(),
-                theme = mapmodule.getTheme(),
-                wantedTheme = (theme === 'dark') ? 'light' : 'dark',
-                themeColours = mapmodule.getThemeColours(wantedTheme);
+            var me = this;
+            var sandbox = me.getSandbox();
+            var gfiRn = 'MapModulePlugin.GetFeatureInfoActivationRequest';
+            var gfiReqBuilder = Oskari.requestBuilder(gfiRn);
+            var mapmodule = me.getMapModule();
+            var theme = mapmodule.getTheme();
+            var wantedTheme = (theme === 'dark') ? 'light' : 'dark';
+            var themeColours = mapmodule.getThemeColours(wantedTheme);
 
             me.template = jQuery(me.templates.main);
 
@@ -100,7 +100,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             prepend: true,
                             sticky: false,
                             callback: function () {
-                                if (sandbox.mapMode !== 'mapPublishMode') {
+                                if (!me._isPublisherActive()) {
                                     var reqBuilder = Oskari.requestBuilder(
                                         'ToolSelectionRequest'
                                     );
@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             tooltip: me._loc.history.next,
                             sticky: false,
                             callback: function () {
-                                if (sandbox.mapMode !== 'mapPublishMode') {
+                                if (!me._isPublisherActive()) {
                                     var reqBuilder = Oskari.requestBuilder(
                                         'ToolSelectionRequest'
                                     );
@@ -132,11 +132,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-line',
                             tooltip: me._loc.measure.line,
-                            sticky: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
-                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
+                            sticky: (!me._isPublisherActive()),
+                            toggleChangeIcon: (!me._isPublisherActive()),
                             activeColour: themeColours.activeColour,
                             callback: function () {
-                                if (sandbox.mapMode !== 'mapPublishMode') {
+                                if (!me._isPublisherActive()) {
                                     if (me.activeTool === 'measureline') {
                                         sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measureline', true]);
                                         me.activeTool = undefined;
@@ -164,11 +164,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                             toolbarid: me.toolbarId,
                             iconCls: 'tool-measure-area',
                             tooltip: me._loc.measure.area,
-                            sticky: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
-                            toggleChangeIcon: (sandbox.mapMode !== 'mapPublishMode') ? true : false,
+                            sticky: (!me._isPublisherActive()),
+                            toggleChangeIcon: (!me._isPublisherActive()),
                             activeColour: themeColours.activeColour,
                             callback: function () {
-                                if (sandbox.mapMode !== 'mapPublishMode') {
+                                if (!me._isPublisherActive()) {
                                     if (me.activeTool === 'measurearea') {
                                         sandbox.postRequestByName('DrawTools.StopDrawingRequest', ['measurearea', true]);
                                         me.activeTool = undefined;
@@ -497,7 +497,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 'bodyBgColour': themeColours.backgroundColour
             });
 
-            if (sandbox.mapMode === 'mapPublishMode') {
+            if (me._isPublisherActive()) {
                 var request,
                     builder = Oskari.requestBuilder('Toolbar.ToolbarRequest');
 
@@ -665,6 +665,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                 }
             }
             return confs;
+        },
+
+        _isPublisherActive: function () {
+            var publisherService = this.getSandbox().getService('Oskari.mapframework.bundle.publisher2.PublisherService');
+            return publisherService && publisherService.getIsActive();
         },
 
         _stopPluginImpl: function (sandbox) {

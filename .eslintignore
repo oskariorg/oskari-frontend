@@ -1,4 +1,3 @@
-webpack/**
 typings/**
 tools/**
 tests/**
@@ -11,11 +10,5 @@ libraries/**
 dist/**
 applications/**
 api/**
-bundles/bundle.js
-bundles/bundle.js.map
-bundles/harava/**
-bundles/liikennevirasto/**
-bundles/lupapiste/**
-bundles/digiroad/**
 bundles/**/locale/*.js
 *.min.js

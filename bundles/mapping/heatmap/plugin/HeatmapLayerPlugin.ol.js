@@ -59,7 +59,7 @@ Oskari.clazz.define(
             var openlayer = new olLayerImage({
                 title: layerIdPrefix + layer.getId(),
                 source: wmsSource,
-                projection: reverseProjection ? reverseProjection : undefined,
+                projection: reverseProjection || undefined,
                 opacity: layer.getOpacity() / 100,
                 visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible()
             });

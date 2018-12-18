@@ -1,3 +1,5 @@
+import SelectList from './SelectList';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
     this.locale = locale;
     this.sb = sandbox;
@@ -49,6 +51,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.container.remove();
         this.container = null;
         this._selections = [];
+        this._regionset = null;
     },
     /**
      * @method  @public  attachTo
@@ -70,6 +73,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.clean();
 
         if (!datasrc || !indId || !indId.length || !indId[0]) {
+            me.trigger('indicator.changed', false);
             return;
         }
         if (!this.regionSelector) {
@@ -95,13 +99,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         this.parentElement.append(cont);
         this.container = cont;
         var seriesSelection = null;
+        var indicators = me.service.getStateService().getIndicators();
         Object.keys(selections).forEach(function (selected, index) {
-            var placeholderText = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
+            var placeholder = (panelLoc.selectionValues[selected] && panelLoc.selectionValues[selected].placeholder) ? panelLoc.selectionValues[selected].placeholder : panelLoc.defaultPlaceholder;
             var label = (locale.parameters[selected]) ? locale.parameters[selected] : !selected.id ? String(selected) : selected.id;
             var options = {
-                placeholder_text: placeholderText
+                searchText: placeholder,
+                placeholder
             };
-
             var dropdown;
             if (me.searchSeries && selections[selected].time) {
                 // create time span select
@@ -120,11 +125,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                     options.multi = true;
                 }
                 var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
-                var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList', selected);
+                var select = new SelectList(selected);
                 dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
                 dropdown.css({width: '205px'});
-                select.adjustChosen();
-                select.selectFirstValue();
+                var previousSelections = [];
+                for (var i in indicators) {
+                    previousSelections.push(indicators[i].selections[selected]);
+                }
+                if (previousSelections.length) {
+                    if (options.multi) {
+                        select.setValue(previousSelections);
+                    } else { // Use the last item in array to set value
+                        select.setValue(previousSelections.slice(-1));
+                    }
+                }
+                if (!select.getValue() || select.getValue().length === 0) {
+                    select.selectFirstValue();
+                }
                 tempSelect.find('.label').append(dropdown);
                 cont.append(tempSelect);
                 me._selections.push(select);
@@ -136,7 +153,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 return iter;
             }
         });
-        var regionSelect = me.regionSelector.create(regionsets);
+        var regionSelect = me.regionSelector.create(regionsets, false);
         me.regionSelector.setWidth(205);
         if (regionsets.length === 1) {
             regionSelect.value(regionsets[0]);
@@ -151,8 +168,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             select.disableOptions(optionsToDisable);
             var state = select.getOptions();
             var enabled = state.options.not(':disabled').first();
-            select.setValue(enabled.val());
-            select.element.trigger('change');
+            regionSelect.value(enabled.val());
         }
 
         me._values = {
@@ -164,7 +180,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
             me._values.seriesId = seriesSelection;
         }
 
-        me.trigger('indicator.changed', regionsets.length > 0);
+        me._selections.forEach(select => {
+            select.getElement().on('change', () => me.trigger('indicator.parameter.changed', me.validateSelections()));
+        });
+        this._regionsets = regionsets;
+        me.trigger('indicator.changed', this.validateSelections());
+    },
+    validateSelections: function () {
+        if (!this._regionsets || this._regionsets.length === 0) {
+            return false;
+        }
+        const selections = this.getValues().selections;
+        const invalid = Object.keys(selections).filter(key => {
+            const val = selections[key];
+            return !val || (Array.isArray(val) && val.length === 0);
+        });
+        return invalid.length === 0;
     },
     getValues: function () {
         var me = this;

@@ -24,7 +24,7 @@ Oskari.clazz.category(
         /**
          * @method _getLinkUuid
          * @private
-         * 
+         *
          * @return {String} current view uuid, if public view. Otherwise returns uuid of system default view with same srs as current view.
          */
         _getLinkUuid: function () {
@@ -176,40 +176,7 @@ Oskari.clazz.category(
                                 me.dialog = null;
                                 return;
                             }
-                            me.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                            me.dialog.onClose(function () {
-                                me.dialog = null;
-                            });
-                            var mapUrlPrefix = me.__getMapUrl();
-                            var linkParams = me.getSandbox().generateMapLinkParameters({});
-
-                            var viewUuid = me._getLinkUuid();
-                            if (!viewUuid) {
-                                var closeBtn = me.dialog.createCloseButton();
-                                me.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
-                                return;
-                            }
-
-                            linkParams += '&uuid=' + viewUuid;
-
-                            // This is kinda ugly...
-                            // Only show marker if there's no markers.
-                            if (linkParams.indexOf('&markers=') === -1) {
-                                linkParams += '&showMarker=true';
-                            }
-                            me.dialog.addClass('no_resize');
-                            var okBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                            okBtn.setTitle(loc.link.ok);
-                            okBtn.addClass('primary');
-                            okBtn.setHandler(function () {
-                                me.dialog.close();
-                                me.getSandbox().postRequestByName('EnableMapKeyboardMovementRequest');
-                            });
-
-                            var linkContent = '<div class="linkcontent">' +
-                                    mapUrlPrefix + linkParams + '</div>';
-                            me.getSandbox().postRequestByName('DisableMapKeyboardMovementRequest');
-                            me.dialog.show(loc.link.title, linkContent, [okBtn]);
+                            me._createMapLinkPopup();
                         }
                     }
                 }
@@ -226,6 +193,91 @@ Oskari.clazz.category(
                     }
                 }
             }
+        },
+        _createMapLinkPopup: function () {
+            var sandbox = Oskari.getSandbox();
+            var loc = this.getLocalization('buttons');
+            var mapUrlPrefix = this.__getMapUrl();
+            var linkParams = sandbox.generateMapLinkParameters({});
+            var viewUuid = this._getLinkUuid();
+            var addMarkerBln = false;
+            var skipInfoBln = true;
+            var content = jQuery('<div class=link-wrapper></div>');
+            var linkContent = jQuery('<div class="link-content"></div>');
+            var options = jQuery('<div class="link-options"></div>');
+            var url;
+
+            this.dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            this.dialog.addClass('oskari-maplink');
+            this.dialog.makeModal();
+            sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
+            var closeBtn = this.dialog.createCloseButton();
+            this.dialog.onClose(() => {
+                sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
+                this.dialog = null;
+            });
+            if (!viewUuid) {
+                this.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
+                return;
+            }
+
+            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
+
+            content.append(linkContent);
+            // checkbox
+            var addMarker = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+            addMarker.setTitle(loc.link.addMarker);
+            addMarker.setChecked(addMarkerBln);
+            addMarker.setHandler(checked => {
+                addMarkerBln = checked;
+                url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+                linkContent.text(url);
+            });
+            options.append(addMarker.getElement());
+
+            if (Oskari.bundle('guidedtour')) {
+                var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                skipInfo.setTitle(loc.link.skipInfo);
+                skipInfo.setChecked(skipInfoBln);
+                skipInfo.setHandler(checked => {
+                    skipInfoBln = checked;
+                    url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+                    linkContent.text(url);
+                });
+                options.append(skipInfo.getElement());
+            }
+            content.append(options);
+            // buttons
+            closeBtn.addClass('primary');
+            var copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            copyBtn.setTitle(loc.link.copy);
+            copyBtn.setHandler(() => {
+                this.copyTextToClipboard(url);
+            });
+            url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+            linkContent.text(url);
+            this.dialog.show(loc.link.title, content, [copyBtn, closeBtn]);
+        },
+        _updateUrl: function (baseUrl, addMarker, skipInfo) {
+            var url = baseUrl;
+            if (addMarker) {
+                url += '&showMarker=true';
+            }
+            if (skipInfo) {
+                url += '&showIntro=false';
+            }
+            return url;
+        },
+        copyTextToClipboard: function (text) {
+            if (typeof text !== 'string') {
+                return;
+            }
+            var input = document.createElement('input');
+            document.body.appendChild(input);
+            input.value = text;
+            input.select();
+            document.execCommand('copy');
+            document.body.removeChild(input);
         },
         /**
          * Returns the map url for link tool

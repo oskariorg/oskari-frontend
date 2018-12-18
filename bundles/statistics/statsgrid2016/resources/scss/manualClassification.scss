@@ -1,0 +1,36 @@
+.manual-class-view {
+    position: relative;
+    svg {
+        .handle {
+            fill: #6baed6;
+            stroke: #4f819e;
+
+            &.selected {
+                fill: #fad500;
+                stroke: #ac9200;
+            }
+        }
+        .guide {
+            fill: #ddd;
+        }
+        .handle-line, .edge path {
+            stroke: rgba(0,0,0, 0.3)
+        }
+        .edge text {
+            fill: #000;
+            font-size: 10px;
+        }
+    }
+    div.input-area {
+        position: absolute;
+        bottom: 13px;
+        left: 0;
+        right: 0;
+        text-align: center;
+
+        input.fail {
+            border-color: #c00;
+            background-color: #faa;
+        }
+    }
+}

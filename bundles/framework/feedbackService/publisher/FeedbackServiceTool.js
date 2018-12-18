@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeedbackServiceTool',
         },
         setEnabled: function (enabled) {
             var me = this;
-            me.state.enabled = (enabled === true) ? true : false;
+            me.state.enabled = (enabled === true);
         }
     }, {
         'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],

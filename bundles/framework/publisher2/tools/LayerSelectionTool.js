@@ -212,9 +212,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      */
         shouldPreselectLayer: function (id) {
             var me = this;
-            var isConfig = (me.data && me.data.configuration) ? true : false;
-            var isPlugins = (isConfig && me.data.configuration.mapfull &&
-            me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins) ? true : false;
+            var isConfig = !!((me.data && me.data.configuration));
+            var isPlugins = !!((isConfig && me.data.configuration.mapfull &&
+            me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins));
             if (isPlugins) {
                 var plugins = me.data.configuration.mapfull.conf.plugins;
                 var toolPlugin = null;
@@ -225,8 +225,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                         break;
                     }
                 }
-                var isPluginConfig = (toolPlugin && toolPlugin.config &&
-                toolPlugin.config.baseLayers) ? true : false;
+                var isPluginConfig = !!((toolPlugin && toolPlugin.config &&
+                toolPlugin.config.baseLayers));
 
                 if (isPluginConfig) {
                     var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);

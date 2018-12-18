@@ -103,7 +103,7 @@ Oskari.clazz.define(
                     url: _layer.getLayerUrl(),
                     params: defaultParams,
                     crossOrigin: _layer.getAttributes('crossOrigin'),
-                    projection: reverseProjection ? reverseProjection : undefined
+                    projection: reverseProjection || undefined
                 };
                 if (layerOptions.singleTile === true) {
                     sourceImpl = new OskariImageWMS(sourceOpts);

@@ -604,12 +604,10 @@ Oskari.clazz.define(
                 me._bindUIEvents(div);
             }
 
-            var resourcesPath = this.getMapModule().getImageUrl(),
-                imgPath = resourcesPath + '/mapping/mapmodule/resources/images/',
-                styleName = style.val,
-                bgLeft = imgPath + 'search-tool-' + styleName + '_01.png',
-                bgMiddle = imgPath + 'search-tool-' + styleName + '_02.png',
-                bgRight = imgPath + 'search-tool-' + styleName + '_03.png',
+            var styleName = style.val,
+                bgLeft = this.getMapModule().getImageUrl('search-tool-' + styleName + '_01.png'),
+                bgMiddle = this.getMapModule().getImageUrl('search-tool-' + styleName + '_02.png'),
+                bgRight = this.getMapModule().getImageUrl('search-tool-' + styleName + '_03.png'),
                 left = div.find('div.search-left'),
                 middle = div.find('div.search-middle'),
                 right = div.find('div.search-right'),

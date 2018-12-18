@@ -174,6 +174,8 @@ Oskari.clazz.define(
             // creating layer for drawing (if layer not already added)
             if (!me.getCurrentDrawLayer()) {
                 me.addVectorLayer(me.getCurrentLayerId());
+            } else {
+                me.getCurrentDrawLayer().setStyle(me._styles.draw);
             }
 
             // always assign layerId for functionality id
@@ -514,9 +516,15 @@ Oskari.clazz.define(
 
             switch (me.getCurrentDrawShape()) {
             case 'Point':
+            case 'LineString':
                 if (requestedBuffer > 0) {
                     me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
+                break;
+            case 'Square':
+                features.forEach(function (f) {
+                    me._featuresValidity[f.getId()] = true;
+                });
                 break;
             case 'Circle':
                 // Do common stuff
@@ -526,11 +534,6 @@ Oskari.clazz.define(
                     bufferedFeatures = features; // or = [];
                 } else {
                     features = me.getCircleAsPolygonFeature(features);
-                }
-                break;
-            case 'LineString':
-                if (requestedBuffer > 0) {
-                    me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
                 break;
             }
@@ -961,9 +964,9 @@ Oskari.clazz.define(
                 if (geom instanceof olGeom.Polygon) {
                     area = mapmodule.getGeomArea(geom);
                     if (area < 10000) {
-                        area = area.toFixed(0) + ' m<sup>2</sup>';
+                        area = area.toFixed(0) + ' m&sup2;';
                     } else if (area > 1000000) {
-                        area = (area / 1000000).toFixed(2) + ' km<sup>2</sup>';
+                        area = (area / 1000000).toFixed(2) + ' km&sup2;';
                     } else {
                         area = (area / 10000).toFixed(2) + ' ha';
                     }

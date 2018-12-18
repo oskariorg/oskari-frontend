@@ -224,8 +224,10 @@ Oskari.registerLocalization(
             "layerlist_title": "Kartlager som kan inbäddas",
             "layerlist_empty": "Valda kartlager kan inte publiceras i en inbäddad karta. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "layerlist_denied": "Kartlagret kan inte publiceras i en inbäddad karta.",
-            "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
+            "denied_tooltip": "Kartdataproducenterna har inte gett publiceringstillstånd till dessa material i andra webbtjänster eller denna kartlager kan inte visas med den valda kartprojektionen. Kontrollera rätten att publicera i menyn \"Valda Kartlager\" innan du börjar skapa kartan.",
             "myPlacesDisclaimer": "Obs! Du publicerar ditt eget kartlager.",
+            "noRights": "inget tillstånd",
+            "unsupportedProjection": "ostödd kartprojektion",
             "buttons": {
                 "continue": "Fortsätt",
                 "continueAndAccept": "Godkänn användningsvillkor och fortsätt",

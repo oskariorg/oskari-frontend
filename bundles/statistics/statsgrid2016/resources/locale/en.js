@@ -69,7 +69,7 @@ Oskari.registerLocalization({
                 'title': 'AREAL DIVISION',
                 'info': 'Redefine areal division for data from dropdown list'
             },
-            'source': 'Data',
+            'source': 'Indicator',
             'orderBy': 'Sort',
             'orderByAscending': 'Sort ascending',
             'orderByDescending': 'Sort descending',
@@ -96,6 +96,7 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Gender',
             'year': 'Year',
+            'Vuosi': 'Year',
             'regionset': 'Regional division',
             'from': 'from',
             'to': 'to'
@@ -112,7 +113,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Natural intervals',
                 'quantile': 'Quantiles',
-                'equal': 'Equal intervals'
+                'equal': 'Equal intervals',
+                'manual': 'Manual classification'
             },
             'manual': 'Manual interval classification',
             'manualPlaceholder': 'Separate values with commas.',
@@ -270,6 +272,14 @@ Oskari.registerLocalization({
             'title': 'Indicators',
             'removeAll': 'Remove all',
             'emptyMsg': 'No selected indicators'
+        },
+        'sumo': {
+            'placeholder': 'Select Here',
+            'captionFormat': '{0} selected',
+            'captionFormatAllSelected': 'All {0} selected!',
+            'searchText': 'Search...',
+            'noMatch': 'No results found matching "{0}"',
+            'locale': ['OK', 'Cancel', 'Select All']
         }
     }
 });

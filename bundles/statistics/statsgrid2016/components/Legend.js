@@ -40,7 +40,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
     //   Legend
     //
     // Alternatively note about no indicator selected
-    render: function (el) {
+    render: function (el, event) {
         if (this._renderState.inProgress) {
             // handle render being called multiple times in quick succession
             // previous render needs to end before repaint since we are doing async stuff
@@ -70,6 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         if (!activeIndicator) {
             container.append(this.__templates.error({ msg: this.locale('legend.noActive') }));
             me._renderDone();
+            this.trigger('content-rendered');
             return;
         }
         // render classification options
@@ -88,50 +89,55 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             me._renderDone();
         });
 
-        this._createLegend(activeIndicator, function (legendUI, classificationOpts) {
-            var headerContainer = container.find('.active-header');
-            var legendContainer = container.find('.active-legend');
-            headerContainer.empty();
-            legendContainer.empty();
-            container.find('.legend-noactive').empty();
-            // create inidicator dropdown if we have more than one indicator
-            var hasMultiple = me.service.getStateService().getIndicators().length > 1;
+        if (event && event.getName() === 'StatsGrid.ActiveIndicatorChangedEvent') {
+            // Call _createLegend only when active indicator has changed
+            // Otherwise this ends up being called for every event bound (and would go through every indicator falsely as active indicator)
+            this._createLegend(activeIndicator, function (legendUI, classificationOpts) {
+                var headerContainer = container.find('.active-header');
+                var legendContainer = container.find('.active-legend');
+                headerContainer.empty();
+                legendContainer.empty();
+                container.find('.legend-noactive').empty();
+                // create inidicator dropdown if we have more than one indicator
+                var hasMultiple = me.service.getStateService().getIndicators().length > 1;
 
-            if (hasMultiple) {
-                var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
-                indicatorMenu.render(headerContainer);
-                indicatorMenu.setWidth('94%');
-                headerContainer.addClass('multi-select-legend');
-            } else {
-                headerContainer.removeClass('multi-select-legend');
-            }
-            me._getLabels(activeIndicator, function (labels) {
                 if (hasMultiple) {
-                    headerContainer.attr('data-selected-indicator', labels.label);
+                    var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
+                    indicatorMenu.render(headerContainer);
+                    indicatorMenu.setWidth('94%');
+                    headerContainer.addClass('multi-select-legend');
+                } else {
+                    headerContainer.removeClass('multi-select-legend');
+                }
+                me._getLabels(activeIndicator, function (labels) {
+                    if (hasMultiple) {
+                        headerContainer.attr('data-selected-indicator', labels.label);
+                        return;
+                    }
+                    var header = me.__templates.activeHeader({
+                        label: labels.label
+                    });
+                    headerContainer.empty();
+                    headerContainer.append(header);
+                });
+
+                if (!classificationOpts) {
+                    // didn't get classification options so not enough data to classify or other error
+                    container.find('.edit-legend').hide();
+                    container.find('.legend-noactive').empty();
+                    legendContainer.empty();
+                    container.append(legendUI);
+                    me._renderDone();
                     return;
                 }
-                var header = me.__templates.activeHeader({
-                    label: labels.label
-                });
-                headerContainer.empty();
-                headerContainer.append(header);
-            });
-
-            if (!classificationOpts) {
-                // didn't get classification options so not enough data to classify or other error
-                container.find('.edit-legend').hide();
-                container.find('.legend-noactive').empty();
-                legendContainer.empty();
-                container.append(legendUI);
-                me._renderDone();
-                return;
-            }
-            var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
-            headerContainer.append(edit);
-            me._createEditClassificationListener();
-            // legend
-            legendContainer.html(legendUI);
-        }); // _createLegend
+                var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
+                headerContainer.append(edit);
+                me._createEditClassificationListener();
+                // legend
+                legendContainer.html(legendUI);
+                me.trigger('content-rendered');
+            }); // _createLegend
+        }
     },
 
     /** **** PRIVATE METHODS ******/
@@ -143,7 +149,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         this._element.find('.edit-legend').on('click', function (event) {
             // toggle accordion
             me._accordion.getPanels().forEach(function (panel) {
-                panel.isOpen() ? panel.close() : panel.open();
+                if (panel.isOpen()) {
+                    panel.close();
+                    me.trigger('edit-legend', false);
+                } else {
+                    panel.open();
+                    me.trigger('edit-legend', true);
+                }
             });
         });
     },
@@ -190,24 +202,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      */
     _createAccordionPanel: function (title) {
         var me = this;
-
-        function _overflowCheck () {
-            var pluginEl = me._element.parent();
-            if (pluginEl.css('position') === 'absolute') {
-                var top = pluginEl.offset().top;
-                var bottom = top + pluginEl.height();
-                var offsetToWindowBottom = jQuery(window).height() - bottom;
-                if (offsetToWindowBottom < 0) {
-                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
-                }
-            }
-        }
-
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
             me._element.find('.edit-legend').addClass('edit-active');
-            _overflowCheck();
         });
         panel.on('close', function () {
             me._setPanelState(panel);
@@ -320,7 +318,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
         me.service.on('StatsGrid.IndicatorEvent', function (event) {
             // if indicator is removed/added - recalculate the source 1/2 etc links
-            me.render();
+            me.render(null, event);
         });
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
@@ -340,12 +338,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                         };
                     });
             }
-            me.render();
+            me.render(null, event);
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             // need to update the legend as data changes when regionset changes
-            me.render();
+            me.render(null, event);
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {

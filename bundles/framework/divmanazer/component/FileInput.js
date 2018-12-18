@@ -20,22 +20,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
 
     this._template = {
         fileBox: _.template('<div class="<%= classes %>"> ' +
-            // '<form method="post" action="" enctype="multipart/form-data" class="box">'+
-                        '<div class="box__input">' +
-                            '<input type="file" class="box__file" accept="<%= allowedFiles %>" />' +
-                            '<label><%= fileupload %>' +
-                                '&nbsp;' +
-                                // '<label for="file" style="cursor: pointer;">' +
-                                '<a href="javascript:void(0);"><%= link %></a>' +
-            // '</label>' +
-                            '</label> ' +
-                        '</div>' +
-                        '<div class="box__uploaded"></div>' +
-            // '<div class="box__uploading"> <%= uploading %>&hellip;</div>'+
-            // '<div class="box__success"><%= success %></div>'+
-            // '<div class="box__error"><%= error %></div>'+
-            // '</form>' +
-                '</div>'),
+            '<div class="box__input">' +
+                '<input type="file" class="box__file" accept="<%= allowedFiles %>" />' +
+                    '<label><%= fileupload %>' +
+                        '&nbsp;<a href="javascript:void(0);"><%= link %></a>' +
+                    '</label> ' +
+            '</div>' +
+            '<div class="box__uploaded"></div>' +
+        '</div>'),
         basicInput: _.template(
             '<div class="<%= classes %>">' +
                 '<input type="file" class="basic__file" accept="<%= allowedFiles %>" <%= allowMultiple %> />' +

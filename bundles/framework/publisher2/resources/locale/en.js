@@ -227,8 +227,10 @@ Oskari.registerLocalization(
             "layerlist_title": "Publishable map layers open in map window:",
             "layerlist_empty": "No publishable map layers are open in the map window. Please check publishable map layers in the Selected Layers menu.",
             "layerlist_denied": "Unpublishable map layers open in map window:",
-            "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing. Please check publishable map layers in the Selected Layers menu.",
+            "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing or the current map projection is unsupported. Please check publishable map layers in the Selected Layers menu.",
             "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
+            "noRights": "no permission",
+            "unsupportedProjection": "unsupported projection",
             "buttons": {
                 "continue": "Continue",
                 "continueAndAccept": "Accept and continue",

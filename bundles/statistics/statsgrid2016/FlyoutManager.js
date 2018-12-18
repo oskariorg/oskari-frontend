@@ -57,6 +57,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             });
             me.flyouts[info.id] = flyout;
             position = position + flyout.getSize().width;
+            if (info.id === 'diagram') {
+                flyout.makeResizable({
+                    minWidth: 630,
+                    minHeight: 400,
+                    handle: '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
+                    scroll: false
+                });
+            }
         });
     },
     open: function (type) {

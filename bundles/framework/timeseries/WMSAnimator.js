@@ -112,6 +112,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 }
                 var request = requestBuilder(this._layer.getId(), true, { 'TIME': newTime });
                 this._sandbox.request(this, request);
+                if (!nextTime && this._doneCallback) {
+                    this._doneCallback();
+                    this._doneCallback = null;
+                }
             }
         },
         /**

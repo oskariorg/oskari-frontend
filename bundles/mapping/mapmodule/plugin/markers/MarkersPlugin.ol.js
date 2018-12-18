@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         this.__layer = undefined;
     }, {
         getDefaultIconUrl: function () {
-            return this.getImagePath() + 'marker.png';
+            return this.getImagePath('marker.png');
         },
         /**
          * @method hasUI
@@ -513,7 +513,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     },
                     stroke: {
                         color: '#ffffff',
-                        width: 1
+                        width: 3
                     }
                 }
             };

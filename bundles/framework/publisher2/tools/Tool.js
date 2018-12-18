@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.Tool',
         groupedSiblings: true,
         /**
         * Initialize tool
-        * Override 
+        * Override
         * @method init
         * @param pdata Publisher data. Includes tools' getValues return values
         * @public

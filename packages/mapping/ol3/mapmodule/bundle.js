@@ -192,6 +192,11 @@ Oskari.clazz.define(
                     "type": "text/css",
                     "src": "../../../../bundles/mapping/mapmodule/resources/scss/scalebar.ol.scss"
                 },
+                // Attribution
+                {
+                    "type": "text/css",
+                    "src": "../../../../bundles/mapping/mapmodule/resources/scss/attribution.ol.scss"
+                },
                 // Markers plugin
                 {
                     "type": "text/javascript",
@@ -333,6 +338,10 @@ Oskari.clazz.define(
                 /**
                  * Vector tiles
                  */ 
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayer.js"
+                },
                 {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"

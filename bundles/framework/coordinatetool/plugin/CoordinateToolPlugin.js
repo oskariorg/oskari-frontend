@@ -621,7 +621,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // XY icon click
             el.off('click');
             el.on('click', function (event) {
-                if (me._sandbox.mapMode !== 'mapPublishMode') {
+                var publisherService = me._sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
+                if (!publisherService || !publisherService.getIsActive()) {
                     me._toggleToolState();
                     event.stopPropagation();
                 }
@@ -685,7 +686,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         },
 
         hasUI: function () {
-            return this._config.noUI ? false : true;
+            return !this._config.noUI;
         },
 
         /**
@@ -699,9 +700,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 conf = me._config;
 
             if (me._latInput && me._lonInput) {
-                var isSupported = (conf && _.isArray(conf.supportedProjections)) ? true : false;
-                var isDifferentProjection = (me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() &&
-                    data.lonlat.lat !== 0 && data.lonlat.lon !== 0) ? true : false;
+                var isSupported = !!((conf && _.isArray(conf.supportedProjections)));
+                var isDifferentProjection = !!((me._projectionSelect && me._projectionSelect.val() !== me.getMapModule().getProjection() &&
+                    data.lonlat.lat !== 0 && data.lonlat.lon !== 0));
                 var lat = parseFloat(data.lonlat.lat);
                 var lon = parseFloat(data.lonlat.lon);
 
@@ -904,7 +905,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             service.getReverseGeocode(
                 // Success callback
                 function (response) {
-                    var hasResponse = (response && response.length > 0) ? true : false;
+                    var hasResponse = !!((response && response.length > 0));
 
                     // type title is not found in locales
                     if (hasResponse && me._reverseGeocodeLabel && locale[response[0].channelId]) {
@@ -1146,7 +1147,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'default');
+            var styleClass = 'toolstyle-' + (style || 'default');
 
             var classList = el.attr('class').split(/\s+/);
             for (var c = 0; c < classList.length; c++) {
@@ -1162,12 +1163,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var loc = me._locale;
             var conf = me._config;
             projection = projection || me._previousProjection || me.getMapModule().getProjection;
-            var showDegrees = (me._mapModule.getProjectionUnits() === 'degrees') ? true : false;
+            var showDegrees = (me._mapModule.getProjectionUnits() === 'degrees');
 
             if (!_.has(conf.projectionShowFormat, projection)) {
                 me._log.debug('Not specified projection format. Used defaults from map projection units.');
             } else {
-                showDegrees = (conf.projectionShowFormat[projection].format === 'degrees') ? true : false;
+                showDegrees = (conf.projectionShowFormat[projection].format === 'degrees');
             }
             if (me._latLabel !== null && me._lonLabel !== null) {
                 if (showDegrees) {
@@ -1191,12 +1192,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var projection = checkedProjection || selectedProjection;
             var conf = me._config;
 
-            var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && conf.projectionShowFormat[projection].format) ? true : false;
-            var isDegrees = ((isProjectionShowConfig && conf.projectionShowFormat[projection].format === 'degrees') || me._mapmodule.getProjectionUnits() === 'degrees') ? true : false;
+            var isProjectionShowConfig = !!((conf.projectionShowFormat && conf.projectionShowFormat[projection] && conf.projectionShowFormat[projection].format));
+            var isDegrees = !!(((isProjectionShowConfig && conf.projectionShowFormat[projection].format === 'degrees') || me._mapmodule.getProjectionUnits() === 'degrees'));
 
-            var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.format === 'string') ? true : false;
+            var isAllProjectionConfig = !!((conf.projectionShowFormat && typeof conf.projectionShowFormat.format === 'string'));
             if (!isProjectionShowConfig && isAllProjectionConfig) {
-                isDegrees = (conf.projectionShowFormat.format === 'degrees') ? true : false;
+                isDegrees = (conf.projectionShowFormat.format === 'degrees');
             }
             return isDegrees;
         },
@@ -1210,11 +1211,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             var conf = me._config;
             var selectedProjection = (me._projectionSelect && me._projectionSelect.val()) ? me._projectionSelect.val() : me.getMapModule().getProjection();
             var projection = checkedProjection || selectedProjection;
-            var isProjectionShowConfig = (conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number') ? true : false;
+            var isProjectionShowConfig = !!((conf.projectionShowFormat && conf.projectionShowFormat[projection] && typeof conf.projectionShowFormat[projection].decimals === 'number'));
 
             var decimals = (isProjectionShowConfig) ? conf.projectionShowFormat[projection].decimals : me._mapmodule.getProjectionDecimals(selectedProjection);
 
-            var isAllProjectionConfig = (conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number') ? true : false;
+            var isAllProjectionConfig = !!((conf.projectionShowFormat && typeof conf.projectionShowFormat.decimals === 'number'));
 
             if (!isProjectionShowConfig && isAllProjectionConfig) {
                 decimals = conf.projectionShowFormat.decimals;

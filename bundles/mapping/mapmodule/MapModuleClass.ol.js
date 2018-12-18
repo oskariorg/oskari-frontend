@@ -54,7 +54,10 @@ export default class MapModule extends AbstractMapModule {
         // by making a MapMoveRequest in application startup
         var controls = olControlDefaults({
             zoom: false,
-            attribution: false,
+            attribution: true,
+            attributionOptions: {
+                collapsible: false
+            },
             rotate: false
         });
         var interactions = olInteractionDefaults({
@@ -131,7 +134,8 @@ export default class MapModule extends AbstractMapModule {
                     evt.coordinate[1],
                     true,
                     evt.pixel[0],
-                    evt.pixel[1]
+                    evt.pixel[1],
+                    me.getDrawingMode()
                 );
                 sandbox.notifyAll(hoverEvent);
             }, 1000);
@@ -140,7 +144,8 @@ export default class MapModule extends AbstractMapModule {
                 evt.coordinate[1],
                 false,
                 evt.pixel[0],
-                evt.pixel[1]);
+                evt.pixel[1],
+                me.getDrawingMode());
             sandbox.notifyAll(hoverEvent);
         });
     }

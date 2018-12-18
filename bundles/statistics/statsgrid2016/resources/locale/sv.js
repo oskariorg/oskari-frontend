@@ -69,7 +69,7 @@ Oskari.registerLocalization({
                 'title': 'OMRÅDESINDELNING',
                 'info': 'Omdefiniera den önskade områdesindelningen från rullgardinsmenyn.'
             },
-            'source': 'Datamängd',
+            'source': 'Indikator',
             'orderBy': 'Sortera',
             'orderByAscending': 'Sortera stigande',
             'orderByDescending': 'Sortera sjunkande',
@@ -93,6 +93,7 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Kön',
             'year': 'År',
+            'Vuosi': 'År',
             'regionset': 'Områdesindelning',
             'from': 'från',
             'to': 'tills'
@@ -109,7 +110,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Naturliga brytpunkter',
                 'quantile': 'Kvantiler',
-                'equal': 'Lika intervall'
+                'equal': 'Lika intervall',
+                'manual': 'Egen klassificering'
             },
             'manual': 'Klassificering för hand',
             'manualPlaceholder': 'Avgränsa tal med kommatecken.',
@@ -268,6 +270,14 @@ Oskari.registerLocalization({
             'title': 'Indikator',
             'removeAll': 'Ta bort alla',
             'emptyMsg': 'Inga valda indikatorer'
+        },
+        'sumo': {
+            'placeholder': 'Välj här',
+            'captionFormat': '{0} valda',
+            'captionFormatAllSelected': 'Alla {0} valda!',
+            'searchText': 'Sök...',
+            'noMatch': 'Inga sökresultat hittades med "{0}"',
+            'locale': ['OK', 'Avbryt', 'Välj alla']
         }
     }
 });

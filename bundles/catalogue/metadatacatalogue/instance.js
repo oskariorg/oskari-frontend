@@ -520,16 +520,25 @@ Oskari.clazz.define(
                 }
                 me.lastSearch = field.getValue();
 
-                me.searchService.doSearch(search, function (data) {
-                    me._showResults(metadataCatalogueContainer, data);
-                }, function (data) {
-                    var key = field.getValue();
-                    if (key === null || key === undefined || key.length === 0) {
-                        me._showError(me.getLocalization('cannot_be_empty'));
-                    } else {
-                        me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
-                    }
+                // Check if any search fields has values, otherwise it's useless to send post request
+                var doSearch = false;
+                jQuery.each(search, function (key, value) {
+                    doSearch = value ? true : doSearch;
                 });
+                if (doSearch) {
+                    me.searchService.doSearch(search, function (data) {
+                        me._showResults(metadataCatalogueContainer, data);
+                    }, function (data) {
+                        var key = field.getValue();
+                        if (key === null || key === undefined || key.length === 0) {
+                            me._showError(me.getLocalization('cannot_be_empty'));
+                        } else {
+                            me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
+                        }
+                    });
+                } else {
+                    me._showError(me.getLocalization('cannot_be_empty'));
+                }
             };
 
             button.setHandler(doMetadataCatalogue);
@@ -984,9 +993,9 @@ Oskari.clazz.define(
 
                     // Include identification
                     var identification = row.identification;
-                    var isIdentificationCode = (identification && identification.code && identification.code.length > 0) ? true : false;
-                    var isIdentificationDate = (identification && identification.date && identification.date.length > 0) ? true : false;
-                    var isUpdateFrequency = (identification && identification.updateFrequency && identification.updateFrequency.length > 0) ? true : false;
+                    var isIdentificationCode = !!((identification && identification.code && identification.code.length > 0));
+                    var isIdentificationDate = !!((identification && identification.date && identification.date.length > 0));
+                    var isUpdateFrequency = !!((identification && identification.updateFrequency && identification.updateFrequency.length > 0));
                     if (isIdentificationCode && isIdentificationDate) {
                         var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
                         if (!locIdentificationCode) {
@@ -1062,7 +1071,7 @@ Oskari.clazz.define(
                                     actionElement.css('margin-right', '6px');
 
                                     // Set action callback
-                                    if (action.callback && typeof action.callback == 'function') {
+                                    if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
                                         callbackElement = actionElement.first();
                                         callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {

@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         // UI text for title
         this.title = title;
         this._visible = true;
+        this._resizable = false;
         this._popup = null;
 
         /* @property container the DIV element */
@@ -46,6 +47,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         isVisible: function () {
             return this._visible;
         },
+        isResizable: function () {
+            return this._resizable;
+        },
         show: function () {
             var me = this;
             if (me.isVisible()) {
@@ -63,7 +67,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             }
             me._popup.hide();
             me._visible = false;
-            suppressEvent = suppressEvent ? suppressEvent : false;
+            suppressEvent = suppressEvent || false;
             if (!suppressEvent) {
                 this.trigger('hide');
             }
@@ -202,6 +206,34 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                     me.bringToTop();
                 }
             });
+        },
+        /**
+         * @method makeResizable
+         * Makes dialog resizable with jQuery
+         * @param opts optional options for resizing
+         */
+        makeResizable: function (opts) {
+            var me = this;
+            opts = opts || {};
+            me.options.resizable = true;
+            me._popup.resizable({
+                minWidth: opts.minWidth || 630,
+                minHeight: opts.minHeight || 400,
+                scroll: !!opts.scroll,
+                handles: opts.handles || 'n,e,s,w,ne,nw,se,sw',
+                handle: opts.handle || '.oskari-flyouttoolbar',
+                start: function () {
+                    // bring this flyout to top when user starts dragging it
+                    me.bringToTop();
+                },
+                stop: function () {
+                    me.options.width = jQuery(this).width();
+                    me.options.height = jQuery(this).height();
+                    me.__render();
+                    me.trigger('resize', me.options);
+                }
+            });
+            this._resizable = true;
         },
         getElement: function () {
             return this._popup;

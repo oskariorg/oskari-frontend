@@ -162,8 +162,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @private
          */
         _getLayerGroups: function (groupingMethod) {
-            var me = this,
-                groupList = [];
+            var me = this;
+            var groupList = [];
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
 
@@ -171,21 +171,23 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var layersCopy = layers.slice(0);
             var notLoadedBackend = {};
 
+            // layers that come in mapfull.config only have a dummy group with no name until layers have been
+            // loaded by the layerselector -  remove such groups from the result
             layersCopy.forEach(function (layer) {
                 var group = layer.getGroups()[0];
-                if (group && isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
-                    if (!notLoadedBackend[group.id]) {
-                        notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
-                            id: group.id,
+                if (group && isNaN(group.id) && !me.mapLayerService.getAllLayerGroups(group.name)) {
+                    if (!notLoadedBackend[group.name]) {
+                        notLoadedBackend[group.name] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
+                            id: group.name,
                             name: {},
                             orderNumber: -1,
                             selectable: true,
                             toolsVisible: false
                         });
-                        notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
+                        notLoadedBackend[group.name].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].getChildren().push({id: layer.getId(), type: 'layer'});
-                    notLoadedBackend[group.id].layersModels.push(layer);
+                    notLoadedBackend[group.name].getChildren().push({id: layer.getId(), type: 'layer'});
+                    notLoadedBackend[group.name].layersModels.push(layer);
                 }
             });
 
