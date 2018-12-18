@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
             var formatter = Oskari.getNumberFormatter(fractionDigits);
             var chartOpts = {
-                colors: me.getColorScale(),
+                colors: me.getColorScale(data),
                 valueRenderer: function (val) {
                     if (typeof val !== 'number') {
                         return null;
@@ -191,7 +191,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             response.data.forEach(function (dataItem) {
                 indicatorData.push({
                     name: dataItem.name,
-                    value: dataItem.values[indicator.hash]
+                    value: dataItem.values[indicator.hash],
+                    id: dataItem.id
                 });
             });
             callback(indicatorData);
@@ -247,21 +248,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * gets the color scale of the mapselection
      * @return colors[] containing colors
      */
-    getColorScale: function () {
+    getColorScale: function (data) {
         var me = this;
+        // Format data for Oskari.statistics.statsgrid.ClassificationService.getClassification
+        var numericData = {};
+        data.forEach(function (entry) {
+            numericData[entry.id] = entry.value;
+        });
         var stateService = this.service.getStateService();
         var activeIndicator = stateService.getActiveIndicator();
         var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
-        var currentRegionset = stateService.getRegionset();
-        var classification = {};
-        this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, this.service.getIndicatorData(activeIndicator.datasource,
-            activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, currentRegionset, function (err, data) {
-                if (err) {
-                    me.log.warn('Error getting indicator data', activeIndicator, currentRegionset);
-                    return;
-                }
-                classification = me.service.getClassificationService().getClassification(data, classificationOpts);
-            }));
+        var classification = me.service.getClassificationService().getClassification(numericData, classificationOpts);
         var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
         return classification.maxBounds && colors ? {bounds: classification.maxBounds, values: colors} : {bounds: [], values: ['#555', '#555']};
     },
