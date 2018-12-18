@@ -221,7 +221,7 @@ Oskari.clazz.category(
                 return;
             }
 
-            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid;
+            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
 
             content.append(linkContent);
             // checkbox
@@ -234,15 +234,18 @@ Oskari.clazz.category(
                 linkContent.text(url);
             });
             options.append(addMarker.getElement());
-            var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-            skipInfo.setTitle(loc.link.skipInfo);
-            skipInfo.setChecked(skipInfoBln);
-            skipInfo.setHandler(checked => {
-                skipInfoBln = checked;
-                url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
-                linkContent.text(url);
-            });
-            options.append(skipInfo.getElement());
+
+            if (Oskari.bundle('guidedtour')) {
+                var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                skipInfo.setTitle(loc.link.skipInfo);
+                skipInfo.setChecked(skipInfoBln);
+                skipInfo.setHandler(checked => {
+                    skipInfoBln = checked;
+                    url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+                    linkContent.text(url);
+                });
+                options.append(skipInfo.getElement());
+            }
             content.append(options);
             // buttons
             closeBtn.addClass('primary');
