@@ -340,6 +340,10 @@ Oskari.clazz.define(
                  */ 
                 {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayer.js"
+                },
+                {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"
                 },
                 /**
