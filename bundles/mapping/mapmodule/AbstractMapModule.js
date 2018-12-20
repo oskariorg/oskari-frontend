@@ -107,8 +107,8 @@ Oskari.clazz.define(
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
         // User location
-        this._locationWatch;
-        this._locationPath;
+        this._locationWatch = null;
+        this._locationPath = null;
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
 
@@ -608,6 +608,7 @@ Oskari.clazz.define(
             var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
             var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
             var opts = options || {};
+            var timestamp;
             // default values
             var navigatorOpts = {
                 maximumAge: 5000,
@@ -623,6 +624,13 @@ Oskari.clazz.define(
             if (navigator.geolocation) {
                 this._locationWatch = navigator.geolocation.watchPosition(
                     function (position) {
+                        me.log.debug(position);
+                        if (timestamp === position.timestamp) {
+                            // some browsers sends first previous position and then changed position
+                            // TODO: is this only location emulator feature, test how this works with mobile phones
+                            return;
+                        }
+                        timestamp = position.timestamp;
                         // transform coordinates from browser projection to current
                         var pos = me.transformCoordinates({
                             lon: position.coords.longitude,
