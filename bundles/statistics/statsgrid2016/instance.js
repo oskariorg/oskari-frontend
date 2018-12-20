@@ -35,9 +35,9 @@ Oskari.clazz.define(
         afterStart: function (sandbox) {
             var me = this;
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             // create the StatisticsService for handling ajax calls and common functionality.
-            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
-            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
+            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale);
             sandbox.registerService(statsService);
             me.statsService = statsService;
 

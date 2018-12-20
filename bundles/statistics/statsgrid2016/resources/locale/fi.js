@@ -171,6 +171,9 @@ Oskari.registerLocalization({
             'myIndicatorDatasource': 'Tietolähde on tyhjä.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana'
         },
+        'missing': {
+            'regionsetName': 'Tuntematon'
+        },
         'datacharts': {
             'flyout': 'Haettu aineisto',
             'barchart': 'Pylväskuvio',

@@ -167,6 +167,9 @@ Oskari.registerLocalization({
             'myIndicatorDatasource': 'Datakällan är tom.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.'
         },
+        'missing': {
+            'regionsetName': 'Okänd'
+        },
         'datacharts': {
             'flyout': 'Sökta datamängden',
             'barchart': 'Stapeldiagram',

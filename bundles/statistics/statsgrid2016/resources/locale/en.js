@@ -170,6 +170,9 @@ Oskari.registerLocalization({
             'myIndicatorDatasource': 'Datasource is empty.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
         },
+        'missing': {
+            'regionsetName': 'Unknown'
+        },
         'datacharts': {
             'flyout': 'Searched data',
             'barchart': 'Bar chart',

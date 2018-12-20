@@ -287,6 +287,10 @@ Oskari.clazz.define(
                 if (!value) {
                     value = this._name[Oskari.getDefaultLanguage()];
                 }
+                if (!value) {
+                    lang = Object.keys(this._name).find(key => this._name[key]);
+                    value = this._name[lang];
+                }
                 return value;
             }
             return this._name;
