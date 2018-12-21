@@ -55,7 +55,9 @@ function (
             'click .add-layer-forced-proj-add': 'addForcedProj',
             'click .add-layer-recheck': 'recheckCapabilities',
             'click .select-maplayer-groups-button': 'selectMaplayerGroups',
-            'click .add-dataprovider-button': 'addDataprovider'
+            'click .add-dataprovider-button': 'addDataprovider',
+            'change .layer-options-new-style-file': 'importExternalStyle',
+            'click .add-external-style': 'addExternalStyle'
         },
 
         /**
@@ -369,10 +371,10 @@ function (
         },
 
         /**
-             * Renders layer settings
-             *
-             * @method render
-             */
+         * Renders layer settings
+         *
+         * @method render
+         */
         render: function () {
             var me = this;
 
@@ -987,13 +989,13 @@ function (
                 }
             });
         },
-        _readLayerOptions: function (data, form) {
+        _readLayerOptions: function () {
+            var form = this.$el;
             var optionsElement = form.find('.add-layer-input.layer-options');
             if (optionsElement.length !== 0) {
                 // Master options element. Read only this element's value to options.
                 try {
-                    var optsJson = JSON.parse(optionsElement.val().trim() || '{}');
-                    data.options = JSON.stringify(optsJson);
+                    return JSON.parse(optionsElement.val().trim());
                 } catch (error) {
                     // don't include "options" in data if malformed JSON
                 }
@@ -1009,9 +1011,20 @@ function (
                 };
                 var options = {
                     styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
-                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles')
+                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles'),
+                    attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
+                    tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
+                    hover: parseOptionQuietly('.add-layer-input.layer-options-hover')
                 };
-                data.options = JSON.stringify(options);
+                var newExtStyle = {
+                    name: form.find('.add-layer-input.layer-options-new-style-name').val(),
+                    content: parseOptionQuietly('.add-layer-input.layer-options-new-style')
+                };
+                if (newExtStyle.name && newExtStyle.content) {
+                    options.externalStyles = options.externalStyles || {};
+                    options.externalStyles[newExtStyle.name] = newExtStyle.content;
+                }
+                return options;
             }
         },
         /**
@@ -1087,7 +1100,10 @@ function (
                 // don't include "attributes" in data if malformed JSON
             }
 
-            this._readLayerOptions(data, form);
+            data.options = this._readLayerOptions();
+            if (data.options) {
+                data.options = JSON.stringify(data.options);
+            }
 
             // layer type specific
             // TODO: maybe something more elegant?
@@ -1491,6 +1507,35 @@ function (
              */
         clickLayerSettings: function (e) {
             e.stopPropagation();
+        },
+
+        importExternalStyle: function (e) {
+            var me = this;
+            if (!e.target || !e.target.files || e.target.files.length !== 1) {
+                return;
+            }
+            var file = e.target.files[0];
+            var filename = file.name.replace('.json', '');
+            me.$el.find('.layer-options-new-style-name').val(filename);
+            var reader = new FileReader();
+            reader.onload = function () {
+                me.$el.find('.layer-options-new-style').val(reader.result);
+            };
+            reader.readAsText(file);
+        },
+
+        addExternalStyle: function () {
+            var me = this;
+            try {
+                var name = me.$el.find('.layer-options-new-style-name').val().trim();
+                var content = JSON.parse(me.$el.find('.layer-options-new-style').val().trim());
+            } catch (e) {
+                return;
+            }
+            if (!name || !content) {
+                return;
+            }
+            me.model.set('_options', me._readLayerOptions());
         }
     });
 });

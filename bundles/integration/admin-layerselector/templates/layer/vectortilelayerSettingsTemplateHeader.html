@@ -5,12 +5,75 @@
     <div class="add-layer-input-area">
         <textarea rows="3" cols="40" id="add-layer-url" class="add-layer-input long" required><%= model.getInterfaceUrl() %></textarea>
     </div>
+    
+    <% var attributions = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().attributions)) ? "" : JSON.stringify(model.getOptions().attributions); %>
     <div class="add-layer-label-area">
-        <label class="add-layer-label" title="<%= instance.getLocalization('admin').options %>"><%= instance.getLocalization('admin').options %></label>
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtAttributions %>"><%= instance.getLocalization('admin').mvtAttributions %></label>
     </div>
     <div class="add-layer-input-area">
-        <% var options = _.isEmpty(model.getOptions()) ? "" : JSON.stringify(model.getOptions()); %>
-        <textarea rows="3" cols="50" class="add-layer-input long layer-options" 
-            placeholder="<%- instance.getLocalization('admin').mvtilesOptionsDesc %>"><%=options%></textarea>
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-attributions" 
+            placeholder="<%- instance.getLocalization('admin').mvtAttributionsDesc %>"><%=attributions%></textarea>
     </div>
+
+    <% var tileGrid = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().tileGrid)) ? "" : JSON.stringify(model.getOptions().tileGrid); %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtTileGrid %>"><%= instance.getLocalization('admin').mvtTileGrid %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-tileGrid" 
+            placeholder="<%- instance.getLocalization('admin').mvtTileGridDesc %>"><%=tileGrid%></textarea>
+    </div>
+
+    <% var styles = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().styles)) ? "" : JSON.stringify(model.getOptions().styles); %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').oskariStyles %>"><%= instance.getLocalization('admin').oskariStyles %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-styles" 
+            placeholder="<%- instance.getLocalization('admin').mvtOskariStylesDesc %>"><%=styles%></textarea>
+    </div>
+
+    <% var hover = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().hover)) ? "" : JSON.stringify(model.getOptions().hover); %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtHover %>"><%= instance.getLocalization('admin').mvtHover %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-hover" 
+            placeholder="<%- instance.getLocalization('admin').mvtHoverDesc %>"><%=hover%></textarea>
+    </div>
+    
+    <% var externalStyles = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().externalStyles)) ? {} : model.getOptions().externalStyles; %>
+    <% if (Object.keys(externalStyles).length != 0) { %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtExternalStyleList %>"><%= instance.getLocalization('admin').mvtExternalStyleList %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea hidden class="add-layer-input long layer-options-ext-styles"><%=JSON.stringify(externalStyles)%></textarea>
+        <ul>
+            <% Object.keys(externalStyles).forEach(function(key) { %><li><%=key%></li><% }) %>
+        </ul>
+    </div>
+    <% } %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtImportStyle %>"><%= instance.getLocalization('admin').mvtImportStyle %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <input type="file" class="add-layer-input long layer-options-new-style-file" accept=".json"/>
+    </div>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtExternalStyleName %>"><%= instance.getLocalization('admin').mvtExternalStyleName %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <input type="text" class="add-layer-input long layer-options-new-style-name" placeholder="<%= instance.getLocalization('admin').mvtExternalStyleName %>"/>
+    </div>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtExternalStyle %>"><%= instance.getLocalization('admin').mvtExternalStyle %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <textarea class="add-layer-input long layer-options-new-style" placeholder="JSON"></textarea>
+        </div>
+        <button class="add-external-style">Add</button>
+    </div>
+
 </div>
