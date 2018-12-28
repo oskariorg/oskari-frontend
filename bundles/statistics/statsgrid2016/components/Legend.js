@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         panels: {}
     };
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    this._renderQueue = [];
     // some components need to know when rendering is completed.
     Oskari.makeObservable(this);
 }, {
@@ -41,17 +42,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
     //
     // Alternatively note about no indicator selected
     render: function (el, event) {
-        if (this._renderState.inProgress) {
-            // handle render being called multiple times in quick succession
-            // previous render needs to end before repaint since we are doing async stuff
-            this._renderState.repaint = true;
-            this._renderState.el = el;
-            // need to call this._renderDone(); to trigger repaint after render done
+        var me = this;
+        // handle render being called multiple times in quick succession
+        // previous render needs to end before new render since we are doing async stuff
+        if (!this._renderState.inProgress) {
+            me._renderState.inProgress = true;
+        } else {
+            me._renderQueue.push({el: el, event: event});
             return;
         }
-        this._renderState.inProgress = true;
-
-        var me = this;
         var container = this._element;
         var accordion = this._accordion;
         // NOTE! detach classification before re-render to keep eventhandlers
@@ -85,59 +84,54 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
             var mountPoint = container.find('.classification');
             // add accordion to the container
             accordion.insertTo(mountPoint);
-            // notify that we are done (to start a repaint if requested in middle of rendering)
-            me._renderDone();
         });
+        this._createLegend(activeIndicator, function (legendUI, classificationOpts) {
+            var headerContainer = container.find('.active-header');
+            var legendContainer = container.find('.active-legend');
+            headerContainer.empty();
+            legendContainer.empty();
+            container.find('.legend-noactive').empty();
+            // create inidicator dropdown if we have more than one indicator
+            var hasMultiple = me.service.getStateService().getIndicators().length > 1;
 
-        if (event && event.getName() === 'StatsGrid.ActiveIndicatorChangedEvent') {
-            // Call _createLegend only when active indicator has changed
-            // Otherwise this ends up being called for every event bound (and would go through every indicator falsely as active indicator)
-            this._createLegend(activeIndicator, function (legendUI, classificationOpts) {
-                var headerContainer = container.find('.active-header');
-                var legendContainer = container.find('.active-legend');
-                headerContainer.empty();
-                legendContainer.empty();
-                container.find('.legend-noactive').empty();
-                // create inidicator dropdown if we have more than one indicator
-                var hasMultiple = me.service.getStateService().getIndicators().length > 1;
-
+            if (hasMultiple) {
+                var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
+                indicatorMenu.render(headerContainer);
+                indicatorMenu.setWidth('94%');
+                headerContainer.addClass('multi-select-legend');
+            } else {
+                headerContainer.removeClass('multi-select-legend');
+            }
+            me._getLabels(activeIndicator, function (labels) {
                 if (hasMultiple) {
-                    var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
-                    indicatorMenu.render(headerContainer);
-                    indicatorMenu.setWidth('94%');
-                    headerContainer.addClass('multi-select-legend');
-                } else {
-                    headerContainer.removeClass('multi-select-legend');
-                }
-                me._getLabels(activeIndicator, function (labels) {
-                    if (hasMultiple) {
-                        headerContainer.attr('data-selected-indicator', labels.label);
-                        return;
-                    }
-                    var header = me.__templates.activeHeader({
-                        label: labels.label
-                    });
-                    headerContainer.empty();
-                    headerContainer.append(header);
-                });
-
-                if (!classificationOpts) {
-                    // didn't get classification options so not enough data to classify or other error
-                    container.find('.edit-legend').hide();
-                    container.find('.legend-noactive').empty();
-                    legendContainer.empty();
-                    container.append(legendUI);
-                    me._renderDone();
+                    headerContainer.attr('data-selected-indicator', labels.label);
                     return;
                 }
-                var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
-                headerContainer.append(edit);
-                me._createEditClassificationListener();
-                // legend
-                legendContainer.html(legendUI);
-                me.trigger('content-rendered');
-            }); // _createLegend
-        }
+                var header = me.__templates.activeHeader({
+                    label: labels.label
+                });
+                headerContainer.empty();
+                headerContainer.append(header);
+            });
+
+            if (!classificationOpts) {
+                // didn't get classification options so not enough data to classify or other error
+                container.find('.edit-legend').hide();
+                container.find('.legend-noactive').empty();
+                legendContainer.empty();
+                container.append(legendUI);
+                me._renderDone();
+                return;
+            }
+            var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
+            headerContainer.append(edit);
+            me._createEditClassificationListener();
+            // legend
+            legendContainer.html(legendUI);
+            me._renderState.inProgress = false;
+            me._renderDone();
+            me.trigger('content-rendered');
+        }); // _createLegend
     },
 
     /** **** PRIVATE METHODS ******/
@@ -163,15 +157,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      * Triggers a new render when needed (if render was called before previous was finished)
      */
     _renderDone: function () {
+        var me = this;
+        if (me._renderQueue.length) {
+            let render = me._renderQueue.shift();
+            me.render(render.el, render.event);
+        }
         var state = this._renderState;
         this._renderState = {};
         this._restorePanelState(this._accordion, state.panels);
-        if (state.repaint) {
-            this.render(state.el);
-        } else {
-            // trigger an event in case something needs to know that we just completed rendering
-            this.trigger('rendered');
-        }
+        // trigger an event in case something needs to know that we just completed rendering
+        this.trigger('rendered');
     },
     /**
      * Restores legend/classification panels to given state (open/closed)
