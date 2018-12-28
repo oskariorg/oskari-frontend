@@ -24,7 +24,12 @@ Oskari.registerLocalization(
             "loadFailed": "Map layers could not be loaded. Please reload the page and select map layers again.",
             "noResults": "No search results found.",
             "layerTypeNotSupported": "The map layer type is not yet supported:",
-            "not_empty": "There are map layers in this theme. Please move them to another theme before removing the theme."
+            "not_empty": "There are map layers in this theme. Please move them to another theme before removing the theme.",
+            "externalStyle": {
+                "nameEmpty": "Name is required.",
+                "name": "The name contains invalid characters.",
+                "content": "The style definition has invalid JSON content."
+            }
         },
         "loading": "Loading…",
         "filter": {
@@ -59,6 +64,7 @@ Oskari.registerLocalization(
                 "tiles3d" : "3D Tiles layer",
                 "vectortile" : "MVT layer"
             },
+            "confirmDeleteStyle": "The style will be removed. Do you want to continue?",
             "selectLayer": "Select map layer",
             "selectSubLayer": "Select sub layer",
             "addOrganization": "Add organisation",
@@ -93,8 +99,8 @@ Oskari.registerLocalization(
             "mvtHoverDesc": "JSON \n{\n  \"featureStyle\": {...},\n  \"content\": [\n    {\"key\": \"Feature Data\"},\n    {\"key\": \"ID\", \"valueProperty\": \"id\"}\n  ]\n}",
             "mvtExternalStyleList": "MapBox styles",
             "mvtExternalStyleName": "Style name",
-            "mvtExternalStyle": "Style definition",
-            "mvtImportStyle": "Import new style",
+            "mvtImportStyle": "Import a new style from a file",
+            "mvtExistingExtStyles": "Styles",
             "oskariStyles": "Styles",
             "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "tiles3dStyles": "Cesium styles",
@@ -254,7 +260,9 @@ Oskari.registerLocalization(
             "selectLayerGroups": "Select layer groups"
         },
         "buttons": {
-            "add": "Add"
+            "add": "Add",
+            "update": "Update",
+            "remove": "Remove",
         }
     }
 });

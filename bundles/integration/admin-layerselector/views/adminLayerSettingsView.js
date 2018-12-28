@@ -56,8 +56,10 @@ function (
             'click .add-layer-recheck': 'recheckCapabilities',
             'click .select-maplayer-groups-button': 'selectMaplayerGroups',
             'click .add-dataprovider-button': 'addDataprovider',
-            'change .layer-options-new-style-file': 'importExternalStyle',
-            'click .add-external-style': 'addExternalStyle'
+            'change .layer-options-external-styles': 'externalStyleSelected',
+            'change .layer-options-external-style-file': 'importExternalStyle',
+            'click .add-external-style': 'addExternalStyle',
+            'click .remove-external-style': 'removeExternalStyle'
         },
 
         /**
@@ -1011,19 +1013,11 @@ function (
                 };
                 var options = {
                     styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
-                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles'),
+                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles-json'),
                     attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
                     tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
                     hover: parseOptionQuietly('.add-layer-input.layer-options-hover')
                 };
-                var newExtStyle = {
-                    name: form.find('.add-layer-input.layer-options-new-style-name').val(),
-                    content: parseOptionQuietly('.add-layer-input.layer-options-new-style')
-                };
-                if (newExtStyle.name && newExtStyle.content) {
-                    options.externalStyles = options.externalStyles || {};
-                    options.externalStyles[newExtStyle.name] = newExtStyle.content;
-                }
                 return options;
             }
         },
@@ -1509,33 +1503,91 @@ function (
             e.stopPropagation();
         },
 
+        externalStyleSelected: function (e) {
+            var value = jQuery(e.target).val();
+            var importFromFile = value === 'importFromFile';
+            var styleName = importFromFile ? '' : value;
+            var styleDef = importFromFile ? '' : JSON.stringify(this.model.getOptions().externalStyles[value]);
+            var fileInput = this.$el.find('input.layer-options-external-style-file');
+            var nameInput = this.$el.find('.layer-options-external-style-name');
+            var styleDefInput = this.$el.find('.layer-options-external-style-def');
+            if (importFromFile) {
+                fileInput.val('');
+            }
+            fileInput.css('display', importFromFile ? '' : 'none');
+            nameInput.css('display', importFromFile ? '' : 'none');
+            nameInput.val(styleName);
+            styleDefInput.val(styleDef);
+            styleDefInput.prop('readonly', !importFromFile);
+            this.$el.find('button.add-external-style').prop('disabled', !importFromFile);
+            this.$el.find('button.remove-external-style').prop('disabled', importFromFile);
+        },
+
         importExternalStyle: function (e) {
             var me = this;
             if (!e.target || !e.target.files || e.target.files.length !== 1) {
                 return;
             }
-            var file = e.target.files[0];
-            var filename = file.name.replace('.json', '');
-            me.$el.find('.layer-options-new-style-name').val(filename);
             var reader = new FileReader();
             reader.onload = function () {
-                me.$el.find('.layer-options-new-style').val(reader.result);
+                try {
+                    var styleDef = JSON.parse(reader.result);
+                    if (styleDef.name) {
+                        me.$el.find('.layer-options-external-style-name').val(styleDef.name);
+                    }
+                    me.$el.find('.layer-options-external-style-def').val(reader.result);
+                } catch (ex) {
+                    this._showDialog(me.instance.locale('errors.title'), me.instance.locale('errors.externalStyle.content'));
+                }
             };
-            reader.readAsText(file);
+            reader.readAsText(e.target.files[0]);
+        },
+
+        _readExternalStyleForm: function () {
+            var form = {};
+            try {
+                form.name = this.$el.find('.layer-options-external-style-name').val().trim();
+                form.content = JSON.parse(this.$el.find('.layer-options-external-style-def').val().trim());
+                if (!form.name) {
+                    form.error = 'nameEmpty';
+                } else if (/[!@#%^&*(),.?"':{}|<>[\]\n\r\t]/.test(form.name)) {
+                    form.error = 'name';
+                }
+                return form;
+            } catch (e) {
+                form.error = 'content';
+                return form;
+            }
         },
 
         addExternalStyle: function () {
+            var form = this._readExternalStyleForm();
+            if (!form.name || !form.content || form.error) {
+                if (form.error) {
+                    var title = this.instance.locale('errors.title');
+                    var message = this.instance.locale(`errors.externalStyle.${form.error}`);
+                    this._showDialog(title, message);
+                }
+                return;
+            }
+            var options = this._readLayerOptions();
+            options.externalStyles = options.externalStyles || {};
+            options.externalStyles[form.name] = form.content;
+            this.model.set('_options', options);
+        },
+
+        removeExternalStyle: function () {
             var me = this;
-            try {
-                var name = me.$el.find('.layer-options-new-style-name').val().trim();
-                var content = JSON.parse(me.$el.find('.layer-options-new-style').val().trim());
-            } catch (e) {
+            var name = me.$el.find('.layer-options-external-styles').val();
+            if (!name || name === 'importFromFile') {
                 return;
             }
-            if (!name || !content) {
+            var options = me._readLayerOptions();
+            if (!options.externalStyles) {
                 return;
             }
-            me.model.set('_options', me._readLayerOptions());
+            delete options.externalStyles[name];
+            me.model.set('_options', options);
         }
     });
 });
