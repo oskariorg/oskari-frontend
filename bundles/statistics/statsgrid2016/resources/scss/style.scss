@@ -175,10 +175,6 @@ div.oskari-flyout {
     * Search styles
     * ********************************************/
 
-    .statsgrid-open-list-overflow {
-        overflow: visible;
-    }
-
     &.statsgrid-search-flyout {
         .statsgrid-search-container {
             padding: $flyoutPadding;
@@ -205,6 +201,10 @@ div.oskari-flyout {
         div.SumoSelect {
             width: 100%;
             min-width: 150px;
+            
+            div.optWrapper ul.options {
+                max-height: 200px;
+            }
         }
 
         .statsgrid-ds-selections {
