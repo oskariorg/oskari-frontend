@@ -347,7 +347,7 @@ export default class MapModule extends AbstractMapModule {
                 unit = ' km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
-                decimals = 1;
+                decimals = 0;
                 unit = ' m';
             }
         } else {
