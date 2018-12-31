@@ -62,17 +62,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
                 this.alert.setContent(this.loc.text, 'default');
             }
 
-            if (!isMaxLayersExceeded) {
-                var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                continueButton.addClass('primary');
-                continueButton.setTitle(this.loc.buttons['continue']);
-                continueButton.setHandler(function () {
-                    me.instance.setPublishMode(true);
-                });
-                this.buttons['continue'] = continueButton;
-                continueButton.insertTo(content.find('div.buttons'));
-            }
-
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             if (isMaxLayersExceeded) {
                 cancelButton.addClass('primary');
@@ -85,5 +74,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             this.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
+            if (!isMaxLayersExceeded) {
+                var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                continueButton.addClass('primary');
+                continueButton.setTitle(this.loc.buttons['continue']);
+                continueButton.setHandler(function () {
+                    me.instance.setPublishMode(true);
+                });
+                this.buttons['continue'] = continueButton;
+                continueButton.insertTo(content.find('div.buttons'));
+            }
         }
     });
