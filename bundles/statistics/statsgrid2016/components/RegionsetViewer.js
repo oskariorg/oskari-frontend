@@ -125,44 +125,52 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             });
 
             const defaultFeatureStyle = me._getFeatureStyle(classification, null, color, false, iconSizePx);
+            const regionFeatureStyle = Object.assign({
+                text: {
+                    scale: 1.2,
+                    fill: {
+                        color: Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000'
+                    },
+                    stroke: {
+                        width: 0
+                    },
+                    labelProperty: classification.showValues ? 'regionValue' : '',
+                    offsetX: 0,
+                    offsetY: 0
+                }
+            }, defaultFeatureStyle);
 
-            const textColor = Oskari.util.isDarkColor('#' + color) ? '#ffffff' : '#000000';
-            defaultFeatureStyle.text = {
-                scale: 1.2,
-                fill: {
-                    color: textColor
-                },
-                stroke: {
-                    width: 0
-                },
-                labelProperty: classification.showValues ? 'regionValue' : '',
-                offsetX: 0,
-                offsetY: 0
-            };
-
-            const requestOptions = {
+            const regionRequestOptions = {
                 clearPrevious: false,
-                featureStyle: defaultFeatureStyle,
+                featureStyle: regionFeatureStyle,
                 optionalStyles: optionalStyles,
                 layerId: me.LAYER_ID,
                 prio: REGION_PRIO + index,
                 opacity: typeof classification.transparency !== 'undefined' ? classification.transparency : 100,
                 animationDuration: 250
             };
+            const borderRequestOptions = Object.assign({}, regionRequestOptions, {
+                prio: BORDER_PRIO + index
+            });
+            borderRequestOptions.featureStyle = defaultFeatureStyle;
+
             if (adds.length !== 0) {
                 me._regionsAdded = me._regionsAdded.concat(adds);
-                addFeaturesRequestParams.push([me._getGeoJSON(regionFeaturesToAdd), requestOptions]);
+                addFeaturesRequestParams.push([me._getGeoJSON(regionFeaturesToAdd), regionRequestOptions]);
                 // Add border features under the points
                 if (borderFeatures.length > 0) {
-                    const borderRequestOptions = Object.assign({}, requestOptions, {
-                        prio: BORDER_PRIO + index
-                    });
                     addFeaturesRequestParams.push([me._getGeoJSON(borderFeatures), borderRequestOptions]);
                 }
             }
             if (updates.length !== 0) {
                 const searchOptions = {'id': updates};
-                addFeaturesRequestParams.push([searchOptions, requestOptions]);
+                addFeaturesRequestParams.push([searchOptions, regionRequestOptions]);
+
+                if (classification.mapStyle === 'points') {
+                    const borderUpdates = updates.map(updateParams => Object.assign({}, updateParams, {value: 'border' + updateParams.value}));
+                    const borderSearchOptions = {'id': borderUpdates};
+                    addFeaturesRequestParams.push([borderSearchOptions, borderRequestOptions]);
+                }
             }
         });
 
@@ -343,7 +351,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         var highlightStrokeWidth = 4;
 
         var hoverOptions = {
-            filter: [{key: 'oskari_type', value: 'region'}],
             content: [
                 {
                     keyProperty: 'name',
@@ -361,6 +368,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                     shape: {
                         data: ptStyle.image.shape.data
                     }
+                },
+                stroke: {
+                    width: highlightStrokeWidth
                 },
                 inherit: true
             };
@@ -415,7 +425,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             layerId: me.LAYER_ID,
             prio: highlight ? HIGHLIGHT_PRIO : REGION_PRIO + groupIndex
         };
-        const searchOptions = {'id': regionId};
+        const searchOptions = {id: regionId};
+        me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
+
+        delete requestOptions.prio;
+        searchOptions.id = 'border' + regionId;
         me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
     },
     /**
