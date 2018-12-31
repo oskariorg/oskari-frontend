@@ -55,11 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             var isManyLayersExceeded = this._isManyLayers();
 
             if (isMaxLayersExceeded) {
-                this.alert.setContent(this.loc.info.maxLayers, 'error');
+                this.alert.setContent(this.loc.info.maxLayers, 'error', true);
             } else if (isManyLayersExceeded) {
-                this.alert.setContent(this.loc.info.printoutProcessingTime, 'info');
+                this.alert.setContent(this.loc.info.printoutProcessingTime, 'info', true);
             } else {
-                this.alert.setContent(this.loc.text, 'default');
+                this.alert.setContent(this.loc.text, 'default', true);
             }
 
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
