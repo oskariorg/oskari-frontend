@@ -178,8 +178,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 clearBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
                 ),
-                cancelBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton'
+                closeBtn = Oskari.clazz.create(
+                    'Oskari.userinterface.component.buttons.CloseButton'
                 );
 
             clearBtn.setTitle(loc.buttons.clear);
@@ -189,12 +189,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.enableGfi(true);
             });
             controlButtons.push(clearBtn);
-            cancelBtn.setHandler(function () {
+            closeBtn.setHandler(function () {
                 me.stopMarkerAdd();
                 me.enableGfi(true);
             });
-            cancelBtn.setPrimary(true);
-            controlButtons.push(cancelBtn);
+            closeBtn.setPrimary(true);
+            controlButtons.push(closeBtn);
 
             me.dialog.show(
                 diaLoc.title,
