@@ -124,6 +124,14 @@ Oskari.registerLocalization(
                 "nohelp": "Aucune aide disponible",
                 "saveFailed": "Échec de l'impression de la vue de la carte. Réessayez plus tard.",
                 "nameIllegalCharacters": "Le nom contient des caractères non-autorisés. Les caractères autorisés sont les lettres de a à z ainsi que å, ä et ö, les nombres, backspaces, et les traits d'union."
+            },
+            "scale": {
+                "label": "Échelle",
+                "tooltip": "Préciser l'échelle à utiliser pour l'impression",
+                "mapScale": "Utiliser l'échelle de carte",
+                "definedScale": "Sélectionner une échelle",
+                "unsupportedLayersMessage": "Les couches cartographiques suivantes n'apparaissent pas dans l'impression",
+                "unsupportedLayersTitle": "L'impression n'affiche pas toutes les couches"
             }
         },
         "StartView": {

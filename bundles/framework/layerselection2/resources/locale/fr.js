@@ -10,8 +10,10 @@ Oskari.registerLocalization(
             "show": "Afficher",
             "hide": "Masquer",
             "hidden": "La couche cartographique est temporairement masquée.",
+            "unsupported-projection": "Impossible d'afficher la couche cartographique dans la projection cartographique sélectionnée.",
+            "change-projection": "Modifer la projection cartographique",
             "out-of-scale": "La couche cartographique ne peut être affichée à ce niveau d’échelle.",
-            "move-to-scale": "Veuillez choisissez un niveau d'échelle adapté.",
+            "move-to-scale": "Veuillez choisir un niveau d'échelle adapté.",
             "out-of-content-area": "La couche cartographique ne contient aucune donnée à cet emplacement.",
             "move-to-content-area": "Veuillez vous déplacer sur un emplacement adapté.",
             "description": "Description",
@@ -106,11 +108,11 @@ Oskari.registerLocalization(
             }
         },
         "guidedTour": {
-            "title": "Selected map layers",
-            "message": "In the \"Selected map layers\" -menu you can define how the selected map layers are displayed. You can sort map layer by dragging them. You can also define opacity and for some of map layers you can also select the pre-defined style. For data products it is possible to show feature data in a tabular form. The map layer can be shown or hidden.",
-            "openLink": "Show Selected map layers",
-            "closeLink": "Hide Selected map layers",
-            "tileText": "Selected Map Layers"
+            "title": "Couches cartographiques sélectionnées",
+            "message": "Dans le menu \"Couches cartographiques sélectionnées\", vous pouvez définir l'affichage des couches cartographiques sélectionnées. Vous pouvez trier les couches cartographiques en les faisant glisser. Vous pouvez également définir l'opacité  et, pour certaines couches cartographiques, vous pouvez également sélectionner le style prédéfini. Pour les produits de données, il est possible d'afficher les données de fonctionnalité sous forme de tableau. La couche cartographique peut être affichée ou masquée.",
+            "openLink": "Afficher les couches cartographiques sélectionnées",
+            "closeLink": "Masquer les couches cartographiques sélectionnées",
+            "tileText": "Couches cartographiques sélectionnées"
         }
     }
 });
