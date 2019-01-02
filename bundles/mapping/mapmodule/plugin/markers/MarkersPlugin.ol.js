@@ -173,14 +173,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me.enableGfi(false);
             me._waitingUserClickToAddMarker = true;
             var loc = me.getLocalization();
-            var diaLoc = loc.dialog,
-                controlButtons = [],
-                clearBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                ),
-                closeBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CloseButton'
-                );
+            var diaLoc = loc.dialog;
+            var controlButtons = [];
+            var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
 
             clearBtn.setTitle(loc.buttons.clear);
             clearBtn.setHandler(function () {
