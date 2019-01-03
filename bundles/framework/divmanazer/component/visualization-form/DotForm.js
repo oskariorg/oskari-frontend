@@ -249,7 +249,7 @@ Oskari.clazz.define(
                         saveButtonHandler();
                     }
                 });
-                messageContainer.insertAfter(dialogContent.find('div.preview'));
+                messageContainer.insertAfter(dialogContent.find('div.sizer'));
             }
 
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
