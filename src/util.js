@@ -660,5 +660,21 @@ Oskari.util = (function () {
         return true;
     };
 
+    /**
+     * Sql LIKE like operator.
+     * Supports % and * as zero to n characters and _ as a single character.
+     * @param  {String|Number} value value to check
+     * @param  {String|Number} likePattern pattern to check against
+     * @return {Boolean} true if pattern exists in the value
+     */
+    util.stringLike = (value, likePattern) => {
+        const regExpSpecials = '\\' + ['/', '.', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\');
+        const likeRegExp = new RegExp(`^${likePattern.toString()
+            .replace(new RegExp(regExpSpecials, 'g'), '\\$1')
+            .replace(/%|\*/g, '.*')
+            .replace(/_/g, '.')}$`);
+        return likeRegExp.test(value.toString());
+    }
+
     return util;
 }());
