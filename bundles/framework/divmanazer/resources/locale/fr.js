@@ -3,6 +3,10 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "DivManazer",
     "value": {
+        "graph": {
+            "noValue": "S/O",
+            "tick": "{value, number}"
+        },
         "buttons": {
             "add": "Ajouter",
             "cancel": "Annuler",
@@ -173,7 +177,7 @@ Oskari.registerLocalization(
                     "label": "tiret"
                 },
                 "cap": {
-                    "label": "Extrêmités de ligne"
+                    "label": "Extrémités de ligne"
                 },
                 "corner": {
                     "label": "Coins"
@@ -214,6 +218,7 @@ Oskari.registerLocalization(
                     "labelOr": "ou",
                     "labelCustom": "Couleur personnalisée (RGB 0-255)"
                 },
+                "lineRemove": "Supprimer le style et la couleur de ligne",
                 "color": {
                     "label": "Couleur de remplissage",
                     "labelOr": "ou",
@@ -222,6 +227,7 @@ Oskari.registerLocalization(
                 "fill": {
                     "label": "Motif de remplissage"
                 },
+                "fillRemove": "Supprimer la couleur et le motif de remplissage",
                 "preview": {
                     "label": "Aperçu"
                 },
@@ -232,6 +238,7 @@ Oskari.registerLocalization(
             }
         },
         "Grid": {
+            "cellValue": "{value, number}",
             "columnSelector": {
                 "title": "Propriétés",
                 "tooltip": "Afficher les colonnes"
@@ -243,6 +250,7 @@ Oskari.registerLocalization(
                     "title": "Paramètres supplémentaires",
                     "dataSource": "Source des données",
                     "metadata": "Lien des métadonnées",
+                    "layerName": "Nom de la couche cartographique",
                     "export_selection": "N'exporter que les entités sélectionnées"
                 },
                 "columns": {
@@ -271,11 +279,19 @@ Oskari.registerLocalization(
             "refreshButton": "Rafraîchir le filtre",
             "addFilter": "Ajouter un nouveau filtre",
             "removeFilter": "Supprimer le filtre",
+            "content": {
+                "title": "Filtre géographique"
+            },
             "bbox": {
                 "on": "Seule l'entité visible sur la fenêtre de la carte.",
                 "off": "Toutes les entités"
             },
-            "clickedFeatures": {},
+            "clickedFeatures": {
+                "clickedFeaturesLabel": "Seules les fonctionnalités sélectionnées sur la carte",
+                "filterByGeometryLabel": "Seules les fonctionnalités qui remplissent l'option sélectionnée :",
+                "filterByGeometryIntersect": "Fonctionnalités qui croisent les fonctionnalités sélectionnées",
+                "filterByGeometryContains": "Fonctionnalités à l'intérieur des fonctionnalités sélectionnées"
+            },
             "values": {
                 "title": "Filtrer les entités par données attributaires",
                 "placeholders": {
@@ -298,6 +314,14 @@ Oskari.registerLocalization(
                 "greaterThanOrEqualTo": "est supérieur(e) ou égal(e) à",
                 "lessThanOrEqualTo": "est inférieur(e) ou égal(e) à"
             },
+            "validation": {
+                "title": "Le filtre n’a pas pu être rafraîchi en raison des erreurs suivantes :",
+                "attribute_missing": "L’attribut est manquant.",
+                "operator_missing": "L’opérateur est manquant.",
+                "value_missing": "La valeur est manquante.",
+                "boolean_operator_missing": "L’opérateur logique est manquant.",
+                "bbox_selected_with_no_properties": ""
+            },
             "aggregateAnalysisFilter": {
                 "addAggregateFilter": "Sélectionnez la valeur globale",
                 "aggregateValueSelectTitle": "Utilisez la valeur globale dans le filtre",
@@ -307,15 +331,19 @@ Oskari.registerLocalization(
                 "getAggregateAnalysisFailed": "Impossible de trouver les données agrégées",
                 "noAggregateAnalysisPopupTitle": "L’analyse agrégée n’a pas trouvé",
                 "noAggregateAnalysisPopupContent": "Vous n’avez réalisé aucune analyse globale. Vous pouvez créer vos propres données globales par la fonction d'analyse puis utiliser des valeurs lors du filtrage."
-            },
-            "validation": {
-                "title": "Le filtre n’a pas pu être rafraîchi en raison des erreurs suivantes :",
-                "attribute_missing": "L’attribut est manquant.",
-                "operator_missing": "L’opérateur est manquant.",
-                "value_missing": "La valeur est manquante.",
-                "boolean_operator_missing": "L’opérateur logique est manquant.",
-                "bbox_selected_with_no_properties": ""
             }
+        },
+        "fileInput": {
+            "fileUpload": "Faites glisser {files, plural, one {un fichier} other {fichiers}} ici ou",
+            "link": "sélectionnez en naviguant.",
+            "uploading": "Chargement",
+            "success": "Réussi",
+            "error": "Erreur!",
+            "invalidType": "Le format de fichier n'est pas autorisé.",
+            "allowedExtensions": "Extensions de fichier autorisées : {allowedExtensions}.",
+            "multipleNotAllowed": "On autorise uniquement un fichier unique pour le téléchargement.",
+            "fileSize": "Le fichier sélectionné est trop volumineux. Sa taille maximale doit être de {size, number} Mo.",
+            "noFiles": "Aucun fichier sélectionné."
         }
     }
 });
