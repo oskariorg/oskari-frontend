@@ -173,14 +173,10 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             me.enableGfi(false);
             me._waitingUserClickToAddMarker = true;
             var loc = me.getLocalization();
-            var diaLoc = loc.dialog,
-                controlButtons = [],
-                clearBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Button'
-                ),
-                cancelBtn = Oskari.clazz.create(
-                    'Oskari.userinterface.component.buttons.CancelButton'
-                );
+            var diaLoc = loc.dialog;
+            var controlButtons = [];
+            var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var closeBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
 
             clearBtn.setTitle(loc.buttons.clear);
             clearBtn.setHandler(function () {
@@ -189,12 +185,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.enableGfi(true);
             });
             controlButtons.push(clearBtn);
-            cancelBtn.setHandler(function () {
+            closeBtn.setHandler(function () {
                 me.stopMarkerAdd();
                 me.enableGfi(true);
             });
-            cancelBtn.setPrimary(true);
-            controlButtons.push(cancelBtn);
+            closeBtn.setPrimary(true);
+            controlButtons.push(closeBtn);
 
             me.dialog.show(
                 diaLoc.title,

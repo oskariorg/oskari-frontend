@@ -55,22 +55,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             var isManyLayersExceeded = this._isManyLayers();
 
             if (isMaxLayersExceeded) {
-                this.alert.setContent(this.loc.info.maxLayers, 'error');
+                this.alert.setContent(this.loc.info.maxLayers, 'error', true);
             } else if (isManyLayersExceeded) {
-                this.alert.setContent(this.loc.info.printoutProcessingTime, 'info');
+                this.alert.setContent(this.loc.info.printoutProcessingTime, 'info', true);
             } else {
-                this.alert.setContent(this.loc.text, 'default');
-            }
-
-            if (!isMaxLayersExceeded) {
-                var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-                continueButton.addClass('primary');
-                continueButton.setTitle(this.loc.buttons['continue']);
-                continueButton.setHandler(function () {
-                    me.instance.setPublishMode(true);
-                });
-                this.buttons['continue'] = continueButton;
-                continueButton.insertTo(content.find('div.buttons'));
+                this.alert.setContent(this.loc.text, 'default', true);
             }
 
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -85,5 +74,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.StartView',
             this.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
+            if (!isMaxLayersExceeded) {
+                var continueButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                continueButton.addClass('primary');
+                continueButton.setTitle(this.loc.buttons['continue']);
+                continueButton.setHandler(function () {
+                    me.instance.setPublishMode(true);
+                });
+                this.buttons['continue'] = continueButton;
+                continueButton.insertTo(content.find('div.buttons'));
+            }
         }
     });

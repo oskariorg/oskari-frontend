@@ -80,7 +80,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             });
             me.buttons['continue'] = continueButton;
             me._updateContinueButton();
-            continueButton.insertTo(content.find('div.buttons')[0]);
 
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelButton.setTitle(me.loc.buttons.cancel);
@@ -90,6 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             me.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
+            continueButton.insertTo(content.find('div.buttons'));
 
             me._renderLayerLists();
 
