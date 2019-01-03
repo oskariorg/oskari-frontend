@@ -202,8 +202,21 @@ div.oskari-flyout {
             width: 100%;
             min-width: 150px;
             
-            div.optWrapper ul.options {
-                max-height: 200px;
+            div.optWrapper {
+                ul.options {
+                   max-height: 200px;
+                }
+                div.MultiControls {
+                    p.btnOk {
+                        float: right;
+                        border-radius: 0 0 3px 0;
+                        border-right: 0;
+                    }
+                    p.btnCancel {
+                        border-right: 1px solid #dbdbdb;
+                        border-radius: 0 0 0 3px;
+                    }
+                }
             }
         }
 
