@@ -175,10 +175,6 @@ div.oskari-flyout {
     * Search styles
     * ********************************************/
 
-    .statsgrid-open-list-overflow {
-        overflow: visible;
-    }
-
     &.statsgrid-search-flyout {
         .statsgrid-search-container {
             padding: $flyoutPadding;
@@ -205,6 +201,23 @@ div.oskari-flyout {
         div.SumoSelect {
             width: 100%;
             min-width: 150px;
+            
+            div.optWrapper {
+                ul.options {
+                   max-height: 200px;
+                }
+                div.MultiControls {
+                    p.btnOk {
+                        float: right;
+                        border-radius: 0 0 3px 0;
+                        border-right: 0;
+                    }
+                    p.btnCancel {
+                        border-right: 1px solid #dbdbdb;
+                        border-radius: 0 0 0 3px;
+                    }
+                }
+            }
         }
 
         .statsgrid-ds-selections {
