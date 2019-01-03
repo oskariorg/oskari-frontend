@@ -966,7 +966,7 @@ Oskari.clazz.define(
                     if (area < 10000) {
                         area = area.toFixed(0) + ' m&sup2;';
                     } else if (area > 1000000) {
-                        area = (area / 1000000).toFixed(2) + ' km&sup2;';
+                        area = (area / 1000000).toFixed(3) + ' km&sup2;';
                     } else {
                         area = (area / 10000).toFixed(2) + ' ha';
                     }
