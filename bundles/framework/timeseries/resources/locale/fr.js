@@ -22,7 +22,7 @@ Oskari.registerLocalization(
             "week": "1 semaine",
             "month": "1 mois"
         },
-        "dateRender": "{val, date} {val, temps, court}",
+        "dateRender": "{val, date} {val, time, short}",
         "alert": {
             "title": "Nombreuses couches avec série chronologique en cours d'utilisation",
             "message": "Vous pouvez uniquement contrôler la couche supérieure.",

@@ -5,7 +5,7 @@ Oskari.registerLocalization(
     "value": {
         "graph": {
             "noValue": "S/O",
-            "tick": "{valeur, nombre}"
+            "tick": "{value, number}"
         },
         "buttons": {
             "add": "Ajouter",
@@ -238,7 +238,7 @@ Oskari.registerLocalization(
             }
         },
         "Grid": {
-            "cellValue": "{valeur, nombre}",
+            "cellValue": "{value, number}",
             "columnSelector": {
                 "title": "Propriétés",
                 "tooltip": "Afficher les colonnes"
@@ -334,15 +334,15 @@ Oskari.registerLocalization(
             }
         },
         "fileInput": {
-            "fileUpload": "Faites glisser {des fichiers, pluriel, singulier, {un fichier} d'autres {fichiers}} ici ou",
+            "fileUpload": "Faites glisser {files, plural, one {un fichier} other {fichiers}} ici ou",
             "link": "sélectionnez en naviguant.",
             "uploading": "Chargement",
             "success": "Réussi",
             "error": "Erreur!",
             "invalidType": "Le format de fichier n'est pas autorisé.",
-            "allowedExtensions": "Extensions de fichier autorisées : {ExtensionsAutorisées}.",
+            "allowedExtensions": "Extensions de fichier autorisées : {allowedExtensions}.",
             "multipleNotAllowed": "On autorise uniquement un fichier unique pour le téléchargement.",
-            "fileSize": "Le fichier sélectionné est trop volumineux. Sa taille maximale doit être de {taille, nombre} Mo.",
+            "fileSize": "Le fichier sélectionné est trop volumineux. Sa taille maximale doit être de {size, number} Mo.",
             "noFiles": "Aucun fichier sélectionné."
         }
     }
