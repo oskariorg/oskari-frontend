@@ -127,7 +127,7 @@ export default class ReqEventHandler {
                 }
                 const fields = layer.getFields();
                 const idIndex = fields.indexOf(WFS_FTR_ID_KEY);
-                let filteredIds = [];
+                const filteredIds = new Set();
                 // handle filter order (AND/OR)
                 const filterOrder = orderFilterOperations(event.getFilters().filters);
                 filterOrder.forEach(attributeFilters => {
@@ -135,11 +135,9 @@ export default class ReqEventHandler {
                     attributeFilters.forEach(filter => {
                         filteredList = filterByAttribute(filter, filteredList, fields);
                     });
-                    filteredIds = filteredIds.concat(filteredList.map(props => props[idIndex]));
+                    filteredList.forEach(props => filteredIds.add(props[idIndex]));
                 });
-                // Remove duplicates
-                filteredIds = filteredIds.filter((elem, pos, arr) => arr.indexOf(elem) === pos);
-                modifySelection(layer, filteredIds, false);
+                modifySelection(layer, [...filteredIds], false);
             }
         };
     }
