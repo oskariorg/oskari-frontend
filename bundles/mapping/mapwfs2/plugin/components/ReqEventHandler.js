@@ -1,5 +1,6 @@
 import olLayerVectorTile from 'ol/layer/VectorTile';
 import {propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY} from './propertyArrayUtils';
+import {filterByAttribute, getFilterAlternativesAsArray} from './filterUtils';
 
 export default class ReqEventHandler {
     constructor (sandbox) {
@@ -7,64 +8,12 @@ export default class ReqEventHandler {
         this.isClickResponsive = true;
     }
     createEventHandlers (plugin) {
+        const me = this;
         const modifySelection = (layer, featureIds, keepPrevious) => {
             plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, !keepPrevious);
             this.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
         };
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
-
-        const filterOperators = {
-            '=': (a, b) => a === b,
-            '~=': (a, b) => Oskari.util.stringLike(a, b),
-            '≠': (a, b) => a !== b,
-            '~≠': (a, b) => !Oskari.util.stringLike(a, b),
-            '>': (a, b) => a > b,
-            '<': (a, b) => a < b,
-            '≥': (a, b) => a <= b,
-            '≤': (a, b) => a <= b
-        };
-        const filterByAttribute = (filter, recordList, fields) => {
-            const filterIndex = fields.indexOf(filter.attribute);
-            if (filterIndex === -1) {
-                return recordList;
-            }
-            const filteredList = recordList.filter(ftrData => {
-                let val = ftrData[filterIndex];
-                if (typeof val === 'undefined' || val === null) {
-                    return false;
-                }
-                const isNumType = typeof val === 'number';
-                const filterValNum = Number(filter.value);
-                let filterVal = isNumType && !isNaN(filterValNum) ? filterValNum : filter.value;
-                if (!isNumType && !filter.caseSensitive) {
-                    val = val.toUpperCase();
-                    filterVal = filterVal.toUpperCase();
-                }
-                return filterOperators[filter.operator](val, filterVal);
-            });
-            return filteredList;
-        };
-        const orderFilterOperations = filters => {
-            const filterOrder = [[]];
-            let attributeFilters = filterOrder[0];
-            filters.forEach(filter => {
-                if (filter.attribute) {
-                    attributeFilters.push(filter);
-                }
-                if (!filter.boolean) {
-                    return;
-                }
-                if (filter.boolean === 'AND') {
-                    attributeFilters.push(filter);
-                } else if (filter.boolean === 'OR') {
-                    attributeFilters = [];
-                    filterOrder.push(attributeFilters);
-                }
-            });
-            return filterOrder;
-        };
-
-        const me = this;
         return {
             'WFSFeaturesSelectedEvent': (event) => {
                 plugin._updateLayerStyle(event.getMapLayer());
@@ -128,9 +77,8 @@ export default class ReqEventHandler {
                 const fields = layer.getFields();
                 const idIndex = fields.indexOf(WFS_FTR_ID_KEY);
                 const filteredIds = new Set();
-                // handle filter order (AND/OR)
-                const filterOrder = orderFilterOperations(event.getFilters().filters);
-                filterOrder.forEach(attributeFilters => {
+                const alternatives = getFilterAlternativesAsArray(event);
+                alternatives.forEach(attributeFilters => {
                     let filteredList = records;
                     attributeFilters.forEach(filter => {
                         filteredList = filterByAttribute(filter, filteredList, fields);
