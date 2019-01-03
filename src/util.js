@@ -669,11 +669,10 @@ Oskari.util = (function () {
      */
     util.stringLike = (value, likePattern) => {
         const regExpSpecials = '\\' + ['/', '.', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\');
-        const likeRegExp = new RegExp(likePattern.toString()
+        const likeRegExp = new RegExp(`^${likePattern.toString()
             .replace(new RegExp(regExpSpecials, 'g'), '\\$1')
             .replace(/%|\*/g, '.*')
-            .replace('_', '.')
-        );
+            .replace(/_/g, '.')}$`);
         return likeRegExp.test(value.toString());
     }
 
