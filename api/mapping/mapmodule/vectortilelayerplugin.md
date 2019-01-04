@@ -101,7 +101,7 @@ Each row object has `key` or `keyProperty` and `valueProperty`.
 ```javascript
 "hover": {
     "featureStyle":  {...},
-    "content": [{...}]
+    "content": [
         { "key": "Feature Data" },
         { "key": 'Feature ID', "valueProperty": "id" },
         { "keyProperty": "type", "valueProperty": "name" }
