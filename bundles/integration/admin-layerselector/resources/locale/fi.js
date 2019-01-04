@@ -24,7 +24,13 @@ Oskari.registerLocalization(
             "loadFailed": "Karttatasojen latauksessa tapahtui virhe. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.",
             "noResults": "Haulla ei löytynyt yhtään tulosta.",
             "layerTypeNotSupported": "Karttatason tyyppiä ei vielä tueta:",
-            "not_empty": "Poistettavassa teemassa on karttatasoja. Valitse karttatasoille toinen teema ja yritä uudelleen."
+            "not_empty": "Poistettavassa teemassa on karttatasoja. Valitse karttatasoille toinen teema ja yritä uudelleen.",
+            "invalidJSON": "JSON-syntaksi on virheellinen",
+            "externalStyle": {
+                "nameEmpty": "Nimi on pakollinen tieto.",
+                "name": "Nimessä on virheellisiä merkkejä.",
+                "content": "Tyylimäärityksen JSON on virheellinen."
+            }
         },
         "loading": "Ladataan...",
         "filter": {
@@ -59,6 +65,7 @@ Oskari.registerLocalization(
                 "tiles3d" : "3D Tiles -taso",
                 "vectortile" : "MVT-taso"
             },
+            "confirmDeleteStyle": "Tyyli poistetaan. Haluatko jatkaa?",
             "selectLayer": "Valitse ylätaso",
             "selectSubLayer": "Valitse alataso",
             "addOrganization": "Lisää tiedontuottaja",
@@ -84,7 +91,17 @@ Oskari.registerLocalization(
             "getInfo": "Hae tiedot",
             "editWfs": "Muokkaa WFS-tietoja",
             "options": "Options JSON",
-            "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
+            "mvtAttributions": "Attribuutiot",
+            "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
+            "mvtTileGrid": "Tiilimatriisi",
+            "mvtTileGridDesc": "JSON \n{\n  \"origin\": [-548576, 8388608],\n  \"resolutions\": [8192, ..., 0.25],\n  \"tileSize\": [256, 256]\n}",
+            "mvtOskariStylesDesc": "JSON \n{\n  \"default\": {\n    \"building\": {...},\n    \"water\": {...}\n  },\n  ...\n}",
+            "mvtHover": "Hover",
+            "mvtHoverDesc": "JSON \n{\n  \"featureStyle\": {...},\n  \"content\": [\n    {\"key\": \"Feature Data\"},\n    {\"key\": \"ID\", \"valueProperty\": \"id\"}\n  ]\n}",
+            "mvtExternalStyleList": "MapBox tyylit",
+            "mvtExternalStyleName": "Tyylin nimi",
+            "mvtImportStyle": "Tuo uusi tyyli tiedostosta",
+            "mvtExistingExtStyles": "Tyylit",
             "oskariStyles": "Tyylit",
             "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "tiles3dStyles": "Cesium tyylit",
@@ -244,7 +261,9 @@ Oskari.registerLocalization(
             "selectLayerGroups": "Valitse karttatason ryhmät"
         },
         "buttons": {
-            "add": "Lisää"
+            "add": "Lisää",
+            "update": "Päivitä",
+            "remove": "Poista"
         }
     }
 });

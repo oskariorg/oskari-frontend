@@ -55,7 +55,11 @@ function (
             'click .add-layer-forced-proj-add': 'addForcedProj',
             'click .add-layer-recheck': 'recheckCapabilities',
             'click .select-maplayer-groups-button': 'selectMaplayerGroups',
-            'click .add-dataprovider-button': 'addDataprovider'
+            'click .add-dataprovider-button': 'addDataprovider',
+            'change .layer-options-external-styles': 'externalStyleSelected',
+            'change .layer-options-external-style-file': 'importExternalStyle',
+            'click .add-external-style': 'addExternalStyle',
+            'click .remove-external-style': 'removeExternalStyle'
         },
 
         /**
@@ -369,10 +373,10 @@ function (
         },
 
         /**
-             * Renders layer settings
-             *
-             * @method render
-             */
+         * Renders layer settings
+         *
+         * @method render
+         */
         render: function () {
             var me = this;
 
@@ -987,32 +991,43 @@ function (
                 }
             });
         },
-        _readLayerOptions: function (data, form) {
-            var optionsElement = form.find('.add-layer-input.layer-options');
-            if (optionsElement.length !== 0) {
-                // Master options element. Read only this element's value to options.
-                try {
-                    var optsJson = JSON.parse(optionsElement.val().trim() || '{}');
-                    data.options = JSON.stringify(optsJson);
-                } catch (error) {
-                    // don't include "options" in data if malformed JSON
-                }
-            } else {
-                // Gather options object by reading multiple layer options elements.
-                var parseOptionQuietly = function (className) {
-                    var element = form.find(className);
-                    if (element.length !== 0) {
-                        try {
-                            return JSON.parse(element.val().trim());
-                        } catch (e) {}
+        _readLayerOptions: function () {
+            var form = this.$el;
+            var parseErrors = [];
+            var options;
+            var parseOptionQuietly = function (className) {
+                var element = form.find(className);
+                if (element.length !== 0) {
+                    var content = element.val().trim();
+                    if (content.length === 0) {
+                        return;
                     }
-                };
-                var options = {
-                    styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
-                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles')
-                };
-                data.options = JSON.stringify(options);
+                    try {
+                        return JSON.parse(content);
+                    } catch (e) {
+                        parseErrors.push({element: element});
+                    }
+                }
+            };
+            options = parseOptionQuietly('.add-layer-input.layer-options');
+            if (parseErrors.length > 0) {
+                return {errors: parseErrors};
             }
+            if (options) {
+                return options;
+            }
+            // Gather options object by reading multiple layer options elements.
+            options = {
+                styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
+                externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles-json'),
+                attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
+                tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
+                hover: parseOptionQuietly('.add-layer-input.layer-options-hover')
+            };
+            if (parseErrors.length > 0) {
+                options.errors = parseErrors;
+            }
+            return options;
         },
         /**
              * Add layer
@@ -1087,7 +1102,14 @@ function (
                 // don't include "attributes" in data if malformed JSON
             }
 
-            this._readLayerOptions(data, form);
+            data.options = this._readLayerOptions();
+            if (data.options) {
+                if (data.options.errors) {
+                    this._showJSONSyntaxError(data.options.errors);
+                    return;
+                }
+                data.options = JSON.stringify(data.options);
+            }
 
             // layer type specific
             // TODO: maybe something more elegant?
@@ -1491,6 +1513,115 @@ function (
              */
         clickLayerSettings: function (e) {
             e.stopPropagation();
+        },
+
+        externalStyleSelected: function (e) {
+            var value = jQuery(e.target).val();
+            var importFromFile = value === 'importFromFile';
+            var styleName = importFromFile ? '' : value;
+            var styleDef = importFromFile ? '' : JSON.stringify(this.model.getOptions().externalStyles[value]);
+            var fileInput = this.$el.find('input.layer-options-external-style-file');
+            var nameInput = this.$el.find('.layer-options-external-style-name');
+            var styleDefInput = this.$el.find('.layer-options-external-style-def');
+            if (importFromFile) {
+                fileInput.val('');
+            }
+            fileInput.css('display', importFromFile ? '' : 'none');
+            nameInput.css('display', importFromFile ? '' : 'none');
+            nameInput.val(styleName);
+            styleDefInput.val(styleDef);
+            styleDefInput.prop('readonly', !importFromFile);
+            this.$el.find('button.add-external-style').prop('disabled', !importFromFile);
+            this.$el.find('button.remove-external-style').prop('disabled', importFromFile);
+        },
+
+        importExternalStyle: function (e) {
+            var me = this;
+            if (!e.target || !e.target.files || e.target.files.length !== 1) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function () {
+                try {
+                    var styleDef = JSON.parse(reader.result);
+                    if (styleDef.name) {
+                        me.$el.find('.layer-options-external-style-name').val(styleDef.name);
+                    }
+                    me.$el.find('.layer-options-external-style-def').val(reader.result);
+                } catch (ex) {
+                    this._showDialog(me.instance.locale('errors.title'), me.instance.locale('errors.externalStyle.content'));
+                }
+            };
+            reader.readAsText(e.target.files[0]);
+        },
+
+        _readExternalStyleForm: function () {
+            var form = {};
+            try {
+                form.name = this.$el.find('.layer-options-external-style-name').val().trim();
+                form.content = JSON.parse(this.$el.find('.layer-options-external-style-def').val().trim());
+                if (!form.name) {
+                    form.error = 'nameEmpty';
+                } else if (/[!@#%^&*(),.?"':{}|<>[\]\n\r\t]/.test(form.name)) {
+                    form.error = 'name';
+                }
+                return form;
+            } catch (e) {
+                form.error = 'content';
+                return form;
+            }
+        },
+
+        addExternalStyle: function () {
+            var form = this._readExternalStyleForm();
+            if (!form.name || !form.content || form.error) {
+                if (form.error) {
+                    var title = this.instance.locale('errors.title');
+                    var message = this.instance.locale(`errors.externalStyle.${form.error}`);
+                    this._showDialog(title, message);
+                }
+                return;
+            }
+            var options = this._readLayerOptions();
+            if (options.errors) {
+                this._showJSONSyntaxError(options.errors);
+                return;
+            }
+            options.externalStyles = options.externalStyles || {};
+            options.externalStyles[form.name] = form.content;
+            this.model.set('_options', options);
+        },
+
+        removeExternalStyle: function () {
+            var me = this;
+            var name = me.$el.find('.layer-options-external-styles').val();
+            if (!name || name === 'importFromFile') {
+                return;
+            }
+            var options = me._readLayerOptions();
+            if (!options.externalStyles) {
+                return;
+            }
+            if (options.errors) {
+                this._showJSONSyntaxError(options.errors);
+                return;
+            }
+            delete options.externalStyles[name];
+            me.model.set('_options', options);
+        },
+
+        _showJSONSyntaxError: function (errors) {
+            var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+            if (errors) {
+                errors.forEach(function (error) {
+                    error.element.focus();
+                    error.element.css('color', 'red');
+                    setTimeout(function () {
+                        error.element.css('color', '');
+                    }, 5000);
+                });
+                this._showDialog(loc('admin.errorTitle'), loc('errors.invalidJSON'));
+            }
         }
     });
 });
