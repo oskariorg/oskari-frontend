@@ -1105,15 +1105,7 @@ function (
             data.options = this._readLayerOptions();
             if (data.options) {
                 if (data.options.errors) {
-                    var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
-                    data.options.errors.forEach(function (error) {
-                        error.element.focus();
-                        error.element.css('color', 'red');
-                        setTimeout(function () {
-                            error.element.css('color', '');
-                        }, 5000);
-                    });
-                    me._showDialog(loc('admin.errorTitle'), loc('errors.invalidJSON'));
+                    this._showJSONSyntaxError(data.options.errors);
                     return;
                 }
                 data.options = JSON.stringify(data.options);
@@ -1591,6 +1583,10 @@ function (
                 return;
             }
             var options = this._readLayerOptions();
+            if (options.errors) {
+                this._showJSONSyntaxError(options.errors);
+                return;
+            }
             options.externalStyles = options.externalStyles || {};
             options.externalStyles[form.name] = form.content;
             this.model.set('_options', options);
@@ -1606,8 +1602,26 @@ function (
             if (!options.externalStyles) {
                 return;
             }
+            if (options.errors) {
+                this._showJSONSyntaxError(options.errors);
+                return;
+            }
             delete options.externalStyles[name];
             me.model.set('_options', options);
+        },
+
+        _showJSONSyntaxError: function (errors) {
+            var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+            if (errors) {
+                errors.forEach(function (error) {
+                    error.element.focus();
+                    error.element.css('color', 'red');
+                    setTimeout(function () {
+                        error.element.css('color', '');
+                    }, 5000);
+                });
+                this._showDialog(loc('admin.errorTitle'), loc('errors.invalidJSON'));
+            }
         }
     });
 });
