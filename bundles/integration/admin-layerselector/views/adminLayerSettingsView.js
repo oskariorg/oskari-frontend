@@ -993,33 +993,41 @@ function (
         },
         _readLayerOptions: function () {
             var form = this.$el;
-            var optionsElement = form.find('.add-layer-input.layer-options');
-            if (optionsElement.length !== 0) {
-                // Master options element. Read only this element's value to options.
-                try {
-                    return JSON.parse(optionsElement.val().trim());
-                } catch (error) {
-                    // don't include "options" in data if malformed JSON
-                }
-            } else {
-                // Gather options object by reading multiple layer options elements.
-                var parseOptionQuietly = function (className) {
-                    var element = form.find(className);
-                    if (element.length !== 0) {
-                        try {
-                            return JSON.parse(element.val().trim());
-                        } catch (e) {}
+            var parseErrors = [];
+            var options;
+            var parseOptionQuietly = function (className) {
+                var element = form.find(className);
+                if (element.length !== 0) {
+                    var content = element.val().trim();
+                    if (content.length === 0) {
+                        return;
                     }
-                };
-                var options = {
-                    styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
-                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles-json'),
-                    attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
-                    tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
-                    hover: parseOptionQuietly('.add-layer-input.layer-options-hover')
-                };
+                    try {
+                        return JSON.parse(content);
+                    } catch (e) {
+                        parseErrors.push({element: element});
+                    }
+                }
+            };
+            options = parseOptionQuietly('.add-layer-input.layer-options');
+            if (parseErrors.length > 0) {
+                return {errors: parseErrors};
+            }
+            if (options) {
                 return options;
             }
+            // Gather options object by reading multiple layer options elements.
+            options = {
+                styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
+                externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles-json'),
+                attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
+                tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
+                hover: parseOptionQuietly('.add-layer-input.layer-options-hover')
+            };
+            if (parseErrors.length > 0) {
+                options.errors = parseErrors;
+            }
+            return options;
         },
         /**
              * Add layer
@@ -1096,6 +1104,18 @@ function (
 
             data.options = this._readLayerOptions();
             if (data.options) {
+                if (data.options.errors) {
+                    var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+                    data.options.errors.forEach(function (error) {
+                        error.element.focus();
+                        error.element.css('color', 'red');
+                        setTimeout(function () {
+                            error.element.css('color', '');
+                        }, 5000);
+                    });
+                    me._showDialog(loc('admin.errorTitle'), loc('errors.invalidJSON'));
+                    return;
+                }
                 data.options = JSON.stringify(data.options);
             }
 

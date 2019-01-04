@@ -25,6 +25,7 @@ Oskari.registerLocalization(
             "noResults": "No search results found.",
             "layerTypeNotSupported": "The map layer type is not yet supported:",
             "not_empty": "There are map layers in this theme. Please move them to another theme before removing the theme.",
+            "invalidJSON": "Invalid JSON syntax.",
             "externalStyle": {
                 "nameEmpty": "Name is required.",
                 "name": "The name contains invalid characters.",

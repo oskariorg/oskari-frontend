@@ -25,6 +25,7 @@ Oskari.registerLocalization(
             "noResults": "Haulla ei löytynyt yhtään tulosta.",
             "layerTypeNotSupported": "Karttatason tyyppiä ei vielä tueta:",
             "not_empty": "Poistettavassa teemassa on karttatasoja. Valitse karttatasoille toinen teema ja yritä uudelleen.",
+            "invalidJSON": "JSON-syntaksi on virheellinen",
             "externalStyle": {
                 "nameEmpty": "Nimi on pakollinen tieto.",
                 "name": "Nimessä on virheellisiä merkkejä.",

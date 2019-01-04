@@ -25,6 +25,7 @@ Oskari.registerLocalization(
             "noResults": "ökningen gav inga resultat.",
             "layerTypeNotSupported": "Typ av kartlager är inte ännu understött:",
             "not_empty": "Teman, som du försöker att ta bort, innehåller kartlager. Välj en annan tema för de här temorna.",
+            "invalidJSON": "JSON-syntaxen är ogiltig",
             "externalStyle": {
                 "nameEmpty": "Namn krävs.",
                 "name": "Namnet innehåller ogiltiga tecken.",
