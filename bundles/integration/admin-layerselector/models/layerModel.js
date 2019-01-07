@@ -431,6 +431,29 @@
                 });
 
                 return langList;
+            },
+
+            getMVTStylesWithoutSrcLayer: function () {
+                var options = this.getOptions();
+                if (!options || !options.styles) {
+                    return;
+                }
+                // deep clone styles
+                var styles = JSON.parse(JSON.stringify(options.styles));
+                // remove mvt src layer key
+                Object.keys(styles).forEach(function (styleKey) {
+                    var style = styles[styleKey];
+                    Object.keys(style).forEach(function (layerKey) {
+                        var layer = style[layerKey];
+                        Object.keys(layer).forEach(function (styleDefKey) {
+                            var styleDef = layer[styleDefKey];
+                            style[styleDefKey] = styleDef;
+                            delete style[layerKey];
+                            styles[styleKey] = style;
+                        });
+                    });
+                });
+                return styles;
             }
         });
     });

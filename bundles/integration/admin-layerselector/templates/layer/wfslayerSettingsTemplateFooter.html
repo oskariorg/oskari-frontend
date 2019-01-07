@@ -2,13 +2,26 @@
 
 <% if (Oskari.app.getBundleInstanceConfigurationByName('mapfull').conf.plugins.find(plugin => plugin.id === 'Oskari.wfsmvt.WfsMvtLayerPlugin')) { %>
 <div class="add-layer-record">
+    <%
+        var styles = model.getMVTStylesWithoutSrcLayer();
+        styles = styles ? JSON.stringify(styles) : '';
+    %>
     <div class="add-layer-label-area">
-        <label class="add-layer-label" title="<%= instance.getLocalization('admin').options %>"><%= instance.getLocalization('admin').options %></label>
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').oskariStyles %>"><%= instance.getLocalization('admin').oskariStyles %></label>
     </div>
     <div class="add-layer-input-area">
-        <% var options = _.isEmpty(model.getOptions()) ? "" : JSON.stringify(model.getOptions()); %>
-        <textarea rows="3" cols="50" class="add-layer-input long layer-options"
-            placeholder="<%- instance.getLocalization('admin').mvtilesOptionsDesc %>"><%=options%></textarea>
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-styles"
+            placeholder="<%- instance.getLocalization('admin').mvtOskariStylesDesc %>"><%=styles%></textarea>
+    </div>
+</div>
+<div class="add-layer-record">
+    <% var hover = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().hover)) ? '' : JSON.stringify(model.getOptions().hover); %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtHover %>"><%= instance.getLocalization('admin').mvtHover %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-hover"
+            placeholder="<%- instance.getLocalization('admin').mvtHoverDesc %>"><%=hover%></textarea>
     </div>
 </div>
 <% } else { %>
