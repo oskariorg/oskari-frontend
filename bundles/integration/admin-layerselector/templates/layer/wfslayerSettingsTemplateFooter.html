@@ -1,7 +1,10 @@
 
 
-<% if (Oskari.app.getBundleInstanceConfigurationByName('mapfull').conf.plugins.find(plugin => plugin.id === 'Oskari.wfsmvt.WfsMvtLayerPlugin')) { %>
-<div class="add-layer-record">
+<% var showMVTOptions = Oskari.app.getBundleInstanceConfigurationByName('mapfull').conf.plugins.find(function(plugin) {
+     return plugin.id === 'Oskari.wfsmvt.WfsMvtLayerPlugin';
+    });
+%>
+<div class="add-layer-record" <% if (!showMVTOptions) { %>style="display: none"<% } %>>
     <%
         var styles = model.getMVTStylesWithoutSrcLayer();
         styles = styles ? JSON.stringify(styles) : '';
@@ -14,7 +17,7 @@
             placeholder="<%- instance.getLocalization('admin').mvtOskariStylesDesc %>"><%=styles%></textarea>
     </div>
 </div>
-<div class="add-layer-record">
+<div class="add-layer-record" <% if (!showMVTOptions) { %>style="display: none"<% } %>>
     <% var hover = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().hover)) ? '' : JSON.stringify(model.getOptions().hover); %>
     <div class="add-layer-label-area">
         <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtHover %>"><%= instance.getLocalization('admin').mvtHover %></label>
@@ -24,7 +27,7 @@
             placeholder="<%- instance.getLocalization('admin').mvtHoverDesc %>"><%=hover%></textarea>
     </div>
 </div>
-<% } else { %>
+<% if (!showMVTOptions) { %>
 <div class="add-layer-record">
     <div class="add-layer-label-area">
         <label for="add-layer-sld-style" class="add-layer-label"  title="<%= instance.getLocalization('admin').addSldStyleDesc %>"><%= instance.getLocalization('admin').addSldStyle %></label>

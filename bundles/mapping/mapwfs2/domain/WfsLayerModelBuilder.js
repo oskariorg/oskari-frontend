@@ -80,6 +80,7 @@ Oskari.clazz.define(
                         });
                     }
                     layer.setHoverOptions(options.hover);
+                    layer.selectStyle(defaultStyle.getName());
                 }
             } else {
                 // check if default style comes and give localization for it if found
