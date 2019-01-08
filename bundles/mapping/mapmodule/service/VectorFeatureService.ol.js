@@ -201,7 +201,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                 });
             } catch (ex) {
                 if (ex.message === `Cannot read property 'forEachFeatureAtCoordinate' of undefined`) {
-                    this._log.debug('Omitted ol renderer error:', ex);
+                    this._log.debug('Could not find features at hover location. Omitted ol renderer error:\n', ex);
                 } else {
                     throw ex;
                 }
