@@ -9,6 +9,15 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.51.0
+
+#### [mod] [rpc] New rpc-client version 2.1.0
+
+This release has no breaking changes.
+
+- Added OskariRPC.synchronizerFactory(...) helper for creating one way data-binding for embedded Oskari maps.
+- New parameter info is given to channel.onReady() callbacks. It's an object containing two keys, clientSupported signifying that the RPC client version is supported by the embeded map, and version which is the Oskari version in use in the embedded map.
+
 ## 1.49.0
 
 ### [add] [rpc] AddFeaturesToMapRequest
