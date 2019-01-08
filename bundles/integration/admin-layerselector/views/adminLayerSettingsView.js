@@ -992,7 +992,8 @@ function (
             });
         },
         _readLayerOptions: function () {
-            var form = this.$el;
+            var me = this;
+            var form = me.$el;
             var parseErrors = [];
             var options;
             var parseOptionQuietly = function (className) {
@@ -1026,6 +1027,14 @@ function (
             };
             if (parseErrors.length > 0) {
                 options.errors = parseErrors;
+            }
+            if (me.model.getLayerType() === 'wfs' && options.styles) {
+                // add MVT src layer name to style definitions
+                Object.keys(options.styles).forEach(function (styleKey) {
+                    var mvtSrcLayerStyleDef = {};
+                    mvtSrcLayerStyleDef[me.model.getLayerName()] = options.styles[styleKey];
+                    options.styles[styleKey] = mvtSrcLayerStyleDef;
+                });
             }
             return options;
         },

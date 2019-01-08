@@ -1022,6 +1022,13 @@ Oskari.clazz.define(
             return this._options;
         },
         /**
+         * @method setOptions
+         * @param {Object} optional layer options
+         */
+        setOptions: function (options) {
+            this._options = options;
+        },
+        /**
          * @method getAttributes
          * @param {String} key optional key to get value directly from attributes
          * @return {Object} optional layer attributes like heatmap-parameters
