@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     btn = {
                         iconCls: 'tool-feature-selection',
                         tooltip: localization.tools.select.tooltip,
-                        sticky: false,
+                        sticky: true,
                         callback: function () {
                             me.popupHandler.showSelectionTools();
                         }
@@ -440,6 +440,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 var me = this;
                 me.plugin.mapStatusChanged();
                 this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
+            },
+            'Toolbar.ToolSelectedEvent': function (event) {
+                if (event.getGroupId() !== 'selectiontools' && event.getToolId() !== 'dialog') {
+                    this.popupHandler.close(false);
+                }
             },
 
             WFSFeatureGeometriesEvent: null
