@@ -4,6 +4,7 @@ import olInteractionKeyboardPan from 'ol/interaction/KeyboardPan';
 import olInteractionKeyboardZoom from 'ol/interaction/KeyboardZoom';
 import olInteractionMouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import olInteractionDoubleClickZoom from 'ol/interaction/DoubleClickZoom';
+import olInteractionDragRotate from 'ol/interaction/DragRotate';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.MapMovementInteractionsRequestHandler
@@ -80,11 +81,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
                     }
+                    if (request.getOptions('rotate')) {
+                        interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragRotate));
+                    }
                 } else {
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionMouseWheelZoom));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
+                    // DragRotate handled only when requested
                 }
                 interactions.forEach(function (interaction) {
                     if (interaction) {
@@ -101,11 +106,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
                     }
+                    if (request.getOptions('rotate')) {
+                        interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragRotate));
+                    }
                 } else {
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionMouseWheelZoom));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDoubleClickZoom));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionDragZoom));
+                    // DragRotate handled only when requested
                 }
                 interactions.forEach(function (interaction) {
                     if (interaction) {
