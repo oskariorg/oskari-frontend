@@ -86,7 +86,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     me.raiseMarkerLayer();
                 },
                 'Toolbar.ToolSelectedEvent': function (event) {
-                    if (event.getGroupId() !== me.buttonGroup && event.getToolId() !== 'add') {
+                    if (event.getGroupId() !== me.buttonGroup && event.getToolId() !== 'add' && event.getSticky()) {
                         me._close(false);
                     }
                 }

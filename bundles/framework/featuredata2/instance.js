@@ -442,7 +442,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
             },
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (event.getGroupId() !== 'selectiontools' && event.getToolId() !== 'dialog') {
+                if (event.getGroupId() !== 'selectiontools' && event.getToolId() !== 'dialog' && event.getSticky()) {
                     this.popupHandler.close(false);
                 }
             },

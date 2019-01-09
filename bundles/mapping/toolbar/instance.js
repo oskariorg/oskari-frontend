@@ -310,6 +310,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
 
                 /* we'll show prompt if measure tool has been selected */
                 if (!me.measureTools[event.getGroupId()] || !me.measureTools[event.getGroupId()][event.getToolId()]) {
+                    if (!event.getSticky()) {
+                        return;
+                    }
                     me.requestHandlers.showMapMeasurementRequestHandler.stopMeasuring(false);
                     return;
                 }

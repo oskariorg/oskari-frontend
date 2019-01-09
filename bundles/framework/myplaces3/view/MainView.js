@@ -104,6 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.MainView',
              * @param {Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent} event
              */
             'Toolbar.ToolSelectedEvent': function (event) {
+                if (!event.getSticky()) {
+                    return;
+                }
                 // changed tool
                 this.cleanupPopup();
             },
