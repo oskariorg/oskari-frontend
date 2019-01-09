@@ -84,6 +84,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 },
                 AfterRearrangeSelectedMapLayerEvent: function () {
                     me.raiseMarkerLayer();
+                },
+                'Toolbar.ToolSelectedEvent': function (event) {
+                    if (event.getGroupId() !== me.buttonGroup && event.getToolId() !== 'add') {
+                        me._close(false);
+                    }
                 }
             };
         },
@@ -186,8 +191,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             });
             controlButtons.push(clearBtn);
             closeBtn.setHandler(function () {
-                me.stopMarkerAdd();
-                me.enableGfi(true);
+                me._close(true);
             });
             closeBtn.setPrimary(true);
             controlButtons.push(closeBtn);
@@ -204,6 +208,11 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 '#toolbar div.toolrow[tbgroup=default-selectiontools]',
                 'bottom'
             );
+        },
+
+        _close: function (selectDefault) {
+            this.stopMarkerAdd(selectDefault);
+            this.enableGfi(true);
         },
 
         /**
@@ -392,7 +401,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         /**
          * Stops the marker location selector
          */
-        stopMarkerAdd: function () {
+        stopMarkerAdd: function (selectDefault) {
             var me = this;
             var sandbox = this.getSandbox();
             me._waitingUserClickToAddMarker = false;
@@ -400,7 +409,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                 me.getMapModule().getMapEl().removeClass('cursor-crosshair');
                 me.dialog.close(true);
             }
-
+            if (!selectDefault) {
+                return;
+            }
             // ask toolbar to select default tool if available
             var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
             if (toolbarRequest) {
