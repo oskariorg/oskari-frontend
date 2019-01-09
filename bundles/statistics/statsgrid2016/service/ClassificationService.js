@@ -222,12 +222,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             };
             this.lastUsedBounds = response.bounds;
             var maxBounds = [];
-            var values = stats.sorted();
-            var j = 1;
-            for (var i = 0; i < values.length; i++) {
-                if (parseFloat(values[i]) > parseFloat(response.bounds[j])) {
-                    maxBounds.push(values[i]);
-                    j++;
+            if (response.bounds) {
+                // max bounds are calculated for color scale used in diagram
+                var values = stats.sorted();
+                var j = 1;
+                for (var i = 0; i < values.length; i++) {
+                    if (parseFloat(values[i]) > parseFloat(response.bounds[j])) {
+                        maxBounds.push(values[i]);
+                        j++;
+                    }
                 }
             }
             response.maxBounds = maxBounds;
