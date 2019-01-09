@@ -130,6 +130,97 @@ Oskari.clazz.define(
         },
 
         /**
+         * @public @method getOskariStyle
+         * Returns Oskari JSON style
+         *
+         * @return {JSON}
+         */
+        getOskariStyle: function () {
+            const values = this.getValues();
+            var oskariStyle = {
+                featureStyle: {
+                    fill: {
+                        color: values.dot.color,
+                        area: {
+                            color: values.area.fillColor,
+                            pattern: values.area.fillStyle
+                        }
+                    },
+                    stroke: {
+                        color: values.line.color,
+                        width: values.line.width,
+                        lineDash: values.line.style,
+                        lineCap: values.line.cap,
+                        lineJoin: values.line.corner,
+                        area: {
+                            color: values.area.lineColor,
+                            width: values.area.lineWidth,
+                            lineDash: values.area.lineStyle,
+                            lineJoin: values.area.lineCorner
+                        }
+                    },
+                    text: {
+                        labelText: values.dot.message
+                    },
+                    image: {
+                        shape: values.dot.shape,
+                        size: values.dot.size
+                    }
+                }
+            };
+            return JSON.stringify(oskariStyle);
+        },
+
+        /**
+         * @public @method setOskariStyleValues
+         * Sets values using Oskari style defined JSON
+         *
+         * @param {JSON} style
+         */
+        setOskariStyleValues: function (style) {
+            if (style === null || style === undefined) {
+                return;
+            }
+            var formClazzes = this._getFormClazz();
+            var fClazzName;
+            var fClazz;
+            const featureStyle = JSON.parse(style).featureStyle;
+            for (fClazzName in formClazzes) {
+                if (formClazzes.hasOwnProperty(fClazzName)) {
+                    fClazz = formClazzes[fClazzName];
+                    switch (fClazzName) {
+                    case 'dot':
+                        fClazz.setValues({
+                            color: featureStyle.fill.color,
+                            shape: featureStyle.image.shape,
+                            size: featureStyle.image.size
+                        });
+                        break;
+                    case 'line':
+                        fClazz.setValues({
+                            color: featureStyle.stroke.color,
+                            width: featureStyle.stroke.width,
+                            cap: featureStyle.stroke.lineCap,
+                            corner: featureStyle.stroke.lineJoin,
+                            style: featureStyle.stroke.lineDash
+                        });
+                        break;
+                    case 'area':
+                        fClazz.setValues({
+                            fillColor: featureStyle.fill.area.color,
+                            fillStyle: featureStyle.fill.area.pattern,
+                            lineColor: featureStyle.stroke.area.color,
+                            lineCorner: featureStyle.stroke.area.lineJoin,
+                            lineStyle: featureStyle.stroke.area.lineDash,
+                            lineWidth: featureStyle.stroke.area.width
+                        });
+                        break;
+                    }
+                }
+            }
+        },
+
+        /**
          * @public @method setValues
          * Sets the values of the form clazzes.
          *
