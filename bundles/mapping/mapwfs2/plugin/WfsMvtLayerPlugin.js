@@ -22,7 +22,6 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                 'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
 
             sandbox.registerService(this.WFSLayerService);
-            sandbox.getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
             this.reqEventHandler = new ReqEventHandler(sandbox);
         }
         _createPluginEventHandlers () {
