@@ -169,6 +169,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
           "type": "text/javascript",
           "src": "../../../../bundles/framework/publisher2/resources/locale/fi.js"
         }, {
+          "lang": "fr",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/fr.js"
+        }, {
           "lang": "sv",
           "type": "text/javascript",
           "src": "../../../../bundles/framework/publisher2/resources/locale/sv.js"

@@ -182,16 +182,19 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
-            }
-        ],
+            }],
             "locales": [{
+                "lang": "en",
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/en.js"
+            }, {
                 "lang": "fi",
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/locale/fi.js"
             }, {
-                "lang": "en",
+                "lang": "fr",
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/en.js"
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/fr.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
