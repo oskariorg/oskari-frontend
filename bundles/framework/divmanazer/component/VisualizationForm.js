@@ -133,65 +133,64 @@ Oskari.clazz.define(
          * @public @method getOskariStyle
          * Returns Oskari JSON style
          *
-         * @return {JSON}
+         * @return {Object}
          */
         getOskariStyle: function () {
             const values = this.getValues();
             var oskariStyle = {
-                featureStyle: {
-                    fill: {
-                        color: values.dot.color,
-                        area: {
-                            color: values.area.fillColor,
-                            pattern: values.area.fillStyle
-                        }
-                    },
-                    stroke: {
-                        color: values.line.color,
-                        width: values.line.width,
-                        lineDash: values.line.style,
-                        lineCap: values.line.cap,
-                        lineJoin: values.line.corner,
-                        area: {
-                            color: values.area.lineColor,
-                            width: values.area.lineWidth,
-                            lineDash: values.area.lineStyle,
-                            lineJoin: values.area.lineCorner
-                        }
-                    },
-                    text: {
-                        labelText: values.dot.message
-                    },
-                    image: {
-                        shape: values.dot.shape,
-                        size: values.dot.size
+                fill: {
+                    area: {
+                        color: values.area.fillColor,
+                        pattern: values.area.fillStyle
                     }
+                },
+                stroke: {
+                    color: values.line.color,
+                    width: values.line.width,
+                    lineDash: values.line.style,
+                    lineCap: values.line.cap,
+                    lineJoin: values.line.corner,
+                    area: {
+                        color: values.area.lineColor,
+                        width: values.area.lineWidth,
+                        lineDash: values.area.lineStyle,
+                        lineJoin: values.area.lineCorner
+                    }
+                },
+                text: {
+                    labelText: values.dot.message
+                },
+                image: {
+                    fill: {
+                        color: values.dot.color
+                    },
+                    shape: values.dot.shape,
+                    size: values.dot.size
                 }
             };
-            return JSON.stringify(oskariStyle);
+            return oskariStyle;
         },
 
         /**
          * @public @method setOskariStyleValues
          * Sets values using Oskari style defined JSON
          *
-         * @param {JSON} style
+         * @param {Object} featureStyle
          */
-        setOskariStyleValues: function (style) {
-            if (style === null || style === undefined) {
+        setOskariStyleValues: function (featureStyle) {
+            if (featureStyle === null || featureStyle === undefined) {
                 return;
             }
             var formClazzes = this._getFormClazz();
             var fClazzName;
             var fClazz;
-            const featureStyle = JSON.parse(style).featureStyle;
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
                     fClazz = formClazzes[fClazzName];
                     switch (fClazzName) {
                     case 'dot':
                         fClazz.setValues({
-                            color: featureStyle.fill.color,
+                            color: featureStyle.image.fill.color,
                             shape: featureStyle.image.shape,
                             size: featureStyle.image.size
                         });
