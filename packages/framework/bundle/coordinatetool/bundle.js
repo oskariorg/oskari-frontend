@@ -76,6 +76,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/resources/locale/et.js"
         }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/fr.js"
+        }, {
             "lang": "is",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/resources/locale/is.js"
