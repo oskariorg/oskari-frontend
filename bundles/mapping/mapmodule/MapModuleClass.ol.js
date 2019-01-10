@@ -1178,8 +1178,7 @@ export default class MapModule extends AbstractMapModule {
      */
     getGeoJSONFromFeatures (features) {
         var olGeoJSON = new olFormatGeoJSON();
-        var geojsonStr = olGeoJSON.writeFeatures(features);
-        return JSON.parse(geojsonStr);
+        return olGeoJSON.writeFeaturesObject(features);
     }
 
     getOLGeometryFromGeoJSON (geojson) {
