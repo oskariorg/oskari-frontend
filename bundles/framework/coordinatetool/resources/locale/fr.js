@@ -9,7 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "Coordonnées ETRS89-TM35FIN",
                 "EPSG:3575": "Coordonnées de la projection équivalente de Lambert de l'Europe centrée sur le pôle Nord",
-                "default": "Coordonnées {src}"
+                "default": "Coordonnées {crs}"
             },
             "popup": {
                 "title": "Coordonnées",
