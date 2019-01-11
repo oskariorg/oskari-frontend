@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
         }
         toolElement.addClass('active');
     },
-    addTool: function (toolId, toggle) {
+    addTool: function (toolId, clickCb) {
         var me = this;
 
         if (!this.element) {
@@ -34,7 +34,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
         }
 
         var toolElement = jQuery('<div class=' + toolId + '></div>');
-        var onClick = typeof toggle === 'function' ? toggle : () => me.flyoutManager.toggle(toolId);
+        var onClick = typeof clickCb === 'function' ? clickCb : () => me.flyoutManager.toggle(toolId);
         toolElement.on('click', onClick);
 
         this.element.append(toolElement);
