@@ -1,3 +1,6 @@
+const TOGGLE_TOOL_SERIES = 'series';
+const TOGGLE_TOOL_CLASSIFICATION = 'classification';
+
 /**
  * @class Oskari.statistics.statsgrid.StatsGridBundleInstance
  *
@@ -80,6 +83,12 @@ Oskari.clazz.define(
                 if (me.conf.diagram) {
                     me.togglePlugin.addTool('diagram');
                 }
+                if (me.conf.classification) {
+                    me.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
+                }
+                if (me.conf.series) {
+                    me.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
+                }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
@@ -107,6 +116,28 @@ Oskari.clazz.define(
                     });
                 }
             }
+        },
+        addMapPluginToggleTool: function (tool) {
+            if (!this.togglePlugin || !tool) {
+                return;
+            }
+            let plugin;
+            switch (tool) {
+            case TOGGLE_TOOL_CLASSIFICATION:
+                plugin = 'classificationPlugin'; break;
+            case TOGGLE_TOOL_SERIES:
+                plugin = 'seriesControlPlugin'; break;
+            }
+            if (!plugin) {
+                return;
+            }
+            this.togglePlugin.addTool(tool, () => {
+                if (this[plugin]) {
+                    this[plugin].toggleUI();
+                }
+            });
+            let visible = this[plugin] && !!this[plugin].getElement();
+            this.togglePlugin.toggleTool(tool, visible);
         },
         _addIndicatorsTabToPersonalData: function (sandbox) {
             var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
@@ -143,6 +174,9 @@ Oskari.clazz.define(
         },
         getFlyoutManager: function () {
             return this.flyoutManager;
+        },
+        getStatisticsService: function () {
+            return this.statsService;
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -214,7 +248,7 @@ Oskari.clazz.define(
                 if (evt.current && evt.current.series) {
                     if (this.seriesControlPlugin) {
                         if (!this.seriesControlPlugin.getElement()) {
-                            this.seriesControlPlugin.redrawUI(Oskari.util.isMobile(), false);
+                            this.seriesControlPlugin.redrawUI();
                         }
                     } else {
                         this.createSeriesControl();
@@ -435,6 +469,8 @@ Oskari.clazz.define(
             }
             if (!this.classificationPlugin) {
                 this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
+                this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
+                this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
             }
             if (mapModule.getPluginInstances()[this.classificationPlugin.getName()]) {
                 this.classificationPlugin.redrawUI();
@@ -463,6 +499,8 @@ Oskari.clazz.define(
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             this.seriesControlPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControlPlugin', this, {}, locale, sandbox);
+            this.seriesControlPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_SERIES, true));
+            this.seriesControlPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_SERIES, false));
             mapModule.registerPlugin(this.seriesControlPlugin);
             mapModule.startPlugin(this.seriesControlPlugin);
         }

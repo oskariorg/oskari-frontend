@@ -121,7 +121,9 @@ Oskari.registerLocalization(
                 "grid": "Näytä tilastotiedot taulukossa",
                 "allowClassification": "Salli luokittelu",
                 "transparent": "Aseta luokittelun tausta läpinäkyväksi",
-                "displayDiagram" : "Näytä pylväsdiagrammi"
+                "displayDiagram" : "Näytä pylväsdiagrammi",
+                "allowHidingClassification" : "Salli luokittelun piilottaminen",
+                "allowHidingSeriesControl" : "Salli sarjatoistimen piilottaminen"
             },
             "layout": {
                 "label": "Ulkoasu",
