@@ -96,6 +96,7 @@ Oskari.registerLocalization(
             "mvtTileGrid": "Rutmatris",
             "mvtTileGridDesc": "JSON \n{\n  \"origin\": [-548576, 8388608],\n  \"resolutions\": [8192, ..., 0.25],\n  \"tileSize\": [256, 256]\n}",
             "mvtOskariStylesDesc": "JSON \n{\n  \"default\": {\n    \"building\": {...},\n    \"water\": {...}\n  },\n  ...\n}",
+            "mvtWfsOskariStylesDesc": "JSON \n{\n  \"Custom MVT style\": {\n    \"featureStyle\": {...},\n    \"optionalStyles\": [{...}]\n  },\n  ...\n}",
             "mvtHover": "Hover",
             "mvtHoverDesc": "JSON \n{\n  \"featureStyle\": {...},\n  \"content\": [\n    {\"key\": \"Feature Data\"},\n    {\"key\": \"ID\", \"valueProperty\": \"id\"}\n  ]\n}",
             "mvtExternalStyleList": "MapBox stilar",
