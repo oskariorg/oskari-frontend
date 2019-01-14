@@ -117,6 +117,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/SeriesControl.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/SeriesToggleTool.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/EditClassification.js"
             }, {
                 "type": "text/javascript",
@@ -151,6 +154,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/ClassificationTool.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/ClassificationToggleTool.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/OpacityTool.js"

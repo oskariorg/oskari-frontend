@@ -31,27 +31,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         //  for this reason we need to call setLocation() manually as location is not in the default path "config.location.classes"
         // me.setLocation(config.legendLocation || me._defaultLocation);
 
-        me._isMobileVisible = true;
-
-        me._mobileDefs = {
-            buttons: {
-                'mobile-classification': {
-                    iconCls: 'mobile-statslegend',
-                    tooltip: locale('legend.title'),
-                    sticky: false,
-                    show: true,
-                    callback: function () {
-                        if (me._isMobileVisible) {
-                            me.teardownUI();
-                        } else {
-                            me._buildUI();
-                        }
-                    }
-                }
-            },
-            buttonGroup: 'mobile-toolbar'
-        };
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
+        Oskari.makeObservable(this);
 
         this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, this._locale);
         this.__legend.on('rendered', function () {
@@ -90,42 +71,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.__legend.render(this.element);
             return this.element;
         },
-        redrawUI: function (mapInMobileMode, forced) {
-            var mobileDefs = this.getMobileDefs();
-
-            // don't do anything now if request is not available.
-            // When returning false, this will be called again when the request is available
-            var toolbarReady = !this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if (!forced && !toolbarReady) {
-                return true;
-            }
+        redrawUI: function () {
             this.teardownUI();
-
-            if (toolbarReady && mapInMobileMode) {
-                // create mobile
-                this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-classification', 'mobileToolbar-mobile-toolbar');
-                this.getSandbox().request(this, toolbarRequest);
-            }
-            if (!mapInMobileMode) {
-                this._buildUI();
-            }
+            this._buildUI();
             return false;
         },
+        toggleUI: function () {
+            this.element ? this.teardownUI() : this._buildUI();
+            return !!this.element;
+        },
         teardownUI: function () {
-            this._isMobileVisible = false;
             var element = this.getElement();
             // detach old element from screen
             if (element) {
                 this.removeFromPluginContainer(element, true);
                 this.element = null;
+                this.trigger('hide');
             }
         },
         _buildUI: function () {
-            this._isMobileVisible = true;
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
             this._overflowCheck();
+            this.trigger('show');
         },
         _makeDraggable: function () {
             this.getElement().draggable();
