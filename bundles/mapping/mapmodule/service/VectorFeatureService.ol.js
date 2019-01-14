@@ -19,6 +19,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         constructor (sandbox, olMap) {
             this.__name = 'VectorFeatureService';
             this.__qname = 'Oskari.mapframework.service.VectorFeatureService';
+            this._log = Oskari.log('VectorFeatureService');
             this._sandbox = sandbox;
             this._tooltipOverlay = null;
             this._map = olMap;
@@ -193,7 +194,18 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         _getTopmostFeatureAndLayer (event) {
             const pixel = [event.getPageX(), event.getPageY()];
             const featureHitCb = (feature, layer) => ({ feature, layer });
-            const ftrAndLyr = this._map.forEachFeatureAtPixel(pixel, featureHitCb, this._onlyRegisteredTypesFilter);
+            let ftrAndLyr;
+            try {
+                ftrAndLyr = this._map.forEachFeatureAtPixel(pixel, featureHitCb, {
+                    layerFilter: layer => this._onlyRegisteredTypesFilter(layer)
+                });
+            } catch (ex) {
+                if (ex.message === `Cannot read property 'forEachFeatureAtCoordinate' of undefined`) {
+                    this._log.debug('Could not find features at hover location. Omitted ol renderer error:\n', ex);
+                } else {
+                    throw ex;
+                }
+            }
             return ftrAndLyr || {};
         }
 

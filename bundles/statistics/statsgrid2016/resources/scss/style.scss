@@ -832,7 +832,7 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
             background-image: url('../images/table_light.png');
         }
     }
-     .diagram {
+    .diagram {
         background-color: $darkColor;
         float: left;
         height: 36px;
@@ -845,6 +845,34 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
             background-color: $lightColor;
             background-image: url("../images/tile-diagram-light.png");
             background-repeat: no-repeat;
+        }
+    }
+    .classification {
+        background-color: $darkColor;
+        float: left;
+        height: 36px;
+        width: 36px;
+        background-image: url('../images/legend-dark.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+        &.active {
+            background-color: $lightColor;
+            background-image: url('../images/legend-light.png');
+        }
+    }
+    .series {
+        background-color: $darkColor;
+        float: left;
+        height: 36px;
+        width: 36px;
+        background-image: url('../images/timeseries-dark.png');
+        background-repeat: no-repeat;
+        background-position: center;
+        cursor: pointer;
+        &.active {
+            background-color: $lightColor;
+            background-image: url('../images/timeseries-light.png');
         }
     }
 

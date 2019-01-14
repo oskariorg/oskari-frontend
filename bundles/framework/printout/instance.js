@@ -399,6 +399,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 this.printout.setEnabled(true);
                 this.printout.refresh(false);
                 this.printout.refresh(true);
+                // reset and disable map rotation
+                this.sandbox.postRequestByName('rotate.map', []);
+                this.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['rotate']]);
             } else {
                 map.removeClass('mapPrintoutMode');
                 if (me.sandbox._mapMode === 'mapPrintoutMode') {
@@ -411,6 +414,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                     this.printout.setEnabled(false);
                     this.printout.hide();
                 }
+                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+                this.sandbox.request(this, builder());
+                this.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['rotate']]);
             }
             // resize map to fit screen with expanded/normal sidebar
             var reqBuilder = Oskari.requestBuilder('MapFull.MapSizeUpdateRequest');
