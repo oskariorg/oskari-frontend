@@ -100,7 +100,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             const setBounds = (stats) => {
                 if (opts.method === 'jenks') {
                     // Luonnolliset välit
-                    response.bounds = stats.getJenks(opts.count);
+                    // geostats.js has performance problems when calculating jenks natural breaks
+                    // hence we are using different function implemented in GeostatsHelper for that
+                    const geostatsHelper = new GeostatsHelper();
+                    response.bounds = geostatsHelper.getJenks(stats.serie, opts.count);
+                    stats.setBounds(response.bounds);
+                    stats.setRanges();
                 } else if (opts.method === 'quantile') {
                     // Kvantiilit
                     response.bounds = stats.getQuantile(opts.count);

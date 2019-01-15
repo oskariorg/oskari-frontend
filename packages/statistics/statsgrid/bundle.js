@@ -175,6 +175,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
             }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
+            }, {
+                "type" : "text/javascript",
+                "expose": "GeostatsHelper",
+                "src" : "../../../libraries/geostats/GeostatsHelper.js"
             }],
             "locales": [{
                 "lang": "en",
