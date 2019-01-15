@@ -170,13 +170,6 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/seriesplayback.css"
             }, {
-                "type" : "text/javascript",
-                "expose" : "geostats",
-                "src" : "../../../libraries/geostats/1.5.0/lib/geostats.min.js"
-            }, {
-                "type": "text/css",
-                "src" : "../../../libraries/geostats/1.5.0/lib/geostats.css"
-            }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.jquery.js",
                 "type": "text/javascript"
             }, {

@@ -16,7 +16,6 @@ module.exports = {
     "d3": false,
     "define": false,
     "DOMPurify": false,
-    "geostats": false,
     "jQuery": false,
     "jsts": false,
     "MobileDetect": false,
