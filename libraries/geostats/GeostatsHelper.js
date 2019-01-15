@@ -1,3 +1,9 @@
+/**
+ * Workaround for an issue with geostats.js where jenks natural breaks calculation
+ * causes performance problems with multiple browsers.
+ *
+ * Uses original file (jenks.js) from https://gist.github.com/tmcw/4977508#file-jenks-js
+ */
 (function (definition) {
     // This file will function properly as a <script> tag, or a module
     // using CommonJS and NodeJS or RequireJS module formats.
