@@ -22,24 +22,28 @@ export default class ReqEventHandler {
                 if (!me.isClickResponsive) {
                     return;
                 }
-                const ftrAndLyr = plugin.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => ({feature, layer}));
-                if (!ftrAndLyr || !(ftrAndLyr.layer instanceof olLayerVectorTile)) {
-                    return;
-                }
-                const layer = plugin.findLayerByOLLayer(ftrAndLyr.layer);
-                if (!layer) {
-                    return;
-                }
+                const hits = [];
+                plugin.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
+                    hits.push({feature, layer});
+                }, {
+                    layerFilter: (layer) => {
+                        return layer instanceof olLayerVectorTile && plugin.findLayerByOLLayer(layer);
+                    }
+                });
+
                 const keepPrevious = event.getParams().ctrlKeyDown;
-                if (keepPrevious) {
-                    modifySelection(layer, [ftrAndLyr.feature.get(WFS_ID_KEY)], keepPrevious);
-                } else {
-                    me.notify('GetInfoResultEvent', {
-                        layerId: layer.getId(),
-                        features: [propsAsArray(ftrAndLyr.feature.getProperties())],
-                        lonlat: event.getLonLat()
-                    });
-                }
+                hits.forEach((ftrAndLyr) => {
+                    const layer = plugin.findLayerByOLLayer(ftrAndLyr.layer);
+                    if (keepPrevious) {
+                        modifySelection(layer, [ftrAndLyr.feature.get(WFS_ID_KEY)], keepPrevious);
+                    } else {
+                        me.notify('GetInfoResultEvent', {
+                            layerId: layer.getId(),
+                            features: [propsAsArray(ftrAndLyr.feature.getProperties())],
+                            lonlat: event.getLonLat()
+                        });
+                    }
+                });
             },
             'AfterMapMoveEvent': () => {
                 plugin.getAllLayerIds().forEach(layerId => {
