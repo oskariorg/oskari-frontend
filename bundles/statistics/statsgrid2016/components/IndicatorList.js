@@ -30,6 +30,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         me.service.on('StatsGrid.IndicatorEvent', function (event) {
             me._updateIndicatorList();
         });
+        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
+            me._updateIndicatorList();
+        });
     },
     /**
      * @method _getIndicators
