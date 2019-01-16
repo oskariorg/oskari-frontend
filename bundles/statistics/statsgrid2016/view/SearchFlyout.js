@@ -70,57 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         btn.setHandler(function (event) {
             event.stopPropagation();
-            var values = selectionComponent.getValues();
-            var selectedIndicators = values.indicator;
-            // indicator loop check Array.isArray
-            if (!Array.isArray(values.indicator)) {
-                selectedIndicators = [values.indicator];
-            }
-
-            var newActiveIndicator = false;
-            var activeSelections = values.selections;
-
-            selectedIndicators.forEach(function (indicator) {
-                if (indicator === '') {
-                    return;
-                }
-                var added;
-                var hasMultiselectValues = false;
-                if (!values.series) {
-                    // Multiselect selections are not supported for series layer
-                    Object.keys(values.selections).forEach(function (key) {
-                        var selection = values.selections[key];
-                        if (Array.isArray(selection)) {
-                            hasMultiselectValues = true;
-                            if (selection.length === 0) {
-                                return;
-                            }
-                            selection.forEach(function (item) {
-                                var current = jQuery.extend(true, {}, values.selections);
-                                current[key] = item;
-                                var newlyAdded = me.service.getStateService().addIndicator(values.datasource, indicator, current);
-                                if (newlyAdded) {
-                                    added = newlyAdded;
-                                    activeSelections = current;
-                                }
-                            });
-                        }
-                    });
-                }
-                if (!hasMultiselectValues) {
-                    added = me.service.getStateService().addIndicator(values.datasource, indicator, activeSelections, values.series);
-                }
-                if (added) {
-                    newActiveIndicator = indicator;
-                }
-            });
-
-            if (newActiveIndicator !== false) {
-                // already added, set as active instead
-                var hash = me.service.getStateService().getHash(values.datasource, newActiveIndicator, activeSelections, values.series);
-                me.service.getStateService().setActiveIndicator(hash);
-            }
-            me.service.getStateService().setRegionset(values.regionset);
+            me.search(selectionComponent.getValues());
         });
 
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -148,6 +98,292 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         indicatorListAccordion.insertTo(container);
 
         return container;
+    },
+    search: function (values) {
+        if (!values) {
+            return;
+        }
+        this._filterSelectionsWithIndicatorMetadata(values, filteredSearchValues => {
+            this._checkIndicatorData(filteredSearchValues, results => {
+                const {searchValuesForIndicators, errors, multiselectStatusMap} = results;
+                this._showSearchErrorMessages(errors, multiselectStatusMap);
+                this._addIndicators(searchValuesForIndicators);
+            });
+        });
+        this.service.getStateService().setRegionset(values.regionset);
+    },
+
+    _filterSelectionsWithIndicatorMetadata: function (searchValues, handleFilteredSearchCb) {
+        const indicators = Array.isArray(searchValues.indicator) ? searchValues.indicator : [searchValues.indicator];
+        const candidates = [];
+
+        const errorMap = new Map();
+        const multiselectStatusMap = new Map();
+
+        let metadataCounter = 0;
+        const metadataChecked = () => {
+            metadataCounter++;
+            if (metadataCounter === indicators.length) {
+                handleFilteredSearchCb({
+                    candidates,
+                    errors: errorMap,
+                    multiselectStatusMap
+                });
+            }
+        };
+
+        const getSearchWithModifiedParam = (values, paramKey, paramValue) => {
+            const modSelection = {...values.selection, [paramKey]: paramValue};
+            return {...values, selections: modSelection};
+        };
+
+        indicators.forEach(indicator => {
+            if (indicator === '') {
+                metadataChecked();
+                return;
+            }
+            const addSearchCandidate = values => {
+                candidates.push({...values, indicator});
+            };
+            this.service.getIndicatorMetadata(searchValues.datasource, indicator, (msg, metadata) => {
+                const indicatorName = metadata && metadata.name ? Oskari.getLocalized(metadata.name) : indicator;
+                if (!metadata) {
+                    errorMap.set(indicatorName, {metadataNotFound: true});
+                    metadataChecked();
+                    return;
+                }
+                const { error, multiselectStatus, ...search } = this.getValidSearchValuesForIndicator(metadata, searchValues);
+                if (error) {
+                    errorMap.set(indicatorName, error);
+                    metadataChecked();
+                    return;
+                }
+                if (multiselectStatus) {
+                    multiselectStatusMap.set(indicatorName, multiselectStatus);
+                }
+                search.indicatorName = indicatorName;
+                if (search.series) {
+                    const seriesKey = search.series.id;
+                    search.multiselectParam = seriesKey;
+                    search.series.values.forEach(cur => addSearchCandidate(getSearchWithModifiedParam(search, seriesKey, cur)));
+                    metadataChecked();
+                    return;
+                }
+                // Handle multiselect values
+                let addedMultiselectSearchParameters = false;
+                Object.keys(search.selections).forEach(searchParamKey => {
+                    const selection = search.selections[searchParamKey];
+                    if (!Array.isArray(selection)) {
+                        return;
+                    }
+                    search.multiselectParam = searchParamKey;
+                    // Add a search candidate for each selection value
+                    selection.forEach(cur => addSearchCandidate(getSearchWithModifiedParam(search, searchParamKey, cur)));
+                    addedMultiselectSearchParameters = true;
+                });
+                // Single value option
+                if (!addedMultiselectSearchParameters) {
+                    addSearchCandidate(search);
+                }
+                metadataChecked();
+            });
+        });
+    },
+
+    getValidSearchValuesForIndicator (metadata, searchValues) {
+        // Make a deep clone of search values
+        var indSearchValues = jQuery.extend(true, {}, searchValues);
+        const {regionset, selections, series} = indSearchValues;
+
+        if (Array.isArray(metadata.regionsets) && !metadata.regionsets.includes(Number(regionset))) {
+            indSearchValues.error = {notAllowed: 'regionset'};
+            return indSearchValues;
+        }
+        if (!selections) {
+            return indSearchValues;
+        }
+        Object.keys(selections).forEach(selectionKey => {
+            const selector = metadata.selectors.find(selector => selector.id === selectionKey);
+            if (!selector) {
+                // Remove unsupported selectors silently
+                delete selections[selectionKey];
+                return;
+            }
+            const isSeriesSelection = series && series.id === selectionKey;
+            const value = isSeriesSelection ? series.values : selections[selectionKey];
+
+            if (!Array.isArray(value)) {
+                // Single option
+                if (!selector.allowedValues.includes(value)) {
+                    indSearchValues.error = {notAllowed: selectionKey};
+                }
+                return;
+            }
+            // Multiselect or series
+            // Filter out unsupported search param values
+            const notAllowed = value.filter(cur =>
+                !selector.allowedValues.includes(cur) && !selector.allowedValues.find(obj => obj.id === cur));
+
+            // Set multiselect status for search
+            indSearchValues.multiselectStatus = {selector: selectionKey, invalid: notAllowed, requested: [...value]};
+
+            if (notAllowed.length === 0) {
+                // Selected values are valid
+                return;
+            }
+            if (notAllowed.length === value.length) {
+                // All selected values are out of range
+                delete selections[selectionKey];
+                indSearchValues.error = {notAllowed: selectionKey};
+                return;
+            }
+            // Filter out unsupported search param values
+            if (isSeriesSelection) {
+                series.values = value.filter(cur => !notAllowed.includes(cur));
+            } else {
+                selections[selectionKey] = value.filter(cur => !notAllowed.includes(cur));
+            }
+        });
+        return indSearchValues;
+    },
+
+    _checkIndicatorData: function ({candidates, errors, multiselectStatusMap}, handleIndicatorsCb) {
+        const passed = [];
+        const failed = [];
+        const indicatorsWithSomeData = new Set();
+
+        let indicatorCounter = 0;
+        const dataChecked = () => {
+            indicatorCounter++;
+            if (indicatorCounter === candidates.length) {
+                // Handle indicators that failed the test
+                failed.forEach(cur => {
+                    if (errors.has(cur.indicatorName)) {
+                        return;
+                    }
+                    if (!indicatorsWithSomeData.has(cur.indicator)) {
+                        errors.set(cur.indicatorName, {datasetEmpty: true});
+                        return;
+                    }
+                    // Multiselect or series search with some found indicator datasets
+                    const multiselectStatus = multiselectStatusMap.get(cur.indicatorName);
+                    const invalidValue = cur.selections[multiselectStatus.selector];
+                    multiselectStatus.invalid.push(invalidValue);
+
+                    if (cur.series) {
+                        // Remove option from indicator's series
+                        const searchValuesForIndicator = passed.find(search => search.indicator === cur.indicator);
+                        const index = searchValuesForIndicator.series.values.indexOf(invalidValue);
+                        if (index !== -1) {
+                            searchValuesForIndicator.series.values.splice(index, 1);
+                        }
+                    }
+                });
+
+                handleIndicatorsCb({searchValuesForIndicators: passed, errors, multiselectStatusMap});
+            }
+        };
+
+        const indicatorPassedDataCheck = candidate => {
+            if (!candidate.series || !indicatorsWithSomeData.has(candidate.indicator)) {
+                passed.push(candidate);
+                indicatorsWithSomeData.add(candidate.indicator);
+            }
+            dataChecked();
+        };
+        const indicatorFailedDataCheck = candidate => {
+            failed.push(candidate);
+            dataChecked();
+        };
+
+        candidates.forEach(candidate => {
+            const {datasource, indicator, selections, series, regionset} = candidate;
+            this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
+                if (err || !data) {
+                    indicatorFailedDataCheck(candidate);
+                    return;
+                }
+                let counter = 0;
+                const enoughData = !!Object.values(data).find(val => !isNaN(val) && ++counter > 1);
+                if (!enoughData) {
+                    indicatorFailedDataCheck(candidate);
+                    return;
+                }
+                indicatorPassedDataCheck(candidate);
+            });
+        });
+    },
+
+    _showSearchErrorMessages: function (errors, multiselectStatusMap) {
+        if (errors.size + multiselectStatusMap.size === 0) {
+            return;
+        }
+        const content = [];
+        errors.forEach((value, indicatorName) => content.push(`<dt>${indicatorName}</dt>`));
+
+        const getInvalidValues = status => {
+            status.requested.sort();
+            let start;
+            let end;
+            let rangeCounter = 0;
+            const reset = () => {
+                start = null;
+                end = null;
+                rangeCounter = 0;
+            };
+            const invalidRanges = [];
+            const addRange = () => {
+                if (!rangeCounter) {
+                    return 0;
+                }
+                if (rangeCounter >= 3) {
+                    invalidRanges.push(start + '-' + end);
+                    return;
+                }
+                invalidRanges.push(start);
+                if (start !== end) {
+                    invalidRanges.push(end);
+                }
+            };
+            status.requested.forEach(val => {
+                if (!status.invalid.includes(val)) {
+                    addRange();
+                    reset();
+                    return;
+                }
+                start = start || val;
+                end = val;
+                rangeCounter++;
+            });
+            addRange();
+            return invalidRanges.join(',');
+        };
+
+        multiselectStatusMap.forEach((status, indicatorName) => {
+            if (!errors.has(indicatorName) && status.invalid && status.invalid.length > 0) {
+                content.push(`<dt>${indicatorName}</dt><dd>with values${getInvalidValues(status)}</dd>`);
+            }
+        });
+        if (content.length > 0) {
+            console.log(content.join(''));
+            this.service.error.show('Could not find data for all indicators', content.join(''), 10000);
+        }
+    },
+
+    _addIndicators: function (searchValuesForIndicators) {
+        let latestNewSearch = null;
+        searchValuesForIndicators.forEach(searchValues => {
+            const {datasource, indicator, selections, series} = searchValues;
+            const added = this.service.getStateService().addIndicator(datasource, indicator, selections, series);
+            if (added) {
+                latestNewSearch = searchValues;
+            }
+        });
+        if (latestNewSearch) {
+            const {datasource, indicator, selections, series} = latestNewSearch;
+            const hash = this.service.getStateService().getHash(datasource, indicator, selections, series);
+            this.service.getStateService().setActiveIndicator(hash);
+        }
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']
