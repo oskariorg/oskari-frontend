@@ -99,100 +99,119 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         return container;
     },
-    search: function (values) {
-        if (!values) {
+    search: function (commonSearchValues) {
+        if (!commonSearchValues) {
             return;
         }
-        this._filterSelectionsWithIndicatorMetadata(values, filteredSearchValues => {
-            this._checkIndicatorData(filteredSearchValues, results => {
-                const {searchValuesForIndicators, errors, multiselectStatusMap} = results;
-                this._showSearchErrorMessages(errors, multiselectStatusMap);
-                this._addIndicators(searchValuesForIndicators);
-            });
-        });
-        this.service.getStateService().setRegionset(values.regionset);
+        this.service.getStateService().setRegionset(commonSearchValues.regionset);
+        this._handleMultipleIndicatorsSearch(commonSearchValues);
     },
 
-    _filterSelectionsWithIndicatorMetadata: function (searchValues, handleFilteredSearchCb) {
-        const indicators = Array.isArray(searchValues.indicator) ? searchValues.indicator : [searchValues.indicator];
-        const candidates = [];
-
+    /**
+     * @method _getIndividualSearchValues To get indicator specific search selections.
+     * Use can have multiple indicators selected and those indicators might have different selections.
+     * We can't just use the same values for each indicator.
+     *
+     * This function rules out any unsupported selection parameters for each indicator and warns user of invalid values.
+     * (f.ex.Selected year out of range)
+     *
+     * @param {Object} commonSearchValues User's selected values from the search form
+     * @param {function} handleSearchValuesCb callback for continuing the search with refined search selections.
+     * The callback will receive an object with keys "searchValues", "errors" and "multiselectStatusMap"
+     */
+    _handleMultipleIndicatorsSearch: function (commonSearchValues, handleSearchValuesCb) {
+        const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
+        const refinedSearchValues = [];
         const errorMap = new Map();
         const multiselectStatusMap = new Map();
 
-        let metadataCounter = 0;
-        const metadataChecked = () => {
-            metadataCounter++;
-            if (metadataCounter === indicators.length) {
-                handleFilteredSearchCb({
-                    candidates,
-                    errors: errorMap,
-                    multiselectStatusMap
-                });
-            }
-        };
-
+        // Overrides selection key and value from provided search values.
         const getSearchWithModifiedParam = (values, paramKey, paramValue) => {
             const modSelection = {...values.selection, [paramKey]: paramValue};
             return {...values, selections: modSelection};
         };
 
+        let metadataCounter = 0;
+        const checkDone = () => {
+            metadataCounter++;
+            if (metadataCounter === indicators.length) {
+                // All metadata requests have finished
+                this._addIndicatorsHavingData(refinedSearchValues, errorMap, multiselectStatusMap);
+            }
+        };
+
         indicators.forEach(indicator => {
             if (indicator === '') {
-                metadataChecked();
+                checkDone();
                 return;
             }
-            const addSearchCandidate = values => {
-                candidates.push({...values, indicator});
+            // Overrides indicator array to make this search indicator specific.
+            const addSearchValues = values => {
+                refinedSearchValues.push({...values, indicator});
             };
-            this.service.getIndicatorMetadata(searchValues.datasource, indicator, (msg, metadata) => {
+            // Get indicator metadata to check the search valididty
+            this.service.getIndicatorMetadata(commonSearchValues.datasource, indicator, (err, metadata) => {
+                // Map possible errors by indicator name
                 const indicatorName = metadata && metadata.name ? Oskari.getLocalized(metadata.name) : indicator;
-                if (!metadata) {
+                if (err || !metadata) {
                     errorMap.set(indicatorName, {metadataNotFound: true});
-                    metadataChecked();
+                    checkDone();
                     return;
                 }
-                const { error, multiselectStatus, ...search } = this.getValidSearchValuesForIndicator(metadata, searchValues);
+                const { error, multiselectStatus, ...searchValues } = this._getRefinedSearch(metadata, commonSearchValues);
                 if (error) {
                     errorMap.set(indicatorName, error);
-                    metadataChecked();
+                    checkDone();
                     return;
                 }
                 if (multiselectStatus) {
                     multiselectStatusMap.set(indicatorName, multiselectStatus);
                 }
-                search.indicatorName = indicatorName;
-                if (search.series) {
-                    const seriesKey = search.series.id;
-                    search.multiselectParam = seriesKey;
-                    search.series.values.forEach(cur => addSearchCandidate(getSearchWithModifiedParam(search, seriesKey, cur)));
-                    metadataChecked();
-                    return;
-                }
+                // Save indicator name for possible error messaging.
+                searchValues.indicatorName = indicatorName;
+
                 // Handle multiselect values
-                let addedMultiselectSearchParameters = false;
-                Object.keys(search.selections).forEach(searchParamKey => {
-                    const selection = search.selections[searchParamKey];
-                    if (!Array.isArray(selection)) {
-                        return;
-                    }
-                    search.multiselectParam = searchParamKey;
-                    // Add a search candidate for each selection value
-                    selection.forEach(cur => addSearchCandidate(getSearchWithModifiedParam(search, searchParamKey, cur)));
-                    addedMultiselectSearchParameters = true;
-                });
-                // Single value option
-                if (!addedMultiselectSearchParameters) {
-                    addSearchCandidate(search);
+                let multivalueParam;
+                let multivalueValues;
+
+                if (searchValues.series) {
+                    multivalueParam = searchValues.series.id;
+                    multivalueValues = searchValues.series.values;
+                } else {
+                    Object.keys(searchValues.selections).forEach(searchParamKey => {
+                        const val = searchValues.selections[searchParamKey];
+                        if (!Array.isArray(val)) {
+                            return;
+                        }
+                        multivalueParam = searchParamKey;
+                        multivalueValues = val;
+                    });
                 }
-                metadataChecked();
+                // Add own search for each value of the serie / multiple select
+                if (multivalueParam && multivalueValues) {
+                    multivalueValues.forEach(val => addSearchValues(
+                        getSearchWithModifiedParam(searchValues, multivalueParam, val))
+                    );
+                } else {
+                    addSearchValues(searchValues);
+                }
+                checkDone();
             });
         });
     },
 
-    getValidSearchValuesForIndicator (metadata, searchValues) {
+    /**
+     * @method _getRefinedSearch
+     * Makes the actual selection validation based on the indicator metadata.
+     *
+     * @param {Object} metadata Indicator metadata
+     * @param {Object} commonSearchValues the search form values
+     * @return {Object} search values suited for an indicator.
+     * Adds "error" and "multiselectStatus" information to the search values.
+     */
+    _getRefinedSearch (metadata, commonSearchValues) {
         // Make a deep clone of search values
-        var indSearchValues = jQuery.extend(true, {}, searchValues);
+        var indSearchValues = jQuery.extend(true, {}, commonSearchValues);
         const {regionset, selections, series} = indSearchValues;
 
         if (Array.isArray(metadata.regionsets) && !metadata.regionsets.includes(Number(regionset))) {
@@ -247,139 +266,172 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         return indSearchValues;
     },
 
-    _checkIndicatorData: function ({candidates, errors, multiselectStatusMap}, handleIndicatorsCb) {
-        const passed = [];
-        const failed = [];
-        const indicatorsWithSomeData = new Set();
-
+    /**
+     * @method _addIndicatorsWithData
+     * Performs data check for each search.
+     * Adds indicators that have data.
+     *
+     * @param {Array} searchValues
+     * @param {Map} errors
+     * @param {Map} multiselectStatusMap
+     */
+    _addIndicatorsHavingData: function (searchValues, errors, multiselectStatusMap) {
+        const indicatorsHavingData = new Set();
+        const successfullSearches = [];
+        const failedSearches = [];
         let indicatorCounter = 0;
-        const dataChecked = () => {
+
+        const checkDone = () => {
             indicatorCounter++;
-            if (indicatorCounter === candidates.length) {
+            if (indicatorCounter === searchValues.length) {
                 // Handle indicators that failed the test
-                failed.forEach(cur => {
-                    if (errors.has(cur.indicatorName)) {
-                        return;
-                    }
-                    if (!indicatorsWithSomeData.has(cur.indicator)) {
-                        errors.set(cur.indicatorName, {datasetEmpty: true});
-                        return;
-                    }
-                    // Multiselect or series search with some found indicator datasets
-                    const multiselectStatus = multiselectStatusMap.get(cur.indicatorName);
-                    const invalidValue = cur.selections[multiselectStatus.selector];
-                    multiselectStatus.invalid.push(invalidValue);
-
-                    if (cur.series) {
-                        // Remove option from indicator's series
-                        const searchValuesForIndicator = passed.find(search => search.indicator === cur.indicator);
-                        const index = searchValuesForIndicator.series.values.indexOf(invalidValue);
-                        if (index !== -1) {
-                            searchValuesForIndicator.series.values.splice(index, 1);
-                        }
-                    }
-                });
-
-                handleIndicatorsCb({searchValuesForIndicators: passed, errors, multiselectStatusMap});
+                failedSearches.forEach(cur => this._updateSearchStatusWithFailure(
+                    cur,
+                    errors,
+                    multiselectStatusMap,
+                    successfullSearches,
+                    indicatorsHavingData
+                ));
+                this._showSearchErrorMessages(errors, multiselectStatusMap);
+                this._addIndicators(successfullSearches);
             }
         };
-
-        const indicatorPassedDataCheck = candidate => {
-            if (!candidate.series || !indicatorsWithSomeData.has(candidate.indicator)) {
-                passed.push(candidate);
-                indicatorsWithSomeData.add(candidate.indicator);
+        const searchSuccessfull = search => {
+            if (!search.series || !indicatorsHavingData.has(search.indicator)) {
+                // Add series search only once
+                successfullSearches.push(search);
+                indicatorsHavingData.add(search.indicator);
             }
-            dataChecked();
+            checkDone();
         };
-        const indicatorFailedDataCheck = candidate => {
-            failed.push(candidate);
-            dataChecked();
+        const searchFailed = search => {
+            failedSearches.push(search);
+            checkDone();
         };
 
-        candidates.forEach(candidate => {
-            const {datasource, indicator, selections, series, regionset} = candidate;
+        // Run the searches to see if we get data from the service.
+        searchValues.forEach(search => {
+            const {datasource, indicator, selections, series, regionset} = search;
             this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
                 if (err || !data) {
-                    indicatorFailedDataCheck(candidate);
+                    searchFailed(search);
                     return;
                 }
                 let counter = 0;
                 const enoughData = !!Object.values(data).find(val => !isNaN(val) && ++counter > 1);
                 if (!enoughData) {
-                    indicatorFailedDataCheck(candidate);
+                    searchFailed(search);
                     return;
                 }
-                indicatorPassedDataCheck(candidate);
+                searchSuccessfull(search);
             });
         });
+    },
+
+    _updateSearchStatusWithFailure: function (failedSearch, errors, multiselectStatusMap, successfullSearches, indicatorsHavingData) {
+        if (errors.has(failedSearch.indicatorName)) {
+            return;
+        }
+        if (!indicatorsHavingData.has(failedSearch.indicator)) {
+            errors.set(failedSearch.indicatorName, {datasetEmpty: true});
+            return;
+        }
+        const multiselectStatus = multiselectStatusMap.get(failedSearch.indicatorName);
+        const invalidValue = failedSearch.selections[multiselectStatus.selector];
+        multiselectStatus.invalid.push(invalidValue);
+        if (failedSearch.series) {
+            // Remove option from indicator's series
+            const seriesSearch = successfullSearches.find(cur => cur.indicator === failedSearch.indicator);
+            const index = seriesSearch.series.values.indexOf(invalidValue);
+            if (index !== -1) {
+                seriesSearch.series.values.splice(index, 1);
+            }
+            if (seriesSearch.series.values.length < 2) {
+                // Can't display as a serie. Downgrade to single indicator.
+                delete seriesSearch.series;
+            }
+        }
     },
 
     _showSearchErrorMessages: function (errors, multiselectStatusMap) {
         if (errors.size + multiselectStatusMap.size === 0) {
             return;
         }
-        const content = [];
-        errors.forEach((value, indicatorName) => content.push(`<dt>${indicatorName}</dt>`));
 
-        const getInvalidValues = status => {
-            status.requested.sort();
-            let start;
-            let end;
-            let rangeCounter = 0;
-            const reset = () => {
-                start = null;
-                end = null;
-                rangeCounter = 0;
-            };
-            const invalidRanges = [];
-            const addRange = () => {
-                if (!rangeCounter) {
-                    return 0;
-                }
-                if (rangeCounter >= 3) {
-                    invalidRanges.push(start + '-' + end);
-                    return;
-                }
-                invalidRanges.push(start);
-                if (start !== end) {
-                    invalidRanges.push(end);
-                }
-            };
-            status.requested.forEach(val => {
-                if (!status.invalid.includes(val)) {
-                    addRange();
-                    reset();
-                    return;
-                }
-                start = start || val;
-                end = val;
-                rangeCounter++;
-            });
-            addRange();
-            return invalidRanges.join(',');
-        };
+        const indicatorMessages = [];
+        errors.forEach((value, indicatorName) => indicatorMessages.push(indicatorName));
 
         multiselectStatusMap.forEach((status, indicatorName) => {
             if (!errors.has(indicatorName) && status.invalid && status.invalid.length > 0) {
-                content.push(`<dt>${indicatorName}</dt><dd>with values${getInvalidValues(status)}</dd>`);
+                indicatorMessages.push(indicatorName + ' (' + this._getInvalidValuesStr(status.invalid, status.requested) + ')');
             }
         });
-        if (content.length > 0) {
-            console.log(content.join(''));
-            this.service.error.show('Could not find data for all indicators', content.join(''), 10000);
+        if (indicatorMessages.length > 0) {
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const okBtn = dialog.createCloseButton('OK');
+            const title = this.loc('errors.noDataForIndicators', {indicators: indicatorMessages.length});
+            dialog.show(title, indicatorMessages.join('<br>'), [okBtn]);
         }
     },
 
-    _addIndicators: function (searchValuesForIndicators) {
+    _getInvalidValuesStr: function (invalids, all) {
+        if (!Array.isArray(invalids) || !Array.isArray(all)) {
+            return;
+        }
+
+        let start;
+        let end;
+        let rangeCounter = 0;
+
+        const reset = () => {
+            start = null;
+            end = null;
+            rangeCounter = 0;
+        };
+
+        const addRange = () => {
+            if (!rangeCounter) {
+                return 0;
+            }
+            if (rangeCounter >= 3) {
+                invalidRanges.push(start + ' - ' + end);
+                return;
+            }
+            invalidRanges.push(start);
+            if (start !== end) {
+                invalidRanges.push(end);
+            }
+        };
+
+        const invalidRanges = [];
+        all.sort();
+        all.forEach(val => {
+            if (!invalids.includes(val)) {
+                addRange();
+                reset();
+                return;
+            }
+            start = start || val;
+            end = val;
+            rangeCounter++;
+        });
+        if (rangeCounter !== 0) {
+            addRange();
+        }
+        return invalidRanges.join(', ');
+    },
+
+    _addIndicators: function (searchValues) {
         let latestNewSearch = null;
-        searchValuesForIndicators.forEach(searchValues => {
-            const {datasource, indicator, selections, series} = searchValues;
-            const added = this.service.getStateService().addIndicator(datasource, indicator, selections, series);
-            if (added) {
-                latestNewSearch = searchValues;
+        searchValues.forEach(values => {
+            const {datasource, indicator, selections, series} = values;
+            if (this.service.getStateService().addIndicator(datasource, indicator, selections, series)) {
+                // Indicator was not already present at the service
+                latestNewSearch = values;
             }
         });
         if (latestNewSearch) {
+            // Search added some new indicators, let's set the last one as the active indicator.
             const {datasource, indicator, selections, series} = latestNewSearch;
             const hash = this.service.getStateService().getHash(datasource, indicator, selections, series);
             this.service.getStateService().setActiveIndicator(hash);

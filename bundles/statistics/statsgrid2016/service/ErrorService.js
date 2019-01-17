@@ -20,11 +20,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ErrorService',
         getName: function () {
             return this.__name;
         },
-        show: function (title, message, fadeoutTime = 5000) {
+        show: function (title, message) {
             var me = this;
             me.close();
             me.popup.show(title, message);
-            me.popup.fadeout(fadeoutTime);
+            me.popup.fadeout(5000);
         },
         close: function () {
             var me = this;

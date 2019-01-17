@@ -168,7 +168,8 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Year field cannot be empty.',
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
             'myIndicatorDatasource': 'Datasource is empty.',
-            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
+            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
+            'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}'
         },
         'missing': {
             'regionsetName': 'Unknown'
