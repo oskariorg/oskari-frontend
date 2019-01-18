@@ -4,7 +4,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.element = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this.searchBtn;
+    this.searchBtn = null;
+    this.searchPending = false;
+    this.searchParametersSelected = false;
     var me = this;
     this.on('show', function () {
         if (!me.getElement()) {
@@ -70,7 +72,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.insertTo(container);
 
         btn.setHandler(function (event) {
-            btn.setEnabled(false);
             event.stopPropagation();
             me.search(selectionComponent.getValues());
         });
@@ -86,8 +87,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             selectionComponent.clearSelections();
         });
 
-        selectionComponent.on('indicator.changed', enabled => btn.setEnabled(enabled));
-        selectionComponent.on('indicator.parameter.changed', enabled => btn.setEnabled(enabled));
+        const searchFormEdited = selectionsOk => {
+            this.searchParametersSelected = selectionsOk;
+            this.updateSearchButtonEnabled();
+        };
+        selectionComponent.on('indicator.changed', searchFormEdited);
+        selectionComponent.on('indicator.parameter.changed', searchFormEdited);
 
         // Create accordion and add indicator list to its panel
         var indicatorListAccordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
@@ -102,11 +107,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         return container;
     },
+    updateSearchButtonEnabled: function () {
+        const enabled = !this.searchPending && this.searchParametersSelected;
+        if (this.searchBtn.isEnabled() !== enabled) {
+            this.searchBtn.setEnabled(enabled);
+        }
+    },
     search: function (commonSearchValues) {
         if (!commonSearchValues) {
             return;
         }
         this.service.getStateService().setRegionset(commonSearchValues.regionset);
+        this.searchPending = true;
+        this.updateSearchButtonEnabled();
         this._handleMultipleIndicatorsSearch(commonSearchValues);
     },
 
@@ -124,6 +137,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
      */
     _handleMultipleIndicatorsSearch: function (commonSearchValues, handleSearchValuesCb) {
         const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
+        if )=
         const refinedSearchValues = [];
         const errorMap = new Map();
         const multiselectStatusMap = new Map();
@@ -286,7 +300,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         const checkDone = () => {
             indicatorCounter++;
-            if (indicatorCounter === searchValues.length) {
+            if (indicatorCounter >= searchValues.length) {
                 // Handle indicators that failed the test
                 failedSearches.forEach(cur => this._updateSearchStatusWithFailure(
                     cur,
@@ -297,7 +311,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 ));
                 this._showSearchErrorMessages(errors, multiselectStatusMap);
                 this._addIndicators(successfullSearches);
-                this.searchBtn.setEnabled(true);
+                this.searchPending = false;
+                this.updateSearchButtonStatus();
             }
         };
         const searchSuccessfull = search => {
@@ -312,6 +327,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             failedSearches.push(search);
             checkDone();
         };
+
+        if (searchValues.length === 0) {
+            checkDone();
+            return;
+        }
 
         // Run the searches to see if we get data from the service.
         searchValues.forEach(search => {
