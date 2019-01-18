@@ -118,8 +118,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         this.service.getStateService().setRegionset(commonSearchValues.regionset);
-        this.searchPending = true;
-        this.updateSearchButtonEnabled();
         this._handleMultipleIndicatorsSearch(commonSearchValues);
     },
 
@@ -137,10 +135,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
      */
     _handleMultipleIndicatorsSearch: function (commonSearchValues, handleSearchValuesCb) {
         const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
-        if )=
+        if (indicators.length === 0) {
+            return;
+        }
         const refinedSearchValues = [];
         const errorMap = new Map();
         const multiselectStatusMap = new Map();
+
+        this.searchPending = true;
+        this.updateSearchButtonEnabled();
 
         // Overrides selection key and value from provided search values.
         const getSearchWithModifiedParam = (values, paramKey, paramValue) => {
