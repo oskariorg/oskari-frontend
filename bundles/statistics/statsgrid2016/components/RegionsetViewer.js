@@ -428,9 +428,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const searchOptions = {id: regionId};
         me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
 
-        delete requestOptions.prio;
-        searchOptions.id = 'border' + regionId;
-        me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
+        if (classification.mapStyle && classification.mapStyle === 'points') {
+            const borderRequestOptions = {...requestOptions};
+            const borderSearchOptions = {...searchOptions};
+            delete borderRequestOptions.prio;
+            borderSearchOptions.id = 'border' + regionId;
+            me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [borderSearchOptions, borderRequestOptions]);
+        }
     },
     /**
      * Listen to events that require re-rendering the UI
