@@ -309,6 +309,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 selectorDiv.remove();
             } else {
                 const sel = selectorDiv.find('select');
+                sel.prop('data-layer', layer.getId());
                 styles.forEach((style) => {
                     const opt = jQuery('<option value="' + style.getName() + '">' + style.getTitle() + '</option>');
                     sel.append(opt);
@@ -316,10 +317,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 if (layer.getCurrentStyle()) {
                     sel.val(layer.getCurrentStyle().getName());
                 }
-                sel.on('change', () => {
-                    const val = sel.find('option:selected').val();
-                    this.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), val]);
-                });
             }
             if (!this.getStyleSelectable()) {
                 selectorDiv.hide();
@@ -348,7 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
-        _rebindCheckboxes: function () {
+        _rebindHandlers: function () {
             var me = this,
                 sandbox = this.getSandbox();
 
@@ -369,6 +366,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             });
             me.layerContent.find('input[type=checkbox]').each(function () {
                 reBind(jQuery(this));
+            });
+            me.layerContent.find('.style-selector select').each(function () {
+                const sel = jQuery(this);
+                sel.on('change', () => {
+                    const val = sel.find('option:selected').val();
+                    me.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [sel.prop('data-layer'), val]);
+                });
             });
         },
         /**
@@ -715,7 +719,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
 
-            me._rebindCheckboxes();
+            me._rebindHandlers();
         },
         /**
          * @method getBaseLayers
