@@ -165,7 +165,8 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
             'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
             'myIndicatorDatasource': 'Datakällan är tom.',
-            'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.'
+            'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
+            'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}'
         },
         'missing': {
             'regionsetName': 'Okänd'

@@ -169,7 +169,8 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
             'myIndicatorDatasource': 'Tietolähde on tyhjä.',
-            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana'
+            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
+            'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
         },
         'missing': {
             'regionsetName': 'Tuntematon'
