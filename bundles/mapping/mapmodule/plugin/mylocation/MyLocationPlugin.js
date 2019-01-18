@@ -133,12 +133,13 @@ Oskari.clazz.define(
          */
         _setupLocation: function () {
             var mapmodule = this.getMapModule();
+            var conf = this.getConfig();
             mapmodule.getUserLocation(function (lon, lat) {
                 if (!lon || !lat) {
                     // error getting location
                     return;
                 }
-                mapmodule.centerMap({ lon: lon, lat: lat }, 6);
+                mapmodule.centerMap({ lon: lon, lat: lat }, conf.zoom || 6);
             });
         },
         /**
