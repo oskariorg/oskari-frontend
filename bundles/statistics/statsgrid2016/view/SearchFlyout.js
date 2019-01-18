@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 this._showSearchErrorMessages(errors, multiselectStatusMap);
                 this._addIndicators(successfullSearches);
                 this.searchPending = false;
-                this.updateSearchButtonStatus();
+                this.updateSearchButtonEnabled();
             }
         };
         const searchSuccessfull = search => {
