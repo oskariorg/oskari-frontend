@@ -4,6 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.element = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+    this.searchBtn;
     var me = this;
     this.on('show', function () {
         if (!me.getElement()) {
@@ -69,9 +70,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.insertTo(container);
 
         btn.setHandler(function (event) {
+            btn.setEnabled(false);
             event.stopPropagation();
             me.search(selectionComponent.getValues());
         });
+        this.searchBtn = btn;
 
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         clearBtn.addClass('margintopLarge');
@@ -294,6 +297,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 ));
                 this._showSearchErrorMessages(errors, multiselectStatusMap);
                 this._addIndicators(successfullSearches);
+                this.searchBtn.setEnabled(true);
             }
         };
         const searchSuccessfull = search => {
