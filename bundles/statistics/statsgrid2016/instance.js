@@ -166,6 +166,17 @@ Oskari.clazz.define(
             this.createClassficationView(indicatorsExist && layerVisible);
         },
         /**
+         * Update visibility of series control based on active indicator & stats layer visibility
+         */
+        _updateSeriesControlVisibility: function () {
+            const ind = this.statsService.getStateService().getActiveIndicator();
+            const isSeriesActive = ind && !!ind.series;
+            const layer = this.getLayerService().findMapLayer('STATS_LAYER');
+            const layerVisible = layer ? layer.isVisible() : true;
+
+            this.setSeriesControlVisible(isSeriesActive && layerVisible);
+        },
+        /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
          */
@@ -244,20 +255,7 @@ Oskari.clazz.define(
             },
             'StatsGrid.ActiveIndicatorChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-
-                if (evt.current && evt.current.series) {
-                    if (this.seriesControlPlugin) {
-                        if (!this.seriesControlPlugin.getElement()) {
-                            this.seriesControlPlugin.redrawUI();
-                        }
-                    } else {
-                        this.createSeriesControl();
-                    }
-                } else {
-                    if (this.seriesControlPlugin) {
-                        this.seriesControlPlugin.stopPlugin();
-                    }
-                }
+                this._updateSeriesControlVisibility();
             },
             'StatsGrid.ClassificationChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -331,6 +329,7 @@ Oskari.clazz.define(
                     return;
                 }
                 this._updateClassficationViewVisibility();
+                this._updateSeriesControlVisibility();
             },
             FeatureEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -492,6 +491,21 @@ Oskari.clazz.define(
                 return;
             }
             this.classificationPlugin.enableClassification(enabled);
+        },
+        setSeriesControlVisible: function (visible) {
+            if (visible) {
+                if (this.seriesControlPlugin) {
+                    if (!this.seriesControlPlugin.getElement()) {
+                        this.seriesControlPlugin.redrawUI();
+                    }
+                } else {
+                    this.createSeriesControl();
+                }
+            } else {
+                if (this.seriesControlPlugin) {
+                    this.seriesControlPlugin.stopPlugin();
+                }
+            }
         },
         createSeriesControl: function () {
             var sandbox = this.getSandbox();
