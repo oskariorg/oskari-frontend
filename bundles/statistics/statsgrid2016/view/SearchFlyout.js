@@ -130,12 +130,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
      * (f.ex.Selected year out of range)
      *
      * @param {Object} commonSearchValues User's selected values from the search form
-     * @param {function} handleSearchValuesCb callback for continuing the search with refined search selections.
-     * The callback will receive an object with keys "searchValues", "errors" and "multiselectStatusMap"
      */
-    _handleMultipleIndicatorsSearch: function (commonSearchValues, handleSearchValuesCb) {
+    _handleMultipleIndicatorsSearch: function (commonSearchValues) {
         const indicators = Array.isArray(commonSearchValues.indicator) ? commonSearchValues.indicator : [commonSearchValues.indicator];
-        if (indicators.length === 0) {
+        if (!commonSearchValues.indicator || indicators.length === 0) {
             return;
         }
         const refinedSearchValues = [];
