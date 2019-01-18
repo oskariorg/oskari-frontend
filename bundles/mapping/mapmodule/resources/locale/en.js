@@ -40,7 +40,8 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Map layers",
                 "chooseDefaultBaseLayer": "Select background map",
-                "chooseOtherLayers": "Select other map layers"
+                "chooseOtherLayers": "Select other map layers",
+                "style": "Style"
             },
             "SearchPlugin": {
                 "placeholder": "Search location",

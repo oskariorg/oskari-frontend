@@ -40,7 +40,8 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Karttatasot",
                 "chooseDefaultBaseLayer": "Valitse taustakartta",
-                "chooseOtherLayers": "Valitse muut karttatasot"
+                "chooseOtherLayers": "Valitse muut karttatasot",
+                "style": "Tyyli"
             },
             "SearchPlugin": {
                 "placeholder": "Paikkahaku",
