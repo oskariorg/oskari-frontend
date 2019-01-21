@@ -77,7 +77,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         me._createClassificationUI(classificationOpts, function (classificationUI) {
             container.append(classificationUI);
 
-            var panelClassification = me._createAccordionPanel(me.locale('classify.editClassifyTitle'));
+            var panelClassification = me._createAccordionPanel(me.locale('classify.edit.title'));
             panelClassification.setContent(classificationUI);
             // add panels to accordion
             accordion.addPanel(panelClassification);
@@ -123,7 +123,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                 me._renderDone();
                 return;
             }
-            var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
+            var edit = me.__templates.edit({ tooltip: me.locale('classify.edit.open') });
             headerContainer.append(edit);
             me._createEditClassificationListener();
             // legend
@@ -200,11 +200,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
-            me._element.find('.edit-legend').addClass('edit-active');
+            var legend = me._element.find('.edit-legend');
+            legend.addClass('edit-active');
+            legend.prop('title', me.locale('classify.edit.close'));
         });
         panel.on('close', function () {
             me._setPanelState(panel);
-            me._element.find('.edit-legend').removeClass('edit-active');
+            var legend = me._element.find('.edit-legend');
+            legend.removeClass('edit-active');
+            legend.prop('title', me.locale('classify.edit.open'));
         });
         panel.setTitle(title);
         panel.getHeader().remove();

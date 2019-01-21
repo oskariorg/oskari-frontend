@@ -39,7 +39,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         },
         setFrameInterval: function (interval) {
             this.frameInterval = interval;
-            this._throttleAnimation = Oskari.util.throttle(this.next.bind(this), interval);
+            const animated = true;
+            this._throttleAnimation = Oskari.util.throttle(() => this.next(animated), interval);
         },
         getFrameInterval: function () {
             return this.frameInterval;
@@ -101,7 +102,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                 }
             }
         },
-        next: function () {
+        next: function (animatedChange) {
+            if (animatedChange && !this.animating) {
+                return;
+            }
             if (this._setValueInProgress) {
                 return false;
             }
@@ -162,11 +166,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             return this.animating;
         },
         getSeriesStats: function (hash) {
-            var region = this.getStateService().getRegionset();
-            if (region) {
-                var statsByRegion = this.seriesStats[hash];
-                if (statsByRegion) {
-                    return statsByRegion[region];
+            var regionset = this.getStateService().getRegionset();
+            if (regionset) {
+                var statsByRegionset = this.seriesStats[hash];
+                if (statsByRegionset) {
+                    return statsByRegionset[regionset];
                 }
             }
         },
@@ -210,7 +214,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             var me = this;
             var collectedValues = [];
             var collectedCount = 0;
-            var region = me.getStateService().getRegionset();
+            var regionset = me.getStateService().getRegionset();
 
             var collectDataCallbackFactory = function (seriesValue) {
                 return function (err, data) {
@@ -231,12 +235,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                     if (collectedCount === series.values.length) {
                         var hash = me.getStateService().getHash(datasrc, indicator, selections, series);
 
-                        var statsByRegion = me.seriesStats[hash];
-                        if (!statsByRegion) {
-                            statsByRegion = {};
-                            me.seriesStats[hash] = statsByRegion;
+                        var statsByRegionset = me.seriesStats[hash];
+                        if (!statsByRegionset) {
+                            statsByRegionset = {};
+                            me.seriesStats[hash] = statsByRegionset;
                         }
-                        statsByRegion[region] = new geostats(collectedValues);
+                        statsByRegionset[regionset] = new geostats(collectedValues);
 
                         if (typeof callback === 'function') {
                             callback();
