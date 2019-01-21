@@ -28,6 +28,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
         this.element.empty();
     },
+    setSpinner: function (spinner) {
+        this.spinner = spinner;
+    },
+    getSpinner: function () {
+        return this.spinner;
+    },
     /**
      * @method lazyRender
      * Called when flyout is opened (by instance)
@@ -73,6 +79,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         btn.setHandler(function (event) {
             event.stopPropagation();
+            me.setSpinner(selectionComponent.spinner);
             me.search(selectionComponent.getValues());
         });
         this.searchBtn = btn;
@@ -117,6 +124,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (!commonSearchValues) {
             return;
         }
+        const me = this;
+        // Display spinner after 500ms if search is still pending
+        setTimeout(
+            function () {
+                if (me.searchPending && me.getSpinner()) {
+                    me.getSpinner().start();
+                }
+            },
+            500);
         this.service.getStateService().setRegionset(commonSearchValues.regionset);
         this._handleMultipleIndicatorsSearch(commonSearchValues);
     },
@@ -460,6 +476,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             const {datasource, indicator, selections, series} = latestNewSearch;
             const hash = this.service.getStateService().getHash(datasource, indicator, selections, series);
             this.service.getStateService().setActiveIndicator(hash);
+        }
+        if (this.getSpinner()) {
+            this.getSpinner().stop();
         }
     }
 }, {
