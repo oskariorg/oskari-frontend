@@ -124,7 +124,11 @@ Oskari.registerLocalization({
                 'distinct': 'Kontinuerlig',
                 'discontinuous': 'Diskontinuerlig'
             },
-            'editClassifyTitle': 'Redigera klassificeringen',
+            'edit': {
+                'title': 'Redigera klassificeringen',
+                'open': 'Öppna klassificeringseditoraren',
+                'close': 'Stägn klassificeringseditoraren'
+            },
             'classifyFieldsTitle': 'Klassificeringsvärden',
             'map': {
                 'mapStyle': 'Kartans stil',

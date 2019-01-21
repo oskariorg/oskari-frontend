@@ -127,7 +127,11 @@ Oskari.registerLocalization({
                 'distinct': 'Continuous',
                 'discontinuous': 'Discontinuous'
             },
-            'editClassifyTitle': 'Modify classification',
+            'edit': {
+                'title': 'Modify classification',
+                'open': 'Open the classification editor',
+                'close': 'Close the classification editor'
+            },
             'classifyFieldsTitle': 'Classification values',
             'map': {
                 'mapStyle': 'Map style',

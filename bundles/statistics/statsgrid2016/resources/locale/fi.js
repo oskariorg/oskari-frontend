@@ -127,7 +127,11 @@ Oskari.registerLocalization({
                 'distinct': 'Jatkuva',
                 'discontinuous': 'Epäjatkuva'
             },
-            'editClassifyTitle': 'Muokkaa luokittelua',
+            'edit': {
+                'title': 'Muokkaa luokittelua',
+                'open': 'Avaa luokittelun muokkaus',
+                'close': 'Sulje luokittelun muokkaus'
+            },
             'classifyFieldsTitle': 'Luokitteluarvot',
             'map': {
                 'mapStyle': 'Kartan tyyli',

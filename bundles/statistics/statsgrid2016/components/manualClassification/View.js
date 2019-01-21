@@ -25,10 +25,10 @@ export default class ManualClassificationView {
     /**
      * @method setData
      * Sets reference to indicator data for use in histogram
-     * @param {Object} indicatorData object withr region ids as keys and indicator data as values
+     * @param {Array|Object} indicatorData array of values or object with region ids as keys and indicator data as values
      */
     setData (indicatorData) {
-        this.indicatorData = Object.values(indicatorData);
+        this.indicatorData = Array.isArray(indicatorData) ? indicatorData : Object.values(indicatorData);
     }
     /**
      * @method getBounds
@@ -67,7 +67,7 @@ export default class ManualClassificationView {
         });
 
         dialog.makeModal();
-        dialog.show(loc('classify.editClassifyTitle'), content, buttons);
+        dialog.show(loc('classify.edit.title'), content, buttons);
         content.parent().css('margin', '10px 0');
     }
 }

@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         getAvailableOptions: function (data) {
             var validOpts = {};
-            var list = this._getDataAsList(data);
+            var list = Array.isArray(data) ? data : this._getDataAsList(data);
             validOpts.maxCount = list.length - 1;
             return validOpts;
         },
@@ -130,8 +130,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 var groupOpts = groupStats.classificationOptions || {};
                 var calculateBounds =
-                    (!groupOpts.method || groupOpts.method !== opts.method) ||
-                    (!groupOpts.count || groupOpts.count !== opts.count);
+                    !groupStats.classificationOptions ||
+                    groupOpts.method !== opts.method ||
+                    groupOpts.count !== opts.count ||
+                    (opts.method === 'manual' && !this._arraysEqual(groupStats.bounds, opts.manualBounds));
 
                 if (calculateBounds) {
                     setBounds(groupStats);
@@ -500,6 +502,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
             }
             return false;
+        },
+        /**
+         * Checks if two arrays have equal primitive values and order.
+         * @return {Boolean} true if the arrays are equal
+         */
+        _arraysEqual: function (a, b) {
+            if (a === b) {
+                return true;
+            }
+            if (!Array.isArray(a) || !Array.isArray(b)) {
+                return false;
+            }
+            if (a.length !== b.length) {
+                return false;
+            }
+            var i;
+            for (i = 0; i < a.length; i++) {
+                if (a[i] !== b[i]) return false;
+            }
+            return true;
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
