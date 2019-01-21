@@ -139,8 +139,8 @@ Oskari.clazz.define(
             const values = this.getValues();
             var oskariStyle = {
                 fill: {
+                    color: values.area.fillColor,
                     area: {
-                        color: values.area.fillColor,
                         pattern: values.area.fillStyle
                     }
                 },
@@ -206,7 +206,7 @@ Oskari.clazz.define(
                         break;
                     case 'area':
                         fClazz.setValues({
-                            fillColor: featureStyle.fill.area.color,
+                            fillColor: featureStyle.fill.color,
                             fillStyle: featureStyle.fill.area.pattern,
                             lineColor: featureStyle.stroke.area.color,
                             lineCorner: featureStyle.stroke.area.lineJoin,
