@@ -64,7 +64,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         content.find('.statsgrid-indicator-list').empty();
         // Get indicators and add them to content using template
         var indicators = me._getIndicators();
-        var metadataPopup = null;
         indicators.forEach(function (ind, id) {
             me.service.getUILabels(ind, function (labels) {
                 var indElem = jQuery(me.__templates.indicator({
