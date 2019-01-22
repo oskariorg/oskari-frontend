@@ -278,6 +278,11 @@ Oskari.registerLocalization({
             'removeAll': 'Poista kaikki',
             'emptyMsg': 'Ei valittuja indikaattoreita'
         },
+        'metadataPopup': {
+            'open': 'Näytä {indicators, plural, one {indikaattorin kuvaus} other {indikaattorien kuvaukset}}',
+            'title': '{indicators, plural, one {Indikaattorin kuvaus} other {Indikaattorien kuvaukset}}',
+            'noMetadata': 'Palvelusta ei saatu {indicators, plural, one {indikaattorin kuvausta} other {indikaattorien kuvauksia}}.'
+        },
         'sumo': {
             'placeholder': 'Valitse tästä',
             'captionFormat': '{0} valittu',
