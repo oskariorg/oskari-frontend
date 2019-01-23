@@ -110,16 +110,17 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             var me = this;
             if (!me._extraOptions) {
                 const initialConf = me._getToolPluginMapfullConf();
-                const isAllowStyleChange = initialConf.config && initialConf.config.isStyleSelectable;
+                const isAllowStyleChange = initialConf && initialConf.config && initialConf.config.isStyleSelectable;
                 const extraOptions = me._templates.extraOptions.clone();
                 extraOptions.find('.style-selection label span').append(me.__loc.layerselection.allowStyleChange);
-                extraOptions.find('.style-selection label input')
+                const allowCheckbox = extraOptions.find('.style-selection label input')
                     .on('change', function () {
                         const isChecked = jQuery(this).is(':checked');
                         me.__plugin.setStyleSelectable(isChecked);
-                    })
-                    .prop('checked', isAllowStyleChange)
-                    .change();
+                    });
+                if (isAllowStyleChange) {
+                    allowCheckbox.prop('checked', true).change();
+                }
                 extraOptions.find('.info').html(me.__loc.layerselection.info);
                 me._extraOptions = extraOptions;
                 var layers = me._getLayersList();
