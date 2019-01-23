@@ -236,8 +236,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                     toolPluginMapfullConf.config.baseLayers));
 
                 if (isPluginConfig) {
-                    var isFound = jQuery.inArray('' + id, toolPluginMapfullConf.config.baseLayers);
-                    return isFound !== -1;
+                    return toolPluginMapfullConf.config.baseLayers.includes('' + id);
                 } else {
                     return false;
                 }
