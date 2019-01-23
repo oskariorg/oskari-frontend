@@ -291,7 +291,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 }
 
                 jQuery.ajax({
-                    url: action,
+                    url: action + '&useOskariStyle=true', // Param useOskariStyle becomes redundant when oskari style json is used only
                     data: values,
                     type: 'POST',
                     success: function (response) {
@@ -340,9 +340,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         _setStyleValuesToStyleForm: function (id, form) {
             var me = this,
                 action = this.instance.getService().getGetUserLayerStyleUrl();
-
+            action += '&id=' + id + '&useOskariStyle=true'; // Param useOskariStyle becomes redundant when oskari style json is used only
             jQuery.ajax({
-                url: action + '&id=' + id,
+                url: action,
                 type: 'GET',
                 success: function (response) {
                     if (typeof response === 'object') {
