@@ -70,8 +70,8 @@ Oskari.clazz.define(
          * @return {Object} values
          */
         getValues: function () {
-            var values = {},
-                me = this;
+            var values = {};
+            var me = this;
             // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
