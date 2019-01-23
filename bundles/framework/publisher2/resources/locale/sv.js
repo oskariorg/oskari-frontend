@@ -102,7 +102,8 @@ Oskari.registerLocalization(
                 },
                 "layerselection": {
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
-                    "selectAsBaselayer": "Välj bakgrundskartlager"
+                    "selectAsBaselayer": "Välj bakgrundskartlager",
+                    "allowStyleChange": "Tillåta stiländring"
                 }
             },
             "toollayout": {
