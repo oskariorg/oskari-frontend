@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             var buttonConf = {
                 iconCls: 'tool-print',
                 tooltip: this.localization.btnTooltip,
-                sticky: true,
+                sticky: false,
                 callback: function () {
                     me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me, 'attach']);
                 }

@@ -286,7 +286,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._addHoverIcon(btn, toolbarConfig, button);
         }
         // notify components that tool has changed
-        e = Oskari.eventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+        e = Oskari.eventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup, btn.sticky);
         this.sandbox.notifyAll(e);
     },
     _addHoverIcon: function (btnConfig, toolbarConfig, buttonEl) {

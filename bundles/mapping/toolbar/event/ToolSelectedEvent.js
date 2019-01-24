@@ -11,9 +11,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent'
  * @param {String} toolId tool that was selected
  * @param {String} groupId group of the tool that was selected
  */
-    function (toolId, groupId) {
+    function (toolId, groupId, isSticky) {
         this._toolId = toolId;
         this._groupId = groupId;
+        this._isSticky = isSticky;
     }, {
     /** @static @property __name event name */
         __name: 'Toolbar.ToolSelectedEvent',
@@ -40,6 +41,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.event.ToolSelectedEvent'
      */
         getGroupId: function () {
             return this._groupId;
+        },
+        /**
+     * @method getSticky
+     * Returns stickyness of selected tool
+     * @return {Boolean}
+     */
+        getSticky: function () {
+            return this._isSticky;
         }
     }, {
     /**

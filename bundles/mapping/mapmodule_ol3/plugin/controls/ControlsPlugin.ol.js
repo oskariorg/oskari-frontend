@@ -71,7 +71,7 @@ Oskari.clazz.define(
                     }
                 },
                 'Toolbar.ToolSelectedEvent': function (event) {
-                    if (event._toolId !== 'zoombox') {
+                    if (event._toolId !== 'zoombox' && event.getSticky()) {
                         this._clearLifetimeInteractions();
                     }
                 }
