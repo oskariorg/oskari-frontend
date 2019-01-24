@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     !groupStats.classificationOptions ||
                     groupOpts.method !== opts.method ||
                     groupOpts.count !== opts.count ||
-                    (opts.method === 'manual' && !Oskari.util.ArraysEqual(groupStats.bounds, opts.manualBounds));
+                    (opts.method === 'manual' && !Oskari.util.arraysEqual(groupStats.bounds, opts.manualBounds));
 
                 if (calculateBounds) {
                     setBounds(groupStats);
