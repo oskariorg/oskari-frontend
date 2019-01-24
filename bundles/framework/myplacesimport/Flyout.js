@@ -322,12 +322,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             }
             var list = [];
             var msg;
-            var errorInfo = response.responseJSON.info;
-            switch (errorInfo.error) {
+            const errorInfo = response.responseJSON.info;
+            const key = errorInfo.error;
+            switch (key) {
             case 'multiple_extensions':
-                msg = this.loc('flyout.error.multiple_extensions', {extension: errorInfo.extension});
+                msg = this.loc('flyout.error.multiple_extensions', {extension: errorInfo.extensions});
                 break;
-            case 'multiple_main':
+            case 'multiple_main_file':
                 msg = this.loc('flyout.error.multiple_main_file', {extensions: errorInfo.extensions});
                 break;
             case 'file_over_size':
@@ -342,7 +343,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 }
                 break;
             case 'parser_error':
-                if (errorInfo.cause === 'no_source_crs') {
+                if (errorInfo.cause === 'unknown_projection') {
                     this._showEpsgInput();
                     msg = errors.noSrs;
                     if (errorInfo.parser === 'shp') {
@@ -351,12 +352,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     break;
                 }
                 // common parser error
-                list.push(errors.parsererror);
                 list.push(errors[errorInfo.parser]);
+                if (errorInfo.cause === 'format_failure') {
+                    list.push(errors.format_failure);
+                } else {
+                    list.push(errors.parser_generic);
+                }
                 break;
             default:
-                if (errors[errorInfo.error]) {
-                    msg = errors[errorInfo.error];
+                if (errors[key]) {
+                    msg = errors[key];
                 } else {
                     msg = errors.generic;
                 }
