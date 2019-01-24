@@ -1198,7 +1198,26 @@ background-color: #888888;
  ol.statsgrid-indicator-list li:nth-child(2n) {
     background-color: #f3f3f3;
 }
-.indicator-list-remove {
+.indicator-list-remove, .indicator-list-info {
     cursor: pointer;
     float: right;
+    margin: 0 3px;
 }
+/* ********************************************
+ * Indicator metadata popup
+ * ********************************************/
+div.indicator-metadata {
+    border: solid #c0d0d0;
+    border-width: 1px 0;
+    div.accordion:first-child {
+        div.accordion_panel {
+            border-top: 0;
+        }
+    }
+    div.accordion_panel {
+        border-bottom: 0;
+        p {
+            margin-top: 10px;
+        }
+    }
+ }

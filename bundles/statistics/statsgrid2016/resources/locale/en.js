@@ -281,6 +281,11 @@ Oskari.registerLocalization({
             'removeAll': 'Remove all',
             'emptyMsg': 'No selected indicators'
         },
+        'metadataPopup': {
+            'open': 'Show indicator {indicators, plural, one {description} other {descriptions}}',
+            'title': 'Indicator {indicators, plural, one {description} other {descriptions}}',
+            'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}'
+        },
         'sumo': {
             'placeholder': 'Select Here',
             'captionFormat': '{0} selected',
