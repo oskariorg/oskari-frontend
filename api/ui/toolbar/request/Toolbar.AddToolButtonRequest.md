@@ -8,7 +8,10 @@ Requests for toolbar to add button with given config
 
 ## Description
 
-Requests for the toolbar to add a button with given config. There are two main types of toolbar buttons: normal buttons & "sticky" buttons. Normal buttons act like any other button in the Oskari UI. Clicking on the button just activates some callback given in the config. Sticky buttons on the other hand stay active (visually pressed down) until some other sticky button is activated. This means that only one sticky button can be active at a time (like radio buttons). It's the responsibility of the functionality adding the button to the toolbar to listen to `Toolbar.ToolSelectedEvent` and stop any ongoing mode the tool implements when some other sticky tool is activated. The event has method `getSticky()` to check for stickyness of the newly selected tool.
+Requests for the toolbar to add a button with given config.
+
+There are two main types of toolbar buttons: normal buttons & "sticky" buttons. Normal buttons act like any other button in the Oskari UI. Clicking on the button just activates some callback given in the config. Sticky buttons on the other hand stay active (visually pressed down) until some other sticky button is activated. This means that only one sticky button can be active at a time (like radio buttons). It's the responsibility of the functionality adding the button to the toolbar to listen to `Toolbar.ToolSelectedEvent` and stop any ongoing mode the tool implements when some other sticky tool is activated. The event has method `getSticky()` to check for stickyness of the newly selected tool. When a sticky tool wants to end its functionality (eg. user clicks "Cancel"), it should select the default tool. This can be done by sending `Toolbar.SelectToolButtonRequest` without parameters.
+
 
 ## Parameters
 
