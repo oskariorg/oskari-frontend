@@ -104,6 +104,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
     stop: function () {
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

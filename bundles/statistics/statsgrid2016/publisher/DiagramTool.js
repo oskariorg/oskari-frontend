@@ -105,6 +105,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

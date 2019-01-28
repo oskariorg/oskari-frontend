@@ -141,6 +141,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });
