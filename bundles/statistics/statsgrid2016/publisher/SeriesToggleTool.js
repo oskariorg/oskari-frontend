@@ -40,15 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
             stats.togglePlugin.removeTool(this.id);
         }
     },
-    /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return found stats layer, if not found then null
-    */
-    _getStatsLayer: function () {
-        return Oskari.getSandbox().findAllSelectedMapLayers().find(lyr => lyr.getId() === 'STATS_LAYER');
-    },
     isDisplayed: function (data) {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (!stats) {

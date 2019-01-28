@@ -93,6 +93,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
             this._overflowCheck();
+            if (this._instance.isEmbedded() && this._config.transparent) {
+                this.makeTransparent(true);
+            }
             this.trigger('show');
         },
         _makeDraggable: function () {

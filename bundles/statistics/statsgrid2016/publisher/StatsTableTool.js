@@ -42,33 +42,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
         return me.__tool;
     },
     /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return founded stats layer, if not found then null
-    */
-    _getStatsLayer: function () {
-        var me = this;
-        var selectedLayers = me.__sandbox.findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
-    },
-    /**
     * Set enabled.
     * @method setEnabled
     * @public
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-
     setEnabled: function (enabled) {
         var me = this;
         var changed = me.state.enabled !== enabled;

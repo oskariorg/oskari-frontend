@@ -39,9 +39,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
         return this.__tool;
     },
-    _getStatsLayer: function () {
-        return Oskari.getSandbox().findAllSelectedMapLayers().find(lyr => lyr.getId() === 'STATS_LAYER');
-    },
     setEnabled: function (enabled) {
         if (typeof enabled !== 'boolean') {
             enabled = false;
