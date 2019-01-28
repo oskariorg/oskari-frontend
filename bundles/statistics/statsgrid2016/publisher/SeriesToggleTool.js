@@ -78,6 +78,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', funct
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

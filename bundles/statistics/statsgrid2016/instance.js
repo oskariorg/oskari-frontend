@@ -73,10 +73,6 @@ Oskari.clazz.define(
                 me.createClassficationView(true);
                 me.enableClassification(conf.allowClassification !== false);
 
-                if (me.conf.transparent) {
-                    me.classificationPlugin.makeTransparent(true);
-                }
-                //
                 if (me.conf.grid) {
                     me.togglePlugin.addTool('table');
                 }

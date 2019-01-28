@@ -40,25 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
             stats.togglePlugin.removeTool(this.id);
         }
     },
-    /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return found stats layer, if not found then null
-    */
-    _getStatsLayer: function () {
-        var selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
-    },
     isDisplayed: function (data) {
         var hasStatsLayerOnMap = this._getStatsLayer() !== null;
         if (hasStatsLayerOnMap) {
@@ -105,6 +86,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });
