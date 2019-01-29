@@ -1,4 +1,6 @@
 import equalSizeBands from '../util/equalSizeBands';
+import geostats from 'geostats/lib/geostats.min.js';
+import 'geostats/lib/geostats.css';
 
 /**
  * @class Oskari.statistics.statsgrid.ClassificationService
@@ -43,7 +45,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         getAvailableOptions: function (data) {
             var validOpts = {};
-            var list = this._getDataAsList(data);
+            var list = Array.isArray(data) ? data : this._getDataAsList(data);
             validOpts.maxCount = list.length - 1;
             return validOpts;
         },
@@ -98,7 +100,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             const setBounds = (stats) => {
                 if (opts.method === 'jenks') {
                     // Luonnolliset välit
-                    response.bounds = stats.getJenks(opts.count);
+                    // geostats.js has performance problems when calculating jenks natural breaks
+                    // hence we are using different function implemented in GeostatsHelper for that
+                    const geostatsHelper = new GeostatsHelper();
+                    response.bounds = geostatsHelper.getJenks(stats.serie, opts.count);
+                    stats.setBounds(response.bounds);
+                    stats.setRanges();
                 } else if (opts.method === 'quantile') {
                     // Kvantiilit
                     response.bounds = stats.getQuantile(opts.count);
@@ -123,8 +130,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 var groupOpts = groupStats.classificationOptions || {};
                 var calculateBounds =
-                    (!groupOpts.method || groupOpts.method !== opts.method) ||
-                    (!groupOpts.count || groupOpts.count !== opts.count);
+                    !groupStats.classificationOptions ||
+                    groupOpts.method !== opts.method ||
+                    groupOpts.count !== opts.count ||
+                    (opts.method === 'manual' && !Oskari.util.arraysEqual(groupStats.bounds, opts.manualBounds));
 
                 if (calculateBounds) {
                     setBounds(groupStats);

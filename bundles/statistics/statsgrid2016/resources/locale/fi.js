@@ -127,7 +127,11 @@ Oskari.registerLocalization({
                 'distinct': 'Jatkuva',
                 'discontinuous': 'Epäjatkuva'
             },
-            'editClassifyTitle': 'Muokkaa luokittelua',
+            'edit': {
+                'title': 'Muokkaa luokittelua',
+                'open': 'Avaa luokittelun muokkaus',
+                'close': 'Sulje luokittelun muokkaus'
+            },
             'classifyFieldsTitle': 'Luokitteluarvot',
             'map': {
                 'mapStyle': 'Kartan tyyli',
@@ -169,7 +173,8 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Vuosi kenttä ei voi olla tyhjä.',
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
             'myIndicatorDatasource': 'Tietolähde on tyhjä.',
-            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana'
+            'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
+            'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
         },
         'missing': {
             'regionsetName': 'Tuntematon'
@@ -276,6 +281,11 @@ Oskari.registerLocalization({
             'title': 'Indikaattorit',
             'removeAll': 'Poista kaikki',
             'emptyMsg': 'Ei valittuja indikaattoreita'
+        },
+        'metadataPopup': {
+            'open': 'Näytä {indicators, plural, one {indikaattorin kuvaus} other {indikaattorien kuvaukset}}',
+            'title': '{indicators, plural, one {Indikaattorin kuvaus} other {Indikaattorien kuvaukset}}',
+            'noMetadata': 'Palvelusta ei saatu {indicators, plural, one {indikaattorin kuvausta} other {indikaattorien kuvauksia}}.'
         },
         'sumo': {
             'placeholder': 'Valitse tästä',

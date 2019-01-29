@@ -32,6 +32,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         service.getIndicatorData(datasource, indicator, selections, series, regionset, function (err, data) {
             if (err) {
                 Oskari.log('RegionsetViewer').warn('Error getting indicator data', datasource, indicator, selections, regionset);
+                me._clearRegions();
                 return;
             }
             const classificationOpts = state.getClassificationOpts(ind.hash);
@@ -39,6 +40,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             const classified = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
             if (!classified) {
                 Oskari.log('RegionsetViewer').warn('Error getting classification', data, classified);
+                me._clearRegions();
                 return;
             }
             if (me._lastRenderCache.classification &&
@@ -428,9 +430,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
         const searchOptions = {id: regionId};
         me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
 
-        delete requestOptions.prio;
-        searchOptions.id = 'border' + regionId;
-        me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
+        if (classification.mapStyle && classification.mapStyle === 'points') {
+            const borderRequestOptions = {...requestOptions};
+            const borderSearchOptions = {...searchOptions};
+            delete borderRequestOptions.prio;
+            borderSearchOptions.id = 'border' + regionId;
+            me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [borderSearchOptions, borderRequestOptions]);
+        }
     },
     /**
      * Listen to events that require re-rendering the UI

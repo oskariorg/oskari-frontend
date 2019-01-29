@@ -58,45 +58,9 @@ Oskari.clazz.define(
          * @param {Object} style
          */
         setStyleValues: function (style) {
-            style.area.lineColor = (typeof style.area.lineColor === 'string' ? style.area.lineColor : null);
-            style.area.fillColor = (typeof style.area.fillColor === 'string' ? style.area.fillColor : null);
-            this.visualizationForm.setValues(style);
-        },
-
-        /**
-         * Returns visualization form values as an object
-         *
-         * @method _getStyleValues
-         * @private
-         * @return {Object} styleJson
-         */
-        _getStyleValues: function (form) {
-            var formValues = form.getValues(),
-                styleJson = {};
-
-            if (formValues) {
-                styleJson.dot = {
-                    size: formValues.dot.size,
-                    color: formValues.dot.color,
-                    shape: formValues.dot.shape
-                };
-                styleJson.line = {
-                    width: formValues.line.width,
-                    color: formValues.line.color,
-                    cap: formValues.line.cap,
-                    corner: formValues.line.corner,
-                    style: formValues.line.style
-                };
-                styleJson.area = {
-                    lineWidth: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
-                    lineStyle: formValues.area.lineStyle,
-                    fillStyle: formValues.area.fillStyle,
-                    lineCorner: formValues.area.lineCorner
-                };
-            }
-            return styleJson;
+            style.fill.color = (typeof style.fill.color === 'string' ? style.fill.color : null);
+            style.stroke.area.color = (typeof style.stroke.area.color === 'string' ? style.stroke.area.color : null);
+            this.visualizationForm.setOskariStyleValues(style);
         },
 
         /**
@@ -106,8 +70,8 @@ Oskari.clazz.define(
          * @return {Object} values
          */
         getValues: function () {
-            var values = {},
-                me = this;
+            var values = {};
+            var me = this;
             // infobox will make us lose our reference so search
             // from document using the form-class
             var onScreenForm = this._getOnScreenForm();
@@ -117,7 +81,7 @@ Oskari.clazz.define(
                 values.desc = onScreenForm.find('input[data-name=userlayerdesc]').val();
                 values.source = onScreenForm.find('input[data-name=userlayersource]').val();
             }
-            values.style = JSON.stringify(me._getStyleValues(me.visualizationForm));
+            values.style = JSON.stringify(me.visualizationForm.getOskariStyle());
 
             return values;
         },

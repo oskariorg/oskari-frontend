@@ -1,15 +1,15 @@
-Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function () {
+Oskari.clazz.define('Oskari.mapframework.publisher.tool.SeriesToggleTool', function () {
 }, {
     index: 1,
     group: 'data',
     allowedLocations: [],
     allowedSiblings: [],
-    id: 'diagram',
+    id: 'series',
 
     init: function (data) {
         var enabled = data &&
             Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
-            data.configuration.statsgrid.conf.diagram === true;
+            data.configuration.statsgrid.conf.series === true;
         this.setEnabled(enabled);
     },
     getTool: function (stateData) {
@@ -17,9 +17,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
         if (!me.__tool) {
             me.__tool = {
                 id: 'Oskari.statistics.statsgrid.TogglePlugin',
-                title: 'displayDiagram',
+                title: 'allowHidingSeriesControl',
                 config: {
-                    diagram: true
+                    series: true
                 }
             };
         }
@@ -35,27 +35,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
             return;
         }
         if (enabled) {
-            stats.togglePlugin.addTool(this.id);
+            stats.addMapPluginToggleTool(this.id);
         } else {
             stats.togglePlugin.removeTool(this.id);
         }
     },
     isDisplayed: function (data) {
-        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
-        if (hasStatsLayerOnMap) {
-            return true;
-        }
-        var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-        if (!configExists) {
+        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
+        if (!stats) {
             return false;
         }
-        if (!Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid')) {
-            Oskari.log('Oskari.mapframework.publisher.tool.DiagramTool')
-                .warn("Published map had config, but current appsetup doesn't include StatsGrid! " +
-                  'The thematic map functionality will be removed if user saves the map!!');
-            return false;
-        }
-        return true;
+        var indicators = stats.getStatisticsService().getStateService().getIndicators();
+        var seriesFound = !!(indicators.find(cur => !!cur.series));
+        return seriesFound;
     },
     getValues: function () {
         var me = this;
@@ -73,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
                 statsgrid: {
                     state: statsGridState,
                     conf: {
-                        diagram: me.state.enabled
+                        series: me.state.enabled
                     }
                 }
             }

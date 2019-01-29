@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
         }
         toolElement.addClass('active');
     },
-    addTool: function (toolId) {
+    addTool: function (toolId, clickCb) {
         var me = this;
 
         if (!this.element) {
@@ -34,10 +34,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
         }
 
         var toolElement = jQuery('<div class=' + toolId + '></div>');
+        var onClick = typeof clickCb === 'function' ? clickCb : () => me.flyoutManager.toggle(toolId);
+        toolElement.on('click', onClick);
 
-        toolElement.on('click', function () {
-            me.flyoutManager.toggle(toolId);
-        });
         this.element.append(toolElement);
     },
     removeTool: function (toolId) {

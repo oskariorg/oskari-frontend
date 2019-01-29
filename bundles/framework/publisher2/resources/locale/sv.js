@@ -102,7 +102,8 @@ Oskari.registerLocalization(
                 },
                 "layerselection": {
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
-                    "selectAsBaselayer": "Välj bakgrundskartlager"
+                    "selectAsBaselayer": "Välj bakgrundskartlager",
+                    "allowStyleChange": "Tillåta stiländring"
                 }
             },
             "toollayout": {
@@ -118,7 +119,11 @@ Oskari.registerLocalization(
                 "label": "Statistik",
                 "tooltip": "Visa kartstatistik",
                 "grid": "Visa statistik",
-                "allowClassification": "Tillåt klassificering"
+                "allowClassification": "Tillåt klassificering",
+                "transparent": "Sätt klassificeringsbakgrund genomskinlig",
+                "displayDiagram" : "Visa diagram",
+                "allowHidingClassification" : "Tillåt att gömma klassificering",
+                "allowHidingSeriesControl" : "Tillåt att gömma seriespelare"
             },
             "layout": {
                 "label": "Grafisk Layout",

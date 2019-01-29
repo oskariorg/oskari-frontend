@@ -12,12 +12,20 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
         ],
         groupedSiblings: false,
         _templates: {
-            backgroundLayerSelector: jQuery('<div class="publisher2 background-layer-selector tool-options"><div class="header"></div><div class="layers"></div></div>'),
+            extraOptions: jQuery(`
+            <div class="publisher2 background-layer-selector tool-options">
+                <div class="style-selection">
+                    <label><input type="checkbox"/><span></span></label>
+                </div>
+                <div class="info"></div>
+                <div class="layers"></div>
+            </div>
+            `),
             backgroundCheckbox: jQuery('<div class="background-layers"><label>' +
                 '    <input class="baselayer" type="checkbox"/>' +
                 '  </label><div>')
         },
-        _backgroundLayerSelector: null,
+        _extraOptions: null,
 
         /**
     * Get tool object.
@@ -50,6 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                     pluginConfig.config.baseLayers = layerSelection.baseLayers;
                     pluginConfig.config.defaultBaseLayer = layerSelection.defaultBaseLayer;
                 }
+                pluginConfig.config.isStyleSelectable = me.__plugin.getStyleSelectable();
                 return {
                     configuration: {
                         mapfull: {
@@ -85,10 +94,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 layerSelection = {};
             var pluginValues = me.getPlugin().getBaseLayers();
             if (pluginValues.defaultBaseLayer) {
-                layerSelection.baseLayers =
-                pluginValues.baseLayers;
-                layerSelection.defaultBaseLayer =
-                pluginValues.defaultBaseLayer;
+                layerSelection.baseLayers = pluginValues.baseLayers;
+                layerSelection.defaultBaseLayer = pluginValues.defaultBaseLayer;
             }
             return layerSelection;
         },
@@ -101,17 +108,29 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      */
         getExtraOptions: function () {
             var me = this;
-            var backgroundLayerSelector = me._templates.backgroundLayerSelector.clone();
-            if (!me._backgroundLayerSelector) {
-                backgroundLayerSelector.find('.header').html(me.__loc.layerselection.info);
-                me._backgroundLayerSelector = backgroundLayerSelector;
+            if (!me._extraOptions) {
+                const initialConf = me._getToolPluginMapfullConf();
+                const isAllowStyleChange = initialConf && initialConf.config && initialConf.config.isStyleSelectable;
+                const extraOptions = me._templates.extraOptions.clone();
+                extraOptions.find('.style-selection label span').append(me.__loc.layerselection.allowStyleChange);
+                const allowCheckbox = extraOptions.find('.style-selection label input')
+                    .on('change', function () {
+                        const isChecked = jQuery(this).is(':checked');
+                        me.__plugin.setStyleSelectable(isChecked);
+                    });
+                if (isAllowStyleChange) {
+                    allowCheckbox.prop('checked', true).change();
+                }
+                extraOptions.find('.info').html(me.__loc.layerselection.info);
+                me._extraOptions = extraOptions;
                 var layers = me._getLayersList();
                 for (var i = 0; i < layers.length; i++) {
                     var layer = layers[i];
                     me._addLayer(layer);
                 }
+                me._checkCanChangeStyle(layers);
             }
-            return me._backgroundLayerSelector;
+            return me._extraOptions;
         },
         /**
      * @method hasPublishRight
@@ -186,7 +205,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
             };
 
             var layerDiv = me._templates.backgroundCheckbox.clone(),
-                foundedLayerDiv = me._backgroundLayerSelector.find('.layers').find('[data-id=' + layer.getId() + ']');
+                foundedLayerDiv = me._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
 
             if (foundedLayerDiv.length > 0) {
                 return;
@@ -202,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                 layer.selected = true;
             }
             input.on('change', closureMagic(layer));
-            me._backgroundLayerSelector.find('.layers').append(layerDiv);
+            me._extraOptions.find('.layers').append(layerDiv);
         },
         /**
      * Should preselt layer.
@@ -211,13 +230,33 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      * @return {Boolean} true if layer must be preselect, other false
      */
         shouldPreselectLayer: function (id) {
+            const toolPluginMapfullConf = this._getToolPluginMapfullConf();
+            if (toolPluginMapfullConf) {
+                var isPluginConfig = !!((toolPluginMapfullConf && toolPluginMapfullConf.config &&
+                    toolPluginMapfullConf.config.baseLayers));
+
+                if (isPluginConfig) {
+                    return toolPluginMapfullConf.config.baseLayers.includes('' + id);
+                } else {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        },
+        /**
+         * @private @method _getToolPluginMapfullConf
+         * Get map view cofiguration (from mapfull) for this tool
+         * @return {Object / null} config or null if not found
+         */
+        _getToolPluginMapfullConf: function () {
             var me = this;
             var isConfig = !!((me.data && me.data.configuration));
             var isPlugins = !!((isConfig && me.data.configuration.mapfull &&
             me.data.configuration.mapfull.conf && me.data.configuration.mapfull.conf.plugins));
+            var toolPlugin = null;
             if (isPlugins) {
                 var plugins = me.data.configuration.mapfull.conf.plugins;
-                var toolPlugin = null;
                 for (var i = 0; i < plugins.length; i++) {
                     var plugin = plugins[i];
                     if (plugin.id === me.getTool().id) {
@@ -225,18 +264,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
                         break;
                     }
                 }
-                var isPluginConfig = !!((toolPlugin && toolPlugin.config &&
-                toolPlugin.config.baseLayers));
-
-                if (isPluginConfig) {
-                    var isFound = jQuery.inArray('' + id, toolPlugin.config.baseLayers);
-                    return isFound !== -1;
-                } else {
-                    return false;
-                }
-            } else {
-                return false;
             }
+            return toolPlugin;
         },
         /**
      * Handle add map layer event
@@ -246,6 +275,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
         _handleMapLayerAdd: function (layer) {
             var me = this;
             me._addLayer(layer);
+            me._checkCanChangeStyle();
         },
         /**
      * Handle remove map layer event
@@ -254,9 +284,26 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.LayerSelectionTool',
      */
         _handleMapLayerRemove: function (layer) {
             var me = this,
-                layerDiv = me._backgroundLayerSelector.find('.layers').find('[data-id=' + layer.getId() + ']');
+                layerDiv = me._extraOptions.find('.layers').find('[data-id=' + layer.getId() + ']');
             // TODO checked handling
             layerDiv.remove();
+            me._checkCanChangeStyle();
+        },
+        /**
+         * @private @method _checkCanChangeStyle
+         * Enable / disable checkbox for layer style change
+         * @param {AbstractLayer[]} layers that should be checked
+         */
+        _checkCanChangeStyle: function (layers = this._getLayersList()) {
+            if (!this._extraOptions) {
+                return;
+            }
+            const isStyleChangePossible = layers.some((layer) => {
+                return typeof layer.getStyles === 'function' && layer.getStyles().length > 1;
+            });
+
+            const input = this._extraOptions.find('.style-selection label input');
+            input.prop('disabled', !isStyleChangePossible);
         },
         /**
      * @method init

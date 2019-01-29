@@ -1,14 +1,24 @@
+import MetadataPopup from './MetadataPopup';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (service) {
     this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.element = null;
     this.service = service;
+    this.metadataPopup = new MetadataPopup();
     this._removeAllBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
     this._wrapper = jQuery('<div class="statsgrid-indicator-list-wrapper"></div>');
     this._content = jQuery('<div class="statsgrid-indicator-list-content"><ol class="statsgrid-indicator-list"></ol></div>');
     this._bindToEvents();
 }, {
     __templates: {
-        indicator: _.template('<li><div>${name} <div class="indicator-list-remove icon-close" data-ind-hash="${indHash}"/></div></li>'),
+        indicator: _.template(
+            `<li>
+                <div>
+                    \${name}
+                    <div class="indicator-list-info icon-info"/>
+                    <div class="indicator-list-remove icon-close" data-ind-hash="\${indHash}"/>
+                </div>
+            </li>`),
         empty: _.template('<li>${emptyMsg}</li>')
     },
     /**
@@ -28,6 +38,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         var me = this;
         // Rerender indicator list on indicator event
         me.service.on('StatsGrid.IndicatorEvent', function (event) {
+            me._updateIndicatorList();
+        });
+        me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             me._updateIndicatorList();
         });
     },
@@ -61,6 +74,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
                 // Add event listener for removing indicator
                 indElem.find('.icon-close').on('click', function () {
                     me.service.getStateService().removeIndicator(ind.datasource, ind.indicator, ind.selections, ind.series);
+                });
+                // Add event listener for showing indicator description
+                indElem.find('.icon-info').on('click', function () {
+                    me.metadataPopup.show(ind.datasource, ind.indicator);
                 });
             });
         });

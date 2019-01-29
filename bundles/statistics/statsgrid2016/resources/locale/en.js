@@ -127,7 +127,11 @@ Oskari.registerLocalization({
                 'distinct': 'Continuous',
                 'discontinuous': 'Discontinuous'
             },
-            'editClassifyTitle': 'Modify classification',
+            'edit': {
+                'title': 'Modify classification',
+                'open': 'Open the classification editor',
+                'close': 'Close the classification editor'
+            },
             'classifyFieldsTitle': 'Classification values',
             'map': {
                 'mapStyle': 'Map style',
@@ -168,7 +172,8 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Year field cannot be empty.',
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
             'myIndicatorDatasource': 'Datasource is empty.',
-            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.'
+            'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
+            'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}'
         },
         'missing': {
             'regionsetName': 'Unknown'
@@ -275,6 +280,11 @@ Oskari.registerLocalization({
             'title': 'Indicators',
             'removeAll': 'Remove all',
             'emptyMsg': 'No selected indicators'
+        },
+        'metadataPopup': {
+            'open': 'Show indicator {indicators, plural, one {description} other {descriptions}}',
+            'title': 'Indicator {indicators, plural, one {description} other {descriptions}}',
+            'noMetadata': 'Service did not return {indicators, plural, one {description for the indicator} other {descriptions for the indicators}}'
         },
         'sumo': {
             'placeholder': 'Select Here',
