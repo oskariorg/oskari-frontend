@@ -15,6 +15,7 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this._log = Oskari.log('WfsMvtLayerPlugin');
             this.layertype = 'wfs';
+            this.hoverState.property = '_oid';
         }
         _initImpl () {
             super._initImpl();

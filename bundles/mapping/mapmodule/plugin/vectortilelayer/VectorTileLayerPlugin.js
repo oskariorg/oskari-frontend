@@ -23,8 +23,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         this.layertype = 'vectortile';
         this.hoverState = {
             layer: null,
-            propertyId: null,
-            feature: null
+            feature: null,
+            property: FTR_PROPERTY_ID
         };
     }
     /**
@@ -186,30 +186,26 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param { olVectorTileLayer } layer
      */
     onMapHover (event, feature, layer) {
-        if (feature && layer) {
-            var hoverOptions = layer.get(LAYER_HOVER);
-            if (hoverOptions) {
-                const propertyId = feature.get(FTR_PROPERTY_ID);
-                if (this.hoverState.layer && this.hoverState.layer !== layer) {
-                    // clear highlight from previously highlighted layer.
-                    this.hoverState.propertyId = null;
-                    this.hoverState.feature = null;
-                    this.hoverState.layer.changed();
-                    this.hoverState.layer = null;
-                }
-                if (this.hoverState.feature !== feature && hoverOptions.featureStyle) {
-                    this.hoverState.propertyId = propertyId;
-                    this.hoverState.feature = feature;
-                    this.hoverState.layer = layer;
-                    this.hoverState.layer.changed();
-                }
+        const {feature: hoverFeature, layer: hoverLayer, property} = this.hoverState;
+        if (feature === hoverFeature) {
+            return;
+        }
+        if (feature && hoverFeature && feature.get(property) === hoverFeature.get(property)) {
+            return;
+        }
+        this.hoverState.feature = feature;
+        this.hoverState.layer = layer;
+        if (hoverLayer) {
+            const style = (hoverLayer.get(LAYER_HOVER) || {}).featureStyle;
+            if (style) {
+                hoverLayer.changed();
             }
-        } else if (this.hoverState.layer) {
-            // Remove feature highlighting
-            this.hoverState.propertyId = null;
-            this.hoverState.feature = null;
-            this.hoverState.layer.changed();
-            this.hoverState.layer = null;
+        }
+        if (layer && layer !== hoverLayer) {
+            const style = (layer.get(LAYER_HOVER) || {}).featureStyle;
+            if (style) {
+                layer.changed();
+            }
         }
     }
 
