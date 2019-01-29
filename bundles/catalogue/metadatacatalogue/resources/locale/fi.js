@@ -51,7 +51,7 @@ Oskari.registerLocalization(
         "invalid_characters": "Hakusanassa on kiellettyjä merkkejä. Sallittuja merkkejä ovat aakkoset (A-Ö, a-ö), numerot (0-9), piste (.), pilkku (,), yhdysviiva (-) ja huutomerkki (!). Voit myös korvata yhden merkin kysymysmerkillä (?) ja sanan loppuosan jokerimerkillä (*):",
         "too_short": "Antamasi hakusana on liian lyhyt. Jos käytät jokerimerkkiä (*), sanassa on oltava vähintään neljä merkkiä ennen jokerimerkkiä.",
         "cannot_be_empty": "Antamasi hakusana on tyhjä. Hakusanassa on oltava vähintään yksi merkki.",
-        "no_search_selections": "Ei valintoja...",
+        "no_search_selections": "Anna hakusana tai valitse vähintään yksi hakuehto.",
         "too_many_stars": "Antamassasi hakusanassa on liian monta jokerimerkkiä. Hakusanassa saa olla vain yksi jokerimerkki sanan lopussa.",
         "searching": "Haetaan…",
         "updated": "ylläpidon tiheys",
