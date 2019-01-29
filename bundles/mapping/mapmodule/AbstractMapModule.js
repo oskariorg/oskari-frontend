@@ -106,9 +106,7 @@ Oskari.clazz.define(
         me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
-        // User location
-        this._locationWatch = null;
-        this._locationPath = null;
+
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
 
@@ -550,117 +548,6 @@ Oskari.clazz.define(
             lonlat.lat = Number(lonlat.lat);
 
             return lonlat;
-        },
-        /**
-         * Tries to get the user location. Signals with an UserLocationEvent and callback with lon and lat params
-         * when successfully got the location or without params as error indicator.
-         * @param  {Function} callback function that is called with lon, lat as params on happy case
-         * @param  {Object}   options  options for navigator.geolocation.getCurrentPosition()
-         */
-        getUserLocation: function (callback, options, errorCB) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
-            var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
-            // normalize opts with defaults
-            var opts = options || {};
-            var navigatorOpts = {
-                maximumAge: 0,
-                timeout: 6000,
-                enableHighAccuracy: false
-            };
-            // override defaults with given options
-            Object.keys(navigatorOpts).forEach((key) => {
-                if (opts.hasOwnProperty(key)) {
-                    navigatorOpts[key] = opts[key];
-                }
-            });
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        // transform coordinates from browser projection to current
-                        var lonlat = me.transformCoordinates({
-                            lon: position.coords.longitude,
-                            lat: position.coords.latitude }, 'EPSG:4326');
-                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat, position.coords.accuracy, null));
-                        // notify callback
-                        if (typeof callback === 'function') {
-                            callback(lonlat.lon, lonlat.lat, position.coords.accuracy);
-                        }
-                    },
-                    function (errors) {
-                        me.log.warn('Error getting user location', errors);
-                        // notify event without position to signal failure
-                        var error = errorCodes[errors.code] || errorCodes[2];
-                        sandbox.notifyAll(evtBuilder(null, null, null, error));
-                        if (typeof errorCB === 'function') {
-                            errorCB(error);
-                        }
-                    }, navigatorOpts
-                );
-            } else {
-                // browser doesn't support
-            }
-        },
-        watchUserLocation: function (successCb, errorCB, options) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
-            var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
-            var opts = options || {};
-            var timestamp;
-            // default values
-            var navigatorOpts = {
-                maximumAge: 5000,
-                timeout: 10000,
-                enableHighAccuracy: true
-            };
-            // override defaults with given options
-            Object.keys(navigatorOpts).forEach((key) => {
-                if (opts.hasOwnProperty(key)) {
-                    navigatorOpts[key] = opts[key];
-                }
-            });
-            if (navigator.geolocation) {
-                this._locationWatch = navigator.geolocation.watchPosition(
-                    function (position) {
-                        me.log.debug(position);
-                        if (timestamp === position.timestamp) {
-                            // some browsers sends first previous position and then changed position
-                            // TODO: is this only location emulator feature, test how this works with mobile phones
-                            return;
-                        }
-                        timestamp = position.timestamp;
-                        // transform coordinates from browser projection to current
-                        var pos = me.transformCoordinates({
-                            lon: position.coords.longitude,
-                            lat: position.coords.latitude }, 'EPSG:4326');
-                        pos.accuracy = position.coords.accuracy;
-                        sandbox.notifyAll(evtBuilder(pos.lon, pos.lat, pos.accuracy, null));
-                        // notify callback
-                        if (typeof successCb === 'function') {
-                            successCb(pos);
-                        }
-                    },
-                    function (errors) {
-                        me.log.warn('Error getting user location', errors);
-                        // notify event without position to signal failure
-                        var error = errorCodes[errors.code] || errorCodes[2];
-                        sandbox.notifyAll(evtBuilder(null, null, null, error));
-                        // me.stopUserLocationWatch();
-                        if (typeof errorCB === 'function') {
-                            errorCB(error);
-                        }
-                    }, navigatorOpts
-                );
-            } else {
-                // browser doesn't support
-            }
-        },
-        stopUserLocationWatch: function () {
-            if (navigator.geolocation) {
-                navigator.geolocation.clearWatch(this._locationWatch);
-            }
         },
         /* --------------- /MAP LOCATION ------------------------ */
 

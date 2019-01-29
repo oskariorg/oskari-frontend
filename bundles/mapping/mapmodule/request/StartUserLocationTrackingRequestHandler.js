@@ -1,3 +1,5 @@
+import {watchUserLocation, stopUserLocationWatch,
+    clearLocationCoords, getLocationCoords} from '../LocationModule';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler
  * Handles StartUserLocationTrackingRequest requests
@@ -15,9 +17,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
         var focused = false;
 
         // clear previous
-        this._clearLocation();
-        mapmodule.clearLocationPath();
-        mapmodule.stopUserLocationWatch();
+        this._clearLocationFromMap();
+        clearLocationCoords();
+        stopUserLocationWatch();
 
         var succesCb = function (pos) {
             // move map to coordinates
@@ -27,15 +29,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
                 mapmodule.zoomToFitMeters(pos.accuracy * 4);
             } else if (opts.centerMap === 'update') {
                 mapmodule.centerMap(pos);
+                // zoom only to first location
                 if (!focused) {
                     focused = true;
                     mapmodule.zoomToFitMeters(pos.accuracy * 4);
                 }
             }
             if (opts.addToMap === 'point') {
-                me._addLocationToMap(pos);
+                me._addLocationToMap(pos, false);
             } else if (opts.addToMap === 'path') {
-                me._addLocationToPath(pos);
+                me._addPathToMap();
+            } else if (opts.addToMap === 'location') {
+                me._addLocationToMap(pos);
             }
         };
         var errorCb = function (error) {
@@ -44,10 +49,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
                 me._clearLocation();
             }
         };
-        mapmodule.watchUserLocation(succesCb, errorCb, opts);
+        watchUserLocation(succesCb, errorCb, opts);
     },
-    _addLocationToMap: function (pos) {
-        const features = this.mapmodule.getLocationGeoJSON(pos);
+    _addLocationToMap: function (pos, addAccuracy) {
+        const features = this.mapmodule.getLocationGeoJSON(pos, addAccuracy);
         const featureStyle = {
             fill: {
                 color: 'rgba(57, 150, 237, 0.3)'
@@ -69,11 +74,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
         };
         Oskari.getSandbox().postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [features, layerOptions]);
     },
-    _clearLocation: function () {
+    _clearLocationFromMap: function () {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'USER_LOCATION_LAYER']);
     },
-    _addLocationToPath: function (pos) {
-        const path = this.mapmodule.updateLocationPath([pos.lon, pos.lat]);
+    _addPathToMap: function () {
+        const coords = getLocationCoords();
+        console.log(coords);
+        const path = this.mapmodule.getLocationPathGeoJSON(coords);
         if (!path) {
             return;
         }

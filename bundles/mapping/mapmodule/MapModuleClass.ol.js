@@ -90,7 +90,6 @@ export default class MapModule extends AbstractMapModule {
         }));
 
         me._setupMapEvents(map);
-
         return map;
     }
 
@@ -380,7 +379,7 @@ export default class MapModule extends AbstractMapModule {
 
         return olExtent.containsCoordinate(extent, lonlatArray);
     }
-    getLocationGeoJSON (position) {
+    getLocationGeoJSON (position, addAccuracy) {
         const coord = [position.lon, position.lat];
         const accuracy = position.accuracy;
         var features = [];
@@ -388,7 +387,7 @@ export default class MapModule extends AbstractMapModule {
             geometry: new olGeom.Point(coord),
             name: 'location'
         }));
-        if (accuracy) {
+        if (accuracy && addAccuracy !== false) {
             features.push(new olFeature({
                 geometry: fromCircle(new olGeom.Circle(coord, accuracy), 50),
                 name: 'accuracy'
@@ -396,22 +395,8 @@ export default class MapModule extends AbstractMapModule {
         }
         return this.getGeoJSONFromFeatures(features);
     }
-    updateLocationPath (coordinate) {
-        if (!Array.isArray(coordinate)) {
-            return;
-        }
-
-        if (!this._locationPath) {
-            this._locationPath = new olGeom.LineString([coordinate]);
-            return null;
-            // or return point
-            // return this.getLocationGeoJSON(coordinate[0], coordinate[1]);
-        }
-        this._locationPath.appendCoordinate(coordinate);
-        return this.getLocationPathGeoJSON();
-    }
-    getLocationPathGeoJSON () {
-        var geom = this._locationPath;
+    getLocationPathGeoJSON (lineCoords) {
+        var geom = new olGeom.LineString(lineCoords);
         if (geom) {
             var feature = new olFeature({
                 geometry: geom,
@@ -420,15 +405,6 @@ export default class MapModule extends AbstractMapModule {
             return this.getGeoJSONFromFeatures([feature]);
         }
         return null;
-    }
-    getLocationPathCoordinates () {
-        if (this._locationPath) {
-            return this._locationPath.getCoordinates();
-        }
-        return [];
-    }
-    clearLocationPath () {
-        this._locationPath = null;
     }
     /* <------------- / OL3 specific ----------------------------------- */
 

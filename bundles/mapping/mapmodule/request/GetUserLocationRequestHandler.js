@@ -1,3 +1,5 @@
+import {getUserLocation} from '../LocationModule';
+
 /**
  * @classOskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler
  * Handles MapModulePlugin.GetUserLocationRequest requests
@@ -30,7 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
         var errorCb = function () {
             me._clearLocation();
         };
-        mapmodule.getUserLocation(succesCb, opts, errorCb);
+        getUserLocation(succesCb, errorCb, opts);
     },
     _addLocationToMap: function (lon, lat, accuracy) {
         const pos = {

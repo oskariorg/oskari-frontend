@@ -1,3 +1,4 @@
+import {stopUserLocationWatch, clearLocationCoords} from '../LocationModule';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler
  * Handles StopUserLocationTrackingRequest requests
@@ -6,6 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StopUserLocati
     this.sandbox = sandbox;
     this.mapmodule = mapmodule;
     this._log = Oskari.log('StopUserLocationTrackingRequestHandler');
+    // TODO: ?ClearUserLocationRequest? to clear both: track and get userlocations
 }, {
     handleRequest: function (core, request) {
         this._log.debug('Stop user location tracking');
@@ -14,9 +16,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StopUserLocati
             this._removeLocationsFromMap();
         }
         if (opts.removePath !== false) {
-            this.mapmodule.clearLocationPath();
+            clearLocationCoords();
         }
-        this.mapmodule.stopUserLocationWatch();
+        stopUserLocationWatch();
     },
     _removeLocationsFromMap: function () {
         Oskari.getSandbox().postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [null, null, 'USER_LOCATION_LAYER']);
