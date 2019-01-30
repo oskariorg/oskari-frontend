@@ -343,8 +343,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'WFSPropertiesEvent': function (event) {
                 // update grid information [don't update the grid if not active]
-                var layer = event.getLayer();
-                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (flyout.isActive()) {
+                    this.plugins['Oskari.userinterface.Flyout'].updateData(event.getLayer());
+                }
             },
 
             /**
@@ -353,8 +355,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'WFSFeatureEvent': function (event) {
                 // update grid information [don't update the grid if not active]
-                var layer = event.getLayer();
-                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (flyout.isActive()) {
+                    this.plugins['Oskari.userinterface.Flyout'].updateData(event.getLayer());
+                }
             },
 
             /**
