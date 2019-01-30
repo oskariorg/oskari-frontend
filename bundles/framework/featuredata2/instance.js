@@ -345,7 +345,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 // update grid information [don't update the grid if not active]
                 const flyout = this.plugins['Oskari.userinterface.Flyout'];
                 if (flyout.isActive()) {
-                    this.plugins['Oskari.userinterface.Flyout'].updateData(event.getLayer());
+                    flyout.updateData(event.getLayer());
                 }
             },
 
@@ -357,7 +357,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 // update grid information [don't update the grid if not active]
                 const flyout = this.plugins['Oskari.userinterface.Flyout'];
                 if (flyout.isActive()) {
-                    this.plugins['Oskari.userinterface.Flyout'].updateData(event.getLayer());
+                    flyout.updateData(event.getLayer());
                 }
             },
 
