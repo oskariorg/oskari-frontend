@@ -48,21 +48,22 @@ module.exports = (env, argv) => {
                     use: 'imports-loader?define=>undefined,exports=>undefined'
                 },
                 {
-                    test: /\.js$/,
+                    test: /\.(js|jsx)$/,
                     exclude: [/libraries/, /\.min\.js$/],
                     use: {
                         loader: 'babel-loader',
                         options: {
                             presets: [
                                 [
-                                    require.resolve('@babel/preset-env'), // Resolve path for use from external porojects
+                                    require.resolve('@babel/preset-env'), // Resolve path for use from external projects
                                     {
                                         useBuiltIns: 'entry',
                                         targets: '> 0.25%, not dead, ie 11'
                                     }
-                                ]
+                                ],
+                                require.resolve('@babel/preset-react') // Resolve path for use from external projects
                             ],
-                            plugins: [require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external porojects
+                            plugins: [require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external projects
                         }
                     }
                 },
@@ -114,9 +115,7 @@ module.exports = (env, argv) => {
             }
         },
         resolve: {
-            alias: {
-
-            },
+            extensions: ['.js', '.jsx'],
             modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
             symlinks: false
         }

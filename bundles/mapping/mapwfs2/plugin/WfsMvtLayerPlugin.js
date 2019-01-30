@@ -14,9 +14,13 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this.__name = 'WfsMvtLayerPlugin';
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this._log = Oskari.log('WfsMvtLayerPlugin');
+            this._visualizationForm = null;
             this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
             this.layertype = 'wfs';
-            this._visualizationForm = null;
+            // mvt only support numeric IDs and WFS-layers often have other characters in ID as well
+            // fixes highlight on features spread to multiple tiles by using a generated _oid for "combining" features
+            this.hoverState.property = '_oid';
+            
         }
         _initImpl () {
             super._initImpl();
@@ -153,7 +157,6 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                 this.setLayerLocales(layer);
             }
             this.reqEventHandler.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
-            this.reqEventHandler.notify('WFSFeatureEvent', layer, properties.length ? properties[properties.length - 1] : []);
         }
         /**
          * @method setLayerLocales

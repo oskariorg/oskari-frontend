@@ -132,6 +132,10 @@ Oskari.clazz.define(
 
         },
 
+        isActive: function () {
+            return !!this.active;
+        },
+
         /**
          * @method setState
          * @param {Object} state

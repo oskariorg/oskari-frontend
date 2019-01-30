@@ -39,10 +39,11 @@ Oskari.registerLocalization(
         "searchservice_search_not_found_anything_text": "No se encontraron resultados.",
         "metadataoptionservice_alert_title": "Error",
         "metadataoptionservice_not_found_anything_text": "La opción de recuperación ha fallado",
-        "metadatasearchservice_not_found_anything_text": "La recuperación de resultados dela  búsqueda ha fallado",
+        "metadatasearchservice_error": "La recuperación de resultados dela  búsqueda ha fallado",
         "invalid_characters": "El término de búsqueda contiene caracteres no válidos. Los caracteres permitidos son las letras a-z, así como å, ä y ö, números, espacios, signos de interrogación (?), asteriscos (*) y guiones  (-)",
         "too_short": "El término de búsqueda es demasiado corto.",
         "cannot_be_empty": "El término de búsqueda debe contener al menos un carácter. Los caracteres permitidos son las letras a-z, así como å, ä y ö, números, espacios y guiones.",
+        "no_search_selections": "El término de búsqueda debe contener al menos un carácter. Los caracteres permitidos son las letras a-z, así como å, ä y ö, números, espacios y guiones.",
         "too_many_stars": "El término de búsqueda contiene demasiados astericos (caracteres *). Puede contener un máximo de N caractere *",
         "searching": "Buscando…",
         "grid": {

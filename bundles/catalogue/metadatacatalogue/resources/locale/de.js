@@ -39,10 +39,11 @@ Oskari.registerLocalization(
         "searchservice_search_not_found_anything_text": "Die Suche ergab keine Treffer.",
         "metadataoptionservice_alert_title": "Fehler",
         "metadataoptionservice_not_found_anything_text": "Abfrageoption fehlgeschlagen.",
-        "metadatasearchservice_not_found_anything_text": "Abfrage der Suchergebnisse fehlgeschlagen.",
+        "metadatasearchservice_error": "Abfrage der Suchergebnisse fehlgeschlagen.",
         "invalid_characters": "Suchbegriff enthält unzulässige Zeichen. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche (-), Fragezeichen (?), Stern (*) und die Backspace-Taste.",
         "too_short": "Der Suchbegriff ist zu kurz.",
         "cannot_be_empty": "Der Suchbegriff muss mindestens 1 Zeichen enthalten. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste.",
+        "no_search_selections": "Der Suchbegriff muss mindestens 1 Zeichen enthalten. Erlaubte Zeichen sind die Buchstaben a-z, å, ä, ö sowie Zahlen, Bindestriche und die Backspace-Taste.",
         "too_many_stars": "Der Suchbegriff enthält zu viele Sterne (*-Zeichen). Es dürfen höchstens N *-Zeichen verwendet werden.",
         "searching": "Lade…",
         "grid": {
