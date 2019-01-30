@@ -119,7 +119,6 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                 this.setLayerLocales(layer);
             }
             this.reqEventHandler.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
-            this.reqEventHandler.notify('WFSFeatureEvent', layer, properties.length ? properties[properties.length - 1] : []);
         }
         /**
          * @method setLayerLocales
