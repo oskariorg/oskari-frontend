@@ -14,7 +14,9 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this.__name = 'WfsMvtLayerPlugin';
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this._log = Oskari.log('WfsMvtLayerPlugin');
+            this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
             this.layertype = 'wfs';
+            this._visualizationForm = null;
         }
         _initImpl () {
             super._initImpl();
@@ -24,6 +26,10 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
 
             sandbox.registerService(this.WFSLayerService);
             this.reqEventHandler = new ReqEventHandler(sandbox);
+
+            this._visualizationForm = Oskari.clazz.create(
+                'Oskari.userinterface.component.VisualizationForm'
+            );
         }
         _createPluginEventHandlers () {
             return Object.assign(super._createPluginEventHandlers(), this.reqEventHandler.createEventHandlers(this));
@@ -31,6 +37,34 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
         _createRequestHandlers () {
             return this.reqEventHandler.createRequestHandlers(this);
         }
+
+        /**
+         * @method getVisualizationForm
+         * @return {VisualizationForm} form
+         */
+        getVisualizationForm () {
+            return this._visualizationForm;
+        }
+
+        /**
+         * @method getLocalization
+         * Convenience method to call from Tile and Flyout
+         * Returns JSON presentation of bundles localization data for
+         * current language. If key-parameter is not given, returns
+         * the whole localization data.
+         *
+         * @param {String} key (optional) if given, returns the value for key
+         * @return {String/Object} returns single localization string or
+         *      JSON object for complete data depending on localization
+         *      structure and if parameter key is given
+         */
+        getLocalization (key) {
+            if (key) {
+                return this.localization(key);
+            }
+            return this.localization;
+        }
+
         /**
          * @method findLayerByOLLayer
          * @param {ol/layer/Layer} olLayer OpenLayers layer impl
