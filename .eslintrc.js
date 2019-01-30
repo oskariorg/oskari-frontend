@@ -37,7 +37,8 @@ module.exports = {
   "extends": [
     "standard",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:react/recommended"
   ],
   // add your custom rules here
   "rules": {
@@ -68,5 +69,12 @@ module.exports = {
     "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "one-var": ["warn", { "initialized": "never" }],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
+    }
   }
 }
