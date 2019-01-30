@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             usedefinedscale: {
                 label: me.loc.scale.definedScale,
                 selected: false,
-                scales: me.instance.conf.scales || me.mapmodule.getScaleArray().reverse()
+                scales: me.instance.conf.scales || me.mapmodule.getScaleArray().slice().reverse()
             }
         };
 
@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             me.mainPanel = content;
             content.find('div.header h3').append(me.loc.title);
-            content.find('div.header div.icon-close').on('click', function(){
+            content.find('div.header div.icon-close').on('click', function () {
                 me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
                 me.instance.sandbox.postRequestByName('EnableMapMouseMovementRequest');
             });
@@ -143,7 +143,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var settingsPanel = me._createSettingsPanel();
             accordion.addPanel(settingsPanel);
 
-            if(me.instance.conf.scaleSelection) {
+            if (me.instance.conf.scaleSelection) {
                 var scalePanel = me._createScalePanel();
                 accordion.addPanel(scalePanel);
             }
@@ -341,12 +341,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var okButton = unsupportedLayersDialog.createCloseButton('OK');
             okButton.addClass('primary');
 
-            var getUnsupportedLayers = function() {
+            var getUnsupportedLayers = function () {
                 var layerNames = [];
-                var layers = me.instance.sandbox.findAllSelectedMapLayers().filter(function(l) {
+                var layers = me.instance.sandbox.findAllSelectedMapLayers().filter(function (l) {
                     return l.getLayerType() === 'wmts';
                 });
-                layers.forEach(function(layer){
+                layers.forEach(function (layer) {
                     layerNames.push(layer.getName());
                 });
                 return layerNames;
@@ -369,8 +369,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     'id': key
                 });
                 toolContainer.find('input').on('change', function () {
-                    if(option.scales) {
-                        contentPanel.find('.scale-'+key).show();
+                    if (option.scales) {
+                        contentPanel.find('.scale-' + key).show();
                         me._updateScaleToSelected(true);
 
                         me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest', [['zoom']]);
@@ -389,9 +389,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     });
                     option.selected = true;
                     var unsupportedLayers = getUnsupportedLayers();
-                    if(unsupportedLayers.length>0 && option.scales) {
+                    if (unsupportedLayers.length > 0 && option.scales) {
                         var message = '<div>' + me.loc.scale.unsupportedLayersMessage + ':</div><ul>';
-                        unsupportedLayers.forEach(function(layerName){
+                        unsupportedLayers.forEach(function (layerName) {
                             message += '<li>' + layerName + '</li>';
                         });
                         message += '</ul>';
@@ -401,23 +401,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     me._updateMapPreview();
                 });
 
-                if(option.scales) {
+                if (option.scales) {
                     var selection = me.template.scaleSelection.clone();
-                    selection.addClass('scale-'+key);
+                    selection.addClass('scale-' + key);
                     var currentScale = me.mapmodule.getMapScale();
 
                     var optionEl = jQuery('<option></option>');
-                    option.scales.forEach(function(scale){
+                    option.scales.forEach(function (scale) {
                         var el = optionEl.clone();
                         el.attr('value', scale);
-                        el.html('1:'+scale);
-                        if(scale===currentScale) {
-                            el.attr('selected',true);
+                        el.html('1:' + scale);
+                        if (scale === currentScale) {
+                            el.attr('selected', true);
                         }
                         selection.find('select').append(el);
                     });
 
-                    selection.find('select').on('change', function(){
+                    selection.find('select').on('change', function () {
                         var el = jQuery(this);
                         var selectedScale = el.val();
                         me.mapmodule.zoomToScale(selectedScale, false);
@@ -437,19 +437,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @method  _updateScaleToSelected
          * @private
          */
-        _updateScaleToSelected: function(selectFirst){
+        _updateScaleToSelected: function (selectFirst) {
             var me = this;
             Object.keys(me.scaleOptionsMap).forEach(function (key) {
                 var option = me.scaleOptionsMap[key];
-                var selection = me.mainPanel.find('.scale-'+key);
-                if(option.scales && option.scales.findIndex(
-                    function(s) {
+                var selection = me.mainPanel.find('.scale-' + key);
+                if (option.scales && option.scales.findIndex(
+                    function (s) {
                         return s === me.mapmodule.getMapScale();
                     }) > -1) {
                     selection.find('select').val(me.mapmodule.getMapScale());
                 }
                 // else select first option
-                else if(selectFirst === true){
+                else if (selectFirst === true) {
                     selection.find('select').val(selection.find('select option:first').val());
                     selection.find('select').trigger('change');
                 }
@@ -622,7 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
             var scaleText = '';
 
-            if(me.instance.conf.scaleSelection && me.scaleOptionsMap.usedefinedscale.selected) {
+            if (me.instance.conf.scaleSelection && me.scaleOptionsMap.usedefinedscale.selected) {
                 resolution = me.mapmodule.getExactResolution(scale);
                 scaleText = '1:' + scale;
             }
@@ -757,7 +757,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 url = url + '&scaleText=' + selections.scaleText;
             }
 
-
             // We need to use the POST method if there's GeoJSON or tile data.
             if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson) {
                 var stringifiedJson = me._stringifyGeoJson(me.instance.geoJson);
@@ -834,7 +833,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         _stringifyGeoJson: function (geoJson) {
             var ret = null;
             if (geoJson) {
-                ret = JSON.stringify(geoJson).replace('\"', '"');
+                ret = JSON.stringify(geoJson).replace('"', '"');
             }
             return ret;
         },

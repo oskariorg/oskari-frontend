@@ -8,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         repaint: false
     };
     this.addEventHandlers();
+    this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
 }, {
     __templates: {
         select: jQuery('<div class="dropdown"></div>')
@@ -34,25 +35,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         var container = me.__templates.select.clone();
         this.element = container;
         var dropdownOptions = {
-            placeholder_text: '',
+            placeholder_text: this.locale('panels.newSearch.selectIndicatorPlaceholder'),
             allow_single_deselect: true,
             disable_search_threshold: 10,
-            no_results_text: 'locale.panels.newSearch.noResults',
+            no_results_text: this.locale('panels.newSearch.noResults'),
             width: '100%'
         };
         this._getIndicatorUILabels(function (options) {
             var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+            me._select = select;
             var dropdown = select.create(options, dropdownOptions);
             me.dropdown = dropdown;
             dropdown.css({
-                width: '100%'
+                width: '100%',
+                'max-width': '400px'
             });
             select.adjustChosen();
 
             var activeIndicator = me.service.getStateService().getActiveIndicator();
             if (activeIndicator) {
                 activeIndicator.hash ? select.setValue(activeIndicator.hash) : select.selectFirstValue();
-                me._select = select;
             }
 
             container.append(dropdown);
@@ -118,6 +120,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
             var current = event.getCurrent();
             if (current && me._select) {
                 me._select.setValue(current.hash);
+            } else if (!current && me._select) {
+                me._select.clearOptions();
             }
         });
         this.service.on('StatsGrid.IndicatorEvent', function (event) {

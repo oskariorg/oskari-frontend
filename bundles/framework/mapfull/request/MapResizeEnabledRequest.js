@@ -13,31 +13,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabled
  * @param {Boolean}
  *            resizeEnabled boolean if window resizing is enabled
  */
-function(resizeEnabled) {
-    this._creator = null;
-    this._resizeEnabled = resizeEnabled;
-
-}, {
+    function (resizeEnabled) {
+        this._creator = null;
+        this._resizeEnabled = resizeEnabled;
+    }, {
     /** @static @property __name request name */
-    __name : "MapFull.MapResizeEnabledRequest",
-    /**
+        __name: 'MapFull.MapResizeEnabledRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getPublishMode
      * @return {Boolean} boolean if window resizing is enabled
      */
-    getResizeEnabled : function() {
-        return this._resizeEnabled;
-    }
-}, {
+        getResizeEnabled: function () {
+            return this._resizeEnabled;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

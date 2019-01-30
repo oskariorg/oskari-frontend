@@ -68,7 +68,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
             this.createUI();
         },
 
-
         /* App specific methods */
         createUI: function () {
             if (this.tabsContainer) {
@@ -108,7 +107,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
                         return;
                     }
                     handler.apply(tabDef.instance, [event]);
-
                 }
             });
         },
@@ -159,7 +157,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         }
     }, {
         /**

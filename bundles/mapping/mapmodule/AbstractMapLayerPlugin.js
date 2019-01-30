@@ -1,6 +1,6 @@
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapLayerPlugin
- * Provides functionality to draw WMS layers on the map
+ * Base class for map layer implementations (wms, wmts, vector tile etc.)
  */
 Oskari.clazz.define(
     'Oskari.mapping.mapmodule.AbstractMapLayerPlugin',
@@ -16,6 +16,7 @@ Oskari.clazz.define(
 
         this.tileSize = [256, 256];
         this._layerImplRefs = {};
+        this._log = Oskari.log(this.getName());
     }, {
         /** @static @property __name plugin name */
         __name: 'OVERRIDETHIS',
@@ -245,7 +246,7 @@ Oskari.clazz.define(
          * @param {Boolean} isBaseMap
          */
         addMapLayerToMap: function (layer, keepLayerOnTop, isBaseMap) {
-            this.getSandbox().printDebug('TODO: addMapLayerToMap() not implemented on ' + this.getName());
+            this._log.debug('TODO: addMapLayerToMap() not implemented on ' + this.getName());
         },
 
         /**
@@ -260,7 +261,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug('Removing Layer from map ' + layer.getId());
+            this._log.debug('Removing Layer from map ' + layer.getId());
             for (var i = 0; i < olLayers.length; ++i) {
                 var loopLayer = olLayers[i];
                 this.getMapModule().removeLayer(loopLayer, layer);
@@ -284,7 +285,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            this.getSandbox().printDebug(
+            this._log.debug(
                 'Setting Layer Opacity for ' + layer.getId() + ' to ' +
                 layer.getOpacity()
             );
@@ -299,7 +300,7 @@ Oskari.clazz.define(
          *            event
          */
         _afterChangeMapLayerStyleEvent: function (event) {
-            this.getSandbox().printDebug('TODO: handle layer style chance');
+            this._log.debug('TODO: handle layer style chance');
         },
         /**
          * Update the layer on map if style etc was changed when administrating layers
@@ -307,7 +308,7 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.domain.AbstractLayer} layer [description]
          */
         _updateLayer: function (layer) {
-            this.getSandbox().printDebug('TODO: update layer on map');
+            this._log.debug('TODO: update layer on map');
         },
         /**
          * @method updateLayerParams

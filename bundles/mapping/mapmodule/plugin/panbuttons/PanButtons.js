@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
         this._name = 'PanButtons';
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-reset': {
                     iconCls: 'mobile-reset-map-state',
                     tooltip: '',
@@ -75,10 +75,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                 right = el.find('.panbuttons_right'),
                 top = el.find('.panbuttons_up'),
                 bottom = el.find('.panbuttons_down'),
-                pbimg = me.getImagePath(),
                 panbuttonDivImg = el.find('.panbuttonDivImg');
             // update path from config
-            panbuttonDivImg.attr('src', pbimg + 'empty.png');
+            panbuttonDivImg.attr('src', me.getImagePath('empty.png'));
 
             center.on('mouseover', function (event) {
                 panbuttonDivImg.addClass('root');
@@ -88,7 +87,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             });
             center.on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
-                    var requestBuilder = me.getSandbox().getRequestBuilder(
+                    var requestBuilder = Oskari.requestBuilder(
                         'StateHandler.SetStateRequest'
                     );
                     if (requestBuilder) {
@@ -174,14 +173,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
-                //not found -> use the style config obtained from the mapmodule.
+                // not found -> use the style config obtained from the mapmodule.
                 var toolStyle = me.getToolStyleFromMapModule();
                 if (toolStyle !== null && toolStyle !== undefined) {
                     me.changeToolStyle(toolStyle, me.getElement());
                 }
             }
         },
-
 
         /**
          * @method changeToolStyle
@@ -200,9 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             if (styleName === null) {
                 panButtons.removeAttr('style');
             } else {
-
-                var imgUrl = this.getImagePath(),
-                    bgImg = imgUrl + 'panbutton-sprites-' + styleName + '.png';
+                var bgImg = this.getImagePath('panbutton-sprites-' + styleName + '.png');
 
                 panButtons.css({
                     'background-image': 'url("' + bgImg + '")'
@@ -215,19 +211,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
-            if(!this.isVisible()) {
+        redrawUI: function (mapInMobileMode, forced) {
+            if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();

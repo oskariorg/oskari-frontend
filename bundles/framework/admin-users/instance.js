@@ -92,20 +92,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             }
 
             me.getRoles(function () {
-                //Let's extend UI after we have the role data
-                var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+                // Let's extend UI after we have the role data
+                var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
-            }, function(){
+            }, function () {
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                     btn = dialog.createCloseButton('Ok'),
-                    request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+                    request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
                 sandbox.request(me, request);
 
                 btn.addClass('primary');
                 dialog.show(me._localization.failed_to_get_roles_title, me._localization.failed_to_get_roles_message, [btn]);
             });
 
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
+            // sandbox.registerAsStateful(this.mediator.bundleId, this);
         },
         /**
          * @method init
@@ -127,7 +127,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-            this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
+            if (this.plugins['Oskari.userinterface.Flyout']) {
+                this.plugins['Oskari.userinterface.Flyout'].onEvent(event);
+            }
 
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
@@ -135,7 +137,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
             }
 
             handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -162,7 +163,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                             this.sandbox.registerForEventByName(this, p);
                         }
                     }
-
                 }
             },
 
@@ -196,11 +196,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
 
-            //this.sandbox.unregisterStateful(this.mediator.bundleId);
+            // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },
@@ -259,7 +259,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.AdminUsersBundleInst
 
             jQuery.ajax({
                 type: 'GET',
-                url: me.sandbox.getAjaxUrl() + 'action_route=ManageRoles',
+                url: Oskari.urls.getRoute('ManageRoles'),
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
                 error: function () {

@@ -1,8 +1,10 @@
+import ManualClassificationView from './manualClassification/View';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (sandbox, locale) {
     this.sb = sandbox;
     this.LAYER_ID = 'STATS_LAYER';
     this.service = this.sb.getService('Oskari.statistics.statsgrid.StatisticsService');
-    this.classificationService = this.sb.getService('Oskari.statistics.statsgrid.ClassificationService');
+    this.classificationService = this.service.getClassificationService();
     this.locale = locale;
     var me = this;
     me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
@@ -11,6 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
     me.service.on('AfterChangeMapLayerOpacityEvent', function (event) {
         me.setLayerOpacityValue(event.getMapLayer().getId(), event.getMapLayer().getOpacity());
     });
+    this.manualClassificationView = null;
     this.__templates = {
         classification: jQuery('<div class="classifications">' +
             '<div class="classification-options">' +
@@ -30,12 +33,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                     '<div class="label">' + this.locale('classify.classifymethod') + '</div>' +
                     '<div class="method value">' +
                         '<select class="method">' +
-                            // FIXME: use classificationService.getAvailableMethods()
-                            '<option value="jenks" selected="selected">' + this.locale('classify.methods.jenks') + '</option>' +
-                            '<option value="quantile">' + this.locale('classify.methods.quantile') + '</option>' +
-                            '<option value="equal">' + this.locale('classify.methods.equal') + '</option>' +
+                            this.classificationService.getAvailableMethods()
+                                .map((method, i) => `<option value="${method}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.methods.' + method)}</option>`).join() +
                         '</select>' +
                     '</div>' +
+                    `<div class="classification-manual"><input class="oskari-formcomponent oskari-button" type="button" value="${this.locale('classify.edit.title')}"></div>` +
                 '</div>' +
 
                 // classes
@@ -53,9 +55,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                     '<div class="label">' + this.locale('classify.mode') + '</div>' +
                     '<div class="classify-mode value">' +
                         '<select class="classify-mode">' +
-                            // FIXME: use classificationService.getAvailableModes()
-                            '<option value="distinct" selected="selected">' + this.locale('classify.modes.distinct') + '</option>' +
-                            '<option value="discontinuous">' + this.locale('classify.modes.discontinuous') + '</option>' +
+                        this.classificationService.getAvailableModes()
+                            .map((mode, i) => `<option value="${mode}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.modes.' + mode)}</option>`).join() +
                         '</select>' +
                     '</div>' +
                 '</div>' +
@@ -69,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 '</div>' +
 
                 // numeric value
-                '<div class="numeric-value visible-map-style-points visible-on-vector">' +
+                '<div class="numeric-value visible-map-style-choropleth visible-map-style-points visible-on-vector">' +
                 '</div>' +
 
                 // colors
@@ -180,6 +181,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         var service = me.service;
         var state = service.getStateService();
+        var seriesService = service.getSeriesService();
         var ind = state.getActiveIndicator();
         if (!ind) {
             // no active indicator
@@ -187,17 +189,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
         classification = classification || state.getClassificationOpts(ind.hash);
 
-        me._element.find('select.map-style').bind('change', function () {
-            var el = jQuery(this);
-            var value = el.val();
-            me._toggleMapStyle(value);
-        });
-
         var mapStyle = classification.mapStyle || 'choropleth';
         me._element.find('select.map-style').val(mapStyle);
         me._toggleMapStyle(mapStyle);
 
         me._element.find('select.method').val(classification.method);
+        me._element.find('.classification-manual').toggle(classification.method === 'manual');
 
         var amountRange = service.getColorService().getRange(classification.type, mapStyle);
         // TODO: handle missing data: if we have data for 3 regions count can be 2.
@@ -212,6 +209,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             amount.append(op);
         }
         me._element.find('select.amount-class').val(classification.count);
+
+        const updateClassCountOptions = data => {
+            var validOptions = me.classificationService.getAvailableOptions(data);
+            if (validOptions.maxCount) {
+                var options = amount.find('option');
+                options.each(function (index, opt) {
+                    opt = jQuery(opt);
+                    if (opt.val() > validOptions.maxCount) {
+                        opt.prop('disabled', true);
+                    }
+                });
+            }
+        };
 
         var mode = me._element.find('select.classify-mode');
         mode.val(classification.mode);
@@ -230,33 +240,30 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         var decimalSelect = me._element.find('select.decimal-place');
         decimalSelect.val(typeof classification.fractionDigits === 'number' ? classification.fractionDigits : 1);
 
-        // disable invalid choices
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
-            if (err) {
-                // propably nothing to tell the user at this point. There will be some invalid choices available on the form
-                return;
-            }
-            var validOptions = service.getClassificationService().getAvailableOptions(data);
-            if (validOptions.maxCount) {
-                var options = amount.find('option');
-                options.each(function (index, opt) {
-                    opt = jQuery(opt);
-                    if (opt.val() > validOptions.maxCount) {
-                        opt.prop('disabled', true);
-                    }
-                });
-            }
+        me.manualClassificationView = new ManualClassificationView(this.classificationService, service.getColorService(), classification);
 
+        if (ind.series) {
+            const serieStats = seriesService.getSeriesStats(ind.hash);
+            if (serieStats && serieStats.serie) {
+                me.manualClassificationView.setData(serieStats.serie);
+                updateClassCountOptions(serieStats.serie);
+            }
             // Discontinuous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
             // Disabling it for data series.
-            var modeOpts = mode.find('option');
-            modeOpts.each(function (index, opt) {
-                opt = jQuery(opt);
-                if (opt.val() === 'discontinuous') {
-                    opt.prop('disabled', ind.series !== undefined);
+            mode.find('option[value="discontinuous"]').prop('disabled', true);
+        } else {
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
+                if (err) {
+                    // propably nothing to tell the user at this point. There will be some invalid choices available on the form
+                    return;
                 }
+                if (classification.method === 'manual') {
+                    me.manualClassificationView.setData(data);
+                }
+                updateClassCountOptions(data);
             });
-        });
+        };
+
         if (mapStyle !== 'choropleth') {
             var min = classification.min || me._rangeSlider.defaultValues[0];
             var max = classification.max || me._rangeSlider.defaultValues[1];
@@ -267,7 +274,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                 max = me._rangeSlider.defaultValues[1];
                 updateClassification = true;
             }
-            me._rangeSlider.element.slider('values', [min, max]);
+            me._rangeSlider.element.slider('option', 'values', [min, max]);
             me._rangeSlider.element.attr('data-count', classification.count || amountRange[0]);
         }
         me._showNumericValueCheckButton.setChecked((typeof classification.showValues === 'boolean') ? classification.showValues : false);
@@ -277,7 +284,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
 
         if (classification.transparency) {
-            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency)
+            this.setLayerOpacityValue(me.LAYER_ID, classification.transparency);
             me.sb.postRequestByName('ChangeMapLayerOpacityRequest', [me.LAYER_ID, classification.transparency]);
         }
     },
@@ -305,6 +312,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             showValues: (me._showNumericValueCheckButton.getValue() === 'on'),
             fractionDigits: parseInt(me._element.find('select.decimal-place').val())
         };
+        const bounds = me.manualClassificationView.getBounds();
+        if (values.method === 'manual' && bounds) {
+            values.manualBounds = bounds;
+        }
+
+        this._validateSelections(values);
+
+        return values;
+    },
+
+    /**
+     * @method  @private _validateSelections fix illegal value combinations
+     * @param {Object} values selected values object
+     */
+    _validateSelections: function (values) {
+        var range = this.service.getColorService().getRange(values.type, values.mapStyle);
+        if (values.count > range.max) {
+            values.count = range.max;
+        }
 
         if (values.mapStyle !== 'points') {
             delete values.min;
@@ -312,8 +338,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         } else {
             delete values.type;
         }
-
-        return values;
     },
 
     /**
@@ -386,6 +410,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         this.setEnabled(this.__enabled);
 
         me._colorSelect.setHandler(updateClassification);
+        me._element.find('select.map-style').on('change', function () {
+            var el = jQuery(this);
+            var value = el.val();
+            me._toggleMapStyle(value);
+        });
         me._element.find('select').on('change', updateClassification);
         me._element.find('select.decimal-place').on('change', function () {
             var stateService = me.service.getStateService();
@@ -395,6 +424,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me._element.find('#legend-flip-colors').on('change', function () {
             updateClassification();
+        });
+        me._element.find('.classification-manual input').on('click', function () {
+            me.service.getSeriesService().setAnimating(false);
+            me.manualClassificationView.openEditor(updateClassification);
         });
         return me._element;
     },

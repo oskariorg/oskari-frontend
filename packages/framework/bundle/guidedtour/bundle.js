@@ -41,7 +41,7 @@ Oskari.clazz.define(
                 "src": "../../../../libraries/jquery/plugins/jquery.cookie.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/framework/guidedtour/resources/css/style.css"
+                "src": "../../../../bundles/framework/guidedtour/resources/scss/style.scss"
             }],
             "locales": [{
                 "lang": "bg",
@@ -75,6 +75,10 @@ Oskari.clazz.define(
                 "lang": "fi",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/guidedtour/resources/locale/fi.js"
+            }, {
+                "lang": "fr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/fr.js"
             }, {
                 "lang": "ka",
                 "type": "text/javascript",

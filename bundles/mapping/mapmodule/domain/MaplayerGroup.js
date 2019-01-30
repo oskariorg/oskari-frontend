@@ -29,15 +29,15 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
         setId: function (id) {
             this.id = id;
         },
-        addChildren: function(children) {
+        addChildren: function (children) {
             this.children.push(children);
             this.sort();
         },
-        setChildren: function(json){
+        setChildren: function (json) {
             var me = this;
             me.children = [];
-            if(json.layers) {
-                json.layers.forEach(function(l) {
+            if (json.layers) {
+                json.layers.forEach(function (l) {
                     me.children.push({
                         id: l.id,
                         type: 'layer',
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
                 });
             }
 
-            me.groups.forEach(function(g) {
+            me.groups.forEach(function (g) {
                 me.children.push({
                     id: g.getId(),
                     type: 'group',
@@ -55,16 +55,15 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
             });
             me.sort();
         },
-        sort: function(){
-            this.children.sort(function compare(a, b) {
+        sort: function () {
+            this.children.sort(function compare (a, b) {
                 // if layer and group have same order then layer go upper
-                if(a.type === 'layer' && b.type === 'group' && a.order === b.order) {
+                if (a.type === 'layer' && b.type === 'group' && a.order === b.order) {
                     return -1;
                 }
-                if(a.type === 'group' && b.type === 'layer' && a.order === b.order) {
+                if (a.type === 'group' && b.type === 'layer' && a.order === b.order) {
                     return 1;
                 }
-
 
                 // else use order or id to sort
                 if (a.order < b.order) {
@@ -84,14 +83,14 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
                 return 0;
             });
         },
-        getChildren: function(){
+        getChildren: function () {
             return this.children;
         },
         getLayerIdList: function () {
             var me = this;
             var layers = [];
-            me.getChildren().forEach(function(children){
-                if(children.type === 'layer') {
+            me.getChildren().forEach(function (children) {
+                if (children.type === 'layer') {
                     layers.push(children.id);
                 }
             });
@@ -122,8 +121,8 @@ Oskari.clazz.define('Oskari.mapframework.domain.MaplayerGroup',
             this.selectable = selectable;
         },
         hasLayers: function () {
-            return this.getChildren().filter(function(children){
-                return children.type==='layer';
+            return this.getChildren().filter(function (children) {
+                return children.type === 'layer';
             }).length > 0;
         },
         hasSubgroups: function () {

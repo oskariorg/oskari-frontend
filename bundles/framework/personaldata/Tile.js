@@ -45,10 +45,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Tile',
             this._addTileStyleClasses();
             this.refresh();
         },
-        _addTileStyleClasses: function() {
-            var isContainer = (this.container && this.instance.mediator) ? true : false;
-            var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
-            var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+        _addTileStyleClasses: function () {
+            var isContainer = !!((this.container && this.instance.mediator));
+            var isBundleId = !!((isContainer && this.instance.mediator.bundleId));
+            var isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
 
             if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
                 this.container.addClass(this.instance.mediator.instanceId);

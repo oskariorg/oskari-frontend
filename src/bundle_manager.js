@@ -23,6 +23,7 @@
         me.sources = {};
         me.bundleInstances = {};
         me.bundles = {};
+        me.dynamicLoaders = {};
 
         /*
          * CACHE for lookups state management
@@ -254,6 +255,34 @@
             bundleInstance = null;
 
             return bundleInstance;
+        },
+        /**
+         * @method registerDynamic
+         * Register bundle for run-time loading with ES import()
+         *
+         * @param {string} bundlename Bundle name
+         * @param {Function} loader function that returns an promise that resolve to the module to be loaded
+         */
+        registerDynamic: function(bundlename, loader) {
+            if (!this.dynamicLoaders[bundlename]) {
+                this.dynamicLoaders[bundlename] = [];
+            }
+            this.dynamicLoaders[bundlename].push(loader);
+        },
+        /**
+         * @method loadDynamic
+         * Called to start dynamic loading of a bundle
+         *
+         * @param {string} bundlename Bundle name
+         *
+         * @return Promise that resolves when all modules have loaded
+         */
+        loadDynamic: function(bundlename) {
+            const loaders = this.dynamicLoaders[bundlename];
+            if (loaders) {
+                return Promise.all(loaders.map((l) => l.call()));
+            }
+            return null;
         }
     };
 

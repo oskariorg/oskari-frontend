@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
         this._doneCallback = null;
         this._isBuffering = false;
         this._isLoading = false;
-        
+
         this._sandbox.register(this);
         var p;
         for (p in this.__eventHandlers) {
@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                 sandbox.registerForEventByName(this, p);
             }
         }
-        this.requestNewTime(this._currentTime, null, function(){});
+        this.requestNewTime(this._currentTime, null, function () {});
     }, {
         __name: 'WMSAnimator',
         getName: function () {
@@ -110,8 +110,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
                         me._resolveWait();
                     });
                 }
-                var request = requestBuilder(this._layer.getId(), true, { "TIME": newTime });
+                var request = requestBuilder(this._layer.getId(), true, { 'TIME': newTime });
                 this._sandbox.request(this, request);
+                if (!nextTime && this._doneCallback) {
+                    this._doneCallback();
+                    this._doneCallback = null;
+                }
             }
         },
         /**
@@ -165,7 +169,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.WMSAnimator',
          * Releases any event handlers and any other resources
          */
         destroy: function () {
-            var p;
             for (var p in this.__eventHandlers) {
                 if (this.__eventHandlers.hasOwnProperty(p)) {
                     this._sandbox.unregisterFromEventByName(this, p);

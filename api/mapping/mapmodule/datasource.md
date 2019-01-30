@@ -1,4 +1,4 @@
-# Data Source
+# Data Source Plugin
 
 <table class="table">
   <tr>

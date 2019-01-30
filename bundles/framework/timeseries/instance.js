@@ -4,18 +4,13 @@
  * Registers TimeseriesService & TimeseriesLayerService
  * Creates UI control for timeseries, when TimeseriesService indicates it's needed
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleInstance',
     /**
      * @method create called automatically on construction
      * @static
      */
     function () {
-        this._sandbox;
         this.started = false;
-        this._controlPlugin;
-        this._timeseriesService;
-        this._timeseriesLayerService;
-        this._controlPluginConf;
     }, {
         __name: 'timeseries',
         /**
@@ -75,7 +70,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
         },
         /**
          * @method _registerForLayerFiltering
-         * Registers for creation of ui filter button 
+         * Registers for creation of ui filter button
          * @private
          */
         _registerForLayerFiltering: function () {

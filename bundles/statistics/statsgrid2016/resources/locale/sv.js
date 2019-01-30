@@ -69,7 +69,7 @@ Oskari.registerLocalization({
                 'title': 'OMRÅDESINDELNING',
                 'info': 'Omdefiniera den önskade områdesindelningen från rullgardinsmenyn.'
             },
-            'source': 'Datamängd',
+            'source': 'Indikator',
             'orderBy': 'Sortera',
             'orderByAscending': 'Sortera stigande',
             'orderByDescending': 'Sortera sjunkande',
@@ -93,6 +93,7 @@ Oskari.registerLocalization({
         'parameters': {
             'sex': 'Kön',
             'year': 'År',
+            'Vuosi': 'År',
             'regionset': 'Områdesindelning',
             'from': 'från',
             'to': 'tills'
@@ -109,7 +110,8 @@ Oskari.registerLocalization({
             'methods': {
                 'jenks': 'Naturliga brytpunkter',
                 'quantile': 'Kvantiler',
-                'equal': 'Lika intervall'
+                'equal': 'Lika intervall',
+                'manual': 'Egen klassificering'
             },
             'manual': 'Klassificering för hand',
             'manualPlaceholder': 'Avgränsa tal med kommatecken.',
@@ -122,7 +124,11 @@ Oskari.registerLocalization({
                 'distinct': 'Kontinuerlig',
                 'discontinuous': 'Diskontinuerlig'
             },
-            'editClassifyTitle': 'Redigera klassificeringen',
+            'edit': {
+                'title': 'Redigera klassificeringen',
+                'open': 'Öppna klassificeringseditoraren',
+                'close': 'Stägn klassificeringseditoraren'
+            },
             'classifyFieldsTitle': 'Klassificeringsvärden',
             'map': {
                 'mapStyle': 'Kartans stil',
@@ -163,7 +169,11 @@ Oskari.registerLocalization({
             'myIndicatorYearInput': 'Årsfält kan inte vara tom.',
             'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
             'myIndicatorDatasource': 'Datakällan är tom.',
-            'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.'
+            'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
+            'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}'
+        },
+        'missing': {
+            'regionsetName': 'Okänd'
         },
         'datacharts': {
             'flyout': 'Sökta datamängden',
@@ -263,6 +273,24 @@ Oskari.registerLocalization({
                 'edit': 'Redigera',
                 'remove': 'Ta bort'
             }
+        },
+        'indicatorList': {
+            'title': 'Indikator',
+            'removeAll': 'Ta bort alla',
+            'emptyMsg': 'Inga valda indikatorer'
+        },
+        'metadataPopup': {
+            'open': 'Visa {indicators, plural, one {indikator beskrivning} other {indikator beskrivningar}}',
+            'title': '{indicators, plural, one {Indikator beskrivning} other {Indikator beskrivningar}}',
+            'noMetadata': 'Tjänsten returnerade ingen beskrivning för {indicators, plural, one {indikatorn} other {indikatorer}}.'
+        },
+        'sumo': {
+            'placeholder': 'Välj här',
+            'captionFormat': '{0} valda',
+            'captionFormatAllSelected': 'Alla {0} valda!',
+            'searchText': 'Sök...',
+            'noMatch': 'Inga sökresultat hittades med "{0}"',
+            'locale': ['OK', 'Avbryt', 'Välj alla']
         }
     }
 });

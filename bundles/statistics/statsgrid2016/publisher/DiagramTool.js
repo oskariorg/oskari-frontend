@@ -7,12 +7,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     id: 'diagram',
 
     init: function (data) {
-        var me = this;
-        if (data && Oskari.util.keyExists(data, 'configuration.statsgrid.conf') && data.configuration.statsgrid.conf.diagram !== false) {
-            me.setEnabled(true);
-        } else {
-            me.setEnabled(false);
-        }
+        var enabled = data &&
+            Oskari.util.keyExists(data, 'configuration.statsgrid.conf') &&
+            data.configuration.statsgrid.conf.diagram === true;
+        this.setEnabled(enabled);
     },
     getTool: function (stateData) {
         var me = this;
@@ -29,11 +27,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
     },
     setEnabled: function (enabled) {
         var me = this;
-
+        var changed = me.state.enabled !== enabled;
         me.state.enabled = enabled;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats) {
+        if (!stats || !changed) {
             return;
         }
         if (enabled) {
@@ -41,25 +39,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
         } else {
             stats.togglePlugin.removeTool(this.id);
         }
-    },
-    /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return found stats layer, if not found then null
-    */
-    _getStatsLayer: function () {
-        var selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
     },
     isDisplayed: function (data) {
         var hasStatsLayerOnMap = this._getStatsLayer() !== null;
@@ -107,6 +86,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.DiagramTool', function (
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

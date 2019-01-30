@@ -13,20 +13,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Tile',
  * instance
  *      reference to component that created the tile
  */
-function(instance) {
-    this.instance = instance;
-    this.container = null;
-    this.template = null;
-    this.shownLayerCount = null;
-}, {
+    function (instance) {
+        this.instance = instance;
+        this.container = null;
+        this.template = null;
+        this.shownLayerCount = null;
+    }, {
     /**
      * @method getName
      * @return {String} the name for the component
      */
-    getName : function() {
-        return 'Oskari.mapframework.bundle.layerselection2.Tile';
-    },
-    /**
+        getName: function () {
+            return 'Oskari.mapframework.bundle.layerselection2.Tile';
+        },
+        /**
      * @method setEl
      * @param {Object} el
      *      reference to the container in browser
@@ -37,120 +37,119 @@ function(instance) {
      *
      * Interface method implementation
      */
-    setEl : function(el, width, height) {
-        this.container = jQuery(el);
-    },
-    /**
+        setEl: function (el, width, height) {
+            this.container = jQuery(el);
+        },
+        /**
      * @method startPlugin
      * Interface method implementation, calls #refresh()
      */
-    startPlugin : function() {
-        this._addTileStyleClasses();
-        this.refresh();
-    },
-    _addTileStyleClasses: function() {
-        var isContainer = (this.container && this.instance.mediator) ? true : false;
-        var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
-        var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+        startPlugin: function () {
+            this._addTileStyleClasses();
+            this.refresh();
+        },
+        _addTileStyleClasses: function () {
+            var isContainer = !!((this.container && this.instance.mediator));
+            var isBundleId = !!((isContainer && this.instance.mediator.bundleId));
+            var isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
 
-        if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
-            this.container.addClass(this.instance.mediator.instanceId);
-        }
-        if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
-            this.container.addClass(this.instance.mediator.bundleId);
-        }
-    },
-    /**
+            if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
+                this.container.addClass(this.instance.mediator.instanceId);
+            }
+            if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
+                this.container.addClass(this.instance.mediator.bundleId);
+            }
+        },
+        /**
      * @method stopPlugin
      * Interface method implementation, clears the container
      */
-    stopPlugin : function() {
-        this.container.empty();
-    },
-    /**
+        stopPlugin: function () {
+            this.container.empty();
+        },
+        /**
      * @method getTitle
      * @return {String} localized text for the title of the tile
      */
-    getTitle : function() {
-        return this.instance.getLocalization('title');
-    },
-    /**
+        getTitle: function () {
+            return this.instance.getLocalization('title');
+        },
+        /**
      * @method getDescription
      * @return {String} localized text for the description of the tile
      */
-    getDescription : function() {
-        return this.instance.getLocalization('desc');
-    },
-    /**
+        getDescription: function () {
+            return this.instance.getLocalization('desc');
+        },
+        /**
      * @method getOptions
      * Interface method implementation, does nothing atm
      */
-    getOptions : function() {
+        getOptions: function () {
 
-    },
-    /**
+        },
+        /**
      * @method setState
      * @param {Object} state
      *      state that this component should use
      * Interface method implementation, does nothing atm
      */
-    setState : function(state) {
-    },
-    notifyUser : function() {
-        var me = this;
-        var status = this.container.children('.oskari-tile-status');
+        setState: function (state) {
+        },
+        notifyUser: function () {
+            var status = this.container.children('.oskari-tile-status');
 
-        // stop current animation
-        status.stop();
-        // blink 2 times
-        this._blink(status, 2);
-    },
-    _blink : function(element, count) {
-        var me = this;
-        if(!element) {
-            return;
-        }
-        if(!count) {
-            count = 1;
-        }
-        // animate to low opacity
-        element.animate({
-            opacity: 0.25
-        }, 500, function() {
+            // stop current animation
+            status.stop();
+            // blink 2 times
+            this._blink(status, 2);
+        },
+        _blink: function (element, count) {
+            var me = this;
+            if (!element) {
+                return;
+            }
+            if (!count) {
+                count = 1;
+            }
+            // animate to low opacity
+            element.animate({
+                opacity: 0.25
+            }, 500, function () {
             // on complete, animate back to fully visible
-             element.animate({
-                opacity: 1
-            }, 500,function() {
+                element.animate({
+                    opacity: 1
+                }, 500, function () {
                 // on complete, check and adjust the count parameter
                 // recurse if count has not been reached yet
-                if(count > 1) {
-                    me._blink(element, --count);
-                }
+                    if (count > 1) {
+                        me._blink(element, --count);
+                    }
+                });
             });
-        });
-    },
-    /**
+        },
+        /**
      * @method refresh
      * Creates the UI for a fresh start
      */
-    refresh : function() {
-        var me = this;
-        var instance = me.instance;
+        refresh: function () {
+            var me = this;
+            var instance = me.instance;
 
-        var sandbox = instance.getSandbox();
-        var layers = sandbox.findAllSelectedMapLayers();
-        var layerCount = layers.length;
+            var sandbox = instance.getSandbox();
+            var layers = sandbox.findAllSelectedMapLayers();
+            var layerCount = layers.length;
 
-        var status = this.container.children('.oskari-tile-status');
-        status.addClass('icon-bubble-right');
-        status.html(layerCount);
+            var status = this.container.children('.oskari-tile-status');
+            status.addClass('icon-bubble-right');
+            status.html(layerCount);
 
-        this.notifyUser();
-    }
-}, {
+            this.notifyUser();
+        }
+    }, {
     /**
      * @property {String[]} protocol
      * @static
      */
-    'protocol' : ['Oskari.userinterface.Tile']
-});
+        'protocol': ['Oskari.userinterface.Tile']
+    });

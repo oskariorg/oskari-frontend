@@ -14,11 +14,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.SimpleFlyout',
     function (instance) {
         var conf = instance.getConfiguration() || {};
         var tags = conf.tags || 'userguide';
-        if(conf.includeLang) {
+        if (conf.includeLang) {
             tags = tags + ',' + Oskari.getLang();
         }
         this.userGuideTabs = [{
-            tags : tags
+            tags: tags
         }];
     }, {
 
@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.SimpleFlyout',
          */
 
         setContent: function (content) {
-            if(!this.cel) {
+            if (!this.cel) {
                 this.cel = jQuery(this.container);
             }
             this.cel.empty();

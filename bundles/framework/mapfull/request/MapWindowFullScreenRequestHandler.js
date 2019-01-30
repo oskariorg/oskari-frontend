@@ -9,9 +9,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
  * @param {Oskari.mapframework.bundle.mapfull.MapFullBundleInstance} mapfull
  *          reference to mapfull bundle instance.
  */
-function(mapfull) {
-    this.mapfull = mapfull;
-}, {
+    function (mapfull) {
+        this.mapfull = mapfull;
+    }, {
     /**
      * @method handleRequest
      * Toggles between the normal and the full screen mode of the map window.
@@ -20,13 +20,13 @@ function(mapfull) {
      * @param {Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest} request
      *      request to handle
      */
-    handleRequest : function(core, request) {
-        this.mapfull.toggleFullScreen();
-   }
-}, {
+        handleRequest: function (core, request) {
+            this.mapfull.toggleFullScreen();
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
-});
+        protocol: ['Oskari.mapframework.core.RequestHandler']
+    });

@@ -34,23 +34,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me.data = pData;
 
             if (me.data) {
-              _.each(me.tools, function (tool) {
-                try {
-                  tool.init(me.data, me.instance);
-                } catch(e) {
-                    Oskari.log('publisher2.view.PanelMapTools').error('Error initializing publisher tool ' + tool.getTool().id);
-                }
-              });
+                _.each(me.tools, function (tool) {
+                    try {
+                        tool.init(me.data, me.instance);
+                    } catch (e) {
+                        Oskari.log('publisher2.view.PanelMapTools').error('Error initializing publisher tool ' + tool.getTool().id);
+                    }
+                });
             }
-
 
             for (var p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
                     me.sandbox.registerForEventByName(me, p);
                 }
             }
-
-
         },
         /**
          * @method onEvent
@@ -86,17 +83,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 }
             }
         },
-        getName: function() {
-            return "Oskari.mapframework.bundle.publisher2.view.PanelMapTools";
+        getName: function () {
+            return 'Oskari.mapframework.bundle.publisher2.view.PanelMapTools';
         },
         /**
         * Sort tools
         * @method
         * @private
         */
-        _sortTools: function(){
+        _sortTools: function () {
             var me = this,
-                sortFunc = function(a,b) {
+                sortFunc = function (a, b) {
                     if (a.getIndex() < b.getIndex()) {
                         return -1;
                     }
@@ -128,19 +125,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             // Sort tools
             me._sortTools();
             // Add tools to panel
-            _.each(tools, function(tool) {
-                var ui = jQuery(me.templates.tool({title : tool.getTitle() }));
-                //setup values when editing an existing map
+            _.each(tools, function (tool) {
+                var ui = jQuery(me.templates.tool({title: tool.getTitle()}));
+                // setup values when editing an existing map
                 ui.find('input').prop('checked', !!tool.isEnabled());
                 ui.find('input').prop('disabled', !!tool.isDisabled());
 
                 contentPanel.append(ui);
 
-                ui.find('input').on('change', function() {
+                ui.find('input').on('change', function () {
                     var enabled = jQuery(this).is(':checked');
                     // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
                     tool.setEnabled(enabled);
-                    if(enabled) {
+                    if (enabled) {
                         ui.find('.extraOptions').show();
                     } else {
                         ui.find('.extraOptions').hide();
@@ -148,13 +145,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 });
 
                 var extraOptions = tool.getExtraOptions(ui);
-                if(extraOptions) {
+                if (extraOptions) {
                     ui.find('.extraOptions').append(extraOptions);
                 }
 
                 var initStateEnabled = ui.find('input').is(':checked');
                 tool.setEnabled(initStateEnabled);
-                if(initStateEnabled) {
+                if (initStateEnabled) {
                     ui.find('.extraOptions').show();
                 } else {
                     ui.find('.extraOptions').hide();
@@ -170,16 +167,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          *
          * @return {Object} id's of the enabled plugins
          */
-        _getEnabledTools: function() {
+        _getEnabledTools: function () {
             var me = this,
                 enabledTools = null;
 
             if (me.data) {
                 enabledTools = {};
-                _.each(me.tools, function(tool) {
-                  if (tool.isEnabled()) {
-                    enabledTools[tool.getTool().id] = true;
-                  }
+                _.each(me.tools, function (tool) {
+                    if (tool.isEnabled()) {
+                        enabledTools[tool.getTool().id] = true;
+                    }
                 });
                 return enabledTools;
             }
@@ -190,8 +187,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @method getValues
          * @return {Object}
          */
-        getValues: function() {
-            //just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
+        getValues: function () {
+            // just return empty -> tools and their plugins' configs get returned by the layout panel, which has all the tools
             return null;
         },
         /**
@@ -202,10 +199,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             var me = this,
                 bartool = null;
             _.each(me.tools, function (tool) {
-                if( tool.getTool().name === name){
-                  bartool = tool;
+                if (tool.getTool().name === name) {
+                    bartool = tool;
                 }
-
             });
             return bartool;
         },
@@ -220,8 +216,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          */
         validate: function () {
             var errors = [];
-            _.each(this.tools, function(tool) {
-                if(!tool.validate()){
+            _.each(this.tools, function (tool) {
+                if (!tool.validate()) {
                     errors.push(tool.getTool().id);
                 }
             });
@@ -232,7 +228,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
          * @param {String} mode the mode
          */
         setMode: function (mode) {
-
             if (!this.panel) {
                 return;
             }
@@ -241,8 +236,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 cont = me.panel.getContainer();
 
             // update tools
-            _.each(me.tools, function(tool){
-                if(tool.isDisplayedInMode(mode) === true){
+            _.each(me.tools, function (tool) {
+                if (tool.isDisplayedInMode(mode) === true) {
                     cont.find('#tool-' + tool.getTool().id).prop('disabled', true);
                     cont.find('#tool-' + tool.getTool().id).prop('checked', false);
                 } else {
@@ -250,7 +245,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                 }
             });
         },
-        getTools: function() {
+        getTools: function () {
             return this.tools;
         },
         /**
@@ -258,12 +253,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
         * @method stop
         * @public
         **/
-        stop: function(){
+        stop: function () {
             var me = this;
-            _.each(me.tools, function(tool) {
+            _.each(me.tools, function (tool) {
                 try {
                     tool.stop();
-                } catch(e) {
+                } catch (e) {
                     Oskari.log('publisher2.view.PanelMapTools').error('Error stopping publisher tool ' + tool.getTool().id);
                 }
             });

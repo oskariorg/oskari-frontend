@@ -30,9 +30,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         };
         me._log = Oskari.log('Oskari.mapping.maprotator.MapRotatorPlugin');
     }, {
-        isSupported: function () {
-            return typeof ol !== 'undefined';
-        },
         handleEvents: function () {
             var me = this;
             var DragRotate = new olInteractionDragRotate();
@@ -46,12 +43,12 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this._map.on('pointerdrag', function (e) {
                 degrees = me.getRotation();
-                me.rotateIcon(degrees);
                 if (degrees !== me.getDegrees()) {
+                    me.rotateIcon(degrees);
+                    me.setDegrees(degrees);
                     var event = eventBuilder(degrees);
                     me._sandbox.notifyAll(event);
                 }
-                me.setDegrees(degrees);
             });
         },
         setDegrees: function (degree) {
@@ -72,10 +69,6 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this._locale = Oskari.getLocalization('maprotator', Oskari.getLang() || Oskari.getDefaultLanguage()).display;
 
-            if (!this.isSupported() && this.hasUi()) {
-                return compass;
-            }
-
             compass.attr('title', this._locale.tooltip.tool);
 
             if (!this.hasUi()) {
@@ -90,9 +83,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
         },
         _createUI: function () {
             this._element = this._createControlElement();
-            if (this.isSupported()) {
-                this.handleEvents();
-            }
+            this.handleEvents();
             this.addToPluginContainer(this._element);
         },
         _createMobileUI: function () {
@@ -102,22 +93,18 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.handleEvents();
         },
         setRotation: function (deg) {
-            if (!this.isSupported()) {
-                return;
-            }
             // if deg is number then transform degrees to radians otherwise use 0
             var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
             // if deg is number use it for degrees otherwise use 0
             var degrees = (typeof deg === 'number') ? deg : 0;
-
             this.rotateIcon(degrees);
             this._map.getView().setRotation(rot);
             this.setDegrees(degrees);
         },
         getRotation: function () {
             var rot = this._map.getView().getRotation();
-            // radians to degrees
-            var deg = rot * 57.3;
+            // radians to degrees with one decimal
+            var deg = Math.round(rot * 573) / 10;
             return deg;
         },
         /**
@@ -135,7 +122,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'default');
+            var styleClass = 'toolstyle-' + (style || 'default');
 
             var classList = el.attr('class').split(/\s+/);
             for (var c = 0; c < classList.length; c++) {
@@ -205,7 +192,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         hasUi: function () {
-            return this._config.noUI ? false : true;
+            return !this._config.noUI;
         },
         /**
          * Get jQuery element.
@@ -226,4 +213,4 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             'Oskari.mapframework.module.Module',
             'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
-  });
+    });

@@ -175,8 +175,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 ),
                 okBtn = Oskari.clazz.create(
                     'Oskari.userinterface.component.Button'
-                ),
-                sandbox = me.instance.sandbox;
+                );
 
             okBtn.setTitle(me.loc('tabs.publishedmaps.delete'));
             okBtn.addClass('primary');
@@ -349,19 +348,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          * @param function cb - callback to call when clicking ok button
           */
         createProjectionChangeDialog: function (cb) {
-            var me = this;
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var btn = dialog.createCloseButton(this.loc("projectionError").ok);
-            var cancel = dialog.createCloseButton( this.loc("projectionError").cancel );
-            cancel.setHandler( function () {
+            var btn = dialog.createCloseButton(this.loc('projectionError').ok);
+            var cancel = dialog.createCloseButton(this.loc('projectionError').cancel);
+            cancel.setHandler(function () {
                 dialog.close(true);
             });
             btn.addClass('primary');
-            btn.setHandler( function () {
+            btn.setHandler(function () {
                 cb();
                 dialog.close(true);
             });
-            dialog.show(this.loc("projectionError").title, this.loc("projectionError").msg, [cancel, btn]);
+            dialog.show(this.loc('projectionError').title, this.loc('projectionError').msg, [cancel, btn]);
             dialog.makeDraggable();
         },
         /**
@@ -396,7 +394,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             // set up the link from name field
             var nameRenderer = function (name, data) {
                 var url = sandbox.createURL(data.url);
-                if(!url) {
+                if (!url) {
                     // no url, no link just plain text
                     return name;
                 }
@@ -419,7 +417,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
 
             var service = instance.getViewService();
             var setMapState = function (data, forced, confirmCallback) {
-                var setStateRequestBuilder = sandbox.getRequestBuilder(
+                var setStateRequestBuilder = Oskari.requestBuilder(
                     'StateHandler.SetStateRequest'
                 );
                 // error handling: check if the layers referenced in view are
@@ -465,14 +463,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             grid.setColumnValueRenderer('show', showRenderer);
 
             var editRequestSender = function (data) {
-                var publishMapEditorRequestBuilder = sandbox.getRequestBuilder(
+                var publishMapEditorRequestBuilder = Oskari.requestBuilder(
                     'Publisher.PublishMapEditorRequest'
                 );
                 if (publishMapEditorRequestBuilder) {
                     var req = publishMapEditorRequestBuilder(data);
                     sandbox.request(instance, req);
                 }
-                var closeFlyoutRequestBuilder = sandbox.getRequestBuilder(
+                var closeFlyoutRequestBuilder = Oskari.requestBuilder(
                     'userinterface.UpdateExtensionRequest'
                 );
                 if (closeFlyoutRequestBuilder) {

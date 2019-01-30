@@ -16,15 +16,19 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         // UI text for title
         this.title = title;
         this._visible = true;
+        this._resizable = false;
         this._popup = null;
         /* @property container the DIV element */
         this.container = null;
-        this.options = options ||  {};
+        this.options = options || {};
+
+        this.__render();
+        Oskari.makeObservable(this);
         this._baseZIndex = 20000;
         this._init();
         Oskari.makeObservable(this);
     }, {
-	    __templates : {
+        __templates: {
             popup: jQuery('<div class="oskari-flyout">' +
                 '   <div class="oskari-flyouttoolbar">' +
                 '       <div class="oskari-flyoutheading"></div>' +
@@ -37,74 +41,77 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 '       <div class="oskari-flyoutcontent"></div>' +
                 '   </div>' +
                 '</div>'),
-            sideTool: _.template('<div class="sidetool">'  +
+            sideTool: _.template('<div class="sidetool">' +
                 '   <div class="icon icon-arrow-white-right"></div>' +
-                '   <label class="verticalsidelabel">${ label }</label>'  +
+                '   <label class="verticalsidelabel">${ label }</label>' +
                 '</div>'),
             toolage: jQuery('<div class="oskari-flyouttool-help"></div>' +
                 '<div class="oskari-flyouttool-attach"></div>' +
                 '<div class="oskari-flyouttool-detach"></div>' +
                 '<div class="oskari-flyouttool-minimize"></div>' +
                 '<div class="oskari-flyouttool-restore"></div>')
-	    },
+        },
         _init: function () {
-            if (this.options.isExtension === true){
+            if (this.options.isExtension === true) {
                 this._createExtensionFlyout();
             } else {
-               this.__render();
+                this.__render();
             }
         },
         addToolage: function () {
             var toolage = this.__templates.toolage.clone();
             this._popup.find('.oskari-flyouttools').prepend(toolage);
         },
-	    isVisible : function() {
-	    	return this._visible;
-	    },
-	    show: function() {
-	    	var me = this;
-            if(me.isVisible()) {
+        isVisible: function () {
+            return this._visible;
+        },
+        isResizable: function () {
+            return this._resizable;
+        },
+        show: function () {
+            var me = this;
+            if (me.isVisible()) {
                 return;
             }
-	    	me._popup.show();
+            me._popup.show();
             me.bringToTop();
-    		me._visible = true;
-    		this.trigger('show');
-	    },
-	    hide: function(suppressEvent) {
-	    	var me = this;
-            if(!me.isVisible()) {
+            me._visible = true;
+            this.trigger('show');
+        },
+        hide: function (suppressEvent) {
+            var me = this;
+            if (!me.isVisible()) {
                 return;
             }
-	    	me._popup.hide();
-    		me._visible = false;
-    		suppressEvent = suppressEvent ? suppressEvent: false;
-            if(!suppressEvent) {
+            me._popup.hide();
+            me._visible = false;
+            suppressEvent = suppressEvent || false;
+            if (!suppressEvent) {
                 this.trigger('hide');
             }
         },
-        __render: function() {
+        __render: function () {
             var me = this;
             var popup = me._popup || me.__templates.popup.clone();
 
-            if(!me._popup) {
-                if(!me.options.container) {
-                  jQuery('body').append(popup);
+            if (!me._popup) {
+                if (!me.options.container) {
+                    jQuery('body').append(popup);
                 } else {
                     me.options.container.append(popup);
                 }
-                popup.find('.icon-close').on('click', function(){
+                popup.find('.icon-close').on('click', function () {
                     me.hide();
                 });
                 me._popup = popup;
                 me.bringToTop();
-                me._popup.on('click', function(){
+                me._popup.on('click', function () {
                     me.bringToTop();
                 });
                 me.hide(true);
             }
 
-            if(me.options.visible === true) {
+            if (me.options.visible === true) {
                 me.show();
             }
 
@@ -116,20 +123,20 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             var me = this;
             this._popup = this.__templates.popup.clone();
 
-            this._popup.on('click', function(){
+            this._popup.on('click', function () {
                 me.bringToTop();
             });
             this.setTitle(this.title);
             this.addClass(this.options.cls);
         },
-        setTitle: function(title) {
+        setTitle: function (title) {
             var me = this;
-            if(!this._popup) {
+            if (!this._popup) {
                 return;
             }
             me._popup.find('.oskari-flyout-title p').html(title || '');
         },
-        getTitle: function() {
+        getTitle: function () {
             var me = this;
             return me._popup.find('.oskari-flyout-title p');
         },
@@ -137,55 +144,54 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          * @method  @public setContent Set content
          * @param {Object} content jQuery object
          */
-        setContent: function(content) {
+        setContent: function (content) {
             var me = this;
             me._popup.find('.oskari-flyoutcontent').html(content);
         },
-        addClass: function(cls) {
-            if(!this._popup) {
+        addClass: function (cls) {
+            if (!this._popup) {
                 return;
             }
             this._popup.addClass(cls);
         },
-        addClassForContent: function(cls) {
-            if (this._popup){
+        addClassForContent: function (cls) {
+            if (this._popup) {
                 this._popup.find('.oskari-flyoutcontent').addClass(cls);
             }
         },
-        setSize : function(width, height) {
-            if(!this._popup) {
+        setSize: function (width, height) {
+            if (!this._popup) {
                 return;
             }
-            if(width) {
+            if (width) {
                 this._popup.css('width', width);
             }
-            if(height) {
+            if (height) {
                 this._popup.css('height', height);
             }
-
         },
-        bringToTop : function() {
-            if(!this._popup) {
+        bringToTop: function () {
+            if (!this._popup) {
                 return;
             }
-            this._popup.css('z-index',  this._baseZIndex + Oskari.seq.nextVal());
+            this._popup.css('z-index', this._baseZIndex + Oskari.seq.nextVal());
         },
-        move : function(left, top, keepOnScreen) {
-            if(!this._popup) {
+        move: function (left, top, keepOnScreen) {
+            if (!this._popup) {
                 return;
             }
-            if(keepOnScreen) {
+            if (keepOnScreen) {
                 var size = this.getSize();
-                if(left + size.width > jQuery(window).width()) {
+                if (left + size.width > jQuery(window).width()) {
                     left = jQuery(window).width() - size.width;
                 }
-                if(left < 0) {
+                if (left < 0) {
                     left = 0;
                 }
-                if(top + size.height > jQuery(window).height()) {
+                if (top + size.height > jQuery(window).height()) {
                     top = jQuery(window).height() - size.height;
                 }
-                if(top < 0) {
+                if (top < 0) {
                     top = 0;
                 }
             }
@@ -194,23 +200,23 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 'top': top
             });
         },
-        getPosition : function() {
-            if(!this._popup) {
+        getPosition: function () {
+            if (!this._popup) {
                 return;
             }
             return this._popup.position();
         },
-        getSize : function() {
-            if(!this._popup) {
+        getSize: function () {
+            if (!this._popup) {
                 return;
             }
             return {
-                width : this._popup.outerWidth(),
-                height : this._popup.height()
+                width: this._popup.outerWidth(),
+                height: this._popup.height()
             };
         },
         toggle: function () {
-            if ( this.isVisible() ) {
+            if (this.isVisible()) {
                 this.hide();
             } else {
                 this.show();
@@ -228,39 +234,66 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             me._popup.draggable({
                 scroll: !!options.scroll,
                 handle: options.handle || '.oskari-flyouttoolbar',
-                start: function() {
+                start: function () {
                     // bring this flyout to top when user starts dragging it
                     me.bringToTop();
                 },
                 stop: function () {
-                    //prevent to drag flyout's toolbar out of the viewport's top
-                    if (me._popup.position().top < 0){
+                    // prevent to drag flyout's toolbar out of the viewport's top
+                    if (me._popup.position().top < 0) {
                         me._popup.css('top', '0px');
                     }
                 }
             });
         },
-        getElement: function(){
+        /**
+         * @method makeResizable
+         * Makes dialog resizable with jQuery
+         * @param opts optional options for resizing
+         */
+        makeResizable: function (opts) {
+            var me = this;
+            opts = opts || {};
+            me.options.resizable = true;
+            me._popup.resizable({
+                minWidth: opts.minWidth || 630,
+                minHeight: opts.minHeight || 400,
+                scroll: !!opts.scroll,
+                handles: opts.handles || 'n,e,s,w,ne,nw,se,sw',
+                handle: opts.handle || '.oskari-flyouttoolbar',
+                start: function () {
+                    // bring this flyout to top when user starts dragging it
+                    me.bringToTop();
+                },
+                stop: function () {
+                    me.options.width = jQuery(this).width();
+                    me.options.height = jQuery(this).height();
+                    me.__render();
+                    me.trigger('resize', me.options);
+                }
+            });
+            this._resizable = true;
+        },
+        getElement: function () {
             return this._popup;
         },
         getContent: function () {
             return this._popup.find('.oskari-flyoutcontent');
         },
 
-/************************************************************************************************
+        /************************************************************************************************
 * Side tool functions
 ************************************************************************************************/
-        _updateSideLabelPositions: function(){
+        _updateSideLabelPositions: function () {
             var me = this;
             var sidelabels = me._popup.find('.sidetool');
             var flyout = me._popup;
             var heights = flyout.find('.oskari-flyouttoolbar').outerHeight();
-            jQuery.each(sidelabels.get(), function(index, sidelabel) {
-                if(index === 0) {
+            jQuery.each(sidelabels.get(), function (index, sidelabel) {
+                if (index === 0) {
                     jQuery(this).css('top', heights);
                     heights += jQuery(this).height() + 10;
-                }
-                else {
+                } else {
                     jQuery(this).css('top', heights + 'px');
                     heights += jQuery(this).height() + 10;
                 }
@@ -271,14 +304,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          * @param {String}   label    sidetool label
          * @param {Function} callback sidetool callback
          */
-        addSideTool: function(label, callback){
+        addSideTool: function (label, callback) {
             var me = this;
-            var sidelabel = jQuery(this.__templates.sideTool({label : label}));
+            var sidelabel = jQuery(this.__templates.sideTool({label: label}));
 
-            var textWidth = function (el)
-            {
+            var textWidth = function (el) {
                 // Only create the dummy element once
-                var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap' }).appendTo('body');
+                var calc = jQuery('<span>').css('font', el.css('font')).css({'font-size': el.css('font-size'), display: 'none', 'white-space': 'nowrap'}).appendTo('body');
                 var width = calc.html(el.html()).width();
                 // Empty out the content until next time - not needed, but cleaner
                 calc.remove();
@@ -288,19 +320,18 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             var textSize = textWidth(sidelabel.find('label'));
 
             var flyout = me._popup;
-            var parent = flyout.parent();
 
             sidelabel.css('margin-left', '-16px');
             flyout.append(sidelabel);
 
             sidelabel.css('height', (textSize + sidelabel.find('.icon').height() + 10) + 'px');
 
-            if(typeof callback === 'function') {
-                sidelabel.on('click', function() {
+            if (typeof callback === 'function') {
+                sidelabel.on('click', function () {
                     var position = me._popup.position();
                     var bounds = {
-                        left : position.left + sidelabel.position().left - 16,
-                        top : position.top + sidelabel.position().top
+                        left: position.left + sidelabel.position().left - 16,
+                        top: position.top + sidelabel.position().top
                     };
                     bounds.right = bounds.left + sidelabel.outerWidth();
                     bounds.bottom = bounds.top + sidelabel.height();
@@ -310,10 +341,10 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
 
             me._updateSideLabelPositions();
 
-            if(!me._addedResizeListener){
-                me._popup.on('DOMSubtreeModified', function(){
+            if (!me._addedResizeListener) {
+                me._popup.on('DOMSubtreeModified', function () {
                     clearTimeout(me._sidetoolTimer);
-                    me._sidetoolTimer = setTimeout(function(){
+                    me._sidetoolTimer = setTimeout(function () {
                         me._updateSideLabelPositions();
                     }, 10);
                 });
@@ -323,11 +354,11 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /**
          * @method  @public removeSideTools Remove sidetools
          */
-        removeSideTools: function() {
+        removeSideTools: function () {
             var me = this;
             var sidelabels = me._popup.find('.sidetool');
-            sidelabels.each(function(index, sidelabel) {
+            sidelabels.each(function (index, sidelabel) {
                 jQuery(sidelabel).remove();
             });
         }
-});
+    });

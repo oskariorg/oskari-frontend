@@ -89,7 +89,7 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "src": "../../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js"
             },{
                 "type": "text/css",
-                "src": "../../../../bundles/framework/hierarchical-layerlist/resources/css/style.css"
+                "src": "../../../../bundles/framework/hierarchical-layerlist/resources/scss/style.scss"
             }],
             "locales": [{
                 "lang": "fi",
@@ -103,6 +103,10 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/resources/locale/en.js"
+            }, {
+                "lang": "fr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/hierarchical-layerlist/resources/locale/fr.js"
             }]
         }
     });

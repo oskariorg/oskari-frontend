@@ -70,15 +70,15 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
          */
         start: function () {
             var el = this.container,
-                $el = $(el),
+                $el = jQuery(el),
                 data = $el.data(),
                 Spinner = this._Spinner,
                 opts = this.opts;
 
-            if(!data) {
+            if (!data) {
                 return;
             }
-            if(this.spinning) {
+            if (this.spinning) {
                 return;
             }
             this.spinning = true;
@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 delete data.spinner;
             }
             if (opts !== false) {
-                data.spinner = new Spinner($.extend({
+                data.spinner = new Spinner(jQuery.extend({
                     color: $el.css('color')
                 }, opts)).spin($el.get()[0]);
             }
@@ -105,10 +105,10 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 return;
             }
             this.spinning = false;
-            $el = $(el);
+            $el = jQuery(el);
             data = $el.data();
 
-            if(!data) {
+            if (!data) {
                 return;
             }
 
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             }
         },
         _Spinner: (function (window, document) {
-            //fgnass.github.com/spin.js#v1.2.8
+            // fgnass.github.com/spin.js#v1.2.8
 
             /**
              * Copyright (c) 2011 Felix Gnass [fgnass at neteye dot de]
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
              * Utility function to create elements. If no tag name is given,
              * a DIV is created. Optionally properties can be passed.
              */
-            function createEl(tag, prop) {
+            function createEl (tag, prop) {
                 var el = document.createElement(tag || 'div'),
                     n;
 
@@ -169,7 +169,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             /**
              * Appends children and returns the parent.
              */
-            function ins(parent) {
+            function ins (parent) {
                 var i, n;
                 for (i = 1, n = arguments.length; i < n; i += 1) {
                     parent.appendChild(arguments[i]);
@@ -181,25 +181,25 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             /**
              * Insert a new stylesheet to hold the @keyframe or VML rules.
              */
-            sheet = function () {
+            sheet = (function () {
                 var el = createEl('style', {
                     type: 'text/css'
                 });
                 ins(document.getElementsByTagName('head')[0], el);
                 return el.sheet || el.styleSheet;
-            }();
+            }());
 
             /**
              * Creates an opacity keyframe animation rule and returns its name.
              * Since most mobile Webkits have timing issues with animation-delay,
              * we create separate rules for each line/segment.
              */
-            function addAnimation(alpha, trail, i, lines) {
+            function addAnimation (alpha, trail, i, lines) {
                 var name = ['opacity', trail, ~~(alpha * 100), i, lines].join('-'),
                     start = 0.01 + i / lines * 100,
                     z = Math.max(1 - (1 - alpha) / trail * (100 - start), alpha),
                     prefix = useCssAnimations.substring(0, useCssAnimations.indexOf('Animation')).toLowerCase(),
-                    pre = prefix && '-' + prefix + '-' || '';
+                    pre = prefix && ('-' + prefix + '-' || '');
 
                 if (!animations[name]) {
                     sheet.insertRule('@' + pre + 'keyframes ' + name + '{' + '0%{opacity:' + z + '}' + start + '%{opacity:' + alpha + '}' + (start + 0.01) + '%{opacity:1}' + (start + trail) % 100 + '%{opacity:' + alpha + '}' + '100%{opacity:' + z + '}' + '}', sheet.cssRules.length);
@@ -212,7 +212,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
             /**
              * Tries various vendor prefixes and returns the first supported property.
              **/
-            function vendor(el, prop) {
+            function vendor (el, prop) {
                 var s = el.style,
                     pp,
                     i;
@@ -233,7 +233,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
              * Sets multiple style properties at once.
              */
 
-            function css(el, prop) {
+            function css (el, prop) {
                 var n;
                 for (n in prop) {
                     if (prop.hasOwnProperty(n)) {
@@ -248,7 +248,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
              * Fills in default values.
              */
 
-            function merge(obj) {
+            function merge (obj) {
                 var def,
                     n,
                     i;
@@ -267,7 +267,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
              * Returns the absolute page-offset of the given element.
              */
 
-            function pos(el) {
+            function pos (el) {
                 var o = {
                     x: el.offsetLeft,
                     y: el.offsetTop
@@ -282,13 +282,12 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
 
             /** The constructor */
 
-            function Spinner(o) {
+            function Spinner (o) {
                 if (!this.spin) {
                     return new Spinner(o);
                 }
                 this.opts = merge(o || {}, Spinner.defaults, defaults);
             }
-
 
             Spinner.defaults = {};
 
@@ -333,7 +332,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                         f = fps / o.speed;
                         ostep = (1 - o.opacity) / (f * o.trail / 100);
                         astep = f / o.lines;
-                        (function anim() {
+                        (function anim () {
                             var s,
                                 alpha;
                             i += 1;
@@ -361,7 +360,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                     var i,
                         seg;
 
-                    function fill(color, shadow) {
+                    function fill (color, shadow) {
                         return css(createEl(), {
                             position: 'absolute',
                             width: (o.length + o.width) + 'px',
@@ -399,16 +398,15 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 }
             });
 
-            /////////////////////////////////////////////////////////////////////////
+            /// //////////////////////////////////////////////////////////////////////
             // VML rendering for IE
-            /////////////////////////////////////////////////////////////////////////
+            /// //////////////////////////////////////////////////////////////////////
 
             /**
              * Check and init VML support
              */
             (function () {
-
-                function vml(tag, attr) {
+                function vml (tag, attr) {
                     return createEl('<' + tag + ' xmlns="urn:schemas-microsoft.com:vml" class="spin-vml">', attr);
                 }
 
@@ -417,7 +415,6 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                 });
 
                 if (!vendor(ss, 'transform') && ss.adj) {
-
                     // VML support detected. Insert CSS rule ...
                     sheet.addRule('.spin-vml', 'behavior:url(#default#VML)');
 
@@ -428,7 +425,7 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                             g,
                             i;
 
-                        function grp() {
+                        function grp () {
                             return css(vml('group', {
                                 coordsize: s + ' ' + s,
                                 coordorigin: -r + ' ' + -r
@@ -445,24 +442,24 @@ Oskari.clazz.define('Oskari.userinterface.component.ProgressSpinner',
                             left: margin
                         });
 
-                        function seg(i, dx, filter) {
+                        function seg (i, dx, filter) {
                             ins(g, ins(css(grp(), {
                                 rotation: 360 / o.lines * i + 'deg',
                                 left: ~~dx
                             }), ins(css(vml('roundrect', {
-                                    arcsize: o.corners
-                                }), {
-                                    width: r,
-                                    height: o.width,
-                                    left: o.radius,
-                                    top: -o.width >> 1,
-                                    filter: filter
-                                }), vml('fill', {
-                                    color: o.color,
-                                    opacity: o.opacity
-                                }), vml('stroke', {
-                                    opacity: 0
-                                }) // transparent stroke to fix color bleeding upon opacity change
+                                arcsize: o.corners
+                            }), {
+                                width: r,
+                                height: o.width,
+                                left: o.radius,
+                                top: -o.width >> 1,
+                                filter: filter
+                            }), vml('fill', {
+                                color: o.color,
+                                opacity: o.opacity
+                            }), vml('stroke', {
+                                opacity: 0
+                            }) // transparent stroke to fix color bleeding upon opacity change
                             )));
                         }
 

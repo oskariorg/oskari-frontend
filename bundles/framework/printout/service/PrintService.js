@@ -15,8 +15,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.service.PrintService',
         this.instance = instance;
         this.sandbox = instance.sandbox;
     }, {
-        __name: "Printout.PrintService",
-        __qname: "Oskari.mapframework.bundle.printout.service.PrintService",
+        __name: 'Printout.PrintService',
+        __qname: 'Oskari.mapframework.bundle.printout.service.PrintService',
 
         getQName: function () {
             return this.__qname;
@@ -45,14 +45,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.service.PrintService',
          */
         fetchPrintMapData: function (url, successCb, errorCb) {
             jQuery.ajax({
-                type: "GET",
+                type: 'GET',
                 dataType: 'json',
                 data: {
                     srs: this.sandbox.getMap().getSrsName()
                 },
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 url: url,

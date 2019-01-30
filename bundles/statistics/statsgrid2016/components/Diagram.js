@@ -15,23 +15,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         container: jQuery('<div></div>')
     },
     /**
-     * @method  @public render Render datatable
+     * @method  @public render Render diagram
      * @param  {Object} el jQuery element
      */
-    render: function (el) {
+    render: function (el, options) {
+        var me = this;
+        if (options) {
+            me._chartInstance.setResizable(!!options.resizable);
+        }
         if (this.element) {
             // already rendered, just move the element to new el when needed
             if (el !== this.element.parent()) {
                 this.element.detach();
                 el.append(this.element);
             }
+            // update ui if diagram is resizable
+            if (options && options.resizable) {
+                me.updateUI(options);
+            }
             return;
         }
         this.element = this._template.container.clone();
         el.append(this.element);
-        this.updateUI();
+        this.updateUI(options);
     },
-    updateUI: function () {
+    updateUI: function (options) {
         var me = this;
         var el = this.element;
         if (!el) {
@@ -70,13 +78,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                 me.element.html(me.loc.statsgrid.noValues);
                 return;
             }
+            var classificationOpts = me.service.getStateService().getClassificationOpts(me.getIndicator().hash);
+            var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
+            var formatter = Oskari.getNumberFormatter(fractionDigits);
+            var chartOpts = {
+                colors: me.getColorScale(data),
+                valueRenderer: function (val) {
+                    if (typeof val !== 'number') {
+                        return null;
+                    }
+                    return formatter.format(val);
+                }
+            };
+
+            if (me._chartInstance.isResizable()) {
+                var dataCharts = jQuery(el).closest('.oskari-datacharts');
+                if (options && options.height) {
+                    // height for flyout toolbar, defaults to 57px (.oskari-flyouttoolbar height)
+                    const heightOffset = jQuery(el).closest('.oskari-flyout').find('.oskari-flyouttoolbar:first').height() || 57;
+                    jQuery(el).closest('.oskari-flyoutcontentcontainer').css('max-height', 'none').height(options.height - heightOffset);
+                }
+                if (options && options.width) {
+                    // helps to calculate container width for chart, defaults to 16px + 16px padding
+                    const widthOffset = (parseInt(dataCharts.css('padding-left').replace(/[^-\d.]/g, '')) +
+                        parseInt(dataCharts.css('padding-right').replace(/[^-\d.]/g, ''))) || 32;
+                    chartOpts.width = options.width - widthOffset;
+                    dataCharts.width(options.width - widthOffset);
+                }
+            }
+
             if (!me._chartElement) {
-                me._chartElement = me.createBarCharts(data);
+                me._chartElement = me.createBarCharts(data, chartOpts);
                 el.html(me._chartElement);
             } else {
-                me.getChartInstance().redraw(data, {
-                    colors: me.getColorScale()
-                });
+                me.getChartInstance().redraw(data, chartOpts);
             }
 
             var labels = me.getChartHeaderElement();
@@ -107,17 +142,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * @method createBarCharts
      * Creates the barchart component if chart is not initialized
      */
-    createBarCharts: function (data) {
-        var me = this;
+    createBarCharts: function (data, chartOpts) {
         if (data === undefined || data.length === 0) {
             Oskari.log('statsgrid.DiagramVisualizer').debug('no indicator data');
             return null;
         }
 
         if (!this.getChartInstance().chartIsInitialized()) {
-            var barchart = this.getChartInstance().createBarChart(data, {
-                colors: me.getColorScale()
-            });
+            var barchart = this.getChartInstance().createBarChart(data, chartOpts);
             var el = jQuery(barchart);
             el.css({
                 'width': '100%'
@@ -155,7 +187,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             response.data.forEach(function (dataItem) {
                 indicatorData.push({
                     name: dataItem.name,
-                    value: dataItem.values[indicator.hash]
+                    value: dataItem.values[indicator.hash],
+                    id: dataItem.id
                 });
             });
             callback(indicatorData);
@@ -211,15 +244,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * gets the color scale of the mapselection
      * @return colors[] containing colors
      */
-    getColorScale: function () {
-        /*
+    getColorScale: function (data) {
+        var me = this;
+        // Format data for Oskari.statistics.statsgrid.ClassificationService.getClassification
+        var numericData = {};
+        data.forEach(function (entry) {
+            numericData[entry.id] = entry.value;
+        });
         var stateService = this.service.getStateService();
         var activeIndicator = stateService.getActiveIndicator();
         var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+        var classification = me.service.getClassificationService().getClassification(numericData, classificationOpts);
         var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        */
-        // TODO use ranges from classification to map colors
-        return ['#555', '#555'];
+        return classification.maxBounds && colors ? {bounds: classification.maxBounds, values: colors} : {bounds: [], values: ['#555', '#555']};
     },
     events: function () {
         var me = this;

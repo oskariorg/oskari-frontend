@@ -7,6 +7,7 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Style par défaut",
         "own-style": "Style personnel",
+        "none-style": "Aucun",
         "refresh": "Rafraîchir",
         "refresh_title": "Rafraîchir les produits de données n'ayant pas un rendu automatique sur la carte.",
         "tile": {
@@ -23,7 +24,8 @@ Oskari.registerLocalization(
             "wfs_no_permissions": "Vous n’êtes pas autorisé à utiliser la couche WFS {couche}.",
             "wfs_configuring_layer_failed": "la configuration de la couche WFS {layer} a échoué.",
             "wfs_request_failed": "La requête pour la couche WFS {layer} a échoué.",
-            "features_parsing_failed": "L’analyse de caractéristique de la couche WFS {layer} a échoué."
+            "features_parsing_failed": "L’analyse de caractéristique de la couche WFS {layer} a échoué.",
+            "layer_load_fail": "Impossible de charger la couche"
         },
         "information": {
             "title": "Rendu des données objet.",
@@ -46,6 +48,14 @@ Oskari.registerLocalization(
                 "cancel": "Annuler",
                 "save": "Enregistrer"
             }
+        },
+        "scale_dialog": {
+            "title": "Échelle actualisée",
+            "msg": "La couche n'est pas accessible avec le niveau de zoom actuel"
+        },
+        "layerFilter": {
+            "tooltip": "Afficher uniquement les couches vectorielles",
+            "featuredata": "Couches vectorielles"
         }
     }
 });

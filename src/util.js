@@ -660,5 +660,44 @@ Oskari.util = (function () {
         return true;
     };
 
+    /**
+     * Checks if two arrays have equal primitive values and order.
+     * Shallow test.
+     * 
+     * @return {Boolean} true if the arrays are equal
+     */
+    util.arraysEqual = function (a, b) {
+        if (a === b) {
+            return true;
+        }
+        if (!Array.isArray(a) || !Array.isArray(b)) {
+            return false;
+        }
+        if (a.length !== b.length) {
+            return false;
+        }
+        let i;
+        for (i = 0; i < a.length; i++) {
+            if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Sql LIKE like operator.
+     * Supports % and * as zero to n characters and _ as a single character.
+     * @param  {String|Number} value value to check
+     * @param  {String|Number} likePattern pattern to check against
+     * @return {Boolean} true if pattern exists in the value
+     */
+    util.stringLike = (value, likePattern) => {
+        const regExpSpecials = '\\' + ['/', '.', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\');
+        const likeRegExp = new RegExp(`^${likePattern.toString()
+            .replace(new RegExp(regExpSpecials, 'g'), '\\$1')
+            .replace(/%|\*/g, '.*')
+            .replace(/_/g, '.')}$`);
+        return likeRegExp.test(value.toString());
+    }
+
     return util;
 }());

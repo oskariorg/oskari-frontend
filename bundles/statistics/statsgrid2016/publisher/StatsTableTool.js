@@ -15,14 +15,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
      * @public
      */
     init: function (pdata) {
-        var me = this;
-
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.grid !== false) {
-            me.setEnabled(true);
-        } else {
-            me.setEnabled(false);
-        }
+        var enabled = pdata &&
+            Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') &&
+            pdata.configuration.statsgrid.conf.grid === true;
+        this.setEnabled(enabled);
     },
     /**
     * Get tool object.
@@ -46,39 +42,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
         return me.__tool;
     },
     /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return founded stats layer, if not found then null
-    */
-    _getStatsLayer: function () {
-        var me = this;
-        var selectedLayers = me.__sandbox.findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
-    },
-    /**
     * Set enabled.
     * @method setEnabled
     * @public
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-
     setEnabled: function (enabled) {
         var me = this;
+        var changed = me.state.enabled !== enabled;
         me.state.enabled = enabled;
 
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (!stats) {
+        if (!stats || !changed) {
             return;
         }
         if (enabled) {
@@ -144,6 +120,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

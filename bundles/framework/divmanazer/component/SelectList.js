@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             if (dataKey.cls) {
                 option.addClass(dataKey.cls);
             }
-            if (dataKey.tooltip){
+            if (dataKey.tooltip) {
                 option.prop('title', dataKey.tooltip);
             }
             option.val(dataKey.id).text(dataKey.title || dataKey.name);
@@ -173,7 +173,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             return ids.some(function (id) {
                 return '' + id === optionId;
             });
-        }
+        };
         chosen.find('option').each(function (index, opt) {
             if (isDisabledOption(opt.value)) {
                 jQuery(opt).prop('disabled', true);
@@ -234,7 +234,7 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             // cleanup empty placeholder value to an empty array
             return value.filter(function (item) {
                 return item !== '';
-            })
+            });
         }
         return value;
     },
@@ -267,6 +267,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         selected.on('chosen:hiding_dropdown', function (event, params) {
             jQuery(event.target).next('.chosen-container').removeClass('chosen-drop-up');
         });
+    },
+    /**
+     * @method clearOptions
+     * Removes all 'select' elements from component
+     */
+    clearOptions: function () {
+        this.element.find('select').empty().trigger('chosen:updated');
     }
 }, {
     extend: ['Oskari.userinterface.component.FormComponent']

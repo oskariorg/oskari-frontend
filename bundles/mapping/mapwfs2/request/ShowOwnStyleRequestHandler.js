@@ -3,7 +3,7 @@
  *
  * Handles map selection popup functionality.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequestHandler',
 
     /**
      * @method create called automatically on construction
@@ -26,9 +26,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
         }
     }, {
         __templates: {
-            "wrapper": '<div></div>',
-            "toolsButton": '<div style= "display: inline-block; border: 1px solid;"></div>',
-            "link": '<div class="link"><a href="javascript:void(0);"></a></div></div>'
+            'wrapper': '<div></div>',
+            'toolsButton': '<div style= "display: inline-block; border: 1px solid;"></div>',
+            'link': '<div class="link"><a href="javascript:void(0);"></a></div></div>'
         },
 
         /**
@@ -65,7 +65,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             saveOwnStyleBtn.setTitle(this.localization.button.save);
             saveOwnStyleBtn.addClass('primary saveOwnStyle');
             saveOwnStyleBtn.setHandler(function () {
-                var styleName = "oskari_custom";
+                var styleName = 'oskari_custom';
 
                 // remove old custom tiles
                 self.plugin.deleteTileCache(layerId, styleName);
@@ -77,7 +77,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
 
                 // change style to custom
                 layer.selectStyle(styleName);
-                var event = self.plugin.getSandbox().getEventBuilder('MapLayerEvent')(layerId, 'update');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
                 self.plugin.getSandbox().notifyAll(event);
 
                 dialog.close();

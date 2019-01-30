@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
      * @param {Oskari.mapframework.bundle.featuredata2.plugin.mapmodule.OpenlayersPopupPlugin} featureData
      *          reference to featureData
      */
-        function(featureData) {
+    function (featureData) {
         this.featureData = featureData;
     }, {
         /**
@@ -20,12 +20,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          * @param {Oskari.mapframework.bundle.featuredata2.request.ShowFeatureDataRequest} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest: function (core, request) {
             var id = request.getId(),
-                flyout = this.featureData.plugins["Oskari.userinterface.Flyout"],
+                flyout = this.featureData.plugins['Oskari.userinterface.Flyout'],
                 panels = flyout.tabsContainer.panels,
                 i;
-            for (i=0; i<panels.length; i++) {
+            for (i = 0; i < panels.length; i++) {
                 if (panels[i].layer.getId() === id) {
                     flyout.tabsContainer.select(panels[i]);
                     break;
@@ -38,5 +38,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.request.ShowFeature
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

@@ -10,7 +10,7 @@
 Oskari.AbstractFunc = function () {
     var name = arguments[0];
     return function () {
-        throw 'AbstractFuncCalled: ' + name;
+        throw new Error('AbstractFuncCalled: ' + name);
     };
 };
 
@@ -23,7 +23,7 @@ Oskari.clazz.define(
      * @param {String} id
      *      Unigue ID for this map
      * @param {String} imageUrl
-     *      base url for marker etc images
+     *      DEPRECATED
      * @param {Array} map options, example data:
      *  {
      *      resolutions : [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -38,11 +38,15 @@ Oskari.clazz.define(
      */
     function (id, imageUrl, options, mapDivId) {
         var me = this;
+        this.log = Oskari.log('AbstractMapModule');
+
+        if (imageUrl) {
+            this.log.warn('Deprecated param "imageUrl" given in AbstractMapModule constructor. It has no effect.');
+        }
 
         // Id will be a prefix for getName()
         me._id = id;
         me._mapDivId = mapDivId;
-        me._imageUrl = imageUrl || '/Oskari/bundles';
         // defaults
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
@@ -105,7 +109,6 @@ Oskari.clazz.define(
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
-        this.log = Oskari.log('AbstractMapModule');
 
         this.isDrawing = false;
 
@@ -447,12 +450,13 @@ Oskari.clazz.define(
         },
         /**
          * @method getImageUrl
-         * Returns a base url for plugins to show. Can be set in constructor and
-         * defaults to "/Oskari/bundles" if not set.
+         * @param fileName name of image file
+         * Returns path to image asset from mapmodule bundle resources
+         * NOTE: Webpack build creates a "context module" that includes all the images found under ./resources/images/
          * @return {String}
          */
-        getImageUrl: function () {
-            return this._imageUrl;
+        getImageUrl: function (fileName) {
+            return require('./resources/images/' + fileName);
         },
         /**
          * Get map max extent.
@@ -735,7 +739,7 @@ Oskari.clazz.define(
          */
         zoomToScale: function (scale, closest, suppressEnd) {
             var resolution = this.getResolutionForScale(scale);
-            if(!closest) {
+            if (!closest) {
                 // get exact resolution
                 resolution = this.getExactResolution(scale);
                 this.setResolution(resolution, suppressEnd);
@@ -753,14 +757,13 @@ Oskari.clazz.define(
          * @param  {Float}           scale the new scale
          * @return {Float}           exact resolution
          */
-        getExactResolution: function(scale) {
-            if(typeof this._getExactResolutionImpl === 'function') {
+        getExactResolution: function (scale) {
+            if (typeof this._getExactResolutionImpl === 'function') {
                 return this._getExactResolutionImpl(scale);
             }
 
-            throw 'Not implemented _getExactResolutionImpl function.';
+            throw new Error('Not implemented _getExactResolutionImpl function.');
         },
-
 
         /**
          * @method getResolutionForScale
@@ -829,7 +832,6 @@ Oskari.clazz.define(
             return layerResolutions;
         },
         /* --------------- /MAP ZOOM ------------------------ */
-
 
         /* --------------- MAP STATE ------------------------ */
 
@@ -1824,7 +1826,7 @@ Oskari.clazz.define(
             }
 
             var isMarkerShape = !!((marker && marker.data && marker.data.shape !== null && !isNaN(marker.data.shape)));
-            var isCustomMarker = !!((marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg')>-1))));
+            var isCustomMarker = !!((marker && marker.data && marker.data.shape !== null && (marker.data.shape.data || (typeof marker.data.shape === 'string' && marker.data.shape.indexOf('<svg') > -1))));
 
             var markerSize = (marker && marker.data && marker.data.size) ? me.getPixelForSize(marker.data.size) : 32;
 
@@ -1905,7 +1907,6 @@ Oskari.clazz.define(
          */
         __changePathAttribute: function (svg, attr, value) {
             var htmlObject = jQuery(svg);
-            var sandbox = this.getSandbox();
             htmlObject.find('path').attr(attr, value);
 
             if (htmlObject.find('path').length > 1) {
@@ -2156,16 +2157,16 @@ Oskari.clazz.define(
             var curr;
 
             if (!element) {
-                throw 'Element is non-existent.';
+                throw new Error('Element is non-existent.');
             }
             if (!containerClasses) {
-                throw 'No container classes.';
+                throw new Error('No container classes.');
             }
             if (!content || !content.length) {
-                throw 'Container with classes "' + containerClasses + '" not found.';
+                throw new Error('Container with classes "' + containerClasses + '" not found.');
             }
             if (content.length > 1) {
-                throw 'Found more than one container with classes "' + containerClasses + '".';
+                throw new Error('Found more than one container with classes "' + containerClasses + '".');
             }
 
             // Add slot to element
@@ -2272,15 +2273,16 @@ Oskari.clazz.define(
          * @return {undefined}
          */
         afterMapLayerAddEvent: function (event) {
-            var map = this.getMap(),
-                layer = event.getMapLayer(),
-                keepLayersOrder = true,
-                isBaseMap = false,
-                layerPlugins = this.getLayerPlugins(),
-                layerFunctions = [],
-                sandbox = this.getSandbox();
+            var layer = event.getMapLayer();
+            var keepLayersOrder = true;
+            var isBaseMap = false;
+            var layerPlugins = this.getLayerPlugins();
+            var layerFunctions = [];
+            var sandbox = this.getSandbox();
+            var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
+            var isPublisherActive = publisherService && publisherService.getIsActive();
 
-            if (!layer.isSupported(sandbox.getMap().getSrsName())) {
+            if (!layer.isSupported(sandbox.getMap().getSrsName()) && !isPublisherActive) {
                 this._mapLayerService.showUnsupportedPopup();
             }
 
@@ -2416,7 +2418,7 @@ Oskari.clazz.define(
             var me = this;
             function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if (requestBuilder) {
+                if (requestBuilder && me._sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     me.__guidedTourDelegateTemplates.forEach(function (template, i) {
                         var delegate = {
                             bundleName: me.getName() + '_' + (i + 1)

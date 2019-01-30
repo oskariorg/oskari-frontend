@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
                     '<g class="bg"><rect x="-10" y="-10" width="10" height="10"/></g>' +
                     '<g class="drag-handle" cursor="ew-resize">' +
                         '<rect x="-9" y="-9" width="18" height="18" fill-opacity="0"/>' +
-                        '<circle cx="0" cy="0" r="4"/>' +
+                        '<circle cx="0" cy="0" r="8"/>' +
                     '</g>' +
                 '</svg>' +
                 '<div class="value-controls">' +

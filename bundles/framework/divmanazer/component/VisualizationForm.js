@@ -130,6 +130,96 @@ Oskari.clazz.define(
         },
 
         /**
+         * @public @method getOskariStyle
+         * Returns Oskari JSON style
+         *
+         * @return {Object}
+         */
+        getOskariStyle: function () {
+            const values = this.getValues();
+            var oskariStyle = {
+                fill: {
+                    color: values.area.fillColor,
+                    area: {
+                        pattern: values.area.fillStyle
+                    }
+                },
+                stroke: {
+                    color: values.line.color,
+                    width: values.line.width,
+                    lineDash: values.line.style,
+                    lineCap: values.line.cap,
+                    lineJoin: values.line.corner,
+                    area: {
+                        color: values.area.lineColor,
+                        width: values.area.lineWidth,
+                        lineDash: values.area.lineStyle,
+                        lineJoin: values.area.lineCorner
+                    }
+                },
+                text: {
+                    labelText: values.dot.message
+                },
+                image: {
+                    fill: {
+                        color: values.dot.color
+                    },
+                    shape: values.dot.shape,
+                    size: values.dot.size
+                }
+            };
+            return oskariStyle;
+        },
+
+        /**
+         * @public @method setOskariStyleValues
+         * Sets values using Oskari style defined JSON
+         *
+         * @param {Object} featureStyle
+         */
+        setOskariStyleValues: function (featureStyle) {
+            if (featureStyle === null || featureStyle === undefined) {
+                return;
+            }
+            var formClazzes = this._getFormClazz();
+            var fClazzName;
+            var fClazz;
+            for (fClazzName in formClazzes) {
+                if (formClazzes.hasOwnProperty(fClazzName)) {
+                    fClazz = formClazzes[fClazzName];
+                    switch (fClazzName) {
+                    case 'dot':
+                        fClazz.setValues({
+                            color: featureStyle.image.fill.color,
+                            shape: featureStyle.image.shape,
+                            size: featureStyle.image.size
+                        });
+                        break;
+                    case 'line':
+                        fClazz.setValues({
+                            color: featureStyle.stroke.color,
+                            width: featureStyle.stroke.width,
+                            cap: featureStyle.stroke.lineCap,
+                            corner: featureStyle.stroke.lineJoin,
+                            style: featureStyle.stroke.lineDash
+                        });
+                        break;
+                    case 'area':
+                        fClazz.setValues({
+                            fillColor: featureStyle.fill.color,
+                            fillStyle: featureStyle.fill.area.pattern,
+                            lineColor: featureStyle.stroke.area.color,
+                            lineCorner: featureStyle.stroke.area.lineJoin,
+                            lineStyle: featureStyle.stroke.area.lineDash,
+                            lineWidth: featureStyle.stroke.area.width
+                        });
+                        break;
+                    }
+                }
+            }
+        },
+
+        /**
          * @public @method setValues
          * Sets the values of the form clazzes.
          *

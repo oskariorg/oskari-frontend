@@ -1,3 +1,6 @@
+const TOGGLE_TOOL_SERIES = 'series';
+const TOGGLE_TOOL_CLASSIFICATION = 'classification';
+
 /**
  * @class Oskari.statistics.statsgrid.StatsGridBundleInstance
  *
@@ -35,9 +38,9 @@ Oskari.clazz.define(
         afterStart: function (sandbox) {
             var me = this;
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             // create the StatisticsService for handling ajax calls and common functionality.
-            // FIXME: panels.newSearch.selectionValues should come from server response instead of passing it here (it's datasource specific)
-            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, this.getLocalization().panels.newSearch.selectionValues);
+            var statsService = Oskari.clazz.create('Oskari.statistics.statsgrid.StatisticsService', sandbox, locale);
             sandbox.registerService(statsService);
             me.statsService = statsService;
 
@@ -50,7 +53,6 @@ Oskari.clazz.define(
             }
             statsService.addDatasource(conf.sources);
             statsService.addRegionset(conf.regionsets);
-
 
             // initialize flyoutmanager
             this.flyoutManager = Oskari.clazz.create('Oskari.statistics.statsgrid.FlyoutManager', this, statsService);
@@ -71,15 +73,17 @@ Oskari.clazz.define(
                 me.createClassficationView(true);
                 me.enableClassification(conf.allowClassification !== false);
 
-                if (me.conf.transparent) {
-                    me.classificationPlugin.makeTransparent(true);
-                }
-                //
                 if (me.conf.grid) {
                     me.togglePlugin.addTool('table');
                 }
                 if (me.conf.diagram) {
                     me.togglePlugin.addTool('diagram');
+                }
+                if (me.conf.classification) {
+                    me.addMapPluginToggleTool(TOGGLE_TOOL_CLASSIFICATION);
+                }
+                if (me.conf.series) {
+                    me.addMapPluginToggleTool(TOGGLE_TOOL_SERIES);
                 }
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
@@ -109,6 +113,28 @@ Oskari.clazz.define(
                 }
             }
         },
+        addMapPluginToggleTool: function (tool) {
+            if (!this.togglePlugin || !tool) {
+                return;
+            }
+            let plugin;
+            switch (tool) {
+            case TOGGLE_TOOL_CLASSIFICATION:
+                plugin = 'classificationPlugin'; break;
+            case TOGGLE_TOOL_SERIES:
+                plugin = 'seriesControlPlugin'; break;
+            }
+            if (!plugin) {
+                return;
+            }
+            this.togglePlugin.addTool(tool, () => {
+                if (this[plugin]) {
+                    this[plugin].toggleUI();
+                }
+            });
+            let visible = this[plugin] && !!this[plugin].getElement();
+            this.togglePlugin.toggleTool(tool, visible);
+        },
         _addIndicatorsTabToPersonalData: function (sandbox) {
             var reqBuilder = Oskari.requestBuilder('PersonalData.AddTabRequest');
             if (typeof reqBuilder === 'function') {
@@ -125,7 +151,27 @@ Oskari.clazz.define(
         hasData: function () {
             return !!this.statsService.getDatasource().length;
         },
+        /**
+         * Update visibility of classification / legend based on idicators length & stats layer visibility
+         */
+        _updateClassficationViewVisibility: function () {
+            var indicatorsExist = this.statsService.getStateService().getIndicators().length > 0;
+            var layer = this.getLayerService().findMapLayer('STATS_LAYER');
+            var layerVisible = layer ? layer.isVisible() : true;
 
+            this.createClassficationView(indicatorsExist && layerVisible);
+        },
+        /**
+         * Update visibility of series control based on active indicator & stats layer visibility
+         */
+        _updateSeriesControlVisibility: function () {
+            const ind = this.statsService.getStateService().getActiveIndicator();
+            const isSeriesActive = ind && !!ind.series;
+            const layer = this.getLayerService().findMapLayer('STATS_LAYER');
+            const layerVisible = layer ? layer.isVisible() : true;
+
+            this.setSeriesControlVisible(isSeriesActive && layerVisible);
+        },
         /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
@@ -135,6 +181,9 @@ Oskari.clazz.define(
         },
         getFlyoutManager: function () {
             return this.flyoutManager;
+        },
+        getStatisticsService: function () {
+            return this.statsService;
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -192,19 +241,7 @@ Oskari.clazz.define(
                     evt.getSeries(),
                     evt.isRemoved());
 
-                if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
-                    if (this.classificationPlugin) {
-                        this.classificationPlugin.redrawUI();
-                    } else {
-                        this.createClassficationView(true);
-                    }
-                    return;
-                }
-                if (this.statsService.getStateService().getIndicators().length === 0) {
-                    if (this.classificationPlugin) {
-                        this.classificationPlugin.teardownUI();
-                    }
-                }
+                this._updateClassficationViewVisibility();
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -214,20 +251,7 @@ Oskari.clazz.define(
             },
             'StatsGrid.ActiveIndicatorChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-
-                if (evt.current && evt.current.series) {
-                    if (this.seriesControlPlugin) {
-                        if (!this.seriesControlPlugin.getElement()) {
-                            this.seriesControlPlugin.redrawUI(Oskari.util.isMobile(), false);
-                        }
-                    } else {
-                        this.createSeriesControl();
-                    }
-                } else {
-                    if (this.seriesControlPlugin) {
-                        this.seriesControlPlugin.stopPlugin();
-                    }
-                }
+                this._updateSeriesControlVisibility();
             },
             'StatsGrid.ClassificationChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -259,14 +283,9 @@ Oskari.clazz.define(
                 }
                 if (wasClosed) {
                     me.getTile().hideExtensions();
-                    if (!this.isEmbedded()) {
-                        me.createClassficationView(false);
-                    }
+                    this._updateClassficationViewVisibility();
                 } else {
                     me.getTile().showExtensions();
-                    if (!this.isEmbedded() && this.statsService.getStateService().getIndicators().length !== 0) {
-                        this.createClassficationView(true);
-                    }
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
@@ -299,6 +318,14 @@ Oskari.clazz.define(
                     // ajax call for all layers
                     this.__setupLayerTools();
                 }
+            },
+            MapLayerVisibilityChangedEvent: function (event) {
+                var layer = event.getMapLayer();
+                if (!layer || layer.getId() !== 'STATS_LAYER') {
+                    return;
+                }
+                this._updateClassficationViewVisibility();
+                this._updateSeriesControlVisibility();
             },
             FeatureEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -355,7 +382,7 @@ Oskari.clazz.define(
                 me.__addTool(layer, true);
             });
             // update all layers at once since we suppressed individual events
-            var event = me.sandbox.getEventBuilder('MapLayerEvent')(null, 'tool');
+            var event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             me.sandbox.notifyAll(event);
         },
 
@@ -437,6 +464,8 @@ Oskari.clazz.define(
             }
             if (!this.classificationPlugin) {
                 this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
+                this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
+                this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
             }
             if (mapModule.getPluginInstances()[this.classificationPlugin.getName()]) {
                 this.classificationPlugin.redrawUI();
@@ -459,12 +488,29 @@ Oskari.clazz.define(
             }
             this.classificationPlugin.enableClassification(enabled);
         },
+        setSeriesControlVisible: function (visible) {
+            if (visible) {
+                if (this.seriesControlPlugin) {
+                    if (!this.seriesControlPlugin.getElement()) {
+                        this.seriesControlPlugin.redrawUI();
+                    }
+                } else {
+                    this.createSeriesControl();
+                }
+            } else {
+                if (this.seriesControlPlugin) {
+                    this.seriesControlPlugin.stopPlugin();
+                }
+            }
+        },
         createSeriesControl: function () {
             var sandbox = this.getSandbox();
             var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
             this.seriesControlPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.SeriesControlPlugin', this, {}, locale, sandbox);
+            this.seriesControlPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_SERIES, true));
+            this.seriesControlPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_SERIES, false));
             mapModule.registerPlugin(this.seriesControlPlugin);
             mapModule.startPlugin(this.seriesControlPlugin);
         }

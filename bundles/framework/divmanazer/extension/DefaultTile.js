@@ -46,7 +46,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * tile is to be rendered
          */
         setEl: function (el, width, height) {
-            this.container = $(el);
+            this.container = jQuery(el);
         },
 
         /**
@@ -55,10 +55,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * f.ex to provide some kind of active visualisations.
          */
         startPlugin: function () {
-
-            var isContainer = (this.container && this.instance.mediator) ? true : false;
-            var isBundleId = (isContainer && this.instance.mediator.bundleId) ? true : false;
-            var isInstanceId = (isContainer && this.instance.mediator.instanceId) ? true : false;
+            var isContainer = !!((this.container && this.instance.mediator));
+            var isBundleId = !!((isContainer && this.instance.mediator.bundleId));
+            var isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
 
             if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
                 this.container.addClass(this.instance.mediator.instanceId);
@@ -122,10 +121,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.DefaultTile',
          * @param {Boolean} blnEnabled true to enable.
          */
         setEnabled: function (blnEnabled) {
-            if(!!blnEnabled) {
+            if (blnEnabled) {
                 this.container.removeClass('disabled');
-            }
-            else {
+            } else {
                 this.container.addClass('disabled');
             }
         },

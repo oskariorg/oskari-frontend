@@ -1,3 +1,6 @@
+import SelectList from './SelectList';
+import MetadataPopup from './MetadataPopup';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
     this.sb = sandbox;
@@ -5,6 +8,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this._params = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParameters', this.instance.getLocalization(), this.instance.getSandbox());
     this.element = null;
+    this.metadataPopup = new MetadataPopup();
     this.selectClassRef = [];
     Oskari.makeObservable(this);
 }, {
@@ -21,7 +25,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             '<div class="tooltip">${tooltip1}</div>' +
             '<div class="tooltip">${tooltip2}</div>' +
             '</div>'),
-        option: _.template('<option value="${id}">${name}</option>')
+        option: _.template('<option value="${id}">${name}</option>'),
+        link: _.template('<a href="javascript:void(0);"></a>')
     },
     /** **** PRIVATE METHODS ******/
 
@@ -67,11 +72,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 }
             });
             var value = select.getValue();
-            select.updateOptions(results);
+            select.setOptions(results);
             select.setValue(value);
             if (hasRegionSetRestriction) {
                 select.disableOptions(disabledIndicatorIDs);
             }
+
             if (result.complete) {
                 me.spinner.stop();
                 var userDatasource = me.service.getUserDatasource();
@@ -108,32 +114,31 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
     getPanelContent: function () {
         var me = this;
         var main = jQuery(this.__templates.main());
-        var locale = me.instance.getLocalization();
-        var panelLoc = locale.panels.newSearch;
+        var locale = Oskari.getMsg.bind(null, 'StatsGrid');
+        var panelLoc = locale('panels.newSearch');
 
         // Series checkbox
-        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.seriesTitle, clazz: 'stats-series-selection'})));
+        main.append(jQuery(this.__templates.select({name: panelLoc.seriesTitle, clazz: 'stats-series-selection'})));
         var seriesInput = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-        seriesInput.setTitle(locale.panels.newSearch.seriesLabel);
+        seriesInput.setTitle(panelLoc.seriesLabel);
         seriesInput.setChecked(false);
         seriesInput.addClass('stats-series-input');
         var seriesSelection = main.find('.stats-series-selection');
         seriesSelection.append(seriesInput.getElement());
 
         // Regionsets
-        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.regionsetTitle, clazz: 'stats-rs-selector'})));
+        main.append(jQuery(this.__templates.select({name: panelLoc.regionsetTitle, clazz: 'stats-rs-selector'})));
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
-            placeholder_text: locale.panels.newSearch.selectRegionsetPlaceholder,
-            no_results_text: locale.panels.newSearch.noResults,
+            placeholder: panelLoc.selectRegionsetPlaceholder,
             multi: true
         };
 
-        var regionFilterSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var regionFilterSelect = new SelectList();
         var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
         regionFilterDropdown.css({width: '100%'});
         regionsetFilterElement.append(regionFilterDropdown);
-        regionFilterSelect.adjustChosen();
+        regionFilterSelect.update();
 
         var datasources = this.service.getDatasource();
         var sources = [];
@@ -145,34 +150,35 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             sources.push(dataObj);
         });
         // Datasources
-        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.datasourceTitle, clazz: 'stats-ds-selector'})));
-        // chosen works better when it has context for the element, get a new reference for chosen
+        main.append(jQuery(this.__templates.select({name: panelLoc.datasourceTitle, clazz: 'stats-ds-selector'})));
         var dsSelector = main.find('.stats-ds-selector');
         var options = {
-            placeholder_text: locale.panels.newSearch.selectDatasourcePlaceholder,
-            no_results_text: locale.panels.newSearch.noResults
+            placeholder: panelLoc.selectDatasourcePlaceholder,
+            search: false
         };
-        var dsSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+        var dsSelect = new SelectList();
         var dropdown = dsSelect.create(sources, options);
         dropdown.css({width: '100%'});
         dsSelector.append(dropdown);
-        dsSelect.adjustChosen();
 
         // Indicator list
-        main.append(jQuery(this.__templates.select({name: locale.panels.newSearch.indicatorTitle, clazz: 'stats-ind-selector'})));
-        // chosen works better when it has context for the element, get a new reference for chosen
+        main.append(jQuery(this.__templates.select({name: panelLoc.indicatorTitle, clazz: 'stats-ind-selector'})));
         var indicatorSelector = main.find('.stats-ind-selector');
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
-            placeholder_text: locale.panels.newSearch.selectIndicatorPlaceholder,
-            no_results_text: locale.panels.newSearch.noResults,
+            placeholder: panelLoc.selectIndicatorPlaceholder,
             multi: true
         };
-        var indicSelect = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        var indicDropdown = indicSelect.create(undefined, indicOptions);
+        var indicSelect = new SelectList();
+        var indicDropdown = indicSelect.create(null, indicOptions);
         indicDropdown.css({width: '100%'});
         indicatorSelector.append(indicDropdown);
-        indicSelect.adjustChosen();
+
+        var indicDescriptionLink = jQuery(this.__templates.link());
+        main.append(indicDescriptionLink);
+        indicDescriptionLink.on('click', function () {
+            me.metadataPopup.show(dsSelect.getValue(), indicSelect.getValue());
+        });
 
         // Refine data label and tooltips
         var dataLabelWithTooltips = jQuery(this.__templates.headerWithTooltip({
@@ -216,10 +222,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         dsSelector.on('change', function () {
             me._params.clean();
             // If selection was removed -> reset indicator selection
-            if (dsSelect.getValue() === '') {
+            if (dsSelect.getValue() === null) {
                 dataLabelWithTooltips.find('.tooltip').show();
-                indicSelect.updateOptions([]);
-                indicSelect.reset();
+                indicSelect.setOptions(null);
                 regionFilterSelect.reset(true);
                 btnAddIndicator.setVisible(false);
                 btnEditIndicator.setVisible(false);
@@ -254,6 +259,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                     var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
                     formFlyout.showForm(dsSelect.getValue(), indId[0]);
                 });
+                indicDescriptionLink.html(locale('metadataPopup.open', {indicators: indId.length}));
+                if (me.metadataPopup.isVisible()) {
+                    me.metadataPopup.show(dsSelect.getValue(), indId);
+                }
             }
             // this will show the params or clean them depending if values exist
             me._params.indicatorSelected(
@@ -286,7 +295,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 if (state.options.length - state.disabled.length === 1) {
                     var enabled = state.options.not(':disabled');
                     select.setValue(enabled.val());
-                    select.element.trigger('change');
                 }
             };
             preselectSingleOption(dsSelect);
@@ -295,7 +303,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me._params.on('indicator.changed', function (enabled) {
             dataLabelWithTooltips.find('.tooltip').hide();
             me.trigger('indicator.changed', enabled);
+            if (enabled) {
+                indicDescriptionLink.show();
+            } else {
+                indicDescriptionLink.hide();
+            }
         });
+        me._params.on('indicator.parameter.changed', e => me.trigger('indicator.parameter.changed', e));
 
         this.service.on('StatsGrid.DatasourceEvent', function (evt) {
             var currentDS = dsSelect.getValue();

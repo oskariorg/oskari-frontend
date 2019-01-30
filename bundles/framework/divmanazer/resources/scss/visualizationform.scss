@@ -86,6 +86,13 @@ div.renderdialog {
         margin: 5px;
     }
 
+    .areaform-preview {
+        width: 80px;
+        height: 80px;
+        border: 1px solid;
+        margin: 5px;
+    }
+
     div.actions input {
         float: right;
     }
@@ -242,7 +249,7 @@ div.areaform {
 
     div.column2 {
         float: right;
-        width: 565px;
+        width: 250px;
     }
 
     div.custom-fill {
@@ -266,6 +273,12 @@ div.pointform {
         margin-top: 6px;
     }
 
+    div.message {
+        padding-top: 10px;
+        div.field {
+            padding-top: 5px;
+        }
+    }
 }
 
 div.fill {
@@ -283,7 +296,6 @@ div.areaform, div.lineform {
 
     div.column1 {
         float: left;
-        width: 130px;
         height: 270px;
         padding-left: 5px;
         padding-right: 5px;
@@ -291,34 +303,53 @@ div.areaform, div.lineform {
 
 }
 
+div.lineform {
+    div.column1 {
+        width: 130px;
+    }
+}
+
+div.lineform div.column1 {
+    width:130px;
+}
+
 div.pointform div.column2,
-div.lineform div.column2,
+div.lineform div.column2 {
+    float: right;
+    width: 365px;
+}
+
 div.areaform div.column22 {
     float: right;
-    width: 350px;
+    width: 95px;
 }
 
 div.renderdialog div.column21,
 div.areaform div.column221 {
     float: left;
-    width: 175px;
-    height: 230px;
+    width: 270px;
+    height: 250px;
     padding-left: 5px;
     padding-right: 5px;
+}
+
+div.areaform div.column1,
+div.areaform div.column21 {
+    width: 115px;
 }
 
 div.pointform div.column22,
 div.lineform div.column22,
 div.areaform div.column222 {
     float: right;
-    width: 155px;
+    width: 75px;
     height: 100px;
     padding-left: 5px;
     padding-right: 5px;
 }
 
 div.pointvisualization {
-    width: 540px;
+    width: 565px;
 }
 
 div.linevisualization {
@@ -326,5 +357,24 @@ div.linevisualization {
 }
 
 div.areavisualization {
-    width: 730px;
+    width: 430px;
+}
+
+label.oskari-formcomponent.oskari-colorpickerinput .sp-input {
+    width: 170px;
+}
+
+.areaform-fill-solid {
+    width: 28px;
+    height: 28px;
+    background-color: black;
+}
+
+.areaform-fill-transparent {
+    width: 28px;
+    height: 28px;
+    background-position: 0px 0px, 10px 10px;
+    background-size: 19px 19px;
+    background-image: linear-gradient(45deg, white 25%, transparent 25%, transparent 75%, white 75%, white 100%),
+    linear-gradient(45deg, white 25%, #eee 25%, #eee 75%, white 75%, white 100%);
 }

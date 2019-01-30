@@ -104,9 +104,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         getActiveFilters: function () {
             var me = this;
             var registeredFilters = [];
-            Object.keys(this.layerFilters).forEach( function( key ) {
-                if ( me.filterHasLayers(key) ) {
-                    registeredFilters.push( key );
+            Object.keys(this.layerFilters).forEach(function (key) {
+                if (me.filterHasLayers(key)) {
+                    registeredFilters.push(key);
                 }
             });
             return registeredFilters;
@@ -342,14 +342,18 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setAttributes(newLayerConf.attributes);
             }
 
+            if (newLayerConf.options) {
+                layer.setOptions(newLayerConf.options);
+            }
+
             if (newLayerConf.params) {
                 layer.setParams(newLayerConf.params);
             }
 
             if (newLayerConf.groups) {
                 var groups = [];
-                newLayerConf.groups.forEach(function(groupId){
-                    var group = me.getAllLayerGroups(groupId);
+                newLayerConf.groups.forEach(function (cur) {
+                    var group = me.getAllLayerGroups(cur.id);
                     groups.push({
                         id: group.getId(),
                         name: Oskari.getLocalized(group.getName())
@@ -494,7 +498,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 // for each group on the layer
                 newLayerConf.groups.forEach(function (group) {
                     // find the group details
-                    var groupConf = me.getAllLayerGroups(group);
+                    var groupConf = me.getAllLayerGroups(group.id);
                     var groupChildren = groupConf.getChildren() || [];
                     // check if the layer is referenced in the group details
                     var layer = groupChildren.find(function (children) {
@@ -502,10 +506,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     });
                     // if layer is not part of the groups layers -> add it
                     if (!layer) {
-                        me.getAllLayerGroups(group).addChildren({
-                            type:'layer',
+                        me.getAllLayerGroups(group.id).addChildren({
+                            type: 'layer',
                             id: newLayerConf.id,
-                            order:1000000
+                            order: 1000000
                         });
                     }
                 });
@@ -784,7 +788,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 } else {
                     layersWithoutCreatedDate.push(layer);
                 }
-            })
+            });
 
             layersWithCreatedDate.sort(function (a, b) {
                 if (a.getCreated() > b.getCreated()) {
@@ -870,9 +874,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var allLayerGroups = me.getAllLayerGroups();
             var filteredLayers = me.getFilteredLayers(filterId);
 
-            var hasFilteredLayer = function(groupLayer) {
-                var layers = filteredLayers.filter(function(l) {
-                    return groupLayer.getId() === l.getId();
+            var hasFilteredLayer = function (layerId) {
+                var layers = filteredLayers.filter(function (l) {
+                    return layerId === l.getId();
                 });
                 return layers.length > 0;
             };
@@ -882,12 +886,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
                 groups.forEach(function (group) {
                     var filteredLayers = [];
-                    var filteredLayerModels = [];
 
-                    group.getLayers().forEach(function (mapLayer) {
-                        if (hasFilteredLayer(mapLayer)) {
-                            filteredLayers.push(mapLayer.getId());
-                            filteredLayerModels.push(mapLayer);
+                    group.getLayerIdList().forEach(function (mapLayerId) {
+                        if (hasFilteredLayer(mapLayerId)) {
+                            let layer = me.findMapLayer(mapLayerId);
+                            filteredLayers.push({
+                                id: layer.getId(),
+                                orderNumber: layer.getOrderNumber()
+                            });
                         }
                     });
 
@@ -900,7 +906,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                         groups: getRecursiveFilteredGroups(group.getGroups())
                     };
                     var groupModel = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', json);
-                    groupModel.setLayers(filteredLayerModels);
                     filteredGroups.push(groupModel);
                 });
 
@@ -1285,7 +1290,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             }
             layer.setGfiContent(jsonLayer.gfiContent);
 
-            /*prefer url - param, fall back to wmsUrl if not available */
+            /* prefer url - param, fall back to wmsUrl if not available */
             if (jsonLayer.url) {
                 layer.setLayerUrls(this.parseUrls(jsonLayer.url));
             } else if (jsonLayer.wmsUrl) {
@@ -1394,7 +1399,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         checkForDuplicateId: function (id, name) {
             if (this._reservedLayerIds[id] === true) {
                 var foundLayer = this.findMapLayer(id);
-                throw "Trying to add map layer with id '" + id + ' (' + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'";
+                throw new Error("Trying to add map layer with id '" + id + ' (' + name + ")' but that id is already reserved for '" + foundLayer.getName() + "'");
             }
         },
         /**

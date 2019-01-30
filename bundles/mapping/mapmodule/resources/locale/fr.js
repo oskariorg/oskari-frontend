@@ -19,6 +19,8 @@ Oskari.registerLocalization(
             "zoomLvl-11": "",
             "zoomLvl-12": ""
         },
+        "unsupportedProjHeader": "Avis",
+        "unsupportedProj": "Impossible d'afficher certaines couches ajoutées à cette vue cartographique avec la projection cartographique actuelle.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Conditions d’utilisation",
@@ -37,7 +39,8 @@ Oskari.registerLocalization(
             },
             "LayerSelectionPlugin": {
                 "title": "Couches cartographiques",
-                "chooseDefaultBaseLayer": "Sélectionner la couche carte d’arrière-plan."
+                "chooseDefaultBaseLayer": "Sélectionner la couche carte d’arrière-plan.",
+                "chooseOtherLayers": "Sélectionner d'autres couches cartographiques"
             },
             "SearchPlugin": {
                 "placeholder": "Recherche de lieu",
@@ -47,6 +50,7 @@ Oskari.registerLocalization(
                 "noresults": "Pas de résultats. Veuillez affiner votre recherche.",
                 "toomanyresults": "Plus de 100 résultats trouvés. Veuillez affiner votre recherche.",
                 "column_name": "Nom",
+                "column_region": "Region",
                 "column_village": "Municipalité",
                 "column_type": "Type"
             },
@@ -56,7 +60,8 @@ Oskari.registerLocalization(
                 "places": "Caractéristiques",
                 "description": "Description",
                 "link": "Adresse web",
-                "name": "Nom"
+                "name": "Nom",
+                "noAttributeData": "Aucun attribut à afficher. Veuillez ouvrir les données de fonctionnalité pour voir les attributs masqués."
             },
             "PublisherToolbarPlugin": {
                 "test": "test",
@@ -108,12 +113,12 @@ Oskari.registerLocalization(
         },
         "guidedTour": {
             "help1": {
-                "title": "Pan the map view",
-                "message": "You can move the view on the map by clicking and dragging or with the panning controls. Return to the default view by clicking the button in the middle of the panning controls. Tip: You can also pan the map with the arrow keys on your keyboard."
+                "title": "Panoramiser la vue cartographique",
+                "message": "Vous pouvez déplacer la vue sur la carte en cliquant et faisant glisser ou avec les commandes de panoramique. Retournez à la vue par défaut en cliquant sur le bouton au centre des commandes de panoramique. Conseil : Vous pouvez également panoramiser la carte  au moyen des touches fléchées de votre clavier."
             },
             "help2": {
-                "title": "Zoom in and zoom out",
-                "message": "You can zoom in and out on the map using the scale scrollbar or the plus and minus buttons next to the scrollbar. You can also zoom using the plus and minus keys on your keyboard or with the scroll wheel of your mouse. You can also zoom in by double clicking the map."
+                "title": "Zoom avant et zoom arrière",
+                "message": "Vous pouvez faire un zoom avant et arrière sur la carte à l'aide de la barre de défilement de l'échelle ou des boutons plus et moins à côté de la barre de défilement. Vous pouvez également faire un zoom au moyen des touches plus et moins de votre clavier ou à l'aide de la roue de défilement de votre souris. Vous pouvez également faire un zoom avant en faisant un double clic sur la carte."
             }
         }
     }

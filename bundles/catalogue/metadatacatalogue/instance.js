@@ -63,23 +63,23 @@ Oskari.clazz.define(
          * @static
          * @property __drawStyle
          */
-        __drawStyle:{
-            draw : {
-                fill : {
-                     color: 'rgba(35, 216, 194, 0.3)'
+        __drawStyle: {
+            draw: {
+                fill: {
+                    color: 'rgba(35, 216, 194, 0.3)'
                 },
-                stroke : {
-                      color: 'rgba(35, 216, 194, 1)',
-                      width: 2
+                stroke: {
+                    color: 'rgba(35, 216, 194, 1)',
+                    width: 2
                 }
             },
-            modify : {
-                fill : {
-                     color: 'rgba(0, 0, 238, 0.3)'
+            modify: {
+                fill: {
+                    color: 'rgba(0, 0, 238, 0.3)'
                 },
-                stroke : {
-                      color: 'rgba(0, 0, 238, 1)',
-                      width: 2
+                stroke: {
+                    color: 'rgba(0, 0, 238, 1)',
+                    width: 2
                 }
             }
         },
@@ -244,14 +244,14 @@ Oskari.clazz.define(
             if (me.conf && me.conf.optionUrl) {
                 optionAjaxUrl = me.conf.optionUrl;
             } else {
-                optionAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearchOptions';
+                optionAjaxUrl = Oskari.urls.getRoute('GetMetadataSearchOptions');
             }
 
             var searchAjaxUrl = null;
             if (me.conf && me.conf.searchUrl) {
                 searchAjaxUrl = me.conf.searchUrl;
             } else {
-                searchAjaxUrl = sandbox.getAjaxUrl() + 'action_route=GetMetadataSearch';
+                searchAjaxUrl = Oskari.urls.getRoute('GetMetadataSearch');
             }
 
             // Default tab priority
@@ -280,11 +280,10 @@ Oskari.clazz.define(
                 sandbox,
                 me
             );
-            sandbox.addRequestHandler(
+            sandbox.requestHandler(
                 'AddSearchResultActionRequest',
                 this.addSearchResultActionRequestHandler
             );
-
 
             // draw ui
             me.createUi();
@@ -312,14 +311,12 @@ Oskari.clazz.define(
          * or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -334,7 +331,7 @@ Oskari.clazz.define(
                 var me = this,
                     coverageFeature;
 
-                if(event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage){
+                if (event.getId() !== me.getName() || event.getIsFinished() !== true || me.drawCoverage) {
                     return;
                 }
 
@@ -343,7 +340,7 @@ Oskari.clazz.define(
                 this.coverageButton.val(me.getLocalization('deleteArea'));
                 this.coverageButton[0].data = JSON.stringify(coverageFeature);
                 this.coverageButton.prop('disabled', false).css({
-                  'border-color': ''
+                    'border-color': ''
                 });
                 this.drawCoverage = false;
 
@@ -368,7 +365,7 @@ Oskari.clazz.define(
                     me.drawCoverage = true;
 
                     var input = document.getElementById('oskari_metadatacatalogue_forminput_searchassistance');
-                    if(input) {
+                    if (input) {
                         input.focus();
                     }
 
@@ -391,30 +388,26 @@ Oskari.clazz.define(
          * @param {String} value the identifier value
          * @param {Oskari.mapframework.domain.VectorLayer} layer the layer
          */
-        _removeFeaturesFromMap: function(identifier, value, layer){
-            var me = this,
-                rn = 'MapModulePlugin.RemoveFeaturesFromMapRequest';
+        _removeFeaturesFromMap: function (identifier, value, layer) {
+            var me = this;
             me._unactiveShowInfoAreaIcons();
-            me.sandbox.postRequestByName(rn, [identifier, value, layer]);
+            me.sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', [identifier, value, layer]);
         },
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var sandbox = this.sandbox,
-                p;
+            var sandbox = this.sandbox;
+            var p;
             for (p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {
                     sandbox.unregisterFromEventByName(this, p);
                 }
             }
 
-            var reqName = 'userinterface.RemoveExtensionRequest',
-                reqBuilder = sandbox.getRequestBuilder(reqName),
-                request = reqBuilder(this);
-
-            sandbox.request(this, request);
+            var reqBuilder = Oskari.requestBuilder('userinterface.RemoveExtensionRequest');
+            sandbox.request(this, reqBuilder(this));
 
             this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
@@ -440,8 +433,8 @@ Oskari.clazz.define(
          * (re)creates the UI for "metadata catalogue" functionality
          */
         createUi: function () {
-            var me = this,
-                metadataCatalogueContainer = me.templates.metadataTab.clone();
+            var me = this;
+            var metadataCatalogueContainer = me.templates.metadataTab.clone();
             me.optionPanel = me.templates.optionPanel.clone();
             me.searchPanel = me.templates.searchPanel.clone();
             me.resultPanel = me.templates.resultPanel.clone();
@@ -497,11 +490,9 @@ Oskari.clazz.define(
                         checkboxDefs,
                         values,
                         j,
-                        coverageButton,
                         checkboxDef,
                         dropdownDef,
-                        dropdownRows,
-                        dropdownRow;
+                        dropdownRows;
                     for (i = 0; i < checkboxRows.length; i += 1) {
                         checkboxDefs = jQuery(checkboxRows[i]).find('.metadataMultiDef');
                         if (checkboxDefs.length === 0) {
@@ -529,16 +520,25 @@ Oskari.clazz.define(
                 }
                 me.lastSearch = field.getValue();
 
-                me.searchService.doSearch(search, function (data) {
-                    me._showResults(metadataCatalogueContainer, data);
-                }, function (data) {
-                    var key = field.getValue();
-                    if (key === null || key === undefined || key.length === 0) {
-                        me._showError(me.getLocalization('cannot_be_empty'));
-                    } else {
-                        me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
-                    }
+                // Check if any search fields has values, otherwise it's useless to send post request
+                var doSearch = false;
+                jQuery.each(search, function (key, value) {
+                    doSearch = value ? true : doSearch;
                 });
+                if (doSearch) {
+                    me.searchService.doSearch(search, function (data) {
+                        me._showResults(metadataCatalogueContainer, data);
+                    }, function (data) {
+                        var key = field.getValue();
+                        if (key === null || key === undefined || key.length === 0) {
+                            me._showError(me.getLocalization('cannot_be_empty'));
+                        } else {
+                            me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
+                        }
+                    });
+                } else {
+                    me._showError(me.getLocalization('cannot_be_empty'));
+                }
             };
 
             button.setHandler(doMetadataCatalogue);
@@ -554,8 +554,7 @@ Oskari.clazz.define(
                 content = metadataCatalogueContainer,
                 priority = this.tabPriority,
                 id = 'oskari_metadatacatalogue_tabpanel_header',
-                reqName = 'Search.AddTabRequest',
-                reqBuilder = me.sandbox.getRequestBuilder(reqName),
+                reqBuilder = Oskari.requestBuilder('Search.AddTabRequest'),
                 req = reqBuilder(title, content, priority, id);
 
             me.sandbox.request(me, req);
@@ -618,12 +617,10 @@ Oskari.clazz.define(
                 newCheckbox,
                 newCheckboxDef,
                 newDropdown,
-                button,
-                icon,
                 dropdownDef,
                 emptyOption,
                 newOption,
-                renderCoverageButton = (_.filter(dataFields, {'field':'coverage'}).length > 0),
+                renderCoverageButton = (_.filter(dataFields, {'field': 'coverage'}).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -697,20 +694,19 @@ Oskari.clazz.define(
                 this.coverageButton = this._initCoverageButton(me, newButton);
                 this.drawCoverage = true;
 
-                this.coverageButton.on('click', function (){
-                  if (me.drawCoverage === true) {
-                      me.coverageButton.prop('disabled', true).css({
-                      'border-color': '#0099CB'
-                      });
-                      me.coverageButton.val(me.getLocalization('startDraw'));
-                      me._getCoverage();
-                      me.drawCoverage = false;
-                    }else {
+                this.coverageButton.on('click', function () {
+                    if (me.drawCoverage === true) {
+                        me.coverageButton.prop('disabled', true).css({
+                            'border-color': '#0099CB'
+                        });
+                        me.coverageButton.val(me.getLocalization('startDraw'));
+                        me._getCoverage();
+                        me.drawCoverage = false;
+                    } else {
                         me.drawCoverage = true;
                         me._stopCoverage();
                         me.coverageButton.val(me.getLocalization('delimitArea'));
                         document.getElementById('oskari_metadatacatalogue_forminput_searchassistance').focus();
-                        var emptyData = {};
                         me.coverageButton[0].data = '';
                         me._removeFeaturesFromMap();
                     }
@@ -723,11 +719,11 @@ Oskari.clazz.define(
 
             me._updateOptions(advancedContainer);
         },
-        _initCoverageButton: function(me, newButton){
-          this.coverageButton = newButton.find('.metadataCoverageDef');
-          this.coverageButton.attr('value', me.getLocalization('delimitArea'));
-          this.coverageButton.attr('name', 'coverage');
-          return this.coverageButton;
+        _initCoverageButton: function (me, newButton) {
+            this.coverageButton = newButton.find('.metadataCoverageDef');
+            this.coverageButton.attr('value', me.getLocalization('delimitArea'));
+            this.coverageButton.attr('name', 'coverage');
+            return this.coverageButton;
         },
 
         /**
@@ -757,7 +753,7 @@ Oskari.clazz.define(
             }]);
         },
 
-        _stopCoverage: function() {
+        _stopCoverage: function () {
             this.sandbox.postRequestByName('DrawTools.StopDrawingRequest', [this.getName(), true]);
         },
 
@@ -927,19 +923,18 @@ Oskari.clazz.define(
             optionPanel.hide();
             resultPanel.show();
 
-
-            //filter functionality
-            resultHeader.find('.filter-link').on('click', function(event) {
+            // filter functionality
+            resultHeader.find('.filter-link').on('click', function (event) {
                 var filterValues = jQuery(event.currentTarget).data('value').split(',');
-                //hide filterlinks and show "show all"-link
+                // hide filterlinks and show "show all"-link
                 resultHeader.find('.filter-link').hide();
                 resultHeader.find('.showLink').show();
 
                 var allRows = table.find('tr[class*=filter-]');
-                _.each(allRows, function(item) {
+                _.each(allRows, function (item) {
                     var classNameFound = false;
                     for (var i = 0; i < filterValues.length; i++) {
-                        if (jQuery(item).hasClass('filter-'+filterValues[i])) {
+                        if (jQuery(item).hasClass('filter-' + filterValues[i])) {
                             classNameFound = true;
                         }
                     }
@@ -947,7 +942,6 @@ Oskari.clazz.define(
                     if (!classNameFound) {
                         jQuery(item).hide();
                     }
-
                 });
             });
         },
@@ -955,15 +949,7 @@ Oskari.clazz.define(
         _populateResultTable: function (resultsTableBody) {
             var me = this,
                 results = me.lastResult;
-            // row reference needs some closure magic to work here
-            var closureMagic = function (scopedValue) {
-                return function () {
-                    me._resultClicked(scopedValue);
-                    return false;
-                };
-            };
-            var selectedLayers = me.sandbox.findAllSelectedMapLayers(),
-                i,
+            var i,
                 style = {
                     stroke: {
                         color: 'rgba(211, 187, 27, 0.8)',
@@ -993,9 +979,9 @@ Oskari.clazz.define(
                     resultContainer = me.templates.resultTableRow.clone();
                     resultContainer.addClass('res' + i);
 
-                    //resultcontainer filtering
+                    // resultcontainer filtering
                     if (row.natureofthetarget) {
-                        resultContainer.addClass('filter-'+row.natureofthetarget);
+                        resultContainer.addClass('filter-' + row.natureofthetarget);
                     }
                     resultContainer.data('resultId', row.id);
                     cells = resultContainer.find('td').not('.spacer');
@@ -1007,20 +993,20 @@ Oskari.clazz.define(
 
                     // Include identification
                     var identification = row.identification;
-                    var isIdentificationCode = (identification && identification.code && identification.code.length>0) ? true : false;
-                    var isIdentificationDate = (identification && identification.date && identification.date.length>0) ? true : false;
-                    var isUpdateFrequency = (identification && identification.updateFrequency && identification.updateFrequency.length > 0) ? true : false;
-                    if(isIdentificationCode && isIdentificationDate) {
+                    var isIdentificationCode = !!((identification && identification.code && identification.code.length > 0));
+                    var isIdentificationDate = !!((identification && identification.date && identification.date.length > 0));
+                    var isUpdateFrequency = !!((identification && identification.updateFrequency && identification.updateFrequency.length > 0));
+                    if (isIdentificationCode && isIdentificationDate) {
                         var locIdentificationCode = me.getLocalization('identificationCode')[identification.code];
-                        if(!locIdentificationCode) {
+                        if (!locIdentificationCode) {
                             locIdentificationCode = identification.code;
                         }
 
-                        //only add the date for certain types of targets
+                        // only add the date for certain types of targets
                         if (row.natureofthetarget === 'dataset' || row.natureofthetarget === 'series') {
                             titleText = titleText + ' (' + locIdentificationCode + ':' + identification.date;
                             if (isUpdateFrequency) {
-                                titleText += ', '+me.getLocalization('updated')+': '+identification.updateFrequency;
+                                titleText += ', ' + me.getLocalization('updated') + ': ' + identification.updateFrequency;
                             }
                             titleText += ')';
                         }
@@ -1071,58 +1057,48 @@ Oskari.clazz.define(
                         jQuery(cells[0]).append(layerList);
                         // Todo: real rating
                         // jQuery(cells[1]).append("*****");
-                        //jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
+                        // jQuery(cells[1]).addClass(me.resultHeaders[1].prop);
 
                         // Action link
-                        if(me._isAction() == true){
-                            jQuery.each(me.searchResultActions, function(index, action){
-                                if(action.showAction(row)) {
+                        if (me._isAction() == true) {
+                            jQuery.each(me.searchResultActions, function (index, action) {
+                                if (action.showAction(row)) {
                                     var actionElement = action.actionElement.clone(),
                                         callbackElement = null,
                                         actionTextEl = null;
 
-                                    actionElement.css('margin-left','6px');
-                                    actionElement.css('margin-right','6px');
+                                    actionElement.css('margin-left', '6px');
+                                    actionElement.css('margin-right', '6px');
 
                                     // Set action callback
-                                    if(action.callback && typeof action.callback == 'function') {
+                                    if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
-                                        if(action.bindCallbackTo) {
-                                            callbackElement = licenseElement.find(action.bindCallbackTo);
-                                        }
-                                        // Bind action click to root element if bindCallbackTo is null
-                                        else {
-                                            callbackElement =  actionElement.first();
-                                        }
-                                        callbackElement.css({'cursor':'pointer'}).on('click', {metadata: row}, function(event){
-                                           action.callback(event.data.metadata);
+                                        callbackElement = actionElement.first();
+                                        callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
+                                            action.callback(event.data.metadata);
                                         });
                                     }
 
                                     // Set action text
-                                    if(action.actionTextElement) {
+                                    if (action.actionTextElement) {
                                         actionTextEl = actionElement.find(action.actionTextElement);
                                     } else {
                                         actionTextEl = actionElement.first();
                                     }
 
-                                    if(actionTextEl.is('input') ||
+                                    if (actionTextEl.is('input') ||
                                         actionTextEl.is('select') ||
                                         actionTextEl.is('button') ||
                                         actionTextEl.is('textarea')) {
-
-                                        if(action.actionText && action.actionText != null){
+                                        if (action.actionText && action.actionText != null) {
                                             actionTextEl.val(action.actionText);
-                                        }
-                                        else {
+                                        } else {
                                             actionTextEl.val(me.getLocalization('licenseText'));
                                         }
-                                    }
-                                    else {
-                                        if(action.actionText && action.actionText != null){
+                                    } else {
+                                        if (action.actionText && action.actionText != null) {
                                             actionTextEl.html(action.actionText);
-                                        }
-                                        else {
+                                        } else {
                                             actionTextEl.html(me.getLocalization('licenseText'));
                                         }
                                     }
@@ -1133,12 +1109,12 @@ Oskari.clazz.define(
                         }
 
                         // Show bbox icon
-                        if(row.geom && row.geom != null) {
+                        if (row.geom && row.geom != null) {
                             jQuery(cells[3]).addClass(me.resultHeaders[2].prop);
                             jQuery(cells[3]).attr('title', me.resultHeaders[2].tooltip);
                             jQuery(cells[3]).find('div.showBbox').on('click', function () {
                                 // If show info area is active, remove geom from map
-                                if(jQuery(this).hasClass('icon-info-area-active')){
+                                if (jQuery(this).hasClass('icon-info-area-active')) {
                                     me._removeFeaturesFromMap();
                                     jQuery(this).parent().attr('title', me.getLocalization('grid').showBBOX);
                                 }
@@ -1189,7 +1165,7 @@ Oskari.clazz.define(
         * @method _unactiveShowInfoAreaIcons
         * @private
         */
-        _unactiveShowInfoAreaIcons: function(){
+        _unactiveShowInfoAreaIcons: function () {
             jQuery('table.metadataSearchResult tr.resultRow td.showBbox div.showBbox')
                 .removeClass('icon-info-area-active')
                 .removeClass('icon-info-area')
@@ -1202,9 +1178,6 @@ Oskari.clazz.define(
                 layerSelected,
                 showText,
                 hideText,
-                visibilityRequestBuilder,
-                builder,
-                request,
                 layerListItem,
                 layerLink;
 
@@ -1230,15 +1203,12 @@ Oskari.clazz.define(
 
             // Click binding
             layerLink.on('click', function () {
-                visibilityRequestBuilder = me.sandbox.getRequestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
                 // Hide layer
                 if (jQuery(this).html() === hideText) {
                     // Set previously selected layer only invisible
-                    builder = me.sandbox.getRequestBuilder('RemoveMapLayerRequest');
+                    var builder = Oskari.requestBuilder('RemoveMapLayerRequest');
                     layerSelected = false;
-
-                    request = builder(layer.getId());
-                    me.sandbox.request(me.getName(), request);
+                    me.sandbox.request(me.getName(), builder(layer.getId()));
                     jQuery(this).html(showText);
                 } else {
                     // Select previously unselected layer
@@ -1246,8 +1216,8 @@ Oskari.clazz.define(
                         me.sandbox.postRequestByName('AddMapLayerRequest', [layer.getId()]);
                     }
                     // Set layer visible
-                    request = visibilityRequestBuilder(layer.getId(), true);
-                    me.sandbox.request(me.getName(), request);
+                    var visibilityRequestBuilder = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
+                    me.sandbox.request(me.getName(), visibilityRequestBuilder(layer.getId(), true));
                     jQuery(this).html(hideText);
                 }
             });
@@ -1279,7 +1249,6 @@ Oskari.clazz.define(
             this.lastResult.sort(function (a, b) {
                 return me._searchResultComparator(a, b, pAttribute, pDescending);
             });
-
         },
         /**
          * @method _searchResultComparator
@@ -1321,7 +1290,7 @@ Oskari.clazz.define(
         * @param {String} actionText action text
         * @param {Function} showAction function. If return true then shows action text. Optional.
         */
-        addSearchResultAction: function(actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction){
+        addSearchResultAction: function (actionElement, actionTextElement, callback, bindCallbackTo, actionText, showAction) {
             var me = this,
                 status = null;
 
@@ -1331,10 +1300,10 @@ Oskari.clazz.define(
                 callback: callback,
                 bindCallbackTo: bindCallbackTo,
                 actionText: actionText,
-                showAction: function(metadata){return true;}
+                showAction: function (metadata) { return true; }
             };
 
-            if(showAction && showAction !== null) {
+            if (showAction && showAction !== null) {
                 status.showAction = showAction;
             }
 
@@ -1345,7 +1314,7 @@ Oskari.clazz.define(
         * @private
         * @return {Boolean} is action
         */
-        _isAction: function(){
+        _isAction: function () {
             var me = this;
             return me.searchResultActions.length > 0;
         },

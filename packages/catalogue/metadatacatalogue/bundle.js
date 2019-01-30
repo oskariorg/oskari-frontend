@@ -47,7 +47,7 @@ Oskari.clazz.define("Oskari.catalogue.bundle.metadatacatalogue.MetadataCatalogue
 	        /* css */
 			{
 				"type" : "text/css",
-				"src" : "../../../bundles/catalogue/metadatacatalogue/resources/css/style.css"
+				"src" : "../../../bundles/catalogue/metadatacatalogue/resources/scss/style.scss"
 			}
 		], 
 		"locales" : [  

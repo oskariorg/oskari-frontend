@@ -10,7 +10,7 @@ Oskari.clazz.define(
         this.instance = parent;
         this._localization = localization;
         this.sandbox = parent.getSandbox();
-        this.ajaxUrl = this.sandbox.getAjaxUrl();
+        this.ajaxUrl = Oskari.urls.getRoute('ManageRoles');
         this.setTitle(localization.title);
         this.setContent(this.createUi());
     }, {
@@ -42,7 +42,7 @@ Oskari.clazz.define(
                 '</li>'
             );
             form = me.templates.main.find('div.add-role');
-            //create new role
+            // create new role
             me.templates.form = jQuery(
                 '<form method="" action="">' +
                 '    <span>' + me._getLocalization('newrole') + '</span>' +
@@ -130,14 +130,14 @@ Oskari.clazz.define(
 
             jQuery.ajax({
                 type: 'PUT',
-                url: me.ajaxUrl + 'action_route=ManageRoles',
+                url: me.ajaxUrl,
                 lang: Oskari.getLang(),
                 timestamp: new Date().getTime(),
 
                 data: saveData,
                 success: function (role) {
                     me.addRoleToList(role);
-                    var evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, 'add');
+                    var evt = Oskari.eventBuilder('RoleChangedEvent')(role, 'add');
                     me.sandbox.notifyAll(evt);
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
@@ -184,7 +184,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.ajaxUrl + 'action_route=ManageRoles' + '&id=' + role.id,
+                url: me.ajaxUrl + '&id=' + role.id,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -195,11 +195,10 @@ Oskari.clazz.define(
                 },
                 success: function (data) {
                     item.remove();
-                    var evt = me.sandbox.getEventBuilder('RoleChangedEvent')(role, 'remove');
+                    var evt = Oskari.eventBuilder('RoleChangedEvent')(role, 'remove');
                     me.sandbox.notifyAll(evt);
                 }
             });
-
         },
         /**
          * @method createUi
@@ -223,7 +222,7 @@ Oskari.clazz.define(
                 }
             );
             // Not sure if we want save on enter
-            //field.bindEnterKey(doSave);
+            // field.bindEnterKey(doSave);
 
             controls.append(button.getElement());
             return me.container;
@@ -237,7 +236,6 @@ Oskari.clazz.define(
          * @return {String} Permissions table
          */
         createLayerRightGrid: function (columnHeaders, layerRightsJSON) {
-            
             var table = '<table class="layer-rights-table">',
                 i = 0,
                 tr = 0,
@@ -269,14 +267,14 @@ Oskari.clazz.define(
                 // lets loop through header
                 for (i = 0; i < columnHeaders.length; i += 1) {
                     header = columnHeaders[i];
-                    //select input value based on arrangement of header columns
+                    // select input value based on arrangement of header columns
                     value = layerRight[header.id];
                     tooltip = header.name;
 
                     if (header.id === 'name') {
                         if (layer) {
                             tooltip = layer.getLayerType() + '/' + layer.getInspireName() + '/' + layer.getOrganizationName();
-                            //value = '<div class="layer-icon ' + layer.getIconClassname() + '"></div> ' + value;
+                            // value = '<div class="layer-icon ' + layer.getIconClassname() + '"></div> ' + value;
                         }
                         table += '<td><span class="layer-name" data-resource="' + layerRight.resourceName +
                             '" data-namespace="' + layerRight.namespace +

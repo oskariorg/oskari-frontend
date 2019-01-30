@@ -15,6 +15,7 @@
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
+        this.missingRegionsetNamesCount = 0;
 
         // pushed from instance
         this.datasources = [];
@@ -101,11 +102,11 @@
         getUserDatasource: function () {
             return this.datasources.find(function (src) {
                 return src.type === 'user';
-            })
+            });
         },
         getUILabels: function (indicator, callback) {
             var me = this;
-            var locale = this.locale;
+            var selectionValues = this.locale('panels.newSearch.selectionValues');
             if (typeof callback !== 'function') {
                 // log error message
                 return;
@@ -138,7 +139,7 @@
                                 name = value.id || value;
                                 // try finding localization for the param
                                 // FIXME: get rid of this -> have server give ui labels
-                                name = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
+                                name = (selectionValues[selector.id] && selectionValues[selector.id][name]) ? selectionValues[selector.id][name] : name;
                             }
                             uiLabels.push({
                                 selector: selector.id,
@@ -153,9 +154,9 @@
 
                 var name = Oskari.getLocalized(ind.name);
                 var selectorsFormatted;
-                if(indicator.series) {
-                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length -1]);
-                    selectorsFormatted = range +' (' + preferredFormatting.join(' / ') + ')';
+                if (indicator.series) {
+                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length - 1]);
+                    selectorsFormatted = range + ' (' + preferredFormatting.join(' / ') + ')';
                 } else {
                     selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
                 }
@@ -200,6 +201,9 @@
                     me.addRegionset(item);
                 });
                 return;
+            }
+            if (!regionset.name) {
+                regionset.name = `${this.locale('missing.regionsetName')} ${++this.missingRegionsetNamesCount}`;
             }
             if (regionset.id && regionset.name) {
                 this.regionsets.push(regionset);
@@ -267,7 +271,7 @@
                     regionset: regionset,
                     srs: this.sandbox.getMap().getSrsName()
                 },
-                url: this.sandbox.getAjaxUrl('GetRegions'),
+                url: Oskari.urls.getRoute('GetRegions'),
                 success: function (pResp) {
                     var onlyWithNames = pResp.regions.filter(function (region) {
                         return !!region.name;
@@ -336,7 +340,7 @@
                 data: {
                     datasource: ds
                 },
-                url: me.sandbox.getAjaxUrl('GetIndicatorList'),
+                url: Oskari.urls.getRoute('GetIndicatorList'),
                 success: function (pResp) {
                     me.cache.respondToQueue(cacheKey, null, pResp);
                     if (!pResp.complete) {
@@ -384,7 +388,7 @@
                     datasource: ds,
                     indicator: indicator
                 },
-                url: me.sandbox.getAjaxUrl('GetIndicatorMetadata'),
+                url: Oskari.urls.getRoute('GetIndicatorMetadata'),
                 success: function (pResp) {
                     me.cache.respondToQueue(cacheKey, null, pResp);
                 },
@@ -427,7 +431,7 @@
             var cacheKey = _cacheHelper.getIndicatorDataKey(ds, indicator, params, regionset);
             _log.debug('Getting data with key', cacheKey);
 
-            function fractionInit(err, data) {
+            function fractionInit (err, data) {
                 var hash = me.state.getHash(ds, indicator, params, series);
                 if (!err) {
                     me._setInitialFractions(hash, data);
@@ -452,7 +456,7 @@
                 type: 'GET',
                 dataType: 'json',
                 data: data,
-                url: this.sandbox.getAjaxUrl('GetIndicatorData'),
+                url: Oskari.urls.getRoute('GetIndicatorData'),
                 success: function (pResp) {
                     me.getRegions(regionset, function (err, regions) {
                         if (err) {
@@ -480,7 +484,7 @@
          * @param {String} indicatorHash
          * @param {Object} data indicator data
          */
-        _setInitialFractions: function(indicatorHash, data) {
+        _setInitialFractions: function (indicatorHash, data) {
             var ind = this.state.getIndicator(indicatorHash);
             if (!ind) {
                 return;
@@ -489,7 +493,7 @@
                 ind.classification = this.state.getClassificationOpts(indicatorHash);
             }
             if (typeof ind.classification.fractionDigits !== 'number') {
-                var allInts = Object.keys(data).every(function(key){
+                var allInts = Object.keys(data).every(function (key) {
                     return data[key] % 1 === 0;
                 });
                 ind.classification.fractionDigits = allInts ? 0 : 1;
@@ -631,7 +635,7 @@
                     ds: datasrc,
                     id: indicatorId
                 });
-            }
+            };
 
             if (!Oskari.user().isLoggedIn()) {
                 // successfully saved for guest user
@@ -796,7 +800,7 @@
             if (regionsets === null) {
                 return;
             }
-    
+
             var unsupportedDatasources = [];
             this.datasources.forEach(function (ds) {
                 var supported = regionsets.some(function (iter) {

@@ -21,7 +21,7 @@ Oskari.clazz.define(
         Oskari.makeObservable(this);
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.mapframework.bundle.timeseries.TimeseriesService",
+        __qname: 'Oskari.mapframework.bundle.timeseries.TimeseriesService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -30,7 +30,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "TimeseriesService",
+        __name: 'TimeseriesService',
         /**
          * @method getName
          * @return {String} service name
@@ -41,7 +41,7 @@ Oskari.clazz.define(
         /**
          * @method _scheduleUpdate
          * @private
-         * Schedule update on next tick (in order to do only one update after repeated changes) 
+         * Schedule update on next tick (in order to do only one update after repeated changes)
          */
         _scheduleUpdate: function () {
             var me = this;
@@ -90,7 +90,7 @@ Oskari.clazz.define(
                 priority: priority,
                 delegate: delegate,
                 conf: conf
-            }
+            };
             this._scheduleUpdate();
         },
         /**
@@ -145,7 +145,7 @@ Oskari.clazz.define(
          */
         getActiveTimeseries: function () {
             var me = this;
-            var things = Object.keys(this._timeseriesThings).map(function (key) { return me._timeseriesThings[key] });
+            var things = Object.keys(this._timeseriesThings).map(function (key) { return me._timeseriesThings[key]; });
             var targets = things.filter(function (thing) {
                 return thing.type !== 'layer';
             });

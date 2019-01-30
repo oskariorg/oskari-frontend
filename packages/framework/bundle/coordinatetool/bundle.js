@@ -57,7 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             "src": "../../../../bundles/framework/coordinatetool/publisher/CoordinateTool.js"
         },{
             "type": "text/css",
-            "src": "../../../../bundles/framework/coordinatetool/resources/css/coordinatetool.css"
+            "src": "../../../../bundles/framework/coordinatetool/resources/scss/coordinatetool.scss"
         }],
         "locales": [{
             "lang": "en",
@@ -75,6 +75,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             "lang": "et",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/resources/locale/et.js"
+        }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/fr.js"
         }, {
             "lang": "is",
             "type": "text/javascript",

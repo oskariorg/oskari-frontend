@@ -11,7 +11,7 @@ Oskari.clazz
         this.viewstate = viewstate;
         this.viewinfo = viewinfo;
     }, {
-        __name: "userinterface.ExtensionUpdatedEvent",
+        __name: 'userinterface.ExtensionUpdatedEvent',
         getName: function () {
             return this.__name;
         },

@@ -10,10 +10,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.request.AddTabRequestHand
  * @param {Oskari.mapframework.bundle.search.StateHandlerBundleInstance} search
  *          reference to search
  */
-function(sandbox, search) {
-    this.sandbox = sandbox;
-    this.search = search;
-}, {
+    function (sandbox, search) {
+        this.sandbox = sandbox;
+        this.search = search;
+    }, {
     /**
      * @method handleRequest
      * @param {Oskari.mapframework.core.Core} core
@@ -21,13 +21,13 @@ function(sandbox, search) {
      * @param {Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler} request
      *      request to handle
      */
-    handleRequest : function(core, request) {
-        this.search.addTab({"title": request.getTitle(), "content": request.getContent(), "priority": request.getPriority(), "id": request.getId()});
-   }
-}, {
+        handleRequest: function (core, request) {
+            this.search.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
-});
+        protocol: ['Oskari.mapframework.core.RequestHandler']
+    });

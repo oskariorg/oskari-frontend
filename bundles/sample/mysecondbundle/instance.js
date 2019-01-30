@@ -5,25 +5,12 @@
  * registering itself to sandbox as a module.
  *
  * Add this to startupsequence to get this bundle started
- {
-            title : 'mysecondbundle',
-            fi : 'mysecondbundle',
-            sv : '?',
-            en : '?',
-            bundlename : 'mysecondbundle',
-            bundleinstancename : 'mysecondbundle',
-            metadata : {
-                "Import-Bundle" : {
-                    "mysecondbundle" : {
-                        bundlePath : '/<path to>/packages/sample/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        }
+    {
+        bundlename : 'mysecondbundle',
+        bundleinstancename : 'mysecondbundle'
+    }
  */
-Oskari.clazz.define("Oskari.sample.bundle.mysecondbundle.ModuleHelloWorldBundleInstance",
+Oskari.clazz.define('Oskari.sample.bundle.mysecondbundle.ModuleHelloWorldBundleInstance',
 
     /**
      * @method create called automatically on construction

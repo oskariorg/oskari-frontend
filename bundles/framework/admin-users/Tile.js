@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
      *     reference to component that created the tile
      */
     function (instance) {
-        
         this.instance = instance;
         this.container = null;
         this.template = null;
@@ -21,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * @return {String} the name for the component
          */
         getName: function () {
-            
             return 'Oskari.mapframework.bundle.admin-users.Tile';
         },
         /**
@@ -36,7 +34,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * Interface method implementation
          */
         setEl: function (el, width, height) {
-            
             this.container = jQuery(el);
         },
         /**
@@ -44,7 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * Interface method implementation, calls #refresh()
          */
         startPlugin: function () {
-            
             this.refresh();
         },
         /**
@@ -52,7 +48,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * Interface method implementation, clears the container
          */
         stopPlugin: function () {
-            
             this.container.empty();
         },
         /**
@@ -60,7 +55,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * @return {String} localized text for the title of the tile
          */
         getTitle: function () {
-            
             return this.instance.getLocalization('title');
         },
         /**
@@ -68,7 +62,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * @return {String} localized text for the description of the tile
          */
         getDescription: function () {
-            
             return this.instance.getLocalization('desc');
         },
         /**
@@ -76,7 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * Interface method implementation, does nothing atm
          */
         getOptions: function () {
-            
+
         },
         /**
          * @method setState
@@ -85,7 +78,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Tile',
          * Interface method implementation, does nothing atm
          */
         setState: function (state) {
-            
+
         },
         /**
          * @method refresh

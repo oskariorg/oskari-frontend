@@ -8,7 +8,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     __idPrefix: 'geometryCutter-',
     eventHandlers: {
         'DrawingEvent': function (event) {
-            var me = this;
             var drawId = event.getId();
             if (drawId.substr(0, this.__idPrefix.length) !== this.__idPrefix || !event.getIsFinished()) {
                 return;
@@ -32,7 +31,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
                 return;
             }
             var featureLayers = event.getFeatures();
-            var relevantLayers = featureLayers.filter(function (l) { return this._editsInProgress[l.layerId] }, this);
+            var relevantLayers = featureLayers.filter(function (l) { return this._editsInProgress[l.layerId]; }, this);
             if (!relevantLayers.length) {
                 return;
             }
@@ -62,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
     startEditing: function (operationId, feature, mode) {
         var drawId = this.__idPrefix + operationId;
         this.stopEditing(operationId, false); // cleanup any previous edits with same operationId
-        function requestFunction(requestName, args) {
+        function requestFunction (requestName, args) {
             var builder = Oskari.requestBuilder(requestName);
             if (!builder) {
                 return false;
@@ -71,7 +70,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             this.sandbox.request(this, request);
             return true;
         }
-        var editState = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.EditState', drawId, mode, feature, requestFunction.bind(this))
+        var editState = Oskari.clazz.create('Oskari.mapframework.bundle.geometrycutter.EditState', drawId, mode, feature, requestFunction.bind(this));
         this._editsInProgress[drawId] = editState;
         editState.startDrawing();
     },
@@ -94,7 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
      * @method sendEvent
      * @param {Oskari.mapframework.bundle.geometrycutter.EditState} editState the editing state to notify about
      */
-    sendEvent: function(editState, isFinished){
+    sendEvent: function (editState, isFinished) {
         var feature = null;
         if (editState.resultFeatures) {
             var index = editState.selectedFeatureIndex;

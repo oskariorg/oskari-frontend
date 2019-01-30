@@ -103,7 +103,8 @@ Oskari.registerLocalization(
                 },
                 "layerselection": {
                     "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
-                    "selectAsBaselayer": "Taustakarttataso"
+                    "selectAsBaselayer": "Taustakarttataso",
+                    "allowStyleChange": "Salli esitystyylin valinta"
                 }
             },
             "toollayout": {
@@ -121,7 +122,9 @@ Oskari.registerLocalization(
                 "grid": "Näytä tilastotiedot taulukossa",
                 "allowClassification": "Salli luokittelu",
                 "transparent": "Aseta luokittelun tausta läpinäkyväksi",
-                "displayDiagram" : "Näytä pylväsdiagrammi"
+                "displayDiagram" : "Näytä pylväsdiagrammi",
+                "allowHidingClassification" : "Salli luokittelun piilottaminen",
+                "allowHidingSeriesControl" : "Salli sarjatoistimen piilottaminen"
             },
             "layout": {
                 "label": "Ulkoasu",
@@ -227,8 +230,10 @@ Oskari.registerLocalization(
             "layerlist_title": "Avoinna olevat karttatasot, jotka ovat julkaistavissa",
             "layerlist_empty": "Avoinna olevat karttatasot eivät ole julkaistavissa. Tarkista Valitut tasot -valikosta, mitkä karttatasot ovat julkaistavissa.",
             "layerlist_denied": "Avoinna olevat karttatasot, jotka eivät ole julkaistavissa",
-            "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
+            "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa tai tasoa ei voida näyttää tässä karttaprojektiossa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
             "myPlacesDisclaimer": "HUOM! Jos käytät karttatasoa karttajulkaisussa, karttatasosta tulee julkinen.",
+            "noRights": "ei julkaisuoikeutta",
+            "unsupportedProjection": "väärä karttaprojektio",
             "buttons": {
                 "continue": "Jatka",
                 "continueAndAccept": "Hyväksy ehdot ja jatka",

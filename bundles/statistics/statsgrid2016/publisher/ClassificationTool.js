@@ -39,19 +39,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
         return this.__tool;
     },
-    _getStatsLayer: function () {
-        var selectedLayers = this.__sandbox.findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
-    },
     setEnabled: function (enabled) {
         if (typeof enabled !== 'boolean') {
             enabled = false;
@@ -119,6 +106,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

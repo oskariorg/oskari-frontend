@@ -20,11 +20,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateTransformationExtension';
         this._templates = {
             projectionTransformSelect: jQuery(
-                '<div class="coordinatetool-divider"></div>'+
-                '<div class="coordinatetool-projection-change-header"></div>'+
-                '<div>'+
-                '    <select id="projection" class="lon-input projection-select projection-transformation"></select>'+
-                '</div>'+
+                '<div class="coordinatetool-divider"></div>' +
+                '<div class="coordinatetool-projection-change-header"></div>' +
+                '<div>' +
+                '    <select id="projection" class="lon-input projection-select projection-transformation"></select>' +
+                '</div>' +
                 '<div class="clear"/>'
             ),
             projectionSelectOption: jQuery('<option></option>')
@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {Object} popupContent
          * @return {Object} projectionSelect
          */
-        initCoordinatesTransformChange: function(popupContent) {
+        initCoordinatesTransformChange: function (popupContent) {
             var me = this,
                 keys = _.keys(me._config.supportedProjections);
             me._popupContent = popupContent;
@@ -46,10 +46,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 me._popupContent.find('.srs').append(me._templates.projectionTransformSelect.clone());
 
                 me._popupContent.find('.coordinatetool-projection-change-header').html(me._locale('display.coordinatesTransform.header'));
-                me._projectionSelect =  me._popupContent.find('.projection-select');
+                me._projectionSelect = me._popupContent.find('.projection-select');
                 me._populateCoordinatesTransformSelect(me._projectionSelect);
-                me._projectionSelect.on('change', function(event) {
-                    var nowSelected = jQuery("#projection option:selected").val();
+                me._projectionSelect.on('change', function (event) {
+                    var nowSelected = jQuery('#projection option:selected').val();
                     var coordinateToolPlugin = me._mapmodule.getPluginInstances('CoordinateToolPlugin');
                     var data = coordinateToolPlugin._getInputsData();
                     var usersInputs = _.clone(data);
@@ -98,16 +98,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param  {String} title   mesage title
          * @param  {String} message mesage
          */
-        _showMessage: function(title, message) {
+        _showMessage: function (title, message) {
             var me = this;
 
-            if(!me._messageDialog) {
+            if (!me._messageDialog) {
                 me._messageDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             }
             me._messageDialog.show(title, message);
             me._messageDialog.fadeout();
         },
-         /**
+        /**
          * Transforms the given coordinates
          * @method @public transformCoordinates
          * @param {Object} data: lat/lon coordinates to be transformed
@@ -115,10 +115,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @param {String} targetSRS: projection to transform to like "EPSG:4326"
          * @return {Object} data: transformed coordinates as object with lon and lat keys
          */
-        transformCoordinates: function(data, srs, targetSRS) {
+        transformCoordinates: function (data, srs, targetSRS) {
             var me = this;
             me._coordinatesFromServer = false;
-            if(!data) {
+            if (!data) {
                 var map = this._sandbox.getMap();
                 data = {
                     'lonlat': {
@@ -127,19 +127,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                     }
                 };
             }
-            if(!srs) {
+            if (!srs) {
                 srs = this._mapmodule.getProjection();
             }
-            if(!targetSRS && this._projectionSelect) {
+            if (!targetSRS && this._projectionSelect) {
                 targetSRS = this._projectionSelect.val();
             }
 
-            if(srs && targetSRS) {
+            if (srs && targetSRS) {
                 data.lonlat = this._mapmodule.transformCoordinates(data.lonlat, srs, targetSRS);
             }
             return data;
         },
-         /**
+        /**
          * Transforms the given coordinates using action_route=Coordinates and updates coordinates to the UI
          * @method getTransformedCoordinatesFromServer
          * @param {Object} data: {lonlat: lat: '', lon: ''} coordinates to be transformed
@@ -150,10 +150,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          */
         getTransformedCoordinatesFromServer: function (data, srs, targetSRS, successCb, errorCb) {
             var me = this;
-            if(!me._instance.isOpen()) {
+            if (!me._instance.isOpen()) {
                 return;
             }
-            if(!data) {
+            if (!data) {
                 var map = me._sandbox.getMap();
                 data = {
                     'lonlat': {
@@ -164,26 +164,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             // If coordinates are empty then not try to transform these
-            if((typeof data.lonlat.lon === 'undefined' && typeof data.lonlat.lat === 'undefined') ||
+            if ((typeof data.lonlat.lon === 'undefined' && typeof data.lonlat.lat === 'undefined') ||
                 (data.lonlat.lon === '' && data.lonlat.lat === '')) {
-                if(typeof errorCb === 'function') {
+                if (typeof errorCb === 'function') {
                     errorCb();
                 }
                 return;
             }
 
-            if(!srs) {
+            if (!srs) {
                 srs = this._mapmodule.getProjection();
             }
-            if(!targetSRS && this._projectionSelect) {
+            if (!targetSRS && this._projectionSelect) {
                 targetSRS = this._projectionSelect.val();
             }
-            if(srs !== targetSRS) {
-                if(me._ajaxXhr[srs + targetSRS]) {
+            if (srs !== targetSRS) {
+                if (me._ajaxXhr[srs + targetSRS]) {
                     me._ajaxXhr[srs + targetSRS].abort();
                 }
                 me._ajaxXhr[srs + targetSRS] = jQuery.ajax({
-                    url: me._sandbox.getAjaxUrl('Coordinates'),
+                    url: Oskari.urls.getRoute('Coordinates'),
                     data: {
                         lat: data.lonlat.lat,
                         lon: data.lonlat.lon,
@@ -199,13 +199,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                                 }
                             };
                             me._coordinatesFromServer = true;
-                            if(typeof successCb === 'function') {
+                            if (typeof successCb === 'function') {
                                 successCb(newData);
                             }
                         }
                     },
                     error: function (jqXHR, textStatus) {
-                        if(typeof errorCb === 'function' && jqXHR.status !== 0) {
+                        if (typeof errorCb === 'function' && jqXHR.status !== 0) {
                             errorCb(jqXHR, textStatus);
                         }
                     }
@@ -215,9 +215,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         /**
          * format different degree presentations of lon/lat coordinates
          */
-        _formatDegrees: function(lon, lat, type) {
-            var me = this,
-                degreesX,
+        _formatDegrees: function (lon, lat, type) {
+            var degreesX,
                 degreesY,
                 minutesX,
                 minutesY,
@@ -225,34 +224,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 secondsY;
 
             switch (type) {
-                case "min":
-                    degreesX = parseInt(lon);
-                    degreesY = parseInt(lat);
-                    minutesX = Number((lon - degreesX) * 60).toFixed(5);
-                    minutesY = Number((lat - degreesY) * 60).toFixed(5);
-                    return {
-                        "degreesX": degreesX,
-                        "degreesY": degreesY,
-                        "minutesX": minutesX.replace('.', Oskari.getDecimalSeparator()),
-                        "minutesY": minutesY.replace('.', Oskari.getDecimalSeparator())
-                    };
-                case "sec":
-                    degreesX = parseInt(lon);
-                    degreesY = parseInt(lat);
-                    minutesX = parseFloat((lon - degreesX) * 60);
-                    minutesY = parseFloat((lat - degreesY) * 60);
-                    secondsX = parseFloat((minutesX - parseInt(minutesX))*60).toFixed(3);
-                    secondsY = parseFloat((minutesY - parseInt(minutesY))*60).toFixed(3);
-                    return {
-                        "degreesX": degreesX,
-                        "degreesY": degreesY,
-                        "minutesX": parseInt(minutesX),
-                        "minutesY": parseInt(minutesY),
-                        "secondsX": secondsX.replace('.', Oskari.getDecimalSeparator()),
-                        "secondsY": secondsY.replace('.', Oskari.getDecimalSeparator())
-                    };
+            case 'min':
+                degreesX = parseInt(lon);
+                degreesY = parseInt(lat);
+                minutesX = Number((lon - degreesX) * 60).toFixed(5);
+                minutesY = Number((lat - degreesY) * 60).toFixed(5);
+                return {
+                    'degreesX': degreesX,
+                    'degreesY': degreesY,
+                    'minutesX': minutesX.replace('.', Oskari.getDecimalSeparator()),
+                    'minutesY': minutesY.replace('.', Oskari.getDecimalSeparator())
+                };
+            case 'sec':
+                degreesX = parseInt(lon);
+                degreesY = parseInt(lat);
+                minutesX = parseFloat((lon - degreesX) * 60);
+                minutesY = parseFloat((lat - degreesY) * 60);
+                secondsX = parseFloat((minutesX - parseInt(minutesX)) * 60).toFixed(3);
+                secondsY = parseFloat((minutesY - parseInt(minutesY)) * 60).toFixed(3);
+                return {
+                    'degreesX': degreesX,
+                    'degreesY': degreesY,
+                    'minutesX': parseInt(minutesX),
+                    'minutesY': parseInt(minutesY),
+                    'secondsX': secondsX.replace('.', Oskari.getDecimalSeparator()),
+                    'secondsY': secondsY.replace('.', Oskari.getDecimalSeparator())
+                };
             }
-
         },
         /**
          * @public @method changeToolStyle
@@ -269,12 +267,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'default');
+            var styleClass = 'toolstyle-' + (style || 'default');
 
             var classList = el.attr('class').split(/\s+/);
-            for(var c=0;c<classList.length;c++){
+            for (var c = 0; c < classList.length; c++) {
                 var className = classList[c];
-                if(className.indexOf('toolstyle-') > -1){
+                if (className.indexOf('toolstyle-') > -1) {
                     el.removeClass(className);
                 }
             }
@@ -286,7 +284,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

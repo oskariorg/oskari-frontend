@@ -1,3 +1,7 @@
+import equalSizeBands from '../util/equalSizeBands';
+import geostats from 'geostats/lib/geostats.min.js';
+import 'geostats/lib/geostats.css';
+
 /**
  * @class Oskari.statistics.statsgrid.ClassificationService
  */
@@ -9,6 +13,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
      */
     function (colorService) {
         this._colorService = colorService;
+        this.lastUsedBounds = null;
     }, {
         __name: 'StatsGrid.ClassificationService',
         __qname: 'Oskari.statistics.statsgrid.ClassificationService',
@@ -28,7 +33,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 def: 5
             },
             // values recognized by the code (and geostats)
-            method: ['jenks', 'quantile', 'equal'], // , 'manual'
+            method: ['jenks', 'quantile', 'equal', 'manual'],
             // values recognized by the code (and geostats)
             mode: ['distinct', 'discontinuous']
         },
@@ -40,7 +45,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         },
         getAvailableOptions: function (data) {
             var validOpts = {};
-            var list = this._getDataAsList(data);
+            var list = Array.isArray(data) ? data : this._getDataAsList(data);
             validOpts.maxCount = list.length - 1;
             return validOpts;
         },
@@ -91,6 +96,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             stats.setPrecision(opts.precision);
 
             var response = {};
+
+            const setBounds = (stats) => {
+                if (opts.method === 'jenks') {
+                    // Luonnolliset välit
+                    // geostats.js has performance problems when calculating jenks natural breaks
+                    // hence we are using different function implemented in GeostatsHelper for that
+                    const geostatsHelper = new GeostatsHelper();
+                    response.bounds = geostatsHelper.getJenks(stats.serie, opts.count);
+                    stats.setBounds(response.bounds);
+                    stats.setRanges();
+                } else if (opts.method === 'quantile') {
+                    // Kvantiilit
+                    response.bounds = stats.getQuantile(opts.count);
+                } else if (opts.method === 'equal') {
+                    // Tasavälit
+                    response.bounds = stats.getEqInterval(opts.count);
+                } else if (opts.method === 'manual') {
+                    const bounds = this.getBoundsFallback(opts.manualBounds, opts.count, stats.min(), stats.max());
+                    response.bounds = stats.setClassManually(bounds);
+                }
+            };
+
             if (groupStats) {
                 if (groupStats.serie.length < 3) {
                     return;
@@ -103,17 +130,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 var groupOpts = groupStats.classificationOptions || {};
                 var calculateBounds =
-                    (!groupOpts.method || groupOpts.method !== opts.method) ||
-                    (!groupOpts.count || groupOpts.count !== opts.count);
+                    !groupStats.classificationOptions ||
+                    groupOpts.method !== opts.method ||
+                    groupOpts.count !== opts.count ||
+                    (opts.method === 'manual' && !Oskari.util.arraysEqual(groupStats.bounds, opts.manualBounds));
 
                 if (calculateBounds) {
-                    if (opts.method === 'jenks') {
-                        response.bounds = groupStats.getJenks(opts.count);
-                    } else if (opts.method === 'quantile') {
-                        response.bounds = groupStats.getQuantile(opts.count);
-                    } else if (opts.method === 'equal') {
-                        response.bounds = groupStats.getEqInterval(opts.count);
-                    }
+                    setBounds(groupStats);
                     groupOpts.method = opts.method;
                     groupOpts.count = opts.count;
                     groupStats.classificationOptions = groupOpts;
@@ -128,16 +151,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 if (opts.count >= list.length) {
                     opts.count = list.length - 1;
                 }
-                if (opts.method === 'jenks') {
-                    // Luonnolliset välit
-                    response.bounds = stats.getJenks(opts.count);
-                } else if (opts.method === 'quantile') {
-                    // Kvantiilit
-                    response.bounds = stats.getQuantile(opts.count);
-                } else if (opts.method === 'equal') {
-                    // Tasavälit
-                    response.bounds = stats.getEqInterval(opts.count);
-                }
+                setBounds(stats);
             }
 
             response.ranges = stats.ranges;
@@ -215,6 +229,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stats.setColors(colors);
                 return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
+            this.lastUsedBounds = response.bounds;
+            var maxBounds = [];
+            if (response.bounds) {
+                // max bounds are calculated for color scale used in diagram
+                var values = stats.sorted();
+                var j = 1;
+                for (var i = 0; i < values.length; i++) {
+                    if (parseFloat(values[i]) > parseFloat(response.bounds[j])) {
+                        maxBounds.push(values[i]);
+                        j++;
+                    }
+                }
+            }
+            response.maxBounds = maxBounds;
             return response;
         },
         getPixelForSize: function (index, size, range) {
@@ -244,6 +272,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             }
 
             return size;
+        },
+        getBoundsFallback: function (bounds, count, dataMin, dataMax) {
+            return this._tryKnownBounds(bounds, count, dataMin, dataMax) || equalSizeBands(count, dataMin, dataMax);
+        },
+        _tryKnownBounds: function (givenBounds, count, dataMin, dataMax) {
+            return this._tryBounds(givenBounds, count, dataMin, dataMax) || this._tryBounds(this.lastUsedBounds, count, dataMin, dataMax);
+        },
+        _tryBounds: function (bounds, count, dataMin, dataMax) {
+            if (!bounds) {
+                return;
+            }
+            if (bounds[0] !== dataMin || bounds[bounds.length - 1] !== dataMax) {
+                return;
+            }
+            const targetLength = count + 1;
+            if (bounds.length === targetLength) {
+                return bounds.slice();
+            }
+            if (bounds.length > targetLength) {
+                return bounds.slice(0, targetLength - 1).concat([dataMax]);
+            }
+
+            const extraNeeded = equalSizeBands(targetLength - bounds.length + 1, bounds[bounds.length - 2], dataMax);
+
+            return bounds
+                .slice(0, -2)
+                .concat(extraNeeded);
         },
         _getPointsLegend: function (ranges, opts, color, counter, statsOpts, formatter) {
             var me = this;

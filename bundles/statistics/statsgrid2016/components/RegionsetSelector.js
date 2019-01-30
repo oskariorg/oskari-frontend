@@ -1,3 +1,5 @@
+import SelectList from './SelectList';
+
 Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (service, locale) {
     this.service = service;
     this.localization = {
@@ -16,10 +18,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (s
      * @method  @public create
      *
      * @param  {Number[]} restrictTo  restrict selection to regions with matching ids
-     * @param  {Object} indicator indicator. If is set indicator, then grep allowed regions. Else if indicator is not defined then shows all regions.
+     * @param  {Boolean} useDivmanazer If true, uses divmanazer's SelectList component. Otherwise uses statsgrids own SelectList. Defaults to true.
      * @return {Object}           jQuery element
      */
-    create: function (restrictTo, disableReset) {
+    create: function (restrictTo, useDivmanazer = true) {
         var me = this;
         var loc = this.localization;
         var allowedRegionsets = this.__getOptions(restrictTo);
@@ -39,25 +41,37 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (s
             placeholder: loc.placeholderText,
             label: loc.label
         }));
-        var options = {
-            allowReset: false,
-            placeholder_text: loc.placeholder
-        };
-        var select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
-        this.dropdown = select.create(allowedRegionsets, options);
-        fieldContainer.find('.label').append(this.dropdown);
-        select.adjustChosen();
+
+        let select = null;
+        if (useDivmanazer) {
+            const options = {
+                allowReset: false,
+                placeholder_text: loc.placeholder
+            };
+            select = Oskari.clazz.create('Oskari.userinterface.component.SelectList');
+            this.dropdown = select.create(allowedRegionsets, options);
+        } else {
+            const options = {
+                search: false,
+                placeholder: loc.placeholder
+            };
+            select = new SelectList();
+            this.dropdown = select.create(allowedRegionsets, options);
+        }
         var jqSelect = this.dropdown.find('select');
+        fieldContainer.find('.label').append(this.dropdown);
+        if (useDivmanazer) {
+            select.adjustChosen();
+        };
 
         return {
             container: fieldContainer,
             oskariSelect: fieldContainer.find('.oskari-select'),
             value: function (value) {
                 if (typeof value === 'undefined') {
-                    return jqSelect.val();
+                    return select.getValue();
                 }
-                jqSelect.val(value);
-                jqSelect.trigger('chosen:updated');
+                select.setValue(value);
             },
             selectInstance: select,
             field: jqSelect
@@ -67,7 +81,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetSelector', function (s
         if (!this.dropdown) {
             return;
         }
-        this.dropdown.css({ width: width });
+        this.dropdown.css({ width });
+        this.dropdown.parent().css({ width });
     },
     __getOptions: function (restrictTo) {
         var allRegionsets = this.service.getRegionsets();

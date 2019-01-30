@@ -25,43 +25,45 @@ Oskari.clazz.define('map.layer.handler',
          */
         handleRequest: function (core, request) {
             var sandbox = this.layerService.getSandbox();
+            var layer;
+            var evt;
 
-            if('activate.map.layer' === request.getName()) {
+            if (request.getName() === 'activate.map.layer') {
                 var layerId = request.getLayerId();
-                if(request.isActivated()) {
+                if (request.isActivated()) {
                     this.mapState.activateLayer(layerId, request._creator);
                 } else {
                     this.mapState.deactivateLayer(layerId, request._creator);
                 }
-            } else if('AddMapLayerRequest' === request.getName()) {
-                var layer = this.layerService.findMapLayer(request.getMapLayerId());
+            } else if (request.getName() === 'AddMapLayerRequest') {
+                layer = this.layerService.findMapLayer(request.getMapLayerId());
                 this.mapState.addLayer(layer, request._creator);
-            } else if('RemoveMapLayerRequest' === request.getName()) {
+            } else if (request.getName() === 'RemoveMapLayerRequest') {
                 this.mapState.removeLayer(request.getMapLayerId(), request._creator);
-            } else if('RearrangeSelectedMapLayerRequest' === request.getName()) {
+            } else if (request.getName() === 'RearrangeSelectedMapLayerRequest') {
                 this.mapState.moveLayer(request.getMapLayerId(), request.getToPosition(), request._creator);
-            } else if('ChangeMapLayerOpacityRequest' === request.getName()) {
-                var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
+            } else if (request.getName() === 'ChangeMapLayerOpacityRequest') {
+                layer = this.mapState.getSelectedLayer(request.getMapLayerId());
                 if (!layer) {
                     return;
                 }
                 layer.setOpacity(request.getOpacity());
 
-                var evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
+                evt = Oskari.eventBuilder('AfterChangeMapLayerOpacityEvent')(layer);
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
-            } else if('ChangeMapLayerStyleRequest' === request.getName()) {
+            } else if (request.getName() === 'ChangeMapLayerStyleRequest') {
                 if (request.getStyle() === '!default!') {
                     // Check for magic string - should propably be removed...
                     return;
                 }
-                var layer = this.mapState.getSelectedLayer(request.getMapLayerId());
+                layer = this.mapState.getSelectedLayer(request.getMapLayerId());
                 if (!layer) {
                     return;
                 }
                 layer.selectStyle(request.getStyle());
 
-                var evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
+                evt = Oskari.eventBuilder('AfterChangeMapLayerStyleEvent')(layer);
                 evt._creator = request._creator;
                 sandbox.notifyAll(evt);
             }

@@ -17,41 +17,41 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.AddToolButtonReq
  * @param {Object} config
  *            JSON config for button
  */
-function(id, group, config) {
-    this._id = id;
-    this._group = group;
-    this._config = config;
-}, {
+    function (id, group, config) {
+        this._id = id;
+        this._group = group;
+        this._config = config;
+    }, {
     /** @static @property __name request name */
-    __name : "Toolbar.AddToolButtonRequest",
-    /**
+        __name: 'Toolbar.AddToolButtonRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getId
      * @return {String} identifier so we can manage the button with subsequent requests
      */
-    getId : function() {
-        return this._id;
-    },
-    /**
+        getId: function () {
+            return this._id;
+        },
+        /**
      * @method getGroup
      * @return {String} identifier for organizing buttons
      */
-    getGroup : function() {
-        return this._group;
-    },
-    /**
+        getGroup: function () {
+            return this._group;
+        },
+        /**
      * @method getConfig
      * @return {Object} button config
      */
-    getConfig : function() {
-        return this._config;
-    }
-}, {
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        getConfig: function () {
+            return this._config;
+        }
+    }, {
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

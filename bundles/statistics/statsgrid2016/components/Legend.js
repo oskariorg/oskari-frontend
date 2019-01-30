@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         panels: {}
     };
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
+    this._renderQueue = [];
     // some components need to know when rendering is completed.
     Oskari.makeObservable(this);
 }, {
@@ -40,18 +41,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
     //   Legend
     //
     // Alternatively note about no indicator selected
-    render: function (el) {
-        if (this._renderState.inProgress) {
-            // handle render being called multiple times in quick succession
-            // previous render needs to end before repaint since we are doing async stuff
-            this._renderState.repaint = true;
-            this._renderState.el = el;
-            // need to call this._renderDone(); to trigger repaint after render done
+    render: function (el, event) {
+        var me = this;
+        // handle render being called multiple times in quick succession
+        // previous render needs to end before new render since we are doing async stuff
+        if (!this._renderState.inProgress) {
+            me._renderState.inProgress = true;
+        } else {
+            me._renderQueue.push({el: el, event: event});
             return;
         }
-        this._renderState.inProgress = true;
-
-        var me = this;
         var container = this._element;
         var accordion = this._accordion;
         // NOTE! detach classification before re-render to keep eventhandlers
@@ -70,6 +69,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         if (!activeIndicator) {
             container.append(this.__templates.error({ msg: this.locale('legend.noActive') }));
             me._renderDone();
+            this.trigger('content-rendered');
             return;
         }
         // render classification options
@@ -77,38 +77,43 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         me._createClassificationUI(classificationOpts, function (classificationUI) {
             container.append(classificationUI);
 
-            var panelClassification = me._createAccordionPanel(me.locale('classify.editClassifyTitle'));
+            var panelClassification = me._createAccordionPanel(me.locale('classify.edit.title'));
             panelClassification.setContent(classificationUI);
             // add panels to accordion
             accordion.addPanel(panelClassification);
             var mountPoint = container.find('.classification');
             // add accordion to the container
             accordion.insertTo(mountPoint);
-            // notify that we are done (to start a repaint if requested in middle of rendering)
-            me._renderDone();
         });
-
         this._createLegend(activeIndicator, function (legendUI, classificationOpts) {
             var headerContainer = container.find('.active-header');
             var legendContainer = container.find('.active-legend');
             headerContainer.empty();
             legendContainer.empty();
             container.find('.legend-noactive').empty();
-
             // create inidicator dropdown if we have more than one indicator
-            if (me.service.getStateService().getIndicators().length > 1) {
+            var hasMultiple = me.service.getStateService().getIndicators().length > 1;
+
+            if (hasMultiple) {
                 var indicatorMenu = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', me.service);
                 indicatorMenu.render(headerContainer);
                 indicatorMenu.setWidth('94%');
+                headerContainer.addClass('multi-select-legend');
             } else {
-                me._getLabels(activeIndicator, function (labels) {
-                    var header = me.__templates.activeHeader({
-                        label: labels.label
-                    });
-                    headerContainer.empty();
-                    headerContainer.append(header);
-                }); // _getLabels
+                headerContainer.removeClass('multi-select-legend');
             }
+            me._getLabels(activeIndicator, function (labels) {
+                if (hasMultiple) {
+                    headerContainer.attr('data-selected-indicator', labels.label);
+                    return;
+                }
+                var header = me.__templates.activeHeader({
+                    label: labels.label
+                });
+                headerContainer.empty();
+                headerContainer.append(header);
+            });
+
             if (!classificationOpts) {
                 // didn't get classification options so not enough data to classify or other error
                 container.find('.edit-legend').hide();
@@ -118,11 +123,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                 me._renderDone();
                 return;
             }
-            var edit = me.__templates.edit({ tooltip: me.locale('classify.editClassifyTitle') });
+            var edit = me.__templates.edit({ tooltip: me.locale('classify.edit.open') });
             headerContainer.append(edit);
             me._createEditClassificationListener();
             // legend
             legendContainer.html(legendUI);
+            me._renderState.inProgress = false;
+            me._renderDone();
+            me.trigger('content-rendered');
         }); // _createLegend
     },
 
@@ -135,7 +143,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         this._element.find('.edit-legend').on('click', function (event) {
             // toggle accordion
             me._accordion.getPanels().forEach(function (panel) {
-                panel.isOpen() ? panel.close() : panel.open();
+                if (panel.isOpen()) {
+                    panel.close();
+                    me.trigger('edit-legend', false);
+                } else {
+                    panel.open();
+                    me.trigger('edit-legend', true);
+                }
             });
         });
     },
@@ -143,15 +157,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      * Triggers a new render when needed (if render was called before previous was finished)
      */
     _renderDone: function () {
+        var me = this;
+        if (me._renderQueue.length) {
+            let render = me._renderQueue.shift();
+            me.render(render.el, render.event);
+        }
         var state = this._renderState;
         this._renderState = {};
         this._restorePanelState(this._accordion, state.panels);
-        if (state.repaint) {
-            this.render(state.el);
-        } else {
-            // trigger an event in case something needs to know that we just completed rendering
-            this.trigger('rendered');
-        }
+        // trigger an event in case something needs to know that we just completed rendering
+        this.trigger('rendered');
     },
     /**
      * Restores legend/classification panels to given state (open/closed)
@@ -182,28 +197,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
      */
     _createAccordionPanel: function (title) {
         var me = this;
-
-        function _overflowCheck () {
-            var pluginEl = me._element.parent();
-            if (pluginEl.css('position') === 'absolute') {
-                var top = pluginEl.offset().top;
-                var bottom = top + pluginEl.height();
-                var offsetToWindowBottom = jQuery(window).height() - bottom;
-                if (offsetToWindowBottom < 0) {
-                    pluginEl.css('top', pluginEl.position().top + offsetToWindowBottom + 'px');
-                }
-            }
-        }
-
         var panel = Oskari.clazz.create('Oskari.userinterface.component.AccordionPanel');
         panel.on('open', function () {
             me._setPanelState(panel);
-            me._element.find('.edit-legend').addClass('edit-active');
-            _overflowCheck();
+            var legend = me._element.find('.edit-legend');
+            legend.addClass('edit-active');
+            legend.prop('title', me.locale('classify.edit.close'));
         });
         panel.on('close', function () {
             me._setPanelState(panel);
-            me._element.find('.edit-legend').removeClass('edit-active');
+            var legend = me._element.find('.edit-legend');
+            legend.removeClass('edit-active');
+            legend.prop('title', me.locale('classify.edit.open'));
         });
         panel.setTitle(title);
         panel.getHeader().remove();
@@ -312,7 +317,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
 
         me.service.on('StatsGrid.IndicatorEvent', function (event) {
             // if indicator is removed/added - recalculate the source 1/2 etc links
-            me.render();
+            me.render(null, event);
         });
 
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
@@ -332,12 +337,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
                         };
                     });
             }
-            me.render();
+            me.render(null, event);
         });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             // need to update the legend as data changes when regionset changes
-            me.render();
+            me.render(null, event);
         });
 
         me.service.on('StatsGrid.ClassificationChangedEvent', function (event) {

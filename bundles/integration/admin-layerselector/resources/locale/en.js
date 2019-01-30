@@ -24,7 +24,13 @@ Oskari.registerLocalization(
             "loadFailed": "Map layers could not be loaded. Please reload the page and select map layers again.",
             "noResults": "No search results found.",
             "layerTypeNotSupported": "The map layer type is not yet supported:",
-            "not_empty": "There are map layers in this theme. Please move them to another theme before removing the theme."
+            "not_empty": "There are map layers in this theme. Please move them to another theme before removing the theme.",
+            "invalidJSON": "Invalid JSON syntax.",
+            "externalStyle": {
+                "nameEmpty": "Name is required.",
+                "name": "The name contains invalid characters.",
+                "content": "The style definition has invalid JSON content."
+            }
         },
         "loading": "Loading…",
         "filter": {
@@ -57,8 +63,9 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache layer",
                 "arcgis93": "ArcGISRest layer",
                 "tiles3d" : "3D Tiles layer",
-                "vectortile" : "MBTiles layer"
+                "vectortile" : "MVT layer"
             },
+            "confirmDeleteStyle": "The style will be removed. Do you want to continue?",
             "selectLayer": "Select map layer",
             "selectSubLayer": "Select sub layer",
             "addOrganization": "Add organisation",
@@ -84,7 +91,22 @@ Oskari.registerLocalization(
             "getInfo": "Get info",
             "editWfs": "Edit WFS",
             "options": "Options JSON",
-            "mbtilesOptionsDesc": "{\n  styles: {\n    default: { ... },\n    myStyle: { ... }\n  },\n  tileGrid: { ... }\n}",
+            "mvtAttributions": "Attributions",
+            "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
+            "mvtTileGrid": "Tile grid",
+            "mvtTileGridDesc": "JSON \n{\n  \"origin\": [-548576, 8388608],\n  \"resolutions\": [8192, ..., 0.25],\n  \"tileSize\": [256, 256]\n}",
+            "mvtOskariStylesDesc": "JSON \n{\n  \"default\": {\n    \"building\": {...},\n    \"water\": {...}\n  },\n  ...\n}",
+            "mvtWfsOskariStylesDesc": "JSON \n{\n  \"Custom MVT style\": {\n    \"featureStyle\": {...},\n    \"optionalStyles\": [{...}]\n  },\n  ...\n}",
+            "mvtHover": "Hover",
+            "mvtHoverDesc": "JSON \n{\n  \"featureStyle\": {...},\n  \"content\": [\n    {\"key\": \"Feature Data\"},\n    {\"key\": \"ID\", \"valueProperty\": \"id\"}\n  ]\n}",
+            "mvtExternalStyleList": "MapBox styles",
+            "mvtExternalStyleName": "Style name",
+            "mvtImportStyle": "Import a new style from a file",
+            "mvtExistingExtStyles": "Styles",
+            "oskariStyles": "Styles",
+            "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
+            "tiles3dStyles": "Cesium styles",
+            "tiles3dStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "selectClass": "Select theme",
             "selectClassDesc": "Select a theme describing the map layer from the list.",
             "baseName": "Background Map Layer Name",
@@ -240,7 +262,9 @@ Oskari.registerLocalization(
             "selectLayerGroups": "Select layer groups"
         },
         "buttons": {
-            "add": "Add"
+            "add": "Add",
+            "update": "Update",
+            "remove": "Remove",
         }
     }
 });

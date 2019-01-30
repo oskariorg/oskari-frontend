@@ -18,12 +18,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.event.RoleChangedEve
         this._creator = null;
         this._role = role;
         if (!this.operations[operation]) {
-            throw "Unknown operation '" + operation + "'";
+            throw new Error("Unknown operation '" + operation + "'");
         }
         this._operation = operation;
     }, {
         /** @static @property __name event name */
-        __name: "RoleChangedEvent",
+        __name: 'RoleChangedEvent',
         /**
          * @method getName
          * @return {String} event name

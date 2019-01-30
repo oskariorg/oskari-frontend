@@ -13,15 +13,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         if (!me.getUiElement()) {
             me.createUi();
             me.setContent(me.getUiElement());
-            me.bindScroll();
+            me.scroll();
         }
+    });
+    this.on('resize', function (options) {
+        me._diagram.render(me.getElement().find('.chart'), options);
     });
 }, {
     _template: {
-        container: jQuery('<div>' +
+        container: jQuery('<div class="stats-diagram-holder">' +
             '   <div class="chart-controls"></div>' +
-            '   <div class="chart">' +
-            '       <div class="axisLabel"></div>' +
+            '   <div class="oskari-datacharts">' +
+            '       <div class="chart">' +
+            '           <div class="axisLabel"></div>' +
+            '       </div>' +
             '   </div>' +
             '</div>')
     },
@@ -31,17 +36,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
     getUiElement: function () {
         return this.uiElement;
     },
-    bindScroll: function () {
-        var axisLabel = this.uiElement.find('.axisLabel');
-        var labelMargin = parseInt(axisLabel.css('margin-top'));
-        var positionTop = this.uiElement.find('.chart').position().top - 2; // top margin 2
-        var chartControlHeight = positionTop + labelMargin;
-        this.getElement().find('.oskari-flyoutcontentcontainer').on('scroll', function () {
+    scroll: function () {
+        var axisLabel = jQuery('.axisLabel');
+        jQuery(jQuery('.statsgrid-diagram-flyout .oskari-datacharts')).scroll(function () {
             var scrollAmount = jQuery(this).scrollTop();
-            if (scrollAmount > chartControlHeight) {
+            // 14 is the 2% padding-bottom
+            if (scrollAmount >= 14) {
                 axisLabel.addClass('sticky');
                 axisLabel.css('margin-top', function () {
-                    return scrollAmount - positionTop;
+                    return scrollAmount - 15;
+
                 });
             } else {
                 if (axisLabel.hasClass('sticky')) {
@@ -64,7 +68,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         this._diagram.createDataSortOption(el.find('.chart-controls .dropdown'));
         // this.loc.datacharts.descColor
         // Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu');
-        this._diagram.render(el.find('.chart'));
+        var options = {resizable: this.isResizable()};
+        this._diagram.render(el.find('.chart'), options);
         this.setUiElement(el);
     }
 }, {
