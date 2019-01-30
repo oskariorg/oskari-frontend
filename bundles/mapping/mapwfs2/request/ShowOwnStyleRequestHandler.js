@@ -15,6 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
         this.plugin = plugin;
         this.localization = plugin.getLocalization('popup');
         this.visualizationForm = this.plugin.getVisualizationForm();
+        this._usesMvtPlugin = this.plugin._clazz === 'Oskari.wfsmvt.WfsMvtLayerPlugin';
 
         /* templates */
         this.template = {};
@@ -45,7 +46,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             var customStyle = layer.getCustomStyle();
 
             if (customStyle) {
-                this.visualizationForm.setValues(customStyle);
+                this._setValues(customStyle);
             }
 
             // init popup
@@ -67,13 +68,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             saveOwnStyleBtn.setHandler(function () {
                 var styleName = 'oskari_custom';
 
-                // remove old custom tiles
-                self.plugin.deleteTileCache(layerId, styleName);
-
-                // set values to backend
-                var values = self.visualizationForm.getValues();
+                var values = self._getValues();
                 layer.setCustomStyle(values);
-                self.plugin.setCustomStyle(layerId, values);
+
+                // remove old custom tiles
+                if (!self._usesMvtPlugin) {
+                    self.plugin.deleteTileCache(layerId, styleName);
+                    self.plugin.setCustomStyle(layerId, values);
+                }
 
                 // change style to custom
                 layer.selectStyle(styleName);
@@ -92,6 +94,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             // show popup
             dialog.addClass('wfs_own_style');
             dialog.show(title, content, [cancelBtn, saveOwnStyleBtn]);
+        },
+
+        _getValues: function () {
+            if (this._usesMvtPlugin) {
+                return this.visualizationForm.getOskariStyle();
+            }
+            return this.visualizationForm.getValues();
+        },
+        _setValues: function (values) {
+            if (this._usesMvtPlugin) {
+                this.visualizationForm.setOskariStyleValues(values);
+            }
+            this.visualizationForm.setValues(values);
         }
     }, {
         /**
