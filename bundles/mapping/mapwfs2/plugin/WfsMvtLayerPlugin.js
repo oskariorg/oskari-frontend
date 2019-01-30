@@ -15,6 +15,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this._log = Oskari.log('WfsMvtLayerPlugin');
             this.layertype = 'wfs';
+            // mvt only support numeric IDs and WFS-layers often have other characters in ID as well
+            // fixes highlight on features spread to multiple tiles by using a generated _oid for "combining" features
             this.hoverState.property = '_oid';
         }
         _initImpl () {
