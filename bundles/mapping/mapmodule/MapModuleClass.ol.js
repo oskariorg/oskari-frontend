@@ -905,25 +905,36 @@ export default class MapModule extends AbstractMapModule {
      */
     __getStrokeStyle (styleDef) {
         var stroke = {};
-        if (styleDef.stroke.width === 0) {
+        let strokeDef = styleDef.stroke.area ? styleDef.stroke.area : styleDef.stroke;
+        let { width, color, lineDash, lineCap } = strokeDef;
+
+        if (width === 0) {
             return null;
         }
-        if (styleDef.stroke.color) {
-            stroke.color = styleDef.stroke.color;
+        if (color) {
+            stroke.color = color;
         }
-
-        if (styleDef.stroke.width) {
-            stroke.width = styleDef.stroke.width;
+        if (width) {
+            stroke.width = width;
         }
-        if (styleDef.stroke.lineDash) {
-            if (_.isArray(styleDef.stroke.lineDash)) {
-                stroke.lineDash = styleDef.stroke.lineDash;
+        if (lineDash) {
+            if (_.isArray(lineDash)) {
+                stroke.lineDash = lineDash;
             } else {
-                stroke.lineDash = [styleDef.stroke.lineDash];
+                switch (lineDash) {
+                case 'dash': stroke.lineDash = [5, 4]; break;
+                case 'dot': stroke.lineDash = [1, 1]; break;
+                case 'dashdot': stroke.lineDash = [5, 1, 1, 1]; break;
+                case 'longdash': stroke.lineDash = [10, 4]; break;
+                case 'longdashdot': stroke.lineDash = [10, 1, 1, 1]; break;
+                case 'solid': stroke.lineDash = []; break;
+                default: stroke.lineDash = [lineDash];
+                }
             }
+            stroke.lineDashOffset = 0;
         }
-        if (styleDef.stroke.lineCap) {
-            stroke.lineCap = styleDef.stroke.lineCap;
+        if (lineCap) {
+            stroke.lineCap = lineCap;
         }
         return new olStyleStroke(stroke);
     }
