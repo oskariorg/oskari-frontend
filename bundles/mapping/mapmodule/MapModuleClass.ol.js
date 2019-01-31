@@ -858,7 +858,7 @@ export default class MapModule extends AbstractMapModule {
         var style = jQuery.extend(true, {}, styleDef);
         var olStyle = {};
         if (Oskari.util.keyExists(style, 'fill.color')) {
-            var color = style.fill.color;
+            var color = style.fill.color ? style.fill.color : 'rgba(0,0,0,0)';
             if (style.effect) {
                 switch (style.effect) {
                 case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
@@ -921,13 +921,26 @@ export default class MapModule extends AbstractMapModule {
             if (_.isArray(lineDash)) {
                 stroke.lineDash = lineDash;
             } else {
+                const getDash = (segment, gap) => [segment, gap + (width || 0)];
                 switch (lineDash) {
-                case 'dash': stroke.lineDash = [5, 4]; break;
-                case 'dot': stroke.lineDash = [1, 1]; break;
-                case 'dashdot': stroke.lineDash = [5, 1, 1, 1]; break;
-                case 'longdash': stroke.lineDash = [10, 4]; break;
-                case 'longdashdot': stroke.lineDash = [10, 1, 1, 1]; break;
-                case 'solid': stroke.lineDash = []; break;
+                case 'dash':
+                    stroke.lineDash = getDash(5, 4);
+                    break;
+                case 'dot':
+                    stroke.lineDash = getDash(1, 1);
+                    break;
+                case 'dashdot':
+                    stroke.lineDash = getDash(5, 1).concat(getDash(1, 1));
+                    break;
+                case 'longdash':
+                    stroke.lineDash = getDash(10, 4);
+                    break;
+                case 'longdashdot':
+                    stroke.lineDash = getDash(10, 1).concat(getDash(1, 1));
+                    break;
+                case 'solid':
+                    stroke.lineDash = [];
+                    break;
                 default: stroke.lineDash = [lineDash];
                 }
             }
