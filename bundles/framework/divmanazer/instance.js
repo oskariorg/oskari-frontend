@@ -450,15 +450,13 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         createFlyout: function (extension, plugin, count, extensionInfo) {
             var me = this;
             var flyoutOpts = {
-                cls: 'oskari-closed',
                 isExtension: true
             };
             var extraFlyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', plugin.getTitle(), flyoutOpts);
-            var flyout = extraFlyout.getElement();
-
+            extraFlyout.addClass('oskari-closed');
             extraFlyout.addToolage();
             extraFlyout.makeDraggable();
-
+            var flyout = extraFlyout.getElement();
             flyout.css('left', me.getFlyoutDefaultPositions().attach.left);
             flyout.css('top', me.getFlyoutDefaultPositions().attach.top);
 

@@ -127,7 +127,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 me.bringToTop();
             });
             this.setTitle(this.title);
-            this.addClass(this.options.cls);
+            if (this.options.cls) {
+                this.addClass(this.options.cls);
+            }
         },
         setTitle: function (title) {
             var me = this;
