@@ -8,8 +8,8 @@ Oskari.clazz.category(
         setSessionExpiring: function (minutes) {
             if (!minutes) return;
 
-            var sandbox = this.getSandbox(),
-                dialog = this._createNotificationDialog(minutes);
+            var sandbox = this.getSandbox();
+            var dialog = this._createNotificationDialog(minutes);
 
             sandbox.setSessionExpiring((minutes - 1), function () {
                 dialog.show();
@@ -22,20 +22,20 @@ Oskari.clazz.category(
      * @return {Object}
      */
         _createNotificationDialog: function (minutes) {
-            var me = this,
-                loc = this.getLocalization('session'),
-                sandbox = this.getSandbox(),
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                extendButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                logoutButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                extendButtonTitle = loc.expiring.extend,
-                logoutButtonMessage = loc.expiring.logout,
-                expiresInMessage = loc.expiring.expires,
-                notifyTitle = loc.expiring.title,
-                notifyMessage = loc.expiring.message,
-                expiredTitle = loc.expired.title,
-                expiredMessage = loc.expired.message,
-                expireTimeout;
+            var me = this;
+            var loc = this.getLocalization('session');
+            var sandbox = this.getSandbox();
+            var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var extendButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var logoutButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var extendButtonTitle = loc.expiring.extend;
+            var logoutButtonMessage = loc.expiring.logout;
+            var expiresInMessage = loc.expiring.expires;
+            var notifyTitle = loc.expiring.title;
+            var notifyMessage = loc.expiring.message;
+            var expiredTitle = loc.expired.title;
+            var expiredMessage = loc.expired.message;
+            var expireTimeout;
 
             notifyMessage = notifyMessage.replace('{extend}', ('"' + extendButtonTitle + '"'));
 
