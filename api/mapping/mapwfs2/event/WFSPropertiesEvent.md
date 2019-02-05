@@ -1,1 +1,4 @@
 # WFSPropertiesEvent
+
+ Update grid headers
+ 

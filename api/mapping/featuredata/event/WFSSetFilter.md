@@ -1,2 +1,3 @@
 # WFSSetFilter
 
+Set WFS filter
