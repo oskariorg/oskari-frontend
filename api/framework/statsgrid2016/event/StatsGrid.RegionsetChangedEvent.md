@@ -1,5 +1,9 @@
 # StatsGrid.RegionsetChangedEvent
 
+Notifies regionset change
+
+## Description
+
 Used to notify that the regionset has changed in statsgrid and any region listing or region specific data should be updated to use the selected regionset and it's regions. Note that both current and previous regionsets can be undefined.
 
 ## Parameters
