@@ -293,10 +293,14 @@ Oskari.clazz.define(
                 this._isInLayerToolsEditMode = event.isInMode();
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
-                this.afterRearrangeSelectedMapLayerEvent(event);
+                this.afterRearrangeSelectedMapLayerEvent();
             },
             MapSizeChangedEvent: function (evt) {
                 this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
+            },
+            UIChangeEvent: function (evt) {
+                // fix layer order after changing from/to publisher
+                setTimeout(() => this.afterRearrangeSelectedMapLayerEvent(), 200);
             },
             'Toolbar.ToolbarLoadedEvent': function () {
                 this.startLazyPlugins();
