@@ -351,22 +351,48 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
 
         // Run the searches to see if we get data from the service.
-        searchValues.forEach(search => {
-            const {datasource, indicator, selections, series, regionset} = search;
-            this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
-                if (err || !data) {
-                    searchFailed(search);
-                    return;
-                }
-                let counter = 0;
-                const enoughData = !!Object.values(data).find(val => !isNaN(val) && ++counter > 1);
-                if (!enoughData) {
-                    searchFailed(search);
-                    return;
-                }
-                searchSuccessfull(search);
-            });
+        const batchSize = 2;
+        let batchCounter = 0;
+        let batchIndex = 0;
+        const batches = [];
+        let batch;
+        searchValues.forEach((search, index) => {
+            if (index % batchSize === 0) {
+                batch = [];
+                batches.push(batch);
+            }
+            batch.push(search);
         });
+        const nextBatch = () => {
+            batchIndex++;
+            batchCounter = 0;
+            if (batchIndex < batches.length) {
+                consumeBatch(batchIndex);
+            }
+        };
+        const consumeBatch = () => {
+            batches[batchIndex].forEach((search, index) => {
+                const {datasource, indicator, selections, series, regionset} = search;
+                this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
+                    batchCounter++;
+                    if (batchCounter === batchSize) {
+                        nextBatch();
+                    }
+                    if (err || !data) {
+                        searchFailed(search);
+                        return;
+                    }
+                    let counter = 0;
+                    const enoughData = !!Object.values(data).find(val => !isNaN(val) && ++counter > 1);
+                    if (!enoughData) {
+                        searchFailed(search);
+                        return;
+                    }
+                    searchSuccessfull(search);
+                });
+            });
+        };
+        consumeBatch();
     },
 
     _updateSearchStatusWithFailure: function (failedSearch, errors, multiselectStatusMap, successfullSearches, indicatorsHavingData) {
