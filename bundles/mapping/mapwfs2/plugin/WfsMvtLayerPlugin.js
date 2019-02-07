@@ -41,31 +41,16 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             return this.reqEventHandler.createRequestHandlers(this);
         }
 
-        /**
-         * @method getVisualizationForm
-         * @return {VisualizationForm} form
-         */
-        getVisualizationForm () {
-            return this._visualizationForm;
+        getCustomStyleEditorForm (layer) {
+            const customStyle = layer.getCustomStyle();
+            this._visualizationForm.setOskariStyleValues(customStyle);
+            return this._visualizationForm.getForm();
         }
 
-        /**
-         * @method getLocalization
-         * Convenience method to call from Tile and Flyout
-         * Returns JSON presentation of bundles localization data for
-         * current language. If key-parameter is not given, returns
-         * the whole localization data.
-         *
-         * @param {String} key (optional) if given, returns the value for key
-         * @return {String/Object} returns single localization string or
-         *      JSON object for complete data depending on localization
-         *      structure and if parameter key is given
-         */
-        getLocalization (key) {
-            if (key) {
-                return this.localization(key);
-            }
-            return this.localization;
+        applyEditorStyle (layer) {
+            const style = this._visualizationForm.getOskariStyle();
+            layer.setCustomStyle(style);
+            layer.selectStyle('oskari_custom');
         }
 
         /**

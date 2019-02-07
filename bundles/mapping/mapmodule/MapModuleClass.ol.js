@@ -918,7 +918,7 @@ export default class MapModule extends AbstractMapModule {
             stroke.width = width;
         }
         if (lineDash) {
-            if (_.isArray(lineDash)) {
+            if (Array.isArray(lineDash)) {
                 stroke.lineDash = lineDash;
             } else {
                 const getDash = (segment, gap) => [segment, gap + (width || 0)];

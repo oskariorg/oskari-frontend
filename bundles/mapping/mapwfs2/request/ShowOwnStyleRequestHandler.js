@@ -13,9 +13,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
 
     function (plugin) {
         this.plugin = plugin;
-        this.localization = plugin.getLocalization('popup');
-        this.visualizationForm = this.plugin.getVisualizationForm();
-        this._usesMvtPlugin = this.plugin._clazz === 'Oskari.wfsmvt.WfsMvtLayerPlugin';
+        this.localization = Oskari.getMsg.bind(null, 'MapWfs2')('popup');
 
         /* templates */
         this.template = {};
@@ -43,11 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
         handleRequest: function (core, request) {
             var layerId = request.getId();
             var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-            var customStyle = layer.getCustomStyle();
-
-            if (customStyle) {
-                this._setValues(customStyle);
-            }
 
             // init popup
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -55,33 +48,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             var content = this.template.wrapper.clone();
 
             // add form
-            // TODO: this.plugin getValues ? - plugin / layer holds the custom style values for the user ;)
-            content.append(this.visualizationForm.getForm());
+            content.append(this.plugin.getCustomStyleEditorForm(layer));
 
             // buttons
-
             var self = this;
-
             var saveOwnStyleBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             saveOwnStyleBtn.setTitle(this.localization.button.save);
             saveOwnStyleBtn.addClass('primary saveOwnStyle');
             saveOwnStyleBtn.setHandler(function () {
-                var styleName = 'oskari_custom';
-
-                var values = self._getValues();
-                layer.setCustomStyle(values);
-
-                // remove old custom tiles
-                if (!self._usesMvtPlugin) {
-                    self.plugin.deleteTileCache(layerId, styleName);
-                    self.plugin.setCustomStyle(layerId, values);
-                }
-
-                // change style to custom
-                layer.selectStyle(styleName);
+                self.plugin.applyEditorStyle(layer);
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
                 self.plugin.getSandbox().notifyAll(event);
-
                 dialog.close();
             });
 
@@ -94,19 +71,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             // show popup
             dialog.addClass('wfs_own_style');
             dialog.show(title, content, [cancelBtn, saveOwnStyleBtn]);
-        },
-
-        _getValues: function () {
-            if (this._usesMvtPlugin) {
-                return this.visualizationForm.getOskariStyle();
-            }
-            return this.visualizationForm.getValues();
-        },
-        _setValues: function (values) {
-            if (this._usesMvtPlugin) {
-                this.visualizationForm.setOskariStyleValues(values);
-            }
-            this.visualizationForm.setValues(values);
         }
     }, {
         /**

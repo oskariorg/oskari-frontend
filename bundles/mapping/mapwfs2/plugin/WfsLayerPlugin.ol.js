@@ -497,13 +497,23 @@ Oskari.clazz.define(
             return this._io;
         },
 
-        /**
-         * @method getVisualizationForm
-         * @return {Object} io
-         */
-        getVisualizationForm: function () {
-            return this._visualizationForm;
+        getCustomStyleEditorForm (layer) {
+            const customStyle = layer.getCustomStyle();
+            this._visualizationForm.setValues(customStyle);
+            return this._visualizationForm.getForm();
         },
+
+        applyEditorStyle (layer) {
+            const styleName = 'oskari_custom';
+            const style = this._visualizationForm.getValues();
+            const layerId = layer.getId();
+            layer.setCustomStyle(style);
+            // remove old custom tiles
+            this.deleteTileCache(layerId, styleName);
+            this.setCustomStyle(layerId, style);
+            layer.selectStyle(styleName);
+        },
+
         /**
          * Returns the requested layer IF it's one of the selected layers on map.
          * If params is undefined, returns all selected layers.
