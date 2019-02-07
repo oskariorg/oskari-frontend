@@ -23,21 +23,18 @@ Oskari.clazz.category(
      */
         _createNotificationDialog: function (minutes) {
             var me = this;
-            var loc = this.getLocalization('session');
+            var locale = Oskari.getMsg.bind(null, 'StateHandler');
             var sandbox = this.getSandbox();
             var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             var extendButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             var logoutButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
-            var extendButtonTitle = loc.expiring.extend;
-            var logoutButtonMessage = loc.expiring.logout;
-            var expiresInMessage = loc.expiring.expires;
-            var notifyTitle = loc.expiring.title;
-            var notifyMessage = loc.expiring.message;
-            var expiredTitle = loc.expired.title;
-            var expiredMessage = loc.expired.message;
+            var extendButtonTitle = locale('session.expiring.extend');
+            var logoutButtonMessage = locale('session.expiring.logout');
+            var notifyTitle = locale('session.expiring.title');
+            var notifyMessage = locale('session.expiring.message', {extend: '"' + extendButtonTitle + '"'});
+            var expiredTitle = locale('session.expired.title');
+            var expiredMessage = locale('session.expired.message');
             var expireTimeout;
-
-            notifyMessage = notifyMessage.replace('{extend}', ('"' + extendButtonTitle + '"'));
 
             extendButton.addClass('primary');
             extendButton.setTitle(extendButtonTitle);
@@ -58,7 +55,7 @@ Oskari.clazz.category(
             return {
                 show: function () {
                     const expireIn = 60; // Expire time in seconds
-                    popup.show(notifyTitle, notifyMessage + '<br />' + expiresInMessage.replace('{expires}', (expireIn)), [logoutButton, extendButton]);
+                    popup.show(notifyTitle, notifyMessage + '<br />' + locale('session.expiring.expires', {expires: expireIn}), [logoutButton, extendButton]);
                     // Using Date for more accurate countdown (instead of just using setTimeout or setInterval)
                     const start = Date.now();
                     let diff;
@@ -77,7 +74,7 @@ Oskari.clazz.category(
                                 location.reload();
                             }
                         } else {
-                            popup.setContent(notifyMessage + '<br />' + expiresInMessage.replace('{expires}', seconds));
+                            popup.setContent(notifyMessage + '<br />' + locale('session.expiring.expires', {expires: seconds}));
                         }
                     }
                     let interval = setInterval(timer, 1000);
