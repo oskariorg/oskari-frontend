@@ -1,3 +1,3 @@
 # WFSFeatureEvent
 
-Update grid data
+Notifies about received WFS feature properties data

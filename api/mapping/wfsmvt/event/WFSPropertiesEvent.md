@@ -1,4 +1,4 @@
 # WFSPropertiesEvent
 
- Update grid headers
+Notifies about WFS feature properties field names
  

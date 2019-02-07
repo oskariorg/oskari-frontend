@@ -1,3 +1,3 @@
 # WFSSetFilter
 
-Set WFS filter
+Notifies that a GeoJSON geometry filter has been set
