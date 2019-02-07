@@ -60,6 +60,7 @@ Oskari.clazz.category(
                     const start = Date.now();
                     let diff;
                     let seconds;
+                    const interval = setInterval(timer, 1000);
                     function timer () {
                         diff = expireIn - (((Date.now() - start) / 1000) | 0);
                         seconds = (diff % 60) | 0;
@@ -77,7 +78,6 @@ Oskari.clazz.category(
                             popup.setContent(notifyMessage + '<br />' + locale('session.expiring.expires', {expires: seconds}));
                         }
                     }
-                    let interval = setInterval(timer, 1000);
                 }
             };
         }
