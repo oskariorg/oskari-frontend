@@ -1,1 +1,0 @@
-# DrawPlugin.GetGeometryRequest

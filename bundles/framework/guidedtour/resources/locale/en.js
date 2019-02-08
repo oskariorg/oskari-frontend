@@ -17,7 +17,7 @@ Oskari.registerLocalization(
         },
         "page1": {
             "title": "Welcome",
-            "message": "Are you first time here? Our quick guide will help you to get started."
+            "message": "Are you here for the first time? Our quick guide will help you to get started."
         }
     }
 });
