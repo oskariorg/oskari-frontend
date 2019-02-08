@@ -7,7 +7,9 @@ Oskari.registerLocalization(
             "expiring": {
                 "title": "Din session håller på att gå ut",
                 "message": "Din session håller på att gå ut. Klicka {extend} för att förbli inloggad.",
-                "extend": "Fortsätt sessionen"
+                "extend": "Fortsätt sessionen",
+                "logout": "Logga ut",
+                "expires": "Sessionen löper ut om {expires} sekunder."
             },
             "expired": {
                 "title": "Din session har gått ut",
