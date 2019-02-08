@@ -518,6 +518,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                 var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(tool);
                 sb.notifyAll(event);
             });
+
+            // fix layer order after changing from/to publisher
+            setTimeout(() => {
+                sb.findRegisteredModuleInstance('MainMapModule').ensureLayerOrder();
+            }, 200);
         },
 
         /**

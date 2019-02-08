@@ -293,14 +293,10 @@ Oskari.clazz.define(
                 this._isInLayerToolsEditMode = event.isInMode();
             },
             AfterRearrangeSelectedMapLayerEvent: function (event) {
-                this.afterRearrangeSelectedMapLayerEvent();
+                this.ensureLayerOrder();
             },
             MapSizeChangedEvent: function (evt) {
                 this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
-            },
-            UIChangeEvent: function (evt) {
-                // fix layer order after changing from/to publisher
-                setTimeout(() => this.afterRearrangeSelectedMapLayerEvent(), 200);
             },
             'Toolbar.ToolbarLoadedEvent': function () {
                 this.startLazyPlugins();
@@ -2308,13 +2304,13 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method afterRearrangeSelectedMapLayerEvent
+         * @method ensureLayerOrder
          * @private
-         * Handles AfterRearrangeSelectedMapLayerEvent.
+         * Handles ensureLayerOrder.
          * Changes the layer order in Openlayers to match the selected layers list in
          * Oskari.
          */
-        afterRearrangeSelectedMapLayerEvent: function () {
+        ensureLayerOrder: function () {
             var me = this;
             var layers = this.getSandbox().findAllSelectedMapLayers();
             var layerIndex = 0;
