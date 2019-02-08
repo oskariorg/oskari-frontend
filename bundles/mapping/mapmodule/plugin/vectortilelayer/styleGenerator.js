@@ -36,7 +36,7 @@ export default function styleGenerator (styleFactory, styleDef, hoverOptions, ho
                     style: styleFactory(Object.assign({}, featureStyle, optionalDef))
                 };
                 if (hoverStyle) {
-                    const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, hoverStyle) : hoverStyle;
+                    const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, optionalDef, hoverStyle) : hoverStyle;
                     optional.hoverStyle = styleFactory(hoverDef);
                 }
                 return optional;

@@ -858,7 +858,7 @@ export default class MapModule extends AbstractMapModule {
         var style = jQuery.extend(true, {}, styleDef);
         var olStyle = {};
         if (Oskari.util.keyExists(style, 'fill.color')) {
-            var color = style.fill.color;
+            var color = style.fill.color ? style.fill.color : 'rgba(0,0,0,0)';
             if (style.effect) {
                 switch (style.effect) {
                 case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
@@ -905,25 +905,49 @@ export default class MapModule extends AbstractMapModule {
      */
     __getStrokeStyle (styleDef) {
         var stroke = {};
-        if (styleDef.stroke.width === 0) {
+        let strokeDef = styleDef.stroke.area ? styleDef.stroke.area : styleDef.stroke;
+        let { width, color, lineDash, lineCap } = strokeDef;
+
+        if (width === 0) {
             return null;
         }
-        if (styleDef.stroke.color) {
-            stroke.color = styleDef.stroke.color;
+        if (color) {
+            stroke.color = color;
         }
-
-        if (styleDef.stroke.width) {
-            stroke.width = styleDef.stroke.width;
+        if (width) {
+            stroke.width = width;
         }
-        if (styleDef.stroke.lineDash) {
-            if (_.isArray(styleDef.stroke.lineDash)) {
-                stroke.lineDash = styleDef.stroke.lineDash;
+        if (lineDash) {
+            if (Array.isArray(lineDash)) {
+                stroke.lineDash = lineDash;
             } else {
-                stroke.lineDash = [styleDef.stroke.lineDash];
+                const getDash = (segment, gap) => [segment, gap + (width || 0)];
+                switch (lineDash) {
+                case 'dash':
+                    stroke.lineDash = getDash(5, 4);
+                    break;
+                case 'dot':
+                    stroke.lineDash = getDash(1, 1);
+                    break;
+                case 'dashdot':
+                    stroke.lineDash = getDash(5, 1).concat(getDash(1, 1));
+                    break;
+                case 'longdash':
+                    stroke.lineDash = getDash(10, 4);
+                    break;
+                case 'longdashdot':
+                    stroke.lineDash = getDash(10, 1).concat(getDash(1, 1));
+                    break;
+                case 'solid':
+                    stroke.lineDash = [];
+                    break;
+                default: stroke.lineDash = [lineDash];
+                }
             }
+            stroke.lineDashOffset = 0;
         }
-        if (styleDef.stroke.lineCap) {
-            stroke.lineCap = styleDef.stroke.lineCap;
+        if (lineCap) {
+            stroke.lineCap = lineCap;
         }
         return new olStyleStroke(stroke);
     }

@@ -14,6 +14,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             this.__name = 'WfsMvtLayerPlugin';
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this._log = Oskari.log('WfsMvtLayerPlugin');
+            this._visualizationForm = null;
+            this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
             this.layertype = 'wfs';
             // mvt only support numeric IDs and WFS-layers often have other characters in ID as well
             // fixes highlight on features spread to multiple tiles by using a generated _oid for "combining" features
@@ -27,6 +29,10 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
 
             sandbox.registerService(this.WFSLayerService);
             this.reqEventHandler = new ReqEventHandler(sandbox);
+
+            this._visualizationForm = Oskari.clazz.create(
+                'Oskari.userinterface.component.VisualizationForm'
+            );
         }
         _createPluginEventHandlers () {
             return Object.assign(super._createPluginEventHandlers(), this.reqEventHandler.createEventHandlers(this));
@@ -34,6 +40,19 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
         _createRequestHandlers () {
             return this.reqEventHandler.createRequestHandlers(this);
         }
+
+        getCustomStyleEditorForm (layer) {
+            const customStyle = layer.getCustomStyle();
+            this._visualizationForm.setOskariStyleValues(customStyle);
+            return this._visualizationForm.getForm();
+        }
+
+        applyEditorStyle (layer) {
+            const style = this._visualizationForm.getOskariStyle();
+            layer.setCustomStyle(style);
+            layer.selectStyle('oskari_custom');
+        }
+
         /**
          * @method findLayerByOLLayer
          * @param {ol/layer/Layer} olLayer OpenLayers layer impl

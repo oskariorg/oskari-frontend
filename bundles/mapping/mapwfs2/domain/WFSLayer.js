@@ -273,6 +273,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             return this._styles;
         },
         /**
+         * @method getStyleDef
+         * @param {String} styleName
+         * @return {Object}
+         */
+        getStyleDef (styleName) {
+            if (styleName === 'oskari_custom') {
+                return {[this._layerName]: {featureStyle: this.getCustomStyle()}};
+            }
+            if (this._options.styles) {
+                return this._options.styles[styleName];
+            }
+        },
+        /**
          * @method setWMSLayerId
          * @param {String} id
          * Unique identifier for map layer used to reference the WMS layer,
