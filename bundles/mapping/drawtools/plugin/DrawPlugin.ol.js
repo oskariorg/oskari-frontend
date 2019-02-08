@@ -554,7 +554,6 @@ Oskari.clazz.define(
             if (showMeasureUI) {
                 data.showMeasureOnMap = showMeasureUI;
             }
-
             if (options.clearCurrent) {
                 me.clearDrawing(id);
             }
@@ -1085,6 +1084,7 @@ Oskari.clazz.define(
             me._modify[me._id].on('modifyend', function () {
                 me._showIntersectionWarning = true;
                 me._mode = '';
+                me.pointerMoveHandler();
                 me._sketch = null;
 
                 // send isFinished when user stops modifying the feature
