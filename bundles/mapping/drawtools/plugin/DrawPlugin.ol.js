@@ -554,15 +554,6 @@ Oskari.clazz.define(
             if (showMeasureUI) {
                 data.showMeasureOnMap = showMeasureUI;
             }
-
-            if (me._sketch && (me.getCurrentDrawShape() === 'Polygon' || me.getCurrentDrawShape() === 'LineString')) {
-                // Update measurement result in tooltip if drawing polygon or linestring
-                // TODO problem occurs when modifying polygon from its original starting point
-                const measurement = me.getCurrentDrawShape() === 'LineString' ? data.length : data.area;
-                const drawMode = me.getCurrentDrawShape() === 'LineString' ? 'line' : 'area';
-                const formattedMeasurement = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
-                jQuery('div.' + me._tooltipClassForMeasure + '.' + me._sketch.getId()).html(formattedMeasurement);
-            }
             if (options.clearCurrent) {
                 me.clearDrawing(id);
             }
@@ -1093,6 +1084,7 @@ Oskari.clazz.define(
             me._modify[me._id].on('modifyend', function () {
                 me._showIntersectionWarning = true;
                 me._mode = '';
+                me.pointerMoveHandler();
                 me._sketch = null;
 
                 // send isFinished when user stops modifying the feature
