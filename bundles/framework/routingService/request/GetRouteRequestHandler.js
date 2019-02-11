@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routeService.request.GetRouteReq
             params.lang = params.lang || Oskari.getLang();
             // Check other required parameters.
             const required = ['srs', 'fromlat', 'fromlon', 'tolat', 'tolon'];
-            const requiredParamMissing = required.find(key => params.hasOwnProperty(key));
+            const requiredParamMissing = required.find(key => !params.hasOwnProperty(key));
             if (requiredParamMissing) {
                 this._notifyInvalidParams(params);
                 return;
