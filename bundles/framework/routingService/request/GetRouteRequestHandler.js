@@ -21,8 +21,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routeService.request.GetRouteReq
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var params = request.getRouteParams();
+            const params = request.getRouteParams();
+            if (!params) {
+                this._notifyInvalidParams();
+                return;
+            }
+            // Set lang parameter when it's not present. Lang is a required parameter.
+            params.lang = params.lang || Oskari.getLang();
+            // Check other required parameters.
+            const required = ['srs', 'fromlat', 'fromlon', 'tolat', 'tolon'];
+            const requiredParamMissing = required.find(key => !params.hasOwnProperty(key));
+            if (requiredParamMissing) {
+                this._notifyInvalidParams(params);
+                return;
+            }
             this.routingService.getRoute(params);
+        },
+
+        _notifyInvalidParams: function (params) {
+            const evt = Oskari.eventBuilder('RouteResultEvent')(false, undefined, undefined, params);
+            Oskari.getSandbox().notifyAll(evt);
         }
     }, {
         /**
