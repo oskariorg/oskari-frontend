@@ -189,6 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
      */
         getRoute: function (params) {
             var me = this;
+            params.lang = params.lang || Oskari.getLang();
 
             jQuery.ajax({
                 data: params,
