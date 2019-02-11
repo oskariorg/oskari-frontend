@@ -169,27 +169,26 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routingService.RoutingServiceBun
         },
 
         /**
-     * @method getRoute
-     * Makes the ajax call to get the route from service
-     * @param {Object} parameters of the route. Possible values are:
-     *                 srs - *required
-     *                 lang - fi/sv/en
-     *                 fromlat - x coordinate of the starting point *required
-     *                 fromlon - y coordinate of the starting point *required
-     *                 tolat - x coordinate of the destination point *required
-     *                 tolon - y coordinate of the destination point *required
-     *                 date - YYYYMMDD
-     *                 time - HHMM
-     *                 timetype - {Boolean} true if is departure time, false if arrival time
-     *                 vialat - x coordinate of the via point
-     *                 vialon - y coordinate of the via point
-     *                 via_time - Minimum time spent at a via_point in minutes
-     *                 zone - Ticket zone
-     *                 transport_types
-     */
+         * @method getRoute
+         * Makes the ajax call to get the route from service
+         * @param {Object} parameters of the route. Possible values are:
+         *                 srs - *required
+         *                 lang - fi/sv/en *required
+         *                 fromlat - x coordinate of the starting point *required
+         *                 fromlon - y coordinate of the starting point *required
+         *                 tolat - x coordinate of the destination point *required
+         *                 tolon - y coordinate of the destination point *required
+         *                 date - YYYYMMDD
+         *                 time - HHMM
+         *                 timetype - {Boolean} true if is departure time, false if arrival time
+         *                 vialat - x coordinate of the via point
+         *                 vialon - y coordinate of the via point
+         *                 via_time - Minimum time spent at a via_point in minutes
+         *                 zone - Ticket zone
+         *                 transport_types
+         */
         getRoute: function (params) {
             var me = this;
-            params.lang = params.lang || Oskari.getLang();
 
             jQuery.ajax({
                 data: params,
