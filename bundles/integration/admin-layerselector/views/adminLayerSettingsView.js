@@ -996,12 +996,15 @@ function (
             var form = me.$el;
             var parseErrors = [];
             var options;
-            var parseOptionQuietly = function (className) {
+            var parseOptionQuietly = function (className, valueOnly) {
                 var element = form.find(className);
                 if (element.length !== 0) {
                     var content = element.val().trim();
                     if (content.length === 0) {
                         return;
+                    }
+                    if (valueOnly) {
+                        return content;
                     }
                     try {
                         return JSON.parse(content);
@@ -1023,7 +1026,8 @@ function (
                 externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles-json'),
                 attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
                 tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
-                hover: parseOptionQuietly('.add-layer-input.layer-options-hover')
+                hover: parseOptionQuietly('.add-layer-input.layer-options-hover'),
+                apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true)
             };
             if (parseErrors.length > 0) {
                 options.errors = parseErrors;
@@ -1039,10 +1043,10 @@ function (
             return options;
         },
         /**
-             * Add layer
-             *
-             * @method addLayer
-             */
+         * Add layer
+         *
+         * @method addLayer
+         */
         addLayer: function (e, callback) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();

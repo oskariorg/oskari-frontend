@@ -1,0 +1,11 @@
+<% var apiKey = (_.isEmpty(model.getOptions()) || !model.getOptions().apiKey) ? "" : model.getOptions().apiKey %>
+<div class="add-layer-record">
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').apiKey %>"><%= instance.getLocalization('admin').apiKey %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <input type="text" id="add-layer-sld-style-sldname" class="add-layer-input long layer-options-apikey" value= "<%=apiKey%>" />
+    </div>
+</div>
+<input type="hidden" id="add-layer-url" required value="https://docs.microsoft.com/en-us/bingmaps/" />
+<input type="hidden" id="add-layer-attributes" />

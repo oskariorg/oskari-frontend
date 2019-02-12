@@ -177,6 +177,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     });
                 }
 
+                let bingMapsPlugin = plugins.find(cur => cur.id === 'Oskari.mapframework.mapmodule.BingMapsLayerPlugin');
+                if (!bingMapsPlugin) {
+                    plugins.push({
+                        id: 'Oskari.mapframework.mapmodule.BingMapsLayerPlugin',
+                        config: {},
+                        state: {}
+                    });
+                }
+
                 for (let i = 0; i < plugins.length; i += 1) {
                     try {
                         plugins[i].instance = Oskari.clazz.create(

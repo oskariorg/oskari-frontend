@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache-taso",
                 "arcgis93": "ArcGISRest-taso",
                 "tiles3d" : "3D Tiles -taso",
+                "bingmaps" : "Bing Maps -taso",
                 "vectortile" : "MVT-taso"
             },
             "confirmDeleteStyle": "Tyyli poistetaan. Haluatko jatkaa?",
@@ -91,7 +92,8 @@ Oskari.registerLocalization(
             "getInfo": "Hae tiedot",
             "editWfs": "Muokkaa WFS-tietoja",
             "options": "Options JSON",
-            "mvtAttributions": "Attribuutiot",
+            "apiKey": "Api key",
+            "mvtAttributions": "Lähdeviitteet",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Tiilimatriisi",
             "mvtTileGridDesc": "JSON \n{\n  \"origin\": [-548576, 8388608],\n  \"resolutions\": [8192, ..., 0.25],\n  \"tileSize\": [256, 256]\n}",
