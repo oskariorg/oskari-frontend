@@ -3,9 +3,8 @@ import olView from 'ol/View';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
-import OLCesium from 'ol-cesium';
+import OLCesium from 'olcs/OLCesium';
 import MapModuleOl from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
-import 'ol-cesium/css/olcs.css';
 
 const TERRAIN_SERVICE_URL = 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/';
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
@@ -31,7 +30,10 @@ class MapModuleOlCesium extends MapModuleOl {
         // by making a MapMoveRequest in application startup
         var controls = olControlDefaults({
             zoom: false,
-            attribution: false,
+            attribution: true,
+            attributionOptions: {
+                collapsible: false
+            },
             rotate: false
         });
 
@@ -58,17 +60,21 @@ class MapModuleOlCesium extends MapModuleOl {
         me._setupMapEvents(map);
 
         var time = Cesium.JulianDate.fromIso8601('2017-07-11T12:00:00Z');
+        const creditContainer = document.createElement('div');
+        creditContainer.className = 'cesium-credit-container';
         this._map3d = new OLCesium({
             map: map,
             time: () => time,
             sceneOptions: {
-                showCredit: false,
+                showCredit: true,
+                creditContainer,
                 shadows: true,
                 contextOptions: {
                     allowTextureFilterAnisotropic: false
                 }
             }
         });
+        this._map3d.container_.appendChild(creditContainer);
 
         var scene = this._map3d.getCesiumScene();
         scene.shadowMap.darkness = 0.7;
