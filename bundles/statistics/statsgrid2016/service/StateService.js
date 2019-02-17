@@ -23,10 +23,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 name: 'Blues',
                 type: 'seq',
                 mode: 'discontinuous',
-                reverseColors: false
+                reverseColors: false,
+                mapStyle: 'chloropeth',
+                transparency: 100,
+                min: 10,
+                max: 60,
+                showValues: false,
+                fractionDigits: 0
             }
         };
         this._timers = {};
+        this.classificationEnabled = true;
+        Oskari.makeObservable(this);
     }, {
         __name: 'StatsGrid.StateService',
         __qname: 'Oskari.statistics.statsgrid.StateService',
@@ -36,6 +44,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         getName: function () {
             return this.__name;
+        },
+        isClassificationEnabled: function () {
+            return this.classificationEnabled;
+        },
+        enableClassification: function (enable) {
+            this.classificationEnabled = !!enable;
+            this.trigger('ClassificationContainerChange');
         },
         /**
          * Resets the current state and sends events about the changes.
@@ -131,6 +146,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 if (!suppressEvent && eventBuilder) {
                     this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
                     me.setActiveIndicator(indicatorHash);
+                }
+            }
+        },
+        updateActiveClassification: function (key, value) {
+            const indicator = this.getActiveIndicator();
+            if (indicator) {
+                indicator.classification[key] = value;
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+                if (eventBuilder) {
+                    this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                }
+            }
+        },
+        updateActiveClassificationObj: function (valueObj) {
+            const indicator = this.getActiveIndicator();
+            if (indicator) {
+                Object.keys(valueObj).forEach(key => {
+                    indicator.classification[key] = valueObj[key];
+                });
+                const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+                if (eventBuilder) {
+                    this.sandbox.notifyAll(eventBuilder(indicator.classification));
                 }
             }
         },
