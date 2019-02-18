@@ -567,8 +567,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         changeMapMarkerVisibility: function (visible, markerId) {
             var key;
-            // Check hiding for wanted marker
-            if (!visible && markerId) {
+            if (!visible && markerId) { // Check hiding for wanted marker
                 if (this._markers[markerId]) {
                     this._unVisibleMarkers[markerId] = _.cloneDeep(this._markers[markerId]);
                     // remove if found
@@ -576,9 +575,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     this.removeMarkers(true, markerId, true);
                     delete this._markers[markerId];
                 }
-            }
-            // Check hiding for all markers
-            else if (!visible) {
+            } else if (!visible) { // Check hiding for all markers
                 for (key in this._markers) {
                     this._unVisibleMarkers[key] = _.cloneDeep(this._markers[key]);
                     // remove if found
@@ -586,9 +583,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     this.removeMarkers(true, key, true);
                     delete this._markers[key];
                 }
-            }
-            // Check showing for wanted marker
-            else if (visible && markerId) {
+            } else if (markerId) { // Check showing for wanted marker
                 if (this._unVisibleMarkers[markerId]) {
                     this._markers[markerId] = _.cloneDeep(this._unVisibleMarkers[markerId]);
                     // remove if found
@@ -596,9 +591,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     this.addMapMarker(this._markers[markerId], markerId, true);
                     delete this._unVisibleMarkers[markerId];
                 }
-            }
-            // Check showing for all markers
-            else if (visible) {
+            } else { // Check showing for all markers
                 for (key in this._unVisibleMarkers) {
                     this._markers[key] = _.cloneDeep(this._unVisibleMarkers[key]);
                     // remove if found
