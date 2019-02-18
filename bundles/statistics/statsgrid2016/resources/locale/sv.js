@@ -138,7 +138,7 @@ Oskari.registerLocalization({
                 'min': 'Minimum',
                 'max': 'Maximum',
                 'color': 'Färg',
-                'transparency': 'Genomskinlighet',
+                'transparency': 'Opacitet',
                 'showValues': 'Visa värden',
                 'fractionDigits': 'Decimaltal'
             }
