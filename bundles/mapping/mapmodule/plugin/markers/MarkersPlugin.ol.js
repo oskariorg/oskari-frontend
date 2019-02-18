@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         _startPluginImpl: function () {
             var me = this;
 
-            this.__layer = me._createMapMarkerLayer();
+            this.__layer = this.__layer ? this.__layer : me._createMapMarkerLayer();
 
             var loc = me.getLocalization();
             me.dialog = Oskari.clazz.create(
