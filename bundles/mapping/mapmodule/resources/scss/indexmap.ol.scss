@@ -1,4 +1,8 @@
 $toggleSize: 46px;
+$lightBgColor: rgba(255,255,255,0.9);
+$darkBgColor: rgba(20,20,20,0.8);
+$darkIcon: url("../images/roundworld_dark.svg");
+$lightIcon: url("../images/roundworld_light.svg");
 
 div.mapplugin.indexmap {
     text-align: left;
@@ -17,18 +21,82 @@ div.mapplugin.indexmap {
         margin-bottom: -$toggleSize;
     }
 
-    .indexmapToggle {
+    div.icon {
         width: $toggleSize !important;
         height: $toggleSize !important;
-        cursor: default;
-        background: url('../images/component-indexmap.png') 0px 0px !important;
+    }
+
+    .indexmapToggle {
+        height: $toggleSize !important;
+        cursor: pointer;
+        overflow: hidden;
+
         display: inline-block;
         position: relative;
+        border-radius: 50%;
 
-        &:hover {
-            background: url('../images/component-indexmap_hover.png') !important;
+        /* default and rounded-dark theme */
+        &.toolstyle-default, &.toolstyle-rounded-dark {
+            background-color: $darkBgColor;
+        
+            div.icon {
+                background-image: $darkIcon;
+            }
         }
-
+        
+        /* rounded-light theme */
+        &.toolstyle-rounded-light {
+            background-color: $lightBgColor;
+        
+            div.icon {
+                background-image: $lightIcon;
+            }
+        }
+        
+        /* sharp-dark theme */
+        &.toolstyle-sharp-dark {
+            border-radius: 0;
+            background-color: $darkBgColor;
+        
+            div.icon {
+                background-image: $darkIcon;
+            }
+        }
+        
+        /* sharp-light theme */
+        &.toolstyle-sharp-light {
+            border-radius: 0;
+            background-color: $lightBgColor;
+        
+            div.icon {
+                background-image: $lightIcon;
+            }
+        }
+        
+        /* 3d-dark theme */
+        &.toolstyle-3d-dark {
+            border-radius: 5px;
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+            background: -o-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+            background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+            background: gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
+        
+            div.icon {
+                background-image: $darkIcon;
+            }
+        }
+        /* 3d-light theme */
+        &.toolstyle-3d-light {
+            border-radius: 5px;
+            background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+            background: -o-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+            background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+            background: gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
+        
+            div.icon {
+                background-image: $lightIcon;
+            }
+        }
     }
 
     .mapplugin.ol_indexmap {
@@ -104,7 +172,7 @@ div.mapplugin.indexmap {
     /*
     left: -8em;
     bottom: .5em;
-    */;
+    ;*/
     margin-top: 10px;
 }
 .ol-overviewmap.ol-collapsed .ol-overviewmap-map, .ol-overviewmap.ol-uncollapsible button {
