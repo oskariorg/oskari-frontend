@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             clearBtn.setTitle(loc.buttons.clear);
             clearBtn.setHandler(function () {
                 me.removeMarkers();
-                me.stopMarkerAdd();
+                me.stopMarkerAdd(true);
                 me.enableGfi(true);
             });
             controlButtons.push(clearBtn);
@@ -385,7 +385,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
                     };
                     var request = reqBuilder(data);
                     me.getSandbox().request(me.getName(), request);
-                    me.stopMarkerAdd();
+                    me.stopMarkerAdd(true);
                 }
                 me.dotForm.getDialog().close(true);
                 me.enableGfi(true);
