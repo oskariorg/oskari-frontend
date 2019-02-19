@@ -351,7 +351,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
 
         // Run the searches to see if we get data from the service.
-        const batchSize = 2;
+        const batchSize = 1;
         const batches = [];
         let batch;
         searchValues.forEach((search, index) => {
