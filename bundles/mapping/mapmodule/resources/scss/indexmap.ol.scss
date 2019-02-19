@@ -24,6 +24,8 @@ div.mapplugin.indexmap {
     div.icon {
         width: $toggleSize !important;
         height: $toggleSize !important;
+        background-repeat: no-repeat;
+        background-position: 50%;
     }
 
     .indexmapToggle {
@@ -76,6 +78,7 @@ div.mapplugin.indexmap {
         /* 3d-dark theme */
         &.toolstyle-3d-dark {
             border-radius: 5px;
+            background-color: $darkBgColor;
             background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
             background: -o-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
             background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#5A5C5D), to(#3B3A3A), color-stop(.8,#4c4a4d));
@@ -88,6 +91,7 @@ div.mapplugin.indexmap {
         /* 3d-light theme */
         &.toolstyle-3d-light {
             border-radius: 5px;
+            background-color: $lightBgColor;
             background: -webkit-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
             background: -o-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
             background: -moz-gradient(linear, 0% 0%, 0% 100%, from(#FAFCFB), to(#DADBDC), color-stop(.8,#DBDBDB));
