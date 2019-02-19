@@ -122,33 +122,6 @@ div.mapplugin.indexmap {
 
 }
 
-.olControlOverviewMapContainer {
-
-    .olControlOverviewMapElement {
-        padding: 5px !important;
-        background-color: #FFFFFF !important;
-        border-color: #D0D0D0 !important;
-        border-style: solid;
-        border-left-width: 2px;
-        border-top-width: 2px;
-    }
-
-    #OpenLayers_Control_minimizeDiv {
-        position: absolute !important;
-        width: $toggleSize !important;
-        height: $toggleSize !important;
-        right: 0px;
-        bottom: 0px;
-        cursor: default;
-        background: url('../images/component-indexmap_hover.png')  !important;
-        
-    }
-}
-
-.olControlOverviewMapExtentRectangle  {
-    border: 2px dashed #f47729 !important;
-}
-
 /**
   ol3 specific
  */
