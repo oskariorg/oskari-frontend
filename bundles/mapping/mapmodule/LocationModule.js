@@ -13,10 +13,11 @@ function _addCoord (pos) {
 function _updatePath (pos) {
     _addCoord(pos);
     if (_pathJson) {
-        // TODO: update coord
+        // TODO: push pos to pathJson coords.
+        // Now geojson is generated from coords array on update if it's added to map
+        // Also geojson could be added to event
     }
 };
-// TODO: add _getMapmodule ()
 
 /**
  * Tries to get the user location. Signals with an UserLocationEvent and callback with lon and lat params
@@ -66,6 +67,7 @@ export function getUserLocation (successCb, errorCB, options) {
         );
     } else {
         // browser doesn't support
+        sandbox.notifyAll(evtBuilder(null, null, null, errorCodes[2]));
     }
 };
 export function watchUserLocation (successCb, errorCB, options) {
@@ -123,6 +125,7 @@ export function watchUserLocation (successCb, errorCB, options) {
         );
     } else {
         // browser doesn't support
+        sandbox.notifyAll(evtBuilder(null, null, null, errorCodes[2]));
     }
 };
 export function getLocationCoords () {
