@@ -1,17 +1,16 @@
 import olStyleStyle from 'ol/style/Style';
-import {FTR_PROPERTY_ID} from '../../domain/constants';
 
 const invisible = new olStyleStyle();
 
 const isHovered = (feature, hoverState) => {
-    if (hoverState && hoverState.feature) {
-        if (hoverState.propertyId) {
-            return hoverState.propertyId === feature.get(FTR_PROPERTY_ID);
-        } else {
-            return hoverState.feature === feature;
-        }
+    if (!hoverState) {
+        return false;
     }
-    return false;
+    const {feature: hoverFeature, property} = hoverState;
+    if (!hoverFeature || !property) {
+        return false;
+    }
+    return hoverFeature.get(property) === feature.get(property);
 };
 
 export default function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState) {
@@ -37,7 +36,7 @@ export default function styleGenerator (styleFactory, styleDef, hoverOptions, ho
                     style: styleFactory(Object.assign({}, featureStyle, optionalDef))
                 };
                 if (hoverStyle) {
-                    const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, hoverStyle) : hoverStyle;
+                    const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, optionalDef, hoverStyle) : hoverStyle;
                     optional.hoverStyle = styleFactory(hoverDef);
                 }
                 return optional;

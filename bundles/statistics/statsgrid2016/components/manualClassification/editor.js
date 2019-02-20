@@ -29,7 +29,7 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
     const boundsLines = svg.append('g');
     const dragHandles = svg.append('g');
 
-    const histogramGenerator = d3.histogram().thresholds(20);
+    const histogramGenerator = d3.histogram().thresholds(50);
     const histoData = histogramGenerator(indicatorData);
 
     const y = d3.scaleLinear()

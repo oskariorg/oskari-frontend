@@ -13,7 +13,13 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             super(config);
             this.__name = 'WfsMvtLayerPlugin';
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
+            this._log = Oskari.log('WfsMvtLayerPlugin');
+            this._visualizationForm = null;
+            this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
             this.layertype = 'wfs';
+            // mvt only support numeric IDs and WFS-layers often have other characters in ID as well
+            // fixes highlight on features spread to multiple tiles by using a generated _oid for "combining" features
+            this.hoverState.property = '_oid';
         }
         _initImpl () {
             super._initImpl();
@@ -23,6 +29,10 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
 
             sandbox.registerService(this.WFSLayerService);
             this.reqEventHandler = new ReqEventHandler(sandbox);
+
+            this._visualizationForm = Oskari.clazz.create(
+                'Oskari.userinterface.component.VisualizationForm'
+            );
         }
         _createPluginEventHandlers () {
             return Object.assign(super._createPluginEventHandlers(), this.reqEventHandler.createEventHandlers(this));
@@ -30,6 +40,19 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
         _createRequestHandlers () {
             return this.reqEventHandler.createRequestHandlers(this);
         }
+
+        getCustomStyleEditorForm (layer) {
+            const customStyle = layer.getCustomStyle();
+            this._visualizationForm.setOskariStyleValues(customStyle);
+            return this._visualizationForm.getForm();
+        }
+
+        applyEditorStyle (layer) {
+            const style = this._visualizationForm.getOskariStyle();
+            layer.setCustomStyle(style);
+            layer.selectStyle('oskari_custom');
+        }
+
         /**
          * @method findLayerByOLLayer
          * @param {ol/layer/Layer} olLayer OpenLayers layer impl
@@ -111,10 +134,46 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
             const {left, bottom, right, top} = this.getSandbox().getMap().getBbox();
             const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
             const {fields, properties} = getFieldsAndPropsArrays(propsList);
-            layer.setFields(fields);
             layer.setActiveFeatures(properties);
-            this.reqEventHandler.notify('WFSPropertiesEvent', layer, [/** TODO locales */], fields);
-            this.reqEventHandler.notify('WFSFeatureEvent', layer, properties.length ? properties[properties.length - 1] : []);
+            // Update fields and locales only if fields is not empty and it has changed
+            if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {
+                layer.setFields(fields);
+                this.setLayerLocales(layer);
+            }
+            this.reqEventHandler.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
+        }
+        /**
+         * @method setLayerLocales
+         * Requests and sets locales for layer's fields.
+         * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
+         */
+        setLayerLocales (layer) {
+            if (!layer || layer.getLocales().length === layer.getFields().length) {
+                return;
+            }
+            const onSuccess = localized => {
+                if (!localized) {
+                    return;
+                }
+                const locales = [];
+                // Set locales in the same order as fields
+                layer.getFields().forEach(field => locales.push(localized[field] ? localized[field] : field));
+                layer.setLocales(locales);
+                this.reqEventHandler.notify('WFSPropertiesEvent', layer, locales, layer.getFields());
+            };
+            jQuery.ajax({
+                type: 'GET',
+                dataType: 'json',
+                data: {
+                    id: layer.getId(),
+                    lang: Oskari.getLang()
+                },
+                url: Oskari.urls.getRoute('GetLocalizedPropertyNames'),
+                success: onSuccess,
+                error: () => {
+                    this._log.warn('Error getting localized property names for wfs layer ' + layer.getId());
+                }
+            });
         }
         /**
          * Returns source corresponding to given layer

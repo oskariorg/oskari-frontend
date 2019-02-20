@@ -43,12 +43,12 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
 
             this._map.on('pointerdrag', function (e) {
                 degrees = me.getRotation();
-                me.rotateIcon(degrees);
                 if (degrees !== me.getDegrees()) {
+                    me.rotateIcon(degrees);
+                    me.setDegrees(degrees);
                     var event = eventBuilder(degrees);
                     me._sandbox.notifyAll(event);
                 }
-                me.setDegrees(degrees);
             });
         },
         setDegrees: function (degree) {
@@ -97,15 +97,14 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             var rot = (typeof deg === 'number') ? deg / 57.3 : 0;
             // if deg is number use it for degrees otherwise use 0
             var degrees = (typeof deg === 'number') ? deg : 0;
-
             this.rotateIcon(degrees);
             this._map.getView().setRotation(rot);
             this.setDegrees(degrees);
         },
         getRotation: function () {
             var rot = this._map.getView().getRotation();
-            // radians to degrees
-            var deg = rot * 57.3;
+            // radians to degrees with one decimal
+            var deg = Math.round(rot * 573) / 10;
             return deg;
         },
         /**

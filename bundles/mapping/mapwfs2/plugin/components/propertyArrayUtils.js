@@ -1,4 +1,5 @@
 export const WFS_ID_KEY = '_oid';
+export const WFS_FTR_ID_KEY = '__fid';
 
 const hiddenProps = new Set(['layer', WFS_ID_KEY]);
 

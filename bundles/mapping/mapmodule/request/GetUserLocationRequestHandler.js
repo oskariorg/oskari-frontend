@@ -14,12 +14,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
         var me = this;
         var mapmodule = this.mapmodule;
         var opts = request.getOptions() || {};
-
         var succesCb = function (lon, lat, accuracy) {
             // move map to coordinates
             if (request.getCenterMap()) {
-                mapmodule.centerMap({ lon: lon, lat: lat }, 6);
-                if (opts.enableHighAccuracy === true) {
+                const zoom = opts.zoomLevel !== undefined ? opts.zoomLevel : 6;
+                mapmodule.centerMap({ lon: lon, lat: lat }, zoom);
+                if (opts.enableHighAccuracy === true && opts.zoomLevel === undefined) {
                     mapmodule.zoomToFitMeters(accuracy * 4);
                 }
             }

@@ -88,6 +88,8 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                 icon.attr('title', tooltips['type-wfs']);
             } else if (layer.isLayerOfType('VECTOR')) {
                 icon.attr('title', tooltips['type-wms']);
+            } else if (layer.isLayerOfType('BINGMAPS')) {
+                icon.attr('title', tooltips['type-wms']);
             }
             if (layer.getMetadataIdentifier()) {
                 tools.find('div.layer-info').addClass('icon-info');

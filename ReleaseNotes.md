@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.50.0
+
+Updated CometD client library to work with updated server components.
+
 ## 1.49.0
 
 For a full list of changes see:
@@ -7,10 +11,10 @@ https://github.com/oskariorg/oskari-frontend/milestone/14?closed=1
 
 ### Build script
 
-The build script has now been completely migrated to Webpack and the old tools-scripts have been removed. Changes for the new script from 1.48.0 is that builds no longer point to a single minifierAppsetup.json but a directory hosting apps that can have the json-file OR main.js file as it's a common use case to have at least one app for the geoportal and another for the embedded maps. 
+The build script has now been completely migrated to Webpack and the old tools-scripts have been removed. Changes for the new script from 1.48.0 is that builds no longer point to a single minifierAppsetup.json but a directory hosting apps that can have the json-file OR main.js file as it's a common use case to have at least one app for the geoportal and another for the embedded maps.
 The parameter for builds changed from "env.appdef=applications/application/guest/minifierAppSetup.json" in 1.48.0
  to "env.appdef=applications/application" in 1.49.0. When the build is run it also generates a "main.js" file based on the minifierAppsetup.json. You can remove the json-file after running the build for the
- first time and start using the main.js as the main entrypoint for the app. 
+ first time and start using the main.js as the main entrypoint for the app.
 
  Bundles can now be loaded "lazily" meaning "lazy" bundles are not part of oskari.min.js but can be loaded and started as usual when referenced. This can be used to minimize the initial JavaScript payload users have to download. Bundles that aren't used by all the users like admin bundles should be included in the app as "lazy".
 
@@ -26,7 +30,7 @@ The parameter for builds changed from "env.appdef=applications/application/guest
 
 ### Code quality
 
-The code base has been formatted with ESLint configured settings. Any pull requests made in GitHub are now automatically checked against these rules using Travis CI. You can also check the settings by running "npm run test". 
+The code base has been formatted with ESLint configured settings. Any pull requests made in GitHub are now automatically checked against these rules using Travis CI. You can also check the settings by running "npm run test".
 
 Most of the calls to deprecated functions inside the oskari-frontend code have been updated to use the new versions of the functions so the developer console should only have warning for customized apps using deprecated functions. Note that the deprecated functions will be removed in a future version and you should update your apps to match the changes (see the browsers developer console for details). If you see no warnings it's all good for your app.
 
@@ -54,7 +58,7 @@ Also removed CSS-files that had corresponding SCSS files so it's clear which one
 - Some of the code like the mapmodule implementation has started migrating towards ES6-modules.
 - User geolocation can no longer move the map outside the map extent
 - Color selection for myplaces etc user generated styles now have a new color picker component
-- The info icon placement has been modified in printout and publisher to match the UI guide 
+- The info icon placement has been modified in printout and publisher to match the UI guide
 - MapLayerService.registerLayerModel() now supports functions/constructors as modelbuilders in addition to name to pass to Oskari.clazz.create()
 - CSS-styles have been streamlined and references to missing resources have been removed.
 - Publisher theme selection and the theme on map are now in sync. Previously you mnight have gotten the geoportal style on preview, but end up with the default style embedded map. This happened if the geoportal had customized style/didn't have the default style
@@ -64,7 +68,7 @@ Also removed CSS-files that had corresponding SCSS files so it's clear which one
 - Metadata presentation fixes and error handling
 - Fix for customized styles when user draws on the map
 - Link tool now allows user to select if guided tour should be skipped on link and if center marker should be shown
-- Toolbars tool selection color now works better on themes with light background 
+- Toolbars tool selection color now works better on themes with light background
 - Fixed https://github.com/oskariorg/oskari-docs/issues/79
 
 

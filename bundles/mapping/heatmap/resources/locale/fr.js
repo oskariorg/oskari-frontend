@@ -3,16 +3,16 @@ Oskari.registerLocalization(
     "lang": "fr",
     "key": "heatmap",
     "value": {
-        "tool_label": "Heatmap",
-        "tool_label_settings": "Settings",
+        "tool_label": "Carte thermique",
+        "tool_label_settings": "Réglages",
         "dialog": {
-            "title": "Heatmap settings",
-            "propertyLabel": "Weight property",
-            "radiusLabel": "Radius",
-            "colorThemesLabel": "Color themes",
-            "colorPickerLabel": "Choose colors",
-            "pixelsPerCellLabel": "Pixels per cell",
-            "noneOption": "None"
+            "title": "Réglages de la carte thermique",
+            "propertyLabel": "Propriété du poids",
+            "radiusLabel": "Rayon",
+            "colorThemesLabel": "Thèmes de couleur",
+            "colorPickerLabel": "Choisir les couleurs",
+            "pixelsPerCellLabel": "Pixels par cellule",
+            "noneOption": "Aucun"
         }
     }
 });

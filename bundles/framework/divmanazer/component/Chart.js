@@ -261,9 +261,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @method setColorScale
      */
     setColorScale: function (colors) {
-        this.colorScale = d3.scaleQuantize()
-            .domain([0, this.data.length])
-            .range(colors);
+        this.colorScale = d3.scaleThreshold().domain(colors.bounds).range(colors.values);
     },
     setResizable: function (resizable) {
         this.resizable = resizable;
@@ -366,7 +364,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         bars.append('rect')
             .attr('class', 'bar')
             .attr('text-anchor', 'middle')
-            .style('fill', function (d, i) { return me.colorScale(i); })
+            .style('fill', function (d, i) { return me.colorScale(d.value); })
             .attr('y', -8) // 7 is half of 15 height (pixel aligned)
             .attr('x', function (d) { return d.value ? me.x(Math.min(0, d.value)) : 0; })
             .attr('height', 17)
@@ -389,7 +387,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
                 var renderedLength = typeof rendered === 'string' ? rendered.length * 8 : 0; // 8px per char (generous)
                 var fitsInBar = renderedLength < width - 10; // padding of 5px + 5px
                 if (fitsInBar) {
-                    color = Oskari.util.isDarkColor(me.colorScale(i)) ? '#fff' : '#000';
+                    color = Oskari.util.isDarkColor(me.colorScale(d.value)) ? '#fff' : '#000';
                     if (d.value >= 0) {
                         textAnchor = 'end';
                         transformX = '-5px';
@@ -442,7 +440,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
 
         this.svg.append('path')
             .attr('d', linegen(this.data))
-            .attr('stroke', function (d, i) { return me.colorScale(i); })
+            .attr('stroke', function (d, i) { return me.colorScale(d.value); })
             .attr('stroke-width', 2)
             .attr('fill', 'none');
 

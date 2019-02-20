@@ -38,7 +38,10 @@ Parameters for options-object:
   <td> addToMap</td><td> Boolean</td><td> If true adds user location to the map. The location (point) is added to vector layer with circle (polygon) expressing the location accuracy.</td><td> false</td>
 </tr>
 <tr>
-  <td> enableHighAccuracy</td><td> Boolean</td><td> true to receive the best possible location results</td><td> false</td>
+  <td> zoomLevel</td><td> Number</td><td> used with centerMap to get desired zoom level. Note that overrides accuracy based zooming (enableHighAccuracy). </td><td> 6</td>
+</tr>
+<tr>
+  <td> enableHighAccuracy</td><td> Boolean</td><td> true to receive the best possible location results. If used with centerMap then zoom level is adjusted according to location accuracy. </td><td> false</td>
 </tr>
 <tr>
   <td> timeout</td><td> Number</td><td> Maximum length of time (in milliseconds) the device is allowed to take in order to return a position</td><td> 6000</td>

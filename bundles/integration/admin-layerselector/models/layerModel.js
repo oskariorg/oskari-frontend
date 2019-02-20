@@ -431,6 +431,36 @@
                 });
 
                 return langList;
+            },
+
+            /**
+             * @method getMVTStylesWithoutSrcLayer
+             * Styles in MVT layer options contain data source layer names as filtering keys.
+             * This function returns styles without the layer child.
+             * Useful when there is only one known data source layer for the styles.
+             * @return {Object} styles object without layer name filters for easier JSON editing.
+             */
+            getMVTStylesWithoutSrcLayer: function () {
+                var options = this.getOptions();
+                if (!options || !options.styles) {
+                    return;
+                }
+                // deep clone styles
+                var styles = JSON.parse(JSON.stringify(options.styles));
+                // remove mvt src layer key
+                Object.keys(styles).forEach(function (styleKey) {
+                    var style = styles[styleKey];
+                    Object.keys(style).forEach(function (layerKey) {
+                        var layer = style[layerKey];
+                        Object.keys(layer).forEach(function (styleDefKey) {
+                            var styleDef = layer[styleDefKey];
+                            style[styleDefKey] = styleDef;
+                            delete style[layerKey];
+                            styles[styleKey] = style;
+                        });
+                    });
+                });
+                return styles;
             }
         });
     });

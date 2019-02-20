@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
                                 .map((method, i) => `<option value="${method}" ${i === 0 ? 'selected="selected"' : ''}>${this.locale('classify.methods.' + method)}</option>`).join() +
                         '</select>' +
                     '</div>' +
-                    `<div class="classification-manual"><input class="oskari-formcomponent oskari-button" type="button" value="${this.locale('classify.editClassifyTitle')}"></div>` +
+                    `<div class="classification-manual"><input class="oskari-formcomponent oskari-button" type="button" value="${this.locale('classify.edit.title')}"></div>` +
                 '</div>' +
 
                 // classes
@@ -181,6 +181,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         var service = me.service;
         var state = service.getStateService();
+        var seriesService = service.getSeriesService();
         var ind = state.getActiveIndicator();
         if (!ind) {
             // no active indicator
@@ -209,6 +210,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
         }
         me._element.find('select.amount-class').val(classification.count);
 
+        const updateClassCountOptions = data => {
+            var validOptions = me.classificationService.getAvailableOptions(data);
+            if (validOptions.maxCount) {
+                var options = amount.find('option');
+                options.each(function (index, opt) {
+                    opt = jQuery(opt);
+                    if (opt.val() > validOptions.maxCount) {
+                        opt.prop('disabled', true);
+                    }
+                });
+            }
+        };
+
         var mode = me._element.find('select.classify-mode');
         mode.val(classification.mode);
         me._element.find('select.color-set').val(classification.type);
@@ -228,37 +242,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
 
         me.manualClassificationView = new ManualClassificationView(this.classificationService, service.getColorService(), classification);
 
-        // disable invalid choices
-        service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
-            if (err) {
-                // propably nothing to tell the user at this point. There will be some invalid choices available on the form
-                return;
+        if (ind.series) {
+            const serieStats = seriesService.getSeriesStats(ind.hash);
+            if (serieStats && serieStats.serie) {
+                me.manualClassificationView.setData(serieStats.serie);
+                updateClassCountOptions(serieStats.serie);
             }
-            if (classification.method === 'manual') {
-                me.manualClassificationView.setData(data);
-            }
-
-            var validOptions = me.classificationService.getAvailableOptions(data);
-            if (validOptions.maxCount) {
-                var options = amount.find('option');
-                options.each(function (index, opt) {
-                    opt = jQuery(opt);
-                    if (opt.val() > validOptions.maxCount) {
-                        opt.prop('disabled', true);
-                    }
-                });
-            }
-
             // Discontinuous mode causes trouble with manually set bounds. Causes error if some class gets no hits.
             // Disabling it for data series.
-            var modeOpts = mode.find('option');
-            modeOpts.each(function (index, opt) {
-                opt = jQuery(opt);
-                if (opt.val() === 'discontinuous') {
-                    opt.prop('disabled', ind.series !== undefined);
+            mode.find('option[value="discontinuous"]').prop('disabled', true);
+        } else {
+            service.getIndicatorData(ind.datasource, ind.indicator, ind.selections, ind.series, state.getRegionset(), function (err, data) {
+                if (err) {
+                    // propably nothing to tell the user at this point. There will be some invalid choices available on the form
+                    return;
                 }
+                if (classification.method === 'manual') {
+                    me.manualClassificationView.setData(data);
+                }
+                updateClassCountOptions(data);
             });
-        });
+        };
+
         if (mapStyle !== 'choropleth') {
             var min = classification.min || me._rangeSlider.defaultValues[0];
             var max = classification.max || me._rangeSlider.defaultValues[1];
@@ -421,6 +426,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.EditClassification', function (
             updateClassification();
         });
         me._element.find('.classification-manual input').on('click', function () {
+            me.service.getSeriesService().setAnimating(false);
             me.manualClassificationView.openEditor(updateClassification);
         });
         return me._element;

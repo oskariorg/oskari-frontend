@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
             var formatter = Oskari.getNumberFormatter(fractionDigits);
             var chartOpts = {
-                colors: me.getColorScale(),
+                colors: me.getColorScale(data),
                 valueRenderer: function (val) {
                     if (typeof val !== 'number') {
                         return null;
@@ -93,21 +93,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
 
             if (me._chartInstance.isResizable()) {
                 var dataCharts = jQuery(el).closest('.oskari-datacharts');
-                var additionalWidthOffset = 0;
                 if (options && options.height) {
                     // height for flyout toolbar, defaults to 57px (.oskari-flyouttoolbar height)
                     const heightOffset = jQuery(el).closest('.oskari-flyout').find('.oskari-flyouttoolbar:first').height() || 57;
                     jQuery(el).closest('.oskari-flyoutcontentcontainer').css('max-height', 'none').height(options.height - heightOffset);
                 }
-                if (dataCharts.get(0).scrollHeight > dataCharts.innerHeight()) {
-                    additionalWidthOffset = 17; // 17px for scroll bar
-                }
                 if (options && options.width) {
-                    // helps to calculate container width for chart, defaults to 16px + 16px padding + 17px for scroll bar
+                    // helps to calculate container width for chart, defaults to 16px + 16px padding
                     const widthOffset = (parseInt(dataCharts.css('padding-left').replace(/[^-\d.]/g, '')) +
-                        parseInt(dataCharts.css('padding-right').replace(/[^-\d.]/g, ''))) +
-                        additionalWidthOffset || 49;
+                        parseInt(dataCharts.css('padding-right').replace(/[^-\d.]/g, ''))) || 32;
                     chartOpts.width = options.width - widthOffset;
+                    dataCharts.width(options.width - widthOffset);
                 }
             }
 
@@ -191,7 +187,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             response.data.forEach(function (dataItem) {
                 indicatorData.push({
                     name: dataItem.name,
-                    value: dataItem.values[indicator.hash]
+                    value: dataItem.values[indicator.hash],
+                    id: dataItem.id
                 });
             });
             callback(indicatorData);
@@ -247,15 +244,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
      * gets the color scale of the mapselection
      * @return colors[] containing colors
      */
-    getColorScale: function () {
-        /*
+    getColorScale: function (data) {
+        var me = this;
+        // Format data for Oskari.statistics.statsgrid.ClassificationService.getClassification
+        var numericData = {};
+        data.forEach(function (entry) {
+            numericData[entry.id] = entry.value;
+        });
         var stateService = this.service.getStateService();
         var activeIndicator = stateService.getActiveIndicator();
         var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
+        var classification = me.service.getClassificationService().getClassification(numericData, classificationOpts);
         var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        */
-        // TODO use ranges from classification to map colors
-        return ['#555', '#555'];
+        return classification.maxBounds && colors ? {bounds: classification.maxBounds, values: colors} : {bounds: [], values: ['#555', '#555']};
     },
     events: function () {
         var me = this;

@@ -32,7 +32,8 @@ Oskari.clazz.define(
             if (!clientVer) {
                 return false;
             }
-            return clientVer.indexOf('2.0.') === 0;
+            const [major, minor, patch] = clientVer.split('.').map(p => parseInt(p));
+            return major === 2 && minor <= 1 && patch >= 0;
         },
         /**
          * @public @method start

@@ -151,13 +151,17 @@ Oskari.clazz.define(
             this._requestLocation();
         },
         _requestLocation: function (timeout, highAccuracy) {
-            timeout = timeout || 2000;
-            highAccuracy = highAccuracy !== false;
-            Oskari.getSandbox().postRequestByName('MyLocationPlugin.GetUserLocationRequest', [true, {
-                enableHighAccuracy: highAccuracy,
-                // addToMap: highAccuracy, // TODO how user can clear location from map??
-                timeout: timeout
-            }]);
+            const conf = this.getConfig();
+            const options = {
+                timeout: timeout || 2000,
+                enableHighAccuracy: highAccuracy !== false
+                // addToMap: highAccuracy !== false // or always true
+                // TODO how user can clear location from map??
+            };
+            if (conf.zoom !== undefined) {
+                options.zoomLevel = conf.zoom;
+            }
+            Oskari.getSandbox().postRequestByName('MyLocationPlugin.GetUserLocationRequest', [true, options]);
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode

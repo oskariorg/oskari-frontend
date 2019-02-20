@@ -15,6 +15,7 @@
         this.colors = Oskari.clazz.create('Oskari.statistics.statsgrid.ColorService');
         this.classification = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationService', this.colors);
         this.error = Oskari.clazz.create('Oskari.statistics.statsgrid.ErrorService', sandbox);
+        this.missingRegionsetNamesCount = 0;
 
         // pushed from instance
         this.datasources = [];
@@ -105,7 +106,7 @@
         },
         getUILabels: function (indicator, callback) {
             var me = this;
-            var locale = this.locale;
+            var selectionValues = this.locale('panels.newSearch.selectionValues');
             if (typeof callback !== 'function') {
                 // log error message
                 return;
@@ -138,7 +139,7 @@
                                 name = value.id || value;
                                 // try finding localization for the param
                                 // FIXME: get rid of this -> have server give ui labels
-                                name = (locale[selector.id] && locale[selector.id][name]) ? locale[selector.id][name] : name;
+                                name = (selectionValues[selector.id] && selectionValues[selector.id][name]) ? selectionValues[selector.id][name] : name;
                             }
                             uiLabels.push({
                                 selector: selector.id,
@@ -200,6 +201,9 @@
                     me.addRegionset(item);
                 });
                 return;
+            }
+            if (!regionset.name) {
+                regionset.name = `${this.locale('missing.regionsetName')} ${++this.missingRegionsetNamesCount}`;
             }
             if (regionset.id && regionset.name) {
                 this.regionsets.push(regionset);

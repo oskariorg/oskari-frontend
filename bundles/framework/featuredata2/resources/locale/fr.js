@@ -10,7 +10,8 @@ Oskari.registerLocalization(
         "nodata": "Les couches cartographiques sélectionnées ne contiennent aucune donnée d'entité",
         "featureNameAll": "Types de données",
         "errorscale": "Les données d'entités de cette couche cartographique ne peuvent être affichées à ce niveau d’échelle. Veuillez changer le niveau d’échelle sur la barre d’échelle.",
-        "errordata": "Les données d'entités au niveau du serveur contiennent des erreurs. Veuillez mettre à jour la carte en la déplaçant légèrement.",
+        "errordata": "Les données d'entités au niveau du serveur contiennent des erreurs. Veuillez actualiser la carte en la déplaçant légèrement.",
+        "errorNoFields": "La couche cartographique ne possède pas de données de fonctionnalité.",
         "columnSelectorTooltip": "Sélectionnez des colonnes visibles.",
         "featureDataPopup": "Valeurs statistiques",
         "selectionTools": {
@@ -98,6 +99,7 @@ Oskari.registerLocalization(
             "differenceMessage": "La différence de valeurs d'objet ou caractéristique non-autorisé est présentée avec une valeur.",
             "noDataMessage": "Compte  = Nombre d'objets avec des objets ou caractéristiques non autorisés.",
             "noDataCommonMessage": "Il y a des valeurs d'objets ou caractéristiques non-autorisées dans les données."
-        }
+        },
+        "showSelectedFirst": "Afficher l'article sélectionné en premier"
     }
 });

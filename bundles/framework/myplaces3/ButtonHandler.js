@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.ButtonHandler',
              * @method Toolbar.ToolSelectedEvent
              */
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (this.drawMode === event.getToolId() || this.ignoreEvents) {
+                if (this.drawMode === event.getToolId() || this.ignoreEvents || !event.getSticky()) {
                     // do not trigger when placeform is shown
                     return;
                 }

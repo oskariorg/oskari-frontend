@@ -104,9 +104,10 @@ Options object
   </li>
 </ul>
 
-FeatureStyle/optionalStyles object
+FeatureStyle/optionalStyle object
 
-FeatureStyle property tells generic and all features used style. OptionalStyles property you can specify style only wanted features. In both of these are same style constructor but in OptionalStyle you need also tell feature where style is used:
+FeatureStyle property defines a generic style used for all the features. With optionalStyles property you can specify style for certain features only. The constructor is the same for both of these styles but in optionalStyle you also need to specify the feature it is used for:
+
 ```javascript
 property: {
   key: 'id',
@@ -121,44 +122,8 @@ property: {
     <b>value</b> - feature property value what need match to use optianal style for feature.
   </li>
 </ul>
-Both supported style object:
-```javascript
-"featureStyle/optionalStyle": {
-  "fill": { // fill styles
-    "color": "#ff00ff" // fill color
-  },
-  "stroke": { // stroke styles
-    "color": "#ff00ff", // stroke color
-    "width": 3, // stroke width
-    "lineDash": "dot", // line dash, also supported: dash, dashdot, longdash, longdashdot or solid
-    "lineCap": "but" // line cap, also supported: round or square
-  },
-  "text": { // text style
-    "fill": { // text fill style
-      "color": "#0000ff" // fill color
-    },
-    "stroke": { // text stroke style
-      "color": "#ff00ff", // stroke color
-      "width": 4 // stroke width
-    },
-    "font": "bold 12px Arial", // font
-    "textAlign": "top", // text align
-    "offsetX": 12, // text offset x
-    "offsetY": 12, // text offset y
-    "labelText": "example", // label text
-    "labelProperty": "propertyName" // read label from feature property
-  },
-  "image": { // image style
-    "shape": "marker.png", // external icon
-    "size": 3, // Oskari icon size.
-    "sizePx": 20, // Exact icon px size. Used if 'size' not defined.
-    "offsetX": 0, // image offset x
-    "offsetY": 0, // image offset y
-    "opacity": 0.7, // image opacity
-    "radius" 2 // image radius
-  }
-}
-```
+
+See [Oskari JSON style](/documentation/examples/oskari-style) for featureStyle/optionalStyle object definition.
 
 ## Examples
 

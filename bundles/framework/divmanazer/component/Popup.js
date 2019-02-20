@@ -29,15 +29,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         show: function (title, message, buttons) {
             this._closingInProgress = false;
-            var me = this,
-                contentDiv = this.dialog.find('div.content'),
-                actionDiv = this.dialog.find('div.actions'),
-                i,
-                contentHeight,
-                reasonableHeight,
-                focusedButton = -1,
-                screenWidth = window.innerWidth,
-                screenHeight = window.innerHeight;
+            var me = this;
+            var contentDiv = this.dialog.find('div.content');
+            var actionDiv = this.dialog.find('div.actions');
+            var i;
+            var focusedButton = -1;
+            var screenWidth = window.innerWidth;
+            var screenHeight = window.innerHeight;
+
             this.setTitle(title);
             this.setContent(message);
 
@@ -63,16 +62,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 buttons[focusedButton].focus();
             }
 
-            contentHeight = contentDiv.height();
-            reasonableHeight = jQuery(document).height() * 0.6;
-            if (contentHeight > reasonableHeight) {
-                contentDiv.height(reasonableHeight);
-                contentDiv.css('overflow-y', 'auto');
-            }
-
-            // center on screen
-            me.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
-            me.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+            this._setReasonableHeight();
 
             // make popup to visible
             me.dialog.css('opacity', 1);
@@ -89,10 +79,35 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 });
             }
 
+            this._centralize();
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
         },
+
+        /**
+         * @method _setReasonableHeight
+         * Restricts content height to be max 60% of the document's height.
+         */
+        _setReasonableHeight: function () {
+            const contentDiv = this.getJqueryContent();
+            const contentHeight = contentDiv.height();
+            const reasonableHeight = jQuery(document).height() * 0.6;
+            if (contentHeight > reasonableHeight) {
+                contentDiv.height(reasonableHeight);
+                contentDiv.css('overflow-y', 'auto');
+            }
+        },
+
+        /**
+         * @method _centralize
+         * Centers the dialog to it's top left corner location.
+         */
+        _centralize: function () {
+            this.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
+            this.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+        },
+
         /**
          * @method _getMaxHeights
          * Calculates max heights for popup and content.
@@ -440,7 +455,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {HTML/DOM/jQueryObject}
          */
         setContent: function (content) {
-            var contentEl = this.dialog.find('div.content');
+            var contentEl = this.dialog.find('div.popup-body > div.content');
             contentEl.empty();
             contentEl.append(content);
         },
@@ -451,11 +466,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @return {String} dialog content
          */
         getContent: function () {
-            return this.dialog.find('div.content')[0].textContent;
+            return this.dialog.find('div.popup-body > div.content')[0].textContent;
         },
 
         getJqueryContent: function () {
-            return this.dialog.find('div.content');
+            return this.dialog.find('div.popup-body > div.content');
         },
 
         /**

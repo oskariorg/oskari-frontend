@@ -10,6 +10,7 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
         this.plugin = null;
         this._mapmodule = null;
         this._sandbox = null;
+        this.state = undefined;
     }, {
         __name: 'maprotator',
         /**
@@ -41,6 +42,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
             me.createPlugin();
             sandbox.register(me);
             sandbox.requestHandler('rotate.map', this);
+            sandbox.registerAsStateful(this.mediator.bundleId, this);
+
+            me.setState(this.state);
         },
         createPlugin: function () {
             if (this.plugin) {
@@ -60,9 +64,36 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorBundleInstance',
         stop: function () {
             this.stopPlugin();
             this.getSandbox().requestHandler('rotate.map', null);
+            this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox = null;
             this.started = false;
+        },
+        setState: function (state) {
+            state = state || {};
+            let degrees = 0;
+            if (state.degrees) {
+                if (typeof state.degrees === 'string') {
+                    degrees = parseFloat(state.degrees);
+                } else {
+                    degrees = state.degrees;
+                }
+            }
+            this.plugin.setRotation(degrees);
+        },
+        getState: function () {
+            let state = {};
+            if (this.plugin) {
+                state.degrees = this.plugin.getRotation();
+            }
+            return state;
+        },
+        getStateParameters: function () {
+            let state = this.getState();
+            if (state.degrees) {
+                return 'rotate=' + Math.round(state.degrees);
+            }
+            return '';
         }
     }, {
-        protocol: ['Oskari.bundle.BundleInstance']
+        protocol: ['Oskari.bundle.BundleInstance', 'Oskari.userinterface.Stateful']
     });

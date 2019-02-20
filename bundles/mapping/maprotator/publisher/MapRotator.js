@@ -75,7 +75,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
                 };
                 json.configuration[me.bundleName] = {
                     conf: pluginConfig,
-                    state: {}
+                    state: this.getMapRotatorInstance().getState()
                 };
                 return json;
             } else {

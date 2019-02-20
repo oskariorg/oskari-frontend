@@ -169,7 +169,7 @@ Oskari.clazz.category(
                     'link': {
                         iconCls: 'tool-link',
                         tooltip: loc.link.tooltip,
-                        sticky: false,
+                        sticky: true,
                         callback: function () {
                             if (me.dialog) {
                                 me.dialog.close(true);
@@ -215,6 +215,8 @@ Oskari.clazz.category(
             this.dialog.onClose(() => {
                 sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
                 this.dialog = null;
+                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+                sandbox.request(this, builder());
             });
             if (!viewUuid) {
                 this.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);

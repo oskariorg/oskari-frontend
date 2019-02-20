@@ -14,10 +14,6 @@ Closed
 
 Open
 
-## TO DO
-
-The bundle is currently limited internationally, because Finland is hardcoded to the picture and extent.
-
 ## Bundle configuration
 
 No configuration is required, in which case the indexmap appears on the lower right corner of the map by default. If there are many elements in the same location, variable 'position' defines the order of the elements. 
@@ -43,6 +39,17 @@ If you wish to change the location of the indexmap, you have two possibilities:
   "containerId" = "mycontainerId"
 } 
 ```
+
+### Button icon
+
+By default the button that open the indexmap has an icon with the map of the world. If you want to change this icon, you can override the background with the selector:
+
+```css
+.indexmapToggle div.icon {
+	background-image: url('path/to/icon') !important;
+}
+```
+
 
 ## Requests the plugin handles
 

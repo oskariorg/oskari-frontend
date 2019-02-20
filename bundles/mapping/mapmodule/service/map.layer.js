@@ -342,6 +342,10 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 layer.setAttributes(newLayerConf.attributes);
             }
 
+            if (newLayerConf.options) {
+                layer.setOptions(newLayerConf.options);
+            }
+
             if (newLayerConf.params) {
                 layer.setParams(newLayerConf.params);
             }
