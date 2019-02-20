@@ -580,24 +580,68 @@ div.oskari-flyout {
     pointer-events: auto;
     text-align: left;
     /* Float right to not overlap with other plugins */
-    float: right; }
-    .statsgrid-legend-plugin-transparent .geostats-legend-counter {
+    float: right;
+
+    .geostats-legend-counter {
       color: #ffffff;
     }
-    .statsgrid-legend-plugin-transparent .accordion .accordion_panel {
+    .accordion .accordion_panel {
       background-color: transparent;
     }
-    .statsgrid-legend-plugin-transparent .accordion .accordion_panel.open {
+    .accordion .accordion_panel.open {
       background-color: transparent;
     }
-    .statsgrid-legend-plugin-transparent .dropdown {
+    .dropdown {
         text-shadow: none;
         color: #000;
     }
-    .statsgrid-legend-plugin-transparent .statsgrid-svg-legend {
+    .statsgrid-svg-legend {
         text-shadow: none;
         color: #000;
     }
+    .statsgrid-legend-container {
+        background-color: transparent;
+    }
+    .active-header.multi-select-legend:hover:after {
+        background-color: transparent;
+        border: none;
+        font-size: 12px;
+    }
+    .select select, .oskari-button, .oskari-button:hover:enabled{
+        background-color: transparent;
+        background: none;
+        border: none;
+        color: #ffffff;
+        text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
+        }
+    .select select {
+        appearance: none;
+        -webkit-appearance: none;
+        margin-left: 12px;
+        option {
+            color: #3c3c3c;
+        }
+    }
+    .color-selection-arrow {
+        display: none;
+    }
+    .oskari-selected-color {
+        border: none;
+    }
+    /*
+    .active-header {
+        color: #3c3c3c;
+        background-color: white;
+        border-radius: 4px;
+        text-shadow: none;
+
+    }
+    */
+}
 .active-header {
     display: flex;
     justify-content: space-between;
@@ -645,12 +689,11 @@ div.oskari-flyout {
     width: 300px;
     font-size: 12px;
 
-    .classification-colors.value {
+    .oskari-color-selection-main {
         display: inline-block;
         vertical-align: top;
     }
-
-    .visible-map-style-choropleth.flip-colors {
+    .flip-colors {
         margin-left: 10px;
         line-height: 27px;
     }
@@ -779,9 +822,7 @@ div.oskari-flyout {
         clear: both;
     }
 }
-.legend-transparent {
-   background-color: transparent;
-}
+
 /* Mobile popup tuning */
 .divmanazerpopup.statsgrid-mobile-legend {
     .popup-body {
