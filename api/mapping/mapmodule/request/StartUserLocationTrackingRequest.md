@@ -59,7 +59,6 @@ Start tracking user's location and add path to the map:
 ```javascript
 var sb = Oskari.getSandbox();
 sb.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'path', centerMap: 'update'}]);
-}
 ```
 
 ## Related api
