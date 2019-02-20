@@ -79,7 +79,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
     },
     _addPathToMap: function () {
         const coords = getLocationCoords();
-        console.log(coords);
         const path = this.mapmodule.getLocationPathGeoJSON(coords);
         if (!path) {
             return;
