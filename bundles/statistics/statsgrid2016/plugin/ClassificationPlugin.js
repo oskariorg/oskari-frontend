@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { GenericContext } from '../../../../src/reactUtil/genericContext';
+import Classification from '../components/Classification';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
@@ -34,21 +38,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);
 
-        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, this._locale);
-        this.__legend.on('rendered', function () {
-            me._calculatePluginSize();
-        });
-        this.__legend.on('edit-legend', function (isEdit) {
-            if (isEdit) {
-                me._overflowCheck(true);
-            } else {
-                me._restoreOverflow();
-            }
-        });
-        this.__legend.on('content-rendered', function () {
-            me._overflowCheck();
-        });
+        this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         this._overflowedOffset = null;
+        this._previousIsEdit = false;
+        this._transparent = false;
+        this._bindToEvents();
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (!this.getElement()) {
@@ -68,9 +62,71 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             this.element = this._templates.main.clone();
             this.element.css('z-index', 15001);
-            this.__legend.render(this.element);
+            this.render();
             return this.element;
         },
+        render: function (activeClassfication) {
+            if (!this.element) return;
+            const node = this.element.get(0);
+            const indicators = this.getIndicatorProps();
+            const classifications = this.getClassificationProps(indicators, activeClassfication);
+
+            ReactDOM.render((
+                <GenericContext.Provider value={{loc: this._locale, service: this.service, plugin: this}}>
+                    <Classification indicators = {indicators} classifications = {classifications}
+                        onMouseUp={this.trigger('ContainerClicked')}/>
+                </GenericContext.Provider>
+            ), node);
+        },
+        getIndicatorProps: function () {
+            const indicators = {
+                selected: []
+            };
+            const state = this.service.getStateService();
+            const active = state.getActiveIndicator();
+            indicators.active = active;
+            indicators.regionset = state.getRegionset();
+            if (active.series) {
+                indicators.serieStats = this.service.getSeriesService().getSeriesStats(active.hash);
+            }
+            this.service.getStateService().getIndicators().forEach((ind) => {
+                this.service.getUILabels(ind, label => {
+                    indicators.selected.push({
+                        id: ind.hash,
+                        title: label.full
+                    });
+                });
+            });
+            this.service.getIndicatorData(active.datasource, active.indicator, active.selections, active.series, indicators.regionset, (err, data) => {
+                if (data) {
+                    indicators.data = data;
+                }
+                if (err) {
+                    this.log.warn('Error getting indicator classification', active, indicators.regionset);
+                }
+            });
+            return indicators;
+        },
+        getClassificationProps: function (indicators, classification) {
+            const service = this.service.getClassificationService();
+            const methods = service.getAvailableMethods();
+            const modes = service.getAvailableModes();
+            const values = classification || this.service.getStateService().getClassificationOpts(indicators.active.hash);
+            const range = this.service.getColorService().getRange(values.type, values.style);
+            //const validOptions = service.getAvailableOptions(indicators.data);
+            let countRange = [];
+            for (let i = range.min; i <= range.max; i++) {
+                countRange.push(i);
+            }
+            return {
+                modes: modes,
+                methods: methods,
+                countRange: countRange,
+                values: values
+                //validOptions: validOptions
+            };
+        },
+
         redrawUI: function () {
             this.teardownUI();
             this._buildUI();
@@ -95,6 +151,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this._overflowCheck();
             if (this._instance.isEmbedded() && this._config.transparent) {
                 this.makeTransparent(true);
+            } else if (this._transparent === true) {
+                this.makeTransparent(true);
             }
             this.trigger('show');
         },
@@ -102,6 +160,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.getElement().draggable();
         },
         makeTransparent: function (transparent) {
+            this._transparent = transparent;
             var element = this.getElement();
             if (!element) {
                 return;
@@ -109,18 +168,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (transparent) {
                 element.removeClass('statsgrid-legend-plugin');
                 element.addClass('statsgrid-legend-plugin-transparent');
-                element.find('.statsgrid-legend-container').addClass('legend-transparent');
             } else {
                 element.removeClass('statsgrid-legend-plugin-transparent');
                 element.addClass('statsgrid-legend-plugin');
-                element.find('.statsgrid-legend-container').removeClass('legend-transparent');
             }
         },
         getElement: function () {
             return this.element;
         },
         enableClassification: function (enabled) {
-            this.__legend.allowClassification(enabled);
+            this.service.getStateService().enableClassification(enabled);
         },
         stopPlugin: function () {
             this.teardownUI();
@@ -193,6 +250,42 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             // otherwise publisher would stop this plugin and start it again when leaving the publisher,
             // resulting a misfuctioning duplicate classification element on screen.
             return false;
+        },
+        _bindToEvents: function () {
+            // if indicator is removed/added - recalculate the source 1/2 etc links
+            this.service.on('StatsGrid.IndicatorEvent', event => this.render());
+
+            // Always show the active indicator - also handles "no indicator selected"
+            // if the selected indicator has no data & edit panel is open -> close it
+            // TODO keep edit classification open
+            this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event => this.render());
+
+            // need to update the legend as data changes when regionset changes
+            this.service.on('StatsGrid.RegionsetChangedEvent', event => this.render());
+
+            this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
+
+            // UI styling changes e.g. disable classification editing, make transparent
+            this.service.getStateService().on('ClassificationContainerChanged', () => this.render());
+
+            this.service.on('AfterChangeMapLayerOpacityEvent', (event) => this.render());
+
+            this.on('Rendered', () => {
+                this._calculatePluginSize();
+                this._overflowCheck();
+            });
+            this.on('Updated', (isEdit) => {
+                // check if edit classification state is changed
+                if (isEdit !== this._previousIsEdit) {
+                    if (isEdit) {
+                        this._overflowCheck(true);
+                    } else {
+                        this._restoreOverflow();
+                    }
+                    this._previousIsEdit = isEdit;
+                }
+                this._overflowCheck();
+            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
