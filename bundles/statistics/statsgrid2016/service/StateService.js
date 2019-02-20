@@ -24,8 +24,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 type: 'seq',
                 mode: 'discontinuous',
                 reverseColors: false,
-                mapStyle: 'chloropeth',
-                transparency: 100,
+                mapStyle: 'choropleth',
+                transparency: 100, // or from statslayer
                 min: 10,
                 max: 60,
                 showValues: false,
@@ -50,7 +50,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         enableClassification: function (enable) {
             this.classificationEnabled = !!enable;
-            this.trigger('ClassificationContainerChange');
+            this.trigger('ClassificationContainerChanged');
         },
         /**
          * Resets the current state and sends events about the changes.
