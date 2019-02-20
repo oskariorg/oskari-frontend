@@ -52,7 +52,7 @@ export default class ManualClassificationView {
         okButton.setHandler(() => {
             dialog.close();
             this.manualBounds = editedBounds;
-            okCallback();
+            okCallback(this.manualBounds);
         });
         const buttons = [dialog.createCloseButton(), okButton];
         const content = jQuery('<div class="manual-class-view"></div>');
