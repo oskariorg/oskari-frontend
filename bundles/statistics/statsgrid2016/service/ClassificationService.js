@@ -224,9 +224,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                         formatter
                     );
                 }
-
                 // Choropleth  legend
                 stats.setColors(colors);
+
                 return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
             this.lastUsedBounds = response.bounds;
@@ -398,7 +398,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 var circle = point.find('circle');
                 circle.attr({
-                    'fill': '#' + color
+                    'fill': color
                 });
 
                 svg.find('svg.symbols').prepend(point.html());
