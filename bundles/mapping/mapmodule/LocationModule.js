@@ -2,7 +2,7 @@
 const errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
 const sandbox = Oskari.getSandbox();
 const log = Oskari.log('Oskari.mapframework.module.LocationModule');
-let _pathJson = null;
+// let _pathJson = null;
 let _locationCoords = [];
 let _locationWatch = null;
 
@@ -10,15 +10,17 @@ function _addCoord (pos) {
     _locationCoords.push([pos.lon, pos.lat]);
 };
 
+// TODO: push pos to pathJson coords.
+// Now geojson is generated from coords array on update if it's added to map
+// Also geojson could be added to event
+/*
 function _updatePath (pos) {
     _addCoord(pos);
     if (_pathJson) {
-        // TODO: push pos to pathJson coords.
-        // Now geojson is generated from coords array on update if it's added to map
-        // Also geojson could be added to event
+
     }
 };
-
+*/
 /**
  * Tries to get the user location. Signals with an UserLocationEvent and callback with lon and lat params
  * when successfully got the location or without params as error indicator.
