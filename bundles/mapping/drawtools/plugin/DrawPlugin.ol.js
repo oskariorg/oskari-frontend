@@ -928,11 +928,21 @@ Oskari.clazz.define(
                 // intersection is allowed or geometry isn't being drawn currently
                 return;
             }
-            if (geometry.getCoordinates()[0].length < 4 || !isValidOp.isValid(olParser.read(geometry))) {
-                // lines intersect -> problem!!
-                currentDrawing.setStyle(me._styles.intersect);
-                me._featuresValidity[currentDrawing.getId()] = false;
-                return;
+
+            if (geometry.getCoordinates()[0].length >= 4) {
+                // This function is called twice when modifying geometry from the point where the drawing initially began
+                // That is because the first and the last point of the geometry are being modified at the same time (they should have identical values)
+                // The first call causes an error because the points differ from each other. Hence using try/catch here to avoid breaking the js process
+                try {
+                    if (!isValidOp.isValid(olParser.read(geometry))) {
+                        // lines intersect -> problem!!
+                        currentDrawing.setStyle(me._styles.intersect);
+                        me._featuresValidity[currentDrawing.getId()] = false;
+                        return;
+                    }
+                } catch (e) {
+                    return;
+                }
             }
             // geometry is valid
             if (geometry.getArea() > 0) {
@@ -1075,6 +1085,7 @@ Oskari.clazz.define(
                     } else if (shape === 'Polygon' && options.selfIntersection !== false) {
                         me.checkIntersection(me._sketch.getGeometry());
                     }
+                    me.pointerMoveHandler();
                     me.sendDrawingEvent(me._id, options);
                     // probably safe to start listening again
                     me.toggleDrawLayerChangeFeatureEventHandler(true);
@@ -1084,7 +1095,6 @@ Oskari.clazz.define(
             me._modify[me._id].on('modifyend', function () {
                 me._showIntersectionWarning = true;
                 me._mode = '';
-                me.pointerMoveHandler();
                 me._sketch = null;
 
                 // send isFinished when user stops modifying the feature
