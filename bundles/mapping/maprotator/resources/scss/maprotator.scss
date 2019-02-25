@@ -4,12 +4,6 @@ $iconShadow: 1px 1px 2px rgba(0,0,0,0.6);
 $darkIcon: url("../images/north_nobg_light.png");
 $lightIcon: url("../images/north_nobg_dark.png");
 
-div.mapplugins.left div.maprotator {
-  float: left;
-}
-div.mapplugins.right div.maprotator {
-  float: right;
-}
 div.mapplugin.maprotator {
     border-radius: 50%;
     width: 32px;
