@@ -929,18 +929,16 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (geometry.getCoordinates()[0].length >= 4) {
-                // This function is called twice when modifying geometry from the point where the drawing initially began
-                // That is because the first and the last point of the geometry are being modified at the same time (they should have identical values)
-                // The first call causes an error because the points differ from each other. Hence using try/catch here to avoid breaking the js process
-                try {
-                    if (!isValidOp.isValid(olParser.read(geometry))) {
-                        // lines intersect -> problem!!
-                        currentDrawing.setStyle(me._styles.intersect);
-                        me._featuresValidity[currentDrawing.getId()] = false;
-                        return;
-                    }
-                } catch (e) {
+            const coordinates = geometry.getCoordinates()[0];
+            // This function is called twice when modifying geometry from the point where the drawing initially began
+            // That is because the first and the last point of the geometry are being modified at the same time
+            // The points should have identical values but in the first call they don't
+            // So the first call is ignored by the if statement below since it would otherwise throw an error from a 3rd party library
+            if (coordinates.length >= 4 && _.isEqual(coordinates[0], coordinates[coordinates.length - 1])) {
+                if (!isValidOp.isValid(olParser.read(geometry))) {
+                    // lines intersect -> problem!!
+                    currentDrawing.setStyle(me._styles.intersect);
+                    me._featuresValidity[currentDrawing.getId()] = false;
                     return;
                 }
             }
