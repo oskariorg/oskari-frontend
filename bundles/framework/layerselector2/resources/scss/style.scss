@@ -33,6 +33,7 @@ div.layerselector2 {
         padding: 6px 10px 6px 40px;
         background-color: #ffffff;
         clear: both;
+        position: relative;
 
         /* Default line height is too high, make it so the text just fits */
         min-height: 14px;
@@ -40,6 +41,15 @@ div.layerselector2 {
 
         &:nth-child(even) {
             background-color: #f3f3f3;
+        }
+
+        div.custom-tools {
+            position: absolute;
+            left: 5px;    
+        }
+
+        div.custom-tools > div:hover {
+            cursor: pointer;
         }
 
         input {
