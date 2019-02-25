@@ -225,7 +225,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
             /* add custom tools */
             const customToolsDiv = layerDiv.find('div.custom-tools');
             layer.getTools()
-                .filter(tool => tool.getTypes().includes('layerSelection'))
+                .filter(tool => tool.getTypes().includes('layerList'))
                 .forEach(tool => {
                     const toolContainer = jQuery('<div></div>');
                     toolContainer.addClass(tool.getIconCls());

@@ -68,7 +68,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             tool.setName('layer-editor');
             tool.setIconCls('icon-info-area');
             tool.setTooltip(this.loc('editor-tool'));
-            tool.setTypes(['layerSelection']);
+            tool.setTypes(['layerList']);
 
             tool.setCallback(() => {
                 this._showEditor(layer.getId());
