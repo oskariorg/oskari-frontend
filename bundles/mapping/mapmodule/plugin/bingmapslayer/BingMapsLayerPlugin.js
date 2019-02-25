@@ -55,8 +55,17 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
     _updateLayerStyle (oskariLayer) {
         const olLayers = this.getOLMapLayers(oskariLayer);
         if (olLayers && olLayers.length > 0) {
-            const lyr = olLayers[0];
-            lyr.setSource(this.createSource(oskariLayer));
+            const lyrWithOldSource = olLayers[0];
+            const lyrIndex = this.mapModule.getMap().getLayers().getArray().indexOf(lyrWithOldSource);
+            // Create a new layer with the selected style and replace the old one.
+            const lyrWithNewSource = this._createOlLayer(oskariLayer);
+            this.mapModule.getMap().getLayers().insertAt(lyrIndex + 1, lyrWithNewSource);
+            this.setOLMapLayers(oskariLayer.getId(), lyrWithNewSource);
+            // Keep the old layer in the background till the new layer has had time to load.
+            const removeOldLyrTimeout = 3000;
+            setTimeout(() => {
+                this.mapModule.getMap().removeLayer(lyrWithOldSource);
+            }, removeOldLyrTimeout);
         }
     }
     /**
@@ -79,15 +88,25 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Boolean} isBaseMap
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
-        const bingMapsLayer = new olLayerTile({
-            opacity: layer.getOpacity() / 100,
-            source: this.createSource(layer)
-        });
+        const bingMapsLayer = this._createOlLayer(layer);
         this.mapModule.addLayer(bingMapsLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), bingMapsLayer);
     }
 
-    createSource (oskariLayer) {
+    /**
+     * @private
+     * @method _createOlLayer Creates a new ol.layer.Tile layer with a Bing Maps source
+     * @param {Oskari.mapframework.domain.BingMapsLayer} layer
+     */
+    _createOlLayer (layer) {
+        const bingMapsLayer = new olLayerTile({
+            opacity: layer.getOpacity() / 100,
+            source: this._createSource(layer)
+        });
+        return bingMapsLayer;
+    }
+
+    _createSource (oskariLayer) {
         const style = oskariLayer.getCurrentStyle();
         const opts = {
             key: oskariLayer.getApiKey(),
