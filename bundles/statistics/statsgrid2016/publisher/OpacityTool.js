@@ -43,23 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
             stats.classificationPlugin.makeTransparent(false);
         }
     },
-    isDisplayed: function (data) {
-        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
-        if (hasStatsLayerOnMap) {
-            return true;
-        }
-        var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-        if (!configExists) {
-            return false;
-        }
-        if (!Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid')) {
-            Oskari.log('Oskari.mapframework.publisher.tool.DiagramTool')
-                .warn("Published map had config, but current appsetup doesn't include StatsGrid! " +
-                  'The thematic map functionality will be removed if user saves the map!!');
-            return false;
-        }
-        return true;
-    },
     getValues: function () {
         var me = this;
         var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();

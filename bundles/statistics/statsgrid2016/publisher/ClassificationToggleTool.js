@@ -40,13 +40,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
             stats.togglePlugin.removeTool(this.id);
         }
     },
-    isDisplayed: function (data) {
-        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
-        if (hasStatsLayerOnMap) {
-            return true;
-        }
-        return Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-    },
     getValues: function () {
         var me = this;
         var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
