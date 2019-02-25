@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'
     },
     /**
      * @method isDisplayed Is displayed.
-     * @returns {Boolean} true, if data contains statsdrid conf and state has indicators
+     * @returns {Boolean} true, if stats layer is on the map or data contains statsdrid conf
      */
     isDisplayed: function (data) {
         if (this._getStatsLayer()) {
