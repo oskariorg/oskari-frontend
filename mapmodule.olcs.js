@@ -5,6 +5,7 @@ import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
 import MapModuleOl from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
+import 'olcs/olcs.css';
 
 const TERRAIN_SERVICE_URL = 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/';
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
