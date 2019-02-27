@@ -6,7 +6,7 @@ node_js: "8"
 notifications:
   webhooks:
     urls:
-      - secure: "VMrF0iHhaTi9pliXrBDjKVG8XzpKbrZeyIX1I38+zgWiH0LzoG7ciRVghiAF1grFK1/B8hhplr6vhMVPlxTsIYJQFLIsvbjjnYJmxEYuhODZZPn9trtaEjCwW0wbi0sdEry7bXi2bM2yUqA6Jl9lFeLA2TCudQ4ou5XjATtzMzo="
+      - secure: "R4Fl434SY2dB4Fr+7RCrPdk6jqEDTYjLAFq+HOAw8QVZ5thUa923wERiuPG0SvhEMvYGnYm61eL4Ya1kT05ckgH9S7KD50Rsu6iqVR1fyVSbx7VBzL3EhkU5kYvEWLlpYVujPczKvlrp7cFniL1B6IR1hNo8RDRLrkbOnJxz7mY="
 
 cache:
   directories:
