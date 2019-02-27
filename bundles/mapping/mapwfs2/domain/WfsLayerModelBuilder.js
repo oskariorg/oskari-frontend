@@ -63,8 +63,11 @@ Oskari.clazz.define(
             defaultStyle.setLegend('');
 
             const mapfullPlugins = Oskari.app.getBundleInstanceConfigurationByName('mapfull').conf.plugins;
-            const mvtPluginInUse = mapfullPlugins.find(plugin => plugin.id === 'Oskari.wfsmvt.WfsMvtLayerPlugin');
-            if (mvtPluginInUse) {
+            const interactiveWfsPluginInUse = mapfullPlugins.find(plugin => (
+                plugin.id === 'Oskari.wfsmvt.WfsMvtLayerPlugin' ||
+                plugin.id === 'Oskari.wfsvector.WfsVectorLayerPlugin')
+            );
+            if (interactiveWfsPluginInUse) {
                 layer.addStyle(defaultStyle);
                 // Read options object for styles and hover options
                 const { options } = mapLayerJson;

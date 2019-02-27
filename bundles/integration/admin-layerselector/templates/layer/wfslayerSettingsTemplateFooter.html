@@ -1,8 +1,15 @@
 
 
-<% var showMVTOptions = Oskari.app.getBundleInstanceConfigurationByName('mapfull').conf.plugins.find(function(plugin) {
-     return plugin.id === 'Oskari.wfsmvt.WfsMvtLayerPlugin';
-    });
+<% 
+    var showMVTOptions = Oskari.app.getBundleInstanceConfigurationByName('mapfull').conf.plugins
+        .find(function(plugin) {
+            vectorPlugins = [
+                'Oskari.wfsmvt.WfsMvtLayerPlugin', 
+                'Oskari.wfsvector.WfsVectorLayerPlugin'
+            ]
+            return vectorPlugins.indexOf(plugin.id) !== -1;
+        }
+    );
 %>
 <div class="add-layer-record" <% if (!showMVTOptions) { %>style="display: none"<% } %>>
     <%
