@@ -16,6 +16,8 @@ import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
+import {fromCircle} from 'ol/geom/Polygon';
+import olFeature from 'ol/Feature';
 
 import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
 
@@ -88,7 +90,6 @@ export default class MapModule extends AbstractMapModule {
         }));
 
         me._setupMapEvents(map);
-
         return map;
     }
 
@@ -378,7 +379,33 @@ export default class MapModule extends AbstractMapModule {
 
         return olExtent.containsCoordinate(extent, lonlatArray);
     }
-
+    getLocationGeoJSON (position, addAccuracy) {
+        const coord = [position.lon, position.lat];
+        const accuracy = position.accuracy;
+        var features = [];
+        features.push(new olFeature({
+            geometry: new olGeom.Point(coord),
+            name: 'location'
+        }));
+        if (accuracy && addAccuracy !== false) {
+            features.push(new olFeature({
+                geometry: fromCircle(new olGeom.Circle(coord, accuracy), 50),
+                name: 'accuracy'
+            }));
+        }
+        return this.getGeoJSONFromFeatures(features);
+    }
+    getLocationPathGeoJSON (lineCoords) {
+        var geom = new olGeom.LineString(lineCoords);
+        if (geom) {
+            var feature = new olFeature({
+                geometry: geom,
+                name: 'path'
+            });
+            return this.getGeoJSONFromFeatures([feature]);
+        }
+        return null;
+    }
     /* <------------- / OL3 specific ----------------------------------- */
 
     /* Impl specific - found in ol2 AND ol3 modules
@@ -1138,13 +1165,20 @@ export default class MapModule extends AbstractMapModule {
     }
 
     getGeoJSONGeometryFromOL (feature) {
-        var olGeoJSON = new olFormatGeoJSON();
-        var geojsonStr = olGeoJSON.writeFeature(feature);
-        var geojson = JSON.parse(geojsonStr);
-        if (geojson.geometry) {
-            return geojson.geometry;
+        var geojson = this.getGeoJSONFromFeatures([feature]);
+        if (geojson.features & geojson.features.length > 0) {
+            return geojson.features[0].geometry;
         }
         return null;
+    }
+    /**
+     * @method getGeoJSONFromFeatures
+     * @param {Array] features
+     * @return {Object} geojson FeatureCollection
+     */
+    getGeoJSONFromFeatures (features) {
+        var olGeoJSON = new olFormatGeoJSON();
+        return olGeoJSON.writeFeaturesObject(features);
     }
 
     getOLGeometryFromGeoJSON (geojson) {

@@ -20,7 +20,9 @@ Oskari.clazz.define(
         me._defaultLocation = 'top right';
         me._index = 40;
         me._name = 'MyLocationPlugin';
-
+        me._active = false;
+        me._timeouts = 0;
+        me._dialog = null;
         me._mobileDefs = {
             buttons: {
                 'mobile-my-location': {
@@ -51,9 +53,7 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var me = this,
                 el = me._templates.plugin.clone();
-
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
-
             el.on('click', function () {
                 me._setupLocation();
             });
@@ -83,7 +83,19 @@ Oskari.clazz.define(
                 });
             }
         },
-
+        _setActive: function (bln) {
+            this._active = !!bln;
+            this._timeouts = 0;
+            var el = this.getElement();
+            if (!el) {
+                return;
+            }
+            if (bln) {
+                el.addClass('disabled');
+            } else {
+                el.removeClass('disabled');
+            }
+        },
         /**
          * @public @method refresh
          *
@@ -132,15 +144,24 @@ Oskari.clazz.define(
          *
          */
         _setupLocation: function () {
-            var mapmodule = this.getMapModule();
-            var conf = this.getConfig();
-            mapmodule.getUserLocation(function (lon, lat) {
-                if (!lon || !lat) {
-                    // error getting location
-                    return;
-                }
-                mapmodule.centerMap({ lon: lon, lat: lat }, conf.zoom || 6);
-            });
+            if (this._active) {
+                return; // already requested and waiting response
+            }
+            this._setActive(true);
+            this._requestLocation();
+        },
+        _requestLocation: function (timeout, highAccuracy) {
+            const conf = this.getConfig();
+            const options = {
+                timeout: timeout || 2000,
+                enableHighAccuracy: highAccuracy !== false
+                // addToMap: highAccuracy !== false // or always true
+                // TODO how user can clear location from map??
+            };
+            if (conf.zoom !== undefined) {
+                options.zoomLevel = conf.zoom;
+            }
+            Oskari.getSandbox().postRequestByName('MyLocationPlugin.GetUserLocationRequest', [true, options]);
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -183,6 +204,52 @@ Oskari.clazz.define(
          */
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
+        },
+        _createEventHandlers: function () {
+            return {
+                UserLocationEvent: (event) => {
+                    if (!this._active) {
+                        return;
+                    }
+                    var error = event.getError();
+                    if (error) {
+                        if (this._dialog) {
+                            this._dialog.close();
+                        }
+                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        if (error === 'denied') {
+                            var btn = dialog.createCloseButton(this._loc.error.button);
+                            dialog.show(this._loc.error.title, this._loc.error.denied, [btn]);
+                            this._setActive(false);
+                        } else if (error === 'unavailable') {
+                            dialog.fadeout();
+                            dialog.show(this._loc.error.title, this._loc.error.noLocation);
+                            this._setActive(false);
+                        // timeouts
+                        } else {
+                            this._timeouts++;
+                            if (this._timeouts === 1) {
+                                dialog.fadeout(5000);
+                                dialog.show('', this._loc.error.timeout);
+                                // request high accuracy location with longer timeout
+                                this._requestLocation(20000);
+                            } else if (this._timeouts === 2) {
+                                // request low accuracy location
+                                this._requestLocation(6000, false);
+                            } else {
+                                // show error and stop requesting location
+                                dialog.fadeout();
+                                dialog.show(this._loc.error.title, this._loc.error.noLocation);
+                                this._setActive(false);
+                            }
+                        }
+                        this._dialog = dialog;
+                    } else {
+                        // success
+                        this._setActive(false);
+                    }
+                }
+            };
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

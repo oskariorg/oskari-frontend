@@ -1,24 +1,23 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequest
+ * @class Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequest
  *
- * Requests for a get user location.
+ * Requests for a track user location.
  *
  * Requests are build and sent through Oskari.Sandbox.
  * Oskari.mapframework.request.Request superclass documents how to send one.
  */
 Oskari.clazz.define(
-    'Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequest',
+    'Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequest',
 
     /**
      * @static @method create called automatically on construction
      *
      */
-    function (centerMap, options) {
-        this._centerMap = centerMap;
+    function (options) {
         this._options = options || {};
     }, {
         /** @static @property __name request name */
-        __name: 'MyLocationPlugin.GetUserLocationRequest',
+        __name: 'StartUserLocationTrackingRequest',
 
         /**
          * @public @method getName
@@ -29,12 +28,9 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method  @public getCenterMap center map to user location
-         * @return {Boolean} center map
+         * @method  @public getOptions
+         * @return {Object} options
          */
-        getCenterMap: function () {
-            return this._centerMap;
-        },
         getOptions: function () {
             return this._options;
         }
