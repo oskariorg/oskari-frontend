@@ -13,10 +13,6 @@ const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.Abstra
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_SLIDER_THROTTLE_MS = 2000;
 
-/**
- * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
- * Provides functionality to draw vector tile layers on the map
- */
 class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
     constructor (config) {
         super(config);
@@ -71,7 +67,7 @@ class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
     }
     /**
      * @private @method _updateLayerStyle
-     * @param {Oskari.mapframework.mapmodule.VectorTileLayer} oskariLayer
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} oskariLayer
      */
     _updateLayerStyle (oskariLayer) {
         const olLayers = this.getOLMapLayers(oskariLayer);
@@ -86,7 +82,7 @@ class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
     /**
      * @private @method _getLayerCurrentStyleFunction
      * Returns OL style corresponding to layer currently selected style
-     * @param {Oskari.mapframework.domain.AbstractLayer} layer
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return {ol/style/Style}
      */
     _getLayerCurrentStyleFunction (layer) {
@@ -102,9 +98,7 @@ class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
         };
     }
     /**
-     * @method addMapLayerToMap
-     * @private
-     * Adds a single vector tile layer to this map
+     * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
