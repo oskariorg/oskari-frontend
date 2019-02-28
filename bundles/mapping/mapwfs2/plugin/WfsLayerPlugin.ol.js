@@ -26,6 +26,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin';
         me._name = 'WfsLayerPlugin';
+        me.layerType = 'wfs';
 
         // connection and communication
         me._connection = null;
@@ -325,7 +326,7 @@ Oskari.clazz.define(
          * Registers plugin into mapModule
          */
         register: function () {
-            this.getMapModule().setLayerPlugin('wfslayer', this);
+            this.getMapModule().setLayerPlugin(this.layerType, this);
         },
 
         /**
@@ -334,7 +335,7 @@ Oskari.clazz.define(
          * Removes registration of the plugin from mapModule
          */
         unregister: function () {
-            this.getMapModule().setLayerPlugin('wfslayer', null);
+            this.getMapModule().setLayerPlugin(this.layerType, null);
         },
         _createEventHandlers: function () {
             var me = this;
