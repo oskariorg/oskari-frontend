@@ -1,4 +1,3 @@
-import olLayerVectorTile from 'ol/layer/VectorTile';
 import {propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY} from './propertyArrayUtils';
 import {filterByAttribute, getFilterAlternativesAsArray} from './filterUtils';
 
