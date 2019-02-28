@@ -117,14 +117,3 @@ export const styleGenerator = (styleFactory, layer, hoverState) => {
     }
     return getStyleFunction(styles, layer, hoverState);
 };
-
-export const getCustomStyleEditor = (layer, visualizationForm) => {
-    visualizationForm.setOskariStyleValues(layer.getCustomStyle());
-    return visualizationForm.getForm();
-};
-
-export const applyEditorStyle = (layer, visualizationForm) => {
-    const style = visualizationForm.getOskariStyle();
-    layer.setCustomStyle(style);
-    layer.selectStyle('oskari_custom');
-};

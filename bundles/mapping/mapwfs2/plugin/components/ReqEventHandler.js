@@ -26,9 +26,7 @@ export default class ReqEventHandler {
                 plugin.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
                     hits.push({feature, layer});
                 }, {
-                    layerFilter: (layer) => {
-                        return layer instanceof olLayerVectorTile && plugin.findLayerByOLLayer(layer);
-                    }
+                    layerFilter: layer => plugin.findLayerByOLLayer(layer)
                 });
 
                 const keepPrevious = event.getParams().ctrlKeyDown;

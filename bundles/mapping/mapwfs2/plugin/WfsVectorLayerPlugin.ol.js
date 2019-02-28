@@ -1,27 +1,23 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-import olStyle from 'ol/style/Style';
-import olStroke from 'ol/style/Stroke';
 import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 
-import ReqEventHandler from './components/ReqEventHandler';
 import { selectedStyle } from './components/defaultStyle';
-import { styleGenerator, applyOpacity, getCustomStyleEditor, applyEditorStyle } from './components/styleUtils';
+import { styleGenerator, applyOpacity } from './components/styleUtils';
 import { WFS_ID_KEY } from './components/propertyArrayUtils';
-
+import VectorPluginMixin from './VectorPluginMixin.ol';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../mapmodule/domain/constants';
 
-const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
-
 const MAP_MOVE_THROTTLE_MS = 2000;
+const OPACITY_SLIDER_THROTTLE_MS = 2000;
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
  * Provides functionality to draw vector tile layers on the map
  */
-class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
+class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
     constructor (config) {
         super(config);
         this.__name = 'WfsVectorLayerPlugin';
@@ -38,65 +34,40 @@ class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * Interface method for the module protocol.
      */
     _initImpl () {
-        const sandbox = this.getSandbox();
-        // register domain builder
-        const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        if (mapLayerService) {
-            mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass());
-            mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
-        }
-
-        this.WFSLayerService = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
-        sandbox.registerService(this.WFSLayerService);
-        this.reqEventHandler = new ReqEventHandler(sandbox);
-
-        this._visualizationForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
-        sandbox.getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
-    }
-    /**
-     * Override, see superclass
-     */
-    _getLayerModelClass () {
-        return 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
-    }
-    _getModelBuilder () {
-        return new WfsLayerModelBuilder(this.getSandbox());
+        super._initImpl();
+        this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService')
+            .registerLayerType(this.layertype, this);
     }
     _createPluginEventHandlers () {
+        const AfterMapMoveEvent = Oskari.util.throttle(this._loadFeaturesForAllLayers, MAP_MOVE_THROTTLE_MS);
         const handlers = {
-            AfterMapMoveEvent: Oskari.util.throttle(this._loadFeaturesForAllLayers, MAP_MOVE_THROTTLE_MS),
-            AfterChangeMapLayerStyleEvent: event => {
+            ...super._createPluginEventHandlers(),
+            AfterMapMoveEvent,
+            AfterChangeMapLayerStyleEvent (event) {
                 const oskariLayer = event.getMapLayer();
                 this._updateLayerStyle(oskariLayer);
             }
         };
-        return {
-            ...this.reqEventHandler.createEventHandlers(this),
-            ...handlers
-        };
+        return handlers;
     }
     _createRequestHandlers () {
-        const me = this;
-        const throttledStyleUpdate = Oskari.util.throttle(lyr => this._updateLayerStyle(lyr), 2000);
-        return {
-            ...this.reqEventHandler.createRequestHandlers(this),
-            ChangeMapLayerOpacityRequest: {
-                handleRequest (core, request) {
-                    const oskariLayer = me._sandbox.findAllSelectedMapLayers()
-                        .find(lyr => lyr.getId() === request.getMapLayerId());
-                    if (oskariLayer && me.isLayerSupported(oskariLayer)) {
-                        oskariLayer.setOpacity(request.getOpacity());
-                        throttledStyleUpdate(oskariLayer);
-                    }
-                }
+        const updateStyle = Oskari.util.throttle(
+            lyr => this._updateLayerStyle(lyr), OPACITY_SLIDER_THROTTLE_MS);
+        // Throttle opacity change on slider move to keep the ui alive.
+        const handleOpacityChange = (core, request) => {
+            const oskariLayer = this.getSandbox().getMap().getSelectedLayer(request.getMapLayerId());
+            if (oskariLayer && this.isLayerSupported(oskariLayer)) {
+                oskariLayer.setOpacity(request.getOpacity());
+                updateStyle(oskariLayer);
             }
         };
-    }
-    getCustomStyleEditorForm (layer) {
-        return getCustomStyleEditor(layer, this._visualizationForm);
-    }
-    applyEditorStyle (layer) {
-        applyEditorStyle(layer, this._visualizationForm);
+        const handlers = {
+            ...super._createRequestHandlers(),
+            ChangeMapLayerOpacityRequest: {
+                handleRequest: handleOpacityChange
+            }
+        };
+        return handlers;
     }
     /**
      * @private @method _updateLayerStyle
@@ -131,18 +102,6 @@ class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         };
     }
     /**
-     * Checks if the layer can be handled by this plugin
-     * @method  isLayerSupported
-     * @param  {Oskari.mapframework.domain.AbstractLayer} layer
-     * @return {Boolean}       true if this plugin handles the type of layers
-     */
-    isLayerSupported (layer) {
-        if (!layer) {
-            return false;
-        }
-        return layer.isLayerOfType(this.layertype);
-    }
-    /**
      * @method addMapLayerToMap
      * @private
      * Adds a single vector tile layer to this map
@@ -152,15 +111,8 @@ class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         const source = this._getLayerSource(layer);
-        const style = new olStyle({
-            stroke: new olStroke({
-                color: 'rgba(255, 0, 255, 1.0)',
-                width: 2
-            })
-        });
         const vectorLayer = new olLayerVector({
             source,
-            style,
             renderMode: 'image'
         });
         // Set oskari properties for vector feature service functionalities.
@@ -171,7 +123,6 @@ class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
 
         this.mapModule.addLayer(vectorLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), vectorLayer);
-        vectorLayer.setStyle(style);
         this._loadFeaturesForLayer(layer);
     }
 
@@ -188,7 +139,6 @@ class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             projection: this.getMap().getView().getProjection(), // OL projection object
             strategy: bboxStrategy
         });
-        // Must be called manually
         source.setLoader(this._getFeatureLoader(layer, source));
         return source;
     }
@@ -221,17 +171,34 @@ class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         };
     }
 
+    /**
+     * @private
+     * @method _loadFeaturesForAllLayers Load features to all wfs layers.
+     * Uses current map view's extent.
+     */
     _loadFeaturesForAllLayers () {
         const mapView = this.mapModule.getMap().getView();
         const extent = mapView.calculateExtent();
         const resolution = mapView.getResolution();
         const projection = mapView.getProjection();
-        // Trigger load for wfs layers.
         this._sandbox.findAllSelectedMapLayers()
             .filter(lyr => this.isLayerSupported(lyr))
             .forEach(lyr => this._loadFeaturesForLayer(lyr, extent, resolution, projection));
     }
 
+    /**
+     * @private
+     * @method _loadFeaturesForLayer Loads features to the layer.
+     *
+     * Uses OpenLayers internal methods.
+     * Load must be called manually in stacked 3D map mode.
+     * (No target container defined for 3D view)
+     *
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @param {ol.Extent} extent (optional)
+     * @param {Number} resolution (optional)
+     * @param {ol.proj.Projection} projection (optional)
+     */
     _loadFeaturesForLayer (lyr, extent, resolution, projection) {
         if (!extent) {
             const mapView = this.mapModule.getMap().getView();
