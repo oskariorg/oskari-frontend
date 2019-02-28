@@ -1,73 +1,22 @@
 import {normalStyle, selectedStyle} from './components/defaultStyle';
 import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
 import {WFS_ID_KEY, getFieldsAndPropsArrays} from './components/propertyArrayUtils';
-import ReqEventHandler from './components/ReqEventHandler';
 import TileState from 'ol/TileState';
 import FeatureExposingMVTSource from './components/FeatureExposingMVTSource';
-
-const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
+import VectorPluginMixin from './VectorPluginMixin.ol';
 
 Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
-    class WfsMvtLayerPlugin extends VectorTileLayerPlugin {
+    class WfsMvtLayerPlugin extends VectorPluginMixin(VectorTileLayerPlugin) {
         constructor (config) {
             super(config);
             this.__name = 'WfsMvtLayerPlugin';
             this._clazz = 'Oskari.wfsmvt.WfsMvtLayerPlugin';
             this._log = Oskari.log('WfsMvtLayerPlugin');
-            this._visualizationForm = null;
             this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
             this.layertype = 'wfs';
             // mvt only support numeric IDs and WFS-layers often have other characters in ID as well
             // fixes highlight on features spread to multiple tiles by using a generated _oid for "combining" features
             this.hoverState.property = '_oid';
-        }
-        _initImpl () {
-            super._initImpl();
-            const sandbox = this.getSandbox();
-            this.WFSLayerService = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
-
-            sandbox.registerService(this.WFSLayerService);
-            this.reqEventHandler = new ReqEventHandler(sandbox);
-
-            this._visualizationForm = Oskari.clazz.create(
-                'Oskari.userinterface.component.VisualizationForm'
-            );
-        }
-        _createPluginEventHandlers () {
-            return Object.assign(super._createPluginEventHandlers(), this.reqEventHandler.createEventHandlers(this));
-        }
-        _createRequestHandlers () {
-            return this.reqEventHandler.createRequestHandlers(this);
-        }
-
-        getCustomStyleEditorForm (layer) {
-            const customStyle = layer.getCustomStyle();
-            this._visualizationForm.setOskariStyleValues(customStyle);
-            return this._visualizationForm.getForm();
-        }
-
-        applyEditorStyle (layer) {
-            const style = this._visualizationForm.getOskariStyle();
-            layer.setCustomStyle(style);
-            layer.selectStyle('oskari_custom');
-        }
-
-        /**
-         * @method findLayerByOLLayer
-         * @param {ol/layer/Layer} olLayer OpenLayers layer impl
-         * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer}
-         */
-        findLayerByOLLayer (olLayer) {
-            const layerId = Object.keys(this._layerImplRefs).find(layerId => olLayer === this._layerImplRefs[layerId]);
-            return this.getSandbox().getMap().getSelectedLayer(layerId);
-        }
-        /**
-         * @method getAllLayerIds
-         * @return {String[]} All layer ids handled by plugin and selected on map
-         */
-        getAllLayerIds () {
-            return Object.keys(this._layerImplRefs);
         }
         /**
          * Override, see superclass
@@ -94,18 +43,6 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
                     return superStyle;
                 };
             }
-        }
-        /**
-         * Override, see superclass
-         */
-        _getLayerModelClass () {
-            return 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
-        }
-        /**
-         * Override, see superclass
-         */
-        _getModelBuilder () {
-            return new WfsLayerModelBuilder(this.getSandbox());
         }
         /**
          * Override, see superclass
