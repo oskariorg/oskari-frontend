@@ -11,7 +11,7 @@ import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../mapmod
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const MAP_MOVE_THROTTLE_MS = 2000;
-const OPACITY_SLIDER_THROTTLE_MS = 2000;
+const OPACITY_THROTTLE_MS = 1500;
 
 class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
     constructor (config) {
@@ -35,33 +35,19 @@ class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
             .registerLayerType(this.layertype, this);
     }
     _createPluginEventHandlers () {
-        const AfterMapMoveEvent = Oskari.util.throttle(this._loadFeaturesForAllLayers, MAP_MOVE_THROTTLE_MS);
+        const updateStyle = event => this._updateLayerStyle(event.getMapLayer());
+
+        const throttleLoadFeatures = Oskari.util.throttle(
+            this._loadFeaturesForAllLayers, MAP_MOVE_THROTTLE_MS);
+
+        const throttleUpdateStyle = Oskari.util.throttle(
+            event => updateStyle(event), OPACITY_THROTTLE_MS);
+
         const handlers = {
             ...super._createPluginEventHandlers(),
-            AfterMapMoveEvent,
-            AfterChangeMapLayerStyleEvent (event) {
-                const oskariLayer = event.getMapLayer();
-                this._updateLayerStyle(oskariLayer);
-            }
-        };
-        return handlers;
-    }
-    _createRequestHandlers () {
-        const updateStyle = Oskari.util.throttle(
-            lyr => this._updateLayerStyle(lyr), OPACITY_SLIDER_THROTTLE_MS);
-        // Throttle opacity change on slider move to keep the ui alive.
-        const handleOpacityChange = (core, request) => {
-            const oskariLayer = this.getSandbox().getMap().getSelectedLayer(request.getMapLayerId());
-            if (oskariLayer && this.isLayerSupported(oskariLayer)) {
-                oskariLayer.setOpacity(request.getOpacity());
-                updateStyle(oskariLayer);
-            }
-        };
-        const handlers = {
-            ...super._createRequestHandlers(),
-            ChangeMapLayerOpacityRequest: {
-                handleRequest: handleOpacityChange
-            }
+            AfterMapMoveEvent: throttleLoadFeatures,
+            AfterChangeMapLayerStyleEvent: updateStyle,
+            AfterChangeMapLayerOpacityEvent: throttleUpdateStyle
         };
         return handlers;
     }
@@ -70,6 +56,9 @@ class WfsVectorLayerPlugin extends VectorPluginMixin(AbstractMapLayerPlugin) {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} oskariLayer
      */
     _updateLayerStyle (oskariLayer) {
+        if (!this.isLayerSupported(oskariLayer)) {
+            return;
+        }
         const olLayers = this.getOLMapLayers(oskariLayer);
 
         if (olLayers && olLayers.length > 0) {
