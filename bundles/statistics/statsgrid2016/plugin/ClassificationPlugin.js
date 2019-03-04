@@ -71,11 +71,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const node = this.element.get(0);
             const indicators = this.getIndicatorProps();
             const classifications = this.getClassificationProps(indicators, activeClassfication);
+            const legendProps = this.getLegendProps(indicators, classifications);
+            const classification = legendProps.classification;
+            if (classification && classifications.values.count !== classification.getGroups().length) {
+                // classification count changed!!
+                this.service.getStateService().updateActiveClassification('count', classification.getGroups().length);
+                return;
+            }
 
             ReactDOM.render((
                 <GenericContext.Provider value={{loc: this._locale, service: this.service, plugin: this}}>
                     <Classification indicators = {indicators} classifications = {classifications}
-                        onMouseUp={this.trigger('ContainerClicked')}/>
+                        legendProps = {legendProps} onMouseUp={this.trigger('ContainerClicked')}/>
                 </GenericContext.Provider>
             ), node);
         },
@@ -126,6 +133,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 values: values
                 //validOptions: validOptions
             };
+        },
+        getLegendProps: function (indicators, classifications) {
+            const data = indicators.data;
+            const serieStats = indicators.serieStats;
+            const classificationOpts = classifications.values;
+            const props = {};
+            if (data && Object.keys(data).length !== 0) {
+                props.classification = this.service.getClassificationService().getClassification(data, classificationOpts, serieStats);
+            }
+            props.colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+            return props;
         },
 
         redrawUI: function () {

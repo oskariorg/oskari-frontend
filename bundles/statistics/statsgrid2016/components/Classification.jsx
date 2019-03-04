@@ -30,51 +30,21 @@ class Classification extends React.Component {
         this.setState(oldState => ({ isEdit: !oldState.isEdit }));
     }
 
-    getLegend () {
-        const {loc, service, plugin} = this.props;        
+    createLegendHTML () {
+        console.log(this.props);
+        const {loc, plugin, legendProps} = this.props;
         const indicatorData = this.props.indicators.data;
-        const currentRegionset = this.props.indicators.regionset;
-        if (indicatorData && Object.keys(indicatorData).length !== 0) {
-            this.createLegendHTML(indicatorData);
+        const classification = legendProps.classification;
+        const colors = legendProps.colors;
+        if (!indicatorData || Object.keys(indicatorData).length === 0) {
+            this.legendHTML = {error: loc('legend.noData')};
             return;
         }
-        const active = this.props.indicators.active;
-        // TODO do we need to try to get indicator data if it's not coming from props
-        service.getIndicatorData(active.datasource, active.indicator,
-            active.selections, active.series, currentRegionset, (err, data) => {
-                if (err) {
-                    plugin.log.warn('Error getting indicator classification', active, currentRegionset);
-                    this.legendHTML = {error: loc('legend.noData')};
-                    return;
-                }
-                if (!data) {
-                    plugin.log.warn('Error getting indicator data', data);
-                    this.legendHTML = {error: loc('legend.noData')};
-                    return;
-                }
-                this.createLegendHTML(data);
-            });
-    }
-
-    createLegendHTML (data) {
-        const {loc, service, plugin} = this.props;
-        const classificationOpts = this.props.classifications.values;
-        const indHash = this.props.indicators.active.hash;
-        const groupStats = this.props.indicators.serieStats || service.getSeriesService().getSeriesStats(indHash);
-        const classification = service.getClassificationService().getClassification(data, classificationOpts, groupStats);
         if (!classification) {
-            plugin.log.warn('Error getting indicator classification', data);
+            plugin.log.warn('Error getting indicator classification', indicatorData);
             this.legendHTML = {error: loc('legend.noEnough')};
             return;
         }
-        if (classificationOpts.count !== classification.getGroups().length) {
-            // classification count changed!!
-            service.getStateService().updateActiveClassification('count', classification.getGroups().length);
-            this.legendHTML = {error: loc('legend.noEnough')};
-            return;
-        }
-
-        const colors = service.getColorService().getColorsForClassification(classificationOpts, true);
         const opacity = this.props.classifications.values.transparency / 100 || 1;
         let legend;
         if (opacity !== 1) {
@@ -123,7 +93,7 @@ class Classification extends React.Component {
         const indicators = this.props.indicators.selected;
         const headerClass = indicators.length === 1 ? 'active-header single-selected' : 'active-header multi-selected';
         const {title} = indicators.find(indicator => activeIndicator.hash === indicator.id) || {title: ''};
-        this.getLegend();
+        this.createLegendHTML();
 
         return (
             <div className="statsgrid-classification-container" onMouseUp = {() => this.props.plugin.trigger('ContainerClicked')}>
