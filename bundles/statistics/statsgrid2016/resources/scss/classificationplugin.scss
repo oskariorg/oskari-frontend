@@ -1,0 +1,30 @@
+.statsgrid-classification-plugin {
+    border: 1px solid rgba(0,0,0,0.2);
+    pointer-events: auto;
+    text-align: left;
+    /* Float right to not overlap with other plugins */
+    float: right;
+}
+
+/* Mobile popup tuning */
+.divmanazerpopup.statsgrid-mobile-classification {
+    .popup-body {
+        >.content {
+            margin: 0px;
+        }
+    }
+}
+
+/* published/embedded map classification background transparent  */
+.statsgrid-classification-plugin-transparent {
+    color:#FFFFFF;
+    text-shadow:
+      -1px -1px 0 #000,
+      1px -1px 0 #000,
+      -1px 1px 0 #000,
+      1px 1px 0 #000;
+    pointer-events: auto;
+    text-align: left;
+    /* Float right to not overlap with other plugins */
+    float: right;
+}

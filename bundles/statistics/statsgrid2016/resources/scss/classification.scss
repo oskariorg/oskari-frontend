@@ -1,0 +1,81 @@
+.statsgrid-classification-container {
+    background-color: #FFFFFF;
+    width: 300px;
+    font-size: 12px;
+
+    .active-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 5px;
+        position: relative;
+
+        &.multi-selected:hover:after {
+            content: attr(data-selected-indicator);
+            display: block;
+            position: absolute;
+            bottom: 32px;
+            background: #ffffff;
+            border: 1px solid #ddd;
+            padding: 5px;
+            font-size: 10px;
+            line-height: 17px;
+        }
+
+        .title {
+            width: 90%;
+            font-weight: bold;
+        }
+    }
+
+    .edit-button {
+        cursor: pointer;
+        height: 16px;
+        width: 16px;
+        margin-left: 2px;
+        margin-right: -2px;
+        right: 0 !important;
+        background-image: url(../images/edit-dark.png);
+    }
+
+    .edit-active {
+        height: 16px;
+        width: 16px;
+        right: 0 !important;
+        background-image: url(../images/edit-hover.png);
+    }
+
+    /* mobile 
+        overflow-y: auto;
+        overflow-x: hidden;
+    */
+}
+
+.statsgrid-classification-plugin-transparent {
+    .statsgrid-classification-container {
+        background-color: transparent;
+    }
+
+    .active-header.multi-selected:hover:after {
+        background-color: transparent;
+        border: none;
+        font-size: 12px;
+    }
+
+    .active-header.single-selected {
+        border: 1px solid #aaa;
+        color: #444;
+        background-color: #fff;;
+        border-radius: 5px;
+        text-shadow: none;
+        padding: 3px 5px;
+        font-size: 13px;
+        background: linear-gradient(#fff 20%,#f6f6f6 50%,#eee 52%,#f4f4f4);
+        box-shadow: inset 0 0 3px #fff, 0 1px 1px rgba(0,0,0,.1);
+        margin-bottom: 6px;
+        .title {
+            font-weight: 400;
+        }
+
+    }
+}

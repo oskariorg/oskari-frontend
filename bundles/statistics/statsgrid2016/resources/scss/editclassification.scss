@@ -1,0 +1,71 @@
+.classification-edit {
+    background-color: #fafafa;
+
+    .classification-options {
+        margin-left: 8px;
+        padding: 5px;
+        .option {
+            clear: both;
+        }
+        .select {
+            width: 96%;
+            font-size: 12px;
+            padding: 1px 2px;
+        }
+        .select-label {
+            font-weight: bold;
+        }
+        .show-values {
+            .label {
+                display: block;
+                margin-bottom: 4px;
+                margin-top: 8px;
+            }
+        }
+    }
+}
+
+/* Mobile popup tuning */
+.divmanazerpopup.statsgrid-mobile-classification {
+    .popup-body {
+        div.accordion {
+            div.content {
+                padding: 0;
+                margin: 0;
+                margin-left: 8px;
+            }
+        }
+    }
+}
+
+/* published/embedded map classification background transparent  */
+.statsgrid-classification-plugin-transparent {
+    .classification-edit {
+        background-color: transparent;
+    }
+}
+
+.statsgrid-classification-plugin-transparent {
+    .dropdown {
+        text-shadow: none;
+        color: #000;
+    }
+    .select {
+        appearance: none;
+        -webkit-appearance: none;
+        margin-left: 12px;
+        background-color: transparent;
+        background: none;
+        border: none;
+        color: #ffffff;
+        text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
+    }
+    option {
+        color: #3c3c3c;
+    }
+    
+}

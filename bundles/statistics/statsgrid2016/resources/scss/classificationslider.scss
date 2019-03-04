@@ -1,0 +1,21 @@
+.oskari-slider {
+    .slider-label {
+        font-weight: bold;
+    }
+    .minmaxlabels {
+        margin-bottom: '25px';
+        .min {
+            float:left;
+        }
+        .max {
+            float:right;
+            margin-right: 4%;
+        }
+    }    
+    .point-range {
+        clear: both;
+        width: 90%;
+        background-image: url(../images/opacity_slider_long.png);
+        background-repeat: no-repeat;
+    }
+}

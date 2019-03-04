@@ -1,0 +1,19 @@
+.classification-colors {
+    .flip-colors {
+        margin-left: 10px;
+        line-height: 27px;
+    }
+
+    .oskari-color-selection {
+        z-index: 10;
+    }
+}
+
+.statsgrid-classification-plugin-transparent {
+    .color-selection-arrow {
+        display: none;
+    }
+    .oskari-selected-color {
+        border: none;
+    }
+}
