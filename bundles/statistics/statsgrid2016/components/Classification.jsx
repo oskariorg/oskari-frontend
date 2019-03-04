@@ -12,7 +12,6 @@ class Classification extends React.Component {
         this.state = {
             isEdit: false
         };
-        this.legendHTML = {};
         handleBinder(this);
     }
     componentDidMount () {
@@ -31,19 +30,16 @@ class Classification extends React.Component {
     }
 
     createLegendHTML () {
-        console.log(this.props);
         const {loc, plugin, legendProps} = this.props;
         const indicatorData = this.props.indicators.data;
         const classification = legendProps.classification;
         const colors = legendProps.colors;
         if (!indicatorData || Object.keys(indicatorData).length === 0) {
-            this.legendHTML = {error: loc('legend.noData')};
-            return;
+            return {error: loc('legend.noData')};
         }
         if (!classification) {
             plugin.log.warn('Error getting indicator classification', indicatorData);
-            this.legendHTML = {error: loc('legend.noEnough')};
-            return;
+            return {error: loc('legend.noEnough')};
         }
         const opacity = this.props.classifications.values.transparency / 100 || 1;
         let legend;
@@ -58,11 +54,11 @@ class Classification extends React.Component {
         }
 
         if (!legend) {
-            this.legendHTML = {error: loc('legend.cannotCreateLegend')};
+            return {error: loc('legend.cannotCreateLegend')};
         } else if (legend instanceof jQuery) {
-            this.legendHTML = {__html: legend.prop('outerHTML')}; // points legend
+            return {__html: legend.prop('outerHTML')}; // points legend
         } else {
-            this.legendHTML = {__html: legend};
+            return {__html: legend};
         }
     }
 
@@ -93,7 +89,7 @@ class Classification extends React.Component {
         const indicators = this.props.indicators.selected;
         const headerClass = indicators.length === 1 ? 'active-header single-selected' : 'active-header multi-selected';
         const {title} = indicators.find(indicator => activeIndicator.hash === indicator.id) || {title: ''};
-        this.createLegendHTML();
+        const legendHTML = this.createLegendHTML();
 
         return (
             <div className="statsgrid-classification-container" onMouseUp = {() => this.props.plugin.trigger('ContainerClicked')}>
@@ -105,7 +101,7 @@ class Classification extends React.Component {
                     classifications = {classifications}
                     isEdit = {this.state.isEdit}
                     indicators = {this.props.indicators}/>
-                <ActiveLegend indicator = {activeIndicator} legendHTML = {this.legendHTML}/>
+                <ActiveLegend indicator = {activeIndicator} legendHTML = {legendHTML}/>
             </div>
         );
     }
