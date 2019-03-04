@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { GenericContext } from '../../../../src/reactUtil/genericContext';
 import Classification from '../components/Classification';
+import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
@@ -25,7 +26,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._name = 'ClassificationPlugin';
         me.element = null;
         me._templates = {
-            main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
+            main: jQuery('<div class="mapplugin statsgrid-classification-plugin"></div>')
         };
         // for publisher dragndrop to work needs to have at least:
         // -  mapplugin-class in parent template
@@ -166,11 +167,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 return;
             }
             if (transparent) {
-                element.removeClass('statsgrid-legend-plugin');
-                element.addClass('statsgrid-legend-plugin-transparent');
+                element.removeClass('statsgrid-classification-plugin');
+                element.addClass('statsgrid-classification-plugin-transparent');
             } else {
-                element.removeClass('statsgrid-legend-plugin-transparent');
-                element.addClass('statsgrid-legend-plugin');
+                element.removeClass('statsgrid-classification-plugin-transparent');
+                element.addClass('statsgrid-classification-plugin');
             }
         },
         getElement: function () {
@@ -203,7 +204,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var headerHeight = element.find('.active-header').first().height();
             if (Oskari.util.isMobile()) {
                 element.find('.accordion').css({
-                    'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
             } else if (!Oskari.util.isMobile()) {

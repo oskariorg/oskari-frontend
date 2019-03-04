@@ -6,21 +6,21 @@ import ClassificationCheckbox from './ClassificationCheckbox';
 import ClassificationColorSelect from './ClassificationColorSelect';
 import ManualClassification from './manualClassification/ManualClassification';
 import {withContext} from '../../../../src/reactUtil/genericContext';
+import '../resources/scss/editclassification.scss';
 
 const getSelectsProperties = ({classifications, loc, service, indicators}) =>
-    // TODO remove visible-map-style classes and edit scss
     // select component's options could be array or object
     [
         {
             id: 'mapStyle',
             component: 'select',
-            class: 'classification-map-style visible-map-style-choropleth visible-map-style-points visible-on-vector',
+            class: 'classification-map-style',
             label: loc('classify.map.mapStyle'),
             options: getLocalizedOptions(['choropleth', 'points'], loc('classify.map'))
         }, {
             id: 'method',
             component: 'select',
-            class: 'classification-method visible-map-style-choropleth visible-map-style-points',
+            class: 'classification-method',
             label: loc('classify.classifymethod'),
             options: getLocalizedOptions(classifications.methods, loc('classify.methods'))
         }, {
@@ -31,49 +31,49 @@ const getSelectsProperties = ({classifications, loc, service, indicators}) =>
         }, {
             id: 'count',
             component: 'select',
-            class: 'classification-count visible-map-style-choropleth visible-map-style-points',
+            class: 'classification-count',
             label: loc('classify.classes'),
             options: getValidCountRange(classifications, service, indicators),
             valueType: 'int'
         }, {
             id: 'mode',
             component: 'select',
-            class: 'classification-mode visible-map-style-choropleth visible-map-style-points',
+            class: 'classification-mode',
             label: loc('classify.mode'),
             options: getLocalizedOptions(classifications.modes, loc('classify.modes'))
         }, {
             id: 'point-size',
             component: 'slider',
-            class: 'point-size oskariui visible-map-style-points visible-on-vector',
+            class: 'point-size',
             label: loc('classify.map.pointSize'),
             hideWith: ['choropleth']
         }, {
             id: 'showValues',
             component: 'checkbox',
-            class: 'numeric-value visible-map-style-choropleth visible-map-style-points visible-on-vector',
+            class: 'show-values',
             label: loc('classify.map.showValues')
         }, {
             id: 'name',
             component: 'color',
-            class: 'classification-colors visible-map-style-choropleth visible-map-style-points'
+            class: 'classification-colors'
         }, {
             id: 'transparency',
             component: 'select',
-            class: 'point-transparency visible-map-style-points visible-on-vector',
+            class: 'classification-transparency',
             label: loc('classify.map.transparency'),
             options: getTransparencyOptions(classifications),
             valueType: 'int'
         }, {
             id: 'type',
             component: 'select',
-            class: 'classification-color-set visible-map-style-choropleth',
+            class: 'classification-type',
             label: loc('colorset.setselection'),
             options: getLocalizedOptions(service.getColorService().getAvailableTypes(), loc('colorset')),
             hideWith: ['points']
         }, {
             id: 'fractionDigits',
             component: 'select',
-            class: 'decimal-place visible-map-style-choropleth visible-map-style-points',
+            class: 'decimal-place',
             label: loc('classify.map.fractionDigits'),
             options: [0, 1, 2, 3, 4, 5],
             valueType: 'int'
@@ -177,25 +177,16 @@ const getComponent = (properties, disabled, {classifications, indicators}) => {
 };
 
 const ClassificationEdit = props => {
-    let className = 'classification';
+    let className = 'classification-edit';
     if (!props.isEdit) {
-        className = 'classification oskari-hidden';
+        className = 'classification-edit oskari-hidden';
     }
     const disabled = !props.service.getStateService().isClassificationEnabled();
-    // TODO remove accordion and modify scss
     const selectsProperties = getSelectsProperties(props);
     return (
         <div className={className}>
-            <div className="accordion">
-                <div className="accordion_panel open">
-                    <div className="content">
-                        <div className="classifications">
-                            <div className="classification-options">
-                                {selectsProperties.map(properties => getComponent(properties, disabled, props))}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+            <div className="classification-options">
+                {selectsProperties.map(properties => getComponent(properties, disabled, props))}
             </div>
         </div>
     );

@@ -11,10 +11,10 @@ const handleChange = (service, properties, value) => {
 const ClassificationSelect = ({properties, options, value, service, disabled}) => {
     // options => array of values [1,3,4,5] or array of objects with properties: value and optionally: text, hidden, disabled
     return (
-        <div className={properties.class}>
-            <div className="label">{properties.label}</div>
-            <div className = "select">
-                <select className="select" value={value} disabled = {disabled} onChange={(evt) => handleChange(service, properties, evt.target.value)}>
+        <div className={properties.class + ' option'}>
+            <div className="select-label">{properties.label}</div>
+            <div className = {properties.class + ' value'}>
+                <select className={properties.class + ' select'} value={value} disabled = {disabled} onChange={(evt) => handleChange(service, properties, evt.target.value)}>
                     {options.map(opt => {
                         if (opt.value !== undefined && opt.hidden) {
                             return <option className = "oskari-hidden" disabled = {opt.disabled ? true : null} key= {'hidden_' + opt.value} value = {opt.value}>{opt.text || opt.value}</option>;

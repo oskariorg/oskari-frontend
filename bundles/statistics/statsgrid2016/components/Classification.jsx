@@ -4,6 +4,7 @@ import ClassificationEdit from './ClassificationEdit';
 import ActiveLegend from './ActiveLegend';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 import handleBinder from '../../../../src/reactUtil/handleBinder';
+import '../resources/scss/classification.scss';
 
 class Classification extends React.Component {
     constructor (props) {
@@ -111,21 +112,21 @@ class Classification extends React.Component {
     }
     getEditButton () {
         if (this.state.isEdit) {
-            return <div className="edit-legend edit-active" title={this.props.loc('classify.edit.close')} onMouseUp = {this.handleToggleClassification}/>
+            return <div className="edit-button edit-active" title={this.props.loc('classify.edit.close')} onMouseUp = {this.handleToggleClassification}/>
         }
-        return <div className="edit-legend" title={this.props.loc('classify.edit.open')} onMouseUp = {this.handleToggleClassification}/>
+        return <div className="edit-button" title={this.props.loc('classify.edit.open')} onMouseUp = {this.handleToggleClassification}/>
     }
 
     render () {
         const classifications = this.props.classifications;
         const activeIndicator = this.props.indicators.active;
         const indicators = this.props.indicators.selected;
-        const headerClass = indicators.length === 1 ? 'active-header' : 'active-header multi-select-legend';
+        const headerClass = indicators.length === 1 ? 'active-header single-selected' : 'active-header multi-selected';
         const {title} = indicators.find(indicator => activeIndicator.hash === indicator.id) || {title: ''};
         this.getLegend();
 
         return (
-            <div className="statsgrid-legend-container" onMouseUp = {() => this.props.plugin.trigger('ContainerClicked')}>
+            <div className="statsgrid-classification-container" onMouseUp = {() => this.props.plugin.trigger('ContainerClicked')}>
                 <div className={headerClass} data-selected-indicator={title}>
                     {this.getHeaderComponent()}
                     {this.getEditButton()}

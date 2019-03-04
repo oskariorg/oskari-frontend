@@ -1,6 +1,7 @@
 import React from 'react';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 import ColorSelect from './ColorSelect';
+import '../resources/scss/classificationcolorselect.scss';
 
 const handleReverseColors = (service, isReverse) => {
     service.getStateService().updateActiveClassification('reverseColors', isReverse);
@@ -23,8 +24,8 @@ const ClassificationColorSelect = ({properties, values, loc, service, disabled})
     }
 
     return (
-        <div className={properties.class}>
-            <div className="label">{label}</div>
+        <div className={properties.class + ' option'}>
+            <div className="select-label">{label}</div>
             <div className = "classification-colors value">
                 <ColorSelect colors = {colors} isSimple = {isSimple} value = {values.name} opacity = {opacity}
                     disabled = {disabled} handleColorChange = {value => handleColorChange(service, value)}/>

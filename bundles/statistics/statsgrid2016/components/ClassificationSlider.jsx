@@ -1,5 +1,6 @@
 import React from 'react';
 import {withContext} from '../../../../src/reactUtil/genericContext';
+import '../resources/scss/classificationslider.scss';
 
 class ClassificationSlider extends React.Component {
     constructor (props) {
@@ -37,17 +38,27 @@ class ClassificationSlider extends React.Component {
             }
         });
     }
+    componentDidUpdate () {
+        if(!this.$el){
+            return;
+        }
+        if (this.props.disabled) {
+            this.$el.slider('disable');
+        } else {
+            this.$el.slider('enable');
+        }
+    }
     componentWillUnmount () {
         this.$el.slider('destroy');
     }
     render () {
         const properties = this.props.properties;
         const loc = this.props.loc;
-
+        const className = 'oskari-slider oskari-ui ' + properties.class;
         return (
-            <div className={properties.class}>
-                <div className="label">{properties.label}</div>
-                <div className="minmaxlabels" style={{marginBottom: '25px'}}>
+            <div className={className}>
+                <div className="slider-label">{properties.label}</div>
+                <div className="minmaxlabels">
                     <div className="min">{loc('classify.map.min')}</div>
                     <div className="max">{loc('classify.map.max')}</div>
                 </div>

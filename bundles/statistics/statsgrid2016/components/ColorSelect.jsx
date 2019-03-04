@@ -101,7 +101,6 @@ class ColorSelect extends React.Component {
                     <div className="color-selection-arrow">
                         <div className="icon-arrow-down"/>
                     </div>
-                    <div style={{clear: 'both'}} />
                 </div>
                 {this.getColorSelection()}
             </div>
