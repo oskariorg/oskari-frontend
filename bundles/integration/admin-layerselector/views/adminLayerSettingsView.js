@@ -1289,14 +1289,12 @@ function (
             });
         },
         removeLayerCollection: function (e) {
-            var me = this,
-                element = jQuery(e.currentTarget),
-                //                    editForm = element.parents('.admin-add-layer').attr('data-id'),
-                accordion = element.parents('.accordion');
-                // make AJAX call
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var accordion = element.parents('.accordion');
+            // make AJAX call
             jQuery.ajax({
                 type: 'POST',
-                dataType: 'json',
                 data: {
                     layer_id: me.model.getId()
                 },
