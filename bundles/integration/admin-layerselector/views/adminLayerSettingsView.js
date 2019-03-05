@@ -596,7 +596,7 @@ function (
             var inspireGroups = this.instance.models.inspire.getGroupTitles();
             me.$el.append(me.groupTemplate({
                 dataProviders: me.getDataProviders(),
-                maplayerGroups: me.options.groupId,
+                maplayerGroups: me.options.maplayerGroups,
                 model: me.model,
                 instance: me.options.instance,
                 groupTitle: groupTitle,
@@ -1266,6 +1266,7 @@ function (
                 url: Oskari.urls.getRoute('SaveLayer'),
                 success: function (resp) {
                     jQuery('body').css('cursor', '');
+                    resp.groups = me.options.maplayerGroups;
                     if (!me.model.getId()) {
                         // trigger event to View.js so that it can act accordingly
                         accordion.trigger({

@@ -242,41 +242,46 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
         },
 
         toggleSubLayerSettings: function (e) {
-            var me = this,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
+            var me = this;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var element = jQuery(e.currentTarget).parents('.add-sublayer-wrapper');
 
             e.stopPropagation();
 
-            var subLayerId = element.attr('sublayer-id'),
-                subLayer = this._getSubLayerById(subLayerId),
-                parentId = this.model.getId(),
-                isEdit = subLayerId !== null && subLayerId !== undefined;
+            var subLayerId = element.attr('sublayer-id');
+            var subLayer = this._getSubLayerById(subLayerId);
+            var parentId = this.model.getId();
+            var isEdit = subLayerId !== null && subLayerId !== undefined;
+            var groupId = element.parents('.accordion').attr('lcid');
+            var groupDetails = me.layerService.getAllLayerGroups(groupId);
 
-                // create AdminLayerSettingsView
             var settings = new AdminLayerSettingsView({
                 model: subLayer,
                 supportedTypes: me.supportedTypes,
                 instance: this.options.instance,
                 layerTabModel: this.options.layerTabModel,
                 baseLayerId: parentId,
-                groupId: element.parents('.accordion').attr('lcid')
+                dataProviders: me.dataProviders,
+                maplayerGroups: (me.model) ? me.model.getGroups() : [{
+                    id: groupDetails.id,
+                    name: Oskari.getLocalized(groupDetails.name)
+                }]
             });
                 // Create buttons for the popup and hide the form buttons...
-            var container = jQuery('<div class="admin-layerselector"><div class="layer"></div></div>'),
-                buttons = [],
-                saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
-                exitPopup = function () {
-                    settings.undelegateEvents();
-                    settings.$el.removeData().unbind();
-                    settings.remove();
-                    Backbone.View.prototype.remove.call(settings);
-                    dialog.close();
-                    // TODO refresh parent layer view
-                    // call trigger on parent element's dom...
-                    // see adminAction
-                };
+            var container = jQuery('<div class="admin-layerselector"><div class="layer"></div></div>');
+            var buttons = [];
+            var saveButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            var exitPopup = function () {
+                settings.undelegateEvents();
+                settings.$el.removeData().unbind();
+                settings.remove();
+                Backbone.View.prototype.remove.call(settings);
+                dialog.close();
+                // TODO refresh parent layer view
+                // call trigger on parent element's dom...
+                // see adminAction
+            };
             if (subLayer && subLayer.getId && subLayer.getId()) {
                 saveButton.setTitle(this.instance.getLocalization('save'));
             } else {
