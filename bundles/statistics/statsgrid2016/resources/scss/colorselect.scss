@@ -1,0 +1,82 @@
+$borderColor: #AAAAAA;
+$disabledBorderColor: #DDDDDD;
+$colorBorder: 1px solid #555555;
+$simpleColorWidth: 16px;
+$colorSetColorWidth: 6px;
+$colorHeight: 16px;
+
+.oskari-color-selection-main {
+    position: relative;
+
+    &.disabled {
+        .oskari-selected-color {
+            border: 1px solid $disabledBorderColor;
+        }
+        .color-selection-arrow {
+            border: 1px solid $disabledBorderColor;
+            .icon-arrow-down {
+                opacity: 0.6;
+            }
+        }
+    }
+    .oskari-color-option {
+        cursor: pointer;
+        .oskari-color {
+            height: 100%;
+            width: 100%;
+            float: left;
+        }
+        .oskari-color-set {
+            border: $colorBorder;
+            height: $colorHeight;
+            .oskari-color {
+                width: $colorSetColorWidth;
+            }
+        }
+        .oskari-color-simple {
+            border: $colorBorder;
+            height: $colorHeight;
+            width: $simpleColorWidth;
+        }
+    }
+    .oskari-color-selection {
+        top: 28px;
+        left: 0px; 
+        width: 101px;
+        z-index: 10;
+        border: 1px solid $borderColor;
+        border-top: none;
+        max-height: 100px;
+        overflow: auto;
+        position: absolute;
+        .oskari-color-option {
+            padding: 2px;
+            background-color: #FFFFFF;
+        }
+    }
+
+    .oskari-selected-color {
+        border: 1px solid $borderColor;
+        padding: 4px;
+        width: 80px;
+        height: 18px;
+        cursor: pointer;
+        float: left;
+        .oskari-color-option {
+            background-color: transparent;
+        }
+    }
+    .color-selection-arrow {
+        float: left;
+        padding-top: 6px;
+        width: 12px;
+        height: 20px;
+        border: 1px solid $borderColor;
+        border-left: none;
+        cursor: pointer;
+    }
+}
+
+:export {
+    colorSetColorWidth: $colorSetColorWidth
+}

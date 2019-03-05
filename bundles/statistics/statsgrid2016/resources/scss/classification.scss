@@ -9,7 +9,10 @@
         align-items: center;
         padding: 5px;
         position: relative;
-
+        &.multi-selected select {
+            width: 94%;
+            padding: 2px;
+        }
         &.multi-selected:hover:after {
             content: attr(data-selected-indicator);
             display: block;

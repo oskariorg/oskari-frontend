@@ -71,7 +71,7 @@ class Classification extends React.Component {
             );
         }
         return (
-            <select value={active.hash} style={{ width: '94%', padding: '2px' }} onChange={this.handleIndicatorChange}>
+            <select value={active.hash} onChange={this.handleIndicatorChange}>
                 {indicators.map(opt => <option key={opt.id} value={opt.id}>{opt.title}</option>)}
             </select>
         );
