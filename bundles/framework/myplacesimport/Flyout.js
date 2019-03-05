@@ -338,7 +338,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 list.push(errors.no_main_file);
                 if (errorInfo.ignored) {
                     if (Object.keys(errorInfo.ignored).some(key => errorInfo.ignored[key] === 'folder')) {
-                        list.push(errors.has_folders);
+                        list.push(errors.hasFolders);
                     }
                 }
                 break;
@@ -356,7 +356,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 if (errorInfo.cause === 'format_failure') {
                     list.push(errors.format_failure);
                 } else {
-                    list.push(errors.parser_generic);
+                    list.push(errors.parserGeneric);
                 }
                 break;
             default:
