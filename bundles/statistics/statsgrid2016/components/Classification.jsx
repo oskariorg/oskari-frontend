@@ -13,12 +13,13 @@ class Classification extends React.Component {
             isEdit: false
         };
         handleBinder(this);
+        this.log = Oskari.log('Oskari.statistics.statsgrid.Classification');
     }
     componentDidMount () {
-        this.props.plugin.trigger('Rendered');
+        this.props.onRenderChange();
     }
     componentDidUpdate () {
-        this.props.plugin.trigger('Updated', this.state.isEdit);
+        this.props.onRenderChange(true, this.state.isEdit);
     }
 
     handleIndicatorChange (event) {
@@ -30,7 +31,7 @@ class Classification extends React.Component {
     }
 
     createLegendHTML () {
-        const {loc, plugin, legendProps} = this.props;
+        const {loc, legendProps} = this.props;
         const indicatorData = this.props.indicators.data;
         const classification = legendProps.classification;
         const colors = legendProps.colors;
@@ -38,7 +39,7 @@ class Classification extends React.Component {
             return {error: loc('legend.noData')};
         }
         if (!classification) {
-            plugin.log.warn('Error getting indicator classification', indicatorData);
+            this.log.warn('Error getting indicator classification', indicatorData);
             return {error: loc('legend.noEnough')};
         }
         const opacity = this.props.classifications.values.transparency / 100 || 1;

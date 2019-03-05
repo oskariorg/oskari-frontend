@@ -66,6 +66,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.render();
             return this.element;
         },
+        rendered: function (isUpdate, isEdit) {
+            if (isUpdate) {
+                // check if edit classification state is changed
+                if (isEdit !== this._previousIsEdit) {
+                    if (isEdit) {
+                        this._overflowCheck(true);
+                    } else {
+                        this._restoreOverflow();
+                    }
+                    this._previousIsEdit = isEdit;
+                }
+                this._overflowCheck();
+            } else {
+                this._calculatePluginSize();
+                this._overflowCheck();
+            }
+        },
         render: function (activeClassfication) {
             if (!this.element) return;
             const node = this.element.get(0);
@@ -80,9 +97,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
 
             ReactDOM.render((
-                <GenericContext.Provider value={{loc: this._locale, service: this.service, plugin: this}}>
+                <GenericContext.Provider value={{loc: this._locale, service: this.service}}>
                     <Classification indicators = {indicators} classifications = {classifications}
-                        legendProps = {legendProps}/>
+                        legendProps = {legendProps} onRenderChange = {this.rendered.bind(this)}/>
                 </GenericContext.Provider>
             ), node);
         },
@@ -110,7 +127,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                     indicators.data = data;
                 }
                 if (err) {
-                    this.log.warn('Error getting indicator classification', active, indicators.regionset);
+                    this.log.warn('Error getting indicator data', active, indicators.regionset);
                 }
             });
             return indicators;
@@ -127,7 +144,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             props.modes = service.getAvailableModes();
             props.types = colorsService.getAvailableTypes();
             props.validOptions = service.getAvailableOptions(indicators.data);
-            if (props.values.mapStyle !== 'choropleth') {
+            if (values.mapStyle !== 'choropleth') {
                 props.colors = colorsService.getDefaultSimpleColors();
             } else {
                 props.colors = colorsService.getOptionsForType(values.type, values.count, values.reverseColors);
@@ -291,23 +308,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.getStateService().on('ClassificationContainerChanged', () => this.render());
 
             this.service.on('AfterChangeMapLayerOpacityEvent', (event) => this.render());
-
-            this.on('Rendered', () => {
-                this._calculatePluginSize();
-                this._overflowCheck();
-            });
-            this.on('Updated', (isEdit) => {
-                // check if edit classification state is changed
-                if (isEdit !== this._previousIsEdit) {
-                    if (isEdit) {
-                        this._overflowCheck(true);
-                    } else {
-                        this._restoreOverflow();
-                    }
-                    this._previousIsEdit = isEdit;
-                }
-                this._overflowCheck();
-            });
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
