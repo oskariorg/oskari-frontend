@@ -23,12 +23,12 @@ function (
         className: 'admin-add-layer',
 
         /**
-             * This object contains backbone event-handling.
-             * It binds methods to certain events fired by different elements.
-             *
-             * @property events
-             * @type {Object}
-             */
+         * This object contains backbone event-handling.
+         * It binds methods to certain events fired by different elements.
+         *
+         * @property events
+         * @type {Object}
+         */
         events: {
             'click .admin-add-layer-ok': 'addLayer',
             'click .admin-add-sublayer-ok': 'addLayer',
@@ -63,12 +63,12 @@ function (
         },
 
         /**
-             * Save dataprovider
-             * @method  _saveDataprovider
-             * @param   {Object}   data  data fo saving
-             * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
-             * @private
-             */
+         * Save dataprovider
+         * @method  _saveDataprovider
+         * @param   {Object}   data  data fo saving
+         * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
+         * @private
+         */
         _saveDataprovider: function (data, popup) {
             var me = this;
 
@@ -94,9 +94,9 @@ function (
         },
 
         /**
-             * Add dataprovider
-             * @method addDataprovider
-             */
+         * Add dataprovider
+         * @method addDataprovider
+         */
         addDataprovider: function () {
             var me = this;
             var buttons = [];
@@ -230,7 +230,7 @@ function (
                 return grepped.length > 0;
             };
 
-                // groups
+            // groups
             me.options.allMaplayerGroups.forEach(function (group) {
                 var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
                 checkbox.setTitle(group.name);
@@ -331,11 +331,11 @@ function (
             dialog.makeDraggable();
         },
         /**
-             * At initialization we add model for this tabPanelView, add templates
-             * and do other initialization steps.
-             *
-             * @method initialize
-             */
+         * At initialization we add model for this tabPanelView, add templates
+         * and do other initialization steps.
+         *
+         * @method initialize
+         */
         initialize: function () {
             var me = this;
 
@@ -427,10 +427,10 @@ function (
         },
 
         /**
-             * Creates the selection to create either base, group or normal layer.
-             *
-             * @method createLayerSelect
-             */
+         * Creates the selection to create either base, group or normal layer.
+         *
+         * @method createLayerSelect
+         */
         createLayerSelect: function (e) {
             var element = jQuery(e.currentTarget),
                 addLayerWrappers = element.parents('.add-layer-wrapper'),
@@ -558,10 +558,10 @@ function (
             }
         },
         /**
-             * Gets dataproviders
-             * @method getDataProviders
-             * @return {Array}         dataproviders
-             */
+         * Gets dataproviders
+         * @method getDataProviders
+         * @return {Array}         dataproviders
+         */
         getDataProviders: function () {
             return this.options.dataProviders;
         },
@@ -608,10 +608,10 @@ function (
         },
 
         /**
-             * Hide layer settings
-             *
-             * @method hideLayerSettings
-             */
+         * Hide layer settings
+         *
+         * @method hideLayerSettings
+         */
         hideLayerSettings: function (e) {
             e.stopPropagation();
             var me = this;
@@ -628,10 +628,10 @@ function (
             }
         },
         /**
-             * Handle interface version change
-             *
-             * @method handleInterfaceVersionChange
-             */
+         * Handle interface version change
+         *
+         * @method handleInterfaceVersionChange
+         */
         handleInterfaceVersionChange: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -645,10 +645,10 @@ function (
             }
         },
         /**
-             * New sld style management for importing it to server
-             *
-             * @method importSldStyle
-             */
+         * New sld style management for importing it to server
+         *
+         * @method importSldStyle
+         */
         importSldStyle: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -662,10 +662,10 @@ function (
             sldImport.show();
         },
         /**
-             * Cancel sld style management for importing it to server
-             *
-             * @method cancelSldStyle
-             */
+         * Cancel sld style management for importing it to server
+         *
+         * @method cancelSldStyle
+         */
         cancelSldStyle: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -680,10 +680,10 @@ function (
             sldImport.hide();
         },
         /**
-             * Save new sld style to data base
-             *
-             * @method saveSldStyle
-             */
+         * Save new sld style to data base
+         *
+         * @method saveSldStyle
+         */
         saveSldStyle: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -708,10 +708,10 @@ function (
             sldImport.hide();
         },
         /**
-             * Check, that xml has valid  syntax
-             *
-             * @method checkXml
-             */
+         * Check, that xml has valid  syntax
+         *
+         * @method checkXml
+         */
         _checkXml: function (xml) {
             var me = this,
                 isValid = true;
@@ -730,10 +730,10 @@ function (
             return isValid;
         },
         /**
-             * Handle sld styles selection
-             *
-             * @method handleSldStylesChange
-             */
+         * Handle sld styles selection
+         *
+         * @method handleSldStylesChange
+         */
         handleSldStylesChange: function (e) {
             e.stopPropagation();
             var me = this,
@@ -744,10 +744,10 @@ function (
             me._DefaultStylesUI(element, styles);
         },
         /**
-             * selected sld styles selection
-             *
-             * @method selectedSldStyles
-             */
+         * selected sld styles selection
+         *
+         * @method selectedSldStyles
+         */
         selectedSldStyles: function (form) {
             var selectedStyles = {},
                 styles = [];
@@ -774,10 +774,10 @@ function (
             }
         },
         /**
-             * Handle layer style legend Url change
-             *
-             * @method handleLayerLegendUrlChange
-             */
+         * Handle layer style legend Url change
+         *
+         * @method handleLayerLegendUrlChange
+         */
         handleLayerLegendUrlChange: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -786,10 +786,10 @@ function (
             form.find('#add-layer-legendImage').val(cur_legendUrl);
         },
         /**
-             * Remove layer
-             *
-             * @method removeLayer
-             */
+         * Remove layer
+         *
+         * @method removeLayer
+         */
         removeLayer: function (e, callback) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();
@@ -862,22 +862,22 @@ function (
             dialog.makeModal();
         },
         /**
-             * @method _showDialog
-             * @private
-             * @param title the dialog title
-             * @param message the dialog message
-             */
+         * @method _showDialog
+         * @private
+         * @param title the dialog title
+         * @param message the dialog message
+         */
         _showDialog: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(title, message);
             dialog.fadeout(5000);
         },
         /**
-             * @method _addLayerAjax
-             * @private
-             * @param {Object} data saved data
-             * @param {jQuery} element jQuery element
-             */
+         * @method _addLayerAjax
+         * @private
+         * @param {Object} data saved data
+         * @param {jQuery} element jQuery element
+         */
         _addLayerAjax: function (data, element, callback) {
             var me = this,
                 form = element.parents('.admin-add-layer'),
@@ -1213,10 +1213,10 @@ function (
             }
         },
         /**
-             * Save group or base layers
-             *
-             * @method saveCollectionLayer
-             */
+         * Save group or base layers
+         *
+         * @method saveCollectionLayer
+         */
         saveCollectionLayer: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -1289,14 +1289,12 @@ function (
             });
         },
         removeLayerCollection: function (e) {
-            var me = this,
-                element = jQuery(e.currentTarget),
-                //                    editForm = element.parents('.admin-add-layer').attr('data-id'),
-                accordion = element.parents('.accordion');
-                // make AJAX call
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var accordion = element.parents('.accordion');
+            // make AJAX call
             jQuery.ajax({
                 type: 'POST',
-                dataType: 'json',
                 data: {
                     layer_id: me.model.getId()
                 },
@@ -1314,10 +1312,10 @@ function (
             });
         },
         /**
-             * Fetch capabilities. AJAX call to get capabilities for given capability url
-             *
-             * @method fetchCapabilities
-             */
+         * Fetch capabilities. AJAX call to get capabilities for given capability url
+         *
+         * @method fetchCapabilities
+         */
         fetchCapabilities: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -1375,10 +1373,10 @@ function (
             });
         },
         /**
-             * Acts on capabilities response based on layer type
-             * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
-             * @param  {String} response  GetWSCapabilities response
-             */
+         * Acts on capabilities response based on layer type
+         * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
+         * @param  {String} response  GetWSCapabilities response
+         */
         __capabilitiesResponseHandler: function (layerType, response) {
             var me = this,
                 warningDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -1401,7 +1399,7 @@ function (
         handleCapabilitiesSelection: function (e) {
             var me = this,
                 current = jQuery(e.currentTarget);
-                // stop propagation so handler on outer tags won't be triggered as well
+            // stop propagation so handler on outer tags won't be triggered as well
             e.stopPropagation();
             var layerName = current.attr('data-layername'),
                 additionalId = current.attr('data-additionalId'),
@@ -1418,11 +1416,11 @@ function (
         },
 
         /**
-             * Helper function. This returns inner value
-             * first one or the one which matches with given key
-             *
-             * @method getValue
-             */
+         * Helper function. This returns inner value
+         * first one or the one which matches with given key
+         *
+         * @method getValue
+         */
         getValue: function (object, key) {
             var k,
                 ret;
@@ -1447,10 +1445,10 @@ function (
             }
         },
         /**
-             * Fetch wfs specific common data / sld styles
-             *
-             * @method __setupSldStyles
-             */
+         * Fetch wfs specific common data / sld styles
+         *
+         * @method __setupSldStyles
+         */
         _setupSldStyles: function () {
             var me = this,
                 elem = me.$el;
@@ -1476,10 +1474,10 @@ function (
             });
         },
         /**
-             * Save new sld style
-             *
-             * @method _saveSldStyle
-             */
+         * Save new sld style
+         *
+         * @method _saveSldStyle
+         */
         _saveSldStyle: function (sldName, sldXml) {
             var me = this;
 
@@ -1520,10 +1518,10 @@ function (
         },
 
         /**
-             * Stops propagation if admin clicks layer settings section.
-             *
-             * @method addLayer
-             */
+         * Stops propagation if admin clicks layer settings section.
+         *
+         * @method addLayer
+         */
         clickLayerSettings: function (e) {
             e.stopPropagation();
         },
