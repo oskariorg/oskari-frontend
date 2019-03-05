@@ -9,19 +9,26 @@ class ColorSelect extends React.Component {
             isOpen: false
         };
         handleBinder(this);
-        this.props.plugin.on('ContainerClicked', this.handleContainerClick);
     }
-    handleToggleClick (evt) {
-        evt.stopPropagation();
+    componentDidMount () {
+        document.addEventListener('mouseup', this.handleClick);
+    }
+    componentWillUnmount () {
+        document.removeEventListener('mouseup', this.handleClick);
+    }
+    handleClick (event) {
         if (this.props.disabled) {
             return;
         }
-        this.setState(oldState => ({ isOpen: !oldState.isOpen }));
-    }
-    handleContainerClick () {
-        if (this.state.isOpen) {
+        const outside = this.wrapperRef && !this.wrapperRef.contains(event.target);
+        if (outside && this.state.isOpen) {
             this.setState({isOpen: false});
+        } else if (!outside) {
+            this.setState(oldState => ({ isOpen: !oldState.isOpen }));
         }
+    }
+    handleWrapperRef (node) {
+        this.wrapperRef = node;
     }
 
     // color: 'deebf7'
@@ -92,7 +99,7 @@ class ColorSelect extends React.Component {
         const selected = this.getSelectedColor();
         return (
             <div className="oskari-color-selection-main">
-                <div className = "oskari-selected-color-wrapper" onMouseDown={this.handleToggleClick} onMouseUp={evt => evt.stopPropagation()}>
+                <div className = "oskari-selected-color-wrapper" ref={this.handleWrapperRef}>
                     <div className = "oskari-selected-color">
                         <div className="oskari-color-option" style={{backgroundColor: 'transparent'}}>
                             {this.props.isSimple ? this.getSimpleColorElement(selected) : this.getMultiColorElement(selected)}

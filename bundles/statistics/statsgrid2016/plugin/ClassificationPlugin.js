@@ -82,7 +82,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             ReactDOM.render((
                 <GenericContext.Provider value={{loc: this._locale, service: this.service, plugin: this}}>
                     <Classification indicators = {indicators} classifications = {classifications}
-                        legendProps = {legendProps} onMouseUp={this.trigger('ContainerClicked')}/>
+                        legendProps = {legendProps}/>
                 </GenericContext.Provider>
             ), node);
         },

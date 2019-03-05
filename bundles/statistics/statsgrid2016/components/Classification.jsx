@@ -92,7 +92,7 @@ class Classification extends React.Component {
         const legendHTML = this.createLegendHTML();
 
         return (
-            <div className="statsgrid-classification-container" onMouseUp = {() => this.props.plugin.trigger('ContainerClicked')}>
+            <div className="statsgrid-classification-container">
                 <div className={headerClass} data-selected-indicator={title}>
                     {this.getHeaderComponent()}
                     {this.getEditButton()}
