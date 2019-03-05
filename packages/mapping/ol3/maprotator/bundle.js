@@ -53,19 +53,23 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundle", function () {
           "type": "text/css",
           "src": "../../../../bundles/mapping/maprotator/resources/scss/maprotator.scss"
       }],
-      "locales" : [{
+      "locales": [{
           "lang": "en",
           "type": "text/javascript",
           "src": "../../../../bundles/mapping/maprotator/resources/locale/en.js"
-      },{
+      }, {
           "lang": "fi",
           "type": "text/javascript",
           "src": "../../../../bundles/mapping/maprotator/resources/locale/fi.js"
-      },{
-        "lang": "sv",
-        "type": "text/javascript",
-        "src": "../../../../bundles/mapping/maprotator/resources/locale/sv.js"
-    }]
+      }, {
+          "lang": "fr",
+          "type": "text/javascript",
+          "src": "../../../../bundles/mapping/maprotator/resources/locale/fr.js"
+      }, {
+          "lang": "sv",
+          "type": "text/javascript",
+          "src": "../../../../bundles/mapping/maprotator/resources/locale/sv.js"
+      }]
   },
   "bundle": {
       "manifest": {

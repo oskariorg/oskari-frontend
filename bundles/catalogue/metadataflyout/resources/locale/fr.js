@@ -4,6 +4,7 @@ Oskari.registerLocalization(
     "key": "catalogue.bundle.metadataflyout",
     "value": {
         "title": "Métadonnées",
+        "tooltip": "Afficher les métadonnées",
         "desc": "",
         "layer": {
             "name": "Métadonnées",
@@ -19,6 +20,10 @@ Oskari.registerLocalization(
             "quality": "Qualité des données",
             "actions": "",
             "xml": "Fichier XML ISO 19139",
+            "coverage": {
+                "removeBBOX": "Masquer l'étendue géographique",
+                "showBBOX": "Afficher l'étendue géographique"
+            },
             "map": "Étendue géographique",
             "pdf": "Impression",
             "select_metadata_prompt": "Sélectionnez les métadonnées en cliquant sur les icônes.",
@@ -178,7 +183,7 @@ Oskari.registerLocalization(
                 },
                 "gmd:MD_RestrictionCode": {
                     "copyright": {
-                        "label": "Copyright",
+                        "label": "Droit d'auteur",
                         "description": "Droits réservés pour la publication, la production ou la vente des droits dans le cadre d’une œuvre littéraire, dramatique, musicale ou artistique, ou pour toute utilisation dans un imprimé commercial ou étiquette commerciale, accordée par voie législative pour une durée prédéterminée à un auteur, compositeur, artiste ou distributeur."
                     },
                     "patent": {
@@ -383,7 +388,24 @@ Oskari.registerLocalization(
             },
             "qualityContent": {
                 "qualityPassTrue": "Le jeu de donnée est conforme à la spécification",
-                "qualityPassFalse": "Le jeu de donnée n'est pas conforme à la spécification"
+                "qualityPassFalse": "Le jeu de donnée n'est pas conforme à la spécification",
+                "nameOfMeasure": "Nom de la mesure",
+                "citationTitle": "Titre",
+                "measureIdentificationCode": "Code d'identification de la mesure",
+                "measureIdentificationAuthorization": "Autorisation d'identification de la mesure",
+                "measureDescription": "Description de la mesure",
+                "evaluationMethodType": "Méthode d'évaluation",
+                "evaluationMethodDescription": "Description de la méthode d'évaluation",
+                "evaluationProcedure": "Procédure d'évaluation",
+                "dateTime": "Date/heure",
+                "specification": "Titre de la spécification",
+                "explanation": "Explication",
+                "valueType": "Type de valeur",
+                "valueUnit": "Unité de valeur",
+                "errorStatistic": "Statistique d'erreur",
+                "value": "Valeur",
+                "conformanceResult": "Résultat de conformité",
+                "quantitativeResult": "Résultat quantitatif"
             },
             "heading": {
                 "abstractTextData": "Texte de résumé (données)",

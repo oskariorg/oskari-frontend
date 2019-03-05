@@ -7,6 +7,13 @@ Oskari.registerLocalization(
         "desc": "Mes données",
         "notLoggedIn": "\"Mes données\" contient votre profil d’utilisateur et toutes vos caractéristiques enregistrées ainsi que vos vues cartographiques, cartes intégrées, indicateurs, analyses et fichiers de données. <a href='/web/fr/identification'>Identifiez-vous pour vérifier vos données</a>.",
         "notLoggedInText": "Se connecter",
+        "register": "Register",
+        "projectionError": {
+            "title": "Les projections ne sont pas compatibles",
+            "msg": "La page se recharge pour modifier la projection",
+            "ok": "OK",
+            "cancel": "Annuler"
+        },
         "tabs": {
             "myviews": {
                 "title": "Mes vues cartographiques",
@@ -114,7 +121,8 @@ Oskari.registerLocalization(
                     "notsaved": "Impossible d’enregistrer la carte intégrée. Veuillez réessayer plus tard.",
                     "notdeleted": "Impossible de supprimer la carte intégrée. Veuillez réessayer plus tard.",
                     "makePublic": "Impossible de publier la carte intégrée. Veuillez réessayer plus tard.",
-                    "makePrivate": "Impossible de dépublier la carte intégrée. Veuillez réessayer plus tard."
+                    "makePrivate": "Impossible de dépublier la carte intégrée. Veuillez réessayer plus tard.",
+                    "loadfailed": "Impossible de récupérer les cartes embarquées."
                 }
             },
             "account": {
@@ -134,11 +142,11 @@ Oskari.registerLocalization(
             "no": "Non"
         },
         "guidedTour": {
-            "title": "My Data",
-            "message": "\"My data\" -menu contains all your saved places, map views, embedded maps, indicators, analysis and datasets. There you can also check your account information. My data are shown only for logged-in users.",
-            "openLink": "Show My data",
-            "closeLink": "Hide My data",
-            "tileText": "My Data"
+            "title": "Mes données",
+            "message": "Le menu\"Mes données\" contient vos lieux, vues cartographiques, cartes embarquées, indicateurs, analyses et jeux de données enregistrés. Vous pouvez aussi y constater l'information sur votre compte. Seuls les utilisateurs qui ont ouvert une session peuvent consulter Mes données.",
+            "openLink": "Afficher mes données",
+            "closeLink": "Masquer mes données",
+            "tileText": "Mes données"
         }
     }
 });

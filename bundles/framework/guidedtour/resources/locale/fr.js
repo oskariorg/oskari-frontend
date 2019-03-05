@@ -4,20 +4,20 @@ Oskari.registerLocalization(
     "key": "GuidedTour",
     "value": {
         "button": {
-            "next": "Next",
-            "previous": "Previous",
-            "start": "Start",
-            "finish": "Finish",
-            "close": "Close"
+            "next": "Suivant",
+            "previous": "Précédent",
+            "start": "Commencer",
+            "finish": "Terminer",
+            "close": "Fermer"
         },
-        "title": "Welcome",
+        "title": "Bienvenue",
         "desc": "",
         "tourseen": {
-            "label": "Do not show this message again"
+            "label": "Ne plus afficher ce message"
         },
         "page1": {
-            "title": "Welcome to the Paikkatietoikkuna map window",
-            "message": "If this is your first visit to the Paikkatietoikkuna map service, our quick start guide will help you to get started."
+            "title": "Bienvenue à la fenêtre cartographique de Paikkatietoikkuna",
+            "message": "S'il s'agit de votre première visite au service cartographique de Paikkatietoikkuna, notre guide de démarrage rapide vous aidera à démarrer."
         }
     }
 });

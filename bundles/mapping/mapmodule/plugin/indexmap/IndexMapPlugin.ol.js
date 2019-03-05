@@ -52,9 +52,12 @@ Oskari.clazz.define(
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
             el.append(me._indElement);
 
-            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
+            var toggleButton = jQuery('<div class="indexmapToggle"><div class="icon"></div></div>');
             // button has to be added separately so the element order is correct...
             el.append(toggleButton);
+            var toolStyle = this.getToolStyleFromMapModule();
+            this.changeToolStyle(toolStyle, el);
+
             // add toggle functionality to button
             me._bindIcon(toggleButton);
             return el;
@@ -120,7 +123,21 @@ Oskari.clazz.define(
                 }
             };
         },
+        changeToolStyle: function (style, div) {
+            var el = div || this.getElement();
 
+            if (!el) {
+                return;
+            }
+            el = el.find('.indexmapToggle');
+
+            el.removeClass((index, className) => {
+                let matchedClasses = className.match(/(^|\s)toolstyle-\S+/g);
+                return (matchedClasses || []).join('');
+            });
+
+            el.addClass('toolstyle-' + (style || 'default'));
+        },
         _setLayerToolsEditModeImpl: function () {
             var icon = this.getElement().find('.indexmapToggle');
 

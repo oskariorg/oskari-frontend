@@ -790,6 +790,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             for (s = 0; s < laytools.length; s += 1) {
                 laytool = laytools[s];
+                if (!laytool.getTypes().includes('selectedLayers')) {
+                    continue;
+                }
                 if (laytool && me.blacklistedTools.indexOf(laytool.getName()) === -1) {
                     // Icon or text link
                     if (laytool.getIconCls() && me.toolsAsText.indexOf(laytool.getName()) === -1) {

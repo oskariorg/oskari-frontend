@@ -78,6 +78,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
                 Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button.setId: No UI');
             }
         },
+
+        /**
+         * @method isEnabled
+         * @override FormComponent.isEnabled
+         * @return is the button enabled or not
+         */
+        isEnabled: function () {
+            return !this._element.disabled;
+        },
+
         /**
          * @method setEnabled
          * Enables/Disables the button

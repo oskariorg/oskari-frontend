@@ -16,6 +16,8 @@ import olMap from 'ol/Map';
 import {defaults as olControlDefaults} from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
+import {fromCircle} from 'ol/geom/Polygon';
+import olFeature from 'ol/Feature';
 
 import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
 
@@ -88,7 +90,6 @@ export default class MapModule extends AbstractMapModule {
         }));
 
         me._setupMapEvents(map);
-
         return map;
     }
 
@@ -347,7 +348,7 @@ export default class MapModule extends AbstractMapModule {
                 unit = ' km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
-                decimals = 1;
+                decimals = 0;
                 unit = ' m';
             }
         } else {
@@ -378,7 +379,33 @@ export default class MapModule extends AbstractMapModule {
 
         return olExtent.containsCoordinate(extent, lonlatArray);
     }
-
+    getLocationGeoJSON (position, addAccuracy) {
+        const coord = [position.lon, position.lat];
+        const accuracy = position.accuracy;
+        var features = [];
+        features.push(new olFeature({
+            geometry: new olGeom.Point(coord),
+            name: 'location'
+        }));
+        if (accuracy && addAccuracy !== false) {
+            features.push(new olFeature({
+                geometry: fromCircle(new olGeom.Circle(coord, accuracy), 50),
+                name: 'accuracy'
+            }));
+        }
+        return this.getGeoJSONFromFeatures(features);
+    }
+    getLocationPathGeoJSON (lineCoords) {
+        var geom = new olGeom.LineString(lineCoords);
+        if (geom) {
+            var feature = new olFeature({
+                geometry: geom,
+                name: 'path'
+            });
+            return this.getGeoJSONFromFeatures([feature]);
+        }
+        return null;
+    }
     /* <------------- / OL3 specific ----------------------------------- */
 
     /* Impl specific - found in ol2 AND ol3 modules
@@ -858,7 +885,7 @@ export default class MapModule extends AbstractMapModule {
         var style = jQuery.extend(true, {}, styleDef);
         var olStyle = {};
         if (Oskari.util.keyExists(style, 'fill.color')) {
-            var color = style.fill.color;
+            var color = style.fill.color ? style.fill.color : 'rgba(0,0,0,0)';
             if (style.effect) {
                 switch (style.effect) {
                 case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
@@ -905,25 +932,49 @@ export default class MapModule extends AbstractMapModule {
      */
     __getStrokeStyle (styleDef) {
         var stroke = {};
-        if (styleDef.stroke.width === 0) {
+        let strokeDef = styleDef.stroke.area ? styleDef.stroke.area : styleDef.stroke;
+        let { width, color, lineDash, lineCap } = strokeDef;
+
+        if (width === 0) {
             return null;
         }
-        if (styleDef.stroke.color) {
-            stroke.color = styleDef.stroke.color;
+        if (color) {
+            stroke.color = color;
         }
-
-        if (styleDef.stroke.width) {
-            stroke.width = styleDef.stroke.width;
+        if (width) {
+            stroke.width = width;
         }
-        if (styleDef.stroke.lineDash) {
-            if (_.isArray(styleDef.stroke.lineDash)) {
-                stroke.lineDash = styleDef.stroke.lineDash;
+        if (lineDash) {
+            if (Array.isArray(lineDash)) {
+                stroke.lineDash = lineDash;
             } else {
-                stroke.lineDash = [styleDef.stroke.lineDash];
+                const getDash = (segment, gap) => [segment, gap + (width || 0)];
+                switch (lineDash) {
+                case 'dash':
+                    stroke.lineDash = getDash(5, 4);
+                    break;
+                case 'dot':
+                    stroke.lineDash = getDash(1, 1);
+                    break;
+                case 'dashdot':
+                    stroke.lineDash = getDash(5, 1).concat(getDash(1, 1));
+                    break;
+                case 'longdash':
+                    stroke.lineDash = getDash(10, 4);
+                    break;
+                case 'longdashdot':
+                    stroke.lineDash = getDash(10, 1).concat(getDash(1, 1));
+                    break;
+                case 'solid':
+                    stroke.lineDash = [];
+                    break;
+                default: stroke.lineDash = [lineDash];
+                }
             }
+            stroke.lineDashOffset = 0;
         }
-        if (styleDef.stroke.lineCap) {
-            stroke.lineCap = styleDef.stroke.lineCap;
+        if (lineCap) {
+            stroke.lineCap = lineCap;
         }
         return new olStyleStroke(stroke);
     }
@@ -1114,13 +1165,20 @@ export default class MapModule extends AbstractMapModule {
     }
 
     getGeoJSONGeometryFromOL (feature) {
-        var olGeoJSON = new olFormatGeoJSON();
-        var geojsonStr = olGeoJSON.writeFeature(feature);
-        var geojson = JSON.parse(geojsonStr);
-        if (geojson.geometry) {
-            return geojson.geometry;
+        var geojson = this.getGeoJSONFromFeatures([feature]);
+        if (geojson.features & geojson.features.length > 0) {
+            return geojson.features[0].geometry;
         }
         return null;
+    }
+    /**
+     * @method getGeoJSONFromFeatures
+     * @param {Array] features
+     * @return {Object} geojson FeatureCollection
+     */
+    getGeoJSONFromFeatures (features) {
+        var olGeoJSON = new olFormatGeoJSON();
+        return olGeoJSON.writeFeaturesObject(features);
     }
 
     getOLGeometryFromGeoJSON (geojson) {

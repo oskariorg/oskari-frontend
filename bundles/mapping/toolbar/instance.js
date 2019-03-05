@@ -309,12 +309,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 me.currentMeasureTool = null;
 
                 /* we'll show prompt if measure tool has been selected */
-                if (!me.measureTools[event.getGroupId()]) {
+                if (!me.measureTools[event.getGroupId()] || !me.measureTools[event.getGroupId()][event.getToolId()]) {
+                    if (!event.getSticky()) {
+                        return;
+                    }
+                    me.requestHandlers.showMapMeasurementRequestHandler.stopMeasuring(false);
                     return;
                 }
-                if (!me.measureTools[event.getGroupId()][event.getToolId()]) {
-                    return;
-                }
+
                 me.currentMeasureTool = event.getToolId();
 
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];

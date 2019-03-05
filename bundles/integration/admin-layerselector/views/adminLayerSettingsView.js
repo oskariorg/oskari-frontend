@@ -23,12 +23,12 @@ function (
         className: 'admin-add-layer',
 
         /**
-             * This object contains backbone event-handling.
-             * It binds methods to certain events fired by different elements.
-             *
-             * @property events
-             * @type {Object}
-             */
+         * This object contains backbone event-handling.
+         * It binds methods to certain events fired by different elements.
+         *
+         * @property events
+         * @type {Object}
+         */
         events: {
             'click .admin-add-layer-ok': 'addLayer',
             'click .admin-add-sublayer-ok': 'addLayer',
@@ -55,16 +55,20 @@ function (
             'click .add-layer-forced-proj-add': 'addForcedProj',
             'click .add-layer-recheck': 'recheckCapabilities',
             'click .select-maplayer-groups-button': 'selectMaplayerGroups',
-            'click .add-dataprovider-button': 'addDataprovider'
+            'click .add-dataprovider-button': 'addDataprovider',
+            'change .layer-options-external-styles': 'externalStyleSelected',
+            'change .layer-options-external-style-file': 'importExternalStyle',
+            'click .add-external-style': 'addExternalStyle',
+            'click .remove-external-style': 'removeExternalStyle'
         },
 
         /**
-             * Save dataprovider
-             * @method  _saveDataprovider
-             * @param   {Object}   data  data fo saving
-             * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
-             * @private
-             */
+         * Save dataprovider
+         * @method  _saveDataprovider
+         * @param   {Object}   data  data fo saving
+         * @param   {Oskari.userinterface.component.Popup}   popup group adding/editing popup
+         * @private
+         */
         _saveDataprovider: function (data, popup) {
             var me = this;
 
@@ -90,9 +94,9 @@ function (
         },
 
         /**
-             * Add dataprovider
-             * @method addDataprovider
-             */
+         * Add dataprovider
+         * @method addDataprovider
+         */
         addDataprovider: function () {
             var me = this;
             var buttons = [];
@@ -226,7 +230,7 @@ function (
                 return grepped.length > 0;
             };
 
-                // groups
+            // groups
             me.options.allMaplayerGroups.forEach(function (group) {
                 var checkbox = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
                 checkbox.setTitle(group.name);
@@ -327,11 +331,11 @@ function (
             dialog.makeDraggable();
         },
         /**
-             * At initialization we add model for this tabPanelView, add templates
-             * and do other initialization steps.
-             *
-             * @method initialize
-             */
+         * At initialization we add model for this tabPanelView, add templates
+         * and do other initialization steps.
+         *
+         * @method initialize
+         */
         initialize: function () {
             var me = this;
 
@@ -369,10 +373,10 @@ function (
         },
 
         /**
-             * Renders layer settings
-             *
-             * @method render
-             */
+         * Renders layer settings
+         *
+         * @method render
+         */
         render: function () {
             var me = this;
 
@@ -423,10 +427,10 @@ function (
         },
 
         /**
-             * Creates the selection to create either base, group or normal layer.
-             *
-             * @method createLayerSelect
-             */
+         * Creates the selection to create either base, group or normal layer.
+         *
+         * @method createLayerSelect
+         */
         createLayerSelect: function (e) {
             var element = jQuery(e.currentTarget),
                 addLayerWrappers = element.parents('.add-layer-wrapper'),
@@ -554,10 +558,10 @@ function (
             }
         },
         /**
-             * Gets dataproviders
-             * @method getDataProviders
-             * @return {Array}         dataproviders
-             */
+         * Gets dataproviders
+         * @method getDataProviders
+         * @return {Array}         dataproviders
+         */
         getDataProviders: function () {
             return this.options.dataProviders;
         },
@@ -604,10 +608,10 @@ function (
         },
 
         /**
-             * Hide layer settings
-             *
-             * @method hideLayerSettings
-             */
+         * Hide layer settings
+         *
+         * @method hideLayerSettings
+         */
         hideLayerSettings: function (e) {
             e.stopPropagation();
             var me = this;
@@ -624,10 +628,10 @@ function (
             }
         },
         /**
-             * Handle interface version change
-             *
-             * @method handleInterfaceVersionChange
-             */
+         * Handle interface version change
+         *
+         * @method handleInterfaceVersionChange
+         */
         handleInterfaceVersionChange: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -641,10 +645,10 @@ function (
             }
         },
         /**
-             * New sld style management for importing it to server
-             *
-             * @method importSldStyle
-             */
+         * New sld style management for importing it to server
+         *
+         * @method importSldStyle
+         */
         importSldStyle: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -658,10 +662,10 @@ function (
             sldImport.show();
         },
         /**
-             * Cancel sld style management for importing it to server
-             *
-             * @method cancelSldStyle
-             */
+         * Cancel sld style management for importing it to server
+         *
+         * @method cancelSldStyle
+         */
         cancelSldStyle: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -676,10 +680,10 @@ function (
             sldImport.hide();
         },
         /**
-             * Save new sld style to data base
-             *
-             * @method saveSldStyle
-             */
+         * Save new sld style to data base
+         *
+         * @method saveSldStyle
+         */
         saveSldStyle: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -704,10 +708,10 @@ function (
             sldImport.hide();
         },
         /**
-             * Check, that xml has valid  syntax
-             *
-             * @method checkXml
-             */
+         * Check, that xml has valid  syntax
+         *
+         * @method checkXml
+         */
         _checkXml: function (xml) {
             var me = this,
                 isValid = true;
@@ -726,10 +730,10 @@ function (
             return isValid;
         },
         /**
-             * Handle sld styles selection
-             *
-             * @method handleSldStylesChange
-             */
+         * Handle sld styles selection
+         *
+         * @method handleSldStylesChange
+         */
         handleSldStylesChange: function (e) {
             e.stopPropagation();
             var me = this,
@@ -740,10 +744,10 @@ function (
             me._DefaultStylesUI(element, styles);
         },
         /**
-             * selected sld styles selection
-             *
-             * @method selectedSldStyles
-             */
+         * selected sld styles selection
+         *
+         * @method selectedSldStyles
+         */
         selectedSldStyles: function (form) {
             var selectedStyles = {},
                 styles = [];
@@ -770,10 +774,10 @@ function (
             }
         },
         /**
-             * Handle layer style legend Url change
-             *
-             * @method handleLayerLegendUrlChange
-             */
+         * Handle layer style legend Url change
+         *
+         * @method handleLayerLegendUrlChange
+         */
         handleLayerLegendUrlChange: function (e) {
             e.stopPropagation();
             var element = jQuery(e.currentTarget),
@@ -782,10 +786,10 @@ function (
             form.find('#add-layer-legendImage').val(cur_legendUrl);
         },
         /**
-             * Remove layer
-             *
-             * @method removeLayer
-             */
+         * Remove layer
+         *
+         * @method removeLayer
+         */
         removeLayer: function (e, callback) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();
@@ -858,22 +862,22 @@ function (
             dialog.makeModal();
         },
         /**
-             * @method _showDialog
-             * @private
-             * @param title the dialog title
-             * @param message the dialog message
-             */
+         * @method _showDialog
+         * @private
+         * @param title the dialog title
+         * @param message the dialog message
+         */
         _showDialog: function (title, message) {
             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             dialog.show(title, message);
             dialog.fadeout(5000);
         },
         /**
-             * @method _addLayerAjax
-             * @private
-             * @param {Object} data saved data
-             * @param {jQuery} element jQuery element
-             */
+         * @method _addLayerAjax
+         * @private
+         * @param {Object} data saved data
+         * @param {jQuery} element jQuery element
+         */
         _addLayerAjax: function (data, element, callback) {
             var me = this,
                 form = element.parents('.admin-add-layer'),
@@ -987,38 +991,62 @@ function (
                 }
             });
         },
-        _readLayerOptions: function (data, form) {
-            var optionsElement = form.find('.add-layer-input.layer-options');
-            if (optionsElement.length !== 0) {
-                // Master options element. Read only this element's value to options.
-                try {
-                    var optsJson = JSON.parse(optionsElement.val().trim() || '{}');
-                    data.options = JSON.stringify(optsJson);
-                } catch (error) {
-                    // don't include "options" in data if malformed JSON
-                }
-            } else {
-                // Gather options object by reading multiple layer options elements.
-                var parseOptionQuietly = function (className) {
-                    var element = form.find(className);
-                    if (element.length !== 0) {
-                        try {
-                            return JSON.parse(element.val().trim());
-                        } catch (e) {}
+        _readLayerOptions: function () {
+            var me = this;
+            var form = me.$el;
+            var parseErrors = [];
+            var options;
+            var parseOptionQuietly = function (className, valueOnly) {
+                var element = form.find(className);
+                if (element.length !== 0) {
+                    var content = element.val().trim();
+                    if (content.length === 0) {
+                        return;
                     }
-                };
-                var options = {
-                    styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
-                    externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles')
-                };
-                data.options = JSON.stringify(options);
+                    if (valueOnly) {
+                        return content;
+                    }
+                    try {
+                        return JSON.parse(content);
+                    } catch (e) {
+                        parseErrors.push({element: element});
+                    }
+                }
+            };
+            options = parseOptionQuietly('.add-layer-input.layer-options');
+            if (parseErrors.length > 0) {
+                return {errors: parseErrors};
             }
+            if (options) {
+                return options;
+            }
+            // Gather options object by reading multiple layer options elements.
+            options = {
+                styles: parseOptionQuietly('.add-layer-input.layer-options-styles'),
+                externalStyles: parseOptionQuietly('.add-layer-input.layer-options-ext-styles-json'),
+                attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
+                tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
+                hover: parseOptionQuietly('.add-layer-input.layer-options-hover'),
+                apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true)
+            };
+            if (parseErrors.length > 0) {
+                options.errors = parseErrors;
+            }
+            if (me.model.getLayerType() === 'wfs' && options.styles) {
+                // add MVT src layer name to style definitions
+                Object.keys(options.styles).forEach(function (styleKey) {
+                    var mvtSrcLayerStyleDef = {};
+                    mvtSrcLayerStyleDef[me.model.getLayerName()] = options.styles[styleKey];
+                    options.styles[styleKey] = mvtSrcLayerStyleDef;
+                });
+            }
+            return options;
         },
         /**
-             * Add layer
-             *
-             * @method addLayer
-             */
+         * Add layer
+         *
+         * @method addLayer
+         */
         addLayer: function (e, callback) {
             if (e && e.stopPropagation) {
                 e.stopPropagation();
@@ -1087,7 +1115,14 @@ function (
                 // don't include "attributes" in data if malformed JSON
             }
 
-            this._readLayerOptions(data, form);
+            data.options = this._readLayerOptions();
+            if (data.options) {
+                if (data.options.errors) {
+                    this._showJSONSyntaxError(data.options.errors);
+                    return;
+                }
+                data.options = JSON.stringify(data.options);
+            }
 
             // layer type specific
             // TODO: maybe something more elegant?
@@ -1178,10 +1213,10 @@ function (
             }
         },
         /**
-             * Save group or base layers
-             *
-             * @method saveCollectionLayer
-             */
+         * Save group or base layers
+         *
+         * @method saveCollectionLayer
+         */
         saveCollectionLayer: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -1254,14 +1289,12 @@ function (
             });
         },
         removeLayerCollection: function (e) {
-            var me = this,
-                element = jQuery(e.currentTarget),
-                //                    editForm = element.parents('.admin-add-layer').attr('data-id'),
-                accordion = element.parents('.accordion');
-                // make AJAX call
+            var me = this;
+            var element = jQuery(e.currentTarget);
+            var accordion = element.parents('.accordion');
+            // make AJAX call
             jQuery.ajax({
                 type: 'POST',
-                dataType: 'json',
                 data: {
                     layer_id: me.model.getId()
                 },
@@ -1279,10 +1312,10 @@ function (
             });
         },
         /**
-             * Fetch capabilities. AJAX call to get capabilities for given capability url
-             *
-             * @method fetchCapabilities
-             */
+         * Fetch capabilities. AJAX call to get capabilities for given capability url
+         *
+         * @method fetchCapabilities
+         */
         fetchCapabilities: function (e) {
             var me = this,
                 element = jQuery(e.currentTarget),
@@ -1340,10 +1373,10 @@ function (
             });
         },
         /**
-             * Acts on capabilities response based on layer type
-             * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
-             * @param  {String} response  GetWSCapabilities response
-             */
+         * Acts on capabilities response based on layer type
+         * @param  {String} layerType 'wmslayer'/'wmtslayer'/'wfslayer'
+         * @param  {String} response  GetWSCapabilities response
+         */
         __capabilitiesResponseHandler: function (layerType, response) {
             var me = this,
                 warningDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
@@ -1366,7 +1399,7 @@ function (
         handleCapabilitiesSelection: function (e) {
             var me = this,
                 current = jQuery(e.currentTarget);
-                // stop propagation so handler on outer tags won't be triggered as well
+            // stop propagation so handler on outer tags won't be triggered as well
             e.stopPropagation();
             var layerName = current.attr('data-layername'),
                 additionalId = current.attr('data-additionalId'),
@@ -1383,11 +1416,11 @@ function (
         },
 
         /**
-             * Helper function. This returns inner value
-             * first one or the one which matches with given key
-             *
-             * @method getValue
-             */
+         * Helper function. This returns inner value
+         * first one or the one which matches with given key
+         *
+         * @method getValue
+         */
         getValue: function (object, key) {
             var k,
                 ret;
@@ -1412,10 +1445,10 @@ function (
             }
         },
         /**
-             * Fetch wfs specific common data / sld styles
-             *
-             * @method __setupSldStyles
-             */
+         * Fetch wfs specific common data / sld styles
+         *
+         * @method __setupSldStyles
+         */
         _setupSldStyles: function () {
             var me = this,
                 elem = me.$el;
@@ -1441,10 +1474,10 @@ function (
             });
         },
         /**
-             * Save new sld style
-             *
-             * @method _saveSldStyle
-             */
+         * Save new sld style
+         *
+         * @method _saveSldStyle
+         */
         _saveSldStyle: function (sldName, sldXml) {
             var me = this;
 
@@ -1485,12 +1518,121 @@ function (
         },
 
         /**
-             * Stops propagation if admin clicks layer settings section.
-             *
-             * @method addLayer
-             */
+         * Stops propagation if admin clicks layer settings section.
+         *
+         * @method addLayer
+         */
         clickLayerSettings: function (e) {
             e.stopPropagation();
+        },
+
+        externalStyleSelected: function (e) {
+            var value = jQuery(e.target).val();
+            var importFromFile = value === 'importFromFile';
+            var styleName = importFromFile ? '' : value;
+            var styleDef = importFromFile ? '' : JSON.stringify(this.model.getOptions().externalStyles[value]);
+            var fileInput = this.$el.find('input.layer-options-external-style-file');
+            var nameInput = this.$el.find('.layer-options-external-style-name');
+            var styleDefInput = this.$el.find('.layer-options-external-style-def');
+            if (importFromFile) {
+                fileInput.val('');
+            }
+            fileInput.css('display', importFromFile ? '' : 'none');
+            nameInput.css('display', importFromFile ? '' : 'none');
+            nameInput.val(styleName);
+            styleDefInput.val(styleDef);
+            styleDefInput.prop('readonly', !importFromFile);
+            this.$el.find('button.add-external-style').prop('disabled', !importFromFile);
+            this.$el.find('button.remove-external-style').prop('disabled', importFromFile);
+        },
+
+        importExternalStyle: function (e) {
+            var me = this;
+            if (!e.target || !e.target.files || e.target.files.length !== 1) {
+                return;
+            }
+            var reader = new FileReader();
+            reader.onload = function () {
+                try {
+                    var styleDef = JSON.parse(reader.result);
+                    if (styleDef.name) {
+                        me.$el.find('.layer-options-external-style-name').val(styleDef.name);
+                    }
+                    me.$el.find('.layer-options-external-style-def').val(reader.result);
+                } catch (ex) {
+                    this._showDialog(me.instance.locale('errors.title'), me.instance.locale('errors.externalStyle.content'));
+                }
+            };
+            reader.readAsText(e.target.files[0]);
+        },
+
+        _readExternalStyleForm: function () {
+            var form = {};
+            try {
+                form.name = this.$el.find('.layer-options-external-style-name').val().trim();
+                form.content = JSON.parse(this.$el.find('.layer-options-external-style-def').val().trim());
+                if (!form.name) {
+                    form.error = 'nameEmpty';
+                } else if (/[!@#%^&*(),.?"':{}|<>[\]\n\r\t]/.test(form.name)) {
+                    form.error = 'name';
+                }
+                return form;
+            } catch (e) {
+                form.error = 'content';
+                return form;
+            }
+        },
+
+        addExternalStyle: function () {
+            var form = this._readExternalStyleForm();
+            if (!form.name || !form.content || form.error) {
+                if (form.error) {
+                    var title = this.instance.locale('errors.title');
+                    var message = this.instance.locale(`errors.externalStyle.${form.error}`);
+                    this._showDialog(title, message);
+                }
+                return;
+            }
+            var options = this._readLayerOptions();
+            if (options.errors) {
+                this._showJSONSyntaxError(options.errors);
+                return;
+            }
+            options.externalStyles = options.externalStyles || {};
+            options.externalStyles[form.name] = form.content;
+            this.model.set('_options', options);
+        },
+
+        removeExternalStyle: function () {
+            var me = this;
+            var name = me.$el.find('.layer-options-external-styles').val();
+            if (!name || name === 'importFromFile') {
+                return;
+            }
+            var options = me._readLayerOptions();
+            if (!options.externalStyles) {
+                return;
+            }
+            if (options.errors) {
+                this._showJSONSyntaxError(options.errors);
+                return;
+            }
+            delete options.externalStyles[name];
+            me.model.set('_options', options);
+        },
+
+        _showJSONSyntaxError: function (errors) {
+            var loc = Oskari.getMsg.bind(null, 'admin-layerselector');
+            if (errors) {
+                errors.forEach(function (error) {
+                    error.element.focus();
+                    error.element.css('color', 'red');
+                    setTimeout(function () {
+                        error.element.css('color', '');
+                    }, 5000);
+                });
+                this._showDialog(loc('admin.errorTitle'), loc('errors.invalidJSON'));
+            }
         }
     });
 });

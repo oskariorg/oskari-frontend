@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 }
             },
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (event.getToolId() !== this.toolName) {
+                if (event.getToolId() !== this.toolName && event.getSticky()) {
                     this.stopTool();
                 }
             }

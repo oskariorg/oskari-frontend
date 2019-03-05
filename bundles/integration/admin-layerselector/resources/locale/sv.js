@@ -24,7 +24,13 @@ Oskari.registerLocalization(
             "loadFailed": "Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren.",
             "noResults": "ökningen gav inga resultat.",
             "layerTypeNotSupported": "Typ av kartlager är inte ännu understött:",
-            "not_empty": "Teman, som du försöker att ta bort, innehåller kartlager. Välj en annan tema för de här temorna."
+            "not_empty": "Teman, som du försöker att ta bort, innehåller kartlager. Välj en annan tema för de här temorna.",
+            "invalidJSON": "JSON-syntaxen är ogiltig",
+            "externalStyle": {
+                "nameEmpty": "Namn krävs.",
+                "name": "Namnet innehåller ogiltiga tecken.",
+                "content": "Stildefinitionen har ogiltigt JSON-innehåll."
+            }
         },
         "loading": "Laddar...",
         "filter": {
@@ -57,8 +63,10 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache Lager",
                 "arcgis93": "ArcGISRest Lager",
                 "tiles3d" : "3D Tiles Lager",
+                "bingmaps" : "Bing Maps Lager",
                 "vectortile" : "MVT Lager"
             },
+            "confirmDeleteStyle": "Stilen blir raderad. Fortsätt?",
             "selectLayer": "Välj nivå",
             "selectSubLayer": "Välj undernivå",
             "addOrganization": "Tillägg dataproducent",
@@ -84,7 +92,19 @@ Oskari.registerLocalization(
             "getInfo": "Sök data",
             "editWfs": "Editera WFS",
             "options": "Options JSON",
-            "mvtilesOptionsDesc": "{\n  \"styles\": {\n    \"default\": { ... },\n    \"myStyle\": { ... }\n  },\n  \"hover\": { ... },\n  \"tileGrid\": { ... }\n}",
+            "apiKey": "Api key",
+            "mvtAttributions": "Tillskrivningar",
+            "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
+            "mvtTileGrid": "Rutmatris",
+            "mvtTileGridDesc": "JSON \n{\n  \"origin\": [-548576, 8388608],\n  \"resolutions\": [8192, ..., 0.25],\n  \"tileSize\": [256, 256]\n}",
+            "mvtOskariStylesDesc": "JSON \n{\n  \"default\": {\n    \"building\": {...},\n    \"water\": {...}\n  },\n  ...\n}",
+            "mvtWfsOskariStylesDesc": "JSON \n{\n  \"Custom MVT style\": {\n    \"featureStyle\": {...},\n    \"optionalStyles\": [{...}]\n  },\n  ...\n}",
+            "mvtHover": "Hover",
+            "mvtHoverDesc": "JSON \n{\n  \"featureStyle\": {...},\n  \"content\": [\n    {\"key\": \"Feature Data\"},\n    {\"key\": \"ID\", \"valueProperty\": \"id\"}\n  ]\n}",
+            "mvtExternalStyleList": "MapBox stilar",
+            "mvtExternalStyleName": "Stil namn",
+            "mvtImportStyle": "Importera en stil från en fil",
+            "mvtExistingExtStyles": "Stilar",
             "oskariStyles": "Stilar",
             "oskariStylesDesc": "{\n  \"default\": { ... },\n  \"myStyle\": { ... }\n}",
             "tiles3dStyles": "Cesium stilar",
@@ -244,7 +264,9 @@ Oskari.registerLocalization(
             "selectLayerGroups": "Välj lagergrupper"
         },
         "buttons": {
-            "add": "Tillägg"
+            "add": "Tillägg",
+            "update": "Uppdatera",
+            "remove": "Ta bort"
         }
     }
 });

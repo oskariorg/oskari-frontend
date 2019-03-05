@@ -554,7 +554,6 @@ Oskari.clazz.define(
             if (showMeasureUI) {
                 data.showMeasureOnMap = showMeasureUI;
             }
-
             if (options.clearCurrent) {
                 me.clearDrawing(id);
             }
@@ -929,11 +928,19 @@ Oskari.clazz.define(
                 // intersection is allowed or geometry isn't being drawn currently
                 return;
             }
-            if (geometry.getCoordinates()[0].length < 4 || !isValidOp.isValid(olParser.read(geometry))) {
-                // lines intersect -> problem!!
-                currentDrawing.setStyle(me._styles.intersect);
-                me._featuresValidity[currentDrawing.getId()] = false;
-                return;
+
+            const coordinates = geometry.getCoordinates()[0];
+            // This function is called twice when modifying geometry from the point where the drawing initially began
+            // That is because the first and the last point of the geometry are being modified at the same time
+            // The points should have identical values but in the first call they don't
+            // So the first call is ignored by the if statement below since it would otherwise throw an error from a 3rd party library
+            if (coordinates.length >= 4 && _.isEqual(coordinates[0], coordinates[coordinates.length - 1])) {
+                if (!isValidOp.isValid(olParser.read(geometry))) {
+                    // lines intersect -> problem!!
+                    currentDrawing.setStyle(me._styles.intersect);
+                    me._featuresValidity[currentDrawing.getId()] = false;
+                    return;
+                }
             }
             // geometry is valid
             if (geometry.getArea() > 0) {
@@ -966,7 +973,7 @@ Oskari.clazz.define(
                     if (area < 10000) {
                         area = area.toFixed(0) + ' m&sup2;';
                     } else if (area > 1000000) {
-                        area = (area / 1000000).toFixed(2) + ' km&sup2;';
+                        area = (area / 1000000).toFixed(3) + ' km&sup2;';
                     } else {
                         area = (area / 10000).toFixed(2) + ' ha';
                     }
@@ -1076,6 +1083,7 @@ Oskari.clazz.define(
                     } else if (shape === 'Polygon' && options.selfIntersection !== false) {
                         me.checkIntersection(me._sketch.getGeometry());
                     }
+                    me.pointerMoveHandler();
                     me.sendDrawingEvent(me._id, options);
                     // probably safe to start listening again
                     me.toggleDrawLayerChangeFeatureEventHandler(true);

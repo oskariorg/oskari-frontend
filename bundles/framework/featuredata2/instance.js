@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     btn = {
                         iconCls: 'tool-feature-selection',
                         tooltip: localization.tools.select.tooltip,
-                        sticky: false,
+                        sticky: true,
                         callback: function () {
                             me.popupHandler.showSelectionTools();
                         }
@@ -343,8 +343,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'WFSPropertiesEvent': function (event) {
                 // update grid information [don't update the grid if not active]
-                var layer = event.getLayer();
-                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (flyout.isActive()) {
+                    flyout.updateData(event.getLayer());
+                }
             },
 
             /**
@@ -353,8 +355,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'WFSFeatureEvent': function (event) {
                 // update grid information [don't update the grid if not active]
-                var layer = event.getLayer();
-                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (flyout.isActive()) {
+                    flyout.updateData(event.getLayer());
+                }
             },
 
             /**
@@ -440,6 +444,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 var me = this;
                 me.plugin.mapStatusChanged();
                 this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
+            },
+            'Toolbar.ToolSelectedEvent': function (event) {
+                if (event.getGroupId() !== 'selectiontools' && event.getToolId() !== 'dialog' && event.getSticky()) {
+                    this.popupHandler.close(false);
+                }
             },
 
             WFSFeatureGeometriesEvent: null

@@ -103,7 +103,8 @@ Oskari.registerLocalization(
                 },
                 "layerselection": {
                     "info": "Select the background map layer. You can select the default background map layer in the map preview.",
-                    "selectAsBaselayer": "Select as baselayer"
+                    "selectAsBaselayer": "Select as baselayer",
+                    "allowStyleChange": "Allow style change"
                 }
             },
             "toollayout": {
@@ -121,7 +122,9 @@ Oskari.registerLocalization(
                 "grid": "Show thematic data in table",
                 "allowClassification": "Allow classification",
                 "transparent": "Set classification background transparent",
-                "displayDiagram" : "Display charts"
+                "displayDiagram" : "Display charts",
+                "allowHidingClassification" : "Allow hiding classification",
+                "allowHidingSeriesControl" : "Allow hiding series player"
             },
             "layout": {
                 "label": "Graphic Layout",

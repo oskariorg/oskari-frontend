@@ -660,7 +660,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     this._setWidth(evt.getWidth());
                 },
                 'Toolbar.ToolSelectedEvent': function (evt) {
-                    if (evt.getGroupId() === 'mobileToolbar-mobile-toolbar' && evt.getToolId() !== 'mobile-timeseries') {
+                    if (evt.getGroupId() === 'mobileToolbar-mobile-toolbar' && evt.getToolId() !== 'mobile-timeseries' && event.getSticky()) {
                         this.teardownUI();
                     }
                 }

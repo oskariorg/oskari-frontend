@@ -43,42 +43,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
             stats.classificationPlugin.makeTransparent(false);
         }
     },
-    /**
-    * Get stats layer.
-    * @method @private _getStatsLayer
-    *
-    * @return found stats layer, if not found then null
-    */
-    _getStatsLayer: function () {
-        var selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
-    },
-    isDisplayed: function (data) {
-        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
-        if (hasStatsLayerOnMap) {
-            return true;
-        }
-        var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-        if (!configExists) {
-            return false;
-        }
-        if (!Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid')) {
-            Oskari.log('Oskari.mapframework.publisher.tool.DiagramTool')
-                .warn("Published map had config, but current appsetup doesn't include StatsGrid! " +
-                  'The thematic map functionality will be removed if user saves the map!!');
-            return false;
-        }
-        return true;
-    },
     getValues: function () {
         var me = this;
         var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
@@ -104,6 +68,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
     stop: function () {
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

@@ -203,45 +203,37 @@ Oskari.clazz.define(
                         'Oskari.mapframework.service.MapLayerService'
                     ),
                     layerId = event.getLayerId(),
+                    operation = event.getOperation(),
                     layer;
 
-                if (event.getOperation() === 'update') {
+                if (layerId !== null && layerId !== undefined) {
                     layer = mapLayerService.findMapLayer(layerId);
+                }
+
+                if (operation === 'update') {
                     flyout.handleLayerModified(layer);
-                } else if (event.getOperation() === 'add') {
-                    layer = mapLayerService.findMapLayer(layerId);
+                } else if (operation === 'add') {
                     flyout.handleLayerAdded(layer);
                     flyout.updateFilters();
                     // refresh layer count
                     tile.refresh();
-                } else if (event.getOperation() === 'remove') {
+                } else if (operation === 'remove') {
                     flyout.handleLayerRemoved(layerId);
                     flyout.updateFilters();
                     // refresh layer count
                     tile.refresh();
-                } else if (event.getOperation() === 'sticky') {
-                    layer = mapLayerService.findMapLayer(layerId);
+                } else if (operation === 'sticky') {
                     flyout.handleLayerSticky(layer);
                     // refresh layer count
                     tile.refresh();
+                } else if (operation === 'tool') {
+                    this.layerChanged(layerId);
                 }
             },
 
             'BackendStatus.BackendStatusChangedEvent': function (event) {
-                var layerId = event.getLayerId(),
-                    flyout = this.plugins['Oskari.userinterface.Flyout'],
-                    mapLayerService = this.sandbox.getService(
-                        'Oskari.mapframework.service.MapLayerService'
-                    ),
-                    layer;
-
-                if (layerId === null || layerId === undefined) {
-                    // Massive update so just recreate the whole ui
-                    flyout.populateLayers();
-                } else {
-                    layer = mapLayerService.findMapLayer(layerId);
-                    flyout.handleLayerModified(layer);
-                }
+                var layerId = event.getLayerId();
+                this.layerChanged(layerId);
             },
 
             /**
@@ -264,6 +256,23 @@ Oskari.clazz.define(
                     plugin.deactivateAllFilters();
                     me.filteredLayerListOpenedByRequest = false;
                 }
+            }
+        },
+        /**
+         * @method layerChanged
+         * Update layer view by given ID, or update all if given null
+         * @param {Number} layerId
+         */
+        layerChanged: function (layerId) {
+            const flyout = this.plugins['Oskari.userinterface.Flyout'];
+            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+            if (layerId === null || layerId === undefined) {
+                // Massive update so just recreate the whole ui
+                flyout.populateLayers();
+            } else {
+                let layer = mapLayerService.findMapLayer(layerId);
+                flyout.handleLayerModified(layer);
             }
         },
 

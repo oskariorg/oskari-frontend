@@ -56,25 +56,6 @@ export default class SelectList extends FormComponent {
     */
     _addSumoEventListeners () {
         const selected = this._element.find('select');
-        // check parent element(s) to apply overflow visible if needed
-        const openListCssClass = 'statsgrid-open-list-overflow';
-        selected.on('sumo:opening', (event, params) => {
-            this._element.parents('div').each((index, parent) => {
-                const el = jQuery(parent);
-                if (el.hasClass('oskari-flyoutcontentcontainer') && !el.hasClass(openListCssClass)) {
-                    el.addClass(openListCssClass);
-                }
-            });
-        });
-        selected.on('sumo:closing', (event, params) => {
-            this._element.parents('div').each((index, parent) => {
-                const el = jQuery(parent);
-                if (el.hasClass('oskari-flyoutcontentcontainer')) {
-                    el.removeClass(openListCssClass);
-                }
-            });
-        });
-
         // determine which way the dropdown should open
         if (!this.options.up) {
             selected.on('sumo:opened', (event, params) => {
@@ -82,16 +63,33 @@ export default class SelectList extends FormComponent {
                 if (dropdown.hasClass('up')) {
                     return;
                 }
-                const dropdownTop = dropdown.offset().top - jQuery(window).scrollTop();
-                const dropdownHeight = dropdown.height();
-                const viewportHeight = jQuery(window).height();
-                if (dropdownTop + dropdownHeight > viewportHeight) {
-                    dropdown.addClass('up');
+                // Opened downwards
+                const container = dropdown.parents('div.oskari-flyoutcontentcontainer');
+                const containerTop = container.offset().top;
+                const topMargin = 10;
+                if (dropdown.offset().top + dropdown.height() < containerTop + container.height()) {
+                    // Drowpdown's bottom is visible
+                    return;
                 }
+                // Open up
+                dropdown.addClass('up');
+                if (dropdown.offset().top > containerTop + topMargin) {
+                    // Drowpdown's top is visible
+                    return;
+                }
+                // Open starting from the top of the container
+                dropdown.removeClass('up');
+                dropdown.css('bottom', '');
+                dropdown.css('top', '0');
+                const top = containerTop - dropdown.offset().top + topMargin;
+                dropdown.css('top', top + 'px');
             });
             selected.on('sumo:closed', () => {
+                // reset previous settings
                 const dropdown = this._element.find('div.optWrapper');
                 dropdown.removeClass('up');
+                dropdown.css('top', '');
+                dropdown.css('bottom', '');
             });
         }
     }
@@ -143,8 +141,7 @@ export default class SelectList extends FormComponent {
      * @method create
      *  creates a select with data specified
      * @param {Object} data, needs to have the keys id and title to construct a list. Optional keys: cls, name.
-     * @param {Object} options
-     * @return {Object} div element containing the list
+     * @param {Object} modifiedOptions
      */
     create (data, modifiedOptions) {
         this._element = _selectTemplate.clone();

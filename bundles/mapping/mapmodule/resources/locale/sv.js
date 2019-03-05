@@ -40,7 +40,8 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
                 "chooseDefaultBaseLayer": "Välj bakgrundskarta",
-                "chooseOtherLayers": "Välj andra kartlager"
+                "chooseOtherLayers": "Välj andra kartlager",
+                "style": "Stil"
             },
             "SearchPlugin": {
                 "placeholder": "Sök plats/adress",

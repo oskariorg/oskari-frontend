@@ -24,6 +24,7 @@ Oskari.registerLocalization(
         "grid": {
             "name": "Nom du lieu",
             "village": "Municipalité",
+            "region": "Region",
             "type": "Type"
         },
         "resultBox": {
@@ -31,11 +32,11 @@ Oskari.registerLocalization(
             "title": "Résultats de la recherche"
         },
         "guidedTour": {
-            "title": "Search",
-            "message": "The Search -menu has divided in two search functions: \"Location Search\" and \"Metadata Search\". By Location Search you can search locations by placenames, addresses and real estate unit identifiers and focus your map to that location. By Metadata Search you can search spatial data sets by many different search options. The search results include also the data sets that are not available in Paikkatietoikkuna.",
-            "openLink": "Show Search",
-            "closeLink": "Hide Search",
-            "tileText": "Search"
+            "title": "Recherche",
+            "message": "Le menu Recherche est divisé en deux fonctions de recherche : \"Recherche de lieu\" et \"Recherche de métadonnées\". La recherche de lieu permet de rechercher des lieux par noms de lieux, adresses et identifiants d'unités immobilières, ainsi que de centrer votre carte sur ce lieu. La recherche de métadonnées permet de rechercher des jeux de données spatiales en fonction de nombreuses options de recherche différentes. Les résultats de recherche comprennent également les jeux de données qui ne sont pas accessibles dans Paikkatietoikkuna.",
+            "openLink": "Afficher la recherche",
+            "closeLink": "Masquer la recherche",
+            "tileText": "Recherche"
         }
     }
 });

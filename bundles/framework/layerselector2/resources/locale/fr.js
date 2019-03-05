@@ -32,7 +32,9 @@ Oskari.registerLocalization(
             "type-base": "Carte d’arrière-plan",
             "type-wms": "Couche cartographique (WMS, WMTS)",
             "type-wfs": "Produit de données (WFS)",
-            "type-wfs-manual": "Rafraîchir les données en cliquant sur \"données objet\" ou \"bouton rafraîchissement\" dans la fenêtre cartographique."
+            "type-wfs-manual": "Rafraîchir les données en cliquant sur \"données objet\" ou \"bouton rafraîchissement\" dans la fenêtre cartographique.",
+            "type-timeseries": "Couche chronologique",
+            "unsupported-srs": "Projection cartographique non reconnue"
         },
         "backendStatus": {
             "OK": {
@@ -49,15 +51,15 @@ Oskari.registerLocalization(
             },
             "MAINTENANCE": {
                 "tooltip": "Il est possible que la couche cartographique soit momentanément indisponible les jours prochains.",
-                "iconClass": "backendstatus-maintenance"
+                "iconClass": "backendstatus-entretien"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "backendstatus-unknown"
+                "iconClass": "backendstatus-inconnu"
             },
             "UNSTABLE": {
                 "tooltip": "",
-                "iconClass": "backendstatus-unstable"
+                "iconClass": "backendstatus-instable"
             }
         },
         "buttons": {
@@ -77,16 +79,16 @@ Oskari.registerLocalization(
             },
             "tooltips": {
                 "newest": "Montrer les ## couches cartographiques les plus récentes",
-                "featuredata": "Ne montrer que les couches vecteur",
-                "remove": "Supprimer le filtre"
+                "remove": "Supprimer le filtre",
+                "featuredata": "Ne montrer que les couches vecteur"
             }
         },
         "guidedTour": {
-            "title": "Map layers",
-            "message": "From the Map Layers -menu you can select the map layer to show on the map. You can list map layers by theme or by data provider. You can also search map layers by a map layer name, a data provider name or a keyword. The selected map layers you can check in the Selected Layers -menu.",
-            "openLink": "Show map layers",
-            "closeLink": "Hide map layers",
-            "tileText": "Map layers"
+            "title": "Couches cartographiques",
+            "message": "Dans le menu Couches cartographiques, vous pouvez sélectionner la couche cartographique à afficher sur la carte. Vous pouvez énumérer les couches cartographiques par thème ou fournisseur de données. Vous pouvez également rechercher des couches cartographiques par nom de couche cartographique, nom de fournisseur de données ou mot-clé. Vous pouvez cocher les couches cartographiques sélectionnées dans le menu Couches sélectionnées.",
+            "openLink": "Afficher les couches cartographiques",
+            "closeLink": "Masquer les couches cartographiques",
+            "tileText": "Couches cartographiques"
         }
     }
 });

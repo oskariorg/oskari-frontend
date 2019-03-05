@@ -292,26 +292,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSPropertiesEvent
      */
     getWFSProperties: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
-            self = this;
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var self = this;
 
         if (layer.getLayerType() !== 'analysis') {
-            var oldFields = layer.getFields(),
-                oldLocales = layer.getLocales();
-
-            if (oldFields.length > 0 && !this.plugin.isArrayEqual(data.data.fields, oldFields) && !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
-                this.plugin.mapMoveHandler();
-            }
-
             if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder()) {
                 // this is a "userlayer" type layer
+                // don't set locales because userlayer contains localized fields
                 this.setOrderForFeatureProperties(layer, data.data.fields);
                 layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
-                layer.setLocales(this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
             } else {
                 // this is any other layer supported by transport
+                var oldFields = layer.getFields();
+                var oldLocales = layer.getLocales();
                 layer.setFields(data.data.fields);
                 layer.setLocales(data.data.locales);
+                if (oldFields.length > 0 && !this.plugin.isArrayEqual(data.data.fields, oldFields) && !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
+                    this.plugin.mapMoveHandler();
+                }
             }
         }
 

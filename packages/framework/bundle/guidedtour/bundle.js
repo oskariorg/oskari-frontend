@@ -76,6 +76,10 @@ Oskari.clazz.define(
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/guidedtour/resources/locale/fi.js"
             }, {
+                "lang": "fr",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/fr.js"
+            }, {
                 "lang": "ka",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/guidedtour/resources/locale/ka.js"

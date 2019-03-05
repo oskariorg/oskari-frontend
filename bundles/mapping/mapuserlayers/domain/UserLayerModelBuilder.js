@@ -38,6 +38,9 @@ Oskari.clazz.define(
             } else {
                 layer.setFeatureProperties([]);
             }
+            if (mapLayerJson.fieldLocales && mapLayerJson.fieldLocales !== 0) {
+                layer.setLocales(mapLayerJson.fieldLocales);
+            }
         },
 
         addHiddenFields: function (fields) {

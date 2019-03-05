@@ -711,6 +711,7 @@ Oskari.clazz.define(
             this._features[layerId].forEach(featObj => {
                 featObj.data.forEach(feature => {
                     this.updateCachedZIndex(layerId, feature, zIndex);
+                    feature.getStyle().setZIndex(zIndex);
                     zIndex++;
                 });
             });
@@ -973,9 +974,6 @@ Oskari.clazz.define(
             }
             if (cached.ol) {
                 cached.ol.setZIndex(zIndex);
-                if (!cached.hoverActive) {
-                    feature.setStyle(cached.ol);
-                }
             }
             if (cached.olHover) {
                 cached.olHover.setZIndex(zIndex);

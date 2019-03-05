@@ -19,7 +19,7 @@ function getUrl (key) {
 }
 
 const Oskari = {
-    VERSION: '1.51.0-dev',
+    VERSION: '1.51.0-rc',
     setMarkers (markers) {
         _markers = markers || [];
     },

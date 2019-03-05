@@ -347,6 +347,17 @@ Oskari.clazz.define(
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"
                 },
                 /**
+                 * Bing maps
+                 */ 
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/bingmapslayer/BingMapsLayer.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/bingmapslayer/BingMapsLayerPlugin.js"
+                },
+                /**
                  * GeoLocation plugin
                  */
                 {
@@ -473,6 +484,18 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/VectorLayerRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StartUserLocationTrackingRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StartUserLocationTrackingRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StopUserLocationTrackingRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StopUserLocationTrackingRequestHandler.js"
                 },
 
                 /**
