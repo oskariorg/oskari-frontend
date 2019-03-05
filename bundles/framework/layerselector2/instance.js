@@ -227,7 +227,8 @@ Oskari.clazz.define(
                     // refresh layer count
                     tile.refresh();
                 } else if (operation === 'tool') {
-                    this.layerChanged(layerId);
+                    // This will increase startup time in pti by ~300% 
+                    //this.layerChanged(layerId);
                 }
             },
 
