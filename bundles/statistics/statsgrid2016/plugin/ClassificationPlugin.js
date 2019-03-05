@@ -116,23 +116,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return indicators;
         },
         getClassificationProps: function (indicators, classification) {
-            const service = this.service.getClassificationService();
-            const methods = service.getAvailableMethods();
-            const modes = service.getAvailableModes();
-            const values = classification || this.service.getStateService().getClassificationOpts(indicators.active.hash);
-            const range = this.service.getColorService().getRange(values.type, values.style);
-            //const validOptions = service.getAvailableOptions(indicators.data);
-            let countRange = [];
-            for (let i = range.min; i <= range.max; i++) {
-                countRange.push(i);
-            }
-            return {
-                modes: modes,
-                methods: methods,
-                countRange: countRange,
-                values: values
-                //validOptions: validOptions
+            const props = {
+                countRange: []
             };
+            const service = this.service.getClassificationService();
+            const colorsService =  this.service.getColorService();
+            const values = classification || this.service.getStateService().getClassificationOpts(indicators.active.hash);
+            props.values = values;
+            props.methods = service.getAvailableMethods();
+            props.modes = service.getAvailableModes();
+            props.types = colorsService.getAvailableTypes();
+            props.validOptions = service.getAvailableOptions(indicators.data);
+            if (props.values.mapStyle !== 'choropleth') {
+                props.colors = colorsService.getDefaultSimpleColors();
+            } else {
+                props.colors = colorsService.getOptionsForType(values.type, values.count, values.reverseColors);
+            }
+            const range = colorsService.getRange(values.type, values.style);
+            for (let i = range.min; i <= range.max; i++) {
+                props.countRange.push(i);
+            }
+            return props;
         },
         getLegendProps: function (indicators, classifications) {
             const data = indicators.data;

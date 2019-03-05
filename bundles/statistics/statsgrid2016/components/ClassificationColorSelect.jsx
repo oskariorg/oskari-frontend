@@ -11,23 +11,17 @@ const handleColorChange = (service, value) => {
 };
 
 const ClassificationColorSelect = ({properties, values, loc, service, disabled}) => {
-    let colors;
-    let label;
+    let label = loc('colorset.button');
     const isSimple = values.mapStyle !== 'choropleth';
     const opacity = values.transparency / 100 || 1;
     if (isSimple) {
         label = loc('classify.map.color');
-        colors = service.getColorService().getDefaultSimpleColors();
-    } else {
-        label = loc('colorset.button');
-        colors = service.getColorService().getOptionsForType(values.type, values.count, values.reverseColors);
     }
-
     return (
         <div className={properties.class + ' option'}>
             <div className="select-label">{label}</div>
             <div className = "classification-colors value">
-                <ColorSelect colors = {colors} isSimple = {isSimple} value = {values.name} opacity = {opacity}
+                <ColorSelect colors = {properties.options} isSimple = {isSimple} value = {values.name} opacity = {opacity}
                     disabled = {disabled} handleColorChange = {value => handleColorChange(service, value)}/>
                 {!isSimple &&
                     <span className="flip-colors">

@@ -33,7 +33,7 @@ const getSelectsProperties = ({classifications, loc, service, indicators}) =>
             component: 'select',
             class: 'classification-count',
             label: loc('classify.classes'),
-            options: getValidCountRange(classifications, service, indicators),
+            options: getValidCountRange(classifications, indicators),
             valueType: 'int'
         }, {
             id: 'mode',
@@ -55,7 +55,8 @@ const getSelectsProperties = ({classifications, loc, service, indicators}) =>
         }, {
             id: 'name',
             component: 'color',
-            class: 'classification-colors'
+            class: 'classification-colors',
+            options: classifications.colors
         }, {
             id: 'transparency',
             component: 'select',
@@ -68,7 +69,7 @@ const getSelectsProperties = ({classifications, loc, service, indicators}) =>
             component: 'select',
             class: 'classification-type',
             label: loc('colorset.setselection'),
-            options: getLocalizedOptions(service.getColorService().getAvailableTypes(), loc('colorset')),
+            options: getLocalizedOptions(classifications.types, loc('colorset')),
             hideWith: ['points']
         }, {
             id: 'fractionDigits',
@@ -110,8 +111,8 @@ const getTransparencyOptions = classifications => {
     return loc;
 };
 
-const getValidCountRange = (classifications, service, indicators) => {
-    const validOptions = service.getClassificationService().getAvailableOptions(indicators.data);
+const getValidCountRange = (classifications, indicators) => {
+    const validOptions = classifications.validOptions;
     const range = classifications.countRange;
     if (validOptions && validOptions.maxCount) {
         return range.map(count => {
