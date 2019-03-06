@@ -10,7 +10,7 @@ class Classification extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            isEdit: false
+            isEdit: props.isEdit
         };
         handleBinder(this);
         this.log = Oskari.log('Oskari.statistics.statsgrid.Classification');
@@ -35,7 +35,7 @@ class Classification extends React.Component {
         const indicatorData = this.props.indicators.data;
         const classification = legendProps.classification;
         const colors = legendProps.colors;
-        if (!indicatorData || Object.keys(indicatorData).length === 0) {
+        if (Object.keys(indicatorData).length === 0) {
             return {error: loc('legend.noData')};
         }
         if (!classification) {

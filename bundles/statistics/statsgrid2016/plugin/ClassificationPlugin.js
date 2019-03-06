@@ -99,13 +99,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             ReactDOM.render((
                 <GenericContext.Provider value={{loc: this._locale, service: this.service}}>
                     <Classification indicators = {indicators} classifications = {classifications}
-                        legendProps = {legendProps} onRenderChange = {this.rendered.bind(this)}/>
+                        legendProps = {legendProps} isEdit = {this._previousIsEdit}
+                        onRenderChange = {this.rendered.bind(this)}/>
                 </GenericContext.Provider>
             ), node);
         },
         getIndicatorProps: function () {
             const indicators = {
-                selected: []
+                selected: [],
+                data: {}
             };
             const state = this.service.getStateService();
             const active = state.getActiveIndicator();
@@ -137,7 +139,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 countRange: []
             };
             const service = this.service.getClassificationService();
-            const colorsService =  this.service.getColorService();
+            const colorsService = this.service.getColorService();
             const values = classification || this.service.getStateService().getClassificationOpts(indicators.active.hash);
             props.values = values;
             props.methods = service.getAvailableMethods();
@@ -160,7 +162,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const serieStats = indicators.serieStats;
             const classificationOpts = classifications.values;
             const props = {};
-            if (data && Object.keys(data).length !== 0) {
+            if (Object.keys(data).length !== 0) {
                 props.classification = this.service.getClassificationService().getClassification(data, classificationOpts, serieStats);
             }
             props.colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
@@ -296,7 +298,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
             // Always show the active indicator - also handles "no indicator selected"
             // if the selected indicator has no data & edit panel is open -> close it
-            // TODO keep edit classification open
             this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event => this.render());
 
             // need to update the legend as data changes when regionset changes
