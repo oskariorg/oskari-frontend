@@ -146,6 +146,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             props.modes = service.getAvailableModes();
             props.types = colorsService.getAvailableTypes();
             props.validOptions = service.getAvailableOptions(indicators.data);
+            props.disabled = !this.service.getStateService().isClassificationEnabled();
             if (values.mapStyle !== 'choropleth') {
                 props.colors = colorsService.getDefaultSimpleColors();
             } else {

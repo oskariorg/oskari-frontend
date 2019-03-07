@@ -1,20 +1,13 @@
 import React from 'react';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 
-const handleChange = (service, properties, value) => {
-    if (properties.valueType === 'int') {
-        value = parseInt(value);
-    }
-    service.getStateService().updateActiveClassification(properties.id, value);
-};
-
-const ClassificationSelect = ({properties, options, value, service, disabled}) => {
+const ClassificationSelect = ({properties, options, value, disabled, handleChange}) => {
     // options => array of values [1,3,4,5] or array of objects with properties: value and optionally: text, hidden, disabled
     return (
         <div className={properties.class + ' option'}>
             <div className="select-label">{properties.label}</div>
             <div className = {properties.class + ' value'}>
-                <select className={properties.class + ' select'} value={value} disabled = {disabled} onChange={(evt) => handleChange(service, properties, evt.target.value)}>
+                <select className={properties.class + ' select'} value={value} disabled = {disabled} onChange={evt => handleChange(properties, evt.target.value)}>
                     {options.map(opt => {
                         if (opt.value !== undefined && opt.hidden) {
                             return <option className = "oskari-hidden" disabled = {opt.disabled ? true : null} key= {'hidden_' + opt.value} value = {opt.value}>{opt.text || opt.value}</option>;

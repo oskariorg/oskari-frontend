@@ -52,12 +52,10 @@ class ClassificationSlider extends React.Component {
         this.$el.slider('destroy');
     }
     render () {
-        const properties = this.props.properties;
         const loc = this.props.loc;
-        const className = 'oskari-slider oskari-ui ' + properties.class;
         return (
-            <div className={className}>
-                <div className="slider-label">{properties.label}</div>
+            <div className= "oskari-slider oskari-ui point-size">
+                <div className="slider-label">{loc('classify.map.pointSize')}</div>
                 <div className="minmaxlabels">
                     <div className="min">{loc('classify.map.min')}</div>
                     <div className="max">{loc('classify.map.max')}</div>

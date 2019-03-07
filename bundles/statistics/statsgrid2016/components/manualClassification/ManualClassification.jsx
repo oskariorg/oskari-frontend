@@ -1,12 +1,14 @@
-import React from "react";
+import React from 'react';
 import ManualClassificationView from './View';
 import {withContext} from '../../../../../src/reactUtil/genericContext';
+
+// TODO: change to use general oskari react button and pass props.handleClick = handleManualClassification
 
 const update = (stateService, bounds) => {
     stateService.updateActiveClassification('manualBounds', bounds);
 };
 
-const handleManualClassification = ({service, indicators, plugin}) => {
+const handleManualClassification = ({service, indicators}) => {
     const {series, state, classification, color} = service.getAllServices();
     const ind = indicators.active;
     const view = new ManualClassificationView(classification, color, ind.classification);
@@ -16,7 +18,7 @@ const handleManualClassification = ({service, indicators, plugin}) => {
     } else if (indicators.data) {
         view.setData(indicators.data);
     } else {
-        return; //failed to get serie or data -> don't open
+        return; // failed to get serie or data -> don't open
     }
     series.setAnimating(false);
     view.openEditor(bounds => update(state, bounds));
@@ -24,11 +26,11 @@ const handleManualClassification = ({service, indicators, plugin}) => {
 
 const ManualClassification = props => {
     return (
-        <div className={props.properties.class}>
+        <div className="classification-manual">
             <input className="oskari-formcomponent oskari-button"
                 type="button"
                 disabled = {props.disabled}
-                value={props.properties.label}
+                value={props.loc('classify.edit.title')}
                 onClick={evt => handleManualClassification(props)}/>
         </div>
     );

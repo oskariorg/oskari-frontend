@@ -10,7 +10,7 @@ const handleColorChange = (service, value) => {
     service.getStateService().updateActiveClassification('name', value);
 };
 
-const ClassificationColorSelect = ({properties, values, loc, service, disabled}) => {
+const ClassificationColorSelect = ({colors, values, loc, service, disabled}) => {
     let label = loc('colorset.button');
     const isSimple = values.mapStyle !== 'choropleth';
     const opacity = values.transparency / 100 || 1;
@@ -18,10 +18,10 @@ const ClassificationColorSelect = ({properties, values, loc, service, disabled})
         label = loc('classify.map.color');
     }
     return (
-        <div className={properties.class + ' option'}>
+        <div className="classification-colors option">
             <div className="select-label">{label}</div>
             <div className = "classification-colors value">
-                <ColorSelect colors = {properties.options} isSimple = {isSimple} value = {values.name} opacity = {opacity}
+                <ColorSelect colors = {colors} isSimple = {isSimple} value = {values.name} opacity = {opacity}
                     disabled = {disabled} handleColorChange = {value => handleColorChange(service, value)}/>
                 {!isSimple &&
                     <span className="flip-colors">
