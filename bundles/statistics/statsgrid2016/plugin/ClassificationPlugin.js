@@ -144,6 +144,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             props.values = values;
             props.methods = service.getAvailableMethods();
             props.modes = service.getAvailableModes();
+            props.mapStyles = service.getAvailableMapStyles();
             props.types = colorsService.getAvailableTypes();
             props.validOptions = service.getAvailableOptions(indicators.data);
             props.disabled = !this.service.getStateService().isClassificationEnabled();

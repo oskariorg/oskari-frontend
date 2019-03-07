@@ -85,8 +85,7 @@ const ClassificationEdit = props => {
     if (!isEdit) {
         className = 'classification-edit oskari-hidden';
     }
-    const {methods, values, disabled, modes, colors, types} = props.classifications;
-    const mapStyles = ['choropleth', 'points']; // TODO: classifications mapStyles
+    const {methods, values, disabled, modes, colors, types, mapStyles} = props.classifications;
     const disabledOptions = getDisabledOptions(props);
 
     return (
