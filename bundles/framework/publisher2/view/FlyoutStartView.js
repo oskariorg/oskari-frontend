@@ -261,7 +261,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     this.success(false);
                 },
                 success: function (resp) {
-                    me.hasAcceptedTou = resp;
+                    // response is "true" or "false" string
+                    me.hasAcceptedTou = ('' + resp === 'true');
                     me._updateContinueButton();
                 }
             });
