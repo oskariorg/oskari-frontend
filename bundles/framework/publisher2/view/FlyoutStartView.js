@@ -262,7 +262,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 },
                 success: function (resp) {
                     // response is "true" or "false" string
-                    me.hasAcceptedTou = ('true' === '' + resp);
+                    me.hasAcceptedTou = ('' + resp === 'true');
                     me._updateContinueButton();
                 }
             });
