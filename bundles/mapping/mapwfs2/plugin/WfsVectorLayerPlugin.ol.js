@@ -6,7 +6,7 @@ import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 import { selectedStyle } from './components/defaultStyle';
 import { styleGenerator, applyOpacity } from './components/styleUtils';
 import { WFS_ID_KEY } from './components/propertyArrayUtils';
-import VectorPluginMixin from './VectorPluginMixin.ol';
+import {VectorPluginMixin} from './VectorPluginMixin.ol';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../mapmodule/domain/constants';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
@@ -207,4 +207,4 @@ Oskari.clazz.defineES('Oskari.wfsvector.WfsVectorLayerPlugin', WfsVectorLayerPlu
     }
 );
 
-export default WfsVectorLayerPlugin;
+export {WfsVectorLayerPlugin};

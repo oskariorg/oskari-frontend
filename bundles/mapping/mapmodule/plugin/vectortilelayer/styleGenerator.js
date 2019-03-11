@@ -13,7 +13,7 @@ const isHovered = (feature, hoverState) => {
     return hoverFeature.get(property) === feature.get(property);
 };
 
-export default function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState) {
+export function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState) {
     const styleCache = {};
     Object.keys(styleDef).forEach((layerName) => {
         const styles = {};

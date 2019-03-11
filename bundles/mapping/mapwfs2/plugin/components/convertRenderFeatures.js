@@ -25,7 +25,7 @@ const tmpTransform = createTransform();
  * @param {ol/source/VectorTile} source
  * @return {ol/Feature[]}
  */
-export default function convertRenderFeatures (inputFeatures, tile, source) {
+export function convertRenderFeatures (inputFeatures, tile, source) {
     const viewProjection = source.getProjection();
     if (!inputFeatures.length) {
         return [];

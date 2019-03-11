@@ -58,6 +58,7 @@ module.exports = {
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "no-fallthrough": "off",
     "standard/no-callback-literal": "off",
+    "import/no-default-export": "error",
 
     // Temporary warn level for Travis-CI
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],

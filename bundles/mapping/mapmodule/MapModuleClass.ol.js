@@ -19,11 +19,11 @@ import * as olGeom from 'ol/geom';
 import {fromCircle} from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 
-import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
+import {OskariImageWMS} from './plugin/wmslayer/OskariImageWMS';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
-export default class MapModule extends AbstractMapModule {
+export class MapModule extends AbstractMapModule {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way

@@ -1,8 +1,8 @@
-import ReqEventHandler from './components/ReqEventHandler';
+import {ReqEventHandler} from './components/ReqEventHandler';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 
-export default (mapPluginSuperClass) => class extends mapPluginSuperClass {
+export const VectorPluginMixin = (mapPluginSuperClass) => class extends mapPluginSuperClass {
     constructor (config) {
         super(config);
         this._visualizationForm = null;
