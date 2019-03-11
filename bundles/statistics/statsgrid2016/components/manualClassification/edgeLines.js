@@ -5,7 +5,7 @@
  * @param {Function} xScale d3 scale function
  * @param {Number} histoHeight height of histogram area in px
  */
-export default function (svg, handlesData, xScale, histoHeight) {
+export function edgeLines (svg, handlesData, xScale, histoHeight) {
     const formatter = Oskari.getNumberFormatter(2);
 
     const bounds = svg.selectAll('.edge')

@@ -1,9 +1,9 @@
 import {normalStyle, selectedStyle} from './components/defaultStyle';
-import VectorTileLayerPlugin from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
+import {VectorTileLayerPlugin} from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
 import {WFS_ID_KEY, getFieldsAndPropsArrays} from './components/propertyArrayUtils';
 import TileState from 'ol/TileState';
-import FeatureExposingMVTSource from './components/FeatureExposingMVTSource';
-import VectorPluginMixin from './VectorPluginMixin.ol';
+import {FeatureExposingMVTSource} from './components/FeatureExposingMVTSource';
+import {VectorPluginMixin} from './VectorPluginMixin.ol';
 
 Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
     class WfsMvtLayerPlugin extends VectorPluginMixin(VectorTileLayerPlugin) {

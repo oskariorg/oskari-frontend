@@ -1,4 +1,4 @@
-import manualClassificationEditor from './editor';
+import {manualClassificationEditor} from './editor';
 import '../../resources/scss/manualClassification.scss';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -6,7 +6,7 @@ const loc = Oskari.getMsg.bind(null, 'StatsGrid');
  * @class ManualClassificationView
  * Wrapper for classification editor UI
  */
-export default class ManualClassificationView {
+export class ManualClassificationView {
     /**
      *
      * @param {Object} classificationService

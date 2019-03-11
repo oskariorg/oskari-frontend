@@ -1,6 +1,6 @@
 const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
 
-export default class BingMapsLayerModelBuilder {
+export class BingMapsLayerModelBuilder {
     parseLayerData (layer, mapLayerJson, maplayerService) {
         // Add Bing imagery sets as styles
         const roads = new Style();

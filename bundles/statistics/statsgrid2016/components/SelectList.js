@@ -16,7 +16,7 @@ let defaultOptions = {
 
 const FormComponent = Oskari.clazz.get('Oskari.userinterface.component.FormComponent');
 
-export default class SelectList extends FormComponent {
+export class SelectList extends FormComponent {
     constructor (id) {
         super();
         this.id = id;

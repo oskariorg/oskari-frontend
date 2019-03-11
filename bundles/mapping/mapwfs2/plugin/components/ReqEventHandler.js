@@ -1,7 +1,7 @@
 import {propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY} from './propertyArrayUtils';
 import {filterByAttribute, getFilterAlternativesAsArray} from './filterUtils';
 
-export default class ReqEventHandler {
+export class ReqEventHandler {
     constructor (sandbox) {
         this.sandbox = sandbox;
         this.isClickResponsive = true;

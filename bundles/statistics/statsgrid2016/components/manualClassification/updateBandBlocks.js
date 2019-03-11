@@ -6,7 +6,7 @@
  * @param {String[]} colorSet classification colors, hex without #
  * @param {Number} histoHeight height of histogram area in px
  */
-export default function updateBandBlocks (svg, handlesData, xScale, colorSet, histoHeight) {
+export function updateBandBlocks (svg, handlesData, xScale, colorSet, histoHeight) {
     const blockData = handlesData
         .sort((a, b) => {
             return a.value - b.value;

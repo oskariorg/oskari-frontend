@@ -1,6 +1,6 @@
 import olSourceBingMaps from 'ol/source/BingMaps';
 import olLayerTile from 'ol/layer/Tile';
-import BingMapsLayerModelBuilder from './BingMapsLayerModelBuilder';
+import {BingMapsLayerModelBuilder} from './BingMapsLayerModelBuilder';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 
@@ -127,4 +127,4 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.BingMapsLayerPlugin', BingM
     }
 );
 
-export default BingMapsLayerPlugin;
+export {BingMapsLayerPlugin};

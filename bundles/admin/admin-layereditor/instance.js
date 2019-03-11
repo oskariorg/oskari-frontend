@@ -1,4 +1,4 @@
-import LayerEditorFlyout from './view/Flyout';
+import {LayerEditorFlyout} from './view/Flyout';
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
 Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',

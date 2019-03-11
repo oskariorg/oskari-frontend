@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
-export default class LayerEditorFlyout extends ExtraFlyout {
+export class LayerEditorFlyout extends ExtraFlyout {
     constructor (title, options) {
         super(title, options);
         this.element = null;
