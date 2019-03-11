@@ -1,5 +1,5 @@
 
-import LayersPlugin from 'oskari-frontend/bundles/mapping/mapmodule/plugin/layers/LayersPluginClass.ol';
+import {LayersPlugin} from 'oskari-frontend/bundles/mapping/mapmodule/plugin/layers/LayersPluginClass.ol';
 
 class LayersPluginOlcs extends LayersPlugin {
     /**
