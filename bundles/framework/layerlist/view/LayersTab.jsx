@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import { LayerList } from '../components/LayerList/LayerList';
+
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
  *
@@ -169,16 +171,23 @@ Oskari.clazz.define(
             );
             me.layerListMountPoint = jQuery(me.templates.layerListMountPoint);
             me.tabPanel.getContainer().append(me.layerListMountPoint);
-            me.tabPanel.setSelectionHandler(me._render.bind(me))
+
+            me.tabPanel.setSelectionHandler(selected => {
+                if (selected) {
+                    me._render();
+                }
+            });
         },
 
         /**
          * TODO. React here
          */
-        _render: function (visible) {
-            if (visible) {
-                ReactDOM.render(<div>Das react</div>, this.layerListMountPoint[0]);
-            }
+        _render: function (props = {}) {
+            const listProps = {
+                groups: this.layerGroups,
+                ...props
+            };
+            ReactDOM.render(<LayerList {...listProps} />, this.layerListMountPoint[0]);
         },
 
         /**
@@ -246,69 +255,9 @@ Oskari.clazz.define(
          * @param  {Array} groups
          */
         showLayerGroups: function (groups) {
-            var me = this,
-                i,
-                groupsLength = groups.length,
-                group,
-                layers,
-                localization,
-                groupPanel,
-                groupContainer,
-                layersLength,
-                n,
-                layer,
-                layerWrapper,
-                layerContainer,
-                selectedLayers;
-            me.accordion.removeAllPanels();
-            me.layerContainers = {};
-            me.layerGroups = groups;
-            localization = me.instance.getLocalization();
-            for (i = 0; i < groupsLength; i += 1) {
-                group = groups[i];
-                layers = group.getLayers();
-                layersLength = layers.length;
-                groupPanel = Oskari.clazz.create(
-                    'Oskari.userinterface.component.AccordionPanel'
-                );
-                groupPanel.setTitle(group.getTitle());
-                groupPanel.setId(
-                    'oskari_layerselector2_accordionPanel_' +
-                    group.getTitle().replace(/[^a-z0-9\-_:.]/gi, '-')
-                );
-                group.layerListPanel = groupPanel;
-
-                var badge = Oskari.clazz.create('Oskari.userinterface.component.Badge');
-                badge.insertTo(groupPanel.getHeader());
-                badge.setContent(layersLength, 'inverse');
-                group.badge = badge;
-
-                groupContainer = groupPanel.getContainer();
-                groupContainer.addClass('oskari-hidden');
-                for (n = 0; n < layersLength; n += 1) {
-                    layer = layers[n];
-                    layerWrapper =
-                        Oskari.clazz.create(
-                            'Oskari.mapframework.bundle.layerselector2.view.Layer',
-                            layer,
-                            me.instance.sandbox,
-                            localization
-                        );
-                    layerContainer = layerWrapper.getContainer();
-                    groupContainer.append(layerContainer);
-                    me.layerContainers[layer.getId()] = layerWrapper;
-                }
-                groupContainer.removeClass('oskari-hidden');
-                me.accordion.addPanel(groupPanel);
-            }
-
-            selectedLayers = me.instance.sandbox.findAllSelectedMapLayers();
-            layersLength = selectedLayers.length;
-            for (i = 0; i < layersLength; i += 1) {
-                me.setLayerSelected(selectedLayers[i].getId(), true);
-            }
-
-            me.filterLayers(me.filterField.getValue());
+            this.layerGroups = groups;
+            this.filterLayers(this.filterField.getValue());
+            this._render();
         },
 
         /**
@@ -321,47 +270,34 @@ Oskari.clazz.define(
          * Also checks if all layers in a group is hidden and hides the group as well.
          */
         filterLayers: function (keyword, ids) {
-            var me = this,
-                visibleGroupCount = 0,
-                visibleLayerCount,
-                i,
-                n,
-                group,
-                layer,
-                layers,
-                layerId,
-                layerCont,
-                bln,
-                loc;
+            let me = this;
+            let visibleGroupCount = 0;
+            let i;
+            let n;
+            let layer;
+            let layerId;
 
             if (!ids && me.sentKeyword === keyword) {
                 ids = me.ontologyLayers;
             }
-            // show all groups
-            me.accordion.showPanels();
-            if (!keyword || keyword.length === 0) {
-                me._showAllLayers();
-                return;
-            }
+
+            const props = {
+                filterKeyword: keyword
+            };
             // filter
             for (i = 0; i < me.layerGroups.length; i += 1) {
-                group = me.layerGroups[i];
-                layers = group.getLayers();
-                visibleLayerCount = 0;
+                let group = me.layerGroups[i];
+                let layers = group.getLayers();
+                let visibleLayerCount = 0;
                 for (n = 0; n < layers.length; n += 1) {
                     layer = layers[n];
                     layerId = layer.getId();
-                    layerCont = me.layerContainers[layerId];
-                    bln = group.matchesKeyword(layerId, keyword) || (me.showSearchSuggestions && ids && me._arrayContains(ids, layerId));
-                    layerCont.setVisible(bln);
+                    let bln = group.matchesKeyword(layerId, keyword) || (me.showSearchSuggestions && ids && me._arrayContains(ids, layerId));
                     if (bln) {
                         visibleLayerCount += 1;
-                        // open the panel if matching layers
-                        group.layerListPanel.open();
                     }
                 }
-                group.layerListPanel.setVisible(visibleLayerCount > 0);
-                if (group.layerListPanel.isVisible()) {
+                if (visibleLayerCount > 0) {
                     visibleGroupCount += 1;
                 }
                 if (group.badge) {
@@ -373,15 +309,12 @@ Oskari.clazz.define(
             // else clear any previous message
             if (visibleGroupCount === 0) {
                 // empty result
-                loc = me.instance.getLocalization('errors');
-                me.accordion.showMessage(loc.noResults);
-                jQuery(me.accordion.ui).find('.accordionmsg').attr(
-                    'id',
-                    'oskari_layerselector2_inspiretab_search_no-result'
-                );
+                // loc = me.instance.getLocalization('errors');
+                // TODO show loc.noResults!
             } else {
-                me.accordion.removeMessage();
+                // me.accordion.removeMessage();
             }
+            this._render(props);
         },
 
         /**
