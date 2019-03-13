@@ -63,7 +63,7 @@ module.exports = (env, argv) => {
                                 ],
                                 require.resolve('@babel/preset-react') // Resolve path for use from external projects
                             ],
-                            plugins: [require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external projects
+                            plugins: [require.resolve('babel-plugin-styled-components'), require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external projects
                         }
                     }
                 },
