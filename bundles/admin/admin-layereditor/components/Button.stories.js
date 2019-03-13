@@ -1,6 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Button } from './Button';
+import {StyledButton} from './StyledButton';
 
 const defaultProps = {
     text: 'My text'
@@ -17,4 +18,7 @@ storiesOf('Button', module)
         return (
             <Button {...storyProps} />
         );
+    })
+    .add('styled', () => {
+        return (<StyledButton {...defaultProps} />);
     });
