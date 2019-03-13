@@ -9,8 +9,8 @@ export const Select = (props) => {
     const {options, ...other} = props;
     return (
         <AntSelect {...other}>
-            {options.map((option, key) => (
-                <AntOption {...option} key={key}>{option.title}</AntOption>
+            {options.map(({title, ...optionProps}, key) => (
+                <AntOption {...optionProps} key={key}>{title}</AntOption>
             ))}
         </AntSelect>
     );

@@ -9,8 +9,8 @@ export const Collapse = (props) => {
     const {panels, ...other} = props;
     return (
         <AntCollapse {...other}>
-            {panels.map((panel, key) => (
-                <AntPanel {...panel} key={key}>{panel.content}</AntPanel>
+            {panels.map(({content, ...panelProps}, key) => (
+                <AntPanel {...panelProps} key={key}>{content}</AntPanel>
             ))}
         </AntCollapse>
     );
