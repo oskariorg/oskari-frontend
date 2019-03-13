@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Collapse from 'antd/lib/collapse';
+import AntCollapse from 'antd/lib/collapse';
 import 'antd/lib/collapse/style/css';
 
-const Panel = Collapse.Panel;
+const AntPanel = AntCollapse.Panel;
 
-export const CollapseComponent = (props) => {
+export const Collapse = (props) => {
     const {panels, ...other} = props;
     return (
-        <Collapse {...other}>
+        <AntCollapse {...other}>
             {panels.map((panel, key) => (
-                <Panel {...panel} key={key}>{panel.content}</Panel>
+                <AntPanel {...panel} key={key}>{panel.content}</AntPanel>
             ))}
-        </Collapse>
+        </AntCollapse>
     );
 };
 
-CollapseComponent.propTypes = {
+Collapse.propTypes = {
     panels: PropTypes.array
 };
