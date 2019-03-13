@@ -3,14 +3,16 @@ import PropTypes from 'prop-types';
 import AntTabs from 'antd/lib/tabs';
 import 'antd/lib/tabs/style/css';
 
-export const Tabs = ({children, ...other}) => {
+const AntTabPane = AntTabs.TabPane;
+
+export const TabPane = ({children, ...other}) => {
     return (
-        <AntTabs {...other}>
+        <AntTabPane {...other}>
             {children}
-        </AntTabs>
+        </AntTabPane>
     );
 };
 
-Tabs.propTypes = {
+TabPane.propTypes = {
     children: PropTypes.any
 };
