@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Button from 'antd/lib/button';
+import AntButton from 'antd/lib/button';
 import 'antd/lib/button/style/css';
 
-export const ButtonComponent = (props) => {
+export const Button = (props) => {
     const {text, ...other} = props;
     return (
-        <Button {...other}>{text}</Button>
+        <AntButton {...other}>{text}</AntButton>
     );
 };
 
-ButtonComponent.propTypes = {
+Button.propTypes = {
     text: PropTypes.string
 };
