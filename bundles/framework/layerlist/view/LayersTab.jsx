@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import { LayerList } from '../components/LayerList/LayerList';
+import { fromJS } from 'immutable';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -183,10 +184,11 @@ Oskari.clazz.define(
          * TODO. React here
          */
         _render: function (props = {}) {
-            const listProps = {
+            const listProps = fromJS({
                 groups: this.layerGroups,
+                keyword: this.filterField.getValue(),
                 ...props
-            };
+            });
             ReactDOM.render(<LayerList {...listProps} />, this.layerListMountPoint[0]);
         },
 

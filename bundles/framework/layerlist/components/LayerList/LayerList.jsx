@@ -1,19 +1,22 @@
 import React, { memo } from 'react';
-
-const Groups = props => (
-    <ul>
-        {props.groups.map((group, i) => <li key={i}>{JSON.stringify(group)}</li>)}
-    </ul>
-);
+import PropTypes from 'prop-types';
 
 function LayerList (props) {
-    const isEmpty = !props.groups || props.groups.length === 0;
-    const content = Array.isArray(props.groups) && props.length !== 0
-        ? <Groups groups={props.groups}></Groups>
-        : 'NO LAYER GROUPS for keyword' + props.keyword;
-    
-    return <div>{content}</div>
-  }
-  
-  let memorized = memo(LayerList);
-  export { memorized as LayerList };
+    const content = !Array.isArray(props.groups) || props.groups.length === 0
+        ? 'NO LAYER GROUPS for keyword' + props.keyword
+        : (
+            <ul>
+                {props.groups.map((group, i) => <li key={i}>{JSON.stringify(group)}</li>)}
+            </ul>
+        );
+
+    return <div>{content}</div>;
+}
+
+LayerList.propTypes = {
+    groups: PropTypes.Array,
+    keyword: PropTypes.string
+};
+
+let memorized = memo(LayerList);
+export { memorized as LayerList };
