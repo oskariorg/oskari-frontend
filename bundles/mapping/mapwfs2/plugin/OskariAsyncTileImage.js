@@ -4,7 +4,7 @@ import {getKeyZXY as olTilecoordGetKeyZXY} from 'ol/tilecoord';
 import {listen as olEventsListen} from 'ol/events';
 import olEventsEventType from 'ol/events/EventType';
 
-export default class OskariAsyncTileImage extends olSourceTileImage {
+export class OskariAsyncTileImage extends olSourceTileImage {
     constructor (options) {
         super({
             attributions: options.attributions,

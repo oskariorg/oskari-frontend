@@ -5,7 +5,7 @@
  * @param {Number} min
  * @param {Number} max
  */
-export default function equalSizeBands (classCount, min, max) {
+export function equalSizeBands (classCount, min, max) {
     var output = [];
     if (classCount < 1) {
         return;

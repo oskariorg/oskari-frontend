@@ -5,7 +5,8 @@
  * @param {Function} xScale d3 scale function
  * @param {Function} yScale d3 scale function
  * @param {Number} chartHeight in px
- */export default function histogram (svg, histoData, xScale, yScale, chartHeight) {
+ */
+export function histogram (svg, histoData, xScale, yScale, chartHeight) {
     histoData.forEach((d) => {
         svg.append('rect')
             .attr('x', xScale(d.x0))

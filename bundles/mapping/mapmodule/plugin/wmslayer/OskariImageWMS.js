@@ -1,6 +1,6 @@
 import olSourceImageWMS from 'ol/source/ImageWMS';
 
-export default class OskariImageWMS extends olSourceImageWMS {
+export class OskariImageWMS extends olSourceImageWMS {
     /**
      * Return currently shown image url
      */
