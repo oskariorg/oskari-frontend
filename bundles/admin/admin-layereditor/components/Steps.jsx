@@ -20,6 +20,7 @@ export const Steps = (props) => {
         <AntSteps {...other}>{children}</AntSteps>
     );
 };
+
 Steps.propTypes = {
     children: Step.array
 };
