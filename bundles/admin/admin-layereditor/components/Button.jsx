@@ -3,13 +3,15 @@ import PropTypes from 'prop-types';
 import Button from 'antd/lib/button';
 import 'antd/lib/button/style/css';
 
-export const ButtonComponent = (props) => {
-    const {text, ...other} = props;
+const ButtonComponent = (props) => {
     return (
-        <Button {...other}>{text}</Button>
+        <Button {...props}>{props.children}</Button>
     );
 };
 
 ButtonComponent.propTypes = {
-    text: PropTypes.string
+    children: PropTypes.any
 };
+
+export default ButtonComponent;
+
