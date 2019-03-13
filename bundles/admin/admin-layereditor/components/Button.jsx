@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import AntButton from 'antd/lib/button';
 import 'antd/lib/button/style/css';
 
-export const Button = (props) => (
-    <AntButton {...props}>{props.children}</AntButton>
+export const Button = ({children, ...other}) => (
+    <AntButton {...other}>{children}</AntButton>
 );
 
 Button.propTypes = {
