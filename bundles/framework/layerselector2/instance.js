@@ -21,6 +21,9 @@ Oskari.clazz.define(
         this.plugins = {};
         this.localization = null;
         this.filteredLayerListOpenedByRequest = false;
+        this.throttledRedraw = Oskari.util.throttle(() => {
+            this.plugins['Oskari.userinterface.Flyout'].populateLayers();
+        }, 2000, {leading: false});
     }, {
         /**
          * @static
@@ -227,8 +230,11 @@ Oskari.clazz.define(
                     // refresh layer count
                     tile.refresh();
                 } else if (operation === 'tool') {
-                    // This will increase startup time in pti by ~300%
-                    // this.layerChanged(layerId);
+                    if (!layerId) {
+                        this.throttledRedraw();
+                    } else {
+                        this.layerChanged(layerId);
+                    }
                 }
             },
 
