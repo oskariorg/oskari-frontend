@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import { LayerList } from '../components/LayerList/LayerList';
-import { fromJS } from 'immutable';
+import { LayerCollapse } from '../components/LayerCollapse';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -184,12 +183,13 @@ Oskari.clazz.define(
          * TODO. React here
          */
         _render: function (props = {}) {
-            const listProps = {
+            const collapseProps = {
                 groups: this.layerGroups,
                 keyword: this.filterField.getValue(),
+                mapSrsName: Oskari.getSandbox().getMap().getSrsName(),
                 ...props
             };
-            ReactDOM.render(<LayerList {...listProps} />, this.layerListMountPoint[0]);
+            ReactDOM.render(<LayerCollapse {...collapseProps} />, this.layerListMountPoint[0]);
         },
 
         /**
