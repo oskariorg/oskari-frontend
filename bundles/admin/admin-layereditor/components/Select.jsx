@@ -5,17 +5,22 @@ import 'antd/lib/select/style/css';
 
 const AntOption = AntSelect.Option;
 
-export const Select = (props) => {
-    const {options, ...other} = props;
-    return (
-        <AntSelect {...other}>
-            {options.map(({title, ...optionProps}, key) => (
-                <AntOption {...optionProps} key={key}>{title}</AntOption>
-            ))}
-        </AntSelect>
-    );
-};
+export const Select = ({children, ...other}) => (
+    <AntSelect {...other}>
+        {children}
+    </AntSelect>
+);
+
+export const Option = ({children, ...other}) => (
+    <AntOption {...other}>
+        {children}
+    </AntOption>
+);
 
 Select.propTypes = {
-    options: PropTypes.array
+    children: PropTypes.any
+};
+
+Option.propTypes = {
+    children: PropTypes.any
 };

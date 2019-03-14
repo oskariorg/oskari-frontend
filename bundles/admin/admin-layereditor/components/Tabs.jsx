@@ -5,21 +5,17 @@ import 'antd/lib/tabs/style/css';
 
 const AntTabPane = AntTabs.TabPane;
 
-export const Tabs = ({children, ...other}) => {
-    return (
-        <AntTabs {...other}>
-            {children}
-        </AntTabs>
-    );
-};
+export const Tabs = ({children, ...other}) => (
+    <AntTabs {...other}>
+        {children}
+    </AntTabs>
+);
 
-export const TabPane = ({children, ...other}) => {
-    return (
-        <AntTabPane {...other}>
-            {children}
-        </AntTabPane>
-    );
-};
+export const TabPane = ({children, ...other}) => (
+    <AntTabPane {...other}>
+        {children}
+    </AntTabPane>
+);
 
 Tabs.propTypes = {
     children: PropTypes.any

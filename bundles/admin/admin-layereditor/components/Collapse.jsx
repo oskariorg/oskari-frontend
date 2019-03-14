@@ -5,17 +5,22 @@ import 'antd/lib/collapse/style/css';
 
 const AntPanel = AntCollapse.Panel;
 
-export const Collapse = (props) => {
-    const {panels, ...other} = props;
-    return (
-        <AntCollapse {...other}>
-            {panels.map(({content, ...panelProps}, key) => (
-                <AntPanel {...panelProps} key={key}>{content}</AntPanel>
-            ))}
-        </AntCollapse>
-    );
-};
+export const Collapse = ({children, ...other}) => (
+    <AntCollapse {...other}>
+        {children}
+    </AntCollapse>
+);
+
+export const Panel = ({children, ...other}) => (
+    <AntPanel {...other}>
+        {children}
+    </AntPanel>
+);
 
 Collapse.propTypes = {
-    panels: PropTypes.array
+    children: PropTypes.any
+};
+
+Panel.propTypes = {
+    children: PropTypes.any
 };
