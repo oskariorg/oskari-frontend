@@ -184,11 +184,11 @@ Oskari.clazz.define(
          * TODO. React here
          */
         _render: function (props = {}) {
-            const listProps = fromJS({
+            const listProps = {
                 groups: this.layerGroups,
                 keyword: this.filterField.getValue(),
                 ...props
-            });
+            };
             ReactDOM.render(<LayerList {...listProps} />, this.layerListMountPoint[0]);
         },
 
