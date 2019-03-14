@@ -55,10 +55,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerlist.LayerListBundle", func
         }, {
             "type": "text/javascript",
             "src": "../../../bundles/framework/layerselector2/request/AddLayerListFilterRequestHandler.js"
-        },
-        {
-            "type": "text/css",
-            "src": "../../../bundles/framework/layerselector2/resources/scss/style.scss"
         }],
 
         "locales": [{
