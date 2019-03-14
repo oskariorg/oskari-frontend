@@ -22,5 +22,9 @@ export const Steps = (props) => {
 };
 
 Steps.propTypes = {
-    children: Step.array
+    children: PropTypes.arrayOf(
+        PropTypes.shape({
+            type: PropTypes.oneOf([Step])
+        })
+    ).isRequired
 };
