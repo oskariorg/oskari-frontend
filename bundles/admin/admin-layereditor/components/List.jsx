@@ -1,21 +1,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import List from 'antd/lib/list';
+import AntList from 'antd/lib/list';
 import 'antd/lib/list/style/css';
 
-export const ListComponent = ({header, footer, dataSource}) => {
+export const List = ({header, footer, dataSource}) => {
     return (
-        <List
+        <AntList
             header={header}
             footer={footer}
             bordered
             dataSource={dataSource}
-            renderItem={item => (<List.Item>{item}</List.Item>)}
+            renderItem={item => (<AntList.Item>{item}</AntList.Item>)}
         />
     );
 };
 
-ListComponent.propTypes = {
+List.propTypes = {
     header: PropTypes.string,
     footer: PropTypes.string,
     dataSource: PropTypes.array
