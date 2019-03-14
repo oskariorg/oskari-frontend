@@ -10,7 +10,6 @@ const versionsAvailable = {
 export class LayerURLForm extends React.Component {
     constructor (props) {
         super(props);
-        // TODO: pass by type or fetch from layer plugin based on props.type?
         this.state = {
             loading: false
         };
@@ -23,19 +22,11 @@ export class LayerURLForm extends React.Component {
                 version
             };
         });
-        alert(`Go fetch capabilities for: ${this.getLayerType()} ${version}`);
+        alert(`TODO: fetch capabilities for: ${this.getLayerType()} ${version}`);
+        setTimeout(() => this.mutator.setVersion(version), 2000);
     }
     getLayerType () {
         return this.props.layer.type;
-    }
-    notifySuccess () {
-        if (this.props.onSuccess) {
-            this.props.onSuccess({
-                name: 'fake',
-                locale: 'it',
-                version: this.state.version
-            });
-        }
     }
     getVersions () {
         return versionsAvailable[this.getLayerType()] || [];
@@ -50,8 +41,6 @@ export class LayerURLForm extends React.Component {
                         onClick={() => this.fetchCapabilities(version)}
                         loading={this.state.loading}>{version}</Button>
                 ))}
-                <br/>
-                <Button type="danger" onClick={() => this.notifySuccess()}>Fake it till you make it</Button>
             </div>
         );
     }
@@ -59,6 +48,5 @@ export class LayerURLForm extends React.Component {
 
 LayerURLForm.propTypes = {
     layer: PropTypes.object,
-    onSuccess: PropTypes.func,
     service: PropTypes.any
 };

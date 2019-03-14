@@ -10,24 +10,17 @@ import { LayerWizardService } from './LayerWizard/LayerWizardService';
 export class LayerWizard extends React.Component {
     constructor (props) {
         super(props);
-        this.service = new LayerWizardService(() => this.render());
+        this.service = new LayerWizardService(() => this.setState({ layer: this.service.getLayer() }));
     }
     setStep (requested) {
         switch (requested) {
         case 0:
-            this.service.getMutator().setType(null);
+            this.service.getMutator().setType();
             break;
         case 1:
-            this.service.getMutator().setVersion(null);
+            this.service.getMutator().setVersion();
             break;
         }
-    }
-    setLayerType (type) {
-        this.setState((state) => {
-            return {
-                layerType: type
-            };
-        });
     }
     showLayerForm (layer) {
         this.setState((state) => {
@@ -57,14 +50,13 @@ export class LayerWizard extends React.Component {
             padding: 10px;
         `;
         const layer = this.service.getLayer();
-        // console.log(layer, this.getStep(), this.isStep(0));
         let typeTitle = 'Layer type';
         if (layer.type) {
             typeTitle = `${typeTitle}: ${layer.type}`;
         }
         const mutator = this.service.getMutator();
         return (
-            <StyledRootEl>
+            <StyledRootEl ref={this.myRef}>
                 <Steps current={this.getStep()}>
                     <Step title={typeTitle} />
                     <Step title="URL" />
@@ -79,7 +71,7 @@ export class LayerWizard extends React.Component {
                     <div>
                         <LayerURLForm
                             layer={layer}
-                            // onSuccess={(layerInfo) => this.showLayerForm(layerInfo)}
+                            onSuccess={(layerInfo) => this.showLayerForm(layerInfo)}
                             service={mutator} />
                         <hr/>
                         <Button onClick={() => this.setStep(0)}>Back</Button>
