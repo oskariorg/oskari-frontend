@@ -56,7 +56,7 @@ export class LayerWizard extends React.Component {
         }
         const mutator = this.service.getMutator();
         return (
-            <StyledRootEl ref={this.myRef}>
+            <StyledRootEl>
                 <Steps current={this.getStep()}>
                     <Step title={typeTitle} />
                     <Step title="URL" />
