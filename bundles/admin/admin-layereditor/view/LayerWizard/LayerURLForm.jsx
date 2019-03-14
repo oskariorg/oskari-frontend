@@ -1,17 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { UrlInput } from '../components/UrlInput';
-import { Select } from '../components/Select';
-import { Button } from '../components/Button';
+import { UrlInput } from '../../components/UrlInput';
+import { Button } from '../../components/Button';
+
+const versionsAvailable = {
+    'WFS': ['3.0']
+};
 
 export class LayerURLForm extends React.Component {
     constructor (props) {
         super(props);
         // TODO: pass by type or fetch from layer plugin based on props.type?
-        this.versionsAvailable = ['3.0'];
         this.state = {
             loading: false
         };
+        this.mutator = props.service;
     }
     fetchCapabilities (version) {
         this.setState((state) => {
@@ -20,7 +23,10 @@ export class LayerURLForm extends React.Component {
                 version
             };
         });
-        alert(`Go fetch capabilities for: ${this.props.type} ${version}`);
+        alert(`Go fetch capabilities for: ${this.getLayerType()} ${version}`);
+    }
+    getLayerType () {
+        return this.props.layer.type;
     }
     notifySuccess () {
         if (this.props.onSuccess) {
@@ -31,16 +37,15 @@ export class LayerURLForm extends React.Component {
             });
         }
     }
+    getVersions () {
+        return versionsAvailable[this.getLayerType()] || [];
+    }
     render () {
-        const protocols = [{title: 'https://'}, {title: 'http://'}];
-        const selectBefore = (
-            <Select defaultValue="https://" style={{ width: 90 }} options={protocols} />
-        );
         return (
             <div>
-                Selected: {this.props.type}
-                <UrlInput addonBefore={selectBefore} defaultValue="oskari.org/geoserver" />
-                {this.versionsAvailable.map((version, key) => (
+                Selected: {this.getLayerType()}
+                <UrlInput defaultValue="oskari.org/geoserver" />
+                {this.getVersions().map((version, key) => (
                     <Button type="primary" key={key}
                         onClick={() => this.fetchCapabilities(version)}
                         loading={this.state.loading}>{version}</Button>
@@ -53,6 +58,7 @@ export class LayerURLForm extends React.Component {
 }
 
 LayerURLForm.propTypes = {
-    type: PropTypes.string,
-    onSuccess: PropTypes.function
+    layer: PropTypes.object,
+    onSuccess: PropTypes.func,
+    service: PropTypes.any
 };

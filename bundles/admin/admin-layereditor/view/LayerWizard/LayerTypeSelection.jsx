@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Button } from '../components/Button';
+import { Button } from '../../components/Button';
 
 const StyledButton = styled(Button)`
     margin: 10px;
@@ -30,6 +30,6 @@ export const LayerTypeSelection = (props) => {
 
 LayerTypeSelection.propTypes = {
     text: PropTypes.string,
-    types: PropTypes.array,
-    onSelect: PropTypes.function
+    types: PropTypes.arrayOf(PropTypes.string),
+    onSelect: PropTypes.func
 };
