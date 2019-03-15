@@ -1,12 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-<<<<<<< HEAD
 import { LayerCollapse } from '../components/LayerCollapse';
-=======
-import { LayerList } from '../components/LayerList/LayerList';
-import { fromJS } from 'immutable';
->>>>>>> e3f714f876b4c33103831a45edf99a87ca513a8f
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
