@@ -31,20 +31,36 @@ export class LayerWizardService {
                 me.layer.type = type;
                 me.notify();
             },
+            setName (name) {
+                if (!name) {
+                    me.layer.name = undefined;
+                    me.notify();
+                    return;
+                }
+                const found = me.capabilities.find((item) => item.name === name);
+                if (found) {
+                    me.layer = {
+                        ...me.layer,
+                        ...found
+                    };
+                } else {
+                    // TODO: not found -> error that should not happen
+                    this.setName();
+                }
+                me.notify();
+            },
             setVersion (url, version) {
                 if (!url || !version) {
                     me.capabilities = [];
                     me.loading = false;
                     // for moving back to previous step
                     me.layer.version = undefined;
-                    me.layer.url = undefined;
                     me.notify();
                     return;
                 }
                 me.loading = true;
                 me.layer.url = url;
                 me.notify();
-                alert(`TODO: fetch capabilities for: ${me.getLayer().type} ${version} on ${url}`);
                 setTimeout(() => {
                     me.layer.version = version;
                     me.capabilities = [{
@@ -60,7 +76,7 @@ export class LayerWizardService {
                     }];
                     me.loading = false;
                     me.notify();
-                }, 2000);
+                }, 1000);
             }
         };
     }

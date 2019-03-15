@@ -4,6 +4,7 @@ import { Steps, Step } from '../components/Steps';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { LayerDetails } from './LayerWizard/LayerDetails';
+import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
 import { Button } from '../components/Button';
 import { LayerWizardService } from './LayerWizard/LayerWizardService';
 
@@ -20,6 +21,9 @@ export class LayerWizard extends React.Component {
         case 1:
             this.service.getMutator().setVersion();
             break;
+        case 2:
+            this.service.getMutator().setName();
+            break;
         }
     }
     getStep () {
@@ -29,7 +33,10 @@ export class LayerWizard extends React.Component {
         if (!this.service.hasVersion()) {
             return 1;
         }
-        return 2;
+        if (!this.service.getLayer().name) {
+            return 2;
+        }
+        return 3;
     }
     isStep (input) {
         return this.getStep() === input;
@@ -50,7 +57,8 @@ export class LayerWizard extends React.Component {
             <StyledRootEl>
                 <Steps current={this.getStep()}>
                     <Step title={typeTitle} />
-                    <Step title="URL" />
+                    <Step title="Service" />
+                    <Step title="Layers" />
                     <Step title="Details" />
                 </Steps>
                 { this.isStep(0) &&
@@ -70,10 +78,19 @@ export class LayerWizard extends React.Component {
                 }
                 { this.isStep(2) &&
                     <div>
+                        <LayerCapabilitiesListing
+                            onSelect={(item) => mutator.setName(item.name)}
+                            capabilities={service.getCapabilities()} />
+                        <hr/>
+                        <Button onClick={() => this.setStep(1)}>Back</Button>
+                    </div>
+                }
+                { this.isStep(3) &&
+                    <div>
                         <LayerDetails
                             layer={layer} />
                         <hr/>
-                        <Button onClick={() => this.setStep(1)}>Back</Button>
+                        <Button onClick={() => this.setStep(2)}>Back</Button>
                     </div>
                 }
             </StyledRootEl>
