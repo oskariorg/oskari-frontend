@@ -36,9 +36,15 @@ const Tools = styled('div')`
 `;
 
 const getBackendStatusIcon = layer => {
+    const classes = ['layer-backendstatus-icon'];
+    const iconCls = ICON_CLASS[layer.getBackendStatus()];
+    if (iconCls) {
+        classes.push(iconCls);
+    }
     const props = {
+        className: classes.join(' '),
         layer,
-        hasStatus: ICON_CLASS.hasOwnProperty(layer.getBackendStatus())
+        hasStatus: !!iconCls
     };
     return <BackendStatus {...props}/>;
 };
