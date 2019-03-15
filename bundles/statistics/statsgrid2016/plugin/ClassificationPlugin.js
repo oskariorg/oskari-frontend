@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { GenericContext } from '../../../../src/reactUtil/genericContext';
+import {GenericContext} from '../../../../src/react/util.jsx';
 import {Classification} from '../components/Classification';
 import '../resources/scss/classificationplugin.scss';
 /**

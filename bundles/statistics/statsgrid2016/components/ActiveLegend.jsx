@@ -1,5 +1,5 @@
 import React from 'react';
-import { withContext } from '../../../../src/reactUtil/genericContext';
+import {withContext} from '../../../../src/react/util.jsx';
 import '../resources/scss/activelegend.scss';
 
 const getNoActiveElem = text => {

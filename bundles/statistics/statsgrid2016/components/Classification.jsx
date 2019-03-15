@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withContext, handleBinder} from '../../../../src/react/util.jsx';
 import {ClassificationEdit} from './ClassificationEdit';
 import {ActiveLegend} from './ActiveLegend';
-import {withContext} from '../../../../src/reactUtil/genericContext';
-import handleBinder from '../../../../src/reactUtil/handleBinder';
 import '../resources/scss/classification.scss';
 
 class Classification extends React.Component {

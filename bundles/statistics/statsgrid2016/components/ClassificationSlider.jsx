@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../src/reactUtil/genericContext';
+import {withContext} from '../../../../src/react/util.jsx';
 import '../resources/scss/classificationslider.scss';
 
 class ClassificationSlider extends React.Component {

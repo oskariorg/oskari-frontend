@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import {withContext} from '../../../../src/react/util.jsx';
 import {ClassificationSelect} from './ClassificationSelect';
 import {ClassificationSlider} from './ClassificationSlider';
 import {ClassificationCheckbox} from './ClassificationCheckbox';
 import {ClassificationColorSelect} from './ClassificationColorSelect';
 import {ManualClassification} from './manualClassification/ManualClassification';
-import {withContext} from '../../../../src/reactUtil/genericContext';
 import '../resources/scss/editclassification.scss';
 
 const getLocalizedOptions = (options, locObj, disabledOptions) => {
