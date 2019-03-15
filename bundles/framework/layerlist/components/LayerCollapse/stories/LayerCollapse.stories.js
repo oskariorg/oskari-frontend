@@ -4,10 +4,13 @@ import { LayerCollapse } from '../../LayerCollapse';
 import { LayerGroup } from '../../../../layerselector2/model/LayerGroup.class';
 import { AbstractLayer } from './AbstractLayer.class';
 
+let lyrCount = 0;
 const createLayer = (name, type) => {
     const layer = new AbstractLayer();
+    lyrCount++;
     layer._name = name;
     layer.setType(type);
+    layer.setId(lyrCount);
     return layer;
 };
 
@@ -20,10 +23,14 @@ const createLayerGroups = () => {
     const wms = createLayer('WMS layer', 'wmslayer');
     const wfs = createLayer('WFS layer', 'wfs');
     const wmts = createLayer('WMTS layer', 'wmtslayer');
-    groups.forEach(group => {
+    groups.forEach((group, index) => {
+        if (index % 2 === 0) {
+            group.addLayer(wfs);
+        }
+        if (index % 3 === 0) {
+            group.addLayer(wmts);
+        }
         group.addLayer(wms);
-        group.addLayer(wfs);
-        group.addLayer(wmts);
     });
     return groups;
 };
@@ -47,10 +54,10 @@ storiesOf('LayerCollapse', module)
         };
         return <LayerCollapse {...storyProps} />;
     })
-    .add('with filter "Base"', () => {
+    .add('with filter "wms"', () => {
         const storyProps = {
             ...defaultProps,
-            filterKeyword: 'Base'
+            filterKeyword: 'wms'
         };
         return <LayerCollapse {...storyProps} />;
     });

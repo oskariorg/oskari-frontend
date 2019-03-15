@@ -3,48 +3,42 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LAYER_TYPE, ICON_CLASS, TOOLTIP } from './constants';
 
-const Tools = styled('div')`
-    float: right;
-`;
-const UnsupportedWarning = styled('div')`
-    float: right;
+const getIconDiv = float => styled('div')`
+    float: ${float};
     width: 16px;
     height: 16px;
-    margin-left: 5px;
+    background-repeat: no-repeat;
+    ${float === 'right' && `
+        margin-left: 5px;
+    `}
 `;
+const RightFloatingIcon = getIconDiv('right');
+const LeftFloatingIcon = getIconDiv('left');
+
 const BackendStatus = styled('div')`
     float: left;
-    width: 20px;
-    height: 16;
-    margin-right: 4px;
     background-repeat: no-repeat;
-    ${props => ICON_CLASS.hasOwnProperty(props.layer.getBackendStatus()) && `
-        height: 20px !important;
+    width: 20px;
+    margin-right: 4px;
+    height: ${props => props.hasStatus ? '20px' : '16px'};
+    ${props => props.hasStatus && `
         margin-bottom: 2px;
         margin-top: -2px;
         cursor: pointer;
     `}
 `;
-const LayerIcon = styled('div')`
-    float: left;
-    width: 16px;
-    height: 16px;
-    background-repeat: no-repeat;   
-`;
 const SecondaryIcon = styled('div')`
     float: left;
     ${props => props.layer.hasTimeseries() && 'margin-right: 2px;'}
 `;
-const InfoIcon = styled('div')`
+const Tools = styled('div')`
     float: right;
-    width: 16px;
-    height: 16px;
-    margin-left: 5px;
 `;
 
 const getBackendStatusIcon = layer => {
     const props = {
-        layer
+        layer,
+        hasStatus: ICON_CLASS.hasOwnProperty(layer.getBackendStatus())
     };
     return <BackendStatus {...props}/>;
 };
@@ -89,34 +83,26 @@ const getLayerIcon = layer => {
         className: classes.join(' '),
         title
     };
-    return <LayerIcon {...props}/>;
+    return <LeftFloatingIcon {...props}/>;
+};
+
+const hasSubLayerMetadata = layer => {
+    const subLayers = layer.getSubLayers();
+    if (!subLayers || subLayers.length === 0) {
+        return false;
+    }
+    return !!subLayers.find(sub => !!sub.getMetadataIdentifier());
 };
 
 const getInfoIcon = layer => {
-    let subLayers = null;
-    let subLmeta = false;
-    // TODO: Check this logic.
-    if (!layer.getMetadataIdentifier()) {
-        subLayers = layer.getSubLayers();
-        if (subLayers && subLayers.length > 0) {
-            subLmeta = true;
-            for (let s = 0; s < subLayers.length; s += 1) {
-                const subUuid = subLayers[s].getMetadataIdentifier();
-                if (!subUuid || subUuid === '') {
-                    subLmeta = false;
-                    break;
-                }
-            }
-        }
-    }
     const classes = ['layer-info'];
-    if (layer.getMetadataIdentifier() || subLmeta) {
+    if (layer.getMetadataIdentifier() || hasSubLayerMetadata(layer)) {
         classes.push('icon-info');
     }
     const props = {
         className: classes.join(' ')
     };
-    return <InfoIcon {...props}/>;
+    return <RightFloatingIcon {...props}/>;
 };
 
 export const LayerTools = ({model, mapSrs}) => {
@@ -124,7 +110,7 @@ export const LayerTools = ({model, mapSrs}) => {
         <Tools className="layer-tools">
             {
                 !model.isSupported(mapSrs) &&
-                <UnsupportedWarning className="layer-not-supported icon-warning-light" />
+                <RightFloatingIcon className="layer-not-supported icon-warning-light" />
             }
             {getBackendStatusIcon(model)}
             {getSecondaryIcon(model)}
