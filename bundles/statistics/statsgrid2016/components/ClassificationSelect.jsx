@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 
 const ClassificationSelect = ({properties, options, value, disabled, handleChange}) => {
@@ -21,4 +22,13 @@ const ClassificationSelect = ({properties, options, value, disabled, handleChang
         </div>
     );
 };
-export default withContext(ClassificationSelect);
+ClassificationSelect.propTypes = {
+    properties: PropTypes.object,
+    options: PropTypes.array,
+    disabled: PropTypes.bool,
+    value: PropTypes.any,
+    handleChange: PropTypes.func
+};
+
+const contextWrapped = withContext(ClassificationSelect);
+export {contextWrapped as ClassificationSelect};

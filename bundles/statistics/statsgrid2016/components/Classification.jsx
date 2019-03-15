@@ -1,7 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import ClassificationEdit from './ClassificationEdit';
-import ActiveLegend from './ActiveLegend';
+import PropTypes from 'prop-types';
+import {ClassificationEdit} from './ClassificationEdit';
+import {ActiveLegend} from './ActiveLegend';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 import handleBinder from '../../../../src/reactUtil/handleBinder';
 import '../resources/scss/classification.scss';
@@ -79,9 +79,13 @@ class Classification extends React.Component {
     }
     getEditButton () {
         if (this.state.isEdit) {
-            return <div className="edit-button edit-active" title={this.props.loc('classify.edit.close')} onMouseUp = {this.handleToggleClassification}/>
+            return (
+                <div className="edit-button edit-active" title={this.props.loc('classify.edit.close')} onMouseUp = {this.handleToggleClassification}/>
+            );
         }
-        return <div className="edit-button" title={this.props.loc('classify.edit.open')} onMouseUp = {this.handleToggleClassification}/>
+        return (
+            <div className="edit-button" title={this.props.loc('classify.edit.open')} onMouseUp = {this.handleToggleClassification}/>
+        );
     }
 
     render () {
@@ -107,4 +111,17 @@ class Classification extends React.Component {
         );
     }
 }
-export default withContext(Classification);
+
+Classification.propTypes = {
+    indicators: PropTypes.object,
+    classifications: PropTypes.object,
+    state: PropTypes.object,
+    isEdit: PropTypes.bool,
+    legendProps: PropTypes.object,
+    onRenderChange: PropTypes.func,
+    service: PropTypes.object,
+    loc: PropTypes.func
+};
+
+const cls = withContext(Classification);
+export {cls as Classification};

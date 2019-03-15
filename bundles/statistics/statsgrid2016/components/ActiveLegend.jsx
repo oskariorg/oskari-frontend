@@ -21,4 +21,5 @@ const ActiveLegend = ({legendHTML}) => {
     return getNoActiveElem('');
 };
 
-export default withContext(ActiveLegend);
+const contextWrapped = withContext(ActiveLegend);
+export {contextWrapped as ActiveLegend};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 
 const ClassificationCheckbox = ({properties, value, handleChange, disabled}) => {
@@ -12,4 +13,13 @@ const ClassificationCheckbox = ({properties, value, handleChange, disabled}) => 
         </div>
     );
 };
-export default withContext(ClassificationCheckbox);
+
+ClassificationCheckbox.propTypes = {
+    properties: PropTypes.object,
+    disabled: PropTypes.bool,
+    value: PropTypes.bool,
+    handleChange: PropTypes.func
+};
+
+const contextWrapped = withContext(ClassificationCheckbox);
+export {contextWrapped as ClassificationCheckbox};

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ManualClassificationView from './View';
 import {withContext} from '../../../../../src/reactUtil/genericContext';
 
@@ -36,4 +37,11 @@ const ManualClassification = props => {
     );
 };
 
-export default withContext(ManualClassification);
+ManualClassification.propTypes = {
+    disabled: PropTypes.bool,
+    service: PropTypes.object,
+    indicators: PropTypes.object,
+    loc: PropTypes.func
+};
+const contextWrapped = withContext(ManualClassification);
+export {contextWrapped as ManualClassification};

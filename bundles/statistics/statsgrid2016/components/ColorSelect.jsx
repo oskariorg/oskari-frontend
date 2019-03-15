@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import handleBinder from '../../../../src/reactUtil/handleBinder';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 import {colorSetColorWidth} from '../resources/scss/colorselect.scss';
@@ -43,7 +44,6 @@ class ColorSelect extends React.Component {
 
     // color: {id:'Blues', value:['deebf7','9ecae1','3182bd']}
     getMultiColorElement (color) {
-        const id = color.id;
         const colors = color.value;
         const width = parseInt(colorSetColorWidth) * colors.length;
         return (
@@ -62,7 +62,7 @@ class ColorSelect extends React.Component {
         const colors = this.props.colors;
         return (
             <div className="oskari-color-selection">
-                {this.props.colors.map((color, index) => {
+                {colors.map((color, index) => {
                     if (this.props.isSimple) {
                         return (
                             <div className="oskari-color-option" key={index} onMouseDown={() => this.props.handleColorChange(index)}>
@@ -115,4 +115,20 @@ class ColorSelect extends React.Component {
         );
     }
 };
-export default withContext(ColorSelect);
+
+ColorSelect.propTypes = {
+    colors: PropTypes.array,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]),
+    disabled: PropTypes.bool,
+    isSimple: PropTypes.bool,
+    opacity: PropTypes.number,
+    handleColorChange: PropTypes.func,
+    service: PropTypes.object,
+    loc: PropTypes.func
+};
+
+const contextWrapped = withContext(ColorSelect);
+export {contextWrapped as ColorSelect};

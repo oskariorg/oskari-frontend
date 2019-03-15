@@ -1,10 +1,10 @@
 import React from 'react';
-
-import ClassificationSelect from './ClassificationSelect';
-import ClassificationSlider from './ClassificationSlider';
-import ClassificationCheckbox from './ClassificationCheckbox';
-import ClassificationColorSelect from './ClassificationColorSelect';
-import ManualClassification from './manualClassification/ManualClassification';
+import PropTypes from 'prop-types';
+import {ClassificationSelect} from './ClassificationSelect';
+import {ClassificationSlider} from './ClassificationSlider';
+import {ClassificationCheckbox} from './ClassificationCheckbox';
+import {ClassificationColorSelect} from './ClassificationColorSelect';
+import {ManualClassification} from './manualClassification/ManualClassification';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 import '../resources/scss/editclassification.scss';
 
@@ -180,4 +180,14 @@ const ClassificationEdit = props => {
         </div>
     );
 };
-export default withContext(ClassificationEdit);
+ClassificationEdit.propTypes = {
+    indicators: PropTypes.object,
+    state: PropTypes.object,
+    classifications: PropTypes.object,
+    isEdit: PropTypes.bool,
+    service: PropTypes.object,
+    loc: PropTypes.func
+};
+
+const contextWrapped = withContext(ClassificationEdit);
+export {contextWrapped as ClassificationEdit};

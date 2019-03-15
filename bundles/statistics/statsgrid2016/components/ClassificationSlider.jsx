@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {withContext} from '../../../../src/reactUtil/genericContext';
 import '../resources/scss/classificationslider.scss';
 
@@ -39,7 +40,7 @@ class ClassificationSlider extends React.Component {
         });
     }
     componentDidUpdate () {
-        if(!this.$el){
+        if (!this.$el) {
             return;
         }
         if (this.props.disabled) {
@@ -67,4 +68,11 @@ class ClassificationSlider extends React.Component {
         );
     }
 };
-export default withContext(ClassificationSlider);
+ClassificationSlider.propTypes = {
+    values: PropTypes.object,
+    disabled: PropTypes.bool,
+    service: PropTypes.object,
+    loc: PropTypes.func
+};
+const cls = withContext(ClassificationSlider);
+export {cls as ClassificationSlider};

@@ -1,6 +1,7 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import {withContext} from '../../../../src/reactUtil/genericContext';
-import ColorSelect from './ColorSelect';
+import {ColorSelect} from './ColorSelect';
 import '../resources/scss/classificationcolorselect.scss';
 
 const handleReverseColors = (service, isReverse) => {
@@ -35,4 +36,13 @@ const ClassificationColorSelect = ({colors, values, loc, service, disabled}) => 
         </div>
     );
 };
-export default withContext(ClassificationColorSelect);
+ClassificationColorSelect.propTypes = {
+    colors: PropTypes.array,
+    values: PropTypes.object,
+    disabled: PropTypes.bool,
+    service: PropTypes.object,
+    loc: PropTypes.func
+};
+
+const contextWrapped = withContext(ClassificationColorSelect);
+export {contextWrapped as ClassificationColorSelect};
