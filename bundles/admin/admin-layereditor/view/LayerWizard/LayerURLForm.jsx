@@ -10,20 +10,21 @@ const versionsAvailable = {
 export class LayerURLForm extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {
-            loading: false
-        };
         this.mutator = props.service;
+        this.state = {
+            url: props.layer.url
+        };
     }
-    fetchCapabilities (version) {
+    updateUrl (url) {
         this.setState((state) => {
             return {
-                loading: true,
-                version
+                ...state,
+                url: url.value
             };
         });
-        alert(`TODO: fetch capabilities for: ${this.getLayerType()} ${version}`);
-        setTimeout(() => this.mutator.setVersion(version), 2000);
+    }
+    fetchCapabilities (version) {
+        this.mutator.setVersion(this.state.url, version);
     }
     getLayerType () {
         return this.props.layer.type;
@@ -35,11 +36,15 @@ export class LayerURLForm extends React.Component {
         return (
             <div>
                 Selected: {this.getLayerType()}
-                <UrlInput defaultValue="oskari.org/geoserver" />
+                <UrlInput
+                    defaultValue={this.state.url}
+                    disabled={this.props.loading}
+                    onChange={(value) => this.updateUrl({value})} />
                 {this.getVersions().map((version, key) => (
                     <Button type="primary" key={key}
                         onClick={() => this.fetchCapabilities(version)}
-                        loading={this.state.loading}>{version}</Button>
+                        disabled={!this.state.url}
+                        loading={this.props.loading}>{version}</Button>
                 ))}
             </div>
         );
@@ -48,5 +53,6 @@ export class LayerURLForm extends React.Component {
 
 LayerURLForm.propTypes = {
     layer: PropTypes.object,
+    loading: PropTypes.bool,
     service: PropTypes.any
 };

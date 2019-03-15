@@ -12,7 +12,7 @@ export const LayerTypeSelection = (props) => {
     const StyledRootEl = styled('div')`
         padding: 10px;
     `;
-    // TODO: replace with some required PropType etc
+    // TODO: replace with some required PropType maybe?
     let buttonHandler = onSelect;
     if (!buttonHandler) {
         buttonHandler = () => {};

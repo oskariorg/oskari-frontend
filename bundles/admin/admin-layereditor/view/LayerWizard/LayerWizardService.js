@@ -4,6 +4,7 @@ export class LayerWizardService {
         this.layer = {};
         this.capabilities = [];
         this.listeners = [consumer];
+        this.loading = false;
     }
     getLayerTypes () {
         return ['WFS'];
@@ -14,8 +15,14 @@ export class LayerWizardService {
     hasVersion () {
         return typeof this.layer.version !== 'undefined';
     }
+    isLoading () {
+        return this.loading;
+    }
     getLayer () {
         return {...this.layer};
+    }
+    getCapabilities () {
+        return this.capabilities;
     }
     getMutator () {
         const me = this;
@@ -24,9 +31,36 @@ export class LayerWizardService {
                 me.layer.type = type;
                 me.notify();
             },
-            setVersion (version) {
-                me.layer.version = version;
+            setVersion (url, version) {
+                if (!url || !version) {
+                    me.capabilities = [];
+                    me.loading = false;
+                    // for moving back to previous step
+                    me.layer.version = undefined;
+                    me.layer.url = undefined;
+                    me.notify();
+                    return;
+                }
+                me.loading = true;
+                me.layer.url = url;
                 me.notify();
+                alert(`TODO: fetch capabilities for: ${me.getLayer().type} ${version} on ${url}`);
+                setTimeout(() => {
+                    me.layer.version = version;
+                    me.capabilities = [{
+                        name: 'fake'
+                    }, {
+                        name: 'it'
+                    }, {
+                        name: 'till'
+                    }, {
+                        name: 'you'
+                    }, {
+                        name: 'make it'
+                    }];
+                    me.loading = false;
+                    me.notify();
+                }, 2000);
             }
         };
     }

@@ -22,16 +22,6 @@ export class LayerWizard extends React.Component {
             break;
         }
     }
-    showLayerForm (layer) {
-        this.setState((state) => {
-            layer.type = state.layerType;
-
-            return {
-                ...state,
-                layer
-            };
-        });
-    }
     getStep () {
         if (!this.service.hasType()) {
             return 0;
@@ -49,12 +39,13 @@ export class LayerWizard extends React.Component {
             margin: 10px;
             padding: 10px;
         `;
-        const layer = this.service.getLayer();
+        const service = this.service;
+        const layer = service.getLayer();
         let typeTitle = 'Layer type';
         if (layer.type) {
             typeTitle = `${typeTitle}: ${layer.type}`;
         }
-        const mutator = this.service.getMutator();
+        const mutator = service.getMutator();
         return (
             <StyledRootEl>
                 <Steps current={this.getStep()}>
@@ -64,14 +55,14 @@ export class LayerWizard extends React.Component {
                 </Steps>
                 { this.isStep(0) &&
                     <LayerTypeSelection
-                        types={this.service.getLayerTypes()}
+                        types={service.getLayerTypes()}
                         onSelect={(type) => mutator.setType(type)} />
                 }
                 { this.isStep(1) &&
                     <div>
                         <LayerURLForm
                             layer={layer}
-                            onSuccess={(layerInfo) => this.showLayerForm(layerInfo)}
+                            loading={service.isLoading()}
                             service={mutator} />
                         <hr/>
                         <Button onClick={() => this.setStep(0)}>Back</Button>
