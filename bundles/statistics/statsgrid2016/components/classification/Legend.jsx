@@ -1,6 +1,6 @@
 import React from 'react';
-import {withContext} from '../../../../src/react/util.jsx';
-import '../resources/scss/activelegend.scss';
+import {withContext} from '../../../../../src/react/util.jsx';
+import './legend.scss';
 
 const getNoActiveElem = text => {
     return (
@@ -10,7 +10,7 @@ const getNoActiveElem = text => {
     );
 };
 
-const ActiveLegend = ({legendHTML}) => {
+const Legend = ({legendHTML}) => {
     if (legendHTML.__html) {
         return (
             <div className="active-legend" dangerouslySetInnerHTML={legendHTML}/>
@@ -21,5 +21,5 @@ const ActiveLegend = ({legendHTML}) => {
     return getNoActiveElem('');
 };
 
-const contextWrapped = withContext(ActiveLegend);
-export {contextWrapped as ActiveLegend};
+const contextWrapped = withContext(Legend);
+export {contextWrapped as Legend};

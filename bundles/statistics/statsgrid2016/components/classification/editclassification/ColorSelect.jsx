@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext, handleBinder} from '../../../../src/react/util.jsx';
-import {colorSetColorWidth} from '../resources/scss/colorselect.scss';
+import {withContext, handleBinder} from '../../../../../../src/react/util.jsx';
+import {colorSetColorWidth} from './colorselect.scss';
 
 class ColorSelect extends React.Component {
     constructor (props) {

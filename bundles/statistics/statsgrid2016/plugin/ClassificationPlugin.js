@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {GenericContext} from '../../../../src/react/util.jsx';
-import {Classification} from '../components/Classification';
+import {Classification} from '../components/classification/Classification';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin

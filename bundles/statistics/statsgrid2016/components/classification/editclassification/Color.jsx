@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../src/react/util.jsx';
+import {withContext} from '../../../../../../src/react/util.jsx';
 import {ColorSelect} from './ColorSelect';
-import '../resources/scss/classificationcolorselect.scss';
+import './color.scss';
 
 const handleReverseColors = (service, isReverse) => {
     service.getStateService().updateActiveClassification('reverseColors', isReverse);
@@ -11,7 +11,7 @@ const handleColorChange = (service, value) => {
     service.getStateService().updateActiveClassification('name', value);
 };
 
-const ClassificationColorSelect = ({colors, values, loc, service, disabled}) => {
+const Color = ({colors, values, loc, service, disabled}) => {
     let label = loc('colorset.button');
     const isSimple = values.mapStyle !== 'choropleth';
     const opacity = values.transparency / 100 || 1;
@@ -36,7 +36,7 @@ const ClassificationColorSelect = ({colors, values, loc, service, disabled}) => 
         </div>
     );
 };
-ClassificationColorSelect.propTypes = {
+Color.propTypes = {
     colors: PropTypes.array,
     values: PropTypes.object,
     disabled: PropTypes.bool,
@@ -44,5 +44,5 @@ ClassificationColorSelect.propTypes = {
     loc: PropTypes.func
 };
 
-const contextWrapped = withContext(ClassificationColorSelect);
-export {contextWrapped as ClassificationColorSelect};
+const contextWrapped = withContext(Color);
+export {contextWrapped as Color};

@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../src/react/util.jsx';
-import {ClassificationSelect} from './ClassificationSelect';
-import {ClassificationSlider} from './ClassificationSlider';
-import {ClassificationCheckbox} from './ClassificationCheckbox';
-import {ClassificationColorSelect} from './ClassificationColorSelect';
-import {ManualClassification} from './manualClassification/ManualClassification';
-import '../resources/scss/editclassification.scss';
+import {withContext} from '../../../../../../src/react/util.jsx';
+import {Select} from './Select';
+import {Slider} from './Slider';
+import {Checkbox} from './Checkbox';
+import {Color} from './Color';
+import {ManualClassification} from '../../manualClassification/ManualClassification';
+import './editclassification.scss';
 
 const getLocalizedOptions = (options, locObj, disabledOptions) => {
     if (!Array.isArray(options)) {
@@ -79,7 +79,7 @@ const handleCheckboxChange = (service, id, isSelected) => {
     service.getStateService().updateActiveClassification(id, isSelected);
 };
 
-const ClassificationEdit = props => {
+const EditClassification = props => {
     const {indicators, service, loc, isEdit} = props;
     let className = 'classification-edit';
     if (!isEdit) {
@@ -91,7 +91,7 @@ const ClassificationEdit = props => {
     return (
         <div className={className}>
             <div className="classification-options">
-                <ClassificationSelect key="mapStyle" value = {values.mapStyle} disabled = {disabled}
+                <Select key="mapStyle" value = {values.mapStyle} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                     options = {getLocalizedOptions(mapStyles, loc('classify.map'))}
                     properties = {{
@@ -100,7 +100,7 @@ const ClassificationEdit = props => {
                         label: loc('classify.map.mapStyle')
                     }}/>
 
-                <ClassificationSelect key="method" value = {values.method} disabled = {disabled}
+                <Select key="method" value = {values.method} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                     options = {getLocalizedOptions(methods, loc('classify.methods'))}
                     properties = {{
@@ -113,7 +113,7 @@ const ClassificationEdit = props => {
                     <ManualClassification key="modifyClassification" disabled = {disabled} indicators={indicators}/>
                 }
 
-                <ClassificationSelect key="count" value = {values.count} disabled = {disabled}
+                <Select key="count" value = {values.count} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                     options = {getValidCountRange(props.classifications)}
                     properties = {{
@@ -123,7 +123,7 @@ const ClassificationEdit = props => {
                         valueType: 'int'
                     }}/>
 
-                <ClassificationSelect key="mode" value = {values.mode} disabled = {disabled}
+                <Select key="mode" value = {values.mode} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                     options = {getLocalizedOptions(modes, loc('classify.modes'), disabledOptions.mode)}
                     properties = {{
@@ -133,10 +133,10 @@ const ClassificationEdit = props => {
                     }}/>
 
                 {values.mapStyle !== 'choropleth' &&
-                    <ClassificationSlider key="point-size" values = {values} disabled = {disabled}/>
+                    <Slider key="point-size" values = {values} disabled = {disabled}/>
                 }
 
-                <ClassificationCheckbox key="showValues" value = {values.showValues} disabled = {disabled}
+                <Checkbox key="showValues" value = {values.showValues} disabled = {disabled}
                     handleChange = {(id, isSelected) => handleCheckboxChange(service, id, isSelected)}
                     properties = {{
                         id: 'showValues',
@@ -144,9 +144,9 @@ const ClassificationEdit = props => {
                         label: loc('classify.map.showValues')
                     }}/>
 
-                <ClassificationColorSelect key="name" values = {values} disabled = {disabled} colors = {colors}/>
+                <Color key="name" values = {values} disabled = {disabled} colors = {colors}/>
 
-                <ClassificationSelect key="transparency" value = {values.transparency} disabled = {disabled}
+                <Select key="transparency" value = {values.transparency} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                     options = {getTransparencyOptions(values.transparency)}
                     properties = {{
@@ -157,7 +157,7 @@ const ClassificationEdit = props => {
                     }}/>
 
                 {values.mapStyle !== 'points' &&
-                    <ClassificationSelect key="type" value = {values.type} disabled = {disabled}
+                    <Select key="type" value = {values.type} disabled = {disabled}
                         handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                         options = {getLocalizedOptions(types, loc('colorset'))}
                         properties = {{
@@ -167,7 +167,7 @@ const ClassificationEdit = props => {
                         }}/>
                 }
 
-                <ClassificationSelect key="fractionDigits" value = {values.fractionDigits} disabled = {disabled}
+                <Select key="fractionDigits" value = {values.fractionDigits} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
                     options = {[0, 1, 2, 3, 4, 5]}
                     properties = {{
@@ -180,7 +180,7 @@ const ClassificationEdit = props => {
         </div>
     );
 };
-ClassificationEdit.propTypes = {
+EditClassification.propTypes = {
     indicators: PropTypes.object,
     state: PropTypes.object,
     classifications: PropTypes.object,
@@ -189,5 +189,5 @@ ClassificationEdit.propTypes = {
     loc: PropTypes.func
 };
 
-const contextWrapped = withContext(ClassificationEdit);
-export {contextWrapped as ClassificationEdit};
+const contextWrapped = withContext(EditClassification);
+export {contextWrapped as EditClassification};

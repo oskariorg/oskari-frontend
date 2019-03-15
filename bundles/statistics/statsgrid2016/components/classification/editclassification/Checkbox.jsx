@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../src/react/util.jsx';
+import {withContext} from '../../../../../../src/react/util.jsx';
 
-const ClassificationCheckbox = ({properties, value, handleChange, disabled}) => {
+const Checkbox = ({properties, value, handleChange, disabled}) => {
     return (
         <div className={properties.class + ' option'}>
             <label className="label oskari-checkboxinput">
@@ -14,12 +14,12 @@ const ClassificationCheckbox = ({properties, value, handleChange, disabled}) => 
     );
 };
 
-ClassificationCheckbox.propTypes = {
+Checkbox.propTypes = {
     properties: PropTypes.object,
     disabled: PropTypes.bool,
     value: PropTypes.bool,
     handleChange: PropTypes.func
 };
 
-const contextWrapped = withContext(ClassificationCheckbox);
-export {contextWrapped as ClassificationCheckbox};
+const contextWrapped = withContext(Checkbox);
+export {contextWrapped as Checkbox};

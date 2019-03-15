@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext, handleBinder} from '../../../../src/react/util.jsx';
-import {ClassificationEdit} from './ClassificationEdit';
-import {ActiveLegend} from './ActiveLegend';
-import '../resources/scss/classification.scss';
+import {withContext, handleBinder} from '../../../../../src/react/util.jsx';
+import {EditClassification} from './editclassification/EditClassification';
+import {Legend} from './Legend';
+import './classification.scss';
 
 class Classification extends React.Component {
     constructor (props) {
@@ -11,7 +11,7 @@ class Classification extends React.Component {
         this.state = {
             isEdit: props.isEdit
         };
-        handleBinder(this);
+        handleBinder(this, 'handle');
         this.log = Oskari.log('Oskari.statistics.statsgrid.Classification');
     }
     componentDidMount () {
@@ -101,11 +101,11 @@ class Classification extends React.Component {
                     {this.getHeaderComponent()}
                     {this.getEditButton()}
                 </div>
-                <ClassificationEdit
+                <EditClassification
                     classifications = {classifications}
                     isEdit = {this.state.isEdit}
                     indicators = {this.props.indicators}/>
-                <ActiveLegend indicator = {activeIndicator} legendHTML = {legendHTML}/>
+                <Legend indicator = {activeIndicator} legendHTML = {legendHTML}/>
             </div>
         );
     }

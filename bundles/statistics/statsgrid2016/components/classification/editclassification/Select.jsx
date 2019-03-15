@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../src/react/util.jsx';
+import {withContext} from '../../../../../../src/react/util.jsx';
 
-const ClassificationSelect = ({properties, options, value, disabled, handleChange}) => {
+const Select = ({properties, options, value, disabled, handleChange}) => {
     // options => array of values [1,3,4,5] or array of objects with properties: value and optionally: text, hidden, disabled
     return (
         <div className={properties.class + ' option'}>
@@ -22,7 +22,7 @@ const ClassificationSelect = ({properties, options, value, disabled, handleChang
         </div>
     );
 };
-ClassificationSelect.propTypes = {
+Select.propTypes = {
     properties: PropTypes.object,
     options: PropTypes.array,
     disabled: PropTypes.bool,
@@ -30,5 +30,5 @@ ClassificationSelect.propTypes = {
     handleChange: PropTypes.func
 };
 
-const contextWrapped = withContext(ClassificationSelect);
-export {contextWrapped as ClassificationSelect};
+const contextWrapped = withContext(Select);
+export {contextWrapped as Select};

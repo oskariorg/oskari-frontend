@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../src/react/util.jsx';
-import '../resources/scss/classificationslider.scss';
+import {withContext} from '../../../../../../src/react/util.jsx';
+import './slider.scss';
 
-class ClassificationSlider extends React.Component {
+class Slider extends React.Component {
     constructor (props) {
         super(props);
         this._rangeSlider = {
@@ -68,11 +68,11 @@ class ClassificationSlider extends React.Component {
         );
     }
 };
-ClassificationSlider.propTypes = {
+Slider.propTypes = {
     values: PropTypes.object,
     disabled: PropTypes.bool,
     service: PropTypes.object,
     loc: PropTypes.func
 };
-const cls = withContext(ClassificationSlider);
-export {cls as ClassificationSlider};
+const cls = withContext(Slider);
+export {cls as Slider};
