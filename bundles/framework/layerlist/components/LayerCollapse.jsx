@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ListComponent } from '../../../admin/admin-layereditor/components/List';
-import { Collapse } from './LayerCollapse/Collapse';
+import { List } from '../../../admin/admin-layereditor/components/List';
 import { Layer } from './LayerCollapse/Layer';
+import { Collapse, Panel } from '../../../admin/admin-layereditor/components/Collapse';
 import { Badge } from '../../../admin/admin-layereditor/components/Badge';
 import { Alert } from '../../../admin/admin-layereditor/components/Alert';
 
@@ -17,7 +17,7 @@ const getLayers = (layers, otherProps) => layers.map(
     }
 );
 const getPanels = (groups, searchResults, otherProps) => {
-    const panels = (searchResults || groups).map(cur => {
+    const panels = (searchResults || groups).map((cur, index) => {
         const group = searchResults ? cur.group : cur;
         const filteredLayers = searchResults ? cur.layers : null;
 
@@ -34,11 +34,12 @@ const getPanels = (groups, searchResults, otherProps) => {
             dataSource: getLayers(layers, otherProps),
             bordered: false
         };
-        return {
+        const panelProps = {
             header: group.getTitle(),
             extra: <Badge {...badgeProps}/>,
-            content: <ListComponent {...listProps}/>
+            children: <List {...listProps}/>
         };
+        return <Panel key={index} {...panelProps}/>;
     });
     return panels;
 };
@@ -75,7 +76,7 @@ export const LayerCollapse = props => {
         return getEmptyMessage(filterKeyword);
     }
     const collapseProps = {
-        panels: getPanels(groups, filtered, rest),
+        children: getPanels(groups, filtered, rest),
         accordion: true,
         bordered: false
     };

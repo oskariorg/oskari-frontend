@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { CheckboxComponent } from '../../../../admin/admin-layereditor/components/Checkbox';
+import { Checkbox } from '../../../../admin/admin-layereditor/components/Checkbox';
 import { LayerTools } from './LayerTools';
 
 const LayerDiv = styled('div')`
@@ -21,7 +21,7 @@ const CustomTools = styled('div')`
         cursor: pointer;
     }
 `;
-const Checkbox = styled(CheckboxComponent)`
+const FloatingCheckbox = styled(Checkbox)`
     float: left;
 `;
 
@@ -30,7 +30,7 @@ export const Layer = props => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools"/>
-            <Checkbox>{model.getName()}</Checkbox>
+            <FloatingCheckbox>{model.getName()}</FloatingCheckbox>
             <LayerTools {...props}/>
         </LayerDiv>
     );
