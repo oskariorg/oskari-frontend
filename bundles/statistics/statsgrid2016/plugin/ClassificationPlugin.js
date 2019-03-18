@@ -64,22 +64,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.element.css('z-index', 15001);
             return this.element;
         },
-        rendered: function (isUpdate, isEdit) {
-            if (isUpdate) {
-                // check if edit classification state is changed
-                if (isEdit !== this._previousIsEdit) {
-                    if (isEdit) {
-                        this._overflowCheck(true);
-                    } else {
-                        this._restoreOverflow();
-                    }
-                    this._previousIsEdit = isEdit;
+        rendered: function (isEdit) {
+            // check if edit classification state is changed
+            if (isEdit !== this._previousIsEdit) {
+                if (isEdit) {
+                    this._overflowCheck(true);
+                } else {
+                    this._restoreOverflow();
                 }
-                this._overflowCheck();
-            } else {
-                this._calculatePluginSize();
-                this._overflowCheck();
+                this._previousIsEdit = isEdit;
             }
+            this._overflowCheck();
         },
         render: function (activeClassfication) {
             if (!this.node) return;
@@ -208,48 +203,32 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
-        _createEventHandlers: function () {
-            return {
-                // 'StatsGrid.ActiveIndicatorChangedEvent' : function(evt) {
-                // },
-                MapSizeChangedEvent: function () {
-                    this._calculatePluginSize();
-                }
-            };
-        },
-        _calculatePluginSize: function () {
-            var element = this.getElement();
-
-            if (!element) {
-                return;
-            }
-            var height = this.getSandbox().getMap().getHeight();
-            var headerHeight = element.find('.active-header').first().height();
-            if (Oskari.util.isMobile()) {
-                element.find('.accordion').css({
-                    'max-height': (height * 0.8 - headerHeight) + 'px'
-                });
-            } else if (!Oskari.util.isMobile()) {
-                element.find('.accordion').css({
-                    'max-height': (height * 0.8 - headerHeight) + 'px'
-                });
-            }
-        },
         _overflowCheck: function (storeOverflow) {
             var pluginEl = this.getElement();
             if (!pluginEl) {
                 return;
             }
             if (pluginEl.css('position') === 'absolute') {
-                var top = pluginEl.offset().top;
-                var bottom = top + pluginEl.height();
-                var offsetToWindowBottom = jQuery(window).height() - bottom - 10; // add margin 10
+                const {top, left} = pluginEl.offset();
+                const bottom = top + pluginEl.height();
+                const wHeight = jQuery(window).height();
+                let offsetToWindowBottom = wHeight - bottom - 10; // add margin 10
                 if (this._defaultLocation.includes('bottom')) {
-                    var pluginContainer = jQuery('.mapplugins.bottom.right');
-                    var containerHeight = pluginContainer.outerHeight();
-                    var offsetToContainer = pluginEl.position().left + pluginEl.outerWidth() + 10;
+                    const pluginContainer = jQuery('.mapplugins.bottom.right');
+                    const containerHeight = pluginContainer.outerHeight();
+                    const offsetToContainer = pluginEl.position().left + pluginEl.outerWidth() + 10;
                     if (offsetToContainer > 0) {
                         offsetToWindowBottom = offsetToWindowBottom - containerHeight + 10; // remove margin 10
+                    }
+                    // prevent to flow over top when map size is changed
+                    if (top < 0) {
+                        pluginEl.css('top', containerHeight - wHeight + 'px');
+                    }
+                    // prevent to flow over left when map size is changed
+                    if (left < 0) {
+                        const wWidth = jQuery(window).width();
+                        const containerWidth = pluginContainer.outerWidth();
+                        pluginEl.css('left', containerWidth - wWidth + 'px');
                     }
                 }
                 if (offsetToWindowBottom < 0) {
@@ -279,7 +258,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.IndicatorEvent', event => this.render());
 
             // Always show the active indicator - also handles "no indicator selected"
-            // if the selected indicator has no data & edit panel is open -> close it
             this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event => this.render());
 
             // need to update the legend as data changes when regionset changes
@@ -294,8 +272,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 }
                 this.render();
             });
-
+            // need to update transparency select
             this.service.on('AfterChangeMapLayerOpacityEvent', event => this.render());
+            // need to calculate contents max height and check overflow
+            this.service.on('MapSizeChangedEvent', event => this.render());
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

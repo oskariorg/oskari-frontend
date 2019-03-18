@@ -270,6 +270,9 @@ Oskari.clazz.define(
             'StatsGrid.Filter': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'MapSizeChangedEvent': function (evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent': function (evt) {
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             },

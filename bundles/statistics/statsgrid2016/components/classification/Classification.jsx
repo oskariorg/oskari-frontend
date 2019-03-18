@@ -14,14 +14,18 @@ class Classification extends React.Component {
         };
         handleBinder(this);
     }
-    componentDidMount () {
-        this.props.onRenderChange();
-    }
     componentDidUpdate () {
-        this.props.onRenderChange(true, this.state.isEdit);
+        this.props.onRenderChange(this.state.isEdit);
     }
     handleToggleClassification () {
         this.setState(oldState => ({ isEdit: !oldState.isEdit }));
+    }
+    getContentWrapperStyle () {
+        const docHeight = document.documentElement.offsetHeight;
+        return {
+            maxHeight: docHeight - 35 + 'px', // header + border
+            overflowY: 'auto'
+        };
     }
 
     render () {
@@ -37,14 +41,16 @@ class Classification extends React.Component {
                 <Header active = {this.props.indicators.active} isEdit = {isEdit}
                     handleClick = {this.handleToggleClassification}
                     indicators = {this.props.indicators.selected}/>
-                {isEdit &&
-                    <EditClassification classifications = {classifications}
-                        indicators = {this.props.indicators}
-                        editEnabled = {pluginState.editEnabled}/>
-                }
-                <Legend legendProps = {this.props.legendProps}
-                    indicatorData = {this.props.indicators.data}
-                    transparency = {classifications.values.transparency}/>
+                <div className="classification-content-wrapper" style={this.getContentWrapperStyle()}>
+                    {isEdit &&
+                        <EditClassification classifications = {classifications}
+                            indicators = {this.props.indicators}
+                            editEnabled = {pluginState.editEnabled}/>
+                    }
+                    <Legend legendProps = {this.props.legendProps}
+                        indicatorData = {this.props.indicators.data}
+                        transparency = {classifications.values.transparency}/>
+                </div>
             </div>
         );
     }
