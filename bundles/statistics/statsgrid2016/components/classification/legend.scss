@@ -28,14 +28,14 @@
     .statsgrid-range {
         float: left;
     }
-}
 
-.statsgrid-classification-plugin-transparent {
-    .geostats-legend-counter {
-      color: #ffffff;
-    }
-    .statsgrid-svg-legend {
-        text-shadow: none;
-        color: #000;
+    &.transparent-classification {
+        .geostats-legend-counter {
+          color: #ffffff;
+        }
+        .statsgrid-svg-legend {
+            text-shadow: none;
+            color: #000;
+        }
     }
 }

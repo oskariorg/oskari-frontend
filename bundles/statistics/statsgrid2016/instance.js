@@ -162,9 +162,8 @@ Oskari.clazz.define(
             var layer = this.getLayerService().findMapLayer(this._layerId);
             var layerVisible = layer ? layer.isVisible() : true;
             const visible = indicatorsExist && layerVisible;
-            if (this.classificationPlugin) {
-                this.classificationPlugin.setVisible(visible);
-            } else if (visible) {
+            service.updateClassificationPluginState('visible', visible);
+            if (visible) {
                 this.createClassficationView();
             }
         },
@@ -339,13 +338,9 @@ Oskari.clazz.define(
                 if (evt.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
-                this.statsService.notifyOskariEvent(evt);
                 // record opacity for published map etc
-                var ind = this.statsService.getStateService().getActiveIndicator();
-                if (!ind || !ind.classification) {
-                    return;
-                }
-                ind.classification.transparency = evt.getMapLayer().getOpacity();
+                this.statsService.getStateService().updateClassificationTransparency(evt.getMapLayer().getOpacity());
+                this.statsService.notifyOskariEvent(evt);
             }
         },
 

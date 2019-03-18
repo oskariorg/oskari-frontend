@@ -25,20 +25,22 @@ class Classification extends React.Component {
     }
 
     render () {
-        if (!this.props.isVisible) {
+        const {classifications, pluginState} = this.props;
+        if (!pluginState.visible) {
             return null;
         }
-        const classifications = this.props.classifications;
         const isEdit = this.state.isEdit;
+        let containerClass = pluginState.transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
 
         return (
-            <div className="statsgrid-classification-container">
+            <div className={containerClass}>
                 <Header active = {this.props.indicators.active} isEdit = {isEdit}
                     handleClick = {this.handleToggleClassification}
                     indicators = {this.props.indicators.selected}/>
                 {isEdit &&
                     <EditClassification classifications = {classifications}
-                        indicators = {this.props.indicators}/>
+                        indicators = {this.props.indicators}
+                        editEnabled = {pluginState.editEnabled}/>
                 }
                 <Legend legendProps = {this.props.legendProps}
                     indicatorData = {this.props.indicators.data}
@@ -51,8 +53,7 @@ class Classification extends React.Component {
 Classification.propTypes = {
     indicators: PropTypes.object,
     classifications: PropTypes.object,
-    state: PropTypes.object,
-    isVisible: PropTypes.bool,
+    pluginState: PropTypes.object,
     legendProps: PropTypes.object,
     onRenderChange: PropTypes.func,
     service: PropTypes.object,

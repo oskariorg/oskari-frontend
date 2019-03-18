@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     init: function (pdata) {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (stats) {
-            stats.createClassficationView(true);
+            stats.createClassficationView();
         }
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             this.setEnabled(true);
@@ -45,7 +45,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
 
         this.state.enabled = enabled;
-        this.getPlugin().enableClassification(enabled);
+        const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+        if (service) {
+            service.getStateService().updateClassificationPluginState('editEnabled', enabled);
+        }
     },
     getValues: function () {
         var me = this;
@@ -78,10 +81,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     * @public
     */
     stop: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (stats) {
-            stats.enableClassification(true);
-            stats.createClassficationView(false);
+        const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+        if (service) {
+            service.getStateService().resetClassificationPluginState('editEnabled');
         }
     }
 }, {

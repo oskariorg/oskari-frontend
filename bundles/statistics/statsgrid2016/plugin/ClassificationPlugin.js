@@ -43,8 +43,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this.node = null;
         this._overflowedOffset = null;
         this._previousIsEdit = false;
-        this._transparent = false;
-        this._isVisible = true;
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (!this.getElement()) {
@@ -57,10 +55,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                     )
                 );
             }
-        },
-        setVisible: function (visible) {
-            this._isVisible = visible;
-            this.render();
         },
         _createControlElement: function () {
             if (this.element !== null) {
@@ -89,6 +83,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         render: function (activeClassfication) {
             if (!this.node) return;
+            const pluginState = this.service.getStateService().getClassificationPluginState();
             const indicators = this.getIndicatorProps();
             const classifications = this.getClassificationProps(indicators, activeClassfication);
             const legendProps = this.getLegendProps(indicators, classifications);
@@ -102,7 +97,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             ReactDOM.render((
                 <GenericContext.Provider value={{loc: this._locale, service: this.service}}>
                     <Classification indicators = {indicators} classifications = {classifications}
-                        legendProps = {legendProps} isVisible = {this._isVisible}
+                        legendProps = {legendProps} pluginState = {pluginState}
                         onRenderChange = {this.rendered.bind(this)}/>
                 </GenericContext.Provider>
             ), this.node);
@@ -150,7 +145,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             props.mapStyles = service.getAvailableMapStyles();
             props.types = colorsService.getAvailableTypes();
             props.validOptions = service.getAvailableOptions(indicators.data);
-            props.disabled = !this.service.getStateService().isClassificationEnabled();
             if (values.mapStyle !== 'choropleth') {
                 props.colors = colorsService.getDefaultSimpleColors();
             } else {
@@ -179,10 +173,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return false;
         },
         toggleUI: function () {
-            this._isVisible = !this._isVisible;
-            this._isVisible ? this.trigger('show') : this.trigger('hide');
-            this.render();
-            return this._isVisible;
+            return this.service.getStateService().toggleClassificationPluginState('visible');
         },
         teardownUI: function () {
             var element = this.getElement();
@@ -201,37 +192,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
             this._overflowCheck();
-            if (this._instance.isEmbedded() && this._config.transparent) {
-                this.makeTransparent(true);
-            } else if (this._transparent === true) {
-                this.makeTransparent(true);
-            }
             this.node = this.element.get(0);
+            this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
             this._bindToEvents();
-            this.trigger('show');
+            this.render();
         },
         _makeDraggable: function () {
             this.getElement().draggable();
         },
-        makeTransparent: function (transparent) {
-            this._transparent = transparent;
-            var element = this.getElement();
-            if (!element) {
-                return;
-            }
-            if (transparent) {
-                element.removeClass('statsgrid-classification-plugin');
-                element.addClass('statsgrid-classification-plugin-transparent');
-            } else {
-                element.removeClass('statsgrid-classification-plugin-transparent');
-                element.addClass('statsgrid-classification-plugin');
-            }
-        },
         getElement: function () {
             return this.element;
-        },
-        enableClassification: function (enabled) {
-            this.service.getStateService().enableClassification(enabled);
         },
         stopPlugin: function () {
             this.teardownUI();
@@ -318,9 +288,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
 
             // UI styling changes e.g. disable classification editing, make transparent
-            this.service.getStateService().on('ClassificationContainerChanged', () => this.render());
+            this.service.getStateService().on('ClassificationPluginChanged', ({key, value}) => {
+                if (key === 'visible') {
+                    value ? this.trigger('show') : this.trigger('hide');
+                }
+                this.render();
+            });
 
-            this.service.on('AfterChangeMapLayerOpacityEvent', (event) => this.render());
+            this.service.on('AfterChangeMapLayerOpacityEvent', event => this.render());
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
