@@ -302,6 +302,7 @@ Oskari.clazz.define(
                 }
                 var emptyState = {};
                 this.setState(emptyState);
+                this.removeClassificationView();
             },
             /**
              * @method MapLayerEvent
