@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import {withContext, handleBinder} from '../../../../../src/react/util.jsx';
 import {EditClassification} from './editclassification/EditClassification';
 import {Legend} from './Legend';
+import {Header} from './Header';
 import './classification.scss';
 
 class Classification extends React.Component {
@@ -20,12 +21,7 @@ class Classification extends React.Component {
     componentDidUpdate () {
         this.props.onRenderChange(true, this.state.isEdit);
     }
-
-    handleIndicatorChange (event) {
-        const service = this.props.service.getStateService();
-        service.setActiveIndicator(event.target.value);
-    }
-    handleToggleClassification (event) {
+    handleToggleClassification () {
         this.setState(oldState => ({ isEdit: !oldState.isEdit }));
     }
 
@@ -62,45 +58,16 @@ class Classification extends React.Component {
         }
     }
 
-    getHeaderComponent () {
-        const indicators = this.props.indicators.selected;
-        const active = this.props.indicators.active;
-        if (indicators.length === 1) {
-            return (
-                <div className = "title">{indicators[0].title}</div>
-            );
-        }
-        return (
-            <select value={active.hash} onChange={this.handleIndicatorChange}>
-                {indicators.map(opt => <option key={opt.id} value={opt.id}>{opt.title}</option>)}
-            </select>
-        );
-    }
-    getEditButton () {
-        if (this.state.isEdit) {
-            return (
-                <div className="edit-button edit-active" title={this.props.loc('classify.edit.close')} onMouseUp = {this.handleToggleClassification}/>
-            );
-        }
-        return (
-            <div className="edit-button" title={this.props.loc('classify.edit.open')} onMouseUp = {this.handleToggleClassification}/>
-        );
-    }
-
     render () {
         const classifications = this.props.classifications;
         const activeIndicator = this.props.indicators.active;
-        const indicators = this.props.indicators.selected;
-        const headerClass = indicators.length === 1 ? 'active-header single-selected' : 'active-header multi-selected';
-        const {title} = indicators.find(indicator => activeIndicator.hash === indicator.id) || {title: ''};
         const legendHTML = this.createLegendHTML();
 
         return (
             <div className="statsgrid-classification-container">
-                <div className={headerClass} data-selected-indicator={title}>
-                    {this.getHeaderComponent()}
-                    {this.getEditButton()}
-                </div>
+                <Header active = {activeIndicator} isEdit = {this.state.isEdit}
+                    handleClick = {this.handleToggleClassification}
+                    indicators = {this.props.indicators.selected}/>
                 <EditClassification
                     classifications = {classifications}
                     isEdit = {this.state.isEdit}
