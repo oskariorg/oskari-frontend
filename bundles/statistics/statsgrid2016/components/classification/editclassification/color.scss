@@ -1,15 +1,30 @@
-.classification-colors {
-    .flip-colors {
-        margin-left: 10px;
-        line-height: 27px;
+.statsgrid-classification-container {
+    .classification-colors {
+        .flip-colors {
+            margin-left: 10px;
+            line-height: 27px;
+        }
     }
 }
 
 .statsgrid-classification-plugin-transparent {
-    .color-selection-arrow {
-        display: none;
-    }
-    .oskari-selected-color {
-        border: none;
+    .oskari-color-selection-main {
+        .color-selection-arrow {
+            display: none;
+        }
+        .oskari-selected-color {
+            border: 1px solid transparent;
+        }
+        .oskari-color-selection {
+            border: 1px solid transparent;
+        }
+        &.disabled {
+            .oskari-color-option {
+                cursor: auto;
+            }
+            .oskari-selected-color, .color-selection-arrow {
+                cursor: auto;
+            }
+        }
     }
 }

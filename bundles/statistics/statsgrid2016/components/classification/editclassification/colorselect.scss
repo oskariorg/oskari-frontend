@@ -1,6 +1,7 @@
 $borderColor: #AAAAAA;
 $disabledBorderColor: #DDDDDD;
 $colorBorder: 1px solid #555555;
+$hoverColor: #306BC8;
 $simpleColorWidth: 16px;
 $colorSetColorWidth: 6px;
 $colorHeight: 16px;
@@ -53,6 +54,10 @@ $colorHeight: 16px;
             padding: 2px;
             background-color: #FFFFFF;
         }
+        .oskari-color-option:hover{
+            background-color: $hoverColor;
+        }
+
     }
 
     .oskari-selected-color {

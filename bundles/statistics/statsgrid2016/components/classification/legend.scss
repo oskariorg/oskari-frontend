@@ -1,12 +1,10 @@
-.statsgrid-classification-plugin {
-    
+.statsgrid-classification-container {
+
     .active-legend {
         height: 100%;
     }
-}
 
-/* overrides for geostats CSS */
-.statsgrid-classification-plugin, .statsgrid-classification-plugin-transparent {
+    /* overrides for geostats CSS */
     .active-legend div {
         clear: both;
     }
@@ -29,13 +27,6 @@
     }
     .statsgrid-range {
         float: left;
-    }
-}
-
-/* Mobile popup tuning */
-.divmanazerpopup.statsgrid-mobile-classification {
-    div.geostats-legend div {
-        margin: 2px 6px 2px 2px;
     }
 }
 

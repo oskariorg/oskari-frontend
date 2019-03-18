@@ -2,15 +2,20 @@
     background-color: #FFFFFF;
     width: 300px;
     font-size: 12px;
-
-    /* mobile 
-        overflow-y: auto;
-        overflow-x: hidden;
-    */
+    border: 1px solid rgba(0,0,0,0.2);
+    pointer-events: auto;
+    text-align: left;
 }
 
 .statsgrid-classification-plugin-transparent {
     .statsgrid-classification-container {
         background-color: transparent;
+        border: 1px solid transparent;
+        color:#FFFFFF;
+        text-shadow:
+            -1px -1px 0 #000,
+            1px -1px 0 #000,
+            -1px 1px 0 #000,
+            1px 1px 0 #000;
     }
 }
