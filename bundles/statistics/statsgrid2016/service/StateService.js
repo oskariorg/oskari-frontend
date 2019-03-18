@@ -219,6 +219,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getIndicators: function () {
             return this.indicators;
         },
+        hasIndicators: function () {
+            return this.indicators.length > 0;
+        },
+        isSeriesActive: function () {
+            const active = this.getActiveIndicator();
+            return active && !!active.series;
+        },
+
         /**
          * @method  @public getIndicatorIndex Gets indicator index startin number 0
          * @param  {String} indicatorHash indicator hash

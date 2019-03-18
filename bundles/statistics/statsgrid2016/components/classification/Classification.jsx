@@ -10,7 +10,7 @@ class Classification extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            isEdit: props.isEdit
+            isEdit: false
         };
         handleBinder(this);
     }
@@ -25,6 +25,9 @@ class Classification extends React.Component {
     }
 
     render () {
+        if (!this.props.isVisible) {
+            return null;
+        }
         const classifications = this.props.classifications;
         const isEdit = this.state.isEdit;
 
@@ -49,7 +52,7 @@ Classification.propTypes = {
     indicators: PropTypes.object,
     classifications: PropTypes.object,
     state: PropTypes.object,
-    isEdit: PropTypes.bool,
+    isVisible: PropTypes.bool,
     legendProps: PropTypes.object,
     onRenderChange: PropTypes.func,
     service: PropTypes.object,

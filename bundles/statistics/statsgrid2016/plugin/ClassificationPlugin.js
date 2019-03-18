@@ -40,10 +40,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         Oskari.makeObservable(this);
 
         this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
+        this.node = null;
         this._overflowedOffset = null;
         this._previousIsEdit = false;
         this._transparent = false;
-        this._bindToEvents();
+        this._isVisible = true;
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (!this.getElement()) {
@@ -57,13 +58,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 );
             }
         },
+        setVisible: function (visible) {
+            this._isVisible = visible;
+            this.render();
+        },
         _createControlElement: function () {
             if (this.element !== null) {
                 return this.element;
             }
             this.element = this._templates.main.clone();
             this.element.css('z-index', 15001);
-            this.render();
             return this.element;
         },
         rendered: function (isUpdate, isEdit) {
@@ -84,8 +88,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
         },
         render: function (activeClassfication) {
-            if (!this.element) return;
-            const node = this.element.get(0);
+            if (!this.node) return;
             const indicators = this.getIndicatorProps();
             const classifications = this.getClassificationProps(indicators, activeClassfication);
             const legendProps = this.getLegendProps(indicators, classifications);
@@ -99,10 +102,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             ReactDOM.render((
                 <GenericContext.Provider value={{loc: this._locale, service: this.service}}>
                     <Classification indicators = {indicators} classifications = {classifications}
-                        legendProps = {legendProps} isEdit = {this._previousIsEdit}
+                        legendProps = {legendProps} isVisible = {this._isVisible}
                         onRenderChange = {this.rendered.bind(this)}/>
                 </GenericContext.Provider>
-            ), node);
+            ), this.node);
         },
         getIndicatorProps: function () {
             const indicators = {
@@ -172,25 +175,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
 
         redrawUI: function () {
-            this.teardownUI();
-            this._buildUI();
+            // No need to redraw because mobile & desktop is same
             return false;
         },
         toggleUI: function () {
-            this.element ? this.teardownUI() : this._buildUI();
-            return !!this.element;
+            this._isVisible = !this._isVisible;
+            this._isVisible ? this.trigger('show') : this.trigger('hide');
+            this.render();
+            return this._isVisible;
         },
         teardownUI: function () {
             var element = this.getElement();
             // detach old element from screen
             if (element) {
-                ReactDOM.unmountComponentAtNode(element.get(0));
+                ReactDOM.unmountComponentAtNode(this.node);
                 this.removeFromPluginContainer(element, true);
                 this.element = null;
                 this.trigger('hide');
             }
         },
-        _buildUI: function () {
+        buildUI: function () {
+            if (this.element) {
+                return;
+            }
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
             this._overflowCheck();
@@ -199,6 +206,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             } else if (this._transparent === true) {
                 this.makeTransparent(true);
             }
+            this.node = this.element.get(0);
+            this._bindToEvents();
             this.trigger('show');
         },
         _makeDraggable: function () {
