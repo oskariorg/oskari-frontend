@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Switch } from '../../../../admin/admin-layereditor/components/Switch';
 import { Checkbox } from '../../../../admin/admin-layereditor/components/Checkbox';
 import { LayerTools } from './LayerTools';
 
@@ -21,22 +22,39 @@ const CustomTools = styled('div')`
         cursor: pointer;
     }
 `;
-const FloatingCheckbox = styled(Checkbox)`
+const FloatingSwitch = styled(Switch)`
     float: left;
+    margin: 0 5px 0 0;
 `;
 
 export const Layer = props => {
-    const {model, even} = props;
+    const {model, even, selected, mutator, ...rest} = props;
+    const layerId = model.getId();
+    const switchProps = {
+        defaultChecked: selected,
+        onChange: checked => {
+            checked ? setTimeout(() => mutator.addLayer(layerId), 300) : mutator.removeLayer(layerId);
+        }
+    };
+    const toolProps = {
+        model,
+        ...rest
+    };
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools"/>
-            <FloatingCheckbox>{model.getName()}</FloatingCheckbox>
-            <LayerTools {...props}/>
+            <label>
+                <FloatingSwitch size="small" {...switchProps} />
+                {model.getName()}
+            </label>
+            <LayerTools {...toolProps}/>
         </LayerDiv>
     );
 };
 
 Layer.propTypes = {
-    model: PropTypes.any,
-    even: PropTypes.bool
+    model: PropTypes.any.isRequired,
+    selected: PropTypes.bool,
+    even: PropTypes.bool,
+    mutator: PropTypes.any
 };

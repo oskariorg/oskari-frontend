@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
-import { LayerCollapse } from '../components/LayerCollapse';
+import { LayerCollapse } from './LayerCollapse';
+import { LayerCollapseService } from './LayerCollapse/LayerCollapseService';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -41,6 +41,7 @@ Oskari.clazz.define(
                 '</div><div style="clear:both;"></div>',
             layerListMountPoint: '<div class="layer-list-mount-pt"></div>'
         };
+        this.layerCollapseService = new LayerCollapseService();
         this._createUI(id);
     }, {
 
@@ -182,12 +183,14 @@ Oskari.clazz.define(
         /**
          * TODO. React here
          */
-        _render: function (props = {}) {
+        _render: function () {
+            const map = Oskari.getSandbox().getMap();
             const collapseProps = {
+                mutator: this.layerCollapseService.getMutator(),
                 groups: this.layerGroups,
                 keyword: this.filterField.getValue(),
-                mapSrsName: Oskari.getSandbox().getMap().getSrsName(),
-                ...props
+                mapSrsName: map.getSrsName(),
+                selectedLayers: map.getLayers()
             };
             ReactDOM.render(<LayerCollapse {...collapseProps} />, this.layerListMountPoint[0]);
         },
@@ -283,9 +286,6 @@ Oskari.clazz.define(
                 ids = me.ontologyLayers;
             }
 
-            const props = {
-                filterKeyword: keyword
-            };
             // filter
             for (i = 0; i < me.layerGroups.length; i += 1) {
                 let group = me.layerGroups[i];
@@ -316,7 +316,7 @@ Oskari.clazz.define(
             } else {
                 // me.accordion.removeMessage();
             }
-            this._render(props);
+            this._render();
         },
 
         /**
@@ -591,6 +591,7 @@ Oskari.clazz.define(
             if (layerCont) {
                 layerCont.setSelected(isSelected);
             }
+            this._render();
         },
 
         updateLayerContent: function (layerId, layer) {

@@ -6,14 +6,17 @@ import { Collapse, Panel } from '../../../admin/admin-layereditor/components/Col
 import { Badge } from '../../../admin/admin-layereditor/components/Badge';
 import { Alert } from '../../../admin/admin-layereditor/components/Alert';
 
-const getLayers = (layers, otherProps) => layers.map(
+const getLayers = (layers, props) => layers.map(
     (lyr, index) => {
-        const props = {
+        const {selectedLayers, ...rest} = props;
+        const selected = Array.isArray(selectedLayers) && selectedLayers.includes(lyr);
+        const layerProps = {
             model: lyr,
             even: index % 2 === 0,
-            ...otherProps
+            selected,
+            ...rest
         };
-        return <Layer key={index} {...props}/>;
+        return <Layer key={index} {...layerProps}/>;
     }
 );
 const getPanels = (groups, searchResults, otherProps) => {

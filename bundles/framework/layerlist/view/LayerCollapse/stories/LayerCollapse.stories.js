@@ -60,4 +60,11 @@ storiesOf('LayerCollapse', module)
             filterKeyword: 'wms'
         };
         return <LayerCollapse {...storyProps} />;
+    })
+    .add('first selected', () => {
+        const storyProps = {
+            ...defaultProps,
+            selectedLayers: defaultProps.groups[0].getLayers().filter((cur, i) => i === 0)
+        };
+        return <LayerCollapse {...storyProps} />;
     });
