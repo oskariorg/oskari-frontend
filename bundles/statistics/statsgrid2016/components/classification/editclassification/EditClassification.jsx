@@ -80,16 +80,12 @@ const handleCheckboxChange = (service, id, isSelected) => {
 };
 
 const EditClassification = props => {
-    const {indicators, service, loc, isEdit} = props;
-    let className = 'classification-edit';
-    if (!isEdit) {
-        className = 'classification-edit oskari-hidden';
-    }
+    const {indicators, service, loc} = props;
     const {methods, values, disabled, modes, colors, types, mapStyles} = props.classifications;
     const disabledOptions = getDisabledOptions(props);
 
     return (
-        <div className={className}>
+        <div className="classification-edit">
             <div className="classification-options">
                 <Select key="mapStyle" value = {values.mapStyle} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
@@ -184,7 +180,6 @@ EditClassification.propTypes = {
     indicators: PropTypes.object,
     state: PropTypes.object,
     classifications: PropTypes.object,
-    isEdit: PropTypes.bool,
     service: PropTypes.object,
     loc: PropTypes.func
 };

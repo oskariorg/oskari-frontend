@@ -184,6 +184,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var element = this.getElement();
             // detach old element from screen
             if (element) {
+                ReactDOM.unmountComponentAtNode(element.get(0));
                 this.removeFromPluginContainer(element, true);
                 this.element = null;
                 this.trigger('hide');

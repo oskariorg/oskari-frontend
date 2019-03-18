@@ -12,7 +12,7 @@ class Classification extends React.Component {
         this.state = {
             isEdit: props.isEdit
         };
-        handleBinder(this, 'handle');
+        handleBinder(this);
     }
     componentDidMount () {
         this.props.onRenderChange();
@@ -26,17 +26,17 @@ class Classification extends React.Component {
 
     render () {
         const classifications = this.props.classifications;
-        const activeIndicator = this.props.indicators.active;
+        const isEdit = this.state.isEdit;
 
         return (
             <div className="statsgrid-classification-container">
-                <Header active = {activeIndicator} isEdit = {this.state.isEdit}
+                <Header active = {this.props.indicators.active} isEdit = {isEdit}
                     handleClick = {this.handleToggleClassification}
                     indicators = {this.props.indicators.selected}/>
-                <EditClassification
-                    classifications = {classifications}
-                    isEdit = {this.state.isEdit}
-                    indicators = {this.props.indicators}/>
+                {isEdit &&
+                    <EditClassification classifications = {classifications}
+                        indicators = {this.props.indicators}/>
+                }
                 <Legend legendProps = {this.props.legendProps}
                     indicatorData = {this.props.indicators.data}
                     transparency = {classifications.values.transparency}/>
