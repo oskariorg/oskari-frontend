@@ -12,7 +12,7 @@ const AbstractMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugi
  * to move map to location/scale based on layer content. Also optimizes openlayers maplayers
  * visibility setting if it detects that content is not in the viewport.
  */
-export default class LayersPlugin extends AbstractMapModulePlugin {
+export class LayersPlugin extends AbstractMapModulePlugin {
     constructor () {
         super();
         this._clazz = 'Oskari.mapframework.bundle.mapmodule.plugin.LayersPlugin';

@@ -1,4 +1,4 @@
-import SelectList from './SelectList';
+import {SelectList} from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, id, label, values, options) {
     this.locale = locale;

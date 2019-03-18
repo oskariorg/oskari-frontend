@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache Lager",
                 "arcgis93": "ArcGISRest Lager",
                 "tiles3d" : "3D Tiles Lager",
+                "bingmaps" : "Bing Maps Lager",
                 "vectortile" : "MVT Lager"
             },
             "confirmDeleteStyle": "Stilen blir raderad. Fortsätt?",
@@ -91,6 +92,7 @@ Oskari.registerLocalization(
             "getInfo": "Sök data",
             "editWfs": "Editera WFS",
             "options": "Options JSON",
+            "apiKey": "Api key",
             "mvtAttributions": "Tillskrivningar",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Rutmatris",

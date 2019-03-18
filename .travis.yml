@@ -3,6 +3,11 @@ sudo: false
 language: node_js
 node_js: "8"
 
+notifications:
+  webhooks:
+    urls:
+      - secure: "R4Fl434SY2dB4Fr+7RCrPdk6jqEDTYjLAFq+HOAw8QVZ5thUa923wERiuPG0SvhEMvYGnYm61eL4Ya1kT05ckgH9S7KD50Rsu6iqVR1fyVSbx7VBzL3EhkU5kYvEWLlpYVujPczKvlrp7cFniL1B6IR1hNo8RDRLrkbOnJxz7mY="
+
 cache:
   directories:
     - "node_modules"

@@ -16,6 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.domain.Tool',
         this._tooltip = null;
         this._iconCls = null;
         this._callback = null;
+        this._types = ['selectedLayers'];
     }, {
 
         /**
@@ -110,5 +111,20 @@ Oskari.clazz.define('Oskari.mapframework.domain.Tool',
          */
         getCallback: function () {
             return this._callback;
+        },
+
+        setTypes: function (types) {
+            this._types = types;
+        },
+
+        addType: function (type) {
+            if (!type || this._types.includes(type)) {
+                return;
+            }
+            this._types.push(type);
+        },
+
+        getTypes: function () {
+            return this._types;
         }
     });

@@ -15,15 +15,8 @@ Oskari.registerLocalization(
             "actions": {
                 "cancel": "Annuler",
                 "next": "Suivant",
-                "close": "Fermer"
-            },
-            "file": {
-                "submit": "Envoyer",
-                "fileOverSizeError": {
-                    "title": "Erreur",
-                    "message": "Le fichier sélectionné est trop lourd. Taille maximum autorisée : <xx> Mo.",
-                    "close": "Fermer"
-                }
+                "close": "Fermer",
+                "submit": "Envoyer"
             },
             "layer": {
                 "title": "Enregistrer les informations relatives au jeu de données :",
@@ -53,7 +46,7 @@ Oskari.registerLocalization(
                 "invalid_file": "Impossible de trouver un fichier d'importation valide dans le fichier zip. Veuillez vérifier que le format du fichier est pris en charge et qu'il s'agit d'un fichier comprimé.",
                 "unable_to_store_data": "Il est impossible de stocker les données de l'utilisateur ou il n'y a pas de fonctionnalité dans les données d'entrée.",
                 "short_file_prefix": "Impossible d'obtenir le jeu de fichiers d'importation - le préfixe est trop court",
-                "file_over_size": "Le fichier sélectionné est trop volumineux. Il doit être d'un maximum de <xx> Mo.",
+                "file_over_size": "Le fichier sélectionné est trop volumineux. Il doit être d'un maximum de {maxSize, number} Mo.",
                 "no_features": "Impossible de trouver les fonctionnalités dans les données d'entrée",
                 "malformed": "Veuillez vous assurer que les noms de fichier sont du bon format (pas d'alphabet scandinave).",
                 "kml": "Impossible de créer de jeu de données à partir du fichier KML.",
@@ -66,7 +59,7 @@ Oskari.registerLocalization(
                 "generic": "L'importation du jeu de données a échoué."
             },
             "warning": {
-                "features_skipped": "Attention! Pendant l'importation, <xx> fonctionnalités ont été refusées en raison de coordonnées ou de géométrie manquantes"
+                "features_skipped": "Attention! Pendant l'importation, {count, plural, one {# fonctionnalité} other {# fonctionnalités}} ont été refusées en raison de coordonnées ou de géométrie manquantes."
             }
         },
         "tab": {

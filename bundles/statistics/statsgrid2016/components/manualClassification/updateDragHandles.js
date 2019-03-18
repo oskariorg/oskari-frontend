@@ -7,7 +7,7 @@
  * @param {Function} isSelected for checking if handleData is selected
  * @param {Number} histoHeight height of histogram area in px
  */
-export default function updateDragHandles (svg, handlesData, xScale, dragBehavior, isSelected, histoHeight) {
+export function updateDragHandles (svg, handlesData, xScale, dragBehavior, isSelected, histoHeight) {
     const handles = svg.selectAll('.handle')
         .data(handlesData.slice(1, -1), (d) => d.id);
 

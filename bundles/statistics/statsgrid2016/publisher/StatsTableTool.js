@@ -63,34 +63,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
             stats.togglePlugin.removeTool(this.id);
         }
     },
-    /**
-    * Is displayed.
-    * @method isDisplayed
-    * @public
-    *
-    * @returns {Boolean} is tool displayed
-    */
-    isDisplayed: function (data) {
-        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
-        if (hasStatsLayerOnMap) {
-            // If there's a statslayer on the map show the tool for statistics functionality
-            // relevant when creating a new published map
-            return true;
-        }
-        // If there isn't one, the user hasn't visited the functionality on this session
-        // Check if the user is editing a map with statslayer
-        var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-        if (!configExists) {
-            return false;
-        }
-        if (!Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid')) {
-            Oskari.log('Oskari.mapframework.publisher.tool.ClassificationTool')
-                .warn("Published map had config, but current appsetup doesn't include StatsGrid! " +
-                  'The thematic map functionality will be removed if user saves the map!!');
-            return false;
-        }
-        return true;
-    },
     getValues: function () {
         var me = this;
         var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();

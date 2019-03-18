@@ -1,4 +1,4 @@
-import SelectList from './SelectList';
+import {SelectList} from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
     this.locale = locale;
@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var panelLoc = locale.panels.newSearch;
 
         var cont = jQuery(this.__templates.main());
-        this.parentElement.append(cont);
+        this.parentElement.html(cont);
         this.container = cont;
         var seriesSelection = null;
         var indicators = me.service.getStateService().getIndicators();

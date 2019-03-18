@@ -21,6 +21,7 @@ Oskari.clazz.define(
         this.lineCapMap = ['butt', 'round'];
         this.lineCornerMap = ['mitre', 'round', 'bevel'];
         this.lineStyleMap = ['', '5 2', 'D'];
+        this._oskariLineStyleMap = ['solid', 'dash', 'solid'];
         this.dialog = null;
 
         var defaultOptions = {
@@ -147,13 +148,13 @@ Oskari.clazz.define(
                 stroke: {
                     color: values.line.color,
                     width: values.line.width,
-                    lineDash: values.line.style,
+                    lineDash: this._oskariLineStyleMap[this.lineStyleMap.indexOf(values.line.style)],
                     lineCap: values.line.cap,
                     lineJoin: values.line.corner,
                     area: {
                         color: values.area.lineColor,
                         width: values.area.lineWidth,
-                        lineDash: values.area.lineStyle,
+                        lineDash: this._oskariLineStyleMap[this.lineStyleMap.indexOf(values.area.lineStyle)],
                         lineJoin: values.area.lineCorner
                     }
                 },
@@ -201,7 +202,7 @@ Oskari.clazz.define(
                             width: featureStyle.stroke.width,
                             cap: featureStyle.stroke.lineCap,
                             corner: featureStyle.stroke.lineJoin,
-                            style: featureStyle.stroke.lineDash
+                            style: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.lineDash)]
                         });
                         break;
                     case 'area':
@@ -210,7 +211,7 @@ Oskari.clazz.define(
                             fillStyle: featureStyle.fill.area.pattern,
                             lineColor: featureStyle.stroke.area.color,
                             lineCorner: featureStyle.stroke.area.lineJoin,
-                            lineStyle: featureStyle.stroke.area.lineDash,
+                            lineStyle: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.area.lineDash)],
                             lineWidth: featureStyle.stroke.area.width
                         });
                         break;

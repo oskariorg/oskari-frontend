@@ -40,10 +40,6 @@ Oskari.registerLocalization(
             {
                 "title": "Thematic Maps",
                 "tags": "guide_thematic"
-            },
-            {
-                "title": "Analysis",
-                "tags": "guide_analysis"
             }
         ],
         "help": {

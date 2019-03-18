@@ -51,7 +51,11 @@ Each style definition has keys for the MVT layer names that should be rendered:
 }
 ```
 
-And each key has object value with one or both keys `featureStyle`, `optionalStyles`. Content of these is defined at AddFeaturesToMapRequest documentation. Full style example:
+And each key has object value with one or both keys `featureStyle`, `optionalStyles`.
+
+See [Oskari JSON style](/documentation/examples/oskari-style) for featureStyle/optionalStyle object definition.
+
+Style example:
 
 ```javascript
 "styles": {

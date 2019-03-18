@@ -40,6 +40,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
         id: 'tiles3dlayer',
         localeKey: 'tiles3d',
         footer: false
+    }, {
+        id: 'bingmapslayer',
+        localeKey: 'bingmaps',
+        footer: false
     }];
     this._init();
     this._setupSupportedLayerTypes();

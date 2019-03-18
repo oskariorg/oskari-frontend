@@ -29,6 +29,9 @@ div.mapplugin.mylocationplugin {
     top: 6px;
     left: 6px;
   }
+  &.disabled {
+    opacity: 0.4;
+  }
 
   /* default and rounded-dark theme */
   &.toolstyle-default, &.toolstyle-rounded-dark {

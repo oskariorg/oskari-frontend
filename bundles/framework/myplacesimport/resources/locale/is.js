@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Þú getur hlaðið gagnapakka úr tölvunni þinni sem zip-skrá. Vinsamlegast athugaðu að allar skrár séu á réttu skráarsniði og í réttu hnitakerfi.",
             "actions": {
                 "cancel": "Hætta",
-                "next": "Næst"
-            },
-            "file": {
-                "submit": "Senda",
-                "fileOverSizeError": {
-                    "title": "Villa",
-                    "message": "Valin skrá er of stór. Hún má ekki vera stærri en <xx> mb.",
-                    "close": "Loka"
-                }
+                "next": "Næst",
+                "close": "Loka",
+                "submit": "Senda"
             },
             "layer": {
                 "title": "Vista upplýsingar um gagnasettið:",
