@@ -13,7 +13,6 @@ class Classification extends React.Component {
             isEdit: props.isEdit
         };
         handleBinder(this, 'handle');
-        this.log = Oskari.log('Oskari.statistics.statsgrid.Classification');
     }
     componentDidMount () {
         this.props.onRenderChange();
@@ -25,43 +24,9 @@ class Classification extends React.Component {
         this.setState(oldState => ({ isEdit: !oldState.isEdit }));
     }
 
-    createLegendHTML () {
-        const {loc, legendProps} = this.props;
-        const indicatorData = this.props.indicators.data;
-        const classification = legendProps.classification;
-        const colors = legendProps.colors;
-        if (Object.keys(indicatorData).length === 0) {
-            return {error: loc('legend.noData')};
-        }
-        if (!classification) {
-            this.log.warn('Error getting indicator classification', indicatorData);
-            return {error: loc('legend.noEnough')};
-        }
-        const opacity = this.props.classifications.values.transparency / 100 || 1;
-        let legend;
-        if (opacity !== 1) {
-            const rgba = colors.map(color => {
-                const {r, g, b} = Oskari.util.hexToRgb(color);
-                return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + opacity + ')';
-            });
-            legend = classification.createLegend(rgba);
-        } else {
-            legend = classification.createLegend(colors);
-        }
-
-        if (!legend) {
-            return {error: loc('legend.cannotCreateLegend')};
-        } else if (legend instanceof jQuery) {
-            return {__html: legend.prop('outerHTML')}; // points legend
-        } else {
-            return {__html: legend};
-        }
-    }
-
     render () {
         const classifications = this.props.classifications;
         const activeIndicator = this.props.indicators.active;
-        const legendHTML = this.createLegendHTML();
 
         return (
             <div className="statsgrid-classification-container">
@@ -72,7 +37,9 @@ class Classification extends React.Component {
                     classifications = {classifications}
                     isEdit = {this.state.isEdit}
                     indicators = {this.props.indicators}/>
-                <Legend indicator = {activeIndicator} legendHTML = {legendHTML}/>
+                <Legend legendProps = {this.props.legendProps}
+                    indicatorData = {this.props.indicators.data}
+                    transparency = {classifications.values.transparency}/>
             </div>
         );
     }
