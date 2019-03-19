@@ -7,8 +7,8 @@ const protocols = ['https', 'http'];
 export class UrlInput extends React.Component {
     constructor (props) {
         super(props);
-        if (props.defaultValue) {
-            const urlParts = props.defaultValue.split('://');
+        if (props.value) {
+            const urlParts = props.value.split('://');
             this.state = {
                 protocol: urlParts.shift(),
                 url: urlParts.join('')
@@ -77,5 +77,5 @@ export class UrlInput extends React.Component {
 
 UrlInput.propTypes = {
     onChange: PropTypes.func,
-    defaultValue: PropTypes.string
+    value: PropTypes.string
 };
