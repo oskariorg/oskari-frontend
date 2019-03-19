@@ -6,8 +6,12 @@ const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
 Oskari.clazz.defineES('Oskari.bundle.language-selector.instance',
     class LanguageSelectorBundle extends BasicBundle {
+        constructor () {
+            super();
+            this.__name = 'language-selector';
+        }
         _startImpl () {
-            const root = jQuery('div#language');
+            const root = jQuery('#language-selector-root');
             if (!root) {
                 return;
             }
