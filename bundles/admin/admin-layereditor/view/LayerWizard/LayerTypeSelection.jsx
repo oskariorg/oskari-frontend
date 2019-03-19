@@ -12,17 +12,17 @@ const StyledRootEl = styled('div')`
 
 export const LayerTypeSelection = (props) => {
     const {types, text, onSelect} = props;
-    // TODO: replace with some required PropType maybe?
-    let buttonHandler = onSelect;
-    if (!buttonHandler) {
-        buttonHandler = () => {};
+    function buttonClick (event) {
+        if (onSelect) {
+            onSelect(event.target.textContent);
+        }
     }
 
     return (
         <StyledRootEl>
             {text}{text && <br />}
             {types.map((title, key) => (
-                <StyledButton key={key} onClick={() => buttonHandler(title)}>{title}</StyledButton>
+                <StyledButton key={key} onClick={buttonClick}>{title}</StyledButton>
             ))}
         </StyledRootEl>
     );
