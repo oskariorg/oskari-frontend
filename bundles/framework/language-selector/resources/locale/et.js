@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "et",
-    "key": "elf-language-selector",
+    "key": "language-selector",
     "value": {
         "title": "Muuda keelt",
         "change": "Muuda"

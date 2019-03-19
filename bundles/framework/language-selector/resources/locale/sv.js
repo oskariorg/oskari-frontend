@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
 {
     "lang": "sv",
-    "key": "elf-language-selector",
+    "key": "language-selector",
     "value": {
         "title": "Välj språk",
         "change": "Välj"
