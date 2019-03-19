@@ -22,7 +22,7 @@ export class StateHandler {
         return {...this.layer};
     }
     getCapabilities () {
-        return this.capabilities;
+        return this.capabilities || [];
     }
     getMutator () {
         const me = this;
