@@ -6,12 +6,12 @@ import { Button } from '../../components/Button';
 const StyledButton = styled(Button)`
     margin: 10px;
 `;
+const StyledRootEl = styled('div')`
+    padding: 10px;
+`;
 
 export const LayerTypeSelection = (props) => {
     const {types, text, onSelect} = props;
-    const StyledRootEl = styled('div')`
-        padding: 10px;
-    `;
     // TODO: replace with some required PropType maybe?
     let buttonHandler = onSelect;
     if (!buttonHandler) {
