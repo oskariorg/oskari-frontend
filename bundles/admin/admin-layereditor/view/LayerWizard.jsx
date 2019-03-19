@@ -16,6 +16,7 @@ padding: 10px;
 export class LayerWizard extends React.Component {
     constructor (props) {
         super(props);
+        this.state = {};
         this.service = new StateHandler(() => this.setState({ layer: this.service.getLayer() }));
     }
     setStep (requested) {
@@ -47,8 +48,8 @@ export class LayerWizard extends React.Component {
         return this.getStep() === input;
     }
     render () {
+        const layer = this.state.layer || {};
         const service = this.service;
-        const layer = service.getLayer();
         let typeTitle = 'Layer type';
         if (layer.type) {
             typeTitle = `${typeTitle}: ${layer.type}`;
