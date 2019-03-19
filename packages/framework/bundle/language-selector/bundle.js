@@ -21,9 +21,6 @@ Oskari.clazz.define("Oskari.bundle.language-selector.bundle", function() {
         {
             "type" : "text/javascript",
             "src" : "../../../../bundles/framework/language-selector/instance.js"
-        }, {
-            "type" : "text/css",
-            "src" : "../../../../bundles/framework/language-selector/resources/scss/style.scss"
         }],
         "locales" : [{
             "lang" : "en",
