@@ -49,8 +49,12 @@ export class StateHandler {
                 }
                 me.notify();
             },
-            setVersion (url, version) {
-                if (!url || !version) {
+            setUrl (url) {
+                me.layer.url = url;
+                me.notify();
+            },
+            setVersion (version) {
+                if (!version) {
                     me.capabilities = [];
                     me.loading = false;
                     // for moving back to previous step
@@ -59,7 +63,6 @@ export class StateHandler {
                     return;
                 }
                 me.loading = true;
-                me.layer.url = url;
                 me.notify();
                 setTimeout(() => {
                     me.layer.version = version;
