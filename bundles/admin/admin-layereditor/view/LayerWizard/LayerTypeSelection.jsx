@@ -21,8 +21,8 @@ export const LayerTypeSelection = (props) => {
     return (
         <StyledRootEl>
             {text}{text && <br />}
-            {types.map((title, key) => (
-                <StyledButton key={key} onClick={buttonClick}>{title}</StyledButton>
+            {types.map((title) => (
+                <StyledButton key={title} onClick={buttonClick}>{title}</StyledButton>
             ))}
         </StyledRootEl>
     );
