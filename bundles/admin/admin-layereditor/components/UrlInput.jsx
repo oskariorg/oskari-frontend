@@ -19,16 +19,13 @@ export class UrlInput extends React.Component {
                 url: undefined
             };
         }
-        this.changeHandler = props.onChange;
-        this.processedProps = {
-            ...props,
-            defaultValue: undefined,
-            onChange: this.onChange.bind(this)
-        };
     }
     setProtocol (protocol) {
+        if (!this.props.onChange) {
+            return;
+        }
         this.setState((state) => {
-            this.changeHandler(`${protocol}://${state.url}`);
+            this.props.onChange(`${protocol}://${state.url}`);
             return {
                 ...state,
                 protocol
@@ -36,7 +33,7 @@ export class UrlInput extends React.Component {
         });
     }
     onChange (event) {
-        if (!this.changeHandler) {
+        if (!this.props.onChange) {
             return;
         }
         const url = event.target.value;
@@ -51,23 +48,29 @@ export class UrlInput extends React.Component {
                 newState.protocol = urlParts.shift();
                 newState.url = urlParts.join('');
             }
-            this.changeHandler(`${newState.protocol}://${newState.url}`);
+            this.props.onChange(`${newState.protocol}://${newState.url}`);
             return newState;
         });
     }
     render () {
         const protocolSelect = (
             <Select
-                defaultValue={this.state.protocol}
+                value={this.state.protocol}
                 style={{ width: 90 }}
                 onSelect={(value) => this.setProtocol(value)} >
-                {protocols.map((title, key) => (
-                    <Option key={key} value={title}>{title}://</Option>
+                {protocols.map((title) => (
+                    <Option key={title} value={title}>{title}://</Option>
                 ))}
             </Select>
         );
+
+        const processedProps = {
+            ...this.props,
+            value: undefined,
+            onChange: this.onChange.bind(this)
+        };
         return (
-            <Input {...this.processedProps} defaultValue={this.state.url} addonBefore={protocolSelect} />
+            <Input {...processedProps} value={this.state.url} addonBefore={protocolSelect} />
         );
     }
 }
