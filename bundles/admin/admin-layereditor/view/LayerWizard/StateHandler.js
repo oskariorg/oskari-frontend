@@ -1,5 +1,5 @@
 
-export class LayerWizardService {
+export class StateHandler {
     constructor (consumer) {
         this.layer = {};
         this.capabilities = [];

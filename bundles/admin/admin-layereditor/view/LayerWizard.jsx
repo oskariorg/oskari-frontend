@@ -6,12 +6,17 @@ import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { LayerDetails } from './LayerWizard/LayerDetails';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
 import { Button } from '../components/Button';
-import { LayerWizardService } from './LayerWizard/LayerWizardService';
+import { StateHandler } from './LayerWizard/StateHandler';
+
+const StyledRootEl = styled('div')`
+margin: 10px;
+padding: 10px;
+`;
 
 export class LayerWizard extends React.Component {
     constructor (props) {
         super(props);
-        this.service = new LayerWizardService(() => this.setState({ layer: this.service.getLayer() }));
+        this.service = new StateHandler(() => this.setState({ layer: this.service.getLayer() }));
     }
     setStep (requested) {
         switch (requested) {
@@ -42,10 +47,6 @@ export class LayerWizard extends React.Component {
         return this.getStep() === input;
     }
     render () {
-        const StyledRootEl = styled('div')`
-            margin: 10px;
-            padding: 10px;
-        `;
         const service = this.service;
         const layer = service.getLayer();
         let typeTitle = 'Layer type';
