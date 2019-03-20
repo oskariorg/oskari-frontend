@@ -1,4 +1,5 @@
 export {AbstractLayer} from './mock/AbstractLayer.class';
+export {locale} from './mock/locale';
 
 class MockMap {
     constructor () {

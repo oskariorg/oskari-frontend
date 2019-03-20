@@ -2,8 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { LayerCollapse } from '../../LayerCollapse';
 import { LayerGroup } from '../../../../layerselector2/model/LayerGroup.class';
-import { Oskari, AbstractLayer } from './mock';
-import { LayerCollapseService } from '../LayerCollapseService';
+import { Oskari, AbstractLayer, locale } from './mock';
+import { StateHandler } from '../StateHandler';
 
 window.Oskari = Oskari;
 
@@ -45,7 +45,7 @@ const createLayerGroups = layers => {
     return groups;
 };
 
-const service = new LayerCollapseService();
+const service = new StateHandler();
 let groups = [];
 let layers = [];
 let wms = null;
@@ -53,78 +53,18 @@ let wms = null;
 const resetStoryState = () => {
     layers = createLayers();
     groups = createLayerGroups(layers);
-    service.setState({
+    service.updateStateWithProps({
         groups,
         filterKeyword: '',
         selectedLayerIds: []
     });
 };
 
-const locale = {
-    'errors': {
-        'title': 'Virhe',
-        'generic': 'Järjestelmässä tapahtui virhe.',
-        'loadFailed': 'Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.',
-        'noResults': 'Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.',
-        'noResultsForKeyword': 'Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen.',
-        'minChars': 'Antamasi hakusana on liian lyhyt. Hakusanassa on oltava vähintään neljä merkkiä.'
-    },
-    'loading': 'Haetaan...',
-    'filter': {
-        'text': 'Hae karttatasoja',
-        'keywordsTitle': 'Avainsanat',
-        'shortDescription': 'Hae karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella.',
-        'description': 'Voit hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.',
-        'inspire': 'Aiheittain',
-        'organization': 'Tiedontuottajittain',
-        'published': 'Käyttäjät',
-        'didYouMean': 'Tarkoititko:'
-    },
-    'published': {
-        'organization': 'Julkaistu karttataso',
-        'inspire': 'Julkaistu karttataso'
-    },
-    'tooltip': {
-        'type-base': 'Taustakartta',
-        'type-wms': 'Karttataso',
-        'type-wfs': 'Tietotuote',
-        'type-wfs-manual': 'Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä.',
-        'type-timeseries': 'Aikasarjataso',
-        'unsupported-srs': 'Väärä karttaprojektio'
-    },
-    'backendStatus': {
-        'OK': {
-            'tooltip': 'Karttataso on käytettävissä tällä hetkellä.',
-            'iconClass': 'backendstatus-ok'
-        },
-        'DOWN': {
-            'tooltip': 'Karttataso ei tällä hetkellä käytettävissä.',
-            'iconClass': 'backendstatus-down'
-        },
-        'ERROR': {
-            'tooltip': 'Karttataso ei tällä hetkellä käytettävissä.',
-            'iconClass': 'backendstatus-error'
-        },
-        'MAINTENANCE': {
-            'tooltip': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
-            'iconClass': 'backendstatus-maintenance'
-        },
-        'UNKNOWN': {
-            'tooltip': '',
-            'iconClass': 'backendstatus-unknown'
-        },
-        'UNSTABLE': {
-            'tooltip': '',
-            'iconClass': 'backendstatus-unstable'
-        }
-    }
-};
-
 storiesOf('LayerCollapse', module)
 
     .add('empty', () => {
         resetStoryState();
-        service.setState({
+        service.updateStateWithProps({
             groups: []
         });
         return <LayerCollapse {...service.getState()} locale={locale} />;
@@ -135,21 +75,21 @@ storiesOf('LayerCollapse', module)
     })
     .add('with filter "wfs"', () => {
         resetStoryState();
-        service.setState({
+        service.updateStateWithProps({
             filterKeyword: 'wfs'
         });
         return <LayerCollapse {...service.getState()} locale={locale} />;
     })
     .add('with filter "wms"', () => {
         resetStoryState();
-        service.setState({
+        service.updateStateWithProps({
             filterKeyword: 'wms'
         });
         return <LayerCollapse {...service.getState()} locale={locale} />;
     })
     .add('WMS selected', () => {
         resetStoryState();
-        service.setState({
+        service.updateStateWithProps({
             selectedLayerIds: [wms.getId()]
         });
         const state = service.getState();
@@ -158,7 +98,7 @@ storiesOf('LayerCollapse', module)
     })
     .add('Sticky WMS', () => {
         resetStoryState();
-        service.setState({
+        service.updateStateWithProps({
             selectedLayerIds: [wms.getId()]
         });
         const state = service.getState();

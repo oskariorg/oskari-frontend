@@ -560,7 +560,7 @@ Oskari.clazz.define(
         },
 
         setLayerSelected: function (layerId, isSelected) {
-            this.layerCollapseService.updateSelectedLayerIds();
+            this.layerCollapseStateHandler.updateSelectedLayerIds();
             this._render();
         },
 

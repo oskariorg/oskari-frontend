@@ -3,12 +3,11 @@ import { storiesOf } from '@storybook/react';
 import { Button } from './Button';
 import {StyledButton} from './StyledButton';
 
-const defaultProps = {
-    text: 'My text'
-};
+const defaultText = 'My text';
+const defaultProps = {};
 storiesOf('Button', module)
     .add('with text', () => (
-        <Button {...defaultProps} />
+        <Button {...defaultProps} >{defaultText}</Button>
     ))
     .add('of type primary', () => {
         const storyProps = {
@@ -16,9 +15,9 @@ storiesOf('Button', module)
             type: 'primary'
         };
         return (
-            <Button {...storyProps} />
+            <Button {...storyProps}>{defaultText}</Button>
         );
     })
     .add('styled', () => {
-        return (<StyledButton {...defaultProps} />);
+        return (<StyledButton {...defaultProps}>{defaultText}</StyledButton>);
     });
