@@ -1,4 +1,4 @@
-export class LayerCollapseService {
+export class StateHandler {
     constructor () {
         this.listeners = [];
         this.selectedLayerIds = [];
@@ -8,45 +8,40 @@ export class LayerCollapseService {
         this.filtered = null;
         this.map = Oskari.getSandbox().getMap();
     }
-    setState (props) {
-        const {groups, selectedLayerIds, filterKeyword} = props;
-        this.groups = groups || this.groups;
-        this.selectedLayerIds = selectedLayerIds || this.selectedLayerIds;
-
-        if (!this._filterStateChanged(filterKeyword)) {
-            return;
-        }
-        this.filterKeyword = filterKeyword;
-        this.filtered = this.getSearchResults();
-        this.openGroupTitles = this.filtered
-            ? this.filtered.map(result => result.group.getTitle()) : [];
-    }
-    _filterStateChanged (nextFilterKeyword) {
-        return this.filterKeyword !== nextFilterKeyword;
-    }
     getState () {
         return {
             mutator: this.getMutator(),
-            selectedLayerIds: this.getSelectedLayerIds(),
+            selectedLayerIds: this._getSelectedLayerIds(),
             groups: this.groups,
             filtered: this.filtered,
             openGroupTitles: this.openGroupTitles,
             mapSrsName: this.map.getSrsName()
         };
     }
+    updateStateWithProps ({groups, selectedLayerIds, filterKeyword}) {
+        this.groups = groups || this.groups;
+        this.selectedLayerIds = selectedLayerIds || this.selectedLayerIds;
+        if (!this._filterStateChanged(filterKeyword)) {
+            return;
+        }
+        this.filterKeyword = filterKeyword;
+        this.filtered = this._getSearchResults();
+        this.openGroupTitles = this.filtered
+            ? this.filtered.map(result => result.group.getTitle()) : [];
+    }
     updateSelectedLayerIds () {
         this.selectedLayerIds = this.map.getLayers().map(layer => layer.getId());
     }
-    getSelectedLayerIds () {
+    _filterStateChanged (nextFilterKeyword) {
+        return this.filterKeyword !== nextFilterKeyword;
+    }
+    _getSelectedLayerIds () {
         if (this.selectedLayerIds.length === 0) {
             this.updateSelectedLayerIds();
         }
         return this.selectedLayerIds;
     }
-    getGroups () {
-        return this.groups;
-    }
-    getSearchResults () {
+    _getSearchResults () {
         if (!this.filterKeyword && this.filterKeyword !== 0) {
             return null;
         }
@@ -57,7 +52,13 @@ export class LayerCollapseService {
             return {group, layers};
         }).filter(result => result.layers.length !== 0);
         return results;
-    };
+    }
+    addListener (listener) {
+        this.listeners.push(listener);
+    }
+    notify () {
+        this.listeners.forEach(consumer => consumer());
+    }
     getMutator () {
         const me = this;
         const sandbox = Oskari.getSandbox();
@@ -101,11 +102,5 @@ export class LayerCollapseService {
                 sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
             }
         };
-    }
-    addListener (listener) {
-        this.listeners.push(listener);
-    }
-    notify () {
-        this.listeners.forEach(consumer => consumer());
     }
 }

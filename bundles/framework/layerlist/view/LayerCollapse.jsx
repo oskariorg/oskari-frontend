@@ -24,8 +24,7 @@ const getNoResultsProps = locale => {
     return alertProps;
 };
 
-export const LayerCollapse = props => {
-    const { locale, groups, openGroupTitles, filtered, mutator, ...rest } = props;
+export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutator, ...rest }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
         return <StyledAlert {...getNoResultsProps(locale)}/>;
     }

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
-import { LayerCollapseService } from './LayerCollapse/LayerCollapseService';
+import { StateHandler } from './LayerCollapse/StateHandler';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -41,8 +41,8 @@ Oskari.clazz.define(
                 '</div><div style="clear:both;"></div>',
             layerListMountPoint: '<div class="layer-list-mount-pt"></div>'
         };
-        this.layerCollapseService = new LayerCollapseService();
-        this.layerCollapseService.addListener(this._render.bind(this));
+        this.layerCollapseStateHandler = new StateHandler();
+        this.layerCollapseStateHandler.addListener(this._render.bind(this));
         this._createUI(id);
     }, {
 
@@ -185,12 +185,11 @@ Oskari.clazz.define(
          * TODO. React here
          */
         _render: function () {
-            this.layerCollapseService.setState({
-                selectedLayerIds: this.layerCollapseService.getSelectedLayerIds(),
+            this.layerCollapseStateHandler.updateStateWithProps({
                 groups: this.layerGroups,
                 filterKeyword: this.filterField.getValue()
             });
-            const collapseProps = this.layerCollapseService.getState();
+            const collapseProps = this.layerCollapseStateHandler.getState();
             ReactDOM.render(<LayerCollapse {...collapseProps} locale={this._locale} />, this.layerListMountPoint[0]);
         },
 
