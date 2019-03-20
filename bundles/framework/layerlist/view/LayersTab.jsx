@@ -42,6 +42,7 @@ Oskari.clazz.define(
             layerListMountPoint: '<div class="layer-list-mount-pt"></div>'
         };
         this.layerCollapseService = new LayerCollapseService();
+        this.layerCollapseService.addListener(this._render.bind(this));
         this._createUI(id);
     }, {
 
@@ -184,15 +185,13 @@ Oskari.clazz.define(
          * TODO. React here
          */
         _render: function () {
-            const map = Oskari.getSandbox().getMap();
-            const collapseProps = {
-                mutator: this.layerCollapseService.getMutator(),
+            this.layerCollapseService.setState({
+                selectedLayerIds: this.layerCollapseService.getSelectedLayerIds(),
                 groups: this.layerGroups,
-                keyword: this.filterField.getValue(),
-                mapSrsName: map.getSrsName(),
-                selectedLayers: map.getLayers()
-            };
-            ReactDOM.render(<LayerCollapse {...collapseProps} />, this.layerListMountPoint[0]);
+                filterKeyword: this.filterField.getValue()
+            });
+            const collapseProps = this.layerCollapseService.getState();
+            ReactDOM.render(<LayerCollapse {...collapseProps} locale={this._locale} />, this.layerListMountPoint[0]);
         },
 
         /**
@@ -558,47 +557,16 @@ Oskari.clazz.define(
         },
 
         _showAllLayers: function () {
-            var i,
-                group,
-                layers,
-                n,
-                layer,
-                layerId,
-                layerCont;
-
-            for (i = 0; i < this.layerGroups.length; i += 1) {
-                group = this.layerGroups[i];
-                layers = group.getLayers();
-
-                for (n = 0; n < layers.length; n += 1) {
-                    layer = layers[n];
-                    layerId = layer.getId();
-                    layerCont = this.layerContainers[layerId];
-                    layerCont.setVisible(true);
-                }
-                group.layerListPanel.setVisible(true);
-                group.layerListPanel.close();
-                if (group.badge) {
-                    group.badge.updateContent(layers.length);
-                }
-            }
-
-            this.accordion.removeMessage();
+            console.warn('LayerTab._showAllLayers is deprecated');
         },
 
         setLayerSelected: function (layerId, isSelected) {
-            var layerCont = this.layerContainers[layerId];
-            if (layerCont) {
-                layerCont.setSelected(isSelected);
-            }
+            this.layerCollapseService.updateSelectedLayerIds();
             this._render();
         },
 
         updateLayerContent: function (layerId, layer) {
-            var layerCont = this.layerContainers[layerId];
-            if (layerCont) {
-                layerCont.updateLayerContent(layer);
-            }
+            console.warn('LayerTab.updateLayerContent is deprecated');
         }
     }
 );

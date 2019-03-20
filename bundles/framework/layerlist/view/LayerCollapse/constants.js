@@ -7,14 +7,3 @@ export const LAYER_TYPE = {
     VECTOR: 'type-wms',
     TIMESERIES: 'type-timeseries'
 };
-export const ICON_CLASS = {
-    OK: 'backendstatus-ok',
-    DOWN: 'backendstatus-down',
-    ERROR: 'backendstatus-error',
-    MAINTENANCE: 'backendstatus-maintenance',
-    UNKNOWN: 'backendstatus-unknown',
-    UNSTABLE: 'backendstatus-unstable'
-};
-export const TOOLTIP = {
-    ...LAYER_TYPE
-};

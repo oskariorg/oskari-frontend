@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { LAYER_TYPE, ICON_CLASS, TOOLTIP } from './constants';
+import { LAYER_TYPE } from '../constants';
 
 const getIconDiv = float => styled('div')`
     float: ${float};
@@ -35,36 +35,42 @@ const Tools = styled('div')`
     float: right;
 `;
 
-const getBackendStatusIcon = layer => {
+const getBackendStatusIconProps = (layer, locale) => {
     const classes = ['layer-backendstatus-icon'];
-    const iconCls = ICON_CLASS[layer.getBackendStatus()];
-    if (iconCls) {
-        classes.push(iconCls);
+    let iconClass = null;
+    let tooltip = null;
+    const status = locale.backendStatus[layer.getBackendStatus() || 'UNKNOWN'];
+    if (status) {
+        iconClass = status.iconClass;
+        tooltip = status.tooltip;
+    }
+    if (iconClass) {
+        classes.push(iconClass);
     }
     const props = {
         className: classes.join(' '),
-        layer,
-        hasStatus: !!iconCls
+        hasStatus: !!iconClass,
+        title: tooltip
     };
-    return <BackendStatus {...props}/>;
+    return props;
 };
 
-const getSecondaryIcon = layer => {
+const getSecondaryIconProps = (layer, locale) => {
     const classes = ['layer-icon-secondary'];
     let title = '';
     if (layer.hasTimeseries()) {
         classes.push('layer-timeseries-disabled');
-        title = TOOLTIP[LAYER_TYPE.TIMESERIES];
+        title = locale.tooltip[LAYER_TYPE.TIMESERIES];
     }
     const props = {
         className: classes.join(' '),
         title,
         layer
     };
-    return <SecondaryIcon {...props}/>;
+    return props;
 };
 
-const getLayerIcon = layer => {
+const getLayerIconProps = (layer, locale) => {
     let layerType = null;
     if (layer.isBaseLayer()) {
         layerType = LAYER_TYPE.BASE;
@@ -83,13 +89,13 @@ const getLayerIcon = layer => {
         layerType = LAYER_TYPE.WMS;
         break;
     }
-    const title = layerType ? '' : TOOLTIP[layerType];
+    const title = layerType ? '' : locale.tooltip[layerType];
     const classes = ['layer-icon', layer.getIconClassname()];
     const props = {
         className: classes.join(' '),
         title
     };
-    return <LeftFloatingIcon {...props}/>;
+    return props;
 };
 
 const hasSubLayerMetadata = layer => {
@@ -100,33 +106,38 @@ const hasSubLayerMetadata = layer => {
     return !!subLayers.find(sub => !!sub.getMetadataIdentifier());
 };
 
-const getInfoIcon = layer => {
+const getInfoIconClasses = layer => {
     const classes = ['layer-info'];
     if (layer.getMetadataIdentifier() || hasSubLayerMetadata(layer)) {
         classes.push('icon-info');
     }
-    const props = {
-        className: classes.join(' ')
-    };
-    return <RightFloatingIcon {...props}/>;
+    return classes;
 };
 
-export const LayerTools = ({model, mapSrs}) => {
+export const LayerTools = ({model, mapSrs, mutator, locale}) => {
+    const infoClasses = getInfoIconClasses(model, locale);
+    const layerIconProps = getLayerIconProps(model, locale);
+    const secondaryIconProps = getSecondaryIconProps(model);
+    const backendStatusProps = getBackendStatusIconProps(model, locale);
     return (
         <Tools className="layer-tools">
             {
                 !model.isSupported(mapSrs) &&
-                <RightFloatingIcon className="layer-not-supported icon-warning-light" />
+                <RightFloatingIcon
+                    className="layer-not-supported icon-warning-light"
+                    title={locale.tooltip['unsupported-srs']} />
             }
-            {getBackendStatusIcon(model)}
-            {getSecondaryIcon(model)}
-            {getLayerIcon(model)}
-            {getInfoIcon(model)}
+            <BackendStatus {...backendStatusProps} onClick={() => mutator.showLayerBackendStatus(model.getId())}/>
+            <SecondaryIcon {...secondaryIconProps}/>
+            <LeftFloatingIcon {...layerIconProps}/>
+            <RightFloatingIcon className={infoClasses.join(' ')} onClick={() => mutator.showLayerMetadata(model)}/>
         </Tools>
     );
 };
 
 LayerTools.propTypes = {
-    model: PropTypes.any,
-    mapSrs: PropTypes.string
+    model: PropTypes.any.isRequired,
+    mutator: PropTypes.any.isRequired,
+    mapSrs: PropTypes.string,
+    locale: PropTypes.any.isRequired
 };

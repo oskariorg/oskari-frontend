@@ -1,10 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
 import AntSwitch from 'antd/lib/switch';
 import 'antd/lib/switch/style/css';
-import styled from 'styled-components';
 
+const checkedColor = '#1890ff';
+const uncheckedColor = 'rgba(0,0,0,.25)';
 const StyledSwitch = styled(AntSwitch)`
-    ${props => props.checked && 'background: #1890ff;'}
+    border: 1px solid transparent;
+    background: ${props => props.checked ? checkedColor : uncheckedColor};
+    &:hover:enabled {
+        background: ${props => props.checked ? checkedColor : uncheckedColor};
+    }
+    &:focus {
+        background: ${props => props.checked ? checkedColor : uncheckedColor};
+    }
 `;
 
 export const Switch = props => <StyledSwitch {...props}/>;

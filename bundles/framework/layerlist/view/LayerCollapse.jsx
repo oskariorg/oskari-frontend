@@ -1,92 +1,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List } from '../../../admin/admin-layereditor/components/List';
-import { Layer } from './LayerCollapse/Layer';
-import { Collapse, Panel } from '../../../admin/admin-layereditor/components/Collapse';
-import { Badge } from '../../../admin/admin-layereditor/components/Badge';
+import { Collapse } from '../../../admin/admin-layereditor/components/Collapse';
 import { Alert } from '../../../admin/admin-layereditor/components/Alert';
+import { LayerCollapsePanel } from './LayerCollapse/LayerCollapsePanel';
+import styled from 'styled-components';
 
-const getLayers = (layers, props) => layers.map(
-    (lyr, index) => {
-        const {selectedLayers, ...rest} = props;
-        const selected = Array.isArray(selectedLayers) && selectedLayers.includes(lyr);
-        const layerProps = {
-            model: lyr,
-            even: index % 2 === 0,
-            selected,
-            ...rest
-        };
-        return <Layer key={index} {...layerProps}/>;
+const StyledCollapse = styled(Collapse)`
+    border-radius: 0 !important;
+    &>div {
+        border-radius: 0 !important;
     }
-);
-const getPanels = (groups, searchResults, otherProps) => {
-    const panels = (searchResults || groups).map((cur, index) => {
-        const group = searchResults ? cur.group : cur;
-        const filteredLayers = searchResults ? cur.layers : null;
+`;
+const StyledAlert = styled(Alert)`
+    margin: 10px;
+`;
 
-        let badgeText = group.getLayers().length;
-        if (filteredLayers && filteredLayers.length !== group.getLayers().length) {
-            badgeText = filteredLayers.length + ' / ' + badgeText;
-        }
-        const badgeProps = {
-            inversed: true,
-            count: badgeText
-        };
-        const layers = filteredLayers || group.getLayers();
-        const listProps = {
-            dataSource: getLayers(layers, otherProps),
-            bordered: false
-        };
-        const panelProps = {
-            header: group.getTitle(),
-            extra: <Badge {...badgeProps}/>,
-            children: <List {...listProps}/>
-        };
-        return <Panel key={index} {...panelProps}/>;
-    });
-    return panels;
-};
-
-const getEmptyMessage = filterKeyword => {
+const getNoResultsProps = locale => {
     const alertProps = {
-        message: 'No layers found',
-        description: 'TODO: Show search keyword used: ' + filterKeyword,
+        description: locale.errors.noResults,
         type: 'info',
         showIcon: true
     };
-    return <Alert {...alertProps}/>;
-};
-
-const getSearchResults = (groups, keyword) => {
-    if (!keyword && keyword !== 0) {
-        return null;
-    }
-    const results = groups.map(group => {
-        const layers = group.getLayers()
-            .filter(lyr => group.matchesKeyword(lyr.getId(), keyword)); // and some other rule?
-        return {group, layers};
-    }).filter(result => result.layers.length !== 0);
-    return results;
+    return alertProps;
 };
 
 export const LayerCollapse = props => {
-    const { groups, filterKeyword, ...rest } = props;
-    if (!Array.isArray(groups) || groups.length === 0) {
-        return getEmptyMessage();
+    const { locale, groups, openGroupTitles, filtered, mutator, ...rest } = props;
+    if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
+        return <StyledAlert {...getNoResultsProps(locale)}/>;
     }
-    const filtered = getSearchResults(groups, filterKeyword);
-    if (filtered && filtered.length === 0) {
-        return getEmptyMessage(filterKeyword);
-    }
-    const collapseProps = {
-        children: getPanels(groups, filtered, rest),
-        accordion: true,
-        bordered: false
-    };
-    return <Collapse {...collapseProps}/>;
+    const panels = (filtered || groups).map(cur => ({
+        group: cur.group || cur,
+        showLayers: cur.layers || cur.getLayers()
+    }));
+    return (
+        <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
+            {
+                panels.map(pnlProps =>
+                    <LayerCollapsePanel key={pnlProps.group.getTitle()}
+                        mutator={mutator}
+                        locale={locale}
+                        {...pnlProps}
+                        {...rest}/>
+                )
+            }
+        </StyledCollapse>
+    );
 };
 
 LayerCollapse.propTypes = {
+    locale: PropTypes.any.isRequired,
+    mutator: PropTypes.any.isRequired,
     groups: PropTypes.array,
-    filterKeyword: PropTypes.string
+    openGroupTitles: PropTypes.array,
+    filtered: PropTypes.array
 };

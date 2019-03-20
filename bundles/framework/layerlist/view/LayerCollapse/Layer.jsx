@@ -2,8 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch } from '../../../../admin/admin-layereditor/components/Switch';
-import { Checkbox } from '../../../../admin/admin-layereditor/components/Checkbox';
-import { LayerTools } from './LayerTools';
+import { LayerTools } from './Layer/LayerTools';
 
 const LayerDiv = styled('div')`
     background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
@@ -24,37 +23,34 @@ const CustomTools = styled('div')`
 `;
 const FloatingSwitch = styled(Switch)`
     float: left;
-    margin: 0 5px 0 0;
+    margin: 0 8px 0 0 !important;
+`;
+const Label = styled('label')`
+    cursor: pointer;
 `;
 
-export const Layer = props => {
-    const {model, even, selected, mutator, ...rest} = props;
-    const layerId = model.getId();
-    const switchProps = {
-        defaultChecked: selected,
-        onChange: checked => {
-            checked ? setTimeout(() => mutator.addLayer(layerId), 300) : mutator.removeLayer(layerId);
-        }
-    };
-    const toolProps = {
-        model,
-        ...rest
-    };
+const onSelect = (checked, layerId, mutator) => {
+    checked ? mutator.addLayer(layerId) : mutator.removeLayer(layerId);
+};
+
+export const Layer = ({model, even, selected, mutator, ...rest}) => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools"/>
-            <label>
-                <FloatingSwitch size="small" {...switchProps} />
+            <Label>
+                <FloatingSwitch size="small" checked={selected}
+                    onChange={checked => onSelect(checked, model.getId(), mutator)}
+                    disabled={model.isSticky()} />
                 {model.getName()}
-            </label>
-            <LayerTools {...toolProps}/>
+            </Label>
+            <LayerTools model={model} mutator={mutator} {...rest}/>
         </LayerDiv>
     );
 };
 
 Layer.propTypes = {
     model: PropTypes.any.isRequired,
-    selected: PropTypes.bool,
     even: PropTypes.bool,
-    mutator: PropTypes.any
+    selected: PropTypes.bool,
+    mutator: PropTypes.any.isRequired
 };
