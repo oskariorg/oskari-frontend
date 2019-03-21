@@ -17,4 +17,3 @@ const StyledSwitch = styled(AntSwitch)`
 `;
 
 export const Switch = props => <StyledSwitch {...props}/>;
-Switch.propTypes = {};
