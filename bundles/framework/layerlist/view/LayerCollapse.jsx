@@ -9,6 +9,9 @@ const StyledCollapse = styled(Collapse)`
     border-radius: 0 !important;
     &>div {
         border-radius: 0 !important;
+        &:last-child {
+            padding-bottom: 2px;
+        }
     }
 `;
 const StyledAlert = styled(Alert)`
@@ -24,7 +27,7 @@ const getNoResultsProps = locale => {
     return alertProps;
 };
 
-export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutator, ...rest }) => {
+export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutator, selectedLayerIds }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
         return <StyledAlert {...getNoResultsProps(locale)}/>;
     }
@@ -35,22 +38,26 @@ export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutat
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
             {
-                panels.map(pnlProps =>
-                    <LayerCollapsePanel key={pnlProps.group.getTitle()}
-                        mutator={mutator}
-                        locale={locale}
-                        {...pnlProps}
-                        {...rest}/>
-                )
+                panels.map(({group, showLayers}) => {
+                    return (
+                        <LayerCollapsePanel key={group.getTitle()}
+                            mutator={mutator}
+                            locale={locale}
+                            group={group}
+                            showLayers={showLayers}
+                            selectedLayerIds={selectedLayerIds}/>
+                    );
+                })
             }
         </StyledCollapse>
     );
 };
 
 LayerCollapse.propTypes = {
-    locale: PropTypes.any.isRequired,
-    mutator: PropTypes.any.isRequired,
     groups: PropTypes.array,
     openGroupTitles: PropTypes.array,
-    filtered: PropTypes.array
+    filtered: PropTypes.array,
+    selectedLayerIds: PropTypes.array,
+    mutator: PropTypes.any.isRequired,
+    locale: PropTypes.any.isRequired
 };

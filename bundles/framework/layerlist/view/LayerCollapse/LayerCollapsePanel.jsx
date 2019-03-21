@@ -11,7 +11,6 @@ const StyledListItem = styled(ListItem)`
     padding: 0 !important;
     display: block !important;
 `;
-
 const getBadgeText = (group, visibleLayerCount) => {
     let badgeText = group.getLayers().length;
     if (visibleLayerCount !== group.getLayers().length) {
@@ -31,19 +30,21 @@ renderItem.propTypes = {
     layer: PropTypes.any.isRequired
 };
 
-export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, ...rest}) => {
+export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
     const items = showLayers.map((layer, index) => {
         const itemProps = {
             layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            ...rest
+            mapSrs,
+            mutator,
+            locale
         };
         return itemProps;
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
-        <Panel {...rest}
+        <Panel {...propsNeededForPanel}
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
@@ -56,6 +57,8 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, ...rest
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     showLayers: PropTypes.array.isRequired,
-    selectedLayerIds: PropTypes.arrayOf(PropTypes.number),
-    mutator: PropTypes.any.isRequired
+    selectedLayerIds: PropTypes.array,
+    mapSrs: PropTypes.string,
+    mutator: PropTypes.any.isRequired,
+    locale: PropTypes.any.isRequired
 };
