@@ -1,3 +1,5 @@
+const LAYER_TIMEOUT_MS = 300;
+
 export class StateHandler {
     constructor () {
         this.listeners = [];
@@ -8,38 +10,25 @@ export class StateHandler {
         this.filtered = null;
         this.map = Oskari.getSandbox().getMap();
     }
-    getState () {
-        return {
-            mutator: this.getMutator(),
-            selectedLayerIds: this._getSelectedLayerIds(),
-            groups: this.groups,
-            filtered: this.filtered,
-            openGroupTitles: this.openGroupTitles,
-            mapSrsName: this.map.getSrsName()
-        };
-    }
     updateStateWithProps ({groups, selectedLayerIds, filterKeyword}) {
         this.groups = groups || this.groups;
         this.selectedLayerIds = selectedLayerIds || this.selectedLayerIds;
         if (!this._filterStateChanged(filterKeyword)) {
+            this.notify();
             return;
         }
         this.filterKeyword = filterKeyword;
         this.filtered = this._getSearchResults();
         this.openGroupTitles = this.filtered
             ? this.filtered.map(result => result.group.getTitle()) : [];
+        this.notify();
     }
     updateSelectedLayerIds () {
         this.selectedLayerIds = this.map.getLayers().map(layer => layer.getId());
+        this.notify();
     }
     _filterStateChanged (nextFilterKeyword) {
         return this.filterKeyword !== nextFilterKeyword;
-    }
-    _getSelectedLayerIds () {
-        if (this.selectedLayerIds.length === 0) {
-            this.updateSelectedLayerIds();
-        }
-        return this.selectedLayerIds;
     }
     _getSearchResults () {
         if (!this.filterKeyword && this.filterKeyword !== 0) {
@@ -56,8 +45,19 @@ export class StateHandler {
     addListener (listener) {
         this.listeners.push(listener);
     }
+    _getState () {
+        return {
+            mutator: this.getMutator(),
+            selectedLayerIds: this.selectedLayerIds,
+            groups: this.groups,
+            filtered: this.filtered,
+            openGroupTitles: this.openGroupTitles,
+            mapSrsName: this.map.getSrsName()
+        };
+    }
     notify () {
-        this.listeners.forEach(consumer => consumer());
+        const state = this._getState();
+        this.listeners.forEach(consumer => consumer(state));
     }
     getMutator () {
         const me = this;
@@ -67,15 +67,17 @@ export class StateHandler {
                 if (!id || me.selectedLayerIds.includes(id)) {
                     return;
                 }
-                setTimeout(() => sandbox.postRequestByName('AddMapLayerRequest', [id]), 300);
+                setTimeout(() => sandbox.postRequestByName('AddMapLayerRequest', [id]), LAYER_TIMEOUT_MS);
                 me.selectedLayerIds.push(id);
                 me.notify();
             },
             removeLayer (id) {
-                if (!id || !me.selectedLayerIds.includes(id)) {
+                const index = me.selectedLayerIds.indexOf(id);
+                if (index === -1) {
                     return;
                 }
-                sandbox.postRequestByName('RemoveMapLayerRequest', [id]);
+                setTimeout(() => sandbox.postRequestByName('RemoveMapLayerRequest', [id]), LAYER_TIMEOUT_MS);
+                me.selectedLayerIds.splice(index, 1);
                 me.notify();
             },
             updateOpenGroupTitles (titles) {

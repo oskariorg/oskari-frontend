@@ -184,13 +184,15 @@ Oskari.clazz.define(
         /**
          * TODO. React here
          */
-        _render: function () {
-            this.layerCollapseStateHandler.updateStateWithProps({
-                groups: this.layerGroups,
-                filterKeyword: this.filterField.getValue()
-            });
-            const collapseProps = this.layerCollapseStateHandler.getState();
-            ReactDOM.render(<LayerCollapse {...collapseProps} locale={this._locale} />, this.layerListMountPoint[0]);
+        _render: function (props) {
+            if (!props) {
+                this.layerCollapseStateHandler.updateStateWithProps({
+                    groups: this.layerGroups,
+                    filterKeyword: this.filterField.getValue()
+                });
+                return;
+            }
+            ReactDOM.render(<LayerCollapse {...props} locale={this._locale} />, this.layerListMountPoint[0]);
         },
 
         /**

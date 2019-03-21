@@ -67,32 +67,32 @@ storiesOf('LayerCollapse', module)
         service.updateStateWithProps({
             groups: []
         });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
+        return <LayerCollapse {...service._getState()} locale={locale} />;
     })
     .add('with groups', () => {
         resetStoryState();
-        return <LayerCollapse {...service.getState()} locale={locale} />;
+        return <LayerCollapse {...service._getState()} locale={locale} />;
     })
     .add('with filter "wfs"', () => {
         resetStoryState();
         service.updateStateWithProps({
             filterKeyword: 'wfs'
         });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
+        return <LayerCollapse {...service._getState()} locale={locale} />;
     })
     .add('with filter "wms"', () => {
         resetStoryState();
         service.updateStateWithProps({
             filterKeyword: 'wms'
         });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
+        return <LayerCollapse {...service._getState()} locale={locale} />;
     })
     .add('WMS selected', () => {
         resetStoryState();
         service.updateStateWithProps({
             selectedLayerIds: [wms.getId()]
         });
-        const state = service.getState();
+        const state = service._getState();
         state.openGroupTitles = groups.map(cur => cur.getTitle());
         return <LayerCollapse {...state} locale={locale} />;
     })
@@ -101,7 +101,7 @@ storiesOf('LayerCollapse', module)
         service.updateStateWithProps({
             selectedLayerIds: [wms.getId()]
         });
-        const state = service.getState();
+        const state = service._getState();
         state.openGroupTitles = groups.map(cur => cur.getTitle());
         wms.setSticky(true);
         return <LayerCollapse {...state} locale={locale} />;
