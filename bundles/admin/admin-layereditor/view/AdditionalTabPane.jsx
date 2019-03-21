@@ -1,33 +1,31 @@
 import React from 'react';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { TextInput } from '../components/TextInput';
 import { TextAreaInput } from '../components/TextAreaInput';
+import { StyledTab, StyledComponent } from './AdminLayerFormStyledComponents';
 
-export const AdditionalTabPane = (props) => {
-    const StyledComponent = styled('div')`
-        padding-top: 5px;
-        padding-bottom 10px;
-    `;
-    const StyledRootElement = styled('div')`
-        & > label {
-            font-weight: bold;
-        }
-    `;
-
+export const AdditionalTabPane = ({layer, service}) => {
     return (
-        <StyledRootElement>
+        <StyledTab>
             <label>Metadata file identifier</label>
             <StyledComponent>
-                <TextInput placeholder='The metadata file identifier is an XML file identifier.' />
+                <TextInput placeholder='The metadata file identifier is an XML file identifier.'
+                    value={layer.metadataIdentifier} onChange={(evt) => service.setMetadataIdentifier(evt.target.value)} />
             </StyledComponent>
             <label>Additional GFI info</label>
             <StyledComponent>
-                <TextAreaInput />
+                <TextAreaInput value={layer.gfiContent} onChange={(evt) => service.setGfiContent(evt.target.value)} />
             </StyledComponent>
             <label>Attributes</label>
             <StyledComponent>
-                <TextAreaInput />
+                <TextAreaInput value={layer.attributes} onChange={(evt) => service.setAttributes(evt.target.value)} />
             </StyledComponent>
-        </StyledRootElement>
+        </StyledTab>
     );
+};
+
+AdditionalTabPane.propTypes = {
+    layer: PropTypes.object,
+    service: PropTypes.any,
+    additionalProps: PropTypes.any
 };

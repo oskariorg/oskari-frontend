@@ -1,11 +1,12 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Slider } from './Slider';
 import { NumberInput } from './NumberInput';
 
 export class Opacity extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {opacity: 0};
+        this.state = {opacity: props.defaultValue};
         this.onChange = this.onChange.bind(this);
     }
 
@@ -13,6 +14,8 @@ export class Opacity extends React.Component {
         this.setState({
             opacity: value
         });
+        // TODO this could be handled in some better way
+        this.props.onChange(value);
     }
 
     // Inline styles could be handled in some other way
@@ -42,3 +45,8 @@ export class Opacity extends React.Component {
         );
     }
 }
+
+Opacity.propTypes = {
+    defaultValue: PropTypes.number,
+    onChange: PropTypes.func
+};

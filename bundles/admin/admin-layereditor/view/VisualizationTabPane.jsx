@@ -1,49 +1,44 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Select, Option } from '../components/Select';
+import PropTypes from 'prop-types';
+import { StyleSelect } from './StyleSelect';
 import { Slider } from '../components/Slider';
 import { TextAreaInput } from '../components/TextAreaInput';
 import { Opacity } from '../components/Opacity';
+import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './AdminLayerFormStyledComponents';
 
-export class VisualizationTabPane extends React.Component {
-    render () {
-        const StyledRoot = styled('div')`
-            & > label {
-                font-weight: bold;
-            }
-        `;
-
-        const StyledComponent = styled('div')`
-            padding-top: 5px;
-            padding-bottom 10px;
-        `;
-
-        return (
-            <StyledRoot>
+export const VisualizationTabPane = ({layer, service}) => {
+    return (
+        <StyledTab>
+            <StyledColumnLeft>
                 <label>Opacity</label>
                 <StyledComponent>
-                    <Opacity />
-                </StyledComponent>
-                <label>Min and max scale</label>
-                <StyledComponent style={{height: 200}}>
-                    <Slider vertical range />
+                    <Opacity defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
                 </StyledComponent>
                 <label>Default style</label>
                 <StyledComponent>
-                    <Select defaultValue='styleone'>
-                        <Option value='styleone'>Style One</Option>
-                        <Option value='styletwo'>Style Two</Option>
-                    </Select>
+                    <StyleSelect styles={layer.styles} defaultStyle={layer.defaultStyle} />
                 </StyledComponent>
                 <label>Style JSON</label>
                 <StyledComponent>
-                    <TextAreaInput rows={6} />
+                    <TextAreaInput rows={6} value={layer.styleJSON} onChange={(evt) => service.setStyleJSON(evt.target.value)} />
                 </StyledComponent>
                 <label>Hover JSON</label>
                 <StyledComponent>
-                    <TextAreaInput rows={6} />
+                    <TextAreaInput rows={6} value={layer.hoverJSON} onChange={(evt) => service.setHoverJSON(evt.target.value)}/>
                 </StyledComponent>
-            </StyledRoot>
-        );
-    }
-}
+            </StyledColumnLeft>
+            <StyledColumnRight>
+                <label>Min and max scale</label>
+                <StyledComponent style={{height: 400, padding: 10, marginLeft: '25%'}}>
+                    <Slider vertical range defaultValue={[layer.minScale, layer.maxScale]} onChange={(values) => service.setMinAndMaxScale(values)} />
+                </StyledComponent>
+            </StyledColumnRight>
+        </StyledTab>
+    );
+};
+
+VisualizationTabPane.propTypes = {
+    layer: PropTypes.object,
+    service: PropTypes.any,
+    visualizationProps: PropTypes.any
+};

@@ -1,41 +1,32 @@
 import React from 'react';
-import styled from 'styled-components';
-import { Select, Option } from '../components/Select';
+import PropTypes from 'prop-types';
+import { DataProviderSelect } from './DataProviderSelect';
 import { TextInput } from '../components/TextInput';
 import { UrlInput } from '../components/UrlInput';
 import { Collapse, Panel } from '../components/Collapse';
-import { MaplayerGroups } from './MaplayerGroups';
+import { MapLayerGroups } from './MapLayerGroups';
+import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
 
-export const GeneralTabPane = (props) => {
-    const StyledRoot = styled('div')`
-        & > label {
-            font-weight: bold;
-        }
-    `;
-    const StyledComponentGroup = styled('div')`
-            padding-bottom: 10px;
-        `;
-    const StyledComponent = styled('div')`
-            padding-top: 5px;
-            padding-bottom 10px;
-        `;
+export const GeneralTabPane = ({layer, service, generalProps}) => {
     return (
-        <StyledRoot>
+        <StyledTab>
             <label>Interface URL</label>
             <StyledComponentGroup>
                 <StyledComponent>
-                    <div><UrlInput /></div>
+                    <div>
+                        <UrlInput value={layer.layerUrl} onChange={(url) => service.setLayerUrl(url)} />
+                    </div>
                 </StyledComponent>
                 <StyledComponent>
                     <Collapse>
                         <Panel header='Username and password'>
                             <div>
                                 <label>Username</label>
-                                <div><TextInput type='text' /></div>
+                                <div><TextInput value={layer.username} type='text' onChange={(evt) => service.setUsername(evt.target.value)} /></div>
                             </div>
                             <div>
                                 <label>Password</label>
-                                <div><TextInput type='password' /></div>
+                                <div><TextInput value={layer.password} type='password' onChange={(evt) => service.setPassword(evt.target.value)} /></div>
                             </div>
                         </Panel>
                     </Collapse>
@@ -43,33 +34,36 @@ export const GeneralTabPane = (props) => {
             </StyledComponentGroup>
             <label>Unique name</label>
             <StyledComponent>
-                <TextInput />
+                <TextInput type='text' value={layer.layerName} onChange={(evt) => service.setLayerName(evt.target.value)} />
             </StyledComponent>
             <StyledComponentGroup>
                 <label>Layer name in Finnish</label>
                 <StyledComponent>
-                    <TextInput />
+                    <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)} />
                 </StyledComponent>
                 <StyledComponent>
                     <Collapse>
                         <Panel header='Other languages'>
-                            <div>In English <TextInput /></div>
-                            <div>In Swedish <TextInput /></div>
+                            <div>In English <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
+                            <div>In Swedish <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
                         </Panel>
                     </Collapse>
                 </StyledComponent>
             </StyledComponentGroup>
             <label>Data provider</label>
             <StyledComponent>
-                <Select defaultValue={1}>
-                    <Option value={1}>City of Helsinki</Option>
-                    <Option value={2}>City of Espoo</Option>
-                </Select>
+                <DataProviderSelect defaultValue={layer.dataProvider} onChange={(evt) => service.setDataProvider(evt)} dataProviders={generalProps.dataProviders} />
             </StyledComponent>
             <label>Maplayer groups</label>
             <StyledComponent>
-                <MaplayerGroups />
+                <MapLayerGroups groups={generalProps.mapLayerGroups} service={service} />
             </StyledComponent>
-        </StyledRoot>
+        </StyledTab>
     );
+};
+
+GeneralTabPane.propTypes = {
+    service: PropTypes.any,
+    layer: PropTypes.any,
+    generalProps: PropTypes.any
 };
