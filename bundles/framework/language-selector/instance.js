@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {LanguageSelector} from './components/LanguageSelector';
+import {LanguageChanger} from './components/LanguageChanger';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -11,11 +11,11 @@ Oskari.clazz.defineES('Oskari.bundle.language-selector.instance',
             this.__name = 'language-selector';
         }
         _startImpl () {
-            const root = jQuery('#language-selector-root');
+            const root = document.getElementById('language-selector-root');
             if (!root) {
                 return;
             }
-            ReactDOM.render(<LanguageSelector />, root.get(0));
+            ReactDOM.render(<LanguageChanger />, root);
         }
     }
 );
