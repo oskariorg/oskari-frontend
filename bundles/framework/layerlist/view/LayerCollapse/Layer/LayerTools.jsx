@@ -49,7 +49,7 @@ const getBackendStatusIconProps = (layer, locale) => {
     }
     const props = {
         className: classes.join(' '),
-        hasStatus: !!iconClass,
+        hasStatus: !!(layer.getBackendStatus() && iconClass),
         title: tooltip
     };
     return props;
@@ -137,7 +137,7 @@ export const LayerTools = ({model, mapSrs, mutator, locale}) => {
 
 LayerTools.propTypes = {
     model: PropTypes.any.isRequired,
-    mutator: PropTypes.any.isRequired,
     mapSrs: PropTypes.string,
+    mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

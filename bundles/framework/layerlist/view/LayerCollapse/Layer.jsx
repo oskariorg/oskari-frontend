@@ -33,7 +33,7 @@ const onSelect = (checked, layerId, mutator) => {
     checked ? mutator.addLayer(layerId) : mutator.removeLayer(layerId);
 };
 
-export const Layer = ({model, even, selected, mutator, ...rest}) => {
+export const Layer = ({model, even, selected, mapSrs, mutator, locale}) => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools"/>
@@ -43,7 +43,7 @@ export const Layer = ({model, even, selected, mutator, ...rest}) => {
                     disabled={model.isSticky()} />
                 {model.getName()}
             </Label>
-            <LayerTools model={model} mutator={mutator} {...rest}/>
+            <LayerTools model={model} mutator={mutator} locale={locale} mapSrs={mapSrs}/>
         </LayerDiv>
     );
 };
@@ -52,5 +52,7 @@ Layer.propTypes = {
     model: PropTypes.any.isRequired,
     even: PropTypes.bool,
     selected: PropTypes.bool,
-    mutator: PropTypes.any.isRequired
+    mapSrs: PropTypes.string,
+    mutator: PropTypes.any.isRequired,
+    locale: PropTypes.any.isRequired
 };
