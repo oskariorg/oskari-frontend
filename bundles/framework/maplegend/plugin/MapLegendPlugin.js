@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             legendInfo: jQuery('<div class="legendInfo"></div>'),
             legendDivider: jQuery('<div class="maplegend-divider"></div>')
         };
-        me._index = 650;
+        me._index = 90;
         me._element = null;
         me._isVisible = false;
         me._loc = null;

@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
         me._clazz = 'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin';
         me._defaultLocation = 'top right';
         me._instance = config.instance;
-        me._index = 90;
+        me._index = 100;
         me._name = 'FeaturedataPlugin';
         me._mapStatusChanged = true;
         me._flyoutOpen = undefined;
