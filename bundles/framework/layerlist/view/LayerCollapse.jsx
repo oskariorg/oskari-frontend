@@ -50,11 +50,11 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
 };
 
 LayerCollapse.propTypes = {
-    groups: PropTypes.array,
-    openGroupTitles: PropTypes.array,
+    groups: PropTypes.array.isRequired,
+    openGroupTitles: PropTypes.array.isRequired,
     filtered: PropTypes.array,
-    selectedLayerIds: PropTypes.array,
-    mapSrs: PropTypes.string,
+    selectedLayerIds: PropTypes.array.isRequired,
+    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

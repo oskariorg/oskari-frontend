@@ -1,4 +1,4 @@
-const LAYER_TIMEOUT_MS = 360;
+const LAYER_TIMEOUT_MS = 400;
 
 export class StateHandler {
     constructor () {
