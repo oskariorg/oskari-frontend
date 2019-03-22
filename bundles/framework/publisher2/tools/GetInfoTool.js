@@ -164,30 +164,8 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.GetInfoTool',
     *
     * @param {Boolean} enabled is tool enabled or not
     */
-        setEnabled: function (enabled) {
-            var me = this,
-                tool = me.getTool();
-
-            // state actually hasn't changed -> do nothing
-            if (me.state.enabled !== undefined && me.state.enabled !== null && enabled === me.state.enabled) {
-                return;
-            }
-
-            me.state.enabled = enabled;
-            if (!me.__plugin && enabled) {
-                me.__plugin = Oskari.clazz.create(tool.id, tool.config);
-                me.__mapmodule.registerPlugin(me.__plugin);
-            }
-
-            if (enabled === true) {
-                me.__plugin.startPlugin(me.__sandbox);
-                me.__started = true;
-            } else {
-                if (me.__started === true) {
-                    me.__plugin.stopPlugin(me.__sandbox);
-                }
-            }
-
+        _setEnabledImpl: function (enabled) {
+            var me = this;
             if (enabled === true && me.state.mode !== null && me.__plugin && typeof me.__plugin.setMode === 'function') {
                 me.__plugin.setMode(me.state.mode);
             }
