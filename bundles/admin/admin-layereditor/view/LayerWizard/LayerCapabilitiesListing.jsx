@@ -1,11 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {List} from '../../components/List';
+import {List, ListItem} from '../../components/List';
 
 export class LayerCapabilitiesListing extends React.Component {
     getItem (item) {
         return (
-            <span onClick={() => this.props.onSelect(item)}>{item.name}</span>
+            <ListItem onClick={() => this.props.onSelect(item)}>
+                {item.name}
+            </ListItem>
         );
     }
     render () {
