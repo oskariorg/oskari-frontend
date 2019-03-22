@@ -38,7 +38,9 @@ Oskari.clazz.define('Oskari.mapping.maprotator.MapRotatorPlugin',
             var eventBuilder = Oskari.eventBuilder('map.rotated');
 
             this.getElement().on('click', function () {
-                me.setRotation(0);
+                if (!me.inLayerToolsEditMode()) {
+                    me.setRotation(0);
+                }
             });
 
             this._map.on('pointerdrag', function (e) {

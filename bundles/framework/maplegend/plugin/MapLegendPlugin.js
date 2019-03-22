@@ -32,6 +32,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             buttonGroup: 'mobile-toolbar'
         };
     }, {
+        _setLayerToolsEditModeImpl: function () {
+            if (this.inLayerToolsEditMode() && this.isOpen()) {
+                this._toggleToolState();
+            }
+        },
         _createControlElement: function () {
             var me = this,
                 loc = Oskari.getLocalization('maplegend', Oskari.getLang());
@@ -163,6 +168,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
             var popupLocation = this.getPopupPosition();
 
             legend.on('click', function () {
+                if (me.inLayerToolsEditMode()) {
+                    return;
+                }
                 if (me._toggleToolState() === false) {
                     return;
                 }
@@ -380,19 +388,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.plugin.MapLegendPlugin
          * @method @private _toggleToolState
          */
         _toggleToolState: function () {
-            var me = this,
-                isMobile = Oskari.util.isMobile();
+            const isMobile = Oskari.util.isMobile();
 
-            if (me.isOpen()) {
-                me._isVisible = false;
-                me._popup.close(true);
-                return me.isOpen();
+            if (this.isOpen()) {
+                this._isVisible = false;
+                this._popup.close(true);
+                return this.isOpen();
             } else {
-                me._isVisible = true;
+                this._isVisible = true;
                 if (isMobile) {
-                    me.createMobileElement();
+                    this.createMobileElement();
                 } else {
-                    me.createDesktopElement();
+                    this.createDesktopElement();
                 }
             }
         },
