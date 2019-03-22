@@ -14,6 +14,7 @@ export class AdminLayerFormService {
             response => response.json()
         );
     }
+
     fetchAsyncData () {
         return Promise.all([this.getDataProviders(), this.getLayerGroups()]);
     }
@@ -112,35 +113,56 @@ export class AdminLayerFormService {
     }
 
     initLayerState (layer) {
+        // Some default values are for storybook testing
         this.layer = {
-            layerUrl: layer.admin ? layer.admin.url : '',
-            username: layer.admin ? layer.admin.username : '',
-            password: layer.admin ? layer.admin.password : '',
+            layerUrl: layer && layer.admin ? layer.admin.url : '',
+            username: layer && layer.admin ? layer.admin.username : '',
+            password: layer && layer.admin ? layer.admin.password : '',
             layerName: layer ? layer.getLayerName() : '',
             name_fi: layer ? layer.getName('fi') : '',
             name_en: layer ? layer.getName('en') : '',
             name_sv: layer ? layer.getName('sv') : '',
             dataProvider: layer ? layer.getOrganizationName() : '',
             groups: layer ? layer.getGroups() : [],
-            opacity: layer ? layer.getOpacity() : '',
-            minScale: layer ? layer.getMinScale() : '',
-            maxScale: layer ? layer.getMaxScale() : '',
+            opacity: layer ? layer.getOpacity() : 100,
+            minScale: layer ? layer.getMinScale() : 1,
+            maxScale: layer ? layer.getMaxScale() : 725670,
             styles: layer ? layer.getStyles() : [],
             defaultStyle: layer ? layer.getCurrentStyle() : '',
             styleJSON: '', // TODO
             hoverJSON: '', // TODO
             metadataIdentifier: layer ? layer.getMetadataIdentifier() : '',
             gfiContent: layer ? layer.getGfiContent() : '',
-            attributes: 'Attributes'
+            attributes: '' // TODO
         };
     }
 
-    saveLayer (layer) {
+    getCookie (cname) {
+        var name = cname + '=';
+        var decodedCookie = decodeURIComponent(document.cookie);
+        var ca = decodedCookie.split(';');
+        var result = ca.map(function (cook) {
+            return cook.trim();
+        }).filter(function (cook) {
+            return cook.indexOf(name) === 0;
+        }).map(function (cook) {
+            return cook.substring(name.length, cook.length);
+        });
+        if (result.length > 0) {
+            return result[0];
+        }
+    }
+
+    saveLayer () {
+        // TODO fetch POST doest not work
+        const layer = this.getLayer();
+        const csrfToken = this.getCookie('XSRF-TOKEN');
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'X-XSRF-TOKEN': csrfToken
             },
             body: JSON.stringify(layer)
         }).then(function (response) {
@@ -153,10 +175,28 @@ export class AdminLayerFormService {
     addListener (consumer) {
         this.listeners.push(consumer);
     }
+
     getLayer () {
         return {...this.layer};
     }
+
     notify () {
         this.listeners.forEach(consumer => consumer());
+    }
+
+    getDummyDataProviders () {
+        return [
+            {id: 1, name: {fi: 'Taustakartat'}},
+            {id: 4, name: {fi: 'Museovirasto'}},
+            {id: 5, name: {fi: 'Geologian tutkimuskeskus'}},
+        ];
+    }
+
+    getDummyLayerGroups () {
+        return [
+            {id: 1, name: {fi: 'Paikannimet'}},
+            {id: 2, name: {fi: 'Hallinnolliset yksiköt'}},
+            {id: 3, name: {fi: 'Osoitteet'}}
+        ];
     }
 }

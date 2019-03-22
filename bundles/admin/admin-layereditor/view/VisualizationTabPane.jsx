@@ -29,8 +29,8 @@ export const VisualizationTabPane = ({layer, service}) => {
             </StyledColumnLeft>
             <StyledColumnRight>
                 <label>Min and max scale</label>
-                <StyledComponent style={{height: 400, padding: 10, marginLeft: '25%'}}>
-                    <Slider vertical range defaultValue={[layer.minScale, layer.maxScale]} onChange={(values) => service.setMinAndMaxScale(values)} />
+                <StyledComponent style={{height: 400, paddingBottom: 20, marginLeft: '25%'}}>
+                    <Slider vertical range defaultValue={[layer.minScale, layer.maxScale]} min={0} max={1000000} onChange={(values) => service.setMinAndMaxScale(values)} />
                 </StyledComponent>
             </StyledColumnRight>
         </StyledTab>

@@ -22,17 +22,21 @@ export class AdminLayerForm extends React.Component {
 
     componentDidMount () {
         const me = this;
-        this.service.fetchAsyncData()
-            .then(([dataProviders, layerGroups]) => {
-                this.setState({dataProviders: dataProviders.organization, layerGroups: layerGroups.groups});
-                me.service.getMutator().setAllMapLayerGroups(layerGroups.groups);
-            });
+        // TODO this is only for getting dummy content for storybook
+        if ((typeof (Oskari) !== 'undefined')) {
+            this.service.fetchAsyncData()
+                .then(([dataProviders, layerGroups]) => {
+                    this.setState({dataProviders: dataProviders.organization, layerGroups: layerGroups.groups});
+                    me.service.getMutator().setAllMapLayerGroups(layerGroups.groups);
+                });
+        } else {
+            this.setState({dataProviders: this.service.getDummyDataProviders(), layerGroups: this.service.getDummyLayerGroups()});
+        }
     };
 
-    handleSubmit (event) {
-        // TODO handle add / save
-        this.service.saveLayer(this.state.layer);
-        event.preventDefault();
+    handleSubmit () {
+        // TODO handle response
+        this.service.saveLayer();
     }
 
     render () {
@@ -45,24 +49,22 @@ export class AdminLayerForm extends React.Component {
         const layer = this.service.layer || {};
         return (
             <StyledRoot>
-                <form onSubmit={this.handleSubmit} id="admin-layer-form">
-                    <Tabs>
-                        <TabPane tab="General" key="general">
-                            <GeneralTabPane layer={layer} service={mutator} generalProps={generalProps} />
-                        </TabPane>
-                        <TabPane tab='Visualization' key="visual">
-                            <VisualizationTabPane layer={layer} service={mutator} />
-                        </TabPane>
-                        <TabPane tab='Additional' key="additional">
-                            <AdditionalTabPane layer={layer} service={mutator} />
-                        </TabPane>
-                        <TabPane tab='Permissions' key="permissions">
-                            <PermissionsTabPane />
-                        </TabPane>
-                    </Tabs>
-                    <Button type='primary' form="admin-layer-form" key='submit' htmlType='submit'>Save</Button>
-                    <Button>Cancel</Button>
-                </form>
+                <Tabs>
+                    <TabPane tab="General" key="general">
+                        <GeneralTabPane layer={layer} service={mutator} generalProps={generalProps} />
+                    </TabPane>
+                    <TabPane tab='Visualization' key="visual">
+                        <VisualizationTabPane layer={layer} service={mutator} />
+                    </TabPane>
+                    <TabPane tab='Additional' key="additional">
+                        <AdditionalTabPane layer={layer} service={mutator} />
+                    </TabPane>
+                    <TabPane tab='Permissions' key="permissions">
+                        <PermissionsTabPane />
+                    </TabPane>
+                </Tabs>
+                <Button type='primary' onClick={() => this.handleSubmit()}>Save</Button>&nbsp;
+                <Button>Cancel</Button>
             </StyledRoot>
         );
     }
