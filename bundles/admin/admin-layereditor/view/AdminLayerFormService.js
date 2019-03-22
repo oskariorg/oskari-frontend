@@ -1,3 +1,4 @@
+import queryString from 'query-string';
 export class AdminLayerFormService {
     constructor (consumer) {
         this.layer = {};
@@ -115,6 +116,7 @@ export class AdminLayerFormService {
     initLayerState (layer) {
         // Some default values are for storybook testing
         this.layer = {
+            layer_id: layer ? layer.getId() : null,
             layerUrl: layer && layer.admin ? layer.admin.url : '',
             username: layer && layer.admin ? layer.admin.username : '',
             password: layer && layer.admin ? layer.admin.password : '',
@@ -154,17 +156,16 @@ export class AdminLayerFormService {
     }
 
     saveLayer () {
-        // TODO fetch POST doest not work
+        // TODO check fields
         const layer = this.getLayer();
-        const csrfToken = this.getCookie('XSRF-TOKEN');
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'X-XSRF-TOKEN': csrfToken
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN')
             },
-            body: JSON.stringify(layer)
+            body: queryString.stringify(layer)
         }).then(function (response) {
             return response.json();
         }).then(function (data) {
@@ -188,7 +189,7 @@ export class AdminLayerFormService {
         return [
             {id: 1, name: {fi: 'Taustakartat'}},
             {id: 4, name: {fi: 'Museovirasto'}},
-            {id: 5, name: {fi: 'Geologian tutkimuskeskus'}},
+            {id: 5, name: {fi: 'Geologian tutkimuskeskus'}}
         ];
     }
 
