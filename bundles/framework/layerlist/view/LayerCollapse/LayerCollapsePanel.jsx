@@ -19,7 +19,7 @@ const getBadgeText = (group, visibleLayerCount) => {
     return badgeText;
 };
 
-const renderItem = ({model, even, selected, mapSrs, mutator, locale}) => {
+const renderLayer = ({model, even, selected, mapSrs, mutator, locale}) => {
     const itemProps = {model, even, selected, mapSrs, mutator, locale};
     return (
         <StyledListItem>
@@ -27,18 +27,18 @@ const renderItem = ({model, even, selected, mapSrs, mutator, locale}) => {
         </StyledListItem>
     );
 };
-renderItem.propTypes = {
+renderLayer.propTypes = {
     model: PropTypes.any,
-    even: PropTypes.bool,
-    selected: PropTypes.bool,
-    mapSrs: PropTypes.string,
+    even: PropTypes.any,
+    selected: PropTypes.any,
+    mapSrs: PropTypes.any,
     mutator: PropTypes.any,
     locale: PropTypes.any
 };
 
 export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
-    const items = showLayers.map((layer, index) => {
-        const itemProps = {
+    const layerRows = showLayers.map((layer, index) => {
+        const layerProps = {
             model: layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
@@ -46,7 +46,7 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
             mutator,
             locale
         };
-        return itemProps;
+        return layerProps;
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
@@ -55,7 +55,7 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
             }>
-            <List bordered={false} dataSource={items} renderItem={renderItem}/>
+            <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
         </Panel>
     );
 };
