@@ -19,21 +19,27 @@ const getBadgeText = (group, visibleLayerCount) => {
     return badgeText;
 };
 
-const renderItem = ({layer, ...rest}) => {
+const renderItem = ({model, even, selected, mapSrs, mutator, locale}) => {
+    const itemProps = {model, even, selected, mapSrs, mutator, locale};
     return (
         <StyledListItem>
-            <Layer key={layer.getId()} model={layer} {...rest} />
+            <Layer key={model.getId()} {...itemProps} />
         </StyledListItem>
     );
 };
 renderItem.propTypes = {
-    layer: PropTypes.any.isRequired
+    model: PropTypes.any,
+    even: PropTypes.bool,
+    selected: PropTypes.bool,
+    mapSrs: PropTypes.string,
+    mutator: PropTypes.any,
+    locale: PropTypes.any
 };
 
 export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
     const items = showLayers.map((layer, index) => {
         const itemProps = {
-            layer,
+            model: layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
             mapSrs,
@@ -57,8 +63,8 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     showLayers: PropTypes.array.isRequired,
-    selectedLayerIds: PropTypes.array,
-    mapSrs: PropTypes.string,
+    selectedLayerIds: PropTypes.array.isRequired,
+    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

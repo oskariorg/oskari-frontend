@@ -1,4 +1,4 @@
-const LAYER_TIMEOUT_MS = 300;
+const LAYER_TIMEOUT_MS = 360;
 
 export class StateHandler {
     constructor () {
@@ -52,7 +52,7 @@ export class StateHandler {
             groups: this.groups,
             filtered: this.filtered,
             openGroupTitles: this.openGroupTitles,
-            mapSrsName: this.map.getSrsName()
+            mapSrs: this.map.getSrsName()
         };
     }
     notify () {
