@@ -13,7 +13,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
     this.flyoutManager.on('hide', function (tool) {
         me.toggleTool(tool, false);
     });
+    this._fixedLocation = true;
 }, {
+    _setLayerToolsEditModeImpl: function () {
+        if (!this.element) {
+            return;
+        }
+        const tools = this.element.find('div');
+        if (this.inLayerToolsEditMode()) {
+            tools.addClass('tool-drag-disabled');
+        } else {
+            tools.removeClass('tool-drag-disabled');
+        }
+    },
+    getElement: function () {
+        return this.element;
+    },
     toggleTool: function (tool, shown) {
         var toolElement = this.getToolElement(tool);
 
@@ -35,7 +50,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.TogglePlugin', function (flyout
 
         var toolElement = jQuery('<div class=' + toolId + '></div>');
         var onClick = typeof clickCb === 'function' ? clickCb : () => me.flyoutManager.toggle(toolId);
-        toolElement.on('click', onClick);
+        const clickHandler = () => {
+            if (!this.inLayerToolsEditMode()) {
+                onClick();
+            }
+        };
+        toolElement.on('click', clickHandler);
+        if (this.inLayerToolsEditMode()) {
+            toolElement.addClass('tool-drag-disabled');
+        }
 
         this.element.append(toolElement);
     },

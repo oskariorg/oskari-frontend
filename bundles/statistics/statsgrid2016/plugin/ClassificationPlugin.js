@@ -17,7 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         } else {
             this._defaultLocation = 'right bottom';
         }
-
+        me._fixedLocation = true;
         me._name = 'ClassificationPlugin';
         me.element = null;
         me._templates = {
@@ -50,18 +50,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         });
         this._overflowedOffset = null;
     }, {
-        _setLayerToolsEditModeImpl: function () {
-            if (!this.getElement()) {
-                return;
-            }
-            if (!this.inLayerToolsEditMode()) {
-                this.setLocation(
-                    this.getElement().parents('.mapplugins').attr(
-                        'data-location'
-                    )
-                );
-            }
-        },
         _createControlElement: function () {
             if (this.element !== null) {
                 return this.element;
