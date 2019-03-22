@@ -362,17 +362,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PublisherSidebar
                     panel.stop();
                 }
             });
-
-            jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
-            jQuery('.mapplugin').removeClass('toollayoutedit');
-
-            var draggables = jQuery('.mapplugin.ui-draggable');
-            draggables.css('position', '');
-            draggables.draggable('destroy');
-            jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
-
-            var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
-            sandbox.notifyAll(event);
         },
         /**
          * @method cancel

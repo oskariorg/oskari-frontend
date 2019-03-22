@@ -106,7 +106,15 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
                 me.stop();
             }
         }
+        this._setEnabledImpl(enabled);
+        var event = Oskari.eventBuilder('Publisher2.ToolEnabledChangedEvent')(this);
+        me.getSandbox().notifyAll(event);
     },
+    /**
+     * @method _setEnabledImpl
+     * override if needed.
+     */
+    _setEnabledImpl: function () {},
 
     isEnabled: function () {
         return this.state.enabled;
@@ -263,6 +271,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.AbstractPluginTool', fun
     * @public
     */
     stop: function () {
+        this.__started = false;
         if (!this.__plugin) {
             return;
         }

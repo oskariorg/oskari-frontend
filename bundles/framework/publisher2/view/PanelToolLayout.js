@@ -36,18 +36,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         me.activeToolLayout = me.instance.publisher.data && me.instance.publisher.data.metadata && me.instance.publisher.data.metadata.toolLayout
             ? me.instance.publisher.data.metadata.toolLayout : 'userlayout';
         me.toolLayoutEditMode = false;
+        me._addedDraggables = [];
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
                 var me = this;
-                // we're in layout edit mode and a new tool was added -> recreate the draggables / droppables
-                if (me.toolLayoutEditMode && event.getTool().state.enabled === true) {
-                    me._editToolLayoutOff();
-                    me._editToolLayoutOn();
-                } else {
+                if (!this.toolLayoutEditMode) {
+                    return;
                     // just update the plugins' locationdata
-                    me._changeToolLayout(me.activeToolLayout, null);
+                    //me._changeToolLayout(me.activeToolLayout, null);
                 }
+                this._enableToolDraggable(event.getTool());
             }
         },
         /**
@@ -342,9 +341,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             me.toolLayoutEditMode = true;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmodeoff);
             jQuery('.mapplugins').show();
-            jQuery('.mapplugin').addClass('toollayoutedit');
+            me._initDraggables();
             // TODO create droppables on _showDroppable, destroy them on _hideDroppable
-            me._makeDraggable(jQuery('.mapplugin'));
             jQuery('.mappluginsContent').droppable({
                 // TODO see if this can be done in hover? Would it even be wanted behaviour?
                 drop: function (event, ui) {
@@ -384,26 +382,56 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
             }
             me.toolLayoutEditMode = false;
             jQuery('#editModeBtn').val(me.loc.toollayout.usereditmode);
-            jQuery('.mapplugin').removeClass('toollayoutedit');
-
-            var draggables = jQuery('.mapplugin.ui-draggable');
-            draggables.css('position', '');
-            draggables.draggable('destroy');
             jQuery('.mappluginsContent.ui-droppable').droppable('destroy');
-
+            this._removeDraggables();
             var event = Oskari.eventBuilder('LayerToolsEditModeEvent')(false);
             sandbox.notifyAll(event);
         },
-
+        _enableToolDraggable: function (tool) {
+            let plugin;
+            if (typeof tool.getPlugin === 'function') {
+                plugin = tool.getPlugin();
+                if (!plugin || typeof plugin.getElement !== 'function') {
+                    return;
+                }
+            }
+            const elem = plugin.getElement();
+            if (!elem) {
+                return;
+            }
+            const enabled = tool.state.enabled === true;
+            if (enabled) {
+                this._makeDraggable(elem);
+                this._addedDraggables.push(elem);
+            } else if (elem.hasClass('ui-draggable')) {
+                elem.draggable('destroy');
+                elem.css('position', '');
+            }
+        },
+        _initDraggables: function () {
+            const tools = this.tools.filter(tool => tool.isStarted());
+            tools.forEach(tool => this._enableToolDraggable(tool));
+        },
+        _removeDraggables: function () {
+            this._addedDraggables.forEach(elem => {
+                elem.removeClass('toollayoutedit');
+                if (elem.hasClass('ui-draggable')) {
+                    elem.draggable('destroy');
+                    elem.css('position', '');
+                }
+            })
+            this._addedDraggables = [];
+        },
         /**
          * @private @method _makeDraggable
          *
-         * @param {jQuery} draggables
+         * @param {jQuery} elem
          *
          */
-        _makeDraggable: function (draggables) {
+        _makeDraggable: function (elem) {
             var me = this;
-            return draggables.draggable({
+            elem.addClass('toollayoutedit');
+            elem.draggable({
                 appendTo: '.mappluginsContent',
                 // containment: "#mapdiv", nosiree, this doesn't play well with droppable's tolerance: 'pointer'
                 drag: function (event, ui) {
@@ -441,7 +469,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 allowedLocation = me._locationAllowed(tool.allowedLocations, target);
                 if (allowedLocation) {
                     allowedLocation = me._siblingsAllowed(pluginClazz, source, target);
-
                     // show allowed-if-we-move-some-siblings-out-of-the-way as allowed for now
                     if (allowedLocation) {
                         // paint it green, plugin can be dropped here
@@ -510,6 +537,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
         **/
         stop: function () {
             var me = this;
+            this._editToolLayoutOff();
             _.each(me.tools, function (tool) {
                 // just call stop for the tools that haven't already been shut down by the tool panel
                 if (tool.isStarted() && tool.getPlugin() && tool.getPlugin().getSandbox()) {
@@ -547,9 +575,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                 i,
                 ret = 2,
                 tool = me.getToolById(pluginClazz);
-
+            // Series controls doesn't have publisher tools and requires lot of space
+            if (pluginClazz === 'Oskari.statistics.statsgrid.SeriesControlPlugin' ||
+                pluginClazz === 'Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin') {
+                return;
             // no tool matching the plugin class -> drop probably allowed (case wfslayerplugin)
-            if (!tool) {
+            } else if (!tool) {
                 return 2;
             } else if (!pluginClazz) {
                 return;
