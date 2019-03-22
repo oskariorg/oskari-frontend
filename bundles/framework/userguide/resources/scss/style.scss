@@ -21,3 +21,7 @@
 		}
 	}
 }
+/* override flyout's default max-width */
+.oskari-flyout.userguide {
+    max-width: 1000px;
+}
