@@ -11,7 +11,7 @@ export class LayerCapabilitiesListing extends React.Component {
     render () {
         return (
             <div>
-                <List dataSource={this.props.capabilities.map(item => this.getItem(item))}></List>
+                <List dataSource={this.props.capabilities} renderItem={item => this.getItem(item)}></List>
             </div>
         );
     }
