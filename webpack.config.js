@@ -71,14 +71,18 @@ module.exports = (env, argv) => {
                     test: /\.css$/,
                     use: [
                         styleLoaderImpl,
-                        { loader: 'css-loader', options: { minimize: true } }
+                        { loader: 'css-loader', options: { } }
+// https://github.com/webpack-contrib/css-loader/issues/863
+//                        { loader: 'css-loader', options: { minimize: true } }
                     ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
                         styleLoaderImpl,
-                        { loader: 'css-loader', options: { minimize: true } },
+// https://github.com/webpack-contrib/css-loader/issues/863
+//                        { loader: 'css-loader', options: { minimize: true } },
+                        { loader: 'css-loader', options: { } },
                         'sass-loader' // compiles Sass to CSS
                     ]
                 },
