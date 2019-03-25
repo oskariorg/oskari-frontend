@@ -1,5 +1,5 @@
-import {propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY} from './propertyArrayUtils';
-import {filterByAttribute, getFilterAlternativesAsArray} from './filterUtils';
+import {propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY} from './util/props';
+import {filterByAttribute, getFilterAlternativesAsArray} from './util/filter';
 
 export class ReqEventHandler {
     constructor (sandbox) {

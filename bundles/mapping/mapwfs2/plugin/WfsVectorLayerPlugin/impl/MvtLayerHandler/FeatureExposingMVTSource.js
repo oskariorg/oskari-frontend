@@ -9,7 +9,7 @@ import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
-import {WFS_ID_KEY} from './propertyArrayUtils';
+import {WFS_ID_KEY} from '../../util/props';
 import {convertRenderFeatures} from './convertRenderFeatures';
 
 const reader = new GeoJSONReader();

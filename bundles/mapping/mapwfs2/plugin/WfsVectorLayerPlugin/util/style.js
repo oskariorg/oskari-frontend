@@ -1,15 +1,57 @@
-import { normalStyle } from './defaultStyle';
+import olStyleStyle from 'ol/style/Style';
+import olStyleFill from 'ol/style/Fill';
+import olStyleStroke from 'ol/style/Stroke';
+import olStyleCircle from 'ol/style/Circle';
 
-const isHovered = (feature, hoverState) => {
-    if (!hoverState) {
-        return false;
+const normalFill = new olStyleFill({
+    color: '#FAEBD7'
+});
+const normalStroke = new olStyleStroke({
+    color: '#000000',
+    width: 1
+});
+
+const selectedFill = new olStyleFill({
+    color: '#e19b28'
+});
+const selectedStroke = new olStyleStroke({
+    color: '#e19b28',
+    width: 2
+});
+
+const normalStyle = new olStyleStyle({
+    image: new olStyleCircle({
+        radius: 6,
+        fill: normalFill,
+        stroke: normalStroke
+    }),
+    fill: normalFill,
+    stroke: normalStroke
+});
+
+const selectedLine = new olStyleStyle({
+    stroke: selectedStroke
+});
+
+const selectedOther = new olStyleStyle({
+    image: new olStyleCircle({
+        radius: 6,
+        fill: selectedFill,
+        stroke: normalStroke
+    }),
+    fill: selectedFill,
+    stroke: normalStroke
+});
+
+export function selectedStyle (feature, resolution) {
+    switch (feature.getGeometry().getType()) {
+    case 'LineString':
+    case 'MultiLineString':
+        return selectedLine;
+    default:
+        return selectedOther;
     }
-    const {feature: hoverFeature, property} = hoverState;
-    if (!hoverFeature || !property) {
-        return false;
-    }
-    return hoverFeature.get(property) === feature.get(property);
-};
+}
 
 const applyOpacityToColorable = (colorable, opacity) => {
     if (!colorable || !colorable.getColor()) {
@@ -52,9 +94,9 @@ export const applyOpacity = (olStyle, opacity) => {
     return olStyle;
 };
 
-const getStyleFunction = (styleValues, layer, hoverState) => {
+const getStyleFunction = (styleValues, layer, hoverHandler) => {
     return (feature, resolution) => {
-        let hovered = isHovered(feature, hoverState);
+        let hovered = hoverHandler.isHovered(feature, hoverHandler);
         let style = null;
         if (styleValues.optional) {
             var found = styleValues.optional.find(op => feature.get(op.key) === op.value);
@@ -70,16 +112,16 @@ const getStyleFunction = (styleValues, layer, hoverState) => {
     };
 };
 
-export const styleGenerator = (styleFactory, layer, hoverState) => {
+export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     const styles = {
         base: normalStyle
     };
     if (!layer) {
-        return getStyleFunction(styles, layer, hoverState);
+        return getStyleFunction(styles, layer, hoverHandler);
     }
     let styleDef = layer.getCurrentStyleDef();
     if (!styleDef) {
-        return getStyleFunction(styles, layer, hoverState);
+        return getStyleFunction(styles, layer, hoverHandler);
     }
     if (!styleDef.featureStyle) {
         // Bypass possible layer definitions
@@ -115,5 +157,5 @@ export const styleGenerator = (styleFactory, layer, hoverState) => {
             return optional;
         });
     }
-    return getStyleFunction(styles, layer, hoverState);
+    return getStyleFunction(styles, layer, hoverHandler);
 };
