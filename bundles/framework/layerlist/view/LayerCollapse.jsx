@@ -27,7 +27,7 @@ const getNoResultsProps = locale => {
     return alertProps;
 };
 
-export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutator, selectedLayerIds }) => {
+export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mapSrs, mutator, locale }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
         return <StyledAlert {...getNoResultsProps(locale)}/>;
     }
@@ -39,13 +39,9 @@ export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutat
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
             {
                 panels.map(({group, showLayers}) => {
+                    const panelProps = {group, showLayers, selectedLayerIds, mapSrs, mutator, locale};
                     return (
-                        <LayerCollapsePanel key={group.getTitle()}
-                            mutator={mutator}
-                            locale={locale}
-                            group={group}
-                            showLayers={showLayers}
-                            selectedLayerIds={selectedLayerIds}/>
+                        <LayerCollapsePanel key={group.getTitle()} {...panelProps} />
                     );
                 })
             }
@@ -54,10 +50,11 @@ export const LayerCollapse = ({ locale, groups, openGroupTitles, filtered, mutat
 };
 
 LayerCollapse.propTypes = {
-    groups: PropTypes.array,
-    openGroupTitles: PropTypes.array,
+    groups: PropTypes.array.isRequired,
+    openGroupTitles: PropTypes.array.isRequired,
     filtered: PropTypes.array,
-    selectedLayerIds: PropTypes.array,
+    selectedLayerIds: PropTypes.array.isRequired,
+    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

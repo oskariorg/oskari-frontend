@@ -137,7 +137,7 @@ export const LayerTools = ({model, mapSrs, mutator, locale}) => {
 
 LayerTools.propTypes = {
     model: PropTypes.any.isRequired,
-    mapSrs: PropTypes.string,
+    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };
