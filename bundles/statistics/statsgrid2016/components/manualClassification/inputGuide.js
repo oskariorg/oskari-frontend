@@ -7,7 +7,7 @@ const arrowSize = 8;
  * @param {Number} yZero loacation of box to edge
  * @param {Number} cursorLocation pixel location in x direction where to draw triangle
  */
-export default function inputGuide (svg, xScale, height, yZero, cursorLocation) {
+export function inputGuide (svg, xScale, height, yZero, cursorLocation) {
     const guide = svg.selectAll('.guide')
         .data([cursorLocation]);
 

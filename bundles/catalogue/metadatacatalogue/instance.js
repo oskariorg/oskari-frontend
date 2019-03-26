@@ -480,10 +480,12 @@ Oskari.clazz.define(
                 metadataCatalogueContainer.find('.metadataOptions').hide();
                 metadataCatalogueContainer.find('.metadataSearching').show();
                 var search = {
-                    search: field.getValue()
+                    search: field.getValue().trim()
                 };
+                var isAdvancedSearch = false;
                 // Collect the advanced search options
                 if (moreLessLink.html() === me.getLocalization('showLess')) {
+                    isAdvancedSearch = true;
                     // Checkboxes
                     var checkboxRows = metadataCatalogueContainer.find('.checkboxRow'),
                         i,
@@ -522,6 +524,7 @@ Oskari.clazz.define(
 
                 // Check if any search fields has values, otherwise it's useless to send post request
                 var doSearch = false;
+
                 jQuery.each(search, function (key, value) {
                     doSearch = value ? true : doSearch;
                 });
@@ -529,15 +532,14 @@ Oskari.clazz.define(
                     me.searchService.doSearch(search, function (data) {
                         me._showResults(metadataCatalogueContainer, data);
                     }, function (data) {
-                        var key = field.getValue();
-                        if (key === null || key === undefined || key.length === 0) {
-                            me._showError(me.getLocalization('cannot_be_empty'));
-                        } else {
-                            me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
-                        }
+                        me._showError(me.getLocalization('metadatasearchservice_error'));
                     });
                 } else {
-                    me._showError(me.getLocalization('cannot_be_empty'));
+                    if (isAdvancedSearch) {
+                        me._showError(me.getLocalization('no_search_selections'));
+                    } else {
+                        me._showError(me.getLocalization('cannot_be_empty'));
+                    }
                 }
             };
 
@@ -565,12 +567,13 @@ Oskari.clazz.define(
             moreLessLink.on('click', function () {
                 var advancedContainer = metadataCatalogueContainer.find('div.advanced');
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
-                    // open advanced/toggle link text
-                    moreLessLink.html(me.getLocalization('showLess'));
                     if (advancedContainer.is(':empty')) {
                         me.optionService.getOptions(function (data) {
+                            // open advanced/toggle link text
+                            moreLessLink.html(me.getLocalization('showLess'));
                             me._createAdvancedPanel(data, advancedContainer, moreLessLink);
                         }, function (data) {
+                            // don't toggle link text on error
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
                             var title = me.getLocalization('metadataoptionservice_alert_title');
@@ -578,6 +581,8 @@ Oskari.clazz.define(
                             dialog.show(title, msg, [okBtn]);
                         });
                     } else {
+                        // open advanced/toggle link text
+                        moreLessLink.html(me.getLocalization('showLess'));
                         advancedContainer.show();
                     }
                 } else {

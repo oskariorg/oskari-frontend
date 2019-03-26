@@ -1,6 +1,6 @@
 const Popup = Oskari.clazz.get('Oskari.userinterface.component.Popup');
 
-export default class MetadataPopup extends Popup {
+export class MetadataPopup extends Popup {
     constructor () {
         super();
         this.loc = Oskari.getMsg.bind(null, 'StatsGrid');

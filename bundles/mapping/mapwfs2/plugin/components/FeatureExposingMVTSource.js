@@ -10,7 +10,7 @@ import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
 import {WFS_ID_KEY} from './propertyArrayUtils';
-import convertRenderFeatures from './convertRenderFeatures';
+import {convertRenderFeatures} from './convertRenderFeatures';
 
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();
@@ -20,7 +20,7 @@ olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olG
  * @class FeatureExposingMVTSource
  * MVT source that allows queries about loaded features. Uses OL internal APIs.
  */
-export default class FeatureExposingMVTSource extends olSourceVectorTile {
+export class FeatureExposingMVTSource extends olSourceVectorTile {
     /**
      * @method getFeaturePropsInExtent
      * Returns properties of features whose extent intersects with the given extent

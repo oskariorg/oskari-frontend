@@ -39,10 +39,11 @@ Oskari.registerLocalization(
         "searchservice_search_not_found_anything_text": "Ni rezultatov. Preveri iskalni izrazin poskusi znova.",
         "metadataoptionservice_alert_title": "Napaka",
         "metadataoptionservice_not_found_anything_text": "Odgovora ni.",
-        "metadatasearchservice_not_found_anything_text": "Iskanih rezultatov ni.",
+        "metadatasearchservice_error": "Iskanih rezultatov ni.",
         "invalid_characters": "Iskani izraz vsebuje neveljavne znake. Dovoljeni znaki so črke od a do z vključno z å, ä in ö, številke, vračalke, vprašaji (?), zvezdice (*) in pomišljaji(-).",
         "too_short": "Iskani izraz je prekratek.",
         "cannot_be_empty": "Iskani izraz mora vsebovati vsaj en znak. Dovoljeni znaki so črke od a do z vključno z å, ä in ö, številke, vračalke in pomišljaji.",
+        "no_search_selections": "Iskani izraz mora vsebovati vsaj en znak. Dovoljeni znaki so črke od a do z vključno z å, ä in ö, številke, vračalke in pomišljaji.",
         "too_many_stars": "Iskani izraz vsebuje preveč zvezdic (*-znakov). Lahko vsebuje največ N znakov *.",
         "searching": "Iskanje…",
         "grid": {

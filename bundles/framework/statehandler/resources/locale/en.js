@@ -7,7 +7,9 @@ Oskari.registerLocalization(
             "expiring": {
                 "title": "Session Expiring",
                 "message": "Your session is expiring. Please click {extend} to stay logged in.",
-                "extend": "Continue"
+                "extend": "Continue",
+                "logout": "Sign out",
+                "expires": "Session expires in {expires} seconds."
             },
             "expired": {
                 "title": "Session Expired",

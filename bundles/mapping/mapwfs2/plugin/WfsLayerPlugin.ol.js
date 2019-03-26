@@ -6,7 +6,7 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olTilegridTileGrid from 'ol/tilegrid/TileGrid';
 import * as olProj from 'ol/proj';
 
-import OskariAsyncTileImage from './OskariAsyncTileImage';
+import {OskariAsyncTileImage} from './OskariAsyncTileImage';
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
@@ -26,6 +26,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin';
         me._name = 'WfsLayerPlugin';
+        me.layerType = 'wfs';
 
         // connection and communication
         me._connection = null;
@@ -325,7 +326,7 @@ Oskari.clazz.define(
          * Registers plugin into mapModule
          */
         register: function () {
-            this.getMapModule().setLayerPlugin('wfslayer', this);
+            this.getMapModule().setLayerPlugin(this.layerType, this);
         },
 
         /**
@@ -334,7 +335,7 @@ Oskari.clazz.define(
          * Removes registration of the plugin from mapModule
          */
         unregister: function () {
-            this.getMapModule().setLayerPlugin('wfslayer', null);
+            this.getMapModule().setLayerPlugin(this.layerType, null);
         },
         _createEventHandlers: function () {
             var me = this;
@@ -497,13 +498,23 @@ Oskari.clazz.define(
             return this._io;
         },
 
-        /**
-         * @method getVisualizationForm
-         * @return {Object} io
-         */
-        getVisualizationForm: function () {
-            return this._visualizationForm;
+        getCustomStyleEditorForm (layer) {
+            const customStyle = layer.getCustomStyle();
+            this._visualizationForm.setValues(customStyle);
+            return this._visualizationForm.getForm();
         },
+
+        applyEditorStyle (layer) {
+            const styleName = 'oskari_custom';
+            const style = this._visualizationForm.getValues();
+            const layerId = layer.getId();
+            layer.setCustomStyle(style);
+            // remove old custom tiles
+            this.deleteTileCache(layerId, styleName);
+            this.setCustomStyle(layerId, style);
+            layer.selectStyle(styleName);
+        },
+
         /**
          * Returns the requested layer IF it's one of the selected layers on map.
          * If params is undefined, returns all selected layers.

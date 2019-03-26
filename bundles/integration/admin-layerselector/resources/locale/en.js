@@ -63,6 +63,7 @@ Oskari.registerLocalization(
                 "arcgis": "ArcGISCache layer",
                 "arcgis93": "ArcGISRest layer",
                 "tiles3d" : "3D Tiles layer",
+                "bingmaps" : "Bing Maps layer",
                 "vectortile" : "MVT layer"
             },
             "confirmDeleteStyle": "The style will be removed. Do you want to continue?",
@@ -91,6 +92,7 @@ Oskari.registerLocalization(
             "getInfo": "Get info",
             "editWfs": "Edit WFS",
             "options": "Options JSON",
+            "apiKey": "Api key",
             "mvtAttributions": "Attributions",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Tile grid",

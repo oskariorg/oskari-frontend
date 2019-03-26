@@ -1,3 +1,5 @@
+import {automagicPlugins} from './automagicPlugins';
+
 /**
  * @class Oskari.mapframework.bundle.mapfull.MapFullBundleInstance
  *
@@ -167,15 +169,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             // startup plugins
             if (me.conf.plugins) {
                 let plugins = this.conf.plugins;
-
-                let vectorTilePlugin = plugins.find(cur => cur.id === 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin');
-                if (!vectorTilePlugin) {
-                    plugins.push({
-                        id: 'Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
-                        config: {},
-                        state: {}
+                automagicPlugins
+                    .filter(plugin => !plugins.find(cur => cur.id === plugin))
+                    .forEach(plugin => {
+                        plugins.push({
+                            id: plugin,
+                            config: {},
+                            state: {}
+                        });
                     });
-                }
 
                 for (let i = 0; i < plugins.length; i += 1) {
                     try {

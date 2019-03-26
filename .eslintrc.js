@@ -37,7 +37,8 @@ module.exports = {
   "extends": [
     "standard",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:react/recommended"
   ],
   // add your custom rules here
   "rules": {
@@ -57,6 +58,7 @@ module.exports = {
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "no-fallthrough": "off",
     "standard/no-callback-literal": "off",
+    "import/no-default-export": "error",
 
     // Temporary warn level for Travis-CI
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
@@ -68,5 +70,15 @@ module.exports = {
     "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "one-var": ["warn", { "initialized": "never" }],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }]
+  },
+  "settings": {
+    "import/resolver": {
+      "node": {
+        "extensions": [".js", ".jsx"]
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
   }
 }

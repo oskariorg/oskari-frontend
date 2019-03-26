@@ -244,6 +244,8 @@ Oskari.clazz.define(
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
+                startUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler', sandbox, this),
+                stopUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
                 mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService)
             };
@@ -252,6 +254,8 @@ Oskari.clazz.define(
             sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.requestHandler('StartUserLocationTrackingRequest', this.requestHandlers.startUserLocationRequestHandler);
+            sandbox.requestHandler('StopUserLocationTrackingRequest', this.requestHandlers.stopUserLocationRequestHandler);
             sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
             sandbox.requestHandler('activate.map.layer', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
@@ -545,53 +549,6 @@ Oskari.clazz.define(
 
             return lonlat;
         },
-        /**
-         * Tries to get the user location. Signals with an UserLocationEvent and callback with lon and lat params
-         * when successfully got the location or without params as error indicator.
-         * @param  {Function} callback function that is called with lon, lat as params on happy case
-         * @param  {Object}   options  options for navigator.geolocation.getCurrentPosition()
-         */
-        getUserLocation: function (callback, options) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
-            // normalize opts with defaults
-            var opts = options || {};
-            if (!opts.hasOwnProperty('maximumAge')) {
-                // don't accept cached position
-                opts.maximumAge = 0;
-            }
-            if (!opts.hasOwnProperty('timeout')) {
-                // timeout after 6 seconds
-                opts.timeout = 6000;
-            }
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        // transform coordinates from browser projection to current
-                        var lonlat = me.transformCoordinates({
-                            lon: position.coords.longitude,
-                            lat: position.coords.latitude }, 'EPSG:4326');
-                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat));
-                        // notify callback
-                        if (typeof callback === 'function') {
-                            callback(lonlat.lon, lonlat.lat);
-                        }
-                    },
-                    function (errors) {
-                        // if users just ignores/closes the browser dialog
-                        // -> error handler won't be called in most browsers
-                        me.log.warn('Error getting user location', errors);
-                        // notify callback and event without lonlat to signal failure
-                        sandbox.notifyAll(evtBuilder());
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    }, opts
-                );
-            }
-        },
         /* --------------- /MAP LOCATION ------------------------ */
 
         /* --------------- MAP ZOOM ------------------------ */
@@ -830,6 +787,24 @@ Oskari.clazz.define(
                 }
             }
             return layerResolutions;
+        },
+        /**
+         * @method zoomToFitMeters
+         * Adjusts zoom to closest level where given metric value fits.
+         * @param {Number} meters that must fit to viewport
+         */
+        zoomToFitMeters: function (meters) {
+            var mapSize = this.getSize();
+            var viewportPx = Math.min(mapSize.height, mapSize.width);
+            var zoom = 0;
+            var reso = this.getResolutionArray();
+            for (var i = reso.length - 1; i > 0; i--) {
+                if (meters < viewportPx * reso[i]) {
+                    zoom = i;
+                    break;
+                }
+            }
+            this.setZoomLevel(zoom);
         },
         /* --------------- /MAP ZOOM ------------------------ */
 

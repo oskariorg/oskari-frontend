@@ -1,5 +1,38 @@
 # Release Notes
 
+## 1.51.0
+
+- The diagram window for thematic maps functionality is now resizable and the bars are now colored based on the classification.
+- Fixed an issue with hovering point symbols on thematic maps.
+- Thematic maps now skips empty data sets when user adds multiple indicators at once.
+- Thematic maps indicator description is now provided in the UI if data source includes description.
+- Thematic maps rendering and performance improvements.
+- Thematic maps manual classification now has discrete steps instead of continuous histogram.
+- Thematic maps tools are now in the same container in embedded maps instead of being scattered between toolbar and thematic maps UI toggle.
+- Build now supports React-based components.
+- Fixed an issued with 'Square' shape in drawtools.
+- Added an alternative frontend functionality for handling WFS-layers (based on MVT and GeoJSON).
+- Link tool no longer shows Guided tour option if it's not available on the instance.
+- Link tool now skips any saved state from cookies.
+- Layer filtering fixed on hierarchical layerselector.
+- Fixed an issue with admin functionalities on hierarchical layerselector.
+- Empty searches are no longer sent to server on metadata catalogue.
+- Fixed an issue where marker text input was breaking out of the popup it's shown in.
+- Fix for attribute name localization on userlayers.
+- Unified how decimals are shown on different functionalities showing measurements.
+- Unified button order on UIs (cancel/ok in same order on each functionality).
+- Added french localizations.
+- The latest RPC-client version is now recognized as supported.
+- Map rotation is now saved in state (saved views/embedded maps/page reload).
+- Myplaces functionality now uses WMS 1.1.1 to work around axis order issues.
+- User location detection now supports tracking and drawing the route on map (no UI for this, usable via RPC).
+- User location now supports accuracy for location and configurable zoom level.
+- Users can now add map layer style menu for embedded maps.
+- Toolbar button logic has been rewritten https://github.com/oskariorg/oskari-frontend/pull/754
+- Session expiration dialog now shows a countdown and reloads the page after session has expired.
+- Support for Bing maps added (required API key from Bing).
+- Other small improvements and bug fixes.
+
 ## 1.50.0
 
 Updated CometD client library to work with updated server components.

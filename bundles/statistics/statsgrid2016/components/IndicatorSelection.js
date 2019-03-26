@@ -1,5 +1,5 @@
-import SelectList from './SelectList';
-import MetadataPopup from './MetadataPopup';
+import {SelectList} from './SelectList';
+import {MetadataPopup} from './MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
@@ -301,12 +301,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             preselectSingleOption(indicSelect);
         });
         me._params.on('indicator.changed', function (enabled) {
-            dataLabelWithTooltips.find('.tooltip').hide();
             me.trigger('indicator.changed', enabled);
             if (enabled) {
                 indicDescriptionLink.show();
+                dataLabelWithTooltips.find('.tooltip').hide();
             } else {
                 indicDescriptionLink.hide();
+                dataLabelWithTooltips.find('.tooltip').show();
             }
         });
         me._params.on('indicator.parameter.changed', e => me.trigger('indicator.parameter.changed', e));

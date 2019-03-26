@@ -1,1 +1,0 @@
-# MapStats.FeatureHighlightedEvent

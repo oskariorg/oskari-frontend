@@ -40,10 +40,6 @@ Oskari.registerLocalization(
             {
                 "title": "Teemakartat",
                 "tags": "ohje_teemakartat"
-            },
-            {
-                "title": "Analyysi",
-                "tags": "ohje_analyysi"
             }
         ],
         "help": {

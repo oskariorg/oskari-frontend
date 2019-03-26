@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
         this.urls = {};
 
         var srsName = this.sandbox.getMap().getSrsName();
-        this.urls.create = Oskari.urls.getRoute('CreateUserLayer') + '&srs=' + srsName + '&sourceEpsg=' + srsName;
+        this.urls.create = Oskari.urls.getRoute('CreateUserLayer') + '&srs=' + srsName;
         this.urls.get = Oskari.urls.getRoute('GetUserLayers') + '&srs=' + srsName;
         this.urls.edit = Oskari.urls.getRoute('EditUserLayer');
         this.urls.getStyle = Oskari.urls.getRoute('GetUserLayerStyle');

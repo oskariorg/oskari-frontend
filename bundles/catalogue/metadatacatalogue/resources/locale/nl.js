@@ -39,10 +39,11 @@ Oskari.registerLocalization(
         "searchservice_search_not_found_anything_text": "Geen resultaten gevonden.",
         "metadataoptionservice_alert_title": "Error",
         "metadataoptionservice_not_found_anything_text": "Ophalen opties mislukt.",
-        "metadatasearchservice_not_found_anything_text": "Het ophalen van zoekresultaten mislukt.",
+        "metadatasearchservice_error": "Het ophalen van zoekresultaten mislukt.",
         "invalid_characters": "Zoekterm bevat ongeldige tekens. Toegestane tekens zijn de letters a-z, evenalså, ä en ö, nummers, backspace, vraagtekens (?), sterren (*) en koppeltekens (-).",
         "too_short": "De zoekterm is te kort",
         "cannot_be_empty": "De zoekterm moet ten minste één teken bevatten. Toegestane tekens zijn de letters a-z, evenals å, ä en ö, nummers, backspace en koppeltekens.",
+        "no_search_selections": "De zoekterm moet ten minste één teken bevatten. Toegestane tekens zijn de letters a-z, evenals å, ä en ö, nummers, backspace en koppeltekens.",
         "too_many_stars": "De zoekterm bevat te veel sterren (* -characters). Het kan hooguit N * -characters bevatten.",
         "searching": "Zoeken...",
         "grid": {
