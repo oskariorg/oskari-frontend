@@ -2,37 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, TabPane } from '../components/Tabs';
 import { Button } from '../components/Button';
-import { GeneralTabPane } from './GeneralTabPane';
-import { VisualizationTabPane } from './VisualizationTabPane';
-import { AdditionalTabPane } from './AdditionalTabPane';
-import { PermissionsTabPane } from './PermissionsTabPane';
-import { AdminLayerFormService } from './AdminLayerFormService';
-import { StyledRoot } from './AdminLayerFormStyledComponents';
-
+import { GeneralTabPane } from './AdminLayerForm/GeneralTabPane';
+import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
+import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
+import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
+import { AdminLayerFormService } from './AdminLayerForm/AdminLayerFormService';
+import { StyledRoot } from './AdminLayerForm/AdminLayerFormStyledComponents';
+import {Alert} from '../components/Alert';
+import {GenericContext} from '../../../../src/react/util.jsx';
 export class AdminLayerForm extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {};
+    constructor ({layer, dataProviders, mapLayerGroups, loc}) {
+        super();
         this.service = new AdminLayerFormService(() => this.setState({ layer: this.service.getLayer() }));
-        this.state.layer = this.service.initLayerState(props.layer);
-        this.state.dataProviders = [];
-        this.state.layerGroups = [];
+        this.service.initLayerState(layer, mapLayerGroups, dataProviders);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
-
-    componentDidMount () {
-        const me = this;
-        // TODO this is only for getting dummy content for storybook
-        if ((typeof (Oskari) !== 'undefined')) {
-            this.service.fetchAsyncData()
-                .then(([dataProviders, layerGroups]) => {
-                    this.setState({dataProviders: dataProviders.organization, layerGroups: layerGroups.groups});
-                    me.service.getMutator().setAllMapLayerGroups(layerGroups.groups);
-                });
-        } else {
-            this.setState({dataProviders: this.service.getDummyDataProviders(), layerGroups: this.service.getDummyLayerGroups()});
-        }
-    };
 
     handleSubmit () {
         // TODO handle response
@@ -40,36 +24,45 @@ export class AdminLayerForm extends React.Component {
     }
 
     render () {
-        const generalProps = {
-            dataProviders: this.state.dataProviders,
-            layerGroups: this.state.layerGroups,
-            mapLayerGroups: this.state.layerGroups
-        };
         const mutator = this.service.getMutator();
         const layer = this.service.layer || {};
+        const message = this.service.message || {};
         return (
-            <StyledRoot>
-                <Tabs>
-                    <TabPane tab="General" key="general">
-                        <GeneralTabPane layer={layer} service={mutator} generalProps={generalProps} />
-                    </TabPane>
-                    <TabPane tab='Visualization' key="visual">
-                        <VisualizationTabPane layer={layer} service={mutator} />
-                    </TabPane>
-                    <TabPane tab='Additional' key="additional">
-                        <AdditionalTabPane layer={layer} service={mutator} />
-                    </TabPane>
-                    <TabPane tab='Permissions' key="permissions">
-                        <PermissionsTabPane />
-                    </TabPane>
-                </Tabs>
-                <Button type='primary' onClick={() => this.handleSubmit()}>Save</Button>&nbsp;
-                <Button>Cancel</Button>
-            </StyledRoot>
+            <GenericContext.Consumer>
+                {value => {
+                    const loc = value.loc;
+                    return (
+                        <StyledRoot>
+                            {message.text &&
+                                <Alert message={message.text} type={message.type} />
+                            }
+                            <Tabs>
+                                <TabPane tab={loc('generalTabTitle')} key="general">
+                                    <GeneralTabPane layer={layer} service={mutator} />
+                                </TabPane>
+                                <TabPane tab={loc('visualizationTabTitle')} key="visual">
+                                    <VisualizationTabPane layer={layer} service={mutator} />
+                                </TabPane>
+                                <TabPane tab={loc('additionalTabTitle')} key="additional">
+                                    <AdditionalTabPane layer={layer} service={mutator} />
+                                </TabPane>
+                                <TabPane tab={loc('permissionsTabTitle')} key="permissions">
+                                    <PermissionsTabPane />
+                                </TabPane>
+                            </Tabs>
+                            <Button type='primary' onClick={() => this.handleSubmit()}>{loc('save')}</Button>&nbsp;
+                            <Button>{loc('cancel')}</Button>
+                        </StyledRoot>
+                    );
+                }}
+            </GenericContext.Consumer>
         );
     }
 }
 
 AdminLayerForm.propTypes = {
-    layer: PropTypes.object
+    layer: PropTypes.object,
+    dataProviders: PropTypes.array.isRequired,
+    mapLayerGroups: PropTypes.array.isRequired,
+    loc: PropTypes.func
 };

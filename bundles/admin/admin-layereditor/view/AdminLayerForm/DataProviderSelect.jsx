@@ -1,11 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option } from '../components/Select';
+import { Select, Option } from '../../components/Select';
 
 export const DataProviderSelect = (props) => {
-    // TODO check language
     const options = props.dataProviders.map((dataProvider) =>
-        <Option key={dataProvider.id}>{dataProvider.name['fi']}</Option>
+        <Option key={dataProvider.id}>{dataProvider.name}</Option>
     );
     return (
         <Select defaultValue={props.defaultValue} onChange={(value) => props.onChange(value)}>

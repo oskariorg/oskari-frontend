@@ -2,22 +2,8 @@ import queryString from 'query-string';
 export class AdminLayerFormService {
     constructor (consumer) {
         this.layer = {};
+        this.message = {};
         this.listeners = [consumer];
-    }
-    getDataProviders () {
-        return fetch(Oskari.urls.getRoute('GetMapLayerGroups')).then(
-            response => response.json()
-        );
-    }
-
-    getLayerGroups () {
-        return fetch(Oskari.urls.getRoute('GetHierarchicalMapLayerGroups')).then(
-            response => response.json()
-        );
-    }
-
-    fetchAsyncData () {
-        return Promise.all([this.getDataProviders(), this.getLayerGroups()]);
     }
 
     getMutator () {
@@ -52,26 +38,17 @@ export class AdminLayerFormService {
                 me.notify();
             },
             setDataProvider (dataProvider) {
-                me.layer.dataProvider = dataProvider;
+                me.layer.groupId = dataProvider;
                 me.notify();
             },
             setMapLayerGroup (checked, id) {
                 const allGroups = me.layer.allGroups;
-                const groups = me.layer.groups;
-                // TODO this could be better
-                if (checked) {
-                    for (let i = 0; i < allGroups.length; i++) {
-                        if (allGroups[i].id === id) {
-                            me.layer.groups.push({id: id, name: allGroups[i].name['fi']}); // TODO get language
-                        }
-                    }
-                } else {
-                    for (let i = 0; i < groups.length; i++) {
-                        if (groups[i].id === id) {
-                            groups.splice(i, 1);
-                        }
+                for (let i = 0; i < allGroups.length; i++) {
+                    if (allGroups[i].id === id) {
+                        allGroups[i].checked = checked;
                     }
                 }
+                me.layer.maplayerGroups = me.formatGroupListForBackend(allGroups);
                 me.notify();
             },
             setAllMapLayerGroups (groups) {
@@ -86,8 +63,8 @@ export class AdminLayerFormService {
                 me.layer.maxScale = values[1];
                 me.notify();
             },
-            setDefaultStyle (defaultStyle) {
-                me.layer.style = defaultStyle;
+            setStyle (style) {
+                me.layer.style = style;
                 me.notify();
             },
             setStyleJSON (styleJSON) {
@@ -109,13 +86,38 @@ export class AdminLayerFormService {
             setAttributes (attributes) {
                 me.layer.attributes = attributes;
                 me.notify();
+            },
+            setMessage (text, type) {
+                me.message = {
+                    text: text,
+                    type: type
+                };
             }
         };
     }
 
-    initLayerState (layer) {
-        // Some default values are for storybook testing
-        this.layer = {
+    initLayerState (layer, allGroups, dataProviders) {
+        var me = this;
+        const groups = layer ? layer.getGroups() : [];
+        for (let i = 0; i < allGroups.length; i++) {
+            for (let j = 0; j < groups.length; j++) {
+                if (allGroups[i].id === groups[j].id) {
+                    allGroups[i].checked = true;
+                }
+            }
+        }
+
+        const styles = layer ? layer.getStyles() : [];
+        const availableStyles = [];
+        for (let i = 0; i < styles.length; i++) {
+            availableStyles.push({
+                name: styles[i].getName(),
+                title: styles[i].getTitle()
+            });
+        }
+
+        me.layer = {
+            version: layer ? layer.getVersion() : '',
             layer_id: layer ? layer.getId() : null,
             layerUrl: layer && layer.admin ? layer.admin.url : '',
             username: layer && layer.admin ? layer.admin.username : '',
@@ -124,18 +126,21 @@ export class AdminLayerFormService {
             name_fi: layer ? layer.getName('fi') : '',
             name_en: layer ? layer.getName('en') : '',
             name_sv: layer ? layer.getName('sv') : '',
-            dataProvider: layer ? layer.getOrganizationName() : '',
-            groups: layer ? layer.getGroups() : [],
+            groupId: layer ? layer.getOrganizationName() : '',
+            maplayerGroups: me.formatGroupListForBackend(allGroups),
+            dataProviders: dataProviders,
+            allGroups: allGroups,
             opacity: layer ? layer.getOpacity() : 100,
             minScale: layer ? layer.getMinScale() : 1,
-            maxScale: layer ? layer.getMaxScale() : 725670,
-            styles: layer ? layer.getStyles() : [],
-            defaultStyle: layer ? layer.getCurrentStyle() : '',
+            maxScale: layer ? layer.getMaxScale() : 1,
+            style: layer ? layer.getCurrentStyle().getName() : '',
+            styleTitle: layer ? layer.getCurrentStyle().getTitle() : '',
+            styles: availableStyles,
             styleJSON: '', // TODO
             hoverJSON: '', // TODO
             metadataIdentifier: layer ? layer.getMetadataIdentifier() : '',
             gfiContent: layer ? layer.getGfiContent() : '',
-            attributes: '' // TODO
+            attributes: layer ? layer.getAttributes() : ''
         };
     }
 
@@ -156,7 +161,6 @@ export class AdminLayerFormService {
     }
 
     saveLayer () {
-        // TODO check fields
         const layer = this.getLayer();
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
@@ -185,19 +189,17 @@ export class AdminLayerFormService {
         this.listeners.forEach(consumer => consumer());
     }
 
-    getDummyDataProviders () {
-        return [
-            {id: 1, name: {fi: 'Taustakartat'}},
-            {id: 4, name: {fi: 'Museovirasto'}},
-            {id: 5, name: {fi: 'Geologian tutkimuskeskus'}}
-        ];
-    }
-
-    getDummyLayerGroups () {
-        return [
-            {id: 1, name: {fi: 'Paikannimet'}},
-            {id: 2, name: {fi: 'Hallinnolliset yksiköt'}},
-            {id: 3, name: {fi: 'Osoitteet'}}
-        ];
+    formatGroupListForBackend (allGroups) {
+        let groups = '';
+        for (let i = 0; i < allGroups.length; i++) {
+            if (allGroups[i].checked) {
+                if (!groups) {
+                    groups = allGroups[i].id.toString();
+                } else {
+                    groups += ',' + allGroups[i].id;
+                }
+            }
+        }
+        return groups;
     }
 }
