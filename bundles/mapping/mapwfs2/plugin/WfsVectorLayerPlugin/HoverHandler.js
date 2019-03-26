@@ -27,18 +27,21 @@ export class HoverHandler {
         if (feature && this.feature && feature.get(this.property) === this.feature.get(this.property)) {
             return;
         }
+        const previousLayer = this.layer;
         this.feature = feature;
         this.layer = layer;
-        if (this.layer) {
+        // update previously hovered layer
+        if (previousLayer) {
+            const style = (previousLayer.get(LAYER_HOVER) || {}).featureStyle;
+            if (style) {
+                previousLayer.changed();
+            }
+        }
+        // update currently hovered layer
+        if (this.layer && this.layer !== this.previousLayer) {
             const style = (this.layer.get(LAYER_HOVER) || {}).featureStyle;
             if (style) {
                 this.layer.changed();
-            }
-        }
-        if (layer && layer !== this.layer) {
-            const style = (layer.get(LAYER_HOVER) || {}).featureStyle;
-            if (style) {
-                layer.changed();
             }
         }
     }

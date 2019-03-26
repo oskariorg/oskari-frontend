@@ -4,35 +4,29 @@ import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olTileState from 'ol/TileState';
 import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSource';
-import { selectedStyle } from '../util/style';
 import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
+import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 
-export class MvtLayerHandler {
+export class MvtLayerHandler extends AbstractLayerHandler {
     constructor (layerPlugin) {
+        super(layerPlugin);
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
-        this.plugin = layerPlugin;
+    }
+    createEventHandlers () {
+        return {
+            AfterChangeMapLayerStyleEvent: event => this._updateLayerStyle(event.getMapLayer()),
+            AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer())
+        };
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
             return styleFunction;
         }
-        // Duplicated code for optimization. Check typeof once instead of on every feature.
-        if (typeof superStyle === 'function') {
-            return (feature, resolution) => {
-                if (selectedIds.has(feature.get(WFS_ID_KEY))) {
-                    return selectedStyle(feature, resolution);
-                }
-                return styleFunction(feature, resolution);
-            };
-        } else {
-            return (feature, resolution) => {
-                if (selectedIds.has(feature.get(WFS_ID_KEY))) {
-                    return selectedStyle(feature, resolution);
-                }
-                return styleFunction;
-            };
-        }
+        return (feature, resolution) => {
+            const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
+            return styleFunction(feature, resolution, isSelected);
+        };
     }
     /**
      * @method updateLayerProperties
@@ -48,42 +42,9 @@ export class MvtLayerHandler {
         // Update fields and locales only if fields is not empty and it has changed
         if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {
             layer.setFields(fields);
-            this.setLayerLocales(layer);
+            this.plugin.setLayerLocales(layer);
         }
-        this.plugin.reqEventHandler.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
-    }
-    /**
-     * @method setLayerLocales
-     * Requests and sets locales for layer's fields.
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
-     */
-    setLayerLocales (layer) {
-        if (!layer || layer.getLocales().length === layer.getFields().length) {
-            return;
-        }
-        const onSuccess = localized => {
-            if (!localized) {
-                return;
-            }
-            const locales = [];
-            // Set locales in the same order as fields
-            layer.getFields().forEach(field => locales.push(localized[field] ? localized[field] : field));
-            layer.setLocales(locales);
-            this.reqEventHandler.notify('WFSPropertiesEvent', layer, locales, layer.getFields());
-        };
-        jQuery.ajax({
-            type: 'GET',
-            dataType: 'json',
-            data: {
-                id: layer.getId(),
-                lang: Oskari.getLang()
-            },
-            url: Oskari.urls.getRoute('GetLocalizedPropertyNames'),
-            success: onSuccess,
-            error: () => {
-                this._log.warn('Error getting localized property names for wfs layer ' + layer.getId());
-            }
-        });
+        this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
     }
     /**
      * Returns source corresponding to given layer
@@ -119,6 +80,7 @@ export class MvtLayerHandler {
      * @param {Boolean} isBaseMap
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+        super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const sourceOpts = {
             format: new olFormatMVT(),
             url: layer.getLayerUrl().replace('{epsg}', this.plugin.getMapModule().getProjection()), // projection code

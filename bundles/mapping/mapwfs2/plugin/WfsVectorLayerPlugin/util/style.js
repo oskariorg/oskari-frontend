@@ -3,54 +3,58 @@ import olStyleFill from 'ol/style/Fill';
 import olStyleStroke from 'ol/style/Stroke';
 import olStyleCircle from 'ol/style/Circle';
 
-const normalFill = new olStyleFill({
+const getNormalFill = () => new olStyleFill({
     color: '#FAEBD7'
 });
-const normalStroke = new olStyleStroke({
+const getNormalStroke = () => new olStyleStroke({
     color: '#000000',
     width: 1
 });
 
-const selectedFill = new olStyleFill({
+const getSelectedFill = () => new olStyleFill({
     color: '#e19b28'
 });
-const selectedStroke = new olStyleStroke({
+const getSelectedStroke = () => new olStyleStroke({
     color: '#e19b28',
     width: 2
 });
 
-const normalStyle = new olStyleStyle({
+const getNormalStyle = () => new olStyleStyle({
     image: new olStyleCircle({
         radius: 6,
-        fill: normalFill,
-        stroke: normalStroke
+        fill: getNormalFill(),
+        stroke: getNormalStroke()
     }),
-    fill: normalFill,
-    stroke: normalStroke
+    fill: getNormalFill(),
+    stroke: getNormalStroke()
 });
 
-const selectedLine = new olStyleStyle({
-    stroke: selectedStroke
+const getSelectedLine = () => new olStyleStyle({
+    stroke: getSelectedStroke()
 });
 
-const selectedOther = new olStyleStyle({
+const getSelectedOther = () => new olStyleStyle({
     image: new olStyleCircle({
         radius: 6,
-        fill: selectedFill,
-        stroke: normalStroke
+        fill: getSelectedFill(),
+        stroke: getSelectedStroke()
     }),
-    fill: selectedFill,
-    stroke: normalStroke
+    fill: getSelectedFill(),
+    stroke: getNormalStroke()
 });
 
-export function selectedStyle (feature, resolution) {
-    switch (feature.getGeometry().getType()) {
-    case 'LineString':
-    case 'MultiLineString':
-        return selectedLine;
-    default:
-        return selectedOther;
-    }
+function getSelectedStyle () {
+    const line = getSelectedLine();
+    const other = getSelectedOther();
+    return (feature, resolution) => {
+        switch (feature.getGeometry().getType()) {
+        case 'LineString':
+        case 'MultiLineString':
+            return line;
+        default:
+            return other;
+        }
+    };
 }
 
 const applyOpacityToColorable = (colorable, opacity) => {
@@ -94,8 +98,11 @@ export const applyOpacity = (olStyle, opacity) => {
     return olStyle;
 };
 
-const getStyleFunction = (styleValues, layer, hoverHandler) => {
-    return (feature, resolution) => {
+const getStyleFunction = (styleValues, hoverHandler) => {
+    return (feature, resolution, isSelected) => {
+        if (isSelected) {
+            return styleValues.selected(feature, resolution);
+        }
         let hovered = hoverHandler.isHovered(feature, hoverHandler);
         let style = null;
         if (styleValues.optional) {
@@ -106,22 +113,23 @@ const getStyleFunction = (styleValues, layer, hoverHandler) => {
         }
         if (!style) {
             style = hovered && styleValues.hover
-                ? styleValues.hover : styleValues.base || normalStyle;
+                ? styleValues.hover : styleValues.base || getNormalStyle();
         }
-        return applyOpacity(style, layer.getOpacity());
+        return style;
     };
 };
 
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     const styles = {
-        base: normalStyle
+        base: getNormalStyle(),
+        selected: getSelectedStyle()
     };
     if (!layer) {
-        return getStyleFunction(styles, layer, hoverHandler);
+        return getStyleFunction(styles, hoverHandler);
     }
     let styleDef = layer.getCurrentStyleDef();
     if (!styleDef) {
-        return getStyleFunction(styles, layer, hoverHandler);
+        return getStyleFunction(styles, hoverHandler);
     }
     if (!styleDef.featureStyle) {
         // Bypass possible layer definitions
@@ -157,5 +165,5 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             return optional;
         });
     }
-    return getStyleFunction(styles, layer, hoverHandler);
+    return getStyleFunction(styles, hoverHandler);
 };

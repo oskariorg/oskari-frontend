@@ -8,16 +8,18 @@ import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../mapmodule/domain/consta
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const RENDER_MODE_MVT = 'mvt';
+const RENDER_MODE_VECTOR = 'vector';
 
 export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     constructor (config) {
         super(config);
         this.__name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
-        this.renderMode = config.renderMode || 'mvt';
+        this.renderMode = config.renderMode || RENDER_MODE_MVT;
         this.visualizationForm = null;
         this.oskariStyleSupport = true;
-        this.layertype = 'vector';
+        this.layertype = 'wfs';
         this.hoverHandler = new HoverHandler(WFS_ID_KEY);
         this.vectorLayerHandler = new VectorLayerHandler(this);
         this.mvtLayerHandler = new MvtLayerHandler(this);
@@ -52,11 +54,25 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         return new WfsLayerModelBuilder(this.getSandbox());
     }
     _createPluginEventHandlers () {
-        const handlers = {
-            // ...this.reqEventHandler.createEventHandlers(this),
-            ...this.vectorLayerHandler.createEventHandlers(this),
-            ...this.mvtLayerHandler.createEventHandlers(this)
-        };
+        const vectorHandlers = this.vectorLayerHandler.createEventHandlers(this);
+        const mvtHandlers = this.mvtLayerHandler.createEventHandlers(this);
+        const commonHandlers = this.reqEventHandler.createEventHandlers(this);
+        const eventKeys = [...new Set([
+            ...Object.keys(vectorHandlers),
+            ...Object.keys(mvtHandlers),
+            ...Object.keys(commonHandlers)
+        ])];
+        const handlers = {};
+        // Call event handlers in all modules
+        eventKeys.forEach(eventName => {
+            handlers[eventName] = event => {
+                [vectorHandlers, mvtHandlers, commonHandlers].forEach(handlerModule => {
+                    if (handlerModule.hasOwnProperty(eventName)) {
+                        handlerModule[eventName](event);
+                    }
+                });
+            };
+        });
         return handlers;
     }
     _createRequestHandlers () {
@@ -68,6 +84,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         return layer.isLayerOfType(this.layertype);
     }
+    getRenderMode (layer) {
+        let renderMode = this.renderMode;
+        if (layer.getOptions()) {
+            renderMode = layer.getOptions().renderMode || renderMode;
+        }
+        return renderMode;
+    }
+    _isRenderModeSupported (mode) {
+        return mode === RENDER_MODE_MVT || mode === RENDER_MODE_VECTOR;
+    }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
@@ -75,23 +101,22 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Boolean} isBaseMap
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
-        const handler = this.renderMode === 'mvt' ? this.mvtLayerHandler
-            : this.renderMode === 'vector' ? this.vectorLayerHandler : null;
-        if (!handler) {
+        const renderMode = this.getRenderMode(layer);
+        if (!this._isRenderModeSupported(renderMode)) {
             return;
         }
+        const handler = renderMode === RENDER_MODE_MVT ? this.mvtLayerHandler : this.vectorLayerHandler;
+        this.layerHandlersByLayerId[layer.getId()] = handler;
         const added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         if (!added) {
             return;
         }
-        this.layerHandlersByLayerId[added.getId()] = handler;
         // Set oskari properties for vector feature service functionalities.
         const silent = true;
         added.set(LAYER_ID, layer.getId(), silent);
         added.set(LAYER_TYPE, layer.getLayerType(), silent);
         added.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-
-        added.setStyle(handler.getCurrentStyleFunction(layer));
+        added.setStyle(this.getCurrentStyleFunction(layer, handler));
     }
 
     /* ----- VectorFeatureService interface functions ----- */
@@ -157,14 +182,33 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return {ol/style/Style}
      */
-    getCurrentStyleFunction (layer) {
-        const handler = this._getLayerHandler(layer);
+    getCurrentStyleFunction (layer, handler = this._getLayerHandler(layer)) {
         if (!handler) {
             return;
         }
         const factory = this.mapModule.getStyle.bind(this.mapModule);
         const styleFunction = styleGenerator(factory, layer, this.hoverHandler);
-        return handler.getStyleFunction(layer, styleFunction);
+        const selectedIds = new Set(this.WFSLayerService.getSelectedFeatureIds(layer.getId()));
+        return handler.getStyleFunction(layer, styleFunction, selectedIds);
+    }
+    /**
+     * @method updateLayerStyle
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     */
+    updateLayerStyle (layer) {
+        if (!this.isLayerSupported(layer)) {
+            return;
+        }
+        const olLayers = this.getOLMapLayers(layer);
+        if (!olLayers || olLayers.length === 0) {
+            return;
+        }
+        const lyr = olLayers[0];
+        lyr.setStyle(this.getCurrentStyleFunction(layer));
+        if (this.getRenderMode(layer) === RENDER_MODE_VECTOR) {
+            // Trigger features changed to synchronize 3D view
+            lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
+        }
     }
     /**
      * @method updateLayerProperties
@@ -177,6 +221,46 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (handler) {
             return handler.updateLayerProperties(layer, source);
         }
+    }
+    /**
+     * @method setLayerLocales
+     * Requests and sets locales for layer's fields.
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
+     */
+    setLayerLocales (layer) {
+        if (!layer || layer.getLocales().length === layer.getFields().length) {
+            return;
+        }
+        const onSuccess = localized => {
+            if (!localized) {
+                return;
+            }
+            const locales = [];
+            // Set locales in the same order as fields
+            layer.getFields().forEach(field => locales.push(localized[field] ? localized[field] : field));
+            layer.setLocales(locales);
+            this.notify('WFSPropertiesEvent', layer, locales, layer.getFields());
+        };
+        jQuery.ajax({
+            type: 'GET',
+            dataType: 'json',
+            data: {
+                id: layer.getId(),
+                lang: Oskari.getLang()
+            },
+            url: Oskari.urls.getRoute('GetLocalizedPropertyNames'),
+            success: onSuccess,
+            error: () => {
+                this._log.warn('Error getting localized property names for wfs layer ' + layer.getId());
+            }
+        });
+    }
+    notify (eventName, ...args) {
+        var builder = Oskari.eventBuilder(eventName);
+        if (!builder) {
+            return;
+        }
+        Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
 };
 
