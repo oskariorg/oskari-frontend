@@ -6,8 +6,11 @@ import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
 import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../mapmodule/domain/constants';
 
-const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
+const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
+const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
+
 const RENDER_MODE_MVT = 'mvt';
 const RENDER_MODE_VECTOR = 'vector';
 
@@ -20,7 +23,8 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.renderMode = config.renderMode;
         this.visualizationForm = null;
         this.oskariStyleSupport = true;
-        this.layertype = 'wfs';
+        this.layertype = 'wfslayer';
+        this.layertypes = new Set([this.layertype]);
         this.hoverHandler = new HoverHandler(WFS_ID_KEY);
         this.vectorLayerHandler = new VectorLayerHandler(this);
         this.mvtLayerHandler = new MvtLayerHandler(this);
@@ -29,31 +33,43 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
 
     /* ---- AbstractMapModulePlugin functions ---- */
 
+    getLayerTypeSelector () {
+        return 'wfs';
+    }
+    /**
+     * Registers layer type to be handled by this layer plugin.
+     *
+     * @param {String} layertype for ex. "MYPLACES"
+     * @param {String} modelClass layer model class name
+     * @param {Object} modelBuilder layer model builder instance
+     */
+    registerLayerType (layertype, modelClass, modelBuilder) {
+        if (this.layertypes.has(layertype) || !this.mapLayerService || !this.vectorFeatureService) {
+            return;
+        }
+        this.layertypes.add(layertype);
+        this.getMapModule().setLayerPlugin(layertype, this);
+        this.mapLayerService.registerLayerModel(layertype, modelClass);
+        this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
+        this.vectorFeatureService.registerLayerType(layertype, this);
+    }
     _initImpl () {
         super._initImpl();
         const sandbox = this.getSandbox();
-        // register domain builder
-        const mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
-        if (mapLayerService) {
-            mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass());
-            mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
-        }
-        sandbox.getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
-        this.WFSLayerService = Oskari.clazz.create(
-            'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService', sandbox);
-        sandbox.registerService(this.WFSLayerService);
-        this.reqEventHandler = new ReqEventHandler(sandbox);
-
-        this.visualizationForm = Oskari.clazz.create(
-            'Oskari.userinterface.component.VisualizationForm'
-        );
         this.renderMode = this.renderMode || (this.getMapModule().has3DSupport() ? RENDER_MODE_VECTOR : RENDER_MODE_MVT);
-    }
-    _getLayerModelClass () {
-        return 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
-    }
-    _getModelBuilder () {
-        return new WfsLayerModelBuilder(this.getSandbox());
+        this.reqEventHandler = new ReqEventHandler(sandbox);
+        this.visualizationForm = new VisualizationForm();
+        this.WFSLayerService = new WFSLayerService(sandbox);
+        this.vectorFeatureService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
+        this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
+
+        if (!this.mapLayerService || !this.vectorFeatureService) {
+            return;
+        }
+        this.mapLayerService.registerLayerModel(this.layertype, 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer');
+        this.mapLayerService.registerLayerModelBuilder(this.layertype, new WfsLayerModelBuilder(sandbox));
+        this.vectorFeatureService.registerLayerType(this.getLayerTypeSelector(), this);
+        sandbox.registerService(this.WFSLayerService);
     }
     _createPluginEventHandlers () {
         const vectorHandlers = this.vectorLayerHandler.createEventHandlers(this);
@@ -84,7 +100,10 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!layer) {
             return false;
         }
-        return layer.isLayerOfType(this.layertype);
+        if (layer.isLayerOfType(this.getLayerTypeSelector())) {
+            return true;
+        }
+        return this.layertypes.has(layer.getLayerType());
     }
     getRenderMode (layer) {
         let renderMode = this.renderMode;

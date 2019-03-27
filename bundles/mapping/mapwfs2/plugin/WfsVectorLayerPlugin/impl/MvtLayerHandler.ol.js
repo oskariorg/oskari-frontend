@@ -72,13 +72,27 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             sourceOpts.tileGrid = new olTileGrid(tileGrid);
         }
         // Properties id, type and hover are being used in VectorFeatureService.
+        const source = this.createSource(layer, sourceOpts);
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
+            visible: layer.isVisible(),
             renderMode: 'hybrid',
-            source: this.createSource(layer, sourceOpts)
+            source
         });
         this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
+        this._registerLayerEvents(layer.getId(), source);
         return vectorTileLayer;
+    }
+    /**
+     * Adds event listeners to ol-layers
+     * @param {string|number} layerId
+     * @param {ol/source/VectorTile} oskariLayer
+     *
+     */
+    _registerLayerEvents (layerId, source) {
+        source.on('tileloadstart', () => this.plugin.getMapModule().loadingState(layerId, true));
+        source.on('tileloadend', () => this.plugin.getMapModule().loadingState(layerId, false));
+        source.on('tileloaderror', () => this.plugin.getMapModule().loadingState(layerId, null, true));
     }
 }

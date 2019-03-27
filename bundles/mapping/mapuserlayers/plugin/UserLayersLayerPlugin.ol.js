@@ -28,22 +28,23 @@ Oskari.clazz.define(
          * Interface method for the module protocol.
          */
         _initImpl: function () {
-            // register domain builder
-            var mapLayerService = this.getSandbox().getService(
-                'Oskari.mapframework.service.MapLayerService'
-            );
+            const layerClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer';
+            const modelBuilderClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder';
+            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox());
 
+            const wfsPlugin = this.getMapModule().getLayerPlugins('wfslayer');
+            if (typeof wfsPlugin.registerLayerType === 'function') {
+                // Let wfs plugin handle this layertype
+                wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder);
+                this.unregister();
+                return;
+            }
+            // register domain builder
+            const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (!mapLayerService) {
                 return;
             }
-
-            mapLayerService.registerLayerModel(this.layertype,
-                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer');
-
-            var layerModelBuilder = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
-                this.getSandbox()
-            );
+            mapLayerService.registerLayerModel(this.layertype, layerClass);
             mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
 
