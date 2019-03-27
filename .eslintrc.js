@@ -30,7 +30,7 @@ module.exports = {
     "__webpack_public_path__": false
   },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 9,
     "sourceType": "module"
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
