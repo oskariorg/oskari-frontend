@@ -35,13 +35,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             // values recognized by the code (and geostats)
             method: ['jenks', 'quantile', 'equal', 'manual'],
             // values recognized by the code (and geostats)
-            mode: ['distinct', 'discontinuous']
+            mode: ['distinct', 'discontinuous'],
+            // values recognized by the code (and geostats)
+            mapStyle: ['choropleth', 'points']
         },
         getAvailableMethods: function () {
             return this.limits.method.slice(0);
         },
         getAvailableModes: function () {
             return this.limits.mode.slice(0);
+        },
+        getAvailableMapStyles: function () {
+            return this.limits.mapStyle.slice(0);
         },
         getAvailableOptions: function (data) {
             var validOpts = {};
@@ -224,9 +229,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                         formatter
                     );
                 }
-
                 // Choropleth  legend
                 stats.setColors(colors);
+
                 return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
             this.lastUsedBounds = response.bounds;
@@ -398,7 +403,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 var circle = point.find('circle');
                 circle.attr({
-                    'fill': '#' + color
+                    'fill': color
                 });
 
                 svg.find('svg.symbols').prepend(point.html());

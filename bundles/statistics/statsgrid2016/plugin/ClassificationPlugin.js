@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {GenericContext} from '../../../../src/react/util.jsx';
+import {Classification} from '../components/classification/Classification';
+import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
  */
@@ -21,7 +26,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._name = 'ClassificationPlugin';
         me.element = null;
         me._templates = {
-            main: jQuery('<div class="mapplugin statsgrid-legend-plugin"></div>')
+            main: jQuery('<div class="mapplugin statsgrid-classification-plugin"></div>')
         };
         // for publisher dragndrop to work needs to have at least:
         // -  mapplugin-class in parent template
@@ -34,21 +39,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me.log = Oskari.log('Oskari.statistics.statsgrid.ClassificationPlugin');
         Oskari.makeObservable(this);
 
-        this.__legend = Oskari.clazz.create('Oskari.statistics.statsgrid.Legend', sandbox, this._locale);
-        this.__legend.on('rendered', function () {
-            me._calculatePluginSize();
-        });
-        this.__legend.on('edit-legend', function (isEdit) {
-            if (isEdit) {
-                me._overflowCheck(true);
-            } else {
-                me._restoreOverflow();
-            }
-        });
-        this.__legend.on('content-rendered', function () {
-            me._overflowCheck();
-        });
+        this.service = sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
         this._overflowedOffset = null;
+        this._previousIsEdit = false;
+        this._transparent = false;
+        this._bindToEvents();
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (!this.getElement()) {
@@ -68,9 +63,114 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             this.element = this._templates.main.clone();
             this.element.css('z-index', 15001);
-            this.__legend.render(this.element);
+            this.render();
             return this.element;
         },
+        rendered: function (isUpdate, isEdit) {
+            if (isUpdate) {
+                // check if edit classification state is changed
+                if (isEdit !== this._previousIsEdit) {
+                    if (isEdit) {
+                        this._overflowCheck(true);
+                    } else {
+                        this._restoreOverflow();
+                    }
+                    this._previousIsEdit = isEdit;
+                }
+                this._overflowCheck();
+            } else {
+                this._calculatePluginSize();
+                this._overflowCheck();
+            }
+        },
+        render: function (activeClassfication) {
+            if (!this.element) return;
+            const node = this.element.get(0);
+            const indicators = this.getIndicatorProps();
+            const classifications = this.getClassificationProps(indicators, activeClassfication);
+            const legendProps = this.getLegendProps(indicators, classifications);
+            const classification = legendProps.classification;
+            if (classification && classifications.values.count !== classification.getGroups().length) {
+                // classification count changed!!
+                this.service.getStateService().updateActiveClassification('count', classification.getGroups().length);
+                return;
+            }
+
+            ReactDOM.render((
+                <GenericContext.Provider value={{loc: this._locale, service: this.service}}>
+                    <Classification indicators = {indicators} classifications = {classifications}
+                        legendProps = {legendProps} isEdit = {this._previousIsEdit}
+                        onRenderChange = {this.rendered.bind(this)}/>
+                </GenericContext.Provider>
+            ), node);
+        },
+        getIndicatorProps: function () {
+            const indicators = {
+                selected: [],
+                data: {}
+            };
+            const state = this.service.getStateService();
+            const active = state.getActiveIndicator();
+            indicators.active = active;
+            indicators.regionset = state.getRegionset();
+            if (active.series) {
+                indicators.serieStats = this.service.getSeriesService().getSeriesStats(active.hash);
+            }
+            this.service.getStateService().getIndicators().forEach((ind) => {
+                this.service.getUILabels(ind, label => {
+                    indicators.selected.push({
+                        id: ind.hash,
+                        title: label.full
+                    });
+                });
+            });
+            this.service.getIndicatorData(active.datasource, active.indicator, active.selections, active.series, indicators.regionset, (err, data) => {
+                if (data) {
+                    indicators.data = data;
+                }
+                if (err) {
+                    this.log.warn('Error getting indicator data', active, indicators.regionset);
+                }
+            });
+            return indicators;
+        },
+        getClassificationProps: function (indicators, classification) {
+            const props = {
+                countRange: []
+            };
+            const service = this.service.getClassificationService();
+            const colorsService = this.service.getColorService();
+            const values = classification || this.service.getStateService().getClassificationOpts(indicators.active.hash);
+            props.values = values;
+            props.methods = service.getAvailableMethods();
+            props.modes = service.getAvailableModes();
+            props.mapStyles = service.getAvailableMapStyles();
+            props.types = colorsService.getAvailableTypes();
+            props.validOptions = service.getAvailableOptions(indicators.data);
+            props.disabled = !this.service.getStateService().isClassificationEnabled();
+            if (values.mapStyle !== 'choropleth') {
+                props.colors = colorsService.getDefaultSimpleColors();
+            } else {
+                props.colors = colorsService.getOptionsForType(values.type, values.count, values.reverseColors);
+            }
+            const range = colorsService.getRange(values.type, values.style);
+            for (let i = range.min; i <= range.max; i++) {
+                props.countRange.push(i);
+            }
+            return props;
+        },
+        getLegendProps: function (indicators, classifications) {
+            const data = indicators.data;
+            const serieStats = indicators.serieStats;
+            const classificationOpts = classifications.values;
+            const props = {};
+            if (Object.keys(data).length !== 0) {
+                props.classification = this.service.getClassificationService().getClassification(data, classificationOpts, serieStats);
+            }
+            props.colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
+            return props;
+        },
+
         redrawUI: function () {
             this.teardownUI();
             this._buildUI();
@@ -84,6 +184,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var element = this.getElement();
             // detach old element from screen
             if (element) {
+                ReactDOM.unmountComponentAtNode(element.get(0));
                 this.removeFromPluginContainer(element, true);
                 this.element = null;
                 this.trigger('hide');
@@ -95,6 +196,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this._overflowCheck();
             if (this._instance.isEmbedded() && this._config.transparent) {
                 this.makeTransparent(true);
+            } else if (this._transparent === true) {
+                this.makeTransparent(true);
             }
             this.trigger('show');
         },
@@ -102,25 +205,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.getElement().draggable();
         },
         makeTransparent: function (transparent) {
+            this._transparent = transparent;
             var element = this.getElement();
             if (!element) {
                 return;
             }
             if (transparent) {
-                element.removeClass('statsgrid-legend-plugin');
-                element.addClass('statsgrid-legend-plugin-transparent');
-                element.find('.statsgrid-legend-container').addClass('legend-transparent');
+                element.removeClass('statsgrid-classification-plugin');
+                element.addClass('statsgrid-classification-plugin-transparent');
             } else {
-                element.removeClass('statsgrid-legend-plugin-transparent');
-                element.addClass('statsgrid-legend-plugin');
-                element.find('.statsgrid-legend-container').removeClass('legend-transparent');
+                element.removeClass('statsgrid-classification-plugin-transparent');
+                element.addClass('statsgrid-classification-plugin');
             }
         },
         getElement: function () {
             return this.element;
         },
         enableClassification: function (enabled) {
-            this.__legend.allowClassification(enabled);
+            this.service.getStateService().enableClassification(enabled);
         },
         stopPlugin: function () {
             this.teardownUI();
@@ -146,7 +248,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             var headerHeight = element.find('.active-header').first().height();
             if (Oskari.util.isMobile()) {
                 element.find('.accordion').css({
-                    'overflow': 'auto',
                     'max-height': (height * 0.8 - headerHeight) + 'px'
                 });
             } else if (!Oskari.util.isMobile()) {
@@ -193,6 +294,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             // otherwise publisher would stop this plugin and start it again when leaving the publisher,
             // resulting a misfuctioning duplicate classification element on screen.
             return false;
+        },
+        _bindToEvents: function () {
+            // if indicator is removed/added - recalculate the source 1/2 etc links
+            this.service.on('StatsGrid.IndicatorEvent', event => this.render());
+
+            // Always show the active indicator - also handles "no indicator selected"
+            // if the selected indicator has no data & edit panel is open -> close it
+            this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event => this.render());
+
+            // need to update the legend as data changes when regionset changes
+            this.service.on('StatsGrid.RegionsetChangedEvent', event => this.render());
+
+            this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
+
+            // UI styling changes e.g. disable classification editing, make transparent
+            this.service.getStateService().on('ClassificationContainerChanged', () => this.render());
+
+            this.service.on('AfterChangeMapLayerOpacityEvent', (event) => this.render());
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
