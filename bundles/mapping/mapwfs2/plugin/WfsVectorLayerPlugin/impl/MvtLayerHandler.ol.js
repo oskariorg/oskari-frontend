@@ -7,17 +7,15 @@ import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSo
 import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 
+/**
+ * @class MvtLayerHandler
+ * LayerHandler implementation for MVT layers
+ */
 export class MvtLayerHandler extends AbstractLayerHandler {
     constructor (layerPlugin) {
         super(layerPlugin);
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
-    }
-    createEventHandlers () {
-        return {
-            AfterChangeMapLayerStyleEvent: event => this._updateLayerStyle(event.getMapLayer()),
-            AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer())
-        };
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
@@ -28,12 +26,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             return styleFunction(feature, resolution, isSelected);
         };
     }
-    /**
-     * @method updateLayerProperties
-     * Notify about changed features in view
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {ol/source/VectorTile} source
-     */
     updateLayerProperties (layer, source = this._sourceFromLayer(layer)) {
         const {left, bottom, right, top} = this.plugin.getSandbox().getMap().getBbox();
         const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
@@ -54,9 +46,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
     _sourceFromLayer (layer) {
         return this.plugin.getOLMapLayers(layer.getId())[0].getSource();
     }
-    /**
-     * Override, see superclass
-     */
     createSource (layer, options) {
         const source = new FeatureExposingMVTSource(options);
 
@@ -71,14 +60,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         });
         return source;
     }
-    /**
-     * @method addMapLayerToMap
-     * @private
-     * Adds a single vector tile layer to this map
-     * @param {Oskari.mapframework.domain.VectorTileLayer} layer
-     * @param {Boolean} keepLayerOnTop
-     * @param {Boolean} isBaseMap
-     */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const sourceOpts = {

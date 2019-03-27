@@ -11,41 +11,32 @@ import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
 
+/**
+ * @class VectorLayerHandler
+ * LayerHandler implementation for vector layers
+ */
 export class VectorLayerHandler extends AbstractLayerHandler {
     createEventHandlers () {
-        const handlers = {
-            'AfterMapMoveEvent': Oskari.util.throttle(() =>
-                this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS),
-            'AfterChangeMapLayerStyleEvent': event =>
-                this._updateLayerStyle(event.getMapLayer()),
-            'AfterChangeMapLayerOpacityEvent': Oskari.util.throttle(event =>
-                this._updateLayerOpacity(event.getMapLayer()), OPACITY_THROTTLE_MS)
-        };
+        const handlers = super.createEventHandlers();
+        handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
+            this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
+
+        if (this.plugin.getMapModule().has3DSupport()) {
+            handlers['AfterChangeMapLayerOpacityEvent'] = Oskari.util.throttle(event =>
+                this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
+        }
         return handlers;
     }
-    _updateLayerOpacity (layer) {
-        this._updateLayerStyle(layer);
-    }
-    /**
-     * @private @method getLayerStyleFunction
-     * Returns OL style corresponding to layer currently selected style
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {function} styleFunction
-     * @param {[number|string]} selectedIds
-     * @return {function} style function for the layer
-     */
     getStyleFunction (layer, styleFunction, selectedIds) {
         return (feature, resolution) => {
             const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
-            return applyOpacity(styleFunction(feature, resolution, isSelected), layer.getOpacity());
+            const style = styleFunction(feature, resolution, isSelected);
+            if (!this.plugin.getMapModule().has3DSupport()) {
+                return style;
+            }
+            return applyOpacity(style, layer.getOpacity());
         };
     }
-    /**
-     * @method addMapLayerToMap Adds wfs layer to map
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {Boolean} keepLayerOnTop
-     * @param {Boolean} isBaseMap
-     */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const source = this._getLayerSource(layer);
@@ -141,13 +132,11 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         }
         olLayers[0].getSource().loadFeatures(extent, resolution, projection);
     }
-    /**
-     * @method updateLayerProperties
-     * Notify about changed features in view
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @param {ol/source/Vector} source
-     */
     updateLayerProperties (layer, source = this._getSourceForLayer(layer)) {
+        /*
+
+        TODO: Fix feature _oid property for geojson
+
         const {left, bottom, right, top} = this.plugin.getSandbox().getMap().getBbox();
         const features = source.getFeaturesInExtent([left, bottom, right, top]);
         const propsList = features.map(ftr => ftr.getProperties());
@@ -159,6 +148,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             this.plugin.setLayerLocales(layer);
         }
         this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
+        */
     }
     _getSourceForLayer (oskariLayer) {
         const olLayers = this.plugin.getOLMapLayers(oskariLayer);

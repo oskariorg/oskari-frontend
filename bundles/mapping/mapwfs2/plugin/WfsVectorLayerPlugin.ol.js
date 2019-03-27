@@ -205,7 +205,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const lyr = olLayers[0];
         lyr.setStyle(this.getCurrentStyleFunction(layer));
-        if (this.getRenderMode(layer) === RENDER_MODE_VECTOR) {
+        if (this.getMapModule().has3DSupport()) {
             // Trigger features changed to synchronize 3D view
             lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
         }
