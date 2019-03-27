@@ -6,7 +6,7 @@ import {bbox as bboxStrategy} from 'ol/loadingstrategy';
 
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 import { applyOpacity } from '../util/style';
-import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
+import { WFS_ID_KEY } from '../util/props';
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
