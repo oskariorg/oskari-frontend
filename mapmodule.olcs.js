@@ -14,6 +14,7 @@ class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
         this._map3d = null;
+        this._support3d = true;
         this._mapReady = false;
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
