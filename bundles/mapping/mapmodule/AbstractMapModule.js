@@ -106,6 +106,7 @@ Oskari.clazz.define(
         me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
+        me._support3d = false;
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -366,6 +367,9 @@ Oskari.clazz.define(
          */
         panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
+        has3DSupport: function () {
+            return this._support3d;
+        },
         /* --------- /Impl specific --------------------------------------> */
 
         /* Impl specific - PRIVATE
