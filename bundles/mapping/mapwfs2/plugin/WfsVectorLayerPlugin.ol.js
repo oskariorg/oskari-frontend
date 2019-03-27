@@ -13,10 +13,11 @@ const RENDER_MODE_VECTOR = 'vector';
 
 export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     constructor (config) {
-        super(config);
+        super();
+        this._config = config;
         this.__name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
-        this.renderMode = config.renderMode || RENDER_MODE_MVT;
+        this.renderMode = config.renderMode;
         this.visualizationForm = null;
         this.oskariStyleSupport = true;
         this.layertype = 'wfs';
@@ -46,6 +47,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.visualizationForm = Oskari.clazz.create(
             'Oskari.userinterface.component.VisualizationForm'
         );
+        this.renderMode = this.renderMode || (this.getMapModule().has3DSupport() ? RENDER_MODE_VECTOR : RENDER_MODE_MVT);
     }
     _getLayerModelClass () {
         return 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
@@ -205,7 +207,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const lyr = olLayers[0];
         lyr.setStyle(this.getCurrentStyleFunction(layer));
-        if (this.getMapModule().has3DSupport()) {
+        if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().has3DSupport()) {
             // Trigger features changed to synchronize 3D view
             lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
         }
