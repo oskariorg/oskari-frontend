@@ -39,8 +39,10 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     }
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
+        const opacity = this.plugin.getMapModule().has3DSupport() ? 1 : layer.getOpacity() / 100;
         const source = this._getLayerSource(layer);
         const vectorLayer = new olLayerVector({
+            opacity,
             source,
             renderMode: 'image'
         });
