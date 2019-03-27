@@ -47,5 +47,5 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
         plugins.push(new LocalizationPlugin(appName));
     });
 
-    return {entries, plugins};
+    return { entries, plugins };
 };

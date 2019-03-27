@@ -185,7 +185,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupTitle = loc('display.popup.title'),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
-                crsDefaultText = loc('display.crs.default', {crs: crs}),
+                crsDefaultText = loc('display.crs.default', { crs: crs }),
                 popupName = 'xytoolpopup',
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
@@ -315,7 +315,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
                 me._popup.addClass('mobile-popup');
-                me._popup.setColourScheme({'bgColour': '#e6e6e6'});
+                me._popup.setColourScheme({ 'bgColour': '#e6e6e6' });
 
                 // hide mouse coordinates
                 popupContent.find('.mousecoordinates-div').hide();

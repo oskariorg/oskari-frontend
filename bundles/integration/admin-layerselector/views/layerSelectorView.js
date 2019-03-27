@@ -179,7 +179,7 @@ function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPa
             var target = jQuery(e.currentTarget),
                 type = target.attr('data-tab');
 
-                // change class 'active' to correct tab
+            // change class 'active' to correct tab
             jQuery('.tabsHeader').find('.active').removeClass('active');
             target.parent().addClass('active');
 
@@ -238,7 +238,7 @@ function (ViewTemplate, TabTitleTemplate, LayerCollection, LayersTabModel, TabPa
                         xhr = null;
                         var successCount = resp.success.length;
                         var failCount = Object.keys(resp.error).length;
-                        content.append('<br><br><span>' + loc('recheckAllSucceeded', {success: successCount, fail: failCount}) + '<span>');
+                        content.append('<br><br><span>' + loc('recheckAllSucceeded', { success: successCount, fail: failCount }) + '<span>');
                     },
                     error: function (xhr, status, error) {
                         xhr = null;

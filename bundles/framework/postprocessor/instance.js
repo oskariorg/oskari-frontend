@@ -105,7 +105,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.postprocessor.PostProcessorBundl
             var olPoints = {
                     _points: [],
                     addPoint: function (lon, lat) {
-                        this._points.push({lon: parseFloat(lon), lat: parseFloat(lat)});
+                        this._points.push({ lon: parseFloat(lon), lat: parseFloat(lat) });
                     },
                     getBounds: function () {
                         var top = 0,

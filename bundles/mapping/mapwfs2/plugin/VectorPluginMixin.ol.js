@@ -1,4 +1,4 @@
-import {ReqEventHandler} from './components/ReqEventHandler';
+import { ReqEventHandler } from './components/ReqEventHandler';
 
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
 

@@ -6,7 +6,7 @@
  */
 Oskari.clazz.define('Oskari.catalogue.bundle.metadatacatalogue.service.MetadataSearchService',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  *

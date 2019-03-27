@@ -24,7 +24,7 @@
  */
 Oskari.clazz.define('Oskari.mapping.drawtools.DrawToolsBundleInstance',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */

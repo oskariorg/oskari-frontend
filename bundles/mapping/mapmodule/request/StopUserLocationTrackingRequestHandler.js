@@ -1,4 +1,4 @@
-import {stopUserLocationWatch, clearLocationCoords} from '../LocationModule';
+import { stopUserLocationWatch, clearLocationCoords } from '../LocationModule';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler
  * Handles StopUserLocationTrackingRequest requests

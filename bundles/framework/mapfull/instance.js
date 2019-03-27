@@ -1,4 +1,4 @@
-import {automagicPlugins} from './automagicPlugins';
+import { automagicPlugins } from './automagicPlugins';
 
 /**
  * @class Oskari.mapframework.bundle.mapfull.MapFullBundleInstance

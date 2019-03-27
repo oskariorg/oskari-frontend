@@ -1,8 +1,8 @@
-import {histogram} from './histogram';
-import {edgeLines} from './edgeLines';
-import {inputGuide} from './inputGuide';
-import {updateBandBlocks} from './updateBandBlocks';
-import {updateDragHandles} from './updateDragHandles';
+import { histogram } from './histogram';
+import { edgeLines } from './edgeLines';
+import { inputGuide } from './inputGuide';
+import { updateBandBlocks } from './updateBandBlocks';
+import { updateDragHandles } from './updateDragHandles';
 
 const width = 500;
 const height = 303;

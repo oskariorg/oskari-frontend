@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerRequestHandler',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance} toolbar
