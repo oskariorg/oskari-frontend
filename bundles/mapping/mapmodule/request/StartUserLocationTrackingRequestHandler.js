@@ -1,5 +1,5 @@
-import {watchUserLocation, stopUserLocationWatch,
-    clearLocationCoords, getLocationCoords} from '../LocationModule';
+import { watchUserLocation, stopUserLocationWatch,
+    clearLocationCoords, getLocationCoords } from '../LocationModule';
 /**
  * @class Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler
  * Handles StartUserLocationTrackingRequest requests

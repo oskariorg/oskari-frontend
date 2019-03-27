@@ -449,7 +449,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.MyViewsTab',
                 me.popupOpen = false;
             });
             var cancelBtn = dialog.createCloseButton(this.loc('tabs.myviews.button.cancel'));
-            dialog.show(me.loc('tabs.myviews.popup.deletetitle'), me.loc('tabs.myviews.popup.deletemsg', {name: view.name}), [cancelBtn, okBtn]);
+            dialog.show(me.loc('tabs.myviews.popup.deletetitle'), me.loc('tabs.myviews.popup.deletemsg', { name: view.name }), [cancelBtn, okBtn]);
             me.popupOpen = true;
             dialog.makeModal();
         },

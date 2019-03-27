@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext, handleBinder} from '../../../../../../src/react/util.jsx';
+import {withContext, handleBinder} from 'oskari-ui/util';
 import {colorSetColorWidth} from './colorselect.scss';
 
 class ColorSelect extends React.Component {

@@ -4,7 +4,7 @@ const isHovered = (feature, hoverState) => {
     if (!hoverState) {
         return false;
     }
-    const {feature: hoverFeature, property} = hoverState;
+    const { feature: hoverFeature, property } = hoverState;
     if (!hoverFeature || !property) {
         return false;
     }
@@ -39,7 +39,7 @@ const applyOpacityToColorable = (colorable, opacity) => {
     if (!rgb) {
         return;
     }
-    const {r, g, b} = rgb;
+    const { r, g, b } = rgb;
     colorable.setColor(`rgba(${r},${g},${b},${alpha})`);
 };
 

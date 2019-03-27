@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../../src/react/util.jsx';
+import {withContext} from 'oskari-ui/util';
 import {ManualClassificationView} from './View';
 
 // TODO: change to use general oskari react button and pass props.handleClick = handleManualClassification

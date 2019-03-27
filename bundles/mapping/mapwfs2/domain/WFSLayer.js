@@ -279,7 +279,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         getStyleDef (styleName) {
             if (styleName === 'oskari_custom') {
-                return {[this._layerName]: {featureStyle: this.getCustomStyle()}};
+                return { [this._layerName]: { featureStyle: this.getCustomStyle() } };
             }
             if (this._options.styles) {
                 return this._options.styles[styleName];

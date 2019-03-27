@@ -117,7 +117,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 dialog.close();
             });
             var cancelBtn = dialog.createCloseButton(me.loc('tab.buttons.cancel'));
-            var confirmMsg = me.loc('tab.confirmDeleteMsg', {name: data.name});
+            var confirmMsg = me.loc('tab.confirmDeleteMsg', { name: data.name });
             dialog.show(me.loc('tab.deleteLayer'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },

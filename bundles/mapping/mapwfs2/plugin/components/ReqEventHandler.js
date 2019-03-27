@@ -1,5 +1,5 @@
-import {propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY} from './propertyArrayUtils';
-import {filterByAttribute, getFilterAlternativesAsArray} from './filterUtils';
+import { propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './propertyArrayUtils';
+import { filterByAttribute, getFilterAlternativesAsArray } from './filterUtils';
 
 export class ReqEventHandler {
     constructor (sandbox) {
@@ -23,7 +23,7 @@ export class ReqEventHandler {
                 }
                 const hits = [];
                 plugin.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
-                    hits.push({feature, layer});
+                    hits.push({ feature, layer });
                 }, {
                     layerFilter: layer => plugin.findLayerByOLLayer(layer)
                 });

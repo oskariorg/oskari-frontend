@@ -1,4 +1,4 @@
-import {getUserLocation} from '../LocationModule';
+import { getUserLocation } from '../LocationModule';
 
 /**
  * @classOskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler

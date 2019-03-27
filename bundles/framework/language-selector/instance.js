@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {LanguageChanger} from './components/LanguageChanger';
+import { LanguageChanger } from './components/LanguageChanger';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 

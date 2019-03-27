@@ -189,7 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
             });
             dialog.show(
                 me.loc('tabs.publishedmaps.popup.deletetitle'),
-                me.loc('tabs.publishedmaps.popup.deletemsg', {name: view.name}),
+                me.loc('tabs.publishedmaps.popup.deletemsg', { name: view.name }),
                 [cancelBtn, okBtn]
             );
             me.popupOpen = true;

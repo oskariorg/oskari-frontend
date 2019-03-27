@@ -286,7 +286,7 @@ Oskari.clazz.define(
         },
         __getSearchResultHeader: function (count, hasMore) {
             var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
-            var msg = intro({count: count});
+            var msg = intro({ count: count });
             msg = msg + '<br/>';
 
             if (hasMore) {
@@ -400,7 +400,7 @@ Oskari.clazz.define(
             var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
             if (result.zoomScale) {
-                zoom = {scale: result.zoomScale};
+                zoom = { scale: result.zoomScale };
             }
             sandbox.request(
                 me.instance.getName(),

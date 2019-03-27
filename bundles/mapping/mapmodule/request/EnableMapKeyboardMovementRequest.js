@@ -12,7 +12,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapKeyboardMovementRequest',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */
