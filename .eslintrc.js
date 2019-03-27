@@ -1,3 +1,4 @@
+const resolveConfig = require('./webpack/resolveConfig.js');
 // http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
@@ -73,8 +74,10 @@ module.exports = {
   },
   "settings": {
     "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx"]
+      "webpack": {
+        "config": {
+          "resolve": resolveConfig
+        }
       }
     },
     "react": {

@@ -1,6 +1,7 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const resolveConfig = require('./webpack/resolveConfig.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
@@ -118,11 +119,7 @@ module.exports = (env, argv) => {
                 'oskari-lazy-loader': path.resolve(__dirname, './webpack/oskariLazyLoader.js')
             }
         },
-        resolve: {
-            extensions: ['.js', '.jsx'],
-            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
-            symlinks: false
-        }
+        resolve: resolveConfig
     };
 
     // Mode specific config

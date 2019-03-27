@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../../../src/react/util.jsx';
+import {withContext} from 'oskari-ui/util';
 
 const Select = ({properties, options, value, disabled, handleChange}) => {
     // options => array of values [1,3,4,5] or array of objects with properties: value and optionally: text, hidden, disabled
