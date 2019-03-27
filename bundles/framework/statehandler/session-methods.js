@@ -43,7 +43,7 @@ Oskari.clazz.category(
                     popup.show(expiredTitle, expiredMessage);
                     popup.makeModal();
                 });
-                clearTimeout(expireTimeout);
+                clearInterval(expireTimeout);
                 me.setSessionExpiring(minutes);
                 popup.close(true);
             });
@@ -60,13 +60,13 @@ Oskari.clazz.category(
                     const start = Date.now();
                     let diff;
                     let seconds;
-                    const interval = setInterval(timer, 1000);
+                    expireTimeout = setInterval(timer, 1000);
                     function timer () {
                         diff = expireIn - (((Date.now() - start) / 1000) | 0);
                         seconds = (diff % 60) | 0;
                         seconds = seconds < 10 ? 0 + seconds : seconds;
-                        if (seconds === 0) {
-                            clearInterval(interval);
+                        if (seconds < 1) {
+                            clearInterval(expireTimeout);
                             popup.show(expiredTitle, expiredMessage);
                             popup.makeModal();
                             if (Oskari.user().isLoggedIn()) {
