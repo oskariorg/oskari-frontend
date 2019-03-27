@@ -65,7 +65,7 @@ Oskari.clazz.category(
                         diff = expireIn - (((Date.now() - start) / 1000) | 0);
                         seconds = (diff % 60) | 0;
                         seconds = seconds < 10 ? 0 + seconds : seconds;
-                        if (seconds === 0) {
+                        if (seconds < 1) {
                             clearInterval(expireTimeout);
                             popup.show(expiredTitle, expiredMessage);
                             popup.makeModal();
