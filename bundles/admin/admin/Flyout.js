@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.GenericAdminFlyout',
          *      request to handle
          */
         handleRequest: function (core, request) {
-            this.addTab({'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId()});
+            this.addTab({ 'title': request.getTitle(), 'content': request.getContent(), 'priority': request.getPriority(), 'id': request.getId() });
         }
     }, {
         'extend': ['Oskari.userinterface.extension.DefaultFlyout']

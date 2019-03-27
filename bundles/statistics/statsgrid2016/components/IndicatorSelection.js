@@ -1,5 +1,5 @@
-import {SelectList} from './SelectList';
-import {MetadataPopup} from './MetadataPopup';
+import { SelectList } from './SelectList';
+import { MetadataPopup } from './MetadataPopup';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (instance, sandbox) {
     this.instance = instance;
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var panelLoc = locale('panels.newSearch');
 
         // Series checkbox
-        main.append(jQuery(this.__templates.select({name: panelLoc.seriesTitle, clazz: 'stats-series-selection'})));
+        main.append(jQuery(this.__templates.select({ name: panelLoc.seriesTitle, clazz: 'stats-series-selection' })));
         var seriesInput = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
         seriesInput.setTitle(panelLoc.seriesLabel);
         seriesInput.setChecked(false);
@@ -127,7 +127,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         seriesSelection.append(seriesInput.getElement());
 
         // Regionsets
-        main.append(jQuery(this.__templates.select({name: panelLoc.regionsetTitle, clazz: 'stats-rs-selector'})));
+        main.append(jQuery(this.__templates.select({ name: panelLoc.regionsetTitle, clazz: 'stats-rs-selector' })));
         var regionsetFilterElement = main.find('.stats-rs-selector');
         var regionOptions = {
             placeholder: panelLoc.selectRegionsetPlaceholder,
@@ -136,7 +136,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
 
         var regionFilterSelect = new SelectList();
         var regionFilterDropdown = regionFilterSelect.create(this.service.getRegionsets(), regionOptions);
-        regionFilterDropdown.css({width: '100%'});
+        regionFilterDropdown.css({ width: '100%' });
         regionsetFilterElement.append(regionFilterDropdown);
         regionFilterSelect.update();
 
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             sources.push(dataObj);
         });
         // Datasources
-        main.append(jQuery(this.__templates.select({name: panelLoc.datasourceTitle, clazz: 'stats-ds-selector'})));
+        main.append(jQuery(this.__templates.select({ name: panelLoc.datasourceTitle, clazz: 'stats-ds-selector' })));
         var dsSelector = main.find('.stats-ds-selector');
         var options = {
             placeholder: panelLoc.selectDatasourcePlaceholder,
@@ -158,11 +158,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         };
         var dsSelect = new SelectList();
         var dropdown = dsSelect.create(sources, options);
-        dropdown.css({width: '100%'});
+        dropdown.css({ width: '100%' });
         dsSelector.append(dropdown);
 
         // Indicator list
-        main.append(jQuery(this.__templates.select({name: panelLoc.indicatorTitle, clazz: 'stats-ind-selector'})));
+        main.append(jQuery(this.__templates.select({ name: panelLoc.indicatorTitle, clazz: 'stats-ind-selector' })));
         var indicatorSelector = main.find('.stats-ind-selector');
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         };
         var indicSelect = new SelectList();
         var indicDropdown = indicSelect.create(null, indicOptions);
-        indicDropdown.css({width: '100%'});
+        indicDropdown.css({ width: '100%' });
         indicatorSelector.append(indicDropdown);
 
         var indicDescriptionLink = jQuery(this.__templates.link());
@@ -259,7 +259,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                     var formFlyout = me.instance.getFlyoutManager().getFlyout('indicatorForm');
                     formFlyout.showForm(dsSelect.getValue(), indId[0]);
                 });
-                indicDescriptionLink.html(locale('metadataPopup.open', {indicators: indId.length}));
+                indicDescriptionLink.html(locale('metadataPopup.open', { indicators: indId.length }));
                 if (me.metadataPopup.isVisible()) {
                     me.metadataPopup.show(dsSelect.getValue(), indId);
                 }

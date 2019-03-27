@@ -178,11 +178,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
         setColourScheme: function (colourScheme) {
             if (colourScheme.bgColour) {
-                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.bgColour});
+                this.dialog.find('h3.popupHeader').css({ 'background-color': colourScheme.bgColour });
             }
 
             if (colourScheme.titleColour) {
-                this.dialog.find('h3.popupHeader').css({'color': colourScheme.titleColour});
+                this.dialog.find('h3.popupHeader').css({ 'color': colourScheme.titleColour });
             }
 
             if (colourScheme.iconCls) {
@@ -192,7 +192,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
 
             if (colourScheme.bodyBgColour) {
-                this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
+                this.dialog.find('.popup-body').css({ 'background-color': colourScheme.bodyBgColour });
             }
 
             /* buttons and actionlinks */
@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
 
         setFont: function (font) {
-            this.dialog.find('h3.popupHeader').css({'font-family': font});
+            this.dialog.find('h3.popupHeader').css({ 'font-family': font });
         },
 
         /**
@@ -560,7 +560,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this.eventHandlers = {
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
+                    this._handleMapSizeChanges({ width: evt.getWidth(), height: evt.getHeight() });
                 }
             };
 

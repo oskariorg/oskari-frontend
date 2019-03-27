@@ -582,7 +582,7 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
-                renderCoverageButton = (_.filter(dataFields, {'field': 'coverage'}).length > 0),
+                renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -718,7 +718,7 @@ Oskari.clazz.define(
             this.selectionPlugin = Oskari.clazz.create('Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin', config, me.sandbox);
             mapModule.registerPlugin(this.selectionPlugin);
             mapModule.startPlugin(this.selectionPlugin);
-            this.selectionPlugin.startDrawing({drawMode: 'square'});
+            this.selectionPlugin.startDrawing({ drawMode: 'square' });
         },
 
         /**
@@ -1037,7 +1037,7 @@ Oskari.clazz.define(
                                     // Set action callback
                                     if (action.callback && typeof action.callback === 'function') {
                                         callbackElement = actionElement.first();
-                                        callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
+                                        callbackElement.css({ 'cursor': 'pointer' }).on('click', { metadata: row }, function (event) {
                                             action.callback(event.data.metadata);
                                         });
                                     }

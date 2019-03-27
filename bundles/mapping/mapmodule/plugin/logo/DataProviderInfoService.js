@@ -16,7 +16,7 @@ service.addItemToGroup('map.layers', { 'id' : 'dummy id the second', 'name' : 'i
 
     Oskari.clazz.define('Oskari.map.DataProviderInfoService',
 
-    /**
+        /**
      * @method create called automatically on construction
      * @static
      */

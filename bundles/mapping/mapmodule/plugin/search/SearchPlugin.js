@@ -390,7 +390,7 @@ Oskari.clazz.define(
                     lat = msg.locations[0].lat;
                     zoom = msg.locations[0].zoomLevel;
                     if (msg.locations[0].zoomScale) {
-                        zoom = {scale: msg.locations[0].zoomScale};
+                        zoom = { scale: msg.locations[0].zoomScale };
                     }
 
                     me.getSandbox().request(
@@ -428,7 +428,7 @@ Oskari.clazz.define(
                         zoom = resultItem.zoomLevel;
 
                         if (resultItem.zoomScale) {
-                            zoom = {scale: resultItem.zoomScale};
+                            zoom = { scale: resultItem.zoomScale };
                         }
 
                         var row = me.templateResultsRow.clone(),
@@ -508,7 +508,7 @@ Oskari.clazz.define(
         _resultClicked: function (result) {
             var zoom = result.zoomLevel;
             if (result.zoomScale) {
-                zoom = {scale: result.zoomScale};
+                zoom = { scale: result.zoomScale };
             }
             this.getSandbox().request(
                 this.getName(),

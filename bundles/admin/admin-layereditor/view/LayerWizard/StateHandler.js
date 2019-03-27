@@ -19,7 +19,7 @@ export class StateHandler {
         return this.loading;
     }
     getLayer () {
-        return {...this.layer};
+        return { ...this.layer };
     }
     getCapabilities () {
         return this.capabilities || [];

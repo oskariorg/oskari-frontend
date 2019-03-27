@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.EditRequestHan
                 shape = geometry.type.replace('Multi', '');
                 this.instance.myPlaceSelected();
                 this.instance.setIsEditPlace(true);
-                this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), shape, {allowMultipleDrawing: 'multiGeom', geojson: JSON.stringify(geometry), drawControl: false, showMeasureOnMap: true, style: this.instance.getDrawStyle()}]);
+                this.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [this.instance.getName(), shape, { allowMultipleDrawing: 'multiGeom', geojson: JSON.stringify(geometry), drawControl: false, showMeasureOnMap: true, style: this.instance.getDrawStyle() }]);
                 this.instance.getMainView().showPlaceForm(center, place);
             } else {
                 // should not happen

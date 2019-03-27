@@ -122,7 +122,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     }
                 }
             }
-            me.instance.state = {current: allMetadata};
+            me.instance.state = { current: allMetadata };
         },
 
         /**
