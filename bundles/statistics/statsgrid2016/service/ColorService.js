@@ -63,28 +63,24 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ColorService',
          * @return {Object[]} array of colors to use for legend and map
          */
         getColorsForClassification: function (classification, includeHash) {
-            var colors = [];
-            var set = null;
             if (classification.mapStyle !== 'points') {
-                set = this.getColorset(classification.count, classification.type, classification.name);
-                set.forEach(function (color) {
-                    if (includeHash) {
-                        color = '#' + color;
-                    }
-                    colors.push(color);
-                });
-            } else {
-                var colorIndex = 0;
-                if (classification.name) {
-                    colorIndex = !isNaN(classification.name) ? parseFloat(classification.name) : 0;
+                let set = this.getColorset(classification.count, classification.type, classification.name);
+                if (classification.reverseColors) {
+                    set.reverse();
                 }
-                colors = Array.apply(null, Array(this._basicColors.length)).map(String.prototype.valueOf, this._basicColors[colorIndex]);
+                if (includeHash) {
+                    return set.map(color => '#' + color);
+                }
+                return set;
             }
-
-            if (classification.mapStyle !== 'points' && classification.reverseColors) {
-                colors.reverse();
+            let color = this._basicColors[0];
+            if (classification.name) {
+                const colorIndex = !isNaN(classification.name) ? parseFloat(classification.name) : 0;
+                if (colorIndex < this._basicColors.length) {
+                    color = this._basicColors[colorIndex];
+                }
             }
-            return colors;
+            return Array.apply(null, Array(this._basicColors.length)).map(String.prototype.valueOf, (includeHash ? '#' + color : color));
         },
         /**
          * Tries to return an array of colors where length equals count parameter.

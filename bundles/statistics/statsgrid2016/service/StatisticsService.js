@@ -82,6 +82,15 @@
         getErrorService: function () {
             return this.error;
         },
+        getAllServices: function () {
+            return {
+                series: this.series,
+                state: this.state,
+                classification: this.classification,
+                color: this.colors,
+                error: this.error
+            };
+        },
         addDatasource: function (ds) {
             if (!ds) {
                 // log error message
