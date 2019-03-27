@@ -1,4 +1,4 @@
-import {equalSizeBands} from '../util/equalSizeBands';
+import { equalSizeBands } from '../util/equalSizeBands';
 import geostats from 'geostats/lib/geostats.min.js';
 import 'geostats/lib/geostats.css';
 

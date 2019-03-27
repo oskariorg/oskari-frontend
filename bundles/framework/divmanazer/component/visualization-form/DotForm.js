@@ -325,7 +325,7 @@ Oskari.clazz.define(
          * Creates a color picker component
          */
         _createColorPicker: function () {
-            var options = {flat: true};
+            var options = { flat: true };
             this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options);
         },
 

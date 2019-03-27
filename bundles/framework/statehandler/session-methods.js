@@ -31,7 +31,7 @@ Oskari.clazz.category(
             var extendButtonTitle = locale('session.expiring.extend');
             var logoutButtonMessage = locale('session.expiring.logout');
             var notifyTitle = locale('session.expiring.title');
-            var notifyMessage = locale('session.expiring.message', {extend: '"' + extendButtonTitle + '"'});
+            var notifyMessage = locale('session.expiring.message', { extend: '"' + extendButtonTitle + '"' });
             var expiredTitle = locale('session.expired.title');
             var expiredMessage = locale('session.expired.message');
             var expireTimeout;
@@ -55,7 +55,7 @@ Oskari.clazz.category(
             return {
                 show: function () {
                     const expireIn = 60; // Expire time in seconds
-                    popup.show(notifyTitle, notifyMessage + '<br />' + locale('session.expiring.expires', {expires: expireIn}), [logoutButton, extendButton]);
+                    popup.show(notifyTitle, notifyMessage + '<br />' + locale('session.expiring.expires', { expires: expireIn }), [logoutButton, extendButton]);
                     // Using Date for more accurate countdown (instead of just using setTimeout or setInterval)
                     const start = Date.now();
                     let diff;
@@ -75,7 +75,7 @@ Oskari.clazz.category(
                                 location.reload();
                             }
                         } else {
-                            popup.setContent(notifyMessage + '<br />' + locale('session.expiring.expires', {expires: seconds}));
+                            popup.setContent(notifyMessage + '<br />' + locale('session.expiring.expires', { expires: seconds }));
                         }
                     }
                 }

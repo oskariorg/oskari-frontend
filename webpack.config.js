@@ -10,13 +10,13 @@ const proxyPort = 8081;
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
-    const {version, pathParam, publicPathPrefix} = parseParams(env);
+    const { version, pathParam, publicPathPrefix } = parseParams(env);
 
     const isDirectory = source => lstatSync(source).isDirectory();
     const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
     const appsetupPaths = getDirectories(path.resolve(pathParam));
 
-    const {entries, plugins} = generateEntries(appsetupPaths, isProd, __dirname);
+    const { entries, plugins } = generateEntries(appsetupPaths, isProd, __dirname);
     plugins.push(new MiniCssExtractPlugin({
         filename: '[name]/oskari.min.css'
     }));
@@ -72,16 +72,16 @@ module.exports = (env, argv) => {
                     use: [
                         styleLoaderImpl,
                         { loader: 'css-loader', options: { } }
-// https://github.com/webpack-contrib/css-loader/issues/863
-//                        { loader: 'css-loader', options: { minimize: true } }
+                        // https://github.com/webpack-contrib/css-loader/issues/863
+                        //                        { loader: 'css-loader', options: { minimize: true } }
                     ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
                         styleLoaderImpl,
-// https://github.com/webpack-contrib/css-loader/issues/863
-//                        { loader: 'css-loader', options: { minimize: true } },
+                        // https://github.com/webpack-contrib/css-loader/issues/863
+                        //                        { loader: 'css-loader', options: { minimize: true } },
                         { loader: 'css-loader', options: { } },
                         'sass-loader' // compiles Sass to CSS
                     ]

@@ -480,7 +480,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             me.popup = popupService.createPopup();
             me.popup.addClass('toolbar-popup');
-            me.popup.setColourScheme({'bgColour': '#e6e6e6'});
+            me.popup.setColourScheme({ 'bgColour': '#e6e6e6' });
             if (isMobile) {
                 popupService.closeAllPopups(true);
             }

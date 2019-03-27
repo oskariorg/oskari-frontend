@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         this._diagram.createDataSortOption(el.find('.chart-controls .dropdown'));
         // this.loc.datacharts.descColor
         // Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu');
-        var options = {resizable: this.isResizable()};
+        var options = { resizable: this.isResizable() };
         this._diagram.render(el.find('.chart'), options);
         this.setElement(el);
     }

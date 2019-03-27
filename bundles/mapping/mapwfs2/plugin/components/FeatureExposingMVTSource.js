@@ -1,16 +1,16 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
-import {intersects} from 'ol/extent';
+import { intersects } from 'ol/extent';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import * as olGeom from 'ol/geom';
-import {fromKey as tileCoordFromKey} from 'ol/tilecoord';
+import { fromKey as tileCoordFromKey } from 'ol/tilecoord';
 
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
 
-import {WFS_ID_KEY} from './propertyArrayUtils';
-import {convertRenderFeatures} from './convertRenderFeatures';
+import { WFS_ID_KEY } from './propertyArrayUtils';
+import { convertRenderFeatures } from './convertRenderFeatures';
 
 const reader = new GeoJSONReader();
 const olParser = new OL3Parser();

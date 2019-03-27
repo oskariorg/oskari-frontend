@@ -224,8 +224,8 @@ Oskari.clazz.define(
             var me = this,
                 prevJson;
 
-                // this is needed to add the functionality to filter with aggregate analyse values
-                // if value is true, the link to filter with aggregate analyse values is added to dialog
+            // this is needed to add the functionality to filter with aggregate analyse values
+            // if value is true, the link to filter with aggregate analyse values is added to dialog
             var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
 
             var fixedOptions = {

@@ -20,7 +20,7 @@ export function propsAsArray (properties) {
 
 export function getFieldsAndPropsArrays (propsList) {
     if (!propsList.length) {
-        return {fields: [], properties: []};
+        return { fields: [], properties: [] };
     }
 
     const fields = sortedFieldsFromProps(propsList[0]);
@@ -29,5 +29,5 @@ export function getFieldsAndPropsArrays (propsList) {
 
     fields.unshift('__fid');
 
-    return {fields, properties};
+    return { fields, properties };
 }

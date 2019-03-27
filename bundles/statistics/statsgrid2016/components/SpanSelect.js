@@ -1,4 +1,4 @@
-import {SelectList} from './SelectList';
+import { SelectList } from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, id, label, values, options) {
     this.locale = locale;
@@ -36,13 +36,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SpanSelect', function (locale, 
         var cont = jQuery(this.__templates.main());
         var lblFrom = this.label + ' ' + this.locale.parameters.from;
         var lblTo = this.label + ' ' + this.locale.parameters.to;
-        var tempFrom = jQuery(this.__templates.select({label: lblFrom}));
-        var tempTo = jQuery(this.__templates.select({label: lblTo}));
+        var tempFrom = jQuery(this.__templates.select({ label: lblFrom }));
+        var tempTo = jQuery(this.__templates.select({ label: lblTo }));
 
         var from = new SelectList(this.id + '_from');
         var to = new SelectList(this.id + '_to');
 
-        var styleDef = {'min-width': '150px'};
+        var styleDef = { 'min-width': '150px' };
 
         var dropdown = to.create(this.values, this.options);
         dropdown.css(styleDef);

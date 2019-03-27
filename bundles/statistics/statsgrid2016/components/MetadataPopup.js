@@ -84,7 +84,7 @@ export class MetadataPopup extends Popup {
     _openPopup () {
         const container = jQuery('<div>');
         if (this._accordions.length === 0) {
-            container.html(this.loc('metadataPopup.noMetadata', {indicators: this.indicators.length}));
+            container.html(this.loc('metadataPopup.noMetadata', { indicators: this.indicators.length }));
         } else {
             const content = this.getJqueryContent();
             if (!content.hasClass('indicator-metadata')) {
@@ -94,7 +94,7 @@ export class MetadataPopup extends Popup {
             // Open the last panel
             this._accordions[this._accordions.length - 1].getPanels()[0].open();
         }
-        const title = this.loc('metadataPopup.title', {indicators: this._accordions.length});
+        const title = this.loc('metadataPopup.title', { indicators: this._accordions.length });
         const okButton = Oskari.clazz.create('Oskari.userinterface.component.buttons.OkButton');
         okButton.setHandler(() => this.close());
         super.show(title, container, [okButton]);

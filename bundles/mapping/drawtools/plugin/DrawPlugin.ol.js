@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import * as olExtent from 'ol/extent';
-import olInteractionDraw, {createRegularPolygon} from 'ol/interaction/Draw';
+import olInteractionDraw, { createRegularPolygon } from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
@@ -12,7 +12,7 @@ import GeometryCollection from 'ol/geom/GeometryCollection';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olCollection from 'ol/Collection';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
-import {BufferOp, BufferParameters} from 'jsts/org/locationtech/jts/operation/buffer';
+import { BufferOp, BufferParameters } from 'jsts/org/locationtech/jts/operation/buffer';
 import isValidOp from 'jsts/org/locationtech/jts/operation/valid/IsValidOp';
 
 const olParser = new jstsOL3Parser();
@@ -247,7 +247,7 @@ Oskari.clazz.define(
                 feat,
                 feats = [];
             geometries.forEach(function (geom) {
-                feat = new olFeature({geometry: geom});
+                feat = new olFeature({ geometry: geom });
                 feat.setId(me.generateNewFeatureId());
                 feats.push(feat);
                 if (checkIntersection) {
@@ -638,7 +638,7 @@ Oskari.clazz.define(
 
                 var multiGeometry = me.createMultiGeometry(geometries);
 
-                feature = new olFeature({geometry: multiGeometry});
+                feature = new olFeature({ geometry: multiGeometry });
                 feature.setId(me.generateNewFeatureId());
 
                 jsonObject = me.formJsonObject(feature, measures, buffer);
@@ -735,7 +735,7 @@ Oskari.clazz.define(
             var me = this;
             var vector = new olLayerVector({
                 id: layerId,
-                source: new olSourceVector({features: new olCollection()}),
+                source: new olSourceVector({ features: new olCollection() }),
                 style: me._styles.draw
             });
             me.getMap().addLayer(vector);
