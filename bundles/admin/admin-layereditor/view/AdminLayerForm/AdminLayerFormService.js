@@ -204,7 +204,7 @@ export class AdminLayerFormService {
     }
 
     getLayer () {
-        return {...this.layer};
+        return { ...this.layer };
     }
 
     notify () {

@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {AdminLayerForm} from './AdminLayerForm';
-import {GenericContext} from '../../../../src/react/util.jsx';
+import { AdminLayerForm } from './AdminLayerForm';
+import { GenericContext } from '../../../../src/react/util.jsx';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -60,7 +60,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         ReactDOM.render(
-            <GenericContext.Provider value={{loc: loc, lang: Oskari.getLang()}}>
+            <GenericContext.Provider value={{ loc: loc }}>
                 <AdminLayerForm layer={layer} dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} flyout={me} />
             </GenericContext.Provider>,
             el.get(0));
