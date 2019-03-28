@@ -5,7 +5,6 @@ src/**
 resources/**
 packages/**
 node_modules/**
-node_modules.bak/**
 locale/**
 libraries/**
 dist/**
