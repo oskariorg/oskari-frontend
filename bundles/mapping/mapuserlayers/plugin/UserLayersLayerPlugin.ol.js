@@ -32,7 +32,7 @@ Oskari.clazz.define(
             const modelBuilderClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder';
             const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox());
 
-            const wfsPlugin = this.getMapModule().getLayerPlugins('wfslayer');
+            const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
             if (typeof wfsPlugin.registerLayerType === 'function') {
                 // Let wfs plugin handle this layertype
                 wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder);

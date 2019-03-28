@@ -63,7 +63,7 @@ Oskari.clazz.define(
             defaultStyle.setLegend('');
 
             const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-            const wfsPlugin = mapModule.getLayerPlugins('wfslayer');
+            const wfsPlugin = mapModule.getLayerPlugins(layer.getLayerType());
             if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
                 layer.addStyle(defaultStyle);
                 // Read options object for styles and hover options

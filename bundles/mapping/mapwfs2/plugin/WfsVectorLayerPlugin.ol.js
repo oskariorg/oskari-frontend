@@ -23,7 +23,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.renderMode = config.renderMode;
         this.visualizationForm = null;
         this.oskariStyleSupport = true;
-        this.layertype = 'wfslayer';
+        this.layertype = 'wfs';
         this.layertypes = new Set([this.layertype]);
         this.hoverHandler = new HoverHandler(WFS_ID_KEY);
         this.vectorLayerHandler = new VectorLayerHandler(this);
@@ -34,8 +34,9 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     /* ---- AbstractMapModulePlugin functions ---- */
 
     getLayerTypeSelector () {
-        return 'wfs';
+        return 'wfslayer';
     }
+
     /**
      * Registers layer type to be handled by this layer plugin.
      *
@@ -66,9 +67,9 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!this.mapLayerService || !this.vectorFeatureService) {
             return;
         }
-        this.mapLayerService.registerLayerModel(this.layertype, 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer');
-        this.mapLayerService.registerLayerModelBuilder(this.layertype, new WfsLayerModelBuilder(sandbox));
-        this.vectorFeatureService.registerLayerType(this.getLayerTypeSelector(), this);
+        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer');
+        this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
+        this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);
     }
     _createPluginEventHandlers () {
