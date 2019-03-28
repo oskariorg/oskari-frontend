@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "session": {
             "expiring": {
                 "title": "Ihre Sitzung endet demnächst.",
-                "message": "Ihre Sitzung endet demnächst. Klicken Sie {erweitern}, um angemeldet zu bleiben.",
+                "message": "Ihre Sitzung endet demnächst. Klicken Sie {extend}, um angemeldet zu bleiben.",
                 "extend": "Sitzung fortsetzen."
             },
             "expired": {
