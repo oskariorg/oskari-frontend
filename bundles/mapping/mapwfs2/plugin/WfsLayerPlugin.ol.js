@@ -6,7 +6,7 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olTilegridTileGrid from 'ol/tilegrid/TileGrid';
 import * as olProj from 'ol/proj';
 
-import {OskariAsyncTileImage} from './OskariAsyncTileImage';
+import { OskariAsyncTileImage } from './OskariAsyncTileImage';
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin
@@ -220,16 +220,16 @@ Oskari.clazz.define(
 
                 if (countInscale === countManu && loc.refresh_alert) {
                     this.getElement().attr('refresh_status', refresh_status2);
-                    this.getElement().css({'background-color': '#FF007F'});
+                    this.getElement().css({ 'background-color': '#FF007F' });
                     this.getElement().attr('title', loc.refresh_alert[refresh_status2]);
                 } else {
                     if (countInvisi === countManu && loc.refresh_alert) {
                         this.getElement().attr('refresh_status', refresh_status1);
-                        this.getElement().css({'background-color': '#FF007F'});
+                        this.getElement().css({ 'background-color': '#FF007F' });
                         this.getElement().attr('title', loc.refresh_alert[refresh_status1]);
                     } else {
                         this.getElement().removeAttr('refresh_status');
-                        this.getElement().css({'background-color': ''});
+                        this.getElement().css({ 'background-color': '' });
                         this.getElement().attr('title', loc.refresh_title);
                     }
                 }

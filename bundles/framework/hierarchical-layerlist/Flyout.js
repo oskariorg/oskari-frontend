@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                         });
                         notLoadedBackend[group.name].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.name].getChildren().push({id: layer.getId(), type: 'layer'});
+                    notLoadedBackend[group.name].getChildren().push({ id: layer.getId(), type: 'layer' });
                     notLoadedBackend[group.name].layersModels.push(layer);
                 }
             });

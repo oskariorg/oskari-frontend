@@ -712,7 +712,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         if (renderer) {
                             value = renderer(value, data);
                         } else if (typeof value === 'number') {
-                            value = me._loc('Grid.cellValue', {value: value});
+                            value = me._loc('Grid.cellValue', { value: value });
                         }
                         cell.append(value);
                         row.append(cell);

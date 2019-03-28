@@ -15,7 +15,7 @@
  */
 Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */
@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.AdapterBundleInstance',
         this._view = null;
     }, {
 
-    /**
+        /**
      * @method getTitle
      * Extension protocol method
      * @return {String} localized text for the title of the component

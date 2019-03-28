@@ -4,7 +4,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.OpenAddLayerDialogHandler',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.Sandbox} sandbox
