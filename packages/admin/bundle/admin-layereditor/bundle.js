@@ -15,10 +15,22 @@ Oskari.clazz.define("Oskari.admin.admin-layereditor.bundle", function () {
 
             "scripts": [{
                 "src": "../../../../bundles/admin/admin-layereditor/instance.js"
+            },
+			{
+                "type": "text/css",
+                "src": "../../../../bundles/admin/admin-layereditor/resources/scss/style.scss"
             }],
             "locales": [{
                 "lang": "en",
                 "src": "../../../../bundles/admin/admin-layereditor/resources/locale/en.js"
+            },
+			{
+                "lang": "fi",
+                "src": "../../../../bundles/admin/admin-layereditor/resources/locale/fi.js"
+            },
+			{
+                "lang": "sv",
+                "src": "../../../../bundles/admin/admin-layereditor/resources/locale/sv.js"
             }]
         },
         "bundle": {
