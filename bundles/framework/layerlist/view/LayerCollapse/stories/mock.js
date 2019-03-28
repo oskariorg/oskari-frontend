@@ -1,21 +1,12 @@
-export { AbstractLayer } from './mock/AbstractLayer.class';
-export { locale } from './mock/locale';
+import '../../../../../../src/global';
+import '../../../../../mapping/mapmodule/service/map.state';
+import '../../../../../mapping/mapmodule/domain/AbstractLayer';
+import '../../../../layerselector2/resources/locale/fi.js';
 
-class MockMap {
-    constructor () {
-        this.layers = [];
-    }
-    getSrsName () {
-        return 'epsg:3067';
-    }
-    getLayers () {
-        return this.layers;
-    }
-};
-const map = new MockMap();
-const sandbox = {
-    getMap: () => map
-};
-export const Oskari = {
-    getSandbox: () => sandbox
-};
+const Oskari = window.Oskari;
+const sandbox = Oskari.getSandbox();
+const stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandbox);
+sandbox.registerService(stateService);
+
+export const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
+export const locale = Oskari.getLocalization('LayerSelector', 'fi');
