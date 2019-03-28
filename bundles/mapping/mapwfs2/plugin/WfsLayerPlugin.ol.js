@@ -6,7 +6,7 @@ import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olTilegridTileGrid from 'ol/tilegrid/TileGrid';
 import * as olProj from 'ol/proj';
 
-import { OskariAsyncTileImage } from './OskariAsyncTileImage';
+import { OskariAsyncTileImage } from './WfsLayerPlugin/OskariAsyncTileImage';
 
 /**
  * @class Oskari.mapframework.bundle.mapwfs2.plugin.WfsLayerPlugin

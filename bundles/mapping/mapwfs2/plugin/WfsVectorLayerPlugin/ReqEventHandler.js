@@ -1,5 +1,5 @@
-import { propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './propertyArrayUtils';
-import { filterByAttribute, getFilterAlternativesAsArray } from './filterUtils';
+import { propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './util/props';
+import { filterByAttribute, getFilterAlternativesAsArray } from './util/filter';
 
 export class ReqEventHandler {
     constructor (sandbox) {
@@ -10,12 +10,12 @@ export class ReqEventHandler {
         const me = this;
         const modifySelection = (layer, featureIds, keepPrevious) => {
             plugin.WFSLayerService.setWFSFeaturesSelections(layer.getId(), featureIds, !keepPrevious);
-            this.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
+            plugin.notify('WFSFeaturesSelectedEvent', plugin.WFSLayerService.getSelectedFeatureIds(layer.getId()), layer, false);
         };
         const getSelectedLayer = (layerId) => this.sandbox.getMap().getSelectedLayer(layerId);
         return {
             'WFSFeaturesSelectedEvent': (event) => {
-                plugin._updateLayerStyle(event.getMapLayer());
+                plugin.updateLayerStyle(event.getMapLayer());
             },
             'MapClickedEvent': (event) => {
                 if (!me.isClickResponsive) {
@@ -34,7 +34,7 @@ export class ReqEventHandler {
                     if (keepPrevious) {
                         modifySelection(layer, [ftrAndLyr.feature.get(WFS_ID_KEY)], keepPrevious);
                     } else {
-                        me.notify('GetInfoResultEvent', {
+                        plugin.notify('GetInfoResultEvent', {
                             layerId: layer.getId(),
                             features: [propsAsArray(ftrAndLyr.feature.getProperties())],
                             lonlat: event.getLonLat()
@@ -89,13 +89,6 @@ export class ReqEventHandler {
                 modifySelection(layer, [...filteredIds], false);
             }
         };
-    }
-    notify (eventName, ...args) {
-        var builder = Oskari.eventBuilder(eventName);
-        if (!builder) {
-            return;
-        }
-        this.sandbox.notifyAll(builder.apply(null, args));
     }
     createRequestHandlers (plugin) {
         return {
