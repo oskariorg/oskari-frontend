@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option } from '../../components/Select';
+import {Select, Option} from '../../components/Select';
 
 export const DataProviderSelect = (props) => {
     const options = props.dataProviders.map((dataProvider) =>
         <Option key={dataProvider.id}>{dataProvider.name}</Option>
     );
     return (
-        <Select defaultValue={props.defaultValue} onChange={(value) => props.onChange(value)}>
+        <Select value={props.value} onChange={(value) => props.onChange(value)}>
             {options}
         </Select>
     );
@@ -15,6 +15,6 @@ export const DataProviderSelect = (props) => {
 
 DataProviderSelect.propTypes = {
     onChange: PropTypes.func,
-    defaultValue: PropTypes.string,
+    value: PropTypes.string,
     dataProviders: PropTypes.arrayOf(PropTypes.object)
 };

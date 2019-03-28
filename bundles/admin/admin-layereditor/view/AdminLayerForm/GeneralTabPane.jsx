@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { DataProviderSelect } from './DataProviderSelect';
-import { TextInput } from '../../components/TextInput';
-import { UrlInput } from '../../components/UrlInput';
-import { Collapse, Panel } from '../../components/Collapse';
-import { MapLayerGroups } from './MapLayerGroups';
-import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
+import {DataProviderSelect} from './DataProviderSelect';
+import {TextInput} from '../../components/TextInput';
+import {UrlInput} from '../../components/UrlInput';
+import {Collapse, Panel} from '../../components/Collapse';
+import {MapLayerGroups} from './MapLayerGroups';
+import {StyledTab, StyledComponentGroup, StyledComponent} from './AdminLayerFormStyledComponents';
 import {GenericContext} from '../../../../../src/react/util.jsx';
 
 export const GeneralTabPane = ({layer, service}) => {
@@ -13,29 +13,30 @@ export const GeneralTabPane = ({layer, service}) => {
         <GenericContext.Consumer>
             {value => {
                 const loc = value.loc;
-                const lang = value.lang;
+                const lang = Oskari.getLang();
+                const credentialProps = {
+                    allowCredentials: true,
+                    defaultOpen: false,
+                    usernameValue: layer.username,
+                    passwordValue: layer.password,
+                    panelText: loc('usernameAndPassword'),
+                    usernameText: loc('username'),
+                    passwordText: loc('password'),
+                    usernameOnChange: service.setUsername,
+                    passwordOnChange: service.setPassword
+                };
                 return (
                     <StyledTab>
                         <label>{loc('interfaceAddress')}</label>
                         <StyledComponentGroup>
                             <StyledComponent>
                                 <div>
-                                    <UrlInput value={layer.layerUrl} onChange={(url) => service.setLayerUrl(url)} />
+                                    <UrlInput
+                                        value={layer.layerUrl}
+                                        onChange={(url) => service.setLayerUrl(url)}
+                                        credentials={credentialProps}
+                                    />
                                 </div>
-                            </StyledComponent>
-                            <StyledComponent>
-                                <Collapse>
-                                    <Panel header={loc('usernameAndPassword')}>
-                                        <div>
-                                            <label>{loc('username')}</label>
-                                            <div><TextInput value={layer.username} type='text' onChange={(evt) => service.setUsername(evt.target.value)} /></div>
-                                        </div>
-                                        <div>
-                                            <label>{loc('password')}</label>
-                                            <div><TextInput value={layer.password} type='password' onChange={(evt) => service.setPassword(evt.target.value)} /></div>
-                                        </div>
-                                    </Panel>
-                                </Collapse>
                             </StyledComponent>
                         </StyledComponentGroup>
                         <label>{loc('uniqueName')}</label>
@@ -48,11 +49,17 @@ export const GeneralTabPane = ({layer, service}) => {
                                 <StyledComponent>
                                     <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)} />
                                 </StyledComponent>
+                                <label>{loc('fi.descplaceholder')}</label>
+                                <StyledComponent>
+                                    <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)} />
+                                </StyledComponent>
                                 <StyledComponent>
                                     <Collapse>
                                         <Panel header={loc('otherLanguages')}>
                                             <div>{loc('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
+                                            <div>{loc('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
                                             <div>{loc('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
+                                            <div>{loc('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
                                         </Panel>
                                     </Collapse>
                                 </StyledComponent>
@@ -64,11 +71,17 @@ export const GeneralTabPane = ({layer, service}) => {
                                 <StyledComponent>
                                     <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)} />
                                 </StyledComponent>
+                                <label>{loc('en.descplaceholder')}</label>
+                                <StyledComponent>
+                                    <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)} />
+                                </StyledComponent>
                                 <StyledComponent>
                                     <Collapse>
                                         <Panel header={loc('otherLanguages')}>
                                             <div>{loc('fi.placeholder')} <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
+                                            <div>{loc('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
                                             <div>{loc('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
+                                            <div>{loc('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
                                         </Panel>
                                     </Collapse>
                                 </StyledComponent>
@@ -80,11 +93,17 @@ export const GeneralTabPane = ({layer, service}) => {
                                 <StyledComponent>
                                     <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)} />
                                 </StyledComponent>
+                                <label>{loc('sv.descplaceholder')}</label>
+                                <StyledComponent>
+                                    <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)} />
+                                </StyledComponent>
                                 <StyledComponent>
                                     <Collapse>
                                         <Panel header={loc('otherLanguages')}>
                                             <div>{loc('fi.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
+                                            <div>{loc('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
                                             <div>{loc('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
+                                            <div>{loc('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
                                         </Panel>
                                     </Collapse>
                                 </StyledComponent>
@@ -92,7 +111,7 @@ export const GeneralTabPane = ({layer, service}) => {
                         }
                         <label>{loc('dataProvider')}</label>
                         <StyledComponent>
-                            <DataProviderSelect defaultValue={layer.groupId} onChange={(evt) => service.setDataProvider(evt)} dataProviders={layer.dataProviders} />
+                            <DataProviderSelect value={layer.organizationName} onChange={(evt) => service.setDataProvider(evt)} dataProviders={layer.dataProviders} />
                         </StyledComponent>
                         <label>{loc('mapLayerGroups')}</label>
                         <StyledComponent>
@@ -107,5 +126,5 @@ export const GeneralTabPane = ({layer, service}) => {
 
 GeneralTabPane.propTypes = {
     service: PropTypes.any,
-    layer: PropTypes.any
+    layer: PropTypes.object
 };

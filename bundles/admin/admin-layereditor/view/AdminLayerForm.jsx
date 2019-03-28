@@ -1,26 +1,31 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, TabPane } from '../components/Tabs';
-import { Button } from '../components/Button';
-import { GeneralTabPane } from './AdminLayerForm/GeneralTabPane';
-import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
-import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
-import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
-import { AdminLayerFormService } from './AdminLayerForm/AdminLayerFormService';
-import { StyledRoot } from './AdminLayerForm/AdminLayerFormStyledComponents';
+import {Tabs, TabPane} from '../components/Tabs';
+import {Button} from '../components/Button';
+import {GeneralTabPane} from './AdminLayerForm/GeneralTabPane';
+import {VisualizationTabPane} from './AdminLayerForm/VisualizationTabPane';
+import {AdditionalTabPane} from './AdminLayerForm/AdditionalTabPane';
+import {PermissionsTabPane} from './AdminLayerForm/PermissionsTabPane';
+import {AdminLayerFormService} from './AdminLayerForm/AdminLayerFormService';
+import {StyledRoot} from './AdminLayerForm/AdminLayerFormStyledComponents';
 import {Alert} from '../components/Alert';
 import {GenericContext} from '../../../../src/react/util.jsx';
 export class AdminLayerForm extends React.Component {
-    constructor ({layer, dataProviders, mapLayerGroups, loc}) {
+    constructor ({layer, dataProviders, mapLayerGroups, flyout}) {
         super();
+        this.flyout = flyout;
         this.service = new AdminLayerFormService(() => this.setState({ layer: this.service.getLayer() }));
         this.service.initLayerState(layer, mapLayerGroups, dataProviders);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleCancel = this.handleCancel.bind(this);
     }
 
     handleSubmit () {
-        // TODO handle response
         this.service.saveLayer();
+    }
+
+    handleCancel () {
+        this.flyout.hide();
     }
 
     render () {
@@ -31,6 +36,9 @@ export class AdminLayerForm extends React.Component {
             <GenericContext.Consumer>
                 {value => {
                     const loc = value.loc;
+                    if (message.key) {
+                        message.text = loc(message.key);
+                    }
                     return (
                         <StyledRoot>
                             {message.text &&
@@ -50,8 +58,17 @@ export class AdminLayerForm extends React.Component {
                                     <PermissionsTabPane />
                                 </TabPane>
                             </Tabs>
-                            <Button type='primary' onClick={() => this.handleSubmit()}>{loc('save')}</Button>&nbsp;
-                            <Button>{loc('cancel')}</Button>
+                            <Button type='primary' onClick={() => this.handleSubmit()}>
+                                {layer.isNew &&
+                                    loc('add')
+                                }
+                                {!layer.isNew &&
+                                    loc('save')
+                                }
+                            </Button>&nbsp;
+                            {this.flyout &&
+                                <Button onClick={() => this.handleCancel()}>{loc('cancel')}</Button>
+                            }
                         </StyledRoot>
                     );
                 }}
@@ -64,5 +81,5 @@ AdminLayerForm.propTypes = {
     layer: PropTypes.object,
     dataProviders: PropTypes.array.isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
-    loc: PropTypes.func
+    flyout: PropTypes.object
 };

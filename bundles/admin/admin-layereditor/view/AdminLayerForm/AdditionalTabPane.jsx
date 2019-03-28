@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInput } from '../../components/TextInput';
-import { TextAreaInput } from '../../components/TextAreaInput';
-import { StyledTab, StyledComponent } from './AdminLayerFormStyledComponents';
+import {TextInput} from '../../components/TextInput';
+import {TextAreaInput} from '../../components/TextAreaInput';
+import {StyledTab, StyledComponent} from './AdminLayerFormStyledComponents';
 import {GenericContext} from '../../../../../src/react/util.jsx';
 
 export const AdditionalTabPane = ({layer, service}) => {

@@ -25,16 +25,28 @@ export class AdminLayerFormService {
                 me.layer.layerName = layerName;
                 me.notify();
             },
-            setLayerNameInFinnish (nameFi) {
-                me.layer.name_fi = nameFi;
+            setLayerNameInFinnish (name) {
+                me.layer.name_fi = name;
                 me.notify();
             },
-            setLayerNameInEnglish (layerNameInEnglish) {
-                me.layer.name_en = layerNameInEnglish;
+            setLayerNameInEnglish (name) {
+                me.layer.name_en = name;
                 me.notify();
             },
-            setLayerNameInSwedish (layerNameInSwedish) {
-                me.layer.name_sv = layerNameInSwedish;
+            setLayerNameInSwedish (name) {
+                me.layer.name_sv = name;
+                me.notify();
+            },
+            setDescriptionInFinnish (description) {
+                me.layer.title_fi = description;
+                me.notify();
+            },
+            setDescriptionInEnglish (description) {
+                me.layer.title_en = description;
+                me.notify();
+            },
+            setDescriptionInSwedish (description) {
+                me.layer.title_sv = description;
                 me.notify();
             },
             setDataProvider (dataProvider) {
@@ -87,11 +99,12 @@ export class AdminLayerFormService {
                 me.layer.attributes = attributes;
                 me.notify();
             },
-            setMessage (text, type) {
+            setMessage (key, type) {
                 me.message = {
-                    text: text,
+                    key: key,
                     type: type
                 };
+                me.notify();
             }
         };
     }
@@ -119,14 +132,18 @@ export class AdminLayerFormService {
         me.layer = {
             version: layer ? layer.getVersion() : '',
             layer_id: layer ? layer.getId() : null,
-            layerUrl: layer && layer.admin ? layer.admin.url : '',
-            username: layer && layer.admin ? layer.admin.username : '',
-            password: layer && layer.admin ? layer.admin.password : '',
+            layerUrl: layer ? layer.getAdmin().url : '',
+            username: layer ? layer.getAdmin().username : '',
+            password: layer ? layer.getAdmin().password : '',
             layerName: layer ? layer.getLayerName() : '',
             name_fi: layer ? layer.getName('fi') : '',
             name_en: layer ? layer.getName('en') : '',
             name_sv: layer ? layer.getName('sv') : '',
-            groupId: layer ? layer.getOrganizationName() : '',
+            title_fi: layer ? layer.getDescription('fi') : '',
+            title_en: layer ? layer.getDescription('en') : '',
+            title_sv: layer ? layer.getDescription('sv') : '',
+            groupId: layer ? layer.getAdmin().organizationId : null,
+            organizationName: layer ? layer.getOrganizationName() : '',
             maplayerGroups: me.formatGroupListForBackend(allGroups),
             dataProviders: dataProviders,
             allGroups: allGroups,
@@ -140,7 +157,8 @@ export class AdminLayerFormService {
             hoverJSON: '', // TODO
             metadataIdentifier: layer ? layer.getMetadataIdentifier() : '',
             gfiContent: layer ? layer.getGfiContent() : '',
-            attributes: layer ? layer.getAttributes() : ''
+            attributes: layer ? JSON.stringify(layer.getAttributes()) : '{}',
+            isNew: !layer
         };
     }
 
@@ -162,6 +180,7 @@ export class AdminLayerFormService {
 
     saveLayer () {
         const layer = this.getLayer();
+        const me = this;
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
@@ -171,9 +190,12 @@ export class AdminLayerFormService {
             },
             body: queryString.stringify(layer)
         }).then(function (response) {
-            return response.json();
-        }).then(function (data) {
-            console.log(data);
+            if (response.ok) {
+                me.getMutator().setMessage('messages.saveSuccess', 'success');
+            } else {
+                me.getMutator().setMessage('messages.saveFailed', 'error');
+            }
+            return response;
         });
     }
 

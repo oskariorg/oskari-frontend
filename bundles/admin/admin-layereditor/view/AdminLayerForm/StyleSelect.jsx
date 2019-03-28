@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option } from '../../components/Select';
+import {Select, Option} from '../../components/Select';
 
 export const StyleSelect = ({styles, currentStyle, service}) => {
     const options = styles.map((style) =>
