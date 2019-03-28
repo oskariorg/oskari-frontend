@@ -30,6 +30,7 @@ Oskari.registerLocalization(
                 "descplaceholder": "Description in Swedish"
             },
             "dataProvider": "Dataprovider",
+            "addDataProvider": "Add dataprovider",
             "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",

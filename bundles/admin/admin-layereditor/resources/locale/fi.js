@@ -30,6 +30,7 @@ Oskari.registerLocalization(
                 "descplaceholder": "Kuvaus ruotsiksi"
             },
             "dataProvider": "Tiedontuottaja",
+            "addDataProvider": "Lisää tiedontuottaja",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",
@@ -41,7 +42,7 @@ Oskari.registerLocalization(
             "maxScale": "Suurin mittakaava",
             "minAndMaxScale": "Pienin ja suurin mittakaava",
             "metaInfoIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
-            "metaInfoId": "Metatiedon tiedosto&shy;tunniste",
+            "metaInfoId": "Metatiedon tiedostotunniste",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
             "attributes": "Attribuutit",
             "messages": {
