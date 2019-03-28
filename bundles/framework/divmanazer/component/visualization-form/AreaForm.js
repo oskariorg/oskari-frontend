@@ -548,7 +548,7 @@ Oskari.clazz.define(
          * @private
          */
         _createColorPickers: function () {
-            var options = {allowEmpty: true, cancelText: this.loc.buttons.cancel};
+            var options = { allowEmpty: true, cancelText: this.loc.buttons.cancel };
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options)

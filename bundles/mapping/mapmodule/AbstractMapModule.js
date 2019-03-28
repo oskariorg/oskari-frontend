@@ -301,7 +301,7 @@ Oskari.clazz.define(
                 this.afterRearrangeSelectedMapLayerEvent(event);
             },
             MapSizeChangedEvent: function (evt) {
-                this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
+                this._handleMapSizeChanges({ width: evt.getWidth(), height: evt.getHeight() });
             },
             'Toolbar.ToolbarLoadedEvent': function () {
                 this.startLazyPlugins();

@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.sample.bundle.tetris.Tile',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  * @param

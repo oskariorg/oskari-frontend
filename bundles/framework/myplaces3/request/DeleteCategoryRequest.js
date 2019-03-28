@@ -7,7 +7,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.request.DeleteCategoryRequest',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  *

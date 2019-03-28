@@ -19,28 +19,34 @@ const getBadgeText = (group, visibleLayerCount) => {
     return badgeText;
 };
 
-const renderItem = ({layer, ...rest}) => {
+const renderLayer = ({model, even, selected, mapSrs, mutator, locale}) => {
+    const itemProps = {model, even, selected, mapSrs, mutator, locale};
     return (
         <StyledListItem>
-            <Layer key={layer.getId()} model={layer} {...rest} />
+            <Layer key={model.getId()} {...itemProps} />
         </StyledListItem>
     );
 };
-renderItem.propTypes = {
-    layer: PropTypes.any.isRequired
+renderLayer.propTypes = {
+    model: PropTypes.any,
+    even: PropTypes.any,
+    selected: PropTypes.any,
+    mapSrs: PropTypes.any,
+    mutator: PropTypes.any,
+    locale: PropTypes.any
 };
 
 export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
-    const items = showLayers.map((layer, index) => {
-        const itemProps = {
-            layer,
+    const layerRows = showLayers.map((layer, index) => {
+        const layerProps = {
+            model: layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
             mapSrs,
             mutator,
             locale
         };
-        return itemProps;
+        return layerProps;
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
@@ -49,7 +55,7 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
             }>
-            <List bordered={false} dataSource={items} renderItem={renderItem}/>
+            <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
         </Panel>
     );
 };
@@ -57,8 +63,8 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     showLayers: PropTypes.array.isRequired,
-    selectedLayerIds: PropTypes.array,
-    mapSrs: PropTypes.string,
+    selectedLayerIds: PropTypes.array.isRequired,
+    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

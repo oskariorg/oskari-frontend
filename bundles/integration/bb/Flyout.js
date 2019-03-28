@@ -8,7 +8,7 @@
  */
 Oskari.clazz.define('Oskari.integration.bundle.bb.Flyout',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  *

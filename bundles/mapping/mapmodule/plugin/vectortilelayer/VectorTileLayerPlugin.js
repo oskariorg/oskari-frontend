@@ -4,8 +4,8 @@ import olFormatMVT from 'ol/format/MVT';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import { createDefaultStyle } from 'ol/style/Style';
 
-import {VectorTileModelBuilder} from './VectorTileModelBuilder';
-import {styleGenerator} from './styleGenerator';
+import { VectorTileModelBuilder } from './VectorTileModelBuilder';
+import { styleGenerator } from './styleGenerator';
 import mapboxStyleFunction from 'ol-mapbox-style/stylefunction';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../domain/constants';
 
@@ -186,7 +186,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param { olVectorTileLayer } layer
      */
     onMapHover (event, feature, layer) {
-        const {feature: hoverFeature, layer: hoverLayer, property} = this.hoverState;
+        const { feature: hoverFeature, layer: hoverLayer, property } = this.hoverState;
         if (feature === hoverFeature) {
             return;
         }
@@ -243,4 +243,4 @@ Oskari.clazz.defineES('Oskari.mapframework.mapmodule.VectorTileLayerPlugin',
     }
 );
 
-export {VectorTileLayerPlugin};
+export { VectorTileLayerPlugin };

@@ -85,7 +85,7 @@ const applyOpacityToColorable = (colorable, opacity) => {
     if (!rgb) {
         return;
     }
-    const {r, g, b} = rgb;
+    const { r, g, b } = rgb;
     colorable.setColor(`rgba(${r},${g},${b},${alpha})`);
 };
 

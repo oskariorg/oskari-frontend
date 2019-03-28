@@ -6,7 +6,7 @@ const isHovered = (feature, hoverState) => {
     if (!hoverState) {
         return false;
     }
-    const {feature: hoverFeature, property} = hoverState;
+    const { feature: hoverFeature, property } = hoverState;
     if (!hoverFeature || !property) {
         return false;
     }

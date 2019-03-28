@@ -1,0 +1,41 @@
+.statsgrid-classification-container {
+
+    .active-legend {
+        height: 100%;
+    }
+
+    /* overrides for geostats CSS */
+    .active-legend div {
+        clear: both;
+    }
+    .geostats-legend-title {
+        display: none;
+    }
+    .legend-noactive {
+        padding: 3px 10px 5px 10px;
+    }
+    .statsgrid-svg {
+        float: left;
+    }
+    .statsgrid-svg-legend {
+        margin: 0 auto;
+        width: 90%;
+        overflow: hidden;
+    }
+    .statsgrid-counter {
+        float: left;
+    }
+    .statsgrid-range {
+        float: left;
+    }
+}
+
+.statsgrid-classification-plugin-transparent {
+    .geostats-legend-counter {
+      color: #ffffff;
+    }
+    .statsgrid-svg-legend {
+        text-shadow: none;
+        color: #000;
+    }
+}

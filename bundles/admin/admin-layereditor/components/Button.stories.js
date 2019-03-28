@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { Button } from './Button';
-import {StyledButton} from './StyledButton';
+import { StyledButton } from './StyledButton';
 
 const defaultText = 'My text';
 const defaultProps = {};

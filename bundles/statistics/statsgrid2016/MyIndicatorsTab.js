@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.MyIndicatorsTab',
             });
             dialog.show(
                 me.loc('tab.popup.deletetitle'),
-                me.loc('tab.popup.deletemsg', {name: indicator.name}),
+                me.loc('tab.popup.deletemsg', { name: indicator.name }),
                 [cancelBtn, okBtn]
             );
             me.popupOpen = true;

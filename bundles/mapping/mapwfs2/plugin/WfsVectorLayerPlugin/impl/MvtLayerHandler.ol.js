@@ -27,9 +27,9 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         };
     }
     updateLayerProperties (layer, source = this._sourceFromLayer(layer)) {
-        const {left, bottom, right, top} = this.plugin.getSandbox().getMap().getBbox();
+        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
-        const {fields, properties} = getFieldsAndPropsArrays(propsList);
+        const { fields, properties } = getFieldsAndPropsArrays(propsList);
         layer.setActiveFeatures(properties);
         // Update fields and locales only if fields is not empty and it has changed
         if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {
@@ -51,8 +51,8 @@ export class MvtLayerHandler extends AbstractLayerHandler {
 
         const update = Oskari.util.throttle(() => {
             this.updateLayerProperties(layer, source);
-        }, 300, {leading: false});
-        source.on('tileloadend', ({tile}) => {
+        }, 300, { leading: false });
+        source.on('tileloadend', ({ tile }) => {
             if (tile.getState() === olTileState.ERROR) {
                 return;
             }

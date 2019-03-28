@@ -50,9 +50,9 @@ export const Layer = ({model, even, selected, mapSrs, mutator, locale}) => {
 
 Layer.propTypes = {
     model: PropTypes.any.isRequired,
-    even: PropTypes.bool,
-    selected: PropTypes.bool,
-    mapSrs: PropTypes.string,
+    even: PropTypes.bool.isRequired,
+    selected: PropTypes.bool.isRequired,
+    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

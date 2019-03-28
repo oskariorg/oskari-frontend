@@ -2,7 +2,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-import {bbox as bboxStrategy} from 'ol/loadingstrategy';
+import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 import { applyOpacity } from '../util/style';

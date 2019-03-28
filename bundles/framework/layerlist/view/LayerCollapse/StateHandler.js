@@ -1,4 +1,4 @@
-const LAYER_TIMEOUT_MS = 300;
+const LAYER_TIMEOUT_MS = 400;
 
 export class StateHandler {
     constructor () {
@@ -10,7 +10,7 @@ export class StateHandler {
         this.filtered = null;
         this.map = Oskari.getSandbox().getMap();
     }
-    updateStateWithProps ({groups, selectedLayerIds, filterKeyword}) {
+    updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
         this.groups = groups || this.groups;
         this.selectedLayerIds = selectedLayerIds || this.selectedLayerIds;
         if (!this._filterStateChanged(filterKeyword)) {
@@ -38,7 +38,7 @@ export class StateHandler {
             const layers = group.getLayers()
                 .filter(lyr => group.matchesKeyword(lyr.getId(), this.filterKeyword));
                 // and some other rule?
-            return {group, layers};
+            return { group, layers };
         }).filter(result => result.layers.length !== 0);
         return results;
     }
@@ -52,7 +52,7 @@ export class StateHandler {
             groups: this.groups,
             filtered: this.filtered,
             openGroupTitles: this.openGroupTitles,
-            mapSrsName: this.map.getSrsName()
+            mapSrs: this.map.getSrsName()
         };
     }
     notify () {
@@ -96,8 +96,8 @@ export class StateHandler {
                     });
                 }
                 sandbox.postRequestByName('catalogue.ShowMetadataRequest', [
-                    {uuid},
-                    subUuids.map(sub => ({uuid: sub}))
+                    { uuid },
+                    subUuids.map(sub => ({ uuid: sub }))
                 ]);
             },
             showLayerBackendStatus (layerId) {
