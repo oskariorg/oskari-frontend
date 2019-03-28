@@ -1,6 +1,7 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const resolveConfig = require('./webpack/resolveConfig.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
@@ -73,16 +74,12 @@ module.exports = (env, argv) => {
                     use: [
                         styleLoaderImpl,
                         { loader: 'css-loader', options: { } }
-                        // https://github.com/webpack-contrib/css-loader/issues/863
-                        //                        { loader: 'css-loader', options: { minimize: true } }
                     ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
                         styleLoaderImpl,
-                        // https://github.com/webpack-contrib/css-loader/issues/863
-                        //                        { loader: 'css-loader', options: { minimize: true } },
                         { loader: 'css-loader', options: { } },
                         'sass-loader' // compiles Sass to CSS
                     ]
@@ -129,7 +126,8 @@ module.exports = (env, argv) => {
                 new UglifyJsPlugin({
                     sourceMap: true,
                     parallel: true
-                })
+                }),
+                new OptimizeCSSAssetsPlugin({})
             ]
         };
     } else {
