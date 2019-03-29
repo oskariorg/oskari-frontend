@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.domain.UserLayer',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */

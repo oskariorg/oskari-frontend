@@ -4,7 +4,7 @@
         function (roleModel) {
             return Backbone.Collection.extend({
 
-            // Reference to this collection's model.
+                // Reference to this collection's model.
                 model: roleModel,
 
                 getRoles: function () {

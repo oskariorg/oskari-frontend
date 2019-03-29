@@ -1,5 +1,5 @@
 import GeometryType from 'ol/geom/GeometryType';
-import {linearRingIsClockwise} from 'ol/geom/flat/orient';
+import { linearRingIsClockwise } from 'ol/geom/flat/orient';
 import LineString from 'ol/geom/LineString';
 import MultiLineString from 'ol/geom/MultiLineString';
 import MultiPoint from 'ol/geom/MultiPoint';
@@ -9,11 +9,11 @@ import Polygon from 'ol/geom/Polygon';
 import GeometryLayout from 'ol/geom/GeometryLayout';
 import Feature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
-import {equivalent, getTransform} from 'ol/proj';
+import { equivalent, getTransform } from 'ol/proj';
 import Units from 'ol/proj/Units';
-import {create as createTransform, compose as composeTransform} from 'ol/transform';
-import {transform2D} from 'ol/geom/flat/transform';
-import {getHeight} from 'ol/extent';
+import { create as createTransform, compose as composeTransform } from 'ol/transform';
+import { transform2D } from 'ol/geom/flat/transform';
+import { getHeight } from 'ol/extent';
 
 const tmpTransform = createTransform();
 

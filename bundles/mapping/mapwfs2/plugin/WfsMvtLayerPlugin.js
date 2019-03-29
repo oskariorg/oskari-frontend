@@ -1,9 +1,9 @@
-import {normalStyle, selectedStyle} from './components/defaultStyle';
-import {VectorTileLayerPlugin} from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
-import {WFS_ID_KEY, getFieldsAndPropsArrays} from './components/propertyArrayUtils';
+import { normalStyle, selectedStyle } from './components/defaultStyle';
+import { VectorTileLayerPlugin } from '../../mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin';
+import { WFS_ID_KEY, getFieldsAndPropsArrays } from './components/propertyArrayUtils';
 import TileState from 'ol/TileState';
-import {FeatureExposingMVTSource} from './components/FeatureExposingMVTSource';
-import {VectorPluginMixin} from './VectorPluginMixin.ol';
+import { FeatureExposingMVTSource } from './components/FeatureExposingMVTSource';
+import { VectorPluginMixin } from './VectorPluginMixin.ol';
 
 Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
     class WfsMvtLayerPlugin extends VectorPluginMixin(VectorTileLayerPlugin) {
@@ -52,8 +52,8 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
 
             const update = Oskari.util.throttle(() => {
                 this.updateLayerProperties(layer, source);
-            }, 300, {leading: false});
-            source.on('tileloadend', ({tile}) => {
+            }, 300, { leading: false });
+            source.on('tileloadend', ({ tile }) => {
                 if (tile.getState() === TileState.ERROR) {
                     return;
                 }
@@ -68,9 +68,9 @@ Oskari.clazz.defineES('Oskari.wfsmvt.WfsMvtLayerPlugin',
          * @param {ol/source/VectorTile} source
          */
         updateLayerProperties (layer, source = this._sourceFromLayer(layer)) {
-            const {left, bottom, right, top} = this.getSandbox().getMap().getBbox();
+            const { left, bottom, right, top } = this.getSandbox().getMap().getBbox();
             const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
-            const {fields, properties} = getFieldsAndPropsArrays(propsList);
+            const { fields, properties } = getFieldsAndPropsArrays(propsList);
             layer.setActiveFeatures(properties);
             // Update fields and locales only if fields is not empty and it has changed
             if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {

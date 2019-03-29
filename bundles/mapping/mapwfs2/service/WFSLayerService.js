@@ -144,10 +144,10 @@ Oskari.clazz.define(
                 existingFeatureSelections;
 
             if (makeNewSelection) {
-                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': featureIds});
+                _.remove(me.WFSFeatureSelections, { 'layerId': layerId });
+                me.WFSFeatureSelections.push({ 'layerId': layerId, 'featureIds': featureIds });
             } else {
-                existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
+                existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, { 'layerId': layerId }), 'featureIds');
                 // no existing selections -> add all
                 if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
                     existingFeatureSelections.push(featureIds);
@@ -164,9 +164,9 @@ Oskari.clazz.define(
                     });
                 }
                 // clear old selection
-                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
+                _.remove(me.WFSFeatureSelections, { 'layerId': layerId });
                 // add the updated selection
-                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': existingFeatureSelections[0]});
+                me.WFSFeatureSelections.push({ 'layerId': layerId, 'featureIds': existingFeatureSelections[0] });
             }
         },
 
@@ -192,7 +192,7 @@ Oskari.clazz.define(
         getSelectedFeatureIds: function (layerId) {
             var me = this,
                 featureIds;
-            featureIds = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
+            featureIds = _.pluck(_.where(me.WFSFeatureSelections, { 'layerId': layerId }), 'featureIds');
             return featureIds[0];
         },
 
@@ -207,7 +207,7 @@ Oskari.clazz.define(
             var me = this;
 
             if (me.getSelectedFeatureIds(layer._id)) {
-                _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
+                _.remove(me.WFSFeatureSelections, { 'layerId': layer._id });
                 var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
                 me.sandbox.notifyAll(event);
             }

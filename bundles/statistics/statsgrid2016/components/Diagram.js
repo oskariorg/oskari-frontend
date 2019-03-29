@@ -256,7 +256,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         var classificationOpts = stateService.getClassificationOpts(activeIndicator.hash);
         var classification = me.service.getClassificationService().getClassification(numericData, classificationOpts);
         var colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
-        return classification.maxBounds && colors ? {bounds: classification.maxBounds, values: colors} : {bounds: [], values: ['#555', '#555']};
+        return classification.maxBounds && colors ? { bounds: classification.maxBounds, values: colors } : { bounds: [], values: ['#555', '#555'] };
     },
     events: function () {
         var me = this;

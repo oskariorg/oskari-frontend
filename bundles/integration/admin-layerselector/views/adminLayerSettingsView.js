@@ -279,7 +279,7 @@ function (
                     } else {
                         var reasonKey = Object.keys(resp.error)[0];
                         var reason = resp.error[reasonKey];
-                        content = jQuery('<span>' + loc('recheckFailReason', {reason: reason}) + '<span>');
+                        content = jQuery('<span>' + loc('recheckFailReason', { reason: reason }) + '<span>');
                     }
                     popup.show(loc('recheckTitle'), content, [closeButton]);
                 },
@@ -655,7 +655,7 @@ function (
                 form = element.parents('.add-style-send'),
                 sldImport = form.find('.add-layer-style-import-block');
 
-                // set this element invisible
+            // set this element invisible
             element.hide();
 
             // Show  new sld input block
@@ -673,7 +673,7 @@ function (
                 sldImport = form.find('.add-layer-style-import-block'),
                 sldImportBtn = form.find('.import-wfs-style-button');
 
-                // set this element invisible
+            // set this element invisible
             sldImportBtn.show();
 
             // Show  new sld input block
@@ -693,7 +693,7 @@ function (
                 sldName = form.find('.add-layer-sld-style-sldname').val(),
                 sldXml = form.find('.add-sld-file').val();
 
-                // Check if sld is valid
+            // Check if sld is valid
             if (me._checkXml(sldXml)) {
                 // Save new style
                 me._saveSldStyle(sldName, sldXml);
@@ -1009,13 +1009,13 @@ function (
                     try {
                         return JSON.parse(content);
                     } catch (e) {
-                        parseErrors.push({element: element});
+                        parseErrors.push({ element: element });
                     }
                 }
             };
             options = parseOptionQuietly('.add-layer-input.layer-options');
             if (parseErrors.length > 0) {
-                return {errors: parseErrors};
+                return { errors: parseErrors };
             }
             if (options) {
                 return options;
@@ -1060,7 +1060,7 @@ function (
                 sandbox = Oskari.getSandbox(),
                 admin;
 
-                // If this is a sublayer -> setup parent layers id
+            // If this is a sublayer -> setup parent layers id
             if (me.options.baseLayerId) {
                 data.parentId = me.options.baseLayerId;
             }

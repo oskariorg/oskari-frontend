@@ -66,14 +66,14 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 id = 'measureline';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
                     allowMultipleDrawing: 'single',
-                    showMeasureOnMap: true}]);
+                    showMeasureOnMap: true }]);
                 break;
             case 'map_control_measure_area_tool':
                 type = 'Polygon';
                 id = 'measurearea';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
                     allowMultipleDrawing: 'single',
-                    showMeasureOnMap: true}]);
+                    showMeasureOnMap: true }]);
                 break;
             default:
                 break;

@@ -124,7 +124,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         createUi: function () {
             var template = jQuery(this.__templates.base).clone();
             template.find('div.info')
-                .html(this.loc('flyout.description', {maxSize: this.maxFileSize}));
+                .html(this.loc('flyout.description', { maxSize: this.maxFileSize }));
             template.find('div.state')
                 .html(this.__createFileImportTemplate());
             return template;
@@ -302,11 +302,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __finish: function (json) {
             this.progressSpinner.stop();
             var title = this.loc('flyout.finish.success.title');
-            var msg = this.loc('flyout.finish.success.message', {count: json.featuresCount});
+            var msg = this.loc('flyout.finish.success.message', { count: json.featuresCount });
             var fadeout = true;
 
             if (json.warning !== undefined && json.warning.featuresSkipped) {
-                msg = msg + ' ' + this.loc('flyout.warning.features_skipped', {count: json.warning.featuresSkipped});
+                msg = msg + ' ' + this.loc('flyout.warning.features_skipped', { count: json.warning.featuresSkipped });
                 fadeout = false;
             }
             this.instance.addUserLayer(json);
@@ -326,13 +326,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             const key = errorInfo.error;
             switch (key) {
             case 'multiple_extensions':
-                msg = this.loc('flyout.error.multiple_extensions', {extension: errorInfo.extensions});
+                msg = this.loc('flyout.error.multiple_extensions', { extension: errorInfo.extensions });
                 break;
             case 'multiple_main_file':
-                msg = this.loc('flyout.error.multiple_main_file', {extensions: errorInfo.extensions});
+                msg = this.loc('flyout.error.multiple_main_file', { extensions: errorInfo.extensions });
                 break;
             case 'file_over_size':
-                msg = this.loc('flyout.error.file_over_size', {maxSize: this.maxFileSize});
+                msg = this.loc('flyout.error.file_over_size', { maxSize: this.maxFileSize });
                 break;
             case 'no_main_file':
                 list.push(errors.no_main_file);
