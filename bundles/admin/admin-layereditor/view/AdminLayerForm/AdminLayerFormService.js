@@ -199,6 +199,27 @@ export class AdminLayerFormService {
         });
     }
 
+    deleteLayer () {
+        const layer = this.getLayer();
+        const me = this;
+        fetch(Oskari.urls.getRoute('DeleteLayer'), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN')
+            },
+            body: queryString.stringify(layer)
+        }).then(function (response) {
+            if (response.ok) {
+                // TODO handle this, just close the flyout?
+            } else {
+                me.getMutator().setMessage('messages.errorRemoveLayer', 'error');
+            }
+            return response;
+        });
+    }
+
     addListener (consumer) {
         this.listeners.push(consumer);
     }

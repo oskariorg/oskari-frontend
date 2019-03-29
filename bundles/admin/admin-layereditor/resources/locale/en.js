@@ -34,8 +34,10 @@ Oskari.registerLocalization(
             "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
+            "ok": "Ok",
             "add": "Add",
             "save": "Save",
+            "delete": "Remove",
             "opacity": "Opacity",
             "minScale": "Minimum scale",
             "maxScale": "Maximum scale",
@@ -46,7 +48,9 @@ Oskari.registerLocalization(
             "attributes": "Attributes",
             "messages": {
                 "saveSuccess": "Saved",
-                "saveFailed": "A system error occurred. Data has not been updated."
+                "saveFailed": "A system error occurred. Data has not been updated.",
+                "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
+                "errorRemoveLayer": "The map layer could not be removed.",
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",

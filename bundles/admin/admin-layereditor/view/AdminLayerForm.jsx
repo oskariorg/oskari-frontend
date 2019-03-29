@@ -10,6 +10,8 @@ import {AdminLayerFormService} from './AdminLayerForm/AdminLayerFormService';
 import {StyledRoot} from './AdminLayerForm/AdminLayerFormStyledComponents';
 import {Alert} from '../components/Alert';
 import {GenericContext} from '../../../../src/react/util.jsx';
+import {Confirm} from '../components/Confirm';
+
 export class AdminLayerForm extends React.Component {
     constructor ({layer, dataProviders, mapLayerGroups, flyout}) {
         super();
@@ -18,6 +20,7 @@ export class AdminLayerForm extends React.Component {
         this.service.initLayerState(layer, mapLayerGroups, dataProviders);
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
+        this.deleteLayer = this.deleteLayer.bind(this);
     }
 
     handleSubmit () {
@@ -28,6 +31,9 @@ export class AdminLayerForm extends React.Component {
         this.flyout.hide();
     }
 
+    deleteLayer () {
+        this.service.deleteLayer();
+    }
     render () {
         const mutator = this.service.getMutator();
         const layer = this.service.layer || {};
@@ -45,16 +51,16 @@ export class AdminLayerForm extends React.Component {
                                 <Alert message={message.text} type={message.type} />
                             }
                             <Tabs>
-                                <TabPane tab={loc('generalTabTitle')} key="general">
+                                <TabPane tab={loc('generalTabTitle')} key='general'>
                                     <GeneralTabPane layer={layer} service={mutator} />
                                 </TabPane>
-                                <TabPane tab={loc('visualizationTabTitle')} key="visual">
+                                <TabPane tab={loc('visualizationTabTitle')} key='visual'>
                                     <VisualizationTabPane layer={layer} service={mutator} />
                                 </TabPane>
-                                <TabPane tab={loc('additionalTabTitle')} key="additional">
+                                <TabPane tab={loc('additionalTabTitle')} key='additional'>
                                     <AdditionalTabPane layer={layer} service={mutator} />
                                 </TabPane>
-                                <TabPane tab={loc('permissionsTabTitle')} key="permissions">
+                                <TabPane tab={loc('permissionsTabTitle')} key='permissions'>
                                     <PermissionsTabPane />
                                 </TabPane>
                             </Tabs>
@@ -66,6 +72,12 @@ export class AdminLayerForm extends React.Component {
                                     loc('save')
                                 }
                             </Button>&nbsp;
+                            {!layer.isNew &&
+                                <Confirm title={loc('messages.confirmDeleteLayer')} onConfirm={() => this.deleteLayer()}
+                                    okText={loc('ok')} cancelText={loc('cancel')} placement='bottomLeft'>
+                                    <Button>{loc('delete')}</Button>&nbsp;
+                                </Confirm>
+                            }
                             {this.flyout &&
                                 <Button onClick={() => this.handleCancel()}>{loc('cancel')}</Button>
                             }

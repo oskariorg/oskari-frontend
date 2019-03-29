@@ -34,8 +34,10 @@ Oskari.registerLocalization(
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",
+            "ok": "Ok",
             "add": "Lisää",
             "save": "Tallenna",
+            "delete": "Poista",
             "opacity": "Peittävyys",
             "style": "Oletustyyli",
             "minScale": "Pienin mittakaava",
@@ -47,7 +49,9 @@ Oskari.registerLocalization(
             "attributes": "Attribuutit",
             "messages": {
                 "saveSuccess": "Tallennettu",
-                "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu."
+                "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
+                "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
+                "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
             },
             "otherLanguages": "Muut kielet",
             "styleJSON": "Style JSON",
