@@ -71,8 +71,8 @@ export class AdminLayerFormService {
                 me.notify();
             },
             setMinAndMaxScale (values) {
-                me.layer.minScale = values[0];
-                me.layer.maxScale = values[1];
+                me.layer.minScale = values[1];
+                me.layer.maxScale = values[0];
                 me.notify();
             },
             setStyle (style) {

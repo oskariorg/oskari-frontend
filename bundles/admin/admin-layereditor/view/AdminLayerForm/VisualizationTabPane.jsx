@@ -35,7 +35,7 @@ export const VisualizationTabPane = ({layer, service}) => {
                         <StyledColumnRight>
                             <label>{loc('minAndMaxScale')}</label>
                             <StyledComponent style={{height: 400, paddingBottom: 20, marginLeft: '25%'}}>
-                                <Slider vertical range defaultValue={[layer.minScale, layer.maxScale]} min={0} max={1000000} onChange={(values) => service.setMinAndMaxScale(values)} />
+                                <Slider vertical range defaultValue={[layer.minScale, layer.maxScale]} min={0} max={100000000} onChange={(values) => service.setMinAndMaxScale(values)} />
                             </StyledComponent>
                         </StyledColumnRight>
                     </StyledTab>
