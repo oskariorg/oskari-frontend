@@ -1,4 +1,4 @@
-import {stringify} from 'query-string';
+import { stringify } from 'query-string';
 export class AdminLayerFormService {
     constructor (consumer) {
         this.layer = {};
