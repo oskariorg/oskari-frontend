@@ -7,7 +7,7 @@ export const DataProviderSelect = (props) => {
         <Option key={dataProvider.id}>{dataProvider.name}</Option>
     );
     return (
-        <Select value={props.value} onChange={(value) => props.onChange(value)}>
+        <Select defaultValue={props.value} onChange={(value) => props.onChange(value)}>
             {options}
         </Select>
     );
