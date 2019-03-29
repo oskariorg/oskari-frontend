@@ -1,7 +1,28 @@
 import React from 'react';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import { Slider } from './Slider';
 import { NumberInput } from './NumberInput';
+
+const StyledRoot = styled('div')`
+    width: 500px;
+`;
+
+const StyledSlider = styled('div')`
+    width: 350px;
+    float: left;
+    margin-left: 10px;
+    margin-right: 10px;
+`;
+
+const StyledNumberInput = styled('div')`
+    width: 120px;
+    float: left;
+`;
+
+const StyledClear = styled('br')`
+    clear: left;
+`;
 
 export class Opacity extends React.Component {
     constructor (props) {
@@ -18,30 +39,28 @@ export class Opacity extends React.Component {
         this.props.onChange(value);
     }
 
-    // Inline styles could be handled in some other way
-    // Slider component had some problems if styled-components was used
     render () {
         const { opacity } = this.state;
         return (
-            <div style={{width: 500}}>
-                <div style={{float: 'left', width: 350, marginLeft: 10, marginRight: 10}}>
+            <StyledRoot>
+                <StyledSlider>
                     <Slider
                         min={0}
                         max={100}
                         onChange={this.onChange}
                         value={typeof opacity === 'number' ? opacity : 0}
                     />
-                </div>
-                <div style={{float: 'left', width: 120}}>
+                </StyledSlider>
+                <StyledNumberInput>
                     <NumberInput
                         min={0}
                         max={100}
                         value={opacity}
                         onChange={this.onChange}
                     /> %
-                </div>
-                <br style={{clear: 'left'}} />
-            </div>
+                </StyledNumberInput>
+                <StyledClear />
+            </StyledRoot>
         );
     }
 }

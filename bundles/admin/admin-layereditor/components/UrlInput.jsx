@@ -59,7 +59,7 @@ export class UrlInput extends React.Component {
         });
     }
     render () {
-        const {credentials, ...other} = {...this.props};
+        const {credentials, ...other} = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
@@ -70,7 +70,6 @@ export class UrlInput extends React.Component {
                 ))}
             </Select>
         );
-        const credentialProps = {...credentials};
         const processedProps = {
             ...other,
             value: undefined,
@@ -79,16 +78,16 @@ export class UrlInput extends React.Component {
         return (
             <div>
                 <Input {...processedProps} value={this.state.url} addonBefore={protocolSelect} />&nbsp;
-                {credentialProps.allowCredentials &&
+                {credentials.allowCredentials &&
                     <Collapse defaultActiveKey={this.state.defaultPanel}>
-                        <Panel header={credentialProps.panelText} key='usernameAndPassword'>
+                        <Panel header={credentials.panelText} key='usernameAndPassword'>
                             <div>
-                                <label>{credentialProps.usernameText}</label>
-                                <div><TextInput value={credentialProps.usernameValue} type='text' onChange={(evt) => credentialProps.usernameOnChange(evt.target.value)} /></div>
+                                <label>{credentials.usernameText}</label>
+                                <div><TextInput value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
                             </div>
                             <div>
-                                <label>{credentialProps.passwordText}</label>
-                                <div><TextInput value={credentialProps.passwordValue} type='password' onChange={(evt) => credentialProps.passwordOnChange(evt.target.value)} /></div>
+                                <label>{credentials.passwordText}</label>
+                                <div><TextInput value={credentials.passwordValue} type='password' onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
                             </div>
                         </Panel>
                     </Collapse>

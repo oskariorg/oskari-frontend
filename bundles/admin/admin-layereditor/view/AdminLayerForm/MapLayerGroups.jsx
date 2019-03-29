@@ -3,9 +3,10 @@ import PropTypes from 'prop-types';
 import {Checkbox} from '../../components/Checkbox';
 import {Collapse, Panel} from '../../components/Collapse';
 import {List, ListItem} from '../../components/List';
-import {GenericContext} from '../../../../../src/react/util.jsx';
+import {withContext} from '../../../../../src/react/util.jsx';
 
-export const MapLayerGroups = ({allGroups, service, lang}) => {
+const MapLayerGroups = (props) => {
+    const {allGroups, service, lang} = props;
     const dataSource = allGroups.map((group) =>
         <Checkbox key={group.id} onChange={(evt) => service.setMapLayerGroup(evt.target.checked, group.id)} checked={group.checked}>{group.name[lang]}</Checkbox>
     );
@@ -15,18 +16,11 @@ export const MapLayerGroups = ({allGroups, service, lang}) => {
         );
     };
     return (
-        <GenericContext.Consumer>
-            {value => {
-                const loc = value.loc;
-                return (
-                    <Collapse>
-                        <Panel header={loc('selectMapLayerGroupsButton')}>
-                            <List dataSource={dataSource} renderItem={renderItem} />
-                        </Panel>
-                    </Collapse>
-                );
-            }}
-        </GenericContext.Consumer>
+        <Collapse>
+            <Panel header={props.loc('selectMapLayerGroupsButton')}>
+                <List dataSource={dataSource} renderItem={renderItem} />
+            </Panel>
+        </Collapse>
     );
 };
 
@@ -35,5 +29,9 @@ MapLayerGroups.propTypes = {
     onChange: PropTypes.func,
     allGroups: PropTypes.array,
     service: PropTypes.any,
-    lang: PropTypes.string
+    lang: PropTypes.string,
+    loc: PropTypes.func
 };
+
+const contextWrap = withContext(MapLayerGroups);
+export {contextWrap as MapLayerGroups};

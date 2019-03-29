@@ -1,4 +1,4 @@
-import queryString from 'query-string';
+import {stringify} from 'query-string';
 export class AdminLayerFormService {
     constructor (consumer) {
         this.layer = {};
@@ -188,7 +188,7 @@ export class AdminLayerFormService {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN')
             },
-            body: queryString.stringify(layer)
+            body: stringify(layer)
         }).then(function (response) {
             if (response.ok) {
                 me.getMutator().setMessage('messages.saveSuccess', 'success');
@@ -209,7 +209,7 @@ export class AdminLayerFormService {
                 'Content-Type': 'application/x-www-form-urlencoded',
                 'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN')
             },
-            body: queryString.stringify(layer)
+            body: stringify(layer)
         }).then(function (response) {
             if (response.ok) {
                 // TODO handle this, just close the flyout?
