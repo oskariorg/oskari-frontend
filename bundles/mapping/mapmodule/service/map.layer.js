@@ -696,7 +696,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
-         * @param {String|Integer} id if defined return only wanted group
+         * @param {String|Integer} id if defined and not equal -1 return only wanted group
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getAllLayerGroups: function (id) {
@@ -727,7 +727,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     layerGroups = group;
                 }
             }
-            return (id) ? layerGroups : this._layerGroups;
+            return (id && id !== -1) ? layerGroups : this._layerGroups;
         },
 
         /**
