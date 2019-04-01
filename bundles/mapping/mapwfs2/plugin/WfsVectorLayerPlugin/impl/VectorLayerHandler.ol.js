@@ -43,8 +43,9 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         const source = this._getLayerSource(layer);
         const vectorLayer = new olLayerVector({
             opacity,
-            source,
-            renderMode: 'image'
+            visible: layer.isVisible(),
+            renderMode: 'image',
+            source
         });
         this.plugin.getMapModule().addLayer(vectorLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorLayer);
@@ -76,6 +77,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      */
     _getFeatureLoader (layer, source) {
         return (extent, resolution, projection) => {
+            this.plugin.getMapModule().loadingState(layer.getId(), true);
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -87,9 +89,11 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 url: Oskari.urls.getRoute('GetWFSFeatures'),
                 success: (resp) => {
                     source.addFeatures(source.getFormat().readFeatures(resp));
+                    this.plugin.getMapModule().loadingState(layer.getId(), false);
                 },
                 error: () => {
                     source.removeLoadedExtent(extent);
+                    this.plugin.getMapModule().loadingState(layer.getId(), null, true);
                 }
             });
         };
