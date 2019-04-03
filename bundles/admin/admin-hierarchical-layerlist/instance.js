@@ -347,7 +347,7 @@ Oskari.clazz.define('Oskari.admin.bundle.admin.HierarchicalLayerListBundleInstan
                         xhr = null;
                         var successCount = resp.success.length;
                         var failCount = Object.keys(resp.error).length;
-                        content.append('<br><br><span>' + loc('recheckAllSucceeded', {success: successCount, fail: failCount}) + '<span>');
+                        content.append('<br><br><span>' + loc('recheckAllSucceeded', { success: successCount, fail: failCount }) + '<span>');
                         tool.removeClass('active');
                     },
                     error: function (xhr, status, error) {

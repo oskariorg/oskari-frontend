@@ -1,4 +1,4 @@
-const {stringifyRequest} = require('loader-utils');
+const { stringifyRequest } = require('loader-utils');
 
 module.exports = function (source) {
     if (!this.query) {

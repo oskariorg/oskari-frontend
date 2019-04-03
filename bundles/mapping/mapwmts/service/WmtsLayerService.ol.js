@@ -1,5 +1,5 @@
 import olLayerTile from 'ol/layer/Tile';
-import olSourceWMTS, {optionsFromCapabilities} from 'ol/source/WMTS';
+import olSourceWMTS, { optionsFromCapabilities } from 'ol/source/WMTS';
 import olFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 
 /**
@@ -160,7 +160,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
             crossOrigin: layer.getAttributes('crossOrigin')
         };
 
-            // override default params and options from layer
+        // override default params and options from layer
         _.each(layer.getOptions(), function (value, key) {
             config[key] = value;
         });

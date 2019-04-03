@@ -165,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 },
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanged({width: evt.getWidth(), height: evt.getHeight()});
+                    this._handleMapSizeChanged({ width: evt.getWidth(), height: evt.getHeight() });
                 }
             };
         },

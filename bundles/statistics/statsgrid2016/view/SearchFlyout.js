@@ -161,8 +161,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         // Overrides selection key and value from provided search values.
         const getSearchWithModifiedParam = (values, paramKey, paramValue) => {
-            const modSelection = {...values.selection, [paramKey]: paramValue};
-            return {...values, selections: modSelection};
+            const modSelection = { ...values.selection, [paramKey]: paramValue };
+            return { ...values, selections: modSelection };
         };
 
         let metadataCounter = 0;
@@ -181,14 +181,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             }
             // Overrides indicator array to make this search indicator specific.
             const addSearchValues = values => {
-                refinedSearchValues.push({...values, indicator});
+                refinedSearchValues.push({ ...values, indicator });
             };
             // Get indicator metadata to check the search valididty
             this.service.getIndicatorMetadata(commonSearchValues.datasource, indicator, (err, metadata) => {
                 // Map possible errors by indicator name
                 const indicatorName = metadata && metadata.name ? Oskari.getLocalized(metadata.name) : indicator;
                 if (err || !metadata) {
-                    errorMap.set(indicatorName, {metadataNotFound: true});
+                    errorMap.set(indicatorName, { metadataNotFound: true });
                     checkDone();
                     return;
                 }
@@ -246,10 +246,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     _getRefinedSearch (metadata, commonSearchValues) {
         // Make a deep clone of search values
         var indSearchValues = jQuery.extend(true, {}, commonSearchValues);
-        const {regionset, selections, series} = indSearchValues;
+        const { regionset, selections, series } = indSearchValues;
 
         if (Array.isArray(metadata.regionsets) && !metadata.regionsets.includes(Number(regionset))) {
-            indSearchValues.error = {notAllowed: 'regionset'};
+            indSearchValues.error = { notAllowed: 'regionset' };
             return indSearchValues;
         }
         if (!selections) {
@@ -268,7 +268,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             if (!Array.isArray(value)) {
                 // Single option
                 if (!selector.allowedValues.includes(value)) {
-                    indSearchValues.error = {notAllowed: selectionKey};
+                    indSearchValues.error = { notAllowed: selectionKey };
                 }
                 return;
             }
@@ -278,7 +278,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                 !selector.allowedValues.includes(cur) && !selector.allowedValues.find(obj => obj.id === cur));
 
             // Set multiselect status for search
-            indSearchValues.multiselectStatus = {selector: selectionKey, invalid: notAllowed, requested: [...value]};
+            indSearchValues.multiselectStatus = { selector: selectionKey, invalid: notAllowed, requested: [...value] };
 
             if (notAllowed.length === 0) {
                 // Selected values are valid
@@ -287,7 +287,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             if (notAllowed.length === value.length) {
                 // All selected values are out of range
                 delete selections[selectionKey];
-                indSearchValues.error = {notAllowed: selectionKey};
+                indSearchValues.error = { notAllowed: selectionKey };
                 return;
             }
             // Filter out unsupported search param values
@@ -370,7 +370,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         const consumeBatch = batch => {
             const dataPromises = [];
             batch.forEach((search, index) => {
-                const {datasource, indicator, selections, series, regionset} = search;
+                const { datasource, indicator, selections, series, regionset } = search;
                 const promise = new Promise((resolve, reject) => {
                     this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
                         if (err || !data) {
@@ -401,7 +401,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         if (!indicatorsHavingData.has(failedSearch.indicator)) {
-            errors.set(failedSearch.indicatorName, {datasetEmpty: true});
+            errors.set(failedSearch.indicatorName, { datasetEmpty: true });
             return;
         }
         const multiselectStatus = multiselectStatusMap.get(failedSearch.indicatorName);
@@ -437,7 +437,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (indicatorMessages.length > 0) {
             const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             const okBtn = dialog.createCloseButton('OK');
-            const title = this.loc('errors.noDataForIndicators', {indicators: indicatorMessages.length});
+            const title = this.loc('errors.noDataForIndicators', { indicators: indicatorMessages.length });
             dialog.show(title, indicatorMessages.join('<br>'), [okBtn]);
         }
     },
@@ -492,7 +492,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     _addIndicators: function (searchValues) {
         let latestNewSearch = null;
         searchValues.forEach(values => {
-            const {datasource, indicator, selections, series} = values;
+            const { datasource, indicator, selections, series } = values;
             if (this.service.getStateService().addIndicator(datasource, indicator, selections, series)) {
                 // Indicator was not already present at the service
                 latestNewSearch = values;
@@ -500,7 +500,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         });
         if (latestNewSearch) {
             // Search added some new indicators, let's set the last one as the active indicator.
-            const {datasource, indicator, selections, series} = latestNewSearch;
+            const { datasource, indicator, selections, series } = latestNewSearch;
             const hash = this.service.getStateService().getHash(datasource, indicator, selections, series);
             this.service.getStateService().setActiveIndicator(hash);
         }

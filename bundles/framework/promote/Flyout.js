@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  * @param {Oskari.mapframework.bundle.promote.PromoteBundleInstance}

@@ -603,7 +603,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 type: isNew ? 'POST' : 'PUT',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: JSON.stringify({'features': categories}),
+                data: JSON.stringify({ 'features': categories }),
                 url: Oskari.urls.getRoute('MyPlacesLayers'),
                 success: function (response) {
                     if (response) {

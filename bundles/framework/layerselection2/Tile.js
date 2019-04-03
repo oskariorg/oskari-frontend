@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Tile',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  * @param

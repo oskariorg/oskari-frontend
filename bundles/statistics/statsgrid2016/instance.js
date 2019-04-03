@@ -34,6 +34,7 @@ Oskari.clazz.define(
 
         this.regionsetViewer = null;
         this.flyoutManager = null;
+        this._layerId = 'STATS_LAYER';
     }, {
         afterStart: function (sandbox) {
             var me = this;
@@ -151,12 +152,15 @@ Oskari.clazz.define(
         hasData: function () {
             return !!this.statsService.getDatasource().length;
         },
+        getLayerId: function () {
+            return this._layerId;
+        },
         /**
          * Update visibility of classification / legend based on idicators length & stats layer visibility
          */
         _updateClassficationViewVisibility: function () {
             var indicatorsExist = this.statsService.getStateService().getIndicators().length > 0;
-            var layer = this.getLayerService().findMapLayer('STATS_LAYER');
+            var layer = this.getLayerService().findMapLayer(this._layerId);
             var layerVisible = layer ? layer.isVisible() : true;
 
             this.createClassficationView(indicatorsExist && layerVisible);
@@ -167,7 +171,7 @@ Oskari.clazz.define(
         _updateSeriesControlVisibility: function () {
             const ind = this.statsService.getStateService().getActiveIndicator();
             const isSeriesActive = ind && !!ind.series;
-            const layer = this.getLayerService().findMapLayer('STATS_LAYER');
+            const layer = this.getLayerService().findMapLayer(this._layerId);
             const layerVisible = layer ? layer.isVisible() : true;
 
             this.setSeriesControlVisible(isSeriesActive && layerVisible);
@@ -290,7 +294,7 @@ Oskari.clazz.define(
             },
             AfterMapLayerRemoveEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer || layer.getId() !== 'STATS_LAYER') {
+                if (!layer || layer.getId() !== this._layerId) {
                     return;
                 }
                 var emptyState = {};
@@ -321,7 +325,7 @@ Oskari.clazz.define(
             },
             MapLayerVisibilityChangedEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer || layer.getId() !== 'STATS_LAYER') {
+                if (!layer || layer.getId() !== this._layerId) {
                     return;
                 }
                 this._updateClassficationViewVisibility();
@@ -331,6 +335,9 @@ Oskari.clazz.define(
                 this.statsService.notifyOskariEvent(evt);
             },
             AfterChangeMapLayerOpacityEvent: function (evt) {
+                if (evt.getMapLayer().getId() !== this._layerId) {
+                    return;
+                }
                 this.statsService.notifyOskariEvent(evt);
                 // record opacity for published map etc
                 var ind = this.statsService.getStateService().getActiveIndicator();

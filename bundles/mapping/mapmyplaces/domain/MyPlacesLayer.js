@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */
@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
     }, {
         /* Layer type specific functions */
 
-    /**
+        /**
      * Sets the wms url for the layer.
      *
      * @method setWmsUrl

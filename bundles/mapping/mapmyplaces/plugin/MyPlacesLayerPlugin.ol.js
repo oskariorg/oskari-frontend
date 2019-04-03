@@ -26,31 +26,27 @@ Oskari.clazz.define(
         },
         /**
          * Interface method for the module protocol.
-         *
          * @private @method _initImpl
-         *
-         *
          */
         _initImpl: function () {
+            const layerClass = 'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer';
+            const modelBuilderClass = 'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder';
+            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox());
+
+            const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
+            if (typeof wfsPlugin.registerLayerType === 'function') {
+                // Let wfs plugin handle this layertype
+                wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder);
+                this.unregister();
+                return;
+            }
             // register domain builder
-            var layerModelBuilder,
-                mapLayerService = this.getSandbox().getService(
-                    'Oskari.mapframework.service.MapLayerService'
-                );
+            const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (!mapLayerService) {
                 return;
             }
-            mapLayerService.registerLayerModel(
-                this.layertype,
-                'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer'
-            );
-            layerModelBuilder = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder',
-                this.getSandbox()
-            );
-            mapLayerService.registerLayerModelBuilder(this.layertype,
-                layerModelBuilder
-            );
+            mapLayerService.registerLayerModel(this.layertype, layerClass);
+            mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
         /**
          * Adds a single MyPlaces layer to this map

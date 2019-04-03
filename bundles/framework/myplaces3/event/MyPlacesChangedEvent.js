@@ -4,7 +4,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.myplaces.event.MyPlacesChangedEvent',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */
