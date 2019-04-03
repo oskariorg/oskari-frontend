@@ -305,13 +305,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             return this._WMSLayerId;
         },
         /**
-         * @method getTileGrid
-         * Returns tile grid from options or default tile grid (EPSG:3067)
-         */
-        getTileGrid: function () {
-            return this._options.tileGrid;
-        },
-        /**
          * @method getLayerUrl
          * Superclass override
          */

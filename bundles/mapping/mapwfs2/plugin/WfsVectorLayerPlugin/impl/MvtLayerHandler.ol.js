@@ -8,6 +8,11 @@ import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 
 const FEATURE_DATA_UPDATE_THROTTLE = 5000;
+const TILEGRID_3067 = {
+    extent: [-548576, 6291456, 1548576, 8388608],
+    resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+    tileSize: [256, 256]
+};
 
 /**
  * @class MvtLayerHandler
@@ -19,15 +24,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
         this.throttledUpdates = new Map();
-        this.tileGrid = this._getTileGrid();
-    }
-    _getTileGrid () {
-        const tileGrid = {
-            extent: [-548576, 6291456, 1548576, 8388608],
-            resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
-            tileSize: [256, 256]
-        };
-        return new olTileGrid(tileGrid);
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
@@ -79,15 +75,15 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         });
         return source;
     }
+
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-
+        const tileGrid = layer.getTileGrid() || TILEGRID_3067;
         const sourceOpts = {
             format: new olFormatMVT(),
             projection: this.plugin.getMap().getView().getProjection(),
             url: layer.getLayerUrl().replace('{epsg}', this.plugin.getMapModule().getProjection()),
-            // tileUrlFunction,
-            tileGrid: this.tileGrid
+            tileGrid: new olTileGrid(tileGrid)
         };
 
         // Properties id, type and hover are being used in VectorFeatureService.
