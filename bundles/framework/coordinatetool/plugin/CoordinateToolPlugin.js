@@ -144,6 +144,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _getPopup: function () {
             return this._popup;
         },
+        _setLayerToolsEditModeImpl: function () {
+            if (this.inLayerToolsEditMode() && this.isOpen()) {
+                this._toggleToolState();
+            }
+        },
         /**
          * @method  @private _validLonLatInputs validate inputs
          * @return {Boolean} is inputs valid true/false
@@ -621,8 +626,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // XY icon click
             el.off('click');
             el.on('click', function (event) {
-                var publisherService = me._sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
-                if (!publisherService || !publisherService.getIsActive()) {
+                if (!me.inLayerToolsEditMode()) {
                     me._toggleToolState();
                     event.stopPropagation();
                 }

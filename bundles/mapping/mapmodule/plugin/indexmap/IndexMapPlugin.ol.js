@@ -143,10 +143,9 @@ Oskari.clazz.define(
 
             if (this.inLayerToolsEditMode()) {
                 // close map
-                var miniMap = this.getElement().find(
-                    '.olControlOverviewMapElement'
-                );
-                miniMap.hide();
+                if (this._indexMap) {
+                    this._indexMap.setCollapsed(true);
+                }
                 // disable icon
                 icon.off('click');
             } else {
