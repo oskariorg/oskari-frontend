@@ -30,10 +30,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 max: 60,
                 showValues: false,
                 fractionDigits: 0
+            },
+            classificationPluginState: {
+                editEnabled: true,
+                visible: true,
+                transparent: false
             }
         };
         this._timers = {};
-        this.classificationEnabled = true;
+        this.classificationPluginState = {};
         Oskari.makeObservable(this);
     }, {
         __name: 'StatsGrid.StateService',
@@ -45,12 +50,42 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getName: function () {
             return this.__name;
         },
-        isClassificationEnabled: function () {
-            return this.classificationEnabled;
+        getClassificationPluginState: function () {
+            return this.classificationPluginState;
         },
-        enableClassification: function (enable) {
-            this.classificationEnabled = !!enable;
-            this.trigger('ClassificationContainerChanged');
+
+        // Used only when plugin is started (doesn't trigger event)
+        initClassificationPluginState: function (conf, isEmbedded) {
+            const defaults = this._defaults.classificationPluginState;
+            if (isEmbedded) {
+                if (conf.hasOwnProperty('transparent')) {
+                    defaults.transparent = conf.transparent;
+                }
+                if (conf.hasOwnProperty('allowClassification')) {
+                    defaults.editEnabled = conf.allowClassification;
+                }
+            }
+            Object.assign(this.classificationPluginState, defaults);
+        },
+        toggleClassificationPluginState: function (key) {
+            if (this.classificationPluginState.hasOwnProperty(key)) {
+                const value = !this.classificationPluginState[key];
+                this.updateClassificationPluginState(key, value);
+                return value;
+            }
+        },
+        resetClassificationPluginState: function (key) {
+            const defaults = this._defaults.classificationPluginState;
+            if (defaults.hasOwnProperty(key)) {
+                this.updateClassificationPluginState(key, defaults[key]);
+            }
+        },
+        updateClassificationPluginState: function (key, value) {
+            if (this.classificationPluginState[key] === value) {
+                return;
+            }
+            this.classificationPluginState[key] = value;
+            this.trigger('ClassificationPluginChanged', { key: key, value: value });
         },
         /**
          * Resets the current state and sends events about the changes.
@@ -124,31 +159,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getRegion: function () {
             return this.activeRegion;
         },
-
-        /**
-         * Sets the current classification and sends out event notifying about the change
-         * @param {String} indicatorHash indicator hash
-         * @param {Object} classification classification
-         * @param {Boolean} suppressEvent suppress event
-         */
-        setClassification: function (indicatorHash, classification, suppressEvent) {
-            var me = this;
-            if (typeof indicatorHash !== 'string' && typeof classification !== 'object') {
-                return;
-            }
-
-            var indicator = this.getIndicator(indicatorHash);
-            if (indicator) {
-                var previousClassification = indicator.classification;
-                indicator.classification = classification;
-                // notify
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
-                if (!suppressEvent && eventBuilder) {
-                    this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
-                    me.setActiveIndicator(indicatorHash);
-                }
-            }
-        },
         updateActiveClassification: function (key, value) {
             const indicator = this.getActiveIndicator();
             if (indicator) {
@@ -171,6 +181,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 }
             }
         },
+        updateClassificationTransparency: function (transparency) {
+            const indicator = this.getActiveIndicator();
+            if (indicator) {
+                indicator.classification.transparency = transparency;
+            }
+        },
+
         /**
          * Gets getClassificationOpts
          * @param  {String} indicatorHash indicator hash
@@ -219,6 +236,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getIndicators: function () {
             return this.indicators;
         },
+        hasIndicators: function () {
+            return this.indicators.length > 0;
+        },
+        isSeriesActive: function () {
+            const active = this.getActiveIndicator();
+            return active && !!active.series;
+        },
+
         /**
          * @method  @public getIndicatorIndex Gets indicator index startin number 0
          * @param  {String} indicatorHash indicator hash

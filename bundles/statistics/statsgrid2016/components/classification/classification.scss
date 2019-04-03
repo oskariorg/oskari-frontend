@@ -5,10 +5,8 @@
     border: 1px solid rgba(0,0,0,0.2);
     pointer-events: auto;
     text-align: left;
-}
 
-.statsgrid-classification-plugin-transparent {
-    .statsgrid-classification-container {
+    &.transparent-classification {
         background-color: transparent;
         border: 1px solid transparent;
         color:#FFFFFF;

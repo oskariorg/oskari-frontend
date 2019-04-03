@@ -5,25 +5,22 @@
             line-height: 27px;
         }
     }
-}
 
-.statsgrid-classification-plugin-transparent {
-    .oskari-color-selection-main {
-        .color-selection-arrow {
-            display: none;
-        }
-        .oskari-selected-color {
-            border: 1px solid transparent;
-        }
-        .oskari-color-selection {
-            border: 1px solid transparent;
-        }
-        &.disabled {
-            .oskari-color-option {
-                cursor: auto;
+    &.transparent-classification {
+        .oskari-color-selection-main {
+            .color-selection-arrow {
+                display: none;
             }
-            .oskari-selected-color, .color-selection-arrow {
-                cursor: auto;
+            .oskari-selected-color {
+                border: 1px solid transparent;
+            }
+            .oskari-color-selection {
+                border: 1px solid transparent;
+            }
+            &.disabled {
+                .oskari-color-option, .oskari-selected-color, .color-selection-arrow {
+                    cursor: auto;
+                }
             }
         }
     }

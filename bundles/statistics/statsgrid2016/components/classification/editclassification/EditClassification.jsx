@@ -80,9 +80,10 @@ const handleCheckboxChange = (service, id, isSelected) => {
 };
 
 const EditClassification = props => {
-    const {indicators, service, loc} = props;
-    const {methods, values, disabled, modes, colors, types, mapStyles} = props.classifications;
+    const {indicators, service, loc, editEnabled} = props;
+    const {methods, values, modes, colors, types, mapStyles} = props.classifications;
     const disabledOptions = getDisabledOptions(props);
+    const disabled = !editEnabled;
 
     return (
         <div className="classification-edit">
@@ -178,7 +179,7 @@ const EditClassification = props => {
 };
 EditClassification.propTypes = {
     indicators: PropTypes.object,
-    state: PropTypes.object,
+    editEnabled: PropTypes.bool,
     classifications: PropTypes.object,
     service: PropTypes.object,
     loc: PropTypes.func
