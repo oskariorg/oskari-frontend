@@ -625,7 +625,7 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
-                renderCoverageButton = (_.filter(dataFields, {'field': 'coverage'}).length > 0),
+                renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -1079,7 +1079,7 @@ Oskari.clazz.define(
                                     if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
                                         callbackElement = actionElement.first();
-                                        callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
+                                        callbackElement.css({ 'cursor': 'pointer' }).on('click', { metadata: row }, function (event) {
                                             action.callback(event.data.metadata);
                                         });
                                     }

@@ -173,14 +173,14 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
             message = this.loc('fileInput.invalidType');
             if (Array.isArray(allowedExtensions) && allowedExtensions.length > 0) {
                 allowedExtensions = '.' + allowedExtensions.join(', .');
-                message += '<br>' + this.loc('fileInput.allowedExtensions', {allowedExtensions: allowedExtensions});
+                message += '<br>' + this.loc('fileInput.allowedExtensions', { allowedExtensions: allowedExtensions });
             }
             this._showPopup(this.loc('fileInput.error'), message);
         }
         // if max file size is defined check that file isn't too large
         if (opts.maxFileSize && file.size > opts.maxFileSize * 1048576) {
             valid = false;
-            this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.fileSize', {size: opts.maxFileSize}));
+            this._showPopup(this.loc('fileInput.error'), this.loc('fileInput.fileSize', { size: opts.maxFileSize }));
         }
         return valid;
     },
@@ -238,10 +238,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
 
         if (opts.allowMultipleFiles === true) {
             allowMultiple = 'multiple';
-            fileUpload = this.loc('fileInput.fileUpload', {files: 2});
+            fileUpload = this.loc('fileInput.fileUpload', { files: 2 });
         } else {
             allowMultiple = '';
-            fileUpload = this.loc('fileInput.fileUpload', {files: 1});
+            fileUpload = this.loc('fileInput.fileUpload', { files: 1 });
         }
 
         if (this.isAdvancedUpload) {
@@ -319,7 +319,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
         var tooltip;
         if (Array.isArray(allowedExtensions) && allowedExtensions.length !== 0) {
             allowedExtensions = '.' + allowedExtensions.join(', .');
-            tooltip = this.loc('fileInput.allowedExtensions', {allowedExtensions: allowedExtensions});
+            tooltip = this.loc('fileInput.allowedExtensions', { allowedExtensions: allowedExtensions });
             elem.prop('title', tooltip);
         }
     },
@@ -333,7 +333,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FileInput', function (option
     },
     // TODO should these be in different place
     exportToFile: function (data, filename, type) {
-        var blob = new Blob([data], {type: type});
+        var blob = new Blob([data], { type: type });
         if (window.navigator.msSaveOrOpenBlob) {
             window.navigator.msSaveBlob(blob, filename);
         } else {

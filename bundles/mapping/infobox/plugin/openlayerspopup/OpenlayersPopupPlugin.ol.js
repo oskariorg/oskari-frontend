@@ -154,7 +154,7 @@ Oskari.clazz.define(
                 currPopup.contentData = contentData;
             }
 
-            me._renderPopup(id, contentData, title, {lon: lon, lat: lat}, options, refresh, additionalTools, marker);
+            me._renderPopup(id, contentData, title, { lon: lon, lat: lat }, options, refresh, additionalTools, marker);
         },
 
         /**
@@ -492,7 +492,7 @@ Oskari.clazz.define(
                         text = link.html();
                     }
                     if (contentData[i] && contentData[i].actions) {
-                        var actionObject = _.find(contentData[i].actions, {'name': text});
+                        var actionObject = _.find(contentData[i].actions, { 'name': text });
                         if (typeof actionObject.action === 'function') {
                             actionObject.action();
                         } else {

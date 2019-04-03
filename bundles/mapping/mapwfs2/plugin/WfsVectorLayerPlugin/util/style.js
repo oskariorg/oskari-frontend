@@ -1,15 +1,61 @@
-import { normalStyle } from './defaultStyle';
+import olStyleStyle from 'ol/style/Style';
+import olStyleFill from 'ol/style/Fill';
+import olStyleStroke from 'ol/style/Stroke';
+import olStyleCircle from 'ol/style/Circle';
 
-const isHovered = (feature, hoverState) => {
-    if (!hoverState) {
-        return false;
-    }
-    const {feature: hoverFeature, property} = hoverState;
-    if (!hoverFeature || !property) {
-        return false;
-    }
-    return hoverFeature.get(property) === feature.get(property);
-};
+const getNormalFill = () => new olStyleFill({
+    color: '#FAEBD7'
+});
+const getNormalStroke = () => new olStyleStroke({
+    color: '#000000',
+    width: 1
+});
+
+const getSelectedFill = () => new olStyleFill({
+    color: '#e19b28'
+});
+const getSelectedStroke = () => new olStyleStroke({
+    color: '#e19b28',
+    width: 2
+});
+
+const getNormalStyle = () => new olStyleStyle({
+    image: new olStyleCircle({
+        radius: 6,
+        fill: getNormalFill(),
+        stroke: getNormalStroke()
+    }),
+    fill: getNormalFill(),
+    stroke: getNormalStroke()
+});
+
+const getSelectedLine = () => new olStyleStyle({
+    stroke: getSelectedStroke()
+});
+
+const getSelectedOther = () => new olStyleStyle({
+    image: new olStyleCircle({
+        radius: 6,
+        fill: getSelectedFill(),
+        stroke: getSelectedStroke()
+    }),
+    fill: getSelectedFill(),
+    stroke: getNormalStroke()
+});
+
+function getSelectedStyle () {
+    const line = getSelectedLine();
+    const other = getSelectedOther();
+    return (feature, resolution) => {
+        switch (feature.getGeometry().getType()) {
+        case 'LineString':
+        case 'MultiLineString':
+            return line;
+        default:
+            return other;
+        }
+    };
+}
 
 const applyOpacityToColorable = (colorable, opacity) => {
     if (!colorable || !colorable.getColor()) {
@@ -39,7 +85,7 @@ const applyOpacityToColorable = (colorable, opacity) => {
     if (!rgb) {
         return;
     }
-    const {r, g, b} = rgb;
+    const { r, g, b } = rgb;
     colorable.setColor(`rgba(${r},${g},${b},${alpha})`);
 };
 
@@ -52,9 +98,12 @@ export const applyOpacity = (olStyle, opacity) => {
     return olStyle;
 };
 
-const getStyleFunction = (styleValues, layer, hoverState) => {
-    return (feature, resolution) => {
-        let hovered = isHovered(feature, hoverState);
+const getStyleFunction = (styleValues, hoverHandler) => {
+    return (feature, resolution, isSelected) => {
+        if (isSelected) {
+            return styleValues.selected(feature, resolution);
+        }
+        let hovered = hoverHandler.isHovered(feature, hoverHandler);
         let style = null;
         if (styleValues.optional) {
             var found = styleValues.optional.find(op => feature.get(op.key) === op.value);
@@ -64,22 +113,23 @@ const getStyleFunction = (styleValues, layer, hoverState) => {
         }
         if (!style) {
             style = hovered && styleValues.hover
-                ? styleValues.hover : styleValues.base || normalStyle;
+                ? styleValues.hover : styleValues.base || getNormalStyle();
         }
-        return applyOpacity(style, layer.getOpacity());
+        return style;
     };
 };
 
-export const styleGenerator = (styleFactory, layer, hoverState) => {
+export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     const styles = {
-        base: normalStyle
+        base: getNormalStyle(),
+        selected: getSelectedStyle()
     };
     if (!layer) {
-        return getStyleFunction(styles, layer, hoverState);
+        return getStyleFunction(styles, hoverHandler);
     }
     let styleDef = layer.getCurrentStyleDef();
     if (!styleDef) {
-        return getStyleFunction(styles, layer, hoverState);
+        return getStyleFunction(styles, hoverHandler);
     }
     if (!styleDef.featureStyle) {
         // Bypass possible layer definitions
@@ -115,5 +165,5 @@ export const styleGenerator = (styleFactory, layer, hoverState) => {
             return optional;
         });
     }
-    return getStyleFunction(styles, layer, hoverState);
+    return getStyleFunction(styles, hoverHandler);
 };

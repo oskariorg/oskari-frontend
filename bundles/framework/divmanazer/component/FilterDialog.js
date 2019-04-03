@@ -283,7 +283,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {boolean} activate
          */
         _toggleClickedFeaturesSelection: function (container, enable, check) {
-            container.find('#analyse-clicked-features').prop({'checked': check, 'disabled': !enable});
+            container.find('#analyse-clicked-features').prop({ 'checked': check, 'disabled': !enable });
         },
         /**
          * Toggles the filter by geometry radios of the filter dialog popup.
@@ -297,13 +297,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             if (!enable) {
                 check = false;
             }
-            container.find('#analyse-filter-by-geometry').prop({'checked': check, 'disabled': !enable});
+            container.find('#analyse-filter-by-geometry').prop({ 'checked': check, 'disabled': !enable });
             if (check) {
-                container.find('input[name="filter-by-geometry"]').prop({'disabled': !enable});
+                container.find('input[name="filter-by-geometry"]').prop({ 'disabled': !enable });
                 // check the first option.
-                container.find('#analyse-filter-by-geometry-intersect').prop({'checked': check, 'disabled': !enable});
+                container.find('#analyse-filter-by-geometry-intersect').prop({ 'checked': check, 'disabled': !enable });
             } else {
-                container.find('input[name="filter-by-geometry"]').prop({'checked': check, 'disabled': true});
+                container.find('input[name="filter-by-geometry"]').prop({ 'checked': check, 'disabled': true });
             }
         },
         /**
@@ -315,8 +315,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {boolean} activate
          */
         _toggleBBOXSelection: function (container, check) {
-            container.find('div.bbox-on').find('input[name=analysis-filter-radio]').prop({'checked': check});
-            container.find('div.bbox-off').find('input[name=analysis-filter-radio]').prop({'checked': false});
+            container.find('div.bbox-on').find('input[name=analysis-filter-radio]').prop({ 'checked': check });
+            container.find('div.bbox-off').find('input[name=analysis-filter-radio]').prop({ 'checked': false });
         },
         /**
          * Toggles the property selections of the filter dialog popup.
@@ -329,13 +329,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 bboxOFF = filterContentBBOX.find('div.bbox-off').find('input[name=analysis-filter-radio]').is(':checked');
             if (bboxOFF) {
                 valuesSelection.find('div.values-additional-info').html(this.loc.values.info.bboxOff);
-                valuesSelection.find('div.filter-by-values-container').css({'display': 'block'});
+                valuesSelection.find('div.filter-by-values-container').css({ 'display': 'block' });
             } else if (filterByGeometryChecked) {
                 valuesSelection.find('div.values-additional-info').html(this.loc.values.info.filterByGeometrySelected);
-                valuesSelection.find('div.filter-by-values-container').css({'display': 'none'});
+                valuesSelection.find('div.filter-by-values-container').css({ 'display': 'none' });
             } else {
                 valuesSelection.find('div.values-additional-info').html('');
-                valuesSelection.find('div.filter-by-values-container').css({'display': 'block'});
+                valuesSelection.find('div.filter-by-values-container').css({ 'display': 'block' });
             }
         },
         /**
@@ -362,7 +362,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 this._toggleFilterByGeometrySelection(filterByGeometryDiv, selectedTemporaryFeatures, false);
             } else if (values.noBBOX) {
                 this._toggleBBOXSelection(bboxDiv, false);
-                bboxDiv.find('div.bbox-off').find('input[name=analysis-filter-radio]').prop({'checked': true});
+                bboxDiv.find('div.bbox-off').find('input[name=analysis-filter-radio]').prop({ 'checked': true });
                 this._toggleClickedFeaturesSelection(clickedFeaturesDiv, clickedFeatures, false);
                 this._toggleFilterByGeometrySelection(filterByGeometryDiv, selectedTemporaryFeatures, false);
             // no previous selections (bbox or no bbox, ) and no selected features -> select bbox by default.

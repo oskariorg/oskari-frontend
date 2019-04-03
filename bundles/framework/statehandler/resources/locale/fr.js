@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "session": {
             "expiring": {
                 "title": "Votre session est sur le point d'expirer",
-                "message": "Votre session est sur le point d'expirer. Veuillez cliquer sur {prolonger} pour rester connecté.",
+                "message": "Votre session est sur le point d'expirer. Veuillez cliquer sur {extend} pour rester connecté.",
                 "extend": "Poursuivre la session"
             },
             "expired": {

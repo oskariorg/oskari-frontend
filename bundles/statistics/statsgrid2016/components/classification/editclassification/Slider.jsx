@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from '../../../../../../src/react/util.jsx';
+import {withContext} from 'oskari-ui/util';
 import './slider.scss';
 
 class Slider extends React.Component {

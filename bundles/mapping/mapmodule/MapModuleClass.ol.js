@@ -5,21 +5,21 @@ import olStyleCircle from 'ol/style/Circle';
 import olStyleIcon from 'ol/style/Icon';
 import olStyleText from 'ol/style/Text';
 import * as olExtent from 'ol/extent';
-import {defaults as olInteractionDefaults} from 'ol/interaction';
+import { defaults as olInteractionDefaults } from 'ol/interaction';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olView from 'ol/View';
-import {METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT} from 'ol/proj/Units';
+import { METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT } from 'ol/proj/Units';
 import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
-import {defaults as olControlDefaults} from 'ol/control';
+import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
-import {fromCircle} from 'ol/geom/Polygon';
+import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 
-import {OskariImageWMS} from './plugin/wmslayer/OskariImageWMS';
+import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
@@ -272,7 +272,7 @@ export class MapModule extends AbstractMapModule {
             return geometry.getArea();
         }
         var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-        return Math.abs(olSphere.getArea(geom, {projection: 'EPSG:4326', radius: 6378137}));
+        return Math.abs(olSphere.getArea(geom, { projection: 'EPSG:4326', radius: 6378137 }));
     }
 
     /**
@@ -698,7 +698,7 @@ export class MapModule extends AbstractMapModule {
         var olBounds = olGeometry.getExtent();
         var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
         var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
-        return {lon: x, lat: y};
+        return { lon: x, lat: y };
     }
 
     getClosestPointFromGeoJSON (geojson) {
@@ -708,14 +708,14 @@ export class MapModule extends AbstractMapModule {
         var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
         var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
         var coord = olGeometry.getClosestPoint([x, y]);
-        return {lon: coord[0], lat: coord[1]};
+        return { lon: coord[0], lat: coord[1] };
     }
 
     // TODO: check LayersPlugin.ol3 getGeometryBounds
     getBoundsFromGeoJSON (geojson) {
         var olGeometry = this.getOLGeometryFromGeoJSON(geojson);
         var extent = olGeometry.getExtent();
-        return {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
+        return { left: extent[0], bottom: extent[1], right: extent[2], top: extent[3] };
     }
 
     isPointInExtent (extent, x, y) {

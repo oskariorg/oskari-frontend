@@ -24,7 +24,8 @@ import 'oskari-loader!../../../packages/catalogue/metadatacatalogue/bundle.js';
 
 import 'oskari-loader!../../../packages/framework/bundle/guidedtour/bundle.js';
 
-import 'oskari-loader!../../../packages/framework/bundle/layerselector2/bundle.js';
+import 'oskari-lazy-loader?layerselector2!../../../packages/framework/bundle/layerselector2/bundle.js';
+import 'oskari-lazy-loader?layerlist!../../../packages/framework/layerlist/bundle.js';
 
 import 'oskari-loader!../../../packages/framework/bundle/layerselection2/bundle.js';
 

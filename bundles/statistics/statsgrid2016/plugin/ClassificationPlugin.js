@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import {GenericContext} from '../../../../src/react/util.jsx';
-import {Classification} from '../components/classification/Classification';
+import { GenericContext } from '../../../../src/react/util.jsx';
+import { Classification } from '../components/classification/Classification';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
@@ -90,7 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
 
             ReactDOM.render((
-                <GenericContext.Provider value={{loc: this._locale, service: this.service}}>
+                <GenericContext.Provider value={{ loc: this._locale, service: this.service }}>
                     <Classification indicators = {indicators} classifications = {classifications}
                         legendProps = {legendProps} pluginState = {pluginState}
                         onRenderChange = {this.rendered.bind(this)}/>

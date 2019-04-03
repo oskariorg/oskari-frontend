@@ -1,12 +1,12 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
-import {unByKey} from 'ol/Observable.js';
+import { unByKey } from 'ol/Observable.js';
 import olOverlay from 'ol/Overlay';
-import {fromExtent} from 'ol/geom/Polygon';
+import { fromExtent } from 'ol/geom/Polygon';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
-import {BufferOp} from 'jsts/org/locationtech/jts/operation/buffer';
+import { BufferOp } from 'jsts/org/locationtech/jts/operation/buffer';
 import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
@@ -730,7 +730,7 @@ Oskari.clazz.define(
          */
         _updateFeature: function (options, propertyName, value) {
             const { prio, layerId, featureStyle } = options;
-            var layers = {layer: layerId};
+            var layers = { layer: layerId };
             var values = Array.isArray(value) ? value : [value];
             var searchValues = values.map(cur => typeof cur === 'object' ? cur.value : cur);
             var searchOptions = {

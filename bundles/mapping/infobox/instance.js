@@ -9,7 +9,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.infobox.InfoBoxBundleInstance',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */

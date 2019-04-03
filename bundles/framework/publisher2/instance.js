@@ -330,9 +330,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 mapfull: {
                     conf: {
                         plugins: [
-                            {id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin'},
-                            {id: 'Oskari.mapframework.mapmodule.ControlsPlugin'},
-                            {id: 'Oskari.mapframework.mapmodule.GetInfoPlugin'}
+                            { id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin' },
+                            { id: 'Oskari.mapframework.mapmodule.ControlsPlugin' },
+                            { id: 'Oskari.mapframework.mapmodule.GetInfoPlugin' }
                         ]
                     }
                 },

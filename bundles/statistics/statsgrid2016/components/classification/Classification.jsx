@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext, handleBinder} from '../../../../../src/react/util.jsx';
+import {withContext, handleBinder} from 'oskari-ui/util';
 import {EditClassification} from './editclassification/EditClassification';
 import {Legend} from './Legend';
 import {Header} from './Header';
