@@ -95,7 +95,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isVisible(),
-            renderMode: 'image',
+            renderMode: 'hybrid',
             source
         });
         this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
