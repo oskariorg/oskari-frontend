@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 return;
             }
             this.classificationPluginState[key] = value;
-            this.trigger('ClassificationPluginChanged', {key: key, value: value});
+            this.trigger('ClassificationPluginChanged', { key: key, value: value });
         },
         /**
          * Resets the current state and sends events about the changes.

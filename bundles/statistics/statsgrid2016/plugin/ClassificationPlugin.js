@@ -209,7 +209,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 return;
             }
             if (pluginEl.css('position') === 'absolute') {
-                const {top, left} = pluginEl.offset();
+                const { top, left } = pluginEl.offset();
                 const bottom = top + pluginEl.height();
                 const wHeight = jQuery(window).height();
                 let offsetToWindowBottom = wHeight - bottom - 10; // add margin 10
@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
 
             // UI styling changes e.g. disable classification editing, make transparent
-            this.service.getStateService().on('ClassificationPluginChanged', ({key, value}) => {
+            this.service.getStateService().on('ClassificationPluginChanged', ({ key, value }) => {
                 if (key === 'visible') {
                     value ? this.trigger('show') : this.trigger('hide');
                 }
