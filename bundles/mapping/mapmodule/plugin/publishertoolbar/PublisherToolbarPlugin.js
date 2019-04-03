@@ -270,8 +270,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         teardownUI: function () {
-            var me = this;
-
             // remove old element
             this.removeFromPluginContainer(this.getElement());
 
