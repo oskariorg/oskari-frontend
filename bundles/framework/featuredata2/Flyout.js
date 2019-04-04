@@ -1077,15 +1077,15 @@ Oskari.clazz.define(
          * @param  {String} layer  Oskari layer
          */
         _appendHeaderMessage: function (panel, locales, layer) {
-            var footer = this.template.wrapper.clone(),
-                sandbox = this.instance.getSandbox(),
-                inputid,
-                inputlayer,
-                loc = this.instance.getLocalization('gridFooter'),
-                message;
+            var footer = this.template.wrapper.clone();
+            var sandbox = this.instance.getSandbox();
+            var inputid;
+            var inputlayer;
+            var loc = this.instance.getLocalization('gridFooter');
+            var message;
             // clean up the old headermessage in case there was one
             jQuery(panel.html).parent().find('div.gridMessageContainer').remove();
-            if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
+            if (!loc || !layer || !layer.isLayerOfType('analysislayer')) {
                 return;
             }
             // Extract analysis input layer id

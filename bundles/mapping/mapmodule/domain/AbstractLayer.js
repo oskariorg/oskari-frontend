@@ -1311,9 +1311,6 @@ Oskari.clazz.define(
          * @return {Boolean}         is filter supported
          */
         isFilterSupported: function () {
-            if (this.isLayerOfType('WFS') || this.isLayerOfType('ANALYSIS')) {
-                return true;
-            }
             return false;
         }
 
