@@ -1,8 +1,8 @@
-# wfsmvt
+# wfsvector
 
 ## Description
 
-Alternative implementation of mapwfs2 that uses MVT vector tiles as data transfer mechanism. Requires module `control-mvt` to be in use in the backend. Currently supports functionalities:
+Alternative implementation of mapwfs2 that uses MVT vector tiles or geojson as data transfer mechanism. Requires module `control-mvt` to be in use in the backend. Currently supports functionalities:
 
 - Displays WFS layer features on the map
 - Shows feature infobox on click
@@ -21,6 +21,28 @@ Does not support:
 
 ![screenshot](wfslayer.png)
 
+## Plugin config
+
+<table class="table">
+  <tr>
+    <th>Property</th><th>Value type</th>
+  </tr>
+  <tr>
+    <td>renderMode</td><td>"mvt"|"vector"</td>
+    <td>origin</td><td>number[2]</td>
+    <td>resolutions</td><td>number[]</td>
+    <td>tileSize</td><td>number</td>
+  </tr>
+</table>
+
+```javascript
+{
+  "renderMode": "mvt",
+  "origin": [-548576, 8388608],
+  "resolutions": [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
+  "tileSize": 256
+}
+```
 
 ## Requests the plugin handles
 
