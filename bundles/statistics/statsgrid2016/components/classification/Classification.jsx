@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext, handleBinder} from 'oskari-ui/util';
-import {EditClassification} from './editclassification/EditClassification';
-import {Legend} from './Legend';
-import {Header} from './Header';
+import { withContext, handleBinder } from 'oskari-ui/util';
+import { EditClassification } from './editclassification/EditClassification';
+import { Legend } from './Legend';
+import { Header } from './Header';
 import './classification.scss';
 
 class Classification extends React.Component {
@@ -29,7 +29,7 @@ class Classification extends React.Component {
     }
 
     render () {
-        const {classifications, pluginState} = this.props;
+        const { classifications, pluginState } = this.props;
         if (!pluginState.visible) {
             return null;
         }
@@ -67,4 +67,4 @@ Classification.propTypes = {
 };
 
 const cls = withContext(Classification);
-export {cls as Classification};
+export { cls as Classification };

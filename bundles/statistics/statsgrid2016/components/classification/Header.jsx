@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
+import { withContext } from 'oskari-ui/util';
 import './header.scss';
 
 const handleIndicatorChange = (service, value) => {
@@ -21,9 +21,9 @@ const getTitleComponent = (indicators, active, service, title) => {
 };
 
 const Header = props => {
-    const {indicators, active, service} = props;
+    const { indicators, active, service } = props;
     const headerClass = indicators.length > 1 ? 'active-header multi-selected' : 'active-header single-selected';
-    const {title} = indicators.find(indicator => active.hash === indicator.id) || {title: ''};
+    const { title } = indicators.find(indicator => active.hash === indicator.id) || { title: '' };
     let buttonClass = 'edit-button';
     let buttonTooltip = 'classify.edit.open';
     if (props.isEdit) {
@@ -49,4 +49,4 @@ Header.propTypes = {
 };
 
 const contextWrapped = withContext(Header);
-export {contextWrapped as Header};
+export { contextWrapped as Header };

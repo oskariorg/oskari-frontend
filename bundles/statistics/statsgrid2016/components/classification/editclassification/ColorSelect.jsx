@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext, handleBinder} from 'oskari-ui/util';
-import {colorSetColorWidth} from './colorselect.scss';
+import { withContext, handleBinder } from 'oskari-ui/util';
+import { colorSetColorWidth } from './colorselect.scss';
 
 class ColorSelect extends React.Component {
     constructor (props) {
@@ -23,7 +23,7 @@ class ColorSelect extends React.Component {
         }
         const outside = this.wrapperRef && !this.wrapperRef.contains(event.target);
         if (outside && this.state.isOpen) {
-            this.setState({isOpen: false});
+            this.setState({ isOpen: false });
         } else if (!outside) {
             this.setState(oldState => ({ isOpen: !oldState.isOpen }));
         }
@@ -36,7 +36,7 @@ class ColorSelect extends React.Component {
     getSimpleColorElement (color) {
         return (
             <div className="oskari-color-simple">
-                <div className="oskari-color" style={{background: '#' + color, opacity: this.props.opacity}}/>
+                <div className="oskari-color" style={{ background: '#' + color, opacity: this.props.opacity }}/>
             </div>
         );
     }
@@ -46,9 +46,9 @@ class ColorSelect extends React.Component {
         const colors = color.value;
         const width = parseInt(colorSetColorWidth) * colors.length;
         return (
-            <div className="oskari-color-set" style={{width: width + 'px'}}>
+            <div className="oskari-color-set" style={{ width: width + 'px' }}>
                 {colors.map(color =>
-                    <div className="oskari-color" key = {color} style={{background: '#' + color, opacity: this.props.opacity}}/>
+                    <div className="oskari-color" key = {color} style={{ background: '#' + color, opacity: this.props.opacity }}/>
                 )}
             </div>
         );
@@ -130,4 +130,4 @@ ColorSelect.propTypes = {
 };
 
 const contextWrapped = withContext(ColorSelect);
-export {contextWrapped as ColorSelect};
+export { contextWrapped as ColorSelect };

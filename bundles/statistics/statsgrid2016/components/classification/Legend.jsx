@@ -1,25 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
+import { withContext } from 'oskari-ui/util';
 import './legend.scss';
 
 const createLegendHTML = props => {
-    const {loc, legendProps, indicatorData} = props;
+    const { loc, legendProps, indicatorData } = props;
     const classification = legendProps.classification;
     const colors = legendProps.colors;
     const log = Oskari.log('Oskari.statistics.statsgrid.Classification');
     if (Object.keys(indicatorData).length === 0) {
-        return {error: loc('legend.noData')};
+        return { error: loc('legend.noData') };
     }
     if (!classification) {
         log.warn('Error getting indicator classification', indicatorData);
-        return {error: loc('legend.noEnough')};
+        return { error: loc('legend.noEnough') };
     }
     const opacity = props.transparency / 100 || 1;
     let legend;
     if (opacity !== 1) {
         const rgba = colors.map(color => {
-            const {r, g, b} = Oskari.util.hexToRgb(color);
+            const { r, g, b } = Oskari.util.hexToRgb(color);
             return 'rgba(' + r + ', ' + g + ', ' + b + ', ' + opacity + ')';
         });
         legend = classification.createLegend(rgba);
@@ -28,11 +28,11 @@ const createLegendHTML = props => {
     }
 
     if (!legend) {
-        return {error: loc('legend.cannotCreateLegend')};
+        return { error: loc('legend.cannotCreateLegend') };
     } else if (legend instanceof jQuery) {
-        return {__html: legend.prop('outerHTML')}; // points legend
+        return { __html: legend.prop('outerHTML') }; // points legend
     } else {
-        return {__html: legend};
+        return { __html: legend };
     }
 };
 
@@ -65,4 +65,4 @@ Legend.propTypes = {
 };
 
 const contextWrapped = withContext(Legend);
-export {contextWrapped as Legend};
+export { contextWrapped as Legend };
