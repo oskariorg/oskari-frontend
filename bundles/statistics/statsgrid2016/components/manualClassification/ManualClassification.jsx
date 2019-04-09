@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
-import {ManualClassificationView} from './View';
+import { withContext } from 'oskari-ui/util';
+import { ManualClassificationView } from './View';
 
 // TODO: change to use general oskari react button and pass props.handleClick = handleManualClassification
 
@@ -9,8 +9,8 @@ const update = (stateService, bounds) => {
     stateService.updateActiveClassification('manualBounds', bounds);
 };
 
-const handleManualClassification = ({service, indicators}) => {
-    const {series, state, classification, color} = service.getAllServices();
+const handleManualClassification = ({ service, indicators }) => {
+    const { series, state, classification, color } = service.getAllServices();
     const ind = indicators.active;
     const view = new ManualClassificationView(classification, color, ind.classification);
 
@@ -44,4 +44,4 @@ ManualClassification.propTypes = {
     loc: PropTypes.func
 };
 const contextWrapped = withContext(ManualClassification);
-export {contextWrapped as ManualClassification};
+export { contextWrapped as ManualClassification };
