@@ -327,6 +327,9 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (event.isDrawing()) {
                 return;
             }
+            if (this._sandbox.getMap().isMoving()) {
+                return;
+            }
             const { feature, layer } = this._getTopmostFeatureAndLayer(event);
 
             // No feature hits for these layer types. Call hover handlers without feature or layer.
