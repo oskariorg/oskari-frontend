@@ -8,11 +8,6 @@ import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 
 const FEATURE_DATA_UPDATE_THROTTLE = 5000;
-const TILEGRID_3067 = {
-    extent: [-548576, 6291456, 1548576, 8388608],
-    resolutions: [8192, 4096, 2048, 1024, 512, 256, 128, 64, 32, 16, 8, 4, 2, 1, 0.5, 0.25],
-    tileSize: [256, 256]
-};
 
 /**
  * @class MvtLayerHandler
@@ -24,6 +19,21 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
         this.throttledUpdates = new Map();
+        this._setupTileGrid(layerPlugin.getConfig());
+    }
+    _setupTileGrid (config) {
+        if (!config) {
+            return;
+        }
+        const { origin, resolutions, tileSize } = config;
+        if (!origin || !resolutions || !tileSize) {
+            return;
+        }
+        this.tileGrid = {
+            origin,
+            resolutions,
+            tileSize: [tileSize, tileSize]
+        };
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
@@ -78,13 +88,14 @@ export class MvtLayerHandler extends AbstractLayerHandler {
 
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-        const tileGrid = layer.getTileGrid() || TILEGRID_3067;
         const sourceOpts = {
             format: new olFormatMVT(),
             projection: this.plugin.getMap().getView().getProjection(),
-            url: layer.getLayerUrl().replace('{epsg}', this.plugin.getMapModule().getProjection()),
-            tileGrid: new olTileGrid(tileGrid)
+            url: layer.getLayerUrl().replace('{epsg}', this.plugin.getMapModule().getProjection())
         };
+        if (this.tileGrid) {
+            sourceOpts.tileGrid = new olTileGrid(this.tileGrid);
+        }
 
         // Properties id, type and hover are being used in VectorFeatureService.
         const source = this.createSource(layer, sourceOpts);
