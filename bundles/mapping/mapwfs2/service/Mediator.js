@@ -381,7 +381,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             if (!this.__isSelectionLayer(layer.getId())) {
                 return;
             }
-            if (data.data.features !== 'empty') {
+            if (data.data.feature !== 'empty') {
                 data.data.features.forEach(function (featureData) {
                     featureIds.push(featureData[0]);
                 });
@@ -395,7 +395,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
 
-            if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder() && data.data.features !== 'empty') {
+            if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder() && data.data.feature !== 'empty') {
                 // this is a "userlayer" type layer - props are sorted to match the original order
                 var features = data.data.features;
                 for (var i = 0; i < features.length; i++) {
@@ -456,7 +456,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
-            hasNoFeatures = data.data.features === 'empty';
+            hasNoFeatures = data.data.feature === 'empty';
 
         // if user has not used Ctrl during selection, make totally new selection
         var makeNewSelection = !data.data.keepPrevious;
