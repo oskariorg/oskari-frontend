@@ -310,6 +310,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         getLayerUrl: function () {
             return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
+        },
+        isFilterSupported: function () {
+            return true;
         }
     }, {
         'extend': ['Oskari.mapframework.mapmodule.VectorTileLayer']

@@ -52,7 +52,7 @@ Oskari.clazz.define(
          * Adds a single user layer to the map
          *
          * @method addMapLayerToMap
-         * @param {Oskari.mapframework.bundle.mapanalysis.domain.Userlayer} layer
+         * @param {Oskari.mapframework.bundle.mapuserlayer.domain.Userlayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */

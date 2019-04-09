@@ -295,7 +295,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
         var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
         var self = this;
 
-        if (layer.getLayerType() !== 'analysis') {
+        if (!layer.isLayerOfType('analysislayer')) {
             if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder()) {
                 // this is a "userlayer" type layer
                 // don't set locales because userlayer contains localized fields
