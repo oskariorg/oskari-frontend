@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { GenericContext } from '../../../../src/react/util.jsx';
+import { GenericContext } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
 import '../resources/scss/classificationplugin.scss';
 /**
