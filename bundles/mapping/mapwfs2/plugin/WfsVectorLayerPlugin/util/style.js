@@ -113,14 +113,32 @@ const getStyleFunction = (styleValues, hoverHandler) => {
         }
         if (!style) {
             style = hovered && styleValues.hover
-                ? styleValues.hover : styleValues.base || getNormalStyle();
+                ? styleValues.hover : styleValues.customized || styleValues.base;
         }
-        return style;
+
+        switch (feature.getGeometry().getType()) {
+        case 'LineString':
+        case 'MultiLineString':
+            return style.line || style;
+        case 'Polygon':
+        case 'MultiPolygon':
+            return style.area || style;
+        case 'Point':
+            return style.point || style;
+        default:
+            return style;
+        }
     };
 };
 
+const getGeomTypedStyles = (styleDef, factory) => ({
+    area: factory(styleDef, 'area'),
+    line: factory(styleDef, 'line'),
+    point: factory(styleDef, 'point')
+});
+
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
-    const styles = {
+    let styles = {
         base: getNormalStyle(),
         selected: getSelectedStyle()
     };
@@ -144,11 +162,11 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     const hoverOptions = layer.getHoverOptions();
     const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
     if (featureStyle) {
-        styles.base = styleFactory(featureStyle);
+        styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
     }
     if (hoverStyle) {
-        const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, hoverStyle) : hoverStyle;
-        styles.hover = styleFactory(hoverDef);
+        const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...hoverStyle } : hoverStyle;
+        styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
     }
     const optionalStyles = styleDef.optionalStyles;
     if (optionalStyles) {
@@ -156,10 +174,10 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             const optional = {
                 key: optionalDef.property.key,
                 value: optionalDef.property.value,
-                style: styleFactory(Object.assign({}, featureStyle, optionalDef))
+                style: getGeomTypedStyles({ ...featureStyle, ...optionalDef }, styleFactory)
             };
             if (hoverStyle) {
-                const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, optionalDef, hoverStyle) : hoverStyle;
+                const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...optionalDef, ...hoverStyle } : hoverStyle;
                 optional.hoverStyle = styleFactory(hoverDef);
             }
             return optional;

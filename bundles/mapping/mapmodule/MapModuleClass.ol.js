@@ -878,11 +878,18 @@ export class MapModule extends AbstractMapModule {
 
     /**
      * Creates style based on JSON
+     * @param styleDef Oskari style definition
+     * @param geomType One of 'area', 'line', 'point' | optional
      * @return {ol/style/Style} style ol3 specific!
      */
-    getStyle (styleDef) {
+    getStyle (styleDef, geomType) {
         var me = this;
         var style = jQuery.extend(true, {}, styleDef);
+
+        if (geomType === 'line' && style.stroke) {
+            delete style.stroke.area;
+        }
+
         var olStyle = {};
         if (Oskari.util.keyExists(style, 'fill.color')) {
             var color = style.fill.color ? style.fill.color : 'rgba(0,0,0,0)';
@@ -1001,14 +1008,17 @@ export class MapModule extends AbstractMapModule {
         }
 
         styleDef.image.size = size;
+        styleDef.image.size = size;
+        var fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
+        var opacity = styleDef.image.opacity || 1;
 
         if (me.isSvg(styleDef.image)) {
-            var svg = me.getSvg(styleDef.image);
+            styleDef.image.color = fillColor;
             return new olStyleIcon({
-                src: svg,
+                src: me.getSvg(styleDef.image),
                 size: [size, size],
                 imgSize: [size, size],
-                opacity: styleDef.image.opacity || 1
+                opacity
             });
         } else if (styleDef.image && styleDef.image.shape) {
             var offsetX = (!isNaN(styleDef.image.offsetX)) ? styleDef.image.offsetX : 16;
@@ -1019,7 +1029,8 @@ export class MapModule extends AbstractMapModule {
                 anchorXUnits: 'pixels',
                 anchorOrigin: 'bottom-left',
                 anchor: [offsetX, offsetY],
-                opacity: styleDef.image.opacity || 1
+                color: fillColor,
+                opacity
             });
         }
 
@@ -1031,9 +1042,9 @@ export class MapModule extends AbstractMapModule {
         if (styleDef.snapToPixel) {
             image.snapToPixel = styleDef.snapToPixel;
         }
-        if (Oskari.util.keyExists(styleDef.image, 'fill.color')) {
+        if (fillColor) {
             image.fill = new olStyleFill({
-                color: styleDef.image.fill.color
+                color: fillColor
             });
         }
         if (styleDef.stroke) {
