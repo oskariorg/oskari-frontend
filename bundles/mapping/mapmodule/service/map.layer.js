@@ -461,6 +461,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param  {Object}          newLayerConf new layer JSONObject presentation, used only update/add
          * @param  {Boolean}         deleteLayer delete layer
          * @param  {Boolean}         newLayer is new layer
+         * @throws Error if missing newLayerConf or newLayerConf.groups for updated layer
          */
         updateLayersInGroups: function (layerId, newLayerConf, deleteLayer, newLayer) {
             var me = this;
@@ -469,13 +470,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
-            //check if layer was updated and removed from a group
+            // check if layer was updated and removed from a group
             var isLayerUpdatedAndRemovedFromGroup = function (groupId) {
                 if (!deleteLayer && !newLayer) {
-                    if (!newLayerConf)
-                        throw "Missing layer config for updated layer";
-                    if (!newLayerConf.groups)
-                        throw "Missing groups for updated layer";
+                    if (!newLayerConf) {
+                        throw new Error('Missing layer config for updated layer');
+                    }
+                    if (!newLayerConf.groups) {
+                        throw new Error('Missing groups for updated layer');
+                    }
                     return newLayerConf.groups.indexOf(groupId) === -1;
                 }
                 return false;
