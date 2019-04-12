@@ -112,8 +112,11 @@ const getStyleFunction = (styleValues, hoverHandler) => {
             }
         }
         if (!style) {
-            style = hovered && styleValues.hover
-                ? styleValues.hover : styleValues.customized || styleValues.base;
+            if (hovered && styleValues.hover) {
+                style = styleValues.hover;
+            } else {
+                style = styleValues.customized || styleValues.base;
+            }
         }
 
         switch (feature.getGeometry().getType()) {
@@ -124,7 +127,7 @@ const getStyleFunction = (styleValues, hoverHandler) => {
         case 'MultiPolygon':
             return style.area || style;
         case 'Point':
-            return style.point || style;
+            return style.dot || style;
         default:
             return style;
         }
@@ -134,7 +137,7 @@ const getStyleFunction = (styleValues, hoverHandler) => {
 const getGeomTypedStyles = (styleDef, factory) => ({
     area: factory(styleDef, 'area'),
     line: factory(styleDef, 'line'),
-    point: factory(styleDef, 'point')
+    dot: factory(styleDef, 'dot')
 });
 
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {

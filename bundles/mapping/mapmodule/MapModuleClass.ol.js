@@ -886,49 +886,110 @@ export class MapModule extends AbstractMapModule {
         var me = this;
         var style = jQuery.extend(true, {}, styleDef);
 
-        if (geomType === 'line' && style.stroke) {
-            delete style.stroke.area;
-        }
-
         var olStyle = {};
-        if (Oskari.util.keyExists(style, 'fill.color')) {
-            var color = style.fill.color ? style.fill.color : 'rgba(0,0,0,0)';
-            if (style.effect) {
-                switch (style.effect) {
-                case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
-                case 'lighten' : color = Oskari.util.alterBrightness(color, 50); break;
-                }
-            }
-            if (Oskari.util.keyExists(style, 'image.opacity')) {
-                var rgb = null;
-                if (color.charAt(0) === '#') {
-                    // check if color is hex
-                    rgb = Oskari.util.hexToRgb(color);
-                    color = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + style.image.opacity + ')';
-                } else if (color.indexOf('rgb(') > -1) {
-                    // else check at if color is rgb
-                    var hexColor = '#' + Oskari.util.rgbToHex(color);
-                    rgb = Oskari.util.hexToRgb(hexColor);
-                    color = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + style.image.opacity + ')';
-                }
-            }
-            olStyle.fill = new olStyleFill({
-                color: color
-            });
-        }
+        olStyle.fill = me.__getFillStyle(style);
         if (style.stroke) {
+            if (geomType === 'line') {
+                delete style.stroke.area;
+            }
             olStyle.stroke = me.__getStrokeStyle(style);
         }
         if (style.image) {
             olStyle.image = me.__getImageStyle(style);
         }
         if (style.text) {
-            var textStyle = me.__getTextStyle(style.text);
+            var textStyle = me.__getTextStyle(style);
             if (textStyle) {
                 olStyle.text = textStyle;
             }
         }
+
         return new olStyleStyle(olStyle);
+    }
+
+    __getColorEffect (effect, color) {
+        if (!effect || !color) {
+            return;
+        }
+        const blendAmount = 50;
+        let delta = 0;
+        switch (effect) {
+        case 'darken' : delta = -blendAmount; break;
+        case 'lighten' : delta = blendAmount; break;
+        }
+        return Oskari.util.alterBrightness(color, delta);
+    }
+
+    __getFillStyle (styleDef) {
+        if (!styleDef.fill) {
+            return;
+        }
+        let color = styleDef.fill.color;
+        if (!color) {
+            return new olStyleFill({ color: 'rgba(0,0,0,0)' });
+        }
+        color = this.__getColorEffect(styleDef.effect, color) || color;
+
+        if (Oskari.util.keyExists(styleDef, 'fill.area.pattern')) {
+            const pattern = this.getFillPattern(styleDef.fill.area.pattern, color);
+            if (pattern) {
+                return new olStyleFill({ color: pattern });
+            }
+        }
+
+        return new olStyleFill({ color });
+    }
+
+    __getFillPattern (patternCode, color) {
+        if ((!patternCode && patternCode !== 0) || !color) {
+            return;
+        }
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.strokeStyle = color;
+        ctx.lineCap = 'square';
+
+        const canvasSize = 64;
+        canvas.width = canvasSize;
+        canvas.height = canvasSize;
+
+        const diagonal = width => {
+            ctx.lineWidth = width;
+            var numberOfStripes = width > 2 ? 12 : 18;
+            var bandWidth = canvasSize / numberOfStripes;
+            for (var i = 0; i < numberOfStripes * 2 + 2; i++) {
+                if (i % 2 === 0) {
+                    continue;
+                }
+                ctx.beginPath();
+                ctx.moveTo(i * bandWidth + bandWidth / 2, 0);
+                ctx.lineTo(i * bandWidth + bandWidth / 2 - canvasSize, canvasSize);
+                ctx.stroke();
+            }
+            return ctx.createPattern(canvas, 'repeat');
+        };
+        const horizontal = width => {
+            ctx.lineWidth = width;
+            var numberOfStripes = width > 2 ? 16 : 18;
+            var bandWidth = canvasSize / numberOfStripes;
+            for (var i = 0; i < numberOfStripes; i++) {
+                if (i % 2 === 0) {
+                    continue;
+                }
+                ctx.beginPath();
+                ctx.moveTo(0, i * bandWidth + bandWidth / 2);
+                ctx.lineTo(canvasSize, i * bandWidth + bandWidth / 2);
+                ctx.stroke();
+            }
+            return ctx.createPattern(canvas, 'repeat');
+        };
+
+        switch (patternCode) {
+        case 0 : return diagonal(2);
+        case 1 : return diagonal(3);
+        case 2 : return horizontal(2);
+        case 3 : return horizontal(3);
+        }
     }
 
     /**
@@ -946,7 +1007,7 @@ export class MapModule extends AbstractMapModule {
             return null;
         }
         if (color) {
-            stroke.color = color;
+            stroke.color = this.__getColorEffect(strokeDef.effect, color) || color;
         }
         if (width) {
             stroke.width = width;
@@ -1009,7 +1070,10 @@ export class MapModule extends AbstractMapModule {
 
         styleDef.image.size = size;
         styleDef.image.size = size;
-        var fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
+
+        let fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
+        fillColor = this.__getColorEffect(styleDef.effect, fillColor) || fillColor;
+
         var opacity = styleDef.image.opacity || 1;
 
         if (me.isSvg(styleDef.image)) {
@@ -1043,6 +1107,19 @@ export class MapModule extends AbstractMapModule {
             image.snapToPixel = styleDef.snapToPixel;
         }
         if (fillColor) {
+            if (opacity !== 1) {
+                var rgb = null;
+                if (fillColor.charAt(0) === '#') {
+                    // check if color is hex
+                    rgb = Oskari.util.hexToRgb(fillColor);
+                    fillColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + opacity + ')';
+                } else if (fillColor.indexOf('rgb(') > -1) {
+                    // else check at if color is rgb
+                    var hexColor = '#' + Oskari.util.rgbToHex(fillColor);
+                    rgb = Oskari.util.hexToRgb(hexColor);
+                    fillColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + opacity + ')';
+                }
+            }
             image.fill = new olStyleFill({
                 color: fillColor
             });
@@ -1058,45 +1135,46 @@ export class MapModule extends AbstractMapModule {
      * @param  {Object} textStyleJSON text style definition
      * @return {ol/style/Text} parsed style or undefined if no param is given
      */
-    __getTextStyle (textStyleJSON) {
-        if (!textStyleJSON) {
+    __getTextStyle (styleDef) {
+        if (!styleDef || !styleDef.text) {
             return;
         }
-        var text = {};
-        if (textStyleJSON.scale) {
-            text.scale = textStyleJSON.scale;
+        const text = {};
+        const { scale, offsetX, offsetY, rotation, textAlign, textBaseline, font, fill, stroke, labelText } = styleDef.text;
+        if (scale) {
+            text.scale = scale;
         }
-        if (textStyleJSON.offsetX) {
-            text.offsetX = textStyleJSON.offsetX;
+        if (offsetX) {
+            text.offsetX = offsetX;
         }
-        if (textStyleJSON.offsetY) {
-            text.offsetY = textStyleJSON.offsetY;
+        if (offsetY) {
+            text.offsetY = offsetY;
         }
-        if (textStyleJSON.rotation) {
-            text.rotation = textStyleJSON.rotation;
+        if (rotation) {
+            text.rotation = rotation;
         }
-        if (textStyleJSON.textAlign) {
-            text.textAlign = textStyleJSON.textAlign;
+        if (textAlign) {
+            text.textAlign = textAlign;
         }
-        if (textStyleJSON.textBaseline) {
-            text.textBaseline = textStyleJSON.textBaseline;
+        if (textBaseline) {
+            text.textBaseline = textBaseline;
         }
-        if (textStyleJSON.font) {
-            text.font = textStyleJSON.font;
+        if (font) {
+            text.font = font;
         }
-        if (Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
+        if (fill && fill.color) {
             text.fill = new olStyleFill({
-                color: textStyleJSON.fill.color
+                color: this.__getColorEffect(styleDef.effect, fill.color) || fill.color
             });
         }
-        if (textStyleJSON.stroke) {
-            text.stroke = this.__getStrokeStyle(textStyleJSON);
+        if (stroke) {
+            text.stroke = this.__getStrokeStyle(styleDef.text);
         }
-        if (textStyleJSON.labelText) {
-            if (typeof textStyleJSON.labelText === 'number') {
-                text.text = textStyleJSON.labelText.toString();
+        if (labelText) {
+            if (typeof labelText === 'number') {
+                text.text = labelText.toString();
             } else {
-                text.text = textStyleJSON.labelText;
+                text.text = labelText;
             }
         }
         return new olStyleText(text);
