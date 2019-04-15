@@ -56,6 +56,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         throttledUpdate();
     }
     _updateLayerProperties (layer, source) {
+        if (!layer.isVisible()) {
+            layer.setActiveFeatures([]);
+            layer.setFields([]);
+            this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), []);
+            return;
+        }
         const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
         const { fields, properties } = getFieldsAndPropsArrays(propsList);
