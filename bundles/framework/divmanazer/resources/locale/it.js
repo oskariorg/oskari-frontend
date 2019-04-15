@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Modifica stile dell'elemento areale",
                 "line": "Modifica stile dell'elemento lineare"
             },
+            "validation": {
+                "title": "I dati forniti contengono errori:",
+                "strokeWidth": "Lo spessore della linea non è valido. La dimensione deve essere compresa tra 1 e 50",
+                "borderWidth": "Lo spessore del lato non è valido. La dimensione deve essere compresa tra 1 e 50"
+            },
             "dot": {
                 "title": "Stile dell'elemento puntuale",
                 "tooltip": "Definisci uno stile per l'elemento puntuale",
