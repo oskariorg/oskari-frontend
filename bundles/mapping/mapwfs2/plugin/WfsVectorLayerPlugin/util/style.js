@@ -2,7 +2,6 @@ import olStyleStyle from 'ol/style/Style';
 import olStyleFill from 'ol/style/Fill';
 import olStyleStroke from 'ol/style/Stroke';
 import olStyleCircle from 'ol/style/Circle';
-import { constants } from 'zlib';
 
 const getNormalFill = () => new olStyleFill({
     color: '#FAEBD7'
