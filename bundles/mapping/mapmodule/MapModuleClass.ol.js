@@ -1,9 +1,4 @@
-import olStyleStyle from 'ol/style/Style';
-import olStyleFill from 'ol/style/Fill';
-import olStyleStroke from 'ol/style/Stroke';
-import olStyleCircle from 'ol/style/Circle';
-import olStyleIcon from 'ol/style/Icon';
-import olStyleText from 'ol/style/Text';
+
 import * as olExtent from 'ol/extent';
 import { defaults as olInteractionDefaults } from 'ol/interaction';
 import olFormatWKT from 'ol/format/WKT';
@@ -20,6 +15,7 @@ import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
 
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
+import { getOlStyle } from './oskariStyle/generator.ol';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
@@ -168,6 +164,20 @@ export class MapModule extends AbstractMapModule {
         this._registerVectorFeatureService();
         this.getMap().render();
         return true;
+    }
+
+    /**
+     * @override @method getStyle
+     * @param styleDef Oskari style definition
+     * @param geomType One of 'line', 'dot', 'area' | optional
+     * @return {ol/style/Style}
+     **/
+    getStyle (styleDef, geomType) {
+        return getOlStyle(this, styleDef, geomType);
+    }
+
+    getDefaultMarkerSize () {
+        return this._defaultMarker.size;
     }
 
     /* OL3 specific - check if this can be done in a common way
@@ -874,310 +884,6 @@ export class MapModule extends AbstractMapModule {
      */
     _removeMapControlImpl (ctl) {
         this.getMap().removeControl(ctl);
-    }
-
-    /**
-     * Creates style based on JSON
-     * @param styleDef Oskari style definition
-     * @param geomType One of 'area', 'line', 'point' | optional
-     * @return {ol/style/Style} style ol3 specific!
-     */
-    getStyle (styleDef, geomType) {
-        var me = this;
-        var style = jQuery.extend(true, {}, styleDef);
-
-        var olStyle = {};
-        olStyle.fill = me.__getFillStyle(style);
-        if (style.stroke) {
-            if (geomType === 'line') {
-                delete style.stroke.area;
-            }
-            olStyle.stroke = me.__getStrokeStyle(style);
-        }
-        if (style.image) {
-            olStyle.image = me.__getImageStyle(style);
-        }
-        if (style.text) {
-            var textStyle = me.__getTextStyle(style);
-            if (textStyle) {
-                olStyle.text = textStyle;
-            }
-        }
-
-        return new olStyleStyle(olStyle);
-    }
-
-    __getColorEffect (effect, color) {
-        if (!effect || !color) {
-            return;
-        }
-        const blendAmount = 50;
-        let delta = 0;
-        switch (effect) {
-        case 'darken' : delta = -blendAmount; break;
-        case 'lighten' : delta = blendAmount; break;
-        }
-        return Oskari.util.alterBrightness(color, delta);
-    }
-
-    __getFillStyle (styleDef) {
-        if (!styleDef.fill) {
-            return;
-        }
-        let color = styleDef.fill.color;
-        if (!color) {
-            return new olStyleFill({ color: 'rgba(0,0,0,0)' });
-        }
-        color = this.__getColorEffect(styleDef.effect, color) || color;
-
-        if (Oskari.util.keyExists(styleDef, 'fill.area.pattern')) {
-            const pattern = this.getFillPattern(styleDef.fill.area.pattern, color);
-            if (pattern) {
-                return new olStyleFill({ color: pattern });
-            }
-        }
-
-        return new olStyleFill({ color });
-    }
-
-    __getFillPattern (patternCode, color) {
-        if ((!patternCode && patternCode !== 0) || !color) {
-            return;
-        }
-        const canvas = document.createElement('canvas');
-        const ctx = canvas.getContext('2d');
-        ctx.strokeStyle = color;
-        ctx.lineCap = 'square';
-
-        const canvasSize = 64;
-        canvas.width = canvasSize;
-        canvas.height = canvasSize;
-
-        const diagonal = width => {
-            ctx.lineWidth = width;
-            var numberOfStripes = width > 2 ? 12 : 18;
-            var bandWidth = canvasSize / numberOfStripes;
-            for (var i = 0; i < numberOfStripes * 2 + 2; i++) {
-                if (i % 2 === 0) {
-                    continue;
-                }
-                ctx.beginPath();
-                ctx.moveTo(i * bandWidth + bandWidth / 2, 0);
-                ctx.lineTo(i * bandWidth + bandWidth / 2 - canvasSize, canvasSize);
-                ctx.stroke();
-            }
-            return ctx.createPattern(canvas, 'repeat');
-        };
-        const horizontal = width => {
-            ctx.lineWidth = width;
-            var numberOfStripes = width > 2 ? 16 : 18;
-            var bandWidth = canvasSize / numberOfStripes;
-            for (var i = 0; i < numberOfStripes; i++) {
-                if (i % 2 === 0) {
-                    continue;
-                }
-                ctx.beginPath();
-                ctx.moveTo(0, i * bandWidth + bandWidth / 2);
-                ctx.lineTo(canvasSize, i * bandWidth + bandWidth / 2);
-                ctx.stroke();
-            }
-            return ctx.createPattern(canvas, 'repeat');
-        };
-
-        switch (patternCode) {
-        case 0 : return diagonal(2);
-        case 1 : return diagonal(3);
-        case 2 : return horizontal(2);
-        case 3 : return horizontal(3);
-        }
-    }
-
-    /**
-     * Parses stroke style from json
-     * @method __getStrokeStyle
-     * @param {Object} style json
-     * @return {ol/style/Stroke}
-     */
-    __getStrokeStyle (styleDef) {
-        var stroke = {};
-        let strokeDef = styleDef.stroke.area ? styleDef.stroke.area : styleDef.stroke;
-        let { width, color, lineDash, lineCap } = strokeDef;
-
-        if (width === 0) {
-            return null;
-        }
-        if (color) {
-            stroke.color = this.__getColorEffect(strokeDef.effect, color) || color;
-        }
-        if (width) {
-            stroke.width = width;
-        }
-        if (lineDash) {
-            if (Array.isArray(lineDash)) {
-                stroke.lineDash = lineDash;
-            } else {
-                const getDash = (segment, gap) => [segment, gap + (width || 0)];
-                switch (lineDash) {
-                case 'dash':
-                    stroke.lineDash = getDash(5, 4);
-                    break;
-                case 'dot':
-                    stroke.lineDash = getDash(1, 1);
-                    break;
-                case 'dashdot':
-                    stroke.lineDash = getDash(5, 1).concat(getDash(1, 1));
-                    break;
-                case 'longdash':
-                    stroke.lineDash = getDash(10, 4);
-                    break;
-                case 'longdashdot':
-                    stroke.lineDash = getDash(10, 1).concat(getDash(1, 1));
-                    break;
-                case 'solid':
-                    stroke.lineDash = [];
-                    break;
-                default: stroke.lineDash = [lineDash];
-                }
-            }
-            stroke.lineDashOffset = 0;
-        }
-        if (lineCap) {
-            stroke.lineCap = lineCap;
-        }
-        return new olStyleStroke(stroke);
-    }
-
-    /**
-     * Parses image style from json
-     * @method __getImageStyle
-     * @param {Object} style json
-     * @return {ol/style/Circle}
-     */
-    __getImageStyle (styleDef) {
-        var me = this;
-        var image = {};
-        var size = this._defaultMarker.size;
-
-        if (styleDef.image && styleDef.image.sizePx) {
-            size = styleDef.image.sizePx;
-        } else if (styleDef.image && styleDef.image.size) {
-            size = this.getPixelForSize(styleDef.image.size);
-        }
-
-        if (typeof size !== 'number') {
-            size = this._defaultMarker.size;
-        }
-
-        styleDef.image.size = size;
-        styleDef.image.size = size;
-
-        let fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
-        fillColor = this.__getColorEffect(styleDef.effect, fillColor) || fillColor;
-
-        var opacity = styleDef.image.opacity || 1;
-
-        if (me.isSvg(styleDef.image)) {
-            styleDef.image.color = fillColor;
-            return new olStyleIcon({
-                src: me.getSvg(styleDef.image),
-                size: [size, size],
-                imgSize: [size, size],
-                opacity
-            });
-        } else if (styleDef.image && styleDef.image.shape) {
-            var offsetX = (!isNaN(styleDef.image.offsetX)) ? styleDef.image.offsetX : 16;
-            var offsetY = (!isNaN(styleDef.image.offsetY)) ? styleDef.image.offsetY : 16;
-            return new olStyleIcon({
-                src: styleDef.image.shape,
-                anchorYUnits: 'pixels',
-                anchorXUnits: 'pixels',
-                anchorOrigin: 'bottom-left',
-                anchor: [offsetX, offsetY],
-                color: fillColor,
-                opacity
-            });
-        }
-
-        if (styleDef.image.radius) {
-            image.radius = styleDef.image.radius;
-        } else {
-            image.radius = 1;
-        }
-        if (styleDef.snapToPixel) {
-            image.snapToPixel = styleDef.snapToPixel;
-        }
-        if (fillColor) {
-            if (opacity !== 1) {
-                var rgb = null;
-                if (fillColor.charAt(0) === '#') {
-                    // check if color is hex
-                    rgb = Oskari.util.hexToRgb(fillColor);
-                    fillColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + opacity + ')';
-                } else if (fillColor.indexOf('rgb(') > -1) {
-                    // else check at if color is rgb
-                    var hexColor = '#' + Oskari.util.rgbToHex(fillColor);
-                    rgb = Oskari.util.hexToRgb(hexColor);
-                    fillColor = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + opacity + ')';
-                }
-            }
-            image.fill = new olStyleFill({
-                color: fillColor
-            });
-        }
-        if (styleDef.stroke) {
-            image.stroke = this.__getStrokeStyle(styleDef);
-        }
-        return new olStyleCircle(image);
-    }
-
-    /**
-     * Parses JSON and returns matching ol/style/Text
-     * @param  {Object} textStyleJSON text style definition
-     * @return {ol/style/Text} parsed style or undefined if no param is given
-     */
-    __getTextStyle (styleDef) {
-        if (!styleDef || !styleDef.text) {
-            return;
-        }
-        const text = {};
-        const { scale, offsetX, offsetY, rotation, textAlign, textBaseline, font, fill, stroke, labelText } = styleDef.text;
-        if (scale) {
-            text.scale = scale;
-        }
-        if (offsetX) {
-            text.offsetX = offsetX;
-        }
-        if (offsetY) {
-            text.offsetY = offsetY;
-        }
-        if (rotation) {
-            text.rotation = rotation;
-        }
-        if (textAlign) {
-            text.textAlign = textAlign;
-        }
-        if (textBaseline) {
-            text.textBaseline = textBaseline;
-        }
-        if (font) {
-            text.font = font;
-        }
-        if (fill && fill.color) {
-            text.fill = new olStyleFill({
-                color: this.__getColorEffect(styleDef.effect, fill.color) || fill.color
-            });
-        }
-        if (stroke) {
-            text.stroke = this.__getStrokeStyle(styleDef.text);
-        }
-        if (labelText) {
-            if (typeof labelText === 'number') {
-                text.text = labelText.toString();
-            } else {
-                text.text = labelText;
-            }
-        }
-        return new olStyleText(text);
     }
 
     /**
