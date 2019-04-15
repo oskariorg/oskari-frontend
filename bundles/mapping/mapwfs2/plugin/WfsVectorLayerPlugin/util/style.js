@@ -2,6 +2,7 @@ import olStyleStyle from 'ol/style/Style';
 import olStyleFill from 'ol/style/Fill';
 import olStyleStroke from 'ol/style/Stroke';
 import olStyleCircle from 'ol/style/Circle';
+import { constants } from 'zlib';
 
 const getNormalFill = () => new olStyleFill({
     color: '#FAEBD7'
@@ -104,41 +105,51 @@ const getStyleFunction = (styleValues, hoverHandler) => {
             return styleValues.selected(feature, resolution);
         }
         let hovered = hoverHandler.isHovered(feature, hoverHandler);
-        let style = null;
+        let styleTypes = null;
         if (styleValues.optional) {
-            var found = styleValues.optional.find(op => feature.get(op.key) === op.value);
+            const found = styleValues.optional.find(op => feature.get(op.key) === op.value);
             if (found) {
-                style = hovered && found.hoverStyle ? found.hoverStyle : found.style;
+                styleTypes = hovered && found.hoverStyle ? found.hoverStyle : found.style;
             }
         }
-        if (!style) {
+        if (!styleTypes) {
             if (hovered && styleValues.hover) {
-                style = styleValues.hover;
+                styleTypes = styleValues.hover;
             } else {
-                style = styleValues.customized || styleValues.base;
+                styleTypes = styleValues.customized || styleValues.base;
             }
         }
 
+        let style = null;
         switch (feature.getGeometry().getType()) {
         case 'LineString':
         case 'MultiLineString':
-            return style.line || style;
+            style = styleTypes.line || styleTypes; break;
         case 'Polygon':
         case 'MultiPolygon':
-            return style.area || style;
+            style = styleTypes.area || styleTypes; break;
         case 'Point':
-            return style.dot || style;
-        default:
-            return style;
+            style = styleTypes.dot || styleTypes; break;
+        };
+
+        if (styleTypes.labelProperty && style.getText()) {
+            style.getText().setText(feature.get(styleTypes.labelProperty) || '');
         }
+        return style;
     };
 };
 
-const getGeomTypedStyles = (styleDef, factory) => ({
-    area: factory(styleDef, 'area'),
-    line: factory(styleDef, 'line'),
-    dot: factory(styleDef, 'dot')
-});
+const getGeomTypedStyles = (styleDef, factory) => {
+    const styles = {
+        area: factory(styleDef, 'area'),
+        line: factory(styleDef, 'line'),
+        dot: factory(styleDef, 'dot')
+    };
+    if (styleDef.text) {
+        styles.labelProperty = styleDef.text.labelProperty;
+    }
+    return styles;
+};
 
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     let styles = {
