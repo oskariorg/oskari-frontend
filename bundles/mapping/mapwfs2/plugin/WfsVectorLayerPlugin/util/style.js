@@ -98,8 +98,27 @@ export const applyOpacity = (olStyle, opacity) => {
     return olStyle;
 };
 
-const getStyleFunction = (styleValues, hoverHandler) => {
+const _setFeatureLabel = (feature, styleValues, labelProperty) => {
+    let prop;
+    if (Array.isArray(labelProperty)) {
+        prop = labelProperty.find(p => feature.get(p) !== '');
+    } else {
+        prop = labelProperty;
+    }
+    if (!prop) {
+        return;
+    }
+    const baseTextStyle = styleValues.base.getText();
+    if (baseTextStyle) {
+        baseTextStyle.setText(feature.get(prop));
+    }
+};
+
+const getStyleFunction = (styleValues, hoverHandler, labelProperty) => {
     return (feature, resolution, isSelected) => {
+        if (labelProperty) {
+            _setFeatureLabel(feature, styleValues, labelProperty);
+        }
         if (isSelected) {
             return styleValues.selected(feature, resolution);
         }
@@ -142,6 +161,12 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     }
     const featureStyle = styleDef.featureStyle;
     const hoverOptions = layer.getHoverOptions();
+
+    let labelProperty;
+    if (Oskari.util.keyExists(featureStyle, 'text.labelProperty')) {
+        labelProperty = featureStyle.text.labelProperty;
+    }
+
     const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
     if (featureStyle) {
         styles.base = styleFactory(featureStyle);
@@ -165,5 +190,5 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             return optional;
         });
     }
-    return getStyleFunction(styles, hoverHandler);
+    return getStyleFunction(styles, hoverHandler, labelProperty);
 };
