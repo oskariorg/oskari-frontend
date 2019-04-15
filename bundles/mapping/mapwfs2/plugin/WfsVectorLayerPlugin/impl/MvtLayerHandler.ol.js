@@ -7,7 +7,7 @@ import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSo
 import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
 
-const FEATURE_DATA_UPDATE_THROTTLE = 5000;
+const FEATURE_DATA_UPDATE_THROTTLE = 1000;
 
 /**
  * @class MvtLayerHandler
