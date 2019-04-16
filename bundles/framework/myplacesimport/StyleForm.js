@@ -58,8 +58,6 @@ Oskari.clazz.define(
          * @param {Object} style
          */
         setStyleValues: function (style) {
-            style.fill.color = (typeof style.fill.color === 'string' ? style.fill.color : null);
-            style.stroke.area.color = (typeof style.stroke.area.color === 'string' ? style.stroke.area.color : null);
             this.visualizationForm.setOskariStyleValues(style);
         },
 

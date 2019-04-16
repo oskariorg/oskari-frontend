@@ -224,9 +224,9 @@ Oskari.clazz.define(
                         break;
                     case 'area':
                         fClazz.setValues({
-                            fillColor: featureStyle.fill.color,
+                            fillColor: (typeof featureStyle.fill.color === 'string' ? featureStyle.fill.color : null),
                             fillStyle: featureStyle.fill.area.pattern,
-                            lineColor: featureStyle.stroke.area.color,
+                            lineColor: (typeof featureStyle.stroke.area.color === 'string' ? featureStyle.stroke.area.color : null),
                             lineCorner: featureStyle.stroke.area.lineJoin,
                             lineStyle: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.area.lineDash)],
                             lineWidth: featureStyle.stroke.area.width
