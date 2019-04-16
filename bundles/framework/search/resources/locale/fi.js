@@ -29,7 +29,8 @@ Oskari.registerLocalization(
         },
         "resultBox": {
             "close": "Sulje",
-            "title": "Hakutulokset"
+            "title": "Hakutulokset",
+            "alternatives": "Tällä paikalla on seuraavia vaihtoehtoisia nimiä:"
         },
         "guidedTour": {
             "title": "Haku",
