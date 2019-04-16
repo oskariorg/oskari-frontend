@@ -160,6 +160,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             var myplacesLayer = mapLayerService.createMapLayer(json);
             mapLayerService.addLayer(myplacesLayer);
         },
+        updateLayerProperties: function (category) {
+            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            const id = this._getMapLayerId(category.getId());
+            const layer = mapLayerService.findMapLayer(id);
+            const options = layer.getOptions();
+            const style = category.getStyle();
+            layer.setName(category.getName());
+            options.styles = this._geStyleForLayer(style);
+            options.hover = this._getHoverStyle(style);
+        },
         _getMapLayerId: function (categoryId) {
             if (!categoryId) {
                 // default to default category id(?)
@@ -396,6 +406,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             var me = this;
             this.instance.getService().saveCategory(category, function (blnSuccess, model, blnNew) {
                 if (blnSuccess) {
+                    if (!blnNew) {
+                        me.updateLayerProperties(model);
+                    }
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(me.loc('notification.categorySaved.title'), me.loc('notification.categorySaved.message'));
                     dialog.fadeout();
@@ -405,6 +418,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     if (layerIsSelected) {
                         var request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
                         me.sandbox.request(me, request);
+                        me.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId]);
                     }
                     return;
                 }
