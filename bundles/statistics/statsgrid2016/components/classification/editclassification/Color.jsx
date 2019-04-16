@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
-import {ColorSelect} from './ColorSelect';
+import { withContext } from 'oskari-ui/util';
+import { ColorSelect } from './ColorSelect';
 import './color.scss';
 
 const handleReverseColors = (service, isReverse) => {
@@ -11,7 +11,7 @@ const handleColorChange = (service, value) => {
     service.getStateService().updateActiveClassification('name', value);
 };
 
-const Color = ({colors, values, loc, service, disabled}) => {
+const Color = ({ colors, values, loc, service, disabled }) => {
     let label = loc('colorset.button');
     const isSimple = values.mapStyle !== 'choropleth';
     const opacity = values.transparency / 100 || 1;
@@ -45,4 +45,4 @@ Color.propTypes = {
 };
 
 const contextWrapped = withContext(Color);
-export {contextWrapped as Color};
+export { contextWrapped as Color };

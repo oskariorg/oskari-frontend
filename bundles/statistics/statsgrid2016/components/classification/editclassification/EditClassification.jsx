@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
-import {Select} from './Select';
-import {Slider} from './Slider';
-import {Checkbox} from './Checkbox';
-import {Color} from './Color';
-import {ManualClassification} from '../../manualClassification/ManualClassification';
+import { withContext } from 'oskari-ui/util';
+import { Select } from './Select';
+import { Slider } from './Slider';
+import { Checkbox } from './Checkbox';
+import { Color } from './Color';
+import { ManualClassification } from '../../manualClassification/ManualClassification';
 import './editclassification.scss';
 
 const getLocalizedOptions = (options, locObj, disabledOptions) => {
@@ -80,8 +80,8 @@ const handleCheckboxChange = (service, id, isSelected) => {
 };
 
 const EditClassification = props => {
-    const {indicators, service, loc, editEnabled} = props;
-    const {methods, values, modes, colors, types, mapStyles} = props.classifications;
+    const { indicators, service, loc, editEnabled } = props;
+    const { methods, values, modes, colors, types, mapStyles } = props.classifications;
     const disabledOptions = getDisabledOptions(props);
     const disabled = !editEnabled;
 
@@ -186,4 +186,4 @@ EditClassification.propTypes = {
 };
 
 const contextWrapped = withContext(EditClassification);
-export {contextWrapped as EditClassification};
+export { contextWrapped as EditClassification };

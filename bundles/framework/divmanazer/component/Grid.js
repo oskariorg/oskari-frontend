@@ -1350,8 +1350,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _prepareData: function (data) {
             if (data instanceof Date) {
                 data = String(data);
-            } else if (!isNaN(data)) {
-                data = String(data);
+            } else if (Oskari.util.isNumber(data)) {
+                data = parseFloat(data);
             }
             return data;
         },

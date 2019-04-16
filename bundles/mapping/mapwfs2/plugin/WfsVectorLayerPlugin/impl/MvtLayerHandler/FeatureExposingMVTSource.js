@@ -1,4 +1,5 @@
 import olSourceVectorTile from 'ol/source/VectorTile';
+import olRenderFeature from 'ol/render/Feature';
 import { intersects } from 'ol/extent';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
@@ -50,12 +51,18 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
         const propertiesById = new Map();
 
         this._applyInExtent([envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()], propertiesById, (features, tile) => {
-            convertRenderFeatures(features, tile, this).forEach(converted => {
-                const convertedGeom = olParser.read(converted.getGeometry());
-                if (RelateOp.relate(geomFilter, convertedGeom).isIntersects()) {
-                    propertiesById.set(converted.get(WFS_ID_KEY), converted.getProperties());
-                }
-            });
+            if (!features || features.length === 0) {
+                return;
+            }
+            const olFeatures = features[0] instanceof olRenderFeature ? convertRenderFeatures(features, tile, this) : features;
+            olFeatures
+                .map(feature => ({
+                    id: feature.get(WFS_ID_KEY),
+                    properties: feature.getProperties(),
+                    geometry: olParser.read(feature.getGeometry())
+                }))
+                .filter(({ geometry }) => RelateOp.relate(geomFilter, geometry).isIntersects())
+                .forEach(({ id, properties }) => propertiesById.set(id, properties));
         });
 
         return Array.from(propertiesById.values());
@@ -90,7 +97,9 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
                     if (skipIds.has(id)) {
                         return false;
                     }
-                    return intersects(feature.getExtent(), extent);
+                    const ftrExtent = feature instanceof olRenderFeature
+                        ? feature.getExtent() : feature.getGeometry().getExtent();
+                    return intersects(ftrExtent, extent);
                 });
                 if (!matching.length) {
                     return;

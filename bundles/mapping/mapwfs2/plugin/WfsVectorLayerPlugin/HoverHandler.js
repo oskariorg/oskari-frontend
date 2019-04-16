@@ -5,6 +5,12 @@ export class HoverHandler {
         this.layer = null;
         this.feature = null;
         this.property = ftrIdPropertyKey || FTR_PROPERTY_ID;
+        // The same handler instance manages myplaces, userlayers and wfslayers
+        // The handler is notified when user hovers the map and doesn't hit a layer of managed type.
+        // Hence, the handler is called several times on map hover.
+        // Clear hover after there is no hit on any of the managed layer types.
+        this.clearHoverThreshold = 10;
+        this.noHitsCounter = 0;
     }
     isHovered (feature) {
         if (!feature || !this.feature) {
@@ -21,10 +27,16 @@ export class HoverHandler {
      * @param { olVectorTileLayer } layer
      */
     onMapHover (event, feature, layer) {
-        if (feature === this.feature) {
+        if (!feature) {
+            if (this.noHitsCounter > this.clearHoverThreshold) {
+                this._clearHover();
+                return;
+            }
+            this.noHitsCounter++;
             return;
         }
-        if (feature && this.feature && feature.get(this.property) === this.feature.get(this.property)) {
+        this.noHitsCounter = 0;
+        if (this._featureOrIdEqualsCurrent(feature)) {
             return;
         }
         const previousLayer = this.layer;
@@ -38,12 +50,30 @@ export class HoverHandler {
             }
         }
         // update currently hovered layer
-        if (this.layer && this.layer !== this.previousLayer) {
+        if (this.layer && this.layer !== previousLayer) {
             const style = (this.layer.get(LAYER_HOVER) || {}).featureStyle;
             if (style) {
                 this.layer.changed();
             }
         }
+    }
+
+    _clearHover () {
+        if (!this.layer) {
+            return;
+        }
+        this.feature = null;
+        this.layer.changed();
+        this.layer = null;
+        this.noHitsCounter = 0;
+    }
+
+    _featureOrIdEqualsCurrent (feature) {
+        if (!this.feature) {
+            return false;
+        }
+        const idProp = this.property;
+        return this.feature === feature || this.feature.get(idProp) === feature.get(idProp);
     }
 
     /**

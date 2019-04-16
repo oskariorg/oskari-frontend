@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @method _deleteUserLayer
          * Request backend to delete user layer. On success removes the layer
          * from map and layerservice. On failure displays a notification.
-         * @param layer layer analysis data to be destroyed
+         * @param layer layer userlayer data to be destroyed
          * @private
          */
         _deleteUserLayer: function (layerId) {

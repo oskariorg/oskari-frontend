@@ -123,23 +123,54 @@ const getStyleFunction = (styleValues, hoverHandler, labelProperty) => {
             return styleValues.selected(feature, resolution);
         }
         let hovered = hoverHandler.isHovered(feature, hoverHandler);
-        let style = null;
+        let styleTypes = null;
         if (styleValues.optional) {
-            var found = styleValues.optional.find(op => feature.get(op.key) === op.value);
+            const found = styleValues.optional.find(op => feature.get(op.key) === op.value);
             if (found) {
-                style = hovered && found.hoverStyle ? found.hoverStyle : found.style;
+                styleTypes = hovered && found.hoverStyle ? found.hoverStyle : found.style;
             }
         }
-        if (!style) {
-            style = hovered && styleValues.hover
-                ? styleValues.hover : styleValues.base || getNormalStyle();
+        if (!styleTypes) {
+            if (hovered && styleValues.hover) {
+                styleTypes = styleValues.hover;
+            } else {
+                styleTypes = styleValues.customized || styleValues.base;
+            }
+        }
+
+        let style = null;
+        switch (feature.getGeometry().getType()) {
+        case 'LineString':
+        case 'MultiLineString':
+            style = styleTypes.line || styleTypes; break;
+        case 'Polygon':
+        case 'MultiPolygon':
+            style = styleTypes.area || styleTypes; break;
+        case 'Point':
+            style = styleTypes.dot || styleTypes; break;
+        };
+
+        if (styleTypes.labelProperty && style.getText()) {
+            style.getText().setText(feature.get(styleTypes.labelProperty) || '');
         }
         return style;
     };
 };
 
-export const styleGenerator = (styleFactory, layer, hoverHandler) => {
+const getGeomTypedStyles = (styleDef, factory) => {
     const styles = {
+        area: factory(styleDef, 'area'),
+        line: factory(styleDef, 'line'),
+        dot: factory(styleDef, 'dot')
+    };
+    if (styleDef.text) {
+        styles.labelProperty = styleDef.text.labelProperty;
+    }
+    return styles;
+};
+
+export const styleGenerator = (styleFactory, layer, hoverHandler) => {
+    let styles = {
         base: getNormalStyle(),
         selected: getSelectedStyle()
     };
@@ -169,11 +200,11 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
 
     const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
     if (featureStyle) {
-        styles.base = styleFactory(featureStyle);
+        styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
     }
     if (hoverStyle) {
-        const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, hoverStyle) : hoverStyle;
-        styles.hover = styleFactory(hoverDef);
+        const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...hoverStyle } : hoverStyle;
+        styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
     }
     const optionalStyles = styleDef.optionalStyles;
     if (optionalStyles) {
@@ -181,10 +212,10 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             const optional = {
                 key: optionalDef.property.key,
                 value: optionalDef.property.value,
-                style: styleFactory(Object.assign({}, featureStyle, optionalDef))
+                style: getGeomTypedStyles({ ...featureStyle, ...optionalDef }, styleFactory)
             };
             if (hoverStyle) {
-                const hoverDef = hoverStyle.inherit === true ? Object.assign({}, featureStyle, optionalDef, hoverStyle) : hoverStyle;
+                const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...optionalDef, ...hoverStyle } : hoverStyle;
                 optional.hoverStyle = styleFactory(hoverDef);
             }
             return optional;

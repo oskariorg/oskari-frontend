@@ -39,9 +39,6 @@ Oskari.clazz.define(
                 prop: 'type'
             }
         ];
-        this.__templates.resultheading = _.template('<div><h3>' +
-            this.instance.getLocalization('searchResults') + ' ${count} ' +
-            this.instance.getLocalization('searchResultsDescription') + ' ${search}</h3></div>');
     }, {
         __templates: {
             main: _.template(
@@ -369,12 +366,27 @@ Oskari.clazz.define(
                 tableHeaderRow.append(header);
             });
 
+            result.locations.forEach(cur => this._setMatchingTitle(cur, searchKey));
             this._populateResultTable(tableBody, result.locations);
-            resultList.append(this.__templates.resultheading({
-                count: result.totalCount,
-                search: searchKey
-            }));
             resultList.append(table);
+        },
+
+        _setMatchingTitle: function (location, searchKey) {
+            if (!location || !location.localized) {
+                return;
+            }
+            const values = Object.values(location.localized);
+            // find exact match
+            let match = values.find(name => name.toUpperCase() === searchKey.toUpperCase());
+            if (match) {
+                location.name = match;
+                return;
+            }
+            // try matching starting with
+            match = values.find(name => name.toUpperCase().startsWith(searchKey.toUpperCase()));
+            if (match) {
+                location.name = match;
+            }
         },
 
         _populateResultTable: function (resultsTableBody, locations) {
@@ -391,14 +403,14 @@ Oskari.clazz.define(
         },
 
         _resultClicked: function (result) {
-            var me = this,
-                popupId = 'searchResultPopup',
-                inst = this.instance,
-                sandbox = inst.sandbox;
-            // good to go
+            var me = this;
+            var popupId = 'searchResultPopup';
+            var inst = this.instance;
+            var sandbox = inst.sandbox;
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
-                zoom = result.zoomLevel;
+            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest');
+            var zoom = result.zoomLevel;
+
             if (result.zoomScale) {
                 zoom = { scale: result.zoomScale };
             }
@@ -407,10 +419,10 @@ Oskari.clazz.define(
                 moveReqBuilder(result.lon, result.lat, zoom)
             );
 
-            var loc = this.instance.getLocalization('resultBox'),
-                resultActions = [],
-                resultAction,
-                action;
+            var loc = this.instance.getLocalization('resultBox');
+            var resultActions = [];
+            var resultAction;
+            var action;
             for (var name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
@@ -428,15 +440,16 @@ Oskari.clazz.define(
             closeAction.type = 'link';
             closeAction.group = 1;
             closeAction.action = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = Oskari.requestBuilder(rN),
-                    request = rB(popupId);
+                var rN = 'InfoBox.HideInfoBoxRequest';
+                var rB = Oskari.requestBuilder(rN);
+                var request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
             resultActions.push(closeAction);
 
+            const alternatives = me._createAlternativeNamesHTMLBlock(result);
             var contentItem = {
-                html: '<h3>' + result.name + '</h3>' + '<p>' + result.region + '<br/>' + result.type + '</p>',
+                html: '<h3>' + result.name + '</h3>' + alternatives + '<p>' + result.region + '<br/>' + result.type + '</p>',
                 actions: resultActions
             };
             var content = [contentItem];
@@ -445,20 +458,44 @@ Oskari.clazz.define(
                 hidePrevious: true
             };
 
-            var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = Oskari.requestBuilder(rN),
-                request = rB(
-                    popupId,
-                    loc.title,
-                    content,
-                    {
-                        lon: result.lon,
-                        lat: result.lat
-                    },
-                    options
-                );
+            var rN = 'InfoBox.ShowInfoBoxRequest';
+            var rB = Oskari.requestBuilder(rN);
+            var request = rB(
+                popupId,
+                loc.title,
+                content,
+                {
+                    lon: result.lon,
+                    lat: result.lat
+                },
+                options
+            );
 
             sandbox.request(this.instance.getName(), request);
+        },
+
+        _createAlternativeNamesHTMLBlock: function (result) {
+            if (!result || !result.localized || Object.keys(result.localized).length <= 0) {
+                return '';
+            }
+            const loc = this.instance.getLocalization('resultBox');
+            const div = document.createElement('div');
+            div.style.fontSize = '12px';
+            const list = document.createElement('ul');
+            Object.keys(result.localized)
+                .filter(key => result.localized[key] !== result.name)
+                .map(key => `${result.localized[key]} [${key}]`)
+                .sort()
+                .forEach(txt => {
+                    const item = document.createElement('li');
+                    item.append(document.createTextNode(txt));
+                    list.append(item);
+                });
+            list.style.marginTop = '5px';
+            list.style.listStylePosition = 'inside';
+            div.append(document.createTextNode(loc.alternatives));
+            div.append(list);
+            return div.outerHTML;
         },
 
         /**
