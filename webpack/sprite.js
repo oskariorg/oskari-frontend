@@ -49,12 +49,15 @@ function copyPngIcons (src, dest) {
     try {
         fs.copySync(src, dest, {
             // overwrite any existing file
-            clobber: true,
+            overwrite: true,
             // dereference symlinks
             dereference: true,
             // only include png files
-            filter: function (file) {
-                return file.endsWith('.png');
+            filter: function (path) {
+                if (fs.lstatSync(path).isDirectory()) {
+                    return true;
+                }
+                return path.endsWith('.png');
             }
         });
     } catch (e) {

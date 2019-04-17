@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
+import { withContext } from 'oskari-ui/util';
 import './slider.scss';
 
 class Slider extends React.Component {
@@ -75,4 +75,4 @@ Slider.propTypes = {
     loc: PropTypes.func
 };
 const cls = withContext(Slider);
-export {cls as Slider};
+export { cls as Slider };

@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
+import { withContext } from 'oskari-ui/util';
 
-const Checkbox = ({properties, value, handleChange, disabled}) => {
+const Checkbox = ({ properties, value, handleChange, disabled }) => {
     return (
         <div className={properties.class + ' option'}>
             <label className="label oskari-checkboxinput">
@@ -22,4 +22,4 @@ Checkbox.propTypes = {
 };
 
 const contextWrapped = withContext(Checkbox);
-export {contextWrapped as Checkbox};
+export { contextWrapped as Checkbox };

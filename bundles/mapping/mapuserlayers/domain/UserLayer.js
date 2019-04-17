@@ -56,6 +56,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.domain.UserLayer'
         },
         hasOrder: function () {
             return this.featureProperties && this.featureProperties.length > 1;
+        },
+        isFilterSupported: function () {
+            // this defaults to false in AbstractLayer, but WFSLayer returns true.
+            // Not sure if this is something we want, but it's the same behavior as before but NOT having
+            // WFS and analysis referenced in AbstractLayer
+            return false;
         }
 
     }, {
