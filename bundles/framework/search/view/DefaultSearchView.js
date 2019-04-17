@@ -475,7 +475,7 @@ Oskari.clazz.define(
         },
 
         _createAlternativeNamesHTMLBlock: function (result) {
-            if (!result || !result.localized || Object.keys(result.localized).length <= 0) {
+            if (!result || !result.localized || Object.keys(result.localized).length <= 1) {
                 return '';
             }
             const loc = this.instance.getLocalization('resultBox');
