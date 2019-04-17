@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             const style = category.getStyle();
             layer.setName(category.getName());
             options.styles = this._geStyleForLayer(style);
-            options.hover = this._getHoverStyle(style);
+            // options.hover = this._getHoverStyle(style);
         },
         _getMapLayerId: function (categoryId) {
             if (!categoryId) {
@@ -194,7 +194,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             baseJson.wmsUrl = Oskari.urls.getRoute('MyPlacesTile') + '&myCat=' + categoryModel.getId() + '&';
             baseJson.name = categoryModel.getName();
             baseJson.options.styles = this._geStyleForLayer(style);
-            baseJson.options.hover = this._getHoverStyle(style);
+            // baseJson.options.hover = this._getHoverStyle(style);
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             // Publish permission is always ok for user's own data
             baseJson.permissions = {
@@ -207,7 +207,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 font: 'bold 14px sans-serif',
                 labelProperty: ['attention_text', 'name'],
                 textAlign: 'left',
-                offsetX: 5,
+                offsetX: 10,
                 fill: { color: '#000000' },
                 stroke: {
                     color: '#FFFFFF',
