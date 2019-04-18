@@ -1,61 +1,22 @@
-import olStyleStyle from 'ol/style/Style';
-import olStyleFill from 'ol/style/Fill';
-import olStyleStroke from 'ol/style/Stroke';
-import olStyleCircle from 'ol/style/Circle';
-
-const getNormalFill = () => new olStyleFill({
-    color: '#FAEBD7'
-});
-const getNormalStroke = () => new olStyleStroke({
-    color: '#000000',
-    width: 1
-});
-
-const getSelectedFill = () => new olStyleFill({
-    color: '#e19b28'
-});
-const getSelectedStroke = () => new olStyleStroke({
-    color: '#e19b28',
-    width: 2
-});
-
-const getNormalStyle = () => new olStyleStyle({
-    image: new olStyleCircle({
-        radius: 6,
-        fill: getNormalFill(),
-        stroke: getNormalStroke()
-    }),
-    fill: getNormalFill(),
-    stroke: getNormalStroke()
-});
-
-const getSelectedLine = () => new olStyleStyle({
-    stroke: getSelectedStroke()
-});
-
-const getSelectedOther = () => new olStyleStyle({
-    image: new olStyleCircle({
-        radius: 6,
-        fill: getSelectedFill(),
-        stroke: getSelectedStroke()
-    }),
-    fill: getSelectedFill(),
-    stroke: getNormalStroke()
-});
-
-function getSelectedStyle () {
-    const line = getSelectedLine();
-    const other = getSelectedOther();
-    return (feature, resolution) => {
-        switch (feature.getGeometry().getType()) {
-        case 'LineString':
-        case 'MultiLineString':
-            return line;
-        default:
-            return other;
+const defaults = {
+    style: {
+        fill: {
+            color: '#FAEBD7'
+        },
+        stroke: {
+            color: '#000000',
+            width: 1
         }
-    };
-}
+    },
+    selected: {
+        inherit: true,
+        effect: 'auto major'
+    },
+    hover: {
+        inherit: true,
+        effect: 'auto minor'
+    }
+};
 
 const applyOpacityToColorable = (colorable, opacity) => {
     if (!colorable || !colorable.getColor()) {
@@ -99,24 +60,33 @@ export const applyOpacity = (olStyle, opacity) => {
 };
 
 const getStyleFunction = (styleValues, hoverHandler) => {
-    return (feature, resolution, isSelected) => {
-        if (isSelected) {
-            return styleValues.selected(feature, resolution);
+    const getTypedStyles = (styles, isHovered, isSelected) => {
+        if (!styles) {
+            return;
         }
-        let hovered = hoverHandler.isHovered(feature, hoverHandler);
+        if (isHovered && isSelected) {
+            return styles.selectedHover || styles.hover || styles.customized || styles.default;
+        }
+        if (isHovered) {
+            return styles.hover || styles.customized || styles.default;
+        }
+        if (isSelected) {
+            return styles.selected || styles.customized || styles.default;
+        }
+        return styles.customized || styles.default;
+    };
+    return (feature, resolution, isSelected) => {
+        const isHovered = hoverHandler.isHovered(feature, hoverHandler);
+
         let styleTypes = null;
         if (styleValues.optional) {
             const found = styleValues.optional.find(op => feature.get(op.key) === op.value);
             if (found) {
-                styleTypes = hovered && found.hoverStyle ? found.hoverStyle : found.style;
+                styleTypes = getTypedStyles(found, isHovered, isSelected);
             }
         }
         if (!styleTypes) {
-            if (hovered && styleValues.hover) {
-                styleTypes = styleValues.hover;
-            } else {
-                styleTypes = styleValues.customized || styleValues.base;
-            }
+            styleTypes = getTypedStyles(styleValues, isHovered, isSelected);
         }
 
         let style = null;
@@ -152,8 +122,9 @@ const getGeomTypedStyles = (styleDef, factory) => {
 
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     let styles = {
-        base: getNormalStyle(),
-        selected: getSelectedStyle()
+        default: getGeomTypedStyles(defaults.style, styleFactory),
+        selected: getGeomTypedStyles({ ...defaults.style, ...defaults.selected }, styleFactory),
+        hover: getGeomTypedStyles({ ...defaults.style, ...defaults.hover }, styleFactory)
     };
     if (!layer) {
         return getStyleFunction(styles, hoverHandler);
@@ -176,10 +147,12 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
     if (featureStyle) {
         styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
+        styles.selected = getGeomTypedStyles({ ...featureStyle, ...defaults.selected }, styleFactory);
     }
     if (hoverStyle) {
         const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...hoverStyle } : hoverStyle;
         styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
+        styles.selectedHover = getGeomTypedStyles(hoverDef, styleFactory);
     }
     const optionalStyles = styleDef.optionalStyles;
     if (optionalStyles) {
@@ -187,11 +160,13 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             const optional = {
                 key: optionalDef.property.key,
                 value: optionalDef.property.value,
-                style: getGeomTypedStyles({ ...featureStyle, ...optionalDef }, styleFactory)
+                customized: getGeomTypedStyles({ ...featureStyle, ...optionalDef }, styleFactory),
+                selected: getGeomTypedStyles({ ...featureStyle, ...optionalDef, ...defaults.selected }, styleFactory)
             };
             if (hoverStyle) {
                 const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...optionalDef, ...hoverStyle } : hoverStyle;
-                optional.hoverStyle = styleFactory(hoverDef);
+                optional.hover = getGeomTypedStyles(hoverDef, styleFactory);
+                optional.selectedHover = getGeomTypedStyles({ ...hoverDef, ...defaults.selected }, styleFactory);
             }
             return optional;
         });

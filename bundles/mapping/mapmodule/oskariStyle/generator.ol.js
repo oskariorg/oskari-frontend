@@ -330,11 +330,22 @@ const getColorEffect = (effect, color) => {
     if (!effect || !color) {
         return;
     }
-    const blendAmount = 50;
-    let delta = 0;
+    const minor = 30;
+    const normal = 60;
+    const major = 90;
+    const getEffect = (delta, auto) => Oskari.util.alterBrightness(color, delta, auto);
     switch (effect) {
-    case EFFECT.DARKEN : delta = -blendAmount; break;
-    case EFFECT.LIGHTEN : delta = blendAmount; break;
+    case EFFECT.AUTO : return getEffect(normal, true);
+    case EFFECT.AUTO_MINOR : return getEffect(minor, true);
+    case EFFECT.AUTO_NORMAL : return getEffect(normal, true);
+    case EFFECT.AUTO_MAJOR : return getEffect(major, true);
+    case EFFECT.DARKEN : return getEffect(-normal);
+    case EFFECT.DARKEN_MINOR : return getEffect(-minor);
+    case EFFECT.DARKEN_NORMAL : return getEffect(-normal);
+    case EFFECT.DARKEN_MAJOR : return getEffect(-major);
+    case EFFECT.LIGHTEN : return getEffect(normal);
+    case EFFECT.LIGHTEN_MINOR : return getEffect(minor);
+    case EFFECT.LIGHTEN_NORMAL : return getEffect(normal);
+    case EFFECT.LIGHTEN_MAJOR : return getEffect(major);
     }
-    return Oskari.util.alterBrightness(color, delta);
 };
