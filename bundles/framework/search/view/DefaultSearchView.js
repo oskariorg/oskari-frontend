@@ -326,6 +326,8 @@ Oskari.clazz.define(
                 info.append(this.__getSearchResultHeader(result.totalCount, result.hasMore));
             }
 
+            result.locations.forEach(cur => this._setMatchingTitle(cur, searchKey));
+
             if (result.totalCount === 1) {
                 // move map etc
                 me._resultClicked(result.locations[0]);
@@ -366,7 +368,6 @@ Oskari.clazz.define(
                 tableHeaderRow.append(header);
             });
 
-            result.locations.forEach(cur => this._setMatchingTitle(cur, searchKey));
             this._populateResultTable(tableBody, result.locations);
             resultList.append(table);
         },
@@ -375,17 +376,16 @@ Oskari.clazz.define(
             if (!location || !location.localized) {
                 return;
             }
-            const values = Object.values(location.localized);
             // find exact match
-            let match = values.find(name => name.toUpperCase() === searchKey.toUpperCase());
+            let match = location.localized.find(cur => cur.name.toUpperCase() === searchKey.toUpperCase());
             if (match) {
-                location.name = match;
+                location.name = match.name;
                 return;
             }
             // try matching starting with
-            match = values.find(name => name.toUpperCase().startsWith(searchKey.toUpperCase()));
+            match = location.localized.find(cur => cur.name.toUpperCase().startsWith(searchKey.toUpperCase()));
             if (match) {
-                location.name = match;
+                location.name = match.name;
             }
         },
 
@@ -475,22 +475,25 @@ Oskari.clazz.define(
         },
 
         _createAlternativeNamesHTMLBlock: function (result) {
-            if (!result || !result.localized || Object.keys(result.localized).length <= 0) {
+            if (!result || !result.localized) {
+                return '';
+            }
+            const alternatives = result.localized
+                .filter(cur => cur.name !== result.name)
+                .map(cur => `${cur.name} [${cur.locale}]`)
+                .sort();
+            if (alternatives.length === 0) {
                 return '';
             }
             const loc = this.instance.getLocalization('resultBox');
             const div = document.createElement('div');
             div.style.fontSize = '12px';
             const list = document.createElement('ul');
-            Object.keys(result.localized)
-                .filter(key => result.localized[key] !== result.name)
-                .map(key => `${result.localized[key]} [${key}]`)
-                .sort()
-                .forEach(txt => {
-                    const item = document.createElement('li');
-                    item.append(document.createTextNode(txt));
-                    list.append(item);
-                });
+            alternatives.forEach(txt => {
+                const item = document.createElement('li');
+                item.append(document.createTextNode(txt));
+                list.append(item);
+            });
             list.style.marginTop = '5px';
             list.style.listStylePosition = 'inside';
             div.append(document.createTextNode(loc.alternatives));
