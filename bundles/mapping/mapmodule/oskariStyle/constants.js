@@ -29,6 +29,7 @@ const NORMAL = 'normal';
 const MAJOR = 'major';
 
 export const EFFECT = {
+    NONE: 'none',
     AUTO,
     DARKEN,
     LIGHTEN,

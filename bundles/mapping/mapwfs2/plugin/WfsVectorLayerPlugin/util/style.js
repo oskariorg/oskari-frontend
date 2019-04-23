@@ -5,16 +5,43 @@ const defaults = {
         },
         stroke: {
             color: '#000000',
-            width: 1
+            width: 1,
+            area: {
+                color: '#000000',
+                width: 1
+            }
+        },
+        image: {
+            shape: 5,
+            size: 3,
+            fill: {
+                color: '#FAEBD7'
+            }
         }
     },
     selected: {
         inherit: true,
-        effect: 'auto major'
+        effect: 'auto major',
+        stroke: {
+            area: {
+                effect: 'none',
+                color: '#000000',
+                width: 4
+            },
+            width: 3
+        }
     },
     hover: {
         inherit: true,
-        effect: 'auto minor'
+        effect: 'auto minor',
+        stroke: {
+            area: {
+                effect: 'none',
+                color: '#000000',
+                width: 2
+            },
+            width: 2
+        }
     }
 };
 
@@ -120,11 +147,14 @@ const getGeomTypedStyles = (styleDef, factory) => {
     return styles;
 };
 
+const merge = (...styles) => jQuery.extend(true, {}, ...styles);
+
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     let styles = {
         default: getGeomTypedStyles(defaults.style, styleFactory),
-        selected: getGeomTypedStyles({ ...defaults.style, ...defaults.selected }, styleFactory),
-        hover: getGeomTypedStyles({ ...defaults.style, ...defaults.hover }, styleFactory)
+        selected: getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory),
+        hover: getGeomTypedStyles(merge(defaults.style, defaults.hover), styleFactory),
+        selectedHover: getGeomTypedStyles(merge(defaults.style, defaults.hover, defaults.selected), styleFactory)
     };
     if (!layer) {
         return getStyleFunction(styles, hoverHandler);
@@ -142,32 +172,32 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             }
         });
     }
-    const featureStyle = styleDef.featureStyle;
-    const hoverOptions = layer.getHoverOptions();
-    const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
+    const featureStyle = styleDef.featureStyle || defaults.style;
+    let hoverStyle = defaults.hover;
+    if (layer.getHoverOptions() && layer.getHoverOptions().featureStyle) {
+        hoverStyle = layer.getHoverOptions().featureStyle;
+    }
+    let hoverDef = hoverStyle.inherit === true ? merge(featureStyle, hoverStyle) : hoverStyle;
     if (featureStyle) {
         styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
-        styles.selected = getGeomTypedStyles({ ...featureStyle, ...defaults.selected }, styleFactory);
-    }
-    if (hoverStyle) {
-        const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...hoverStyle } : hoverStyle;
+        styles.selected = getGeomTypedStyles(merge(featureStyle, defaults.selected), styleFactory);
         styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
-        styles.selectedHover = getGeomTypedStyles(hoverDef, styleFactory);
+        styles.selectedHover = getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory);
     }
     const optionalStyles = styleDef.optionalStyles;
     if (optionalStyles) {
         styles.optional = optionalStyles.map((optionalDef) => {
+            if (hoverStyle.inherit) {
+                hoverDef = merge(featureStyle, optionalDef, hoverStyle);
+            }
             const optional = {
                 key: optionalDef.property.key,
                 value: optionalDef.property.value,
-                customized: getGeomTypedStyles({ ...featureStyle, ...optionalDef }, styleFactory),
-                selected: getGeomTypedStyles({ ...featureStyle, ...optionalDef, ...defaults.selected }, styleFactory)
+                customized: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
+                selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory),
+                hover: getGeomTypedStyles(hoverDef, styleFactory),
+                selectedHover: getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory)
             };
-            if (hoverStyle) {
-                const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...optionalDef, ...hoverStyle } : hoverStyle;
-                optional.hover = getGeomTypedStyles(hoverDef, styleFactory);
-                optional.selectedHover = getGeomTypedStyles({ ...hoverDef, ...defaults.selected }, styleFactory);
-            }
             return optional;
         });
     }
