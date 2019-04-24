@@ -1,11 +1,11 @@
+import 'oskari-loader!../../../packages/framework/bundle/mapfull/bundle.js';
+import 'oskari-loader!../../../packages/framework/bundle/oskariui/bundle.js';
+import 'oskari-loader!../../../packages/mapping/ol3/mapmodule/bundle.js';
 import 'oskari-loader!../../../packages/mapping/ol3/mapmyplaces/bundle.js';
 import 'oskari-loader!../../../packages/mapping/ol3/maparcgis/bundle.js';
-import 'oskari-loader!../../../packages/mapping/ol3/mapmodule/bundle.js';
-import 'oskari-loader!../../../packages/framework/bundle/oskariui/bundle.js';
 import 'oskari-loader!../../../packages/mapping/ol3/mapwfs2/bundle.js';
 import 'oskari-loader!../../../packages/mapping/ol3/mapuserlayers/bundle.js';
 import 'oskari-loader!../../../packages/framework/bundle/ui-components/bundle.js';
-import 'oskari-loader!../../../packages/framework/bundle/mapfull/bundle.js';
 import 'oskari-loader!../../../packages/mapping/ol3/mapwmts/bundle.js';
 
 import 'oskari-loader!../../../packages/framework/bundle/divmanazer/bundle.js';
