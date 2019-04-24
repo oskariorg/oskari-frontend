@@ -113,7 +113,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         return renderMode;
     }
-    _isRenderModeSupported (mode) {
+    isRenderModeSupported (mode) {
         return mode === RENDER_MODE_MVT || mode === RENDER_MODE_VECTOR;
     }
     /**
@@ -124,7 +124,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         const renderMode = this.getRenderMode(layer);
-        if (!this._isRenderModeSupported(renderMode)) {
+        if (!this.isRenderModeSupported(renderMode)) {
             return;
         }
         const handler = renderMode === RENDER_MODE_MVT ? this.mvtLayerHandler : this.vectorLayerHandler;
