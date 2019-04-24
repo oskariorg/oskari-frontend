@@ -40,7 +40,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const opacity = this.plugin.getMapModule().has3DSupport() ? 1 : layer.getOpacity() / 100;
-        const source = this._getLayerSource(layer);
+        const source = this._createLayerSource(layer);
         const vectorLayer = new olLayerVector({
             opacity,
             visible: layer.isVisible(),
@@ -54,12 +54,12 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     }
     /**
      * @private
-     * @method _getLayerSource To get an ol vector source for the layer.
+     * @method _createLayerSource To get an ol vector source for the layer.
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return {ol.source.Vector} vector layer source
      */
-    _getLayerSource (layer) {
-        var source = new olSourceVector({
+    _createLayerSource (layer) {
+        const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
             projection: this.plugin.getMap().getView().getProjection(), // OL projection object
@@ -88,8 +88,11 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 },
                 url: Oskari.urls.getRoute('GetWFSFeatures'),
                 success: (resp) => {
-                    source.addFeatures(source.getFormat().readFeatures(resp));
+                    const features = source.getFormat().readFeatures(resp);
+                    features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
+                    source.addFeatures(features);
                     this.plugin.getMapModule().loadingState(layer.getId(), false);
+                    this.updateLayerProperties(layer, source);
                 },
                 error: () => {
                     source.removeLoadedExtent(extent);
@@ -137,29 +140,5 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return;
         }
         olLayers[0].getSource().loadFeatures(extent, resolution, projection);
-    }
-    updateLayerProperties (layer, source = this._getSourceForLayer(layer)) {
-        /*
-
-        TODO: Fix feature _oid property for geojson
-
-        const {left, bottom, right, top} = this.plugin.getSandbox().getMap().getBbox();
-        const features = source.getFeaturesInExtent([left, bottom, right, top]);
-        const propsList = features.map(ftr => ftr.getProperties());
-        const {fields, properties} = getFieldsAndPropsArrays(propsList);
-        layer.setActiveFeatures(properties);
-        // Update fields and locales only if fields is not empty and it has changed
-        if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {
-            layer.setFields(fields);
-            this.plugin.setLayerLocales(layer);
-        }
-        this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
-        */
-    }
-    _getSourceForLayer (oskariLayer) {
-        const olLayers = this.plugin.getOLMapLayers(oskariLayer);
-        if (olLayers && olLayers.length > 0) {
-            return olLayers[0].getSource();
-        }
     }
 };

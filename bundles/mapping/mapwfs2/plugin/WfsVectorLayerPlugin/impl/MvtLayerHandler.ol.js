@@ -4,10 +4,8 @@ import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olTileState from 'ol/TileState';
 import { FeatureExposingMVTSource } from './MvtLayerHandler/FeatureExposingMVTSource';
-import { WFS_ID_KEY, getFieldsAndPropsArrays } from '../util/props';
+import { WFS_ID_KEY } from '../util/props';
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
-
-const FEATURE_DATA_UPDATE_THROTTLE = 1000;
 
 /**
  * @class MvtLayerHandler
@@ -18,24 +16,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         super(layerPlugin);
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
-        this.throttledUpdates = new Map();
         const config = layerPlugin.getConfig();
         if (!config) {
             return;
         }
         this.minZoomLevel = config.minZoomLevel;
         this._setupTileGrid(config);
-    }
-    _setupTileGrid (config) {
-        const { origin, resolutions, tileSize } = config;
-        if (!origin || !resolutions || !tileSize) {
-            return;
-        }
-        this.tileGrid = {
-            origin,
-            resolutions,
-            tileSize: [tileSize, tileSize]
-        };
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
@@ -46,54 +32,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             return styleFunction(feature, resolution, isSelected);
         };
     }
-    updateLayerProperties (layer, source = this._sourceFromLayer(layer)) {
-        if (this.throttledUpdates.has(layer.getId())) {
-            const throttledUpdate = this.throttledUpdates.get(layer.getId());
-            throttledUpdate();
-            return;
-        }
-        const update = () => this._updateLayerProperties(layer, source);
-        const throttledUpdate = Oskari.util.throttle(update, FEATURE_DATA_UPDATE_THROTTLE, { leading: false });
-        this.throttledUpdates.set(layer.getId(), throttledUpdate);
-        throttledUpdate();
-    }
-    _updateLayerProperties (layer, source) {
-        if (!layer.isVisible()) {
-            layer.setActiveFeatures([]);
-            layer.setFields([]);
-            this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), []);
-            return;
-        }
-        const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
-        const propsList = source.getFeaturePropsInExtent([left, bottom, right, top]);
-        const { fields, properties } = getFieldsAndPropsArrays(propsList);
-        layer.setActiveFeatures(properties);
-        // Update fields and locales only if fields is not empty and it has changed
-        if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {
-            layer.setFields(fields);
-            this.plugin.setLayerLocales(layer);
-        }
-        this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
-    }
-    /**
-     * Returns source corresponding to given layer
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
-     * @return {ol/source/VectorTile}
-     */
-    _sourceFromLayer (layer) {
-        return this.plugin.getOLMapLayers(layer.getId())[0].getSource();
-    }
-    createSource (layer, options) {
-        const source = new FeatureExposingMVTSource(options);
-        source.on('tileloadend', ({ tile }) => {
-            if (tile.getState() === olTileState.ERROR) {
-                return;
-            }
-            this.updateLayerProperties(layer, source);
-        });
-        return source;
-    }
-
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const sourceOpts = {
@@ -109,9 +47,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         if (mvtMinScale && (!layerMinScale || layerMinScale > mvtMinScale)) {
             layer.setMinScale(mvtMinScale);
         }
-
-        // Properties id, type and hover are being used in VectorFeatureService.
-        const source = this.createSource(layer, sourceOpts);
+        const source = this._createLayerSource(layer, sourceOpts);
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isVisible(),
@@ -122,6 +58,27 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
         this._registerLayerEvents(layer.getId(), source);
         return vectorTileLayer;
+    }
+    _setupTileGrid (config) {
+        const { origin, resolutions, tileSize } = config;
+        if (!origin || !resolutions || !tileSize) {
+            return;
+        }
+        this.tileGrid = {
+            origin,
+            resolutions,
+            tileSize: [tileSize, tileSize]
+        };
+    }
+    _createLayerSource (layer, options) {
+        const source = new FeatureExposingMVTSource(options);
+        source.on('tileloadend', ({ tile }) => {
+            if (tile.getState() === olTileState.ERROR) {
+                return;
+            }
+            this.updateLayerProperties(layer, source);
+        });
+        return source;
     }
     _getMinScale () {
         if (!this.minZoomLevel) {
@@ -139,7 +96,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
      * Adds event listeners to ol-layers
      * @param {string|number} layerId
      * @param {ol/source/VectorTile} oskariLayer
-     *
      */
     _registerLayerEvents (layerId, source) {
         source.on('tileloadstart', () => this.plugin.getMapModule().loadingState(layerId, true));
