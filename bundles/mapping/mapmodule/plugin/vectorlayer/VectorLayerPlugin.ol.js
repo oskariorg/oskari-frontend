@@ -984,8 +984,14 @@ Oskari.clazz.define(
                 return;
             }
             if (olStyle.getText()) {
-                const showLabel = Oskari.util.keyExists(oskariStyle, 'text.labelProperty');
-                const label = showLabel ? feature.get(oskariStyle.text.labelProperty) || '' : '';
+                let labelProp = Oskari.util.keyExists(oskariStyle, 'text.labelProperty') ? oskariStyle.text.labelProperty : '';
+                let label = '';
+                if (labelProp) {
+                    if (Array.isArray(labelProp)) {
+                        labelProp = labelProp.find(p => feature.get(p) !== '');
+                    }
+                    label = feature.get(labelProp);
+                }
                 olStyle.getText().setText('' + label);
             }
             return olStyle;

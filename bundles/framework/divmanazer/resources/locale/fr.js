@@ -148,6 +148,11 @@ Oskari.registerLocalization(
                 "area": "Modifier le style d'entité surfacique",
                 "line": "Modifier le style d'entité linéaire"
             },
+            "validation": {
+                "title": "Les données fournies contiennent des erreurs :",
+                "strokeWidth": "La largeur de ligne n’est pas valide. La taille doit se situer entre 1 et 50.",
+                "borderWidth": "La largeur de la ligne de bordure n’est pas valide. La taille doit se situer entre 1 et 50."
+            },
             "dot": {
                 "title": "Style d'entité point",
                 "tooltip": "Définir un style pour les entités ponctuelles",

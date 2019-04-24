@@ -98,6 +98,19 @@ export const applyOpacity = (olStyle, opacity) => {
     return olStyle;
 };
 
+const _setFeatureLabel = (feature, textStyle, labelProperty) => {
+    let prop;
+    if (Array.isArray(labelProperty)) {
+        prop = labelProperty.find(p => feature.get(p));
+    } else {
+        prop = labelProperty;
+    }
+    if (!prop) {
+        return;
+    }
+    textStyle.setText(feature.get(prop));
+};
+
 const getStyleFunction = (styleValues, hoverHandler) => {
     return (feature, resolution, isSelected) => {
         if (isSelected) {
@@ -128,11 +141,12 @@ const getStyleFunction = (styleValues, hoverHandler) => {
         case 'MultiPolygon':
             style = styleTypes.area || styleTypes; break;
         case 'Point':
+        case 'MultiPoint':
             style = styleTypes.dot || styleTypes; break;
         };
-
-        if (styleTypes.labelProperty && style.getText()) {
-            style.getText().setText(feature.get(styleTypes.labelProperty) || '');
+        const textStyle = style.getText();
+        if (styleTypes.labelProperty && textStyle) {
+            _setFeatureLabel(feature, textStyle, styleTypes.labelProperty);
         }
         return style;
     };
@@ -173,6 +187,7 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     }
     const featureStyle = styleDef.featureStyle;
     const hoverOptions = layer.getHoverOptions();
+
     const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
     if (featureStyle) {
         styles.customized = getGeomTypedStyles(featureStyle, styleFactory);

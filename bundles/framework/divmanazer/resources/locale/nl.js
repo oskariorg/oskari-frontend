@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Wijzigen area feature style",
                 "line": "Wijzigen line feature style"
             },
+            "validation": {
+                "title": "Gegevens bevatten fouten:",
+                "strokeWidth": "De lijndikte past niet binnen de maximale afmetingen (1-50).",
+                "borderWidth": "De dikte van de gebiedsgrens past niet binnen de afmetingen (0-50)."
+            },
             "dot": {
                 "title": "Point feature style",
                 "tooltip": "Define a style for point features.",

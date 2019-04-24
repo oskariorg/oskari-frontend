@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             formData.append('layer-desc', formValues.desc);
             formData.append('layer-source', formValues.source);
             formData.append('file-import', this.fileInput.getFiles());
-            formData.append('layer-style', JSON.stringify(me.__getStyleValues()));
+            formData.append('layer-style', JSON.stringify(this.styleForm.getOskariStyle()));
             jQuery.ajax({
                 url: url,
                 type: 'POST',
@@ -217,41 +217,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 source: form.find('.source input').val(),
                 epsg: form.find('.source-srs input').val().trim()
             };
-        },
-        /**
-         * Returns the visualization form's values.
-         *
-         * @method __getStyleValues
-         * @private
-         * @return {Object}
-         */
-        __getStyleValues: function () {
-            var formValues = this.styleForm.getValues();
-            var values = {};
-
-            if (formValues) {
-                values.dot = {
-                    size: formValues.dot.size,
-                    color: formValues.dot.color,
-                    shape: formValues.dot.shape
-                };
-                values.line = {
-                    width: formValues.line.width,
-                    color: formValues.line.color,
-                    cap: formValues.line.cap,
-                    corner: formValues.line.corner,
-                    style: formValues.line.style
-                };
-                values.area = {
-                    lineWidth: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
-                    lineStyle: formValues.area.lineStyle,
-                    fillStyle: formValues.area.fillStyle,
-                    lineCorner: formValues.area.lineCorner
-                };
-            }
-            return values;
         },
         /**
          * Validates the form inputs (currently that the name and file are present).
