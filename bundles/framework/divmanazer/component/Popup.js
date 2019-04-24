@@ -222,14 +222,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @return {Oskari.userinterface.component.Button} button that closes the dialog
          */
         createCloseButton: function (label) {
-            var me = this,
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
-            if (label) {
-                okBtn.setTitle(label);
-            }
-            okBtn.setHandler(function () {
-                me.close(true);
-            });
+            const okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
+            label = label || Oskari.getMsg('DivManazer', 'buttons.close');
+            okBtn.setTitle(label);
+            okBtn.setHandler(() => this.close(true));
             return okBtn;
         },
 

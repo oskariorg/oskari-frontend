@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Editovať štýl plošného objektu",
                 "line": "Editovať štýl líniového objektu"
             },
+            "validation": {
+                "title": "Zadané údaje sú neplatné:",
+                "strokeWidth": "Hrúbka línie je neplatná. Musí byť v rozmedzí 1 a 50.",
+                "borderWidth": "Hrúbka línie je neplatná. Musí byť v rozmedzí 1 a 50."
+            },
             "dot": {
                 "title": "Štýl bodového objektu",
                 "tooltip": "Definovať štýl pre bodové objekty.",

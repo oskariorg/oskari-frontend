@@ -148,6 +148,11 @@ Oskari.registerLocalization(
                 "area": "Muokkaa alueen esitystapaa",
                 "line": "Muokkaa viivan esitystapaa"
             },
+            "validation": {
+                "title": "Annetuissa tiedoissa on virheitä:",
+                "strokeWidth": "Viivan leveys on virheellinen. Viivan leveyden on oltava välillä 1-50.",
+                "borderWidth": "Reunaviivan leveys on virheellinen. Leveyden on oltava välillä 1-50."
+            },
             "dot": {
                 "title": "Pisteen esitystapa",
                 "tooltip": "Määrittele esitystapa pistekohteille.",

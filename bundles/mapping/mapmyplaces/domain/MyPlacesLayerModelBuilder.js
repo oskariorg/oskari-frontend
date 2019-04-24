@@ -18,6 +18,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             var me = this;
             var loclayer = me.localization.layer;
 
+            // set options before parsing wfs spesific layer data
+            if (mapLayerJson.options) {
+                layer.setOptions(mapLayerJson.options);
+            }
+
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             this.wfsBuilder.setDefaultRenderMode(layer, 'vector');

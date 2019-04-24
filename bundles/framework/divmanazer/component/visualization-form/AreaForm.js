@@ -335,6 +335,9 @@ Oskari.clazz.define(
                 if (me.values.fillStyle === 4 || me.values.fillStyle === 5) {
                     me.values.fillStyle = -1;
                 }
+                if (!me.creator.validateWidth('borderWidth', me.values.lineWidth)) {
+                    return;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();

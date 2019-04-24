@@ -148,6 +148,11 @@ Oskari.registerLocalization(
                 "area": "Redigera områdets stil",
                 "line": "Redigera linjens stil"
             },
+            "validation": {
+                "title": "Brister i uppgifterna:",
+                "strokeWidth": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
+                "borderWidth": "Områdets konturlinje är utanför de tillåtna gränserna (1-50)."
+            },
             "dot": {
                 "title": "Punktens stil",
                 "tooltip": "",

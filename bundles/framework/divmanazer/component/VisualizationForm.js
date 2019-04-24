@@ -25,6 +25,7 @@ Oskari.clazz.define(
         this.dialog = null;
 
         var defaultOptions = {
+            validateValues: true,
             // include all forms by default
             forms: ['dot', 'line', 'area'],
             formValues: {
@@ -73,7 +74,23 @@ Oskari.clazz.define(
             '<div class="renderButton"></div>'
         );
     }, {
-
+        validateWidth: function (key, width) {
+            if (!this._options.validateValues) {
+                return true;
+            }
+            const isValid = Oskari.util.isNumberBetween(width, 1, 50);
+            if (!isValid) {
+                this.showMessage(this._loc.validation.title, this._loc.validation[key]);
+            }
+            return isValid;
+        },
+        showMessage: function (title, message) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = dialog.createCloseButton();
+            okBtn.setPrimary(true, true);
+            dialog.fadeout();
+            dialog.show(title, message, [okBtn]);
+        },
         /**
          * @public @method getForm
          * Creates dom elements for each forms and binds click events to them
@@ -207,9 +224,9 @@ Oskari.clazz.define(
                         break;
                     case 'area':
                         fClazz.setValues({
-                            fillColor: featureStyle.fill.color,
+                            fillColor: (typeof featureStyle.fill.color === 'string' ? featureStyle.fill.color : null),
                             fillStyle: featureStyle.fill.area.pattern,
-                            lineColor: featureStyle.stroke.area.color,
+                            lineColor: (typeof featureStyle.stroke.area.color === 'string' ? featureStyle.stroke.area.color : null),
                             lineCorner: featureStyle.stroke.area.lineJoin,
                             lineStyle: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.area.lineDash)],
                             lineWidth: featureStyle.stroke.area.width

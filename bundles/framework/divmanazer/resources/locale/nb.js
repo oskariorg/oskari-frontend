@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Tilpass arealstil",
                 "line": "Tilpass linjestil"
             },
+            "validation": {
+                "title": "Dataene inneholder feil:",
+                "strokeWidth": "Linjebredde er ugyldig. Bredde må være mellom 1 og 50",
+                "borderWidth": "Bredde på kantlinje er ugyldig. Bredde må være mellom 1 og 50"
+            },
             "dot": {
                 "title": "Punktstil",
                 "tooltip": "Definer en punktstil",
