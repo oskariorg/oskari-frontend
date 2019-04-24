@@ -15,14 +15,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
          * @param {Oskari.mapframework.service.MapLayerService} maplayerService not really needed here
          */
         parseLayerData: function (layer, mapLayerJson, maplayerService) {
-            var me = this,
-                loclayer = me.localization.layer;
+            var me = this;
+            var loclayer = me.localization.layer;
+
             // set options before parsing wfs spesific layer data
             if (mapLayerJson.options) {
                 layer.setOptions(mapLayerJson.options);
             }
+
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
+            this.wfsBuilder.setDefaultRenderMode(layer, 'vector');
 
             if (mapLayerJson.fields) {
                 layer.setFields(mapLayerJson.fields);
