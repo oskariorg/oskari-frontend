@@ -29,7 +29,8 @@ Oskari.registerLocalization(
         },
         "resultBox": {
             "close": "Fermer",
-            "title": "Résultats de la recherche"
+            "title": "Résultats de la recherche",
+            "alternatives": "Cet endroit a ces noms de lieu alternatifs suivants:"
         },
         "guidedTour": {
             "title": "Recherche",

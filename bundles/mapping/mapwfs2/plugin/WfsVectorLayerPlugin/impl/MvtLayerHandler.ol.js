@@ -19,12 +19,14 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
         this.throttledUpdates = new Map();
-        this._setupTileGrid(layerPlugin.getConfig());
-    }
-    _setupTileGrid (config) {
+        const config = layerPlugin.getConfig();
         if (!config) {
             return;
         }
+        this.minZoomLevel = config.minZoomLevel;
+        this._setupTileGrid(config);
+    }
+    _setupTileGrid (config) {
         const { origin, resolutions, tileSize } = config;
         if (!origin || !resolutions || !tileSize) {
             return;
@@ -102,6 +104,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         if (this.tileGrid) {
             sourceOpts.tileGrid = new olTileGrid(this.tileGrid);
         }
+        const layerMinScale = layer.getMinScale() && layer.getMinScale() > 0 ? layer.getMinScale() : undefined;
+        const mvtMinScale = this._getMinScale();
+        if (mvtMinScale && (!layerMinScale || layerMinScale > mvtMinScale)) {
+            layer.setMinScale(mvtMinScale);
+        }
 
         // Properties id, type and hover are being used in VectorFeatureService.
         const source = this.createSource(layer, sourceOpts);
@@ -115,6 +122,18 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
         this._registerLayerEvents(layer.getId(), source);
         return vectorTileLayer;
+    }
+    _getMinScale () {
+        if (!this.minZoomLevel) {
+            return;
+        }
+        if (this.minZoomLevel > this.plugin.getMapModule().getScaleArray().length - 1) {
+            return;
+        }
+        const zoomLevelScale = this.plugin.getMapModule().getScaleArray()[this.minZoomLevel];
+        // Min scale is exclusive on layer visibility.
+        // Add +1 to make a layer visible at the zoom level.
+        return zoomLevelScale + 1;
     }
     /**
      * Adds event listeners to ol-layers

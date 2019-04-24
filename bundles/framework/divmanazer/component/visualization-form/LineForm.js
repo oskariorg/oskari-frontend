@@ -263,6 +263,9 @@ Oskari.clazz.define(
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
+                if (!me.creator.validateWidth('strokeWidth', me.values.width)) {
+                    return;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();

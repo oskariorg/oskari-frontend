@@ -76,10 +76,7 @@ Oskari.clazz.define(
                 }
                 values._isDefault = this._isDefault || false;
 
-                var formValues = this.visualizationForm.getValues();
-                values.dot = formValues.dot;
-                values.line = formValues.line;
-                values.area = formValues.area;
+                values.style = this.visualizationForm.getOskariStyle();
 
                 // Get the names of the fields the user has checked.
                 values.visibleFields = [];
@@ -107,7 +104,7 @@ Oskari.clazz.define(
                 this._checkVisibleFields(onScreenForm, data.visibleFields);
             }
 
-            this.visualizationForm.setValues(data);
+            this.visualizationForm.setOskariStyleValues(data.style);
         },
 
         /**

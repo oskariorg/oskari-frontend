@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Polygondarstellung bearbeiten",
                 "line": "Liniendarstellung bearbeiten"
             },
+            "validation": {
+                "title": "Daten sind fehlerhaft:",
+                "strokeWidth": "Die Linienstärke liegt außerhalb der Größenbeschränkung (1-50).",
+                "borderWidth": "Die Linienstärke liegt außerhalb der Größenbeschränkungen (1-50)."
+            },
             "dot": {
                 "title": "Punktdarstellung",
                 "tooltip": "",
