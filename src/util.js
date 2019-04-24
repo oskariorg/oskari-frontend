@@ -228,9 +228,14 @@ Oskari.util = (function () {
      * Returns a new color string for lighter or darker color than the original.
      * @param {String} colorStr color to change
      * @param {Number} amount amount of change. Positive number for lighter, negative for darker color.
+     * @param {Number} lightColorFlip if color is light the change will be flipped.
      */
-    util.alterBrightness = function (colorStr, amount) {
+    util.alterBrightness = function (colorStr, amount, lightColorFlip) {
         var usePound = false;
+
+        if (lightColorFlip && this.isLightColor(colorStr)) {
+            amount = -amount;
+        }
 
         if (colorStr.indexOf('rgba') === 0) {
             // Alpha is not supported

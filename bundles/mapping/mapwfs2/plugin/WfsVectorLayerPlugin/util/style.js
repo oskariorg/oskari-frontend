@@ -1,61 +1,49 @@
-import olStyleStyle from 'ol/style/Style';
-import olStyleFill from 'ol/style/Fill';
-import olStyleStroke from 'ol/style/Stroke';
-import olStyleCircle from 'ol/style/Circle';
-
-const getNormalFill = () => new olStyleFill({
-    color: '#FAEBD7'
-});
-const getNormalStroke = () => new olStyleStroke({
-    color: '#000000',
-    width: 1
-});
-
-const getSelectedFill = () => new olStyleFill({
-    color: '#e19b28'
-});
-const getSelectedStroke = () => new olStyleStroke({
-    color: '#e19b28',
-    width: 2
-});
-
-const getNormalStyle = () => new olStyleStyle({
-    image: new olStyleCircle({
-        radius: 6,
-        fill: getNormalFill(),
-        stroke: getNormalStroke()
-    }),
-    fill: getNormalFill(),
-    stroke: getNormalStroke()
-});
-
-const getSelectedLine = () => new olStyleStyle({
-    stroke: getSelectedStroke()
-});
-
-const getSelectedOther = () => new olStyleStyle({
-    image: new olStyleCircle({
-        radius: 6,
-        fill: getSelectedFill(),
-        stroke: getSelectedStroke()
-    }),
-    fill: getSelectedFill(),
-    stroke: getNormalStroke()
-});
-
-function getSelectedStyle () {
-    const line = getSelectedLine();
-    const other = getSelectedOther();
-    return (feature, resolution) => {
-        switch (feature.getGeometry().getType()) {
-        case 'LineString':
-        case 'MultiLineString':
-            return line;
-        default:
-            return other;
+const defaults = {
+    style: {
+        fill: {
+            color: '#FAEBD7'
+        },
+        stroke: {
+            color: '#000000',
+            width: 1,
+            area: {
+                color: '#000000',
+                width: 1
+            }
+        },
+        image: {
+            shape: 5,
+            size: 3,
+            fill: {
+                color: '#FAEBD7'
+            }
         }
-    };
-}
+    },
+    selected: {
+        inherit: true,
+        effect: 'auto major',
+        stroke: {
+            area: {
+                effect: 'none',
+                color: '#000000',
+                width: 4
+            },
+            width: 3
+        }
+    },
+    hover: {
+        inherit: true,
+        effect: 'auto minor',
+        stroke: {
+            area: {
+                effect: 'none',
+                color: '#000000',
+                width: 2
+            },
+            width: 2
+        }
+    }
+};
 
 const applyOpacityToColorable = (colorable, opacity) => {
     if (!colorable || !colorable.getColor()) {
@@ -112,24 +100,33 @@ const _setFeatureLabel = (feature, textStyle, labelProperty) => {
 };
 
 const getStyleFunction = (styleValues, hoverHandler) => {
-    return (feature, resolution, isSelected) => {
-        if (isSelected) {
-            return styleValues.selected(feature, resolution);
+    const getTypedStyles = (styles, isHovered, isSelected) => {
+        if (!styles) {
+            return;
         }
-        let hovered = hoverHandler.isHovered(feature, hoverHandler);
+        if (isHovered && isSelected) {
+            return styles.selectedHover || styles.hover || styles.customized || styles.default;
+        }
+        if (isHovered) {
+            return styles.hover || styles.customized || styles.default;
+        }
+        if (isSelected) {
+            return styles.selected || styles.customized || styles.default;
+        }
+        return styles.customized || styles.default;
+    };
+    return (feature, resolution, isSelected) => {
+        const isHovered = hoverHandler.isHovered(feature, hoverHandler);
+
         let styleTypes = null;
         if (styleValues.optional) {
             const found = styleValues.optional.find(op => feature.get(op.key) === op.value);
             if (found) {
-                styleTypes = hovered && found.hoverStyle ? found.hoverStyle : found.style;
+                styleTypes = getTypedStyles(found, isHovered, isSelected);
             }
         }
         if (!styleTypes) {
-            if (hovered && styleValues.hover) {
-                styleTypes = styleValues.hover;
-            } else {
-                styleTypes = styleValues.customized || styleValues.base;
-            }
+            styleTypes = getTypedStyles(styleValues, isHovered, isSelected);
         }
 
         let style = null;
@@ -164,10 +161,14 @@ const getGeomTypedStyles = (styleDef, factory) => {
     return styles;
 };
 
+const merge = (...styles) => jQuery.extend(true, {}, ...styles);
+
 export const styleGenerator = (styleFactory, layer, hoverHandler) => {
     let styles = {
-        base: getNormalStyle(),
-        selected: getSelectedStyle()
+        default: getGeomTypedStyles(defaults.style, styleFactory),
+        selected: getGeomTypedStyles(merge(defaults.style, defaults.selected), styleFactory),
+        hover: getGeomTypedStyles(merge(defaults.style, defaults.hover), styleFactory),
+        selectedHover: getGeomTypedStyles(merge(defaults.style, defaults.hover, defaults.selected), styleFactory)
     };
     if (!layer) {
         return getStyleFunction(styles, hoverHandler);
@@ -185,29 +186,32 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
             }
         });
     }
-    const featureStyle = styleDef.featureStyle;
-    const hoverOptions = layer.getHoverOptions();
-
-    const hoverStyle = hoverOptions ? hoverOptions.featureStyle : null;
+    const featureStyle = styleDef.featureStyle || defaults.style;
+    let hoverStyle = defaults.hover;
+    if (layer.getHoverOptions() && layer.getHoverOptions().featureStyle) {
+        hoverStyle = layer.getHoverOptions().featureStyle;
+    }
+    let hoverDef = hoverStyle.inherit === true ? merge(featureStyle, hoverStyle) : hoverStyle;
     if (featureStyle) {
         styles.customized = getGeomTypedStyles(featureStyle, styleFactory);
-    }
-    if (hoverStyle) {
-        const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...hoverStyle } : hoverStyle;
+        styles.selected = getGeomTypedStyles(merge(featureStyle, defaults.selected), styleFactory);
         styles.hover = getGeomTypedStyles(hoverDef, styleFactory);
+        styles.selectedHover = getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory);
     }
     const optionalStyles = styleDef.optionalStyles;
     if (optionalStyles) {
         styles.optional = optionalStyles.map((optionalDef) => {
+            if (hoverStyle.inherit) {
+                hoverDef = merge(featureStyle, optionalDef, hoverStyle);
+            }
             const optional = {
                 key: optionalDef.property.key,
                 value: optionalDef.property.value,
-                style: getGeomTypedStyles({ ...featureStyle, ...optionalDef }, styleFactory)
+                customized: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
+                selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory),
+                hover: getGeomTypedStyles(hoverDef, styleFactory),
+                selectedHover: getGeomTypedStyles(merge(hoverDef, defaults.selected), styleFactory)
             };
-            if (hoverStyle) {
-                const hoverDef = hoverStyle.inherit === true ? { ...featureStyle, ...optionalDef, ...hoverStyle } : hoverStyle;
-                optional.hoverStyle = styleFactory(hoverDef);
-            }
             return optional;
         });
     }

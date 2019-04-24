@@ -44,17 +44,11 @@ export class HoverHandler {
         this.layer = layer;
         // update previously hovered layer
         if (previousLayer) {
-            const style = (previousLayer.get(LAYER_HOVER) || {}).featureStyle;
-            if (style) {
-                previousLayer.changed();
-            }
+            previousLayer.changed();
         }
         // update currently hovered layer
         if (this.layer && this.layer !== previousLayer) {
-            const style = (this.layer.get(LAYER_HOVER) || {}).featureStyle;
-            if (style) {
-                this.layer.changed();
-            }
+            this.layer.changed();
         }
     }
 
