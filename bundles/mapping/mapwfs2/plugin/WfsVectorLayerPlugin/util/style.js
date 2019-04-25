@@ -57,6 +57,9 @@ const applyOpacityToColorable = (colorable, opacity) => {
         return;
     }
     let colorLike = colorable.getColor();
+    if (typeof colorLike !== 'string') {
+        return;
+    }
     if (colorLike.startsWith('rgba')) {
         colorLike = colorLike.substring(0, colorLike.lastIndexOf(','));
         colorLike += `,${alpha})`;
