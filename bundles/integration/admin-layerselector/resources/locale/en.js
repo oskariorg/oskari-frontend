@@ -93,6 +93,12 @@ Oskari.registerLocalization(
             "editWfs": "Edit WFS",
             "options": "Options JSON",
             "apiKey": "Api key",
+            "renderMode": {
+                "title": "Collection Type",
+                "mvt": "Lots of small objects",
+                "vector": "Big objects",
+                "info": "Viewing of small objects has been optimized but it restricts the minimum scale"
+            },
             "mvtAttributions": "Attributions",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Tile grid",

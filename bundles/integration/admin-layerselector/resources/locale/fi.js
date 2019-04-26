@@ -93,6 +93,12 @@ Oskari.registerLocalization(
             "editWfs": "Muokkaa WFS-tietoja",
             "options": "Options JSON",
             "apiKey": "Api key",
+            "renderMode": {
+                "title": "Sisällön tyyppi",
+                "mvt": "Paljon pieniä kohteita",
+                "vector": "Suuria kohteita",
+                "info": "Pienten kohteiden esittämistä on optimoitu, mutta se rajoittaa tarkastelualueen kokoa."
+            },
             "mvtAttributions": "Lähdeviitteet",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Tiilimatriisi",
