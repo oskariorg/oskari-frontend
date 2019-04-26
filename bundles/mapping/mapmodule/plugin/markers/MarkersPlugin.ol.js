@@ -681,7 +681,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
         enableGfi: function (blnEnable) {
             var sandbox = this.getSandbox();
             var evtB = Oskari.eventBuilder(
-                'DrawFilterPlugin.SelectedDrawingEvent'
+                'DrawPlugin.SelectedDrawingEvent'
             );
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
