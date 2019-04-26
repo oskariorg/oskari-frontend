@@ -471,6 +471,8 @@ function (
                 urlSource = [],
                 i,
                 j;
+            const wfsPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getLayerPlugins('wfs');
+            const supportsWFS3 = wfsPlugin && wfsPlugin.oskariStyleSupport === true;
             if (!me.model) {
                 me.model = this._createNewModel(layerType);
                 this.listenTo(this.model, 'change', this.render);
@@ -490,6 +492,7 @@ function (
 
             me.$el.append(me.layerTemplate({
                 model: me.model,
+                supportsWFS3: supportsWFS3,
                 header: layerTypeData.headerTemplate,
                 footer: layerTypeData.footerTemplate,
                 instance: me.options.instance,
