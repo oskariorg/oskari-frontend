@@ -93,6 +93,12 @@ Oskari.registerLocalization(
             "editWfs": "Editera WFS",
             "options": "Options JSON",
             "apiKey": "Api key",
+            "renderMode": {
+                "title": "Innehållstyp",
+                "mvt": "Massor av små objekt",
+                "vector": "Stora objekt",
+                "info": "Visning av små objekt har optimerats men det begränsar minsta skala"
+            },
             "mvtAttributions": "Tillskrivningar",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Rutmatris",
