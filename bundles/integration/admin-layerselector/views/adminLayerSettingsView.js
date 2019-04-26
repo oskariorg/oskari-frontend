@@ -1027,6 +1027,7 @@ function (
                 attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
                 tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
                 hover: parseOptionQuietly('.add-layer-input.layer-options-hover'),
+                renderMode: parseOptionQuietly('.layer-options-renderMode:checked', true),
                 apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true)
             };
             if (parseErrors.length > 0) {
