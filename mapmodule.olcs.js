@@ -87,6 +87,9 @@ class MapModuleOlCesium extends MapModuleOl {
         scene.fog.density = 0.0005;
         scene.fog.screenSpaceErrorFactor = 10;
 
+        // Fix dark imagery
+        scene.highDynamicRange = false;
+
         var terrainProvider = new Cesium.CesiumTerrainProvider({
             url: TERRAIN_SERVICE_URL
         });
