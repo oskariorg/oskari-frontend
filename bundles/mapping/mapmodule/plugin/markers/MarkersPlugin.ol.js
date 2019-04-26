@@ -680,20 +680,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         enableGfi: function (blnEnable) {
             var sandbox = this.getSandbox();
-            var evtB = Oskari.eventBuilder(
-                'DrawPlugin.SelectedDrawingEvent'
-            );
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
             );
             var hiReqBuilder = Oskari.requestBuilder(
                 'WfsLayerPlugin.ActivateHighlightRequest'
             );
-
-            // notify components to reset any saved "selected place" data
-            if (evtB) {
-                sandbox.notifyAll(evtB());
-            }
 
             // enable or disable gfi requests
             if (gfiReqBuilder) {

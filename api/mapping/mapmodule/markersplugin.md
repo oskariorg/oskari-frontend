@@ -114,9 +114,6 @@ Markers on map are saved in state:
   <tr>
     <td>MarkerClickEvent</td><td> Notifies that a marker has been clicked. Provides the ID of the clicked marker. </td>
   </tr>
-  <tr>
-    <td>DrawPlugin.SelectedDrawingEvent</td><td> Reset drawing tool before adding a marker. </td>
-  </tr>
 </table>
 
 ## Dependencies
