@@ -8,9 +8,6 @@ const StyledSelect = styled('select')`
     & option[value=""][disabled] {
         display: none;
     }
-    & option {
-        color: black;
-    }
 `;
 
 const loc = Oskari.getMsg.bind(null, 'language-selector');
