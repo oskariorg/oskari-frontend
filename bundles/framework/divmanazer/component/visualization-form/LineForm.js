@@ -24,7 +24,7 @@ Oskari.clazz.define(
             color: '#' + this.defaultValues.color
         };
 
-        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
+        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed'];
         this.capButtonNames = ['icon-line-flat_cap', 'icon-line-round_cap'];
         this.cornerButtonNames = ['icon-corner-sharp', 'icon-corner-round'];
 
