@@ -2,17 +2,21 @@ import React from 'react';
 import { LanguageSelect } from './LanguageSelect';
 import { getSupportedLanguages } from './getSupportedLanguages';
 
-const handleLanguageChange = (event) => {
-    let redirect;
-    const newLang = 'lang=' + event.target.value;
-    if (window.location.href.indexOf('?') === -1) {
-        redirect = window.location.href + '?' + newLang;
-    } else if (window.location.href.indexOf('lang=') > -1) {
-        redirect = window.location.href.replace(/lang=[^&]+/, newLang);
-    } else {
-        redirect = window.location.href + '&' + newLang;
-    }
-    window.location.href = redirect.replace('#', '');
+const handleLanguageChange = (langCode) => {
+    const oldSearch = window.location.search;
+    const newLang = 'lang=' + langCode;
+    if (oldSearch === '') {
+        return redirect('?' + newLang);
+    } 
+    if (oldSearch.indexOf('lang=') > -1) {
+        return redirect(oldSearch.replace(/lang=[^&]+/, newLang));
+    } 
+    return redirect(oldSearch + '&' + newLang);
+};
+
+const redirect = (search) => {
+    const { pathname, hash } = window.location;
+    window.location.href = (pathname + search + hash);
 };
 
 export const LanguageChanger = () => {

@@ -5,7 +5,7 @@ import { languageNames } from './languageNames';
 
 const StyledSelect = styled('select')`
     width: 100%;
-    & option[value=""][disabled] {
+    & option[value="_"][disabled] {
         display: none;
     }
 `;
@@ -16,12 +16,13 @@ export const LanguageSelect = ({ languages, value, onChange, hideCurrent }) => {
     const langOptions = languages
         .filter((lang) => !hideCurrent || lang !== value)
         .map((lang) => <option key={lang} value={lang}>{languageNames[lang] || lang}</option>);
-    const placeholder = <option value="" disabled selected>{loc('title')}</option>;
+    const placeholder = <option value="_" disabled>{loc('title')}</option>;
     return (
         <StyledSelect
             className="oskari-language-selector"
-            onChange={onChange}
-            value={!hideCurrent ? value : undefined}>
+            onChange={event => onChange(event.target.value)}
+            value={!hideCurrent ? value : undefined}
+            defaultValue="_">
             {placeholder}
             {langOptions}
         </StyledSelect>
