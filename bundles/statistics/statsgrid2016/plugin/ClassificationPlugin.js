@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { GenericContext } from 'oskari-ui/util';
 import { Classification } from '../components/classification/Classification';
+import { ManualClassificationView } from '../components/manualClassification/View';
 import '../resources/scss/classificationplugin.scss';
 /**
  * @class Oskari.statistics.statsgrid.ClassificationPlugin
@@ -43,6 +44,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this.node = null;
         this._overflowedOffset = null;
         this._previousIsEdit = false;
+        this.indicatorData = {};
     }, {
         _setLayerToolsEditModeImpl: function () {
             if (!this.getElement()) {
@@ -78,24 +80,57 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         render: function (activeClassfication) {
             if (!this.node) return;
-            const pluginState = this.service.getStateService().getClassificationPluginState();
             const indicators = this.getIndicatorProps();
-            const classifications = this.getClassificationProps(indicators, activeClassfication);
-            const legendProps = this.getLegendProps(indicators, classifications);
+            const indicatorData = this.getIndicatorData(indicators);
+            if (indicatorData.status === 'PENDING') return;
+            const classifications = this.getClassificationProps(indicators, activeClassfication, indicatorData);
+            const legendProps = this.getLegendProps(indicatorData.data, classifications.values, indicators.serieStats);
             const classification = legendProps.classification;
             if (classification && classifications.values.count !== classification.getGroups().length) {
                 // classification count changed!!
                 this.service.getStateService().updateActiveClassification('count', classification.getGroups().length);
                 return;
             }
+            const pluginState = this.service.getStateService().getClassificationPluginState();
+            const mutator = this.service.getStateService().getClassificationMutator();
+            const manualView = this.getManualViewProps(classifications.values);
 
             ReactDOM.render((
-                <GenericContext.Provider value={{ loc: this._locale, service: this.service }}>
+                <GenericContext.Provider value={{ loc: this._locale }}>
                     <Classification indicators = {indicators} classifications = {classifications}
                         legendProps = {legendProps} pluginState = {pluginState}
-                        onRenderChange = {this.rendered.bind(this)}/>
+                        onRenderChange = {this.rendered.bind(this)}
+                        indicatorData = {indicatorData}
+                        mutator = {mutator}
+                        manualView = {manualView}/>
                 </GenericContext.Provider>
             ), this.node);
+        },
+        getIndicatorData: function (indicators) {
+            const active = indicators.active;
+            const { status, hash, regionset } = this.indicatorData;
+            if (status !== 'PENDING' && hash === active.hash && regionset === indicators.regionset) {
+                return this.indicatorData;
+            }
+            this.indicatorData = {
+                hash: active.hash,
+                regionset: indicators.regionset,
+                data: {},
+                status: 'PENDING'
+            };
+            this.service.getIndicatorData(active.datasource, active.indicator, active.selections, active.series, indicators.regionset, (err, data) => {
+                if (this.indicatorData.hash !== active.hash) return; // not latest active indicator response
+                if (data) {
+                    this.indicatorData.data = data;
+                    this.indicatorData.status = 'DONE';
+                }
+                if (err) {
+                    this.log.warn('Error getting indicator data', active, indicators.regionset);
+                    this.indicatorData.status = 'ERROR';
+                }
+                this.render();
+            });
+            return this.indicatorData;
         },
         getIndicatorProps: function () {
             const indicators = {
@@ -117,17 +152,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                     });
                 });
             });
-            this.service.getIndicatorData(active.datasource, active.indicator, active.selections, active.series, indicators.regionset, (err, data) => {
-                if (data) {
-                    indicators.data = data;
-                }
-                if (err) {
-                    this.log.warn('Error getting indicator data', active, indicators.regionset);
-                }
-            });
+
             return indicators;
         },
-        getClassificationProps: function (indicators, classification) {
+        getClassificationProps: function (indicators, classification, indicatorData) {
             const props = {
                 countRange: []
             };
@@ -139,7 +167,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             props.modes = service.getAvailableModes();
             props.mapStyles = service.getAvailableMapStyles();
             props.types = colorsService.getAvailableTypes();
-            props.validOptions = service.getAvailableOptions(indicators.data);
+            props.validOptions = service.getAvailableOptions(indicatorData.data);
             if (values.mapStyle !== 'choropleth') {
                 props.colors = colorsService.getDefaultSimpleColors();
             } else {
@@ -151,16 +179,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             return props;
         },
-        getLegendProps: function (indicators, classifications) {
-            const data = indicators.data;
-            const serieStats = indicators.serieStats;
-            const classificationOpts = classifications.values;
+        getLegendProps: function (data, classificationOpts, serieStats) {
             const props = {};
             if (Object.keys(data).length !== 0) {
                 props.classification = this.service.getClassificationService().getClassification(data, classificationOpts, serieStats);
             }
             props.colors = this.service.getColorService().getColorsForClassification(classificationOpts, true);
             return props;
+        },
+        getManualViewProps: function (classification) {
+            if (classification.method !== 'manual') return;
+            const { seriesService, classificationService, colorService } = this.service.getAllServices();
+            return {
+                view: new ManualClassificationView(classificationService, colorService, classification),
+                setAnimating: seriesService.setAnimating
+            };
         },
 
         redrawUI: function () {
