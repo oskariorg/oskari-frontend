@@ -38,9 +38,10 @@ Oskari.clazz.define(
             if (typeof wfsPlugin.registerLayerType === 'function') {
                 // Let wfs plugin handle this layertype
                 this.useVectors = true;
+                const me = this;
                 const eventHandlers = {
                     'MyPlaces.MyPlacesChangedEvent': event => {
-                        wfsPlugin.refreshLayersOfType(this.layerType);
+                        wfsPlugin.refreshLayersOfType(me.layertype);
                     }
                 };
                 wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder, eventHandlers);

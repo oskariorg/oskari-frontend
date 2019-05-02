@@ -52,7 +52,15 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         this._loadFeaturesForLayer(layer);
         return vectorLayer;
     }
-    reloadLayer (layer) {
+    refreshLayer (layer) {
+        if (!layer) {
+            return;
+        }
+        const source = this._getLayerSource(layer);
+        if (!source) {
+            return;
+        }
+        source.clear();
         const mapView = this.plugin.getMap().getView();
         const extent = mapView.calculateExtent();
         const resolution = mapView.getResolution();

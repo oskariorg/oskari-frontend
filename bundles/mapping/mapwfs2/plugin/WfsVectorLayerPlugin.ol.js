@@ -54,9 +54,20 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModel(layertype, modelClass);
         this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
-        if (eventHandlers) {
-            // TODO set event handler to update myplaces!
+        this._registerEventHandlers(eventHandlers);
+    }
+    _registerEventHandlers (eventHandlers) {
+        if (!eventHandlers) {
+            return;
         }
+        Object.keys(eventHandlers).forEach(eventName => {
+            if (this._eventHandlers.hasOwnProperty(eventName)) {
+                this._log.warn('Wfs plugin tried to register multiple handlers for event: ' + eventName);
+                return;
+            }
+            this._eventHandlers[eventName] = eventHandlers[eventName];
+            this.getSandbox().registerForEventByName(this, eventName);
+        });
     }
     _initImpl () {
         super._initImpl();
@@ -145,8 +156,8 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         added.setStyle(this.getCurrentStyleFunction(layer, handler));
     }
     /**
-     * @method refreshLayersOfType 
-     * @param {String} layerType 
+     * @method refreshLayersOfType
+     * @param {String} layerType
      */
     refreshLayersOfType (layerType) {
         if (!layerType) {
@@ -159,8 +170,8 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
                 if (handler) {
                     handler.refreshLayer(layer);
                 }
-            }
-    };
+            });
+    }
     /* ----- VectorFeatureService interface functions ----- */
 
     onMapHover (event, feature, layer) {
