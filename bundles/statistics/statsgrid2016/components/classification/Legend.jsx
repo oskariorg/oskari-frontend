@@ -4,7 +4,8 @@ import { withContext } from 'oskari-ui/util';
 import './legend.scss';
 
 const createLegendHTML = props => {
-    const { loc, legendProps, indicatorData } = props;
+    const { loc, legendProps } = props;
+    const indicatorData = props.indicatorData.data;
     const classification = legendProps.classification;
     const colors = legendProps.colors;
     const log = Oskari.log('Oskari.statistics.statsgrid.Classification');
@@ -58,10 +59,10 @@ const Legend = props => {
 };
 
 Legend.propTypes = {
-    indicatorData: PropTypes.object,
-    transparency: PropTypes.number,
-    legendProps: PropTypes.object,
-    loc: PropTypes.func
+    indicatorData: PropTypes.object.isRequired,
+    transparency: PropTypes.number.isRequired,
+    legendProps: PropTypes.object.isRequired,
+    loc: PropTypes.func.isRequired
 };
 
 const contextWrapped = withContext(Legend);
