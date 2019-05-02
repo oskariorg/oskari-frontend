@@ -20,7 +20,6 @@ Oskari.clazz.define(
         __name: 'MyPlacesLayerPlugin',
         /** @static @property layertype type of layers this plugin handles */
         layertype: 'myplaces',
-        useVectors: false,
 
         getLayerTypeSelector: function () {
             return this.layertype;
@@ -37,7 +36,6 @@ Oskari.clazz.define(
             const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
             if (typeof wfsPlugin.registerLayerType === 'function') {
                 // Let wfs plugin handle this layertype
-                this.useVectors = true;
                 const me = this;
                 const eventHandlers = {
                     'MyPlaces.MyPlacesChangedEvent': event => {
