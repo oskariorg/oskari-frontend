@@ -80,15 +80,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         render: function (activeClassfication) {
             if (!this.node) return;
-            const indicators = this.getIndicatorProps();
-            const indicatorData = this.getIndicatorData(indicators);
+            const stateService = this.service.getStateService();
+            const activeIndicator = stateService.getActiveIndicator();
+            const regionset = stateService.getRegionset();
+            if (!activeIndicator || !regionset) return;
+            const indicators = this.getIndicatorProps(activeIndicator, regionset);
+            const indicatorData = this.getIndicatorData(activeIndicator, regionset);
             if (indicatorData.status === 'PENDING') return;
-            const classifications = this.getClassificationProps(indicators, activeClassfication, indicatorData);
+            const classifications = this.getClassificationProps(activeIndicator, activeClassfication, indicatorData);
             const legendProps = this.getLegendProps(indicatorData.data, classifications.values, indicators.serieStats);
             const classification = legendProps.classification;
             if (classification && classifications.values.count !== classification.getGroups().length) {
                 // classification count changed!!
-                this.service.getStateService().updateActiveClassification('count', classification.getGroups().length);
+                stateService.updateActiveClassification('count', classification.getGroups().length);
                 return;
             }
             const pluginState = this.service.getStateService().getClassificationPluginState();
@@ -106,41 +110,37 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 </GenericContext.Provider>
             ), this.node);
         },
-        getIndicatorData: function (indicators) {
-            const active = indicators.active;
+        getIndicatorData: function (activeIndicator, activeRegionset) {
             const { status, hash, regionset } = this.indicatorData;
-            if (status !== 'PENDING' && hash === active.hash && regionset === indicators.regionset) {
+            if (status !== 'PENDING' && hash === activeIndicator.hash && regionset === activeRegionset) {
                 return this.indicatorData;
             }
             this.indicatorData = {
-                hash: active.hash,
-                regionset: indicators.regionset,
+                hash: activeIndicator.hash,
+                regionset: activeRegionset,
                 data: {},
                 status: 'PENDING'
             };
-            this.service.getIndicatorData(active.datasource, active.indicator, active.selections, active.series, indicators.regionset, (err, data) => {
-                if (this.indicatorData.hash !== active.hash) return; // not latest active indicator response
+            this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset, (err, data) => {
+                if (this.indicatorData.hash !== activeIndicator.hash) return; // not latest active indicator response
                 if (data) {
                     this.indicatorData.data = data;
                     this.indicatorData.status = 'DONE';
                 }
                 if (err) {
-                    this.log.warn('Error getting indicator data', active, indicators.regionset);
+                    this.log.warn('Error getting indicator data', activeIndicator, activeRegionset);
                     this.indicatorData.status = 'ERROR';
                 }
                 this.render();
             });
             return this.indicatorData;
         },
-        getIndicatorProps: function () {
+        getIndicatorProps: function (active, regionset) {
             const indicators = {
-                selected: [],
-                data: {}
+                active,
+                regionset,
+                selected: []
             };
-            const state = this.service.getStateService();
-            const active = state.getActiveIndicator();
-            indicators.active = active;
-            indicators.regionset = state.getRegionset();
             if (active.series) {
                 indicators.serieStats = this.service.getSeriesService().getSeriesStats(active.hash);
             }
@@ -155,13 +155,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
 
             return indicators;
         },
-        getClassificationProps: function (indicators, classification, indicatorData) {
+        getClassificationProps: function (activeIndicator, classification, indicatorData) {
             const props = {
                 countRange: []
             };
             const service = this.service.getClassificationService();
             const colorsService = this.service.getColorService();
-            const values = classification || this.service.getStateService().getClassificationOpts(indicators.active.hash);
+            const values = classification || this.service.getStateService().getClassificationOpts(activeIndicator.hash);
             props.values = values;
             props.methods = service.getAvailableMethods();
             props.modes = service.getAvailableModes();
