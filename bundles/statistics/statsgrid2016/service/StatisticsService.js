@@ -84,11 +84,11 @@
         },
         getAllServices: function () {
             return {
-                series: this.series,
-                state: this.state,
-                classification: this.classification,
-                color: this.colors,
-                error: this.error
+                seriesService: this.series,
+                stateService: this.state,
+                classificationService: this.classification,
+                colorService: this.colors,
+                errorService: this.error
             };
         },
         addDatasource: function (ds) {

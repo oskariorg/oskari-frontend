@@ -23,11 +23,11 @@ const Select = ({ properties, options, value, disabled, handleChange }) => {
     );
 };
 Select.propTypes = {
-    properties: PropTypes.object,
-    options: PropTypes.array,
-    disabled: PropTypes.bool,
-    value: PropTypes.any,
-    handleChange: PropTypes.func
+    properties: PropTypes.object.isRequired,
+    options: PropTypes.array.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    value: PropTypes.any.isRequired,
+    handleChange: PropTypes.func.isRequired
 };
 
 const contextWrapped = withContext(Select);

@@ -40,16 +40,21 @@ class Classification extends React.Component {
             <div className={containerClass}>
                 <Header active = {this.props.indicators.active} isEdit = {isEdit}
                     handleClick = {this.handleToggleClassification}
-                    indicators = {this.props.indicators.selected}/>
+                    indicators = {this.props.indicators.selected}
+                    mutator = {this.props.mutator}/>
                 <div className="classification-content-wrapper" style={this.getContentWrapperStyle()}>
                     {isEdit &&
                         <EditClassification classifications = {classifications}
                             indicators = {this.props.indicators}
-                            editEnabled = {pluginState.editEnabled}/>
+                            editEnabled = {pluginState.editEnabled}
+                            mutator = {this.props.mutator}
+                            indicatorData = {this.props.indicatorData}
+                            manualView = {this.props.manualView}/>
                     }
                     <Legend legendProps = {this.props.legendProps}
-                        indicatorData = {this.props.indicators.data}
-                        transparency = {classifications.values.transparency}/>
+                        indicatorData = {this.props.indicatorData}
+                        transparency = {classifications.values.transparency}
+                        mutator = {this.props.mutator}/>
                 </div>
             </div>
         );
@@ -57,13 +62,15 @@ class Classification extends React.Component {
 }
 
 Classification.propTypes = {
-    indicators: PropTypes.object,
-    classifications: PropTypes.object,
-    pluginState: PropTypes.object,
-    legendProps: PropTypes.object,
-    onRenderChange: PropTypes.func,
-    service: PropTypes.object,
-    loc: PropTypes.func
+    indicators: PropTypes.object.isRequired,
+    indicatorData: PropTypes.object.isRequired,
+    classifications: PropTypes.object.isRequired,
+    pluginState: PropTypes.object.isRequired,
+    legendProps: PropTypes.object.isRequired,
+    manualView: PropTypes.object,
+    onRenderChange: PropTypes.func.isRequired,
+    mutator: PropTypes.object.isRequired,
+    loc: PropTypes.func.isRequired
 };
 
 const cls = withContext(Classification);
