@@ -63,6 +63,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         const source = this._getLayerSource(layer);
         source.tileCache.expireCache({});
         source.tileCache.clear();
+        source.clear();
         source.refresh();
     }
     _setupTileGrid (config) {
