@@ -29,6 +29,9 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             success: 0,
             error: 0
         }
+
+        this.timers = new Map();
+        this.timerDelayInMillis = 60000;
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
@@ -150,18 +153,21 @@ export class MvtLayerHandler extends AbstractLayerHandler {
                     loadEvent.setRequestType(loadEvent.type.image);
                     loadEvent.setStatus(loadEvent.status.loading);
                     sb.notifyAll(loadEvent);
+                    this._setTimer(layerId,tileCounter,loadEvent,sb);
                 }
                 break;
             case 'tileloadend':
             case 'tileloaderror':
 
                 if (this._allStartedTileLoadingsFailed(tileCounter)) {
+                    this._resetTimer(layerId);
                     loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
                     loadEvent.setRequestType(loadEvent.type.image);
                     loadEvent.setStatus(loadEvent.status.error);
                     sb.notifyAll(loadEvent);
                     this._resetCounter(tileCounter);
                 } else if (this._allStartedTileLoadingsAreDone(tileCounter)) {
+                    this._resetTimer(layerId);
                     loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
                     loadEvent.setRequestType(loadEvent.type.image);
                     loadEvent.setStatus(loadEvent.status.complete);
@@ -182,9 +188,32 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         return tileCounter.started === tileCounter.success + tileCounter.error;
     }
 
+    _tileLoadingInProgress(tileCounter){
+        return tileCounter.started > tileCounter.success + tileCounter.error;
+    }
+
     _resetCounter(tileCounter) {
         tileCounter.error = 0;
         tileCounter.success = 0;
         tileCounter.started = 0;
     }
-}
+    
+    _setTimer(layerId,tileCounter,loadEvent,sb){
+        this._resetTimer(layerId);
+        this.timers.set(layerId,setTimeout(() => {
+
+            if (this._tileLoadingInProgress(tileCounter)) {
+                loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
+                loadEvent.setRequestType(loadEvent.type.image);
+                loadEvent.setStatus(loadEvent.status.error);
+                sb.notifyAll(loadEvent);
+            }
+        }, this.timerDelayInMillis));
+    }
+
+    _resetTimer(layerId){
+        if(this.timers.get(layerId)){
+            clearTimeout(this.timers.get(layerId));
+        }
+    }
+}   
