@@ -120,7 +120,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
      */
     _registerLayerEvents(layerId, source) {
 
-        let tileCounter = this.counters.get(layerId);
+        const tileCounter = this.counters.get(layerId);
 
         source.on('tileloadstart', () => {
             tileCounter.started++;
@@ -142,7 +142,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
     _sendWFSStatusChangedEvent(layerId, tileCounter, tileLoadStatusEvent) {
 
         const sb = Oskari.getSandbox();
-        let loadEvent = null;
+        let loadEvent;
 
         switch (tileLoadStatusEvent) {
             case 'tileloadstart':
@@ -181,11 +181,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
     }
 
     _allStartedTileLoadingsFailed(tileCounter) {
-        return tileCounter.started === tileCounter.error;
+        return tileCounter.started > 0 && tileCounter.started === tileCounter.error;
     }
 
     _allStartedTileLoadingsAreDone(tileCounter) {
-        return tileCounter.started === tileCounter.success + tileCounter.error;
+        return tileCounter.started > 0 && tileCounter.started === tileCounter.success + tileCounter.error;
     }
 
     _tileLoadingInProgress(tileCounter){
