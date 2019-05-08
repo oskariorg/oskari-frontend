@@ -43,8 +43,9 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * @param {String} layertype for ex. "MYPLACES"
      * @param {String} modelClass layer model class name
      * @param {Object} modelBuilder layer model builder instance
+     * @param {Object} eventHandlers
      */
-    registerLayerType (layertype, modelClass, modelBuilder) {
+    registerLayerType (layertype, modelClass, modelBuilder, eventHandlers) {
         if (this.layertypes.has(layertype) || !this.mapLayerService || !this.vectorFeatureService) {
             return;
         }
@@ -53,6 +54,20 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModel(layertype, modelClass);
         this.mapLayerService.registerLayerModelBuilder(layertype, modelBuilder);
         this.vectorFeatureService.registerLayerType(layertype, this);
+        this._registerEventHandlers(eventHandlers);
+    }
+    _registerEventHandlers (eventHandlers) {
+        if (!eventHandlers) {
+            return;
+        }
+        Object.keys(eventHandlers).forEach(eventName => {
+            if (this._eventHandlers.hasOwnProperty(eventName)) {
+                this._log.warn('Wfs plugin tried to register multiple handlers for event: ' + eventName);
+                return;
+            }
+            this._eventHandlers[eventName] = eventHandlers[eventName];
+            this.getSandbox().registerForEventByName(this, eventName);
+        });
     }
     _initImpl () {
         super._initImpl();
@@ -140,7 +155,23 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         added.set(LAYER_HOVER, layer.getHoverOptions(), silent);
         added.setStyle(this.getCurrentStyleFunction(layer, handler));
     }
-
+    /**
+     * @method refreshLayersOfType
+     * @param {String} layerType
+     */
+    refreshLayersOfType (layerType) {
+        if (!layerType) {
+            return;
+        }
+        this.getSandbox().getMap().getLayers()
+            .filter(layer => layer.getLayerType() === layerType)
+            .forEach(layer => {
+                const handler = this._getLayerHandler(layer);
+                if (handler) {
+                    handler.refreshLayer(layer);
+                }
+            });
+    }
     /* ----- VectorFeatureService interface functions ----- */
 
     onMapHover (event, feature, layer) {
