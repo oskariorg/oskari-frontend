@@ -12,7 +12,7 @@ import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
  * LayerHandler implementation for MVT layers
  */
 export class MvtLayerHandler extends AbstractLayerHandler {
-    constructor (layerPlugin) {
+    constructor(layerPlugin) {
         super(layerPlugin);
         this._log = Oskari.log('WfsMvtLayerPlugin');
         this.localization = Oskari.getMsg.bind(null, 'MapWfs2');
@@ -33,7 +33,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this.timers = new Map();
         this.timerDelayInMillis = 60000;
     }
-    getStyleFunction (layer, styleFunction, selectedIds) {
+    getStyleFunction(layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
             return styleFunction;
         }
@@ -42,7 +42,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             return styleFunction(feature, resolution, isSelected);
         };
     }
-    addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+    addMapLayerToMap(layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const sourceOpts = {
             format: new olFormatMVT(),
@@ -73,13 +73,13 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         return vectorTileLayer;
     }
 
-    _initializeCountersForLayerIfNeeded(layerId){
+    _initializeCountersForLayerIfNeeded(layerId) {
         if (this.counters.get(layerId) === undefined) {
             this.counters.set(layerId, { ...this.countersWithInitialValue });
         }
     }
 
-    _setupTileGrid (config) {
+    _setupTileGrid(config) {
         const { origin, resolutions, tileSize } = config;
         if (!origin || !resolutions || !tileSize) {
             return;
@@ -90,7 +90,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             tileSize: [tileSize, tileSize]
         };
     }
-    _createLayerSource (layer, options) {
+    _createLayerSource(layer, options) {
         const source = new FeatureExposingMVTSource(options);
         source.on('tileloadend', ({ tile }) => {
             if (tile.getState() === olTileState.ERROR) {
@@ -100,7 +100,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         });
         return source;
     }
-    _getMinScale () {
+    _getMinScale() {
         if (!this.minZoomLevel) {
             return;
         }
@@ -145,8 +145,8 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             case 'tileloadstart':
 
                 if (tileCounter.started === 1) {
-                    super.sendLoadingWFSStatusChangedEvent(layerId);
-                    this._setTimer(layerId,tileCounter);
+                    super.sendWFSStatusChangedEvent(layerId, 'loading');
+                    this._setTimer(layerId, tileCounter);
                 }
                 break;
             case 'tileloadend':
@@ -154,11 +154,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
 
                 if (this._allStartedTileLoadingsFailed(tileCounter)) {
                     this._resetTimer(layerId);
-                    super.sendErrorWFSStatusChangedEvent(layerId);
+                    super.sendWFSStatusChangedEvent(layerId, 'error');
                     this._resetCounter(tileCounter);
                 } else if (this._allStartedTileLoadingsAreDone(tileCounter)) {
                     this._resetTimer(layerId);
-                    super.sendCompleteWFSStatusChangedEvent(layerId);
+                    super.sendWFSStatusChangedEvent(layerId, 'complete');
                     this._resetCounter(tileCounter);
                 }
                 break;
@@ -175,7 +175,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         return tileCounter.started > 0 && tileCounter.started === tileCounter.success + tileCounter.error;
     }
 
-    _tileLoadingInProgress(tileCounter){
+    _tileLoadingInProgress(tileCounter) {
         return tileCounter.started > tileCounter.success + tileCounter.error;
     }
 
@@ -184,19 +184,19 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         tileCounter.success = 0;
         tileCounter.started = 0;
     }
-    
-    _setTimer(layerId,tileCounter){
+
+    _setTimer(layerId, tileCounter) {
         this._resetTimer(layerId);
-        this.timers.set(layerId,setTimeout(() => {
+        this.timers.set(layerId, setTimeout(() => {
 
             if (this._tileLoadingInProgress(tileCounter)) {
-                super.sendErrorWFSStatusChangedEvent(layerId);
+                super.sendWFSStatusChangedEvent(layerId, 'error');
             }
         }, this.timerDelayInMillis));
     }
 
-    _resetTimer(layerId){
-        if(this.timers.get(layerId)){
+    _resetTimer(layerId) {
+        if (this.timers.get(layerId)) {
             clearTimeout(this.timers.get(layerId));
         }
     }
