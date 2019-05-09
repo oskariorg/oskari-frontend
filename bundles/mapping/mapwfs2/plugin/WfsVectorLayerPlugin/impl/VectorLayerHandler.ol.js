@@ -78,6 +78,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     _getFeatureLoader (layer, source) {
         return (extent, resolution, projection) => {
             this.plugin.getMapModule().loadingState(layer.getId(), true);
+            super.sendLoadingWFSStatusChangedEvent(layer.getId());
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -92,11 +93,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);
                     this.plugin.getMapModule().loadingState(layer.getId(), false);
+                    super.sendCompleteWFSStatusChangedEvent(layer.getId());
                     this.updateLayerProperties(layer, source);
                 },
                 error: () => {
                     source.removeLoadedExtent(extent);
                     this.plugin.getMapModule().loadingState(layer.getId(), null, true);
+                    super.sendErrorWFSStatusChangedEvent(layer.getId());
                 }
             });
         };
