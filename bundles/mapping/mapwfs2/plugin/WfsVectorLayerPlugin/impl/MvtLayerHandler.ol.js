@@ -141,19 +141,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
 
     _sendWFSStatusChangedEvent(layerId, tileCounter, tileLoadStatusEvent) {
 
-        const sb = Oskari.getSandbox();
-        let loadEvent;
-
         switch (tileLoadStatusEvent) {
             case 'tileloadstart':
 
                 if (tileCounter.started === 1) {
-
-                    loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
-                    loadEvent.setRequestType(loadEvent.type.image);
-                    loadEvent.setStatus(loadEvent.status.loading);
-                    sb.notifyAll(loadEvent);
-                    this._setTimer(layerId,tileCounter,loadEvent,sb);
+                    super.sendLoadingWFSStatusChangedEvent(layerId);
+                    this._setTimer(layerId,tileCounter);
                 }
                 break;
             case 'tileloadend':
@@ -161,17 +154,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
 
                 if (this._allStartedTileLoadingsFailed(tileCounter)) {
                     this._resetTimer(layerId);
-                    loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
-                    loadEvent.setRequestType(loadEvent.type.image);
-                    loadEvent.setStatus(loadEvent.status.error);
-                    sb.notifyAll(loadEvent);
+                    super.sendErrorWFSStatusChangedEvent(layerId);
                     this._resetCounter(tileCounter);
                 } else if (this._allStartedTileLoadingsAreDone(tileCounter)) {
                     this._resetTimer(layerId);
-                    loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
-                    loadEvent.setRequestType(loadEvent.type.image);
-                    loadEvent.setStatus(loadEvent.status.complete);
-                    sb.notifyAll(loadEvent);
+                    super.sendCompleteWFSStatusChangedEvent(layerId);
                     this._resetCounter(tileCounter);
                 }
                 break;
@@ -198,15 +185,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         tileCounter.started = 0;
     }
     
-    _setTimer(layerId,tileCounter,loadEvent,sb){
+    _setTimer(layerId,tileCounter){
         this._resetTimer(layerId);
         this.timers.set(layerId,setTimeout(() => {
 
             if (this._tileLoadingInProgress(tileCounter)) {
-                loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
-                loadEvent.setRequestType(loadEvent.type.image);
-                loadEvent.setStatus(loadEvent.status.error);
-                sb.notifyAll(loadEvent);
+                super.sendErrorWFSStatusChangedEvent(layerId);
             }
         }, this.timerDelayInMillis));
     }
