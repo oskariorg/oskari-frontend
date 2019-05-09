@@ -16,7 +16,7 @@ const OPACITY_THROTTLE_MS = 1500;
  * LayerHandler implementation for vector layers
  */
 export class VectorLayerHandler extends AbstractLayerHandler {
-    createEventHandlers () {
+    createEventHandlers() {
         const handlers = super.createEventHandlers();
         handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
             this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
@@ -27,7 +27,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         }
         return handlers;
     }
-    getStyleFunction (layer, styleFunction, selectedIds) {
+    getStyleFunction(layer, styleFunction, selectedIds) {
         return (feature, resolution) => {
             const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
             const style = styleFunction(feature, resolution, isSelected);
@@ -37,7 +37,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return applyOpacity(style, layer.getOpacity());
         };
     }
-    addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+    addMapLayerToMap(layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const opacity = this.plugin.getMapModule().has3DSupport() ? 1 : layer.getOpacity() / 100;
         const source = this._createLayerSource(layer);
@@ -58,7 +58,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return {ol.source.Vector} vector layer source
      */
-    _createLayerSource (layer) {
+    _createLayerSource(layer) {
         const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
@@ -75,10 +75,10 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @param {ol.source.Vector} source
      * @return {function} loader function for the layer
      */
-    _getFeatureLoader (layer, source) {
+    _getFeatureLoader(layer, source) {
         return (extent, resolution, projection) => {
             this.plugin.getMapModule().loadingState(layer.getId(), true);
-            super.sendLoadingWFSStatusChangedEvent(layer.getId());
+            super.sendWFSStatusChangedEvent(layer.getId(), 'loading');
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -93,13 +93,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);
                     this.plugin.getMapModule().loadingState(layer.getId(), false);
-                    super.sendCompleteWFSStatusChangedEvent(layer.getId());
+                    super.sendWFSStatusChangedEvent(layer.getId(), 'complete');
                     this.updateLayerProperties(layer, source);
                 },
                 error: () => {
                     source.removeLoadedExtent(extent);
                     this.plugin.getMapModule().loadingState(layer.getId(), null, true);
-                    super.sendErrorWFSStatusChangedEvent(layer.getId());
+                    super.sendWFSStatusChangedEvent(layer.getId(), 'error');
                 }
             });
         };
@@ -109,7 +109,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @method _loadFeaturesForAllLayers Load features to all wfs layers.
      * Uses current map view's extent.
      */
-    _loadFeaturesForAllLayers () {
+    _loadFeaturesForAllLayers() {
         const mapView = this.plugin.getMap().getView();
         const extent = mapView.calculateExtent();
         const resolution = mapView.getResolution();
@@ -131,7 +131,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @param {Number} resolution (optional)
      * @param {ol.proj.Projection} projection (optional)
      */
-    _loadFeaturesForLayer (lyr, extent, resolution, projection) {
+    _loadFeaturesForLayer(lyr, extent, resolution, projection) {
         if (!extent) {
             const mapView = this.plugin.getMap().getView();
             extent = mapView.calculateExtent();
