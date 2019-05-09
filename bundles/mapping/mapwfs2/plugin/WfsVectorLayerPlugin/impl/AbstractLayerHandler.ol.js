@@ -2,11 +2,12 @@ import { getFieldsAndPropsArrays } from '../util/props';
 const FEATURE_DATA_UPDATE_THROTTLE = 1000;
 
 export class AbstractLayerHandler {
-    constructor (layerPlugin) {
+    constructor(layerPlugin) {
         this.plugin = layerPlugin;
         this.layerIds = [];
         this.throttledUpdates = new Map();
         this._log = Oskari.log('Oskari.mapping.mapmodule.AbstractLayerHandler');
+        this.sb = Oskari.getSandbox();
     }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
@@ -15,13 +16,13 @@ export class AbstractLayerHandler {
      * @param {Boolean} keepLayerOnTop
      * @param {Boolean} isBaseMap
      */
-    addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+    addMapLayerToMap(layer, keepLayerOnTop, isBaseMap) {
         this.layerIds.push(layer.getId());
     }
     /**
      * @method createEventHandlers Creates layer handler specific event handlers
      */
-    createEventHandlers () {
+    createEventHandlers() {
         return {
             AfterChangeMapLayerStyleEvent: event => this._updateLayerStyle(event.getMapLayer()),
             AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer())
@@ -35,7 +36,7 @@ export class AbstractLayerHandler {
      * @param {[number|string]} selectedIds
      * @return {function} style function for the layer
      */
-    getStyleFunction (layer, styleFunction, selectedIds) {
+    getStyleFunction(layer, styleFunction, selectedIds) {
         this._log.debug('TODO: getStyleFunction() not implemented on LayerHandler');
     }
     /**
@@ -44,7 +45,7 @@ export class AbstractLayerHandler {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @param {ol/source} source
      */
-    updateLayerProperties (layer, source = this._getLayerSource(layer)) {
+    updateLayerProperties(layer, source = this._getLayerSource(layer)) {
         if (this.throttledUpdates.has(layer.getId())) {
             const throttledUpdate = this.throttledUpdates.get(layer.getId());
             throttledUpdate();
@@ -55,7 +56,7 @@ export class AbstractLayerHandler {
         this.throttledUpdates.set(layer.getId(), throttledUpdate);
         throttledUpdate();
     }
-    _updateLayerProperties (layer, source) {
+    _updateLayerProperties(layer, source) {
         if (!layer.isVisible()) {
             layer.setActiveFeatures([]);
             layer.setFields([]);
@@ -73,7 +74,7 @@ export class AbstractLayerHandler {
         }
         this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
     }
-    _getFeaturePropsInExtent (source, extent) {
+    _getFeaturePropsInExtent(source, extent) {
         if (typeof source.getFeaturePropsInExtent === 'function') {
             return source.getFeaturePropsInExtent(extent);
         }
@@ -87,7 +88,7 @@ export class AbstractLayerHandler {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return {ol/source/VectorTile}
      */
-    _getLayerSource (oskariLayer) {
+    _getLayerSource(oskariLayer) {
         const olLayers = this.plugin.getOLMapLayers(oskariLayer);
         if (olLayers && olLayers.length > 0) {
             return olLayers[0].getSource();
@@ -97,7 +98,7 @@ export class AbstractLayerHandler {
      * @private @method _updateLayerStyle
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-    _updateLayerStyle (layer) {
+    _updateLayerStyle(layer) {
         if (!this.layerIds.includes(layer.getId())) {
             return;
         }
@@ -107,7 +108,7 @@ export class AbstractLayerHandler {
      * @private @method _updateLayerOpacity
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-    _updateLayerOpacity (layer) {
+    _updateLayerOpacity(layer) {
         if (!this.layerIds.includes(layer.getId())) {
             return;
         }
@@ -116,5 +117,28 @@ export class AbstractLayerHandler {
             return;
         }
         olLayers[0].setOpacity(layer.getOpacity() / 100);
+    }
+
+    sendWFSStatusChangedEvent(layerId, status) {
+        const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
+        loadEvent.setRequestType(loadEvent.type.image);
+        this._setStatusToLoadEvent(loadEvent, status);
+        this.sb.notifyAll(loadEvent);
+    }
+
+    _setStatusToLoadEvent(loadEvent, status) {
+        switch (status) {
+            case 'loading':
+                loadEvent.setStatus(loadEvent.status.loading);
+                break;
+            case 'complete':
+                loadEvent.setStatus(loadEvent.status.complete);
+                break;
+            case 'error':
+                loadEvent.setStatus(loadEvent.status.error);
+                break;
+            default:
+                Oskari.log(this.getName()).error('Unsupported status: ' + status);
+        }
     }
 }
