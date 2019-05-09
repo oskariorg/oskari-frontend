@@ -7,6 +7,7 @@ export class AbstractLayerHandler {
         this.layerIds = [];
         this.throttledUpdates = new Map();
         this._log = Oskari.log('Oskari.mapping.mapmodule.AbstractLayerHandler');
+        this.sb = Oskari.getSandbox();
     }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
@@ -55,6 +56,28 @@ export class AbstractLayerHandler {
         this.throttledUpdates.set(layer.getId(), throttledUpdate);
         throttledUpdate();
     }
+
+    sendLoadingWFSStatusChangedEvent(layerId){
+        const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
+        loadEvent.setRequestType(loadEvent.type.feature);
+        loadEvent.setStatus(loadEvent.status.loading);
+        this.sb.notifyAll(loadEvent);
+    }
+
+    sendCompleteWFSStatusChangedEvent(layerId){
+        const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
+        loadEvent.setRequestType(loadEvent.type.feature);
+        loadEvent.setStatus(loadEvent.status.complete);
+        this.sb.notifyAll(loadEvent);
+    }
+
+    sendErrorWFSStatusChangedEvent(layerId){
+        const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
+        loadEvent.setRequestType(loadEvent.type.feature);
+        loadEvent.setStatus(loadEvent.status.error);
+        this.sb.notifyAll(loadEvent);
+    }
+
     _updateLayerProperties (layer, source) {
         if (!layer.isVisible()) {
             layer.setActiveFeatures([]);
