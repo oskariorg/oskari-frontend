@@ -157,11 +157,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         case 'tileloadend':
         case 'tileloaderror':
 
-            if (this._allStartedTileLoadingsFailed(tileCounter)) {
+            if (this._tileLoadingsFailed(tileCounter)) {
                 this._resetTimer(layerId);
                 super.sendWFSStatusChangedEvent(layerId, 'error');
                 this._resetCounter(tileCounter);
-            } else if (this._allStartedTileLoadingsAreDone(tileCounter)) {
+            } else if (this._tileLoadingsAreDone(tileCounter)) {
                 this._resetTimer(layerId);
                 super.sendWFSStatusChangedEvent(layerId, 'complete');
                 this._resetCounter(tileCounter);
@@ -172,12 +172,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         }
     }
 
-    _allStartedTileLoadingsFailed (tileCounter) {
-        return tileCounter.started > 0 && tileCounter.started === tileCounter.error;
+    _tileLoadingsFailed (tileCounter) {
+        return tileCounter.error >= tileCounter.started;
     }
 
-    _allStartedTileLoadingsAreDone (tileCounter) {
-        return tileCounter.started > 0 && tileCounter.started === tileCounter.success + tileCounter.error;
+    _tileLoadingsAreDone (tileCounter) {
+        return tileCounter.success + tileCounter.error >= tileCounter.started;
     }
 
     _tileLoadingInProgress (tileCounter) {
