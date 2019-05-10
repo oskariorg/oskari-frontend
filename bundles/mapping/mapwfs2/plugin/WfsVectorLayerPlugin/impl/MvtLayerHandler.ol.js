@@ -67,7 +67,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
 
-        this._initializeCountersForLayerIfNeeded(layer.getId());
+        this._initializeCountersForLayer(layer.getId());
         this._registerLayerEvents(layer.getId(), source);
 
         return vectorTileLayer;
@@ -81,10 +81,8 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         source.refresh();
     }
 
-    _initializeCountersForLayerIfNeeded (layerId) {
-        if (this.counters.get(layerId) === undefined) {
-            this.counters.set(layerId, { ...this.countersWithInitialValue });
-        }
+    _initializeCountersForLayer (layerId) {
+        this.counters.set(layerId, { ...this.countersWithInitialValue });
     }
 
     _setupTileGrid (config) {
