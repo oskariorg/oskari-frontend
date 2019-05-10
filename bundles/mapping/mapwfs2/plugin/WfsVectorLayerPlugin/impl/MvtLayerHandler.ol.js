@@ -1,5 +1,7 @@
 /* eslint-disable new-cap */
 import olLayerVectorTile from 'ol/layer/VectorTile';
+import olLayerTile from 'ol/layer/Tile';
+import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olTileState from 'ol/TileState';
@@ -48,6 +50,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             layer.setMinScale(mvtMinScale);
         }
         const source = this._createLayerSource(layer, sourceOpts);
+        this._createDebugLayer(source);
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isVisible(),
@@ -79,6 +82,14 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             this.updateLayerProperties(layer, source);
         });
         return source;
+    }
+    _createDebugLayer (source) {
+        this.plugin.getMapModule().getMap().addLayer(new olLayerTile({
+            source: new olSourceTileDebug({
+                projection: 'EPSG:3857',
+                tileGrid: source.getTileGrid()
+            })
+        }));
     }
     _getMinScale () {
         if (!this.minZoomLevel) {
