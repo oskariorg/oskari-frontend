@@ -20,8 +20,8 @@ Oskari.clazz.define(
         this._loc = this._getLocalization('DivManazer');
         this.lineCapMap = ['butt', 'round'];
         this.lineCornerMap = ['mitre', 'round', 'bevel'];
-        this.lineStyleMap = ['', '5 2', 'D'];
-        this._oskariLineStyleMap = ['solid', 'dash', 'solid'];
+        this.lineStyleMap = ['', '5 2'];
+        this._oskariLineStyleMap = ['solid', 'dash'];
         this.dialog = null;
 
         var defaultOptions = {

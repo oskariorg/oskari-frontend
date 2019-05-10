@@ -640,8 +640,8 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
         height: 34px;
         display: inline-flex;
         display: -ms-inline-flexbox;
-        margin-left: 6px;
-
+        align-items : center;
+        
         .icon {
             float: left;
             width: 30px;
@@ -656,8 +656,8 @@ div.mapplugins .mappluginsContainer .mappluginsContent .mapplugin.statsgrid-publ
             margin-left: 4px;
             font-weight: bold;
             font-size: 12px;
-            line-height: 34px;
             vertical-align: middle;
+            width: 95px;
         }
 
         &.material-selected .icon{

@@ -116,17 +116,16 @@ class ColorSelect extends React.Component {
 };
 
 ColorSelect.propTypes = {
-    colors: PropTypes.array,
+    colors: PropTypes.array.isRequired,
     value: PropTypes.oneOfType([
         PropTypes.string,
         PropTypes.number
-    ]),
-    disabled: PropTypes.bool,
-    isSimple: PropTypes.bool,
-    opacity: PropTypes.number,
-    handleColorChange: PropTypes.func,
-    service: PropTypes.object,
-    loc: PropTypes.func
+    ]).isRequired,
+    disabled: PropTypes.bool.isRequired,
+    isSimple: PropTypes.bool.isRequired,
+    opacity: PropTypes.number.isRequired,
+    handleColorChange: PropTypes.func.isRequired,
+    loc: PropTypes.func.isRequired
 };
 
 const contextWrapped = withContext(ColorSelect);

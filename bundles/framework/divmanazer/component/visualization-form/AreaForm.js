@@ -28,8 +28,7 @@ Oskari.clazz.define(
 
         this.styleButtonNames = [
             'icon-line-basic',
-            'icon-line-dashed',
-            'icon-double-line'
+            'icon-line-dashed'
         ];
         this.cornerButtonNames = [
             'icon-corner-sharp',
