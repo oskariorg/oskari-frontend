@@ -98,7 +98,7 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
                         return false;
                     }
                     const ftrExtent = feature instanceof olRenderFeature
-                        ? feature.getExtent() : feature.getGeometry().getExtent();
+                        ? this._getFixedFeatureExtent(tile, feature) : feature.getGeometry().getExtent();
                     return intersects(ftrExtent, extent);
                 });
                 if (!matching.length) {
@@ -106,5 +106,12 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
                 }
                 continuation(matching, tile);
             });
+    }
+
+    _getFixedFeatureExtent (tile, renderFeature) {
+        if (renderFeature.getExtent()[3] < tile.getExtent()[3]) {
+            renderFeature.extent_ = null;
+        }
+        return renderFeature.getExtent();
     }
 }
