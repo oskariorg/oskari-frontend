@@ -125,19 +125,20 @@ export class MvtLayerHandler extends AbstractLayerHandler {
      * @param {ol/source/VectorTile} oskariLayer
      */
     _registerLayerEvents (layerId, source) {
-        const tileCounter = this.counters.get(layerId);
-
         source.on('tileloadstart', () => {
+            const tileCounter = this.counters.get(layerId);
             tileCounter.started++;
             this.plugin.getMapModule().loadingState(layerId, true);
             this._sendWFSStatusChangedEvent(layerId, tileCounter, 'tileloadstart');
         });
         source.on('tileloadend', () => {
+            const tileCounter = this.counters.get(layerId);
             tileCounter.success++;
             this.plugin.getMapModule().loadingState(layerId, false);
             this._sendWFSStatusChangedEvent(layerId, tileCounter, 'tileloadend');
         });
         source.on('tileloaderror', () => {
+            const tileCounter = this.counters.get(layerId);
             tileCounter.error++;
             this.plugin.getMapModule().loadingState(layerId, null, true);
             this._sendWFSStatusChangedEvent(layerId, tileCounter, 'tileloaderror');
