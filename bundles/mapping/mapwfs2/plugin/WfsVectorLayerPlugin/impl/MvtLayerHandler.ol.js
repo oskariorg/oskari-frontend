@@ -195,6 +195,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this.timers.set(layerId, setTimeout(() => {
             if (this._tileLoadingInProgress(tileCounter)) {
                 super.sendWFSStatusChangedEvent(layerId, 'error');
+                this._resetCounter(tileCounter);
             }
         }, this.timerDelayInMillis));
     }
