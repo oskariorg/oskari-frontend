@@ -98,7 +98,7 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
                         return false;
                     }
                     const ftrExtent = feature instanceof olRenderFeature
-                        ? feature.getExtent() : feature.getGeometry().getExtent();
+                        ? this._getRenderFeatureExtent(feature, tile) : feature.getGeometry().getExtent();
                     return intersects(ftrExtent, extent);
                 });
                 if (!matching.length) {
@@ -106,5 +106,20 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
                 }
                 continuation(matching, tile);
             });
+    }
+
+    /**
+     * @method _getRenderFeatureExtent
+     * RenderFeature's extent might be in tile coordinates instead of projected map coordinates.
+     * This helper method recalculates the feature's extent when it doesn't intersect with it's tile extent.
+     *
+     * @param {olRenderFeature} renderFeature
+     * @param {ol/VectorTile} tile
+     */
+    _getRenderFeatureExtent (renderFeature, tile) {
+        if (intersects(renderFeature.getExtent(), tile.getExtent())) {
+            renderFeature.extent_ = null;
+        }
+        return renderFeature.getExtent();
     }
 }

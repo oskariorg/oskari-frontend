@@ -97,7 +97,7 @@ Oskari.registerLocalization(
                 "title": "Innehållstyp",
                 "mvt": "Massor av små objekt",
                 "vector": "Stora objekt",
-                "info": "Visning av små objekt har optimerats men det begränsar minsta skala"
+                "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
             "mvtAttributions": "Tillskrivningar",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",

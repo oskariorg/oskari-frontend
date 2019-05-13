@@ -62,6 +62,13 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this._registerLayerEvents(layer.getId(), source);
         return vectorTileLayer;
     }
+    refreshLayer (layer) {
+        const source = this._getLayerSource(layer);
+        source.tileCache.expireCache({});
+        source.tileCache.clear();
+        source.clear();
+        source.refresh();
+    }
     _setupTileGrid (config) {
         const { origin, resolutions, tileSize } = config;
         if (!origin || !resolutions || !tileSize) {

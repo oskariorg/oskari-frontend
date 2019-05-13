@@ -55,6 +55,13 @@ export class AbstractLayerHandler {
         this.throttledUpdates.set(layer.getId(), throttledUpdate);
         throttledUpdate();
     }
+    /**
+     * @method refreshLayer forces feature update on layer
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     */
+    refreshLayer (layer) {
+        this._log.debug('TODO: refreshLayer() not implemented on LayerHandler');
+    }
     _updateLayerProperties (layer, source) {
         if (!layer.isVisible()) {
             layer.setActiveFeatures([]);

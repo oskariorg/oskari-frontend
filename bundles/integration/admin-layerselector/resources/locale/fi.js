@@ -97,7 +97,7 @@ Oskari.registerLocalization(
                 "title": "Sisällön tyyppi",
                 "mvt": "Paljon pieniä kohteita",
                 "vector": "Suuria kohteita",
-                "info": "Pienten kohteiden esittämistä on optimoitu, mutta se rajoittaa tarkastelualueen kokoa."
+                "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
             "mvtAttributions": "Lähdeviitteet",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",

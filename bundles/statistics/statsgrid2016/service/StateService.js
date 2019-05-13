@@ -87,6 +87,40 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             this.classificationPluginState[key] = value;
             this.trigger('ClassificationPluginChanged', { key: key, value: value });
         },
+        updateClassificationTransparency: function (transparency) {
+            const indicator = this.getActiveIndicator();
+            if (indicator) {
+                indicator.classification.transparency = transparency;
+            }
+        },
+
+        getClassificationMutator: function () {
+            return {
+                setActiveIndicator: hash => this.setActiveIndicator(hash),
+                updateClassification: (key, value) => {
+                    const indicator = this.getActiveIndicator();
+                    if (indicator) {
+                        indicator.classification[key] = value;
+                        var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+                        if (eventBuilder) {
+                            this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                        }
+                    }
+                },
+                updateClassificationObj: obj => {
+                    const indicator = this.getActiveIndicator();
+                    if (indicator) {
+                        Object.keys(obj).forEach(key => {
+                            indicator.classification[key] = obj[key];
+                        });
+                        const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+                        if (eventBuilder) {
+                            this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                        }
+                    }
+                }
+            };
+        },
         /**
          * Resets the current state and sends events about the changes.
          * Removes all selected indicators, selected region and regionset is set to undefined
@@ -158,34 +192,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         getRegion: function () {
             return this.activeRegion;
-        },
-        updateActiveClassification: function (key, value) {
-            const indicator = this.getActiveIndicator();
-            if (indicator) {
-                indicator.classification[key] = value;
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
-                if (eventBuilder) {
-                    this.sandbox.notifyAll(eventBuilder(indicator.classification));
-                }
-            }
-        },
-        updateActiveClassificationObj: function (valueObj) {
-            const indicator = this.getActiveIndicator();
-            if (indicator) {
-                Object.keys(valueObj).forEach(key => {
-                    indicator.classification[key] = valueObj[key];
-                });
-                const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
-                if (eventBuilder) {
-                    this.sandbox.notifyAll(eventBuilder(indicator.classification));
-                }
-            }
-        },
-        updateClassificationTransparency: function (transparency) {
-            const indicator = this.getActiveIndicator();
-            if (indicator) {
-                indicator.classification.transparency = transparency;
-            }
         },
 
         /**

@@ -94,10 +94,10 @@ Oskari.registerLocalization(
             "options": "Options JSON",
             "apiKey": "Api key",
             "renderMode": {
-                "title": "Collection Type",
+                "title": "Collection type",
                 "mvt": "Lots of small objects",
                 "vector": "Big objects",
-                "info": "Viewing of small objects has been optimized but it restricts the minimum scale"
+                "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
             "mvtAttributions": "Attributions",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
