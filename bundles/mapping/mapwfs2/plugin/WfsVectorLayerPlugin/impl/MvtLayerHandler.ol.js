@@ -20,7 +20,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         if (!config) {
             return;
         }
-        this.minZoomLevel = config.minZoomLevel;
+        this.minZoomLevel = this._getMinZoom(config);
         this._setupTileGrid(config);
 
         this.counters = new Map();
@@ -71,6 +71,25 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         this._registerLayerEvents(layer.getId(), source);
 
         return vectorTileLayer;
+    }
+
+    _getMinZoom (config) {
+        if (!config.minZoomLevel || !Array.isArray(config.resolutions)) return 0;
+        const minResolution = config.resolutions[config.minZoomLevel];
+        const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+        const mapResolutions = mapModule.getResolutionArray();
+        for (let z = 1; z < mapResolutions.length; z++) {
+            const curr = mapResolutions[z];
+            if (curr === minResolution) {
+                return z;
+            }
+            if (curr < minResolution) {
+                const dcurr = Math.abs(curr - minResolution);
+                const dprev = Math.abs(mapResolutions[z - 1] - minResolution);
+                return dcurr < dprev ? z : z - 1;
+            }
+        }
+        return mapResolutions.length - 1;
     }
 
     refreshLayer (layer) {
