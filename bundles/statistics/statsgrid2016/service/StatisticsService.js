@@ -498,9 +498,6 @@
             if (!ind) {
                 return;
             }
-            if (!ind.classification) {
-                ind.classification = this.state.getClassificationOpts(indicatorHash);
-            }
             if (typeof ind.classification.fractionDigits !== 'number') {
                 var allInts = Object.keys(data).every(function (key) {
                     return data[key] % 1 === 0;

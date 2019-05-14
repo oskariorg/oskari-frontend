@@ -28,8 +28,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 transparency: 100, // or from statslayer
                 min: 10,
                 max: 60,
-                showValues: false,
-                fractionDigits: 0
+                showValues: false
             },
             classificationPluginState: {
                 editEnabled: true,
@@ -95,13 +94,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
 
         getClassificationMutator: function () {
+            const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
             return {
                 setActiveIndicator: hash => this.setActiveIndicator(hash),
                 updateClassification: (key, value) => {
                     const indicator = this.getActiveIndicator();
                     if (indicator) {
                         indicator.classification[key] = value;
-                        var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
                         if (eventBuilder) {
                             this.sandbox.notifyAll(eventBuilder(indicator.classification));
                         }
@@ -113,7 +112,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                         Object.keys(obj).forEach(key => {
                             indicator.classification[key] = obj[key];
                         });
-                        const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
                         if (eventBuilder) {
                             this.sandbox.notifyAll(eventBuilder(indicator.classification));
                         }
@@ -200,7 +198,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         getClassificationOpts: function (indicatorHash) {
             var indicator = this.getIndicator(indicatorHash) || {};
-            return jQuery.extend({}, this._defaults.classification, this.lastSelectedClassification, indicator.classification || {});
+            const lastSelected = { ...this.lastSelectedClassification };
+            delete lastSelected.manualBounds;
+            delete lastSelected.fractionDigits;
+            return jQuery.extend({}, this._defaults.classification, lastSelected, indicator.classification || {});
         },
         /**
          * Returns an wanted indicator.
@@ -332,9 +333,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 indicator: indicator,
                 selections: selections,
                 series: series,
-                hash: this.getHash(datasrc, indicator, selections, series),
-                classification: classification
+                hash: this.getHash(datasrc, indicator, selections, series)
             };
+            // init classification values if not given
+            ind.classification = classification || this.getClassificationOpts(ind.hash);
             var found = false;
             this.indicators.forEach(function (existing) {
                 if (existing.hash === ind.hash) {
@@ -344,12 +346,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             if (found) {
                 return false;
             }
+
             if (series) {
                 this.seriesService.setValues(series.values);
                 ind.selections[series.id] = this.seriesService.getValue();
                 // Discontinuos mode is problematic for series data,
                 // because each class has to get at least one hit -> set distinct mode.
-                ind.classification = jQuery.extend({}, ind.classification || {}, { mode: 'distinct' });
+                ind.classification.mode = 'distinct';
             }
             this.indicators.push(ind);
 
