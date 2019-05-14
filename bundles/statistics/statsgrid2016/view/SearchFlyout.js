@@ -255,8 +255,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (!selections) {
             return indSearchValues;
         }
+
         Object.keys(selections).forEach(selectionKey => {
             const selector = metadata.selectors.find(selector => selector.id === selectionKey);
+            const checkNotAllowed = value =>
+                !selector.allowedValues.includes(value) && !selector.allowedValues.find(obj => obj.id === value);
+
             if (!selector) {
                 // Remove unsupported selectors silently
                 delete selections[selectionKey];
@@ -267,15 +271,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
             if (!Array.isArray(value)) {
                 // Single option
-                if (!selector.allowedValues.includes(value)) {
+                if (checkNotAllowed(value)) {
                     indSearchValues.error = { notAllowed: selectionKey };
                 }
                 return;
             }
             // Multiselect or series
             // Filter out unsupported search param values
-            const notAllowed = value.filter(cur =>
-                !selector.allowedValues.includes(cur) && !selector.allowedValues.find(obj => obj.id === cur));
+            const notAllowed = value.filter(checkNotAllowed);
 
             // Set multiselect status for search
             indSearchValues.multiselectStatus = { selector: selectionKey, invalid: notAllowed, requested: [...value] };
