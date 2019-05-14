@@ -22,6 +22,16 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         }
         this.minZoomLevel = this._getMinZoom(config);
         this._setupTileGrid(config);
+
+        this.counters = new Map();
+        this.countersWithInitialValue = {
+            started: 0,
+            success: 0,
+            error: 0
+        };
+
+        this.timers = new Map();
+        this.timerDelayInMillis = 60000;
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
         if (!selectedIds.size) {
@@ -56,9 +66,13 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         });
         this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
+
+        this._initializeCountersForLayer(layer.getId());
         this._registerLayerEvents(layer.getId(), source);
+
         return vectorTileLayer;
     }
+
     _getMinZoom (config) {
         if (!config.minZoomLevel || !Array.isArray(config.resolutions)) return 0;
         const minResolution = config.resolutions[config.minZoomLevel];
@@ -77,6 +91,19 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         }
         return mapResolutions.length - 1;
     }
+
+    refreshLayer (layer) {
+        const source = this._getLayerSource(layer);
+        source.tileCache.expireCache({});
+        source.tileCache.clear();
+        source.clear();
+        source.refresh();
+    }
+
+    _initializeCountersForLayer (layerId) {
+        this.counters.set(layerId, { ...this.countersWithInitialValue });
+    }
+
     _setupTileGrid (config) {
         const { origin, resolutions, tileSize } = config;
         if (!origin || !resolutions || !tileSize) {
@@ -110,14 +137,91 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         // Add +1 to make a layer visible at the zoom level.
         return zoomLevelScale + 1;
     }
+
     /**
      * Adds event listeners to ol-layers
      * @param {string|number} layerId
      * @param {ol/source/VectorTile} oskariLayer
      */
     _registerLayerEvents (layerId, source) {
-        source.on('tileloadstart', () => this.plugin.getMapModule().loadingState(layerId, true));
-        source.on('tileloadend', () => this.plugin.getMapModule().loadingState(layerId, false));
-        source.on('tileloaderror', () => this.plugin.getMapModule().loadingState(layerId, null, true));
+        source.on('tileloadstart', () => {
+            const tileCounter = this.counters.get(layerId);
+            tileCounter.started++;
+            this.plugin.getMapModule().loadingState(layerId, true);
+            this._sendWFSStatusChangedEvent(layerId, tileCounter, 'tileloadstart');
+        });
+        source.on('tileloadend', () => {
+            const tileCounter = this.counters.get(layerId);
+            tileCounter.success++;
+            this.plugin.getMapModule().loadingState(layerId, false);
+            this._sendWFSStatusChangedEvent(layerId, tileCounter, 'tileloadend');
+        });
+        source.on('tileloaderror', () => {
+            const tileCounter = this.counters.get(layerId);
+            tileCounter.error++;
+            this.plugin.getMapModule().loadingState(layerId, null, true);
+            this._sendWFSStatusChangedEvent(layerId, tileCounter, 'tileloaderror');
+        });
+    }
+
+    _sendWFSStatusChangedEvent (layerId, tileCounter, tileLoadStatusEvent) {
+        switch (tileLoadStatusEvent) {
+        case 'tileloadstart':
+
+            if (tileCounter.started === 1) {
+                super.sendWFSStatusChangedEvent(layerId, 'loading');
+                this._setTimer(layerId, tileCounter);
+            }
+            break;
+        case 'tileloadend':
+        case 'tileloaderror':
+
+            if (this._tileLoadingsFailed(tileCounter)) {
+                this._resetTimer(layerId);
+                super.sendWFSStatusChangedEvent(layerId, 'error');
+                this._resetCounter(tileCounter);
+            } else if (this._tileLoadingsAreDone(tileCounter)) {
+                this._resetTimer(layerId);
+                super.sendWFSStatusChangedEvent(layerId, 'complete');
+                this._resetCounter(tileCounter);
+            }
+            break;
+        default:
+            Oskari.log(this.getName()).error('Unsupported tileLoadStatusEvent: ' + tileLoadStatusEvent);
+        }
+    }
+
+    _tileLoadingsFailed (tileCounter) {
+        return tileCounter.error >= tileCounter.started;
+    }
+
+    _tileLoadingsAreDone (tileCounter) {
+        return tileCounter.success + tileCounter.error >= tileCounter.started;
+    }
+
+    _tileLoadingInProgress (tileCounter) {
+        return tileCounter.started > tileCounter.success + tileCounter.error;
+    }
+
+    _resetCounter (tileCounter) {
+        tileCounter.error = 0;
+        tileCounter.success = 0;
+        tileCounter.started = 0;
+    }
+
+    _setTimer (layerId, tileCounter) {
+        this._resetTimer(layerId);
+        this.timers.set(layerId, setTimeout(() => {
+            if (this._tileLoadingInProgress(tileCounter)) {
+                super.sendWFSStatusChangedEvent(layerId, 'error');
+                this._resetCounter(tileCounter);
+            }
+        }, this.timerDelayInMillis));
+    }
+
+    _resetTimer (layerId) {
+        if (this.timers.get(layerId)) {
+            clearTimeout(this.timers.get(layerId));
+        }
     }
 }

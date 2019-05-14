@@ -52,6 +52,21 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         this._loadFeaturesForLayer(layer);
         return vectorLayer;
     }
+    refreshLayer (layer) {
+        if (!layer) {
+            return;
+        }
+        const source = this._getLayerSource(layer);
+        if (!source) {
+            return;
+        }
+        source.clear();
+        const mapView = this.plugin.getMap().getView();
+        const extent = mapView.calculateExtent();
+        const resolution = mapView.getResolution();
+        const projection = mapView.getProjection();
+        this._loadFeaturesForLayer(layer, extent, resolution, projection);
+    }
     /**
      * @private
      * @method _createLayerSource To get an ol vector source for the layer.
@@ -78,6 +93,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     _getFeatureLoader (layer, source) {
         return (extent, resolution, projection) => {
             this.plugin.getMapModule().loadingState(layer.getId(), true);
+            super.sendWFSStatusChangedEvent(layer.getId(), 'loading');
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -92,11 +108,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);
                     this.plugin.getMapModule().loadingState(layer.getId(), false);
+                    super.sendWFSStatusChangedEvent(layer.getId(), 'complete');
                     this.updateLayerProperties(layer, source);
                 },
                 error: () => {
                     source.removeLoadedExtent(extent);
                     this.plugin.getMapModule().loadingState(layer.getId(), null, true);
+                    super.sendWFSStatusChangedEvent(layer.getId(), 'error');
                 }
             });
         };
@@ -123,7 +141,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * Load must be called manually in stacked 3D map mode.
      * (No target container defined for 3D view)
      *
-     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} lyr
      * @param {ol.Extent} extent (optional)
      * @param {Number} resolution (optional)
      * @param {ol.proj.Projection} projection (optional)
