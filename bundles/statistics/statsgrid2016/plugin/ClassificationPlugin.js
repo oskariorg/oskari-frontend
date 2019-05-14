@@ -89,14 +89,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (indicatorData.status === 'PENDING') return;
             const classifications = this.getClassificationProps(activeIndicator, activeClassfication, indicatorData);
             const legendProps = this.getLegendProps(indicatorData.data, classifications.values, indicators.serieStats);
+            const mutator = this.service.getStateService().getClassificationMutator();
             const classification = legendProps.classification;
-            if (classification && classifications.values.count !== classification.getGroups().length) {
-                // classification count changed!!
-                stateService.updateActiveClassification('count', classification.getGroups().length);
-                return;
+            // TODO: These should be handled elsewhere
+            if (classification) {
+                if (classifications.values.method === 'manual' && !classifications.values.manualBounds) {
+                    // store manual bounds based on last used bounds
+                    mutator.updateClassification('manualBounds', classification.bounds);
+                    return;
+                }
+                if (classifications.values.count !== classification.getGroups().length) {
+                    // classification count changed!!
+                    mutator.updateClassification('count', classification.getGroups().length);
+                    return;
+                }
             }
             const pluginState = this.service.getStateService().getClassificationPluginState();
-            const mutator = this.service.getStateService().getClassificationMutator();
             const manualView = this.getManualViewProps(classifications.values);
 
             ReactDOM.render((
