@@ -69,6 +69,10 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundle", function () {
           "lang": "sv",
           "type": "text/javascript",
           "src": "../../../../bundles/mapping/maprotator/resources/locale/sv.js"
+      }, {
+          "lang": "ru",
+          "type": "text/javascript",
+          "src": "../../../../bundles/mapping/maprotator/resources/locale/ru.js"
       }]
   },
   "bundle": {

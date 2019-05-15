@@ -95,6 +95,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             "lang": "sk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatetool/resources/locale/sk.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatetool/resources/locale/ru.js"
         }]
     },
     "bundle": {

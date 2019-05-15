@@ -39,27 +39,27 @@ Oskari.registerLocalization(
         "backendStatus": {
             "OK": {
                 "tooltip": "Слой карты в настоящее время доступен.",
-                "iconClass": "Внутренний статус - Ок"
+                "iconClass": "backendstatus-ok"
             },
             "DOWN": {
                 "tooltip": "Слой карты в настоящее время недоступен.",
-                "iconClass": "Внутренний статус - отключен"
+                "iconClass": "backendstatus-down"
             },
             "ERROR": {
                 "tooltip": "Слой карты в настоящее время недоступен.",
-                "iconClass": "Внутренний статус - ошибка"
+                "iconClass": "backendstatus-error"
             },
             "MAINTENANCE": {
                 "tooltip": "Слой карты может быть иногда недоступен в течение нескольких следующих дней.",
-                "iconClass": "Внутренний статус - на обслуживании"
+                "iconClass": "backendstatus-maintenance"
             },
             "UNKNOWN": {
                 "tooltip": "",
-                "iconClass": "Внутренний статус - неизвестно"
+                "iconClass": "backendstatus-unknown"
             },
             "UNSTABLE": {
                 "tooltip": "",
-                "iconClass": "backendstatus-нестабильно"
+                "iconClass": "backendstatus-unstable"
             }
         },
         "buttons": {
