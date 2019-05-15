@@ -92,6 +92,12 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      */
     _getFeatureLoader (layer, source) {
         return (extent, resolution, projection) => {
+            const olLayers = this.plugin.getOLMapLayers(layer.getId());
+
+            if (olLayers !== undefined && olLayers.length > 0 && !olLayers[0].getVisible()) {
+                return;
+            }
+
             this.plugin.getMapModule().loadingState(layer.getId(), true);
             super.sendWFSStatusChangedEvent(layer.getId(), 'loading');
             jQuery.ajax({
