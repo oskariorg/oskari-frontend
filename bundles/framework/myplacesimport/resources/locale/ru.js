@@ -17,13 +17,6 @@ Oskari.registerLocalization(
                 "next": "Далее",
                 "close": "Закрыть"
             },
-            "file": {
-                "submit": "Импортировать",
-                "fileOverSizeError": {
-                    "title": "Ошибка",
-                    "message": "Выбранный файл слишком большой. Он превышает <xx> Мб."
-                }
-            },
             "layer": {
                 "title": "Информация о наборе данных",
                 "name": "Название слоя карты",
@@ -81,7 +74,7 @@ Oskari.registerLocalization(
                 "remove": "Удалить",
                 "removeButton": "Удалить"
             },
-            "confirmDeleteMsg": "Вы хотите удалить набор данных \"{имя}\"?",
+            "confirmDeleteMsg": "Вы хотите удалить набор данных \"{name}\"?",
             "buttons": {
                 "ok": "OK",
                 "save": "Сохранить",

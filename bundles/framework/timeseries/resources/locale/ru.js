@@ -22,7 +22,7 @@ Oskari.registerLocalization(
             "week": "1 неделя",
             "month": "1 месяц"
         },
-        "dateRender": "{значение, дата} {значение, время, сократить}",
+        "dateRender": "{val, date} {val, time, short}",
         "alert": {
             "title": "Несколько слоев с временными рядами в использовании",
             "message": "Вы можете управлять только верхним слоем.",

@@ -30,23 +30,23 @@ Oskari.registerLocalization(
                     {
                         "id": "A4",
                         "label": "A4 книжная",
-                        "classForPreview": "предпросмотр",
-                        "selected": "верно"
+                        "classForPreview": "preview-portrait",
+                        "selected": true
                     },
                     {
-                        "id": "A4_Альбомная",
+                        "id": "A4_Landscape",
                         "label": "A4 альбомная",
-                        "classForPreview": "предпросмотр"
+                        "classForPreview": "preview-landscape"
                     },
                     {
                         "id": "A3",
                         "label": "A3 книжная",
-                        "classForPreview": "предпросмотр книжной ориентации"
+                        "classForPreview": "preview-portrait"
                     },
                     {
-                        "id": "A3_Альбомная",
+                        "id": "A3_Landscape",
                         "label": "A3 альбомная",
-                        "classForPreview": "предпросмотр альбомной ориентации"
+                        "classForPreview": "preview-landscape"
                     }
                 ]
             },
@@ -80,12 +80,12 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "png",
-                        "format": "изображение/png",
+                        "format": "image/png",
                         "label": "PNG изображение"
                     },
                     {
                         "id": "pdf",
-                        "format": "приложение/pdf",
+                        "format": "application/pdf",
                         "selected": true,
                         "label": "PDF документ"
                     }
@@ -98,22 +98,22 @@ Oskari.registerLocalization(
             "content": {
                 "options": [
                     {
-                        "id": "Логотип",
+                        "id": "pageLogo",
                         "label": "Включить логотип",
                         "tooltip": "Вы можете скрыть лого если нужно.",
-                        "checked": "проверено"
+                        "checked": "checked"
                     },
                     {
-                        "id": "масштаб страницы",
+                        "id": "pageScale",
                         "label": "Добавьте масштаб при печати карты.",
                         "tooltip": "Добавьте масштаб карты, по желанию.",
-                        "checked": "проверено"
+                        "checked": "checked"
                     },
                     {
-                        "id": "Дата",
+                        "id": "pageDate",
                         "label": "Использовать текущую дату",
                         "tooltip": "Вы можете добавить дату при печати карты.",
-                        "checked": "проверено"
+                        "checked": "checked"
                     }
                 ]
             },
