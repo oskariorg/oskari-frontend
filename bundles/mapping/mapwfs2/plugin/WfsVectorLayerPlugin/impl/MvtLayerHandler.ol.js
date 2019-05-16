@@ -50,7 +50,6 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             layer.setMinScale(mvtMinScale);
         }
         const source = this._createLayerSource(layer, sourceOpts);
-        this._createDebugLayer(source);
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
             visible: layer.isVisible(),
