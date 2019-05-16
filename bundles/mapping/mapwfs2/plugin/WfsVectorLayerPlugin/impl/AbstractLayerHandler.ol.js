@@ -1,5 +1,10 @@
 import { getFieldsAndPropsArrays } from '../util/props';
 const FEATURE_DATA_UPDATE_THROTTLE = 1000;
+const LOADING_STATUS_VALUE = {
+    COMPLETE: 'complete',
+    LOADING: 'loading',
+    ERROR: 'error'
+};
 
 export class AbstractLayerHandler {
     constructor (layerPlugin) {
@@ -80,7 +85,7 @@ export class AbstractLayerHandler {
             this.plugin.setLayerLocales(layer);
         }
         if (layer.getActiveFeatures() && layer.getActiveFeatures().length) {
-            this.sendWFSStatusChangedEvent(layer.getId(), 'complete');
+            this.sendWFSStatusChangedEvent(layer.getId(), LOADING_STATUS_VALUE.COMPLETE);
         }
 
         this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
@@ -139,13 +144,13 @@ export class AbstractLayerHandler {
 
     _setStatusToLoadEvent (loadEvent, status) {
         switch (status) {
-        case 'loading':
+        case LOADING_STATUS_VALUE.LOADING:
             loadEvent.setStatus(loadEvent.status.loading);
             break;
-        case 'complete':
+        case LOADING_STATUS_VALUE.COMPLETE:
             loadEvent.setStatus(loadEvent.status.complete);
             break;
-        case 'error':
+        case LOADING_STATUS_VALUE.ERROR:
             loadEvent.setStatus(loadEvent.status.error);
             break;
         default:
