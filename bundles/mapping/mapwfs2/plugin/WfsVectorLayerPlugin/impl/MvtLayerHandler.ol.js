@@ -1,5 +1,7 @@
 /* eslint-disable new-cap */
 import olLayerVectorTile from 'ol/layer/VectorTile';
+import olLayerTile from 'ol/layer/Tile';
+import olSourceTileDebug from 'ol/source/TileDebug';
 import olFormatMVT from 'ol/format/MVT';
 import olTileGrid from 'ol/tilegrid/TileGrid';
 import olTileState from 'ol/TileState';
@@ -124,6 +126,23 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             this.updateLayerProperties(layer, source);
         });
         return source;
+    }
+    /**
+     * @method _createDebugLayer Helper for debugging purposes.
+     * Use from console. Set breakpoint to _createLayerSource and add desired layer to map.
+     *
+     * Like so:
+     * Set breakpoint on "const source = new FeatureExposingMVTSource(options);"
+     * Call this._createDebugLayer(source)
+     * @param {FeatureExposingMVTSource} source layer source
+     */
+    _createDebugLayer (source) {
+        this.plugin.getMapModule().getMap().addLayer(new olLayerTile({
+            source: new olSourceTileDebug({
+                projection: this.plugin.getMapModule().getMap().getView().getProjection(),
+                tileGrid: source.getTileGrid()
+            })
+        }));
     }
     _getMinScale () {
         if (!this.minZoomLevel) {
