@@ -79,6 +79,10 @@ export class AbstractLayerHandler {
             layer.setFields(fields);
             this.plugin.setLayerLocales(layer);
         }
+        if (layer.getActiveFeatures() && layer.getActiveFeatures().length) {
+            this.sendWFSStatusChangedEvent(layer.getId(), 'complete');
+        }
+
         this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
     }
     _getFeaturePropsInExtent (source, extent) {
