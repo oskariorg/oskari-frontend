@@ -2,6 +2,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
+import { equals as extentEquals } from 'ol/extent';
 import { bbox as bboxStrategy } from 'ol/loadingstrategy';
 
 import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
@@ -91,12 +92,17 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @return {function} loader function for the layer
      */
     _getFeatureLoader (layer, source) {
+        let lastExtent = null;
         return (extent, resolution, projection) => {
             const olLayers = this.plugin.getOLMapLayers(layer.getId());
 
             if (olLayers !== undefined && olLayers.length > 0 && !olLayers[0].getVisible()) {
                 return;
             }
+            if (lastExtent && extentEquals(extent, lastExtent) && source.getFeatures().length !== 0) {
+                return;
+            }
+            lastExtent = extent;
 
             this.plugin.getMapModule().loadingState(layer.getId(), true);
             super.sendWFSStatusChangedEvent(layer.getId(), 'loading');
