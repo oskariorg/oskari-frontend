@@ -127,6 +127,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
         });
         return source;
     }
+    /**
+     * @method _createDebugLayer Helper for debugging purposes.
+     * Use from console. Set brakepoint to _createLayerSource and add desired layer to map.
+     * @param {FeatureExposingMVTSource} source layer source
+     */
     _createDebugLayer (source) {
         this.plugin.getMapModule().getMap().addLayer(new olLayerTile({
             source: new olSourceTileDebug({
