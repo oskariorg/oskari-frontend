@@ -112,6 +112,10 @@ Oskari.clazz.define(
                 "lang": "sv",
                 "type": "text/javascript",
                 "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/sv.js"
+            }, {
+                "lang": "ru",
+                "type": "text/javascript",
+                "src": "../../../../bundles/catalogue/metadataflyout/resources/locale/ru.js"
             }],
             "resources": []
         },

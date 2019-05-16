@@ -139,6 +139,10 @@ Oskari.clazz.define(
                 "lang": "uk",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/guidedtour/resources/locale/uk.js"
+            }, {
+                "lang": "ru",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/guidedtour/resources/locale/ru.js"
             }]
         },
         "bundle": {

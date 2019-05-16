@@ -7,6 +7,7 @@ export class AbstractLayerHandler {
         this.layerIds = [];
         this.throttledUpdates = new Map();
         this._log = Oskari.log('Oskari.mapping.mapmodule.AbstractLayerHandler');
+        this.sb = Oskari.getSandbox();
     }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
@@ -123,5 +124,28 @@ export class AbstractLayerHandler {
             return;
         }
         olLayers[0].setOpacity(layer.getOpacity() / 100);
+    }
+
+    sendWFSStatusChangedEvent (layerId, status) {
+        const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
+        loadEvent.setRequestType(loadEvent.type.image);
+        this._setStatusToLoadEvent(loadEvent, status);
+        this.sb.notifyAll(loadEvent);
+    }
+
+    _setStatusToLoadEvent (loadEvent, status) {
+        switch (status) {
+        case 'loading':
+            loadEvent.setStatus(loadEvent.status.loading);
+            break;
+        case 'complete':
+            loadEvent.setStatus(loadEvent.status.complete);
+            break;
+        case 'error':
+            loadEvent.setStatus(loadEvent.status.error);
+            break;
+        default:
+            Oskari.log(this.getName()).error('Unsupported status: ' + status);
+        }
     }
 }

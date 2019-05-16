@@ -159,6 +159,10 @@ function() {
             "lang" : "cs",
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/cs.js"
+        }, {
+            "lang" : "ru",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/ru.js"
         }]
     },
     "bundle" : {
