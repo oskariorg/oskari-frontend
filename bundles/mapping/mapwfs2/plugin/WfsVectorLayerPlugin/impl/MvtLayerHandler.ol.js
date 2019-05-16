@@ -130,7 +130,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
     _createDebugLayer (source) {
         this.plugin.getMapModule().getMap().addLayer(new olLayerTile({
             source: new olSourceTileDebug({
-                projection: 'EPSG:3857',
+                projection: this.plugin.getMapModule().getMap().getView().getProjection(),
                 tileGrid: source.getTileGrid()
             })
         }));
