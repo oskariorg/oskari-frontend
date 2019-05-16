@@ -129,7 +129,11 @@ export class MvtLayerHandler extends AbstractLayerHandler {
     }
     /**
      * @method _createDebugLayer Helper for debugging purposes.
-     * Use from console. Set brakepoint to _createLayerSource and add desired layer to map.
+     * Use from console. Set breakpoint to _createLayerSource and add desired layer to map.
+     *
+     * Like so:
+     * Set breakpoint on "const source = new FeatureExposingMVTSource(options);"
+     * Call this._createDebugLayer(source)
      * @param {FeatureExposingMVTSource} source layer source
      */
     _createDebugLayer (source) {
