@@ -99,7 +99,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             if (olLayers !== undefined && olLayers.length > 0 && !olLayers[0].getVisible()) {
                 return;
             }
-            if (lastExtent && extentEquals(extent, lastExtent) && source.getFeatures().length !== 0) {
+            if (lastExtent && extentEquals(extent, lastExtent) && source.getFeatures().length > 0) {
                 return;
             }
             lastExtent = extent;

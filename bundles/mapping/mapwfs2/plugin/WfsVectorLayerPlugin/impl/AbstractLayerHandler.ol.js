@@ -84,7 +84,7 @@ export class AbstractLayerHandler {
             layer.setFields(fields);
             this.plugin.setLayerLocales(layer);
         }
-        if (layer.getActiveFeatures() && layer.getActiveFeatures().length) {
+        if (layer.getActiveFeatures() && layer.getActiveFeatures().length > 0) {
             this.sendWFSStatusChangedEvent(layer.getId(), LOADING_STATUS_VALUE.COMPLETE);
         }
 
