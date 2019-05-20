@@ -382,7 +382,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                             return;
                         }
                         let counter = 0;
-                        const enoughData = !!Object.values(data).find(val => !isNaN(val) && ++counter > 1);
+                        const enoughData = Object.values(data).some(val => !isNaN(val) && ++counter > 1);
                         if (!enoughData) {
                             searchFailed(search);
                             resolve();
