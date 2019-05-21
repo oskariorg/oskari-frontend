@@ -22,3 +22,4 @@ tools/test-results.xml
 *.tar.gz
 bower_components/*
 .DS_Store
+coverage/
