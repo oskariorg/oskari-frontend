@@ -2,12 +2,17 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-import { equals as extentEquals } from 'ol/extent';
-import { bbox as bboxStrategy } from 'ol/loadingstrategy';
+import { getSize as getExtentSize } from 'ol/extent';
+import { tile as tileStrategyFactory } from 'ol/loadingstrategy';
+import { createXYZ } from 'ol/tilegrid';
 
-import { AbstractLayerHandler } from './AbstractLayerHandler.ol';
+import olLayerTile from 'ol/layer/Tile';
+import olSourceTileDebug from 'ol/source/TileDebug';
+
+import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { applyOpacity } from '../util/style';
 import { WFS_ID_KEY } from '../util/props';
+import { RequestCounter } from './RequestCounter';
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
@@ -45,7 +50,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         const vectorLayer = new olLayerVector({
             opacity,
             visible: layer.isVisible(),
-            renderMode: 'image',
+            renderMode: 'hybrid',
             source
         });
         this.plugin.getMapModule().addLayer(vectorLayer, !keepLayerOnTop);
@@ -75,11 +80,18 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @return {ol.source.Vector} vector layer source
      */
     _createLayerSource (layer) {
+        const map = this.plugin.getMapModule().getMap();
+        const projection = map.getView().getProjection();
+        const tileSize = (map.getSize() || [0, 0]).map(size => size > 1024 ? 1024 : size > 512 ? 512 : 256);
+        const tileGrid = createXYZ({
+            extent: projection.getExtent(),
+            tileSize
+        });
         const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
-            projection: this.plugin.getMap().getView().getProjection(), // OL projection object
-            strategy: bboxStrategy
+            projection: projection,
+            strategy: tileStrategyFactory(tileGrid)
         });
         source.setLoader(this._getFeatureLoader(layer, source));
         return source;
@@ -92,20 +104,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
      * @return {function} loader function for the layer
      */
     _getFeatureLoader (layer, source) {
-        let lastExtent = null;
+        const counter = new RequestCounter();
+        const updateLoadingStatus = status => {
+            counter.update(status);
+            this.tileLoadingStateChanged(layer.getId(), counter);
+        };
         return (extent, resolution, projection) => {
-            const olLayers = this.plugin.getOLMapLayers(layer.getId());
-
-            if (olLayers !== undefined && olLayers.length > 0 && !olLayers[0].getVisible()) {
-                return;
-            }
-            if (lastExtent && extentEquals(extent, lastExtent) && source.getFeatures().length > 0) {
-                return;
-            }
-            lastExtent = extent;
-
-            this.plugin.getMapModule().loadingState(layer.getId(), true);
-            super.sendWFSStatusChangedEvent(layer.getId(), 'loading');
+            updateLoadingStatus(LOADING_STATUS_VALUE.LOADING);
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -119,15 +124,10 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     const features = source.getFormat().readFeatures(resp);
                     features.forEach(ftr => ftr.set(WFS_ID_KEY, ftr.getId()));
                     source.addFeatures(features);
-                    this.plugin.getMapModule().loadingState(layer.getId(), false);
-                    super.sendWFSStatusChangedEvent(layer.getId(), 'complete');
                     this.updateLayerProperties(layer, source);
+                    updateLoadingStatus(LOADING_STATUS_VALUE.COMPLETE);
                 },
-                error: () => {
-                    source.removeLoadedExtent(extent);
-                    this.plugin.getMapModule().loadingState(layer.getId(), null, true);
-                    super.sendWFSStatusChangedEvent(layer.getId(), 'error');
-                }
+                error: () => updateLoadingStatus(LOADING_STATUS_VALUE.ERROR)
             });
         };
     }
@@ -169,6 +169,10 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         if (olLayers.length === 0) {
             return;
         }
-        olLayers[0].getSource().loadFeatures(extent, resolution, projection);
+        const olLayer = olLayers[0];
+        if (!olLayer.isVisible()) {
+            return;
+        }
+        olLayer.getSource().loadFeatures(extent, resolution, projection);
     }
 };
