@@ -9,6 +9,8 @@ import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandl
 import { applyOpacity } from '../util/style';
 import { WFS_ID_KEY } from '../util/props';
 import { RequestCounter } from './RequestCounter';
+import olLayerTile from 'ol/layer/Tile';
+import olSourceTileDebug from 'ol/source/TileDebug';
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
@@ -18,14 +20,17 @@ const OPACITY_THROTTLE_MS = 1500;
  * LayerHandler implementation for vector layers
  */
 export class VectorLayerHandler extends AbstractLayerHandler {
+    constructor (layerPlugin) {
+        super(layerPlugin);
+        this.loadingStrategies = {};
+    }
     createEventHandlers () {
         const handlers = super.createEventHandlers();
-        handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
-            this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
-
         if (this.plugin.getMapModule().has3DSupport()) {
             handlers['AfterChangeMapLayerOpacityEvent'] = Oskari.util.throttle(event =>
                 this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
+            handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
+                this._loadFeaturesForAllLayers(), MAP_MOVE_THROTTLE_MS);
         }
         return handlers;
     }
@@ -49,9 +54,12 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             renderMode: 'hybrid',
             source
         });
+        this.applyZoomBounds(layer, vectorLayer);
         this.plugin.getMapModule().addLayer(vectorLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorLayer);
-        this._loadFeaturesForLayer(layer);
+        if (this.plugin.getMapModule().has3DSupport()) {
+            this._loadFeaturesForLayer(layer);
+        }
         return vectorLayer;
     }
     refreshLayer (layer) {
@@ -63,11 +71,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return;
         }
         source.clear();
-        const mapView = this.plugin.getMap().getView();
-        const extent = mapView.calculateExtent();
-        const resolution = mapView.getResolution();
-        const projection = mapView.getProjection();
-        this._loadFeaturesForLayer(layer, extent, resolution, projection);
+        this._loadFeaturesForLayer(layer);
     }
     /**
      * @private
@@ -83,14 +87,33 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             extent: projection.getExtent(),
             tileSize
         });
+        const strategy = tileStrategyFactory(tileGrid);
+        this.loadingStrategies['' + layer.getId()] = strategy;
         const source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
             projection: projection,
-            strategy: tileStrategyFactory(tileGrid)
+            strategy: strategy
         });
         source.setLoader(this._getFeatureLoader(layer, source));
         return source;
+    }
+    /**
+     * @method _createDebugLayer Helper for debugging purposes.
+     * Use from console. Set breakpoint to _createLayerSource and add desired layer to map.
+     *
+     * Like so:
+     * Set breakpoint on "const tileGrid = createXYZ({ ... });"
+     * Call this._createDebugLayer(source)
+     * @param {FeatureExposingMVTSource} source layer source
+     */
+    _createDebugLayer (tileGrid) {
+        this.plugin.getMapModule().getMap().addLayer(new olLayerTile({
+            source: new olSourceTileDebug({
+                projection: this.plugin.getMapModule().getMap().getView().getProjection(),
+                tileGrid
+            })
+        }));
     }
     /**
      * @private
@@ -166,9 +189,19 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return;
         }
         const olLayer = olLayers[0];
-        if (!olLayer.getVisible()) {
+        if (!this._shouldLoadFeatures(olLayer, resolution)) {
             return;
         }
-        olLayer.getSource().loadFeatures(extent, resolution, projection);
+        const strategy = this.loadingStrategies['' + lyr.getId()];
+        strategy(extent, resolution).forEach(tileExt => {
+            olLayer.getSource().loadFeatures(tileExt, resolution, projection);
+        });
+    }
+
+    _shouldLoadFeatures (olLayer, resolution) {
+        if (!olLayer.getVisible()) {
+            return false;
+        }
+        return resolution <= olLayer.getMaxResolution() && resolution >= olLayer.getMinResolution();
     }
 };

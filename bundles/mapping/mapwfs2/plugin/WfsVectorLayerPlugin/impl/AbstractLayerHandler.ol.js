@@ -141,6 +141,18 @@ export class AbstractLayerHandler {
         olLayers[0].setOpacity(layer.getOpacity() / 100);
     }
 
+    applyZoomBounds (layerDef, layerImpl) {
+        const mapModule = this.plugin.getMapModule();
+        // Set min max Resolutions
+        if (layerDef.getMaxScale() && layerDef.getMaxScale() !== -1) {
+            layerImpl.setMinResolution(mapModule.getResolutionForScale(layerDef.getMaxScale()));
+        }
+        // No definition, if scale is greater than max resolution scale
+        if (layerDef.getMinScale() && layerDef.getMinScale() !== -1 && (layerDef.getMinScale() < mapModule.getScaleArray()[0])) {
+            layerImpl.setMaxResolution(mapModule.getResolutionForScale(layerDef.getMinScale()));
+        }
+    }
+
     sendWFSStatusChangedEvent (layerId, status) {
         const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
         loadEvent.setRequestType(loadEvent.type.image);

@@ -57,6 +57,7 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             renderMode: 'hybrid',
             source
         });
+        this.applyZoomBounds(layer, vectorTileLayer);
         this.plugin.getMapModule().addLayer(vectorTileLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorTileLayer);
 
