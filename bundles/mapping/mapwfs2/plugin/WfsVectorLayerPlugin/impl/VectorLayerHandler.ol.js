@@ -2,12 +2,8 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
-import { getSize as getExtentSize } from 'ol/extent';
 import { tile as tileStrategyFactory } from 'ol/loadingstrategy';
 import { createXYZ } from 'ol/tilegrid';
-
-import olLayerTile from 'ol/layer/Tile';
-import olSourceTileDebug from 'ol/source/TileDebug';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
 import { applyOpacity } from '../util/style';
@@ -170,7 +166,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return;
         }
         const olLayer = olLayers[0];
-        if (!olLayer.isVisible()) {
+        if (!olLayer.getVisible()) {
             return;
         }
         olLayer.getSource().loadFeatures(extent, resolution, projection);
