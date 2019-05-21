@@ -1,10 +1,13 @@
 import { getFieldsAndPropsArrays } from '../util/props';
+
 const FEATURE_DATA_UPDATE_THROTTLE = 1000;
+
 const LOADING_STATUS_VALUE = {
     COMPLETE: 'complete',
     LOADING: 'loading',
     ERROR: 'error'
 };
+export { LOADING_STATUS_VALUE };
 
 export class AbstractLayerHandler {
     constructor (layerPlugin) {
@@ -13,6 +16,9 @@ export class AbstractLayerHandler {
         this.throttledUpdates = new Map();
         this._log = Oskari.log('Oskari.mapping.mapmodule.AbstractLayerHandler');
         this.sb = Oskari.getSandbox();
+
+        this.loadingTimers = new Map();
+        this.timerDelayInMillis = 60000;
     }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
@@ -135,14 +141,26 @@ export class AbstractLayerHandler {
         olLayers[0].setOpacity(layer.getOpacity() / 100);
     }
 
+    applyZoomBounds (layerDef, layerImpl) {
+        const mapModule = this.plugin.getMapModule();
+        // Set min max Resolutions
+        if (layerDef.getMaxScale() && layerDef.getMaxScale() !== -1) {
+            layerImpl.setMinResolution(mapModule.getResolutionForScale(layerDef.getMaxScale()));
+        }
+        // No definition, if scale is greater than max resolution scale
+        if (layerDef.getMinScale() && layerDef.getMinScale() !== -1 && (layerDef.getMinScale() < mapModule.getScaleArray()[0])) {
+            layerImpl.setMaxResolution(mapModule.getResolutionForScale(layerDef.getMinScale()));
+        }
+    }
+
     sendWFSStatusChangedEvent (layerId, status) {
         const loadEvent = Oskari.eventBuilder('WFSStatusChangedEvent')(layerId);
         loadEvent.setRequestType(loadEvent.type.image);
-        this._setStatusToLoadEvent(loadEvent, status);
+        this._setLoadingStatusToEvent(loadEvent, status);
         this.sb.notifyAll(loadEvent);
     }
 
-    _setStatusToLoadEvent (loadEvent, status) {
+    _setLoadingStatusToEvent (loadEvent, status) {
         switch (status) {
         case LOADING_STATUS_VALUE.LOADING:
             loadEvent.setStatus(loadEvent.status.loading);
@@ -155,6 +173,50 @@ export class AbstractLayerHandler {
             break;
         default:
             Oskari.log(this.getName()).error('Unsupported status: ' + status);
+        }
+    }
+
+    /**
+     * @method tileLoadingStateChanged
+     * @param layerId
+     * @param {RequestCounter} counter
+     */
+    tileLoadingStateChanged (layerId, counter) {
+        if (counter.getLastStatusUpdate() === LOADING_STATUS_VALUE.LOADING) {
+            this.plugin.getMapModule().loadingState(layerId, true);
+            if (counter.isFirstPending()) {
+                this.sendWFSStatusChangedEvent(layerId, LOADING_STATUS_VALUE.LOADING);
+                this._setTimer(layerId, counter);
+            }
+            return;
+        }
+        if (counter.getLastStatusUpdate() === LOADING_STATUS_VALUE.ERROR) {
+            this.plugin.getMapModule().loadingState(layerId, null, true);
+        } else if (counter.getLastStatusUpdate() === LOADING_STATUS_VALUE.COMPLETE) {
+            this.plugin.getMapModule().loadingState(layerId, false);
+        }
+        const loadingStatus = counter.getFinishedStatus();
+        if (!loadingStatus) {
+            return;
+        }
+        this._resetTimer(layerId);
+        this.sendWFSStatusChangedEvent(layerId, loadingStatus);
+        counter.reset();
+    }
+
+    _setTimer (layerId, counter) {
+        this._resetTimer(layerId);
+        this.loadingTimers.set(layerId, setTimeout(() => {
+            if (counter.isPending()) {
+                this.sendWFSStatusChangedEvent(layerId, LOADING_STATUS_VALUE.ERROR);
+                counter.reset();
+            }
+        }, this.timerDelayInMillis));
+    }
+
+    _resetTimer (layerId) {
+        if (this.loadingTimers.get(layerId)) {
+            clearTimeout(this.loadingTimers.get(layerId));
         }
     }
 }
