@@ -60,12 +60,12 @@ Oskari.clazz.define(
         },
 
         _ignoreUserLayers: function () {
-            this.config = this.config || {};
-            const ignoredLayerTypes = new Set(this.config.ignoredLayerTypes || []);
+            this._config = this._config || {};
+            const ignoredLayerTypes = new Set(this._config.ignoredLayerTypes || []);
             ignoredLayerTypes.add('WFS');
             ignoredLayerTypes.add('MYPLACES');
             ignoredLayerTypes.add('USERLAYER');
-            this.config.ignoredLayerTypes = Array.from(ignoredLayerTypes);
+            this._config.ignoredLayerTypes = Array.from(ignoredLayerTypes);
         },
 
         _destroyControlElement: function () {
