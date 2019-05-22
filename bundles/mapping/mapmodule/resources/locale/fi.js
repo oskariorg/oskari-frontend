@@ -67,7 +67,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "testi",
                 "history": {
-                    "reset": "Siirry oletusnäkymään.",
+                    "reset": "Palaa alkutilaan.",
                     "back": "Siirry edelliseen näkymään.",
                     "next": "Siirry seuraavaan näkymään."
                 },
@@ -116,6 +116,11 @@ Oskari.registerLocalization(
                     "denied": "Sivustolta on estetty paikannus. Salli paikannus ja yritä uudelleen",
                     "noLocation": "Sijainnin määritys epäonnistui",
                     "close": "Sulje"
+                }
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Palaa alkutilaan"
                 }
             }
         },

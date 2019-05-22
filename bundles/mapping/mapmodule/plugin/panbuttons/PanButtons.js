@@ -53,6 +53,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
          * Plugin jQuery element
          */
         _createControlElement: function () {
+            const centerTooltip = Oskari.getMsg('MapModule', 'plugin.PanButtonsPlugin.center.tooltip');
             var me = this,
                 ppid = (new Date()).getTime().toString(),
                 el = jQuery(
@@ -60,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
                     '  <div>' +
                     '    <img class="panbuttonDivImg" usemap="#panbuttons_' + ppid + '">' +
                     '      <map name="panbuttons_' + ppid + '">' +
-                    '        <area shape="circle"  class="panbuttons_center" coords="45,45,20" href="#">' +
+                    '        <area shape="circle"  class="panbuttons_center" title="' + centerTooltip + '" coords="45,45,20" href="#">' +
                     '        <area shape="polygon" class="panbuttons_left"   coords="13,20,25,30,20,45,27,65,13,70,5,45" href="#">' +
                     '        <area shape="polygon" class="panbuttons_up"     coords="30,8,45,4,60,8,60,23,45,20,30,23" href="#">' +
                     '        <area shape="polygon" class="panbuttons_right"  coords="79,20,67,30,72,45,65,65,79,70,87,45" href="#">' +
