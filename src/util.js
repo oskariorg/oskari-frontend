@@ -163,7 +163,7 @@ Oskari.util = (function () {
             return null;
         }
         if (typeof value === 'object') {
-            for (i = 0; i < value.length; i++) {
+            for (let i = 0; i < value.length; i++) {
                 val = value[i] + '';
                 val = val.split('.');
                 if (val.length === 2 && maxDecimals < val[1].length) {
