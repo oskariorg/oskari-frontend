@@ -593,7 +593,7 @@ Oskari.util = (function () {
     util.coordinateIsDegrees = function (point) {
         var matches1 = coordinateDMSDecode(point[0]);
         var matches2 = coordinateDMSDecode(point[1]);
-        return (matches1 && matches2);
+        return (matches1 != null && matches1.length > 0 && matches2 != null && matches2.length > 0);
     };
 
     /**
