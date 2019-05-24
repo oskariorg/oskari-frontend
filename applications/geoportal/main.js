@@ -50,6 +50,7 @@ import 'oskari-loader!../../packages/framework/bundle/backendstatus/bundle.js';
 
 import 'oskari-loader!../../packages/sample/bundle/sample-info/bundle.js';
 
+import 'oskari-lazy-loader?printout!../../packages/framework/bundle/printout/bundle.js';
 import 'oskari-lazy-loader?postprocessor!../../packages/framework/bundle/postprocessor/bundle.js';
 
 import 'oskari-loader!../../packages/statistics/statsgrid/bundle.js';
