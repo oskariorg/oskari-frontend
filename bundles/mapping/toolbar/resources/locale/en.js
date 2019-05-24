@@ -14,7 +14,7 @@ Oskari.registerLocalization(
                 "skipInfo": "Do not show quick guide"
             },
             "history": {
-                "reset": "Move to the default map view.",
+                "reset": "Move to the original map view.",
                 "back": "Move to the previous map view.",
                 "next": "Move to the next map view."
             },

@@ -294,7 +294,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     }
                 }
                 if (event.getStatus() === event.status.error) {
-                    this.__loadingStatus['' + event.getLayerId()] = 'error';
+                    if (this.__loadingStatus.hasOwnProperty('' + event.getLayerId())) {
+                        this.__loadingStatus['' + event.getLayerId()] = 'error';
+                    }
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), true);
                 }

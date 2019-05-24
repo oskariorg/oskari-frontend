@@ -67,7 +67,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Move to default view",
+                    "reset": "Move to the original map view",
                     "back": "Move to previous view",
                     "next": "Move to next view"
                 },
@@ -110,6 +110,11 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Center map to your location"
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Move to the original map view"
+                }
             }
         },
         "guidedTour": {

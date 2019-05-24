@@ -67,7 +67,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Tillbaka till standardvyn",
+                    "reset": "Gå tillbaka till standardvyn för kartvyn",
                     "back": "Tillbaka till föregående vy",
                     "next": "Flytta till nästa vy"
                 },
@@ -110,6 +110,11 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Centrera kartan till din plats"
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Gå tillbaka till standardvyn för kartvyn"
+                }
             }
         },
         "guidedTour": {
