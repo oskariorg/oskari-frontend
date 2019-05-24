@@ -13,25 +13,88 @@ const OskariMock = {
 };
 
 global.Oskari = OskariMock;
-const util = require('./util')
+const util = require('./util');
+const MobileDetect = require('mobile-detect');
+const jQuery = require('jquery');
+global.MobileDetect = MobileDetect;
+global.jQuery = jQuery;
 
 describe('throttle function', () => {
 
-    test('with leading false waits given time before calling function again', () => {
+    test('executes function call only once within given wait parameter interval', () => {
 
         expect.assertions(1);
 
+        const functionCallCount = 10;
         const wait = 1000;
+        const mockFunction = jest.fn();
 
-        const throttledFunction = OskariMock.util.throttle(() => {
-            return 1;
-        }, wait, { leading: false });
+        const throttledFunction = OskariMock.util.throttle(mockFunction, wait);
 
-        let start = Date.now();
-        while (undefined === throttledFunction()) { };
-        let end = Date.now();
-        expect(end - start).toBeGreaterThanOrEqual(wait);
+        for (let i = 0; i < functionCallCount; i++) {
+            throttledFunction();
+        };
+        expect(mockFunction.mock.calls.length).toEqual(1);
     });
+
+    test('executes all function calls when called with interval >= throttle wait parameter', async () => {
+
+        expect.assertions(1);
+
+        const functionCallCount = 5;
+        const wait = 200;
+        const mockFunction = jest.fn();
+
+        const throttledFunction = OskariMock.util.throttle(mockFunction, wait);
+
+        for (let i = 0; i < functionCallCount; i++) {
+            throttledFunction();
+            await sleep(wait);
+        };
+        expect(mockFunction.mock.calls.length).toEqual(functionCallCount);
+    });
+    
+    test('executes function after wait time when {leading: false}', async () => {
+
+        expect.assertions(3);
+
+        const wait = 200;
+        const mockFunctionResponse = 'executed';
+        const mockFunction = jest.fn().mockImplementation(() => mockFunctionResponse);
+        const throttledFunction = OskariMock.util.throttle(mockFunction, wait ,{leading: false});
+
+        const firstExecutionResult = throttledFunction();
+        await sleep(wait);
+        const secondExecutionResult = throttledFunction();
+        expect(firstExecutionResult).toEqual(undefined);
+        expect(mockFunction.mock.calls.length).toEqual(1);
+        expect(secondExecutionResult).toEqual(mockFunctionResponse);
+    });
+
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+
+
+    /* test('with leading true waits given time before calling function again', () => {
+ 
+         expect.assertions(1);
+ 
+         const wait = 10000;
+ 
+         const throttledFunction = OskariMock.util.throttle(() => {
+             return 1;
+         }, wait, { leading: true });
+ 
+         throttledFunction();
+         let start = Date.now();
+         while (undefined === throttledFunction()) { };
+         let end = Date.now();
+         expect(end - start).toBeGreaterThanOrEqual(wait);
+     });*/
+
+
 });
 
 describe('isNumber function', () => {
@@ -46,9 +109,34 @@ describe('isNumber function', () => {
         expect(OskariMock.util.isNumber('a')).toEqual(false);
     });
 
-    test('returns false without parameters', () => {
+    test('returns false without parameters (appears as undefined)', () => {
         expect.assertions(1);
         expect(OskariMock.util.isNumber()).toEqual(false);
+    });
+
+    test('returns false when parameters are null', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.isNumber(null, null)).toEqual(false);
+    });
+
+    test('returns false with leading zero and keep option true', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.isNumber('01', true)).toEqual(false);
+    });
+
+    test('returns false with array where one element is string with leading zero and keepLeadingZero option true', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.isNumber([12, 14.8, new Number(199), '01'], true)).toEqual(false);
+    });
+
+    test('returns true with array where all elements are numbers', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.isNumber([12, 14.8, new Number(199)])).toEqual(true);
+    });
+
+    test('returns false with array where one element is not number', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.isNumber([12, 'a', new Number(199)])).toEqual(false);
     });
 });
 
@@ -73,6 +161,12 @@ describe('isDecimal function', () => {
         expect.assertions(1);
         expect(OskariMock.util.isDecimal()).toEqual(false);
     });
+
+    test('returns false with array where one element is not decimal number', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.isDecimal([12.1, 'a', new Number(199.7)])).toEqual(false);
+    });
+
 });
 
 describe('decimals function', () => {
@@ -106,6 +200,11 @@ describe('hexToRgb function', () => {
         expect(OskariMock.util.hexToRgb('FFFFFF')).toEqual({ "b": 255, "g": 255, "r": 255 });
     });
 
+    test('returns correct value with shorthand parameter 03F', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.hexToRgb('03F')).toEqual({ "b": 255, "g": 51, "r": 0 });
+    });
+
     test('returns correct value with parameter 228B22 (= Green)', () => {
         expect.assertions(1);
         expect(OskariMock.util.hexToRgb('228B22')).toEqual({ "b": 34, "g": 139, "r": 34 });
@@ -133,6 +232,11 @@ describe('rgbToHex function', () => {
     test('returns correct value with rgb(0,191,255) (= Light blue)', () => {
         expect.assertions(1);
         expect(OskariMock.util.rgbToHex('rgb(0,191,255)')).toEqual('00bfff');
+    });
+
+    test('returns passed parameter without # when # is included as first char', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.rgbToHex('#rgb(255,0,0)')).toEqual('rgb(255,0,0)');
     });
 
     test('throws TypeError when invalid parameter is provided', () => {
@@ -210,6 +314,11 @@ describe('alterBrightness function', () => {
     test('includes bound in result if included in parameter', () => {
         expect.assertions(1);
         expect(OskariMock.util.alterBrightness('#000000', -5)).toEqual('#000000');
+    });
+
+    test('Returns passed parameter with not supported rgba parameter', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.alterBrightness('rgba(255,0,0,0.3)', -5)).toEqual('rgba(255,0,0,0.3)');
     });
 
     test('throws TypeError when parameters are not provided', () => {
@@ -319,6 +428,11 @@ describe('getColorBrightness function', () => {
         expect(OskariMock.util.getColorBrightness('#FFFFFF')).toEqual('light');
     });
 
+    test('returns light with white sort hex parameter', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.getColorBrightness('#FFF')).toEqual('light');
+    });
+
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
         expect(() => OskariMock.util.getColorBrightness()).toThrowError(TypeError);
@@ -393,6 +507,12 @@ describe('coordinateMetricToDegrees function', () => {
         expect(OskariMock.util.coordinateMetricToDegrees(['a', 'b'], 0)).toEqual(["0° 0' NaN\"", "0° 0' NaN\""]);
     });
 
+    test('limits decimals to 20', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.coordinateMetricToDegrees([20, 33], 21))
+            .toEqual(["20° 0' 0.00000000000000000000\"", "33° 0' 0.00000000000000000000\""]);
+    });
+
     test('throws TypeError when parameters are not provided', () => {
         expect.assertions(1);
         expect(() => OskariMock.util.coordinateMetricToDegrees()).toThrowError(TypeError);
@@ -409,7 +529,13 @@ describe('coordinateDegreesToMetric  function', () => {
 
     test('returns array with NaN values when invalid parameters are provided', () => {
         expect.assertions(1);
-        expect(OskariMock.util.coordinateDegreesToMetric(['a', 'b'], 0)).toEqual([NaN, NaN]);
+        expect(OskariMock.util.coordinateDegreesToMetric(['', '', ''], 0)).toEqual([NaN, NaN]);
+    });
+
+    test('limits decimals to 20', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.coordinateDegreesToMetric(['123°', '50°'], 21))
+            .toEqual(["123.00000000000000000000", "50.00000000000000000000"]);
     });
 
     test('throws TypeError when parameters are not provided', () => {
@@ -583,6 +709,19 @@ describe('arrayMove function', () => {
         expect(values[3]).toEqual(lastItemAtStart);
     });
 
+    test('Also works when from and to difference is greater than 60', () => {
+
+        expect.assertions(1);
+
+        const values = [];
+
+        for (let i = 0; i < 100; i++) {
+            values[i] = i;
+        }
+
+        expect(OskariMock.util.arrayMove(values, 1, 64)).toEqual(true);
+    });
+
 });
 
 describe('arraysEqual function', () => {
@@ -632,29 +771,75 @@ describe('arraysEqual function', () => {
         expect(OskariMock.util.arraysEqual(null, values)).toEqual(false);
     });
 
+    test('returns false when array lengths are different', () => {
+
+        expect.assertions(1);
+
+        const shorter = [72, 12, 13];
+        const longer = [72, 12, 13, 32];
+
+        expect(OskariMock.util.arraysEqual(shorter, longer)).toEqual(false);
+    });
+
 });
 
 describe('stringLike function', () => {
 
     test('returns true when string matches pattern', () => {
+        expect.assertions(1);
         const patternAsteriskAndPercentageAndUnderscoreIncluded = 'te_t*s%';
         expect(OskariMock.util.stringLike('testingstring', patternAsteriskAndPercentageAndUnderscoreIncluded)).toEqual(true);
     });
 
     test('returns true when string matches pattern', () => {
+        expect.assertions(1);
         const patternOnlyNumbers = '^[0-9]*$';
         expect(OskariMock.util.stringLike('testing', patternOnlyNumbers)).toEqual(false);
     });
 
     test('throws TypeError when pattern parameter is not provided', () => {
+        expect.assertions(1);
         expect(() => OskariMock.util.stringLike('testing')).toThrowError(TypeError);
     });
 
     test('throws TypeError when value parameter is not provided', () => {
+        expect.assertions(1);
         expect(() => OskariMock.util.stringLike(null, 'testing')).toThrowError(TypeError);
     });
 
     test('throws TypeError when parameters are not provided', () => {
         expect(() => OskariMock.util.stringLike()).toThrowError(TypeError);
     });
+});
+
+describe('isMobile function', () => {
+
+    afterEach(() => {
+        document.body.innerHTML = null;
+    });
+
+    test('returns false when screen is not mobile', () => {
+
+        expect.assertions(1);
+
+        document.body.innerHTML =
+            '<div id=\"mapdiv\" style=\"height: 600px;width: 600px;\">' +
+            'Dummy div content' +
+            '</div>';
+
+        expect(OskariMock.util.isMobile()).toEqual(false);
+    });
+
+    test('returns true when screen is mobile', () => {
+
+        expect.assertions(1);
+
+        document.body.innerHTML =
+            '<div id=\"mapdiv\" style=\"height: 300px;width: 300px;\">' +
+            'Dummy div content' +
+            '</div>';
+
+        expect(OskariMock.util.isMobile()).toEqual(true);
+    });
+
 });
