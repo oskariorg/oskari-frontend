@@ -55,6 +55,7 @@ import 'oskari-lazy-loader?postprocessor!../../packages/framework/bundle/postpro
 import 'oskari-loader!../../packages/statistics/statsgrid/bundle.js';
 
 import 'oskari-loader!../../packages/framework/bundle/coordinatetool/bundle.js';
+import 'oskari-loader!../../packages/framework/bundle/findbycoordinates/bundle.js';
 
 import 'oskari-loader!../../packages/framework/bundle/myplacesimport/bundle.js';
 
