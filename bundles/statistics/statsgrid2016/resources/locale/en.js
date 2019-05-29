@@ -173,7 +173,8 @@ Oskari.registerLocalization({
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
             'myIndicatorDatasource': 'Datasource is empty.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
-            'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}'
+            'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
+            'noAllDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
         },
         'missing': {
             'regionsetName': 'Unknown'
