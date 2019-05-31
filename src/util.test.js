@@ -404,6 +404,26 @@ describe('naturalSort function', () => {
         expect.assertions(1);
         expect(OskariMock.util.naturalSort(10.1, 22.1, sortAscending)).toEqual(-1);
     });
+
+    test('returns sort number correctly with multi-digit string as first parameter ascending', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.naturalSort('z11', 'z2', sortAscending)).toEqual(1);
+    });
+
+    test('returns sort number correctly with multi-digit string as first parameter descending', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.naturalSort('z11', 'z2', sortDescending)).toEqual(-1);
+    });
+
+    test('returns sort number correctly with multi-digit string as second parameter ascending', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.naturalSort('z2', 'z11', sortAscending)).toEqual(-1);
+    });
+
+    test('returns sort number correctly with multi-digit string as second parameter descending', () => {
+        expect.assertions(1);
+        expect(OskariMock.util.naturalSort('z2', 'z11', sortDescending)).toEqual(1);
+    });
 });
 
 describe('getColorBrightness function', () => {
