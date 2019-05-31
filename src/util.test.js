@@ -395,12 +395,12 @@ describe('naturalSort function', () => {
         expect(OskariMock.util.naturalSort(1, 2, sortDescending)).toEqual(1);
     });
 
-    test('returns sort number correctly with double parameters ascending', () => {
+    test('returns sort number correctly with double parameters descending', () => {
         expect.assertions(1);
         expect(OskariMock.util.naturalSort(10.1, 22.1, sortDescending)).toEqual(1);
     });
 
-    test('returns sort number correctly with double parameters descending', () => {
+    test('returns sort number correctly with double parameters ascending', () => {
         expect.assertions(1);
         expect(OskariMock.util.naturalSort(10.1, 22.1, sortAscending)).toEqual(-1);
     });
