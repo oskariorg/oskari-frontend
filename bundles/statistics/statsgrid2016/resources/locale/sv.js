@@ -171,7 +171,7 @@ Oskari.registerLocalization({
             'myIndicatorDatasource': 'Datakällan är tom.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
             'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
-            'noAllDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
+            'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
         },
         'missing': {
             'regionsetName': 'Okänd'

@@ -442,7 +442,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             const okBtn = dialog.createCloseButton('OK');
             let title;
             if (successfullSearches.length > 0) {
-                title = this.loc('errors.noAllDataForIndicators', { indicators: indicatorMessages.length });
+                title = this.loc('errors.onlyPartialDataForIndicators', { indicators: indicatorMessages.length });
             } else {
                 title = this.loc('errors.noDataForIndicators', { indicators: indicatorMessages.length });
             }
