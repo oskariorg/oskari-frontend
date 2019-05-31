@@ -1,6 +1,5 @@
 import Tiles3DModelBuilder from './Tiles3DModelBuilder';
-
-import '../util/overrideCesiumMaterial'; // for side effects only
+import { applyCustomMaterialSettings } from '../util/overrideCesiumMaterial'; // for side effects only
 
 /**
  * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
@@ -58,6 +57,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
             }
             this._initTilesetClickHandler();
+            applyCustomMaterialSettings();
         },
         /**
          * @method _afterChangeMapLayerOpacityEvent
