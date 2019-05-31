@@ -1,5 +1,6 @@
 export const WFS_ID_KEY = '_oid';
 export const WFS_FTR_ID_KEY = '__fid';
+export const WFS_FTR_ID_LOCALE = 'ID';
 
 const hiddenProps = new Set(['layer', 'geometry', 'bbox', WFS_ID_KEY]);
 
@@ -20,30 +21,31 @@ function sortedFieldsFromProps (properties) {
 }
 
 function propsArrayFrom (properties, fields) {
-    return [properties._oid].concat(fields.map(key => {
+    return fields.map(key => {
+        if (key === WFS_FTR_ID_KEY) {
+            return properties[WFS_ID_KEY];
+        }
         const value = properties[key];
         if (key.startsWith('$')) {
             return destructComplex(value);
         }
         return value;
-    }));
+    });
 }
 
-export function propsAsArray (properties) {
-    const fields = sortedFieldsFromProps(properties);
-    return propsArrayFrom(properties, fields);
-}
-
-export function getFieldsAndPropsArrays (propsList) {
+export function getFieldsArray (propsList) {
     if (!propsList.length) {
-        return { fields: [], properties: [] };
+        return [];
     }
-
     let fields = sortedFieldsFromProps(propsList[0]);
-    const properties = propsList.map(properties => propsArrayFrom(properties, fields));
-
     fields = fields.map(removeComplexPrefix);
-    fields.unshift('__fid');
+    fields.unshift(WFS_FTR_ID_KEY);
+    return fields;
+}
 
-    return { fields, properties };
+export function getPropsArray (propsList, fields) {
+    if (!propsList.length) {
+        return [];
+    }
+    return propsList.map(properties => propsArrayFrom(properties, fields));
 }

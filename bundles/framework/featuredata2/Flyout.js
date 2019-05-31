@@ -638,10 +638,14 @@ Oskari.clazz.define(
                     panel.grid.setMetadataLink(layer.getMetadataIdentifier());
 
                     // localizations
-                    if (locales) {
+                    if (locales && locales.length > 0) {
                         for (k = 0; k < locales.length; k += 1) {
                             panel.grid.setColumnUIName(fields[k], locales[k]);
                         }
+                    } else {
+                        panel.grid.setColumnUIName('__fid', 'ID');
+                        panel.grid.setColumnUIName('__centerX', 'X');
+                        panel.grid.setColumnUIName('__centerY', 'Y');
                     }
                     visibleFields = me.getVisibleFields(layer);
 
@@ -820,7 +824,6 @@ Oskari.clazz.define(
                 featureData,
                 urlLink,
                 values;
-
             eachFeature:
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
@@ -862,7 +865,6 @@ Oskari.clazz.define(
                         continue eachFeature;
                     }
                 }
-
                 model.addData(featureData);
             }
         },

@@ -820,7 +820,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             'for': 'oskari-grid-column-selector-' + field,
                             'class': 'column-label'
                         })
-                        .html(field);
+                        .html(me.uiNames[field] || field);
                     newColumn.css({
                         'margin': '5px'
                     });

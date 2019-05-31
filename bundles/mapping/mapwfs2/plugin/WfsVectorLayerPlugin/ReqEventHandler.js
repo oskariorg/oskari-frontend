@@ -1,4 +1,4 @@
-import { propsAsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './util/props';
+import { getPropsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './util/props';
 import { filterByAttribute, getFilterAlternativesAsArray } from './util/filter';
 
 export class ReqEventHandler {
@@ -36,7 +36,7 @@ export class ReqEventHandler {
                     } else {
                         plugin.notify('GetInfoResultEvent', {
                             layerId: layer.getId(),
-                            features: [propsAsArray(ftrAndLyr.feature.getProperties())],
+                            features: getPropsArray([ftrAndLyr.feature.getProperties()], layer.getFields()),
                             lonlat: event.getLonLat()
                         });
                     }

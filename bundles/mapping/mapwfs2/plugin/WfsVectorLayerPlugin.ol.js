@@ -3,7 +3,7 @@ import { MvtLayerHandler } from './WfsVectorLayerPlugin/impl/MvtLayerHandler.ol'
 import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
-import { WFS_ID_KEY } from './WfsVectorLayerPlugin/util/props';
+import { WFS_ID_KEY, WFS_FTR_ID_KEY, WFS_FTR_ID_LOCALE } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../mapmodule/domain/constants';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
@@ -279,20 +279,27 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * @method setLayerLocales
      * Requests and sets locales for layer's fields.
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer wfs layer
+     * @param {Array} fields
      */
-    setLayerLocales (layer) {
-        if (!layer || layer.getLocales().length === layer.getFields().length) {
+    setWFSProperties (layer, fields) {
+        if (!layer) {
             return;
         }
         const onSuccess = localized => {
-            if (!localized) {
-                return;
+            if (Array.isArray(localized) && localized.length) {
+                if (localized[0].name !== WFS_FTR_ID_KEY) {
+                    localized.unshift({
+                        name: WFS_FTR_ID_KEY,
+                        locale: WFS_FTR_ID_LOCALE
+                    });
+                }
+                layer.setFields(localized.map(prop => prop.name));
+                layer.setLocales(localized.map(prop => prop.locale));
+            } else {
+                layer.setFields(fields);
+                layer.setLocales([]);
             }
-            const locales = [];
-            // Set locales in the same order as fields
-            layer.getFields().forEach(field => locales.push(localized[field] ? localized[field] : field));
-            layer.setLocales(locales);
-            this.notify('WFSPropertiesEvent', layer, locales, layer.getFields());
+            this.updateLayerProperties(layer);
         };
         jQuery.ajax({
             type: 'GET',

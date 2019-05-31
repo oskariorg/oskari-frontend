@@ -1,4 +1,4 @@
-import { getFieldsAndPropsArrays } from '../util/props';
+import { getFieldsArray, getPropsArray } from '../util/props';
 
 const FEATURE_DATA_UPDATE_THROTTLE = 1000;
 
@@ -77,24 +77,24 @@ export class AbstractLayerHandler {
     _updateLayerProperties (layer, source) {
         if (!layer.isVisible()) {
             layer.setActiveFeatures([]);
-            layer.setFields([]);
-            this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), []);
+            this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
             return;
         }
         const { left, bottom, right, top } = this.plugin.getSandbox().getMap().getBbox();
         const propsList = this._getFeaturePropsInExtent(source, [left, bottom, right, top]);
-        const { fields, properties } = getFieldsAndPropsArrays(propsList);
-        layer.setActiveFeatures(properties);
+        const fields = getFieldsArray(propsList);
         // Update fields and locales only if fields is not empty and it has changed
-        if (fields && fields.length > 0 && !Oskari.util.arraysEqual(layer.getFields(), fields)) {
-            layer.setFields(fields);
-            this.plugin.setLayerLocales(layer);
+        if (fields && layer.getFields().length < fields.length) {
+            this.plugin.setWFSProperties(layer, fields);
+            return;
         }
+        const properties = getPropsArray(propsList, layer.getFields());
+        layer.setActiveFeatures(properties);
         if (layer.getActiveFeatures() && layer.getActiveFeatures().length > 0) {
             this.sendWFSStatusChangedEvent(layer.getId(), LOADING_STATUS_VALUE.COMPLETE);
         }
 
-        this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), fields);
+        this.plugin.notify('WFSPropertiesEvent', layer, layer.getLocales(), layer.getFields());
     }
     _getFeaturePropsInExtent (source, extent) {
         if (typeof source.getFeaturePropsInExtent === 'function') {
