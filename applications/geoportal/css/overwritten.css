@@ -1,0 +1,19 @@
+table td {
+  text-align: left;
+  vertical-align: top; }
+
+table {
+  border-top-width: 0px; }
+
+  #toolbar {
+    margin: 30px 0px 30px 0px;
+  }
+  #logobar {
+    height: 100px;
+    overflow: hidden;
+    background-image: url('../oskari_rgb_neg_72.png');
+    background-repeat: no-repeat;
+    background-origin: content-box;
+    background-position: 0px 8px;
+    background-size: 100%;
+}
