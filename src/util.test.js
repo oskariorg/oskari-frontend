@@ -19,29 +19,78 @@ const jQuery = require('jquery');
 global.MobileDetect = MobileDetect;
 global.jQuery = jQuery;
 
-describe('throttle function', () => {
+describe('throttle function executes given function ', () => {
 
-    test('executes function call only once within given wait parameter interval', () => {
+    test('once immediatelly and once after given wait interval when {leading: false} is not provided', async () => {
 
-        expect.assertions(1);
+        expect.assertions(2);
 
-        const functionCallCount = 10;
-        const wait = 1000;
+        const functionCallCount = 5;
+        const wait = 500;
         const mockFunction = jest.fn();
 
         const throttledFunction = OskariMock.util.throttle(mockFunction, wait);
 
         for (let i = 0; i < functionCallCount; i++) {
             throttledFunction();
+            if (i === 0) {
+                expect(mockFunction.mock.calls.length).toEqual(1);
+            }
         };
+        await sleep(wait);
+        expect(mockFunction.mock.calls.length).toEqual(2);
+    });
+
+    test('zero times immediatelly and once after given wait interval when {leading: false} is provided', async () => {
+
+        expect.assertions(2);
+
+        jest.setTimeout(7000);
+
+        const functionCallCount = 5;
+        const wait = 500;
+        const mockFunction = jest.fn();
+
+        const throttledFunction = OskariMock.util.throttle(mockFunction, wait, { leading: false });
+
+        for (let i = 0; i < functionCallCount; i++) {
+            throttledFunction();
+            if (i === 0) {
+                expect(mockFunction.mock.calls.length).toEqual(0);
+            }
+        };
+        /* Sleep enough to verify that only one function call within given wait time is set to be executed in future
+        *  (multiple throttle function calls received as burst within given wait- parameter do not spread all given function calls to be executed in future with interval of wait- parameter)
+        */
+        await sleep(wait * functionCallCount);
         expect(mockFunction.mock.calls.length).toEqual(1);
     });
 
-    test('executes all function calls when called with interval >= throttle wait parameter', async () => {
+    test('once immediatelly and zero time after given wait interval when {trailing: false} is provided', async () => {
 
-        expect.assertions(1);
+        expect.assertions(2);
+
+        const functionCallCount = 2;
+        const wait = 500;
+        const mockFunction = jest.fn();
+
+        const throttledFunction = OskariMock.util.throttle(mockFunction, wait, { trailing: false });
+
+        for (let i = 0; i < functionCallCount; i++) {
+            throttledFunction();
+            if (i === 0) {
+                expect(mockFunction.mock.calls.length).toEqual(1);
+            }
+        };
+        await sleep(wait);
+        expect(mockFunction.mock.calls.length).toEqual(1);
+    });
+
+    test('immediatelly without throttling when called with interval >= throttle wait parameter', async () => {
 
         const functionCallCount = 5;
+        expect.assertions(functionCallCount);
+
         const wait = 200;
         const mockFunction = jest.fn();
 
@@ -50,51 +99,13 @@ describe('throttle function', () => {
         for (let i = 0; i < functionCallCount; i++) {
             throttledFunction();
             await sleep(wait);
+            expect(mockFunction.mock.calls.length).toEqual(i + 1);
         };
-        expect(mockFunction.mock.calls.length).toEqual(functionCallCount);
-    });
-    
-    test('executes function after wait time when {leading: false}', async () => {
-
-        expect.assertions(3);
-
-        const wait = 200;
-        const mockFunctionResponse = 'executed';
-        const mockFunction = jest.fn().mockImplementation(() => mockFunctionResponse);
-        const throttledFunction = OskariMock.util.throttle(mockFunction, wait ,{leading: false});
-
-        const firstExecutionResult = throttledFunction();
-        await sleep(wait);
-        const secondExecutionResult = throttledFunction();
-        expect(firstExecutionResult).toEqual(undefined);
-        expect(mockFunction.mock.calls.length).toEqual(1);
-        expect(secondExecutionResult).toEqual(mockFunctionResponse);
     });
 
     function sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
-
-
-
-    /* test('with leading true waits given time before calling function again', () => {
- 
-         expect.assertions(1);
- 
-         const wait = 10000;
- 
-         const throttledFunction = OskariMock.util.throttle(() => {
-             return 1;
-         }, wait, { leading: true });
- 
-         throttledFunction();
-         let start = Date.now();
-         while (undefined === throttledFunction()) { };
-         let end = Date.now();
-         expect(end - start).toBeGreaterThanOrEqual(wait);
-     });*/
-
-
 });
 
 describe('isNumber function', () => {
