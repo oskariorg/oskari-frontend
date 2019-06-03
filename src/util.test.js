@@ -14,9 +14,7 @@ const OskariMock = {
 
 global.Oskari = OskariMock;
 const util = require('./util');
-const MobileDetect = require('mobile-detect');
 const jQuery = require('jquery');
-global.MobileDetect = MobileDetect;
 global.jQuery = jQuery;
 
 describe('throttle function executes given function ', () => {
