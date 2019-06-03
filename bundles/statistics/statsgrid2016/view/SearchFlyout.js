@@ -329,7 +329,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                     successfullSearches,
                     indicatorsHavingData
                 ));
-                this._showSearchErrorMessages(errors, multiselectStatusMap);
+                this._showSearchErrorMessages(successfullSearches, errors, multiselectStatusMap);
                 this._addIndicators(successfullSearches);
                 this.searchPending = false;
                 this.updateSearchButtonEnabled();
@@ -424,7 +424,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
     },
 
-    _showSearchErrorMessages: function (errors, multiselectStatusMap) {
+    _showSearchErrorMessages: function (successfullSearches, errors, multiselectStatusMap) {
         if (errors.size + multiselectStatusMap.size === 0) {
             return;
         }
@@ -440,7 +440,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (indicatorMessages.length > 0) {
             const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             const okBtn = dialog.createCloseButton('OK');
-            const title = this.loc('errors.noDataForIndicators', { indicators: indicatorMessages.length });
+            let title;
+            if (successfullSearches.length > 0) {
+                title = this.loc('errors.onlyPartialDataForIndicators', { indicators: indicatorMessages.length });
+            } else {
+                title = this.loc('errors.noDataForIndicators', { indicators: indicatorMessages.length });
+            }
             dialog.show(title, indicatorMessages.join('<br>'), [okBtn]);
         }
     },
