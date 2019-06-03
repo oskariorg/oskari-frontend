@@ -1,4 +1,4 @@
-
+const MobileDetect = require('mobile-detect');
 /*
 * @class Oskari.util
 * Util class instance for static methods what may be used to for checks values.
@@ -163,7 +163,7 @@ Oskari.util = (function () {
             return null;
         }
         if (typeof value === 'object') {
-            for (i = 0; i < value.length; i++) {
+            for (let i = 0; i < value.length; i++) {
                 val = value[i] + '';
                 val = val.split('.');
                 if (val.length === 2 && maxDecimals < val[1].length) {
@@ -593,7 +593,7 @@ Oskari.util = (function () {
     util.coordinateIsDegrees = function (point) {
         var matches1 = coordinateDMSDecode(point[0]);
         var matches2 = coordinateDMSDecode(point[1]);
-        return (matches1 && matches2);
+        return (matches1 != null && matches1.length > 0 && matches2 != null && matches2.length > 0);
     };
 
     /**
