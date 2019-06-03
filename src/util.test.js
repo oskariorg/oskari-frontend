@@ -21,20 +21,17 @@ describe('throttle function executes given function ', () => {
 
     test('once immediatelly and once after given wait interval when {leading: false} is not provided', async () => {
 
-        expect.assertions(2);
+        expect.assertions(3);
 
-        const functionCallCount = 5;
         const wait = 500;
         const mockFunction = jest.fn();
 
         const throttledFunction = OskariMock.util.throttle(mockFunction, wait);
 
-        for (let i = 0; i < functionCallCount; i++) {
-            throttledFunction();
-            if (i === 0) {
-                expect(mockFunction.mock.calls.length).toEqual(1);
-            }
-        };
+        throttledFunction();
+        expect(mockFunction.mock.calls.length).toEqual(1);
+        throttledFunction();
+        expect(mockFunction.mock.calls.length).toEqual(1);
         await sleep(wait);
         expect(mockFunction.mock.calls.length).toEqual(2);
     });
