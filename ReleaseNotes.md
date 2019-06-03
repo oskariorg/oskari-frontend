@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.52.1
+
+Fixed an issue where markers added to map were always colored black. Now they can be made as colorful as before.
+
 ## 1.52.0
 
 For a full list of changes see:
