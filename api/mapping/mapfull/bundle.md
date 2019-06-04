@@ -74,21 +74,34 @@ ProjectionDefs will replace the default projections "EPSG:3067" and "EPSG:4326".
 
 ```javascript
 {
-  "selectedLayers":[
+  "selectedLayers": [
     {
-      "id":<id of a preselected layer>,
-      "hidden" : <boolean (optional)>,
+      "id": "<id of a preselected layer>",
+      "hidden" : "<boolean (optional)>",
       "style" : "<style name (optional)>",
-      "opacity" : <layer opacity (optional)>
+      "opacity" : "<layer opacity (optional)>"
     }
   ],
-  "zoom": <zoomlevel 0-12>,
+  "zoom": "<zoomlevel 0-12>",
   "east": "<latitude>",
-  "north": "<longitude>"
+  "north": "<longitude>",
+  "camera": {
+    "orientation": {
+      "heading": 0,
+      "roll": 0,
+      "pitch": -65
+    },
+    "location": {
+      "altitude": 1500000,
+      "x": 2762500,
+      "y": 7835000
+    }
+  }
 }
 ```
 
 * selectedLayers is an array specifying which layers should be added to map on startup. It can have only id property, but other listed properties are supported as well.
+* camera setting is available only in mapmodules with 3D support
 
 ## Requests the bundle handles
 
