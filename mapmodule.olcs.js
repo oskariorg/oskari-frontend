@@ -1,13 +1,12 @@
-import {defaults as olInteractionDefaults} from 'ol/interaction';
+import { defaults as olInteractionDefaults } from 'ol/interaction';
 import olView from 'ol/View';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
-import {defaults as olControlDefaults} from 'ol/control';
+import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
-import {MapModule as MapModuleOl} from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
+import { MapModule as MapModuleOl } from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
 import 'olcs/olcs.css';
 
-const TERRAIN_SERVICE_URL = 'https://beta-karttakuva.maanmittauslaitos.fi/hmap/';
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
 
 class MapModuleOlCesium extends MapModuleOl {
@@ -89,13 +88,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         // Fix dark imagery
         scene.highDynamicRange = false;
-
-        var terrainProvider = new Cesium.CesiumTerrainProvider({
-            url: TERRAIN_SERVICE_URL
-        });
-        terrainProvider.readyPromise.then(() => {
-            scene.terrainProvider = terrainProvider;
-        });
+        this._initTerrainProvider();
 
         var updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
@@ -118,6 +111,39 @@ class MapModuleOlCesium extends MapModuleOl {
                 positiveZ: `${skyboxIconsDir}/tycho2t3_80_pz.jpg`,
                 negativeZ: `${skyboxIconsDir}/tycho2t3_80_mz.jpg`
             }
+        });
+    }
+
+    /**
+     * @method _initTerrainProvider Initializes the terrain defined in module options.
+     */
+    _initTerrainProvider () {
+        if (!this.getCesiumScene() || !this._options.terrain) {
+            return;
+        }
+        const { providerUrl, ionAssetId, ionAccessToken } = this._options.terrain;
+        let terrainProvider = null;
+        if (providerUrl) {
+            terrainProvider = new Cesium.CesiumTerrainProvider({ url: providerUrl });
+        }
+        if (ionAccessToken) {
+            Cesium.Ion.defaultAccessToken = ionAccessToken;
+
+            if (ionAssetId) {
+                terrainProvider = new Cesium.CesiumTerrainProvider({
+                    url: Cesium.IonResource.fromAssetId(ionAssetId)
+                });
+            } else {
+                terrainProvider = Cesium.createWorldTerrain({
+                    requestVertexNormals: true
+                });
+            }
+        }
+        if (!terrainProvider) {
+            return;
+        }
+        terrainProvider.readyPromise.then(() => {
+            this.getCesiumScene().terrainProvider = terrainProvider;
         });
     }
 
