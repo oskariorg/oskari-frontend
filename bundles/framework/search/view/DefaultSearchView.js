@@ -39,6 +39,7 @@ Oskari.clazz.define(
                 prop: 'type'
             }
         ];
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         __templates: {
             main: _.template(
@@ -76,11 +77,13 @@ Oskari.clazz.define(
             var searchContainer = this.getContainer();
             var field = this.getField();
             var button = this.getButton();
+            me.progressSpinner.insertTo(searchContainer);
 
             var doSearch = function () {
                 field.setEnabled(false);
                 button.setEnabled(false);
                 me.__doSearch();
+                me.progressSpinner.start();
             };
 
             var doAutocompleteSearch = function (e) {
@@ -201,9 +204,13 @@ Oskari.clazz.define(
             }
         },
         __doAutocompleteSearch: function () {
+            var me = this;
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
+            me.progressSpinner.start();
+
             this.searchservice.doAutocompleteSearch(searchKey, function (result) {
+                me.progressSpinner.stop();
                 var autocompleteValues = [];
                 for (var i = 0; i < result.methods.length; i++) {
                     autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });
@@ -216,6 +223,7 @@ Oskari.clazz.define(
             var me = this;
             var field = this.getField();
             var button = this.getButton();
+            me.progressSpinner.stop();
             if (isSuccess) {
                 field.setEnabled(true);
                 button.setEnabled(true);
