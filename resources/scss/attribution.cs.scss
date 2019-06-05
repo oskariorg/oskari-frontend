@@ -10,6 +10,6 @@ div.cesium-credit-container {
     max-width: 350px;
 
     .cesium-credit-logoContainer {
-        display: none !important;
+        visibility: hidden;
     }
 }

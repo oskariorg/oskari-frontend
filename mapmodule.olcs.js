@@ -128,6 +128,7 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         if (ionAccessToken) {
             Cesium.Ion.defaultAccessToken = ionAccessToken;
+            jQuery('.cesium-credit-container .cesium-credit-logoContainer').css('visibility', 'visible');
 
             if (ionAssetId) {
                 terrainProvider = new Cesium.CesiumTerrainProvider({
