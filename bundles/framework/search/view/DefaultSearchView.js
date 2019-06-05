@@ -204,6 +204,7 @@ Oskari.clazz.define(
             }
         },
         __doAutocompleteSearch: function () {
+            var me = this;
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
             me.progressSpinner.start();
