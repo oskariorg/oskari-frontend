@@ -66,21 +66,26 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     getNewSearchElement: function () {
         var me = this;
         var container = jQuery('<div></div>');
-
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
         container.append(selectionComponent.getPanelContent());
+
+        var buttonContainer = jQuery('<div id="statistics-search-flyout-button-container"></div>');
+        container.append(buttonContainer);
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
         btn.setPrimary(true);
         btn.setTitle(this.loc('panels.newSearch.addButtonTitle'));
         btn.setEnabled(false);
-        btn.insertTo(container);
+        btn.insertTo(buttonContainer);
 
         btn.setHandler(function (event) {
             event.stopPropagation();
-            me.setSpinnerVerticalPosition(event, selectionComponent.spinner);
-            me.setSpinner(selectionComponent.spinner);
+            const progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+            progressSpinner.insertTo(jQuery('#statistics-search-flyout-button-container'));
+            progressSpinner.opts.top = -100;
+            me.setSpinner(progressSpinner);
+            me.getSpinner().start();
             me.search(selectionComponent.getValues());
         });
         this.searchBtn = btn;
@@ -88,7 +93,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         clearBtn.addClass('margintopLarge');
         clearBtn.setTitle(this.loc('panels.newSearch.clearButtonTitle'));
-        clearBtn.insertTo(container);
+        clearBtn.insertTo(buttonContainer);
 
         clearBtn.setHandler(function (event) {
             event.stopPropagation();
@@ -515,17 +520,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
         if (this.getSpinner()) {
             this.getSpinner().stop();
-            this.resetSpinnerVerticalPosition();
         }
-    },
-    setSpinnerVerticalPosition (event, spinner) {
-        spinner.opts.top = event.pageY - 100;
-        spinner.opts.position = 'absolute';
-    },
-    resetSpinnerVerticalPosition () {
-        const spinner = this.getSpinner();
-        spinner.opts.top = 'auto';
-        delete spinner.opts.position;
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']
