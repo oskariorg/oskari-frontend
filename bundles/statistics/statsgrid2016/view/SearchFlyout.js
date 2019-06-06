@@ -79,6 +79,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         btn.setHandler(function (event) {
             event.stopPropagation();
+            me.setSpinnerVerticalPosition(event, selectionComponent.spinner);
             me.setSpinner(selectionComponent.spinner);
             me.search(selectionComponent.getValues());
         });
@@ -514,7 +515,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
         if (this.getSpinner()) {
             this.getSpinner().stop();
+            this.resetSpinnerVerticalPosition();
         }
+    },
+    setSpinnerVerticalPosition (event, spinner) {
+        spinner.opts.top = event.pageY - 100;
+        spinner.opts.position = 'absolute';
+    },
+    resetSpinnerVerticalPosition () {
+        const spinner = this.getSpinner();
+        spinner.opts.top = 'auto';
+        delete spinner.opts.position;
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']
