@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                 );
                 mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
             }
-            if (!Cesium) {
+            if (!this.getMapModule().has3DSupport()) {
                 return;
             }
             this._initTilesetClickHandler();
@@ -146,8 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
          * @param {Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer} layer
          */
         addMapLayerToMap: function (layer) {
-            if (!Cesium) {
-                // 3D layers are not supported
+            if (!this.getMapModule().has3DSupport()) {
                 return;
             }
             // Common settings for the dynamicScreenSpaceError optimization
