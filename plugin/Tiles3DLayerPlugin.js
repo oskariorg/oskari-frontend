@@ -2,10 +2,10 @@ import Tiles3DModelBuilder from './Tiles3DModelBuilder';
 import { applyCustomMaterialSettings } from '../util/overrideCesiumMaterial'; // for side effects only
 
 /**
- * @class Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin
+ * @class Oskari.mapframework.plugin.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
  */
-Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
+Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
 
     /**
      * @method create called automatically on construction
@@ -15,14 +15,14 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
     }, {
         __name: 'Tiles3DLayerPlugin',
-        _clazz: 'Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin',
+        _clazz: 'Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
         layertype: 'tiles3d',
 
         /**
          * Checks if the layer can be handled by this plugin
          * @method  isLayerSupported
          * @param  {Oskari.mapframework.domain.AbstractLayer}  layer
-         * @return {Boolean}       true if this plugin handles the type of layers
+         * @return {Boolean} true if this plugin handles the type of layers
          */
         isLayerSupported: function (layer) {
             if (!layer) {
@@ -52,9 +52,12 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
             if (mapLayerService) {
                 mapLayerService.registerLayerModel(
                     this.layertype + 'layer',
-                    'Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer'
+                    'Oskari.mapframework.mapmodule.Tiles3DLayer'
                 );
                 mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
+            }
+            if (!Cesium) {
+                return;
             }
             this._initTilesetClickHandler();
             applyCustomMaterialSettings();
@@ -110,7 +113,7 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
                 if (tableContent.length === 0) {
                     return;
                 }
-                let content = [{html: `<table>${tableContent}</table>`}];
+                let content = [{ html: `<table>${tableContent}</table>` }];
                 const location = me.getMapModule().getMouseLocation(movement.position);
                 // Request info box
                 const infoRequestBuilder = Oskari.requestBuilder('InfoBox.ShowInfoBoxRequest');
@@ -143,6 +146,10 @@ Oskari.clazz.define('Oskari.map3dtiles.bundle.tiles3d.plugin.Tiles3DLayerPlugin'
          * @param {Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer} layer
          */
         addMapLayerToMap: function (layer) {
+            if (!Cesium) {
+                // 3D layers are not supported
+                return;
+            }
             // Common settings for the dynamicScreenSpaceError optimization
             // copied from Cesium.Cesium3DTileset api doc.
             var tileset = new Cesium.Cesium3DTileset({
