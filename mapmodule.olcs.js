@@ -101,7 +101,7 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     _createSkyBox () {
-        const skyboxIconsDir = 'Oskari/libraries/ol-cesium/Cesium/Assets/Textures/SkyBox/';
+        const skyboxIconsDir = 'Oskari/libraries/Cesium/Assets/Textures/SkyBox/';
         return new Cesium.SkyBox({
             sources: {
                 positiveX: `${skyboxIconsDir}/tycho2t3_80_px.jpg`,
