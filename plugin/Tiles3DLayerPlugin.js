@@ -2,7 +2,7 @@ import Tiles3DModelBuilder from './Tiles3DModelBuilder';
 import { applyCustomMaterialSettings } from '../util/overrideCesiumMaterial'; // for side effects only
 
 /**
- * @class Oskari.mapframework.plugin.Tiles3DLayerPlugin
+ * @class Oskari.mapframework.mapmodule.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
  */
 Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
