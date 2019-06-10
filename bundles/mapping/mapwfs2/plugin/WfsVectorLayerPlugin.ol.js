@@ -131,6 +131,14 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     isRenderModeSupported (mode) {
         return mode === RENDER_MODE_MVT || mode === RENDER_MODE_VECTOR;
     }
+    getPropertiesForIntersectingGeom (geometry, layer) {
+        const handler = this._getLayerHandler(layer);
+        if (!handler) {
+            return;
+        }
+        const olLayer = this.getOLMapLayers(layer)[0];
+        return handler.getPropertiesForIntersectingGeom(geometry, olLayer);
+    }
     /**
      * @method addMapLayerToMap Adds wfs layer to map
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer

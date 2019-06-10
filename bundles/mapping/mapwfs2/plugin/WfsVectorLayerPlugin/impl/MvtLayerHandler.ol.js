@@ -35,6 +35,12 @@ export class MvtLayerHandler extends AbstractLayerHandler {
             return styleFunction(feature, resolution, isSelected);
         };
     }
+    getPropertiesForIntersectingGeom (geometry, layer) {
+        if (!geometry || !layer) {
+            return;
+        }
+        return layer.getSource().getPropsIntersectingGeom(geometry);
+    }
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         const sourceOpts = {

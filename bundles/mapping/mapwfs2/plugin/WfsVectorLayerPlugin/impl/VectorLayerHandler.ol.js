@@ -9,8 +9,24 @@ import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandl
 import { applyOpacity } from '../util/style';
 import { WFS_ID_KEY } from '../util/props';
 import { RequestCounter } from './RequestCounter';
+
 import olLayerTile from 'ol/layer/Tile';
 import olSourceTileDebug from 'ol/source/TileDebug';
+import olPoint from 'ol/geom/Point';
+import olLineString from 'ol/geom/LineString';
+import olLinearRing from 'ol/geom/LinearRing';
+import olPolygon from 'ol/geom/Polygon';
+import olMultiPoint from 'ol/geom/MultiPoint';
+import olMultiLineString from 'ol/geom/MultiLineString';
+import olMultiPolygon from 'ol/geom/MultiPolygon';
+import olGeometryCollection from 'ol/geom/GeometryCollection';
+
+import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
+import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
+import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
+const reader = new GeoJSONReader();
+const olParser = new OL3Parser();
+olParser.inject(olPoint, olLineString, olLinearRing, olPolygon, olMultiPoint, olMultiLineString, olMultiPolygon, olGeometryCollection);
 
 const MAP_MOVE_THROTTLE_MS = 2000;
 const OPACITY_THROTTLE_MS = 1500;
@@ -43,6 +59,22 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             }
             return applyOpacity(style, layer.getOpacity());
         };
+    }
+    getPropertiesForIntersectingGeom (geometry, layer) {
+        if (!geometry || !layer) {
+            return;
+        }
+        const featuresById = new Map();
+        const geomFilter = reader.read(geometry);
+        const envelope = geomFilter.getEnvelopeInternal();
+        const extentFilter = [envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()];
+        layer.getSource().forEachFeatureInExtent(extentFilter, ftr => {
+            const geom = olParser.read(ftr.getGeometry());
+            if (RelateOp.relate(geomFilter, geom).isIntersects()) {
+                featuresById.set(ftr.get(WFS_ID_KEY), ftr.getProperties());
+            }
+        });
+        return Array.from(featuresById.values());
     }
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
