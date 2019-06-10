@@ -754,11 +754,11 @@ Oskari.clazz.define(
         },
 
         /**
-         * Gets features at given position on canvas
          * @method getFeaturesAtPixel
+         * To get feature properties at given mouse location on screen / dom element.
          * @param  {Float} x
          * @param  {Float} y
-         * @return {Array}
+         * @return {Array} list containing objects with props `properties` and  `layerId`
          */
         getFeaturesAtPixel (x, y) {
             if (typeof this._getFeaturesAtPixelImpl === 'function') {

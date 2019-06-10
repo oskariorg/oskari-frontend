@@ -131,13 +131,21 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     isRenderModeSupported (mode) {
         return mode === RENDER_MODE_MVT || mode === RENDER_MODE_VECTOR;
     }
-    getPropertiesForIntersectingGeom (geometry, layer) {
+    /**
+     * @method getPropertiesForIntersectingGeom
+     * To get feature properties as a list. Returns features that intersect with given geometry.
+     *
+     * @param {String | Object} geoJsonGeom GeoJson format geometry object. Note: NOT feature, but feature's geometry
+     * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
+     * @return {Array} features' properties as a list
+     */
+    getPropertiesForIntersectingGeom (geoJsonGeom, layer) {
         const handler = this._getLayerHandler(layer);
         if (!handler) {
             return;
         }
         const olLayer = this.getOLMapLayers(layer)[0];
-        return handler.getPropertiesForIntersectingGeom(geometry, olLayer);
+        return handler.getPropertiesForIntersectingGeom(geoJsonGeom, olLayer);
     }
     /**
      * @method addMapLayerToMap Adds wfs layer to map

@@ -181,11 +181,18 @@ export class MapModule extends AbstractMapModule {
         return this._defaultMarker.size;
     }
 
+    /**
+     * @method _getFeaturesAtPixelImpl
+     * To get feature properties at given mouse location on screen / div element.
+     * @param  {Float} x
+     * @param  {Float} y
+     * @return {Array} list containing objects with props `properties` and  `layerId`
+     */
     _getFeaturesAtPixelImpl (x, y) {
         const hits = [];
         this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
             const hit = {
-                featureProperties: feature.getProperties(),
+                properties: feature.getProperties(),
                 layerId: layer.get(LAYER_ID)
             };
             hits.push(hit);
