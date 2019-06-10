@@ -66,20 +66,27 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     getNewSearchElement: function () {
         var me = this;
         var container = jQuery('<div></div>');
-
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
         container.append(selectionComponent.getPanelContent());
+
+        var buttonContainer = jQuery('<div></div>');
+        container.append(buttonContainer);
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
         btn.setPrimary(true);
         btn.setTitle(this.loc('panels.newSearch.addButtonTitle'));
         btn.setEnabled(false);
-        btn.insertTo(container);
+        btn.insertTo(buttonContainer);
+
+        const progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        progressSpinner.insertTo(buttonContainer);
+        progressSpinner.opts.top = -100;
 
         btn.setHandler(function (event) {
             event.stopPropagation();
-            me.setSpinner(selectionComponent.spinner);
+            me.setSpinner(progressSpinner);
+            me.getSpinner().start();
             me.search(selectionComponent.getValues());
         });
         this.searchBtn = btn;
@@ -87,7 +94,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         clearBtn.addClass('margintopLarge');
         clearBtn.setTitle(this.loc('panels.newSearch.clearButtonTitle'));
-        clearBtn.insertTo(container);
+        clearBtn.insertTo(buttonContainer);
 
         clearBtn.setHandler(function (event) {
             event.stopPropagation();
