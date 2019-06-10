@@ -69,7 +69,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
         container.append(selectionComponent.getPanelContent());
 
-        var buttonContainer = jQuery('<div id="statistics-search-flyout-button-container"></div>');
+        var buttonContainer = jQuery('<div></div>');
         container.append(buttonContainer);
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
@@ -79,11 +79,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         btn.setEnabled(false);
         btn.insertTo(buttonContainer);
 
+        const progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        progressSpinner.insertTo(buttonContainer);
+        progressSpinner.opts.top = -100;
+
         btn.setHandler(function (event) {
             event.stopPropagation();
-            const progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
-            progressSpinner.insertTo(jQuery('#statistics-search-flyout-button-container'));
-            progressSpinner.opts.top = -100;
             me.setSpinner(progressSpinner);
             me.getSpinner().start();
             me.search(selectionComponent.getValues());
