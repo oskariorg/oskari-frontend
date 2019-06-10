@@ -21,22 +21,20 @@ export class ReqEventHandler {
                 if (!me.isClickResponsive) {
                     return;
                 }
-                const hits = [];
-                plugin.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
-                    hits.push({ feature, layer });
-                }, {
-                    layerFilter: layer => plugin.findLayerByOLLayer(layer)
-                });
-
+                const hits = plugin.getMapModule().getFeaturesAtPixel(event.getMouseX(), event.getMouseY());
                 const keepPrevious = event.getParams().ctrlKeyDown;
-                hits.forEach((ftrAndLyr) => {
-                    const layer = plugin.findLayerByOLLayer(ftrAndLyr.layer);
+                hits.forEach(({ featureProperties, layerId }) => {
+                    const layer = plugin.findLayerById(layerId);
+                    if (!layer) {
+                        return;
+                    }
+                    const wfsFeatureId = featureProperties[WFS_ID_KEY];
                     if (keepPrevious) {
-                        modifySelection(layer, [ftrAndLyr.feature.get(WFS_ID_KEY)], keepPrevious);
+                        modifySelection(layer, [wfsFeatureId], keepPrevious);
                     } else {
                         plugin.notify('GetInfoResultEvent', {
                             layerId: layer.getId(),
-                            features: getPropsArray([ftrAndLyr.feature.getProperties()], layer.getFields()),
+                            features: getPropsArray([featureProperties], layer.getFields()),
                             lonlat: event.getLonLat()
                         });
                     }

@@ -752,6 +752,21 @@ Oskari.clazz.define(
             }
             return this.getResolutionArray()[resIndex];
         },
+
+        /**
+         * Gets features at given position on canvas
+         * @method getFeaturesAtPixel
+         * @param  {Float} x
+         * @param  {Float} y
+         * @return {Array}
+         */
+        getFeaturesAtPixel (x, y) {
+            if (typeof this._getFeaturesAtPixelImpl === 'function') {
+                return this._getFeaturesAtPixelImpl(x, y);
+            }
+            throw new Error('Not implemented _getFeaturesAtPixelImpl function.');
+        },
+
         /**
          * @method calculateLayerScales
          * Calculate a subset of maps scales array that matches the given boundaries.

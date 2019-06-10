@@ -16,6 +16,7 @@ import olFeature from 'ol/Feature';
 
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
+import { LAYER_ID } from '../mapmodule/domain/constants';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
@@ -178,6 +179,18 @@ export class MapModule extends AbstractMapModule {
 
     getDefaultMarkerSize () {
         return this._defaultMarker.size;
+    }
+
+    _getFeaturesAtPixelImpl (x, y) {
+        const hits = [];
+        this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
+            const hit = {
+                featureProperties: feature.getProperties(),
+                layerId: layer.get(LAYER_ID)
+            };
+            hits.push(hit);
+        });
+        return hits;
     }
 
     /* OL3 specific - check if this can be done in a common way
