@@ -192,7 +192,7 @@ export class MapModule extends AbstractMapModule {
         const hits = [];
         this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
             const hit = {
-                properties: feature.getProperties(),
+                featureProperties: feature.getProperties(),
                 layerId: layer.get(LAYER_ID)
             };
             hits.push(hit);
