@@ -21,22 +21,20 @@ export class ReqEventHandler {
                 if (!me.isClickResponsive) {
                     return;
                 }
-                const hits = [];
-                plugin.getMap().forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
-                    hits.push({ feature, layer });
-                }, {
-                    layerFilter: layer => plugin.findLayerByOLLayer(layer)
-                });
-
+                const hits = plugin.getMapModule().getFeaturesAtPixel(event.getMouseX(), event.getMouseY());
                 const keepPrevious = event.getParams().ctrlKeyDown;
-                hits.forEach((ftrAndLyr) => {
-                    const layer = plugin.findLayerByOLLayer(ftrAndLyr.layer);
+                hits.forEach(({ featureProperties, layerId }) => {
+                    const layer = getSelectedLayer(layerId);
+                    if (!layer || !plugin.isLayerSupported(layer)) {
+                        return;
+                    }
+                    const wfsFeatureId = featureProperties[WFS_ID_KEY];
                     if (keepPrevious) {
-                        modifySelection(layer, [ftrAndLyr.feature.get(WFS_ID_KEY)], keepPrevious);
+                        modifySelection(layer, [wfsFeatureId], keepPrevious);
                     } else {
                         plugin.notify('GetInfoResultEvent', {
                             layerId: layer.getId(),
-                            features: getPropsArray([ftrAndLyr.feature.getProperties()], layer.getFields()),
+                            features: getPropsArray([featureProperties], layer.getFields()),
                             lonlat: event.getLonLat()
                         });
                     }
@@ -58,8 +56,7 @@ export class ReqEventHandler {
                 const targetLayers = plugin.WFSLayerService.isSelectFromAllLayers() ? plugin.getAllLayerIds() : [plugin.WFSLayerService.getTopWFSLayer()];
                 targetLayers.forEach(layerId => {
                     const layer = getSelectedLayer(layerId);
-                    const OLLayer = plugin.getOLMapLayers(layer)[0];
-                    const propsList = OLLayer.getSource().getPropsIntersectingGeom(filterFeature.geometry);
+                    const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
                     modifySelection(layer, propsList.map(props => props[WFS_ID_KEY]), keepPrevious);
                 });
             },
