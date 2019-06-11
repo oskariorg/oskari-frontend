@@ -90,7 +90,6 @@ class MapModuleOlCesium extends MapModuleOl {
         // Fix dark imagery
         scene.highDynamicRange = false;
         this._initTerrainProvider();
-        me._setup3DMapEvents();
 
         var updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
@@ -158,28 +157,6 @@ class MapModuleOlCesium extends MapModuleOl {
         this._mapReadySubscribers.forEach(function (fireOperation) {
             fireOperation.operation.apply(me, fireOperation.arguments);
         });
-    }
-
-    /**
-     * Add Cesium event handlers
-     * @method @private _setup3DMapEvents
-     */
-    _setup3DMapEvents () {
-        const scene = this.getCesiumScene();
-        const handler = new Cesium.ScreenSpaceEventHandler(scene.canvas);
-        const clickActionFactory = ctrlPressed => {
-            return click => {
-                if (this.getDrawingMode()) {
-                    return;
-                }
-                const { x, y } = click.position;
-                const lonlat = this.getMouseLocation(click.position);
-                const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, x, y, ctrlPressed);
-                this._sandbox.notifyAll(mapClickedEvent);
-            };
-        };
-        handler.setInputAction(clickActionFactory(true), Cesium.ScreenSpaceEventType.LEFT_CLICK, Cesium.KeyboardEventModifier.CTRL);
-        handler.setInputAction(clickActionFactory(false), Cesium.ScreenSpaceEventType.LEFT_CLICK);
     }
 
     /**
