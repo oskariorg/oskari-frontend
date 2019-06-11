@@ -227,17 +227,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         return this.getSandbox().getMap().getSelectedLayer(layerId);
     }
     /**
-     * @method findLayerById
-     * @param layerId Oskari layer id
-     * @return {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer}
-     */
-    findLayerById (layerId) {
-        if (!this._layerImplRefs[layerId]) {
-            return;
-        }
-        return this.getSandbox().getMap().getSelectedLayer(layerId);
-    }
-    /**
      * @method getAllLayerIds
      * @return {String[]} All layer ids handled by plugin and selected on map
      */

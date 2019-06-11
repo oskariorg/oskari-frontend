@@ -1,17 +1,6 @@
 import { getPropsArray, WFS_ID_KEY, WFS_FTR_ID_KEY } from './util/props';
 import { filterByAttribute, getFilterAlternativesAsArray } from './util/filter';
 
-import { FeatureExposingMVTSource } from './impl/MvtLayerHandler/FeatureExposingMVTSource';
-import LinearRing from 'ol/geom/LinearRing';
-import GeometryCollection from 'ol/geom/GeometryCollection';
-import * as olGeom from 'ol/geom';
-import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
-import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
-import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
-const reader = new GeoJSONReader();
-const olParser = new OL3Parser();
-olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
-
 export class ReqEventHandler {
     constructor (sandbox) {
         this.sandbox = sandbox;
@@ -35,8 +24,8 @@ export class ReqEventHandler {
                 const hits = plugin.getMapModule().getFeaturesAtPixel(event.getMouseX(), event.getMouseY());
                 const keepPrevious = event.getParams().ctrlKeyDown;
                 hits.forEach(({ featureProperties, layerId }) => {
-                    const layer = plugin.findLayerById(layerId);
-                    if (!layer) {
+                    const layer = getSelectedLayer(layerId);
+                    if (!layer || !plugin.isLayerSupported(layer)) {
                         return;
                     }
                     const wfsFeatureId = featureProperties[WFS_ID_KEY];
