@@ -286,6 +286,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             }
         },
         /**
+         * @method isSupported
+         * Wfs layer is always supported
+         */
+        isSupported () {
+            return true;
+        },
+        /**
          * @method setWMSLayerId
          * @param {String} id
          * Unique identifier for map layer used to reference the WMS layer,
