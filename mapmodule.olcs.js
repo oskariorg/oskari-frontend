@@ -13,8 +13,8 @@ const TILESET_DEFAULT_COLOR = '#ffd2a6';
 class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
-        this._map3d = null;
-        this._support3d = true;
+        this._map3D = null;
+        this._supports3D = true;
         this._mapReady = false;
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
@@ -64,7 +64,7 @@ class MapModuleOlCesium extends MapModuleOl {
         var time = Cesium.JulianDate.fromIso8601('2017-07-11T12:00:00Z');
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
-        this._map3d = new OLCesium({
+        this._map3D = new OLCesium({
             map: map,
             time: () => time,
             sceneOptions: {
@@ -76,14 +76,14 @@ class MapModuleOlCesium extends MapModuleOl {
                 }
             }
         });
-        this._map3d.container_.appendChild(creditContainer);
+        this._map3D.container_.appendChild(creditContainer);
 
-        var scene = this._map3d.getCesiumScene();
+        var scene = this._map3D.getCesiumScene();
         scene.shadowMap.darkness = 0.7;
         scene.skyBox = this._createSkyBox();
 
         // Performance optimization
-        this._map3d.enableAutoRenderLoop();
+        this._map3D.enableAutoRenderLoop();
         scene.fog.density = 0.0005;
         scene.fog.screenSpaceErrorFactor = 10;
 
@@ -167,11 +167,11 @@ class MapModuleOlCesium extends MapModuleOl {
      * @return {Array} list containing objects with props `properties` and  `layerId`
      */
     _getFeaturesAtPixelImpl (x, y) {
-        if (!this._map3d.getEnabled()) {
+        if (!this._map3D.getEnabled()) {
             return super._getFeaturesAtPixelImpl(x, y);
         }
         const hits = [];
-        const picked = this._map3d.getCesiumScene().pick(new Cesium.Cartesian2(x, y));
+        const picked = this._map3D.getCesiumScene().pick(new Cesium.Cartesian2(x, y));
         if (!picked) {
             return hits;
         }
@@ -207,7 +207,7 @@ class MapModuleOlCesium extends MapModuleOl {
             return;
         }
         if (layerImpl instanceof Cesium.Cesium3DTileset) {
-            this._map3d.getCesiumScene().primitives.add(layerImpl);
+            this._map3D.getCesiumScene().primitives.add(layerImpl);
         } else {
             this.getMap().addLayer(layerImpl);
             // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
@@ -260,20 +260,20 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     setDrawingMode (mode) {
         this.isDrawing = !!mode;
-        this.set3dEnabled(!this.isDrawing);
+        this._set3DModeEnabled(!this.isDrawing);
     }
 
     /**
-     * Enable 3d view.
+     * Enable 3D view.
      */
-    set3dEnabled (enable) {
-        if (enable === this._map3d.getEnabled()) {
+    _set3DModeEnabled (enable) {
+        if (enable === this._map3D.getEnabled()) {
             return;
         }
         var map = this.getMap();
         var interactions = null;
         if (enable) {
-            // Remove all ol interactions before switching to 3d view.
+            // Remove all ol interactions before switching to 3D view.
             // Editing interactions after ol map is hidden doesn't work.
             interactions = map.getInteractions();
             if (interactions) {
@@ -295,7 +295,7 @@ class MapModuleOlCesium extends MapModuleOl {
                 map.addInteraction(cur);
             });
         }
-        this._map3d.setEnabled(enable);
+        this._map3D.setEnabled(enable);
     }
 
     /**
@@ -303,14 +303,14 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     getCamera () {
         var view = {};
-        var olcsCam = this._map3d.getCamera();
+        var olcsCam = this._map3D.getCamera();
         var coords = olcsCam.getPosition();
         view.location = {
             x: coords[0],
             y: coords[1],
             altitude: olcsCam.getAltitude()
         };
-        var sceneCam = this._map3d.getCesiumScene().camera;
+        var sceneCam = this._map3D.getCesiumScene().camera;
         view.orientation = {
             heading: Cesium.Math.toDegrees(sceneCam.heading),
             pitch: Cesium.Math.toDegrees(sceneCam.pitch),
@@ -339,10 +339,10 @@ class MapModuleOlCesium extends MapModuleOl {
     * }
     */
     setCamera (options) {
-        this.set3dEnabled(true);
+        this._set3DModeEnabled(true);
         if (this._mapReady) {
             if (options) {
-                var camera = this._map3d.getCesiumScene().camera;
+                var camera = this._map3D.getCesiumScene().camera;
                 var view = {};
                 if (options.location) {
                     var pos = options.location;
@@ -357,7 +357,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     };
                 }
                 camera.setView(view);
-                this._map3d.getCamera().updateView();
+                this._map3D.getCamera().updateView();
                 this.updateDomain();
             }
         } else {
@@ -389,7 +389,7 @@ class MapModuleOlCesium extends MapModuleOl {
                 state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
             }
         }
-        if (this._map3d.getEnabled()) {
+        if (this._map3D.getEnabled()) {
             state.camera = this.getCamera();
         }
         return state;
@@ -404,7 +404,7 @@ class MapModuleOlCesium extends MapModuleOl {
         var params = '';
         var pluginName;
 
-        if (this._map3d.getEnabled()) {
+        if (this._map3D.getEnabled()) {
             var cam = this.getCamera();
             params +=
                 '&cam=' + cam.location.x.toFixed(0) +
@@ -496,7 +496,7 @@ class MapModuleOlCesium extends MapModuleOl {
      * @return {Cesium.Scene} scene
      */
     getCesiumScene () {
-        return this._map3d.getCesiumScene();
+        return this._map3D.getCesiumScene();
     }
 
     /**
