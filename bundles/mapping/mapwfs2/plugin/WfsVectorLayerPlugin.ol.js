@@ -72,7 +72,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     _initImpl () {
         super._initImpl();
         const sandbox = this.getSandbox();
-        this.renderMode = this.renderMode || (this.getMapModule().has3DSupport() ? RENDER_MODE_VECTOR : RENDER_MODE_MVT);
+        this.renderMode = this.renderMode || (this.getMapModule().getSupports3D() ? RENDER_MODE_VECTOR : RENDER_MODE_MVT);
         this.reqEventHandler = new ReqEventHandler(sandbox);
         this.visualizationForm = new VisualizationForm();
         this.WFSLayerService = new WFSLayerService(sandbox);
@@ -274,7 +274,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const lyr = olLayers[0];
         lyr.setStyle(this.getCurrentStyleFunction(layer));
-        if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().has3DSupport()) {
+        if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
             // Trigger features changed to synchronize 3D view
             lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
         }

@@ -106,7 +106,7 @@ Oskari.clazz.define(
         me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
-        me._support3d = false;
+        me._supports3D = false;
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -182,6 +182,7 @@ Oskari.clazz.define(
                     // set srsName to Oskari.mapframework.domain.Map
                     if (me._sandbox) {
                         me._sandbox.getMap().setSrsName(me._projectionCode);
+                        me._sandbox.getMap().setSupports3D(me.getSupports3D());
                     }
                 }
             }
@@ -367,8 +368,8 @@ Oskari.clazz.define(
          */
         panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
-        has3DSupport: function () {
-            return this._support3d;
+        getSupports3D: function () {
+            return this._supports3D;
         },
         /* --------- /Impl specific --------------------------------------> */
 
@@ -405,7 +406,6 @@ Oskari.clazz.define(
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
         _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
         getStyle: Oskari.AbstractFunc('getStyle'),
-        set3dEnabled: Oskari.AbstractFunc('set3dEnabled'),
         getCamera: Oskari.AbstractFunc('getCamera'),
         setCamera: Oskari.AbstractFunc('setCamera'),
         /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */

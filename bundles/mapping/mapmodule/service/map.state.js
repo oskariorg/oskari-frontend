@@ -299,6 +299,24 @@
         getSrsName: function () {
             return this._projectionCode;
         },
+        /**
+         * @method setSupports3D
+         * Map implementation supports 3D layers.
+         *
+         * @param {Boolean} supports3D
+         */
+        setSupports3D: function (supports3D) {
+            this._supports3D = supports3D;
+        },
+        /**
+         * @method setSupports3D
+         * Map implementation supports 3D layers.
+         *
+         * @return {Boolean} map supports 3D layers
+         */
+        getSupports3D: function () {
+            return this._supports3D;
+        },
         /************************************************
         * Common layer functions
         ************************************************** */
