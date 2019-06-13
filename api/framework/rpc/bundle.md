@@ -275,11 +275,56 @@ If configuration is not set these defaults will be used:
 
 ```javascript
 {
-    "allowedFunctions" : ["getAllLayers", "getMapPosition", "getSupportedEvents", "getSupportedFunctions", "getSupportedRequests",
-        "getZoomRange", "getPixelMeasuresInScale", "getMapBbox", "resetState", "getCurrentState", "useState", "getFeatures"],
-    "allowedEvents" : ["AfterMapMoveEvent", "MapClickedEvent", "AfterAddMarkerEvent", "MarkerClickEvent", "RouteResultEvent", "UserLocationEvent", "DrawingEvent"],
-    "allowedRequests" : ["InfoBox.ShowInfoBoxRequest", "MapModulePlugin.AddMarkerRequest", "MapModulePlugin.AddFeaturesToMapRequest", "MapModulePlugin.RemoveFeaturesFromMapRequest", "MapModulePlugin.GetFeatureInfoRequest", "MapModulePlugin.MapLayerVisibilityRequest", "MapModulePlugin.RemoveMarkersRequest", "MapMoveRequest", "ShowProgressSpinnerRequest", "GetRouteRequest", "ChangeMapLayerOpacityRequest", "MyLocationPlugin.GetUserLocationRequest",  "DrawTools.StartDrawingRequest", "DrawTools.StopDrawingRequest", "MapModulePlugin.ZoomToFeaturesRequest",
-    "StartUserLocationTrackingRequest", "StopUserLocationTrackingRequest"]
+    "allowedFunctions" : [
+        "getAllLayers",
+        "getMapPosition",
+        "getSupportedEvents",
+        "getSupportedFunctions",
+        "getSupportedRequests",
+        "getZoomRange",
+        "getPixelMeasuresInScale",
+        "getMapBbox",
+        "resetState",
+        "getCurrentState",
+        "useState",
+        "getFeatures"
+    ],
+    "allowedEvents" : [
+        "AfterMapMoveEvent",
+        "MapClickedEvent",
+        "AfterAddMarkerEvent",
+        "MarkerClickEvent",
+        "RouteResultEvent",
+        "UserLocationEvent",
+        "DrawingEvent"
+    ],
+    "allowedRequests" : [
+        "MapModulePlugin.AddMarkerRequest",
+        "VectorLayerRequest",
+        "MapModulePlugin.AddFeaturesToMapRequest",
+        "MapModulePlugin.RemoveFeaturesFromMapRequest",
+        "MapModulePlugin.GetFeatureInfoRequest",
+        "MapModulePlugin.MapLayerVisibilityRequest",
+        "MapModulePlugin.RemoveMarkersRequest",
+        "MapModulePlugin.MarkerVisibilityRequest",
+        "MapMoveRequest",
+        "ShowProgressSpinnerRequest",
+        "GetRouteRequest",
+        "GetFeedbackServiceRequest",
+        "GetFeedbackServiceDefinitionRequest",
+        "GetFeedbackRequest",
+        "PostFeedbackRequest",
+        "SearchRequest",
+        "ChangeMapLayerOpacityRequest",
+        "MyLocationPlugin.GetUserLocationRequest",
+        "DrawTools.StartDrawingRequest",
+        "DrawTools.StopDrawingRequest",
+        "MapModulePlugin.ZoomToFeaturesRequest",
+        "MapModulePlugin.MapLayerUpdateRequest",
+        "rotate.map",
+        "StartUserLocationTrackingRequest",
+        "StopUserLocationTrackingRequest"
+    ]
 }
 ```
 
