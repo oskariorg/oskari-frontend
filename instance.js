@@ -19,17 +19,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             tooltip: tooltip,
             sticky: true,
             callback: function () {
-                var url = window.location.origin;
-                if (window.location.pathname && window.location.pathname.length) {
-                    url += window.location.pathname;
-                }
-                if (me.conf.uuid) {
-                    url += '?uuid=' + me.conf.uuid;
-                }
-                window.location.href = url;
+                me._changeDimension();
             }
         };
         sandbox.request(me, addToolButtonBuilder('DimensionChange', 'dimensionviews', buttonConf));
+        sandbox.requestHandler('DimensionChangeRequest', this);
+    },
+    _changeDimension: function () {
+        let url = window.location.origin;
+        if (window.location.pathname && window.location.pathname.length) {
+            url += window.location.pathname;
+        }
+        if (this.conf.uuid) {
+            url += '?uuid=' + this.conf.uuid;
+        }
+        window.location.href = url;
+    },
+    handleRequest: function (core, request) {
+        this._changeDimension();
     }
 }, {
     'extend': ['Oskari.BasicBundle'],
