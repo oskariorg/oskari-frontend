@@ -278,7 +278,8 @@ If configuration is not set these defaults will be used:
     "allowedFunctions" : ["getAllLayers", "getMapPosition", "getSupportedEvents", "getSupportedFunctions", "getSupportedRequests",
         "getZoomRange", "getPixelMeasuresInScale", "getMapBbox", "resetState", "getCurrentState", "useState", "getFeatures"],
     "allowedEvents" : ["AfterMapMoveEvent", "MapClickedEvent", "AfterAddMarkerEvent", "MarkerClickEvent", "RouteResultEvent", "UserLocationEvent", "DrawingEvent"],
-    "allowedRequests" : ["InfoBox.ShowInfoBoxRequest", "MapModulePlugin.AddMarkerRequest", "MapModulePlugin.AddFeaturesToMapRequest", "MapModulePlugin.RemoveFeaturesFromMapRequest", "MapModulePlugin.GetFeatureInfoRequest", "MapModulePlugin.MapLayerVisibilityRequest", "MapModulePlugin.RemoveMarkersRequest", "MapMoveRequest", "ShowProgressSpinnerRequest", "GetRouteRequest", "ChangeMapLayerOpacityRequest", "MyLocationPlugin.GetUserLocationRequest",  "DrawTools.StartDrawingRequest", "DrawTools.StopDrawingRequest", "MapModulePlugin.ZoomToFeaturesRequest"]
+    "allowedRequests" : ["InfoBox.ShowInfoBoxRequest", "MapModulePlugin.AddMarkerRequest", "MapModulePlugin.AddFeaturesToMapRequest", "MapModulePlugin.RemoveFeaturesFromMapRequest", "MapModulePlugin.GetFeatureInfoRequest", "MapModulePlugin.MapLayerVisibilityRequest", "MapModulePlugin.RemoveMarkersRequest", "MapMoveRequest", "ShowProgressSpinnerRequest", "GetRouteRequest", "ChangeMapLayerOpacityRequest", "MyLocationPlugin.GetUserLocationRequest",  "DrawTools.StartDrawingRequest", "DrawTools.StopDrawingRequest", "MapModulePlugin.ZoomToFeaturesRequest",
+    "StartUserLocationTrackingRequest", "StopUserLocationTrackingRequest"]
 }
 ```
 
