@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                 );
                 mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
             }
-            if (!this.getMapModule().has3DSupport()) {
+            if (!this.getMapModule().getSupports3D()) {
                 return;
             }
             this._initTilesetClickHandler();
@@ -146,7 +146,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
          * @param {Oskari.map3dtiles.bundle.tiles3d.domain.Tiles3DLayer} layer
          */
         addMapLayerToMap: function (layer) {
-            if (!this.getMapModule().has3DSupport()) {
+            if (!this.getMapModule().getSupports3D()) {
                 return;
             }
             // Common settings for the dynamicScreenSpaceError optimization
