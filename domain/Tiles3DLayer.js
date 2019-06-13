@@ -47,6 +47,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayer',
                 };
                 return style;
             }
+        },
+        /**
+         * @method isSupported
+         */
+        isSupported: function () {
+            return Oskari.getSandbox().getMap().getSupports3D();
         }
     }, {
         'extend': ['Oskari.mapframework.domain.AbstractLayer']
