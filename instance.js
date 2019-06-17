@@ -5,6 +5,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
     this.loc = Oskari.getMsg.bind(null, 'dimensionchange');
 }, {
     __name: 'DimensionChangeBundleInstance',
+    _unsupported3D: ['vectortile'],
+    _unsupported2D: ['tiles3d'],
+
     /**
      * @method _startImpl bundle start hook. Called from superclass start()
      * @param sandbox
@@ -23,7 +26,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             }
         };
         sandbox.request(me, addToolButtonBuilder('DimensionChange', 'dimensionviews', buttonConf));
-        sandbox.requestHandler('DimensionChangeRequest', this);
+        this._addLayerTools();
+    },
+    eventHandlers: {
+        'AfterMapLayerAddEvent': function (event) {
+            this._addTool(event.getMapLayer());
+        }
     },
     _changeDimension: function () {
         let url = window.location.origin;
@@ -55,6 +63,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             return layer._id + '+' + layer._opacity;
         });
         return 'mapLayers=' + lyrValues.join();
+    },
+    _addLayerTools () {
+        var layers = this.sandbox.getMap().getLayers();
+        if (layers.length === 0) {
+            return;
+        }
+        layers.forEach(this._addTool.bind(this));
+    },
+    _addTool (layer) {
+        let linkText = '';
+        if (this.sandbox.getMap().getSupports3D()) {
+            linkText = this.loc('change-dimension-2D');
+            if (this._unsupported3D.indexOf(layer.getLayerType()) === -1) {
+                return;
+            }
+        } else {
+            linkText = this.loc('change-dimension-3D');
+            if (this._unsupported2D.indexOf(layer.getLayerType()) === -1) {
+                return;
+            }
+        }
+        const toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
+        const tool = toolBuilder();
+        tool.setName('dimension-change');
+        tool.setTitle(linkText);
+        tool.setTooltip(linkText);
+        tool.setCallback(this._changeDimension.bind(this));
+        layer.addTool(tool);
     },
     handleRequest: function (core, request) {
         this._changeDimension();
