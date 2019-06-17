@@ -143,6 +143,8 @@ Oskari.clazz.define(
         me._groups = [];
 
         me._orderNumber = 1000000;
+
+        me._unsupportedReason = null;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1221,6 +1223,12 @@ Oskari.clazz.define(
                 return true;
             }
             return this._srsList.indexOf(projection) !== -1;
+        },
+        setUnsupportedReason: function (reason) {
+            this._unsupportedReason = reason;
+        },
+        getUnsupportedReason: function () {
+            return this._unsupportedReason;
         },
         /**
          * @method setSrsList

@@ -89,8 +89,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
-            const dimensionChangeTxt = this.instance.getSandbox().getMap().getSupports3D() ? loc['change-dimension-2D'] : loc['change-dimension-3D'];
-            this.templateChangeDimension = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + dimensionChangeTxt + '</a></div>');
+            this.getTemplateUnsupportedFor = reason => (
+                `<div class="layer-footer-unsupported">
+                    ${loc['unsupported-' + reason.key]}
+                    <br>
+                    <a href="JavaScript:void(0);">${reason.text}</a>
+                </div>`
+            );
 
             // set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
@@ -226,7 +231,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             var footer;
             if (!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
-                footer = this._createUnsupportedFooter();
+                footer = this._createUnsupportedFooter(layer);
             } else {
                 /* fix: we need this at anytime for slider to work */
                 footer = this._createLayerFooter(layer, layerDiv);
@@ -258,11 +263,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         /**
          * @private
          * @method _createUnsupportedFooter create jQuery element for unsupported SRS footer
+         * @param { AbstractLayer } layer
          */
-        _createUnsupportedFooter: function () {
+        _createUnsupportedFooter: function (layer) {
             var me = this;
             var sandbox = me.instance.getSandbox();
             var footer;
+            var reason = layer.getUnsupportedReason();
 
             if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
@@ -273,15 +280,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
-            } else if (sandbox.hasHandler('DimensionChangeRequest')) {
-                // show link to change dimension
-                footer = me.templateChangeDimension.clone();
-                footer.find('a').on('click', function () {
-                    // send request to show projection changer
-                    var request = Oskari.requestBuilder('DimensionChangeRequest')();
-                    sandbox.request(me.instance.getName(), request);
-                    return false;
-                });
+            } else if (reason && reason.text) {
+                footer = me.getTemplateUnsupportedFor(reason);
+                if (reason.action) {
+                    footer.find('a').on('click', reason.action);
+                }
             } else {
                 footer = me.templateUnsupported.clone();
             }

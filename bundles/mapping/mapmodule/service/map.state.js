@@ -54,6 +54,8 @@
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = 'EPSG:3067';
+
+        this._layerUnsupportedReasonFunctions = new Map();
     }, {
         /** @static @property __name service name */
         __name: 'mapmodule.state',
@@ -374,6 +376,12 @@
                 return false;
             }
             this.getLayers().push(layer);
+            if (!layer.isSupported(this._projectionCode)) {
+                const reason = this.getLayerUnsupportedReason(layer);
+                if (reason) {
+                    layer.setUnsupportedReason(reason);
+                }
+            }
             var evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(layer);
             // TODO: setter?
             evt._creator = triggeredBy;
@@ -514,6 +522,24 @@
             removalList = list.splice(indexToRemove, 1);
             notifyDim(removalList);
             return true;
+        },
+        getLayerUnsupportedReason: function (layer) {
+            if (!layer) {
+                return;
+            }
+            const iterator = this._layerUnsupportedReasonFunctions.entries();
+            let entry = iterator.next();
+            while (!entry.done) {
+                const unsupportedResponse = entry.value[1](layer);
+                if (unsupportedResponse) {
+                    unsupportedResponse.reason = entry.value[0];
+                    return unsupportedResponse;
+                }
+                entry = iterator.next();
+            }
+        },
+        addLayerUnsupportedReasonFunction: function (name, func) {
+            this._layerUnsupportedReasonFunctions.set(name, func);
         }
     }, {
         /**
