@@ -89,6 +89,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
+            const dimensionChangeTxt = this.instance.getSandbox().getMap().getSupports3D() ? loc['change-dimension-2D'] : loc['change-dimension-3D'];
+            this.templateChangeDimension = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + dimensionChangeTxt + '</a></div>');
+
             // set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
             elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
@@ -267,6 +270,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 footer.find('a').on('click', function () {
                     // send request to show projection changer
                     var request = Oskari.requestBuilder('ShowProjectionChangerRequest')();
+                    sandbox.request(me.instance.getName(), request);
+                    return false;
+                });
+            } else if (sandbox.hasHandler('DimensionChangeRequest')) {
+                // show link to change dimension
+                footer = me.templateChangeDimension.clone();
+                footer.find('a').on('click', function () {
+                    // send request to show projection changer
+                    var request = Oskari.requestBuilder('DimensionChangeRequest')();
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });

@@ -12,6 +12,8 @@ Oskari.registerLocalization(
             "hidden": "Kartlagret är tillfälligt dolt.",
             "unsupported-projection": "Denna kartlager kan inte visas med den valda kartprojektionen.",
             "change-projection": "Ändra kartprojektion",
+            "change-dimension-2D": "Gå till 2D-kartvyn",
+            "change-dimension-3D": "Gå till 3D-kartvyn",
             "out-of-scale": "Data som ingår i detta kartlager kan inte visas på den valda skalnivån.",
             "move-to-scale": "Gå till en lämplig skalnivå.",
             "out-of-content-area": "Detta kartlager saknar innehåll vid dessa koordinater.",

@@ -12,6 +12,8 @@ Oskari.registerLocalization(
             "hidden": "Karttataso on tilapäisesti piilotettu.",
             "unsupported-projection": "Karttatsoa ei voida näyttää tässä karttaprojektiossa.",
             "change-projection": "Vaihda karttaprojektiota",
+            "change-dimension-2D": "Siirry 2D-näkymään",
+            "change-dimension-3D": "Siirry 3D-näkymään",
             "out-of-scale": "Karttatasoa ei voida näyttää valitulla mittakaavatasolla.",
             "move-to-scale": "Siirry sopivalle mittakaavatasolle.",
             "out-of-content-area": "Karttatasolla ei ole kohteita karttanäkymän alueella.",
