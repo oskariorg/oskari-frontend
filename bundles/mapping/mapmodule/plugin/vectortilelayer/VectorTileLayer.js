@@ -62,6 +62,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
          */
         getTileGrid () {
             return this._options.tileGrid;
+        },
+
+        isSupported (srsName) {
+            if (Oskari.getSandbox().getMap().getSupports3D()) {
+                return false;
+            }
+            if (!this._srsList || !this._srsList.length) {
+                // if list is not provided, treat as supported
+                return true;
+            }
+            return this._srsList.indexOf(srsName) !== -1;
         }
     }, {
         'extend': ['Oskari.mapframework.domain.AbstractLayer']
