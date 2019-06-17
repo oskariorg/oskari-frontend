@@ -26,7 +26,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             }
         };
         sandbox.request(me, addToolButtonBuilder('DimensionChange', 'dimensionviews', buttonConf));
-        this._addLayerTools();
+
+        const mapStateService = sandbox.getService('mapmodule.state');
+        mapStateService.addLayerUnsupportedReasonFunction('dimension', layer => {
+            const unuspportedReason = {
+                text: this.loc('change-dimension-3D'),
+                action: this._changeDimension.bind(this)
+            };
+            if (sandbox.getMap().getSupports3D()) {
+                if (!this._unsupported3D.includes(layer.getLayerType())) {
+                    return;
+                }
+                unuspportedReason.text = this.loc('change-dimension-2D');
+                return unuspportedReason;
+            }
+            if (this._unsupported2D.includes(layer.getLayerType())) {
+                return unuspportedReason;
+            }
+        });
     },
     eventHandlers: {
         'AfterMapLayerAddEvent': function (event) {
