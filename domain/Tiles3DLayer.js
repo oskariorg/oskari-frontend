@@ -52,7 +52,8 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayer',
          * @method isSupported
          */
         isSupported: function () {
-            return Oskari.getSandbox().getMap().getSupports3D();
+            //return Oskari.getSandbox().getMap().getSupports3D();
+            return true;
         }
     }, {
         'extend': ['Oskari.mapframework.domain.AbstractLayer']
