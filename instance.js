@@ -30,10 +30,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         if (window.location.pathname && window.location.pathname.length) {
             url += window.location.pathname;
         }
-        if (this.conf.uuid) {
-            url += '?uuid=' + this.conf.uuid;
+        const params = [
+            'noSavedState=true',
+            'showIntro=false'
+        ];
+        const lyrParam = this._getSelectedMapLayersUrlParam();
+        if (lyrParam) {
+            params.unshift(lyrParam);
         }
-        window.location.href = url;
+        if (this.conf.uuid) {
+            params.unshift('uuid=' + this.conf.uuid);
+        }
+        window.location.href = url + '?' + params.join('&');
+    },
+    _getSelectedMapLayersUrlParam: function () {
+        var layers = this.sandbox.getMap().getLayers();
+        if (layers.length === 0) {
+            return;
+        }
+        var lyrValues = layers.map(layer => {
+            if (layer.style) {
+                return layer._id + '+' + layer._opacity + '+' + layer.style;
+            }
+            return layer._id + '+' + layer._opacity;
+        });
+        return 'mapLayers=' + lyrValues.join();
     },
     handleRequest: function (core, request) {
         this._changeDimension();
