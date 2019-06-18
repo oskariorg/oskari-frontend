@@ -100,6 +100,10 @@ Oskari.registerLocalization(
                 "showTransformationTools": "Show coordinate transformation tools",
                 "noUI": "Hide user interface (Use RPC interface)"
             }
+        },
+        "guidedTour": {
+            "title": "XY tool - Coordinates",
+            "message": "Here you can see the current coordinates, pan to specific coordinates and add markers."
         }
     }
 });

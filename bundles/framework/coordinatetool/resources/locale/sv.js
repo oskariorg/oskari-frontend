@@ -100,6 +100,10 @@ Oskari.registerLocalization(
                 "showTransformationTools": "Visa verktyg för koordinattransformation",
                 "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
+        },
+        "guidedTour": {
+            "title": "TODO",
+            "message": "TODO"
         }
     }
 });
