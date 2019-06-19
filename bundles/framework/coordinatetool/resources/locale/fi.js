@@ -102,8 +102,8 @@ Oskari.registerLocalization(
             }
         },
         "guidedTour": {
-            "title": "TODO",
-            "message": "TODO"
+            "title": "Koordinaatit",
+            "message": "Koordinaatit-työkalulla saat haettua karttanäkymän koordinaatteja, kohdistettua kartan tiettyihin koordinaatteihin sekä lisättyä merkintöjä."
         }
     }
 });

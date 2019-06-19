@@ -102,8 +102,8 @@ Oskari.registerLocalization(
             }
         },
         "guidedTour": {
-            "title": "TODO",
-            "message": "TODO"
+            "title": "Koordinater",
+            "message": "Här kan du se koordinater, panorera till specifika koordinater och lägga till markörer på kartan."
         }
     }
 });

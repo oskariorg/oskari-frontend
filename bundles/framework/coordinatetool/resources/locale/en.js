@@ -102,8 +102,8 @@ Oskari.registerLocalization(
             }
         },
         "guidedTour": {
-            "title": "XY tool - Coordinates",
-            "message": "Here you can see the current coordinates, pan to specific coordinates and add markers."
+            "title": "Coordinates",
+            "message": "With the coordinates tool you can see the current coordinates, pan to specific coordinates and add markers."
         }
     }
 });
