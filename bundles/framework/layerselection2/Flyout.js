@@ -87,15 +87,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '</div>');
 
-            this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
+            this.templateUnsupportedClean = jQuery('<div class="layer-footer-unsupported"></div>');
 
-            this.getTemplateUnsupportedFor = reason => (
-                `<div class="layer-footer-unsupported">
-                    ${loc['unsupported-' + reason.key]}
-                    <br>
-                    <a href="JavaScript:void(0);">${reason.text}</a>
-                </div>`
-            );
+            this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
             // set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
@@ -230,7 +224,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var toolsDiv = layerDiv.find('div.layer-tools');
 
             var footer;
-            if (!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
+            if (!this.instance.getSandbox().getMap().isLayerSupported(layer)) {
                 footer = this._createUnsupportedFooter(layer);
             } else {
                 /* fix: we need this at anytime for slider to work */
@@ -269,7 +263,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var me = this;
             var sandbox = me.instance.getSandbox();
             var footer;
-            var reason = layer.getUnsupportedReason();
+            var reasons = sandbox.getMap().getLayerUnsupportedReasons(layer);
 
             if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
@@ -280,11 +274,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
-            } else if (reason && reason.text) {
-                footer = me.getTemplateUnsupportedFor(reason);
-                if (reason.action) {
-                    footer.find('a').on('click', reason.action);
-                }
+            } else if (reasons) {
+                footer = me.templateUnsupportedClean.clone();
+                reasons.forEach(reason => {
+                    footer.append(reason.getDescription());
+                    const action = reason.getAction();
+                    const actionText = reason.getActionText();
+                    if (actionText && action) {
+                        const actionLink = jQuery(`<a href="JavaScript:void(0);">${actionText}</a>`);
+                        actionLink.on('click', action);
+                        footer.append(' ');
+                        footer.append(actionLink);
+                    }
+                });
             } else {
                 footer = me.templateUnsupported.clone();
             }

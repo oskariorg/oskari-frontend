@@ -122,7 +122,7 @@ export const LayerTools = ({model, mapSrs, mutator, locale}) => {
     return (
         <Tools className="layer-tools">
             {
-                !model.isSupported(mapSrs) &&
+                !model.isSupportedSrs(mapSrs) &&
                 <RightFloatingIcon
                     className="layer-not-supported icon-warning-light"
                     title={locale.tooltip['unsupported-srs']} />

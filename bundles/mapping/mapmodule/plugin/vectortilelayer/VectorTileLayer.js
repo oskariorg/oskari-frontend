@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
             return this._options.tileGrid;
         },
 
-        isSupported (srsName) {
+        isSupportedSrs (srsName) {
             if (Oskari.getSandbox().getMap().getSupports3D()) {
                 return false;
             }

@@ -391,7 +391,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var selectedLayers = this.sandbox.getMap().getLayers();
             var service = this.getService();
             var deniedLayers = selectedLayers.filter((layer) => {
-                return !service.hasPublishRight(layer) || !layer.isSupported(this.sandbox.getMap().getSrsName());
+                return !service.hasPublishRight(layer) || !layer.isSupportedSrs(this.sandbox.getMap().getSrsName());
             });
             return deniedLayers;
         },

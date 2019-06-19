@@ -116,7 +116,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layers = [];
             var deniedLayers = [];
             me.instance.sandbox.findAllSelectedMapLayers().forEach(function (layer) {
-                if (!me.service.hasPublishRight(layer) || !layer.isSupported(me.instance.sandbox.getMap().getSrsName())) {
+                if (!me.service.hasPublishRight(layer) || !layer.isSupportedSrs(me.instance.sandbox.getMap().getSrsName())) {
                     deniedLayers.push(layer);
                 } else {
                     layers.push(layer);
@@ -186,7 +186,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 if (!this.service.hasPublishRight(layer)) {
                     reasons.push(this.loc.noRights);
                 }
-                if (!layer.isSupported(this.instance.sandbox.getMap().getSrsName())) {
+                if (!layer.isSupportedSrs(this.instance.sandbox.getMap().getSrsName())) {
                     reasons.push(this.loc.unsupportedProjection);
                 }
                 if (reasons.length) {

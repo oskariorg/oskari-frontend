@@ -1213,22 +1213,24 @@ Oskari.clazz.define(
             return this._srs_name;
         },
         /**
-         * @method isSupported does the layer support given projection?
+         * @method isSupportedSrs does the layer support given projection?
          * @param {String} projection
          * @return {Boolean} true if no data about support or param found in supported
          */
-        isSupported: function (projection) {
+        isSupportedSrs: function (projection) {
             if (!this._srsList || !this._srsList.length) {
                 // if list is not provided, treat as supported
                 return true;
             }
             return this._srsList.indexOf(projection) !== -1;
         },
-        setUnsupportedReason: function (reason) {
-            this._unsupportedReason = reason;
-        },
-        getUnsupportedReason: function () {
-            return this._unsupportedReason;
+        /**
+         * @method @deprecated isSupported
+         * @param {String} projection
+         * @return {Boolean} true if no data about support or param found in supported
+         */
+        isSupported: function (projection) {
+            return this.isSupportedSrs(projection);
         },
         /**
          * @method setSrsList

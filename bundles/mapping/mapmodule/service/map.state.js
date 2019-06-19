@@ -1,3 +1,4 @@
+import { LayerUnsupportedReason } from '../domain/LayerUnsupportedReason';
 /**
  * @class Oskari.mapframework.domain.Map
  *
@@ -55,7 +56,7 @@
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = 'EPSG:3067';
 
-        this._layerUnsupportedReasonFunctions = new Map();
+        this._layerSupportedChecks = {};
     }, {
         /** @static @property __name service name */
         __name: 'mapmodule.state',
@@ -376,12 +377,6 @@
                 return false;
             }
             this.getLayers().push(layer);
-            if (!layer.isSupported(this._projectionCode)) {
-                const reason = this.getLayerUnsupportedReason(layer);
-                if (reason) {
-                    layer.setUnsupportedReason(reason);
-                }
-            }
             var evt = Oskari.eventBuilder('AfterMapLayerAddEvent')(layer);
             // TODO: setter?
             evt._creator = triggeredBy;
@@ -523,23 +518,37 @@
             notifyDim(removalList);
             return true;
         },
-        getLayerUnsupportedReason: function (layer) {
+        isLayerSupported: function (layer) {
+            if (!layer) {
+                return false;
+            }
+            const failedChecks = Object.values(this._layerSupportedChecks)
+                .map(check => check(layer))
+                .filter(retval => retval !== true);
+            return failedChecks.length === 0;
+        },
+        getLayerUnsupportedReasons: function (layer) {
             if (!layer) {
                 return;
             }
-            const iterator = this._layerUnsupportedReasonFunctions.entries();
-            let entry = iterator.next();
-            while (!entry.done) {
-                const unsupportedResponse = entry.value[1](layer);
-                if (unsupportedResponse) {
-                    unsupportedResponse.reason = entry.value[0];
-                    return unsupportedResponse;
-                }
-                entry = iterator.next();
+            const reasons = Object.values(this._layerSupportedChecks)
+                .map(check => check(layer))
+                .filter(retval => retval instanceof LayerUnsupportedReason);
+            if (reasons.length === 0) {
+                return;
             }
+            return reasons;
         },
-        addLayerUnsupportedReasonFunction: function (name, func) {
-            this._layerUnsupportedReasonFunctions.set(name, func);
+        /**
+         * @method addLayerUnsupportedCheck
+         *
+         * For layer support checking.
+         *
+         * @param {String} key Check function key. Makes it possible to overwrite existing check.
+         * @param {function} check check function receives layer as param and should return boolean or `LayerUnsupportedReason` if layer is not supported.
+         */
+        addLayerSupportedCheck: function (key, check) {
+            this._layerSupportedChecks[key] = check;
         }
     }, {
         /**

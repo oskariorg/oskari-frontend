@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Obs.",
         "unsupportedProj": "Vissa kartlager i denna kartvy kan inte visas med den aktuella kartprojektionen.",
+        "unsupported-layer": "Denna kartlager kan inte visas.",
+        "unsupported-layer-projection": "Denna kartlager kan inte visas med den valda kartprojektionen.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Användarvillkor",
