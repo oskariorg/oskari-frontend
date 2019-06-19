@@ -14,6 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
      */
     _startImpl: function (sandbox) {
         var me = this;
+        me._sandbox = sandbox;
         var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
         var tooltip = me.conf.uuid ? me.loc('to3Dview') : me.loc('backTo2Dview');
         var iconCls = me.conf.uuid ? 'dimension-tool' : 'dimension-tool-back';
@@ -21,34 +22,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             iconCls: iconCls,
             tooltip: tooltip,
             sticky: true,
-            callback: function () {
-                me._changeDimension();
-            }
+            callback: this._changeDimension.bind(this)
         };
         sandbox.request(me, addToolButtonBuilder('DimensionChange', 'dimensionviews', buttonConf));
+        this._addLayerSupportedChecks();
+    },
+    _addLayerSupportedChecks: function () {
+        const map = this._sandbox.getMap();
+        const changeDimensionTxt = this.loc('change-dimension-' + (map.getSupports3D() ? '2D' : '3D'));
+        const action = this._changeDimension.bind(this);
 
-        const mapStateService = sandbox.getService('mapmodule.state');
-        mapStateService.addLayerUnsupportedReasonFunction('dimension', layer => {
-            const unuspportedReason = {
-                text: this.loc('change-dimension-3D'),
-                action: this._changeDimension.bind(this)
-            };
-            if (sandbox.getMap().getSupports3D()) {
-                if (!this._unsupported3D.includes(layer.getLayerType())) {
-                    return;
+        const unuspportedDimension = Oskari.clazz.create('Oskari.mapframework.domain.LayerUnsupportedReason');
+        unuspportedDimension.setActionText(changeDimensionTxt);
+        unuspportedDimension.setAction(action);
+
+        const mapLocalization = Oskari.getMsg.bind(null, 'MapModule');
+        const unuspportedSrs = Oskari.clazz.create('Oskari.mapframework.domain.LayerUnsupportedReason');
+        unuspportedSrs.setDescription(mapLocalization('unsupported-layer-projection'));
+        unuspportedSrs.setActionText(changeDimensionTxt);
+        unuspportedSrs.setAction(action);
+
+        map.addLayerSupportedCheck('dimension', layer => {
+            if (map.getSupports3D()) {
+                if (this._unsupported3D.includes(layer.getLayerType())) {
+                    return unuspportedDimension;
                 }
-                unuspportedReason.text = this.loc('change-dimension-2D');
-                return unuspportedReason;
+                return true;
             }
             if (this._unsupported2D.includes(layer.getLayerType())) {
-                return unuspportedReason;
+                return unuspportedDimension;
             }
+            return true;
         });
-    },
-    eventHandlers: {
-        'AfterMapLayerAddEvent': function (event) {
-            this._addTool(event.getMapLayer());
-        }
+        map.addLayerSupportedCheck('srs', layer => {
+            if (layer.isSupportedSrs(map.getSrsName())) {
+                return true;
+            }
+            return unuspportedSrs;
+        });
     },
     _changeDimension: function () {
         let url = window.location.origin;
@@ -69,7 +80,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         window.location.href = url + '?' + params.join('&');
     },
     _getSelectedMapLayersUrlParam: function () {
-        var layers = this.sandbox.getMap().getLayers();
+        var layers = this._sandbox.getMap().getLayers();
         if (layers.length === 0) {
             return;
         }
@@ -80,34 +91,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
             return layer._id + '+' + layer._opacity;
         });
         return 'mapLayers=' + lyrValues.join();
-    },
-    _addLayerTools () {
-        var layers = this.sandbox.getMap().getLayers();
-        if (layers.length === 0) {
-            return;
-        }
-        layers.forEach(this._addTool.bind(this));
-    },
-    _addTool (layer) {
-        let linkText = '';
-        if (this.sandbox.getMap().getSupports3D()) {
-            linkText = this.loc('change-dimension-2D');
-            if (this._unsupported3D.indexOf(layer.getLayerType()) === -1) {
-                return;
-            }
-        } else {
-            linkText = this.loc('change-dimension-3D');
-            if (this._unsupported2D.indexOf(layer.getLayerType()) === -1) {
-                return;
-            }
-        }
-        const toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
-        const tool = toolBuilder();
-        tool.setName('dimension-change');
-        tool.setTitle(linkText);
-        tool.setTooltip(linkText);
-        tool.setCallback(this._changeDimension.bind(this));
-        layer.addTool(tool);
     },
     handleRequest: function (core, request) {
         this._changeDimension();
