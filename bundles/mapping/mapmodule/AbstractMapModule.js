@@ -176,8 +176,7 @@ Oskari.clazz.define(
             this.handleMapLinkParams(stateService);
 
             // Add srs check for layers
-            const reason = new UnsupportedLayerSrs();
-            stateService.addLayerSupportedCheck(reason.getId(), reason.getLayerCheckFunction());
+            stateService.addLayerSupportCheck(new UnsupportedLayerSrs());
 
             if (me._options) {
                 if (me._options.resolutions) {

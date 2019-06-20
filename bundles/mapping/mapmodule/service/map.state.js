@@ -545,14 +545,13 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
             return reasons;
         },
         /**
-         * @method addLayerSupportedCheck
+         * @method addLayerSupportCheck
          * For layer support checking.
          *
-         * @param {String} key Check function key. Makes it possible to overwrite existing check.
-         * @param {function} check check function receives layer as param and returns boolean or `UnsupportedLayerReason` if layer is not supported.
+         * @param {UnsupportedLayerReason} layerUnsupportedReason
          */
-        addLayerSupportedCheck: function (key, check) {
-            this._layerSupportedChecks[key] = check;
+        addLayerSupportCheck: function (layerUnsupportedReason) {
+            this._layerSupportedChecks[layerUnsupportedReason.getId()] = layerUnsupportedReason.getLayerCheckFunction();
         }
     }, {
         /**
