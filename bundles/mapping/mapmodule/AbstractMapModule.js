@@ -1,4 +1,4 @@
-import { SRS, LayerUnsupportedReason } from './domain/LayerUnsupportedReason';
+import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
 
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
@@ -176,13 +176,8 @@ Oskari.clazz.define(
             this.handleMapLinkParams(stateService);
 
             // Add srs check for layers
-            const reason = new LayerUnsupportedReason(this.getLocalization()['unsupported-layer-projection']);
-            stateService.addLayerSupportedCheck(SRS, layer => {
-                if (layer.isSupportedSrs(this._projectionCode)) {
-                    return true;
-                }
-                return reason;
-            });
+            const reason = new UnsupportedLayerSrs();
+            stateService.addLayerSupportedCheck(reason.getId(), reason.getLayerCheckFunction());
 
             if (me._options) {
                 if (me._options.resolutions) {
@@ -2287,7 +2282,7 @@ Oskari.clazz.define(
             var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
             var isPublisherActive = publisherService && publisherService.getIsActive();
 
-            if (!layer.isSupportedSrs(sandbox.getMap().getSrsName()) && !isPublisherActive) {
+            if (!sandbox.getMap().isLayerSupported(layer) && !isPublisherActive) {
                 this._mapLayerService.showUnsupportedPopup();
             }
 

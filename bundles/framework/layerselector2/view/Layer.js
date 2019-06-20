@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
              * Supported projection
              */
             tools.find('.layer-not-supported')
-                .css('display', !layer.isSupported(sandbox.getMap().getSrsName()) ? null : 'none')
+                .css('display', !sandbox.getMap().isLayerSupported(layer) ? null : 'none')
                 .attr('title', this.localization.tooltip['unsupported-srs']);
 
             return layerDiv;

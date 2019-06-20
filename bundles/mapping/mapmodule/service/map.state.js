@@ -1,4 +1,4 @@
-import { LayerUnsupportedReason } from '../domain/LayerUnsupportedReason';
+import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
 /**
  * @class Oskari.mapframework.domain.Map
  *
@@ -527,25 +527,29 @@ import { LayerUnsupportedReason } from '../domain/LayerUnsupportedReason';
                 .filter(retval => retval !== true);
             return failedChecks.length === 0;
         },
-        getLayerUnsupportedReasons: function (layer) {
-            if (!layer) {
+        /**
+         * @method getUnsupportedLayerReasons To get reasons why layer is not supported by the current map view.
+         * @param { AbstractLayer } unsupportedLayer layer
+         * @return  { UnsupportedLayerReason[] } reasons
+         */
+        getUnsupportedLayerReasons: function (unsupportedLayer) {
+            if (!unsupportedLayer) {
                 return;
             }
             const reasons = Object.values(this._layerSupportedChecks)
-                .map(check => check(layer))
-                .filter(retval => retval instanceof LayerUnsupportedReason);
+                .map(check => check(unsupportedLayer))
+                .filter(retval => retval instanceof UnsupportedLayerReason);
             if (reasons.length === 0) {
                 return;
             }
             return reasons;
         },
         /**
-         * @method addLayerUnsupportedCheck
-         *
+         * @method addLayerSupportedCheck
          * For layer support checking.
          *
          * @param {String} key Check function key. Makes it possible to overwrite existing check.
-         * @param {function} check check function receives layer as param and should return boolean or `LayerUnsupportedReason` if layer is not supported.
+         * @param {function} check check function receives layer as param and returns boolean or `UnsupportedLayerReason` if layer is not supported.
          */
         addLayerSupportedCheck: function (key, check) {
             this._layerSupportedChecks[key] = check;
