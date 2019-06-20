@@ -43,8 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         srs.setAction(action);
         srs.setActionText(changeDimensionTxt);
 
-        map.addLayerSupportedCheck(type.getId(), type.getLayerCheckFunction());
-        map.addLayerSupportedCheck(srs.getId(), srs.getLayerCheckFunction());
+        map.addLayerSupportCheck(type);
+        map.addLayerSupportCheck(srs);
     },
     _changeDimension: function () {
         let url = window.location.origin;
