@@ -1,3 +1,8 @@
+import { UnsupportedLayerType } from './domain/UnsupportedLayerType';
+
+const UnsupportedLayerReason = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason');
+const UnsupportedLayerSrs = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerSrs');
+
 /**
  * @class Oskari.mapframework.bundle.dimension-change.DimensionChangeBundleInstance
  */
@@ -5,8 +10,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
     this.loc = Oskari.getMsg.bind(null, 'dimensionchange');
 }, {
     __name: 'DimensionChangeBundleInstance',
-    _unsupported3D: ['vectortile'],
-    _unsupported2D: ['tiles3d'],
 
     /**
      * @method _startImpl bundle start hook. Called from superclass start()
@@ -32,65 +35,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         const changeDimensionTxt = this.loc('change-dimension-' + (map.getSupports3D() ? '2D' : '3D'));
         const action = this._changeDimension.bind(this);
 
-        const unuspportedDimension = Oskari.clazz.create('Oskari.mapframework.domain.LayerUnsupportedReason');
-        unuspportedDimension.setActionText(changeDimensionTxt);
-        unuspportedDimension.setAction(action);
+        const type = new UnsupportedLayerType(UnsupportedLayerReason.FATAL);
+        type.setAction(action);
+        type.setActionText(changeDimensionTxt);
 
-        const mapLocalization = Oskari.getMsg.bind(null, 'MapModule');
-        const unuspportedSrs = Oskari.clazz.create('Oskari.mapframework.domain.LayerUnsupportedReason');
-        unuspportedSrs.setDescription(mapLocalization('unsupported-layer-projection'));
-        unuspportedSrs.setActionText(changeDimensionTxt);
-        unuspportedSrs.setAction(action);
+        const srs = new UnsupportedLayerSrs();
+        srs.setAction(action);
+        srs.setActionText(changeDimensionTxt);
 
-        map.addLayerSupportedCheck('dimension', layer => {
-            if (map.getSupports3D()) {
-                if (this._unsupported3D.includes(layer.getLayerType())) {
-                    return unuspportedDimension;
-                }
-                return true;
-            }
-            if (this._unsupported2D.includes(layer.getLayerType())) {
-                return unuspportedDimension;
-            }
-            return true;
-        });
-        map.addLayerSupportedCheck('srs', layer => {
-            if (layer.isSupportedSrs(map.getSrsName())) {
-                return true;
-            }
-            return unuspportedSrs;
-        });
+        map.addLayerSupportedCheck(type.getId(), type.getLayerCheckFunction());
+        map.addLayerSupportedCheck(srs.getId(), srs.getLayerCheckFunction());
     },
     _changeDimension: function () {
         let url = window.location.origin;
         if (window.location.pathname && window.location.pathname.length) {
             url += window.location.pathname;
         }
-        const params = [
-            'noSavedState=true',
-            'showIntro=false'
-        ];
-        const lyrParam = this._getSelectedMapLayersUrlParam();
-        if (lyrParam) {
-            params.unshift(lyrParam);
-        }
+        const extraParams = {
+            noSavedState: true,
+            showIntro: false
+        };
         if (this.conf.uuid) {
-            params.unshift('uuid=' + this.conf.uuid);
+            extraParams.uuid = this.conf.uuid;
         }
-        window.location.href = url + '?' + params.join('&');
-    },
-    _getSelectedMapLayersUrlParam: function () {
-        var layers = this._sandbox.getMap().getLayers();
-        if (layers.length === 0) {
-            return;
-        }
-        var lyrValues = layers.map(layer => {
-            if (layer.style) {
-                return layer._id + '+' + layer._opacity + '+' + layer.style;
-            }
-            return layer._id + '+' + layer._opacity;
-        });
-        return 'mapLayers=' + lyrValues.join();
+        const blackListed = ['coord', 'zoomLevel', 'rotate', 'cam'];
+        const mapQueryStr = this._sandbox.generateMapLinkParameters(extraParams);
+        const mapParams = Oskari.util.getRequestParameters(mapQueryStr);
+        window.location.href = url + '?' + Object.keys(mapParams)
+            .filter(key => !blackListed.includes(key))
+            .map(key => `${key}=${mapParams[key]}`)
+            .join('&');
     },
     handleRequest: function (core, request) {
         this._changeDimension();
