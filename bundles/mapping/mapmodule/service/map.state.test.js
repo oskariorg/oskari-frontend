@@ -10,7 +10,7 @@ const sandbox = Oskari.getSandbox();
 const stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandbox);
 sandbox.registerService(stateService);
 
-describe('Layer ', () => {    
+describe('Layer ', () => {
     const layer = Oskari.clazz.create('Oskari.mapframework.domain.AbstractLayer');
     const map = sandbox.getMap();
     const unsupportedSrs = new UnsupportedLayerSrs();
