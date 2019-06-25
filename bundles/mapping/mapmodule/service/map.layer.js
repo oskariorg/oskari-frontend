@@ -559,7 +559,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var popup = this._popupService.createPopup();
 
             var buttons = [popup.createCloseButton('OK')];
-            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj').replace(/[\n]/g, '<br>'), buttons);
+            const dimension = this.getSandbox().getMap().getSupports3D() ? '3D' : '2D';
+            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj', { dimension }).replace(/[\n]/g, '<br>'), buttons);
 
             this.popupCoolOff = true;
             setTimeout(function () {

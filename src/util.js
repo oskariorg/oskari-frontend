@@ -606,13 +606,23 @@ Oskari.util = (function () {
      */
     util.getRequestParam = function (name, defaultValue) {
         var query = location.search.substr(1);
-        var result = {};
-        query.split('&').forEach(function (part) {
-            var item = part.split('=');
-            result[item[0]] = decodeURIComponent(item[1]);
-        });
+        var result = util.getRequestParameters(query);
         return result[name] || defaultValue;
     };
+
+    /**
+     * @method getRequestParameters
+     * Returns request parameters from query string as an object
+     * @return {Object} parameters
+     */
+    util.getRequestParameters = function (query) {
+        const params = {};
+        query.split('&').forEach(part => {
+            const item = part.split('=');
+            params[item[0]] = decodeURIComponent(item[1]);
+        });
+        return params;
+    }
     /**
      * Returns true if first param is a number with value between start-stop parameters
      * @param  {Number}  num   [description]

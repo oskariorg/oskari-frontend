@@ -42,7 +42,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     }
     createEventHandlers () {
         const handlers = super.createEventHandlers();
-        if (this.plugin.getMapModule().has3DSupport()) {
+        if (this.plugin.getMapModule().getSupports3D()) {
             handlers['AfterChangeMapLayerOpacityEvent'] = Oskari.util.throttle(event =>
                 this._updateLayerStyle(event.getMapLayer()), OPACITY_THROTTLE_MS);
             handlers['AfterMapMoveEvent'] = Oskari.util.throttle(() =>
@@ -54,7 +54,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         return (feature, resolution) => {
             const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
             const style = styleFunction(feature, resolution, isSelected);
-            if (!this.plugin.getMapModule().has3DSupport()) {
+            if (!this.plugin.getMapModule().getSupports3D()) {
                 return style;
             }
             return applyOpacity(style, layer.getOpacity());
@@ -78,7 +78,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
     }
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
         super.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
-        const opacity = this.plugin.getMapModule().has3DSupport() ? 1 : layer.getOpacity() / 100;
+        const opacity = this.plugin.getMapModule().getSupports3D() ? 1 : layer.getOpacity() / 100;
         const source = this._createLayerSource(layer);
         const vectorLayer = new olLayerVector({
             opacity,
@@ -89,7 +89,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         this.applyZoomBounds(layer, vectorLayer);
         this.plugin.getMapModule().addLayer(vectorLayer, !keepLayerOnTop);
         this.plugin.setOLMapLayers(layer.getId(), vectorLayer);
-        if (this.plugin.getMapModule().has3DSupport()) {
+        if (this.plugin.getMapModule().getSupports3D()) {
             this._loadFeaturesForLayer(layer);
         }
         return vectorLayer;

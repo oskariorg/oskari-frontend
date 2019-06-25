@@ -10,7 +10,6 @@ Oskari.registerLocalization(
             "show": "Näytä",
             "hide": "Piilota",
             "hidden": "Karttataso on tilapäisesti piilotettu.",
-            "unsupported-projection": "Karttatsoa ei voida näyttää tässä karttaprojektiossa.",
             "change-projection": "Vaihda karttaprojektiota",
             "out-of-scale": "Karttatasoa ei voida näyttää valitulla mittakaavatasolla.",
             "move-to-scale": "Siirry sopivalle mittakaavatasolle.",

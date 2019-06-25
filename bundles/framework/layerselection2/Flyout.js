@@ -1,3 +1,4 @@
+const UnsupportedLayerReason = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason');
 /**
  * @class Oskari.mapframework.bundle.layerselection2.Flyout
  *
@@ -86,6 +87,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc['out-of-content-area'] + ' <a href="JavaScript:void(0);">' + loc['move-to-content-area'] + '</a></p>');
 
             this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '</div>');
+
+            this.templateUnsupportedClean = jQuery('<div class="layer-footer-unsupported"></div>');
 
             this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
@@ -222,8 +225,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var toolsDiv = layerDiv.find('div.layer-tools');
 
             var footer;
-            if (!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
-                footer = this._createUnsupportedFooter();
+            if (!this.instance.getSandbox().getMap().isLayerSupported(layer)) {
+                footer = this._createUnsupportedFooter(layer);
             } else {
                 /* fix: we need this at anytime for slider to work */
                 footer = this._createLayerFooter(layer, layerDiv);
@@ -255,11 +258,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         /**
          * @private
          * @method _createUnsupportedFooter create jQuery element for unsupported SRS footer
+         * @param { AbstractLayer } layer
          */
-        _createUnsupportedFooter: function () {
+        _createUnsupportedFooter: function (layer) {
             var me = this;
             var sandbox = me.instance.getSandbox();
             var footer;
+            var reasons = sandbox.getMap().getUnsupportedLayerReasons(layer);
 
             if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
@@ -270,6 +275,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
+            } else if (reasons && reasons.length > 0) {
+                footer = me.templateUnsupportedClean.clone();
+                const grouped = reasons.reduce((groups, cur) => {
+                    if (cur.getSeverity() >= UnsupportedLayerReason.FATAL) {
+                        groups.fatals = groups.fatals || [];
+                        groups.fatals.push(cur);
+                    } else if (cur.getSeverity() < UnsupportedLayerReason.WARNING) {
+                        groups.infos = groups.infos || [];
+                        groups.infos.push(cur);
+                    } else {
+                        groups.warnings = groups.warnings || [];
+                        groups.warnings.push(cur);
+                    }
+                    return groups;
+                }, {});
+                const { fatals, warnings, infos } = grouped;
+                const selected = fatals || warnings || infos;
+                selected
+                    .sort((a, b) => (b.getSeverity() - a.getSeverity()))
+                    .forEach(reason => {
+                        const div = jQuery(`<div>${reason.getDescription()} </div>`);
+                        const action = reason.getAction();
+                        const actionText = reason.getActionText();
+                        if (actionText && action) {
+                            const actionLink = jQuery(`<a href="JavaScript:void(0);">${actionText}</a>`);
+                            actionLink.on('click', action);
+                            div.append(actionLink);
+                        }
+                        footer.append(div);
+                    });
             } else {
                 footer = me.templateUnsupported.clone();
             }

@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Уведомление",
         "unsupportedProj": "Некоторые слои, добавленные в этот вид карты, не могут быть показаны в текущей проекции карты.",
+        "unsupported-layer": "Слой карты не может быть показан.",
+        "unsupported-layer-projection": "Слой карты не может быть показан в выбранной проекции карты.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Условия использования",

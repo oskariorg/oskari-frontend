@@ -1,3 +1,5 @@
+import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -106,7 +108,7 @@ Oskari.clazz.define(
         me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
-        me._support3d = false;
+        me._supports3D = false;
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -173,6 +175,9 @@ Oskari.clazz.define(
             sandbox.registerService(stateService);
             this.handleMapLinkParams(stateService);
 
+            // Add srs check for layers
+            stateService.addLayerSupportCheck(new UnsupportedLayerSrs());
+
             if (me._options) {
                 if (me._options.resolutions) {
                     me._mapResolutions = me._options.resolutions;
@@ -182,6 +187,7 @@ Oskari.clazz.define(
                     // set srsName to Oskari.mapframework.domain.Map
                     if (me._sandbox) {
                         me._sandbox.getMap().setSrsName(me._projectionCode);
+                        me._sandbox.getMap().setSupports3D(me.getSupports3D());
                     }
                 }
             }
@@ -367,8 +373,8 @@ Oskari.clazz.define(
          */
         panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
-        has3DSupport: function () {
-            return this._support3d;
+        getSupports3D: function () {
+            return this._supports3D;
         },
         /* --------- /Impl specific --------------------------------------> */
 
@@ -405,7 +411,6 @@ Oskari.clazz.define(
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
         _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
         getStyle: Oskari.AbstractFunc('getStyle'),
-        set3dEnabled: Oskari.AbstractFunc('set3dEnabled'),
         getCamera: Oskari.AbstractFunc('getCamera'),
         setCamera: Oskari.AbstractFunc('setCamera'),
         /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
@@ -2276,7 +2281,7 @@ Oskari.clazz.define(
             var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
             var isPublisherActive = publisherService && publisherService.getIsActive();
 
-            if (!layer.isSupported(sandbox.getMap().getSrsName()) && !isPublisherActive) {
+            if (!sandbox.getMap().isLayerSupported(layer) && !isPublisherActive) {
                 this._mapLayerService.showUnsupportedPopup();
             }
 

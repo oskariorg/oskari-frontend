@@ -286,10 +286,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             }
         },
         /**
-         * @method isSupported
+         * @method isSupportedSrs
          * Wfs layer is always supported
          */
-        isSupported () {
+        isSupportedSrs () {
             return true;
         },
         /**

@@ -230,7 +230,7 @@ Oskari.clazz.define(
          * @return {Boolean}
          */
         isLayerSrsSupported: function (layer) {
-            return layer.isSupported(this.getSandbox().getMap().getSrsName());
+            return layer.isSupportedSrs(this.getSandbox().getMap().getSrsName());
         },
 
         getLayerTypeIdentifier: function () {

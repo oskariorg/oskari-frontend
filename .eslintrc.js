@@ -28,7 +28,12 @@ module.exports = {
     "OskariPinchZoom": false,
     "Proj4js": false,
     "turf": false,
-    "__webpack_public_path__": false
+    "__webpack_public_path__": false,
+    // ---- jest tests
+    "describe": false,
+    "expect": false,
+    "test": false
+    // ----
   },
   "parserOptions": {
     "ecmaVersion": 9,

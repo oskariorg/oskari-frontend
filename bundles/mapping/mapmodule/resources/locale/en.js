@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Notice",
         "unsupportedProj": "Some layers added to this map view cannot be shown with the current map projection.",
+        "unsupported-layer": "Map Layer cannot be shown.",
+        "unsupported-layer-projection": "Map layer cannot be shown in selected map projection.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
