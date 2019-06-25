@@ -1230,6 +1230,7 @@ Oskari.clazz.define(
          * @return {Boolean} true if no data about support or param found in supported
          */
         isSupported: function (projection) {
+            Oskari.log('AbstractLayer').deprecated();
             return this.isSupportedSrs(projection);
         },
         /**
