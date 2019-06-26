@@ -243,7 +243,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplate: {
-            priority: 50,
+            priority: 40,
             show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
             },
