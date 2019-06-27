@@ -2371,7 +2371,7 @@ Oskari.clazz.define(
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplates: [{
-            priority: 70,
+            priority: 90,
             getTitle: function () {
                 return this.getLocalization().guidedTour.help1.title;
             },
@@ -2386,7 +2386,7 @@ Oskari.clazz.define(
             positionAlign: 'left'
         },
         {
-            priority: 80,
+            priority: 100,
             getTitle: function () {
                 return this.getLocalization().guidedTour.help2.title;
             },
