@@ -402,7 +402,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplate: {
-            priority: 40,
+            priority: 50,
             show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
             },

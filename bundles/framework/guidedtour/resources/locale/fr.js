@@ -16,8 +16,8 @@ Oskari.registerLocalization(
             "label": "Ne plus afficher ce message"
         },
         "page1": {
-            "title": "Bienvenue à la fenêtre cartographique de Paikkatietoikkuna",
-            "message": "S'il s'agit de votre première visite au service cartographique de Paikkatietoikkuna, notre guide de démarrage rapide vous aidera à démarrer."
+            "title": "Bienvenue à la fenêtre cartographique",
+            "message": "S'il s'agit de votre première visite au service cartographique, notre guide de démarrage rapide vous aidera à démarrer."
         }
     }
 });
