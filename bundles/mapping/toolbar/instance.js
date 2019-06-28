@@ -534,7 +534,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplate: {
-            priority: 60,
+            priority: 80,
             getTitle: function () {
                 return this.getLocalization().guidedTour.title;
             },

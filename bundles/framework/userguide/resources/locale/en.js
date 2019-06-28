@@ -44,6 +44,12 @@ Oskari.registerLocalization(
         ],
         "help": {
             "tags": "map window,user guide"
+        },
+        "guidedTour": {
+            "title": "User Guide",
+            "message": "Learn more about how to use this service by reading the User Guide.",
+            "openLink": "Show User Guide",
+            "closeLink": "Hide User Guide"
         }
     }
 });

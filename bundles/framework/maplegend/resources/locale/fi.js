@@ -10,6 +10,12 @@ Oskari.registerLocalization(
         "tooltip":"Näytä karttaselitteet",
         "singleLegend":"Karttaselite: ",
         "infotext":"Valitse selitettävä karttataso:",
-        "newtab":"Avaa uudessa välilehdessä"
+        "newtab":"Avaa uudessa välilehdessä",
+        "guidedTour": {
+            "title": "Karttaselitteet",
+            "message": "Karttaselitteet selventävät näkyvissä olevien tasojen symboleja ja merkitystä.",
+            "openLink": "Näytä Karttaselitteet",
+            "closeLink": "Piilota Karttaselitteet"
+        }
     }
 });
