@@ -1035,6 +1035,11 @@ Oskari.clazz.define(
             if (update && cached.hoverActive) {
                 delete cached.hoverActive;
                 me._applyHoverStyle(me._hoverState.feature, me._hoverState.layer);
+                const layer = this.getLayerById(layerId);
+                const hoverOptions = layer.get(LAYER_HOVER);
+                const contentOptions = hoverOptions ? hoverOptions.content : null;
+                const vectorFeatureService = this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService');
+                vectorFeatureService.updateTooltipContent(contentOptions, feature);
             } else {
                 me._animateFillColorChange(feature, olStyle, options.animationDuration);
             }
