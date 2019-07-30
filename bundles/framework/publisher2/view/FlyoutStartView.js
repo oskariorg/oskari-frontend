@@ -1,4 +1,4 @@
-import { UnsupportedLayerSrs } from "../../../mapping/mapmodule/domain/UnsupportedLayerSrs";
+import { UnsupportedLayerSrs } from '../../../mapping/mapmodule/domain/UnsupportedLayerSrs';
 
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.StartView
