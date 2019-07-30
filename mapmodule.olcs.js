@@ -79,6 +79,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._map3D.container_.appendChild(creditContainer);
 
         var scene = this._map3D.getCesiumScene();
+        scene.globe.depthTestAgainstTerrain = true;
         scene.shadowMap.darkness = 0.7;
         scene.skyBox = this._createSkyBox();
 
