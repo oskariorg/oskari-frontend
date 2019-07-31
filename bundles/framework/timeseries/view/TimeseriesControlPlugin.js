@@ -1,3 +1,5 @@
+import 'moment';
+
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin
  * Provides control UI for timeseries

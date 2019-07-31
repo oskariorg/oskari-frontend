@@ -31,6 +31,7 @@
     "jsts": "2.0.3",
     "lodash": "4.17.11",
     "mobile-detect": "1.4.3",
+    "moment": "2.24.0",
     "ol": "5.3.1",
     "ol-mapbox-style": "4.2.1",
     "react": "16.8.5",
