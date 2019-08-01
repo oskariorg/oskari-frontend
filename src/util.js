@@ -713,6 +713,22 @@ Oskari.util = (function () {
             .replace(/_/g, '.')}$`);
         return likeRegExp.test(value.toString());
     }
+    /**
+    * Function to get errorText from objects received in jQuery.ajax request failure.
+    *
+    * @param {jqXHR} jqXHR The jqXHR (in jQuery 1.4.x, XMLHttpRequest) object
+    * @param {String} errorThrown exception object
+    */
+    util.getErrorTextFromAjaxFailureObjects = (jqXHR, errorThrown) => {
+        var error = errorThrown.message || errorThrown;
+        try {
+            const err = JSON.parse(jqXHR.responseText).error;
+            if (err !== null && err !== undefined) {
+                error = err;
+            }
+        } catch (ignore) {}
+        return error;
+    }
 
     return util;
 }());

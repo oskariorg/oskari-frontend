@@ -869,3 +869,39 @@ describe('isMobile function', () => {
     });
 
 });
+
+describe('getErrorTextFromAjaxFailureObjects function', () => {
+
+    const mockjqHRerrorText = 'mockjqHRerrorText';
+    const mockExceptionMessage = 'exceptionmsg';
+
+    const mockjqHR = {
+        "responseText": JSON.stringify({"error": mockjqHRerrorText})
+    };
+    const mockException = {
+        "message" : mockExceptionMessage
+    };
+
+    const mockExceptionWihtoutMessage = {};
+
+    test('Returns jqXHR.responseText when present', () => {
+        expect(OskariMock.util.getErrorTextFromAjaxFailureObjects(mockjqHR,mockException)).toEqual(mockjqHRerrorText);
+    });
+
+    test('Returns message from exception object when jqXHR is not provided', () => {
+        expect(OskariMock.util.getErrorTextFromAjaxFailureObjects(null,mockException)).toEqual(mockExceptionMessage);
+    });
+
+    test('Returns exception object when jqXHR is not provided and exception does not contain message', () => {
+        expect(OskariMock.util.getErrorTextFromAjaxFailureObjects(null,mockExceptionWihtoutMessage)).toEqual(mockExceptionWihtoutMessage);
+    });
+
+    test('throws TypeError when parameters are not provided', () => {
+        expect(() => OskariMock.util.getErrorTextFromAjaxFailureObjects()).toThrowError(TypeError);
+    });
+
+    test('throws TypeError when exception is not provided', () => {
+        expect(() => OskariMock.util.getErrorTextFromAjaxFailureObjects(mockjqHR,null)).toThrowError(TypeError);
+    });
+
+});
