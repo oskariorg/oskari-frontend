@@ -1,3 +1,6 @@
+/* eslint-disable new-cap */
+import { Style as olStyle, Circle as olCircleStyle, Stroke as olStroke, Fill as olFill, Text as olText } from 'ol/style';
+
 const defaults = {
     style: {
         fill: {
@@ -219,4 +222,33 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
         });
     }
     return getStyleFunction(styles, hoverHandler);
+};
+
+// Style for cluster circles
+const clusterStyleCache = {};
+export const clusterStyleFunc = feature => {
+    const size = feature.get('features').length;
+    let style = clusterStyleCache[size];
+    if (!style) {
+        style = new olStyle({
+            image: new olCircleStyle({
+                radius: size > 9 ? 14 : 12,
+                stroke: new olStroke({
+                    color: '#fff'
+                }),
+                fill: new olFill({
+                    color: '#3399CC'
+                })
+            }),
+            text: new olText({
+                text: size.toString(),
+                font: 'bold 14px sans-sherif',
+                fill: new olFill({
+                    color: '#fff'
+                })
+            })
+        });
+        clusterStyleCache[size] = style;
+    }
+    return style;
 };

@@ -191,6 +191,14 @@ export class MapModule extends AbstractMapModule {
     _getFeaturesAtPixelImpl (x, y) {
         const hits = [];
         this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
+            // Cluster source check
+            if (feature && feature.get('features')) {
+                if (feature.get('features').length > 1) {
+                    return;
+                }
+                // Single feature in cluster
+                feature = feature.get('features')[0];
+            }
             const hit = {
                 featureProperties: feature.getProperties(),
                 layerId: layer.get(LAYER_ID)

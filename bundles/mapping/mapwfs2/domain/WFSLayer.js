@@ -286,6 +286,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             }
         },
         /**
+         * To get distance between features when clustering kicks in.
+         *  @method getClusteringDistance
+         *  @return {Number} Distance between features in pixels
+         */
+        getClusteringDistance () {
+            return this._options.clusteringDistance;
+        },
+        /**
          * @method isSupportedSrs
          * Wfs layer is always supported
          */
