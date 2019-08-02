@@ -16,6 +16,6 @@ import '../src/loader.js';
 import '../src/oskari.app.js';
 import '../src/BasicBundle.js';
 
-// common styles
+// common css
 import '../resources/css/forms.css';
 import '../resources/css/portal.css';
