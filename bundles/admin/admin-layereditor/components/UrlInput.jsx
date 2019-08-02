@@ -1,5 +1,5 @@
 import React from 'react';
-import Input from 'antd/lib/input';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
 import { Select, Option } from './Select';
 

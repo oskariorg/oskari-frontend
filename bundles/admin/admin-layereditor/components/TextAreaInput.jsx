@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Input from 'antd/lib/input';
-import 'antd/lib/input/style/css';
+import { Input } from 'antd';
 
 const { TextArea } = Input;
 

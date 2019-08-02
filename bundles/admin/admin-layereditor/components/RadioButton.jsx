@@ -1,6 +1,5 @@
 import React from 'react';
-import AntRadio from 'antd/lib/radio';
-import 'antd/lib/radio/style/css';
+import { Radio as AntRadio } from 'antd';
 
 export const Radio = (props) => (
     <AntRadio {...props} />

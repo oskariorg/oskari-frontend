@@ -1,6 +1,5 @@
 
 import React from 'react';
-import AntAlert from 'antd/lib/alert';
-import 'antd/lib/alert/style/css';
+import { Alert as AntAlert } from 'antd';
 
 export const Alert = props => <AntAlert {...props} />;

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse as AntCollapse } from 'antd';
-import 'antd/lib/collapse/style/css';
 
 const AntPanel = AntCollapse.Panel;
 

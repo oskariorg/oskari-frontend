@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntButton from 'antd/lib/button';
-import 'antd/lib/button/style/css';
+import { Button as AntButton } from 'antd';
 
 export const Button = ({children, ...other}) => (
     <AntButton {...other}>{children}</AntButton>

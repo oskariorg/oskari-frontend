@@ -21,9 +21,15 @@ module.exports = function parseParams (env) {
     const version = parts.length > 1 ? parts[0] : 'devapp';
     const pathParam = parts.length > 1 ? parts[1] : parts[0];
 
-    return {
+    const params = {
         version,
         pathParam,
         publicPathPrefix: env.absolutePublicPath === 'true' ? '/' : ''
     };
+
+    if (env.theme) {
+        params.theme = env.theme;
+    }
+
+    return params;
 };

@@ -58,7 +58,11 @@ input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="butt
 }
 
 /* This is used in buttons */
-input[type="submit"], input[type="button"], input[type="reset"], button, .lfr-actions, .lfr-actions ul {
+input[type="submit"],
+input[type="reset"],
+input[type="button"]:not([class*="ant-"]),
+button:not([class*="ant-"]),
+.lfr-actions, .lfr-actions ul {
   background: #d4d4d4 url(../images/portlet/header_bg.png) repeat-x 0 0;
   border: 1px solid;
   border-color: #C8C9CA #9E9E9E #9E9E9E #C8C9CA;
@@ -68,7 +72,11 @@ input[type="submit"], input[type="button"], input[type="reset"], button, .lfr-ac
 }
 
 /* This is used in buttons */
-input[type="submit"]:hover:enabled, input[type="button"]:hover:enabled, input[type="reset"]:hover:enabled, button:hover:enabled, .lfr-actions:hover, .lfr-actions:hover ul {
+input[type="submit"]:hover:enabled,
+input[type="reset"]:hover:enabled,
+input[type="button"]:hover:enabled:not([class*="ant-"]),
+button:hover:enabled:not([class*="ant-"]),
+.lfr-actions:hover, .lfr-actions:hover ul {
   background: #b9ced9 url(../images/application/state_hover_bg.png) repeat-x 0 0;
   border-color: #627782;
   /* Hover color doesn't really matter... */
