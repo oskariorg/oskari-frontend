@@ -1031,7 +1031,8 @@ function (
                 tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
                 hover: parseOptionQuietly('.add-layer-input.layer-options-hover'),
                 renderMode: parseOptionQuietly('.layer-options-renderMode:checked', true),
-                apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true)
+                apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true),
+                clusteringDistance: parseOptionQuietly('.add-layer-input.layer-options-clustering-distance')
             };
             if (parseErrors.length > 0) {
                 options.errors = parseErrors;
