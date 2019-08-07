@@ -349,7 +349,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
                     }
                     // Single feature
                     feature = feature.get('features')[0];
-                }    
+                }
                 const layerType = layer.get(LAYER_TYPE);
                 const hoverOptions = layer.get(LAYER_HOVER);
                 const contentOptions = hoverOptions ? hoverOptions.content : null;
