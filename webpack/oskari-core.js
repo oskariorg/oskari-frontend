@@ -15,7 +15,6 @@ import '../src/global.js';
 import '../src/loader.js';
 import '../src/oskari.app.js';
 import '../src/BasicBundle.js';
-import '../src/resetRemainingSessionTime.js';
 // common css
 import '../resources/css/forms.css';
 import '../resources/css/portal.css';
