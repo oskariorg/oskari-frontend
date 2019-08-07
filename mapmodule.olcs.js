@@ -2,6 +2,7 @@ import { defaults as olInteractionDefaults } from 'ol/interaction';
 import olView from 'ol/View';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
+import { Vector as olLayerVector } from 'ol/layer';
 import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
@@ -210,6 +211,10 @@ class MapModuleOlCesium extends MapModuleOl {
         if (layerImpl instanceof Cesium.Cesium3DTileset) {
             this._map3D.getCesiumScene().primitives.add(layerImpl);
         } else {
+            if (layerImpl instanceof olLayerVector) {
+                // olcs property
+                layerImpl.set('altitudeMode', 'clampToGround');
+            }
             this.getMap().addLayer(layerImpl);
             // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
             if (toBottom === true) {
