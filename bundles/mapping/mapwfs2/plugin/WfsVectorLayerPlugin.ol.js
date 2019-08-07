@@ -277,12 +277,14 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!olLayers || olLayers.length === 0) {
             return;
         }
-        const lyr = olLayers[0];
-        lyr.setStyle(this.getCurrentStyleFunction(layer));
-        if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
-            // Trigger features changed to synchronize 3D view
-            lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
-        }
+        const style = this.getCurrentStyleFunction(layer);
+        olLayers.forEach(lyr => {
+            lyr.setStyle(style);
+            if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
+                // Trigger features changed to synchronize 3D view
+                lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
+            }
+        });
     }
     /**
      * @method updateLayerProperties

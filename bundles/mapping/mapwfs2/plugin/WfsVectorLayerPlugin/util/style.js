@@ -226,9 +226,10 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
 
 // Style for cluster circles
 const clusterStyleCache = {};
-export const clusterStyleFunc = feature => {
+export const clusterStyleFunc = (feature, isSelected) => {
     const size = feature.get('features').length;
-    let style = clusterStyleCache[size];
+    const cacheKey = [`${size} ${isSelected}`];
+    let style = clusterStyleCache[cacheKey];
     if (!style) {
         style = new olStyle({
             image: new olCircleStyle({
@@ -237,7 +238,7 @@ export const clusterStyleFunc = feature => {
                     color: '#fff'
                 }),
                 fill: new olFill({
-                    color: '#3399CC'
+                    color: isSelected ? '#005d90' : '#3399CC'
                 })
             }),
             text: new olText({
@@ -248,7 +249,8 @@ export const clusterStyleFunc = feature => {
                 })
             })
         });
-        clusterStyleCache[size] = style;
+        clusterStyleCache[cacheKey] = style;
     }
     return style;
 };
+export const hiddenStyle = new olStyle({ visibility: 'hidden' });

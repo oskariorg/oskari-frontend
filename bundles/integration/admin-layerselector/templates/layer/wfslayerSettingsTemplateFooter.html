@@ -46,7 +46,7 @@
     </div>
 </div>
 <div class="add-layer-record" <% if (!supportsWFS3) { %>style="display: none"<% } %>>
-    <% var clusteringDist = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().clusteringDistance)) ? '' : JSON.stringify(model.getOptions().clusteringDistance); %>
+    <% var clusteringDist = (_.isEmpty(model.getOptions()) || !model.getOptions().clusteringDistance) ? '' : model.getOptions().clusteringDistance; %>
     <div class="add-layer-label-area">
         <label class="add-layer-label" title="<%= instance.getLocalization('admin').clusteringDistance %>"><%= instance.getLocalization('admin').clusteringDistance %></label>
     </div>

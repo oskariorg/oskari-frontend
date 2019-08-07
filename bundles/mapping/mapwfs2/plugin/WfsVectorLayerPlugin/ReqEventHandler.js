@@ -23,6 +23,15 @@ export class ReqEventHandler {
                 }
                 const hits = plugin.getMapModule().getFeaturesAtPixel(event.getMouseX(), event.getMouseY());
                 const keepPrevious = event.getParams().ctrlKeyDown;
+                const modifySelectionOpts = {};
+                const getSelectionOptsForLayer = layer => {
+                    let selectionOpts = modifySelectionOpts[layer.getId()];
+                    if (!selectionOpts) {
+                        selectionOpts = { layer, features: [] };
+                        modifySelectionOpts[layer.getId()] = selectionOpts;
+                    }
+                    return selectionOpts;
+                };
                 hits.forEach(({ featureProperties, layerId }) => {
                     const layer = getSelectedLayer(layerId);
                     if (!layer || !plugin.isLayerSupported(layer)) {
@@ -30,15 +39,19 @@ export class ReqEventHandler {
                     }
                     const wfsFeatureId = featureProperties[WFS_ID_KEY];
                     if (keepPrevious) {
-                        modifySelection(layer, [wfsFeatureId], keepPrevious);
+                        getSelectionOptsForLayer(layer).features.push(wfsFeatureId);
                     } else {
                         plugin.notify('GetInfoResultEvent', {
-                            layerId: layer.getId(),
+                            layerId,
                             features: getPropsArray([featureProperties], layer.getFields()),
                             lonlat: event.getLonLat()
                         });
                     }
                 });
+                if (keepPrevious) {
+                    Object.values(modifySelectionOpts)
+                        .forEach(({ layer, features }) => modifySelection(layer, features, keepPrevious));
+                }
             },
             'AfterMapMoveEvent': () => {
                 plugin.getAllLayerIds().forEach(layerId => {

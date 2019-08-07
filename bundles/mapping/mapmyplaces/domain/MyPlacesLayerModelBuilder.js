@@ -3,10 +3,11 @@
  * JSON-parsing for myplaces layer
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayerModelBuilder',
-    function (sandbox) {
+    function (sandbox, clusteringDistance) {
         this.localization = Oskari.getLocalization('MapMyPlaces');
         this.sandbox = sandbox;
         this.wfsBuilder = Oskari.clazz.create('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder', sandbox);
+        this.clusteringDistance = clusteringDistance;
     }, {
         /**
          * parses any additional fields to model
@@ -27,6 +28,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             this.wfsBuilder.setDefaultRenderMode(layer, 'vector');
 
+            if (this.clusteringDistance && this.clusteringDistance > 0) {
+                layer.setClusteringDistance(this.clusteringDistance);
+            }
             if (mapLayerJson.fields) {
                 layer.setFields(mapLayerJson.fields);
             }

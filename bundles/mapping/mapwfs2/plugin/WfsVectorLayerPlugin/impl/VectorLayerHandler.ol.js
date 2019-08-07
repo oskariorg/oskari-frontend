@@ -51,12 +51,13 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         return handlers;
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
-        const clustering = typeof layer.getClusteringDistance() !== 'undefined';
+        const clustering = this._isClusteringSupported() && typeof layer.getClusteringDistance() !== 'undefined';
         return (feature, resolution) => {
             // Cluster layer feature
             if (feature.get('features')) {
                 if (feature.get('features').length > 1) {
-                    return clusterStyleFunc(feature);
+                    const isSelected = !!feature.get('features').find(cur => selectedIds.has(cur.get(WFS_ID_KEY)));
+                    return clusterStyleFunc(feature, isSelected);
                 } else {
                     // Only single point in cluster. Use it in styling.
                     feature = feature.get('features')[0];
@@ -109,11 +110,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         });
         const olLayers = [vectorLayer];
 
-        // TEMP TEST
-        layer._options.clusteringDistance = 20;
-
         // Setup clustering
-        if (layer.getClusteringDistance()) {
+        if (this._isClusteringSupported() && layer.getClusteringDistance()) {
             const clusterSource = new olCluster({
                 distance: layer.getClusteringDistance(),
                 source,
@@ -135,7 +133,6 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                 source: clusterSource
             });
             vectorLayer.on('change:opacity', () => clusterLayer.setOpacity(vectorLayer.getOpacity()));
-
             olLayers.push(clusterLayer);
         }
 
@@ -291,5 +288,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return false;
         }
         return resolution <= olLayer.getMaxResolution() && resolution >= olLayer.getMinResolution();
+    }
+    _isClusteringSupported () {
+        return !this.plugin.getMapModule().getSupports3D();
     }
 };
