@@ -112,21 +112,21 @@ Oskari.clazz.category('Oskari.Sandbox', 'state-methods', {
             return;
         }
         var milliSeconds = 60 * 1000 * minutes;
-        setTimeout(function () {
+        this.sessionTimeout = setTimeout(function () {
             callback();
         }, milliSeconds);
     },
     extendSession: function (errorCallback) {
-        var url = this.getAjaxUrl() + 'action_route=GetCurrentUser';
-        var currentUuid = Oskari.user().getUuid();
-        var successCallback = function (res, textStatus, jqXHR) {
-            var resUuid = jqXHR.getResponseHeader('currentUserUid');
-            if (resUuid !== currentUuid) {
-                // the uuid in response was not what we expected
-                errorCallback();
-            }
+        const url = Oskari.urls.getRoute('ResetRemainingSessionTime');
+        const successCallback = function (res, textStatus, jqXHR) {
+            const log = Oskari.log('sandbox-state-methods');
+            log.debug(res);
         };
-
         this.ajax(url, successCallback, errorCallback);
+    },
+    clearSessionTimer: function() {
+        if(this.sessionTimeout){
+            clearTimeout(this.sessionTimeout);
+        }
     }
 });

@@ -16,6 +16,17 @@ Oskari.clazz.category(
             });
         },
         /**
+         * @method resetSessionTimer
+         * @param {Number} minutes session lenght in minutes
+         */
+        resetSessionTimer: function (minutes) {
+            if (!minutes) return;
+
+            // Clear old timer and set new one
+            this.getSandbox().clearSessionTimer();
+            this.setSessionExpiring(minutes);
+        },
+        /**
      * @method _createNotificationDialog
      * @private
      * @param  {Number} minutes

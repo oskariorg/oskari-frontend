@@ -95,6 +95,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             if (Oskari.user().isLoggedIn() && sessionLengthInMinutes > 0) {
                 this.setSessionExpiring(sessionLengthInMinutes);
             }
+
+            this._setupActionsOnUserActivity(sessionLengthInMinutes);
         },
 
         /**
@@ -494,6 +496,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
                 i;
             for (i = 0; i < selectedLayers.length; i += 1) {
                 sandbox.request(module.getName(), rbRemove(selectedLayers[i].getId()));
+            }
+        },
+        _setupActionsOnUserActivity (sessionLengthInMinutes) {
+            if (Oskari.user().isLoggedIn() && sessionLengthInMinutes > 0) {
+                const throttleTime = 300000;
+                const resetRemainingSessionTime = Oskari.util.throttle(() => {
+                    jQuery.ajax({
+                        type: 'GET',
+                        url: Oskari.urls.getRoute('ResetRemainingSessionTime'),
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                            this._log.error(errorText);
+                        },
+                        success: (response) => {
+                            this._log.debug(response);
+                            this.resetSessionTimer(sessionLengthInMinutes);
+                        }
+                    });
+                }, throttleTime);
+
+                jQuery(document).mousemove(() => {
+                    resetRemainingSessionTime();
+                });
             }
         }
 
