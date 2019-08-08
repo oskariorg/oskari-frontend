@@ -499,28 +499,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.StateHandlerBundleI
             }
         },
         _setupActionsOnUserActivity (sessionLengthInMinutes) {
-            const throttleTime = 300000;
-            const resetRemainingSessionTime = Oskari.util.throttle(() => {
-                jQuery.ajax({
-                    type: 'GET',
-                    url: Oskari.urls.getRoute('ResetRemainingSessionTime'),
-                    error: (jqXHR, textStatus, errorThrown) => {
-                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
-                        this._log.error(errorText);
-                    },
-                    success: (response) => {
-                        this._log.debug(response);
-
-                        if (Oskari.user().isLoggedIn() && sessionLengthInMinutes > 0) {
+            if (Oskari.user().isLoggedIn() && sessionLengthInMinutes > 0) {
+                const throttleTime = 300000;
+                const resetRemainingSessionTime = Oskari.util.throttle(() => {
+                    jQuery.ajax({
+                        type: 'GET',
+                        url: Oskari.urls.getRoute('ResetRemainingSessionTime'),
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                            this._log.error(errorText);
+                        },
+                        success: (response) => {
+                            this._log.debug(response);
                             this.resetSessionTimer(sessionLengthInMinutes);
                         }
-                    }
-                });
-            }, throttleTime);
+                    });
+                }, throttleTime);
 
-            jQuery(document).mousemove(() => {
-                resetRemainingSessionTime();
-            });
+                jQuery(document).mousemove(() => {
+                    resetRemainingSessionTime();
+                });
+            }
         }
 
     }, {
