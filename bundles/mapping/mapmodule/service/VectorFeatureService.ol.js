@@ -266,13 +266,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         }
 
         /**
-         * @method _updateTooltipContent
+         * @method updateTooltipContent
          * Updates tooltip with feature's data or hides it if content is empty.
          *
          * @param {String} contentOptions
          * @param {olFeature | olRenderFeature} feature
          */
-        _updateTooltipContent (contentOptions, feature) {
+        updateTooltipContent (contentOptions, feature) {
             const tooltip = jQuery(this.getTooltipOverlay().getElement());
             const content = this._getTooltipContent(contentOptions, feature);
             if (content) {
@@ -306,7 +306,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const tooltip = jQuery(this.getTooltipOverlay().getElement());
             if (contentOptions) {
                 if (this._tooltipState.feature !== feature) {
-                    this._updateTooltipContent(contentOptions, feature);
+                    this.updateTooltipContent(contentOptions, feature);
                 }
                 if (!tooltip.is(':empty')) {
                     this._updateTooltipPosition(event.getPageX(), event.getPageY(), event.getLon(), event.getLat());
