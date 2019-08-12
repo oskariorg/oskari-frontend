@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select as AntSelect } from 'antd';
+import 'antd/es/select/style/';
 
 const AntOption = AntSelect.Option;
 

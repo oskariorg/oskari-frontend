@@ -76,12 +76,7 @@ module.exports = (env, argv) => {
                             ],
                             plugins: [
                                 require.resolve('babel-plugin-styled-components'), // Resolve path for use from external projects
-                                require.resolve('babel-plugin-transform-remove-strict-mode'),
-                                ['import', {
-                                    libraryName: 'antd',
-                                    libraryDirectory: 'es',
-                                    style: true
-                                }]
+                                require.resolve('babel-plugin-transform-remove-strict-mode')
                             ]
                         }
                     }
