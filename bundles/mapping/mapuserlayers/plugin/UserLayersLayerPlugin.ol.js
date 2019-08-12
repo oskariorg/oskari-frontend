@@ -12,7 +12,8 @@ Oskari.clazz.define(
      *
      *
      */
-    function () {
+    function (config) {
+        this._config = config;
         this._log = Oskari.log(this.getName());
     }, {
         __name: 'UserLayersLayerPlugin',
