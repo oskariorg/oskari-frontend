@@ -160,16 +160,21 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const handler = renderMode === RENDER_MODE_MVT ? this.mvtLayerHandler : this.vectorLayerHandler;
         this.layerHandlersByLayerId[layer.getId()] = handler;
-        const added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
+        let added = handler.addMapLayerToMap(layer, keepLayerOnTop, isBaseMap);
         if (!added) {
             return;
         }
+        if (!Array.isArray(added)) {
+            added = [added];
+        }
         // Set oskari properties for vector feature service functionalities.
-        const silent = true;
-        added.set(LAYER_ID, layer.getId(), silent);
-        added.set(LAYER_TYPE, layer.getLayerType(), silent);
-        added.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-        added.setStyle(this.getCurrentStyleFunction(layer, handler));
+        added.forEach(lyr => {
+            const silent = true;
+            lyr.set(LAYER_ID, layer.getId(), silent);
+            lyr.set(LAYER_TYPE, layer.getLayerType(), silent);
+            lyr.set(LAYER_HOVER, layer.getHoverOptions(), silent);
+            lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
+        });
     }
     /**
      * @method refreshLayersOfType
@@ -272,12 +277,14 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!olLayers || olLayers.length === 0) {
             return;
         }
-        const lyr = olLayers[0];
-        lyr.setStyle(this.getCurrentStyleFunction(layer));
-        if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
-            // Trigger features changed to synchronize 3D view
-            lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
-        }
+        const style = this.getCurrentStyleFunction(layer);
+        olLayers.forEach(lyr => {
+            lyr.setStyle(style);
+            if (this.renderMode === RENDER_MODE_VECTOR && this.getMapModule().getSupports3D()) {
+                // Trigger features changed to synchronize 3D view
+                lyr.getSource().getFeatures().forEach(ftr => ftr.changed());
+            }
+        });
     }
     /**
      * @method updateLayerProperties

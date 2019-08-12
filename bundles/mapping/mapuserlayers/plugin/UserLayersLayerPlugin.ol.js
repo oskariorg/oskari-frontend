@@ -12,7 +12,8 @@ Oskari.clazz.define(
      *
      *
      */
-    function () {
+    function (config) {
+        this._config = config;
         this._log = Oskari.log(this.getName());
     }, {
         __name: 'UserLayersLayerPlugin',
@@ -29,8 +30,9 @@ Oskari.clazz.define(
          */
         _initImpl: function () {
             const layerClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer';
+            const { clusteringDistance } = this._config;
             const modelBuilderClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder';
-            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox());
+            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox(), clusteringDistance);
 
             const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
             if (typeof wfsPlugin.registerLayerType === 'function') {

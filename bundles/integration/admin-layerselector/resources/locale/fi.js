@@ -99,6 +99,7 @@ Oskari.registerLocalization(
                 "vector": "Suuria kohteita",
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
+            "clusteringDistance": "Pisteiden etäisyys klusteroidessa",
             "mvtAttributions": "Lähdeviitteet",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Tiilimatriisi",

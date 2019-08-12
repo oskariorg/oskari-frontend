@@ -45,6 +45,15 @@
             placeholder="<%- instance.getLocalization('admin').mvtHoverDesc %>"><%=hover%></textarea>
     </div>
 </div>
+<div class="add-layer-record" <% if (!supportsWFS3) { %>style="display: none"<% } %>>
+    <% var clusteringDist = (_.isEmpty(model.getOptions()) || !model.getOptions().clusteringDistance) ? '' : model.getOptions().clusteringDistance; %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').clusteringDistance %>"><%= instance.getLocalization('admin').clusteringDistance %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <input type="text" class="add-layer-input small layer-options-clustering-distance" value="<%= clusteringDist %>" />&nbsp;px
+    </div>
+</div>
 <% if (!supportsWFS3) { %>
 <div class="add-layer-record">
     <div class="add-layer-label-area">

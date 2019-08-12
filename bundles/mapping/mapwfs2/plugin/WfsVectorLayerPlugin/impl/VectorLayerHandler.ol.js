@@ -1,17 +1,15 @@
 /* eslint-disable new-cap */
-import olSourceVector from 'ol/source/Vector';
-import olLayerVector from 'ol/layer/Vector';
+import { Cluster as olCluster, Vector as olSourceVector, TileDebug as olSourceTileDebug } from 'ol/source';
+import { Vector as olLayerVector, Tile as olLayerTile } from 'ol/layer';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import { tile as tileStrategyFactory } from 'ol/loadingstrategy';
 import { createXYZ } from 'ol/tilegrid';
 
 import { AbstractLayerHandler, LOADING_STATUS_VALUE } from './AbstractLayerHandler.ol';
-import { applyOpacity } from '../util/style';
+import { applyOpacity, clusterStyleFunc } from '../util/style';
 import { WFS_ID_KEY } from '../util/props';
 import { RequestCounter } from './RequestCounter';
 
-import olLayerTile from 'ol/layer/Tile';
-import olSourceTileDebug from 'ol/source/TileDebug';
 import olPoint from 'ol/geom/Point';
 import olLineString from 'ol/geom/LineString';
 import olLinearRing from 'ol/geom/LinearRing';
@@ -20,6 +18,8 @@ import olMultiPoint from 'ol/geom/MultiPoint';
 import olMultiLineString from 'ol/geom/MultiLineString';
 import olMultiPolygon from 'ol/geom/MultiPolygon';
 import olGeometryCollection from 'ol/geom/GeometryCollection';
+
+import { getCenter as getOlExtentCenter } from 'ol/extent';
 
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
@@ -51,7 +51,24 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         return handlers;
     }
     getStyleFunction (layer, styleFunction, selectedIds) {
+        const clustering = this._isClusteringSupported() && typeof layer.getClusteringDistance() !== 'undefined';
         return (feature, resolution) => {
+            // Cluster layer feature
+            if (feature.get('features')) {
+                if (feature.get('features').length > 1) {
+                    const isSelected = !!feature.get('features').find(cur => selectedIds.has(cur.get(WFS_ID_KEY)));
+                    return clusterStyleFunc(feature, isSelected);
+                } else {
+                    // Only single point in cluster. Use it in styling.
+                    feature = feature.get('features')[0];
+                }
+            } else if (clustering) {
+                // Vector layer feature, hide points
+                const geomType = feature.getGeometry().getType();
+                if (geomType === 'Point' || geomType === 'MultiPoint') {
+                    return null;
+                }
+            }
             const isSelected = selectedIds.has(feature.get(WFS_ID_KEY));
             const style = styleFunction(feature, resolution, isSelected);
             if (!this.plugin.getMapModule().getSupports3D()) {
@@ -68,7 +85,12 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         const geomFilter = reader.read(geometry);
         const envelope = geomFilter.getEnvelopeInternal();
         const extentFilter = [envelope.getMinX(), envelope.getMinY(), envelope.getMaxX(), envelope.getMaxY()];
-        layer.getSource().forEachFeatureInExtent(extentFilter, ftr => {
+        let source = layer.getSource();
+        if (source instanceof olCluster) {
+            // Get wrapped vector source
+            source = source.getSource();
+        }
+        source.forEachFeatureInExtent(extentFilter, ftr => {
             const geom = olParser.read(ftr.getGeometry());
             if (RelateOp.relate(geomFilter, geom).isIntersects()) {
                 featuresById.set(ftr.get(WFS_ID_KEY), ftr.getProperties());
@@ -84,15 +106,46 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             opacity,
             visible: layer.isVisible(),
             renderMode: 'hybrid',
-            source
+            source: source
         });
-        this.applyZoomBounds(layer, vectorLayer);
-        this.plugin.getMapModule().addLayer(vectorLayer, !keepLayerOnTop);
-        this.plugin.setOLMapLayers(layer.getId(), vectorLayer);
+        const olLayers = [vectorLayer];
+
+        // Setup clustering
+        if (this._isClusteringSupported() && layer.getClusteringDistance()) {
+            const clusterSource = new olCluster({
+                distance: layer.getClusteringDistance(),
+                source,
+                geometryFunction: feature => {
+                    const geom = feature.getGeometry();
+                    if (geom instanceof olPoint) {
+                        return geom;
+                    }
+                    if (geom instanceof olMultiPoint) {
+                        const center = getOlExtentCenter(geom.getExtent());
+                        return new olPoint(center);
+                    }
+                    return null;
+                }
+            });
+            const clusterLayer = new olLayerVector({
+                opacity,
+                visible: layer.isVisible(),
+                source: clusterSource
+            });
+            vectorLayer.on('change:opacity', () => clusterLayer.setOpacity(vectorLayer.getOpacity()));
+            olLayers.push(clusterLayer);
+        }
+
+        olLayers.forEach(olLayer => {
+            this.applyZoomBounds(layer, olLayer);
+            this.plugin.getMapModule().addLayer(olLayer, !keepLayerOnTop);
+        });
+
+        this.plugin.setOLMapLayers(layer.getId(), olLayers);
         if (this.plugin.getMapModule().getSupports3D()) {
             this._loadFeaturesForLayer(layer);
         }
-        return vectorLayer;
+        return olLayers;
     }
     refreshLayer (layer) {
         if (!layer) {
@@ -121,7 +174,7 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         });
         const strategy = tileStrategyFactory(tileGrid);
         this.loadingStrategies['' + layer.getId()] = strategy;
-        const source = new olSourceVector({
+        let source = new olSourceVector({
             format: new olFormatGeoJSON(),
             url: Oskari.urls.getRoute('GetWFSFeatures'),
             projection: projection,
@@ -235,5 +288,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
             return false;
         }
         return resolution <= olLayer.getMaxResolution() && resolution >= olLayer.getMinResolution();
+    }
+    _isClusteringSupported () {
+        return !this.plugin.getMapModule().getSupports3D();
     }
 };

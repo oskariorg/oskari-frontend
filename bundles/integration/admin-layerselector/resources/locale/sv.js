@@ -99,6 +99,7 @@ Oskari.registerLocalization(
                 "vector": "Stora objekt",
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
+            "clusteringDistance": "Punktavstånd i kluster",
             "mvtAttributions": "Tillskrivningar",
             "mvtAttributionsDesc": "JSON \n[{\n  \"label\": \"© MyOrganization\",\n  \"link\": \"https://linktomycopyrights\"\n}]",
             "mvtTileGrid": "Rutmatris",

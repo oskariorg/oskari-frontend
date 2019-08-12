@@ -190,12 +190,19 @@ export class MapModule extends AbstractMapModule {
      */
     _getFeaturesAtPixelImpl (x, y) {
         const hits = [];
-        this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
-            const hit = {
-                featureProperties: feature.getProperties(),
+        const addHit = (ftr, layer) => {
+            hits.push({
+                featureProperties: ftr.getProperties(),
                 layerId: layer.get(LAYER_ID)
-            };
-            hits.push(hit);
+            });
+        };
+        this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
+            // Cluster source
+            if (feature && feature.get('features')) {
+                feature.get('features').forEach(cur => addHit(cur, layer));
+                return;
+            }
+            addHit(feature, layer);
         });
         return hits;
     }
