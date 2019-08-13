@@ -340,29 +340,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @return {Object} slider
          */
         _addSlider: function (layer, layerDiv, input) {
-            var me = this,
-                lyrId = layer.getId(),
-                opa = layer.getOpacity(),
-                sliderEl = layerDiv.find('.layout-slider'),
-                slider = sliderEl.slider({
-                    min: 0,
-                    max: 100,
-                    value: opa,
-                    /* change: function (event,ui) {
-                     me._layerOpacityChanged(layer, ui.value);
-                     }, */
-                    slide: function (event, ui) {
-                        me._layerOpacityChanged(layer, ui.value);
-                    },
-                    stop: function (event, ui) {
-                        me._layerOpacityChanged(layer, ui.value);
-                    }
-                });
+            var me = this;
+            var lyrId = layer.getId();
+            var opa = layer.getOpacity();
+            var sliderEl = layerDiv.find('.layout-slider');
+            var slider = sliderEl.slider({
+                min: 0,
+                max: 100,
+                value: opa,
+                /* change: function (event,ui) {
+                    me._layerOpacityChanged(layer, ui.value);
+                    }, */
+                slide: function (event, ui) {
+                    me._layerOpacityChanged(layer, ui.value);
+                },
+                stop: function (event, ui) {
+                    me._layerOpacityChanged(layer, ui.value);
+                }
+            });
 
             me._sliders[lyrId] = slider;
 
             if (input) {
-                input.attr('value', layer.getOpacity());
+                input.val(layer.getOpacity());
                 input.on('change paste keyup', function () {
                     // sliderEl.slider('value', jQuery(this).val());
                     me._layerOpacityChanged(layer, jQuery(this).val());
@@ -663,7 +663,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 opa = layerDiv.find('div.layer-opacity div.opacity-slider input'),
                 slider = layerDiv.find('.layout-slider');
 
-            opa.attr('value', layer.getOpacity());
+            opa.val(layer.getOpacity());
             slider.slider('value', layer.getOpacity());
         },
 
