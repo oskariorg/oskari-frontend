@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tool: '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             buttons: '<div class="buttons"></div>',
             help: '<div class="help icon-info"></div>',
-            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/></form>' + '</div>',
+            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
             formatOptionTool: '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
             title: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
@@ -637,7 +637,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 pageTitle: title,
                 pageSize: size,
                 maplinkArgs: maplinkArgs,
-                format: selectedFormat || 'application/pdf'
+                format: selectedFormat || 'application/pdf',
+                customStyles: this._getSelectedCustomStyles()
             };
 
             if (!size) {
@@ -652,6 +653,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 }
             }
             return selections;
+        },
+        _getSelectedCustomStyles: function () {
+            const customStyles = {};
+            const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
+
+            selectedLayers.forEach(l => {
+                if (l.getCurrentStyle().getName() === 'oskari_custom') {
+                    customStyles[l.getId()] = l.getCustomStyle();
+                }
+            });
+
+            return customStyles;
         },
 
         /**
@@ -688,6 +701,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
             var link = printUrl;
             me.mainPanel.find('#oskari_print_formID').attr('action', link);
+            me.mainPanel.find('input[name=customStyles]').val(JSON.stringify(selections.customStyles));
 
             if (geoJson) {
                 // UTF-8 Base64 encoding
@@ -756,9 +770,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             if (selections.scaleText) {
                 url = url + '&scaleText=' + selections.scaleText;
             }
-
+            const hasCustomStyles = Object.keys(selections.customStyles).length > 0;
             // We need to use the POST method if there's GeoJSON or tile data.
-            if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson) {
+            if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson || hasCustomStyles) {
                 var stringifiedJson = me._stringifyGeoJson(me.instance.geoJson);
                 var stringifiedTileData = me._stringifyTileData(me.instance.tileData);
                 var stringifiedTableData = me._stringifyTableData(me.instance.tableJson);
