@@ -9,7 +9,6 @@ const LayerDiv = styled('div')`
     clear: both;
     position: relative;
     padding: 6px 10px 6px 40px;
-    width: 100%;
     min-height: 14px;
     line-height: 14px;
     

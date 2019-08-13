@@ -1,6 +1,6 @@
 import React from 'react';
-import AntSlider from 'antd/lib/slider';
-import 'antd/lib/slider/style/css';
+import { Slider as AntSlider } from 'antd';
+import 'antd/es/slider/style/';
 
 export const Slider = (props) => (
     <AntSlider {...props} />
