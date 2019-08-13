@@ -143,6 +143,8 @@ Oskari.clazz.define(
         me._groups = [];
 
         me._orderNumber = 1000000;
+
+        me._unsupportedReason = null;
     }, {
         /**
          * Populates name, description, inspire and organization fields with a localization JSON object
@@ -1211,16 +1213,25 @@ Oskari.clazz.define(
             return this._srs_name;
         },
         /**
-         * @method isSupported does the layer support given projection?
+         * @method isSupportedSrs does the layer support given projection?
          * @param {String} projection
          * @return {Boolean} true if no data about support or param found in supported
          */
-        isSupported: function (projection) {
+        isSupportedSrs: function (projection) {
             if (!this._srsList || !this._srsList.length) {
                 // if list is not provided, treat as supported
                 return true;
             }
             return this._srsList.indexOf(projection) !== -1;
+        },
+        /**
+         * @method @deprecated isSupported
+         * @param {String} projection
+         * @return {Boolean} true if no data about support or param found in supported
+         */
+        isSupported: function (projection) {
+            Oskari.log('AbstractLayer').deprecated('isSupported');
+            return this.isSupportedSrs(projection);
         },
         /**
          * @method setSrsList
@@ -1287,7 +1298,7 @@ Oskari.clazz.define(
          * @param {Array} groups groups array [{id:1,name:name"}]
          */
         setGroups: function (groups) {
-            this._groups = groups || [{id: -1, name: ''}];
+            this._groups = groups || [{ id: -1, name: '' }];
         },
         /**
          * @method @public getGroups get groups
@@ -1311,9 +1322,6 @@ Oskari.clazz.define(
          * @return {Boolean}         is filter supported
          */
         isFilterSupported: function () {
-            if (this.isLayerOfType('WFS') || this.isLayerOfType('ANALYSIS')) {
-                return true;
-            }
             return false;
         }
 

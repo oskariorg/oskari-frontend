@@ -24,8 +24,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         options.colors = options.colors || this._options.colors;
         if (typeof options.colors === 'string') {
             options.colors = [options.colors];
-        } else if (options.colors) {
-            options.colors = options.colors;
         }
     },
     chartIsInitialized: function () {
@@ -184,7 +182,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             .ticks(Math.min(10, tickTarget))
             .tickSizeInner(-this.dimensions.height() + this.dimensions.xAxisOffset)
             .tickSizeOuter(0)
-            .tickFormat(function (d) { return me.loc('graph.tick', {value: d}); });
+            .tickFormat(function (d) { return me.loc('graph.tick', { value: d }); });
     },
     /**
      * initializes the chart skeleton without any specific line or bar options

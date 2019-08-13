@@ -28,6 +28,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
          */
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
+            const flyout = jQuery(el[0].parentElement.parentElement);
+            flyout.addClass('userguide');
             if (!jQuery(this.container).hasClass('userguide')) {
                 jQuery(this.container).addClass('userguide');
             }

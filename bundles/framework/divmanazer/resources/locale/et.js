@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Muuda polügooni stiili",
                 "line": "Muuda joone stiili"
             },
+            "validation": {
+                "title": "Andmed sisaldavad vigu:",
+                "strokeWidth": "Joone laius ei mahu piirväärtuste (1-50) sisse.",
+                "borderWidth": "Pinna piirjoone laius ei mahu piirväärtuste (1-50) sisse."
+            },
             "dot": {
                 "title": "Muuda punktikihi stiili",
                 "tooltip": "Muuda punktikihi stiili",

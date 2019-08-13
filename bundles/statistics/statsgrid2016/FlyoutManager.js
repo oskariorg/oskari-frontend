@@ -3,6 +3,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.flyouts = {};
     var loc = instance.getLocalization();
     Oskari.makeObservable(this);
+    this.service = instance.getStatisticsService().getStateService();
 
     this.flyoutInfo = [
         {
@@ -79,7 +80,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         if (!flyout) {
             return;
         }
-        flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
+
+        const indicators = this.service.getIndicators();
+
+        if ((type === 'diagram' || type === 'table') && indicators.length === 0) {
+            const searchFlyout = me.flyouts['search'];
+            searchFlyout.move(searchFlyout.options.pos.x, searchFlyout.options.pos.y, true);
+            searchFlyout.show();
+            this.trigger('show', 'search');
+            const calculutedFlyoutPositionX = searchFlyout.options.pos.x + searchFlyout._popup[0].clientWidth + 5;
+            flyout.move(calculutedFlyoutPositionX, flyout.options.pos.y, true);
+        } else {
+            flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
+        }
+
         flyout.show();
         this.trigger('show', type);
     },

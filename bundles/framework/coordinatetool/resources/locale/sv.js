@@ -100,6 +100,10 @@ Oskari.registerLocalization(
                 "showTransformationTools": "Visa verktyg för koordinattransformation",
                 "noUI": "Dölj användargränsnittet (Använd via RPC gränssnitt)"
             }
+        },
+        "guidedTour": {
+            "title": "Koordinater",
+            "message": "Här kan du se koordinater, panorera till specifika koordinater och lägga till markörer på kartan."
         }
     }
 });

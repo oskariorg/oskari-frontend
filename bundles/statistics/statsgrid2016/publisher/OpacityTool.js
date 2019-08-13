@@ -35,13 +35,9 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
             return;
         }
         if (!stats.classificationPlugin) {
-            stats.createClassificationView(enabled);
+            stats.createClassificationView();
         }
-        if (enabled) {
-            stats.classificationPlugin.makeTransparent(true);
-        } else {
-            stats.classificationPlugin.makeTransparent(false);
-        }
+        stats.getStatisticsService().getStateService().updateClassificationPluginState('transparent', enabled);
     },
     getValues: function () {
         var me = this;
@@ -66,6 +62,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
         };
     },
     stop: function () {
+        const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+        if (service) {
+            service.getStateService().resetClassificationPluginState('transparent');
+        }
     }
 }, {
     'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],

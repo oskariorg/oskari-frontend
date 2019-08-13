@@ -1,6 +1,52 @@
 # Release Notes
 
+## 1.52.1
+
+Fixed an issue where markers added to map were always colored black. Now they can be made as colorful as before.
+
+## 1.52.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/17?closed=1
+
+- Styling for vector features has been improved. See new options in http://oskari.org/documentation/examples/oskari-style
+- New bundle "language-selector" has been added. It requires an element with id "language-selector-root" where it renders itself. Allows the user to change between the supported languages of the Oskari instance.
+- Added support to show localized variants of placenames on the geoportal search result listing
+- Session timeout notification now allows user to extend the session
+- Improved performance of the layer listing with long layer lists
+- Improved performance of the feature data table when multiple features are selected
+- Fixed issues with publisher when preview had open menus and user clicked "change location of components"
+- Fixed an issue where publisher terms of use acceptance wasn't handled properly
+- Fixed an issue in thematic maps where guest users couldn't view indicators they just added
+- Fixed an issue in thematic maps where indicator data having 0 as value was handled as no data
+- Fixed an issue on hierarchical layer-admin where some buttons were placed outside the UI on some screen resolutions
+- Fixed an issue on hierarchical layer-admin where removing layer group or moving one to a new parent caused an error
+- Fixed an issue on hierarchical layer-admin with changing layer style
+- Fix for sprite generation tool for customizing icons on an Oskari instance
+- Added French and Russian localizations
+- Other small fixes and tuning
+- ESLint rules tuned
+- Library updates
+
+Frontend changes for the new WFS-integration system:
+- add "wfsvector" after mapwfs2 bundle import in main.js if you want to try the new backend (see oskari-server migration guide):
+```
+import 'oskari-loader!oskari-frontend/packages/mapping/ol3/mapwfs2/bundle.js';
+import 'oskari-loader!oskari-frontend/packages/mapping/ol3/wfsvector/bundle.js';
+```
+
+Initial React-based UI changes (work in progress still):
+- Thematic map legend has been rewritten and is now implemented with React components
+- Added "Storybook" to improve developer experience on component development (https://storybook.js.org). Run "npm run storybook" to see how it looks.
+- Added utils for React-based development to src/react (also has an alias "oskari-ui" for Webpack/imports) 
+- Initial React based UI-components added but still need work as they have some global styling that affect rest of the UI
+- Added styled-components library to dependencies (current plan is to move away from SCSS start migrating towards styles-components)
+- New implementation for React-based maplayer admin has been added to bundles/admin/admin-layereditor (the new UI components are under this bundle for now and the functionality is not finished yet)
+
 ## 1.51.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/16?closed=1
 
 - The diagram window for thematic maps functionality is now resizable and the bars are now colored based on the classification.
 - Fixed an issue with hovering point symbols on thematic maps.

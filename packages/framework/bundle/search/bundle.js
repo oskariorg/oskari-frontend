@@ -173,6 +173,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.search.SearchBundle", function (
             "lang": "uk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/search/resources/locale/uk.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/search/resources/locale/ru.js"
         }]
     },
     "bundle": {

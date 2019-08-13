@@ -66,6 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (stats) {
             stats.togglePlugin.removeTool(this.id);
+            stats.getStatisticsService().getStateService().resetClassificationPluginState('visible');
         }
     }
 }, {

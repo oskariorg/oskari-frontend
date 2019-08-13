@@ -82,6 +82,15 @@
         getErrorService: function () {
             return this.error;
         },
+        getAllServices: function () {
+            return {
+                seriesService: this.series,
+                stateService: this.state,
+                classificationService: this.classification,
+                colorService: this.colors,
+                errorService: this.error
+            };
+        },
         addDatasource: function (ds) {
             if (!ds) {
                 // log error message
@@ -488,9 +497,6 @@
             var ind = this.state.getIndicator(indicatorHash);
             if (!ind) {
                 return;
-            }
-            if (!ind.classification) {
-                ind.classification = this.state.getClassificationOpts(indicatorHash);
             }
             if (typeof ind.classification.fractionDigits !== 'number') {
                 var allInts = Object.keys(data).every(function (key) {

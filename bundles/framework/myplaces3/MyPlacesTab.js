@@ -199,7 +199,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
                 service.deleteMyPlace(data.id, callback);
             });
             var cancelBtn = dialog.createCloseButton(me.loc('tab.notification.delete.btnCancel'));
-            var confirmMsg = me.loc('tab.notification.delete.confirm', {name: data.name});
+            var confirmMsg = me.loc('tab.notification.delete.confirm', { name: data.name });
             dialog.show(me.loc('tab.notification.delete.title'), confirmMsg, [cancelBtn, okBtn]);
             dialog.makeModal();
         },

@@ -165,6 +165,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundle", function
                 "lang": "uk",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/toolbar/resources/locale/uk.js"
+            }, {
+                "lang": "ru",
+                "type": "text/javascript",
+                "src": "../../../../bundles/mapping/toolbar/resources/locale/ru.js"
             }]
         },
         "bundle": {

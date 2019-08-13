@@ -24,7 +24,7 @@ Oskari.clazz.define(
             color: '#' + this.defaultValues.color
         };
 
-        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
+        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed'];
         this.capButtonNames = ['icon-line-flat_cap', 'icon-line-round_cap'];
         this.cornerButtonNames = ['icon-corner-sharp', 'icon-corner-round'];
 
@@ -263,6 +263,9 @@ Oskari.clazz.define(
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
+                if (!me.creator.validateWidth('strokeWidth', me.values.width)) {
+                    return;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -308,7 +311,7 @@ Oskari.clazz.define(
          * Creates a color picker component
          */
         _createColorPicker: function () {
-            var options = {flat: true};
+            var options = { flat: true };
             this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options);
         },
 

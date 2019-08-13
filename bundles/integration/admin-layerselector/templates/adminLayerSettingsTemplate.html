@@ -15,6 +15,7 @@
         capabilitiesTemplate: capabilitiesTemplate,
         model: model,
         instance: instance,
+        supportsWFS3: supportsWFS3,
         isSubLayer: isSubLayer }) %>
     <% } %>
 
@@ -328,6 +329,7 @@
 <% if(footer) { %>
 <%= footer({
     model: model,
+    supportsWFS3: supportsWFS3,
     instance: instance,
     isSubLayer: isSubLayer }) %>
 <% } %>

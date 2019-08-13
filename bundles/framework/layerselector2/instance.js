@@ -23,7 +23,7 @@ Oskari.clazz.define(
         this.filteredLayerListOpenedByRequest = false;
         this.throttledRedraw = Oskari.util.throttle(() => {
             this.plugins['Oskari.userinterface.Flyout'].populateLayers();
-        }, 2000, {leading: false});
+        }, 2000, { leading: false });
     }, {
         /**
          * @static

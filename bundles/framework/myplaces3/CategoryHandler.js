@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
         this.initialLoad = true;
         this.metaType = 'MYPLACES';
         this.loc = Oskari.getMsg.bind(null, 'MyPlaces3');
-        this.validateTool = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
     }, {
         __name: 'MyPlacesCategoryHandler',
         /**
@@ -161,6 +160,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             var myplacesLayer = mapLayerService.createMapLayer(json);
             mapLayerService.addLayer(myplacesLayer);
         },
+        updateLayerProperties: function (category) {
+            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            const id = this._getMapLayerId(category.getId());
+            const layer = mapLayerService.findMapLayer(id);
+            const options = layer.getOptions();
+            const style = category.getStyle();
+            layer.setName(category.getName());
+            options.styles = this._geStyleForLayer(style);
+        },
         _getMapLayerId: function (categoryId) {
             if (!categoryId) {
                 // default to default category id(?)
@@ -181,14 +189,34 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
          */
         _getMapLayerJson: function (categoryModel) {
             var baseJson = this._getMapLayerJsonBase();
+            const style = categoryModel.getStyle();
             baseJson.wmsUrl = Oskari.urls.getRoute('MyPlacesTile') + '&myCat=' + categoryModel.getId() + '&';
             baseJson.name = categoryModel.getName();
+            baseJson.options.styles = this._geStyleForLayer(style);
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             // Publish permission is always ok for user's own data
             baseJson.permissions = {
                 'publish': 'publication_permission_ok'
             };
             return baseJson;
+        },
+        _geStyleForLayer: function (style) {
+            style.text = {
+                font: 'bold 14px sans-serif',
+                labelProperty: ['attention_text', 'name'],
+                textAlign: 'left',
+                offsetX: 10,
+                fill: { color: '#000000' },
+                stroke: {
+                    color: '#FFFFFF',
+                    width: 2
+                }
+            };
+            return {
+                default: {
+                    featureStyle: style
+                }
+            };
         },
         /**
          * @method _getMapLayerJsonBase
@@ -204,7 +232,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 opacity: 50,
                 metaType: this.metaType,
                 orgName: this.loc('category.organization'),
-                inspire: this.loc('category.inspire')
+                inspire: this.loc('category.inspire'),
+                options: {}
             };
             if (this.instance.conf &&
                 this.instance.conf.layerDefaults &&
@@ -243,33 +272,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
 
         editCategory: function (category) {
             var me = this;
-
             this.sandbox.postRequestByName('DisableMapKeyboardMovementRequest');
             var form = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', me.instance);
             var values = {
                 name: category.getName(),
                 id: category.getId(),
                 _isDefault: category.isDefault(),
-                dot: {
-                    size: category.getDotSize(),
-                    color: category.getDotColor(),
-                    shape: ((category.getDotShape() !== null && category.getDotShape() !== undefined) ? category.getDotShape() : 1)
-                },
-                line: {
-                    cap: category.getLineCap(),
-                    corner: category.getLineCorner(),
-                    style: category.getLineStyle(),
-                    width: category.getLineWidth(),
-                    color: category.getLineColor()
-                },
-                area: {
-                    lineWidth: category.getAreaLineWidth(),
-                    lineCorner: category.getAreaLineCorner(),
-                    lineStyle: category.getAreaLineStyle(),
-                    lineColor: category.getAreaLineColor(),
-                    fillColor: category.getAreaFillColor(),
-                    fillStyle: category.getAreaFillStyle()
-                }
+                style: category.getStyle()
             };
             form.setValues(values);
             var content = form.getForm();
@@ -341,38 +350,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             });
             dialog.show(title, message, [okBtn]);
         },
-
-        /**
-         * @method hasIllegalChars
-         * Checks value for problematic characters
-         * @return {Boolean} true if value has illegal characters
-         */
-        hasIllegalChars: function (value) {
-            this.validateTool.setValue(value);
-            return !this.validateTool.checkValue();
-        },
-
-        /**
-         * @method _validateNumber
-         * Checks value for number and number range
-         * @return {Boolean} true if value is ok
-         * @private
-         */
-        _validateNumber: function (value, min, max) {
-            return this.validateTool.validateNumberRange(value, min, max);
-        },
-        /**
-         * @method _isColor
-         * Checks value for a hex color
-         * @return {Boolean} true if ok, false -> not a color. null is valid color.
-         * @private
-         */
-        _isColor: function (value) {
-            if (value === null) {
-                return true;
-            }
-            return this.validateTool.validateHexColor(value);
-        },
         validateCategoryFormValues: function (values) {
             var errors = [];
             var me = this;
@@ -391,79 +368,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     error: me.loc('validation.categoryNameIllegal')
                 });
             }
-
-            if (!this._validateNumber(values.dot.shape, 0, 6)) {
-                errors.push({
-                    field: 'dotShape',
-                    error: me.loc('validation.dotShape')
-                });
-            }
-            if (!this._validateNumber(values.dot.size, 1, 5)) {
-                errors.push({
-                    field: 'dotSize',
-                    error: me.loc('validation.dotSize')
-                });
-            }
-            if (!this._isColor(values.dot.color)) {
-                errors.push({
-                    field: 'dotColor',
-                    error: me.loc('validation.dotColor')
-                });
-            }
-            if (!this._validateNumber(values.line.width, 1, 50)) {
-                errors.push({
-                    field: 'lineWidth',
-                    error: me.loc('validation.lineSize')
-                });
-            }
-            if (!this._isColor(values.line.color)) {
-                errors.push({
-                    field: 'lineColor',
-                    error: me.loc('validation.lineColor')
-                });
-            }
-            if (!this._validateNumber(values.area.lineWidth, 0, 50)) {
-                errors.push({
-                    field: 'areaLineWidth',
-                    error: me.loc('validation.areaLineSize')
-                });
-            }
-            if (!this._isColor(values.area.lineColor)) {
-                errors.push({
-                    field: 'areaLineColor',
-                    error: me.loc('validation.areaLineColor')
-                });
-            }
-            if (!this._isColor(values.area.fillColor)) {
-                errors.push({
-                    field: 'areaFillColor',
-                    error: me.loc('validation.areaFillColor')
-                });
-            }
             return errors;
         },
         getCategoryFromFormValues: function (values) {
             var category = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.model.MyPlacesCategory');
             category.setName(Oskari.util.sanitize(values.name));
             category.setId(values.id);
-
-            category.setDotSize(values.dot.size);
-            category.setDotColor(values.dot.color);
-            category.setDotShape(values.dot.shape);
-
-            category.setLineWidth(values.line.width);
-            category.setLineColor(values.line.color);
-            category.setLineCap(values.line.cap);
-            category.setLineCorner(values.line.corner);
-            category.setLineStyle(values.line.style);
-
-            category.setAreaLineWidth(values.area.lineWidth);
-            category.setAreaLineColor(values.area.lineColor);
-            category.setAreaLineCorner(values.area.lineCorner);
-            category.setAreaLineStyle(values.area.lineStyle);
-            category.setAreaFillColor(values.area.fillColor);
-            category.setAreaFillStyle(values.area.fillStyle);
-
+            category.setStyle(values.style);
             category.setDefault(values._isDefault);
             return category;
         },
@@ -471,6 +382,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             var me = this;
             this.instance.getService().saveCategory(category, function (blnSuccess, model, blnNew) {
                 if (blnSuccess) {
+                    if (!blnNew) {
+                        me.updateLayerProperties(model);
+                    }
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                     dialog.show(me.loc('notification.categorySaved.title'), me.loc('notification.categorySaved.message'));
                     dialog.fadeout();
@@ -480,6 +394,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                     if (layerIsSelected) {
                         var request = Oskari.requestBuilder('MapModulePlugin.MapLayerUpdateRequest')(layerId, true);
                         me.sandbox.request(me, request);
+                        me.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layerId]);
                     }
                     return;
                 }

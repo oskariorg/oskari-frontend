@@ -16,6 +16,17 @@ Oskari.clazz.category(
             });
         },
         /**
+         * @method resetSessionTimer
+         * @param {Number} minutes session lenght in minutes
+         */
+        resetSessionTimer: function (minutes) {
+            if (!minutes) return;
+
+            // Clear old timer and set new one
+            this.getSandbox().clearSessionTimer();
+            this.setSessionExpiring(minutes);
+        },
+        /**
      * @method _createNotificationDialog
      * @private
      * @param  {Number} minutes
@@ -31,7 +42,7 @@ Oskari.clazz.category(
             var extendButtonTitle = locale('session.expiring.extend');
             var logoutButtonMessage = locale('session.expiring.logout');
             var notifyTitle = locale('session.expiring.title');
-            var notifyMessage = locale('session.expiring.message', {extend: '"' + extendButtonTitle + '"'});
+            var notifyMessage = locale('session.expiring.message', { extend: '"' + extendButtonTitle + '"' });
             var expiredTitle = locale('session.expired.title');
             var expiredMessage = locale('session.expired.message');
             var expireTimeout;
@@ -43,7 +54,7 @@ Oskari.clazz.category(
                     popup.show(expiredTitle, expiredMessage);
                     popup.makeModal();
                 });
-                clearTimeout(expireTimeout);
+                clearInterval(expireTimeout);
                 me.setSessionExpiring(minutes);
                 popup.close(true);
             });
@@ -55,18 +66,18 @@ Oskari.clazz.category(
             return {
                 show: function () {
                     const expireIn = 60; // Expire time in seconds
-                    popup.show(notifyTitle, notifyMessage + '<br />' + locale('session.expiring.expires', {expires: expireIn}), [logoutButton, extendButton]);
+                    popup.show(notifyTitle, notifyMessage + '<br />' + locale('session.expiring.expires', { expires: expireIn }), [logoutButton, extendButton]);
                     // Using Date for more accurate countdown (instead of just using setTimeout or setInterval)
                     const start = Date.now();
                     let diff;
                     let seconds;
-                    const interval = setInterval(timer, 1000);
+                    expireTimeout = setInterval(timer, 1000);
                     function timer () {
                         diff = expireIn - (((Date.now() - start) / 1000) | 0);
                         seconds = (diff % 60) | 0;
                         seconds = seconds < 10 ? 0 + seconds : seconds;
-                        if (seconds === 0) {
-                            clearInterval(interval);
+                        if (seconds < 1) {
+                            clearInterval(expireTimeout);
                             popup.show(expiredTitle, expiredMessage);
                             popup.makeModal();
                             if (Oskari.user().isLoggedIn()) {
@@ -75,7 +86,7 @@ Oskari.clazz.category(
                                 location.reload();
                             }
                         } else {
-                            popup.setContent(notifyMessage + '<br />' + locale('session.expiring.expires', {expires: seconds}));
+                            popup.setContent(notifyMessage + '<br />' + locale('session.expiring.expires', { expires: seconds }));
                         }
                     }
                 }

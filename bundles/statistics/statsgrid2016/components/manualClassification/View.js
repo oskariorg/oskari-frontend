@@ -1,4 +1,4 @@
-import {manualClassificationEditor} from './editor';
+import { manualClassificationEditor } from './editor';
 import '../../resources/scss/manualClassification.scss';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -52,7 +52,7 @@ export class ManualClassificationView {
         okButton.setHandler(() => {
             dialog.close();
             this.manualBounds = editedBounds;
-            okCallback();
+            okCallback(this.manualBounds);
         });
         const buttons = [dialog.createCloseButton(), okButton];
         const content = jQuery('<div class="manual-class-view"></div>');

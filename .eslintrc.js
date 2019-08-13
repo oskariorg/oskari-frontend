@@ -1,3 +1,4 @@
+const resolveConfig = require('./webpack/resolveConfig.js');
 // http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
@@ -27,10 +28,15 @@ module.exports = {
     "OskariPinchZoom": false,
     "Proj4js": false,
     "turf": false,
-    "__webpack_public_path__": false
+    "__webpack_public_path__": false,
+    // ---- jest tests
+    "describe": false,
+    "expect": false,
+    "test": false
+    // ----
   },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 9,
     "sourceType": "module"
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
@@ -73,8 +79,10 @@ module.exports = {
   },
   "settings": {
     "import/resolver": {
-      "node": {
-        "extensions": [".js", ".jsx"]
+      "webpack": {
+        "config": {
+          "resolve": resolveConfig
+        }
       }
     },
     "react": {

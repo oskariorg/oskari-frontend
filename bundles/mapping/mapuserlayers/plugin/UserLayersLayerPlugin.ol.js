@@ -12,7 +12,8 @@ Oskari.clazz.define(
      *
      *
      */
-    function () {
+    function (config) {
+        this._config = config;
         this._log = Oskari.log(this.getName());
     }, {
         __name: 'UserLayersLayerPlugin',
@@ -28,22 +29,24 @@ Oskari.clazz.define(
          * Interface method for the module protocol.
          */
         _initImpl: function () {
-            // register domain builder
-            var mapLayerService = this.getSandbox().getService(
-                'Oskari.mapframework.service.MapLayerService'
-            );
+            const layerClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer';
+            const { clusteringDistance } = this._config;
+            const modelBuilderClass = 'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder';
+            const layerModelBuilder = Oskari.clazz.create(modelBuilderClass, this.getSandbox(), clusteringDistance);
 
+            const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
+            if (typeof wfsPlugin.registerLayerType === 'function') {
+                // Let wfs plugin handle this layertype
+                wfsPlugin.registerLayerType(this.layertype, layerClass, layerModelBuilder);
+                this.unregister();
+                return;
+            }
+            // register domain builder
+            const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (!mapLayerService) {
                 return;
             }
-
-            mapLayerService.registerLayerModel(this.layertype,
-                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayer');
-
-            var layerModelBuilder = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
-                this.getSandbox()
-            );
+            mapLayerService.registerLayerModel(this.layertype, layerClass);
             mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
         },
 
@@ -51,7 +54,7 @@ Oskari.clazz.define(
          * Adds a single user layer to the map
          *
          * @method addMapLayerToMap
-         * @param {Oskari.mapframework.bundle.mapanalysis.domain.Userlayer} layer
+         * @param {Oskari.mapframework.bundle.mapuserlayer.domain.Userlayer} layer
          * @param {Boolean} keepLayerOnTop
          * @param {Boolean} isBaseMap
          */

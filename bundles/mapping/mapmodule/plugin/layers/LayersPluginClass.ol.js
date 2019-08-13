@@ -137,7 +137,7 @@ export class LayersPlugin extends AbstractMapModulePlugin {
     getGeometryCenter (geometry) {
         if (geometry.getType() === 'Point') {
             var point = geometry.getCoordinates();
-            return {lon: point[0], lat: point[1]};
+            return { lon: point[0], lat: point[1] };
         } else if (geometry.getType() === 'Polygon') {
             var extent = geometry.getExtent();
             return {

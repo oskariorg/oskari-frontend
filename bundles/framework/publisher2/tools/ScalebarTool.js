@@ -11,13 +11,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
             'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
         ],
         groupedSiblings: false,
+
         /**
-    * Get tool object.
-    * @method getTool
-    * @private
-    *
-    * @returns {Object} tool
-    */
+        * Get tool object.
+        * @method getTool
+        * @private
+        *
+        * @returns {Object} tool
+        */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
@@ -27,12 +28,23 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
         },
 
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Is displayed.
+        * @method isDisplayed
+        * @public
+        *
+        * @returns {Boolean} is tool displayed
+        */
+        isDisplayed: function () {
+            return !Oskari.getSandbox().getMap().getSupports3D();
+        },
+
+        /**
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
             var me = this;
 

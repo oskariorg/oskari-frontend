@@ -28,8 +28,7 @@ Oskari.clazz.define(
 
         this.styleButtonNames = [
             'icon-line-basic',
-            'icon-line-dashed',
-            'icon-double-line'
+            'icon-line-dashed'
         ];
         this.cornerButtonNames = [
             'icon-corner-sharp',
@@ -335,6 +334,9 @@ Oskari.clazz.define(
                 if (me.values.fillStyle === 4 || me.values.fillStyle === 5) {
                     me.values.fillStyle = -1;
                 }
+                if (!me.creator.validateWidth('borderWidth', me.values.lineWidth)) {
+                    return;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -548,7 +550,7 @@ Oskari.clazz.define(
          * @private
          */
         _createColorPickers: function () {
-            var options = {allowEmpty: true, cancelText: this.loc.buttons.cancel};
+            var options = { allowEmpty: true, cancelText: this.loc.buttons.cancel };
             this._colorPickers = [
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
                 Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options)

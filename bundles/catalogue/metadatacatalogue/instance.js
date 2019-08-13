@@ -53,6 +53,7 @@ Oskari.clazz.define(
         this.searchResultActions = [];
         this.conf = this.conf || {};
         this.state = this.state || {};
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         /**
          * @static
@@ -445,6 +446,8 @@ Oskari.clazz.define(
             me.searchPanel.append(me.getLocalization('searching'));
             me.resultPanel.hide();
 
+            me.progressSpinner.insertTo(metadataCatalogueContainer);
+
             var metadataCatalogueDescription = metadataCatalogueContainer.find(
                 'div.metadataCatalogueDescription'
             );
@@ -476,6 +479,7 @@ Oskari.clazz.define(
             button.setId('oskari_metadatacatalogue_button_search');
 
             var doMetadataCatalogue = function () {
+                me.progressSpinner.start();
                 me._removeFeaturesFromMap();
                 metadataCatalogueContainer.find('.metadataOptions').hide();
                 metadataCatalogueContainer.find('.metadataSearching').show();
@@ -531,8 +535,10 @@ Oskari.clazz.define(
                 if (doSearch) {
                     me.searchService.doSearch(search, function (data) {
                         me._showResults(metadataCatalogueContainer, data);
+                        me.progressSpinner.stop();
                     }, function (data) {
                         me._showError(me.getLocalization('metadatasearchservice_error'));
+                        me.progressSpinner.stop();
                     });
                 } else {
                     if (isAdvancedSearch) {
@@ -625,7 +631,7 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
-                renderCoverageButton = (_.filter(dataFields, {'field': 'coverage'}).length > 0),
+                renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -1079,7 +1085,7 @@ Oskari.clazz.define(
                                     if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
                                         callbackElement = actionElement.first();
-                                        callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
+                                        callbackElement.css({ 'cursor': 'pointer' }).on('click', { metadata: row }, function (event) {
                                             action.callback(event.data.metadata);
                                         });
                                     }

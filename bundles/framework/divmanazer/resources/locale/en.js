@@ -148,6 +148,11 @@ Oskari.registerLocalization(
                 "area": "Edit area feature style",
                 "line": "Edit line feature style"
             },
+            "validation": {
+                "title": "The given data are invalid:",
+                "lineSize": "The line width is invalid. It must be between 1 and 50.",
+                "borderWidth": "The line width is invalid. It must be between 1 and 50."
+            },
             "dot": {
                 "title": "Point feature style",
                 "tooltip": "Define a style for point features.",

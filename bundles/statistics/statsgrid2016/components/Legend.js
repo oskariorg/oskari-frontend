@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Legend', function (sandbox, loc
         if (!this._renderState.inProgress) {
             me._renderState.inProgress = true;
         } else {
-            me._renderQueue.push({el: el, event: event});
+            me._renderQueue.push({ el: el, event: event });
             return;
         }
         var container = this._element;

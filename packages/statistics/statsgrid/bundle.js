@@ -111,16 +111,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/plugin/TogglePlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/Legend.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/SeriesControl.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/SeriesToggleTool.js"
-            }, {
-                "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/EditClassification.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/RegionsetViewer.js"
@@ -205,6 +199,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "lang": "sv",
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/locale/sv.js"
+            }, {
+                "lang": "ru",
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/ru.js"
             }]
         },
         "bundle": {

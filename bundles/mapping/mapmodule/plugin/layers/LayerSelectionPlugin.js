@@ -41,7 +41,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
     }, {
         _toggleToolState: function () {
             var el = this.getElement();
-
             if (this.popup && this.popup.isVisible()) {
                 if (el) {
                     el.removeClass('active');
@@ -166,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 },
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanged({width: evt.getWidth(), height: evt.getHeight()});
+                    this._handleMapSizeChanged({ width: evt.getWidth(), height: evt.getHeight() });
                 }
             };
         },
@@ -183,10 +182,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
             var header = this.getElement().find('div.header');
             header.off('click');
-            if (this.inLayerToolsEditMode() && this.popup.isVisible()) {
-                this.popup.getJqueryContent().detach();
-                this.popup.close(true);
-                this.popup = null;
+            if (this.inLayerToolsEditMode()) {
+                if (this.popup && this.popup.isVisible()) {
+                    this.popup.getJqueryContent().detach();
+                    this.popup.close(true);
+                    this.popup = null;
+                }
+                this.closeSelection();
             } else {
                 this._bindHeader(header);
             }
