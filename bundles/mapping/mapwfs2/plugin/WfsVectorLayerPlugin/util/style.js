@@ -246,7 +246,7 @@ export const clusterStyleFunc = (feature, isSelected) => {
             }),
             text: new olText({
                 text: size.toString(),
-                font: 'bold 14px sans-sherif',
+                font: 'bold 14px sans-serif',
                 fill: new olFill({
                     color: '#fff'
                 })
