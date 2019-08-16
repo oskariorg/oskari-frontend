@@ -313,8 +313,6 @@ Oskari.clazz.define(
             if (originator) {
                 dialog.moveTo(originator, side);
             }
-            // Disable rest of UI
-            dialog.makeModal();
             categoryForm.start();
         }
     }, {

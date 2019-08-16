@@ -310,7 +310,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
-            dialog.makeModal();
             dialog.show(me.loc('categoryform.edit.title'), content, buttons);
             dialog.moveTo('div.personaldata ul li select', 'right');
             // bind listeners etc. for category form
