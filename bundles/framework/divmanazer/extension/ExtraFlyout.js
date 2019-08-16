@@ -21,8 +21,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         /* @property container the DIV element */
         this.container = null;
         this.options = options || {};
-
-        this.__render();
         Oskari.makeObservable(this);
         this._baseZIndex = 20000;
         this._init();
@@ -127,9 +125,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 me.bringToTop();
             });
             this.setTitle(this.title);
+            this.addClass('oskari-closed');
             if (this.options.cls) {
                 this.addClass(this.options.cls);
             }
+            this.addToolage();
+            this.makeDraggable();
+            this.move(this.options.left, this.options.top);
         },
         setTitle: function (title) {
             var me = this;
