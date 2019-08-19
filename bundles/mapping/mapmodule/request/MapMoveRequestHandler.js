@@ -29,12 +29,12 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var zoom = request.getZoom(),
-                srsName = request.getSrsName(),
-                lonlat = {
-                    lon: request.getCenterX(),
-                    lat: request.getCenterY()
-                };
+            var zoom = request.getZoom();
+            var srsName = request.getSrsName();
+            var lonlat = {
+                lon: request.getCenterX(),
+                lat: request.getCenterY()
+            };
 
             // transform coordinates to given projection
             lonlat = this.mapModule.transformCoordinates(lonlat, srsName);
@@ -44,13 +44,21 @@ Oskari.clazz.define(
             // if zoom is about to change -> Suppress the event
             this.mapModule.centerMap(lonlat, null, !!zoomChange);
             if (zoomChange) {
-                if (zoom.left && zoom.top && zoom.bottom && zoom.right) {
-                    this.mapModule.zoomToExtent(zoom, false, false);
-                } else if (zoom.scale) {
-                    this.mapModule.zoomToScale(zoom.scale, false, false);
-                } else {
-                    this.mapModule.setZoomLevel(zoom, false);
+                const { left, top, bottom, right } = zoom;
+
+                if (left && top && bottom && right) {
+                    const zoomOut = top === bottom && left === right;
+                    this.mapModule.zoomToExtent(zoom, zoomOut, zoomOut);
+                    if (zoomOut) {
+                        this.mapModule.zoomToScale(2000);
+                    }
+                    return;
                 }
+                if (zoom.scale) {
+                    this.mapModule.zoomToScale(zoom.scale, false, false);
+                    return;
+                }
+                this.mapModule.setZoomLevel(zoom, false);
             }
         }
     }, {
