@@ -2,7 +2,6 @@ import { defaults as olInteractionDefaults } from 'ol/interaction';
 import olView from 'ol/View';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
-import { Vector as olLayerVector } from 'ol/layer';
 import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
@@ -80,7 +79,9 @@ class MapModuleOlCesium extends MapModuleOl {
         this._map3D.container_.appendChild(creditContainer);
 
         var scene = this._map3D.getCesiumScene();
-        scene.globe.depthTestAgainstTerrain = true;
+        // Vector features sink in the ground. This allows sunken features to be visible through the ground.
+        // This should be enabled when 3D-tiles (buildings) are visible.
+        scene.globe.depthTestAgainstTerrain = false;
         scene.shadowMap.darkness = 0.7;
         scene.skyBox = this._createSkyBox();
 
@@ -211,10 +212,6 @@ class MapModuleOlCesium extends MapModuleOl {
         if (layerImpl instanceof Cesium.Cesium3DTileset) {
             this._map3D.getCesiumScene().primitives.add(layerImpl);
         } else {
-            if (layerImpl instanceof olLayerVector) {
-                // olcs property
-                layerImpl.set('altitudeMode', 'clampToGround');
-            }
             this.getMap().addLayer(layerImpl);
             // check for boolean true instead of truthy value since some calls might send layer name as second parameter/functionality has changed
             if (toBottom === true) {
