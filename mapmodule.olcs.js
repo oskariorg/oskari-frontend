@@ -78,7 +78,8 @@ class MapModuleOlCesium extends MapModuleOl {
 
         var scene = this._map3D.getCesiumScene();
         // Vector features sink in the ground. This allows sunken features to be visible through the ground.
-        // This should be enabled when 3D-tiles (buildings) are visible.
+        // Setting olcs property 'altitudeMode': 'clampToGround' to vector layer had some effect but wasn't good enough.
+        // DepthTestAgainstTerrain should be enabled when 3D-tiles (buildings) are visible.
         scene.globe.depthTestAgainstTerrain = false;
         scene.shadowMap.darkness = 0.7;
         scene.skyBox = this._createSkyBox();
@@ -563,12 +564,15 @@ class MapModuleOlCesium extends MapModuleOl {
      * @return lonlat in map projection
      */
     getMouseLocation (position) {
-        const ellipsoid = this.getCesiumScene().globe.ellipsoid;
-        const cartesian = this.getCesiumScene().camera.pickEllipsoid(position, ellipsoid);
+        const scene = this.getCesiumScene();
+        const { camera, globe } = scene;
+
+        const ray = camera.getPickRay(position);
+        const cartesian = globe.pick(ray, scene);
         if (!cartesian) {
             return;
         }
-        const cartographic = ellipsoid.cartesianToCartographic(cartesian);
+        const cartographic = Cesium.Ellipsoid.WGS84.cartesianToCartographic(cartesian);
         let location = [
             Cesium.Math.toDegrees(cartographic.longitude),
             Cesium.Math.toDegrees(cartographic.latitude)
