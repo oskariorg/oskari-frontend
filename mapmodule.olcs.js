@@ -59,8 +59,6 @@ class MapModuleOlCesium extends MapModuleOl {
             resolutions: this.getResolutionArray()
         }));
 
-        me._setupMapEvents(map);
-
         var time = Cesium.JulianDate.fromIso8601('2017-07-11T12:00:00Z');
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
@@ -92,7 +90,9 @@ class MapModuleOlCesium extends MapModuleOl {
 
         // Fix dark imagery
         scene.highDynamicRange = false;
+
         this._initTerrainProvider();
+        this._setupMapEvents(map);
 
         var updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
@@ -159,6 +159,61 @@ class MapModuleOlCesium extends MapModuleOl {
         var me = this;
         this._mapReadySubscribers.forEach(function (fireOperation) {
             fireOperation.operation.apply(me, fireOperation.arguments);
+        });
+    }
+
+    /**
+     * Add map event handlers
+     * @method @private _setupMapEvents
+     */
+    _setupMapEvents (map) {
+        const cam = this.getCesiumScene().camera;
+        cam.moveStart.addEventListener(this.notifyStartMove.bind(this));
+        cam.moveEnd.addEventListener(this.notifyMoveEnd.bind(this));
+
+        map.on('singleclick', evt => {
+            if (this.getDrawingMode()) {
+                return;
+            }
+            const { pixel, originalEvent } = evt;
+            const position = Cesium.Cartesian2.fromArray(pixel);
+            const lonlat = this.getMouseLocation(position);
+            if (!lonlat) {
+                return;
+            }
+            const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, ...evt.pixel, originalEvent.ctrlKey);
+            this._sandbox.notifyAll(mapClickedEvent);
+        });
+
+        map.on('dblclick', function () {
+            if (this.getDrawingMode()) {
+                return false;
+            }
+        });
+
+        const notifyMouseHover = (lonlat, pixel, paused) => {
+            var hoverEvent = Oskari.eventBuilder('MouseHoverEvent')(
+                lonlat.lon,
+                lonlat.lat,
+                paused,
+                ...pixel,
+                this.getDrawingMode()
+            );
+            this._sandbox.notifyAll(hoverEvent);
+        };
+
+        let mouseMoveTimer;
+        map.on('pointermove', evt => {
+            const { pixel } = evt;
+            const position = Cesium.Cartesian2.fromArray(pixel);
+            const lonlat = this.getMouseLocation(position);
+            if (!lonlat) {
+                return;
+            }
+            notifyMouseHover(lonlat, pixel, false);
+            clearTimeout(mouseMoveTimer);
+            // No mouse move in 1000 ms - mouse move paused
+            mouseMoveTimer = setTimeout(notifyMouseHover.bind(this, lonlat, pixel, true), 1000);
         });
     }
 
