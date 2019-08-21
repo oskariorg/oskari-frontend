@@ -49,10 +49,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.timeseries.TimeseriesToolBundle"
                 "src": "../../../../bundles/framework/timeseries/resources/css/timeseriesplayback.css"
             }, {
                 "type": "text/javascript",
-                "expose": "moment",
-                "src" : "../../../../libraries/moment/2.10.6/moment-with-locales.js"
-            }, {
-                "type": "text/javascript",
                 "expose": "d3",
                 "src": "../../../../libraries/d3/d3.min.js"
             }],

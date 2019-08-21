@@ -48,11 +48,10 @@ const defaults = {
     }
 };
 
-const applyOpacityToColorable = (colorable, opacity) => {
+const applyAlphaToColorable = (colorable, alpha) => {
     if (!colorable || !colorable.getColor()) {
         return;
     }
-    const alpha = opacity < 1 ? opacity : opacity / 100.0;
     if (Array.isArray(colorable.getColor())) {
         const color = [...colorable.getColor()];
         color[3] = alpha;
@@ -87,8 +86,12 @@ export const applyOpacity = (olStyle, opacity) => {
     if (!olStyle || isNaN(opacity)) {
         return;
     }
-    applyOpacityToColorable(olStyle.getFill(), opacity);
-    applyOpacityToColorable(olStyle.getStroke(), opacity);
+    const alpha = opacity < 1 ? opacity : opacity / 100.0;
+    applyAlphaToColorable(olStyle.getFill(), alpha);
+    applyAlphaToColorable(olStyle.getStroke(), alpha);
+    if (olStyle.getImage()) {
+        olStyle.getImage().setOpacity(alpha);
+    }
     return olStyle;
 };
 
@@ -243,7 +246,7 @@ export const clusterStyleFunc = (feature, isSelected) => {
             }),
             text: new olText({
                 text: size.toString(),
-                font: 'bold 14px sans-sherif',
+                font: 'bold 14px sans-serif',
                 fill: new olFill({
                     color: '#fff'
                 })

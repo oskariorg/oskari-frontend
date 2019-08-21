@@ -99,15 +99,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (toolbarConfig && toolbarConfig.createdHover === true) {
             button.on('mouseenter', function () {
                 var buttonEl = jQuery(this);
-                if (!buttonEl.hasClass('selected')) {
+                if (!buttonEl.hasClass('selected') && !buttonEl.hasClass('disabled')) {
                     me._addHoverIcon(pConfig, toolbarConfig, button);
                 }
                 buttonEl.addClass('hover');
             });
             button.on('mouseleave', function () {
-                var buttonEl = jQuery(this);
-                buttonEl.removeClass('hover');
-                if (!buttonEl.hasClass('selected')) {
+                button.removeClass('hover');
+                if (!button.hasClass('selected') && !button.hasClass('disabled')) {
                     me._addButtonTheme(pConfig, toolbarConfig, button);
                 }
             });
@@ -208,10 +207,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 this.sandbox.notifyAll(e);
 
                 if (pGroup) {
-                    var btnGroup = this.buttons[pGroup];
-                    for (pId in btnGroup) {
-                        this._deactiveTools(pId, pGroup);
-                    }
+                    this._deactiveTools(pGroup);
                 }
 
                 this.container.find('.selected').removeClass('selected');
@@ -239,10 +235,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
         if (btn.sticky === true) {
             // only need to deactivate tools when sticky button
-            this._deactiveTools(pId, pGroup);
+            this._deactiveTools(pGroup);
 
-            // button stays on (==sticky) -> remove previous "sticky"
-            this._removeToolSelections(pGroup);
             this.selectedButton = {
                 id: pId,
                 group: pGroup
@@ -381,43 +375,37 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
     },
 
-    _deactiveTools: function (pId, pGroup) {
+    _deactiveTools: function (pGroup) {
         var me = this;
-        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-        var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
-        var button = group.find('div.tool[tool=' + pId + ']');
-        button.removeClass('selected');
+        var toolbar = me.getToolbarContainer(me.groupsToToolbars[pGroup]);
+        toolbar.find('div[tbgroup]').each(function () {
+            var group = jQuery(this);
+            var groupId = group.attr('tbgroup');
+            var toolbarConfig = me.getToolBarConfigs(me.groupsToToolbars[groupId]);
 
-        for (var id in this.buttons[pGroup]) {
-            var btn = this.buttons[pGroup][id];
-            button = group.find('div.tool[tool=' + id + ']');
-            // Change default background color back
+            group.find('div[tool]').each(function () {
+                var button = jQuery(this);
+                var toolId = button.attr('tool');
+                var conf = me.buttons[groupId][toolId];
+                me._resetToolStyle(button, conf, toolbarConfig);
+            });
+        });
+    },
 
-            if (btn.activeColour) {
-                button.css('background-color', '');
-                button.removeClass('selected');
-                me._removeIconThemes(button, btn);
-            }
-
-            var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
-            me._changeButtonIconTheme(btn, button, toolbarConfig.colours.background);
-
-            // Change default icon back
-            if (btn.toggleChangeIcon === true) {
-                me._addButtonTheme(btn, button);
-            }
+    _resetToolStyle: function (btn, btnConf, toolbarConf) {
+        btn.removeClass('selected');
+        btn.removeClass('hover');
+        if (btnConf.activeColour) {
+            btn.css('background-color', '');
+            this._removeIconThemes(btn, btnConf);
+        }
+        this._changeButtonIconTheme(btnConf, btn, toolbarConf.colours.background);
+        // Change default icon back
+        if (btnConf.toggleChangeIcon === true) {
+            this._addButtonTheme(btnConf, btn);
         }
     },
-    /**
-     * @method _removeToolSelections
-     * @private
-     * Clears selection from all tools to make room for a new selection
-     */
-    _removeToolSelections: function (pGroup) {
-        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
-        var tools = toolbar.find('div.tool');
-        tools.removeClass('selected');
-    },
+
     /**
      * @method removeToolButton
      *

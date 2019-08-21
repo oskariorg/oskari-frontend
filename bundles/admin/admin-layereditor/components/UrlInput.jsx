@@ -1,7 +1,8 @@
 import React from 'react';
-import Input from 'antd/lib/input';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
 import { Select, Option } from './Select';
+import 'antd/es/input/style/';
 
 const protocols = ['https', 'http'];
 export class UrlInput extends React.Component {
