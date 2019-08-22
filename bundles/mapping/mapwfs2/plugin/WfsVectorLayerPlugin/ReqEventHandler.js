@@ -66,7 +66,12 @@ export class ReqEventHandler {
                 if (['Polygon', 'MultiPolygon'].indexOf(filterFeature.geometry.type) >= 0 && typeof filterFeature.properties.area !== 'number') {
                     return;
                 }
-                const targetLayers = plugin.WFSLayerService.isSelectFromAllLayers() ? plugin.getAllLayerIds() : [plugin.WFSLayerService.getTopWFSLayer()];
+                var targetLayers;
+                if (plugin.WFSLayerService.getAnalysisWFSLayerId()) {
+                    targetLayers = [plugin.WFSLayerService.getAnalysisWFSLayerId()];
+                } else {
+                    targetLayers = plugin.WFSLayerService.isSelectFromAllLayers() ? plugin.getAllLayerIds() : [plugin.WFSLayerService.getTopWFSLayer()];
+                }
                 targetLayers.forEach(layerId => {
                     const layer = getSelectedLayer(layerId);
                     const propsList = plugin.getPropertiesForIntersectingGeom(filterFeature.geometry, layerId);
