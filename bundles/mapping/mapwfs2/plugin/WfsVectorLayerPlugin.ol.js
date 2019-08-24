@@ -86,6 +86,13 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);
+        this._setupMouseOutOfMapHandler();
+    }
+    _setupMouseOutOfMapHandler () {
+        const me = this;
+        this.getMapModule().getMap().getViewport().addEventListener('mouseout', (evt) => {
+            me.hoverHandler.clearHover();
+        }, false);
     }
     _createPluginEventHandlers () {
         const vectorHandlers = this.vectorLayerHandler.createEventHandlers(this);
