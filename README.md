@@ -4,16 +4,19 @@
 
 Documentation available at [http://www.oskari.org].
 
-This repository holds the frontend code and a sample application for Oskari. Developing the frontend requires an oskari-server to be running that responds to the XHR requests made by the frontend. You can download a pre-compiled copy of the server from [http://www.oskari.org/download] or checkout the source code in the oskari-server repository. Any customized application should use the oskari-server-extension template as base for customized server and create an app-specific repository for the frontend. Oskari frontend code is built using Webpack and the same build system can be easily used for customized apps.
+This repository holds the frontend framework code for Oskari. Developing the frontend framework requires a frontend application. The frontend application should be located next to the framework directory. You may checkout a sample frontend application source code from [GitHub](https://github.com/oskariorg/sample-application "Sample Oskari frontend application").
+
+You will also need oskari-server to be running that responds to the XHR requests made by the frontend. You can download a pre-compiled copy of the server from [http://www.oskari.org/download]. You may also build it from source by cloning [oskari-server](https://github.com/oskariorg/oskari-server) and [sample-server-extension](https://github.com/oskariorg/sample-server-extension).
+
+Any application should use the sample-server-extension template as base for customized server and create an app-specific repository for the frontend (see [sample-application](https://github.com/oskariorg/sample-application)). Oskari frontend applications are built using Webpack.
 
 ## Preparations
 
-Make sure you have at least Node 8.x / NPM 5.x. Run `npm install` in the frontend repository root.
+Make sure you have at least Node 8.x / NPM 5.x. 
+
+Run `npm install` in the frontend framework repository root.
+Run `npm install` in the frontend application repository root.
 Make sure you have oskari-server running on localhost port 8080 (can be customized on webpack.config.js).
-
-### App composition
-
-An Oskari frontend application consists of bundles that are defined in the miniferAppSetup.json for each app (an example can be found under applications/sample/servlet). Only bundles referenced here can be instantiated at runtime. Bundles that are used only in a limited part of the app (for example admin tools) can be configured to load dynamically at runtime. This will decrease the size of the main app JS bundle. To enable dynamic loading for a bundle, add `"lazy": true` on the same level as `"bundlename"` in the miniferAppSetup.json.
 
 ## Run in development
 
@@ -43,21 +46,11 @@ Special case: If on your production server your application index.jsp location i
 
     npm run build -- --env.absolutePublicPath=true
 
-### Customized application icons (optional)
-
-It's possible to override any icon in `oskari-frontend/resources/icons` with app-specific icons. To add icons for your application or to override icons: include a folder named `icons` under the application folder (for example in sample app `applications/sample/servlet/icons`). To replace an icon provide a png-file with the same name as in `oskari-frontend/resources/icons`. For maximum compatibility the pixel size for overridden icon should match the original. Any png-files in the app-specific icons folder will be included in the sprite that is generated so this can be used to add icons for app-specific bundles.
-
-After running the production build it's possible to create a customized set of icons for the application by running a command `npm run sprite -- [version]:[application path]` like
-
-    npm run sprite -- 1.49.0:applications/sample
-
-Note! Requires (GraphicsMagick)[http://www.graphicsmagick.org/] to be installed on the server and the "gm" command to be usable on the cmd/bash.\
-Note! You must first run a production build for the application to create the corresponding dist-folder. With the example command the sprite will be generated under the `dist\1.49.0\servlet` folder as `icons.png` and `icons.css`.\
-Note! To use the customized icons set your HTML (JSP) on the oskari-server need to link the icons.css under the application folder (default JSP links it from under oskari-frontend/resources/icons.css).
-
 ### How to setup custom frontend
 
-See https://github.com/nls-oskari/pti-frontend for an example how to separate app-specific functionality and use oskari-frontend and oskari-frontend-contrib.
+See https://github.com/oskariorg/sample-application for an example how to create app-specific functionality and use oskari-frontend and oskari-frontend-contrib. Use sample-application template as base and create your own application.
+
+Run npm `build` and `start` commands in your application repository root.
 
 ### FAQ
 

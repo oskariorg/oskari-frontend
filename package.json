@@ -12,8 +12,8 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "lintfix": "eslint . --quiet --fix",
-    "build": "webpack --progress --mode production --env.appdef=devapp:applications",
-    "start": "webpack-dev-server --hot --env.appdef=devapp:applications",
+    "build": "webpack --progress --mode production --env.appdef=devapp:../sample-application/applications",
+    "start": "webpack-dev-server --hot --env.appdef=devapp:../sample-application/applications",
     "sprite": "node webpack/sprite.js",
     "storybook": "start-storybook"
   },
