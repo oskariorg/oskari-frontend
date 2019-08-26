@@ -4,18 +4,19 @@
 
 Documentation available at [http://www.oskari.org].
 
-This repository holds the frontend framework code for Oskari. Developing the frontend framework requires a frontend application. The frontend application should be located next to the framework directory. You may checkout a sample frontend application source code from [GitHub](https://github.com/oskariorg/sample-application "Sample Oskari frontend application").
+This repository holds the frontend framework code for Oskari. Developing the frontend framework requires a frontend application. You may clone sample frontend application from [https://github.com/oskariorg/sample-application]. The sample application directory should be located next to the frontend framework directory.
 
 You will also need oskari-server to be running that responds to the XHR requests made by the frontend. You can download a pre-compiled copy of the server from [http://www.oskari.org/download]. You may also build it from source by cloning [oskari-server](https://github.com/oskariorg/oskari-server) and [sample-server-extension](https://github.com/oskariorg/sample-server-extension).
 
-Any application should use the sample-server-extension template as base for customized server and create an app-specific repository for the frontend (see [sample-application](https://github.com/oskariorg/sample-application)). Oskari frontend applications are built using Webpack.
+Oskari frontend applications are built using Webpack.
 
 ## Preparations
 
 Make sure you have at least Node 8.x / NPM 5.x. 
 
-Run `npm install` in the frontend framework repository root.
-Run `npm install` in the frontend application repository root.
+* Run `npm install` in the frontend framework repository root.
+* Run `npm install` in the frontend application repository root.
+
 Make sure you have oskari-server running on localhost port 8080 (can be customized on webpack.config.js).
 
 ## Run in development
@@ -46,35 +47,13 @@ Special case: If on your production server your application index.jsp location i
 
     npm run build -- --env.absolutePublicPath=true
 
-### How to setup custom frontend
+## Customizing Oskari
 
-See https://github.com/oskariorg/sample-application for an example how to create app-specific functionality and use oskari-frontend and oskari-frontend-contrib. Use sample-application template as base and create your own application.
+Any customized application should use the [sample-server-extension](https://github.com/oskariorg/sample-server-extension) template as base for customized server and create an app-specific repository for the frontend. 
+
+You can use [sample-application](https://github.com/oskariorg/sample-application) template to create your custom frontend application. See further instructions from the sample application repository.
 
 Run npm `build` and `start` commands in your application repository root.
-
-### FAQ
-
-#### "Out of memory" error when running Webpack
-
-If you get an error when running the build like  "FATAL ERROR: Committing semi space failed. Allocation failed - process out of memory" or "FATAL ERROR: CALL_AND_RETRY_LAST Allocation failed - JavaScript heap out of memory" you need to configure some more memory for the node-process.
-
-In linux you can use:
-
-    export NODE_OPTIONS=--max_old_space_size=4096
-    npm run build -- --env.appdef=1.49.0:applications/sample/
-
-Or in Windows:
-
-    set NODE_OPTIONS=--max_old_space_size=4096 && npm run build -- --env.appdef=1.49.0:applications/sample/
-
-#### Production build "freezes"
-
-CPU usage of the computer shows nothing is happening, but the bash/cmd is still executing the build command. Try setting "parallel" to false on UglifyJsPlugin configuration in webpack.config.js:
-
-    new UglifyJsPlugin({
-        sourceMap: true,
-        parallel: false
-    })
 
 # Reporting issues
 
