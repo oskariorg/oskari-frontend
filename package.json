@@ -34,7 +34,7 @@
     "moment": "2.24.0",
     "ol": "5.3.1",
     "ol-mapbox-style": "4.2.1",
-	  "query-string": "6.4.2",
+    "query-string": "6.4.2",
     "react": "16.8.5",
     "react-dom": "16.8.5",
     "styled-components": "4.1.3"
