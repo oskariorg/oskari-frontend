@@ -502,7 +502,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var style = {
                 image: {
-                    color: data.color,
+                    fill: {
+                        color: data.color
+                    },
                     size: data.size,
                     shape: data.shape,
                     offsetX: data.offsetX,
@@ -680,20 +682,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         enableGfi: function (blnEnable) {
             var sandbox = this.getSandbox();
-            var evtB = Oskari.eventBuilder(
-                'DrawFilterPlugin.SelectedDrawingEvent'
-            );
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
             );
             var hiReqBuilder = Oskari.requestBuilder(
                 'WfsLayerPlugin.ActivateHighlightRequest'
             );
-
-            // notify components to reset any saved "selected place" data
-            if (evtB) {
-                sandbox.notifyAll(evtB());
-            }
 
             // enable or disable gfi requests
             if (gfiReqBuilder) {

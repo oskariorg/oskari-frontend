@@ -7,7 +7,7 @@ const { existsSync } = require('fs');
 module.exports = function generateEntries (appsetupPaths, isProd, context) {
     const entries = {};
     const plugins = [
-        new IgnorePlugin(/^\.\/locale$/),
+        new IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CopyWebpackPlugin(
             [
                 { from: 'resources', to: 'resources', context },

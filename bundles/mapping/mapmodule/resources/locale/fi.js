@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Huom.",
         "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
+        "unsupported-layer": "Karttatsoa ei voida näyttää.",
+        "unsupported-layer-projection": "Karttatsoa ei voida näyttää tässä karttaprojektiossa.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
@@ -67,7 +69,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "testi",
                 "history": {
-                    "reset": "Siirry oletusnäkymään.",
+                    "reset": "Palaa alkutilaan.",
                     "back": "Siirry edelliseen näkymään.",
                     "next": "Siirry seuraavaan näkymään."
                 },
@@ -116,6 +118,11 @@ Oskari.registerLocalization(
                     "denied": "Sivustolta on estetty paikannus. Salli paikannus ja yritä uudelleen",
                     "noLocation": "Sijainnin määritys epäonnistui",
                     "close": "Sulje"
+                }
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Palaa alkutilaan"
                 }
             }
         },

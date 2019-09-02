@@ -28,8 +28,7 @@ Oskari.clazz.define(
 
         this.styleButtonNames = [
             'icon-line-basic',
-            'icon-line-dashed',
-            'icon-double-line'
+            'icon-line-dashed'
         ];
         this.cornerButtonNames = [
             'icon-corner-sharp',
@@ -334,6 +333,9 @@ Oskari.clazz.define(
                 // Transparent and solid color fill styles are both saved as -1
                 if (me.values.fillStyle === 4 || me.values.fillStyle === 5) {
                     me.values.fillStyle = -1;
+                }
+                if (!me.creator.validateWidth('borderWidth', me.values.lineWidth)) {
+                    return;
                 }
                 renderDialog.close();
                 if (me.saveCallback) {

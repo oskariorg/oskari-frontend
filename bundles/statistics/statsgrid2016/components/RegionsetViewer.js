@@ -178,12 +178,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
         // Remove regions missing value
         if (handledRegions.length !== regions.length) {
-            const regionsWithoutValue = regions.filter(r => !handledRegions.includes(r.id)).map(r => r.id);
+            const regionsWithoutValue = [];
+            me._regionsAdded = [];
+            regions.forEach(r => {
+                const id = r.id;
+                if (handledRegions.includes(id)) {
+                    me._regionsAdded.push(id);
+                } else {
+                    regionsWithoutValue.push(id);
+                }
+            });
             const borders = regionsWithoutValue.map(id => 'border' + id);
             const removes = regionsWithoutValue.concat(borders);
-            if (regionsWithoutValue.length > 0) {
-                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, me.LAYER_ID]);
-            }
+
+            sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, me.LAYER_ID]);
         }
         addFeaturesRequestParams.forEach(params => {
             sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);

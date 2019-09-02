@@ -84,11 +84,11 @@
         },
         getAllServices: function () {
             return {
-                series: this.series,
-                state: this.state,
-                classification: this.classification,
-                color: this.colors,
-                error: this.error
+                seriesService: this.series,
+                stateService: this.state,
+                classificationService: this.classification,
+                colorService: this.colors,
+                errorService: this.error
             };
         },
         addDatasource: function (ds) {
@@ -497,9 +497,6 @@
             var ind = this.state.getIndicator(indicatorHash);
             if (!ind) {
                 return;
-            }
-            if (!ind.classification) {
-                ind.classification = this.state.getClassificationOpts(indicatorHash);
             }
             if (typeof ind.classification.fractionDigits !== 'number') {
                 var allInts = Object.keys(data).every(function (key) {

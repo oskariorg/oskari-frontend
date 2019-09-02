@@ -196,6 +196,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.publisher2.PublisherBundle", fun
           "lang": "sk",
           "type": "text/javascript",
           "src": "../../../../bundles/framework/publisher2/resources/locale/sk.js"
+        }, {
+          "lang": "ru",
+          "type": "text/javascript",
+          "src": "../../../../bundles/framework/publisher2/resources/locale/ru.js"
         }]
     },
     "bundle": {

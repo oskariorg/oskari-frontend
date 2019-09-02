@@ -1,6 +1,6 @@
 import React from 'react';
-import AntCheckbox from 'antd/lib/checkbox';
-import 'antd/lib/checkbox/style/css';
+import { Checkbox as AntCheckbox } from 'antd';
+import 'antd/es/checkbox/style/';
 
 export const Checkbox = (props) => (
     <AntCheckbox {...props} />

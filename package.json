@@ -1,17 +1,19 @@
 {
   "name": "oskari-frontend",
-  "version": "1.52.0-dev",
-  "description": "Build tools for Oskari core",
+  "version": "1.53.0-dev",
+  "description": "Oskari frontend",
   "homepage": "http://oskari.org",
   "keywords": [
     "Oskari"
   ],
   "main": "grunt.js",
   "scripts": {
-    "test": "eslint . --quiet",
+    "test": "eslint . --quiet && jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
     "lintfix": "eslint . --quiet --fix",
-    "build": "webpack --progress --mode production --env.appdef=devapp:applications/sample",
-    "start": "webpack-dev-server --hot --env.appdef=devapp:applications/sample",
+    "build": "webpack --progress --mode production --env.appdef=devapp:../sample-application/applications",
+    "start": "webpack-dev-server --hot --env.appdef=devapp:../sample-application/applications",
     "sprite": "node webpack/sprite.js",
     "storybook": "start-storybook"
   },
@@ -25,13 +27,16 @@
   "license": "MIT",
   "dependencies": {
     "antd": "3.15.2",
+    "jquery": "3.4.1",
     "jsts": "2.0.3",
+    "lodash": "4.17.11",
+    "mobile-detect": "1.4.3",
+    "moment": "2.24.0",
     "ol": "5.3.1",
     "ol-mapbox-style": "4.2.1",
 	  "query-string": "6.4.2",
     "react": "16.8.5",
     "react-dom": "16.8.5",
-    "lodash": "4.17.11",
     "styled-components": "4.1.3"
   },
   "devDependencies": {
@@ -39,7 +44,8 @@
     "@babel/polyfill": "7.4.0",
     "@babel/preset-env": "7.4.2",
     "@babel/preset-react": "7.0.0",
-    "@storybook/react": "5.0.3",
+    "@storybook/react": "5.0.11",
+    "@types/jest": "24.0.13",
     "babel-loader": "8.0.5",
     "babel-plugin-styled-components": "1.10.0",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
@@ -47,7 +53,7 @@
     "css-loader": "2.1.1",
     "eslint": "5.15.3",
     "eslint-config-standard": "12.0.0",
-    "eslint-import-resolver-webpack": "^0.11.0",
+    "eslint-import-resolver-webpack": "0.11.0",
     "eslint-plugin-import": "2.16.0",
     "eslint-plugin-node": "8.0.1",
     "eslint-plugin-promise": "4.0.1",
@@ -59,10 +65,15 @@
     "geostats": "1.7.0",
     "gm": "1.23.1",
     "imports-loader": "0.8.0",
+    "jest": "24.8.0",
+    "less": "^3.9.0",
+    "less-loader": "^5.0.0",
+    "less-vars-to-js": "^1.3.0",
     "loader-utils": "1.2.3",
     "merge": "1.2.1",
     "mini-css-extract-plugin": "0.5.0",
-    "node-sass": "4.11.0",
+    "node-sass": "4.12.0",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
     "sass-loader": "7.1.0",
     "script-loader": "0.7.2",
     "style-loader": "0.23.1",
@@ -72,5 +83,8 @@
     "webpack-cli": "3.3.0",
     "webpack-dev-server": "3.2.1"
   },
-  "private": true
+  "private": true,
+  "jest": {
+    "testEnvironment": "jsdom"
+  }
 }

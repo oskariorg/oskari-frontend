@@ -48,6 +48,12 @@ Oskari.registerLocalization(
         ],
         "help": {
             "tags": "fenêtre de la carte, guide utilisateur"
+        },
+        "guidedTour": {
+            "title": "Inscription",
+            "message": "Inscrire un compte d'utilisateur vous permet d'utiliser les caractéristiques supplémentaires du service, par exemple l'édition cartographique et la sauvegarde permanente des vues cartographiques.",
+            "openLink": "Afficher Inscription",
+            "closeLink": "Masquer Inscription"
         }
     }
 });

@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Urejaj slog za območje pojava",
                 "line": "Urejaj slog linijskega pojava"
             },
+            "validation": {
+                "title": "Podatek vsebuje napake:",
+                "strokeWidth": "Velikost linije ne ustreza dovoljenim vrednostim med 1 in 50.",
+                "borderWidth": "Velikost robne črte ne ustreza dovoljenim vrednostim med 1 in 50."
+            },
             "dot": {
                 "title": "Slog točkovnega pojava",
                 "tooltip": "Definiraj slog za točkovne pojave",

@@ -44,6 +44,12 @@ Oskari.registerLocalization(
         ],
         "help": {
             "tags": "karttaikkuna,pikaohje"
+        },
+        "guidedTour": {
+            "title": "Käyttöohje",
+            "message": "Käyttöohjeesta löydät opastusta tämän palvelun käyttöön.",
+            "openLink": "Näytä Käyttöohje",
+            "closeLink": "Piilota Käyttöohje"
         }
     }
 });

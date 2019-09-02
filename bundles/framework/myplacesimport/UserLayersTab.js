@@ -125,7 +125,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
          * @method _deleteUserLayer
          * Request backend to delete user layer. On success removes the layer
          * from map and layerservice. On failure displays a notification.
-         * @param layer layer analysis data to be destroyed
+         * @param layer layer userlayer data to be destroyed
          * @private
          */
         _deleteUserLayer: function (layerId) {
@@ -291,7 +291,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                 }
 
                 jQuery.ajax({
-                    url: action + '&useOskariStyle=true', // Param useOskariStyle becomes redundant when oskari style json is used only
+                    url: action,
                     data: values,
                     type: 'POST',
                     success: function (response) {
@@ -340,7 +340,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
         _setStyleValuesToStyleForm: function (id, form) {
             var me = this;
             var action = this.instance.getService().getGetUserLayerStyleUrl();
-            action += '&id=' + id + '&useOskariStyle=true'; // Param useOskariStyle becomes redundant when oskari style json is used only
+            action += '&id=' + id;
             jQuery.ajax({
                 url: action,
                 type: 'GET',

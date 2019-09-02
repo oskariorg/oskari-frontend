@@ -194,7 +194,10 @@ Oskari.clazz.define(
                     'DrawTools.StopDrawingRequest',
                     'MapModulePlugin.ZoomToFeaturesRequest',
                     'MapModulePlugin.MapLayerUpdateRequest',
-                    'rotate.map'];
+                    'rotate.map',
+                    'StartUserLocationTrackingRequest',
+                    'StopUserLocationTrackingRequest'
+                ];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             // try to get event/request builder for each of these to see that they really are supported!!

@@ -160,6 +160,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.userguide.UserGuideBundle", func
             "lang": "uk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/userguide/resources/locale/uk.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/userguide/resources/locale/ru.js"
         }]
     },
     "bundle": {

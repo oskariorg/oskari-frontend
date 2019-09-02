@@ -9,6 +9,26 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.53.0
+
+### [mod] [rpc] StartUserLocationTrackingRequest
+
+Allowed request for rpc use.
+
+### [mod] [rpc] StopUserLocationTrackingRequest
+
+Allowed request for rpc use.
+
+## 1.52.0
+
+### [add] StartUserLocationTrackingRequest
+
+Request to show user's location on map.
+
+### [add] StopUserLocationTrackingRequest
+
+Request to stop user's location tracking.
+
 ## 1.51.0
 
 #### [mod] [rpc] New rpc-client version 2.1.0

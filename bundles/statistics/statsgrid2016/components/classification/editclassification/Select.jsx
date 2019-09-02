@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
+import { withContext } from 'oskari-ui/util';
 
-const Select = ({properties, options, value, disabled, handleChange}) => {
+const Select = ({ properties, options, value, disabled, handleChange }) => {
     // options => array of values [1,3,4,5] or array of objects with properties: value and optionally: text, hidden, disabled
     return (
         <div className={properties.class + ' option'}>
@@ -23,12 +23,12 @@ const Select = ({properties, options, value, disabled, handleChange}) => {
     );
 };
 Select.propTypes = {
-    properties: PropTypes.object,
-    options: PropTypes.array,
-    disabled: PropTypes.bool,
-    value: PropTypes.any,
-    handleChange: PropTypes.func
+    properties: PropTypes.object.isRequired,
+    options: PropTypes.array.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    value: PropTypes.any.isRequired,
+    handleChange: PropTypes.func.isRequired
 };
 
 const contextWrapped = withContext(Select);
-export {contextWrapped as Select};
+export { contextWrapped as Select };

@@ -2,10 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { LayerCollapse } from '../../LayerCollapse';
 import { LayerGroup } from '../../../../layerselector2/model/LayerGroup.class';
-import { Oskari, AbstractLayer, locale } from './mock';
+import { AbstractLayer, locale } from './mock';
 import { StateHandler } from '../StateHandler';
-
-window.Oskari = Oskari;
 
 let lyrCount = 0;
 const createLayer = (name, type) => {

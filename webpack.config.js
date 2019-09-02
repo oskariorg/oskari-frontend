@@ -1,17 +1,20 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const resolveConfig = require('./webpack/resolveConfig.js');
 const parseParams = require('./webpack/parseParams.js');
-const { lstatSync, readdirSync } = require('fs');
+const { lstatSync, readdirSync, readFileSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
+const lessToJs = require('less-vars-to-js');
+const { NormalModuleReplacementPlugin } = require('webpack');
 
 const proxyPort = 8081;
 
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
-    const { version, pathParam, publicPathPrefix } = parseParams(env);
+    const { version, pathParam, publicPathPrefix, theme } = parseParams(env);
 
     const isDirectory = source => lstatSync(source).isDirectory();
     const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
@@ -21,6 +24,13 @@ module.exports = (env, argv) => {
     plugins.push(new MiniCssExtractPlugin({
         filename: '[name]/oskari.min.css'
     }));
+
+    // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
+    const replacement = path.resolve(__dirname, 'ant-globals.less');
+    plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
+
+    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, './ant-theme.less');
+    const themeVariables = lessToJs(readFileSync(themeFile, 'utf8'));
 
     const styleLoaderImpl = isProd ? {
         loader: MiniCssExtractPlugin.loader,
@@ -64,7 +74,10 @@ module.exports = (env, argv) => {
                                 ],
                                 require.resolve('@babel/preset-react') // Resolve path for use from external projects
                             ],
-                            plugins: [require.resolve('babel-plugin-styled-components'), require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external projects
+                            plugins: [
+                                require.resolve('babel-plugin-styled-components'), // Resolve path for use from external projects
+                                require.resolve('babel-plugin-transform-remove-strict-mode')
+                            ]
                         }
                     }
                 },
@@ -73,18 +86,28 @@ module.exports = (env, argv) => {
                     use: [
                         styleLoaderImpl,
                         { loader: 'css-loader', options: { } }
-                        // https://github.com/webpack-contrib/css-loader/issues/863
-                        //                        { loader: 'css-loader', options: { minimize: true } }
                     ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
                         styleLoaderImpl,
-                        // https://github.com/webpack-contrib/css-loader/issues/863
-                        //                        { loader: 'css-loader', options: { minimize: true } },
                         { loader: 'css-loader', options: { } },
                         'sass-loader' // compiles Sass to CSS
+                    ]
+                },
+                {
+                    test: /\.less$/,
+                    use: [
+                        styleLoaderImpl,
+                        { loader: 'css-loader' },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                modifyVars: themeVariables,
+                                javascriptEnabled: true
+                            }
+                        }
                     ]
                 },
                 {
@@ -129,7 +152,8 @@ module.exports = (env, argv) => {
                 new UglifyJsPlugin({
                     sourceMap: true,
                     parallel: true
-                })
+                }),
+                new OptimizeCSSAssetsPlugin({})
             ]
         };
     } else {

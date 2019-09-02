@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
-import {Select} from './Select';
-import {Slider} from './Slider';
-import {Checkbox} from './Checkbox';
-import {Color} from './Color';
-import {ManualClassification} from '../../manualClassification/ManualClassification';
+import { withContext } from 'oskari-ui/util';
+import { Select } from './Select';
+import { Slider } from './Slider';
+import { Checkbox } from './Checkbox';
+import { Color } from './Color';
+import { ManualClassification } from '../../manualClassification/ManualClassification';
 import './editclassification.scss';
 
 const getLocalizedOptions = (options, locObj, disabledOptions) => {
@@ -68,27 +68,28 @@ const getDisabledOptions = props => {
     return disabled;
 };
 
-const handleSelectChange = (service, properties, value) => {
+const handleSelectChange = (mutator, properties, value) => {
     if (properties.valueType === 'int') {
         value = parseInt(value);
     }
-    service.getStateService().updateActiveClassification(properties.id, value);
+    mutator.updateClassification(properties.id, value);
 };
 
-const handleCheckboxChange = (service, id, isSelected) => {
-    service.getStateService().updateActiveClassification(id, isSelected);
+const handleCheckboxChange = (mutator, id, isSelected) => {
+    mutator.updateClassification(id, isSelected);
 };
 
 const EditClassification = props => {
-    const {indicators, service, loc} = props;
-    const {methods, values, disabled, modes, colors, types, mapStyles} = props.classifications;
+    const { indicators, mutator, loc, editEnabled, manualView, indicatorData } = props;
+    const { methods, values, modes, colors, types, mapStyles } = props.classifications;
     const disabledOptions = getDisabledOptions(props);
+    const disabled = !editEnabled;
 
     return (
         <div className="classification-edit">
             <div className="classification-options">
-                <Select key="mapStyle" value = {values.mapStyle} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                <Select value = {values.mapStyle} disabled = {disabled}
+                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                     options = {getLocalizedOptions(mapStyles, loc('classify.map'))}
                     properties = {{
                         id: 'mapStyle',
@@ -96,8 +97,8 @@ const EditClassification = props => {
                         label: loc('classify.map.mapStyle')
                     }}/>
 
-                <Select key="method" value = {values.method} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                <Select value = {values.method} disabled = {disabled}
+                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                     options = {getLocalizedOptions(methods, loc('classify.methods'))}
                     properties = {{
                         id: 'method',
@@ -106,11 +107,12 @@ const EditClassification = props => {
                     }}/>
 
                 {values.method === 'manual' &&
-                    <ManualClassification key="modifyClassification" disabled = {disabled} indicators={indicators}/>
+                    <ManualClassification disabled = {disabled} manualView = {manualView}
+                        indicators={indicators} indicatorData = {indicatorData} mutator= {mutator}/>
                 }
 
-                <Select key="count" value = {values.count} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                <Select value = {values.count} disabled = {disabled}
+                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                     options = {getValidCountRange(props.classifications)}
                     properties = {{
                         id: 'count',
@@ -119,8 +121,8 @@ const EditClassification = props => {
                         valueType: 'int'
                     }}/>
 
-                <Select key="mode" value = {values.mode} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                <Select value = {values.mode} disabled = {disabled}
+                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                     options = {getLocalizedOptions(modes, loc('classify.modes'), disabledOptions.mode)}
                     properties = {{
                         id: 'mode',
@@ -129,21 +131,21 @@ const EditClassification = props => {
                     }}/>
 
                 {values.mapStyle !== 'choropleth' &&
-                    <Slider key="point-size" values = {values} disabled = {disabled}/>
+                    <Slider key="point-size" values = {values} disabled = {disabled} mutator = {mutator}/>
                 }
 
                 <Checkbox key="showValues" value = {values.showValues} disabled = {disabled}
-                    handleChange = {(id, isSelected) => handleCheckboxChange(service, id, isSelected)}
+                    handleChange = {(id, isSelected) => handleCheckboxChange(mutator, id, isSelected)}
                     properties = {{
                         id: 'showValues',
                         class: 'show-values',
                         label: loc('classify.map.showValues')
                     }}/>
 
-                <Color key="name" values = {values} disabled = {disabled} colors = {colors}/>
+                <Color values = {values} disabled = {disabled} colors = {colors} mutator = {mutator}/>
 
                 <Select key="transparency" value = {values.transparency} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                     options = {getTransparencyOptions(values.transparency)}
                     properties = {{
                         id: 'transparency',
@@ -154,7 +156,7 @@ const EditClassification = props => {
 
                 {values.mapStyle !== 'points' &&
                     <Select key="type" value = {values.type} disabled = {disabled}
-                        handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                        handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                         options = {getLocalizedOptions(types, loc('colorset'))}
                         properties = {{
                             id: 'type',
@@ -164,7 +166,7 @@ const EditClassification = props => {
                 }
 
                 <Select key="fractionDigits" value = {values.fractionDigits} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(service, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
                     options = {[0, 1, 2, 3, 4, 5]}
                     properties = {{
                         id: 'fractionDigits',
@@ -177,12 +179,14 @@ const EditClassification = props => {
     );
 };
 EditClassification.propTypes = {
-    indicators: PropTypes.object,
-    state: PropTypes.object,
-    classifications: PropTypes.object,
-    service: PropTypes.object,
-    loc: PropTypes.func
+    indicators: PropTypes.object.isRequired,
+    indicatorData: PropTypes.object.isRequired,
+    editEnabled: PropTypes.bool.isRequired,
+    classifications: PropTypes.object.isRequired,
+    mutator: PropTypes.object.isRequired,
+    manualView: PropTypes.object,
+    loc: PropTypes.func.isRequired
 };
 
 const contextWrapped = withContext(EditClassification);
-export {contextWrapped as EditClassification};
+export { contextWrapped as EditClassification };

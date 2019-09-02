@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
+import { withContext } from 'oskari-ui/util';
 import './slider.scss';
 
 class Slider extends React.Component {
@@ -35,7 +35,7 @@ class Slider extends React.Component {
                     min: ui.values[0],
                     max: ui.values[1]
                 };
-                this.props.service.getStateService().updateActiveClassificationObj(value);
+                this.props.mutator.updateClassificationObj(value);
             }
         });
     }
@@ -69,10 +69,10 @@ class Slider extends React.Component {
     }
 };
 Slider.propTypes = {
-    values: PropTypes.object,
-    disabled: PropTypes.bool,
-    service: PropTypes.object,
-    loc: PropTypes.func
+    values: PropTypes.object.isRequired,
+    disabled: PropTypes.bool.isRequired,
+    mutator: PropTypes.object.isRequired,
+    loc: PropTypes.func.isRequired
 };
 const cls = withContext(Slider);
-export {cls as Slider};
+export { cls as Slider };

@@ -70,9 +70,7 @@ Oskari.clazz.define(
 
             if (this.isEmbedded()) {
                 // Start in an embedded map mode
-                // Classification can be disabled for embedded map
-                me.createClassficationView(true);
-                me.enableClassification(conf.allowClassification !== false);
+                me.createClassficationView();
 
                 if (me.conf.grid) {
                     me.togglePlugin.addTool('table');
@@ -159,18 +157,21 @@ Oskari.clazz.define(
          * Update visibility of classification / legend based on idicators length & stats layer visibility
          */
         _updateClassficationViewVisibility: function () {
-            var indicatorsExist = this.statsService.getStateService().getIndicators().length > 0;
+            const service = this.statsService.getStateService();
+            var indicatorsExist = service.hasIndicators();
             var layer = this.getLayerService().findMapLayer(this._layerId);
             var layerVisible = layer ? layer.isVisible() : true;
-
-            this.createClassficationView(indicatorsExist && layerVisible);
+            const visible = indicatorsExist && layerVisible;
+            service.updateClassificationPluginState('visible', visible);
+            if (visible) {
+                this.createClassficationView();
+            }
         },
         /**
          * Update visibility of series control based on active indicator & stats layer visibility
          */
         _updateSeriesControlVisibility: function () {
-            const ind = this.statsService.getStateService().getActiveIndicator();
-            const isSeriesActive = ind && !!ind.series;
+            const isSeriesActive = this.statsService.getStateService().isSeriesActive();
             const layer = this.getLayerService().findMapLayer(this._layerId);
             const layerVisible = layer ? layer.isVisible() : true;
 
@@ -269,6 +270,9 @@ Oskari.clazz.define(
             'StatsGrid.Filter': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
             },
+            'MapSizeChangedEvent': function (evt) {
+                this.statsService.notifyOskariEvent(evt);
+            },
             'UIChangeEvent': function (evt) {
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             },
@@ -287,7 +291,6 @@ Oskari.clazz.define(
                 }
                 if (wasClosed) {
                     me.getTile().hideExtensions();
-                    this._updateClassficationViewVisibility();
                 } else {
                     me.getTile().showExtensions();
                 }
@@ -299,6 +302,7 @@ Oskari.clazz.define(
                 }
                 var emptyState = {};
                 this.setState(emptyState);
+                this.removeClassificationView();
             },
             /**
              * @method MapLayerEvent
@@ -338,13 +342,9 @@ Oskari.clazz.define(
                 if (evt.getMapLayer().getId() !== this._layerId) {
                     return;
                 }
-                this.statsService.notifyOskariEvent(evt);
                 // record opacity for published map etc
-                var ind = this.statsService.getStateService().getActiveIndicator();
-                if (!ind || !ind.classification) {
-                    return;
-                }
-                ind.classification.transparency = evt.getMapLayer().getOpacity();
+                this.statsService.getStateService().updateClassificationTransparency(evt.getMapLayer().getOpacity());
+                this.statsService.notifyOskariEvent(evt);
             }
         },
 
@@ -455,45 +455,29 @@ Oskari.clazz.define(
             }
             return state;
         },
-        createClassficationView: function (enabled) {
+        createClassficationView: function () {
+            if (this.classificationPlugin) {
+                return;
+            }
             var config = jQuery.extend(true, {}, this.getConfiguration());
             var sandbox = this.getSandbox();
             var locale = Oskari.getMsg.bind(null, 'StatsGrid');
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
 
-            if (!enabled) {
-                if (this.classificationPlugin) {
-                    mapModule.unregisterPlugin(this.classificationPlugin);
-                    mapModule.stopPlugin(this.classificationPlugin);
-                    this.classificationPlugin = null;
-                }
-                return;
-            }
-            if (!this.classificationPlugin) {
-                this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
-                this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
-                this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
-            }
-            if (mapModule.getPluginInstances()[this.classificationPlugin.getName()]) {
-                this.classificationPlugin.redrawUI();
-            } else {
-                mapModule.registerPlugin(this.classificationPlugin);
-                mapModule.startPlugin(this.classificationPlugin);
-            }
-            // get the plugin order straight in mobile toolbar even for the tools coming in late
-            if (Oskari.util.isMobile()) {
-                mapModule.redrawPluginUIs(true);
-            }
+            this.classificationPlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.ClassificationPlugin', this, config, locale, sandbox);
+            this.classificationPlugin.on('show', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, true));
+            this.classificationPlugin.on('hide', () => this.togglePlugin && this.togglePlugin.toggleTool(TOGGLE_TOOL_CLASSIFICATION, false));
+            mapModule.registerPlugin(this.classificationPlugin);
+            mapModule.startPlugin(this.classificationPlugin);
+            this.classificationPlugin.buildUI();
         },
-        /**
-         * @method  @public enableClassification change published map classification visibility.
-         * @param  {Boolean} enabled allow user to change classification or not
-         */
-        enableClassification: function (enabled) {
-            if (!this.classificationPlugin) {
-                return;
+        removeClassificationView: function () {
+            if (this.classificationPlugin) {
+                const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
+                mapModule.unregisterPlugin(this.classificationPlugin);
+                mapModule.stopPlugin(this.classificationPlugin);
+                this.classificationPlugin = null;
             }
-            this.classificationPlugin.enableClassification(enabled);
         },
         setSeriesControlVisible: function (visible) {
             if (visible) {

@@ -330,7 +330,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 mapfull: {
                     conf: {
                         plugins: [
-                            { id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin' },
                             { id: 'Oskari.mapframework.mapmodule.ControlsPlugin' },
                             { id: 'Oskari.mapframework.mapmodule.GetInfoPlugin' }
                         ]
@@ -340,6 +339,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     conf: {}
                 }
             };
+            if (!this.getSandbox().getMap().getSupports3D()) {
+                config.mapfull.conf.plugins.push(
+                    { id: 'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin' }
+                );
+            }
             // setup current mapstate so layers are not removed
             var state = this.getSandbox().getCurrentState();
             // merge state to initial config
@@ -391,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
             var selectedLayers = this.sandbox.getMap().getLayers();
             var service = this.getService();
             var deniedLayers = selectedLayers.filter((layer) => {
-                return !service.hasPublishRight(layer) || !layer.isSupported(this.sandbox.getMap().getSrsName());
+                return !service.hasPublishRight(layer) || !this.sandbox.getMap().isLayerSupported(layer);
             });
             return deniedLayers;
         },
@@ -402,7 +406,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplate: {
-            priority: 40,
+            priority: 50,
             show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'Publisher2']);
             },

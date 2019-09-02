@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Editar estilo de área",
                 "line": "Editar estilo de línea"
             },
+            "validation": {
+                "title": "Los datos contienen errores:",
+                "strokeWidth": "El tamaño de la línea no es válido. Tiene que estar entre 1 y 50",
+                "borderWidth": "El grosor de la línea de borde no es válido. Tiene que estar entre 1 y 50"
+            },
             "dot": {
                 "title": "Estilo de objeto puntal",
                 "tooltip": "Define un estilo para los objetos puntuales",

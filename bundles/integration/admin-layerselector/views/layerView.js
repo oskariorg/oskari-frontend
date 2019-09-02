@@ -204,9 +204,11 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
              * @method toggleLayerSettings
              */
         toggleLayerSettings: function (e) {
-            var me = this,
-                element = jQuery(e.currentTarget);
+            var me = this;
+            var element = jQuery(e.currentTarget);
 
+            const wfsPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getLayerPlugins('wfs');
+            const supportsWFS3 = wfsPlugin && wfsPlugin.oskariStyleSupport === true;
             me.getDataproviders(false, function () {
                 // show layer settings
                 if (element.parents('.admin-add-layer').length === 0 && !element.find('.admin-add-layer').hasClass('show-edit-layer')) {
@@ -220,6 +222,7 @@ function (ViewTemplate, AdminLayerSettingsView, SubLayerTemplate) {
                     // create AdminLayerSettingsView
                     var settings = new AdminLayerSettingsView({
                         model: me.model,
+                        supportsWFS3: supportsWFS3,
                         supportedTypes: me.supportedTypes,
                         instance: me.options.instance,
                         classes: me.classNames,

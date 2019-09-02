@@ -1,28 +1,19 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {withContext} from 'oskari-ui/util';
-import {ManualClassificationView} from './View';
-
+import { withContext } from 'oskari-ui/util';
 // TODO: change to use general oskari react button and pass props.handleClick = handleManualClassification
 
-const update = (stateService, bounds) => {
-    stateService.updateActiveClassification('manualBounds', bounds);
-};
-
-const handleManualClassification = ({service, indicators}) => {
-    const {series, state, classification, color} = service.getAllServices();
-    const ind = indicators.active;
-    const view = new ManualClassificationView(classification, color, ind.classification);
-
-    if (ind.series && indicators.serieStats && indicators.serieStats.serie) {
+const handleManualClassification = ({ indicators, mutator, manualView, indicatorData }) => {
+    const view = manualView.view;
+    if (indicators.active.series && indicators.serieStats && indicators.serieStats.serie) {
         view.setData(indicators.serieStats.serie);
-    } else if (indicators.data) {
-        view.setData(indicators.data);
+    } else if (indicatorData.data) {
+        view.setData(indicatorData.data);
     } else {
-        return; // failed to get serie or data -> don't open
+        // failed to get serie or data -> don't open
     }
-    series.setAnimating(false);
-    view.openEditor(bounds => update(state, bounds));
+    manualView.setAnimating(false);
+    view.openEditor(bounds => mutator.updateClassification('manualBounds', bounds));
 };
 
 const ManualClassification = props => {
@@ -38,10 +29,12 @@ const ManualClassification = props => {
 };
 
 ManualClassification.propTypes = {
-    disabled: PropTypes.bool,
-    service: PropTypes.object,
-    indicators: PropTypes.object,
-    loc: PropTypes.func
+    disabled: PropTypes.bool.isRequired,
+    mutator: PropTypes.object.isRequired,
+    indicators: PropTypes.object.isRequired,
+    manualView: PropTypes.object.isRequired,
+    indicatorData: PropTypes.object.isRequired,
+    loc: PropTypes.func.isRequired
 };
 const contextWrapped = withContext(ManualClassification);
-export {contextWrapped as ManualClassification};
+export { contextWrapped as ManualClassification };

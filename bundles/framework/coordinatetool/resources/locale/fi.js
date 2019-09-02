@@ -100,6 +100,10 @@ Oskari.registerLocalization(
                 "showTransformationTools": "Näytä koordinaattimuunnostyökalut",
                 "noUI": "Piilota käyttöliittymä (käytä RPC-rajapinnan kautta)"
             }
+        },
+        "guidedTour": {
+            "title": "Koordinaatit",
+            "message": "Koordinaatit-työkalulla saat haettua karttanäkymän koordinaatteja, kohdistettua kartan tiettyihin koordinaatteihin sekä lisättyä merkintöjä."
         }
     }
 });

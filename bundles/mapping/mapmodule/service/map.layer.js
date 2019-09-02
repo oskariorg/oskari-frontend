@@ -461,6 +461,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @param  {Object}          newLayerConf new layer JSONObject presentation, used only update/add
          * @param  {Boolean}         deleteLayer delete layer
          * @param  {Boolean}         newLayer is new layer
+         * @throws Error if missing newLayerConf or newLayerConf.groups for updated layer
          */
         updateLayersInGroups: function (layerId, newLayerConf, deleteLayer, newLayer) {
             var me = this;
@@ -468,6 +469,20 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             if (me._layerGroups.length === 0) {
                 return;
             }
+
+            // check if layer was updated and removed from a group
+            var isLayerUpdatedAndRemovedFromGroup = function (groupId) {
+                if (!deleteLayer && !newLayer) {
+                    if (!newLayerConf) {
+                        throw new Error('Missing layer config for updated layer');
+                    }
+                    if (!newLayerConf.groups) {
+                        throw new Error('Missing groups for updated layer');
+                    }
+                    return newLayerConf.groups.indexOf(groupId) === -1;
+                }
+                return false;
+            };
 
             // remove layer from group on delete, update layer in group if already exists
             // recurses the group structure
@@ -477,7 +492,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     return children.id === layerId && children.type === 'layer';
                 });
                 if (layerIndex !== -1) {
-                    if (deleteLayer) {
+                    if (deleteLayer || isLayerUpdatedAndRemovedFromGroup(group.id)) {
                         group.children.splice(layerIndex, 1);
                     }
                 }
@@ -544,7 +559,8 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             var popup = this._popupService.createPopup();
 
             var buttons = [popup.createCloseButton('OK')];
-            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj').replace(/[\n]/g, '<br>'), buttons);
+            const dimension = this.getSandbox().getMap().getSupports3D() ? '3D' : '2D';
+            popup.show(this.loc('unsupportedProjHeader'), this.loc('unsupportedProj', { dimension }).replace(/[\n]/g, '<br>'), buttons);
 
             this.popupCoolOff = true;
             setTimeout(function () {
@@ -696,7 +712,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         /**
          * @method getAllLayerGroups
          * Returns an array of layer groups added to the service
-         * @param {String|Integer} id if defined return only wanted group
+         * @param {String|Integer} id if defined and not equal -1 return only wanted group
          * @return {Oskari.mapframework.domain.AbstractLayer[]}
          */
         getAllLayerGroups: function (id) {
@@ -727,7 +743,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                     layerGroups = group;
                 }
             }
-            return (id) ? layerGroups : this._layerGroups;
+            return (id && id !== -1) ? layerGroups : this._layerGroups;
         },
 
         /**

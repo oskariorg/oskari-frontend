@@ -25,40 +25,39 @@
             }
         }
     }
-}
 
-/* published/embedded map classification background transparent  */
-.statsgrid-classification-plugin-transparent {
-    .classification-edit {
-        background-color: transparent;
-    }
-    .dropdown {
-        text-shadow: none;
-        color: #000;
-    }
-    .select {
-        cursor: pointer;
-        appearance: none;
-        -webkit-appearance: none;
-        margin-left: 12px;
-        background-color: transparent;
-        background: none;
-        border: none;
-        color: #ffffff;
-        text-shadow:
-            -1px -1px 0 #000,
-            1px -1px 0 #000,
-            -1px 1px 0 #000,
-            1px 1px 0 #000;
-        &:disabled {
-            cursor: auto;
+    /* published/embedded map classification background transparent  */
+    &.transparent-classification {
+        .classification-edit {
+            background-color: transparent;
+        }
+        .dropdown {
+            text-shadow: none;
+            color: #000;
+        }
+        .select {
+            cursor: pointer;
+            appearance: none;
+            -webkit-appearance: none;
+            margin-left: 12px;
+            background-color: transparent;
+            background: none;
+            border: none;
+            color: #ffffff;
+            text-shadow:
+                -1px -1px 0 #000,
+                1px -1px 0 #000,
+                -1px 1px 0 #000,
+                1px 1px 0 #000;
+            &:disabled {
+                cursor: auto;
+            }
+        }
+        option {
+            color: #3c3c3c;
+            &:disabled {
+                color: graytext;
+            }
         }
     }
-    option {
-        color: #3c3c3c;
-        &:disabled {
-            color: graytext;
-        }
-    }
-    
 }

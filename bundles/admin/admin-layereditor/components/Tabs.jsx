@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntTabs from 'antd/lib/tabs';
-import 'antd/lib/tabs/style/css';
+import { Tabs as AntTabs } from 'antd';
+import 'antd/es/tabs/style/';
 
 const AntTabPane = AntTabs.TabPane;
 

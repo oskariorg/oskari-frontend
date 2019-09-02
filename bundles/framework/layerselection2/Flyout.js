@@ -1,3 +1,4 @@
+const UnsupportedLayerReason = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason');
 /**
  * @class Oskari.mapframework.bundle.layerselection2.Flyout
  *
@@ -86,6 +87,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             this.templateLayerFooterOutOfContentArea = jQuery('<p class="layer-msg">' + loc['out-of-content-area'] + ' <a href="JavaScript:void(0);">' + loc['move-to-content-area'] + '</a></p>');
 
             this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '</div>');
+
+            this.templateUnsupportedClean = jQuery('<div class="layer-footer-unsupported"></div>');
 
             this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
@@ -222,8 +225,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             var toolsDiv = layerDiv.find('div.layer-tools');
 
             var footer;
-            if (!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
-                footer = this._createUnsupportedFooter();
+            if (!this.instance.getSandbox().getMap().isLayerSupported(layer)) {
+                footer = this._createUnsupportedFooter(layer);
             } else {
                 /* fix: we need this at anytime for slider to work */
                 footer = this._createLayerFooter(layer, layerDiv);
@@ -255,11 +258,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         /**
          * @private
          * @method _createUnsupportedFooter create jQuery element for unsupported SRS footer
+         * @param { AbstractLayer } layer
          */
-        _createUnsupportedFooter: function () {
+        _createUnsupportedFooter: function (layer) {
             var me = this;
             var sandbox = me.instance.getSandbox();
             var footer;
+            var reasons = sandbox.getMap().getUnsupportedLayerReasons(layer);
 
             if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
@@ -270,6 +275,36 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
+            } else if (reasons && reasons.length > 0) {
+                footer = me.templateUnsupportedClean.clone();
+                const grouped = reasons.reduce((groups, cur) => {
+                    if (cur.getSeverity() >= UnsupportedLayerReason.FATAL) {
+                        groups.fatals = groups.fatals || [];
+                        groups.fatals.push(cur);
+                    } else if (cur.getSeverity() < UnsupportedLayerReason.WARNING) {
+                        groups.infos = groups.infos || [];
+                        groups.infos.push(cur);
+                    } else {
+                        groups.warnings = groups.warnings || [];
+                        groups.warnings.push(cur);
+                    }
+                    return groups;
+                }, {});
+                const { fatals, warnings, infos } = grouped;
+                const selected = fatals || warnings || infos;
+                selected
+                    .sort((a, b) => (b.getSeverity() - a.getSeverity()))
+                    .forEach(reason => {
+                        const div = jQuery(`<div>${reason.getDescription()} </div>`);
+                        const action = reason.getAction();
+                        const actionText = reason.getActionText();
+                        if (actionText && action) {
+                            const actionLink = jQuery(`<a href="JavaScript:void(0);">${actionText}</a>`);
+                            actionLink.on('click', action);
+                            div.append(actionLink);
+                        }
+                        footer.append(div);
+                    });
             } else {
                 footer = me.templateUnsupported.clone();
             }
@@ -305,29 +340,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @return {Object} slider
          */
         _addSlider: function (layer, layerDiv, input) {
-            var me = this,
-                lyrId = layer.getId(),
-                opa = layer.getOpacity(),
-                sliderEl = layerDiv.find('.layout-slider'),
-                slider = sliderEl.slider({
-                    min: 0,
-                    max: 100,
-                    value: opa,
-                    /* change: function (event,ui) {
-                     me._layerOpacityChanged(layer, ui.value);
-                     }, */
-                    slide: function (event, ui) {
-                        me._layerOpacityChanged(layer, ui.value);
-                    },
-                    stop: function (event, ui) {
-                        me._layerOpacityChanged(layer, ui.value);
-                    }
-                });
+            var me = this;
+            var lyrId = layer.getId();
+            var opa = layer.getOpacity();
+            var sliderEl = layerDiv.find('.layout-slider');
+            var slider = sliderEl.slider({
+                min: 0,
+                max: 100,
+                value: opa,
+                /* change: function (event,ui) {
+                    me._layerOpacityChanged(layer, ui.value);
+                    }, */
+                slide: function (event, ui) {
+                    me._layerOpacityChanged(layer, ui.value);
+                },
+                stop: function (event, ui) {
+                    me._layerOpacityChanged(layer, ui.value);
+                }
+            });
 
             me._sliders[lyrId] = slider;
 
             if (input) {
-                input.attr('value', layer.getOpacity());
+                input.val(layer.getOpacity());
                 input.on('change paste keyup', function () {
                     // sliderEl.slider('value', jQuery(this).val());
                     me._layerOpacityChanged(layer, jQuery(this).val());
@@ -628,7 +663,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 opa = layerDiv.find('div.layer-opacity div.opacity-slider input'),
                 slider = layerDiv.find('.layout-slider');
 
-            opa.attr('value', layer.getOpacity());
+            opa.val(layer.getOpacity());
             slider.slider('value', layer.getOpacity());
         },
 

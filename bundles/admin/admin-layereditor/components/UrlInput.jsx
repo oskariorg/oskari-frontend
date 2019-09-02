@@ -1,9 +1,10 @@
 import React from 'react';
-import Input from 'antd/lib/input';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
 import { Select, Option } from './Select';
 import { Collapse, Panel } from './Collapse';
 import { TextInput } from './TextInput';
+import 'antd/es/input/style/';
 
 const protocols = ['https', 'http'];
 export class UrlInput extends React.Component {
