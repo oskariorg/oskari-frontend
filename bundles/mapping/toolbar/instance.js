@@ -395,7 +395,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 var toolbar = this.getToolbarContainer();
 
                 // remove any old selection
-                this._removeToolSelections();
+                this._deactiveTools(group);
 
                 var groupContainer = toolbar.find('div.toolrow[tbgroup=' + group + ']');
                 if (groupContainer.length > 0) {

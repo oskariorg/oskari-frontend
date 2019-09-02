@@ -168,7 +168,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             const style = category.getStyle();
             layer.setName(category.getName());
             options.styles = this._geStyleForLayer(style);
-            // options.hover = this._getHoverStyle(style);
         },
         _getMapLayerId: function (categoryId) {
             if (!categoryId) {
@@ -194,7 +193,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             baseJson.wmsUrl = Oskari.urls.getRoute('MyPlacesTile') + '&myCat=' + categoryModel.getId() + '&';
             baseJson.name = categoryModel.getName();
             baseJson.options.styles = this._geStyleForLayer(style);
-            // baseJson.options.hover = this._getHoverStyle(style);
             baseJson.id = this._getMapLayerId(categoryModel.getId());
             // Publish permission is always ok for user's own data
             baseJson.permissions = {
@@ -218,28 +216,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
                 default: {
                     featureStyle: style
                 }
-            };
-        },
-        _getHoverStyle: function (style) {
-            const strokeWidth = Oskari.util.keyExists(style, 'stroke.width') ? style.stroke.width : 1;
-            const borderWidth = Oskari.util.keyExists(style, 'stroke.area.width') ? style.stroke.area.width : 1;
-            const { placename, placedesc } = this.loc('categoryform.visibleFields');
-            return {
-                featureStyle: {
-                    inherit: true,
-                    effect: 'darken',
-                    // text: { scale: 1.5 },
-                    stroke: {
-                        area: {
-                            width: borderWidth * 2
-                        },
-                        width: strokeWidth * 2
-                    }
-                },
-                content: [
-                    { key: placename, valueProperty: 'name' },
-                    { key: placedesc, valueProperty: 'place_desc' }
-                ]
             };
         },
         /**
