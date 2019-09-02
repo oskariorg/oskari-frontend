@@ -179,6 +179,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 } else {
                     me.displayInfo();
                 }
+                me.selectSavedIndicator(indicator, data);
             });
         });
         this.setContent(this.element);
@@ -189,6 +190,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     setSpinnerVisible: function (show) {
         this.element.find('.spinner-holder').css('height', show ? '100px' : '0');
         show ? this.spinner.start() : this.spinner.stop();
+    },
+    selectSavedIndicator: function (indicator, data) {
+        const { ds, id } = indicator;
+        const selectors = { ...data.selectors };
+        const stateService = this.service.getStateService();
+        stateService.setRegionset(selectors.regionset);
+        delete selectors.regionset;
+        stateService.addIndicator(ds, id, selectors);
     },
     /**
      * Opens a form for user to add or edit data for indicators year/regionset

@@ -255,7 +255,7 @@ Oskari.registerLocalization(
             },
             "dialog": {
                 "successTitle": "Enregistré",
-                "successMsg": "Les données ont été enregistrées. Ajouter l'indicateur à la carte à l'aide de la fonctionnalité de recherche des statistiques."
+                "successMsg": "Les données ont été enregistrées."
             },
             "import": {
                 "title": "Importation à partir du presse-papiers",
