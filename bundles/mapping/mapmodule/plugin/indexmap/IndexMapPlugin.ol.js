@@ -80,7 +80,6 @@ Oskari.clazz.define(
                             // - in some cases indexmap + normal map going to an infinite update-loop when zooming out
                             layer = layer.createIndexMapLayer();
                         }
-
                         var controlOptions = {
                             target: me._indElement[0],
                             layers: [ layer ],
@@ -97,8 +96,8 @@ Oskari.clazz.define(
                         me._indexMap = new olControlOverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
                         me.getMap().addControl(me._indexMap);
+                        me._indexMap.setCollapsed(false);
                     }
-                    me._indexMap.setCollapsed(false);
                 } else {
                     me._indexMap.setCollapsed(true);
                 }
@@ -154,19 +153,25 @@ Oskari.clazz.define(
             }
         },
         /**
-         * Get 1st visible bottom layer
+         * Get 1st visible image layer.
+         * fallback to first visible layer
          * @returns {*}
          * @private
          */
         _getBaseLayer: function () {
-            var layer = null;
-            for (var i = 0; i < this._map.getLayers().getLength(); i += 1) {
-                layer = this._map.getLayers().item(i);
-                if (layer.getVisible()) {
-                    return layer;
-                }
+            const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
+            if (selectedLayers.length === 0) return null;
+
+            let layer = selectedLayers.find(l => {
+                const type = l.getLayerType();
+                return l.isVisible() && (type === 'wmts' || type === 'wms');
+            });
+            if (!layer) {
+                layer = selectedLayers.find(l => l.isVisible());
             }
-            return null;
+            if (!layer) return null;
+            const olLayers = this.getMapModule().getOLMapLayers(layer.getId());
+            return olLayers && olLayers.length > 0 ? olLayers[0] : null;
         }
     },
     {
