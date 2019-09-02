@@ -29,7 +29,7 @@ export class HoverHandler {
     onMapHover (event, feature, layer) {
         if (!feature) {
             if (this.noHitsCounter > this.clearHoverThreshold) {
-                this._clearHover();
+                this.clearHover();
                 return;
             }
             this.noHitsCounter++;
@@ -52,7 +52,7 @@ export class HoverHandler {
         }
     }
 
-    _clearHover () {
+    clearHover () {
         if (!this.layer) {
             return;
         }
