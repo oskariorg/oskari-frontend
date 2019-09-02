@@ -45,7 +45,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
                 axisLabel.addClass('sticky');
                 axisLabel.css('margin-top', function () {
                     return scrollAmount - 15;
-
                 });
             } else {
                 if (axisLabel.hasClass('sticky')) {

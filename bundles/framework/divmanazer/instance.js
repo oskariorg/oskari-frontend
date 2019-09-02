@@ -214,8 +214,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             /**
              * Templates
              */
-            var me = this,
-                flyout;
+            var me = this;
 
             me.compiledTemplates['Oskari.userinterface.Tile'] = jQuery(
                 me.templates['Oskari.userinterface.Tile']
@@ -242,7 +241,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 name,
                 flyoutPlugin,
                 el,
-                fcc,
                 tilePlugin,
                 tile,
                 viewPlugin,

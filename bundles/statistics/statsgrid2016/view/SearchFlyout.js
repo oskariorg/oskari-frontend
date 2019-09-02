@@ -43,7 +43,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         this.clearUi();
         this.addClassForContent('statsgrid-search-container');
         var flyout = this.getElement();
-        var title = this.loc('flyout.title');
         if (isEmbedded) {
             // Remove close button from published
             flyout.find('.oskari-flyouttools').hide();
