@@ -18,31 +18,47 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         this._visible = true;
         this._resizable = false;
         this._popup = null;
-
         /* @property container the DIV element */
         this.container = null;
         this.options = options || {};
-
-        this.__render();
         Oskari.makeObservable(this);
         this._baseZIndex = 20000;
+        this._init();
+        Oskari.makeObservable(this);
     }, {
         __templates: {
             popup: jQuery('<div class="oskari-flyout">' +
-                '<div class="oskari-flyouttoolbar">' +
-                '    <div class="oskari-flyoutheading"></div>' +
-                '    <div class="oskari-flyout-title"><p></p></div>' +
-                '    <div class="oskari-flyouttools">' +
-                '        <div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
-                '    </div>' +
-                '</div>' +
-                '<div class="oskari-flyoutcontentcontainer"></div>' +
+                '   <div class="oskari-flyouttoolbar">' +
+                '       <div class="oskari-flyoutheading"></div>' +
+                '       <div class="oskari-flyout-title"><p></p></div>' +
+                '       <div class="oskari-flyouttools">' +
+                '           <div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
+                '       </div>' +
+                '   </div>' +
+                '   <div class="oskari-flyoutcontentcontainer">' +
+                '       <div class="oskari-flyoutcontent"></div>' +
+                '   </div>' +
                 '</div>'),
-            sideTool: _.template(
-                '<div class="sidetool">' +
-                '<div class="icon icon-arrow-white-right"></div>' +
-                '<label class="verticalsidelabel">${ label }</label>' +
-                '</div>')
+            sideTool: _.template('<div class="sidetool">' +
+                '   <div class="icon icon-arrow-white-right"></div>' +
+                '   <label class="verticalsidelabel">${ label }</label>' +
+                '</div>'),
+            toolage: jQuery('<div class="oskari-flyouttool-help"></div>' +
+                '<div class="oskari-flyouttool-attach"></div>' +
+                '<div class="oskari-flyouttool-detach"></div>' +
+                '<div class="oskari-flyouttool-minimize"></div>' +
+                '<div class="oskari-flyouttool-restore"></div>')
+        },
+        _init: function () {
+            if (this.options.isExtension === true) {
+                this._createExtensionFlyout();
+            } else {
+                this.__render();
+            }
+        },
+        addToolage: function () {
+            var toolage = this.__templates.toolage.clone();
+            this._popup.find('.oskari-flyouttools').prepend(toolage);
         },
         isVisible: function () {
             return this._visible;
@@ -101,6 +117,22 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             me.addClass(me.options.cls);
             me.setSize(me.options.width, me.options.height);
         },
+        _createExtensionFlyout: function () {
+            var me = this;
+            this._popup = this.__templates.popup.clone();
+
+            this._popup.on('click', function () {
+                me.bringToTop();
+            });
+            this.setTitle(this.title);
+            this.addClass('oskari-closed');
+            if (this.options.cls) {
+                this.addClass(this.options.cls);
+            }
+            this.addToolage();
+            this.makeDraggable();
+            this.move(this.options.left, this.options.top);
+        },
         setTitle: function (title) {
             var me = this;
             if (!this._popup) {
@@ -118,13 +150,18 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          */
         setContent: function (content) {
             var me = this;
-            me._popup.find('.oskari-flyoutcontentcontainer').html(content);
+            me._popup.find('.oskari-flyoutcontent').html(content);
         },
         addClass: function (cls) {
             if (!this._popup) {
                 return;
             }
             this._popup.addClass(cls);
+        },
+        addClassForContent: function (cls) {
+            if (this._popup) {
+                this._popup.find('.oskari-flyoutcontent').addClass(cls);
+            }
         },
         setSize: function (width, height) {
             if (!this._popup) {
@@ -204,6 +241,12 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 start: function () {
                     // bring this flyout to top when user starts dragging it
                     me.bringToTop();
+                },
+                stop: function () {
+                    // prevent to drag flyout's toolbar out of the viewport's top
+                    if (me._popup.position().top < 0) {
+                        me._popup.css('top', '0px');
+                    }
                 }
             });
         },
@@ -237,6 +280,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         },
         getElement: function () {
             return this._popup;
+        },
+        getContent: function () {
+            return this._popup.find('.oskari-flyoutcontent');
         },
 
         /************************************************************************************************

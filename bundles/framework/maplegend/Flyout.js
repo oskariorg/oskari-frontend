@@ -36,10 +36,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.maplegend.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el) {
+        setEl: function (el, flyout) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('maplegend')) {
                 jQuery(this.container).addClass('maplegend');
+            }
+            if (!flyout.hasClass('maplegend')) {
+                flyout.addClass('maplegend');
             }
         },
         /**

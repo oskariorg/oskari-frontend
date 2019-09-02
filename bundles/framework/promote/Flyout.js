@@ -25,29 +25,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.promote.Flyout',
         },
 
         /**
-     * @method setEl
-     * @param {Object} el
-     *         reference to the container in browser
-     * @param {Number} width
-     *         container size(?) - not used
-     * @param {Number} height
-     *         container size(?) - not used
-     *
-     * Interface method implementation
-     */
-        setEl: function (el, width, height) {
+         * @method setEl
+         * @param {Object} el
+         *         reference to the container in browser
+         * @param {Number} width
+         *         container size(?) - not used
+         * @param {Number} height
+         *         container size(?) - not used
+         *
+         * Interface method implementation
+         */
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('promote')) {
                 jQuery(this.container).addClass('promote');
             }
+            if (!flyout.hasClass('promote')) {
+                flyout.addClass('promote');
+            }
         },
 
         /**
-     * @method startPlugin
-     *
-     * Interface method implementation, assigns the HTML templates
-     * that will be used to create the UI
-     */
+         * @method startPlugin
+         *
+         * Interface method implementation, assigns the HTML templates
+         * that will be used to create the UI
+         */
         startPlugin: function () {
             this.template = jQuery('<div class="promoteContainer">' +
                 '<div class="promoteDescription"></div>' +

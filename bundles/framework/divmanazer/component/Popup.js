@@ -411,6 +411,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeModal: function () {
             var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
             overlay.overlay('body');
+            this.dialog.css('z-index', overlay.getZIndexForModal());
             this.overlay = overlay;
             overlay.followResizing(true);
         },
@@ -538,6 +539,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             var me = this,
                 dragOptions = options || {
                     scroll: false,
+                    stack: '.divmanazerpopup',
                     handle: '.popupHeader'
                 };
             me.dialog.css('position', 'absolute');

@@ -322,6 +322,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 
                 sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
+            },
+            'UIChangeEvent': function (evt) {
+                // select default tool
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest');
             }
         },
 
