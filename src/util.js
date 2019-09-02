@@ -423,8 +423,11 @@ Oskari.util = (function () {
         return this.getColorBrightness(color) === 'light';
     };
 
-    util.isMobile = function () {
+    util.isMobile = function (ignoreSize) {
         var md = new MobileDetect(window.navigator.userAgent);
+        if (ignoreSize === true) {
+            return !!md.mobile();
+        }
         var mobileDefs = {
             width: 500,
             height: 400

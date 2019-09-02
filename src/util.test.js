@@ -867,6 +867,17 @@ describe('isMobile function', () => {
 
         expect(OskariMock.util.isMobile()).toEqual(true);
     });
+    test('returns false when screen size is small but device is desktop', () => {
+
+        expect.assertions(1);
+
+        document.body.innerHTML =
+            '<div id=\"mapdiv\" style=\"height: 300px;width: 300px;\">' +
+            'Dummy div content' +
+            '</div>';
+
+        expect(OskariMock.util.isMobile(true)).toEqual(false);
+    });
 
 });
 
