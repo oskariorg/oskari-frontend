@@ -359,7 +359,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupContent.find('div.mousecoordinates-div').show();
 
                 me._popup.show(popupTitle, popupContent, buttons);
-                me._popup.moveTo(me.getElement(), popupLocation, true);
+                const elem = me.getElement();
+                if (elem) {
+                    me._popup.moveTo(elem, popupLocation, true);
+                } else {
+                    me._popup.moveTo(mapmodule.getMapEl(), 'center', true, null);
+                }
+
                 popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({
                     'bgColour': themeColours.backgroundColour,
