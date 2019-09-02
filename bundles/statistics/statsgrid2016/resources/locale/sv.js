@@ -258,7 +258,7 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Sparad',
-                'successMsg': 'Informationen sparad. Granska indikatorn genom att tillägga den på kartan vid materialsökningen.'
+                'successMsg': 'Informationen sparad.'
             },
             'import': {
                 'title': 'Hämta från urklipp',

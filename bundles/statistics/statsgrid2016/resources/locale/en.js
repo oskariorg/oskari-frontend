@@ -261,7 +261,7 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Saved',
-                'successMsg': 'The data has been saved. Add the indicator to the map using the statistics search functionality.'
+                'successMsg': 'The data has been saved.'
             },
             'import': {
                 'title': 'Import from the clipboard',

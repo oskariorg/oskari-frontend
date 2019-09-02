@@ -262,7 +262,7 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Tallennettu',
-                'successMsg': 'Tiedot tallennettu. Lisää indikaattori kartalle aineistohaun kautta.'
+                'successMsg': 'Tiedot tallennettu.'
             },
             'import': {
                 'title': 'Tuo leikepöydältä',

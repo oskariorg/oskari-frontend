@@ -254,7 +254,7 @@ Oskari.registerLocalization(
             },
             "dialog": {
                 "successTitle": "Сохранено",
-                "successMsg": "Данные сохранены. Добавьте индикатор на карту с помощью функции поиска статистики."
+                "successMsg": "Данные сохранены."
             },
             "import": {
                 "title": "",
