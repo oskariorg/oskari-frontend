@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             const regionset = stateService.getRegionset();
             if (!activeIndicator || !regionset) return;
             const indicators = this.getIndicatorProps(activeIndicator, regionset);
-            const indicatorData = this.getIndicatorData(activeIndicator, regionset);
+            const indicatorData = this.getIndicatorData(activeIndicator, regionset, stateService.isSeriesActive());
             if (indicatorData.status === 'PENDING') return;
             const classifications = this.getClassificationProps(activeIndicator, activeClassfication, indicatorData);
             const legendProps = this.getLegendProps(indicatorData.data, classifications.values, indicators.serieStats);
@@ -118,15 +118,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                 </GenericContext.Provider>
             ), this.node);
         },
-        getIndicatorData: function (activeIndicator, activeRegionset) {
+        getIndicatorData: function (activeIndicator, activeRegionset, isSerie) {
             const { status, hash, regionset } = this.indicatorData;
+            const serieSelection = isSerie ? this.service.getSeriesService().getValue() : null;
             if (status !== 'PENDING' && hash === activeIndicator.hash && regionset === activeRegionset) {
-                return this.indicatorData;
+                if (!isSerie || serieSelection === this.indicatorData.serieSelection) {
+                    return this.indicatorData;
+                }
             }
             this.indicatorData = {
                 hash: activeIndicator.hash,
                 regionset: activeRegionset,
                 data: {},
+                serieSelection,
                 status: 'PENDING'
             };
             this.service.getIndicatorData(activeIndicator.datasource, activeIndicator.indicator, activeIndicator.selections, activeIndicator.series, activeRegionset, (err, data) => {
