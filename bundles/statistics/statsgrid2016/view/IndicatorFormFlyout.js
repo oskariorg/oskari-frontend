@@ -188,7 +188,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         this.move(this.options.pos.x, this.options.pos.y, true);
     },
     setSpinnerVisible: function (show) {
-        this.element.find('.spinner-holder').css('height', show ? '100px' : '0');
+        this.uiElement.find('.spinner-holder').css('height', show ? '100px' : '0');
         show ? this.spinner.start() : this.spinner.stop();
     },
     selectSavedIndicator: function (indicator, data) {
