@@ -15,7 +15,17 @@ import styled from 'styled-components';
 const PaddedButton = styled(Button)`
     margin-right: 5px;
 `;
-const AdminLayerForm = ({ mutator, layer, message = {}, onCancel, onDelete, onSave, loc }) => {
+const AdminLayerForm = ({
+    mutator,
+    mapLayerGroups,
+    dataProviders,
+    layer,
+    message = {},
+    onCancel,
+    onDelete,
+    onSave,
+    loc
+}) => {
     if (message.key) {
         message.text = loc(message.key);
     }
@@ -26,7 +36,11 @@ const AdminLayerForm = ({ mutator, layer, message = {}, onCancel, onDelete, onSa
             }
             <Tabs>
                 <TabPane tab={loc('generalTabTitle')} key='general'>
-                    <GeneralTabPane layer={layer} service={mutator} />
+                    <GeneralTabPane
+                        dataProviders={dataProviders}
+                        mapLayerGroups={mapLayerGroups}
+                        layer={layer}
+                        service={mutator} />
                 </TabPane>
                 <TabPane tab={loc('visualizationTabTitle')} key='visual'>
                     <VisualizationTabPane layer={layer} service={mutator} />
@@ -61,6 +75,8 @@ const AdminLayerForm = ({ mutator, layer, message = {}, onCancel, onDelete, onSa
 
 AdminLayerForm.propTypes = {
     mutator: PropTypes.object.isRequired,
+    mapLayerGroups: PropTypes.array.isRequired,
+    dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
     message: PropTypes.object,
     onCancel: PropTypes.func,
@@ -69,5 +85,5 @@ AdminLayerForm.propTypes = {
     loc: PropTypes.func.isRequired
 };
 
-const contextWrap = React.memo(withContext(AdminLayerForm));
+const contextWrap = withContext(AdminLayerForm);
 export { contextWrap as AdminLayerForm };

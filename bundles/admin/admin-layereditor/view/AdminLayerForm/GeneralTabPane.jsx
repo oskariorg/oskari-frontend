@@ -1,15 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {DataProviderSelect} from './DataProviderSelect';
-import {TextInput} from '../../components/TextInput';
-import {UrlInput} from '../../components/UrlInput';
-import {Collapse, Panel} from '../../components/Collapse';
-import {MapLayerGroups} from './MapLayerGroups';
-import {StyledTab, StyledComponentGroup, StyledComponent} from './AdminLayerFormStyledComponents';
-import {withContext} from '../../../../../src/react/util.jsx';
+import { DataProviderSelect } from './DataProviderSelect';
+import { TextInput } from '../../components/TextInput';
+import { UrlInput } from '../../components/UrlInput';
+import { Collapse, Panel } from '../../components/Collapse';
+import { MapLayerGroups } from './MapLayerGroups';
+import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
+import { withContext } from '../../../../../src/react/util.jsx';
 
 const GeneralTabPane = (props) => {
-    const {layer, service, loc} = props;
+    const { mapLayerGroups, dataProviders, layer, service, loc } = props;
     const lang = Oskari.getLang();
     const credentialProps = {
         allowCredentials: true,
@@ -29,6 +29,7 @@ const GeneralTabPane = (props) => {
                 <StyledComponent>
                     <div>
                         <UrlInput
+                            key={layer.layer_id}
                             value={layer.layerUrl}
                             onChange={(url) => service.setLayerUrl(url)}
                             credentials={credentialProps}
@@ -108,21 +109,26 @@ const GeneralTabPane = (props) => {
             }
             <label>{loc('dataProvider')}</label>
             <StyledComponent>
-                <DataProviderSelect value={layer.organizationName} onChange={(evt) => service.setDataProvider(evt)} dataProviders={layer.dataProviders} />
+                <DataProviderSelect key={layer.layer_id}
+                    value={layer.organizationName}
+                    onChange={(evt) => service.setDataProvider(evt)}
+                    dataProviders={dataProviders} />
             </StyledComponent>
             <label>{loc('mapLayerGroups')}</label>
             <StyledComponent>
-                <MapLayerGroups allGroups={layer.allGroups} service={service} lang={lang} />
+                <MapLayerGroups layer={layer} mapLayerGroups={mapLayerGroups} service={service} lang={lang} />
             </StyledComponent>
         </StyledTab>
     );
 };
 
 GeneralTabPane.propTypes = {
+    mapLayerGroups: PropTypes.array.isRequired,
+    dataProviders: PropTypes.array.isRequired,
     service: PropTypes.any,
     layer: PropTypes.object,
     loc: PropTypes.func
 };
 
 const contextWrap = withContext(GeneralTabPane);
-export {contextWrap as GeneralTabPane};
+export { contextWrap as GeneralTabPane };

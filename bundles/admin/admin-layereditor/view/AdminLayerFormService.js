@@ -53,14 +53,18 @@ export class AdminLayerFormService {
                 me.layer = { ...me.layer, groupId: dataProvider };
                 me.notify();
             },
-            setMapLayerGroup (checked, id) {
-                const allGroups = me.layer.allGroups;
-                for (let i = 0; i < allGroups.length; i++) {
-                    if (allGroups[i].id === id) {
-                        allGroups[i].checked = checked;
+            setMapLayerGroup (checked, group) {
+                const layer = { ...me.layer };
+                if (checked) {
+                    layer.maplayerGroups = [...layer.maplayerGroups, group];
+                } else {
+                    const found = layer.maplayerGroups.find(cur => cur.id === group.id);
+                    if (found) {
+                        layer.maplayerGroups = [...layer.maplayerGroups];
+                        layer.maplayerGroups.splice(layer.maplayerGroups.indexOf(found), 1);
                     }
                 }
-                me.layer = { ...me.layer, maplayerGroups: me.formatGroupListForBackend(allGroups) };
+                me.layer = layer;
                 me.notify();
             },
             setOpacity (opacity) {
@@ -109,16 +113,8 @@ export class AdminLayerFormService {
         };
     }
 
-    initLayerState (layer, allGroups, dataProviders) {
+    initLayerState (layer) {
         var me = this;
-        const groups = layer ? layer.getGroups() : [];
-        for (let i = 0; i < allGroups.length; i++) {
-            for (let j = 0; j < groups.length; j++) {
-                if (allGroups[i].id === groups[j].id) {
-                    allGroups[i].checked = true;
-                }
-            }
-        }
 
         const styles = layer ? layer.getStyles() : [];
         const availableStyles = [];
@@ -144,9 +140,7 @@ export class AdminLayerFormService {
             title_sv: layer ? layer.getDescription('sv') : '',
             groupId: layer ? layer.getAdmin().organizationId : null,
             organizationName: layer ? layer.getOrganizationName() : '',
-            maplayerGroups: me.formatGroupListForBackend(allGroups),
-            dataProviders: dataProviders,
-            allGroups: allGroups,
+            maplayerGroups: layer ? [...layer.getGroups()] : [],
             opacity: layer ? layer.getOpacity() : 100,
             minScale: layer ? layer.getMinScale() : 1,
             maxScale: layer ? layer.getMaxScale() : 1,
@@ -181,8 +175,12 @@ export class AdminLayerFormService {
     }
 
     saveLayer () {
-        const layer = this.getLayer();
         const me = this;
+
+        // Modify layer for backend
+        const layer = { ...this.getLayer() };
+        layer.maplayerGroups = layer.maplayerGroups.map(cur => cur.id).join(',');
+
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
@@ -222,8 +220,8 @@ export class AdminLayerFormService {
         });
     }
 
-    addListener (consumer) {
-        this.listeners.push(consumer);
+    setListener (consumer) {
+        this.listeners = [consumer];
     }
 
     getLayer () {
@@ -236,19 +234,5 @@ export class AdminLayerFormService {
 
     notify () {
         this.listeners.forEach(consumer => consumer());
-    }
-
-    formatGroupListForBackend (allGroups) {
-        let groups = '';
-        for (let i = 0; i < allGroups.length; i++) {
-            if (allGroups[i].checked) {
-                if (!groups) {
-                    groups = allGroups[i].id.toString();
-                } else {
-                    groups += ',' + allGroups[i].id;
-                }
-            }
-        }
-        return groups;
     }
 }

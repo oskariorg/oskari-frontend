@@ -66,6 +66,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
                 <GenericContext.Provider value={{ loc: loc }}>
                     <AdminLayerForm
                         mutator={this.service.getMutator()}
+                        mapLayerGroups={mapLayerGroups}
+                        dataProviders={dataProviders}
                         layer={this.service.getLayer()}
                         message={this.service.getMessage()}
                         onDelete={() => this.service.deleteLayer()}
@@ -74,8 +76,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
                 </GenericContext.Provider>,
                 el.get(0));
         };
-        this.service.initLayerState(layer, mapLayerGroups, dataProviders);
-        this.service.addListener(renderUI);
+        this.service.initLayerState(layer);
+        this.service.setListener(renderUI);
         renderUI();
     }
     cleanUp () {

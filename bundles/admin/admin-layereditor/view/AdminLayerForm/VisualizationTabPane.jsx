@@ -1,20 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {StyleSelect} from './StyleSelect';
-import {Slider} from '../../components/Slider';
-import {TextAreaInput} from '../../components/TextAreaInput';
-import {Opacity} from '../../components/Opacity';
-import {StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight} from './AdminLayerFormStyledComponents';
-import {withContext} from '../../../../../src/react/util.jsx';
+import { StyleSelect } from './StyleSelect';
+import { Slider } from '../../components/Slider';
+import { TextAreaInput } from '../../components/TextAreaInput';
+import { Opacity } from '../../components/Opacity';
+import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './AdminLayerFormStyledComponents';
+import { withContext } from '../../../../../src/react/util.jsx';
+import styled from 'styled-components';
+
+const VerticalComponent = styled(StyledComponent)`
+    height: 400px;
+    padding-bottom: 20px;
+    margin-left: 25%;
+`;
 
 const VisualizationTabPane = (props) => {
-    const {layer, service, loc} = props;
+    const { layer, service, loc } = props;
     return (
         <StyledTab>
             <StyledColumnLeft>
                 <label>{loc('opacity')}</label>
                 <StyledComponent>
-                    <Opacity defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
+                    <Opacity key={layer.layer_id} defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
                 </StyledComponent>
                 <label>{loc('style')}</label>
                 <StyledComponent>
@@ -31,9 +38,15 @@ const VisualizationTabPane = (props) => {
             </StyledColumnLeft>
             <StyledColumnRight>
                 <label>{loc('minAndMaxScale')}</label>
-                <StyledComponent style={{height: 400, paddingBottom: 20, marginLeft: '25%'}}>
-                    <Slider vertical range defaultValue={[layer.minScale, layer.maxScale]} min={0} max={100000000} onChange={(values) => service.setMinAndMaxScale(values)} />
-                </StyledComponent>
+                <VerticalComponent>
+                    <Slider key={layer.layer_id}
+                        vertical
+                        range
+                        defaultValue={[layer.minScale, layer.maxScale]}
+                        min={0}
+                        max={100000000}
+                        onChange={(values) => service.setMinAndMaxScale(values)} />
+                </VerticalComponent>
             </StyledColumnRight>
         </StyledTab>
     );
@@ -47,4 +60,4 @@ VisualizationTabPane.propTypes = {
 };
 
 const contextWrap = withContext(VisualizationTabPane);
-export {contextWrap as VisualizationTabPane};
+export { contextWrap as VisualizationTabPane };

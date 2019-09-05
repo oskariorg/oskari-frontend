@@ -6,9 +6,9 @@ export const StyledRoot = styled('div')`
 `;
 
 export const StyledTab = styled('div')`
-& > label {
-    font-weight: bold;
-}
+    & > label {
+        font-weight: bold;
+    }
 `;
 
 export const StyledComponentGroup = styled('div')`
@@ -17,17 +17,17 @@ export const StyledComponentGroup = styled('div')`
 
 export const StyledComponent = styled('div')`
     padding-top: 5px;
-    padding-bottom 10px;
+    padding-bottom: 10px;
 `;
 
 export const StyledColumnLeft = styled('div')`
-float:left;
-width:75%;
-overflow:hidden;
+    float: left;
+    width: 75%;
+    overflow: hidden;
 `;
 
 export const StyledColumnRight = styled('div')`
-float:left;
-width:25%;
-overflow:hidden;
+    float: left;
+    width: 25%;
+    overflow: hidden;
 `;

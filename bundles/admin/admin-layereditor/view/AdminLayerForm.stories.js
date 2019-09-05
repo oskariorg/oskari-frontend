@@ -21,15 +21,18 @@ const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
+layer.setGroups([]);
 
 const service = new AdminLayerFormService();
-service.initLayerState(layer, [], []);
+service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)
     .add('layout', () => (
         <GenericContext.Provider value={{ loc: loc }}>
             <AdminLayerForm
                 mutator={service.getMutator()}
+                mapLayerGroups={[]}
+                dataProviders={[]}
                 layer={service.getLayer()}
                 message={service.getMessage()}
                 onDelete={() => {}}
