@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Popconfirm from 'antd/lib/popconfirm';
-import 'antd/lib/popconfirm/style/css';
+import 'antd/es/popconfirm/style';
 
-export const Confirm = ({children, ...other}) => (
+export const Confirm = ({ children, ...other }) => (
     <Popconfirm {...other}>{children}</Popconfirm>
 );
 

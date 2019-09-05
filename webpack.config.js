@@ -4,9 +4,8 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const resolveConfig = require('./webpack/resolveConfig.js');
 const parseParams = require('./webpack/parseParams.js');
-const { lstatSync, readdirSync, readFileSync } = require('fs');
+const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
-const lessToJs = require('less-vars-to-js');
 const { NormalModuleReplacementPlugin } = require('webpack');
 
 const proxyPort = 8081;
@@ -30,7 +29,6 @@ module.exports = (env, argv) => {
     plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
     const themeFile = theme ? path.resolve(theme) : path.join(__dirname, './ant-theme.less');
-    const themeVariables = lessToJs(readFileSync(themeFile, 'utf8'));
 
     const styleLoaderImpl = isProd ? {
         loader: MiniCssExtractPlugin.loader,
@@ -104,7 +102,9 @@ module.exports = (env, argv) => {
                         {
                             loader: 'less-loader',
                             options: {
-                                modifyVars: themeVariables,
+                                modifyVars: {
+                                    'hack': `true; @import "${themeFile}";`
+                                },
                                 javascriptEnabled: true
                             }
                         }
@@ -172,7 +172,11 @@ module.exports = (env, argv) => {
                 changeOrigin: true,
                 headers: {
                     'X-Forwarded-Host': 'localhost:' + proxyPort,
-                    'X-Forwarded-Proto': 'http'
+                    'X-Forwarded-Proto': 'http',
+                    'auth-email': 'joonas.heijari@maanmittauslaitos.fi',
+                    'auth-firstname': 'Joonas',
+                    'auth-lastname': 'Heijari',
+                    'auth-screenname': 'jheijari'
                 }
             }]
         };

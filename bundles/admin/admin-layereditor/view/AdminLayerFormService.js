@@ -1,9 +1,9 @@
 import { stringify } from 'query-string';
 export class AdminLayerFormService {
-    constructor (consumer) {
+    constructor () {
         this.layer = {};
         this.message = {};
-        this.listeners = [consumer];
+        this.listeners = [];
     }
 
     getMutator () {
@@ -160,6 +160,8 @@ export class AdminLayerFormService {
             attributes: layer ? JSON.stringify(layer.getAttributes()) : '{}',
             isNew: !layer
         };
+
+        this.message = {};
     }
 
     getCookie (cname) {
@@ -225,7 +227,11 @@ export class AdminLayerFormService {
     }
 
     getLayer () {
-        return { ...this.layer };
+        return this.layer;
+    }
+
+    getMessage () {
+        return this.message;
     }
 
     notify () {
