@@ -11,6 +11,7 @@ import { Alert } from '../components/Alert';
 import { withContext } from '../../../../src/react/util';
 import { Confirm } from '../components/Confirm';
 import styled from 'styled-components';
+import { pure } from 'recompose';
 
 const PaddedButton = styled(Button)`
     margin-right: 5px;
@@ -69,5 +70,5 @@ AdminLayerForm.propTypes = {
     loc: PropTypes.func.isRequired
 };
 
-const contextWrap = withContext(AdminLayerForm);
+const contextWrap = pure(withContext(AdminLayerForm));
 export { contextWrap as AdminLayerForm };

@@ -10,47 +10,47 @@ export class AdminLayerFormService {
         const me = this;
         return {
             setLayerUrl (url) {
-                me.layer.layerUrl = url;
+                me.layer = { ...me.layer, layerUrl: url };
                 me.notify();
             },
             setUsername (username) {
-                me.layer.username = username;
+                me.layer = { ...me.layer, username };
                 me.notify();
             },
             setPassword (password) {
-                me.layer.password = password;
+                me.layer = { ...me.layer, password };
                 me.notify();
             },
             setLayerName (layerName) {
-                me.layer.layerName = layerName;
+                me.layer = { ...me.layer, layerName };
                 me.notify();
             },
             setLayerNameInFinnish (name) {
-                me.layer.name_fi = name;
+                me.layer = { ...me.layer, name_fi: name };
                 me.notify();
             },
             setLayerNameInEnglish (name) {
-                me.layer.name_en = name;
+                me.layer = { ...me.layer, name_en: name };
                 me.notify();
             },
             setLayerNameInSwedish (name) {
-                me.layer.name_sv = name;
+                me.layer = { ...me.layer, name_sv: name };
                 me.notify();
             },
             setDescriptionInFinnish (description) {
-                me.layer.title_fi = description;
+                me.layer = { ...me.layer, title_fi: description };
                 me.notify();
             },
             setDescriptionInEnglish (description) {
-                me.layer.title_en = description;
+                me.layer = { ...me.layer, title_en: description };
                 me.notify();
             },
             setDescriptionInSwedish (description) {
-                me.layer.title_sv = description;
+                me.layer = { ...me.layer, title_sv: description };
                 me.notify();
             },
             setDataProvider (dataProvider) {
-                me.layer.groupId = dataProvider;
+                me.layer = { ...me.layer, groupId: dataProvider };
                 me.notify();
             },
             setMapLayerGroup (checked, id) {
@@ -60,43 +60,43 @@ export class AdminLayerFormService {
                         allGroups[i].checked = checked;
                     }
                 }
-                me.layer.maplayerGroups = me.formatGroupListForBackend(allGroups);
+                me.layer = { ...me.layer, maplayerGroups: me.formatGroupListForBackend(allGroups) };
                 me.notify();
             },
-            setAllMapLayerGroups (groups) {
-                me.layer.allGroups = groups;
-            },
             setOpacity (opacity) {
-                me.layer.opacity = opacity;
+                me.layer = { ...me.layer, opacity };
                 me.notify();
             },
             setMinAndMaxScale (values) {
-                me.layer.minScale = values[1];
-                me.layer.maxScale = values[0];
+                me.layer = {
+                    ...me.layer,
+                    maxScale: values[0],
+                    minScale: values[1]
+                };
                 me.notify();
             },
             setStyle (style) {
-                me.layer.style = style;
+                me.layer = { ...me.layer, style };
                 me.notify();
             },
             setStyleJSON (styleJSON) {
-                me.layer.styleJSON = styleJSON;
+                me.layer = { ...me.layer, styleJSON };
                 me.notify();
             },
             setHoverJSON (hoverJSON) {
-                me.layer.hoverJSON = hoverJSON;
+                me.layer = { ...me.layer, hoverJSON };
                 me.notify();
             },
             setMetadataIdentifier (metadataIdentifier) {
-                me.layer.metadataIdentifier = metadataIdentifier;
+                me.layer = { ...me.layer, metadataIdentifier };
                 me.notify();
             },
             setGfiContent (gfiContent) {
-                me.layer.gfiContent = gfiContent;
+                me.layer = { ...me.layer, gfiContent };
                 me.notify();
             },
             setAttributes (attributes) {
-                me.layer.attributes = attributes;
+                me.layer = { ...me.layer, attributes };
                 me.notify();
             },
             setMessage (key, type) {
