@@ -544,12 +544,18 @@ Oskari.clazz.define(
 
             var measures = me.sumMeasurements(features);
             var data = {
-                length: measures.length,
-                area: measures.area,
                 buffer: requestedBuffer,
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me.getCurrentDrawShape()
             };
+
+            if (measures.length) {
+                data.length = measures.length;
+            }
+            if (measures.area) {
+                data.area = measures.area;
+            }
+
             var showMeasureUI = !!me.getOpts('showMeasureOnMap');
             if (showMeasureUI) {
                 data.showMeasureOnMap = showMeasureUI;
@@ -712,14 +718,20 @@ Oskari.clazz.define(
          */
         sumMeasurements: function (features) {
             var me = this;
-            var value = {
-                length: 0,
-                area: 0
-            };
+            var value = {};
             var mapmodule = this.getMapModule();
             features.forEach(function (f) {
-                value.length += mapmodule.getGeomLength(f.getGeometry());
-                if (me._featuresValidity[f.getId()]) {
+                const geomType = f.getGeometry().getType();
+                if (geomType === 'LineString' || geomType === 'Polygon') {
+                    if (!value.length) {
+                        value.length = 0;
+                    }
+                    value.length += mapmodule.getGeomLength(f.getGeometry());
+                }
+                if (me._featuresValidity[f.getId()] && geomType === 'Polygon') {
+                    if (!value.area) {
+                        value.area = 0;
+                    }
                     value.area += mapmodule.getGeomArea(f.getGeometry());
                 }
             });
