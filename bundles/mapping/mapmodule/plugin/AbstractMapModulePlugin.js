@@ -83,6 +83,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @return {String}
          */
         getImagePath: function (fileName) {
+            console.log(this.getMapModule());
             return this.getMapModule().getImageUrl(fileName);
         },
 
