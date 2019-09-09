@@ -166,22 +166,6 @@ export class AdminLayerFormService {
         this.message = {};
     }
 
-    getCookie (cname) {
-        var name = cname + '=';
-        var decodedCookie = decodeURIComponent(document.cookie);
-        var ca = decodedCookie.split(';');
-        var result = ca.map(function (cook) {
-            return cook.trim();
-        }).filter(function (cook) {
-            return cook.indexOf(name) === 0;
-        }).map(function (cook) {
-            return cook.substring(name.length, cook.length);
-        });
-        if (result.length > 0) {
-            return result[0];
-        }
-    }
-
     saveLayer () {
         const me = this;
 
@@ -195,8 +179,7 @@ export class AdminLayerFormService {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN')
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: stringify(layer)
         }).then(function (response) {
@@ -216,8 +199,7 @@ export class AdminLayerFormService {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded',
-                'X-XSRF-TOKEN': this.getCookie('XSRF-TOKEN')
+                'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: stringify(layer)
         }).then(function (response) {
