@@ -1192,30 +1192,7 @@ function (
             data.groupId = form.find('#select-dataprovider').val();
             data.capabilitiesUpdateRateSec = form.find('#add-layer-capabilities-update-rate').val();
 
-            if ((data.layerUrl !== me.model.getInterfaceUrl() && me.model.getInterfaceUrl()) ||
-                    (data.layerName !== me.model.getLayerName() && me.model.getLayerName())) {
-                var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange,
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    btn = dialog.createCloseButton(me.instance.getLocalization().ok),
-                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-                btn.addClass('primary');
-                cancelBtn.setTitle(me.instance.getLocalization().cancel);
-
-                btn.setHandler(function () {
-                    dialog.close();
-                    me._addLayerAjax(data, element, callback);
-                });
-
-                cancelBtn.setHandler(function () {
-                    dialog.close();
-                });
-
-                dialog.show(me.instance.getLocalization('admin').warningTitle, confirmMsg, [btn, cancelBtn]);
-                dialog.makeModal();
-            } else {
-                me._addLayerAjax(data, element, callback);
-            }
+            me._addLayerAjax(data, element, callback);
         },
         /**
          * Save group or base layers
