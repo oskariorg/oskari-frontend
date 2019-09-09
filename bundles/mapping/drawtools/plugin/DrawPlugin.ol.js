@@ -840,13 +840,19 @@ Oskari.clazz.define(
                     return geometry;
                 };
             }
-            var drawInteraction = new olInteractionDraw({
+            const opts = {
                 features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
                 type: geometryType,
                 style: me._styles.draw,
                 geometryFunction: geometryFunction,
                 maxPoints: maxPoints
-            });
+            };
+
+            if (!Oskari.util.isMobile(true)) {
+                // use smaller snap tolerance on desktop
+                opts.snapTolerance = 3;
+            }
+            var drawInteraction = new olInteractionDraw(opts);
             // does this need to be registered here and/or for each functionalityId?
             me._draw[functionalityId] = drawInteraction;
 

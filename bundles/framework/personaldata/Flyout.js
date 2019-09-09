@@ -38,10 +38,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('personaldata')) {
                 jQuery(this.container).addClass('personaldata');
+            }
+            if (!flyout.hasClass('personaldata')) {
+                flyout.addClass('personaldata');
             }
         },
         /**

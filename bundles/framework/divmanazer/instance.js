@@ -43,7 +43,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         /**
          * @property flyoutZIndexBase
          */
-        this.flyoutZIndexBase = 1600;
+        this.flyoutZIndexBase = 20000;
 
         /**
          * @property menubarContainerId
@@ -200,28 +200,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 '    <div class="oskari-tile-status"></div>' +
                 '</div>',
 
-            /* flyout */
-            'Oskari.userinterface.Flyout':
-                '<div class="oskari-flyout oskari-closed">' +
-                '  <div class="oskari-flyouttoolbar">' +
-                '    <div class="oskari-flyoutheading"></div>' +
-                '    <div class="oskari-flyout-title">' +
-                '      <p></p>' +
-                '    </div>' +
-                '    <div class="oskari-flyouttools">' +
-                '      <div class="oskari-flyouttool-help"></div>' +
-                '      <div class="oskari-flyouttool-attach"></div>' +
-                '      <div class="oskari-flyouttool-detach"></div>' +
-                '      <div class="oskari-flyouttool-minimize"></div>' +
-                '      <div class="oskari-flyouttool-restore"></div>' +
-                '      <div class="oskari-flyouttool-close icon-close icon-close:hover"></div>' +
-                '    </div>' +
-                '  </div>' +
-                '  <div class="oskari-flyoutcontentcontainer">' +
-                '    <div class="oskari-flyoutcontent"></div>' +
-                '  </div>' +
-                '</div>',
-
             /* view */
             'Oskari.userinterface.View': '<div class="oskari-view"></div>'
 
@@ -236,21 +214,11 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             /**
              * Templates
              */
-            var me = this,
-                flyout;
+            var me = this;
 
             me.compiledTemplates['Oskari.userinterface.Tile'] = jQuery(
                 me.templates['Oskari.userinterface.Tile']
             );
-
-            flyout = jQuery(me.templates['Oskari.userinterface.Flyout']);
-
-            /* flyout.css('left', '-3195px');
-         flyout.css('top', '-3100px'); */
-            flyout.css('left', me.getFlyoutDefaultPositions().attach.left);
-            flyout.css('top', me.getFlyoutDefaultPositions().attach.top);
-
-            me.compiledTemplates['Oskari.userinterface.Flyout'] = flyout;
 
             me.compiledTemplates['Oskari.userinterface.View'] = jQuery(
                 me.templates['Oskari.userinterface.View']
@@ -272,9 +240,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 count,
                 name,
                 flyoutPlugin,
-                flyout,
                 el,
-                fcc,
                 tilePlugin,
                 tile,
                 viewPlugin,
@@ -294,7 +260,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 draggableTarget: null,
                 draggableHandle: null,
                 viewState: {},
-                extensionUpdatedEvent: null
+                extensionUpdatedEvent: null,
+                plugins: {}
             };
 
             extensionInfo.extensionUpdatedEvent = Oskari.eventBuilder('userinterface.ExtensionUpdatedEvent')(extension, extensionInfo.state);
@@ -303,26 +270,22 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             name = extension.getName();
 
             flyoutPlugin = plugins['Oskari.userinterface.Flyout'];
-            flyout = null;
-            el = null;
             if (flyoutPlugin !== null && flyoutPlugin !== undefined) {
-                flyout = me.createFlyout(extension, flyoutPlugin, count, extensionInfo);
+                const flyout = me.createFlyout(extension, flyoutPlugin, count, extensionInfo);
+                const flyoutElem = flyout.getElement();
+                const contentElem = flyout.getContent();
 
-                me._applyDraggableToFlyout(
-                    flyout,
-                    extensionInfo,
-                    '.oskari-flyouttoolbar'
-                );
+                flyoutPlugin.setEl(contentElem.get(), flyoutElem);
 
-                fcc = flyout.children('.oskari-flyoutcontentcontainer');
-
-                el = fcc.children('.oskari-flyoutcontent');
-
-                flyoutPlugin.setEl(el.get());
-
-                me.flyoutContainer.append(flyout);
+                me.flyoutContainer.append(flyoutElem);
 
                 flyoutPlugin.startPlugin();
+
+                extensionInfo.plugins['Oskari.userinterface.Flyout'] = {
+                    plugin: flyoutPlugin,
+                    flyout,
+                    el: flyoutElem
+                };
             }
 
             tilePlugin = plugins['Oskari.userinterface.Tile'];
@@ -335,12 +298,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 tile.fadeIn(200);
 
                 me.tileContainer.append(tile);
-
-                // give the flyout a proper x offset
-                if (flyout) {
-                    var offsetLeft = tile.offset().left + tile.width();
-                    flyout.css('left', offsetLeft);
-                }
             }
 
             viewPlugin = plugins['Oskari.userinterface.View'];
@@ -355,18 +312,11 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             /*
              * store these for further usage
              */
-            extensionInfo.plugins = {};
 
             if (tilePlugin) {
                 extensionInfo.plugins['Oskari.userinterface.Tile'] = {
                     plugin: tilePlugin,
                     el: tile
-                };
-            }
-            if (flyoutPlugin) {
-                extensionInfo.plugins['Oskari.userinterface.Flyout'] = {
-                    plugin: flyoutPlugin,
-                    el: flyout
                 };
             }
             if (viewPlugin) {
@@ -482,26 +432,28 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
         /**
          * @method createFlyout
          *
-         * creates flyout DIV using the flyout template adds a bunch
-         * of tools to the DIV toolbar
+         * creates flyout DIV using the ExtraFlyout extension
+         * adds a bunch of tools to the DIV toolbar, sets default position and makes flyout draggable
          *
          */
         createFlyout: function (extension, plugin, count, extensionInfo) {
-            var me = this,
-                flyout = this.compiledTemplates['Oskari.userinterface.Flyout'].clone(true, true),
-                flyouttools,
-                toolage;
+            var me = this;
+            const { top, left } = this.getFlyoutDefaultPositions().attach;
+            var flyoutOpts = {
+                isExtension: true,
+                top: parseInt(top),
+                left: parseInt(left)
+            };
+            const flyout = Oskari.clazz.create('Oskari.userinterface.extension.ExtraFlyout', plugin.getTitle(), flyoutOpts);
+            const elem = flyout.getElement();
 
-            flyout.find('.oskari-flyout-title p').append(plugin.getTitle());
-
-            flyouttools = flyout.children('.oskari-flyouttoolbar').children('.oskari-flyouttools');
-            toolage = {
-                attach: flyouttools.children('.oskari-flyouttool-attach'),
-                detach: flyouttools.children('.oskari-flyouttool-detach'),
-                minimize: flyouttools.children('.oskari-flyouttool-minimize'),
-                restore: flyouttools.children('.oskari-flyouttool-restore'),
-                close: flyouttools.children('.oskari-flyouttool-close'),
-                help: flyouttools.children('.oskari-flyouttool-help')
+            const toolage = {
+                attach: elem.find('.oskari-flyouttool-attach'),
+                detach: elem.find('.oskari-flyouttool-detach'),
+                minimize: elem.find('.oskari-flyouttool-minimize'),
+                restore: elem.find('.oskari-flyouttool-restore'),
+                close: elem.find('.oskari-flyouttool-close'),
+                help: elem.find('.oskari-flyouttool-help')
             };
 
             toolage.detach.on('click', function () {
@@ -686,6 +638,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     state = 'restore';
                 } else if (extensionState === 'restore') {
                     state = 'minimize';
+                } else if (extensionState === 'hide') {
+                    state = 'attach';
                 }
             }
 
@@ -717,8 +671,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     if (otherExtensionInfo === extensionInfo) {
                         continue;
                     }
-
-                    if (otherExtensionInfo.state !== 'attach') {
+                    if (otherExtensionInfo.state !== 'attach' && otherExtensionInfo.state !== 'hide') {
                         continue;
                     }
 
@@ -928,7 +881,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             attach: {
                 'oskari-attached': true,
                 'oskari-detached': false,
-                'oskari-closed': false
+                'oskari-closed': false,
+                'oskari-hidden': false
             },
             detach: {
                 'oskari-attached': false,
@@ -950,7 +904,14 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 'oskari-closed': true,
                 'oskari-minimized': false,
                 'oskari-detached': false,
-                'oskari-attached': false
+                'oskari-attached': false,
+                'oskari-hidden': false
+            },
+            hide: {
+                'oskari-attached': true,
+                'oskari-detached': false,
+                'oskari-closed': false,
+                'oskari-hidden': true
             }
 
         },
@@ -1001,51 +962,32 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
          */
         flyoutOps: {
             /** @method detach */
-            detach: function (flyout, flyoutPlugin, extensionInfo, extensions) {
-                var me = this,
-                    // toState,
-                    viewState;
+            detach: function (el, flyoutPlugin, extensionInfo, extensions) {
+                const flyout = extensionInfo.plugins['Oskari.userinterface.Flyout'].flyout;
+                flyout.bringToTop();
 
-                if ((!extensionInfo.viewState.left || !extensionInfo.viewState.top) || (extensionInfo.viewState.left === me.getFlyoutDefaultPositions().attach.left && extensionInfo.viewState.top === me.getFlyoutDefaultPositions().attach.top)) {
-                    extensionInfo.viewState.left = me.getFlyoutDefaultPositions().detach.left;
-                    extensionInfo.viewState.top = me.getFlyoutDefaultPositions().detach.top;
+                let { left, top } = extensionInfo.viewState;
+                const { attach, detach } = this.getFlyoutDefaultPositions();
+                if ((!left || !top) || (left === attach.left && top === attach.top)) {
+                    flyout.move(parseInt(detach.left), parseInt(detach.top));
                 }
-                /* toState = {
-                    "left": extensionInfo.viewState.left,
-                    "top": extensionInfo.viewState.top
-                }; */
-
-                /*
-                 * to top
-                 */
-                me.shuffleZIndices(flyout);
 
                 /*
                  * with style
                  */
-                me.applyTransition(flyout, 'detach', me.flyoutTransitions);
-
-                viewState = me.getFlyoutViewState(flyout, 'detach');
-                extensionInfo.viewState = viewState;
+                this.applyTransition(el, 'detach', this.flyoutTransitions);
+                extensionInfo.viewState = this.getFlyoutViewState(el, 'detach');
             },
 
             /** @method attach */
-            attach: function (flyout, flyoutPlugin, extensionInfo, extensions) {
-                var me = this,
-                    viewState;
-
-                /*
-                 * to top
-                 */
-                me.shuffleZIndices(flyout);
-
+            attach: function (el, flyoutPlugin, extensionInfo, extensions) {
+                const flyout = extensionInfo.plugins['Oskari.userinterface.Flyout'].flyout;
+                flyout.bringToTop();
                 /*
                  * with style
                  */
-                me.applyTransition(flyout, 'attach', me.flyoutTransitions);
-
-                viewState = me.getFlyoutViewState(flyout, 'attach');
-                extensionInfo.viewState = viewState;
+                this.applyTransition(el, 'attach', this.flyoutTransitions);
+                extensionInfo.viewState = this.getFlyoutViewState(el, 'attach');
 
                 if (flyoutPlugin.onOpen) {
                     flyoutPlugin.onOpen();
@@ -1053,35 +995,39 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
             },
 
             /** @method minimize */
-            minimize: function (flyout, flyoutPlugin, extensionInfo) {
-                var me = this,
-                    viewState = me.getFlyoutViewState(flyout, 'minimize');
-
-                me.applyTransition(flyout, 'minimize', me.flyoutTransitions);
-
-                extensionInfo.viewState = viewState;
+            minimize: function (el, flyoutPlugin, extensionInfo) {
+                this.applyTransition(el, 'minimize', this.flyoutTransitions);
+                extensionInfo.viewState = this.getFlyoutViewState(el, 'minimize');
             },
 
             /** @method restore */
-            restore: function (flyout, flyoutPlugin, extensionInfo) {
-                var me = this;
-                //    viewState;
-                me.applyTransition(flyout, 'restore', me.flyoutTransitions);
-                // viewState = extensionInfo.viewState;
+            restore: function (el, flyoutPlugin, extensionInfo) {
+                const flyout = extensionInfo.plugins['Oskari.userinterface.Flyout'].flyout;
+                flyout.bringToTop();
+                this.applyTransition(el, 'restore', this.flyoutTransitions);
             },
 
             /** @method close */
-            close: function (flyout, flyoutPlugin, extensionInfo) {
-                var me = this;
-
+            close: function (el, flyoutPlugin, extensionInfo) {
                 extensionInfo.viewState = {
                     viewState: 'close'
                 };
-                me.applyTransition(flyout, 'close', me.flyoutTransitions);
+                this.applyTransition(el, 'close', this.flyoutTransitions);
 
                 if (flyoutPlugin.onClose) {
                     flyoutPlugin.onClose();
                 }
+            },
+            /**
+             * @method hide
+             * Only attached flyout can be set hidden
+             */
+            hide: function (el, flyoutPlugin, extensionInfo) {
+                if (extensionInfo.viewState.viewState !== 'attach') {
+                    return;
+                }
+                this.applyTransition(el, 'hide', this.flyoutTransitions);
+                extensionInfo.viewState = this.getFlyoutViewState(el, 'hide');
             }
         },
 
@@ -1296,7 +1242,7 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 zprops = {},
                 zextns = {},
                 zflyout = {},
-                min = 16000,
+                min = this.flyoutZIndexBase,
                 idx,
                 e,
                 extensionInfo,

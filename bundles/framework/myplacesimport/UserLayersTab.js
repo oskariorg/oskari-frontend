@@ -326,7 +326,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             });
             buttons.push(cancelBtn);
             buttons.push(saveBtn);
-            dialog.makeModal();
             dialog.show(me.loc('tab.editLayer'), form, buttons);
         },
         /**

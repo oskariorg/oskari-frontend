@@ -1,14 +1,13 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', function (title, options, instance) {
     this.instance = instance;
     this.locale = Oskari.getMsg.bind(null, 'StatsGrid');
-    this.element = null;
+    this.uiElement = null;
     this.spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     this.service = instance.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
     this.indicatorForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorForm', this.locale);
     this.indicatorParamsList = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorParametersList', this.locale);
     this.indicatorDataForm = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorDataForm', this.locale);
     this._accordion = Oskari.clazz.create('Oskari.userinterface.component.Accordion');
-    this.addClass('statsgrid-user-indicator-flyout');
     var me = this;
     this.errorService = this.service.getErrorService();
     me.on('hide', function () {
@@ -37,7 +36,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
     });
 }, {
     _templates: {
-        main: '<div class="stats-user-indicator-form"></div>',
+        main: '<div></div>',
         notLoggedIn: _.template('<div class="stats-not-logged-in">${warning}</div>'),
         spinner: '<div class="spinner-holder"></div>'
     },
@@ -98,8 +97,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             me.indicatorParamsList.setDatasets(datasets); // [{ year : 2017, regionset: 1850}]
         });
     },
-    getElement: function () {
-        return this.element;
+    getUiElement: function () {
+        return this.uiElement;
     },
     reset: function () {
         this.datasourceId = null;
@@ -113,10 +112,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
      */
     createUi: function () {
         var me = this;
-        if (this.getElement()) {
+        if (this.getUiElement()) {
             return;
         }
-        this.element = jQuery(this._templates.main);
+        this.uiElement = jQuery(this._templates.main);
+        this.addClassForContent('stats-user-indicator-form');
 
         if (!Oskari.user().isLoggedIn()) {
             var popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
@@ -142,20 +142,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         dataPanel.open();
         this.dataPanel = dataPanel;
         this._accordion.addPanel(dataPanel);
-        this._accordion.insertTo(this.element);
+        this._accordion.insertTo(this.uiElement);
 
         var spinnerHolder = jQuery(this._templates.spinner);
-        this.element.append(spinnerHolder);
+        this.uiElement.append(spinnerHolder);
         this.spinner.insertTo(spinnerHolder);
-        this.element.append(this.indicatorDataForm.createUi());
+        this.uiElement.append(this.indicatorDataForm.createUi());
 
         me.indicatorDataForm.getButtons().forEach(function (btn) {
-            btn.insertTo(me.element);
+            btn.insertTo(me.uiElement);
         });
 
         var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
         this.saveBtn = saveBtn;
-        saveBtn.insertTo(this.element);
+        saveBtn.insertTo(this.uiElement);
         jQuery(saveBtn.getElement()).css({
             'float': 'right',
             'clear': 'both'
@@ -182,13 +182,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
                 me.selectSavedIndicator(indicator, data);
             });
         });
-        this.setContent(this.element);
+        this.setContent(this.uiElement);
         // options.pos.x/y is injected by FlyoutManager and without
         // explicit call to move() the flyout opens in seemingly random locations (out of screen etc)
         this.move(this.options.pos.x, this.options.pos.y, true);
     },
     setSpinnerVisible: function (show) {
-        this.element.find('.spinner-holder').css('height', show ? '100px' : '0');
+        this.uiElement.find('.spinner-holder').css('height', show ? '100px' : '0');
         show ? this.spinner.start() : this.spinner.stop();
     },
     selectSavedIndicator: function (indicator, data) {
