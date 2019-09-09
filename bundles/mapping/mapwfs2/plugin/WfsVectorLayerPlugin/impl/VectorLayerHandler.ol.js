@@ -19,8 +19,6 @@ import olMultiLineString from 'ol/geom/MultiLineString';
 import olMultiPolygon from 'ol/geom/MultiPolygon';
 import olGeometryCollection from 'ol/geom/GeometryCollection';
 
-import { getCenter as getOlExtentCenter } from 'ol/extent';
-
 import GeoJSONReader from 'jsts/org/locationtech/jts/io/GeoJSONReader';
 import OL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
 import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
@@ -63,9 +61,10 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     feature = feature.get('features')[0];
                 }
             } else if (clustering) {
-                // Vector layer feature, hide points
+                // Vector layer feature, hide single points
                 const geomType = feature.getGeometry().getType();
-                if (geomType === 'Point' || geomType === 'MultiPoint') {
+                if (geomType === 'Point' ||
+                    (geomType === 'MultiPoint' && feature.getGeometry().getPoints().length === 1)) {
                     return null;
                 }
             }
@@ -120,9 +119,8 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     if (geom instanceof olPoint) {
                         return geom;
                     }
-                    if (geom instanceof olMultiPoint) {
-                        const center = getOlExtentCenter(geom.getExtent());
-                        return new olPoint(center);
+                    if (geom instanceof olMultiPoint && geom.getPoints().length === 1) {
+                        return geom.getPoint(0);
                     }
                     return null;
                 }
