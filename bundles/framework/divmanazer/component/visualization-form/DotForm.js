@@ -223,12 +223,13 @@ Oskari.clazz.define(
             me._colorPicker.setValue(me.values.color);
 
             colorPickerWrapper.on('change', function () {
-                me.values.color = me._colorPicker.getValue();
+                me.values.pickedColor = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
             });
 
             this._updatePreview(dialogContent);
             var saveButtonHandler = function () {
+                me.values.color = me.values.pickedColor;
                 me.renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -368,7 +369,7 @@ Oskari.clazz.define(
 
             iconSvg.find('path').attr({
                 'stroke-width': 1,
-                'fill': me.values.color,
+                'fill': me.values.pickedColor,
                 'stroke': '#b4b4b4'
             });
 

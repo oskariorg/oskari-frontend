@@ -253,7 +253,7 @@ Oskari.clazz.define(
             me._colorPicker.setValue(me.values.color);
 
             colorPickerWrapper.on('change', function () {
-                me.values.color = me._colorPicker.getValue();
+                me.values.pickedColor = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
             });
 
@@ -266,6 +266,7 @@ Oskari.clazz.define(
                 if (!me.creator.validateWidth('strokeWidth', me.values.width)) {
                     return;
                 }
+                me.values.color = me.values.pickedColor;
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -326,7 +327,7 @@ Oskari.clazz.define(
             var previewTemplate = me._previewTemplates[me.values.style].clone();
 
             previewTemplate.find('path').attr({
-                'stroke': me.values.color,
+                'stroke': me.values.pickedColor,
                 'fill': 'none',
                 'stroke-width': me.values.width,
                 'stroke-linejoin': me.values.corner === 0 ? 'miter' : 'round',
