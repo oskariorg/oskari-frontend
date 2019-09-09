@@ -15,10 +15,6 @@ Oskari.clazz.define("Oskari.admin.admin-layereditor.bundle", function () {
 
             "scripts": [{
                 "src": "../../../../bundles/admin/admin-layereditor/instance.js"
-            },
-			{
-                "type": "text/css",
-                "src": "../../../../bundles/admin/admin-layereditor/resources/scss/style.scss"
             }],
             "locales": [{
                 "lang": "en",
