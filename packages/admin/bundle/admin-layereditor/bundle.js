@@ -19,6 +19,14 @@ Oskari.clazz.define("Oskari.admin.admin-layereditor.bundle", function () {
             "locales": [{
                 "lang": "en",
                 "src": "../../../../bundles/admin/admin-layereditor/resources/locale/en.js"
+            },
+			{
+                "lang": "fi",
+                "src": "../../../../bundles/admin/admin-layereditor/resources/locale/fi.js"
+            },
+			{
+                "lang": "sv",
+                "src": "../../../../bundles/admin/admin-layereditor/resources/locale/sv.js"
             }]
         },
         "bundle": {

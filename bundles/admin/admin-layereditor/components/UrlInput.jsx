@@ -2,6 +2,8 @@ import React from 'react';
 import { Input } from 'antd';
 import PropTypes from 'prop-types';
 import { Select, Option } from './Select';
+import { Collapse, Panel } from './Collapse';
+import { TextInput } from './TextInput';
 import 'antd/es/input/style/';
 
 const protocols = ['https', 'http'];
@@ -19,6 +21,10 @@ export class UrlInput extends React.Component {
                 protocol: protocols[0],
                 url: undefined
             };
+        }
+        if (props.credentials && props.credentials.defaultOpen) {
+            // Panel with this key is open as default
+            this.state.defaultPanel = 'usernameAndPassword';
         }
     }
     setProtocol (protocol) {
@@ -54,6 +60,7 @@ export class UrlInput extends React.Component {
         });
     }
     render () {
+        const {credentials, ...other} = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
@@ -64,19 +71,35 @@ export class UrlInput extends React.Component {
                 ))}
             </Select>
         );
-
         const processedProps = {
-            ...this.props,
+            ...other,
             value: undefined,
             onChange: this.onChange.bind(this)
         };
         return (
-            <Input {...processedProps} value={this.state.url} addonBefore={protocolSelect} />
+            <div>
+                <Input {...processedProps} value={this.state.url} addonBefore={protocolSelect} />&nbsp;
+                {credentials.allowCredentials &&
+                    <Collapse defaultActiveKey={this.state.defaultPanel}>
+                        <Panel header={credentials.panelText} key='usernameAndPassword'>
+                            <div>
+                                <label>{credentials.usernameText}</label>
+                                <div><TextInput value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
+                            </div>
+                            <div>
+                                <label>{credentials.passwordText}</label>
+                                <div><TextInput value={credentials.passwordValue} type='password' onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
+                            </div>
+                        </Panel>
+                    </Collapse>
+                }
+            </div>
         );
     }
 }
 
 UrlInput.propTypes = {
     onChange: PropTypes.func,
-    value: PropTypes.string
+    value: PropTypes.string,
+    credentials: PropTypes.object
 };
