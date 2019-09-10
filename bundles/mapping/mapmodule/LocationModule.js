@@ -91,10 +91,7 @@ export function getUserLocation (successCb, errorCB, options) {
     }
 };
 export function watchUserLocation (successCb, errorCB, options) {
-    // var me = this;
-    // var sandbox = me.getSandbox();
     const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-    // var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
     let opts = options || {};
     let prevTime;
     // default values
