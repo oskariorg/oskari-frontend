@@ -36,8 +36,8 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Basic settings",
-                "label": "Website address (without http and www prefixes)",
-                "placeholder": "Website address",
+                "label": "Allow embedding only in following domain",
+                "placeholder": "Allowed domain",
                 "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com."
             },
             "name": {

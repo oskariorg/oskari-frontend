@@ -17,17 +17,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
         this.loc = localization;
         this.sandbox = sandbox;
         this.fields = {
-            domain: {
-                label: localization.domain.label,
-                placeholder: localization.domain.placeholder,
-                helptags: 'portti,help,publisher,domain',
-                tooltip: localization.domain.tooltip
-            },
             name: {
                 label: localization.name.label,
                 placeholder: localization.name.placeholder,
                 helptags: 'portti,help,publisher,name',
                 tooltip: localization.name.tooltip
+            },
+            domain: {
+                label: localization.domain.label,
+                placeholder: localization.domain.placeholder,
+                helptags: 'portti,help,publisher,domain',
+                tooltip: localization.domain.tooltip
             }
         };
         this.langField = {
@@ -47,16 +47,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
          * @param {Object} pData initial data
          */
         init: function (pData) {
-            var me = this,
-                fkey,
-                data,
-                field,
-                selectedLang = Oskari.getLang();
+            const me = this;
+            let selectedLang = Oskari.getLang();
 
-            for (fkey in me.fields) {
+            for (const fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {
-                    data = me.fields[fkey];
-                    field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
+                    const data = me.fields[fkey];
+                    const field = Oskari.clazz.create('Oskari.userinterface.component.FormInput', fkey);
                     field.getField().find('input').before('<br />');
                     field.setLabel(data.label);
                     field.setTooltip(data.tooltip, data.helptags);
@@ -65,30 +62,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 }
             }
 
-            me.fields.domain.field.setRequired(true, me.loc.error.domain);
-            me.fields.domain.field.setContentCheck(true, me.loc.error.domainIllegalCharacters);
-
-            me.fields.domain.field.setValidator(function (inputField) {
-                var value = inputField.getValue(),
-                    name = inputField.getName(),
-                    errors = [];
-                if (value.indexOf('http') === 0 || value.indexOf('www') === 0) {
-                    errors.push({
-                        field: name,
-                        error: me.loc.error.domainStart
-                    });
-                    return errors;
-                }
-                return errors;
-            });
             me.fields.name.field.setRequired(true, me.loc.error.name);
             me.fields.name.field.setValidator(function (inputField) {
-                var value = inputField.getValue(),
-                    name = inputField.getName(),
-                    sanitizedValue,
-                    errors = [];
+                const value = inputField.getValue();
+                const name = inputField.getName();
+                const errors = [];
                 inputField.setValue(value);
-                sanitizedValue = Oskari.util.sanitize(value);
+                const sanitizedValue = Oskari.util.sanitize(value);
                 if (sanitizedValue !== value) {
                     errors.push({
                         field: name,
@@ -97,6 +77,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     return errors;
                 }
                 return errors;
+            });
+
+            me.fields.domain.field.setContentCheck(true, me.loc.error.domainIllegalCharacters);
+            me.fields.domain.field.setValidator(function (inputField) {
+                const value = inputField.getValue();
+                const name = inputField.getName();
+                const errors = [];
+                if (value.indexOf('://') !== -1) {
+                    errors.push({
+                        field: name,
+                        error: me.loc.error.domainStart
+                    });
+                    return errors;
+                }
+                return errors;
+            });
+            me.fields.domain.field.getField().find('input').change(function () {
+                const input = jQuery(this);
+                if (input.val().indexOf('://') !== -1) {
+                    input.val(input.val().replace(/(^\w+:|^)\/\//, ''));
+                }
             });
 
             if (pData.metadata) {
@@ -110,8 +111,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             }
 
             // Create language select
-            var langField = Oskari.clazz.create('Oskari.userinterface.component.LanguageSelect'),
-                langElement = me.langField.template.clone();
+            const langField = Oskari.clazz.create('Oskari.userinterface.component.LanguageSelect');
+            const langElement = me.langField.template.clone();
 
             langField.setValue(selectedLang);
             // plugins should change language when user changes selection

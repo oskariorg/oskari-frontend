@@ -19,7 +19,7 @@ Oskari.registerLocalization(
             "search": "Sök"
         },
         "LanguageSelect": {
-            "title": "språk",
+            "title": "Språk",
             "tooltip": "Välj språk",
             "languages": {
                 "af": "afrikaans",

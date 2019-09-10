@@ -36,13 +36,13 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Webbplats",
-                "label": "Webbplats för inbäddad karta",
-                "placeholder": "Webbplats adress utan prefixet http eller www.",
+                "label": "Tillåt inbäddning endast på följande webbplats",
+                "placeholder": "Webbplats adress",
                 "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com"
             },
             "name": {
                 "label": "Kartans namn",
-                "placeholder": "obligatorisk uppgift",
+                "placeholder": "Obligatorisk uppgift",
                 "tooltip": "Välj ett språk på kartan. Språket användas på användargänsnitt och text på kartan. Obs! Valt språk visas inte på förhandsvisningskartan."
             },
             "language": {
