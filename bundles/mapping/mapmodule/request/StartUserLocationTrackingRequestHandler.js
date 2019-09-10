@@ -20,20 +20,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.StartUserLocat
         this._clearLocationFromMap();
         clearLocationCoords();
         stopUserLocationWatch();
-
         var succesCb = function (pos) {
+            let mapMoved = false;
             // move map to coordinates
-            if (opts.centerMap === 'single' && !focused) {
+            if (opts.centerMap === 'update' || (opts.centerMap === 'single' && !focused)) {
+                mapMoved = mapmodule.centerMap(pos);
+            }
+            // zoom only once, skip if centerMap fails
+            if (!focused && mapMoved) {
                 focused = true;
-                mapmodule.centerMap(pos);
                 mapmodule.zoomToFitMeters(pos.accuracy * 4);
-            } else if (opts.centerMap === 'update') {
-                mapmodule.centerMap(pos);
-                // zoom only to first location
-                if (!focused) {
-                    focused = true;
-                    mapmodule.zoomToFitMeters(pos.accuracy * 4);
-                }
             }
             if (opts.addToMap === 'point') {
                 me._addLocationToMap(pos, false);
