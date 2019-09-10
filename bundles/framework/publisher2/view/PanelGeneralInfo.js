@@ -84,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 const value = inputField.getValue();
                 const name = inputField.getName();
                 const errors = [];
-                if (value.indexOf('http') === 0 || value.indexOf('www') === 0) {
+                if (value.indexOf('://') !== -1) {
                     errors.push({
                         field: name,
                         error: me.loc.error.domainStart
@@ -92,6 +92,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     return errors;
                 }
                 return errors;
+            });
+            me.fields.domain.field.getField().find('input').change(function () {
+                const input = jQuery(this);
+                if (input.val().indexOf('://') !== -1) {
+                    input.val(input.val().replace(/(^\w+:|^)\/\//, ''));
+                }
             });
 
             if (pData.metadata) {
