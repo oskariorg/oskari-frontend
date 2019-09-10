@@ -21,8 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Huom.",
         "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
-        "unsupported-layer": "Karttatsoa ei voida näyttää.",
-        "unsupported-layer-projection": "Karttatsoa ei voida näyttää tässä karttaprojektiossa.",
+        "unsupported-layer": "Karttatasoa ei voida näyttää.",
+        "unsupported-layer-projection": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
