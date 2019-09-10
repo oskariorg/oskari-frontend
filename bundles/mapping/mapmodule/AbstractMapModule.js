@@ -2446,6 +2446,34 @@ Oskari.clazz.define(
             } else {
                 Oskari.on('bundle.start', handler);
             }
+        },
+        /**
+         * Get 1st visible image layer.
+         * fallback to first visible layer
+         * @returns {Layer} null|undefined if not found
+         */
+        getBaseLayer: function () {
+            const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
+
+            if (selectedLayers.length === 0) return null;
+
+            const layer = selectedLayers.find(l => {
+                const type = l.getLayerType();
+                return l.isVisible() && (type === 'wmts' || type === 'wms');
+            });
+            if (layer) return layer;
+            return selectedLayers.find(l => l.isVisible());
+        },
+        /**
+         * Get 1st visible ol image layer.
+         * fallback to first visible ol layer
+         * @returns {ol/layer/Layer} null if not found
+         */
+        getBaseOLMapLayer: function () {
+            const layer = this.getBaseLayer();
+            if (!layer) return null;
+            const olLayers = this.getOLMapLayers(layer.getId());
+            return olLayers && olLayers.length > 0 ? olLayers[0] : null;
         }
         /* --------------- /MAP LAYERS ------------------------ */
     }, {
