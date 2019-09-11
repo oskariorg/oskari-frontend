@@ -9,6 +9,29 @@ let _locationWatch = null;
 function _addCoord (pos) {
     _locationCoords.push([pos.lon, pos.lat]);
 };
+function notifyError (cb, code) {
+    const error = errorCodes[code] || errorCodes[2];
+    if (typeof cb === 'function') {
+        cb(error);
+    }
+    const evt = Oskari.eventBuilder('UserLocationEvent');
+    // notify event without position to signal failure
+    sandbox.notifyAll(evt(null, null, null, error));
+};
+function notifyLonLat (cb, lonlat, accuracy) {
+    if (typeof cb === 'function') {
+        cb(lonlat.lon, lonlat.lat, accuracy);
+    }
+    const evt = Oskari.eventBuilder('UserLocationEvent');
+    sandbox.notifyAll(evt(lonlat.lon, lonlat.lat, accuracy));
+};
+function notifyPosition (cb, pos) {
+    if (typeof cb === 'function') {
+        cb(pos);
+    }
+    const evt = Oskari.eventBuilder('UserLocationEvent');
+    sandbox.notifyAll(evt(pos.lon, pos.lat, pos.accuracy));
+};
 
 // TODO: push pos to pathJson coords.
 // Now geojson is generated from coords array on update if it's added to map
@@ -30,7 +53,6 @@ function _updatePath (pos) {
  */
 export function getUserLocation (successCb, errorCB, options) {
     // normalize opts with defaults
-    const evtBuilder = Oskari.eventBuilder('UserLocationEvent');
     const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
     var opts = options || {};
     var navigatorOpts = {
@@ -47,39 +69,31 @@ export function getUserLocation (successCb, errorCB, options) {
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
             function (position) {
+                const { longitude, latitude, accuracy } = position.coords;
                 // transform coordinates from browser projection to current
                 var lonlat = mapmodule.transformCoordinates({
-                    lon: position.coords.longitude,
-                    lat: position.coords.latitude }, 'EPSG:4326');
-                sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat, position.coords.accuracy, null));
-                // notify callback
-                if (typeof successCb === 'function') {
-                    successCb(lonlat.lon, lonlat.lat, position.coords.accuracy);
+                    lon: longitude,
+                    lat: latitude }, 'EPSG:4326');
+                if (mapmodule.isValidLonLat(lonlat.lon, lonlat.lat)) {
+                    notifyLonLat(successCb, lonlat, accuracy);
+                } else {
+                    notifyError(errorCB);
                 }
             },
             function (errors) {
                 log.warn('Error getting user location', errors);
-                // notify event without position to signal failure
-                var error = errorCodes[errors.code] || errorCodes[2];
-                sandbox.notifyAll(evtBuilder(null, null, null, error));
-                if (typeof errorCB === 'function') {
-                    errorCB(error);
-                }
+                notifyError(errorCB, errors.code);
             }, navigatorOpts
         );
     } else {
         // browser doesn't support
-        sandbox.notifyAll(evtBuilder(null, null, null, errorCodes[2]));
+        notifyError(errorCB);
     }
 };
 export function watchUserLocation (successCb, errorCB, options) {
-    // var me = this;
-    // var sandbox = me.getSandbox();
-    const evtBuilder = Oskari.eventBuilder('UserLocationEvent');
     const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-    // var errorCodes = {1: 'denied', 2: 'unavailable', 3: 'timeout'};
     let opts = options || {};
-    let timestamp;
+    let prevTime;
     // default values
     let navigatorOpts = {
         maximumAge: 5000,
@@ -96,38 +110,34 @@ export function watchUserLocation (successCb, errorCB, options) {
         _locationWatch = navigator.geolocation.watchPosition(
             function (position) {
                 log.debug(position);
-                if (timestamp === position.timestamp) {
+                const { timestamp, coords } = position;
+                if (prevTime === timestamp) {
                     // some browsers sends first previous position and then changed position
                     // TODO: is this only location emulator feature, test how this works with mobile phones
                     return;
                 }
-                timestamp = position.timestamp;
+                prevTime = timestamp;
                 // transform coordinates from browser projection to current
                 var pos = mapmodule.transformCoordinates({
-                    lon: position.coords.longitude,
-                    lat: position.coords.latitude }, 'EPSG:4326');
-                pos.accuracy = position.coords.accuracy;
-                _addCoord(pos);
-                sandbox.notifyAll(evtBuilder(pos.lon, pos.lat, pos.accuracy, null));
-                // notify callback
-                if (typeof successCb === 'function') {
-                    successCb(pos);
+                    lon: coords.longitude,
+                    lat: coords.latitude }, 'EPSG:4326');
+                if (!mapmodule.isValidLonLat(pos.lon, pos.lat)) {
+                    notifyError(errorCB);
+                    return;
                 }
+
+                pos.accuracy = coords.accuracy;
+                _addCoord(pos);
+                notifyPosition(successCb, pos);
             },
             function (errors) {
                 log.warn('Error getting user location', errors);
-                // notify event without position to signal failure
-                var error = errorCodes[errors.code] || errorCodes[2];
-                sandbox.notifyAll(evtBuilder(null, null, null, error));
-                // me.stopUserLocationWatch();
-                if (typeof errorCB === 'function') {
-                    errorCB(error);
-                }
+                notifyError(errorCB, errors.code);
             }, navigatorOpts
         );
     } else {
         // browser doesn't support
-        sandbox.notifyAll(evtBuilder(null, null, null, errorCodes[2]));
+        notifyError(errorCB);
     }
 };
 export function getLocationCoords () {

@@ -538,11 +538,12 @@ export class MapModule extends AbstractMapModule {
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @return {Boolean} success
      */
     centerMap (lonlat, zoom, suppressEnd) {
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
-            return;
+            return false;
         }
         this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
         if (zoom === null || zoom === undefined) {
@@ -553,6 +554,7 @@ export class MapModule extends AbstractMapModule {
         if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
+        return true;
     }
     /**
      * Get maps current extent.

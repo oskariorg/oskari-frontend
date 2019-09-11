@@ -818,6 +818,7 @@ Oskari.clazz.define(
          * @param {Number} meters that must fit to viewport
          */
         zoomToFitMeters: function (meters) {
+            if (meters <= 0) return;
             var mapSize = this.getSize();
             var viewportPx = Math.min(mapSize.height, mapSize.width);
             var zoom = 0;
