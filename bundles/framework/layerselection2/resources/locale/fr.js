@@ -10,8 +10,6 @@ Oskari.registerLocalization(
             "show": "Afficher",
             "hide": "Masquer",
             "hidden": "La couche cartographique est temporairement masquée.",
-            "unsupported-projection": "Impossible d'afficher la couche cartographique dans la projection cartographique sélectionnée.",
-            "change-projection": "Modifer la projection cartographique",
             "out-of-scale": "La couche cartographique ne peut être affichée à ce niveau d’échelle.",
             "move-to-scale": "Veuillez choisir un niveau d'échelle adapté.",
             "out-of-content-area": "La couche cartographique ne contient aucune donnée à cet emplacement.",

@@ -10,7 +10,6 @@ Oskari.registerLocalization(
             "show": "Visa",
             "hide": "Göm",
             "hidden": "Kartlagret är tillfälligt dolt.",
-            "change-projection": "Ändra kartprojektion",
             "out-of-scale": "Data som ingår i detta kartlager kan inte visas på den valda skalnivån.",
             "move-to-scale": "Gå till en lämplig skalnivå.",
             "out-of-content-area": "Detta kartlager saknar innehåll vid dessa koordinater.",
