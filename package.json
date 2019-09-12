@@ -42,7 +42,7 @@
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
     "copy-webpack-plugin": "5.0.2",
     "css-loader": "2.1.1",
-    "dompurify": "^1.0.11",
+    "dompurify": "1.0.11",
     "eslint": "5.15.3",
     "eslint-config-standard": "12.0.0",
     "eslint-import-resolver-webpack": "0.11.0",
