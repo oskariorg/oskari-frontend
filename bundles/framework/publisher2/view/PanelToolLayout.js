@@ -40,11 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
     }, {
         eventHandlers: {
             'Publisher2.ToolEnabledChangedEvent': function (event) {
-                var me = this;
                 if (!this.toolLayoutEditMode) {
                     return;
-                    // just update the plugins' locationdata
-                    //me._changeToolLayout(me.activeToolLayout, null);
                 }
                 this._enableToolDraggable(event.getTool());
             }
@@ -419,7 +416,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelToolLayout'
                     elem.draggable('destroy');
                     elem.css('position', '');
                 }
-            })
+            });
             this._addedDraggables = [];
         },
         /**
