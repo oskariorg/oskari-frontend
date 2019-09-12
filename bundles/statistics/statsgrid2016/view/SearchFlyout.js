@@ -1,7 +1,7 @@
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (title, options, instance) {
     this.loc = Oskari.getMsg.bind(null, 'StatsGrid');
     this.instance = instance;
-    this.element = null;
+    this.uiElement = null;
     this.sandbox = this.instance.getSandbox();
     this.service = this.sandbox.getService('Oskari.statistics.statsgrid.StatisticsService');
     this.searchBtn = null;
@@ -9,24 +9,23 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     this.searchParametersSelected = false;
     var me = this;
     this.on('show', function () {
-        if (!me.getElement()) {
+        if (!me.getUiElement()) {
             me.createUi();
-            me.addClass('statsgrid-search-flyout');
-            me.setContent(me.getElement());
+            me.setContent(me.getUiElement());
         }
     });
 }, {
-    setElement: function (el) {
-        this.element = el;
+    setUiElement: function (el) {
+        this.uiElement = el;
     },
-    getElement: function () {
-        return this.element;
+    getUiElement: function () {
+        return this.uiElement;
     },
     clearUi: function () {
-        if (this.element === null) {
+        if (this.uiElement === null) {
             return;
         }
-        this.element.empty();
+        this.uiElement.empty();
     },
     setSpinner: function (spinner) {
         this.spinner = spinner;
@@ -42,44 +41,48 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     createUi: function (isEmbedded) {
         // empties all
         this.clearUi();
-        this.setElement(jQuery('<div class="statsgrid-search-container"></div>'));
-        var title = this.loc('flyout.title');
-        var parent = this.getElement().parent().parent();
+        this.addClassForContent('statsgrid-search-container');
+        var flyout = this.getElement();
         if (isEmbedded) {
-            parent.find('.oskari-flyout-title p').html(title);
             // Remove close button from published
-            parent.find('.oskari-flyouttools').hide();
+            flyout.find('.oskari-flyouttools').hide();
         } else {
             // resume defaults (important if user used publisher)
-            parent.find('.oskari-flyout-title p').html(title);
-            parent.find('.oskari-flyouttools').show();
+            flyout.find('.oskari-flyouttools').show();
         }
-        this.addContent(this.getElement(), isEmbedded);
+        this.addContent(isEmbedded);
     },
-    addContent: function (el, isEmbedded) {
+    addContent: function (isEmbedded) {
         if (isEmbedded) {
             // no search for embedded map
             return;
         }
-        el.append(this.getNewSearchElement());
+        this.setUiElement(this.getNewSearchElement());
     },
     getNewSearchElement: function () {
         var me = this;
         var container = jQuery('<div></div>');
-
         var selectionComponent = Oskari.clazz.create('Oskari.statistics.statsgrid.IndicatorSelection', me.instance, me.sandbox);
         container.append(selectionComponent.getPanelContent());
+
+        var buttonContainer = jQuery('<div></div>');
+        container.append(buttonContainer);
 
         var btn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         btn.addClass('margintopLarge');
         btn.setPrimary(true);
         btn.setTitle(this.loc('panels.newSearch.addButtonTitle'));
         btn.setEnabled(false);
-        btn.insertTo(container);
+        btn.insertTo(buttonContainer);
+
+        const progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
+        progressSpinner.insertTo(buttonContainer);
+        progressSpinner.opts.top = -100;
 
         btn.setHandler(function (event) {
             event.stopPropagation();
-            me.setSpinner(selectionComponent.spinner);
+            me.setSpinner(progressSpinner);
+            me.getSpinner().start();
             me.search(selectionComponent.getValues());
         });
         this.searchBtn = btn;
@@ -87,7 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         var clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
         clearBtn.addClass('margintopLarge');
         clearBtn.setTitle(this.loc('panels.newSearch.clearButtonTitle'));
-        clearBtn.insertTo(container);
+        clearBtn.insertTo(buttonContainer);
 
         clearBtn.setHandler(function (event) {
             event.stopPropagation();
@@ -161,8 +164,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         // Overrides selection key and value from provided search values.
         const getSearchWithModifiedParam = (values, paramKey, paramValue) => {
-            const modSelection = {...values.selection, [paramKey]: paramValue};
-            return {...values, selections: modSelection};
+            const modSelection = { ...values.selection, [paramKey]: paramValue };
+            return { ...values, selections: modSelection };
         };
 
         let metadataCounter = 0;
@@ -181,14 +184,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             }
             // Overrides indicator array to make this search indicator specific.
             const addSearchValues = values => {
-                refinedSearchValues.push({...values, indicator});
+                refinedSearchValues.push({ ...values, indicator });
             };
             // Get indicator metadata to check the search valididty
             this.service.getIndicatorMetadata(commonSearchValues.datasource, indicator, (err, metadata) => {
                 // Map possible errors by indicator name
                 const indicatorName = metadata && metadata.name ? Oskari.getLocalized(metadata.name) : indicator;
                 if (err || !metadata) {
-                    errorMap.set(indicatorName, {metadataNotFound: true});
+                    errorMap.set(indicatorName, { metadataNotFound: true });
                     checkDone();
                     return;
                 }
@@ -246,17 +249,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     _getRefinedSearch (metadata, commonSearchValues) {
         // Make a deep clone of search values
         var indSearchValues = jQuery.extend(true, {}, commonSearchValues);
-        const {regionset, selections, series} = indSearchValues;
+        const { regionset, selections, series } = indSearchValues;
 
         if (Array.isArray(metadata.regionsets) && !metadata.regionsets.includes(Number(regionset))) {
-            indSearchValues.error = {notAllowed: 'regionset'};
+            indSearchValues.error = { notAllowed: 'regionset' };
             return indSearchValues;
         }
         if (!selections) {
             return indSearchValues;
         }
+
         Object.keys(selections).forEach(selectionKey => {
             const selector = metadata.selectors.find(selector => selector.id === selectionKey);
+            const checkNotAllowed = value =>
+                !selector.allowedValues.includes(value) && !selector.allowedValues.find(obj => obj.id === value);
+
             if (!selector) {
                 // Remove unsupported selectors silently
                 delete selections[selectionKey];
@@ -267,18 +274,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
             if (!Array.isArray(value)) {
                 // Single option
-                if (!selector.allowedValues.includes(value)) {
-                    indSearchValues.error = {notAllowed: selectionKey};
+                if (checkNotAllowed(value)) {
+                    indSearchValues.error = { notAllowed: selectionKey };
                 }
                 return;
             }
             // Multiselect or series
             // Filter out unsupported search param values
-            const notAllowed = value.filter(cur =>
-                !selector.allowedValues.includes(cur) && !selector.allowedValues.find(obj => obj.id === cur));
+            const notAllowed = value.filter(checkNotAllowed);
 
             // Set multiselect status for search
-            indSearchValues.multiselectStatus = {selector: selectionKey, invalid: notAllowed, requested: [...value]};
+            indSearchValues.multiselectStatus = { selector: selectionKey, invalid: notAllowed, requested: [...value] };
 
             if (notAllowed.length === 0) {
                 // Selected values are valid
@@ -287,7 +293,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             if (notAllowed.length === value.length) {
                 // All selected values are out of range
                 delete selections[selectionKey];
-                indSearchValues.error = {notAllowed: selectionKey};
+                indSearchValues.error = { notAllowed: selectionKey };
                 return;
             }
             // Filter out unsupported search param values
@@ -326,7 +332,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                     successfullSearches,
                     indicatorsHavingData
                 ));
-                this._showSearchErrorMessages(errors, multiselectStatusMap);
+                this._showSearchErrorMessages(successfullSearches, errors, multiselectStatusMap);
                 this._addIndicators(successfullSearches);
                 this.searchPending = false;
                 this.updateSearchButtonEnabled();
@@ -370,7 +376,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         const consumeBatch = batch => {
             const dataPromises = [];
             batch.forEach((search, index) => {
-                const {datasource, indicator, selections, series, regionset} = search;
+                const { datasource, indicator, selections, series, regionset } = search;
                 const promise = new Promise((resolve, reject) => {
                     this.service.getIndicatorData(datasource, indicator, selections, series, regionset, (err, data) => {
                         if (err || !data) {
@@ -379,7 +385,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                             return;
                         }
                         let counter = 0;
-                        const enoughData = !!Object.values(data).find(val => !isNaN(val) && ++counter > 1);
+                        const enoughData = Object.values(data).some(val => !isNaN(val) && ++counter > 1);
                         if (!enoughData) {
                             searchFailed(search);
                             resolve();
@@ -401,7 +407,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
             return;
         }
         if (!indicatorsHavingData.has(failedSearch.indicator)) {
-            errors.set(failedSearch.indicatorName, {datasetEmpty: true});
+            errors.set(failedSearch.indicatorName, { datasetEmpty: true });
             return;
         }
         const multiselectStatus = multiselectStatusMap.get(failedSearch.indicatorName);
@@ -421,7 +427,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         }
     },
 
-    _showSearchErrorMessages: function (errors, multiselectStatusMap) {
+    _showSearchErrorMessages: function (successfullSearches, errors, multiselectStatusMap) {
         if (errors.size + multiselectStatusMap.size === 0) {
             return;
         }
@@ -437,7 +443,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         if (indicatorMessages.length > 0) {
             const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
             const okBtn = dialog.createCloseButton('OK');
-            const title = this.loc('errors.noDataForIndicators', {indicators: indicatorMessages.length});
+            let title;
+            if (successfullSearches.length > 0) {
+                title = this.loc('errors.onlyPartialDataForIndicators', { indicators: indicatorMessages.length });
+            } else {
+                title = this.loc('errors.noDataForIndicators', { indicators: indicatorMessages.length });
+            }
             dialog.show(title, indicatorMessages.join('<br>'), [okBtn]);
         }
     },
@@ -492,7 +503,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
     _addIndicators: function (searchValues) {
         let latestNewSearch = null;
         searchValues.forEach(values => {
-            const {datasource, indicator, selections, series} = values;
+            const { datasource, indicator, selections, series } = values;
             if (this.service.getStateService().addIndicator(datasource, indicator, selections, series)) {
                 // Indicator was not already present at the service
                 latestNewSearch = values;
@@ -500,7 +511,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
         });
         if (latestNewSearch) {
             // Search added some new indicators, let's set the last one as the active indicator.
-            const {datasource, indicator, selections, series} = latestNewSearch;
+            const { datasource, indicator, selections, series } = latestNewSearch;
             const hash = this.service.getStateService().getHash(datasource, indicator, selections, series);
             this.service.getStateService().setActiveIndicator(hash);
         }

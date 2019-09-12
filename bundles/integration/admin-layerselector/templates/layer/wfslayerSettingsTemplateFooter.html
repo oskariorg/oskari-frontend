@@ -1,10 +1,28 @@
 
 
-<% 
-    var mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-    var wfsPlugin = mapModule.getLayerPlugins(model.getLayerType());
-%>
-<div class="add-layer-record" <% if (!wfsPlugin.oskariStyleSupport) { %>style="display: none"<% } %>>
+<div class="add-layer-record" <% if (!supportsWFS3) { %>style="display: none"<% } %>>
+    <% 
+        var renderMode = model.getOptions() && model.getOptions().renderMode;
+        var renderModeLoc = instance.getLocalization('admin').renderMode;
+    %>
+    <div class="add-layer-label-area">
+        <label for="add-layer-jobtype" class="add-layer-label" title="<%= renderModeLoc.title %>"><%= renderModeLoc.title %></label>
+        <div class="layer-render-mode icon-info" title="<%= renderModeLoc.info %>"></div>
+    </div>
+    <div class="add-layer-input-area">
+        <div class="input-controls">
+            <label><%= renderModeLoc.mvt %><input type="radio" name="renderMode" <% if (renderMode === 'mvt' ) { %>checked<% } %>
+                    class="add-class-input layer-options-renderMode" value="mvt" />
+            </label>
+        </div>
+        <div class="input-controls">
+            <label><%= renderModeLoc.vector %><input type="radio" name="renderMode" <% if (renderMode === 'vector' ) { %>checked<% } %>
+                    class="add-class-input layer-options-renderMode" value="vector" />
+            </label>
+        </div>
+    </div>
+</div>
+<div class="add-layer-record" <% if (!supportsWFS3) { %>style="display: none"<% } %>>
     <%
         var styles = model.getMVTStylesWithoutSrcLayer();
         styles = styles ? JSON.stringify(styles) : '';
@@ -17,7 +35,7 @@
             placeholder="<%- instance.getLocalization('admin').mvtWfsOskariStylesDesc %>"><%=styles%></textarea>
     </div>
 </div>
-<div class="add-layer-record" <% if (!wfsPlugin.oskariStyleSupport) { %>style="display: none"<% } %>>
+<div class="add-layer-record" <% if (!supportsWFS3) { %>style="display: none"<% } %>>
     <% var hover = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().hover)) ? '' : JSON.stringify(model.getOptions().hover); %>
     <div class="add-layer-label-area">
         <label class="add-layer-label" title="<%= instance.getLocalization('admin').mvtHover %>"><%= instance.getLocalization('admin').mvtHover %></label>
@@ -27,7 +45,16 @@
             placeholder="<%- instance.getLocalization('admin').mvtHoverDesc %>"><%=hover%></textarea>
     </div>
 </div>
-<% if (!wfsPlugin.oskariStyleSupport) { %>
+<div class="add-layer-record" <% if (!supportsWFS3) { %>style="display: none"<% } %>>
+    <% var clusteringDist = (_.isEmpty(model.getOptions()) || !model.getOptions().clusteringDistance) ? '' : model.getOptions().clusteringDistance; %>
+    <div class="add-layer-label-area">
+        <label class="add-layer-label" title="<%= instance.getLocalization('admin').clusteringDistance %>"><%= instance.getLocalization('admin').clusteringDistance %></label>
+    </div>
+    <div class="add-layer-input-area">
+        <input type="text" class="add-layer-input small layer-options-clustering-distance" value="<%= clusteringDist %>" />&nbsp;px
+    </div>
+</div>
+<% if (!supportsWFS3) { %>
 <div class="add-layer-record">
     <div class="add-layer-label-area">
         <label for="add-layer-sld-style" class="add-layer-label"  title="<%= instance.getLocalization('admin').addSldStyleDesc %>"><%= instance.getLocalization('admin').addSldStyle %></label>
@@ -83,7 +110,6 @@
     </div>
     </div>
 </div>
-<% } %>
 <!-- div class="add-layer-record">
     <button id="add-layer-wfs-button" class="edit-wfs-button"><%= instance.getLocalization('admin').editWfs %></button>
 </div -->
@@ -151,5 +177,5 @@
 
     </div>
 </div>
-
+<% } %>
 

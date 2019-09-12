@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import * as olExtent from 'ol/extent';
-import olInteractionDraw, {createRegularPolygon} from 'ol/interaction/Draw';
+import olInteractionDraw, { createRegularPolygon } from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
@@ -12,7 +12,7 @@ import GeometryCollection from 'ol/geom/GeometryCollection';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olCollection from 'ol/Collection';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
-import {BufferOp, BufferParameters} from 'jsts/org/locationtech/jts/operation/buffer';
+import { BufferOp, BufferParameters } from 'jsts/org/locationtech/jts/operation/buffer';
 import isValidOp from 'jsts/org/locationtech/jts/operation/valid/IsValidOp';
 
 const olParser = new jstsOL3Parser();
@@ -247,7 +247,7 @@ Oskari.clazz.define(
                 feat,
                 feats = [];
             geometries.forEach(function (geom) {
-                feat = new olFeature({geometry: geom});
+                feat = new olFeature({ geometry: geom });
                 feat.setId(me.generateNewFeatureId());
                 feats.push(feat);
                 if (checkIntersection) {
@@ -544,12 +544,18 @@ Oskari.clazz.define(
 
             var measures = me.sumMeasurements(features);
             var data = {
-                length: measures.length,
-                area: measures.area,
                 buffer: requestedBuffer,
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me.getCurrentDrawShape()
             };
+
+            if (measures.length) {
+                data.length = measures.length;
+            }
+            if (measures.area) {
+                data.area = measures.area;
+            }
+
             var showMeasureUI = !!me.getOpts('showMeasureOnMap');
             if (showMeasureUI) {
                 data.showMeasureOnMap = showMeasureUI;
@@ -638,7 +644,7 @@ Oskari.clazz.define(
 
                 var multiGeometry = me.createMultiGeometry(geometries);
 
-                feature = new olFeature({geometry: multiGeometry});
+                feature = new olFeature({ geometry: multiGeometry });
                 feature.setId(me.generateNewFeatureId());
 
                 jsonObject = me.formJsonObject(feature, measures, buffer);
@@ -712,14 +718,20 @@ Oskari.clazz.define(
          */
         sumMeasurements: function (features) {
             var me = this;
-            var value = {
-                length: 0,
-                area: 0
-            };
+            var value = {};
             var mapmodule = this.getMapModule();
             features.forEach(function (f) {
-                value.length += mapmodule.getGeomLength(f.getGeometry());
-                if (me._featuresValidity[f.getId()]) {
+                const geomType = f.getGeometry().getType();
+                if (geomType === 'LineString' || geomType === 'Polygon') {
+                    if (!value.length) {
+                        value.length = 0;
+                    }
+                    value.length += mapmodule.getGeomLength(f.getGeometry());
+                }
+                if (me._featuresValidity[f.getId()] && geomType === 'Polygon') {
+                    if (!value.area) {
+                        value.area = 0;
+                    }
                     value.area += mapmodule.getGeomArea(f.getGeometry());
                 }
             });
@@ -735,7 +747,7 @@ Oskari.clazz.define(
             var me = this;
             var vector = new olLayerVector({
                 id: layerId,
-                source: new olSourceVector({features: new olCollection()}),
+                source: new olSourceVector({ features: new olCollection() }),
                 style: me._styles.draw
             });
             me.getMap().addLayer(vector);
@@ -840,13 +852,19 @@ Oskari.clazz.define(
                     return geometry;
                 };
             }
-            var drawInteraction = new olInteractionDraw({
+            const opts = {
                 features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
                 type: geometryType,
                 style: me._styles.draw,
                 geometryFunction: geometryFunction,
                 maxPoints: maxPoints
-            });
+            };
+
+            if (!Oskari.util.isMobile(true)) {
+                // use smaller snap tolerance on desktop
+                opts.snapTolerance = 3;
+            }
+            var drawInteraction = new olInteractionDraw(opts);
             // does this need to be registered here and/or for each functionalityId?
             me._draw[functionalityId] = drawInteraction;
 

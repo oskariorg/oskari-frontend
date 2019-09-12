@@ -49,10 +49,13 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('admin-layerrights')) {
                 jQuery(this.container).addClass('admin-layerrights');
+            }
+            if (!flyout.hasClass('admin-layerrights')) {
+                flyout.addClass('admin-layerrights');
             }
         },
 
@@ -80,8 +83,6 @@ Oskari.clazz.define('Oskari.framework.bundle.admin-layerrights.Flyout',
                 '   </form>' +
                 '</div>\n'
             );
-            var elParent = this.container.parentElement.parentElement;
-            jQuery(elParent).addClass('admin-layerrights-flyout');
         },
 
         /**

@@ -33,7 +33,7 @@
     </div>
     <div class="add-layer-input-area">
         <% var extStyles = (_.isEmpty(model.getOptions()) || _.isEmpty(model.getOptions().externalStyles)) ? "" : JSON.stringify(model.getOptions().externalStyles); %>
-        <textarea rows="3" cols="50" class="add-layer-input long layer-options-ext-styles" 
+        <textarea rows="3" cols="50" class="add-layer-input long layer-options-ext-styles-json" 
             placeholder="<%- instance.getLocalization('admin').tiles3dStylesDesc %>"><%=extStyles%></textarea>
     </div>
 </div>

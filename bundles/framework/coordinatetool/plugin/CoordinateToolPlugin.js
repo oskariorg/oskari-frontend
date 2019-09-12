@@ -144,6 +144,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
         _getPopup: function () {
             return this._popup;
         },
+        _setLayerToolsEditModeImpl: function () {
+            if (this.inLayerToolsEditMode() && this.isOpen()) {
+                this._toggleToolState();
+            }
+        },
         /**
          * @method  @private _validLonLatInputs validate inputs
          * @return {Boolean} is inputs valid true/false
@@ -185,7 +190,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupTitle = loc('display.popup.title'),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
-                crsDefaultText = loc('display.crs.default', {crs: crs}),
+                crsDefaultText = loc('display.crs.default', { crs: crs }),
                 popupName = 'xytoolpopup',
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
@@ -315,7 +320,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 var topOffsetElement = jQuery('div.mobileToolbarDiv');
                 me._popup.addClass('coordinatetool__popup');
                 me._popup.addClass('mobile-popup');
-                me._popup.setColourScheme({'bgColour': '#e6e6e6'});
+                me._popup.setColourScheme({ 'bgColour': '#e6e6e6' });
 
                 // hide mouse coordinates
                 popupContent.find('.mousecoordinates-div').hide();
@@ -354,7 +359,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupContent.find('div.mousecoordinates-div').show();
 
                 me._popup.show(popupTitle, popupContent, buttons);
-                me._popup.moveTo(me.getElement(), popupLocation, true);
+                const elem = me.getElement();
+                if (elem) {
+                    me._popup.moveTo(elem, popupLocation, true);
+                } else {
+                    me._popup.moveTo(mapmodule.getMapEl(), 'center', true, null);
+                }
+
                 popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;
                 me._popup.setColourScheme({
                     'bgColour': themeColours.backgroundColour,
@@ -621,8 +632,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             // XY icon click
             el.off('click');
             el.on('click', function (event) {
-                var publisherService = me._sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
-                if (!publisherService || !publisherService.getIsActive()) {
+                if (!me.inLayerToolsEditMode()) {
                     me._toggleToolState();
                     event.stopPropagation();
                 }

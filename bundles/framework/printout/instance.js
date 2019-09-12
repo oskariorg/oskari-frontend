@@ -372,9 +372,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
          * @param {Boolean} blnEnabled
          */
         setPublishMode: function (blnEnabled) {
-            var me = this,
-                map = jQuery('#contentMap'),
-                request;
+            const me = this;
+            const map = jQuery('#contentMap');
 
             // trigger an event letting other bundles know we require the whole UI
             var eventBuilder = Oskari.eventBuilder('UIChangeEvent');
@@ -383,10 +382,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
             if (blnEnabled) {
                 map.addClass('mapPrintoutMode');
                 me.sandbox.mapMode = 'mapPrintoutMode';
-
-                // me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [undefined, 'close']);
-                jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', 'none');
-
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
                 // proceed with printout view
                 if (!this.printout) {
                     this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
@@ -408,9 +404,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                     delete me.sandbox._mapMode;
                 }
                 if (this.printout) {
-                    jQuery(me.plugins['Oskari.userinterface.Flyout'].container).parent().parent().css('display', '');
-                    request = Oskari.requestBuilder('userinterface.UpdateExtensionRequest')(me, 'close', me.getName());
-                    me.sandbox.request(me.getName(), request);
+                    this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
                     this.printout.setEnabled(false);
                     this.printout.hide();
                 }

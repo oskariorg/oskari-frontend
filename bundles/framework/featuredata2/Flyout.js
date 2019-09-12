@@ -78,10 +78,13 @@ Oskari.clazz.define(
          *
          * Interface method implementation
          */
-        setEl: function (el) {
+        setEl: function (el, flyout) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('featuredata')) {
                 jQuery(this.container).addClass('featuredata');
+            }
+            if (!flyout.hasClass('featuredata')) {
+                flyout.addClass('featuredata');
             }
         },
 
@@ -161,13 +164,10 @@ Oskari.clazz.define(
          * Creates the UI for a fresh start
          */
         createUi: function () {
-            var me = this,
-                flyout = jQuery(me.container),
-                sandbox = me.instance.sandbox,
-                reqBuilder = Oskari.requestBuilder(
-                    'activate.map.layer'
-                );
-
+            const me = this;
+            const flyout = jQuery(me.container);
+            const sandbox = me.instance.sandbox;
+            const reqBuilder = Oskari.requestBuilder('activate.map.layer');
             flyout.empty();
             me.WFSLayerService = sandbox.getService('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 
@@ -184,20 +184,11 @@ Oskari.clazz.define(
                     }
                     me.selectedTab = selectedPanel;
                     if (selectedPanel) {
-                        if (selectedPanel.getContainer().css('display') == 'none') {
+                        if (selectedPanel.getContainer().css('display') === 'none') {
                             selectedPanel.getContainer().show();
                         }
-                        // sendout highlight request for selected tab
+                        // sendout activation request for selected tab
                         if (me.active) {
-                            var selection = [];
-                            if (me.layers[selectedPanel.layer.getId()] && me.layers[selectedPanel.layer.getId()].grid) {
-                                selection = me.layers[selectedPanel.layer.getId()].grid.getSelection();
-                            }
-                            if (selection && selection.length > 0) {
-                                selection.forEach(function (selected, index) {
-                                    me._handleGridSelect(selectedPanel.layer, selected.__fid, index !== 0);
-                                });
-                            }
                             request = reqBuilder(selectedPanel.layer.getId(), true);
                             sandbox.request(me.instance.getName(), request);
                         }
@@ -224,8 +215,8 @@ Oskari.clazz.define(
             var me = this,
                 prevJson;
 
-                // this is needed to add the functionality to filter with aggregate analyse values
-                // if value is true, the link to filter with aggregate analyse values is added to dialog
+            // this is needed to add the functionality to filter with aggregate analyse values
+            // if value is true, the link to filter with aggregate analyse values is added to dialog
             var isAggregateValueAvailable = me.checkIfAggregateValuesAreAvailable();
 
             var fixedOptions = {
@@ -650,10 +641,14 @@ Oskari.clazz.define(
                     panel.grid.setMetadataLink(layer.getMetadataIdentifier());
 
                     // localizations
-                    if (locales) {
+                    if (locales && locales.length > 0) {
                         for (k = 0; k < locales.length; k += 1) {
                             panel.grid.setColumnUIName(fields[k], locales[k]);
                         }
+                    } else {
+                        panel.grid.setColumnUIName('__fid', 'ID');
+                        panel.grid.setColumnUIName('__centerX', 'X');
+                        panel.grid.setColumnUIName('__centerY', 'Y');
                     }
                     visibleFields = me.getVisibleFields(layer);
 
@@ -832,7 +827,6 @@ Oskari.clazz.define(
                 featureData,
                 urlLink,
                 values;
-
             eachFeature:
             for (i = 0; i < features.length; i += 1) {
                 featureData = {};
@@ -874,7 +868,6 @@ Oskari.clazz.define(
                         continue eachFeature;
                     }
                 }
-
                 model.addData(featureData);
             }
         },
@@ -1077,15 +1070,15 @@ Oskari.clazz.define(
          * @param  {String} layer  Oskari layer
          */
         _appendHeaderMessage: function (panel, locales, layer) {
-            var footer = this.template.wrapper.clone(),
-                sandbox = this.instance.getSandbox(),
-                inputid,
-                inputlayer,
-                loc = this.instance.getLocalization('gridFooter'),
-                message;
+            var footer = this.template.wrapper.clone();
+            var sandbox = this.instance.getSandbox();
+            var inputid;
+            var inputlayer;
+            var loc = this.instance.getLocalization('gridFooter');
+            var message;
             // clean up the old headermessage in case there was one
             jQuery(panel.html).parent().find('div.gridMessageContainer').remove();
-            if (!loc || !layer || layer.getLayerType().toUpperCase() !== 'ANALYSIS') {
+            if (!loc || !layer || !layer.isLayerOfType('analysislayer')) {
                 return;
             }
             // Extract analysis input layer id

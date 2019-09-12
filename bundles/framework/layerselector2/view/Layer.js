@@ -206,7 +206,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
                 .on('click', function () {
                     layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
                 })
-                .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));
+                .toggleClass('not-supported', !layer.isSupportedSrs(sandbox.getMap().getSrsName()));
 
             layerDiv.find('input').on('change', function () {
                 checkbox = jQuery(this);
@@ -266,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
              * Supported projection
              */
             tools.find('.layer-not-supported')
-                .css('display', !layer.isSupported(sandbox.getMap().getSrsName()) ? null : 'none')
+                .css('display', !sandbox.getMap().isLayerSupported(layer) ? null : 'none')
                 .attr('title', this.localization.tooltip['unsupported-srs']);
 
             return layerDiv;

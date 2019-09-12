@@ -47,13 +47,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.admin-users.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = jQuery(el[0]);
-            /**
+
             if (!this.container.hasClass('admin-users')) {
                 this.container.addClass('admin-users');
             }
-            */
+            if (!flyout.hasClass('admin-users')) {
+                flyout.addClass('admin-users');
+            }
         },
 
         /**

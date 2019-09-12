@@ -52,6 +52,20 @@ Oskari.clazz.define(
          */
         _initImpl: function () {
             Oskari.log('GetInfoPlugin').debug('init');
+            const wfsPlugin = this.getMapModule().getLayerPlugins('wfs');
+            if (wfsPlugin && !!wfsPlugin.isRenderModeSupported) {
+                // Using wfs vector plugin
+                this._ignoreUserLayers();
+            }
+        },
+
+        _ignoreUserLayers: function () {
+            this._config = this._config || {};
+            const ignoredLayerTypes = new Set(this._config.ignoredLayerTypes || []);
+            ignoredLayerTypes.add('WFS');
+            ignoredLayerTypes.add('MYPLACES');
+            ignoredLayerTypes.add('USERLAYER');
+            this._config.ignoredLayerTypes = Array.from(ignoredLayerTypes);
         },
 
         _destroyControlElement: function () {
@@ -206,9 +220,11 @@ Oskari.clazz.define(
          * @return {Boolean} true if layer's type is ignored
          */
         _isIgnoredLayerType: function (layer) {
-            return _.any((this._config || {}).ignoredLayerTypes, function (type) {
-                return layer.isLayerOfType(type);
-            });
+            const ignored = (this._config || {}).ignoredLayerTypes;
+            if (!Array.isArray(ignored)) {
+                return false;
+            }
+            return ignored.some(type => layer.isLayerOfType(type));
         },
 
         /**

@@ -227,6 +227,7 @@ Oskari.clazz.define(
                 content.append('&nbsp;');
                 content.append(label);
             }
+            dialog.addClass('bluetitle');
             dialog.show(title, content, buttons);
             if (step.getPositionRef) {
                 dialog.moveTo(step.getPositionRef(), step.positionAlign);
@@ -292,8 +293,6 @@ Oskari.clazz.define(
                     }
                 );
                 buttons.push(nextBtn);
-                // custom class for positioned popups
-                dialog.addClass('bluetitle');
             } else if (this.guideStep === this._guideSteps.length - 1) {
                 var finishTxt = me._localization.button.finish;
                 var finishBtn = dialog.createCloseButton(finishTxt);

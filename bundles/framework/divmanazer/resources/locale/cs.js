@@ -144,6 +144,11 @@ Oskari.registerLocalization(
                 "area": "Edit area style",
                 "line": "Edit line style"
             },
+            "validation": {
+                "title": "V datech se vyskytují chyby:",
+                "strokeWidth": "Velikost linie nesplňuje velikostní omezení (1-50).",
+                "borderWidth": "Velikost hranice plochy nesplňuje velikostní omezení (1-50)."
+            },
             "dot": {
                 "title": "Point feature portrayal",
                 "tooltip": "",

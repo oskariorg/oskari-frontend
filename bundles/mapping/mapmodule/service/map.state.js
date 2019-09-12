@@ -1,3 +1,4 @@
+import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
 /**
  * @class Oskari.mapframework.domain.Map
  *
@@ -54,6 +55,8 @@
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
         this._projectionCode = 'EPSG:3067';
+
+        this._layerSupportedChecks = {};
     }, {
         /** @static @property __name service name */
         __name: 'mapmodule.state',
@@ -299,6 +302,24 @@
         getSrsName: function () {
             return this._projectionCode;
         },
+        /**
+         * @method setSupports3D
+         * Map implementation supports 3D layers.
+         *
+         * @param {Boolean} supports3D
+         */
+        setSupports3D: function (supports3D) {
+            this._supports3D = supports3D;
+        },
+        /**
+         * @method setSupports3D
+         * Map implementation supports 3D layers.
+         *
+         * @return {Boolean} map supports 3D layers
+         */
+        getSupports3D: function () {
+            return this._supports3D;
+        },
         /************************************************
         * Common layer functions
         ************************************************** */
@@ -496,6 +517,41 @@
             removalList = list.splice(indexToRemove, 1);
             notifyDim(removalList);
             return true;
+        },
+        isLayerSupported: function (layer) {
+            if (!layer) {
+                return false;
+            }
+            const failedChecks = Object.values(this._layerSupportedChecks)
+                .map(check => check(layer))
+                .filter(retval => retval !== true);
+            return failedChecks.length === 0;
+        },
+        /**
+         * @method getUnsupportedLayerReasons To get reasons why layer is not supported by the current map view.
+         * @param { AbstractLayer } unsupportedLayer layer
+         * @return  { UnsupportedLayerReason[] } reasons
+         */
+        getUnsupportedLayerReasons: function (unsupportedLayer) {
+            if (!unsupportedLayer) {
+                return;
+            }
+            const reasons = Object.values(this._layerSupportedChecks)
+                .map(check => check(unsupportedLayer))
+                .filter(retval => retval instanceof UnsupportedLayerReason);
+            if (reasons.length === 0) {
+                return;
+            }
+            return reasons;
+        },
+        /**
+         * @method addLayerSupportCheck
+         * For layer support checking.
+         *
+         * @param {UnsupportedLayerReason} layerUnsupportedReason
+         */
+        addLayerSupportCheck: function (layerUnsupportedReason) {
+            this._layerSupportedChecks[layerUnsupportedReason.getId()] = layerUnsupportedReason.getLayerCheckFunction();
         }
     }, {
         /**

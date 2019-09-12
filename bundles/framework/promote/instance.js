@@ -9,7 +9,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.promote.PromoteBundleInstance',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */

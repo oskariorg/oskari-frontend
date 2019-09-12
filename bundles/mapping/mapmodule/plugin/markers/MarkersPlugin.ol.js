@@ -221,7 +221,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         _createMapMarkerLayer: function () {
             var me = this;
-            var markerLayer = new olLayerVector({title: 'Markers', source: new olSourceVector()});
+            var markerLayer = new olLayerVector({ title: 'Markers', source: new olSourceVector() });
 
             me.getMap().addLayer(markerLayer);
             me.raiseMarkerLayer(markerLayer);
@@ -502,7 +502,9 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var style = {
                 image: {
-                    color: data.color,
+                    fill: {
+                        color: data.color
+                    },
                     size: data.size,
                     shape: data.shape,
                     offsetX: data.offsetX,
@@ -535,7 +537,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
             }
             var markerLayer = this.getMarkersLayer();
             var markerStyle = this.getMapModule().getStyle(style);
-            var newMarker = new olFeature({id: data.id, geometry: new olGeom.Point([data.x, data.y])});
+            var newMarker = new olFeature({ id: data.id, geometry: new olGeom.Point([data.x, data.y]) });
 
             this._markerFeatures[data.id] = newMarker;
             this._markers[data.id] = data;
@@ -680,20 +682,12 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.MarkersPlugin',
          */
         enableGfi: function (blnEnable) {
             var sandbox = this.getSandbox();
-            var evtB = Oskari.eventBuilder(
-                'DrawFilterPlugin.SelectedDrawingEvent'
-            );
             var gfiReqBuilder = Oskari.requestBuilder(
                 'MapModulePlugin.GetFeatureInfoActivationRequest'
             );
             var hiReqBuilder = Oskari.requestBuilder(
                 'WfsLayerPlugin.ActivateHighlightRequest'
             );
-
-            // notify components to reset any saved "selected place" data
-            if (evtB) {
-                sandbox.notifyAll(evtB());
-            }
 
             // enable or disable gfi requests
             if (gfiReqBuilder) {

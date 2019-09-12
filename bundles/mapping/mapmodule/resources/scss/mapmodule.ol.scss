@@ -184,8 +184,8 @@ div.mapplugins {
                     float: right;
                     margin: 0 0 0 $pluginMargin;
                 }
-                &.statsgrid-legend-plugin,
-                &.statsgrid-legend-plugin-transparent {
+                &.statsgrid-classification-plugin,
+                &.statsgrid-classification-plugin-transparent {
                     position: absolute;
                     left: -305px;
                 }
@@ -267,8 +267,8 @@ div.mapplugins {
                 &.scalebar {
                     float: right;
                 }
-                &.statsgrid-legend-plugin,
-                &.statsgrid-legend-plugin-transparent {
+                &.statsgrid-classification-plugin,
+                &.statsgrid-classification-plugin-transparent {
                     position: absolute;
                     left: calc(-310px + 100%);
                     top: -75px;

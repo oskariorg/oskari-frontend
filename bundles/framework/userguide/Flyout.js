@@ -26,10 +26,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('userguide')) {
                 jQuery(this.container).addClass('userguide');
+            }
+            if (!flyout.hasClass('userguide')) {
+                flyout.addClass('userguide');
             }
         },
 

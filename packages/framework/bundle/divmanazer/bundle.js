@@ -160,9 +160,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/Chart.js"
-            },  {
-                "type": "text/javascript",
-                "src": "../../../../bundles/framework/divmanazer/component/ColorSelect.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/divmanazer/component/LanguageSelect.js"
@@ -317,9 +314,6 @@ Oskari.clazz.define("Oskari.userinterface.bundle.ui.UserInterfaceBundle", functi
             }, {
                 "type": "text/css",
                 "src": "../../../../bundles/framework/divmanazer/resources/scss/popover.scss"
-            }, {
-                "type": "text/css",
-                "src": "../../../../bundles/framework/divmanazer/resources/scss/colorselect.scss"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../libraries/jquery/plugins/jquery-placeholder/jquery.placeholder.js"

@@ -1,4 +1,4 @@
-import {getUserLocation} from '../LocationModule';
+import { getUserLocation } from '../LocationModule';
 
 /**
  * @classOskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler
@@ -18,8 +18,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.GetUserLocatio
             // move map to coordinates
             if (request.getCenterMap()) {
                 const zoom = opts.zoomLevel !== undefined ? opts.zoomLevel : 6;
-                mapmodule.centerMap({ lon: lon, lat: lat }, zoom);
-                if (opts.enableHighAccuracy === true && opts.zoomLevel === undefined) {
+                const success = mapmodule.centerMap({ lon: lon, lat: lat }, zoom);
+                if (success && opts.enableHighAccuracy === true && opts.zoomLevel === undefined) {
                     mapmodule.zoomToFitMeters(accuracy * 4);
                 }
             }

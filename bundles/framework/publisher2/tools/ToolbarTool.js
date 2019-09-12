@@ -161,7 +161,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
                 title: 'PublisherToolbarPlugin',
-                config: {'toolbarId': 'PublisherToolbar', buttons: []}
+                config: { 'toolbarId': 'PublisherToolbar', buttons: [] }
             };
         },
         /**
@@ -198,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             };
 
             // we want toolbar always with no default tools
-            retValue.configuration.toolbar = { conf: {'history': false, 'basictools': false, 'viewtools': false} };
+            retValue.configuration.toolbar = { conf: { 'history': false, 'basictools': false, 'viewtools': false } };
 
             // PublishedMyPlaces is not supported with ol3
 

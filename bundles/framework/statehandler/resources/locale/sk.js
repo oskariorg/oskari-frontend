@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "session": {
             "expiring": {
                 "title": "Spojenie sa končí",
-                "message": "Vaše spojenie sa končí. Aby ste zostali prihlásený, kliknite prosím na tlačidlo {predĺžiť}.",
+                "message": "Vaše spojenie sa končí. Aby ste zostali prihlásený, kliknite prosím na tlačidlo {extend}.",
                 "extend": "Pokračovať"
             },
             "expired": {

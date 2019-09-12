@@ -271,12 +271,20 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
     _updateStyles: function () {
         var me = this;
         var stylesel = me._el.find('.stylesel');
+        var sel = stylesel.find('select');
         stylesel.hide();
+
+        if (!me._binded) {
+            sel.on('change', function (e) {
+                var val = sel.find('option:selected').val();
+                me._layer.selectStyle(val);
+                me.sb.postRequestByName('ChangeMapLayerStyleRequest', [me._layer.getId(), val]);
+            });
+        }
 
         if (typeof me._layer.getStyles === 'function' && me._layer.getStyles().length > 1) {
             var hasOpts = false,
                 styles = me._layer.getStyles(),
-                sel = stylesel.find('select'),
                 i,
                 opt;
 
@@ -287,13 +295,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
                 hasOpts = true;
             }
 
-            if (!me._binded) {
-                sel.on('change', function (e) {
-                    var val = sel.find('option:selected').val();
-                    me._layer.selectStyle(val);
-                    me.sb.postRequestByName('ChangeMapLayerStyleRequest', [me._layer.getId(), val]);
-                });
-            }
             if (hasOpts) {
                 if (me._layer.getCurrentStyle()) {
                     sel.val(me._layer.getCurrentStyle().getName());

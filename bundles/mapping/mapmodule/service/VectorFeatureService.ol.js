@@ -266,13 +266,13 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         }
 
         /**
-         * @method _updateTooltipContent
+         * @method updateTooltipContent
          * Updates tooltip with feature's data or hides it if content is empty.
          *
          * @param {String} contentOptions
          * @param {olFeature | olRenderFeature} feature
          */
-        _updateTooltipContent (contentOptions, feature) {
+        updateTooltipContent (contentOptions, feature) {
             const tooltip = jQuery(this.getTooltipOverlay().getElement());
             const content = this._getTooltipContent(contentOptions, feature);
             if (content) {
@@ -306,7 +306,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             const tooltip = jQuery(this.getTooltipOverlay().getElement());
             if (contentOptions) {
                 if (this._tooltipState.feature !== feature) {
-                    this._updateTooltipContent(contentOptions, feature);
+                    this.updateTooltipContent(contentOptions, feature);
                 }
                 if (!tooltip.is(':empty')) {
                     this._updateTooltipPosition(event.getPageX(), event.getPageY(), event.getLon(), event.getLat());
@@ -327,7 +327,10 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             if (event.isDrawing()) {
                 return;
             }
-            const { feature, layer } = this._getTopmostFeatureAndLayer(event);
+            if (this._sandbox.getMap().isMoving()) {
+                return;
+            }
+            let { feature, layer } = this._getTopmostFeatureAndLayer(event);
 
             // No feature hits for these layer types. Call hover handlers without feature or layer.
             Object.keys(this.layerTypeHandlers).forEach(layerType => {
@@ -339,6 +342,14 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             });
 
             if (feature && layer) {
+                if (feature && feature.get('features')) {
+                    // Cluster source
+                    if (feature.get('features').length > 1) {
+                        return;
+                    }
+                    // Single feature
+                    feature = feature.get('features')[0];
+                }
                 const layerType = layer.get(LAYER_TYPE);
                 const hoverOptions = layer.get(LAYER_HOVER);
                 const contentOptions = hoverOptions ? hoverOptions.content : null;
@@ -385,6 +396,14 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
             me._map.forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
                 if (!layer) {
                     return;
+                }
+                if (feature.get('features')) {
+                    // Cluster source
+                    if (feature.get('features').length > 1) {
+                        return;
+                    }
+                    // Single feature
+                    feature = feature.get('features')[0];
                 }
                 const layerType = layer.get(LAYER_TYPE);
                 const isRegisteredLayerType = layerType && me.layerTypeHandlers[layerType];

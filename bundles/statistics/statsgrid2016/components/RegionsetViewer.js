@@ -165,12 +165,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
                 }
             }
             if (updates.length !== 0) {
-                const searchOptions = {'id': updates};
+                const searchOptions = { 'id': updates };
                 addFeaturesRequestParams.push([searchOptions, regionRequestOptions]);
 
                 if (classification.mapStyle === 'points') {
-                    const borderUpdates = updates.map(updateParams => Object.assign({}, updateParams, {value: 'border' + updateParams.value}));
-                    const borderSearchOptions = {'id': borderUpdates};
+                    const borderUpdates = updates.map(updateParams => Object.assign({}, updateParams, { value: 'border' + updateParams.value }));
+                    const borderSearchOptions = { 'id': borderUpdates };
                     addFeaturesRequestParams.push([borderSearchOptions, borderRequestOptions]);
                 }
             }
@@ -178,12 +178,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
 
         // Remove regions missing value
         if (handledRegions.length !== regions.length) {
-            const regionsWithoutValue = regions.filter(r => !handledRegions.includes(r.id)).map(r => r.id);
+            const regionsWithoutValue = [];
+            me._regionsAdded = [];
+            regions.forEach(r => {
+                const id = r.id;
+                if (handledRegions.includes(id)) {
+                    me._regionsAdded.push(id);
+                } else {
+                    regionsWithoutValue.push(id);
+                }
+            });
             const borders = regionsWithoutValue.map(id => 'border' + id);
             const removes = regionsWithoutValue.concat(borders);
-            if (regionsWithoutValue.length > 0) {
-                sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, me.LAYER_ID]);
-            }
+
+            sandbox.postRequestByName('MapModulePlugin.RemoveFeaturesFromMapRequest', ['id', removes, me.LAYER_ID]);
         }
         addFeaturesRequestParams.forEach(params => {
             sandbox.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', params);
@@ -427,12 +435,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             layerId: me.LAYER_ID,
             prio: highlight ? HIGHLIGHT_PRIO : REGION_PRIO + groupIndex
         };
-        const searchOptions = {id: regionId};
+        const searchOptions = { id: regionId };
         me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [searchOptions, requestOptions]);
 
         if (classification.mapStyle && classification.mapStyle === 'points') {
-            const borderRequestOptions = {...requestOptions};
-            const borderSearchOptions = {...searchOptions};
+            const borderRequestOptions = { ...requestOptions };
+            const borderSearchOptions = { ...searchOptions };
             delete borderRequestOptions.prio;
             borderSearchOptions.id = 'border' + regionId;
             me.sb.postRequestByName('MapModulePlugin.AddFeaturesToMapRequest', [borderSearchOptions, borderRequestOptions]);

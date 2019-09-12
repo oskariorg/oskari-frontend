@@ -129,7 +129,7 @@ Oskari.clazz.define(
                     Oskari.log(this.getName()).info('no system-message started');
                 }
                 this._errorLayer = error;
-                this._errorLayers.push({errorlayer: this._errorLayer});
+                this._errorLayers.push({ errorlayer: this._errorLayer });
             }
             if (error.level === 'warning') {
                 if (requestBuilder) {
@@ -139,7 +139,7 @@ Oskari.clazz.define(
                     Oskari.log(this.getName()).info('no system-message started');
                 }
                 this._errorLayer = error;
-                this._errorLayers.push({errorlayer: this._errorLayer});
+                this._errorLayers.push({ errorlayer: this._errorLayer });
             }
             if (error.key === 'layer_scale_out_of_range') {
                 plugin.updateScale(layer, error.minscale, error.maxscale);

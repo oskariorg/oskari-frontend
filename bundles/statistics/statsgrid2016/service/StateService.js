@@ -23,10 +23,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 name: 'Blues',
                 type: 'seq',
                 mode: 'discontinuous',
-                reverseColors: false
+                reverseColors: false,
+                mapStyle: 'choropleth',
+                transparency: 100, // or from statslayer
+                min: 10,
+                max: 60,
+                showValues: false
+            },
+            classificationPluginState: {
+                editEnabled: true,
+                visible: true,
+                transparent: false
             }
         };
         this._timers = {};
+        this.classificationPluginState = {};
+        Oskari.makeObservable(this);
     }, {
         __name: 'StatsGrid.StateService',
         __qname: 'Oskari.statistics.statsgrid.StateService',
@@ -36,6 +48,76 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
         getName: function () {
             return this.__name;
+        },
+        getClassificationPluginState: function () {
+            return this.classificationPluginState;
+        },
+
+        // Used only when plugin is started (doesn't trigger event)
+        initClassificationPluginState: function (conf, isEmbedded) {
+            const defaults = this._defaults.classificationPluginState;
+            if (isEmbedded) {
+                if (conf.hasOwnProperty('transparent')) {
+                    defaults.transparent = conf.transparent;
+                }
+                if (conf.hasOwnProperty('allowClassification')) {
+                    defaults.editEnabled = conf.allowClassification;
+                }
+            }
+            Object.assign(this.classificationPluginState, defaults);
+        },
+        toggleClassificationPluginState: function (key) {
+            if (this.classificationPluginState.hasOwnProperty(key)) {
+                const value = !this.classificationPluginState[key];
+                this.updateClassificationPluginState(key, value);
+                return value;
+            }
+        },
+        resetClassificationPluginState: function (key) {
+            const defaults = this._defaults.classificationPluginState;
+            if (defaults.hasOwnProperty(key)) {
+                this.updateClassificationPluginState(key, defaults[key]);
+            }
+        },
+        updateClassificationPluginState: function (key, value) {
+            if (this.classificationPluginState[key] === value) {
+                return;
+            }
+            this.classificationPluginState[key] = value;
+            this.trigger('ClassificationPluginChanged', { key: key, value: value });
+        },
+        updateClassificationTransparency: function (transparency) {
+            const indicator = this.getActiveIndicator();
+            if (indicator) {
+                indicator.classification.transparency = transparency;
+            }
+        },
+
+        getClassificationMutator: function () {
+            const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
+            return {
+                setActiveIndicator: hash => this.setActiveIndicator(hash),
+                updateClassification: (key, value) => {
+                    const indicator = this.getActiveIndicator();
+                    if (indicator) {
+                        indicator.classification[key] = value;
+                        if (eventBuilder) {
+                            this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                        }
+                    }
+                },
+                updateClassificationObj: obj => {
+                    const indicator = this.getActiveIndicator();
+                    if (indicator) {
+                        Object.keys(obj).forEach(key => {
+                            indicator.classification[key] = obj[key];
+                        });
+                        if (eventBuilder) {
+                            this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                        }
+                    }
+                }
+            };
         },
         /**
          * Resets the current state and sends events about the changes.
@@ -111,36 +193,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         },
 
         /**
-         * Sets the current classification and sends out event notifying about the change
-         * @param {String} indicatorHash indicator hash
-         * @param {Object} classification classification
-         * @param {Boolean} suppressEvent suppress event
-         */
-        setClassification: function (indicatorHash, classification, suppressEvent) {
-            var me = this;
-            if (typeof indicatorHash !== 'string' && typeof classification !== 'object') {
-                return;
-            }
-
-            var indicator = this.getIndicator(indicatorHash);
-            if (indicator) {
-                var previousClassification = indicator.classification;
-                indicator.classification = classification;
-                // notify
-                var eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
-                if (!suppressEvent && eventBuilder) {
-                    this.sandbox.notifyAll(eventBuilder(indicator.classification, previousClassification));
-                    me.setActiveIndicator(indicatorHash);
-                }
-            }
-        },
-        /**
          * Gets getClassificationOpts
          * @param  {String} indicatorHash indicator hash
          */
         getClassificationOpts: function (indicatorHash) {
             var indicator = this.getIndicator(indicatorHash) || {};
-            return jQuery.extend({}, this._defaults.classification, this.lastSelectedClassification, indicator.classification || {});
+            const lastSelected = { ...this.lastSelectedClassification };
+            delete lastSelected.manualBounds;
+            delete lastSelected.fractionDigits;
+            return jQuery.extend({}, this._defaults.classification, lastSelected, indicator.classification || {});
         },
         /**
          * Returns an wanted indicator.
@@ -182,6 +243,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
         getIndicators: function () {
             return this.indicators;
         },
+        hasIndicators: function () {
+            return this.indicators.length > 0;
+        },
+        isSeriesActive: function () {
+            const active = this.getActiveIndicator();
+            return active && !!active.series;
+        },
+
         /**
          * @method  @public getIndicatorIndex Gets indicator index startin number 0
          * @param  {String} indicatorHash indicator hash
@@ -264,9 +333,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 indicator: indicator,
                 selections: selections,
                 series: series,
-                hash: this.getHash(datasrc, indicator, selections, series),
-                classification: classification
+                hash: this.getHash(datasrc, indicator, selections, series)
             };
+            // init classification values if not given
+            ind.classification = classification || this.getClassificationOpts(ind.hash);
             var found = false;
             this.indicators.forEach(function (existing) {
                 if (existing.hash === ind.hash) {
@@ -276,12 +346,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             if (found) {
                 return false;
             }
+
             if (series) {
                 this.seriesService.setValues(series.values);
                 ind.selections[series.id] = this.seriesService.getValue();
                 // Discontinuos mode is problematic for series data,
                 // because each class has to get at least one hit -> set distinct mode.
-                ind.classification = jQuery.extend({}, ind.classification || {}, {mode: 'distinct'});
+                ind.classification.mode = 'distinct';
             }
             this.indicators.push(ind);
 

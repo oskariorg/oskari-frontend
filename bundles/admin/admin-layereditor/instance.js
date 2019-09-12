@@ -1,4 +1,4 @@
-import {LayerEditorFlyout} from './view/Flyout';
+import { LayerEditorFlyout } from './view/Flyout';
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
 Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
@@ -19,11 +19,19 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 }
             };
+            this.dataProviders = [];
         }
         _startImpl () {
             this._setupLayerTools();
+            this._loadDataProviders();
         }
 
+        _setDataProviders (dataProviders) {
+            this.dataProviders = dataProviders;
+        }
+        _getDataProviders () {
+            return this.dataProviders;
+        }
         /**
          * Fetches reference to the map layer service
          * @return {Oskari.mapframework.service.MapLayerService}
@@ -66,7 +74,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             // add feature data tool for layer
             const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('layer-editor');
-            tool.setIconCls('icon-info-area');
+            tool.setIconCls('edit-layer');
             tool.setTooltip(this.loc('editor-tool'));
             tool.setTypes(['layerList']);
 
@@ -83,10 +91,46 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          */
         _showEditor (layerId) {
             const flyout = this._getFlyout();
-            flyout.setLayerId(layerId);
+            const layerService = this._getLayerService();
+            flyout.setLocale(this.loc);
+            flyout.setDataProviders(this._getDataProviders());
+            flyout.setMapLayerGroups(layerService.getAllLayerGroups());
+            flyout.setLayer(layerService.findMapLayer(layerId));
             flyout.show();
         }
 
+        /**
+         * @private @method _loadDataProviders
+         * Loads data provider list
+         */
+        _loadDataProviders () {
+            const me = this;
+            jQuery.ajax({
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json; charset=UTF-8',
+                url: Oskari.urls.getRoute('GetMapLayerGroups'),
+                error: function () {
+                    var errorDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                    errorDialog.show(me.locale('errors.dataProvider.title'), me.locale('errors.dataProvider.message'));
+                    errorDialog.fadeout();
+                },
+                success: function (response) {
+                    const dataProviders = [];
+                    response.organization.forEach(function (org) {
+                        dataProviders.push({
+                            id: org.id,
+                            name: Oskari.getLocalized(org.name)
+                        });
+                    });
+
+                    dataProviders.sort(function (a, b) {
+                        return Oskari.util.naturalSort(a.name, b.name);
+                    });
+                    me._setDataProviders(dataProviders);
+                }
+            });
+        }
         /**
          * @private @method _getFlyout
          * Ensure flyout exists and return it

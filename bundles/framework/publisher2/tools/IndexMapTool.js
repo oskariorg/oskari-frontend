@@ -15,11 +15,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
         groupedSiblings: false,
 
         /**
-    * Get tool object.
-    * @method getTool
-    *
-    * @returns {Object} tool description
-    */
+        * Get tool object.
+        * @method getTool
+        *
+        * @returns {Object} tool description
+        */
         getTool: function () {
             return {
                 id: 'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
@@ -27,13 +27,25 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.IndexMapTool',
                 config: {}
             };
         },
+
         /**
-    * Get values.
-    * @method getValues
-    * @public
-    *
-    * @returns {Object} tool value object
-    */
+        * Is displayed.
+        * @method isDisplayed
+        * @public
+        *
+        * @returns {Boolean} is tool displayed
+        */
+        isDisplayed: function () {
+            return !Oskari.getSandbox().getMap().getSupports3D();
+        },
+
+        /**
+        * Get values.
+        * @method getValues
+        * @public
+        *
+        * @returns {Object} tool value object
+        */
         getValues: function () {
             var me = this;
 

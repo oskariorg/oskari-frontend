@@ -173,7 +173,8 @@ Oskari.registerLocalization({
             'myIndicatorRegionselect': 'Regionselect cannot be empty.',
             'myIndicatorDatasource': 'Datasource is empty.',
             'cannotDisplayAsSeries': 'Indicator cannot be inspected as a series.',
-            'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}'
+            'noDataForIndicators': 'Service did not return data for {indicators, plural, one {the indicator} other {indicators}}',
+            'onlyPartialDataForIndicators': 'Service did not return all data for {indicators, plural, one {the indicator} other {indicators}}'
         },
         'missing': {
             'regionsetName': 'Unknown'
@@ -260,7 +261,7 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Saved',
-                'successMsg': 'The data has been saved. Add the indicator to the map using the statistics search functionality.'
+                'successMsg': 'The data has been saved.'
             },
             'import': {
                 'title': 'Import from the clipboard',

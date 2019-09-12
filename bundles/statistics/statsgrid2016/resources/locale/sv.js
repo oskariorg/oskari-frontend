@@ -170,7 +170,8 @@ Oskari.registerLocalization({
             'myIndicatorRegionselect': 'Områdesindelning kan inte vara tom.',
             'myIndicatorDatasource': 'Datakällan är tom.',
             'cannotDisplayAsSeries': 'Indikatorn kan inte inspekteras som en serie.',
-            'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}'
+            'noDataForIndicators': 'Tjänsten returnerade ingen data för {indicators, plural, one {indikatorn} other {indikatorer}}',
+            'onlyPartialDataForIndicators': 'Tjänsten returnerade inte alla data för {indicators, plural, one {indikatorn} other {indikatorer}}'
         },
         'missing': {
             'regionsetName': 'Okänd'
@@ -257,7 +258,7 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Sparad',
-                'successMsg': 'Informationen sparad. Granska indikatorn genom att tillägga den på kartan vid materialsökningen.'
+                'successMsg': 'Informationen sparad.'
             },
             'import': {
                 'title': 'Hämta från urklipp',

@@ -14,7 +14,7 @@ Oskari.registerLocalization(
                 "skipInfo": "Älä näytä pikaopasta"
             },
             "history": {
-                "reset": "Siirry oletusnäkymään.",
+                "reset": "Palaa alkutilaan.",
                 "back": "Siirry edelliseen näkymään.",
                 "next": "Siirry seuraavaan näkymään."
             },

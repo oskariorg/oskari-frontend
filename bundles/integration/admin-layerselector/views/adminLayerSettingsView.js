@@ -279,7 +279,7 @@ function (
                     } else {
                         var reasonKey = Object.keys(resp.error)[0];
                         var reason = resp.error[reasonKey];
-                        content = jQuery('<span>' + loc('recheckFailReason', {reason: reason}) + '<span>');
+                        content = jQuery('<span>' + loc('recheckFailReason', { reason: reason }) + '<span>');
                     }
                     popup.show(loc('recheckTitle'), content, [closeButton]);
                 },
@@ -471,6 +471,8 @@ function (
                 urlSource = [],
                 i,
                 j;
+            const wfsPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule').getLayerPlugins('wfs');
+            const supportsWFS3 = wfsPlugin && wfsPlugin.oskariStyleSupport === true;
             if (!me.model) {
                 me.model = this._createNewModel(layerType);
                 this.listenTo(this.model, 'change', this.render);
@@ -490,6 +492,7 @@ function (
 
             me.$el.append(me.layerTemplate({
                 model: me.model,
+                supportsWFS3: supportsWFS3,
                 header: layerTypeData.headerTemplate,
                 footer: layerTypeData.footerTemplate,
                 instance: me.options.instance,
@@ -655,7 +658,7 @@ function (
                 form = element.parents('.add-style-send'),
                 sldImport = form.find('.add-layer-style-import-block');
 
-                // set this element invisible
+            // set this element invisible
             element.hide();
 
             // Show  new sld input block
@@ -673,7 +676,7 @@ function (
                 sldImport = form.find('.add-layer-style-import-block'),
                 sldImportBtn = form.find('.import-wfs-style-button');
 
-                // set this element invisible
+            // set this element invisible
             sldImportBtn.show();
 
             // Show  new sld input block
@@ -693,7 +696,7 @@ function (
                 sldName = form.find('.add-layer-sld-style-sldname').val(),
                 sldXml = form.find('.add-sld-file').val();
 
-                // Check if sld is valid
+            // Check if sld is valid
             if (me._checkXml(sldXml)) {
                 // Save new style
                 me._saveSldStyle(sldName, sldXml);
@@ -1009,13 +1012,13 @@ function (
                     try {
                         return JSON.parse(content);
                     } catch (e) {
-                        parseErrors.push({element: element});
+                        parseErrors.push({ element: element });
                     }
                 }
             };
             options = parseOptionQuietly('.add-layer-input.layer-options');
             if (parseErrors.length > 0) {
-                return {errors: parseErrors};
+                return { errors: parseErrors };
             }
             if (options) {
                 return options;
@@ -1027,7 +1030,9 @@ function (
                 attributions: parseOptionQuietly('.add-layer-input.layer-options-attributions'),
                 tileGrid: parseOptionQuietly('.add-layer-input.layer-options-tileGrid'),
                 hover: parseOptionQuietly('.add-layer-input.layer-options-hover'),
-                apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true)
+                renderMode: parseOptionQuietly('.layer-options-renderMode:checked', true),
+                apiKey: parseOptionQuietly('.add-layer-input.layer-options-apikey', true),
+                clusteringDistance: parseOptionQuietly('.add-layer-input.layer-options-clustering-distance')
             };
             if (parseErrors.length > 0) {
                 options.errors = parseErrors;
@@ -1060,7 +1065,7 @@ function (
                 sandbox = Oskari.getSandbox(),
                 admin;
 
-                // If this is a sublayer -> setup parent layers id
+            // If this is a sublayer -> setup parent layers id
             if (me.options.baseLayerId) {
                 data.parentId = me.options.baseLayerId;
             }
@@ -1187,30 +1192,7 @@ function (
             data.groupId = form.find('#select-dataprovider').val();
             data.capabilitiesUpdateRateSec = form.find('#add-layer-capabilities-update-rate').val();
 
-            if ((data.layerUrl !== me.model.getInterfaceUrl() && me.model.getInterfaceUrl()) ||
-                    (data.layerName !== me.model.getLayerName() && me.model.getLayerName())) {
-                var confirmMsg = me.instance.getLocalization('admin').confirmResourceKeyChange,
-                    dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    btn = dialog.createCloseButton(me.instance.getLocalization().ok),
-                    cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-                btn.addClass('primary');
-                cancelBtn.setTitle(me.instance.getLocalization().cancel);
-
-                btn.setHandler(function () {
-                    dialog.close();
-                    me._addLayerAjax(data, element, callback);
-                });
-
-                cancelBtn.setHandler(function () {
-                    dialog.close();
-                });
-
-                dialog.show(me.instance.getLocalization('admin').warningTitle, confirmMsg, [btn, cancelBtn]);
-                dialog.makeModal();
-            } else {
-                me._addLayerAjax(data, element, callback);
-            }
+            me._addLayerAjax(data, element, callback);
         },
         /**
          * Save group or base layers

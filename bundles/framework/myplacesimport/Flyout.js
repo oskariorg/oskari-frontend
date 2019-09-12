@@ -67,6 +67,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         getTemplate: function () {
             return this.template;
         },
+        setEl: function (el, flyout) {
+            this.container = jQuery(el[0]);
+            this.container.addClass('myplacesimport');
+            flyout.addClass('myplacesimport');
+        },
+
         /**
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
@@ -74,11 +80,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method startPlugin
          */
         startPlugin: function () {
-            var container = this.getEl();
-            container.addClass('myplacesimport');
             var tooltipCont = jQuery(this.__templates.help).clone();
             tooltipCont.attr('title', this.loc('flyout.help'));
-            container.append(tooltipCont);
+            this.container.append(tooltipCont);
 
             this.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
                 'allowMultipleFiles': false,
@@ -88,11 +92,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             });
 
             this.setTemplate(this.createUi());
-            container.append(this.getTemplate());
+            this.container.append(this.getTemplate());
             this.bindListeners();
+
             /* progress */
-            this.progressSpinner.insertTo(container);
-            this.progressBarFile.create(container);
+            this.progressSpinner.insertTo(this.container);
+            this.progressBarFile.create(this.container);
         },
         /**
          * Interface method implementation
@@ -124,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         createUi: function () {
             var template = jQuery(this.__templates.base).clone();
             template.find('div.info')
-                .html(this.loc('flyout.description', {maxSize: this.maxFileSize}));
+                .html(this.loc('flyout.description', { maxSize: this.maxFileSize }));
             template.find('div.state')
                 .html(this.__createFileImportTemplate());
             return template;
@@ -177,7 +182,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             formData.append('layer-desc', formValues.desc);
             formData.append('layer-source', formValues.source);
             formData.append('file-import', this.fileInput.getFiles());
-            formData.append('layer-style', JSON.stringify(me.__getStyleValues()));
+            formData.append('layer-style', JSON.stringify(this.styleForm.getOskariStyle()));
             jQuery.ajax({
                 url: url,
                 type: 'POST',
@@ -217,41 +222,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 source: form.find('.source input').val(),
                 epsg: form.find('.source-srs input').val().trim()
             };
-        },
-        /**
-         * Returns the visualization form's values.
-         *
-         * @method __getStyleValues
-         * @private
-         * @return {Object}
-         */
-        __getStyleValues: function () {
-            var formValues = this.styleForm.getValues();
-            var values = {};
-
-            if (formValues) {
-                values.dot = {
-                    size: formValues.dot.size,
-                    color: formValues.dot.color,
-                    shape: formValues.dot.shape
-                };
-                values.line = {
-                    width: formValues.line.width,
-                    color: formValues.line.color,
-                    cap: formValues.line.cap,
-                    corner: formValues.line.corner,
-                    style: formValues.line.style
-                };
-                values.area = {
-                    lineWidth: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
-                    lineStyle: formValues.area.lineStyle,
-                    fillStyle: formValues.area.fillStyle,
-                    lineCorner: formValues.area.lineCorner
-                };
-            }
-            return values;
         },
         /**
          * Validates the form inputs (currently that the name and file are present).
@@ -302,11 +272,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         __finish: function (json) {
             this.progressSpinner.stop();
             var title = this.loc('flyout.finish.success.title');
-            var msg = this.loc('flyout.finish.success.message', {count: json.featuresCount});
+            var msg = this.loc('flyout.finish.success.message', { count: json.featuresCount });
             var fadeout = true;
 
             if (json.warning !== undefined && json.warning.featuresSkipped) {
-                msg = msg + ' ' + this.loc('flyout.warning.features_skipped', {count: json.warning.featuresSkipped});
+                msg = msg + ' ' + this.loc('flyout.warning.features_skipped', { count: json.warning.featuresSkipped });
                 fadeout = false;
             }
             this.instance.addUserLayer(json);
@@ -326,13 +296,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             const key = errorInfo.error;
             switch (key) {
             case 'multiple_extensions':
-                msg = this.loc('flyout.error.multiple_extensions', {extension: errorInfo.extensions});
+                msg = this.loc('flyout.error.multiple_extensions', { extension: errorInfo.extensions });
                 break;
             case 'multiple_main_file':
-                msg = this.loc('flyout.error.multiple_main_file', {extensions: errorInfo.extensions});
+                msg = this.loc('flyout.error.multiple_main_file', { extensions: errorInfo.extensions });
                 break;
             case 'file_over_size':
-                msg = this.loc('flyout.error.file_over_size', {maxSize: this.maxFileSize});
+                msg = this.loc('flyout.error.file_over_size', { maxSize: this.maxFileSize });
                 break;
             case 'no_main_file':
                 list.push(errors.no_main_file);

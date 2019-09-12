@@ -174,7 +174,8 @@ Oskari.registerLocalization({
             'myIndicatorRegionselect': 'Aluejako ei voi olla tyhjä.',
             'myIndicatorDatasource': 'Tietolähde on tyhjä.',
             'cannotDisplayAsSeries': 'Indikaattoria ei voida tarkastella sarjana',
-            'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
+            'noDataForIndicators': 'Palvelusta ei saatu tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}',
+            'onlyPartialDataForIndicators': 'Palvelusta ei saatu kaikkia tietoja {indicators, plural, one {indikaattorille} other {indikaattoreille}}'
         },
         'missing': {
             'regionsetName': 'Tuntematon'
@@ -261,7 +262,7 @@ Oskari.registerLocalization({
             },
             'dialog': {
                 'successTitle': 'Tallennettu',
-                'successMsg': 'Tiedot tallennettu. Lisää indikaattori kartalle aineistohaun kautta.'
+                'successMsg': 'Tiedot tallennettu.'
             },
             'import': {
                 'title': 'Tuo leikepöydältä',

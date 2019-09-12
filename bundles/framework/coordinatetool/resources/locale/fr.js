@@ -100,6 +100,10 @@ Oskari.registerLocalization(
                 "showTransformationTools": "Afficher les outils de transformation des coordonnées",
                 "noUI": "Masquer l'interface utilisateur (utiliser l'interface  RPC)"
             }
+        },
+        "guidedTour": {
+            "title": "Outil XY - coordonnées",
+            "message": "Ici, vous pouvez voir les coordonnées actuelles, panoramiser à des coordonnées précises et ajouter des repères."
         }
     }
 });

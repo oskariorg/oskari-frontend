@@ -3,28 +3,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     this.flyouts = {};
     var loc = instance.getLocalization();
     Oskari.makeObservable(this);
+    this.service = instance.getStatisticsService().getStateService();
 
     this.flyoutInfo = [
         {
             id: 'search',
             title: loc.tile.search,
-            oskariClass: 'Oskari.statistics.statsgrid.view.SearchFlyout'
+            oskariClass: 'Oskari.statistics.statsgrid.view.SearchFlyout',
+            cls: 'statsgrid-search-flyout'
         },
         {
             id: 'table',
             title: loc.tile.table,
-            oskariClass: 'Oskari.statistics.statsgrid.view.TableFlyout'
+            oskariClass: 'Oskari.statistics.statsgrid.view.TableFlyout',
+            cls: 'statsgrid-data-flyout'
         },
         {
             id: 'diagram',
             title: loc.tile.diagram,
-            oskariClass: 'Oskari.statistics.statsgrid.view.DiagramFlyout'
+            oskariClass: 'Oskari.statistics.statsgrid.view.DiagramFlyout',
+            cls: 'statsgrid-diagram-flyout'
         },
         {
             id: 'indicatorForm',
             hideTile: true,
             title: loc.userIndicators.flyoutTitle || 'Add indicator',
-            oskariClass: 'Oskari.statistics.statsgrid.view.IndicatorFormFlyout'
+            oskariClass: 'Oskari.statistics.statsgrid.view.IndicatorFormFlyout',
+            cls: 'statsgrid-user-indicator-flyout'
         }
     ];
 }, {
@@ -33,6 +38,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             // already initialized
             return;
         }
+
         var me = this;
         var p = jQuery('#mapdiv');
         var position = p.position().left;
@@ -41,6 +47,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         this.flyoutInfo.forEach(function (info) {
             var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
                 width: 'auto',
+                cls: info.cls,
                 pos: {
                     x: position + offset,
                     y: 5
@@ -73,7 +80,20 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         if (!flyout) {
             return;
         }
-        flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
+
+        const indicators = this.service.getIndicators();
+
+        if ((type === 'diagram' || type === 'table') && indicators.length === 0) {
+            const searchFlyout = me.flyouts['search'];
+            searchFlyout.move(searchFlyout.options.pos.x, searchFlyout.options.pos.y, true);
+            searchFlyout.show();
+            this.trigger('show', 'search');
+            const calculutedFlyoutPositionX = searchFlyout.options.pos.x + searchFlyout._popup[0].clientWidth + 5;
+            flyout.move(calculutedFlyoutPositionX, flyout.options.pos.y, true);
+        } else {
+            flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
+        }
+
         flyout.show();
         this.trigger('show', type);
     },

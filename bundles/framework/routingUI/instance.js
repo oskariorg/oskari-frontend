@@ -1,3 +1,5 @@
+import 'moment';
+
 /**
  * @class Oskari.mapframework.bundle.routingUI.RoutingUIBundleInstance
  */

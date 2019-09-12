@@ -115,10 +115,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.MyPlacesImportSer
             layer.setName(updatedLayer.name);
             layer.setSource(updatedLayer.source);
             layer.setDescription(updatedLayer.description);
+            layer.setOptions(updatedLayer.options);
 
             this.sandbox.notifyAll(evt);
             if (layerIsSelected) {
                 this.instance.sandbox.request(this.instance, request);
+                this.instance.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId()]);
             }
         },
         /**

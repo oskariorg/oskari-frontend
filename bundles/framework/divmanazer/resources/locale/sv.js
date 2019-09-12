@@ -19,7 +19,7 @@ Oskari.registerLocalization(
             "search": "Sök"
         },
         "LanguageSelect": {
-            "title": "språk",
+            "title": "Språk",
             "tooltip": "Välj språk",
             "languages": {
                 "af": "afrikaans",
@@ -147,6 +147,11 @@ Oskari.registerLocalization(
                 "dot": "Redigera punktens stil",
                 "area": "Redigera områdets stil",
                 "line": "Redigera linjens stil"
+            },
+            "validation": {
+                "title": "Brister i uppgifterna:",
+                "strokeWidth": "Linjens storlek är utanför de tillåtna gränserna (1-50).",
+                "borderWidth": "Områdets konturlinje är utanför de tillåtna gränserna (1-50)."
             },
             "dot": {
                 "title": "Punktens stil",
