@@ -1,4 +1,4 @@
-import 'moment';
+import moment from 'moment';
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin
