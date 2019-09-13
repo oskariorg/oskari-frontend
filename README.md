@@ -55,6 +55,10 @@ You can use [sample-application](https://github.com/oskariorg/sample-application
 
 Run npm `build` and `start` commands in your application repository root.
 
+## Dependencies
+
+Note! All the dependencies (even dev-dependencies like Webpack) are under dependencies for a reason. The reason is that this repository is used as dependency for apps and apps inherit the webpack-dependencies automatically instead of having to install and configure their own versions.
+
 # Reporting issues
 
 All Oskari-related issues should be reported here: https://github.com/oskariorg/oskari-docs/issues
