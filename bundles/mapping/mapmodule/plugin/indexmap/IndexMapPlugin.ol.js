@@ -71,7 +71,7 @@ Oskari.clazz.define(
                 // Add index map control - remove old one
                 if (!me._indexMap || me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
-                    var layer = me._getBaseLayer();
+                    var layer = me.getMapModule().getBaseOLMapLayer();
                     if (layer) {
                         if (typeof layer.createIndexMapLayer === 'function') {
                             // this is used for statslayer to create a copied layer as indexmap
@@ -151,28 +151,8 @@ Oskari.clazz.define(
                 // enable icon
                 this._bindIcon(icon);
             }
-        },
-        /**
-         * Get 1st visible image layer.
-         * fallback to first visible layer
-         * @returns {*}
-         * @private
-         */
-        _getBaseLayer: function () {
-            const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
-            if (selectedLayers.length === 0) return null;
-
-            let layer = selectedLayers.find(l => {
-                const type = l.getLayerType();
-                return l.isVisible() && (type === 'wmts' || type === 'wms');
-            });
-            if (!layer) {
-                layer = selectedLayers.find(l => l.isVisible());
-            }
-            if (!layer) return null;
-            const olLayers = this.getMapModule().getOLMapLayers(layer.getId());
-            return olLayers && olLayers.length > 0 ? olLayers[0] : null;
         }
+
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
