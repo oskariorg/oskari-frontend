@@ -384,10 +384,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.PrintoutBundleInstance'
                 me.sandbox.mapMode = 'mapPrintoutMode';
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, 'hide']);
                 // proceed with printout view
-                if (!this.printout) {
-                    this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
-                    this.printout.render(map);
-                }
+                this.printout = Oskari.clazz.create('Oskari.mapframework.bundle.printout.view.BasicPrintout', this, this.getLocalization('BasicView'), this.backendConfiguration);
+                this.printout.render(map);
+
                 if (this.state && this.state.form) {
                     this.printout.setState(this.state.form);
                 }
