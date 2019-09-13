@@ -11,6 +11,15 @@ Some extra tags:
 
 ## 1.53.0
 
+### [mod] [rpc] MapMoveRequest
+
+Added fourth parameter "options".
+```javascript
+{ srsName, animation }
+``` 
+`srsName`: The projection in which the given coordinates are
+`animation`: Animation to use on map move. Possible values: `fly`, `pan`.
+
 ### [mod] [rpc] StartUserLocationTrackingRequest
 
 Allowed request for rpc use.

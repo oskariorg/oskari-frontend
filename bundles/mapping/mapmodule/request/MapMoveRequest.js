@@ -20,23 +20,22 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
      * @param {Number/OpenLayers.Bounds/Object} zoom (optional)
      *            zoomlevel (0-12) or OpenLayers.Bounds to zoom to or an object with property scale { scale : 10000 }.
      *            If not given the map zoom level stays as it was.
-     * @param {Boolean} deprecated
-     *            not used for anything
-     *
-     * @param {string} srsName
-     *
+     * @param {Object} options
+     *          object with optional parameters srsName and animation.
+     * @param {string} deprecatedSrsName
+     *          used to be srsName but it is moved to options.
      */
-
-    function (centerX, centerY, zoom, deprecated, srsName) {
+    function (centerX, centerY, zoom, options, deprecatedSrsName) {
         this._creator = null;
-
         this._centerX = centerX;
-
         this._centerY = centerY;
-
         this._zoom = zoom;
-
-        this._projectionCode = srsName;
+        // destruct options
+        if (typeof options !== 'object') {
+            options = {};
+        }
+        this._projectionCode = options.srsName || deprecatedSrsName;
+        this._animation = options.animation;
     }, {
         /** @static @property {String} __name request name */
         __name: 'MapMoveRequest',
@@ -72,10 +71,17 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapMoveRequest',
         },
         /**
          * @method getSrsName
-         * @return {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
+         * @return {String} _projectionCode SRS projection code
          */
         getSrsName: function () {
             return this._projectionCode;
+        },
+        /**
+         * @method getAnimation
+         * @return {String} animation to use on map move.
+         */
+        getAnimation: function () {
+            return this._animation;
         }
     }, {
         /**
