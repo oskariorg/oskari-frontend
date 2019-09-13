@@ -104,7 +104,7 @@ Oskari.registerLocalization(
                     },
                     {
                         "id": "pageScale",
-                        "label": "Add a scale to the map printout.",
+                        "label": "Add a scale to the map printout",
                         "tooltip": "Add a scale to the map, if you want.",
                         "checked": "checked"
                     },
