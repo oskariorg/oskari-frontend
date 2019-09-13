@@ -25,7 +25,18 @@ Requests a map to be moved to certain zoom level and location. Triggers afterMap
   <td> \* y </td><td> Number </td><td> y coordinate of the desired map location </td><td> </td>
 </tr>
 <tr>
-  <td> zoomLevel </td><td> Number </td><td> desired zoomlevel, OpenLayers.Bounds to zoom to or an object with property scale { scale : 10000 }. </td><td> </td>
+  <td> zoomLevel </td>
+  <td> Number|Object </td>
+  <td> 
+    Desired zoomlevel as a number <br>
+    Or
+    ```javascript
+    { scale }
+    // or
+    { left, top, bottom, right }
+    ```
+    </td>
+  <td> </td>
 </tr>
 <tr>
   <td> options </td>
