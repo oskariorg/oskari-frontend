@@ -113,6 +113,13 @@ Oskari.registerLocalization(
                         "label": "Visa ett datum i kartutskriften.",
                         "tooltip": "Du kan lägga till ett datum till utskriften.",
                         "checked": "kontrollerad"
+                    },
+                    {
+                        "id": "pageTimeSeriesTime",
+                        "label": "Visa tidpunkten av tidsserien.",
+                        "tooltip": "Visa tiden för dess tidsserie på utskriften.",
+                        "checked": "checked",
+                        "printLabel": "Tidpunkten av tidsserien"
                     }
                 ]
             },

@@ -113,6 +113,13 @@ Oskari.registerLocalization(
                         "label": "Include current date",
                         "tooltip": "You can add a date to the printout.",
                         "checked": "checked"
+                    },
+                    {
+                        "id": "pageTimeSeriesTime",
+                        "label": "Include time series timestamp",
+                        "tooltip": "You can add a time series timestamp to the printout.",
+                        "checked": "checked",
+                        "printLabel": "Time series time"
                     }
                 ]
             },
