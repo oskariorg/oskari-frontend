@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             /* CONTENT options from localisations files */
             me.contentOptions.forEach(function (dat) {
-                if (dat.id === 'pageTimeSeriesTime' && !areLayersWithTimeSeriesSelected) {
+                if (dat.id === 'pageTimeSeriesTime' && (typeof me.timeseriesPlugin === 'undefined' || !areLayersWithTimeSeriesSelected)) {
                     return;
                 }
                 var opt = me.template.option.clone();
