@@ -1,6 +1,6 @@
 const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
 
-export default class Tiles3DModelBuilder {
+export class Tiles3DModelBuilder {
     parseLayerData (layer, mapLayerJson, maplayerService) {
         if (!mapLayerJson.options) {
             return;

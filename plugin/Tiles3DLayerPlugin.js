@@ -1,4 +1,4 @@
-import Tiles3DModelBuilder from './Tiles3DModelBuilder';
+import { Tiles3DModelBuilder } from './Tiles3DModelBuilder';
 import { applyCustomMaterialSettings } from '../util/overrideCesiumMaterial'; // for side effects only
 
 /**
