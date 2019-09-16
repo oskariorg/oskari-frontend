@@ -299,13 +299,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             contentPanel.append(mapTitle);
 
-            me.areLayersWithTimeSeriesSelected =
+            const areLayersWithTimeSeriesSelected =
                 me.instance.sandbox.findAllSelectedMapLayers()
                     .filter(l => l.getAttributes().times).length > 0;
 
             /* CONTENT options from localisations files */
             me.contentOptions.forEach(function (dat) {
-                if (dat.id === 'pageTimeSeriesTime' && !me.areLayersWithTimeSeriesSelected) {
+                if (dat.id === 'pageTimeSeriesTime' && !areLayersWithTimeSeriesSelected) {
                     return;
                 }
                 var opt = me.template.option.clone();
@@ -779,7 +779,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 url = url + '&scaleText=' + selections.scaleText;
             }
 
-            if (me.areLayersWithTimeSeriesSelected) {
+            if (typeof me.timeseriesPlugin === 'undefined') {
+                me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
+            }
+
+            const areLayersWithTimeSeriesSelected =
+                me.instance.sandbox.findAllSelectedMapLayers()
+                    .filter(l => l.getAttributes().times).length > 0;
+
+            if (areLayersWithTimeSeriesSelected) {
                 url = url + '&time=' + me.timeseriesPlugin.getCurrentTime();
             }
 
