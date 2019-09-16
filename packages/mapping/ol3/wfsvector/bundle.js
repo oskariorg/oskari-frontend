@@ -23,7 +23,13 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                     "src" : "../../../../bundles/mapping/mapwfs2/service/WFSLayerService.js"
                 }, {
                     "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
+                }, {
+                    "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequest.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapwfs2/request/ActivateHighlightRequestHandler.js"
                 }, {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeaturesSelectedEvent.js"
@@ -34,15 +40,105 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                     "type" : "text/javascript",
                     "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureEvent.js"
                 }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureGeometriesEvent.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequest.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/mapping/mapwfs2/request/ShowOwnStyleRequestHandler.js"
+                }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/domain/WFSLayer.js"
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/domain/WfsLayerModelBuilder.js"
                 }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/framework/divmanazer/component/VisualizationForm.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/DotForm.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/LineForm.js"
+                }, {
+                    "type" : "text/javascript",
+                    "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
+                }, {
+                    "type": "text/css",
+                    "src": "../../../../bundles/mapping/mapwfs2/resources/scss/style.scss"
+                }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/plugin/WfsVectorLayerPlugin.ol.js"
-                }]
+                }
+            ],
+            "locales" : [{
+                "lang" : "en",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/en.js"
+            }, {
+                "lang" : "es",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/es.js"
+            }, {
+                "lang" : "et",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/et.js"
+            }, {
+                "lang" : "fi",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/fi.js"
+            }, {
+                "lang" : "fr",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/fr.js"
+            }, {
+                "lang" : "is",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/is.js"
+            }, {
+                "lang" : "it",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/it.js"
+            }, {
+                "lang" : "sv",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sv.js"
+            }, {
+                "lang" : "nb",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nb.js"
+            }, {
+                "lang" : "nl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nl.js"
+            }, {
+                "lang" : "nn",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/nn.js"
+            }, {
+                "lang" : "sl",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sl.js"
+            }, {
+                "lang" : "sk",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/sk.js"
+            }, {
+                "lang" : "de",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/de.js"
+            }, {
+                "lang" : "cs",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/cs.js"
+            }, {
+                "lang" : "ru",
+                "type" : "text/javascript",
+                "src" : "../../../../bundles/mapping/mapwfs2/resources/locale/ru.js"
+            }]
         },
         "bundle": {
             "manifest": {
