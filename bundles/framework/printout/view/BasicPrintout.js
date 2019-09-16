@@ -779,23 +779,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 url = url + '&scaleText=' + selections.scaleText;
             }
 
-            if (typeof me.timeseriesPlugin === 'undefined') {
-                me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
+            if (typeof me.timeseriesPlugin !== 'undefined') {
+                const areLayersWithTimeSeriesSelected =
+                    me.instance.sandbox.findAllSelectedMapLayers()
+                        .filter(l => l.getAttributes().times).length > 0;
+
+                if (areLayersWithTimeSeriesSelected) {
+                    url = url + '&time=' + me.timeseriesPlugin.getCurrentTime();
+                }
+                if (selections.pageTimeSeriesTime) {
+                    url = url + '&formattedTime=' + me.timeseriesPlugin.getCurrentTimeFormatted();
+                    url = url + '&timeseriesPrintLabel=' + me.contentOptionsMap.pageTimeSeriesTime.printLabel;
+                }
             }
-
-            const areLayersWithTimeSeriesSelected =
-                me.instance.sandbox.findAllSelectedMapLayers()
-                    .filter(l => l.getAttributes().times).length > 0;
-
-            if (areLayersWithTimeSeriesSelected) {
-                url = url + '&time=' + me.timeseriesPlugin.getCurrentTime();
-            }
-
-            if (selections.pageTimeSeriesTime) {
-                url = url + '&formattedTime=' + me.timeseriesPlugin.getCurrentTimeFormatted();
-                url = url + '&timeseriesPrintLabel=' + me.contentOptionsMap.pageTimeSeriesTime.printLabel;
-            }
-
             const hasCustomStyles = Object.keys(selections.customStyles).length > 0;
             // We need to use the POST method if there's GeoJSON or tile data.
             if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson || hasCustomStyles) {
