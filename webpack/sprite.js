@@ -313,6 +313,7 @@ if (!param) {
     failWarn('Version & appsetup directory must be given as param, eg. 1.48:applications/paikkatietoikkuna.fi');
 }
 
+// TODO: get version from package.json like build
 const [version, appsetupPath] = param.split(':');
 
 const targets = getDirectories(path.resolve(appsetupPath)).map((dirPath) => {
