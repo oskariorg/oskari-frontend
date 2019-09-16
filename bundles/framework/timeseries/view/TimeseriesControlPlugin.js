@@ -1,4 +1,4 @@
-import 'moment';
+import moment from 'moment';
 
 /**
  * @class Oskari.mapframework.bundle.timeseries.TimeseriesControlPlugin
@@ -91,6 +91,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'week', value: 'weeks' },
             { key: 'month', value: 'months' }
         ],
+        /**
+         * @method getCurrentTimeFormatted
+         * return current time in timeseries in same format as shown in timeseries control
+         */
+        getCurrentTimeFormatted () {
+            return this.loc('dateRender', { val: new Date(this._uiState.currentTime) });
+        },
+        /**
+         * @method getCurrentTime
+         * return current time in timeseries
+         */
+        getCurrentTime () {
+            return this._uiState.currentTime;
+        },
         /**
          * @method _filterSkipOptions Return animation skip options that are longer or as long than the shortest time interval in the series
          * @private

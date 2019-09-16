@@ -89,6 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         me.previewImgDiv = null;
 
         me.contentOptionDivs = {};
+        me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
     }, {
         __templates: {
             preview: '<div class="preview"><img /><span></span></div>',
@@ -298,8 +299,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             contentPanel.append(mapTitle);
 
+            const areLayersWithTimeSeriesSelected =
+                me.instance.sandbox.findAllSelectedMapLayers()
+                    .filter(l => l.getAttributes().times).length > 0;
+
             /* CONTENT options from localisations files */
             me.contentOptions.forEach(function (dat) {
+                if (dat.id === 'pageTimeSeriesTime' && (typeof me.timeseriesPlugin === 'undefined' || !areLayersWithTimeSeriesSelected)) {
+                    return;
+                }
                 var opt = me.template.option.clone();
                 opt.find('input').attr('id', dat.id).prop('checked', !!dat.checked);
                 opt.find('label').html(dat.label).attr({
@@ -631,7 +639,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
 
             for (var p in me.contentOptionsMap) {
-                if (me.contentOptionsMap.hasOwnProperty(p)) {
+                if (me.contentOptionsMap.hasOwnProperty(p) && me.contentOptionDivs[p]) {
                     selections[p] = me.contentOptionDivs[p].find('input').prop('checked');
                 }
             }
@@ -780,6 +788,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             if (selections.scaleText) {
                 url = url + '&scaleText=' + selections.scaleText;
+            }
+
+            if (typeof me.timeseriesPlugin !== 'undefined') {
+                const areLayersWithTimeSeriesSelected =
+                    me.instance.sandbox.findAllSelectedMapLayers()
+                        .filter(l => l.getAttributes().times).length > 0;
+
+                if (areLayersWithTimeSeriesSelected) {
+                    url = url + '&time=' + me.timeseriesPlugin.getCurrentTime();
+                }
+                if (selections.pageTimeSeriesTime) {
+                    url = url + '&formattedTime=' + me.timeseriesPlugin.getCurrentTimeFormatted();
+                    url = url + '&timeseriesPrintLabel=' + me.contentOptionsMap.pageTimeSeriesTime.printLabel;
+                }
             }
             const hasCustomStyles = Object.keys(selections.customStyles).length > 0;
             const hasTileData = Object.keys(me.instance.tileData).length > 0;

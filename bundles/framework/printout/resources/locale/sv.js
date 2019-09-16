@@ -98,21 +98,28 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Inkludera logotyp i utskriften.",
+                        "label": "Inkludera logotyp i utskriften",
                         "tooltip": "Du kan dölja logotyp vid behov.",
                         "checked": "kontrollerad"
                     },
                     {
                         "id": "pageScale",
-                        "label": "Lägg en skala till kartutskriften.",
+                        "label": "Lägg en skala till kartutskriften",
                         "tooltip": "Lägg till skala till kartan, om du vill.",
                         "checked": "kontrollerad"
                     },
                     {
                         "id": "pageDate",
-                        "label": "Visa ett datum i kartutskriften.",
+                        "label": "Visa ett datum i kartutskriften",
                         "tooltip": "Du kan lägga till ett datum till utskriften.",
                         "checked": "kontrollerad"
+                    },
+                    {
+                        "id": "pageTimeSeriesTime",
+                        "label": "Visa tidpunkten av tidsserien",
+                        "tooltip": "Visa tiden för dess tidsserie på utskriften.",
+                        "checked": "checked",
+                        "printLabel": "Tidpunkten av tidsserien"
                     }
                 ]
             },
