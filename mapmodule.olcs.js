@@ -1,7 +1,7 @@
 import { defaults as olInteractionDefaults } from 'ol/interaction';
-import olView from 'ol/View';
+import OLView from 'ol/View';
 import * as olProj from 'ol/proj';
-import olMap from 'ol/Map';
+import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
@@ -39,7 +39,7 @@ class MapModuleOlCesium extends MapModuleOl {
             rotate: false
         });
 
-        var map = new olMap({
+        var map = new OLMap({
             keyboardEventTarget: document,
             target: this.getMapElementId(),
             controls: controls,
@@ -50,7 +50,7 @@ class MapModuleOlCesium extends MapModuleOl {
         });
 
         var projection = olProj.get(me.getProjection());
-        map.setView(new olView({
+        map.setView(new OLView({
             projection: projection,
             // actual startup location is set with MapMoveRequest later on
             // still these need to be set to prevent errors
