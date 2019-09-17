@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterChangeMapLayerStyleEv
         this._mapLayer = mapLayer;
     }, {
         /** @static @property __name event name */
-        __name: "AfterChangeMapLayerStyleEvent",
+        __name: 'AfterChangeMapLayerStyleEvent',
         /**
          * @method getName
          * @return {String} event name

@@ -70,7 +70,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
          * handler.getCurrentState() if not given)
          */
         saveState: function (view, pState) {
-
             var state = pState;
             var me = this;
             if (!state) {
@@ -79,9 +78,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             var data = {
                 currentViewId: me.handler.getCurrentViewId(),
                 srs: me.getSrsFromState(state),
+                uuid: Oskari.app.getUuid(),
                 viewData: state
             };
-
 
             if (view) {
                 data.viewName = view.name;
@@ -89,16 +88,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
                 data.isDefault = view.isDefault ? view.isDefault : false;
             }
 
-            var builder = me._sandbox.getEventBuilder('StateSavedEvent');
+            var builder = Oskari.eventBuilder('StateSavedEvent');
             var event = builder(data.viewName, state);
 
-            //Create Cookie of map state save
+            // Create Cookie of map state save
             jQuery.cookie.json = true;
             var expiredays = 7;
-            jQuery.cookie("oskaristate", data, {
+            jQuery.cookie('oskaristate', data, {
                 expires: expiredays
             });
-            if(!view) {
+            if (!view) {
                 // cookie set, no need to call server
                 return;
             }
@@ -107,8 +106,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             data.viewData = JSON.stringify(data.viewData);
             // save to ajaxUrl
             jQuery.ajax({
-                //dataType : "json",
-                type: "POST",
+                type: 'POST',
                 url: this._ajaxUrl + 'action_route=AddView',
                 data: data,
                 success: function (newView) {
@@ -125,8 +123,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
                 }
             });
         },
-        getSrsFromState: function(state) {
-            if (Oskari.util.keyExists( state, 'mapfull.state.srs')) {
+        getSrsFromState: function (state) {
+            if (Oskari.util.keyExists(state, 'mapfull.state.srs')) {
                 return state.mapfull.state.srs;
             }
             return null;
@@ -135,28 +133,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
         serializeJSON: function (obj) {
             var me = this;
             var t = typeof obj;
-            if (t !== "object" || obj === null) {
+            if (t !== 'object' || obj === null) {
                 // simple data type
-                if (t === "string") {
+                if (t === 'string') {
                     obj = '"' + obj + '"';
                 }
                 return String(obj);
             } else {
                 // FIXME use ===
                 // array or object
-                var json = [],
-                    arr = (obj && obj.constructor == Array);
+                var json = [];
+                var arr = (obj && obj.constructor == Array);
 
                 jQuery.each(obj, function (k, v) {
                     t = typeof v;
-                    if (t === "string") {
+                    if (t === 'string') {
                         v = '"' + v + '"';
-                    } else if (t === "object" && v !== null) {
+                    } else if (t === 'object' && v !== null) {
                         v = me.serializeJSON(v);
                     }
-                    json.push((arr ? "" : '"' + k + '":') + String(v));
+                    json.push((arr ? '' : '"' + k + '":') + String(v));
                 });
-                return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+                return (arr ? '[' : '{') + String(json) + (arr ? ']' : '}');
             }
         },
         /**
@@ -172,7 +170,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.SaveViewPlug
             this._sandbox = sandbox;
             var me = this;
             jQuery(document).ready(function () {
-                jQuery(window).on('beforeunload', function(){
+                jQuery(window).on('beforeunload', function () {
                     me.saveState();
                 });
             });

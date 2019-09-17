@@ -20,7 +20,7 @@ Oskari.clazz.define('map.layer.activation.event',
         this._isActivated = isActivated === true;
     }, {
         /** @static @property __name event name */
-        __name: "map.layer.activation",
+        __name: 'map.layer.activation',
         /**
          * @method getName
          * @return {String} event name

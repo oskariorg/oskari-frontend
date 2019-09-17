@@ -16,7 +16,15 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Opening embedded map…",
-                "msg": "Updating embedded map…"
+                "msg": "Updating embedded map…",
+                "published": {
+                    "msg": "Opening embedded map for editing. Please wait a moment!",
+                    "error": {
+                        "title": "Error",
+                        "common": "Opening embedded map failed.",
+                        "login": "Please log in to edit embedded map."
+                    }
+                }
             }
         },
         "BasicView": {
@@ -55,6 +63,7 @@ Oskari.registerLocalization(
                 "label": "Tools",
                 "tooltip": "Select available map tools. Check a placement in the map preview.",
                 "ScaleBarPlugin": "Scale bar",
+                "TimeseriesControlPlugin": "Time series player",
                 "IndexMapPlugin": "Index map",
                 "PanButtons": "Pan tool",
                 "Portti2Zoombar": "Zoom bar",
@@ -218,8 +227,10 @@ Oskari.registerLocalization(
             "layerlist_title": "Publishable map layers open in map window:",
             "layerlist_empty": "No publishable map layers are open in the map window. Please check publishable map layers in the Selected Layers menu.",
             "layerlist_denied": "Unpublishable map layers open in map window:",
-            "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing. Please check publishable map layers in the Selected Layers menu.",
+            "denied_tooltip": "These map layers are not publishable in embedded maps. Data producers have not granted permissions for publishing or the current map projection is unsupported. Please check publishable map layers in the Selected Layers menu.",
             "myPlacesDisclaimer": "NOTE! If you are using this map layer in an embedded map, the map layer will be published.",
+            "noRights": "no permission",
+            "unsupportedProjection": "unsupported projection",
             "buttons": {
                 "continue": "Continue",
                 "continueAndAccept": "Accept and continue",

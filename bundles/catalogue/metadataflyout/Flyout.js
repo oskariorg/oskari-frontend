@@ -18,7 +18,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
      *
      */
     function (instance, locale) {
-
         /* @property instance bundle instance */
         this.instance = instance;
 
@@ -31,7 +30,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         this.pages = {};
 
         this.asyncTabs = {};
-
     }, {
 
         getName: function () {
@@ -44,8 +42,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
         },
 
         startPlugin: function () {
-            var me = this,
-                locale = me.locale;
         },
 
         stopPlugin: function () {
@@ -126,7 +122,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                     }
                 }
             }
-            me.instance.state = {current:allMetadata};
+            me.instance.state = {current: allMetadata};
         },
 
         /**
@@ -136,8 +132,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
          * @param {Object} data Json object containing the tabs (title, content?, callback for getting content...?)
          */
         addTabs: function (data) {
-
-            //add to bookkeeping
+            // add to bookkeeping
             var me = this;
             for (var key in data) {
                 if (data.hasOwnProperty(key)) {
@@ -145,14 +140,12 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Flyout',
                 }
             }
 
-            //in case flyout already rendered add tabs to each page
+            // in case flyout already rendered add tabs to each page
             for (var uuid in me.pages) {
                 if (me.pages.hasOwnProperty(uuid)) {
                     me.pages[uuid].page.addTabsAsync(data);
                 }
             }
-
-
         }
     }, {
         'protocol': ['Oskari.userinterface.Flyout']

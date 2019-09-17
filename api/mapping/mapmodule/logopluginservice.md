@@ -1,4 +1,4 @@
-# LogoPluginService
+# Logo Plugin Service
 
 ## Description
 This service can be used to extend the Logo-plugin. The same LogoPluginService instance is returned on repeated calls to Oskari.clazz.create (singleton pattern).

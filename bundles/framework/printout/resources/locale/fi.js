@@ -3,8 +3,8 @@ Oskari.registerLocalization(
     "lang": "fi",
     "key": "Printout",
     "value": {
-        "title": "Tulosta karttanäkymä",
-        "flyouttitle": "Tulosta karttanäkymä",
+        "title": "Tulostus",
+        "flyouttitle": "Tulostus",
         "desc": "",
         "btnTooltip": "Tulosta nykyinen karttanäkymä png-kuvaksi tai pdf-tiedostoon.",
         "BasicView": {
@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Klikkaa esikatselukuvaa avataksesi sen suuremmassa koossa uudessa ikkunassa.",
                 "pending": "Esikatselukuva päivitetään hetken kuluttua.",
                 "notes": {
-                    "extent": "Tarkista tulosteen kattavuusalue esikatselukuvasta.",
-                    "restriction": "Esikatselukuvassa näytetään ainoastaan taustakartta."
+                    "extent": "Tarkista tulosteen kattavuusalue esikatselukuvasta."
                 }
             },
             "buttons": {
@@ -125,6 +124,14 @@ Oskari.registerLocalization(
                 "nohelp": "Ohjetta ei löytynyt.",
                 "saveFailed": "Tulostus epäonnistui.",
                 "nameIllegalCharacters": "Kartan nimessä on kiellettyjä merkkejä. Sallittuja merkkejä ovat suomen kielen aakkoset (a-ö, A-Ö), numerot (0-9), välilyönti ja yhdysmerkki (-)."
+            },
+            "scale": {
+                "label": "Mittakaava",
+                "tooltip": "Määritä tulostuksessa käytettävä mittakaava",
+                "mapScale": "Käytä kartan mittakaavaa",
+                "definedScale": "Valitse mittakaava",
+                "unsupportedLayersMessage": "Seuraavat tasot eivät tulostu mittakaava valinnalla",
+                "unsupportedLayersTitle": "Tulosteessa ei näy kaikki tasot"
             }
         },
         "StartView": {

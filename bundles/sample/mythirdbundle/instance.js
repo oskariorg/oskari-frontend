@@ -2,25 +2,12 @@
  * @class Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance
  *
  * Add this to startupsequence to get this bundle started
- {
-            title : 'mythirdbundle',
-            fi : 'mythirdbundle',
-            sv : '?',
-            en : '?',
-            bundlename : 'mythirdbundle',
-            bundleinstancename : 'mythirdbundle',
-            metadata : {
-                "Import-Bundle" : {
-                    "mythirdbundle" : {
-                        bundlePath : '/<path to>/packages/sample/bundle/'
-                    }
-                },
-                "Require-Bundle-Instance" : []
-            },
-            instanceProps : {}
-        }
+    {
+        bundlename : 'mythirdbundle',
+        bundleinstancename : 'mythirdbundle'
+    }
  */
-Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance",
+Oskari.clazz.define('Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -28,7 +15,6 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
      */
 
     function () {
-
         this.sandbox = null;
         this.plugins = {};
         this._localization = null;
@@ -38,7 +24,6 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
          * Loader sets this
          */
         this.mediator = null;
-
     }, {
         /**
          * @static
@@ -136,7 +121,6 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
             return this.plugins;
         },
 
-
         /**
          * @method start
          * BundleInstance protocol method
@@ -159,12 +143,12 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
                     sandbox.registerForEventByName(me, p);
                 }
             }
-            //Let's extend UI with Flyout and Tile
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            // Let's extend UI with Flyout and Tile
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
 
             // TODO: stateful to myfourthbundle?
-            //sandbox.registerAsStateful(this.mediator.bundleId, this);
+            // sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             // draw ui
             me._createUI();
@@ -217,7 +201,7 @@ Oskari.clazz.define("Oskari.sample.bundle.mythirdbundle.FlyoutHelloWorldBundleIn
                 }
             }
             var request =
-                sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(me);
+                Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(me);
             sandbox.request(me, request);
             // unregister module from sandbox
             me.sandbox.unregister(me);

@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolContainerReq
         this._data = data || {}; // default to empty object
     }, {
         /** @static @property __name request name */
-        __name: "Toolbar.ToolContainerRequest",
+        __name: 'Toolbar.ToolContainerRequest',
         /**
          * @method getName
          * @return {String} request name

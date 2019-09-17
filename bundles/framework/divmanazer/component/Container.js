@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
      * @static
      */
     function () {
-        
         this._clazz = 'Oskari.userinterface.component.Container';
         this._components = [];
     }, {
@@ -19,8 +18,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {HTMLElement} component
          */
         addComponent: function (component) {
-            
-            if(!this._element) {
+            if (!this._element) {
                 Oskari.getSandbox().printWarn(
                     this.getClazz() + '.addComponent: container not initialized'
                 );
@@ -61,7 +59,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {HTMLElement} component
          */
         removeComponent: function (component) {
-            
             if (component === null || component === undefined) {
                 throw new TypeError(
                     this.getClazz() + '.removeComponent: ' +
@@ -86,7 +83,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {Array} components
          */
         getComponents: function () {
-            
             return this._components.slice(0);
         },
 
@@ -97,7 +93,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @return {Object}                   Values object
          */
         getValues: function (values, eventElement) {
-            
             var i,
                 me = this,
                 component,
@@ -146,7 +141,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Container',
          * @param {HTMLElement} component
          */
         _getComponentIndex: function (component) {
-            
             var i,
                 c,
                 ret = -1;

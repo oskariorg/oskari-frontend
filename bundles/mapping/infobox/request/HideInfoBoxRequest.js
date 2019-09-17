@@ -19,7 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.HideInfoBoxReque
         this._id = id;
     }, {
         /** @static @property __name request name */
-        __name: "InfoBox.HideInfoBoxRequest",
+        __name: 'InfoBox.HideInfoBoxRequest',
         /**
          * @method getName
          * @return {String} request name

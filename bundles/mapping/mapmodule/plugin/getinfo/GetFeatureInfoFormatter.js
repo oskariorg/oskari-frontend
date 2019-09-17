@@ -396,7 +396,6 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 type: type,
                 isMyPlace: isMyPlace
             };
-
         });
 
         return result;

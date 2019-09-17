@@ -6,6 +6,7 @@
  * See Oskari.mapframework.bundle.rpc.RemoteProcedureCall for bundle definition.
  *
  */
+/* eslint-disable no-throw-literal */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.rpc.RemoteProcedureCallInstance',
     function () {
@@ -27,18 +28,17 @@ Oskari.clazz.define(
         getSandbox: function () {
             return this.sandbox;
         },
-        isClientSupported : function(clientVer) {
-            if(!clientVer) {
+        isClientSupported: function (clientVer) {
+            if (!clientVer) {
                 return false;
             }
-            return clientVer.indexOf("2.0.") === 0;
+            return clientVer.indexOf('2.0.') === 0;
         },
         /**
          * @public @method start
          * BundleInstance protocol method
          */
         start: function () {
-            
             var me = this,
                 channel,
                 conf = this.conf || {},
@@ -113,7 +113,7 @@ Oskari.clazz.define(
                             message: 'Invalid origin: ' + trans.origin
                         };
                     }
-                    var builder = me.sandbox.getRequestBuilder(params[0]);
+                    var builder = Oskari.requestBuilder(params[0]);
                     if (!me._allowedRequests[params[0]] || !builder) {
                         throw {
                             error: 'request_not_available',
@@ -133,87 +133,86 @@ Oskari.clazz.define(
          * @param  {Object} conf bundle configuration
          */
         init: function () {
-          var me = this;
-          // sanitize conf to prevent unnecessary errors
-          var conf = this.conf || {};
-          var allowedEvents = conf.allowedEvents;
-          var allowedFunctions = conf.allowedfunctions;
-          var allowedRequests = conf.allowedRequests;
+            var me = this;
+            // sanitize conf to prevent unnecessary errors
+            var conf = this.conf || {};
+            var allowedEvents = conf.allowedEvents;
+            var allowedFunctions = conf.allowedfunctions;
+            var allowedRequests = conf.allowedRequests;
 
-          if (allowedEvents === null || allowedEvents === undefined) {
-              allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
-              'RouteResultEvent','FeedbackResultEvent','SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', "FeatureEvent", 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-              'RPCUIEvent', 'map.rotated'];
-          }
+            if (allowedEvents === null || allowedEvents === undefined) {
+                allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
+                    'RouteResultEvent', 'FeedbackResultEvent', 'SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
+                    'RPCUIEvent', 'map.rotated'];
+            }
 
-          if (allowedFunctions === null || allowedFunctions === undefined) {
-              allowedFunctions = [];
-              // allow all available functions by default
-              var funcs = this._availableFunctions;
+            if (allowedFunctions === null || allowedFunctions === undefined) {
+                allowedFunctions = [];
+                // allow all available functions by default
+                var funcs = this._availableFunctions;
 
-              // Special handling for getScreenshot() since it's not always present
-              var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-              if(typeof mapModule.getScreenshot === 'function') {
-                  // this is only available in Openlayers3 implementation of mapmodule
-                  funcs['getScreenshot'] = function(transaction) {
-                    mapModule.getScreenshot(function(image){
-                      transaction.complete(image);
-                    });
+                // Special handling for getScreenshot() since it's not always present
+                var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
+                if (typeof mapModule.getScreenshot === 'function') {
+                    // this is only available in Openlayers3 implementation of mapmodule
+                    funcs['getScreenshot'] = function (transaction) {
+                        mapModule.getScreenshot(function (image) {
+                            transaction.complete(image);
+                        });
+                    };
                 }
-              }
 
-              for(var name in funcs) {
-                  if(funcs.hasOwnProperty(name)) {
-                      allowedFunctions.push(name);
-                  }
-              }
-          }
-          if (allowedRequests === null || allowedRequests === undefined) {
-              allowedRequests = ['InfoBox.ShowInfoBoxRequest',
-                  'InfoBox.HideInfoBoxRequest',
-                  'MapModulePlugin.AddMarkerRequest',
-                  'MapModulePlugin.AddFeaturesToMapRequest',
-                  'MapModulePlugin.RemoveFeaturesFromMapRequest',
-                  'MapModulePlugin.GetFeatureInfoRequest',
-                  'MapModulePlugin.MapLayerVisibilityRequest',
-                  'MapModulePlugin.RemoveMarkersRequest',
-                  'MapModulePlugin.MarkerVisibilityRequest',
-                  'MapMoveRequest',
-                  'ShowProgressSpinnerRequest',
-                  'GetRouteRequest',
-                  'GetFeedbackServiceRequest',
-                  'GetFeedbackServiceDefinitionRequest',
-                  'GetFeedbackRequest',
-                  'PostFeedbackRequest',
-                  'SearchRequest',
-                  'ChangeMapLayerOpacityRequest',
-                  'MyLocationPlugin.GetUserLocationRequest',
-                  'DrawTools.StartDrawingRequest',
-                  'DrawTools.StopDrawingRequest',
-                  'MapModulePlugin.ZoomToFeaturesRequest',
-                  'MapModulePlugin.MapLayerUpdateRequest',
-                  'rotate.map'];
-          }
-          me._allowedFunctions = this.__arrayToObject(allowedFunctions);
-          // try to get event/request builder for each of these to see that they really are supported!!
-          me.__setupAvailableEvents(allowedEvents);
-          me.__setupAvailableRequests(allowedRequests);
+                for (var name in funcs) {
+                    if (funcs.hasOwnProperty(name)) {
+                        allowedFunctions.push(name);
+                    }
+                }
+            }
+            if (allowedRequests === null || allowedRequests === undefined) {
+                allowedRequests = ['InfoBox.ShowInfoBoxRequest',
+                    'InfoBox.HideInfoBoxRequest',
+                    'MapModulePlugin.AddMarkerRequest',
+                    'VectorLayerRequest',
+                    'MapModulePlugin.AddFeaturesToMapRequest',
+                    'MapModulePlugin.RemoveFeaturesFromMapRequest',
+                    'MapModulePlugin.GetFeatureInfoRequest',
+                    'MapModulePlugin.MapLayerVisibilityRequest',
+                    'MapModulePlugin.RemoveMarkersRequest',
+                    'MapModulePlugin.MarkerVisibilityRequest',
+                    'MapMoveRequest',
+                    'ShowProgressSpinnerRequest',
+                    'GetRouteRequest',
+                    'GetFeedbackServiceRequest',
+                    'GetFeedbackServiceDefinitionRequest',
+                    'GetFeedbackRequest',
+                    'PostFeedbackRequest',
+                    'SearchRequest',
+                    'ChangeMapLayerOpacityRequest',
+                    'MyLocationPlugin.GetUserLocationRequest',
+                    'DrawTools.StartDrawingRequest',
+                    'DrawTools.StopDrawingRequest',
+                    'MapModulePlugin.ZoomToFeaturesRequest',
+                    'MapModulePlugin.MapLayerUpdateRequest',
+                    'rotate.map'];
+            }
+            me._allowedFunctions = this.__arrayToObject(allowedFunctions);
+            // try to get event/request builder for each of these to see that they really are supported!!
+            me.__setupAvailableEvents(allowedEvents);
+            me.__setupAvailableRequests(allowedRequests);
         },
-        __setupAvailableEvents : function(allowedEvents) {
+        __setupAvailableEvents: function (allowedEvents) {
             var available = [];
-            var sb = this.getSandbox();
-            for(var i=0; i < allowedEvents.length; ++i) {
-                if(typeof sb.getEventBuilder(allowedEvents[i]) === 'function') {
+            for (var i = 0; i < allowedEvents.length; ++i) {
+                if (typeof Oskari.eventBuilder(allowedEvents[i]) === 'function') {
                     available.push(allowedEvents[i]);
                 }
             }
             this._allowedEvents = this.__arrayToObject(available);
         },
-        __setupAvailableRequests : function(allowedRequests) {
+        __setupAvailableRequests: function (allowedRequests) {
             var available = [];
-            var sb = this.getSandbox();
-            for(var i=0; i < allowedRequests.length; ++i) {
-                if(typeof sb.getRequestBuilder(allowedRequests[i]) === 'function') {
+            for (var i = 0; i < allowedRequests.length; ++i) {
+                if (typeof Oskari.requestBuilder(allowedRequests[i]) === 'function') {
                     available.push(allowedRequests[i]);
                 }
             }
@@ -225,38 +224,38 @@ Oskari.clazz.define(
          * @param  {String[]} list will be used as keys in the result object. Values are boolean 'true' for each
          * @return {Object}   object with list items as keys and bln true as values
          */
-        __arrayToObject: function(list) {
+        __arrayToObject: function (list) {
             var result = {};
-            for(var i=0; i < list.length; ++i) {
+            for (var i = 0; i < list.length; ++i) {
                 result[list[i]] = true;
             }
             return result;
         },
-        _availableFunctions : {
+        _availableFunctions: {
             // format "supportedXYZ" to an object for easier checking for specific name
-            getSupportedEvents : function() {
+            getSupportedEvents: function () {
                 return this._allowedEvents;
             },
-            getSupportedFunctions : function() {
+            getSupportedFunctions: function () {
                 return this._allowedFunctions;
             },
-            getSupportedRequests : function() {
+            getSupportedRequests: function () {
                 return this._allowedRequests;
             },
-            getInfo : function(transaction, clientVersion) {
+            getInfo: function (transaction, clientVersion) {
                 var sbMap = this.sandbox.getMap();
                 return {
-                    version : Oskari.VERSION,
-                    clientSupported : this.isClientSupported(clientVersion),
-                    srs  : sbMap.getSrsName()
+                    version: Oskari.VERSION,
+                    clientSupported: this.isClientSupported(clientVersion),
+                    srs: sbMap.getSrsName()
                 };
             },
-            getAllLayers : function() {
+            getAllLayers: function () {
                 var me = this;
                 var mapLayerService = me.sandbox.getService('Oskari.mapframework.service.MapLayerService');
                 var layers = mapLayerService.getAllLayers();
-                mapModule = me.sandbox.findRegisteredModuleInstance("MainMapModule");
-                mapResolutions = mapModule.getResolutionArray();
+                var mapModule = me.sandbox.findRegisteredModuleInstance('MainMapModule');
+                var mapResolutions = mapModule.getResolutionArray();
                 return layers.map(function (layer) {
                     if (layer.getMaxScale() && layer.getMinScale()) {
                         var layerResolutions = mapModule.calculateLayerResolutions(layer.getMaxScale(), layer.getMinScale());
@@ -266,7 +265,7 @@ Oskari.clazz.define(
                             id: layer.getId(),
                             opacity: layer.getOpacity(),
                             visible: layer.isVisible(),
-                            name : layer.getName(),
+                            name: layer.getName(),
                             minZoom: minZoomLevel,
                             maxZoom: maxZoomLevel
                         };
@@ -275,12 +274,12 @@ Oskari.clazz.define(
                             id: layer.getId(),
                             opacity: layer.getOpacity(),
                             visible: layer.isVisible(),
-                            name : layer.getName()
+                            name: layer.getName()
                         };
                     }
                 });
             },
-            getMapBbox : function() {
+            getMapBbox: function () {
                 var bbox = this.sandbox.getMap().getBbox();
                 return {
                     bottom: bbox.bottom,
@@ -289,7 +288,7 @@ Oskari.clazz.define(
                     top: bbox.top
                 };
             },
-            getMapPosition : function() {
+            getMapPosition: function () {
                 var sbMap = this.sandbox.getMap();
                 return {
                     centerX: sbMap.getX(),
@@ -299,7 +298,7 @@ Oskari.clazz.define(
                     srsName: sbMap.getSrsName()
                 };
             },
-            getZoomRange : function() {
+            getZoomRange: function () {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return {
                     min: 0,
@@ -307,39 +306,39 @@ Oskari.clazz.define(
                     current: mapModule.getMapZoom()
                 };
             },
-            zoomIn : function() {
+            zoomIn: function () {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 var newZoom = mapModule.getNewZoomLevel(1);
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             },
-            zoomOut : function() {
+            zoomOut: function () {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 var newZoom = mapModule.getNewZoomLevel(-1);
                 mapModule.setZoomLevel(newZoom);
                 return newZoom;
             },
-            zoomTo : function(transaction, newZoom) {
+            zoomTo: function (transaction, newZoom) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 mapModule.setZoomLevel(newZoom);
                 return mapModule.getMapZoom();
             },
-            getPixelMeasuresInScale : function(transaction, mmMeasures, scale) {
+            getPixelMeasuresInScale: function (transaction, mmMeasures, scale) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     scalein = scale,
                     pixelMeasures = [],
                     zoomLevel = 0,
                     nextScale;
 
-                if(mmMeasures && mmMeasures.constructor === Array){
-                    if(!scalein){
+                if (mmMeasures && mmMeasures.constructor === Array) {
+                    if (!scalein) {
                         scalein = mapModule.calculateFitScale4Measures(mmMeasures);
                     }
                     pixelMeasures = mapModule.calculatePixelsInScale(mmMeasures, scalein);
                 }
 
                 var scales = mapModule.getScaleArray();
-                scales.forEach(function(sc, index) {
+                scales.forEach(function (sc, index) {
                     if ((!nextScale || nextScale > sc) && sc > scalein) {
                         nextScale = sc;
                         zoomLevel = index;
@@ -352,42 +351,41 @@ Oskari.clazz.define(
                     zoomLevel: zoomLevel
                 };
             },
-            resetState : function() {
+            resetState: function () {
                 this.sandbox.resetState();
                 return true;
             },
-            getCurrentState : function() {
+            getCurrentState: function () {
                 return this.sandbox.getCurrentState();
             },
-            useState : function(transaction,state) {
+            useState: function (transaction, state) {
                 this.sandbox.useState(state);
                 return true;
             },
-            getFeatures: function(transaction,includeFeatures) {
+            getFeatures: function (transaction, includeFeatures) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule'),
                     plugin = mapModule.getLayerPlugins(['vectorlayer']),
                     features = {};
-                if(!plugin) {
+                if (!plugin) {
                     return features;
                 }
                 var layers = plugin.getLayerIds();
-                layers.forEach(function(id) {
-                    if(includeFeatures === true) {
+                layers.forEach(function (id) {
+                    if (includeFeatures === true) {
                         features[id] = plugin.getLayerFeatures(id);
-                    }
-                    else {
+                    } else {
                         features[id] = [];
                     }
                 });
                 return features;
             },
-            setCursorStyle: function(transaction, cursorStyle) {
+            setCursorStyle: function (transaction, cursorStyle) {
                 var mapModule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
                 return mapModule.setCursorStyle(cursorStyle);
             },
-            sendUIEvent: function(transaction, bundleId, payload) {
+            sendUIEvent: function (transaction, bundleId, payload) {
                 var me = this,
-                    event = me.sandbox.getEventBuilder('RPCUIEvent')(bundleId, payload);
+                    event = Oskari.eventBuilder('RPCUIEvent')(bundleId, payload);
                 me.sandbox.notifyAll(event);
                 return true;
             }
@@ -402,10 +400,9 @@ Oskari.clazz.define(
          *
          */
         _bindFunctions: function (channel) {
-            
             var me = this,
                 funcs = this._allowedFunctions;
-            var bindFunction = function(name) {
+            var bindFunction = function (name) {
                 channel.bind(name, function (trans, params) {
                     if (!me._domainMatch(trans.origin)) {
                         throw {
@@ -416,17 +413,17 @@ Oskari.clazz.define(
                     params = params || [];
                     params.unshift(trans);
 
-                    var value =  me._availableFunctions[name].apply(me, params);
-                    if(typeof value === 'undefined') {
-                      trans.delayReturn(true);
-                      return;
+                    var value = me._availableFunctions[name].apply(me, params);
+                    if (typeof value === 'undefined') {
+                        trans.delayReturn(true);
+                        return;
                     }
                     return value;
                 });
-            }
+            };
 
-            for(var name in funcs) {
-                if(!funcs.hasOwnProperty(name) || !this._availableFunctions[name]) {
+            for (var name in funcs) {
+                if (!funcs.hasOwnProperty(name) || !this._availableFunctions[name]) {
                     continue;
                 }
                 bindFunction(name);
@@ -443,24 +440,22 @@ Oskari.clazz.define(
          * @return {Boolean} Does origin match config domain
          */
         _domainMatch: function (origin) {
-            
-            var sb = this.sandbox;
-            if(!origin) {
+            if (!origin) {
                 this.log.warn('No origin in RPC message');
                 // no origin, always deny
                 return false;
             }
             // Allow subdomains and different ports
-            var domain = this.conf.domain
+            var domain = this.conf.domain;
 
             var url = document.createElement('a');
             url.href = origin;
             var originDomain = url.hostname;
 
             var allowed = originDomain.endsWith(domain);
-            if(!allowed) {
+            if (!allowed) {
                 // always allow from localhost
-                if(originDomain === 'localhost') {
+                if (originDomain === 'localhost') {
                     this.log.warn('Origin mismatch, but allowing localhost. Published to: ' + domain);
                     return true;
                 }
@@ -476,7 +471,6 @@ Oskari.clazz.define(
          *
          */
         _registerEventHandler: function (eventName) {
-            
             var me = this;
             if (me.eventHandlers[eventName]) {
                 // Event handler already in place
@@ -500,7 +494,6 @@ Oskari.clazz.define(
          *
          */
         stop: function () {
-            
             var me = this,
                 sandbox = this.sandbox,
                 p;
@@ -528,7 +521,6 @@ Oskari.clazz.define(
          *
          */
         onEvent: function (event) {
-            
             var me = this,
                 handler = me.eventHandlers[event.getName()];
             if (!handler) {
@@ -548,7 +540,6 @@ Oskari.clazz.define(
          * @return {Object}       Event params
          */
         _getParams: function (event) {
-            
             var ret = {},
                 key,
                 allowedTypes = ['string', 'number', 'boolean'];
@@ -562,7 +553,7 @@ Oskari.clazz.define(
                         continue;
                     }
                     // check that value is one of allowed types
-                    if(this.__isInList(typeof event[key], allowedTypes)) {
+                    if (this.__isInList(typeof event[key], allowedTypes)) {
                         ret[key] = event[key];
                     }
                 }
@@ -579,11 +570,11 @@ Oskari.clazz.define(
          *
          * @return {Boolean}  true if value is part of the list
          */
-        __isInList : function(value, list) {
+        __isInList: function (value, list) {
             var i = 0,
                 len = list.length;
-            for(;i < len; ++i) {
-                if(value === list[i]) {
+            for (;i < len; ++i) {
+                if (value === list[i]) {
                     return true;
                 }
             }
@@ -597,7 +588,6 @@ Oskari.clazz.define(
          *
          */
         update: function () {
-            
             return undefined;
         },
 
@@ -608,7 +598,6 @@ Oskari.clazz.define(
          *
          */
         _unregisterEventHandler: function (eventName) {
-            
             delete this.eventHandlers[eventName];
             this.sandbox.unregisterFromEventByName(this, eventName);
         }

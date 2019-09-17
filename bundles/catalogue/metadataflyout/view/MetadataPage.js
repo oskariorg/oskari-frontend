@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
      *
      */
     function (instance, locale) {
-
         /* @property instance bundle instance */
         this.instance = instance;
 
@@ -27,7 +26,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
             Oskari.getLocalization('DivManazer').LanguageSelect.languages;
 
         this.asyncTabs = {};
-
     }, {
         init: function () {},
 
@@ -40,9 +38,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          */
         _createContent: function (data) {
             var me = this,
-                browseGraphics,
                 i,
-                me = this,
                 model,
                 panel,
                 template;
@@ -53,31 +49,37 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             template = _.extend({}, data);
             delete template.identifications;
-            // Create a panel for each identification
-            for (i = 0; i < data.identifications.length; i += 1) {
-                model = _.extend({}, template);
-                model.identification = data.identifications[i];
-                panel = Oskari.clazz.create(
-                    'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
-                    me.instance,
-                    me.locale,
-                    model
-                );
-                if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
-                    panel.addTabs(me.asyncTabs);
-                }
 
-                me.addPanel(panel);
-                panel.init(i === 0);
+            if (data.identifications.length === 0) {
+                //  No identifications, show metadata not found message
+                me._showMetadataNotFoundMessage();
+            } else {
+                // Create a panel for each identification
+                for (i = 0; i < data.identifications.length; i += 1) {
+                    model = _.extend({}, template);
+                    model.identification = data.identifications[i];
+                    panel = Oskari.clazz.create(
+                        'Oskari.catalogue.bundle.metadataflyout.view.MetadataPanel',
+                        me.instance,
+                        me.locale,
+                        model
+                    );
+                    if (me.asyncTabs && !jQuery.isEmptyObject(me.asyncTabs)) {
+                        panel.addTabs(me.asyncTabs);
+                    }
+
+                    me.addPanel(panel);
+                    panel.init(i === 0);
+                }
             }
         },
 
-        addTabsAsync: function(data) {
+        addTabsAsync: function (data) {
             var me = this;
 
             if (me.panels && me.panels.length) {
-                _.each(me.panels, function(panel) {
-                      panel.addTabsAsync(data);
+                _.each(me.panels, function (panel) {
+                    panel.addTabsAsync(data);
                 });
             } else {
                 for (var key in data) {
@@ -96,15 +98,11 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
          *
          */
         _processJSON: function (uuid, metadataJson) {
-            var abstractText,
-                me = this,
+            var me = this,
                 data,
                 dataTemplate,
                 i,
-                identification,
-                imgObj,
-                identificationTemplate,
-                url;
+                identificationTemplate;
             // underscore templates don't like missing values, so let's extend empty strings and arrays...
             dataTemplate = {
                 lineageStatements: [],
@@ -154,7 +152,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 data.lineageStatements[index] = me._prettify(lineage);
             });
 
-            data.dataQualities.forEach(function(dataQuality) {
+            data.dataQualities.forEach(function (dataQuality) {
                 dataQuality.UIlabel = me.locale.heading[dataQuality.nodeName];
             });
 
@@ -197,7 +195,6 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                     identification.useLimitations[i] =
                         me._prettify(identification.useLimitations[i]);
                 }
-
             });
 
             data.uuid = uuid;
@@ -249,7 +246,10 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
                 function (data) {
                     me._processJSON(uuid, data);
                 },
-                function (jqXHR, exception) {}
+                function (jqXHR, exception) {
+                    // Request failed, show generic message to user
+                    me._showMetadataNotFoundMessage();
+                }
             );
             return true;
         },
@@ -313,7 +313,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             // URLs starting with http://, https://, or ftp://
             replacePattern =
-                /(\b(https?|ftp):\/\/[-A-Z0-9+&@#\/%?=~_|!:,.;]*[-A-Z0-9+&@#\/%=~_|])/gim;
+                /(\b(https?|ftp):\/\/[-A-Z0-9+&@#/%?=~_|!:,.;]*[-A-Z0-9+&@#/%=~_|])/gim;
             replacedText = inputText.replace(
                 replacePattern,
                 '<a href="$1" target="_blank">$1</a>'
@@ -321,21 +321,30 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.view.MetadataPage',
 
             // URLs starting with www.
             // (without // before it, or it'd re-link the ones done above)
-            replacePattern = /(^|[^\/])(www\.[\S]+(\b|$))/gim;
+            replacePattern = /(^|[^/])(www\.[\S]+(\b|$))/gim;
             replacedText = replacedText.replace(
                 replacePattern,
                 '$1<a href="http://$2" target="_blank">$2</a>'
             );
 
-            //Change email addresses to mailto:: links
-            //replacePattern = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
-            //replacedText = replacedText.replace(
+            // Change email addresses to mailto:: links
+            // replacePattern = /(\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,6})/gim;
+            // replacedText = replacedText.replace(
             //    replacePattern,
             //    '<a href="mailto:$1">$1</a>'
-            //);
+            // );
 
             return replacedText;
+        },
+
+        /**
+         * @method showErrorMessage
+         * Render 'metadata not found' message to ui
+         */
+        _showMetadataNotFoundMessage: function () {
+            this.ui.text(this.locale.notFound);
         }
+
     }, {
         extend: ['Oskari.userinterface.component.Accordion']
     });

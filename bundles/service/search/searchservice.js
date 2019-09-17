@@ -15,39 +15,39 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
      * @param {String}
      *            searchUrl ajax URL to actual search implementation (optional)
      */
-    function(sandbox, searchUrl) {
+    function (sandbox, searchUrl) {
         this._searchUrl = searchUrl;
         this.sandbox = sandbox;
-        if(sandbox && typeof sandbox.getService == 'function') {
+        if (sandbox && typeof sandbox.getService === 'function') {
             var service = sandbox.getService(this.getQName());
-            if(service) {
+            if (service) {
                 // already registered
                 return service;
             }
             // else setup this instance
-            if(!searchUrl) {
-                this._searchUrl = sandbox.getAjaxUrl('GetSearchResult');
+            if (!searchUrl) {
+                this._searchUrl = Oskari.urls.getRoute('GetSearchResult');
             }
             sandbox.requestHandler('SearchRequest', this);
             sandbox.registerService(this);
         }
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.service.SearchService",
+        __qname: 'Oskari.service.SearchService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
          */
-        getQName: function() {
+        getQName: function () {
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "SearchService",
+        __name: 'SearchService',
         /**
          * @method getName
          * @return {String} service name
          */
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -58,10 +58,10 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Oskari.mapframework.bundle.search.request.SearchRequest} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest: function (core, request) {
             var params = request.getSearchParams();
             // backward compatibility code, can be removed in Oskari 1.36
-            if(typeof params === 'object') {
+            if (typeof params === 'object') {
                 params = params.searchKey;
             }
             this.doSearch(params);
@@ -77,51 +77,51 @@ Oskari.clazz.define('Oskari.service.search.SearchService',
          * @param {Function}
          *            onComplete callback method for search completion
          */
-        doSearch: function(searchString, onSuccess, onError) {
+        doSearch: function (searchString, onSuccess, onError) {
             var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
-            var evtBuilder = sb.getEventBuilder('SearchResultEvent');
+            var evtBuilder = Oskari.eventBuilder('SearchResultEvent');
             jQuery.ajax({
-                dataType: "json",
-                type: "POST",
+                dataType: 'json',
+                type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    "searchKey": searchString,
-                    "Language": lang,
-                    "epsg": sb.getMap().getSrsName(),
-                    "autocomplete": false
+                    'searchKey': searchString,
+                    'Language': lang,
+                    'epsg': sb.getMap().getSrsName(),
+                    'autocomplete': false
                 },
-                success: function(response) {
+                success: function (response) {
                     sb.notifyAll(evtBuilder(true, searchString, response));
-                    if(typeof onSuccess === 'function') {
+                    if (typeof onSuccess === 'function') {
                         onSuccess(response);
                     }
                 },
-                error: function(response) {
+                error: function (response) {
                     sb.notifyAll(evtBuilder(false, searchString, response));
-                    if(typeof onError === 'function') {
+                    if (typeof onError === 'function') {
                         onError(response);
                     }
                 }
             });
         },
-        doAutocompleteSearch: function(searchKey, onSuccess) {
-            if(typeof onSuccess !== 'function') {
+        doAutocompleteSearch: function (searchKey, onSuccess) {
+            if (typeof onSuccess !== 'function') {
                 return;
             }
             var lang = Oskari.getLang();
             var sb = this.sandbox || Oskari.getSandbox();
             jQuery.ajax({
-                dataType: "json",
-                type: "POST",
+                dataType: 'json',
+                type: 'POST',
                 url: this._searchUrl,
                 data: {
-                    "searchKey": searchKey,
-                    "Language": lang,
-                    "epsg": sb.getMap().getSrsName(),
-                    "autocomplete": true
+                    'searchKey': searchKey,
+                    'Language': lang,
+                    'epsg': sb.getMap().getSrsName(),
+                    'autocomplete': true
                 },
-                success: function(response) {
+                success: function (response) {
                     onSuccess(response);
                 }
             });

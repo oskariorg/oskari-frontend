@@ -14,7 +14,7 @@ Oskari.clazz.define(
      * @param {Oskari.mapframework.ui.module.common.MapModule}
      *            mapModule reference to mapmodule
      */
-    function(sandbox, mapModule) {
+    function (sandbox, mapModule) {
         this.sandbox = sandbox;
         this.mapModule = mapModule;
     }, {
@@ -28,12 +28,12 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.request.common.MapMoveRequest} request
          *      request to handle
          */
-        handleRequest: function(core, request) {
+        handleRequest: function (core, request) {
             var zoom = request.getZoom(),
                 srsName = request.getSrsName(),
                 lonlat = {
-                    lon : request.getCenterX(),
-                    lat : request.getCenterY()
+                    lon: request.getCenterX(),
+                    lat: request.getCenterY()
                 };
 
             // transform coordinates to given projection
@@ -41,7 +41,7 @@ Oskari.clazz.define(
 
             var zoomChange = (zoom || zoom === 0);
 
-            //if zoom is about to change -> Suppress the event
+            // if zoom is about to change -> Suppress the event
             this.mapModule.centerMap(lonlat, null, !!zoomChange);
             if (zoomChange) {
                 if (zoom.left && zoom.top && zoom.bottom && zoom.right) {

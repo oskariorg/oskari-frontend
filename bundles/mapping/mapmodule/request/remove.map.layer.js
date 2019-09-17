@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.RemoveMapLayerRequest',
         this._mapLayerId = mapLayerId;
     }, {
         /** @static @property __name request name */
-        __name: "RemoveMapLayerRequest",
+        __name: 'RemoveMapLayerRequest',
         /**
          * @method getName
          * @return {String} request name

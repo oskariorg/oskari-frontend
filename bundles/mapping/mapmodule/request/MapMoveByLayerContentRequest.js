@@ -15,40 +15,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
  * @param {boolean} zoomToExtent (optional) if true zooms map to layer extent, default false
  * Oskari.mapframework.service.MapLayerService
  */
-function(mapLayerId, zoomToExtent) {
-    this._creator = null;
-    this._mapLayerId = mapLayerId;
-    this._zoomToExtent = (zoomToExtent === true);
-}, {
+    function (mapLayerId, zoomToExtent) {
+        this._creator = null;
+        this._mapLayerId = mapLayerId;
+        this._zoomToExtent = (zoomToExtent === true);
+    }, {
     /** @static @property __name request name */
-    __name : "MapModulePlugin.MapMoveByLayerContentRequest",
-    /**
+        __name: 'MapModulePlugin.MapMoveByLayerContentRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getMapLayerId
      * @return {String} id for map layer used in
      * Oskari.mapframework.service.MapLayerService
      */
-    getMapLayerId : function() {
-        return this._mapLayerId;
-    },
-    /**
+        getMapLayerId: function () {
+            return this._mapLayerId;
+        },
+        /**
      * @method getZoomToExtent
      * @return {Boolean} zoomToExtent
      * Oskari.mapframework.service.MapLayerService
      */
-    getZoomToExtent : function() {
-        return this._zoomToExtent;
-    }
-}, {
+        getZoomToExtent: function () {
+            return this._zoomToExtent;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.event.WFSSetFilter'
         this._filters = filters;
     }, {
         /** @static @property __name event name */
-        __name: "WFSSetFilter",
+        __name: 'WFSSetFilter',
         /**
          * @method getName
          * @return {String} event name

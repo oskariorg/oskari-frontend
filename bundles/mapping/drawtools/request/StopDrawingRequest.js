@@ -20,39 +20,39 @@ Oskari.clazz
          *        true to not send event
          */
 
-        function(id, clearCurrent, supressEvent) {
+        function (id, clearCurrent, supressEvent) {
             this._id = id;
             this._clearCurrent = !!clearCurrent;
             this._supressEvent = supressEvent;
         }, {
             /** @static @property __name request name */
-            __name: "DrawTools.StopDrawingRequest",
+            __name: 'DrawTools.StopDrawingRequest',
             /**
              * @method getName
              * @return {String} request name
              */
-            getName: function() {
+            getName: function () {
                 return this.__name;
             },
             /**
              * @method getId
              * @return {String} id for drawing as given in StartDrawingRequest
              */
-            getId: function() {
+            getId: function () {
                 return this._id;
             },
             /**
              * @method isClearCurrent
              * @return {boolean} true to remove the current drawing
              */
-            isClearCurrent: function() {
+            isClearCurrent: function () {
                 return this._clearCurrent;
             },
             /**
              * @method supressEvent
              * @return {boolean} true to not send event
              */
-            supressEvent: function() {
+            supressEvent: function () {
                 return this._supressEvent;
             }
         }, {

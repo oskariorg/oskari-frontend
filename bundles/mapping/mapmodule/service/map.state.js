@@ -8,7 +8,7 @@
  * way to control the map. This is only to get map values without openlayers
  * dependency.
  */
-(function(Oskari) {
+(function (Oskari) {
     var log = Oskari.log('map.state');
 
     // moved from core
@@ -16,14 +16,7 @@
     var _activatedLayers = [];
     var _allowMultipleActivatedLayers = false;
 
-    Oskari.clazz.define('Oskari.mapframework.domain.Map',
-
-    /**
-     * @method create called automatically on construction
-     * @static
-     */
-
-    function (sandbox) {
+    Oskari.clazz.define('Oskari.mapframework.domain.Map', function (sandbox) {
         this._sandbox = sandbox;
 
         // @property {Number} _centerX map longitude (float)
@@ -60,10 +53,10 @@
         this._isMoving = false;
 
         // @property {String} _projectionCode SRS projection code, defaults to 'EPSG:3067'
-        this._projectionCode = "EPSG:3067";
+        this._projectionCode = 'EPSG:3067';
     }, {
         /** @static @property __name service name */
-        __name: "mapmodule.state",
+        __name: 'mapmodule.state',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -311,12 +304,12 @@
         ************************************************** */
         getLayerIndex: function (id, list) {
             var normalizedId = id + '';
-            if(!list) {
+            if (!list) {
                 list = this.getLayers();
             }
             var len = list.length;
             for (var i = 0; i < len; ++i) {
-                if(list[i].getId() + '' === normalizedId) {
+                if (list[i].getId() + '' === normalizedId) {
                     return i;
                 }
             }
@@ -325,7 +318,7 @@
         /************************************************
         * Selected layers
         ************************************************** */
-        getLayers : function() {
+        getLayers: function () {
             return _selectedLayers || [];
         },
         /**
@@ -337,7 +330,7 @@
          */
         getSelectedLayer: function (id) {
             var index = this.getLayerIndex(id);
-            if(index === -1) {
+            if (index === -1) {
                 return null;
             }
             var list = this.getLayers();
@@ -353,12 +346,12 @@
         isLayerSelected: function (id) {
             return this.getLayerIndex(id) !== -1;
         },
-        addLayer : function(layer, triggeredBy) {
-            if(!layer || !layer.getId()) {
+        addLayer: function (layer, triggeredBy) {
+            if (!layer || !layer.getId()) {
                 log.warn('Attempt to add layer that is not available.');
                 return;
             }
-            if(this.isLayerSelected(layer.getId())) {
+            if (this.isLayerSelected(layer.getId())) {
                 log.warn('Layer already added. Skipping id ' + layer.getId());
                 return false;
             }
@@ -369,10 +362,10 @@
             this._sandbox.notifyAll(evt);
             return true;
         },
-        removeLayer : function(id, triggeredBy) {
+        removeLayer: function (id, triggeredBy) {
             var list = this.getLayers();
             var indexToRemove = this.getLayerIndex(id);
-            if(indexToRemove === -1) {
+            if (indexToRemove === -1) {
                 // not found
                 log.debug('Attempt to remove layer "' + id + '" that is not selected.');
                 return false;
@@ -389,14 +382,14 @@
             this._sandbox.notifyAll(evt);
             return true;
         },
-        moveLayer : function(id, newIndex, triggeredBy) {
+        moveLayer: function (id, newIndex, triggeredBy) {
             var list = this.getLayers();
             var oldIndex = this.getLayerIndex(id);
-            if(oldIndex === -1) {
+            if (oldIndex === -1) {
                 // no layer to move
                 return false;
             }
-            if(!Oskari.util.isNumberBetween(newIndex, 0, list.length -1)) {
+            if (!Oskari.util.isNumberBetween(newIndex, 0, list.length - 1)) {
                 // if not valid index -> treat as "move to last"
                 newIndex = list.length - 1;
             }
@@ -413,7 +406,7 @@
         /************************************************
         * Activated or "highlighted" layers
         ************************************************** */
-        getActivatedLayers : function() {
+        getActivatedLayers: function () {
             return _activatedLayers || [];
         },
         /**
@@ -421,8 +414,8 @@
          * @param  {Boolean} allow optional boolean value to set the flag
          * @return {Boolean} value of the flag
          */
-        allowMultipleActivatedLayers : function(allow) {
-            if(typeof allow === 'undefined') {
+        allowMultipleActivatedLayers: function (allow) {
+            if (typeof allow === 'undefined') {
                 // getter
                 return _allowMultipleActivatedLayers;
             }
@@ -430,8 +423,8 @@
             var newValue = !!allow;
             var activated = this.getActivatedLayers();
             // check if we have too many activated layers when turned off
-            if(newValue === false && newValue !== _allowMultipleActivatedLayers && activated.length > 1) {
-                var latestActivated = activated[activated.length -1];
+            if (newValue === false && newValue !== _allowMultipleActivatedLayers && activated.length > 1) {
+                var latestActivated = activated[activated.length - 1];
                 // deactivate all
                 this.deactivateLayer();
                 // reactivate the latest
@@ -450,18 +443,18 @@
         isLayerActivated: function (id) {
             return this.getLayerIndex(id, this.getActivatedLayers()) !== -1;
         },
-        activateLayer : function(id, triggeredBy) {
-            if(!this.isLayerSelected(id)) {
+        activateLayer: function (id, triggeredBy) {
+            if (!this.isLayerSelected(id)) {
                 log.warn('Trying to activate layer that is not selected. Skipping id ' + id);
                 return false;
             }
-            if(this.isLayerActivated(id)) {
+            if (this.isLayerActivated(id)) {
                 log.warn('Layer already activated. Skipping id ' + id);
                 return false;
             }
             var layer = this.getSelectedLayer(id);
             // check if multiactivation is allowed -> deactivate the previous if not
-            if(!this.allowMultipleActivatedLayers() && this.getActivatedLayers().length !== 0) {
+            if (!this.allowMultipleActivatedLayers() && this.getActivatedLayers().length !== 0) {
                 this.deactivateLayer(undefined, triggeredBy);
             }
             this.getActivatedLayers().push(layer);
@@ -473,20 +466,20 @@
             this._sandbox.notifyAll(evt);
             return true;
         },
-        deactivateLayer : function(id, triggeredBy) {
+        deactivateLayer: function (id, triggeredBy) {
             var sandbox = this._sandbox;
             var list = this.getActivatedLayers();
             var removalList = [];
             var evtBuilder = Oskari.eventBuilder('map.layer.activation');
-            function notifyDim(removalList) {
-                removalList.forEach(function(layer) {
+            function notifyDim (removalList) {
+                removalList.forEach(function (layer) {
                     var evt = evtBuilder(layer, false);
                     // TODO: setter?
                     evt._creator = triggeredBy;
                     sandbox.notifyAll(evt);
                 });
             }
-            if(typeof id === 'undefined') {
+            if (typeof id === 'undefined') {
                 // remove all
                 removalList = list.slice(0);
                 _activatedLayers = [];
@@ -495,7 +488,7 @@
             }
             // remove single
             var indexToRemove = this.getLayerIndex(id, list);
-            if(indexToRemove === -1) {
+            if (indexToRemove === -1) {
                 // not found
                 log.debug('Attempt to deactivate layer "' + id + '" that is not activated.');
                 return false;

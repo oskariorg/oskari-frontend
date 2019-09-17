@@ -3,7 +3,7 @@
  *
  * Shows a form for my place
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
+Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
 
     /**
      * @method create called automatically on construction
@@ -132,12 +132,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
                     if (placeLink.indexOf('://') === -1 || placeLink.indexOf('://') > 6) {
                         placeLink = 'http://' + placeLink;
                     }
-                    placeLink = placeLink.replace("<", '');
-                    placeLink = placeLink.replace(">", '');
+                    placeLink = placeLink.replace('<', '');
+                    placeLink = placeLink.replace('>', '');
                 }
                 var imageLink = onScreenForm.find('input[data-name=imagelink]').val(),
                     categorySelection = onScreenForm.find('select[data-name=category]').val();
-                if(typeof categorySelection === "string"){
+                if (typeof categorySelection === 'string') {
                     categorySelection = parseInt(categorySelection);
                 }
                 values.place = {
@@ -179,23 +179,22 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
                 onScreenForm.find('input[data-name=imagelink]').val(data.place.imageLink);
                 onScreenForm.find('select[data-name=category]').val(data.place.category);
                 this._updateImageUrl(data.place.imageLink, onScreenForm);
-
             }
 
             this.initialValues = data;
         },
         setMeasurementResult: function (measurement, drawMode) {
-            if (drawMode === "point" || typeof measurement !== 'number') {
-               return;
+            if (drawMode === 'point' || typeof measurement !== 'number') {
+                return;
             }
             var measurementWithUnit = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule').formatMeasurementResult(measurement, drawMode);
             this.measurementResult = this.loc('placeform.measurement.' + drawMode) + ' ' + measurementWithUnit;
             this._getOnScreenForm().find('div.measurementResult').html(this.measurementResult);
         },
-        bindEvents: function(){
+        bindEvents: function () {
             var me = this;
             var isPublished = (this.options ? this.options.published : false);
-            if(!isPublished) {
+            if (!isPublished) {
                 me._bindCategoryChange();
             }
 
@@ -254,7 +253,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.view.PlaceForm",
             }
         },
 
-        createCategoryForm: function (){
+        createCategoryForm: function () {
             var onScreenForm = this._getOnScreenForm();
             this.categoryForm = Oskari.clazz.create('Oskari.mapframework.bundle.myplaces3.view.CategoryForm', this.instance);
             onScreenForm.find('div#newLayerForm').html(this.categoryForm.getForm());

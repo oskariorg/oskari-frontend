@@ -21,8 +21,8 @@ Oskari.clazz.define(
             lineWidth: this.defaultValues.line.width,
             lineCorner: this.defaultValues.line.corner,
             lineStyle: this.defaultValues.line.style,
-            lineColor: this.defaultValues.line.color,
-            fillColor: this.defaultValues.fill.color,
+            lineColor: '#' + this.defaultValues.line.color,
+            fillColor: '#' + this.defaultValues.fill.color,
             fillStyle: this.defaultValues.fill.style
         };
 
@@ -72,12 +72,16 @@ Oskari.clazz.define(
             'icon-line-thin-diagonal',
             'icon-line-wide-diagonal',
             'icon-line-thin-horizontal',
-            'icon-line-wide-horizontal'
+            'icon-line-wide-horizontal',
+            'areaform-fill-transparent',
+            'areaform-fill-solid'
         ];
 
         this.templateAreaStyleDialogContent = jQuery('<div class="areaform">' +
             '<div class="container clearfix">' +
             '<div class="column1">' +
+            '<label>' + this.loc.linecolor.label + '</label>' +
+            '<div class="color-picker-area-line-wrapper"></div>' +
             '<label>' + this.loc.linestyle.label + '</label>' +
             '<div class="style icon-buttons"></div>' +
             '<label>' + this.loc.linecorner.label + '</label>' +
@@ -87,40 +91,14 @@ Oskari.clazz.define(
             '</div>' +
             '<div class="column2">' +
             '<div class="column21">' +
-            '<label>' + this.loc.linecolor.label + '</label>' +
-            '<div class="color-grid">' +
-            '<div class="color-rectangle line"></div>' +
-            '</div>' +
-            '<div class="color-label">' +
-            '<label>' + this.loc.linecolor.labelOr + '</label>' +
-            '</div>' +
-            '<div class="color-source-selector-line">' +
-            '<label for="color-checkbox-0">' + this.loc.linecolor.labelCustom + '</label>' +
-            '</div>' +
-            '<div class="custom-colors-line"></div>' +
-            '<div class="remove-color-line"></div>' +
-            '</div>' +
-            '<div class="column22">' +
-            '<div class="column221">' +
             '<label>' + this.loc.color.label + '</label>' +
-            '<div class="color-grid">' +
-            '<div class="color-rectangle fill"></div>' +
-            '</div>' +
-            '<div class="color-label">' +
-            '<label>' + this.loc.color.labelOr + '</label>' +
-            '</div>' +
-            '<div class="color-source-selector-fill">' +
-            '<label for="color-checkbox-1">' + this.loc.color.labelCustom + '</label>' +
-            '</div>' +
-            '<div class="custom-colors-fill"></div>' +
+            '<div class="color-picker-area-fill-wrapper"></div>' +
             '<label>' + this.loc.fill.label + '</label>' +
             '<div class="fill icon-buttons"></div>' +
-            '<div class="remove-color-fill"></div>' +
             '</div>' +
-            '<div class="column222">' +
+            '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
-            '<div class="preview"></div>' +
-            '</div>' +
+            '<div class="areaform-preview"></div>' +
             '</div>' +
             '</div>' +
             '</div>' +
@@ -140,14 +118,14 @@ Oskari.clazz.define(
         this.minWidth = 1;
         this.maxWidth = 5;
         this.templateWidthValue = jQuery('<input type="number" name="width" class="linewidth" min="' + this.minWidth + '" max="' + this.maxWidth + '" step=1 value="' + this.values.lineWidth + '">');
-        this.previewSize = 50;
+        this.previewSize = 80;
         this.selectColor = '#dddddd';
 
-        this._previewSize = 50;
+        this._previewSize = 80;
         this._previewTemplates = [
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
-            jQuery('<svg viewBox="0 0 50 50" width="50" height="50" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path><path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: miter; stroke-linecap: butt;" fill="#ffde00" stroke="#000000" d="M15.618650138979566,19.104939575319182L35.30776005884479,15.739369510308894L28.003552181094584,34.08332088547988Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="4,3"></path></svg>'),
+            jQuery('<svg viewBox="0 0 50 50" width="80" height="80" xmlns="http://www.w3.org/2000/svg"><path fill="#000000" stroke="#000000" d="M10,17L40,12L29,40Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path><path style="-webkit-tap-highlight-color: rgba(0, 0, 0, 0); stroke-linejoin: miter; stroke-linecap: butt;" fill="#ffde00" stroke="#000000" d="M15.618650138979566,19.104939575319182L35.30776005884479,15.739369510308894L28.003552181094584,34.08332088547988Z" stroke-width="1" stroke-linejoin="miter" stroke-linecap="butt" stroke-dasharray="0"></path></svg>')
         ];
     }, {
         /**
@@ -236,7 +214,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
-                styleBtnContainer.click(function () {
+                styleBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('lineStyle', newValue);
                     me.values.lineStyle = newValue;
@@ -255,7 +233,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
-                cornerBtnContainer.click(function () {
+                cornerBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('lineCorner', newValue);
                     me.values.lineCorner = newValue;
@@ -268,7 +246,7 @@ Oskari.clazz.define(
             content = dialogContent.find('div.width');
             var widthSpinner = me.templateWidthValue.clone();
             widthSpinner.val(me.values.lineWidth !== null && me.values.lineWidth !== undefined ? me.values.lineWidth : 1);
-            widthSpinner.change(function () {
+            widthSpinner.on('change', function () {
                 var newValue = parseInt(widthSpinner.val(), 10);
                 if (!isNaN(newValue)) {
                     me.values.lineWidth = newValue;
@@ -276,216 +254,31 @@ Oskari.clazz.define(
                 }
             });
             content.append(widthSpinner);
-            var c,
-                statedChosenColor,
-                cType,
-                colorCell,
-                idExt,
-                id,
-                colorCheckbox,
-                colorTypeId,
-                cell,
-                activeCell,
-                customColorEditor,
-                redValue,
-                greenValue,
-                blueValue,
-                rgb;
-            // Color chooser
-            for (c = 0; c < 2; c += 1) {
-                statedChosenColor = false;
-                cType = (c === 0) ? 'lineColor' : 'fillColor';
-                content = dialogContent.find('.color-rectangle.' + me.colorTypes[c]);
-                for (i = 0; i < me.basicColors.length; i += 1) {
-                    colorCell = me.templateColorCell.clone();
-                    colorCell.css('background-color', me.basicColors[i]);
-                    idExt = 'ColorCell';
-                    id = i.toString() + c.toString() + idExt;
-                    if (id.length === idExt.length + 2) {
-                        id = '0' + id;
-                    }
-                    colorCell.attr('id', id);
-                    colorCell.click(function () {
-                        var cellIndex = parseInt(this.id.substring(0, 2), 10);
-                        var colorType = parseInt(this.id.substring(2, 3), 10);
-                        if (jQuery('#color-checkbox-' + colorType).prop('checked')) {
-                            jQuery('#color-checkbox-' + colorType).attr('checked', false);
-                            jQuery('input.custom-color.' + me.colorTypes[colorType]).prop('disabled', true);
-                        }
-                        if (cellIndex === me.activeColorCell[colorType]) {
-                            return;
-                        }
-                        if (me.activeColorCell[colorType] > -1) {
-                            var activeCell = me.activeColorCell[colorType].toString();
-                            if (me.activeColorCell[colorType] < 10) {
-                                activeCell = '0' + activeCell;
-                            }
-                            jQuery('#' + activeCell + colorType + 'ColorCell').css('border', '1px solid #000000');
-                        }
-                        me.values[colorType === 0 ? 'lineColor' : 'fillColor'] = Oskari.util.rgbToHex(this.style.backgroundColor);
-                        me.activeColorCell[colorType] = cellIndex;
-                        if (cellIndex < 10) {
-                            cellIndex = '0' + cellIndex.toString();
-                        }
-                        jQuery('#' + cellIndex + colorType + 'ColorCell').css('border', '3px solid #ffffff');
-                        me._updatePreview(dialogContent);
-                    });
-                    //instead of selecting always black,
-                    // we should use the color that comes from the state
-                    if ('#' + me.values[cType] === me.basicColors[i]) {
-                        colorCell.css('border', '3px solid #ffffff');
-                        me.activeColorCell[c] = i;
-                        statedChosenColor = true;
-                    }
-                    content.append(colorCell);
+            // Create color pickers
+            me._createColorPickers();
+            var colorPickerLineWrapper = dialogContent.find('.color-picker-area-line-wrapper');
+            var colorPickerFillWrapper = dialogContent.find('.color-picker-area-fill-wrapper');
+
+            colorPickerLineWrapper.append(me._colorPickers[0].getElement());
+            colorPickerFillWrapper.append(me._colorPickers[1].getElement());
+            me._colorPickers[0].setValue(me.values['lineColor']);
+            me._colorPickers[1].setValue(me.values['fillColor']);
+
+            colorPickerLineWrapper.on('change', function () {
+                me.values['lineColor'] = me._colorPickers[0].getValue();
+                me._updatePreview(dialogContent);
+            });
+
+            colorPickerFillWrapper.on('change', function () {
+                me.values['fillColor'] = me._colorPickers[1].getValue();
+                if (me.values.fillStyle === 4) {
+                    // Color has been selected but fill style is transparent
+                    // Change fill style to solid color
+                    me.values.fillStyle = 5;
+                    me._styleUnselectedButton(jQuery('div#4fillstyle.icon-button'));
+                    me._styleSelectedButton(jQuery('div#5fillstyle.icon-button'));
                 }
-
-                // Custom color
-                content = dialogContent.find('.color-source-selector-' + me.colorTypes[c]);
-                colorCheckbox = me.templateColorSource.clone();
-                colorCheckbox.attr('id', 'color-checkbox-' + c);
-
-                var customColorChangeHandler = function (colorType) {
-                    var values = [],
-                        i,
-                        intValue;
-                    values[0] = jQuery('input#' + colorType + 'red-value').val();
-                    values[1] = jQuery('input#' + colorType + 'green-value').val();
-                    values[2] = jQuery('input#' + colorType + 'blue-value').val();
-                    // From integer to hex values
-                    for (i = 0; i < 3; i += 1) {
-                        intValue = parseInt(values[i],10);
-                        if ((intValue < 0) || (intValue > 255)) {
-                            return;
-                        }
-                        values[i] = intValue.toString(16);
-                        if (values[i].length === 1) {
-                            values[i] = '0' + values[i];
-                        }
-                    }
-                    me.values[(colorType === '0') ? 'lineColor' : 'fillColor'] = values.join('');
-                    me._updatePreview();
-                };
-
-                // If the default value is not included in the color cells
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    colorCheckbox.attr('checked', true);
-                }
-                colorCheckbox.change(function () {
-                    var colorTypeId = this.id.substring(this.id.length-1, this.id.length);
-                    var colorType = (colorTypeId === '0') ? 'lineColor' : 'fillColor';
-                    jQuery('input.custom-color.' + me.colorTypes[colorTypeId]).prop('disabled', !this.checked);
-
-                    if (this.checked) {
-                        if(me.activeColorCell[colorTypeId] > -1){
-                            var cell = me.activeColorCell[colorTypeId].toString();
-                            if (me.activeColorCell[colorTypeId] < 10) {
-                                cell = '0' + cell;
-                            }
-                            var activeCell = jQuery('#' + cell + colorTypeId + 'ColorCell');
-                            activeCell.css('border', '1px solid #000000');
-                            jQuery('.custom-red-value.' + me.colorTypes[colorTypeId]).val(parseInt(me.values[colorType].substring(0, 2), 16));
-                            jQuery('.custom-green-value.' + me.colorTypes[colorTypeId]).val(parseInt(me.values[colorType].substring(2, 4), 16));
-                            jQuery('.custom-blue-value.' + me.colorTypes[colorTypeId]).val(parseInt(me.values[colorType].substring(4), 16));
-                            me.activeColorCell[colorTypeId] = -1;
-                        }
-                        customColorChangeHandler(colorTypeId);
-                    } else {
-                        me.values[colorType] = null;
-                        me.activeColorCell[colorTypeId] = -1;
-
-                    }
-                    me._updatePreview(dialogContent);
-                });
-                content.prepend(colorCheckbox);
-
-                // if the color is not picked from selection and not transparent (null), it must be users own color
-                // select user colors checkbox
-                if (!statedChosenColor && me.values[cType] !== null) {
-                    colorCheckbox.checked = true;
-                    content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
-                }
-
-                content = dialogContent.find('.custom-colors-' + me.colorTypes[c]);
-                customColorEditor = this.templateCustomColor.clone();
-                customColorEditor.addClass(me.colorTypes[c]);
-                content.append(customColorEditor);
-
-                redValue = me.templateColorValue.clone();
-                redValue.addClass('custom-red-value');
-                redValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    redValue.val(parseInt(me.values[cType].substring(0, 2), 16));
-                    redValue.prop('disabled', false);
-                }
-                content.find('.colorcolumn1').append(redValue);
-                content.find('label.custom-red-value').text('R');
-                content.find('input.custom-red-value').attr('id', c + 'red-value');
-
-                greenValue = me.templateColorValue.clone();
-                greenValue.addClass('custom-green-value');
-                greenValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    greenValue.val(parseInt(me.values[cType].substring(2, 4), 16));
-                    greenValue.prop('disabled', false);
-                }
-                content.find('.colorcolumn21').append(greenValue);
-                content.find('label.custom-green-value').text('G');
-                content.find('input.custom-green-value').attr('id', c + 'green-value');
-
-                blueValue = me.templateColorValue.clone();
-                blueValue.addClass('custom-blue-value');
-                blueValue.addClass(me.colorTypes[c]);
-                if (me.activeColorCell[c] === -1 && me.values[cType] !== null) {
-                    blueValue.val(parseInt(me.values[cType].substring(4), 16));
-                    blueValue.prop('disabled', false);
-                }
-                content.find('.colorcolumn22').append(blueValue);
-                content.find('label.custom-blue-value').text('B');
-                content.find('input.custom-blue-value').attr('id', c + 'blue-value');
-
-                // if the color is not picked from selection and not transparent (null), it must be users own color
-                // add color values to the input fields
-                if (!statedChosenColor && me.values[cType] !== null) {
-                    rgb = Oskari.util.hexToRgb(me.values[cType]);
-                    content.find('input.custom-color.custom-red-value').val(rgb.r);
-                    content.find('input.custom-color.custom-green-value').val(rgb.g);
-                    content.find('input.custom-color.custom-blue-value').val(rgb.b);
-                    dialogContent.find('input#' + c.toString() + 'red-value.custom-color').prop('disabled', false);
-                    dialogContent.find('input#' + c.toString() + 'green-value.custom-color').prop('disabled', false);
-                    dialogContent.find('input#' + c.toString() + 'blue-value.custom-color').prop('disabled', false);
-                }
-                content.find('.custom-color').change(customColorChangeHandler.bind(null, c.toString()));
-            }
-
-            // remove color links
-            ['line', 'fill'].forEach(function(type, index){
-                content = dialogContent.find('.remove-color-' + type);
-                jQuery('<a href="#">' + me.loc[type + 'Remove'] + '</a>').appendTo(content).click(function(e){
-                    e.preventDefault();
-
-                    if (me.activeColorCell[index] > -1) {
-                        var activeCell = me.activeColorCell[index].toString();
-                        if (me.activeColorCell[index] < 10) {
-                            activeCell = '0' + activeCell;
-                        }
-                        jQuery('#' + activeCell + index + 'ColorCell').css('border', '1px solid #000000');
-                    }
-
-                    me.activeColorCell[index] = -1;
-                    me.values[type + 'Color'] = null;
-
-                    jQuery('#color-checkbox-' + index).attr('checked', false);
-                    jQuery('input.custom-color.' + me.colorTypes[index]).prop('disabled', true);
-
-                    if(type === 'fill'){
-                        if (me.values.fillStyle !== -1) {
-                            me._styleUnselectedButton(jQuery('div#' + me.values.fillStyle + 'fillstyle.icon-button'));
-                        }
-                        me.values.fillStyle = -1;
-                    }
-                    me._updatePreview(dialogContent);
-                });
+                me._updatePreview(dialogContent);
             });
 
             // Fill style
@@ -497,8 +290,8 @@ Oskari.clazz.define(
                 if (i == me.values.fillStyle) {
                     this._styleSelectedButton(fillBtnContainer);
                 }
-                fillBtnContainer.click(function () {
-                    var newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
+                fillBtnContainer.on('click', function () {
+                    var newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     if (me.values.fillStyle === newValue) {
                         me.values.fillStyle = -1;
                         me._styleUnselectedButton(jQuery('div#' + newValue + 'fillstyle.icon-button'));
@@ -508,10 +301,28 @@ Oskari.clazz.define(
                         }
                         me._styleSelectedButton(jQuery('div#' + newValue + 'fillstyle.icon-button'));
                         me.values.fillStyle = newValue;
+                        // Set color picker and fill color value to empty/null when transparent is selected
+                        if (newValue === 4) {
+                            me._colorPickers[1].setValue('');
+                            me.values.fillColor = null;
+                        }
                     }
                     me._updatePreview(dialogContent);
                 });
                 content.append(fillBtnContainer);
+            }
+
+            if (me.values.fillStyle === -1) {
+                // Transparent or solid color is chosen
+                if (me.values.fillColor != null) {
+                    // Fill color exist, use solid color as style
+                    me.values.fillStyle = 5;
+                    me._styleSelectedButton(content.find('div#5fillstyle.icon-button'));
+                } else {
+                    // No fill color, style must be transparent
+                    me.values.fillStyle = 4;
+                    me._styleSelectedButton(content.find('div#4fillstyle.icon-button'));
+                }
             }
 
             this._updatePreview(dialogContent);
@@ -520,6 +331,10 @@ Oskari.clazz.define(
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
+                // Transparent and solid color fill styles are both saved as -1
+                if (me.values.fillStyle === 4 || me.values.fillStyle === 5) {
+                    me.values.fillStyle = -1;
+                }
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -561,19 +376,24 @@ Oskari.clazz.define(
         _updatePreview: function (dialog) {
             var me = this;
             var view = dialog === undefined || dialog === null ? jQuery('.areaform') : dialog,
-                preview = view.find('.preview');
+                preview = view.find('.areaform-preview');
 
             if (preview.length === 0) {
                 return;
             }
 
             var previewTemplate = me._previewTemplates[me.values.lineStyle].clone();
-            var fill = (parseInt(me.values.fillStyle,10) < 0) ? '#' + me.values.fillColor : 'none';
+            var fill = (parseInt(me.values.fillStyle, 10) < 0) ? me.values.fillColor : 'none';
             if (me.values.fillStyle >= 0 || me.values.fillColor === null) {
                 fill = 'none';
             }
 
-            var line = me.values.lineColor !== null ? '#' + me.values.lineColor : 'none';
+            var line = me.values.lineColor !== null ? me.values.lineColor : 'none';
+
+            if (me.values.fillStyle === 5 && me.values.fillColor !== null) {
+                // Solid fill style chosen, using current fill color
+                fill = me.values.fillColor;
+            }
 
             previewTemplate.find('path').attr({
                 'fill': fill,
@@ -585,108 +405,109 @@ Oskari.clazz.define(
 
             preview.empty();
             // Patterns (IE8 compatible version)
-            if (me.values.fillStyle >= 0) {
+            if (me.values.fillStyle >= 0 && me.values.fillStyle < 4) {
+                // Fillstyle 4 = transparent and fillstyle 5 = solid (no need to create svg)
                 var pathSvg = jQuery('<path></path>');
                 switch (parseInt(me.values.fillStyle)) {
-                    case 0:
-                        var p01a = [10.5,17.5];
-                        var p02a = [12.3,19.7];
-                        var p03a = [14.1,21.9];
-                        var p04a = [15.9,24.1];
-                        var p05a = [17.7,26.3];
-                        var p06a = [19.5,28.5];
-                        var p07a = [21.4,30.6];
-                        var p08a = [23.2,32.8];
-                        var p09a = [25.0,35.0];
-                        var p010a = [26.8,37.2];
-                        var p011a = [28.6,39.4];
+                case 0:
+                    var p01a = [10.5, 17.5];
+                    var p02a = [12.3, 19.7];
+                    var p03a = [14.1, 21.9];
+                    var p04a = [15.9, 24.1];
+                    var p05a = [17.7, 26.3];
+                    var p06a = [19.5, 28.5];
+                    var p07a = [21.4, 30.6];
+                    var p08a = [23.2, 32.8];
+                    var p09a = [25.0, 35.0];
+                    var p010a = [26.8, 37.2];
+                    var p011a = [28.6, 39.4];
 
-                        var p01b = [11.2,16.8];
-                        var p02b = [16,16];
-                        var p03b = [20.8,15.2];
-                        var p04b = [25.6,14.4];
-                        var p05b = [30.4,13.6];
-                        var p06b = [35.2,12.8];
-                        var p07b = [40.0,12.0];
-                        var p08b = [37.4,18.6];
-                        var p09b = [34.8,25.2];
-                        var p010b = [32.2,31.8];
-                        var p011b = [29.6,38.4];
+                    var p01b = [11.2, 16.8];
+                    var p02b = [16, 16];
+                    var p03b = [20.8, 15.2];
+                    var p04b = [25.6, 14.4];
+                    var p05b = [30.4, 13.6];
+                    var p06b = [35.2, 12.8];
+                    var p07b = [40.0, 12.0];
+                    var p08b = [37.4, 18.6];
+                    var p09b = [34.8, 25.2];
+                    var p010b = [32.2, 31.8];
+                    var p011b = [29.6, 38.4];
 
-                        pathSvg.attr({
-                            'd': 'M' + p01a + 'L' + p01b + 'M' + p02a + 'L' + p02b + 'M' + p03a + 'L' + p03b + 'M' + p04a + 'L' + p04b + 'M' + p05a + 'L' + p05b + 'M' + p06a + 'L' + p06b + 'M' + p07a + 'L' + p07b + 'M' + p08a + 'L' + p08b + 'M' + p09a + 'L' + p09b + 'M' + p010a + 'L' + p010b + 'M' + p011a + 'L' + p011b,
-                            'stroke-width': 1,
-                            'stroke': '#' + me.values.fillColor,
-                            'fill': 'none'
-                        });
-                        break;
-                    case 1:
-                        var p11a = [14.8,16.2];
-                        var p12a = [23.2,14.8];
-                        var p13a = [31.6,13.4];
-                        var p14a = [39.8,12.2];
-                        var p15a = [35.4,23.6];
-                        var p16a = [30.9,35.1];
+                    pathSvg.attr({
+                        'd': 'M' + p01a + 'L' + p01b + 'M' + p02a + 'L' + p02b + 'M' + p03a + 'L' + p03b + 'M' + p04a + 'L' + p04b + 'M' + p05a + 'L' + p05b + 'M' + p06a + 'L' + p06b + 'M' + p07a + 'L' + p07b + 'M' + p08a + 'L' + p08b + 'M' + p09a + 'L' + p09b + 'M' + p010a + 'L' + p010b + 'M' + p011a + 'L' + p011b,
+                        'stroke-width': 1,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
+                    break;
+                case 1:
+                    var p11a = [14.8, 16.2];
+                    var p12a = [23.2, 14.8];
+                    var p13a = [31.6, 13.4];
+                    var p14a = [39.8, 12.2];
+                    var p15a = [35.4, 23.6];
+                    var p16a = [30.9, 35.1];
 
-                        var p11b = [11.9,19.1];
-                        var p12b = [15.0,23.0];
-                        var p13b = [18.2,26.8];
-                        var p14b = [21.4,30.6];
-                        var p15b = [24.5,34.5];
-                        var p16b = [27.7,38.3];
+                    var p11b = [11.9, 19.1];
+                    var p12b = [15.0, 23.0];
+                    var p13b = [18.2, 26.8];
+                    var p14b = [21.4, 30.6];
+                    var p15b = [24.5, 34.5];
+                    var p16b = [27.7, 38.3];
 
-                        pathSvg.attr({
-                            'd': 'M' + p11a + 'L' + p11b + 'M' + p12a + 'L' + p12b + 'M' + p13a + 'L' + p13b + 'M' + p14a + 'L' + p14b + 'M' + p15a + 'L' + p15b + 'M' + p16a + 'L' + p16b,
-                            'stroke-width': 2,
-                            'stroke': '#' + me.values.fillColor,
-                            'fill': 'none'
-                        });
-                        break;
-                    case 2:
-                        var p21a = [19,15.5];
-                        var p22a = [12.1,19.5];
-                        var p23a = [15.4,23.5];
-                        var p24a = [18.7,27.5];
-                        var p25a = [22.0,31.5];
-                        var p26a = [25.3,35.5];
-                        var p27a = [28.6,39.5];
+                    pathSvg.attr({
+                        'd': 'M' + p11a + 'L' + p11b + 'M' + p12a + 'L' + p12b + 'M' + p13a + 'L' + p13b + 'M' + p14a + 'L' + p14b + 'M' + p15a + 'L' + p15b + 'M' + p16a + 'L' + p16b,
+                        'stroke-width': 2,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
+                    break;
+                case 2:
+                    var p21a = [19, 15.5];
+                    var p22a = [12.1, 19.5];
+                    var p23a = [15.4, 23.5];
+                    var p24a = [18.7, 27.5];
+                    var p25a = [22.0, 31.5];
+                    var p26a = [25.3, 35.5];
+                    var p27a = [28.6, 39.5];
 
-                        var p21b = [38.6,15.5];
-                        var p22b = [37.0,19.5];
-                        var p23b = [35.4,23.5];
-                        var p24b = [33.9,27.5];
-                        var p25b = [32.3,31.5];
-                        var p26b = [30.7,35.5];
-                        var p27b = [29.1,39.5];
+                    var p21b = [38.6, 15.5];
+                    var p22b = [37.0, 19.5];
+                    var p23b = [35.4, 23.5];
+                    var p24b = [33.9, 27.5];
+                    var p25b = [32.3, 31.5];
+                    var p26b = [30.7, 35.5];
+                    var p27b = [29.1, 39.5];
 
-                        pathSvg.attr({
-                            'd': 'M' + p21a + 'L' + p21b + 'M' + p22a + 'L' + p22b + 'M' + p23a + 'L' + p23b + 'M' + p24a + 'L' + p24b + 'M' + p25a + 'L' + p25b + 'M' + p26a + 'L' + p26b + 'M' + p27a + 'L' + p27b,
-                            'stroke-width': 1,
-                            'stroke': '#' + me.values.fillColor,
-                            'fill': 'none'
-                        });
-                        break;
-                    case 3:
-                        var p31a = [16.1,16.0];
-                        var p32a = [13.4,21.0];
-                        var p33a = [17.5,26.0];
-                        var p34a = [21.6,31.0];
-                        var p35a = [25.7,36.0];
+                    pathSvg.attr({
+                        'd': 'M' + p21a + 'L' + p21b + 'M' + p22a + 'L' + p22b + 'M' + p23a + 'L' + p23b + 'M' + p24a + 'L' + p24b + 'M' + p25a + 'L' + p25b + 'M' + p26a + 'L' + p26b + 'M' + p27a + 'L' + p27b,
+                        'stroke-width': 1,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
+                    break;
+                case 3:
+                    var p31a = [16.1, 16.0];
+                    var p32a = [13.4, 21.0];
+                    var p33a = [17.5, 26.0];
+                    var p34a = [21.6, 31.0];
+                    var p35a = [25.7, 36.0];
 
-                        var p31b = [38.4,16.0];
-                        var p32b = [36.4,21.0];
-                        var p33b = [35.5,26.0];
-                        var p34b = [32.5,31.0];
-                        var p35b = [30.5,36.0];
+                    var p31b = [38.4, 16.0];
+                    var p32b = [36.4, 21.0];
+                    var p33b = [35.5, 26.0];
+                    var p34b = [32.5, 31.0];
+                    var p35b = [30.5, 36.0];
 
-                        pathSvg.attr({
-                            'd': 'M' + p31a + 'L' + p31b + 'M' + p32a + 'L' + p32b + 'M' + p33a + 'L' + p33b + 'M' + p34a + 'L' + p34b + 'M' + p35a + 'L' + p35b,
-                            'stroke-width': 2,
-                            'stroke': '#' + me.values.fillColor,
-                            'fill': 'none'
-                        });
+                    pathSvg.attr({
+                        'd': 'M' + p31a + 'L' + p31b + 'M' + p32a + 'L' + p32b + 'M' + p33a + 'L' + p33b + 'M' + p34a + 'L' + p34b + 'M' + p35a + 'L' + p35b,
+                        'stroke-width': 2,
+                        'stroke': me.values.fillColor,
+                        'fill': 'none'
+                    });
 
-                        break;
+                    break;
                 }
                 previewTemplate.prepend(pathSvg);
             }
@@ -701,7 +522,7 @@ Oskari.clazz.define(
                 var p2 = [40, 12];
                 var p3 = [29, 40];
                 // double line
-                var d = 2 * (2.0 + parseInt(me.values.lineWidth,10));
+                var d = 2 * (2.0 + parseInt(me.values.lineWidth, 10));
 
                 var t1 = Math.atan(Math.abs((p2[1] - p1[1]) / (p2[0] - p1[0])));
                 var p1a = [p1[0] + d * Math.sin(Math.PI / 3 + t1), p1[1] + d * Math.cos(Math.PI / 3 + t1)];
@@ -717,9 +538,21 @@ Oskari.clazz.define(
                 });
             }
 
-
             // Refresh svg to show correctly
             preview.html(preview.html());
+        },
+
+        /**
+         * @method createColorPickers
+         * Creates an array of color picker components
+         * @private
+         */
+        _createColorPickers: function () {
+            var options = {allowEmpty: true, cancelText: this.loc.buttons.cancel};
+            this._colorPickers = [
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options),
+                Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options)
+            ];
         },
 
         /**
@@ -748,7 +581,7 @@ Oskari.clazz.define(
          */
         _styleUnselectedButton: function (unselectedButton) {
             unselectedButton.css('border', '1px solid');
-            unselectedButton.css('background-color', 'transparent');
+            unselectedButton.css('background-color', '');
         }
     }
 );

@@ -28,13 +28,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.request.PublishMapEdit
                 me.openEditor();
                 return;
             }
-            //get the uuid from the request
+            // get the uuid from the request
             var uuid = request.getEditMap().uuid || null;
             // make the ajax call
             jQuery.ajax({
                 url: Oskari.urls.getRoute('AppSetup'),
                 data: {
-                    uuid : uuid
+                    uuid: uuid
                 },
                 type: 'GET',
                 dataType: 'json',

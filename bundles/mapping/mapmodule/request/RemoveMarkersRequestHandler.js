@@ -1,9 +1,10 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveMarkersRequestHandler', function (sandbox, markersPlugin) {
     this.sandbox = sandbox;
     this.markersPlugin = markersPlugin;
+    this._log = Oskari.log('RemoveMarkersRequestHandler');
 }, {
     handleRequest: function (core, request) {
-        this.sandbox.printDebug("[Oskari.mapframework.bundle.mapmodule.request.RemoveMarkersRequestHandler] Remove markers");
+        this._log.debug('Remove markers');
         this.markersPlugin.removeMarkers(false, request.getId());
     }
 }, {

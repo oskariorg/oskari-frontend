@@ -32,7 +32,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
             getCallback = function (btn) {
                 return function (isSuccess, pContent) {
                     var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                        okBtn = dialog.createCloseButton("OK");
+                        okBtn = dialog.createCloseButton('OK');
                     okBtn.addClass('primary');
                     if (isSuccess) {
                         // help articles have only 'static' content
@@ -47,8 +47,8 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
             // Help popups
             content.find('[helptags]').each(function (i, e) {
                 var btn = jQuery(e),
-                    taglist = btn.attr("helptags");
-                btn.bind('click', function () {
+                    taglist = btn.attr('helptags');
+                btn.on('click', function () {
                     me.getHelpArticle(taglist, getCallback(btn));
                 });
             });
@@ -62,9 +62,8 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
          *   boolean that indicates success, second parameter is the loaded content if it was successfully loaded
          */
         getHelpArticle: function (taglist, callback) {
-            var me = this;
             jQuery.ajax({
-                url: me.sandbox.getAjaxUrl() + 'action_route=GetArticlesByTag',
+                url: Oskari.urls.getRoute('GetArticlesByTag'),
                 data: {
                     tags: taglist
                 },
@@ -72,7 +71,7 @@ Oskari.clazz.define('Oskari.userinterface.component.UIHelper',
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (resp) {

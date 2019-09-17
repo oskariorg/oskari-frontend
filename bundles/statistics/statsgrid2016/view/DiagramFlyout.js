@@ -1,7 +1,7 @@
 /*
  * Creates a flyout with tabs for different ways of visualizing data
  */
-Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(title, options, instance) {
+Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (title, options, instance) {
     this.sb = instance.getSandbox();
     this.loc = instance.getLocalization();
     this.element = null;
@@ -9,8 +9,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
     this._indicatorSelector = Oskari.clazz.create('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', service);
     this._diagram = Oskari.clazz.create('Oskari.statistics.statsgrid.Diagram', service, this.loc);
     var me = this;
-    this.on('show', function() {
-        if(!me.getElement()) {
+    this.on('show', function () {
+        if (!me.getElement()) {
             me.createUi();
             me.addClass('statsgrid-diagram-flyout');
             me.setContent(me.getElement());
@@ -19,37 +19,33 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function(t
     });
 }, {
     _template: {
-        container: jQuery('<div class="oskari-datacharts"><div class="chart-controls"></div> <div class="chart"> <div class="axisLabel"></div> </div></div>')
+        container: jQuery('<div class="stats-diagram-holder"><div class="chart-controls"></div><div class="oskari-datacharts"> <div class="chart"> <div class="axisLabel"></div> </div></div></div>')
     },
-    setElement: function(el) {
+    setElement: function (el) {
         this.element = el;
     },
-    getElement: function() {
+    getElement: function () {
         return this.element;
     },
     scroll: function () {
-        var me = this;
         var axisLabel = jQuery('.axisLabel');
-        jQuery( jQuery('.statsgrid-diagram-flyout > .oskari-flyoutcontentcontainer') ).scroll(function() {
+        jQuery(jQuery('.statsgrid-diagram-flyout .oskari-datacharts')).scroll(function () {
             var scrollAmount = jQuery(this).scrollTop();
-            //14 is the 2% padding-bottom
-            var chartControlHeight = jQuery('.chart-controls').outerHeight() + 14;
-            if ( scrollAmount > 50 ) {
-                axisLabel.addClass("sticky");
-                axisLabel.css("margin-top", function () {
-                   var el = jQuery('.statsgrid-diagram-flyout > .oskari-flyouttoolbar');
-                   return scrollAmount - chartControlHeight;
-                })
-            }
-            else  {
-                if ( axisLabel.hasClass('sticky') ) {
-                    axisLabel.removeClass("sticky");
-                    axisLabel.css("margin-top", "");
+            // 14 is the 2% padding-bottom
+            if (scrollAmount >= 14) {
+                axisLabel.addClass('sticky');
+                axisLabel.css('margin-top', function () {
+                    return scrollAmount - 15;
+                });
+            } else {
+                if (axisLabel.hasClass('sticky')) {
+                    axisLabel.removeClass('sticky');
+                    axisLabel.css('margin-top', '');
                 }
             }
         });
     },
-    createUi: function() {
+    createUi: function () {
         if (this.getElement()) {
             // already created ui
             return;

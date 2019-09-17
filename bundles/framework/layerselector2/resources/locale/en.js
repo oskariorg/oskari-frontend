@@ -33,6 +33,7 @@ Oskari.registerLocalization(
             "type-wms": "Map layer (WMS, WMTS)",
             "type-wfs": "Data product (WFS)",
             "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window.",
+            "type-timeseries": "Time series layer",
             "unsupported-srs": "Unsupported map projection"
         },
         "backendStatus": {
@@ -74,11 +75,9 @@ Oskari.registerLocalization(
         "layerFilter": {
             "buttons": {
                 "newest": "Newest",
-                "featuredata": "Vector layers"
             },
             "tooltips": {
                 "newest": "Show ## newest map layers",
-                "featuredata": "Show only vector layers",
                 "remove": "Remove filter"
             }
         },

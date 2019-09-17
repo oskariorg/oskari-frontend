@@ -1,4 +1,4 @@
-# Controls
+# Controls Plugin
 
 ## Description
 

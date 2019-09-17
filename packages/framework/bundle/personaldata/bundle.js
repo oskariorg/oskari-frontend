@@ -52,7 +52,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundle"
             "src": "../../../../bundles/framework/personaldata/request/AddTabRequestHandler.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/personaldata/resources/css/personaldata.css"
+            "src": "../../../../bundles/framework/personaldata/resources/scss/personaldata.scss"
         }],
 
         "locales": [{

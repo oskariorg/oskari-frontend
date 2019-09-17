@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.catalogue.bundle.metadataflyout.Tile',
         },
 
         setEl: function (el, width, height) {
-            this.container = $(el);
+            this.container = jQuery(el);
         },
 
         startPlugin: function () {

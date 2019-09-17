@@ -30,7 +30,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.infobox.InfoBoxBundle",
                 "src": "../../../../bundles/mapping/infobox/instance.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/infobox/plugin/openlayerspopup/OpenlayersPopupPlugin.ol3.js"
+                "src": "../../../../bundles/mapping/infobox/plugin/openlayerspopup/OpenlayersPopupPlugin.ol.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/infobox/request/ShowInfoBoxRequest.js"
@@ -57,7 +57,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.infobox.InfoBoxBundle",
                 "src": "../../../../bundles/mapping/infobox/event/InfoboxActionEvent.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/infobox/resources/css/infobox_ol3.css"
+                "src": "../../../../bundles/mapping/infobox/resources/scss/infobox.ol.scss"
             }]
         },
         "bundle": {

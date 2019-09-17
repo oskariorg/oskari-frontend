@@ -1,22 +1,63 @@
 {
-  "name": "Oskari",
+  "name": "oskari-frontend",
   "version": "0.0.1",
   "description": "Build tools for Oskari core",
+  "homepage": "http://oskari.org",
   "keywords": [
     "Oskari"
   ],
   "main": "grunt.js",
-  "dependencies": {},
   "scripts": {
-    "test": "eslint -c .eslintrc.js src/**/*.js",
-    "lintfix": "eslint -c .eslintrc.js src/**/*.js --fix"
+    "test": "eslint . --quiet",
+    "build": "webpack --progress --mode production --env.appdef=devapp:applications/sample",
+    "start": "webpack-dev-server --hot --env.appdef=devapp:applications/sample",
+    "sprite": "node webpack/sprite.js"
+  },
+  "bugs": {
+    "url": "https://github.com/oskariorg/oskari-docs/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/oskariorg/oskari-frontend.git"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "jsts": "^2.0.0",
+    "ol": "^5.2.0",
+    "ol-mapbox-style": "^3.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.1.2",
+    "@babel/polyfill": "^7.0.0",
+    "@babel/preset-env": "^7.1.0",
+    "babel-loader": "^8.0.4",
+    "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "copy-webpack-plugin": "^4.5.2",
+    "css-loader": "^0.28.11",
     "eslint": "^4.6.1",
     "eslint-config-standard": "^10.2.1",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.1.1",
     "eslint-plugin-promise": "^3.5.0",
-    "eslint-plugin-standard": "^3.0.1"
-  }
+    "eslint-plugin-standard": "^3.0.1",
+    "expose-loader": "^0.7.5",
+    "file-loader": "^1.1.11",
+    "fs-extra": "^0.26.7",
+    "gm": "^1.21.1",
+    "imports-loader": "^0.8.0",
+    "loader-utils": "^1.1.0",
+    "lodash": "^4.12.0",
+    "merge": "^1.2.0",
+    "mini-css-extract-plugin": "^0.4.5",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.3",
+    "script-loader": "^0.7.2",
+    "style-loader": "^0.21.0",
+    "sumoselect": "^3.0.5",
+    "uglifyjs-webpack-plugin": "^1.2.7",
+    "webpack": "^4.12.2",
+    "webpack-cli": "^3.0.8",
+    "webpack-dev-server": "^3.1.4"
+  },
+  "private": true
 }

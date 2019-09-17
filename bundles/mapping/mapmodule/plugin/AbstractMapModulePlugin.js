@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         getMapModule: function () {
             // Throw a fit if mapmodule is not set, it'd probably break things.
             if (this._mapModule === null || this._mapModule === undefined) {
-                throw 'No mapmodule provided!';
+                throw new Error('No mapmodule provided!');
             }
             return this._mapModule;
         },
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 this._mapModule = mapModule;
                 this._map = mapModule.getMap();
                 this._pluginName = mapModule.getName() + this._name;
-                if(!this._loc || Object.keys(this._loc).length === 0) {
+                if (!this._loc || Object.keys(this._loc).length === 0) {
                     // don't blindly overwrite if localization already has some content
                     this._loc = mapModule.getLocalization('plugin', true)[this._name] || {};
                 }
@@ -79,10 +79,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         },
         /**
          * Returns path to image resources
+         * @param fileName
          * @return {String}
          */
-        getImagePath : function() {
-            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/';
+        getImagePath: function (fileName) {
+            return this.getMapModule().getImageUrl(fileName);
         },
 
         /**
@@ -106,7 +107,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         init: function () {
             try {
                 return this._initImpl();
-            } catch(e) {
+            } catch (e) {
                 Oskari.log('AbstractMapModulePlugin').error('Error initializing plugin impl ' + this.getName());
             }
         },
@@ -151,7 +152,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             var me = this,
                 eventHandlers = me._createEventHandlers();
 
-            eventHandlers.LayerToolsEditModeEvent = function(event) {
+            eventHandlers.LayerToolsEditModeEvent = function (event) {
                 me._setLayerToolsEditMode(event.isInMode());
             };
             return eventHandlers;
@@ -219,26 +220,25 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          *
          */
         startPlugin: function (sandbox) {
-            var me = this,
-                handler;
+            var me = this;
 
             me._sandbox = sandbox;
             sandbox.register(me);
             me._eventHandlers = me.createEventHandlers();
             me._requestHandlers = me.createRequestHandlers();
 
-            Object.keys(me._eventHandlers).forEach(function(key) {
+            Object.keys(me._eventHandlers).forEach(function (key) {
                 sandbox.registerForEventByName(me, key);
             });
 
-            Object.keys(me._requestHandlers).forEach(function(key) {
+            Object.keys(me._requestHandlers).forEach(function (key) {
                 sandbox.requestHandler(key, me._requestHandlers[key]);
             });
 
             var waitingForToolbar = false;
             try {
                 waitingForToolbar = me._startPluginImpl(sandbox);
-            } catch(e) {
+            } catch (e) {
                 Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + me.getName());
             }
             // Make sure plugin's edit mode is set correctly
@@ -259,20 +259,19 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          * @param {Oskari.Sandbox} sandbox
          */
         stopPlugin: function (sandbox) {
-            var me = this,
-                handler;
+            var me = this;
 
             try {
                 me._stopPluginImpl(sandbox);
-            } catch(e) {
+            } catch (e) {
                 Oskari.log('AbstractMapModulePlugin').error('Error stopping plugin impl ' + me.getName());
             }
 
-            Object.keys(me._eventHandlers).forEach(function(key) {
+            Object.keys(me._eventHandlers).forEach(function (key) {
                 sandbox.unregisterFromEventByName(me, key);
             });
 
-            Object.keys(me._requestHandlers).forEach(function(key) {
+            Object.keys(me._requestHandlers).forEach(function (key) {
                 sandbox.requestHandler(key, null);
             });
 
@@ -327,12 +326,12 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
                 // return a clone so people won't muck about with the config...
                 try {
                     return jQuery.extend(true, ret, this._config);
-                } catch(err) {
+                } catch (err) {
                     var log = Oskari.log('AbstractMapModulePlugin');
                     log.warn('Unable to setup config properly for ' + this.getName() + '. Trying shallow copy.', err);
                     try {
                         return jQuery.extend(ret, this._config);
-                    } catch(err) {
+                    } catch (err) {
                         log.error('Unable to setup config for ' + this.getName() + '. Returning empty config.', err);
                     }
                 }

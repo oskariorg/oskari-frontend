@@ -11,7 +11,6 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
      */
 
     function (instance, locale) {
-
         this.instance = instance;
         this.locale = locale;
         this.container = null;
@@ -21,7 +20,7 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
             return 'Oskari.integration.bundle.bb.Tile';
         },
         setEl: function (el) {
-            this.container = $(el);
+            this.container = jQuery(el);
             if (this.instance && !this.container.hasClass(this.instance.getName())) {
                 this.container.addClass(this.instance.getName());
             }
@@ -43,9 +42,6 @@ Oskari.clazz.define('Oskari.integration.bundle.bb.Tile',
             this.state = state;
         },
         refresh: function () {
-            var me = this,
-                instance = me.instance,
-                cel = this.container;
         }
     }, {
         'protocol': ['Oskari.userinterface.Tile']

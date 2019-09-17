@@ -6,7 +6,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.geometrycutter.StopGeometryCutti
         this._operationId = operationId;
         this._isCancel = (isCancel == true);
     }, {
-        __name: "StopGeometryCuttingRequest",
+        __name: 'StopGeometryCuttingRequest',
         getName: function () {
             return this.__name;
         },

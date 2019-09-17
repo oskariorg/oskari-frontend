@@ -89,16 +89,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.Flyout',
             if (this.instance.getLocalization('tabs')) {
                 var tabs = me.tabContainer.panels,
                     i,
-                    newtab,
-                    tab;
+                    newtab;
                 for (i = 0; i < tabs.length; i += 1) {
                     newtab = tabs[i];
                     if (tagsTxt === newtab.tagsTxt) {
                         newtab.setContent(content);
                     }
                 }
-            }
-            else {
+            } else {
                 me.cel.append(content);
             }
         }

@@ -50,12 +50,12 @@ Oskari.clazz.define(
         _setupLocation: function () {
             var me = this;
             var mapmodule = this.getMapModule();
-            mapmodule.getUserLocation(function(lon, lat) {
-                if(!lon || !lat) {
+            mapmodule.getUserLocation(function (lon, lat) {
+                if (!lon || !lat) {
                     // error getting location
                     return;
                 }
-                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+                mapmodule.centerMap({ lon: lon, lat: lat }, 6);
                 me._locationIsSet = true;
             });
         }

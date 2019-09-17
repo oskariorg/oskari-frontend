@@ -30,6 +30,12 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/Tile.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/MyIndicatorsTab.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/service/SeriesService.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/service/StatisticsService.js"
             }, {
                 "type": "text/javascript",
@@ -48,10 +54,16 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/service/Cache.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/service/CacheHelper.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorSelection.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorParameters.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorParametersHandler.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/RegionsetSelector.js"
@@ -60,7 +72,22 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/components/SelectedIndicatorsMenu.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorForm.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorParametersList.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorDataForm.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/IndicatorList.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Diagram.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/SpanSelect.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/view/TableFlyout.js"
@@ -75,16 +102,19 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/view/SearchFlyout.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
+                "src": "../../../bundles/statistics/statsgrid2016/view/IndicatorFormFlyout.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/ExtraFeatures.js"
+                "src": "../../../bundles/statistics/statsgrid2016/components/Datatable.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/plugin/TogglePlugin.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/Legend.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/components/SeriesControl.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/EditClassification.js"
@@ -114,6 +144,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/event/ClassificationChangedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/ParameterChangedEvent.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/StatsTableTool.js"
             }, {
                 "type": "text/javascript",
@@ -126,10 +159,16 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/plugin/ClassificationPlugin.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/plugin/SeriesControlPlugin.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/DiagramTool.js"
             }, {
                 "type": "text/css",
-                "src": "../../../bundles/statistics/statsgrid2016/resources/css/style.css"
+                "src": "../../../bundles/statistics/statsgrid2016/resources/scss/style.scss"
+            }, {
+                "type": "text/css",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/css/seriesplayback.css"
             }, {
                 "type" : "text/javascript",
                 "expose" : "geostats",

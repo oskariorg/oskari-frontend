@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.ChangeMapLayerStyleReque
         this._style = style;
     }, {
         /** @static @property __name request name */
-        __name: "ChangeMapLayerStyleRequest",
+        __name: 'ChangeMapLayerStyleRequest',
         /**
          * @method getName
          * @return {String} request name

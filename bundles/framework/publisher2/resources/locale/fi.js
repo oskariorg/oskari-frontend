@@ -16,7 +16,15 @@ Oskari.registerLocalization(
         "edit": {
             "popup": {
                 "title": "Päivitetään upotettua karttaa…",
-                "msg": "Päivitetään upotetun kartan tietoja…"
+                "msg": "Päivitetään upotetun kartan tietoja…",
+                "published": {
+                    "msg": "Avataan upotettua karttaa muokattavaksi. Odota hetki, ole hyvä!",
+                    "error": {
+                        "title": "Virhe",
+                        "common": "Upotetun kartan avaaminen epäonnistui.",
+                        "login": "Kirjaudu sisään muokataksesi karttajulkaisua."
+                    }
+                }
             }
         },
         "BasicView": {
@@ -55,6 +63,7 @@ Oskari.registerLocalization(
                 "label": "Kartalla näytettävät työkalut",
                 "tooltip": "Valitse kartalla käytettävissä olevat työkalut. Tarkista asettelu esikatselukartasta.",
                 "ScaleBarPlugin": "Mittakaavajana",
+                "TimeseriesControlPlugin": "Aikasarjatoistin",
                 "IndexMapPlugin": "Indeksikartta",
                 "PanButtons": "Kartan liikuttaminen nuolipainikkeilla",
                 "Portti2Zoombar": "Mittakaavasäädin",
@@ -218,8 +227,10 @@ Oskari.registerLocalization(
             "layerlist_title": "Avoinna olevat karttatasot, jotka ovat julkaistavissa",
             "layerlist_empty": "Avoinna olevat karttatasot eivät ole julkaistavissa. Tarkista Valitut tasot -valikosta, mitkä karttatasot ovat julkaistavissa.",
             "layerlist_denied": "Avoinna olevat karttatasot, jotka eivät ole julkaistavissa",
-            "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
+            "denied_tooltip": "Karttatasot eivät ole julkaistavissa upotetussa kartassa. Tiedontuottaja ei ole antanut lupaa julkaista karttatasoa muissa verkkopalveluissa tai tasoa ei voida näyttää tässä karttaprojektiossa. Tarkista karttatason julkaisuoikeudet Valitut tasot -valikosta.",
             "myPlacesDisclaimer": "HUOM! Jos käytät karttatasoa karttajulkaisussa, karttatasosta tulee julkinen.",
+            "noRights": "ei julkaisuoikeutta",
+            "unsupportedProjection": "väärä karttaprojektio",
             "buttons": {
                 "continue": "Jatka",
                 "continueAndAccept": "Hyväksy ehdot ja jatka",

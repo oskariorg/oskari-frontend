@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
      *    reference to component that created the flyout
      */
 
-    function(instance) {
+    function (instance) {
         var me = this;
         this.instance = instance;
         this.sb = this.instance.sandbox;
@@ -31,7 +31,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
 
         this.addedButtons = {};
 
-        this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
+        this.layerlistService.on('Layerlist.Filter.Button.Add', function (button) {
             me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
         });
         this._bindExtenderServiceListeners();
@@ -46,18 +46,18 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  _bindExtenderServiceListeners
          * @private
          */
-        _bindExtenderServiceListeners: function() {
+        _bindExtenderServiceListeners: function () {
             var me = this;
 
-            me.service.on('option.added', function() {
+            me.service.on('option.added', function () {
                 me.populateLayers();
             });
 
-            me.service.on('show.empty.groups', function() {
+            me.service.on('show.empty.groups', function () {
                 me.populateLayers();
             });
 
-            me.service.on('admin.layer', function(data) {
+            me.service.on('admin.layer', function (data) {
                 var mode = data.mode;
 
                 if (mode === 'delete') {
@@ -73,27 +73,25 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     me._updateBreadcrumbGroups(data.layerData);
                 }
 
-
                 me.populateLayers();
             });
 
-            me.service.on('order.changed', function(data) {
+            me.service.on('order.changed', function (data) {
                 // order not changed, need reload tree
                 if (data.ajax && data.success === false) {
                     me.populateLayers();
                 }
             });
 
-
             // group added
-            me.service.on('group.added', function(data) {
+            me.service.on('group.added', function (data) {
                 // update service groups
                 me.mapLayerService.updateLayerGroups(data);
                 me.populateLayers();
             });
 
             // group deleted
-            me.service.on('group.deleted', function(data) {
+            me.service.on('group.deleted', function (data) {
                 me.mapLayerService.deleteLayerGroup(data.id, data.parentId);
                 me.populateLayers();
             });
@@ -103,16 +101,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  _bindOskariEvents
          * @private
          */
-        _bindOskariEvents: function() {
+        _bindOskariEvents: function () {
             var me = this;
 
-            me.notifierService.on('MapLayerEvent', function(evt) {
+            me.notifierService.on('MapLayerEvent', function (evt) {
                 if (evt.getOperation() === 'add' || evt.getOperation() === 'remove') {
                     me.populateLayers();
                 }
             });
 
-            me.notifierService.on('BackendStatus.BackendStatusChangedEvent', function(evt) {
+            me.notifierService.on('BackendStatus.BackendStatusChangedEvent', function (evt) {
                 var layerId = evt.getLayerId();
                 if (layerId === null || layerId === undefined) {
                     // Massive update so just recreate the whole ui
@@ -120,7 +118,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 }
             });
 
-            me.notifierService.on('userinterface.ExtensionUpdatedEvent', function(evt) {
+            me.notifierService.on('userinterface.ExtensionUpdatedEvent', function (evt) {
                 // ExtensionUpdateEvents are fired a lot, only let hierarchical-layerlist extension event to be handled when enabled
                 if (evt.getExtension().getName() !== me.instance.getName()) {
                     // wasn't me -> do nothing
@@ -137,7 +135,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @param   {Object}                layerData layer data
          * @private
          */
-        _updateBreadcrumbGroups: function(layerData) {
+        _updateBreadcrumbGroups: function (layerData) {
             var me = this;
 
             // Check at if layer is selected
@@ -148,11 +146,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             }
 
             // check if the layer belongs to the referenced group
-            var group = layerData.groups.find(function(group) {
+            var group = layerData.groups.find(function (group) {
                 return group.id === currentGroupId;
             });
 
-            if(!group) {
+            if (!group) {
                 // update group reference to the FIRST group the layer belongs to IF the layer was not part of the "currentGroup"
                 me.instance._selectedLayerGroupId[layerData.id] = layerData.groups[0].id;
             }
@@ -163,13 +161,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method _getLayerGroups
          * @private
          */
-        _getLayerGroups: function(groupingMethod) {
+        _getLayerGroups: function (groupingMethod) {
             var me = this,
-                groupList = [],
-                groupModel = null,
-                n,
-                layer,
-                groupAttr;
+                groupList = [];
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
 
@@ -177,41 +171,38 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var layersCopy = layers.slice(0);
             var notLoadedBackend = {};
 
-            layersCopy.forEach(function(layer){
+            layersCopy.forEach(function (layer) {
                 var group = layer.getGroups()[0];
-                if(isNaN(group.id) && Array.isArray(me.mapLayerService.getAllLayerGroups(group.id))) {
-                    if(!notLoadedBackend[group.id]) {
-                        notLoadedBackend[group.id] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup',{
-                            groups: [],
-                            id: group.id,
-                            layers: [],
-                            name:{},
+                if (group && isNaN(group.id) && !me.mapLayerService.getAllLayerGroups(group.name)) {
+                    if (!notLoadedBackend[group.name]) {
+                        notLoadedBackend[group.name] = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', {
+                            id: group.name,
+                            name: {},
                             orderNumber: -1,
                             selectable: true,
                             toolsVisible: false
                         });
-                        notLoadedBackend[group.id].getName()[Oskari.getLang()] = group.name;
+                        notLoadedBackend[group.name].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.id].layers.push({id:layer.getId()});
+                    notLoadedBackend[group.name].getChildren().push({id: layer.getId(), type: 'layer'});
+                    notLoadedBackend[group.name].layersModels.push(layer);
                 }
             });
 
-
-            Object.keys(notLoadedBackend).forEach(function(key){
+            Object.keys(notLoadedBackend).forEach(function (key) {
                 var group = notLoadedBackend[key];
                 allGroups.unshift(group);
             });
 
-
-            allGroups.forEach(function(group) {
-                groupModel = Oskari.clazz.create(
+            allGroups.forEach(function (group) {
+                var groupModel = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.model.LayerGroup',
                     group,
                     me.mapLayerService
                 );
+
                 groupList.push(groupModel);
             });
-
             return groupList;
         },
 
@@ -225,8 +216,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
          * @param {String} groupingMethod method name to sort by
          */
-        _layerListComparator: function(a, b, groupingMethod) {
-            //"use strict";
+        _layerListComparator: function (a, b, groupingMethod) {
+            // "use strict";
             var nameA = a[groupingMethod]().toLowerCase(),
                 nameB = b[groupingMethod]().toLowerCase();
             if (nameA === nameB && (a.getName() && b.getName())) {
@@ -248,9 +239,9 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @param {String} filterName filter name
          * @param {String} tooltip    tooltip
          */
-        _setFilterTooltip: function(filterName, tooltip) {
+        _setFilterTooltip: function (filterName, tooltip) {
             var me = this;
-            me.layerTabs.forEach(function(tab) {
+            me.layerTabs.forEach(function (tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
                 var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
                 filterIcon.parents('.filter').attr('title', tooltip);
@@ -261,12 +252,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  @private _setFilterIconClasses
          * @param {String} filterName filter name
          */
-        _setFilterIconClasses: function(filterName) {
+        _setFilterIconClasses: function (filterName) {
             var me = this;
-            me.layerTabs.forEach(function(tab) {
+            me.layerTabs.forEach(function (tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
                 var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
+                Object.keys(filters).forEach(function (key) {
                     var filter = filters[key];
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
                     // First remove all active classes
@@ -286,7 +277,6 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             });
         },
 
-
         /*******************************************************************************************************************************
         /* PUBLIC METHODS
         *******************************************************************************************************************************/
@@ -295,7 +285,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
             return 'Oskari.framework.bundle.hierarchical-layerlist.Flyout';
         },
 
@@ -310,7 +300,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function(el, width, height) {
+        setEl: function (el, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('hierarchical-layerlist')) {
                 jQuery(this.container).addClass('hierarchical-layerlist');
@@ -323,7 +313,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
-        startPlugin: function() {
+        startPlugin: function () {
             var me = this,
                 layerGroupTab = Oskari.clazz.create(
                     'Oskari.framework.bundle.hierarchical-layerlist.view.LayerGroupTab',
@@ -343,7 +333,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             elId.attr('id', 'oskari_hierarchical-layerlist_flyout_oskari_flyouttool_close');
 
             var buttons = me.layerlistService.getLayerlistFilterButton();
-            Object.keys(buttons).forEach(function(key) {
+            Object.keys(buttons).forEach(function (key) {
                 var button = buttons[key];
                 me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
             });
@@ -353,7 +343,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Adds default filter buttons.
          * @method  @private addDefaultFilters
          */
-        addDefaultFilters: function() {
+        addDefaultFilters: function () {
             var me = this;
 
             // Add newest filter
@@ -367,7 +357,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Add newest filter.
          * @method  @public addNewestFilter
          */
-        addNewestFilter: function() {
+        addNewestFilter: function () {
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
@@ -383,7 +373,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Add featuredata filter.
          * @method  @public addFeaturedataFilter
          */
-        addFeaturedataFilter: function() {
+        addFeaturedataFilter: function () {
             var me = this,
                 loc = me.instance.getLocalization('layerFilter');
 
@@ -400,13 +390,13 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          * Interface method implementation, does nothing atm
          */
-        stopPlugin: function() {},
+        stopPlugin: function () {},
 
         /**
          * @method getTitle
          * @return {String} localized text for the title of the flyout
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.instance.getLocalization('title');
         },
 
@@ -414,7 +404,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method getDescription
          * @return {String} localized text for the description of the flyout
          */
-        getDescription: function() {
+        getDescription: function () {
             return this.instance.getLocalization('desc');
         },
 
@@ -422,7 +412,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method getOptions
          * Interface method implementation, does nothing atm
          */
-        getOptions: function() {},
+        getOptions: function () {},
 
         /**
          * @method setState
@@ -430,7 +420,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *     close/minimize/maximize etc
          * Interface method implementation, does nothing atm
          */
-        setState: function(state) {
+        setState: function (state) {
             this.state = state;
         },
 
@@ -439,7 +429,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method  @public setContentState
          * @param {Object} state a content state
          */
-        setContentState: function(state) {
+        setContentState: function (state) {
             var i,
                 tab;
             // prepare for complete state reset
@@ -461,7 +451,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method getContentState
          * @return {Object}        state object
          */
-        getContentState: function() {
+        getContentState: function () {
             var state = {},
                 i,
                 tab;
@@ -479,7 +469,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method createUi
          * Creates the UI for a fresh start
          */
-        createUi: function() {
+        createUi: function () {
             var me = this,
                 cel = jQuery(this.container),
                 i,
@@ -492,7 +482,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             );
 
             // Add filter tab change listener
-            me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
+            me.tabContainer.addTabChangeListener(function (previousTab, newTab) {
                 if (me._currentFilter) {
                     me.activateFilter(me._currentFilter);
                 }
@@ -503,13 +493,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 me.tabContainer.addPanel(tab.getTabPanel());
             }
 
-
             // Add other tabs
             me.selectedTab = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.view.SelectedLayersTab', me.instance);
             me.tabContainer.addPanel(me.selectedTab.getTabPanel());
 
             me.tabContainer.addTabChangeListener(
-                function(previousTab, newTab) {
+                function (previousTab, newTab) {
                     // Make sure this fires only when the flyout is open
                     if (!cel.parents('.oskari-flyout.oskari-closed').length) {
                         var searchInput = newTab.getContainer().find('input[type=text]');
@@ -529,7 +518,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Update selected tab
          * @method updateSelectedLayers
          */
-        updateSelectedLayers: function() {
+        updateSelectedLayers: function () {
             var me = this;
             me.selectedTab.updateSelectedLayers();
         },
@@ -540,7 +529,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          *
          */
-        focus: function() {
+        focus: function () {
             if (this.layerTabs) {
                 this.layerTabs[0].focus();
             }
@@ -550,10 +539,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * Populate layer lists.
          * @method  @public populateLayers
          */
-        populateLayers: function() {
-            var me = this;
-            var sandbox = this.instance.getSandbox(),
-                i,
+        populateLayers: function () {
+            var i,
                 tab,
                 groups;
 
@@ -580,22 +567,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @param {String} iconClassDeactive    tool icon deactive class
          * @param {String} filterName           filter name
          */
-        addFilterTool: function(toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
+        addFilterTool: function (toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
             var me = this;
             if (me.addedButtons[filterName]) {
                 return;
             }
 
-            var filter = {
-                toolText: toolText,
-                tooltip: tooltip,
-                iconClassActive: iconClassActive,
-                iconClassDeactive: iconClassDeactive,
-                filterName: filterName
-            };
             var loc = me.instance.getLocalization('layerFilter');
 
-            me.layerTabs.forEach(function(tab) {
+            me.layerTabs.forEach(function (tab) {
                 var filterButton = me.filterTemplate.clone(),
                     filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
 
@@ -605,8 +585,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 filterButton.find('.filter-icon').addClass('filter-' + filterName);
                 filterButton.find('.filter-icon').addClass(iconClassDeactive);
 
-                filterButton.unbind('click');
-                filterButton.bind('click', function() {
+                filterButton.off('click');
+                filterButton.on('click', function () {
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
                     me.deactivateAllFilters(filterName);
                     if (filterIcon.hasClass(iconClassDeactive)) {
@@ -630,17 +610,17 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method @public activateFilter
          * @param  {String} filterName activate filter name
          */
-        activateFilter: function(filterName) {
+        activateFilter: function (filterName) {
             var me = this;
             me._currentFilter = filterName;
 
-            me.layerTabs.forEach(function(tab) {
+            me.layerTabs.forEach(function (tab) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
                 var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
+                Object.keys(filters).forEach(function (key) {
                     var filter = filters[key];
                     var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                    if(filter.id === filterName) {
+                    if (filter.id === filterName) {
                         filterIcon.removeClass(filter.cls.deactive);
                         filterIcon.addClass(filter.cls.active);
                         filterIcon.addClass('active');
@@ -660,14 +640,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          * @param {String} notDeactivateThisFilter not deactivate this filter
          */
-        deactivateAllFilters: function(notDeactivateThisFilter) {
+        deactivateAllFilters: function (notDeactivateThisFilter) {
             var me = this;
 
             me._currentFilter = null;
-            me.layerTabs.forEach(function(tab, tabIndex) {
+            me.layerTabs.forEach(function (tab, tabIndex) {
                 var filterContainer = tab.getTabPanel().getContainer().find('.hierarchical-layerlist-layer-filter');
                 var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
+                Object.keys(filters).forEach(function (key) {
                     var filter = filters[key];
                     if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
                         var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);

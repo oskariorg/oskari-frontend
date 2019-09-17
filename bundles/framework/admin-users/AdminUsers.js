@@ -24,8 +24,7 @@ Oskari.clazz.define(
          */
         _initTemplates: function () {
             var me = this,
-                btn,
-                i;
+                btn;
 
             me.templates.main = jQuery('<div class="admin-users"></div>');
             me.templates.search = jQuery(
@@ -34,7 +33,7 @@ Oskari.clazz.define(
                 '  <div class="icon-close"></div>' +
                 '</div>'
             );
-            me.templates.search.find('input').keypress(
+            me.templates.search.find('input').on('keypress',
                 function (event) {
                     if (event.keyCode === 10 || event.keyCode === 13) {
                         me._filterList(event, me);
@@ -42,7 +41,7 @@ Oskari.clazz.define(
                 }
             );
 
-            me.templates.search.find('input').keyup(
+            me.templates.search.find('input').on('keyup',
                 function (event) {
                     if (jQuery(this).val().length === 0) {
                         me._filterList(event, me);
@@ -50,9 +49,7 @@ Oskari.clazz.define(
                 }
             );
 
-
-
-            me.templates.search.find('div.icon-close').click(
+            me.templates.search.find('div.icon-close').on('click',
                 function (event) {
                     jQuery(event.target)
                         .parent()
@@ -66,7 +63,7 @@ Oskari.clazz.define(
             );
             // jQuery doesn't clone handlers that aren't created with jQuery,
             // so we have to do this with jQuery...
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._filterList(event, me);
                 }
@@ -110,7 +107,7 @@ Oskari.clazz.define(
                 '<fieldset></fieldset>' +
                 '</form>'
             );
-            //me.templates.form.attr('action', me.sandbox.getAjaxUrl() + me.instance.conf.restUrl);
+            // me.templates.form.attr('action', Oskari.urls.getRoute() + me.instance.conf.restUrl);
             me.templates.form.find('input').each(function (index) {
                 var el = jQuery(this);
                 el.prev('span').html(me._getLocalization(el.attr('name')));
@@ -126,7 +123,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.DeleteButton'
             );
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._deleteUser(event, me);
                 }
@@ -135,7 +132,7 @@ Oskari.clazz.define(
             btn = Oskari.clazz.create(
                 'Oskari.userinterface.component.buttons.CancelButton'
             );
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._closeForm(jQuery(event.target).parents('form'));
                 }
@@ -157,7 +154,7 @@ Oskari.clazz.define(
             );
             btn = Oskari.clazz.create('Oskari.userinterface.component.buttons.EditButton');
             btn.setName('edit');
-            jQuery(btn.getElement()).click(
+            jQuery(btn.getElement()).on('click',
                 function (event) {
                     me._openForm(event, me);
                 }
@@ -192,7 +189,6 @@ Oskari.clazz.define(
                 roleData,
                 value,
                 name,
-                opt,
                 roles = me.instance.storedRoles;
 
             for (i = 0, ilen = roles.length; i < ilen; i += 1) {
@@ -204,7 +200,7 @@ Oskari.clazz.define(
                     var optEl = document.createElement('option');
                     optEl.value = value;
                     optEl.textContent = name;
-                    //opt = jQuery('<option value="' + value + '">' + name + '</option>');
+                    // opt = jQuery('<option value="' + value + '">' + name + '</option>');
                     sel.append(optEl);
                 }
             }
@@ -222,7 +218,7 @@ Oskari.clazz.define(
             var me = this;
             jQuery.ajax({
                 type: 'GET',
-                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+                url: Oskari.urls.getRoute() + me.instance.conf.restUrl,
                 success: function (data) {
                     me._createList(me, data.users, me.state.filter);
                 },
@@ -311,7 +307,7 @@ Oskari.clazz.define(
             item.hide();
             jQuery.ajax({
                 type: 'DELETE',
-                url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl + '&id=' + uid,
+                url: Oskari.urls.getRoute() + me.instance.conf.restUrl + '&id=' + uid,
                 error: function (jqXHR, textStatus, errorThrown) {
                     var error = me._getErrorText(jqXHR, textStatus, errorThrown);
                     me._openPopup(
@@ -332,8 +328,6 @@ Oskari.clazz.define(
          * Populates an item fragment
          */
         _populateItem: function (item, user) {
-            var me = this;
-
             item.attr('data-id', user.id);
             item.find('h3').text(
                 user.user +
@@ -444,21 +438,15 @@ Oskari.clazz.define(
             event.preventDefault(); // We don't want the form to submit
             var frm = jQuery(event.target);
             if (me._formIsValid(frm, me)) {
-
                 jQuery.ajax({
                     type: frm.attr('method'),
-                    url: me.sandbox.getAjaxUrl() + me.instance.conf.restUrl,
+                    url: Oskari.urls.getRoute() + me.instance.conf.restUrl,
                     data: frm.serialize(),
                     success: function (data) {
                         me._closeForm(frm);
                         me.fetchUsers(me.container);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        var error = me._getErrorText(
-                            jqXHR,
-                            textStatus,
-                            errorThrown
-                        );
                         me._openPopup(
                             me._getLocalization('save_failed'),
                             me._getLocalization('save_failed_message')

@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 var placesInCategory = placesList[category];
                 var indexInCategory = placesInCategory.findIndex(function (place) {
                     return place.getId() === id;
-                })
+                });
                 if (indexInCategory !== -1) {
                     placesInCategory.splice(indexInCategory, 1);
                 }
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 var placesInCategory = placesList[category];
                 place = placesInCategory.find(function (place) {
                     return place.getId() === id;
-                })
+                });
             });
             return place;
         },
@@ -221,15 +221,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 category.setLineStyle(properties.stroke_dasharray);
                 category.setLineCap(properties.stroke_linecap);
                 category.setLineCorner(properties.stroke_linejoin);
-                category.setLineColor(this._formatColorFromServer(properties.stroke_color));
+                category.setLineColor(properties.stroke_color);
                 category.setAreaLineWidth(properties.border_width);
                 category.setAreaLineStyle(properties.border_dasharray);
                 category.setAreaLineCorner(properties.border_linejoin);
-                category.setAreaLineColor(this._formatColorFromServer(properties.border_color));
-                category.setAreaFillColor(this._formatColorFromServer(properties.fill_color));
+                category.setAreaLineColor(properties.border_color);
+                category.setAreaFillColor(properties.fill_color);
                 category.setAreaFillStyle(properties.fill_pattern);
                 category.setDotShape(properties.dot_shape);
-                category.setDotColor(this._formatColorFromServer(properties.dot_color));
+                category.setDotColor(properties.dot_color);
                 category.setDotSize(properties.dot_size);
                 category.setUuid(properties.uuid);
                 if (properties.publisher_name) {
@@ -584,14 +584,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     'stroke_dasharray': cat.getLineStyle(),
                     'stroke_linecap': cat.getLineCap(),
                     'stroke_linejoin': cat.getLineCorner(),
-                    'stroke_color': this._prefixColorForServer(cat.getLineColor()),
+                    'stroke_color': cat.getLineColor(),
                     'border_width': cat.getAreaLineWidth(),
                     'border_dasharray': cat.getAreaLineStyle(),
                     'border_linejoin': cat.getAreaLineCorner(),
-                    'border_color': typeof cat.getAreaLineColor() === 'string' ? this._prefixColorForServer(cat.getAreaLineColor()) : null,
-                    'fill_color': typeof cat.getAreaFillColor() === 'string' ? this._prefixColorForServer(cat.getAreaFillColor()) : null,
+                    'border_color': typeof cat.getAreaLineColor() === 'string' ? cat.getAreaLineColor() : null,
+                    'fill_color': typeof cat.getAreaFillColor() === 'string' ? cat.getAreaFillColor() : null,
                     'fill_pattern': cat.getAreaFillStyle(),
-                    'dot_color': this._prefixColorForServer(cat.getDotColor()),
+                    'dot_color': cat.getDotColor(),
                     'dot_size': cat.getDotSize(),
                     'dot_shape': cat.getDotShape()
                 };
@@ -652,14 +652,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 categoryModel.setName(Oskari.util.sanitize(properties.category_name));
                 categoryModel.setUuid(properties.uuid);
                 categoryModel.setDefault(!!properties.default);
-                category.setPublic(!!properties.publisher_name);
+                categoryModel.setPublic(!!properties.publisher_name);
 
                 categoryModel.setDotSize(properties.dot_size);
-                categoryModel.setDotColor(me._formatColorFromServer(properties.dot_color));
+                categoryModel.setDotColor(properties.dot_color);
                 categoryModel.setDotShape(properties.dot_shape);
 
                 categoryModel.setLineWidth(properties.stroke_width);
-                categoryModel.setLineColor(me._formatColorFromServer(properties.stroke_color));
+                categoryModel.setLineColor(properties.stroke_color);
                 categoryModel.setLineCap(properties.stroke_linecap);
                 categoryModel.setLineCorner(properties.stroke_linejoin);
                 categoryModel.setLineStyle(properties.stroke_dasharray);
@@ -667,8 +667,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 categoryModel.setAreaLineWidth(properties.border_width);
                 categoryModel.setAreaLineCorner(properties.border_linejoin);
                 categoryModel.setAreaLineStyle(properties.border_dasharray);
-                categoryModel.setAreaLineColor(me._formatColorFromServer(properties.border_color));
-                categoryModel.setAreaFillColor(me._formatColorFromServer(properties.fill_color));
+                categoryModel.setAreaLineColor(properties.border_color);
+                categoryModel.setAreaFillColor(properties.fill_color);
                 categoryModel.setAreaFillStyle(properties.fill_pattern);
                 if (isNew) {
                     me._addCategory(categoryModel);
@@ -747,10 +747,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 contentType: 'application/json',
                 data: JSON.stringify({
                     'features': features,
-                    'srsName': this.srsName,
-                    'crs': this.srsName
+                    'srsName': this.srsName
                 }),
-                url: Oskari.urls.getRoute('MyPlacesFeatures'),
+                url: Oskari.urls.getRoute('MyPlacesFeatures') + '&crs=' + this.srsName,
                 success: function (response) {
                     if (response) {
                         if (me.skipLoading === true) {
@@ -795,10 +794,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     place.setCreateDate(feature.properties.created);
                     place.setUuid(feature.uuid);
                 } else {
-                    place = this.findMyPlace(id);
+                    place = me.findMyPlace(id);
                     if (!place) {
                         cb(false, null);
                         Oskari.log('Oskari.mapframework.bundle.myplaces3.service.MyPlacesService').error('Cannot find place to update');
+                        return;
                     }
                 }
                 place.setName(Oskari.util.sanitize(feature.properties.name));
@@ -835,7 +835,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 return;
             }
             jQuery.ajax({
-                type: 'GET',
+                type: 'POST',
                 dataType: 'json',
                 data: {
                     id: category.getId(),
@@ -857,37 +857,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                     }
                 }
             });
-        },
-        /**
-         * @method  _formatColorFromServer
-         * @private
-         * Removes prefix #-character if present
-         */
-        _formatColorFromServer: function (color) {
-            if (typeof color === 'string') {
-                if (color.length === 0) {
-                    return null;
-                } else if (color.charAt(0) === '#') {
-                    return color.substring(1);
-                } else {
-                    return color;
-                }
-            } else {
-                return null;
-            }
-        },
-        /**
-         * @method  _prefixColorForServer
-         * @private
-         * Adds prefix #-character if not present
-         */
-        _prefixColorForServer: function (color) {
-            if (color.charAt(0) !== '#') {
-                return '#' + color;
-            }
-            return color;
         }
-
     }, {
         'protocol': ['Oskari.mapframework.service.Service']
     });

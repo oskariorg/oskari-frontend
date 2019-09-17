@@ -29,7 +29,7 @@ Oskari.clazz.define(
     },
     {
         /** @static @property __name event name */
-        __name: "MapLayerVisibilityChangedEvent",
+        __name: 'MapLayerVisibilityChangedEvent',
         /**
          * @method getName
          * @return {String} the name for the event

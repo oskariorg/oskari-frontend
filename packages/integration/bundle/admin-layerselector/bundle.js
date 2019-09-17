@@ -51,7 +51,7 @@ Oskari.clazz.define(
 
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/integration/admin-layerselector/resources/css/style.css"
+                "src": "../../../../bundles/integration/admin-layerselector/resources/scss/style.scss"
             }],
             "locales": [
                 {

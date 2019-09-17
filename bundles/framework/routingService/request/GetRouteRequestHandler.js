@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routeService.request.GetRouteReq
      * @param {Oskari.mapframework.bundle.routingService.RoutingServiceBundleInstance} routingService
      *          reference to routingService
      */
-    function(routingService) {
+    function (routingService) {
         this.routingService = routingService;
     }, {
         /**
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routeService.request.GetRouteReq
          * @param {Oskari.mapframework.bundle.routingService.request.GetRouteRequest} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest: function (core, request) {
             var params = request.getRouteParams();
             this.routingService.getRoute(params);
         }
@@ -29,5 +29,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.routeService.request.GetRouteReq
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

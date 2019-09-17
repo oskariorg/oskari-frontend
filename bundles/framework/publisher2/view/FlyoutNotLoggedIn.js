@@ -27,33 +27,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutNotLoggedI
          * @param {jQuery} container reference to DOM element this component will be rendered to
          */
         render: function (container) {
-            var me = this,
-                conf = me.instance.conf,
-                sandbox = me.instance.getSandbox(),
-                content = me.template.clone(),
-                login = me.loginTemplate.clone(),
-                loginUrl = null,
-                register = me.registerTemplate.clone(),
-                registerUrl = null,
-                loginTmp = login.find('a'),
-                registerTmp = register.find('a');
+            var conf = this.instance.conf || {};
+            var content = this.template.clone();
+            var login = this.loginTemplate.clone();
+            var register = this.registerTemplate.clone();
 
-            if (conf) {
-                loginUrl = Oskari.getLocalized(conf.loginUrl);
-                registerUrl = Oskari.getLocalized(conf.registerUrl);
-            }
-            content.append(me.loc.text);
+            content.append(this.loc.text);
             container.append(content);
 
+            var loginUrl = Oskari.getLocalized(conf.loginUrl) || Oskari.urls.getLocation('login');
             if (loginUrl) {
-                loginTmp.attr('href', loginUrl);
-                loginTmp.append(me.loc.signup);
+                var loginLink = login.find('a');
+                loginLink.attr('href', loginUrl);
+                loginLink.append(this.loc.signup);
                 container.append(login);
             }
 
+            var registerUrl = Oskari.getLocalized(conf.registerUrl) || Oskari.urls.getLocation('register');
             if (registerUrl) {
-                registerTmp.attr('href', registerUrl);
-                registerTmp.append(me.loc.register);
+                var registerLink = register.find('a');
+                registerLink.attr('href', registerUrl);
+                registerLink.append(this.loc.register);
                 container.append(register);
             }
         }

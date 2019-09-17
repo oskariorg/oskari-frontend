@@ -17,12 +17,11 @@ Oskari.clazz.define('Oskari.mapframework.request.common.AddMapLayerRequest',
      */
 
     function (mapLayerId) {
-
         this._creator = null;
         this._mapLayerId = mapLayerId;
     }, {
         /** @static @property __name request name */
-        __name: "AddMapLayerRequest",
+        __name: 'AddMapLayerRequest',
 
         /**
          * @method getName

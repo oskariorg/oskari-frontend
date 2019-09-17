@@ -24,7 +24,7 @@ Oskari.clazz.define('activate.map.layer.request',
         this._isActivated = isActivated === true;
     }, {
         /** @static @property __name request name */
-        __name: "activate.map.layer",
+        __name: 'activate.map.layer',
         /**
          * @method getName
          * @return {String} request name

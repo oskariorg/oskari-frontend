@@ -14,26 +14,25 @@ Oskari.clazz
      * @param {Boolean}
      *            enabled Truth value of WFS highlight activation
      */
-        function(enabled) {
+        function (enabled) {
             this._enabled = !!enabled;
-
-    }, {
+        }, {
         /** @static @property __name request name */
-        __name : "WfsLayerPlugin.ActivateHighlightRequest",
-        /**
+            __name: 'WfsLayerPlugin.ActivateHighlightRequest',
+            /**
          * @method getName
          * @return {String} request name
          */
-        getName : function() {
-            return this.__name;
-        },
-        isEnabled : function() {
-            return this._enabled;
-        }
-    }, {
+            getName: function () {
+                return this.__name;
+            },
+            isEnabled: function () {
+                return this._enabled;
+            }
+        }, {
         /**
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        'protocol' : ['Oskari.mapframework.request.Request']
-    });
+            'protocol': ['Oskari.mapframework.request.Request']
+        });

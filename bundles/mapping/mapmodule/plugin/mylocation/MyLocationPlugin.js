@@ -22,7 +22,7 @@ Oskari.clazz.define(
         me._name = 'MyLocationPlugin';
 
         me._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-my-location': {
                     iconCls: 'mobile-my-location',
                     tooltip: '',
@@ -38,7 +38,7 @@ Oskari.clazz.define(
 
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
-        }
+        };
     }, {
         /**
          * @private @method _createControlElement
@@ -50,12 +50,11 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var me = this,
-                el = me._templates.plugin.clone(),
-                me = this;
+                el = me._templates.plugin.clone();
 
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
 
-            el.click(function () {
+            el.on('click', function () {
                 me._setupLocation();
             });
 
@@ -71,15 +70,15 @@ Oskari.clazz.define(
          */
         _setLayerToolsEditModeImpl: function () {
             var me = this;
-            if(!me.getElement()) {
+            if (!me.getElement()) {
                 return;
             }
             if (me.inLayerToolsEditMode()) {
                 // disable icon
-                me.getElement().unbind('click');
+                me.getElement().off('click');
             } else {
                 // enable icon
-                me.getElement().click(function () {
+                me.getElement().on('click', function () {
                     me._setupLocation();
                 });
             }
@@ -121,7 +120,7 @@ Oskari.clazz.define(
                 return;
             }
 
-            var styleClass = 'toolstyle-' + (style ? style : 'rounded-dark');
+            var styleClass = 'toolstyle-' + (style || 'rounded-dark');
 
             me.changeCssClasses(styleClass, /^toolstyle-/, [el]);
         },
@@ -135,11 +134,11 @@ Oskari.clazz.define(
         _setupLocation: function () {
             var mapmodule = this.getMapModule();
             mapmodule.getUserLocation(function (lon, lat) {
-                if(!lon || !lat) {
+                if (!lon || !lat) {
                     // error getting location
                     return;
                 }
-                mapmodule.centerMap({ lon: lon, lat : lat }, 6);
+                mapmodule.centerMap({ lon: lon, lat: lat }, 6);
             });
         },
         /**
@@ -148,19 +147,18 @@ Oskari.clazz.define(
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
-            if(!this.isVisible()) {
+        redrawUI: function (mapInMobileMode, forced) {
+            if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
             this.teardownUI();
@@ -172,6 +170,18 @@ Oskari.clazz.define(
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
+        },
+        teardownUI: function () {
+            this.removeFromPluginContainer(this.getElement());
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        },
+        /**
+         * @method _stopPluginImpl BasicMapModulePlugin method override
+         * @param {Oskari.Sandbox} sandbox
+         */
+        _stopPluginImpl: function (sandbox) {
+            this.teardownUI();
         }
     }, {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

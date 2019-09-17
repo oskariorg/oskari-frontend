@@ -1,4 +1,4 @@
-# Portti2 Zoombar
+# Portti2 Zoombar Plugin
 
 ## Description
 

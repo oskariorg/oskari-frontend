@@ -19,7 +19,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher.event.MapPublishedEven
         this._height = height;
         this._language = language;
         this._url = url;
-
     }, {
         /** @static @property __name event name */
         __name: 'Publisher.MapPublishedEvent',

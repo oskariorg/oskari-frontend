@@ -18,12 +18,12 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var me = this;
         if (!pId || !pGroup || !pConfig || !pConfig.callback) {
             // no config -> do nothing
-            me.sandbox.printDebug("All parameters must be defined in AddToolButtonRequest");
+            Oskari.log('Toolbar').warn('All parameters must be defined in AddToolButtonRequest');
             return;
         }
-        var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
-            group = null,
-            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
+        var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig);
+        var group = null;
+        var prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
 
         if (!me.buttons[prefixedGroup]) {
             // create group if not existing
@@ -52,16 +52,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         button.attr('data-toggle-change-icon', pConfig.toggleChangeIcon);
 
         if (Oskari.util.keyExists(me.conf, 'style.toolStyle')) {
-            //if style explicitly provided, add that as well
-            var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light': '-dark';
+            // if style explicitly provided, add that as well
+            var style = me.conf.style.toolStyle.indexOf('light') > -1 ? '-light' : '-dark';
 
             button.addClass(pConfig.iconCls);
-            if(!me._isAllreadyThemedIcon(pConfig)) {
+            if (!me._isAllreadyThemedIcon(pConfig)) {
                 button.addClass(pConfig.iconCls + style);
             }
         } else if (me.conf.classes && me.conf.classes[pGroup] && me.conf.classes[pGroup][pId]) {
-            ///TODO: this is the "old" way of handling stuff (as seen on the old realiable publisher1).
-            //Remove, once we've migrated stuff into using the new way (=style info as part of the toolbar's config).
+            // TODO: this is the "old" way of handling stuff (as seen on the old realiable publisher1).
+            // Remove, once we've migrated stuff into using the new way (=style info as part of the toolbar's config).
             button.addClass(me.conf.classes[pGroup][pId].iconCls);
         } else {
             button.addClass(pConfig.iconCls);
@@ -90,37 +90,37 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
                 group: prefixedGroup
             };
         }
-        button.bind('click', function (event) {
+        button.on('click', function (event) {
             me._clickButton(pId, prefixedGroup);
         });
 
         var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[prefixedGroup]);
         // If created hover style then change icon styles
-        if(toolbarConfig && toolbarConfig.createdHover === true) {
-            button.hover(function(){
+        if (toolbarConfig && toolbarConfig.createdHover === true) {
+            button.on('mouseenter', function () {
                 var buttonEl = jQuery(this);
-                if(!buttonEl.hasClass('selected')) {
-                    me._addHoverIcon(pConfig,toolbarConfig,button);
+                if (!buttonEl.hasClass('selected')) {
+                    me._addHoverIcon(pConfig, toolbarConfig, button);
                 }
                 buttonEl.addClass('hover');
-
-            }, function(){
+            });
+            button.on('mouseleave', function () {
                 var buttonEl = jQuery(this);
                 buttonEl.removeClass('hover');
-                if(!buttonEl.hasClass('selected')) {
-                    me._addButtonTheme(pConfig,toolbarConfig,button);
+                if (!buttonEl.hasClass('selected')) {
+                    me._addButtonTheme(pConfig, toolbarConfig, button);
                 }
             });
         }
 
-        /* add first or last to group (default last)*/
+        // add first or last to group (default last)
         if (pConfig.prepend) {
             group.prepend(button);
         } else {
             group.append(button);
         }
         // prefer enabled flag over disabled
-        if(pConfig.disabled === true) {
+        if (pConfig.disabled === true) {
             pConfig.enabled = false;
             delete pConfig.disabled;
         }
@@ -129,52 +129,52 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             button.addClass('disabled');
         }
 
-        if(pConfig.childPosition) {
+        if (pConfig.childPosition) {
             me._createButtonChildren(pId, pGroup, button, pConfig);
             me._checkToolChildrenPosition(pId, pGroup, pConfig);
         }
-        if(pConfig.iconCls) {
-            me._addButtonTheme(pConfig,toolbarConfig,button);
+        if (pConfig.iconCls) {
+            me._addButtonTheme(pConfig, toolbarConfig, button);
         }
     },
 
-    getMapModule: function(){
-         return Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
-     },
+    getMapModule: function () {
+        return Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+    },
 
-    _checkToolChildrenPosition: function(pId, pGroup, pConfig){
-        var me = this,
-            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
-            btn = this.buttons[prefixedGroup][pId],
-            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
-            toolbarParent = toolbar.parents('.oskariui-center').find('div').first(),
-            offset = toolbarParent.offset(),
-            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']'),
-            button = group.find('div.tool[tool=' + pId + ']');
+    _checkToolChildrenPosition: function (pId, pGroup, pConfig) {
+        var me = this;
+        var prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
+        var btn = this.buttons[prefixedGroup][pId];
+        var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig);
+        var toolbarParent = toolbar.parents('.oskariui-center').find('div').first();
+        var offset = toolbarParent.offset();
+        var group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
+        var button = group.find('div.tool[tool=' + pId + ']');
 
-        if(typeof btn.children === 'undefined' || !pConfig.childPosition) {
+        if (typeof btn.children === 'undefined' || !pConfig.childPosition) {
             return;
         }
 
-        switch(pConfig.childPosition){
-            case 'bottom':
-                btn.children.css({
-                    position: 'absolute',
-                    'background-color': btn.activeColour || '#ffffff',
-                    top: offset.top + toolbarParent.outerHeight() + 'px',
-                    left: button.offset().left
-                });
-                break;
+        switch (pConfig.childPosition) {
+        case 'bottom':
+            btn.children.css({
+                position: 'absolute',
+                'background-color': btn.activeColour || '#ffffff',
+                top: offset.top + toolbarParent.outerHeight() + 'px',
+                left: button.offset().left
+            });
+            break;
         }
     },
-    _createButtonChildren: function(pId, pGroup, button, pConfig){
-        var me = this,
-            buttonChildren = jQuery('<div class="tool-children"></div>'),
-            toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig),
-            toolbarTopParent = toolbar.parents('.oskariui-center'),
-            prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup,
-            btn = this.buttons[prefixedGroup][pId],
-            children = buttonChildren.clone();
+    _createButtonChildren: function (pId, pGroup, button, pConfig) {
+        var me = this;
+        var buttonChildren = jQuery('<div class="tool-children"></div>');
+        var toolbar = me.getToolbarContainer(pConfig ? pConfig.toolbarid : null, pConfig);
+        var toolbarTopParent = toolbar.parents('.oskariui-center');
+        var prefixedGroup = (pConfig.toolbarid || 'default') + '-' + pGroup;
+        var btn = this.buttons[prefixedGroup][pId];
+        var children = buttonChildren.clone();
 
         children.attr({
             'data-button-id': pId,
@@ -196,21 +196,21 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @private
      */
     _clickButton: function (pId, pGroup) {
-        var me = this,
-            e;
+        var me = this;
+        var e;
         if (!pId) {
-            if(this.defaultButton) {
+            if (this.defaultButton) {
                 // use default button if ID param not given
                 pId = this.defaultButton.id;
                 pGroup = this.defaultButton.group;
             } else {
-                e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+                e = Oskari.eventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
                 this.sandbox.notifyAll(e);
 
-                if(pGroup){
+                if (pGroup) {
                     var btnGroup = this.buttons[pGroup];
-                    for(var pId in btnGroup) {
-                        this._deactiveTools(pId,pGroup);
+                    for (pId in btnGroup) {
+                        this._deactiveTools(pId, pGroup);
                     }
                 }
 
@@ -219,10 +219,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             }
         }
 
-        var btn = this.buttons[pGroup][pId],
-            toolbar,
-            group,
-            button;
+        var btn = this.buttons[pGroup][pId];
+        var toolbar;
+        var group;
+        var button;
+        var toolbarConfig;
 
         if (btn.enabled === false) {
             return;
@@ -232,14 +233,13 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
         button = group.find('div.tool[tool=' + pId + ']');
 
-        if(typeof btn.selected === 'undefined') {
+        if (typeof btn.selected === 'undefined') {
             btn.selected = button.hasClass('selected');
         }
 
         if (btn.sticky === true) {
-
-            //only need to deactivate tools when sticky button
-            this._deactiveTools(pId,pGroup);
+            // only need to deactivate tools when sticky button
+            this._deactiveTools(pId, pGroup);
 
             // button stays on (==sticky) -> remove previous "sticky"
             this._removeToolSelections(pGroup);
@@ -250,19 +250,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
             // highlight the button
             button.addClass('selected');
+            toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
 
-            if(btn.activeColour) {
-                button.css('background-color', btn.activeColour);
+            if (!btn.activeColour) {
+                btn.activeColour = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
+            }
+            button.css('background-color', btn.activeColour);
 
-                if(btn.toggleChangeIcon === true) {
-                    // Remove button light and dark icons
-                    me._removeIconThemes(button, btn);
-                    me._changeButtonIconTheme(btn, button, btn.activeColour);
-                }
+            if (btn.toggleChangeIcon === true) {
+                // Remove button light and dark icons
+                me._removeIconThemes(button, btn);
+                me._changeButtonIconTheme(btn, button, btn.activeColour);
+            } else if (button.hasClass(btn.iconCls + '-light')) {
+                me._removeIconThemes(button, btn);
+                me._changeButtonIconTheme(btn, button, '#212121');
             }
         }
 
-        //toggle selection of this button
+        // toggle selection of this button
         if (btn.toggleSelection) {
             // highlight the button
             if (button.hasClass('selected')) {
@@ -276,17 +281,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
 
         btn.callback(btn.children);
 
-        if(!button.hasClass('selected') && button.hasClass('hover')){
-            var toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
-            me._addHoverIcon(btn,toolbarConfig,button);
+        if (!button.hasClass('selected') && button.hasClass('hover')) {
+            toolbarConfig = this.getToolBarConfigs(this.groupsToToolbars[pGroup]);
+            me._addHoverIcon(btn, toolbarConfig, button);
         }
         // notify components that tool has changed
-        e = this.sandbox.getEventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
+        e = Oskari.eventBuilder('Toolbar.ToolSelectedEvent')(pId, pGroup);
         this.sandbox.notifyAll(e);
     },
-    _addHoverIcon: function(btnConfig,toolbarConfig,buttonEl){
+    _addHoverIcon: function (btnConfig, toolbarConfig, buttonEl) {
         var me = this;
-        if(!btnConfig || !btnConfig.iconCls || !toolbarConfig || !buttonEl || toolbarConfig.createdHover === false) {
+        if (!btnConfig || !btnConfig.iconCls || !toolbarConfig || !buttonEl || toolbarConfig.createdHover === false) {
             return;
         }
         me._removeIconThemes(buttonEl, btnConfig);
@@ -294,14 +299,14 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         var iconEnd = (Oskari.util.isDarkColor(toolbarConfig.colours.hover)) ? 'dark' : 'light';
         buttonEl.addClass(btnConfig.iconCls + '-' + iconEnd);
     },
-    _removeIconThemes: function(btnEl, btnConfig){
+    _removeIconThemes: function (btnEl, btnConfig) {
         var me = this;
-        if(!btnConfig || !btnConfig.iconCls || !btnEl) {
+        if (!btnConfig || !btnConfig.iconCls || !btnEl) {
             return;
         }
         var iconCls = btnConfig.iconCls;
-        if(me._isAllreadyThemedIcon(btnConfig)) {
-            iconCls = (btnConfig.iconCls.indexOf('-light') > -1) ? btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-light')) : btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-dark'));
+        if (me._isAllreadyThemedIcon(btnConfig)) {
+            iconCls = (btnConfig.iconCls.indexOf('-light') > -1) ? btnConfig.iconCls.substring(0, btnConfig.iconCls.indexOf('-light')) : btnConfig.iconCls.substring(0, btnConfig.iconCls.indexOf('-dark'));
         }
         btnEl.removeClass(iconCls + '-light');
         btnEl.removeClass(iconCls + '-dark');
@@ -313,34 +318,33 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @param {Object} toolbarConfig toolbar config
      * @param {Object} buttonEl  button jQuery element
      */
-    _addButtonTheme: function(btnConfig, toolbarConfig, buttonEl){
+    _addButtonTheme: function (btnConfig, toolbarConfig, buttonEl) {
         var me = this;
-        if(!btnConfig || !btnConfig.iconCls || !buttonEl) {
+        if (!btnConfig || !btnConfig.iconCls || !buttonEl) {
             return;
         }
         me._removeIconThemes(buttonEl, btnConfig);
 
-        if(me._isAllreadyThemedIcon(btnConfig)) {
+        if (me._isAllreadyThemedIcon(btnConfig)) {
             buttonEl.addClass(btnConfig.iconCls);
-        } else if(toolbarConfig && toolbarConfig.colours && toolbarConfig.colours.background) {
-            if(Oskari.util.getColorBrightness(toolbarConfig.colours.background) === 'light') {
+        } else if (toolbarConfig && toolbarConfig.colours && toolbarConfig.colours.background) {
+            if (Oskari.util.getColorBrightness(toolbarConfig.colours.background) === 'light') {
                 buttonEl.addClass(btnConfig.iconCls + '-light');
             } else {
                 buttonEl.addClass(btnConfig.iconCls + '-dark');
             }
-        }
-        else {
+        } else {
             buttonEl.addClass(btnConfig.iconCls + '-' + this.getMapModule().getTheme());
         }
     },
-    _isAllreadyThemedIcon: function(btnConfig){
-        var isButtonConfig = (btnConfig && btnConfig.iconCls) ? true : false;
-        var isLightTheme = (btnConfig.iconCls.indexOf('light') > -1) ? true : false;
-        var isDarkTheme = (btnConfig.iconCls.indexOf('dark') > -1) ? true : false;
+    _isAllreadyThemedIcon: function (btnConfig) {
+        var isButtonConfig = (btnConfig && btnConfig.iconCls);
+        var isLightTheme = (btnConfig.iconCls.indexOf('light') > -1);
+        var isDarkTheme = (btnConfig.iconCls.indexOf('dark') > -1);
 
-        if(!isButtonConfig) {
+        if (!isButtonConfig) {
             return false;
-        } else if(isLightTheme || isDarkTheme) {
+        } else if (isLightTheme || isDarkTheme) {
             return true;
         } else {
             return false;
@@ -352,17 +356,17 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * @param  {Object} btnConfig button config
      * @param  {Object} buttonEl  button jQuery element
      */
-    _changeButtonIconTheme: function(btnConfig, buttonEl, color){
+    _changeButtonIconTheme: function (btnConfig, buttonEl, color) {
         var me = this;
-        if(!btnConfig || !btnConfig.activeColour || !buttonEl) {
+        if (!btnConfig || !btnConfig.activeColour || !buttonEl) {
             return;
         }
 
-        if(me._isAllreadyThemedIcon(btnConfig)) {
-            //buttonEl.addClass(btnConfig.iconCls);
-            var iconCls = (btnConfig.iconCls.indexOf('-light') > -1) ? btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-light')) : btnConfig.iconCls.substring(0,btnConfig.iconCls.indexOf('-dark'));
-            if(buttonEl.hasClass('selected')) {
-                if(Oskari.util.isLightColor(color)) {
+        if (me._isAllreadyThemedIcon(btnConfig)) {
+            // buttonEl.addClass(btnConfig.iconCls);
+            var iconCls = (btnConfig.iconCls.indexOf('-light') > -1) ? btnConfig.iconCls.substring(0, btnConfig.iconCls.indexOf('-light')) : btnConfig.iconCls.substring(0, btnConfig.iconCls.indexOf('-dark'));
+            if (buttonEl.hasClass('selected')) {
+                if (Oskari.util.isLightColor(color)) {
                     buttonEl.addClass(iconCls + '-light');
                 } else {
                     buttonEl.addClass(iconCls + '-dark');
@@ -370,28 +374,26 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             } else {
                 buttonEl.addClass(btnConfig.iconCls);
             }
-        } else if(Oskari.util.isLightColor(color)) {
+        } else if (Oskari.util.isLightColor(color)) {
             buttonEl.addClass(btnConfig.iconCls + '-light');
         } else {
             buttonEl.addClass(btnConfig.iconCls + '-dark');
         }
     },
 
-    _deactiveTools: function(pId,pGroup){
+    _deactiveTools: function (pId, pGroup) {
         var me = this;
         var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
         var group = toolbar.find('div.toolrow[tbgroup=' + pGroup + ']');
         var button = group.find('div.tool[tool=' + pId + ']');
         button.removeClass('selected');
 
-        var tools = group.find('div.tool');
-
-        for(var id in this.buttons[pGroup]) {
+        for (var id in this.buttons[pGroup]) {
             var btn = this.buttons[pGroup][id];
-            var button = group.find('div.tool[tool=' + id + ']');
+            button = group.find('div.tool[tool=' + id + ']');
             // Change default background color back
 
-            if(btn.activeColour) {
+            if (btn.activeColour) {
                 button.css('background-color', '');
                 button.removeClass('selected');
                 me._removeIconThemes(button, btn);
@@ -401,8 +403,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             me._changeButtonIconTheme(btn, button, toolbarConfig.colours.background);
 
             // Change default icon back
-            if(btn.toggleChangeIcon === true) {
-                me._addButtonTheme(btn,button);
+            if (btn.toggleChangeIcon === true) {
+                me._addButtonTheme(btn, button);
             }
         }
     },
@@ -412,8 +414,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
      * Clears selection from all tools to make room for a new selection
      */
     _removeToolSelections: function (pGroup) {
-        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]),
-            tools = toolbar.find('div.tool');
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[pGroup]);
+        var tools = toolbar.find('div.tool');
         tools.removeClass('selected');
     },
     /**
@@ -439,8 +441,8 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         if (!this.buttons[prefixedGroup]) {
             return;
         }
-        var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
-            group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
+        var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]);
+        var group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
         if (!pId) {
             // delete whole group
             group.remove();
@@ -450,7 +452,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             return;
         }
         // remove individual button
-        if(this.buttons[prefixedGroup] && this.buttons[prefixedGroup][pId] && this.buttons[prefixedGroup][pId].children) {
+        if (this.buttons[prefixedGroup] && this.buttons[prefixedGroup][pId] && this.buttons[prefixedGroup][pId].children) {
             this.buttons[prefixedGroup][pId].children.remove();
         }
         var button = group.find('div.tool[tool=' + pId + ']');
@@ -458,15 +460,15 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         this.buttons[prefixedGroup][pId] = null;
         delete this.buttons[prefixedGroup][pId];
 
-        var isSelected = (this.selectedButton && this.selectedButton.group && this.selectedButton.id) ? true : false;
-        if(isSelected && this.selectedButton.group === prefixedGroup && this.selectedButton.id === pId) {
+        var isSelected = (this.selectedButton && this.selectedButton.group && this.selectedButton.id);
+        if (isSelected && this.selectedButton.group === prefixedGroup && this.selectedButton.id === pId) {
             this.selectedButton = null;
             delete this.selectedButton;
         }
 
         // check if no buttons left -> delete group also?
-        var count = 0,
-            key;
+        var count = 0;
+        var key;
         for (key in this.buttons[prefixedGroup]) {
             if (this.buttons[prefixedGroup].hasOwnProperty(key)) {
                 count++;
@@ -478,9 +480,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
             delete this.buttons[prefixedGroup];
         }
     },
-    isToolbarEmpty : function(toolbarId) {
+    isToolbarEmpty: function (toolbarId) {
         for (var key in this.buttons) {
-            if(key.indexOf(toolbarId) === 0) {
+            if (key.indexOf(toolbarId) === 0) {
                 // if any of the groups startwith toolbarId -> not empty
                 return false;
             }
@@ -508,11 +510,11 @@ Oskari.clazz.category('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance'
         }
         var prefixedGroup = (pToolbarId || 'default') + '-' + pGroup;
         if (this.buttons[prefixedGroup]) {
-            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]),
-                group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']'),
-                button,
-                buttonContainers,
-                b;
+            var toolbar = this.getToolbarContainer(this.groupsToToolbars[prefixedGroup]);
+            var group = toolbar.find('div.toolrow[tbgroup=' + prefixedGroup + ']');
+            var button;
+            var buttonContainers;
+            var b;
             if (pId) {
                 button = group.find('div.tool[tool=' + pId + ']');
                 this.buttons[prefixedGroup][pId].enabled = pState;

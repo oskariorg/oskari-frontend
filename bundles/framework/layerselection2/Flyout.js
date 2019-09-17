@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
      * Reference to component that created the tile
      *
      */
-    function(instance) {
+    function (instance) {
         this.instance = instance;
         this.container = null;
         this.state = null;
@@ -30,13 +30,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         this.sortableBinded = false;
         this._sliders = {};
         this.toolsAsText = ['ownStyle', 'objectData', 'content-editor'];
-        this.blacklistedTools  = ['show-layer-legend-tool'];
+        this.blacklistedTools = ['show-layer-legend-tool'];
     }, {
         /**
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
             return 'Oskari.mapframework.bundle.layerselection2.Flyout';
         },
 
@@ -52,7 +52,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * Container size(?) - not used
          *
          */
-        setEl: function(el, width, height) {
+        setEl: function (el, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('layerselection2')) {
                 jQuery(this.container).addClass('layerselection2');
@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          *
          */
-        startPlugin: function() {
+        startPlugin: function () {
             var loc = this.instance.getLocalization('layer'),
                 elParent,
                 elId;
@@ -87,9 +87,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             this.templateUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '</div>');
 
-            this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">'+ loc['change-projection'] +'</a></div>');
+            this.templateChangeUnsupported = jQuery('<div class="layer-footer-unsupported">' + loc['unsupported-projection'] + '<br><a href="JavaScript:void(0);">' + loc['change-projection'] + '</a></div>');
 
-            //set id to flyouttool-close
+            // set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
             elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselection2_flyout_oskari_flyouttool_close');
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          *
          */
-        stopPlugin: function() {
+        stopPlugin: function () {
 
         },
 
@@ -111,7 +111,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {String} localized text for the title of the flyout
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.instance.getLocalization('title');
         },
 
@@ -121,7 +121,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {String} localized text for the description of the flyout.
          */
-        getDescription: function() {
+        getDescription: function () {
             return this.instance.getLocalization('desc');
         },
 
@@ -131,7 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          *
          */
-        getOptions: function() {
+        getOptions: function () {
 
         },
 
@@ -143,9 +143,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * State that this component should use
          *
          */
-        setState: function(state) {
+        setState: function (state) {
             this.state = state;
-
         },
 
         /**
@@ -154,7 +153,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          *
          */
-        createUi: function() {
+        createUi: function () {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 n,
@@ -176,34 +175,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 me._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
             }
             listContainer.sortable({
-                start: function(event, ui) {
+                start: function (event, ui) {
                     var height = ui.item.height();
                     me.calculateContainerHeightDuringSort(height);
                 },
-                stop: function(event, ui) {
+                stop: function (event, ui) {
                     me.calculateContainerHeightDuringSort();
                     me._layerOrderChanged(ui.item);
                 }
             });
 
-            //this blocks user inputs/selections in FF and Opera
-            /*listContainer.disableSelection();*/
+            // this blocks user inputs/selections in FF and Opera
+            /* listContainer.disableSelection(); */
 
             // RIGHTJS sortable event handling
             // TODO: get rid of sortableBinded and UNBIND?
             if (!me.sortableBinded) {
                 me.sortableBinded = true;
-                /*RightJS('.selectedLayersList').on('finish', function (event) {
+                /* RightJS('.selectedLayersList').on('finish', function (event) {
                  me._layerOrderChanged(event.index);
-                 });*/
-
+                 }); */
             }
         },
-        calculateContainerHeightDuringSort: function(height) {
+        calculateContainerHeightDuringSort: function (height) {
             var container = jQuery(this.container);
-            if (typeof height === "undefined") {
+            if (typeof height === 'undefined') {
                 container.css({
-                    height: ""
+                    height: ''
                 });
             }
             var totalHeight = container.height() + height;
@@ -220,11 +218,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {Boolean} isGeometryMatch
          *
          */
-        _appendLayerFooter: function(layerDiv, layer, isInScale, isGeometryMatch) {
+        _appendLayerFooter: function (layerDiv, layer, isInScale, isGeometryMatch) {
             var toolsDiv = layerDiv.find('div.layer-tools');
 
             var footer;
-            if(!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
+            if (!layer.isSupported(this.instance.getSandbox().getMap().getSrsName())) {
                 footer = this._createUnsupportedFooter();
             } else {
                 /* fix: we need this at anytime for slider to work */
@@ -251,8 +249,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             toolsDiv.append(footer);
 
-            var opa = layerDiv.find('div.layer-opacity div.opacity-slider input'),
-                slider = this._addSlider(layer, layerDiv, opa);
+            var opa = layerDiv.find('div.layer-opacity div.opacity-slider input');
+            this._addSlider(layer, layerDiv, opa);
         },
         /**
          * @private
@@ -266,9 +264,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             if (sandbox.hasHandler('ShowProjectionChangerRequest')) {
                 // show link to change projection
                 footer = me.templateChangeUnsupported.clone();
-                footer.find('a').bind('click', function () {
+                footer.find('a').on('click', function () {
                     // send request to show projection changer
-                    var request = sandbox.getRequestBuilder('ShowProjectionChangerRequest')();
+                    var request = Oskari.requestBuilder('ShowProjectionChangerRequest')();
                     sandbox.request(me.instance.getName(), request);
                     return false;
                 });
@@ -287,7 +285,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {Boolean} isInScale
          *
          */
-        _switchRefreshIcon: function(layerDiv, layer, isInScale) {
+        _switchRefreshIcon: function (layerDiv, layer, isInScale) {
             var refreshDiv = layerDiv.find('div.layer-tool-refresh');
 
             if (!isInScale || !layer.isVisible()) {
@@ -295,7 +293,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
             } else {
                 refreshDiv.css('display', '');
             }
-
         },
 
         /**
@@ -307,7 +304,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {Object} slider
          */
-        _addSlider: function(layer, layerDiv, input) {
+        _addSlider: function (layer, layerDiv, input) {
             var me = this,
                 lyrId = layer.getId(),
                 opa = layer.getOpacity(),
@@ -316,13 +313,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     min: 0,
                     max: 100,
                     value: opa,
-                    /*change: function (event,ui) {
+                    /* change: function (event,ui) {
                      me._layerOpacityChanged(layer, ui.value);
-                     },*/
-                    slide: function(event, ui) {
+                     }, */
+                    slide: function (event, ui) {
                         me._layerOpacityChanged(layer, ui.value);
                     },
-                    stop: function(event, ui) {
+                    stop: function (event, ui) {
                         me._layerOpacityChanged(layer, ui.value);
                     }
                 });
@@ -331,8 +328,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             if (input) {
                 input.attr('value', layer.getOpacity());
-                input.on('change paste keyup', function() {
-                    //sliderEl.slider('value', jQuery(this).val());
+                input.on('change paste keyup', function () {
+                    // sliderEl.slider('value', jQuery(this).val());
                     me._layerOpacityChanged(layer, jQuery(this).val());
                 });
             }
@@ -347,13 +344,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {Number} newIndex index where the moved layer is now
          *
          */
-        _layerOrderChanged: function(item) {
+        _layerOrderChanged: function (item) {
             var allNodes = jQuery(this.container).find('.selectedLayersList li.layerselection2'),
                 movedId = item.attr('layer_id'),
                 newIndex = -1;
 
-            allNodes.each(function(index, el) {
-                if ($(this).attr('layer_id') === movedId) {
+            allNodes.each(function (index, el) {
+                if (jQuery(this).attr('layer_id') === movedId) {
                     newIndex = index;
                     return false;
                 }
@@ -365,7 +362,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 newIndex = (allNodes.length - 1) - newIndex;
                 var sandbox = this.instance.getSandbox(),
                     reqName = 'RearrangeSelectedMapLayerRequest',
-                    builder = sandbox.getRequestBuilder(reqName),
+                    builder = Oskari.requestBuilder(reqName),
                     request = builder(movedId, newIndex);
 
                 sandbox.request(this.instance.getName(), request);
@@ -383,7 +380,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created layer container
          */
-        _updateStyles: function(layer, layerDiv) {
+        _updateStyles: function (layer, layerDiv) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 stylesel = layerDiv.find('div.stylesel');
@@ -404,10 +401,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     hasOpts = true;
                 }
                 if (!sel.hasClass('binded')) {
-                    sel.change(function(e) {
+                    sel.on('change', function (e) {
                         var val = sel.find('option:selected').val();
                         layer.selectStyle(val);
-                        var builder = sandbox.getRequestBuilder('ChangeMapLayerStyleRequest'),
+                        var builder = Oskari.requestBuilder('ChangeMapLayerStyleRequest'),
                             req = builder(layer.getId(), val);
                         sandbox.request(me.instance.getName(), req);
                     });
@@ -433,13 +430,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created layer container
          */
-        _createLayerContainer: function(layer) {
+        _createLayerContainer: function (layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
-                reqName = 'ChangeMapLayerOpacityRequest',
-                opacityRequestBuilder = sandbox.getRequestBuilder(reqName),
                 layerId = layer.getId(),
-                value = layer.getOpacity(),
                 layerDiv = this.templateLayer.clone(),
                 tooltips = this.instance.getLocalization('layer').tooltip,
                 icon = layerDiv.find('div.layer-icon'),
@@ -488,11 +482,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     'oskari_layerselection_layercontainer_icon_close_layerId' + layerId
                 );
 
-                layerDiv.find('div.layer-tool-remove').bind(
+                layerDiv.find('div.layer-tool-remove').on(
                     'click',
-                    function() {
+                    function () {
                         var reqName = 'RemoveMapLayerRequest',
-                            builder = sandbox.getRequestBuilder(reqName),
+                            builder = Oskari.requestBuilder(reqName),
                             request = builder(layer.getId());
 
                         sandbox.request(me.instance.getName(), request);
@@ -507,11 +501,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     'oskari_layerselection_layercontainer_icon_refresh_layerId' + layerId
                 );
                 layerDiv.find('.layer-tool-refresh').attr('title', loc.refresh_load.tooltip);
-                layerDiv.find('div.layer-tool-refresh').bind(
+                layerDiv.find('div.layer-tool-refresh').on(
                     'click',
-                    function() {
+                    function () {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me.instance, 'detach']);
-                        var event = sandbox.getEventBuilder('WFSRefreshManualLoadLayersEvent')(layerId);
+                        var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')(layerId);
                         sandbox.notifyAll(event);
                         return false;
                     }
@@ -529,15 +523,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {Number} toPosition
          *
          */
-        handleLayerOrderChanged: function(layer, fromPosition, toPosition) {
+        handleLayerOrderChanged: function (layer, fromPosition, toPosition) {
             if (!layer) {
-                throw 'handleLayerOrderChanged: No layer provided';
+                throw new Error('handleLayerOrderChanged: No layer provided');
             }
             if (isNaN(fromPosition)) {
-                throw 'handleLayerOrderChanged: fromPosition is Not a Number: ' + fromPosition;
+                throw new Error('handleLayerOrderChanged: fromPosition is Not a Number: ' + fromPosition);
             }
             if (isNaN(toPosition)) {
-                throw 'handleLayerOrderChanged: toPosition is Not a Number: ' + toPosition;
+                throw new Error('handleLayerOrderChanged: toPosition is Not a Number: ' + toPosition);
             }
 
             if (fromPosition === toPosition) {
@@ -582,12 +576,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * viewport
          *
          */
-        handleLayerVisibilityChanged: function(layer, isInScale, isGeometryMatch) {
-            var me = this,
-                sandbox = me.instance.getSandbox(),
-                lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']',
+        handleLayerVisibilityChanged: function (layer, isInScale, isGeometryMatch) {
+            var lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
-                loc = this.instance.getLocalization('layer'),
                 footer = layerDiv.find('div.layer-tools'); // teardown previous footer & layer state classes
 
             footer.empty();
@@ -613,10 +604,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {Number} newOpacity Layer's new opacity
          *
          */
-        _layerOpacityChanged: function(layer, newOpacity) {
+        _layerOpacityChanged: function (layer, newOpacity) {
             var sandbox = this.instance.getSandbox(),
                 reqName = 'ChangeMapLayerOpacityRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName),
+                requestBuilder = Oskari.requestBuilder(reqName),
                 request = requestBuilder(layer.getId(), newOpacity);
 
             sandbox.request(this.instance.getName(), request);
@@ -631,7 +622,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * layer Layer under the opacity change
          *
          */
-        _changeOpacityInput: function(layer) {
+        _changeOpacityInput: function (layer) {
             var lyrSel = 'li.layerselection2.layer.selected[layer_id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
                 opa = layerDiv.find('div.layer-opacity div.opacity-slider input'),
@@ -651,12 +642,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * layer Layer that had its opacity changed
          *
          */
-        handleLayerOpacityChanged: function(layer) {
+        handleLayerOpacityChanged: function (layer) {
             if (this._sliders[layer.getId()]) {
                 this._sliders[layer.getId()].slider('value', layer.getOpacity());
                 this._changeOpacityInput(layer);
             }
-
         },
 
         /**
@@ -668,7 +658,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * layer Layer that had its style changed
          *
          */
-        handleLayerStyleChanged: function(layer) {
+        handleLayerStyleChanged: function (layer) {
             var lyrSel = 'li.layer.selected[layer_id=' + layer.getId() + ']',
                 layerDiv = jQuery(this.container).find(lyrSel),
                 styleDropdown = layerDiv.find('div.stylesel select');
@@ -685,15 +675,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created footer
          */
-        _createLayerFooterOutOfScale: function(layer) {
+        _createLayerFooterOutOfScale: function (layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterOutOfScale.clone(),
                 reqName = 'MapModulePlugin.MapMoveByLayerContentRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName);
+                requestBuilder = Oskari.requestBuilder(reqName);
 
             msg.addClass('layer-msg-for-outofscale');
-            msg.find('a').bind('click', function() {
+            msg.find('a').on('click', function () {
                 // send request to show map layer
                 var request = requestBuilder(layer.getId());
                 sandbox.request(me.instance.getName(), request);
@@ -712,15 +702,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created footer
          */
-        _createLayerFooterHidden: function(layer) {
+        _createLayerFooterHidden: function (layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterHidden.clone(),
                 reqName = 'MapModulePlugin.MapLayerVisibilityRequest',
-                visibilityRequestBuilder = sandbox.getRequestBuilder(reqName);
+                visibilityRequestBuilder = Oskari.requestBuilder(reqName);
 
             msg.addClass('layer-msg-for-hidden');
-            msg.find('a').bind('click', function() {
+            msg.find('a').on('click', function () {
                 // send request to show map layer
                 var request = visibilityRequestBuilder(layer.getId(), true);
                 sandbox.request(me.instance.getName(), request);
@@ -739,15 +729,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created footer
          */
-        _createLayerFooterOutOfContentArea: function(layer) {
+        _createLayerFooterOutOfContentArea: function (layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 msg = this.templateLayerFooterOutOfContentArea.clone(),
                 reqName = 'MapModulePlugin.MapMoveByLayerContentRequest',
-                requestBuilder = sandbox.getRequestBuilder(reqName);
+                requestBuilder = Oskari.requestBuilder(reqName);
 
             msg.addClass('layer-msg-for-outofcontentarea');
-            msg.find('a').bind('click', function() {
+            msg.find('a').on('click', function () {
                 // send request to show map layer
                 var request = requestBuilder(layer.getId());
                 sandbox.request(me.instance.getName(), request);
@@ -766,33 +756,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          *
          * @return {jQuery} reference to the created footer
          */
-        _createLayerFooter: function(layer, layerDiv) {
+        _createLayerFooter: function (layer) {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 tools = this.templateLayerFooterTools.clone(), // layer footer
-                loc = this.instance.getLocalization('layer'),
                 visReqName = 'MapModulePlugin.MapLayerVisibilityRequest',
-                visibilityRequestBuilder = sandbox.getRequestBuilder(visReqName),
-                s,
-                subLayers,
-                subLmeta = false,
-                subUuid;
+                visibilityRequestBuilder = Oskari.requestBuilder(visReqName),
+                s;
 
             // Sticky layers can't be hidden
             if (layer.isSticky()) {
                 tools.find('div.layer-visibility').hide();
             }
 
-            tools.find('div.layer-visibility a').bind('click', function() {
+            tools.find('div.layer-visibility a').on('click', function () {
                 // send request to hide map layer
                 var request = visibilityRequestBuilder(layer.getId(), false);
                 sandbox.request(me.instance.getName(), request);
                 return false;
             });
 
-
-            var closureMagic = function(tool) {
-                return function() {
+            var closureMagic = function (tool) {
+                return function () {
                     tool.getCallback()();
                     return false;
                 };
@@ -812,12 +797,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                         toolContainer.addClass(laytool.getIconCls());
                         toolContainer.attr('title', laytool.getTooltip());
                         tools.find('div.object-data').append(toolContainer);
-                        toolContainer.bind('click', closureMagic(laytool));
+                        toolContainer.on('click', closureMagic(laytool));
                     } else {
                         toolContainer = jQuery('<a href="JavaScript:void(0);"></a>');
                         toolContainer.append(laytool.getTitle());
                         tools.find('div.object-data').append(toolContainer);
-                        toolContainer.bind('click', closureMagic(laytool));
+                        toolContainer.on('click', closureMagic(laytool));
                     }
                 }
             }
@@ -835,9 +820,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {jQuery} footer
          *
          */
-        _updatePublishPermissionText: function(layer, footer) {
-            var sandbox = this.instance.getSandbox(),
-                loc = this.instance.getLocalization('layer'),
+        _updatePublishPermissionText: function (layer, footer) {
+            var loc = this.instance.getLocalization('layer'),
                 publishPermission = layer.getPermission('publish');
 
             if (publishPermission === 'publication_permission_ok' && Oskari.user().isLoggedIn()) {
@@ -864,7 +848,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @param {Boolean} keepLayersOrder
          * True to ignore baselayer placement
          */
-        handleLayerSelectionChanged: function(layer, isSelected, keepLayersOrder) {
+        handleLayerSelectionChanged: function (layer, isSelected, keepLayersOrder) {
             // add layer
             if (isSelected) {
                 var me = this,
@@ -872,7 +856,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     scale = sandbox.getMap().getScale(),
                     listContainer = jQuery('ul.selectedLayersList'),
                     layerContainer = this._createLayerContainer(layer),
-                    footer = layerContainer.find('div.layer-tools'), // footer tools
                     previousLayers = [];
 
                 // insert to top
@@ -895,7 +878,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                 }
 
                 this._appendLayerFooter(layerContainer, layer, layer.isInScale(scale), true);
-
             }
             // remove layer
             else {
@@ -917,7 +899,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * layer Layer that was modified
          *
          */
-        handleLayerModified: function(layer) {
+        handleLayerModified: function (layer) {
             var newDiv,
                 me = this,
                 layerDiv = jQuery(me.container).find('li.layerselection2[layer_id=' + layer.getId() + ']'),
@@ -942,7 +924,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * layer layer whichs switch off enable/disable is changed
          * Updates the name for the given layer in the UI
          */
-        handleLayerSticky: function(layer) {
+        handleLayerSticky: function (layer) {
             var me = this,
                 layerDiv = jQuery(me.container).find('li.layerselection2[layer_id=' + layer.getId() + ']');
 
@@ -953,7 +935,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
          * @method refresh
          * utitity to temporarily support rightjs sliders (again)
          */
-        refresh: function() {
+        refresh: function () {
             var me = this,
                 sandbox = me.instance.getSandbox(),
                 layers = sandbox.findAllSelectedMapLayers(),

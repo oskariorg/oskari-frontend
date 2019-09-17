@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 if (panel.getPriority() < this.panels[index].getPriority()) {
                     break;
                 }
-                index = index+1;
+                index = index + 1;
             }
 
             // ensure order is correct
@@ -74,10 +74,10 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
                 headerContainer.prepend(header);
                 this.select(panel);
             } else {
-                headerContainer.children().eq(index-1).after(header);
+                headerContainer.children().eq(index - 1).after(header);
             }
 
-            this.panels.splice(index,0,panel);
+            this.panels.splice(index, 0, panel);
             if (this.panels.length === 1) {
                 // select first by default
                 this.select(panel);
@@ -85,7 +85,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
 
             link = header.find('a');
             // bind tab changing
-            link.bind('click', function () {
+            link.on('click', function () {
                 me.select(panel);
                 return false;
             });
@@ -156,13 +156,13 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @return {Oskari.userinterface.component.TabPanel} panel with requested id or null if not found
          */
         getPanelById: function (id) {
-            if(arguments.length === 0) {
+            if (arguments.length === 0) {
                 return null;
             }
-            var panels = this.panels.filter(function(panel) {
+            var panels = this.panels.filter(function (panel) {
                 return panel.getId() === id;
             });
-            if(panels.length) {
+            if (panels.length) {
                 return panels[0];
             }
             return null;
@@ -175,7 +175,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabContainer',
          * @return {Boolean} true if given panel is currently selected
          */
         isSelected: function (panel) {
-            if(panel && panel.getHeader()) {
+            if (panel && panel.getHeader()) {
                 return panel.getHeader().hasClass('active');
             }
             return false;

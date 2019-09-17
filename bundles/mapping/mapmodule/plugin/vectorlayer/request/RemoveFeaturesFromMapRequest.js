@@ -31,21 +31,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveFeatures
          * @method getIdentifier
          * @return {String} identifier
          */
-        getIdentifier: function(){
+        getIdentifier: function () {
             return this._identifier;
         },
         /**
          * @method getValue
          * @return {String} value
          */
-        getValue: function(){
+        getValue: function () {
             return this._value;
         },
         /**
          * @method getLayer
          * @return {Oskari.mapframework.domain.VectorLayer} layer
          */
-        getLayer: function(){
+        getLayer: function () {
             return this._layer;
         }
     }, {

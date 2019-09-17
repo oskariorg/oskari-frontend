@@ -33,7 +33,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
         this._suppressEvents = false;
 
         this._mobileDefs = {
-            buttons:  {
+            buttons: {
                 'mobile-zoom-in': {
                     iconCls: 'mobile-zoom-in',
                     tooltip: '',
@@ -43,8 +43,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                         var mapModule = me.getMapModule();
                         var currentZoom = mapModule.getMapZoom();
                         var maxZoomLevel = mapModule.getMaxZoomLevel();
-                        if(currentZoom<maxZoomLevel) {
-                            me.getMapModule().setZoomLevel(currentZoom+1);
+                        if (currentZoom < maxZoomLevel) {
+                            me.getMapModule().setZoomLevel(currentZoom + 1);
                         }
                     }
                 },
@@ -56,16 +56,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     callback: function (el) {
                         var mapModule = me.getMapModule();
                         var currentZoom = mapModule.getMapZoom();
-                        if(currentZoom>0) {
-                            me.getMapModule().setZoomLevel(currentZoom-1);
+                        if (currentZoom > 0) {
+                            me.getMapModule().setZoomLevel(currentZoom - 1);
                         }
                     }
                 }
             },
             buttonGroup: 'mobile-toolbar'
         };
-
-
 
         this._desktopStyles = {
             plus: {
@@ -75,7 +73,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 css: {}
             }
         };
-
         this.toolStyles = {
             'default': {
                 val: null
@@ -157,20 +154,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var me = this,
-                el = jQuery(
-                    '<div class="oskariui mapplugin pzbDiv zoombar">' +
-                    '  <div class="pzbDiv-plus"></div>' +
-                    '  <div class="slider"></div>' +
-                    '  <div class="pzbDiv-minus"></div>' +
-                    '</div>'
-                ),
-                mapModule = me.getMapModule(),
-                sliderEl = el.find('div.slider');
+            var me = this;
+            var el = jQuery(
+                '<div class="oskariui mapplugin pzbDiv zoombar">' +
+                '  <div class="pzbDiv-plus"></div>' +
+                '  <div class="slider"></div>' +
+                '  <div class="pzbDiv-minus"></div>' +
+                '</div>'
+            );
+            var mapModule = me.getMapModule();
+            var sliderEl = el.find('div.slider');
 
             sliderEl.attr('id', 'pzb-slider-' + me.getName());
 
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     event.stopPropagation();
                 }
@@ -187,11 +184,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 max: mapModule.getMaxZoomLevel(),
                 value: mapModule.getMapZoom(),
                 slide: function (event, ui) {
-                   me.getMapModule().setZoomLevel(ui.value);
+                    me.getMapModule().setZoomLevel(ui.value);
                 }
             });
 
-            el.find('.pzbDiv-plus').bind('click', function (event) {
+            el.find('.pzbDiv-plus').on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     if (me._slider && me._slider.slider('value') < mapModule.getMaxZoomLevel()) {
                         me.getMapModule().setZoomLevel(
@@ -201,7 +198,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 }
             });
 
-            el.find('.pzbDiv-minus').bind('click', function (event) {
+            el.find('.pzbDiv-minus').on('click', function (event) {
                 if (!me.inLayerToolsEditMode()) {
                     if (me._slider && me._slider.slider('value') > 0) {
                         me.getMapModule().setZoomLevel(
@@ -221,15 +218,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          *
          */
         refresh: function () {
-            var me = this,
-                conf = me.getConfig();
+            var me = this;
+            var conf = me.getConfig();
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
                 me.changeToolStyle(conf.toolStyle, me.getElement());
             } else {
                 var toolStyle = me.getToolStyleFromMapModule();
                 if (!toolStyle) {
-                    toolStyle = "default";
+                    toolStyle = 'default';
                 }
                 if (toolStyle !== null && toolStyle !== undefined) {
                     me.changeToolStyle(me.toolStyles[toolStyle], me.getElement());
@@ -250,7 +247,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
             if (me._slider) {
                 // disable events in "onChange"
                 me._suppressEvents = true;
-                /*me._slider.setValue(value);*/
                 me._slider.slider('value', value);
                 me._suppressEvents = false;
             }
@@ -299,29 +295,32 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 return;
             }
             if (!style) {
-                style = this.toolStyles["default"];
-            } else if (!style.hasOwnProperty("widthCenter")) {
-                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles["default"];
+                style = this.toolStyles['default'];
+            } else if (!style.hasOwnProperty('widthCenter')) {
+                style = this.toolStyles[style] ? this.toolStyles[style] : this.toolStyles['default'];
             }
 
-            var imgUrl = this.getImagePath(),
-                styleName = style.val,
-                zoombarImg = imgUrl + 'zoombar-' + styleName + '.png',
-                zoombarCursorImg = imgUrl + 'zoombar-cursor-' + styleName + '.png',
-                zoombarMinusImg = imgUrl + 'zoombar_minus-' + styleName + '.png',
-                zoombarPlusImg = imgUrl + 'zoombar_plus-' + styleName + '.png',
-                bar = div.find('.ui-slider-vertical'),
-                cursor = div.find('.ui-slider-handle'),
-                plus = div.find('.pzbDiv-plus'),
-                minus = div.find('.pzbDiv-minus'),
-                slider = div.find('div.slider'),
-                mapModule = me.getMapModule();
+            var styleName = style.val;
+
+            if (!styleName) {
+                return;
+            }
+
+            var zoombarImg = this.getImagePath('zoombar-' + styleName + '.png');
+            var zoombarCursorImg = this.getImagePath('zoombar-cursor-' + styleName + '.png');
+            var zoombarMinusImg = this.getImagePath('zoombar_minus-' + styleName + '.png');
+            var zoombarPlusImg = this.getImagePath('zoombar_plus-' + styleName + '.png');
+            var bar = div.find('.ui-slider-vertical');
+            var cursor = div.find('.ui-slider-handle');
+            var plus = div.find('.pzbDiv-plus');
+            var minus = div.find('.pzbDiv-minus');
+            var slider = div.find('div.slider');
 
             // FIXME get rid of this, rounded style should be fixed instead
             // Used to get the cursor to the right position since
             // it's off by 2 pixels with the 'rounded' style.
-            var isRounded = styleName && styleName.match(/^rounded/),
-                sliderHeight = this.getMapModule().getMaxZoomLevel() * style.heightCenter;
+            var isRounded = styleName && styleName.match(/^rounded/);
+            var sliderHeight = this.getMapModule().getMaxZoomLevel() * style.heightCenter;
 
             if (style.val === null) {
                 bar.css({
@@ -333,7 +332,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                     'background-image': '',
                     'width': '',
                     'height': '',
-                    'margin-left': ''
+                    'margin-left': '2px'
                 });
 
                 me._desktopStyles = {
@@ -395,13 +394,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 });
             }
         },
-        teardownUI : function() {
-            //remove old element
+        teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
-            if(this._slider) {
+            if (this._slider) {
                 this._slider.remove();
                 delete this._slider;
             }
+            var mobileDefs = this.getMobileDefs();
+            this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
@@ -409,22 +409,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
-            if(!this.isVisible()) {
+        redrawUI: function (mapInMobileMode, forced) {
+            if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
             var mobileDefs = this.getMobileDefs();
+            this.teardownUI();
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
             var toolbarNotReady = this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
-            if(!forced && toolbarNotReady) {
+            if (!forced && toolbarNotReady) {
                 return true;
             }
-            this.teardownUI();
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
@@ -433,6 +432,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
+        },
+        /**
+         * @method _stopPluginImpl BasicMapModulePlugin method override
+         * @param {Oskari.Sandbox} sandbox
+         */
+        _stopPluginImpl: function (sandbox) {
+            this.teardownUI();
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

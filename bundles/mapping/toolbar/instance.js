@@ -7,7 +7,7 @@
  *
  * See Oskari.mapframework.bundle.toolbar.ToolbarBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -145,7 +145,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 toolbarRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ToolbarRequestHandler', me),
                 showMapMeasurementRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.toolbar.request.ShowMapMeasurementRequestHandler', me)
             };
-
         },
         /**
          * @method createMenuToolbarContainer
@@ -156,16 +155,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             var tbcontainer = this.templateMenutoolbar.clone();
             this.menutoolbarcontainer.append(tbcontainer);
             this.toolbars[tbid] = tbcontainer;
-            var c = tbcontainer.find(".oskariui-menutoolbarbuttongroup");
+            var c = tbcontainer.find('.oskariui-menutoolbarbuttongroup');
             this.containers[tbid] = c;
             if (data.title) {
-                tbcontainer.find(".oskariui-menutoolbar-title p").append(data.title);
+                tbcontainer.find('.oskariui-menutoolbar-title p').append(data.title);
             }
             if (data.show) {
                 tbcontainer.removeClass('oskari-closed');
             }
             if (data.closeBoxCallback) {
-                tbcontainer.find(".oskariui-menutoolbar-closebox div").click(data.closeBoxCallback);
+                tbcontainer.find('.oskariui-menutoolbar-closebox div').on('click', data.closeBoxCallback);
             }
 
             return c;
@@ -190,11 +189,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         },
         changeMenuToolbarTitle: function (title) {
             if (title) {
-                this.menutoolbarcontainer.find(".oskariui-menutoolbar-title p").html(title);
+                this.menutoolbarcontainer.find('.oskariui-menutoolbar-title p').html(title);
             }
         },
 
-        getToolBarConfigs: function(ptbid){
+        getToolBarConfigs: function (ptbid) {
             var tbid = ptbid || 'default';
             return this._toolbarConfigs[tbid];
         },
@@ -211,7 +210,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             var showHover = (data && typeof data.disableHover === 'boolean') ? !data.disableHover : true;
 
             var createHoverStyle = false;
-            if(c) {
+            if (c) {
                 createHoverStyle = true;
             }
 
@@ -222,21 +221,20 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 createHoverStyle = true;
             }
 
-            if(!data) {
+            if (!data) {
                 data = {};
             }
 
-            if(!data.colours) {
+            if (!data.colours) {
                 data.colours = {
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
-
             } else {
-                if(!data.colours.hover) {
+                if (!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
                 }
-                if(!data.colours.background) {
+                if (!data.colours.background) {
                     data.colours.background = '#333438';
                 }
             }
@@ -244,11 +242,11 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
             };
 
-            var addHoverStyle = (createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]) ? true : false;
+            var addHoverStyle = !!((createHoverStyle && data && showHover && !this._toolbarConfigs[tbid]));
 
             c.addClass('toolbar_' + tbid);
-            if(addHoverStyle) {
-                jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
+            if (addHoverStyle) {
+                jQuery('<style type="text/css" id="toolbar_' + tbid + '_style">' +
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
@@ -266,13 +264,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             }
             */
 
-            if(!this._toolbarConfigs[tbid]) {
+            if (!this._toolbarConfigs[tbid]) {
                 this._toolbarConfigs[tbid] = {
-                    createdHover: (addHoverStyle && showHover) ? true : false,
+                    createdHover: !!((addHoverStyle && showHover)),
                     colours: data.colours
                 };
             }
-
 
             return c;
         },
@@ -291,9 +288,9 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             return handler.apply(this, [event]);
         },
         measureTools: {
-            "default-basictools": {
-                "measureline": true,
-                "measurearea": true
+            'default-basictools': {
+                'measureline': true,
+                'measurearea': true
             }
         },
 
@@ -305,7 +302,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
             /*
              * @method ToolSelectedEvent
              * */
-            "Toolbar.ToolSelectedEvent": function (event) {
+            'Toolbar.ToolSelectedEvent': function (event) {
                 var me = this;
                 var sandbox = this.getSandbox();
 
@@ -322,8 +319,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
 
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 
-                sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || "", false, null, null));
-
+                sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
             }
         },
 
@@ -380,7 +376,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          * @param {Object} state bundle state as JSON
          */
         setState: function (state) {
-
             if (!state) {
                 // TODO: loop buttons and check which had selected = true for default tool
                 return;
@@ -472,26 +467,24 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         _addToolbar: function (tbid, data) {
             this.getToolbarContainer(tbid, data);
         },
-        _updateToolbar: function(ptbid, data){
+        _updateToolbar: function (ptbid, data) {
             var me = this;
             var tbid = ptbid || 'default';
 
-
-            if(!data) {
+            if (!data) {
                 data = {};
             }
 
-            if(!data.colours) {
+            if (!data.colours) {
                 data.colours = {
                     hover: (me.conf && me.conf.colours && me.conf.colours.hover) ? me.conf.colours.hover : '#3c3c3c',
                     background: (me.conf && me.conf.colours && me.conf.colours.background) ? me.conf.colours.background : '#333438'
                 };
-
             } else {
-                if(!data.colours.hover) {
+                if (!data.colours.hover) {
                     data.colours.hover = '#3c3c3c';
                 }
-                if(!data.colours.background) {
+                if (!data.colours.background) {
                     data.colours.background = '#333438';
                 }
             }
@@ -499,41 +492,38 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 hover: (data && data.colours && data.colours.hover) ? data.colours.hover : '#3c3c3c'
             };
 
-            if(this._toolbarConfigs[tbid].createdHover === true) {
-                jQuery('style#toolbar_'+tbid+'_style').remove();
-                jQuery('<style type="text/css" id="toolbar_'+tbid+'_style">'+
+            if (this._toolbarConfigs[tbid].createdHover === true) {
+                jQuery('style#toolbar_' + tbid + '_style').remove();
+                jQuery('<style type="text/css" id="toolbar_' + tbid + '_style">' +
                             'div.toolbar_' + tbid + ' div.toolrow div.tool:hover:not(.disabled):not(.selected) {' +
                             '   background-color: ' + data.colours.hover + ';' +
                             '}' +
                         '</style>').appendTo('head');
             }
 
-
             this._toolbarConfigs[tbid].colours = data.colours;
-
 
             // change toolbar toolicons
             var c = me.containers[tbid];
-            if(c) {
-                c.find('.tool').each(function(){
+            if (c) {
+                c.find('.tool').each(function () {
                     var button = jQuery(this);
                     var iconCls = button.attr('data-icon');
                     button.removeClass(iconCls + '-light');
                     button.removeClass(iconCls + '-dark');
 
                     var color = data.colours.background;
-                    if(button.hasClass('selected') && button.attr('data-toggle-change-icon') === 'true' && button.attr('data-active-color')) {
+                    if (button.hasClass('selected') && button.attr('data-toggle-change-icon') === 'true' && button.attr('data-active-color')) {
                         color = button.attr('data-active-color');
                     }
 
-                    if(Oskari.util.getColorBrightness(color) === 'light') {
+                    if (Oskari.util.getColorBrightness(color) === 'light') {
                         button.addClass(iconCls + '-light');
                     } else {
                         button.addClass(iconCls + '-dark');
                     }
                 });
             }
-
         },
         /**
          * @static
@@ -544,7 +534,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
         __guidedTourDelegateTemplate: {
             priority: 60,
             getTitle: function () {
-                return this.getLocalization().guidedTour.title
+                return this.getLocalization().guidedTour.title;
             },
             getContent: function () {
                 var content = jQuery('<div></div>');
@@ -561,16 +551,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if(requestBuilder){
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -580,14 +570,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance",
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);

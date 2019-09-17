@@ -51,7 +51,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method setTemplate
          * @param {jQuery} template
          */
-        setTemplate: function(template) {
+        setTemplate: function (template) {
             if (this.template && template) {
                 this.template.replaceWith(template);
             }
@@ -61,7 +61,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method getTemplate
          * @return {jQuery}
          */
-        getTemplate: function() {
+        getTemplate: function () {
             return this.template;
         },
         /**
@@ -99,7 +99,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          *
          * @method refresh
          */
-        refresh: function() {
+        refresh: function () {
             this.setTemplate(this.createUi());
         },
         /**
@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                     var hasAX = "ActiveXObject" in window;
                     if(hasAX){
                         var objFSO = new ActiveXObject("Scripting.FileSystemObject");
-                        var filePath = $("#" + fileid)[0].value;
+                        var filePath = jQuery("#" + fileid)[0].value;
                         var objFile = objFSO.getFile(filePath);
                         var fileSize = objFile.size; //size in kb
                         fileSize = fileSize / 1048576; //size in mb
@@ -165,8 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
                 me.container.find('form input[type=submit]').prop('disabled', false);
             }
 
-
-        },*/
+        }, */
         /**
          * Creates the template for file upload form
          *
@@ -175,7 +174,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Object} locale
          * @return {jQuery}
          */
-        __createFileImportTemplate: function(locale) {
+        __createFileImportTemplate: function (locale) {
             var me = this,
                 file = jQuery(this.__templates.file).clone(),
                 action = this.instance.getService().getFileImportUrl(),
@@ -190,95 +189,96 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             file.find('div.style-form').html(styleForm.getForm());
             file.find('input[type=button]').val(locale.file.submit);
 
-            file.find('input[name=file-import]').on('change', function(e){
+            file.find('input[name=file-import]').on('change', function (e) {
                 var file = this.files[0],
                     maxFileSizeMb = me.instance.conf.maxFileSizeMb;
-                if ((file.size / 1048576) > maxFileSizeMb){ //size in mb
+                if ((file.size / 1048576) > maxFileSizeMb) { // size in mb
                     me.container.find('form input[type=button]').prop('disabled', true);
                     me.__showMessage(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), false);
-                }else{
+                } else {
                     me.container.find('form input[type=button]').prop('disabled', false);
                 }
             });
 
-            file.find('input[type=button]').on('click', function (e){
+            file.find('input[type=button]').on('click', function (e) {
                 var styleJson = JSON.stringify(me.__getStyleValues(styleForm)),
-                    form = file.find('form'); //jQuery(this).parent()
+                    form = file.find('form'); // jQuery(this).parent()
                 // Set the value of the hidden style field
                 form.find('input[name=layer-style]').val(styleJson);
                 // Prevent from sending if there were missing fields
-                if (me.__validateForm (form, locale)){
-                    return; //e.preventDefault()
+                if (me.__validateForm(form, locale)) {
+                    return; // e.preventDefault()
                 }
 
                 jQuery.ajax({
                     url: action,
                     type: 'POST',
                     data: new FormData(form[0]),
-                    cache : false,
-                    contentType: false, //multipart/form-data
+                    cache: false,
+                    contentType: false, // multipart/form-data
                     processData: false,
-                    //timeout : ,
-                    //dataType: 'json',
+                    // timeout : ,
+                    // dataType: 'json',
                     xhr: function () {
-                        var myXhr = jQuery.ajaxSettings.xhr();//new XMLHttpRequest()
-                        if (myXhr.upload ){
-                            myXhr.upload.addEventListener('loadstart', function(e) {
+                        var myXhr = jQuery.ajaxSettings.xhr();// new XMLHttpRequest()
+                        if (myXhr.upload) {
+                            myXhr.upload.addEventListener('loadstart', function (e) {
                                 me.progressSpinner.start();
                             });
-                            myXhr.upload.addEventListener('progress', function(e){
+                            myXhr.upload.addEventListener('progress', function (e) {
                                 if (e.lengthComputable) {
                                     me.progressBarFile.show();
-                                    me.progressBarFile.updateProgressBar(e.total,e.loaded);
+                                    me.progressBarFile.updateProgressBar(e.total, e.loaded);
                                 }
                             });
                         }
                         return myXhr;
                     },
 
-                    success: function (data, textStatus, jqXHR){
+                    success: function (data, textStatus, jqXHR) {
                         me.progressSpinner.stop();
-                        me.__finish(data,locale);
+                        me.__finish(data, locale);
                     },
-                    error: function (jqXHR, textStatus, errorThrown){
+                    error: function (jqXHR, textStatus, errorThrown) {
                         var msg = null,
                             title = locale.finish.failure.title,
                             error = null,
-                            warning = null;
+                            warning = null,
+                            err;
                         me.progressSpinner.stop();
-                        if (textStatus === "error"){
+                        if (textStatus === 'error') {
                             try {
                                 err = JSON.parse(jqXHR.responseText);
                                 if (err.error !== null && err.error !== undefined) {
                                     error = err.error;
-                                    if (err.error.warning !== undefined && err.error.warning.featuresSkipped){
+                                    if (err.error.warning !== undefined && err.error.warning.featuresSkipped) {
                                         warning = locale.warning.features_skipped.replace(/<xx>/g, err.warning.featuresSkipped);
                                     }
                                 }
                             } catch (e) {
                                 Oskari.log(me.getName())
-                                .warn('Error whilst parsing json',e);
+                                    .warn('Error whilst parsing json', e);
                             }
-                        }else if (textStatus === "timeout"){
+                        } else if (textStatus === 'timeout') {
                             error = textStatus;
-                        }else if (textStatus === "abort"){
-                             error = textStatus;
-                        }else if (textStatus === "parsererror"){
+                        } else if (textStatus === 'abort') {
+                            error = textStatus;
+                        } else if (textStatus === 'parsererror') {
                             error = textStatus;
                         }
 
                         // textual portion of the HTTP status
-                        if (errorThrown){
+                        if (errorThrown) {
                             Oskari.log(me.getName()).warn('Error whilst importing userlayer: ' + errorThrown);
                         }
 
-                        if (typeof error === "string" && locale.error[error.toLowerCase()]) {
+                        if (typeof error === 'string' && locale.error[error.toLowerCase()]) {
                             msg = locale.error[error.toLowerCase()];
                         } else {
                             msg = locale.error.generic;
                         }
-                        if (warning){
-                            msg = msg + " " + warning;
+                        if (warning) {
+                            msg = msg + ' ' + warning;
                         }
                         me.__showMessage(title, msg, false);
                     }
@@ -297,27 +297,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Oskari.userinterface.component.VisualizationForm} styleForm
          * @return {Object}
          */
-        __getStyleValues: function(styleForm) {
+        __getStyleValues: function (styleForm) {
             var formValues = styleForm.getValues(),
                 values = {};
 
             if (formValues) {
                 values.dot = {
                     size: formValues.dot.size,
-                    color: '#' + formValues.dot.color,
+                    color: formValues.dot.color,
                     shape: formValues.dot.shape
                 };
                 values.line = {
-                    size: formValues.line.width,
-                    color: '#' + formValues.line.color,
+                    width: formValues.line.width,
+                    color: formValues.line.color,
                     cap: formValues.line.cap,
                     corner: formValues.line.corner,
                     style: formValues.line.style
                 };
                 values.area = {
-                    size: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : '#' + formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : '#' + formValues.area.fillColor,
+                    lineWidth: formValues.area.lineWidth,
+                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
+                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
                     lineStyle: formValues.area.lineStyle,
                     fillStyle: formValues.area.fillStyle,
                     lineCorner: formValues.area.lineCorner
@@ -335,7 +335,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Object} locale
          * @return {Boolean}
          */
-        __validateForm: function(form, locale) {
+        __validateForm: function (form, locale) {
             var fileInput = form.find('input[type=file]'),
                 nameInput = form.find('input[name=layer-name]'),
                 errors = false,
@@ -359,14 +359,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param {Object} json
          * @param {Object} locale
          */
-        __finish: function(json, locale){
+        __finish: function (json, locale) {
             var title = locale.finish.success.title,
                 msg = locale.finish.success.message,
-                me=this,
                 fadeout = true;
 
-            if (json.warning !== undefined && json.warning.featuresSkipped){
-                msg = msg + " " + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
+            if (json.warning !== undefined && json.warning.featuresSkipped) {
+                msg = msg + ' ' + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
                 fadeout = false;
             }
             this.instance.addUserLayer(json);
@@ -385,10 +384,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {boolean} fadeout
          */
         __showMessage: function (title, message, fadeout) {
-            fadeout =  fadeout !== false;
-            var me = this,
-                loc = this._locale,
-                dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
+            fadeout = fadeout !== false;
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
                 btn = dialog.createCloseButton(this.locale.actions.close);
 
             dialog.makeModal();
@@ -398,5 +395,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             }
         }
     }, {
-        "extend": ["Oskari.userinterface.extension.DefaultFlyout"]
+        'extend': ['Oskari.userinterface.extension.DefaultFlyout']
     });

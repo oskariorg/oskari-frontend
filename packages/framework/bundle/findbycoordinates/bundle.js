@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance
+ * @class Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundle
  *
  * Definition for bundle. See source for details.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance", function () {
+Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundle", function () {
 
 }, {
     "create": function () {
@@ -29,7 +29,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
             "src": "../../../../bundles/framework/findbycoordinates/instance.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/findbycoordinates/resources/css/style.css"
+            "src": "../../../../bundles/framework/findbycoordinates/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "en",
@@ -124,4 +124,4 @@ Oskari.clazz.define("Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
 
 });
 
-Oskari.bundle_manager.installBundleClass("findbycoordinates", "Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundleInstance");
+Oskari.bundle_manager.installBundleClass("findbycoordinates", "Oskari.mapframework.bundle.findbycoordinates.FindByCoordinatesBundle");

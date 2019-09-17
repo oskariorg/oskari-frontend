@@ -24,7 +24,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.RearrangeSelectedMapLaye
         this._toPosition = toPosition;
     }, {
         /** @static @property __name request name */
-        __name: "RearrangeSelectedMapLayerRequest",
+        __name: 'RearrangeSelectedMapLayerRequest',
         /**
          * @method getName
          * @return {String} request name

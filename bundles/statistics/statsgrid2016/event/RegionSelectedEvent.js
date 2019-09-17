@@ -20,28 +20,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionSelectedEvent',
          * Returns event name
          * @return {String} The event name.
          */
-        getName : function () {
-            return "StatsGrid.RegionSelectedEvent";
+        getName: function () {
+            return 'StatsGrid.RegionSelectedEvent';
         },
         /**
          * Regionset id
          * @return {Number}
          */
-        getRegionset : function() {
+        getRegionset: function () {
             return this.regionset;
         },
         /**
          * Region id
          * @return {Number}
          */
-        getRegion : function() {
+        getRegion: function () {
             return this.region;
         },
         /**
          * Region id
          * @return {Number[]}
          */
-        getSelection : function() {
+        getSelection: function () {
             return this.currentSelection;
         },
 
@@ -49,7 +49,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.RegionSelectedEvent',
          * Triggered by
          * return {String} triggered by
          */
-        getTriggeredBy: function(){
+        getTriggeredBy: function () {
             return this.triggeredBy;
         }
     }, {

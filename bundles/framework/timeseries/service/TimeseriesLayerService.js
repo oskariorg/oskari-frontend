@@ -39,7 +39,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "TimeseriesLayerService",
+        __name: 'TimeseriesLayerService',
         /**
          * @method getName
          * @return {String} service name
@@ -52,15 +52,32 @@ Oskari.clazz.define(
          */
         __eventHandlers: {
             'AfterRearrangeSelectedMapLayerEvent': function (event) {
-                this.updateTimeseriesLayers();
+                if (event.getMovedMapLayer().hasTimeseries()) {
+                    this.updateTimeseriesLayers();
+                }
             },
             'AfterMapLayerAddEvent': function (event) {
-                this.updateTimeseriesLayers();
+                if (event.getMapLayer().hasTimeseries()) {
+                    this.updateTimeseriesLayers();
+                }
             },
             'AfterMapLayerRemoveEvent': function (event) {
-                var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
-                if (series) {
-                    series.delegate.destroy();
+                if (event.getMapLayer().hasTimeseries()) {
+                    var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
+                    if (series) {
+                        series.delegate.destroy();
+                        this.updateTimeseriesLayers();
+                    }
+                }
+            },
+            'MapLayerVisibilityChangedEvent': function (event) {
+                if (event.getMapLayer().hasTimeseries()) {
+                    if (!event.getMapLayer().isVisible()) {
+                        var series = this._timeseriesService.unregisterTimeseries(event.getMapLayer().getId(), 'layer');
+                        if (series) {
+                            series.delegate.destroy();
+                        }
+                    }
                     this.updateTimeseriesLayers();
                 }
             }
@@ -122,10 +139,11 @@ Oskari.clazz.define(
             var me = this,
                 layers = me._sandbox.findAllSelectedMapLayers();
             for (var i = 0; i < layers.length; i++) {
-                if (!layers[i].hasTimeseries()) {
+                if (!layers[i].hasTimeseries() || !layers[i].isVisible() || !layers[i].isSupported(me._sandbox.getMap().getSrsName())) {
                     continue;
                 }
                 var layer = layers[i];
+
                 var series = this._timeseriesService.getTimeseries(layer.getId(), 'layer');
                 if (series) {
                     // existing timeseries layer -> update it (priority changed if layers rearranged)

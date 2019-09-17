@@ -10,7 +10,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
      * @static
      */
     function (name) {
-        
         this._element = document.createElement('input');
         this._element.className = 'oskari-formcomponent oskari-button';
         this._element.type = 'button';
@@ -19,32 +18,26 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
         }
     }, {
         blur: function () {
-            
-            jQuery(this._element).blur();
+            jQuery(this._element).trigger('blur');
         },
 
         focus: function () {
-            
             this._element.focus();
         },
 
-        isFocus: function(){
-            
+        isFocus: function () {
             return this._element === document.activeElement;
         },
 
         getName: function () {
-            
             return this._element.name;
         },
 
         setName: function (name) {
-            
             this._element.name = name;
         },
 
         getTitle: function () {
-            
             return this.getValue();
         },
 
@@ -53,27 +46,22 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Sets the button title
          */
         setTitle: function (title) {
-            
             this.setValue(title);
         },
 
         getTooltip: function () {
-            
             return this._element.title;
         },
 
         setTooltip: function (tooltip) {
-            
             this._element.title = tooltip;
         },
 
         getValue: function () {
-            
             return this._element.value;
         },
 
         setValue: function (value) {
-            
             this._element.value = value;
         },
 
@@ -87,7 +75,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
             if (this._element) {
                 this._element.id = pId;
             } else {
-                Oskari.getSandbox().printWarn("Oskari.userinterface.component.Button.setId: No UI");
+                Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button.setId: No UI');
             }
         },
         /**
@@ -96,7 +84,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @param {Boolean} enabled true to enable, false to disable
          */
         _setEnabledImpl: function (enabled) {
-            
             this._element.disabled = !enabled;
         },
 
@@ -105,7 +92,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Sets click handler for button
          */
         _setHandlerImpl: function () {
-            
             this._element.onclick = this._handler;
         },
 
@@ -114,7 +100,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Sets primary status of the button
          */
         setPrimary: function (primary, focus) {
-            
             if (typeof primary !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
@@ -139,7 +124,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Hide the button/hide  it in the document
          */
         hide: function () {
-            
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: hide is deprecated, please use setVisible instead.');
             this.setVisible(false);
         },
@@ -150,7 +134,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Show the button/show it in the document
          */
         show: function () {
-            
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: show is deprecated, please use setVisible instead.');
             this.setVisible(true);
         },
@@ -161,8 +144,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * Adds this button to given container.
          * @param {Boolean} focus
          */
-        setFocus: function(focus) {
-            
+        setFocus: function (focus) {
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: setFocus is deprecated, please use focus instead.');
             if (focus && focus === true) {
                 this.focus();
@@ -178,7 +160,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @return {jQuery} reference to DOM element
          */
         getButton: function () {
-            
             Oskari.getSandbox().printWarn('Oskari.userinterface.component.Button: getButton is deprecated, please use getElement instead.');
             return jQuery(this.getElement());
         },
@@ -187,7 +168,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
          * @method _setVisibleImpl
          */
         _setVisibleImpl: function (visible) {
-            
             this._element.visible = visible;
             this._visible = visible;
             this.getElement().style.display = this.isVisible() ? '' : 'none';
@@ -195,4 +175,4 @@ Oskari.clazz.define('Oskari.userinterface.component.Button',
     }, {
         extend: ['Oskari.userinterface.component.FormComponent']
     }
-    );
+);

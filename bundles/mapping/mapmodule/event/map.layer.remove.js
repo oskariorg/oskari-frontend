@@ -22,7 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapLayerRemoveEvent',
         this._mapLayer = mapLayer;
     }, {
         /** @static @property __name event name */
-        __name: "AfterMapLayerRemoveEvent",
+        __name: 'AfterMapLayerRemoveEvent',
         /**
          * @method getName
          * @return {String} event name

@@ -11,7 +11,7 @@ Oskari.clazz.define(
         me._clazz =
             'Oskari.mapframework.bundle.featuredata2.plugin.MapSelectionPlugin';
         me._name = 'MapSelectionPlugin';
-        if( config.instance ) {
+        if (config.instance) {
             me.caller = config.instance;
         }
         me.drawControls = null;
@@ -40,17 +40,17 @@ Oskari.clazz.define(
          * @params {String} includes drawMode, geometry and style
          */
         startDrawing: function (params) {
-            //Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
+            // Set the flag for the mediator to know that no gfi-popups are allowed until the popup is closed...
             this.WFSLayerService.setSelectionToolsActive(true);
             this._toggleControl(params.drawMode);
         },
-        clearDrawing: function() {
+        clearDrawing: function () {
             var me = this;
             var sb = this.getSandbox();
             sb.postRequestByName('DrawTools.StopDrawingRequest', [
-                    me.DRAW_REQUEST_ID,
-                    true,
-                    true
+                me.DRAW_REQUEST_ID,
+                true,
+                true
             ]);
         },
         /**
@@ -99,31 +99,31 @@ Oskari.clazz.define(
             var sb = this.getSandbox();
 
             me.drawControls = {
-                point: function() {
+                point: function () {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
                         me.DRAW_REQUEST_ID,
                         'Point'
                     ]);
                 },
-                line: function() {
+                line: function () {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
                         me.DRAW_REQUEST_ID,
                         'LineString'
                     ]);
                 },
-                polygon: function() {
+                polygon: function () {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
                         me.DRAW_REQUEST_ID,
                         'Polygon'
                     ]);
                 },
-                square: function() {
+                square: function () {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
                         me.DRAW_REQUEST_ID,
                         'Square'
                     ]);
                 },
-                circle: function() {
+                circle: function () {
                     sb.postRequestByName('DrawTools.StartDrawingRequest', [
                         me.DRAW_REQUEST_ID,
                         'Circle'
@@ -149,7 +149,7 @@ Oskari.clazz.define(
          * @method setFeatures
          * @param features Features from the drawing event when drawing is finished
          */
-        setFeatures: function(features) {
+        setFeatures: function (features) {
             this._features = features;
         },
         /**

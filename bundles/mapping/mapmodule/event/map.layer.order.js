@@ -25,7 +25,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterRearrangeSelectedMapL
         this._toPosition = toPosition;
     }, {
         /** @static @property __name event name */
-        __name: "AfterRearrangeSelectedMapLayerEvent",
+        __name: 'AfterRearrangeSelectedMapLayerEvent',
         /**
          * @method getName
          * @return {String} event name

@@ -61,10 +61,6 @@ Options object
 {
     layerId: 'MY_VECTOR_LAYER',
     clearPrevious: true,
-    layerOptions: {
-    	minResolution: 0,
-    	maxResolution: 1000
-    },
     centerTo: true,
     featureStyle: null,
     optionalStyles: null,
@@ -72,15 +68,7 @@ Options object
     cursor: 'zoom-in',
     prio: 1,
     minScale: 1451336,
-    layerInspireName: 'Inspire theme name',
-    layerOrganizationName: 'Organization name',
-    showLayer: true,
-    opacity: 80,
-    layerName: 'Layer name',
-    layerDescription: 'Description text',
-    layerPermissions: {
-        'publish': 'publication_permission_ok'
-    }
+    animationDuration: null
 }
 ```
 <ul>
@@ -89,9 +77,6 @@ Options object
 	</li>
 	<li>
 		<b>clearPrevious</b> - when true, the previous features will be cleared
-	</li>
-	<li>
-		<b>layerOptions</b> - additional options of the layer.
 	</li>
 	<li>
 		<b>centerTo</b> - Whether to zoom to the added features.
@@ -115,19 +100,7 @@ Options object
     <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
   </li>
   <li>
-    <b>layerInspireName</b> - Layer Inspire name when adding layer to visible (see showLayer).
-  </li><li>
-    <b>layerOrganizationName</b> - Layer organization name when adding layer to visible (see showLayer).
-  </li><li>
-    <b>showLayer</b> - Adds layer to visible (adds layer to layerservice and also select current layer to selected).
-  </li><li>
-    <b>opacity</b> - Layer opacity.
-  </li><li>
-    <b>layerName</b> - Layer name. If already added layer then update layer name.
-  </li><li>
-    <b>layerDescription</b> - Layer description. If already added layer then update layer description.
-  </li><li>
-    <b>layerPermissions</b> - Layer permissions.
+    <b>animationDuration</b> - On update requests it's possible to animate fill color change. Specify animation duration in ms.
   </li>
 </ul>
 
@@ -371,11 +344,14 @@ channel.postRequest('MapModulePlugin.AddFeaturesToMapRequest', [WKT, {
 }]);
 
 // Now update previously added feature
-// For example change stroke style
+// For example change stroke style and animate 1 second fill color shift to blue
 var featureStyle = {
   stroke: {
     color: '#00FF00',
     width: 5
+  },
+  fill {
+    color: '#0000FF'
   }
 };
 
@@ -383,7 +359,8 @@ var featureStyle = {
 var updatedFeatureAttributes = {'test_property':1};
 var params = [updatedFeatureAttributes, {
     featureStyle: featureStyle,
-    layerId: 'MY_VECTOR_LAYER'
+    layerId: 'MY_VECTOR_LAYER',
+    animationDuration: 1000
 }];
 
 channel.postRequest(
@@ -394,5 +371,6 @@ channel.postRequest(
 
 ## Related api
 
-- removeFeaturesFromMapRequest
+- VectorLayerRequest
+- RemoveFeaturesFromMapRequest
 

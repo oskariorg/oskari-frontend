@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.userinterface.component.SearchInput',
      * @method create called automatically on construction
      */
     function () {
-        
         this._element.className = 'oskari-formcomponent oskari-searchinput';
         this._input.type = 'search';
     },
@@ -17,4 +16,4 @@ Oskari.clazz.define('Oskari.userinterface.component.SearchInput',
     {
         extend: ['Oskari.userinterface.component.TextInput']
     }
-    );
+);

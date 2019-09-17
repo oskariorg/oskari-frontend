@@ -17,7 +17,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.request.UpdateExtensionReque
         }
 
         this.ui.updateExtension(extension, request);
-
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']

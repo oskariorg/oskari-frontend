@@ -10,23 +10,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapWindowFullScr
  * @method create called automatically on construction
  * @static
  */
-function() {
-    this._creator = null;
-
-}, {
+    function () {
+        this._creator = null;
+    }, {
     /** @static @property __name request name */
-    __name : "MapFull.MapWindowFullScreenRequest",
-    /**
+        __name: 'MapFull.MapWindowFullScreenRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    }
-}, {
+        getName: function () {
+            return this.__name;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

@@ -2,7 +2,7 @@
  * @class Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.service.FindByCoordinatesService',
-    function(instance, url) {
+    function (instance, url) {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.url = url;
@@ -40,16 +40,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.service.FindBy
             var url = this.getUrl(options);
 
             jQuery.ajax({
-                dataType : "json",
-                type : "GET",
-                beforeSend: function(x) {
-                  if(x && x.overrideMimeType) {
-                   x.overrideMimeType("application/json");
-                  }
-                 },
-                url : url,
-                error : errorCb,
-                success : successCb
+                dataType: 'json',
+                type: 'GET',
+                beforeSend: function (x) {
+                    if (x && x.overrideMimeType) {
+                        x.overrideMimeType('application/json');
+                    }
+                },
+                url: url,
+                error: errorCb,
+                success: successCb
             });
         }
     }, {

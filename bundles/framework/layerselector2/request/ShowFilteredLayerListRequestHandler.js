@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
      * @param {Oskari.mapframework.bundle.featuredata2.plugin.mapmodule.OpenlayersPopupPlugin} featureData
      *          reference to featureData
      */
-    function(sandbox, instance) {
+    function (sandbox, instance) {
         this.sandbox = sandbox;
         this.instance = instance;
     }, {
@@ -21,16 +21,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          * @param {Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequest} request
          *      request to handle
          */
-        handleRequest : function(core, request) {
+        handleRequest: function (core, request) {
             var layerSelectorFlyout = this.instance.plugins['Oskari.userinterface.Flyout'];
 
             this.instance.filteredLayerListOpenedByRequest = true;
 
-            if(request.getSelectedFilter()){
-                layerSelectorFlyout.activateFilter(request.getSelectedFilter());
+            if (request.getSelectedFilter()) {
+                layerSelectorFlyout.setActiveFilter(request.getSelectedFilter());
             }
 
-            if(request.getOpenLayerList() && request.getOpenLayerList() === true){
+            if (request.getOpenLayerList() && request.getOpenLayerList() === true) {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this.instance, 'attach']);
             }
         }
@@ -39,5 +39,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.request.ShowFilte
          * @property {String[]} protocol array of superclasses as {String}
          * @static
          */
-        protocol : ['Oskari.mapframework.core.RequestHandler']
+        protocol: ['Oskari.mapframework.core.RequestHandler']
     });

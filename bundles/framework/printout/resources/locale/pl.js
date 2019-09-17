@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Kliknij mały podgląd aby otworzyć duży podgląd",
                 "pending": "Podgląd będzie aktualizowany wkrótce",
                 "notes": {
-                    "extent": "Z podglądu można wywnioskować zakres mapy do wydruku",
-                    "restriction": "Nie wszystkie warstwy mapy są widoczne w podglądzie"
+                    "extent": "Z podglądu można wywnioskować zakres mapy do wydruku"
                 }
             },
             "buttons": {

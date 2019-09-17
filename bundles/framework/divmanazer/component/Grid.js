@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             '<label></label>' +
             '</div>' +
             '</li>'
-            );
+        );
         this.templateColumnSelectorClose = jQuery(
             '<div class="icon-close close-selector-button"></div>'
         );
@@ -153,8 +153,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * Sets the header table autosizeble
          * @param {Integer} margin is setted some margin then autosize header
          */
-        setAutoHeightHeader: function(margin) {
-            if(typeof margin === 'number') {
+        setAutoHeightHeader: function (margin) {
+            if (typeof margin === 'number') {
                 this.autoHeightHeader = margin;
             }
         },
@@ -305,7 +305,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             if (!data.size && me.additionalDataHandler) {
                 link = me.templatePopupLink.clone();
                 link.append(me.additionalDataHandler.title);
-                link.bind('click', function () {
+                link.on('click', function () {
                     // show userguide popup with data
                     me.additionalDataHandler.handler(link, content);
                     return false;
@@ -313,7 +313,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 return link;
             }
             return content;
-
         },
         /**
          * @private @method _renderAdditionalData
@@ -389,7 +388,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @method  @public addGroupingHeader
          * @param {Array} headers array of groupung header objects [{cls:'styleClass', text:'Grouping text'}]
          */
-        setGroupingHeader: function(headers) {
+        setGroupingHeader: function (headers) {
             this._groupingHeaders = headers;
         },
 
@@ -414,7 +413,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 link,
                 dataArray,
                 data,
-                fullFieldNames,
                 fieldName,
                 baseKey,
                 uiName,
@@ -461,8 +459,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
                     me.select(selections, false);
                     me.trigger('sort', {
-                        column : scopedValue,
-                        ascending : !descending
+                        column: scopedValue,
+                        ascending: !descending
                     });
                     return false;
                 };
@@ -542,20 +540,20 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 }
             };
 
-            if(me._groupingHeaders) {
+            if (me._groupingHeaders) {
                 var cols = 0;
                 var row = jQuery('<tr class="grouping"></tr>');
-                for(i =0; i < me._groupingHeaders.length; i+= 1) {
+                for (i = 0; i < me._groupingHeaders.length; i += 1) {
                     var h = me._groupingHeaders[i];
                     var groupHeader = me.templateTableGroupingHeader.clone();
-                    if(typeof h.cls === 'string') {
+                    if (typeof h.cls === 'string') {
                         groupHeader.addClass(h.cls);
                     }
-                    if(typeof h.text === 'string'){
+                    if (typeof h.text === 'string') {
                         groupHeader.find('.title').html(h.text);
                     }
 
-                    if(typeof h.colspan === 'number') {
+                    if (typeof h.colspan === 'number') {
                         groupHeader.attr('colspan', h.colspan);
                         cols += h.colspan;
                     } else {
@@ -563,12 +561,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     }
 
                     // Check last grouping header cell
-                    if(i === me._groupingHeaders.length-1 && cols < me._fullFieldNames.length && !h.colspan) {
+                    if (i === me._groupingHeaders.length - 1 && cols < me._fullFieldNames.length && !h.colspan) {
                         var lastColspan = (me._fullFieldNames.length - cols) + 1;
                         groupHeader.attr('colspan', lastColspan);
                     }
 
-                    if(h.maxCols) {
+                    if (h.maxCols) {
                         groupHeader.attr('data-max-cols', h.maxCols);
                         groupHeader.attr('data-start-col', cols);
                         groupHeader.attr('data-header-index', i);
@@ -579,7 +577,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 tableHeader.prepend(row);
             }
 
-
             for (i = 0; i < me._fullFieldNames.length; i += 1) {
                 header = me.templateTableHeader.clone();
                 link = header.find('a');
@@ -587,10 +584,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 baseKey = me._fullFieldNames[i].baseKey;
                 uiName = me.uiNames[baseKey];
 
-                if(typeof uiName === 'function') {
+                if (typeof uiName === 'function') {
                     uiName(header);
                 } else {
-
                     var tools = this.columnTools[baseKey] || [];
                     if (!uiName) {
                         uiName = fieldName;
@@ -598,7 +594,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         uiName = fieldName.replace(baseKey, uiName);
                     }
                     link.append(uiName);
-                    header.attr('title',uiName);
+                    header.attr('title', uiName);
                     if (me.lastSort && fieldName === me.lastSort.attr) {
                         if (me.lastSort.descending) {
                             header.addClass('desc');
@@ -607,7 +603,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         }
                     }
                     if (me._fullFieldNames[i].type === 'default') {
-                        link.bind('click', headerClosureMagic(me._fullFieldNames[i].key));
+                        link.on('click', headerClosureMagic(me._fullFieldNames[i].key));
                         me.__attachHeaderTools(header, tools, me._fullFieldNames[i].key);
                     } else if (me._fullFieldNames[i].type === 'object') {
                         if (dataArray.length > 2) {
@@ -618,7 +614,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             header.addClass('base');
                         }
                         // Expand or close subtable
-                        link.bind('click', headerLinkClosureMagic);
+                        link.on('click', headerLinkClosureMagic);
                     }
 
                     if (me._fullFieldNames[i].visibility === 'hidden') {
@@ -629,8 +625,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 header.data('key', me._fullFieldNames[i].baseKey);
                 header.data('value', me._fullFieldNames[i].subKey);
 
-                header.addClass(me._columnClsPrefix+i);
-                if(me.__selectedColumn === me._fullFieldNames[i].baseKey) {
+                header.addClass(me._columnClsPrefix + i);
+                if (me.__selectedColumn === me._fullFieldNames[i].baseKey) {
                     header.addClass('selected');
                 }
                 headerContainer.append(header);
@@ -641,17 +637,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param  {String} value column field name
          * @return {String}       value with problematic characters removed/replaced
          */
-        __getHeaderClass : function(value) {
-            if(!value) {
+        __getHeaderClass: function (value) {
+            if (!value) {
                 return value;
             }
             // replace " with empty string so html doesn't break
-            var result = value.split("\"").join("");
-            result = result.split(":").join("");
-            result = result.split(",").join("_");
-            result = result.split(".").join("_");
-            result = result.split("{").join("_");
-            result = result.split("}").join("_");
+            var result = value.split('"').join('');
+            result = result.split(':').join('');
+            result = result.split(',').join('_');
+            result = result.split('.').join('_');
+            result = result.split('{').join('_');
+            result = result.split('}').join('_');
             return result;
         },
         /**
@@ -660,13 +656,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @param  {Object[]} tools  array of items with name and callback
          * @param  {String} field  column name for the callback parameter
          */
-        __attachHeaderTools : function(header, tools, field) {
+        __attachHeaderTools: function (header, tools, field) {
             var me = this;
-            tools.forEach(function(tool) {
+            tools.forEach(function (tool) {
                 var tpl = me.templateTool.clone();
                 tpl.append(tool.name);
-                if(tool.callback) {
-                    tpl.on('click', function() {
+                if (tool.callback) {
+                    tpl.on('click', function () {
                         tool.callback(field);
                     });
                 }
@@ -687,8 +683,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 body = table.find('tbody').last(),
                 dataArray = me.model.getData(),
                 row,
-                data,
-                key,
                 value,
                 cell,
                 columnIndex,
@@ -696,17 +690,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 rows,
                 rowClicked;
 
-            dataArray.forEach(function(data) {
+            dataArray.forEach(function (data) {
                 row = me.templateRow.clone();
 
                 row.attr('data-id', data[me.model.getIdField()]);
                 columnIndex = 0;
-                fieldNames.forEach(function(key) {
-                    if ( typeof data[key] === 'number' ) {
-                        value = me._loc('Grid.cellValue', {value: data[key]});
-                    } else {
-                        value = data[key];
-                    }
+                fieldNames.forEach(function (key) {
+                    value = data[key];
+
                     // Handle subtables
                     if (typeof value === 'object') {
                         columnIndex = me._createSubTable(
@@ -720,6 +711,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         renderer = me.valueRenderer[key];
                         if (renderer) {
                             value = renderer(value, data);
+                        } else if (typeof value === 'number') {
+                            value = me._loc('Grid.cellValue', {value: value});
                         }
                         cell.append(value);
                         row.append(cell);
@@ -734,9 +727,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             };
             rows.on('click', rowClicked);
             // enable links to work normally (unbind row click on hover and rebind when mouse exits)
-            rows.find('a').hover(function () {
+            rows.find('a').on('mouseenter', function () {
                 jQuery(this).parents('tr').off('click');
-            }, function () {
+            });
+            rows.find('a').on('mouseleave', function () {
                 jQuery(this).parents('tr').on('click', rowClicked);
             });
 
@@ -760,7 +754,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 fields,
                 newColumn,
                 checkboxInput;
-            if(me.visibleColumnSelector) {
+            if (me.visibleColumnSelector) {
                 me.visibleColumnSelector.remove();
                 me.visibleColumnSelector = null;
             }
@@ -773,50 +767,50 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             me.visibleColumnSelector.append(columnSelector);
 
             // Open or close the checkbox dropdown list
-            me.visibleColumnSelector.click(function () {
+            me.visibleColumnSelector.on('click', function () {
                 if (columnSelector.css('visibility') !== 'hidden') {
                     columnSelector.css('visibility', 'hidden');
                 } else {
                     columnSelector.css('visibility', 'visible');
                 }
             });
-            columnSelectorClose.click(function (e) {
+            columnSelectorClose.on('click', function (e) {
                 e.stopPropagation();
                 columnSelector.css('visibility', 'hidden');
             });
             fields = me.model.getFields();
 
             var checkbocInputChange = function () {
-                    var fieldSelectors = me.visibleColumnSelector.find('input.column-selector-list-item:checked');
-                    me.visibleColumns = [];
+                var fieldSelectors = me.visibleColumnSelector.find('input.column-selector-list-item:checked');
+                me.visibleColumns = [];
 
-                    fieldSelectors.each(function(){
-                        me.visibleColumns.push(jQuery(this).attr('data-id'));
-                    });
+                fieldSelectors.each(function () {
+                    me.visibleColumns.push(jQuery(this).attr('data-id'));
+                });
 
-                    if(me.visibleColumns.length>0) {
-                       me.setVisibleFields(me.visibleColumns);
-                    }
+                if (me.visibleColumns.length > 0) {
+                    me.setVisibleFields(me.visibleColumns);
+                }
 
-                    me.renderTo(table.parent(), {
-                        columnSelector: 'open'
-                    });
-                };
+                me.renderTo(table.parent(), {
+                    columnSelector: 'open'
+                });
+            };
 
             // Set current checkbox value for the field
-            fieldNames.forEach(function(field){
-                if(me.visibleColumns.indexOf(field) === -1) {
+            fieldNames.forEach(function (field) {
+                if (me.visibleColumns.indexOf(field) === -1) {
                     me.visibleColumns.push(field);
                 }
             });
 
             // Add field names to the list
-            fields.forEach(function(field){
-                if(field) {
+            fields.forEach(function (field) {
+                if (field) {
                     newColumn = me.templateColumnSelectorListItem.clone();
                     newColumn.addClass('column-selector-list-item');
                     checkboxInput = newColumn.find('input');
-                    checkboxInput.attr('checked', (me.visibleColumns.indexOf(field) !== -1));
+                    checkboxInput.prop('checked', (me.visibleColumns.indexOf(field) !== -1));
 
                     checkboxInput.addClass('column-selector-list-item');
                     checkboxInput.attr('data-id', field);
@@ -832,13 +826,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     });
 
                     // Update visible fields after checkbox change
-                    checkboxInput.change(checkbocInputChange);
+                    checkboxInput.on('change', checkbocInputChange);
                     columnSelectorList.append(newColumn);
                 }
             });
             columnSelectorList.attr('class', 'column-selector-list');
             columnSelector.append(columnSelectorList, columnSelectorClose);
-            columnSelectorClose.click(function (e) {
+            columnSelectorClose.on('click', function (e) {
                 e.stopPropagation();
                 columnSelector.css('visibility', 'hidden');
             });
@@ -857,7 +851,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             featureTable.css('cursor', 'e-resize');
 
             // Start resizing
-            featureTable.mousedown(function (e) {
+            featureTable.on('mousedown', function (e) {
                 start = jQuery(this);
                 pressed = true;
                 startX = e.pageX;
@@ -870,14 +864,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             });
 
             // Resize when mouse moves
-            jQuery(document).mousemove(function (e) {
+            jQuery(document).on('.mousemove', function (e) {
                 if (pressed) {
                     jQuery(start).width(startWidth + (e.pageX - startX));
                 }
             });
 
             // Stop resizing
-            jQuery(document).mouseup(function () {
+            jQuery(document).on('mouseup', function () {
                 if (pressed) {
                     jQuery(start).removeClass('resizing');
                     pressed = false;
@@ -898,13 +892,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          */
         renderTo: function (container, state, toolRowElement) {
             var me = this,
-                toolRow,
                 fieldNames,
                 table;
 
             var selected = me._getSelectedRows();
             container.empty();
-            if(me.toolRow && (state === null || state.columnSelector !== 'open')) {
+            if (me.toolRow && (state === null || state.columnSelector !== 'open')) {
                 me.toolRow.remove();
                 me.toolRow = null;
             }
@@ -913,10 +906,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
             // Tool row
             if (me.showColumnSelector || me.showExcelExporter) {
-                if(!me.toolRow) {
+                if (!me.toolRow) {
                     me.toolRow = me.templateGridTools.clone();
                 }
-                if(toolEl) {
+                if (toolEl) {
                     me.toolsRenderedTo = toolEl;
                     toolEl.prepend(me.toolRow);
                 } else {
@@ -926,7 +919,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             fieldNames = me.visibleColumns;
-            if(fieldNames.length === 0) {
+            if (fieldNames.length === 0) {
                 fieldNames = me.fieldNames;
             }
             table = me.template.clone();
@@ -978,23 +971,23 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
 
                     // data at the end of the file
                     var additionalInfo = [];
-                    if(jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
+                    if (jQuery(exportForm.getElement().elements.dataSource).is(':checked')) {
                         additionalInfo.push({
-                            type : 'datasource',
-                            name : me._loc('Grid.export.additional.dataSource'),
-                            value : exportForm.getElement().elements.dataSource.value
+                            type: 'datasource',
+                            name: me._loc('Grid.export.additional.dataSource'),
+                            value: exportForm.getElement().elements.dataSource.value
                         });
                     }
                     additionalInfo.push({
-                        type : 'layerName',
-                        name : me._loc('Grid.export.additional.layerName'),
-                        value : me._getLayerName()
+                        type: 'layerName',
+                        name: me._loc('Grid.export.additional.layerName'),
+                        value: me._getLayerName()
                     });
-                    if(jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
+                    if (jQuery(exportForm.getElement().elements.metadata).is(':checked')) {
                         additionalInfo.push({
-                            type : 'metadata',
-                            name : me._loc('Grid.export.additional.metadata'),
-                            value : exportForm.getElement().elements.metadata.value
+                            type: 'metadata',
+                            name: me._loc('Grid.export.additional.metadata'),
+                            value: exportForm.getElement().elements.metadata.value
                         });
                     }
 
@@ -1012,7 +1005,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         'Oskari.userinterface.component.Popup'
                     );
                     // Selection state
-                    jQuery(exportForm.getElement()).find('input[name=export_selection]').prop('disabled',me.getSelection().length === 0);
+                    jQuery(exportForm.getElement()).find('input[name=export_selection]').prop('disabled', me.getSelection().length === 0);
                     me.exportPopup.makeModal();
 
                     me.exportPopup.show(
@@ -1035,26 +1028,25 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             }
 
             // Keep already selected to selected
-            if(selected.values.length > 0) {
-                selected.values.forEach(function(selection){
-                    me.table.find('tr[data-id="'+selection+'"]').addClass('selected');
+            if (selected.values.length > 0) {
+                selected.values.forEach(function (selection) {
+                    me.table.find('tr[data-id="' + selection + '"]').addClass('selected');
                 });
                 me.moveSelectedRowsTop(me.sortOptions.moveSelectedRowsTop);
             }
         },
 
-        updateHeaderHeight: function(){
+        updateHeaderHeight: function () {
             var me = this;
             // autosize header
-            if(typeof me.autoHeightHeader === 'number' && me.table) {
+            if (typeof me.autoHeightHeader === 'number' && me.table) {
                 var maxHeight = 0;
-                var thead = me.table.find('thead');
                 var theadRow = me.table.find('thead tr:not(.grouping)');
                 theadRow.height(me.autoHeightHeader || 30);
 
-                theadRow.find('th').each(function(){
+                theadRow.find('th').each(function () {
                     var el = jQuery(this);
-                    if(el.prop('scrollHeight')>maxHeight) {
+                    if (el.prop('scrollHeight') > maxHeight) {
                         maxHeight = el.prop('scrollHeight');
                     }
                 });
@@ -1082,7 +1074,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             form.addClass('oskari-grid-export');
             form.addClass('clearfix');
             form.setAction(
-                Oskari.getSandbox().getAjaxUrl('ExportTableFile')
+                Oskari.urls.getRoute('ExportTableFile')
             );
             form.setMethod('POST');
 
@@ -1150,7 +1142,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 'Oskari.userinterface.component.CheckboxInput'
             );
             input.setName('dataSource');
-            input.setTitle(loc.additional.dataSource);  // Doesn't go to backend in form submit
+            input.setTitle(loc.additional.dataSource); // Doesn't go to backend in form submit
             input.setValue(this.getDataSource());
             input.setEnabled(!!this.getDataSource());
             input.setChecked(!!this.getDataSource());
@@ -1225,8 +1217,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                     // Try 1st string - filter out values with leading 0 and no . in it
                     var parsedString = String(value),
                         parsed = parseFloat(value);
-                    if(parsedString){
-                        if(parsedString.indexOf("0") === 0 && parsedString.indexOf(".") === -1 ){
+                    if (parsedString) {
+                        if (parsedString.indexOf('0') === 0 && parsedString.indexOf('.') === -1) {
                             return value;
                         }
                     }
@@ -1235,8 +1227,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             var fieldValues = _.pluck(me.getDataModel().data, field);
                             decimalCount = Oskari.util.decimals(fieldValues);
                         }
-                        if(fixedCount){
-                            if(!isNaN(fixedCount) && fixedCount < decimalCount){
+                        if (fixedCount) {
+                            if (!isNaN(fixedCount) && fixedCount < decimalCount) {
                                 decimalCount = fixedCount;
                             }
                         }
@@ -1275,15 +1267,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
             // Add data
             data.forEach(function (rowData) {
                 row = [];
-                if(selected) {
+                if (selected) {
                     if (jQuery(rows[i]).hasClass('selected')) {
                         fields.forEach(function (field) {
                             row.push(me._prepareData(rowData[field]));
                         });
                         ret.push(row);
                     }
-                }
-                else {
+                } else {
                     fields.forEach(function (field) {
                         row.push(me._prepareData(rowData[field]));
                     });
@@ -1306,13 +1297,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _getAttributeValue: function (a, pAttribute) {
             // to string so number will work also
             var nameA = a[pAttribute],
-                numericValue,
                 split = pAttribute.split('.');
 
             // if not found, try subtable
             if (typeof nameA === 'undefined' && split.length > 1) {
                 var splitted = a[split[0]];
-                if(splitted && splitted[split[1]]) {
+                if (splitted && splitted[split[1]]) {
                     nameA = splitted[split[1]];
                 }
             }
@@ -1322,7 +1312,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                 nameA = nameA.toLowerCase();
             }
 
-            if(Oskari.util.isNumber(nameA, true)) {
+            if (Oskari.util.isNumber(nameA, true)) {
                 nameA = parseFloat(nameA);
             }
             return nameA;
@@ -1349,7 +1339,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
          * @return {String/null}
          */
         _getLayerName: function () {
-            return  jQuery('div.oskari-flyoutcontent.featuredata').find('li.active').text();
+            return jQuery('div.oskari-flyoutcontent.featuredata').find('li.active').text();
         },
         /**
          * Prepare column data for excel export
@@ -1360,56 +1350,55 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _prepareData: function (data) {
             if (data instanceof Date) {
                 data = String(data);
-            }
-            else if (!isNaN(data)) {
+            } else if (!isNaN(data)) {
                 data = String(data);
             }
             return data;
         },
-        //http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
-        contentScroll : function(follow) {
+        // http://stackoverflow.com/questions/17067294/html-table-with-100-width-with-vertical-scroll-inside-tbody
+        contentScroll: function (follow) {
             var me = this;
-            if(this.__scrollSortFunc) {
+            if (this.__scrollSortFunc) {
                 this.off('sort', this.__scrollSortFunc);
                 this.__scrollSortFunc = null;
             }
-            this.__scrollSortFunc = function() {
+            this.__scrollSortFunc = function () {
                 me.contentScroll(follow);
             };
             this.on('sort', this.__scrollSortFunc);
             this.table.find('thead').css('display', 'block');
             this.table.find('tbody').css({
-                'display' : 'block',
-                'overflow' : 'auto'
+                'display': 'block',
+                'overflow': 'auto'
             });
             var dataCells = this.table.find('tbody tr:first').children();
-            this.table.find('thead tr').children().each(function(i, header) {
+            this.table.find('thead tr').children().each(function (i, header) {
                 jQuery(header).css({
                     'padding': '5px',
                     'width': '120px',
-                    'max-width' : 'none'
+                    'max-width': 'none'
                 });
             });
-            dataCells.each(function(i, cell) {
+            dataCells.each(function (i, cell) {
                 jQuery(cell).css({
                     'padding': '5px',
                     'width': '120px',
-                    'max-width' : 'none'
+                    'max-width': 'none'
                 });
             });
             var headerHeight = this.table.find('thead').height();
             var pixelsFromTop = me.table[0].getBoundingClientRect().top;
-            var setHeight = function(force) {
+            var setHeight = function (force) {
                 var newTop = me.table[0].getBoundingClientRect().top;
-                if(!force && pixelsFromTop === newTop) {
+                if (!force && pixelsFromTop === newTop) {
                     return;
                 }
                 pixelsFromTop = newTop;
                 var parentHeight = me.table.parent().parent().height();
-                me.table.find('tbody').height((parentHeight-headerHeight-pixelsFromTop) + 'px');
+                me.table.find('tbody').height((parentHeight - headerHeight - pixelsFromTop) + 'px');
             };
             setHeight(true);
-            if(follow === true) {
+            if (follow === true) {
                 clearInterval(this.sizeInterval);
                 this.sizeInterval = setInterval(setHeight, 1000);
             }

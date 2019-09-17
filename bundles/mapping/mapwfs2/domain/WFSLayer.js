@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
 
     function () {
         /* Layer Type */
-        this._layerType = "WFS";
+        this._layerType = 'WFS';
         this._featureData = true;
         this._fields = []; // property names
         this._locales = []; // property name locales
@@ -26,7 +26,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._styles = []; /* Array of styles that this layer supports */
         this._customStyle = null;
         this._filterJson = null;
-        this._WMSLayerId;
         this._internalOpened = false;
 
         this.localization = Oskari.getLocalization('MapWfs2');
@@ -183,7 +182,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             for (var j = 0; j < fgeom.length; ++j) {
                 this._clickedGeometries.push(fgeom[j]);
             }
-
         },
         /**
          * @method setPropertyTypes
@@ -267,9 +265,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             if (this.getCustomStyle()) {
                 var locOwnStyle = this.localization['own-style'];
                 var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                style.setName("oskari_custom");
+                style.setName('oskari_custom');
                 style.setTitle(locOwnStyle);
-                style.setLegend("");
+                style.setLegend('');
                 return this._styles.concat([style]);
             }
             return this._styles;
@@ -282,7 +280,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         setWMSLayerId: function (id) {
             this._WMSLayerId = id;
-
         },
         /**
          * @method getWMSLayerId
@@ -295,5 +292,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             return this._WMSLayerId;
         }
     }, {
-        "extend": ["Oskari.mapframework.domain.AbstractLayer"]
+        'extend': ['Oskari.mapframework.domain.AbstractLayer']
     });

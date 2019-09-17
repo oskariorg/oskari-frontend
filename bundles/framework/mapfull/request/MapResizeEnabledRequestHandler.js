@@ -9,9 +9,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.request.MapResizeEnabled
  * @param {Oskari.Sandbox} sandbox
  *          reference to application sandbox
  */
-function(mapfull) {
-    this.mapfull = mapfull;
-}, {
+    function (mapfull) {
+        this.mapfull = mapfull;
+    }, {
     /**
      * @method handleRequest
      * Shows/hides the maplayer specified in the request in OpenLayers implementation.
@@ -20,14 +20,13 @@ function(mapfull) {
      * @param {Oskari.mapframework.bundle.mapmodule.request.MapLayerVisibilityRequest} request
      *      request to handle
      */
-    handleRequest : function(core, request) {
-        this.mapfull.resizeEnabled = request.getResizeEnabled();
-
-   }
-}, {
+        handleRequest: function (core, request) {
+            this.mapfull.resizeEnabled = request.getResizeEnabled();
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    protocol : ['Oskari.mapframework.core.RequestHandler']
-});
+        protocol: ['Oskari.mapframework.core.RequestHandler']
+    });

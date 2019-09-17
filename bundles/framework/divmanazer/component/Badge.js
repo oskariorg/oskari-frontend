@@ -15,21 +15,21 @@ Oskari.clazz
             this.ui = null;
             this.container = null;
             this.supportedTypes = [
-                "default",
-                "success",
-                "warning",
-                "important",
-                "info",
-                "inverse",
-                "oskari",
-                "oskari-inverse"
+                'default',
+                'success',
+                'warning',
+                'important',
+                'info',
+                'inverse',
+                'oskari',
+                'oskari-inverse'
             ];
         }, {
             templates: {
-                "wrapper": jQuery('<div class="badge-wrapper"></div>')
+                'wrapper': jQuery('<div class="badge-wrapper"></div>')
             },
-            getTemplate: function(type) {
-                if(this.supportedTypes.indexOf(type) === -1) {
+            getTemplate: function (type) {
+                if (this.supportedTypes.indexOf(type) === -1) {
                     type = this.supportedTypes[0];
                 }
                 return jQuery('<span class="oskari-badge oskari-badge-' + type + '"></span>');
@@ -51,7 +51,7 @@ Oskari.clazz
                 this.ui = txtspan;
             },
             updateContent: function (content) {
-                if( !this.ui ) {
+                if (!this.ui) {
                     return;
                 }
                 this.ui.html(content);

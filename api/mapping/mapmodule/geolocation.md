@@ -1,4 +1,4 @@
-# Geo Location
+# Geo Location Plugin
 
 ## Description
 

@@ -31,10 +31,9 @@ Oskari.clazz.define(
                 me.sandbox.registerForEventByName(me, p);
             }
         }
-
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService",
+        __qname: 'Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -43,7 +42,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "WFSLayerService",
+        __name: 'WFSLayerService',
         /**
          * @method getName
          * @return {String} service name
@@ -123,7 +122,7 @@ Oskari.clazz.define(
                 layers = me.sandbox.findAllSelectedMapLayers(),
                 topWFSLayer;
 
-            for (i=0; i < layers.length; i++ ) {
+            for (var i = 0; i < layers.length; i++) {
                 var layer = layers[i];
                 if (layer.hasFeatureData()) {
                     topWFSLayer = layer._id;
@@ -146,15 +145,15 @@ Oskari.clazz.define(
 
             if (makeNewSelection) {
                 _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': featureIds});
+                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': featureIds});
             } else {
                 existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
-                //no existing selections -> add all
+                // no existing selections -> add all
                 if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
                     existingFeatureSelections.push(featureIds);
                 } else {
-                    //existing selections found -> just add the features that weren't previously selected
-                    _.each(featureIds, function(featureId) {
+                    // existing selections found -> just add the features that weren't previously selected
+                    _.each(featureIds, function (featureId) {
                         // add the features that weren't previously selected
                         if (existingFeatureSelections[0].indexOf(featureId) < 0) {
                             existingFeatureSelections[0].push(featureId);
@@ -163,12 +162,11 @@ Oskari.clazz.define(
                             _.pull(existingFeatureSelections[0], featureId);
                         }
                     });
-
                 }
-                //clear old selection
+                // clear old selection
                 _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                //add the updated selection
-                me.WFSFeatureSelections.push({'layerId' : layerId, 'featureIds': existingFeatureSelections[0]});
+                // add the updated selection
+                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': existingFeatureSelections[0]});
             }
         },
 
@@ -210,7 +208,7 @@ Oskari.clazz.define(
 
             if (me.getSelectedFeatureIds(layer._id)) {
                 _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
-                var event = me.sandbox.getEventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
+                var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
                 me.sandbox.notifyAll(event);
             }
         },
@@ -219,9 +217,9 @@ Oskari.clazz.define(
          *
          * Convenience function to clear selections from all WFS layers
          */
-        emptyAllWFSFeatureSelections: function() {
+        emptyAllWFSFeatureSelections: function () {
             var me = this;
-            _.each(this.WFSFeatureSelections, function(selection) {
+            _.each(this.WFSFeatureSelections, function (selection) {
                 var layer = me.sandbox.findMapLayerFromSelectedMapLayers(selection.layerId);
                 me.emptyWFSFeatureSelections(layer);
             });
@@ -267,10 +265,10 @@ Oskari.clazz.define(
             return this.selectionToolsActive;
         },
 
-        getAnalysisWFSLayerId: function() {
+        getAnalysisWFSLayerId: function () {
             return this.analysisWFSLayerId;
         },
-        setAnalysisWFSLayerId: function(layerId) {
+        setAnalysisWFSLayerId: function (layerId) {
             this.analysisWFSLayerId = layerId;
         }
     });

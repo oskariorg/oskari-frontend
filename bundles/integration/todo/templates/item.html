@@ -1,6 +1,0 @@
-<div class="view">
-    <input class="toggle" type="checkbox" <%= done ? 'checked="checked"' : '' %> />
-    <label><%- title %></label>
-    <a class="destroy"></a>
-</div>
-<input class="edit" type="text" value="<%- title %>" />

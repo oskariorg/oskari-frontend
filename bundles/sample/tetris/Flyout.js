@@ -55,7 +55,7 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
             var elParent,
                 elId;
 
-            //set id to flyouttool-close
+            // set id to flyouttool-close
             elParent = this.container.parentElement.parentElement;
             elId = jQuery(elParent).find('.oskari-flyouttoolbar').find('.oskari-flyouttools').find('.oskari-flyouttool-close');
             elId.attr('id', 'oskari_tetris_flyout_oskari_flyouttool_close');
@@ -111,7 +111,6 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
          */
         setState: function (state) {
             this.state = state;
-
         },
 
         /**
@@ -137,15 +136,15 @@ Oskari.clazz.define('Oskari.sample.bundle.tetris.Flyout',
                     restartButtonText: loc.restartButtonText,
                     scoreText: loc.scoreText,
                     theme: {
-                          blocks: {
-                            line:     '#fa1e1e',
-                            square:   '#f1fa1e',
-                            arrow:    '#d838cb',
-                            rightHook:'#f5821f',
+                        blocks: {
+                            line: '#fa1e1e',
+                            square: '#f1fa1e',
+                            arrow: '#d838cb',
+                            rightHook: '#f5821f',
                             leftHook: '#42c6f0',
                             rightZag: '#4bd838',
-                            leftZag:  '#fa1e1e'
-                          }
+                            leftZag: '#fa1e1e'
+                        }
                     }
                 }
             );

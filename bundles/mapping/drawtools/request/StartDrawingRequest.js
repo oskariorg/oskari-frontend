@@ -23,13 +23,13 @@ Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
      *                         - show area/line length on map for drawing
      *                         - show text next to the drawing(?)
      */
-    function(id, shape, options) {
+    function (id, shape, options) {
         this._id = id;
         this._shape = shape;
         this._options = options || {};
     }, {
         /** @static @property __name request name */
-        __name: "DrawTools.StartDrawingRequest",
+        __name: 'DrawTools.StartDrawingRequest',
         /**
          * @method getName
          * @return {String} request name
@@ -60,7 +60,7 @@ Oskari.clazz.define('Oskari.mapping.drawtools.request.StartDrawingRequest',
          *                     otherwise returns the whole options
          */
         getOptions: function (key) {
-            if(key) {
+            if (key) {
                 return this._options[key];
             }
             return this._options;

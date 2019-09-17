@@ -34,8 +34,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.domain.WmsLayer[]} layers
          */
         preselectLayers: function (layers) {
-            var sandbox = this.getSandbox(),
-                i,
+            var i,
                 layer,
                 layerId;
 
@@ -43,12 +42,11 @@ Oskari.clazz.define(
                 layer = layers[i];
                 layerId = layer.getId();
 
-                if ( layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
+                if (layer.isLayerOfType(this.getLayerTypeSelector())) {
                     Oskari.log(this._name).debug('preselecting ' + layerId);
                     this.addMapLayerToMap(layer, true, layer.isBaseLayer());
                 }
             }
-
         },
 
         /**
@@ -58,10 +56,10 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.domain.WmsLayer} layer
          * @return {undefined}
          */
-        _updateLayer: function(layer) {
-            if ( !layer.isLayerOfType( this.getLayerTypeSelector() ) ) {
+        _updateLayer: function (layer) {
+            if (!layer.isLayerOfType(this.getLayerTypeSelector())) {
                 // only handle layers of type heatmap
-                return
+                return;
             }
             var oLayers = this.getOLMapLayers(layer),
                 subs = layer.getSubLayers(),
@@ -85,81 +83,81 @@ Oskari.clazz.define(
                 }
             }
         },
-            __getSLD: function( layer ) {
-			 var SLD = '<?xml version="1.0" ?>' +
-			'<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">'+
-			'<NamedLayer>'+
-			'<Name>'+ layer.getSLDNamedLayer() + '</Name>'+
-			'<UserStyle>'+
-			'<Title>Heatmap</Title>'+
-			'<FeatureTypeStyle>'+
-			'<Transformation>'+
-			'<ogc:Function name="gs:Heatmap">'+
-			'<ogc:Function name="parameter">'+
-			'<ogc:Literal>data</ogc:Literal>'+
-			'</ogc:Function>';
-			if(layer.getWeightedHeatmapProperty()) {
-				SLD = SLD +
-					'<ogc:Function name="parameter">'+
-					'<ogc:Literal>weightAttr</ogc:Literal>'+
-					'<ogc:Literal>'+layer.getWeightedHeatmapProperty()+'</ogc:Literal>'+
-					'</ogc:Function>';
-			}
-			SLD = SLD +
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>radiusPixels</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>radius</ogc:Literal>'+
-				'<ogc:Literal>'+layer.getRadius()+'</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>pixelsPerCell</ogc:Literal>'+
-				'<ogc:Literal>'+ layer.getPixelsPerCell() +'</ogc:Literal>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>outputBBOX</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>wms_bbox</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>outputWidth</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>wms_width</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'<ogc:Function name="parameter">'+
-				'<ogc:Literal>outputHeight</ogc:Literal>'+
-				'<ogc:Function name="env">'+
-				'<ogc:Literal>wms_height</ogc:Literal>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'</ogc:Function>'+
-				'</Transformation>'+
-				'<Rule>'+
-				'<RasterSymbolizer>'+
-				'<Geometry>'+
-				'<ogc:PropertyName>' + layer.getGeometryProperty() + '</ogc:PropertyName></Geometry>'+
-				'<Opacity>1</Opacity>'+
-				'<ColorMap type="ramp" >';
+        __getSLD: function (layer) {
+            var SLD = '<?xml version="1.0" ?>' +
+   '<StyledLayerDescriptor version="1.0.0" xmlns="http://www.opengis.net/sld" xmlns:ogc="http://www.opengis.net/ogc" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/sld http://schemas.opengis.net/sld/1.0.0/StyledLayerDescriptor.xsd">' +
+   '<NamedLayer>' +
+   '<Name>' + layer.getSLDNamedLayer() + '</Name>' +
+   '<UserStyle>' +
+   '<Title>Heatmap</Title>' +
+   '<FeatureTypeStyle>' +
+   '<Transformation>' +
+   '<ogc:Function name="gs:Heatmap">' +
+   '<ogc:Function name="parameter">' +
+   '<ogc:Literal>data</ogc:Literal>' +
+   '</ogc:Function>';
+            if (layer.getWeightedHeatmapProperty()) {
+                SLD = SLD +
+     '<ogc:Function name="parameter">' +
+     '<ogc:Literal>weightAttr</ogc:Literal>' +
+     '<ogc:Literal>' + layer.getWeightedHeatmapProperty() + '</ogc:Literal>' +
+     '</ogc:Function>';
+            }
+            SLD = SLD +
+    '<ogc:Function name="parameter">' +
+    '<ogc:Literal>radiusPixels</ogc:Literal>' +
+    '<ogc:Function name="env">' +
+    '<ogc:Literal>radius</ogc:Literal>' +
+    '<ogc:Literal>' + layer.getRadius() + '</ogc:Literal>' +
+    '</ogc:Function>' +
+    '</ogc:Function>' +
+    '<ogc:Function name="parameter">' +
+    '<ogc:Literal>pixelsPerCell</ogc:Literal>' +
+    '<ogc:Literal>' + layer.getPixelsPerCell() + '</ogc:Literal>' +
+    '</ogc:Function>' +
+    '<ogc:Function name="parameter">' +
+    '<ogc:Literal>outputBBOX</ogc:Literal>' +
+    '<ogc:Function name="env">' +
+    '<ogc:Literal>wms_bbox</ogc:Literal>' +
+    '</ogc:Function>' +
+    '</ogc:Function>' +
+    '<ogc:Function name="parameter">' +
+    '<ogc:Literal>outputWidth</ogc:Literal>' +
+    '<ogc:Function name="env">' +
+    '<ogc:Literal>wms_width</ogc:Literal>' +
+    '</ogc:Function>' +
+    '</ogc:Function>' +
+    '<ogc:Function name="parameter">' +
+    '<ogc:Literal>outputHeight</ogc:Literal>' +
+    '<ogc:Function name="env">' +
+    '<ogc:Literal>wms_height</ogc:Literal>' +
+    '</ogc:Function>' +
+    '</ogc:Function>' +
+    '</ogc:Function>' +
+    '</Transformation>' +
+    '<Rule>' +
+    '<RasterSymbolizer>' +
+    '<Geometry>' +
+    '<ogc:PropertyName>' + layer.getGeometryProperty() + '</ogc:PropertyName></Geometry>' +
+    '<Opacity>1</Opacity>' +
+    '<ColorMap type="ramp" >';
 
-			// setup color map
-			//'<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
-			var colors = layer.getColorConfig();
-			var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
-			_.each(colors, function(color) {
-				SLD = SLD + entryTemplate(color);
-			});
-			SLD = SLD +
-				'</ColorMap>'+
-				'</RasterSymbolizer>'+
-				'</Rule>'+
-				'</FeatureTypeStyle>'+
-				'</UserStyle>'+
-				'</NamedLayer>'+
-				'</StyledLayerDescriptor>';
-			return SLD;
+            // setup color map
+            // '<ColorMapEntry color="#FFFFFF" quantity="0.02" opacity="0"/>';
+            var colors = layer.getColorConfig();
+            var entryTemplate = _.template('<ColorMapEntry color="${color}" quantity="${quantity}" opacity="${opacity}" />');
+            _.each(colors, function (color) {
+                SLD = SLD + entryTemplate(color);
+            });
+            SLD = SLD +
+    '</ColorMap>' +
+    '</RasterSymbolizer>' +
+    '</Rule>' +
+    '</FeatureTypeStyle>' +
+    '</UserStyle>' +
+    '</NamedLayer>' +
+    '</StyledLayerDescriptor>';
+            return SLD;
         },
         /**
          * Calculates the resolutions based on layer scales.
@@ -168,7 +166,7 @@ Oskari.clazz.define(
          * @param  {Oskari.mapframework.domain.WmsLayer} layer
          * @return {Array[Number]}
          */
-        _calculateResolutions: function(layer) {
+        _calculateResolutions: function (layer) {
             var mm = this.getMapModule(),
                 minScale = layer.getMinScale(),
                 maxScale = layer.getMaxScale();
@@ -180,6 +178,6 @@ Oskari.clazz.define(
             }
         }
     }, {
-    'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
+        'extend': ['Oskari.mapping.mapmodule.AbstractMapLayerPlugin']
 
-});
+    });

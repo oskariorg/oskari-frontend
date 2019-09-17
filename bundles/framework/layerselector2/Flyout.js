@@ -13,25 +13,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
      */
 
     function (instance) {
-        var me = this;
         this.instance = instance;
         this.container = null;
         this.template = null;
         this.state = null;
         this.layerTabs = [];
-        this.filterTemplate = jQuery('<div class="filter filter-border"><center><div class="filter-icon"></div><div class="filter-text"></div></center></div>');
         this.filters = [];
         this._filterNewestCount = 20;
         this._currentFilter = null;
 
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
-
         this.addedButtons = {};
-
-        this.layerlistService.on('Layerlist.Filter.Button.Add', function(button) {
-            me.addFilterTool(button.properties.text, button.properties.tooltip, button.properties.cls.active, button.properties.cls.deactive, button.filterId);
-        });
+        this.filterComponents = [];
     }, {
 
         /**
@@ -66,23 +60,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            var me = this,
-                inspireTab = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
-                    me.instance,
-                    me.instance.getLocalization('filter').inspire,
-                    'oskari_layerselector2_tabpanel_inspiretab'
-                ),
-                orgTab = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
-                    me.instance,
-                    me.instance.getLocalization('filter').organization,
-                    'oskari_layerselector2_tabpanel_orgtab'
-                ),
-                publishedTab,
-                elParent,
-                elId;
-
+            var me = this;
+            var inspireTab = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
+                me.instance,
+                me.instance.getLocalization('filter').inspire,
+                'oskari_layerselector2_tabpanel_inspiretab'
+            );
+            var orgTab = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
+                me.instance,
+                me.instance.getLocalization('filter').organization,
+                'oskari_layerselector2_tabpanel_orgtab'
+            );
 
             me.template = jQuery('<div class="allLayersTabContent"></div>');
             inspireTab.groupingMethod = 'getInspireName';
@@ -91,48 +81,49 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.layerTabs.push(inspireTab);
             me.layerTabs.push(orgTab);
 
-            // add published tab based on config
-            if (me.instance.conf && me.instance.conf.showPublishedTab === true) {
-                publishedTab = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.layerselector2.view.PublishedLayersTab',
-                    me.instance,
-                    me.instance.getLocalization('filter').published
-                );
-                this.layerTabs.push(publishedTab);
-            }
-
-            elParent = this.container.parentElement.parentElement;
-            elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
+            var elParent = this.container.parentElement.parentElement;
+            var elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
 
-            var buttons = me.layerlistService.getLayerlistFilterButton();
-            Object.keys(buttons).forEach(function(key) {
-                var button = buttons[key];
-                me.addFilterTool(button.text, button.tooltip, button.cls.active, button.cls.deactive, button.id);
+            me.createFilterButtons();
+        },
+        /**
+         * Create filterbuttons for each active filter
+         * @method  @public createFilterButtons
+         */
+        createFilterButtons: function () {
+            var me = this;
+            this.layerTabs.forEach(function (tab) {
+                var filterButton = Oskari.clazz.create('Oskari.layerselector2.view.FilterButtons',
+                    tab.getTabPanel().getContainer().find('.layerselector2-layer-filter'),
+                    me.layerlistService);
+                me.filterComponents.push(filterButton);
+
+                filterButton.on('FilterActivate', function (currentFilter) {
+                    me._currentFilter = currentFilter;
+                    me.populateLayers();
+                });
             });
         },
-
-        /**
-         * Adds default filter buttons.
-         * @method  @private addDefaultFilters
-         */
-        addDefaultFilters: function() {
-            var me = this;
-
-            // Add newest filter
-            me.addNewestFilter();
-
-            // Add featuredata filter
-            me.addFeaturedataFilter();
+        setActiveFilter: function (filter) {
+            this.filterComponents.forEach(function (component) {
+                component.activateFilter(filter);
+            });
         },
+        updateFilters: function () {
+            var filtersWithLayers = this.mapLayerService.getActiveFilters();
 
+            this.filterComponents.forEach(function (component) {
+                component.setFilters(filtersWithLayers);
+            });
+        },
         /**
          * Add newest filter.
          * @method  @public addNewestFilter
          */
-        addNewestFilter: function() {
-            var me = this,
-                loc = me.instance.getLocalization('layerFilter');
+        addNewestFilter: function () {
+            var me = this;
+            var loc = me.instance.getLocalization('layerFilter');
 
             me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
@@ -141,23 +132,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 },
                 'newest');
         },
-
-        /**
-         * Add featuredata filter.
-         * @method  @public addFeaturedataFilter
-         */
-        addFeaturedataFilter: function() {
-            var me = this,
-                loc = me.instance.getLocalization('layerFilter');
-
-            me.layerlistService.registerLayerlistFilterButton(loc.buttons.featuredata,
-                loc.tooltips.featuredata, {
-                    active: 'layer-stats',
-                    deactive: 'layer-stats-disabled'
-                },
-                'featuredata');
-        },
-
         /**
          * @method stopPlugin
          *
@@ -234,7 +208,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
             return state;
         },
-
         /**
          * @method createUi
          * Creates the UI for a fresh start
@@ -253,9 +226,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             );
 
             // Add filter tab change listener
-            me.tabContainer.addTabChangeListener(function(previousTab, newTab) {
+            me.tabContainer.addTabChangeListener(function (previousTab, newTab) {
                 if (me._currentFilter) {
-                    me.activateFilter(me._currentFilter);
+                    me.setActiveFilter(me._currentFilter);
                 }
             });
             me.tabContainer.insertTo(cel);
@@ -265,7 +238,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             }
 
             me.tabContainer.addTabChangeListener(
-                function(previousTab, newTab) {
+                function (previousTab, newTab) {
                     // Make sure this fires only when the flyout is open
                     if (!cel.parents('.oskari-flyout.oskari-closed').length) {
                         var searchInput = newTab.getContainer().find('input[type=text]');
@@ -277,7 +250,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             );
 
             // Create default filters
-            me.addDefaultFilters();
+            me.addNewestFilter();
             me.populateLayers();
         },
 
@@ -287,7 +260,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          *
          *
          */
-        focus: function() {
+        focus: function () {
             if (this.layerTabs && this.layerTabs.length) {
                 this.layerTabs[0].focus();
             }
@@ -299,10 +272,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          */
         populateLayers: function () {
             var me = this;
-            var sandbox = this.instance.getSandbox();
             // populate layer list
             var layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers();
-
             this.layerTabs.forEach(function (tab) {
                 // populate tab if it has grouping method
                 if (tab.groupingMethod) {
@@ -329,7 +300,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 groupAttr;
 
             // sort layers by grouping & name
-            layers.sort(function(a, b) {
+            layers.sort(function (a, b) {
                 return me._layerListComparator(a, b, groupingMethod);
             });
 
@@ -350,7 +321,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
                 group.addLayer(layer);
             }
-            var sortedGroupList = jQuery.grep(groupList, function(group, index) {
+            var sortedGroupList = jQuery.grep(groupList, function (group, index) {
                 return group.getLayers().length > 0;
             });
             return sortedGroupList;
@@ -444,165 +415,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.populateLayers();
             // we could  just remove the layer and update the layer count for the group
             // but saving time to do other finishing touches
-        },
-
-        /**
-         * Add filter tool to layer list.
-         * @method  @public addFilterTool
-         * @param {String} toolText             tool button text
-         * @param {String} tooltip              tool tooltip text
-         * @param {String} iconClassActive      tool icon active class
-         * @param {String} iconClassDeactive    tool icon deactive class
-         * @param {String} filterName           filter name
-         */
-        addFilterTool: function(toolText, tooltip, iconClassActive, iconClassDeactive, filterName) {
-            var me = this;
-            if (me.addedButtons[filterName]) {
-                return;
-            }
-
-            var filter = {
-                toolText: toolText,
-                tooltip: tooltip,
-                iconClassActive: iconClassActive,
-                iconClassDeactive: iconClassDeactive,
-                filterName: filterName
-            };
-            var loc = me.instance.getLocalization('layerFilter');
-
-            me.layerTabs.forEach(function(tab) {
-                var filterButton = me.filterTemplate.clone(),
-                    filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-
-                filterButton.attr('data-filter', filterName);
-                filterButton.find('.filter-text').html(toolText);
-                filterButton.attr('title', tooltip);
-                filterButton.find('.filter-icon').addClass('filter-' + filterName);
-                filterButton.find('.filter-icon').addClass(iconClassDeactive);
-
-                filterButton.unbind('click');
-                filterButton.bind('click', function() {
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
-                    me.deactivateAllFilters(filterName);
-                    if (filterIcon.hasClass(iconClassDeactive)) {
-                        // Activate this filter
-                        me._setFilterIconClasses(filterName);
-                        me.activateFilter(filterName);
-                        me._setFilterTooltip(filterName, loc.tooltips.remove);
-                    } else {
-                        // Deactivate all filters
-                        me.deactivateAllFilters();
-                    }
-                });
-
-                filterContainer.append(filterButton);
-            });
-        },
-
-        /**
-         * Set filter button tooltip
-         * @method  @private _setFilterTooltip
-         * @param {String} filterName filter name
-         * @param {String} tooltip    tooltip
-         */
-        _setFilterTooltip: function(filterName, tooltip) {
-            var me = this;
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filterName);
-                filterIcon.parents('.filter').attr('title', tooltip);
-            });
-        },
-        /**
-         * Set filter icon classes
-         * @method  @private _setFilterIconClasses
-         * @param {String} filterName filter name
-         */
-        _setFilterIconClasses: function(filterName) {
-            var me = this;
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                    // First remove all active classes
-                    filterIcon.removeClass(filter.cls.active);
-                    filterIcon.removeClass(filter.cls.deactive);
-                    filterIcon.removeClass('active');
-                    // If filter has same than currently selected then activate icon
-                    if (filter.id === filterName) {
-                        filterIcon.addClass(filter.cls.active);
-                        filterIcon.addClass('active');
-                    }
-                    // Otherwise use deactive icon
-                    else {
-                        filterIcon.addClass(filter.cls.deactive);
-                    }
-                });
-            });
-        },
-
-        /**
-         * Activate selected filter.
-         * @method @public activateFilter
-         * @param  {Function} filterName activate filter name
-         */
-        activateFilter: function(filterName) {
-            var me = this;
-            me._currentFilter = filterName;
-
-            me.layerTabs.forEach(function(tab) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                    if(filter.id === filterName) {
-                        filterIcon.removeClass(filter.cls.deactive);
-                        filterIcon.addClass(filter.cls.active);
-                        filterIcon.addClass('active');
-                    } else {
-                        filterIcon.removeClass(filter.cls.active);
-                        filterIcon.addClass(filter.cls.deactive);
-                        filterIcon.removeClass('active');
-                    }
-                });
-            });
-            me.populateLayers();
-        },
-
-        /**
-         * Deactivate all filters
-         * @method  @public deactivateAllFilters
-         *
-         * @param {String} notDeactivateThisFilter not deactivate this filter
-         */
-        deactivateAllFilters: function(notDeactivateThisFilter) {
-            var me = this;
-
-            me._currentFilter = null;
-            me.layerTabs.forEach(function(tab, tabIndex) {
-                var filterContainer = tab.getTabPanel().getContainer().find('.layerselector2-layer-filter');
-                var filters = me.layerlistService.getLayerlistFilterButton();
-                Object.keys(filters).forEach(function(key) {
-                    var filter = filters[key];
-                    if (!notDeactivateThisFilter || filter.id !== notDeactivateThisFilter) {
-                        var filterIcon = filterContainer.find('.filter-icon.' + 'filter-' + filter.id);
-                        filterIcon.removeClass(filter.cls.active);
-                        filterIcon.removeClass('active');
-                        filterIcon.addClass(filter.cls.deactive);
-                        // Set tooltip for one per filter
-                        if (tabIndex === 0) {
-                            me._setFilterTooltip(filter.name, filter.tooltip);
-                        }
-                    }
-                });
-            });
-
-            if (!notDeactivateThisFilter) {
-                me.activateFilter();
-            }
         }
     }, {
 

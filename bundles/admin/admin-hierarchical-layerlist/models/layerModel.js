@@ -1,32 +1,9 @@
-// polyfill for bind - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Function/bind -> polyfill
-if (!Function.prototype.bind) {
-    Function.prototype.bind = function(oThis) {
-        if (typeof this !== "function") {
-            // closest thing possible to the ECMAScript 5 internal IsCallable function
-            throw new TypeError("Function.prototype.bind - what is trying to be bound is not callable");
-        }
-
-        var aArgs = Array.prototype.slice.call(arguments, 1),
-            fToBind = this,
-            fNOP = function() {},
-            fBound = function() {
-                return fToBind.apply(this instanceof fNOP && oThis ? this : oThis,
-                    aArgs.concat(Array.prototype.slice.call(arguments)));
-            };
-
-        fNOP.prototype = this.prototype;
-        fBound.prototype = new fNOP();
-
-        return fBound;
-    };
-}
-// actual model - uses bind to make Oskari layer object functions call BackBone model.attributes
-(function() {
-    define(function() {
+(function () {
+    define(function () {
         return Backbone.Model.extend({
 
             // Ensure that each todo created has `title`.
-            initialize: function(model) {
+            initialize: function (model) {
                 // exted given object (layer) with this one
                 if (model) {
                     for (var key in model) {
@@ -45,7 +22,7 @@ if (!Function.prototype.bind) {
              * Selects the first style so legendImage will show initial value
              * @return {[type]} [description]
              */
-            _selectFirstStyle: function() {
+            _selectFirstStyle: function () {
                 var styles = this.getStyles();
                 if (styles.length) {
                     this.selectStyle(styles[0].getName());
@@ -56,27 +33,27 @@ if (!Function.prototype.bind) {
              * Call setupCapabilities with selected wmslayer to pick one layer def from the whole response after calling this.
              * @param  {Object} capabilities response from server
              */
-            setCapabilitiesResponse: function(resp, skipSort) {
+            setCapabilitiesResponse: function (resp, skipSort) {
                 if (!skipSort) {
                     this._sortCapabilities(resp);
                 }
                 this.set({
-                    "capabilities": resp
+                    'capabilities': resp
                 });
             },
-            _sortCapabilities: function(capabilities) {
+            _sortCapabilities: function (capabilities) {
                 var me = this,
                     sortFunction = me._getPropertyComparatorFor('title');
                 capabilities.layers.sort(sortFunction);
                 if (capabilities.groups) {
                     capabilities.groups.sort(sortFunction);
-                    _.each(capabilities.groups, function(group) {
+                    _.each(capabilities.groups, function (group) {
                         me._sortCapabilities(group);
                     });
                 }
             },
-            _getPropertyComparatorFor: function(property) {
-                return function(a, b) {
+            _getPropertyComparatorFor: function (property) {
+                return function (a, b) {
                     if (a[property] > b[property]) {
                         return 1;
                     } else if (a[property] < b[property]) {
@@ -90,15 +67,15 @@ if (!Function.prototype.bind) {
              * @private
              * @param  {Object} capabilitiesNode
              */
-            _setupFromCapabilitiesValues: function(capabilitiesNode) {
+            _setupFromCapabilitiesValues: function (capabilitiesNode) {
                 var sb = Oskari.getSandbox();
-                sb.printDebug("Found:", capabilitiesNode);
+                Oskari.log('admin-hierarchical-layerlist~layerModel').debug('Found:', capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
                     mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
                     dataToKeep = null;
                 // clear existing values
-                var capabilities = this.get("capabilities");
-                var adminBlock = this.get("_admin");
+                var capabilities = this.get('capabilities');
+                var adminBlock = this.get('_admin');
 
                 var typeFunction = this._typeHandlers[mapLayer.getLayerType()];
                 if (typeFunction) {
@@ -129,8 +106,8 @@ if (!Function.prototype.bind) {
              * Append wfsconfiguration to capabilities adminblock.
              * @param  {Object} GetWfsLayerconfiguration response from server
              */
-            setWfsConfigurationResponse: function(resp) {
-                var adminBlock = this.get("_admin");
+            setWfsConfigurationResponse: function (resp) {
+                var adminBlock = this.get('_admin');
                 if (adminBlock) {
                     adminBlock.passtrough = resp;
                 }
@@ -152,7 +129,7 @@ if (!Function.prototype.bind) {
              * @param  {String} title used for  mapping capabilities because of duplicate layer names
              * @return {Boolean}             true if name was found
              */
-            setupCapabilities: function(layerName, capabilities, additionalId, title) {
+            setupCapabilities: function (layerName, capabilities, additionalId, title) {
                 if (!layerName) {
                     return;
                 }
@@ -191,14 +168,14 @@ if (!Function.prototype.bind) {
                 var found = false;
 
                 // check layers directly under this
-                _.each(capabilities.layers, function(layer) {
+                _.each(capabilities.layers, function (layer) {
                     if (!found) {
                         found = me.setupCapabilities(layerName, layer, additionalId, title);
                     }
                 });
                 // if not found, check any groups under this
                 if (!found && capabilities.groups) {
-                    _.each(capabilities.groups, function(group) {
+                    _.each(capabilities.groups, function (group) {
                         if (!found) {
                             found = me.setupCapabilities(layerName, group, additionalId);
                         }
@@ -207,12 +184,11 @@ if (!Function.prototype.bind) {
                 return found;
             },
 
-
             /**
              * Returns XSLT if defined or null if not
              * @return {String} xslt
              */
-            getGfiXslt: function() {
+            getGfiXslt: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.xslt;
@@ -224,7 +200,7 @@ if (!Function.prototype.bind) {
              * Returns username if defined or null if not
              * @return {String} username
              */
-            getUsername: function() {
+            getUsername: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.username;
@@ -236,7 +212,7 @@ if (!Function.prototype.bind) {
              * Returns password if defined or null if not
              * @return {String} password
              */
-            getPassword: function() {
+            getPassword: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.password;
@@ -247,7 +223,7 @@ if (!Function.prototype.bind) {
              * Returns service version if defined or null if not
              * @return {String} version
              */
-            getVersion: function() {
+            getVersion: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.version;
@@ -258,7 +234,7 @@ if (!Function.prototype.bind) {
              * Returns service  jobtype if defined or null if not
              * @return {String} jobtype
              */
-            getJobType: function() {
+            getJobType: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.jobtype;
@@ -269,7 +245,7 @@ if (!Function.prototype.bind) {
              * Returns capabilities for layer JSON
              * @return {Object} capabilities
              */
-            getCapabilities: function() {
+            getCapabilities: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.capabilities;
@@ -280,7 +256,7 @@ if (!Function.prototype.bind) {
              * Returns wfs service manual refresh mode
              * @return {Boolean} true/false
              */
-            isManualRefresh: function() {
+            isManualRefresh: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.manualRefresh;
@@ -291,7 +267,7 @@ if (!Function.prototype.bind) {
              * Returns wfs service resolveDepth param
              * @return {Boolean} true/false
              */
-            isResolveDepth: function() {
+            isResolveDepth: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.resolveDepth;
@@ -302,7 +278,7 @@ if (!Function.prototype.bind) {
              * Returns interface url
              * @return {String} url
              */
-            getInterfaceUrl: function() {
+            getInterfaceUrl: function () {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     return adminBlock.url;
@@ -315,7 +291,7 @@ if (!Function.prototype.bind) {
              * @param  {String} type ['organization' | 'inspire']
              * @return {Number} group id
              */
-            getGroupId: function(type) {
+            getGroupId: function (type) {
                 var adminBlock = this.getAdmin();
                 if (adminBlock) {
                     // inspireId or organizationId
@@ -327,14 +303,14 @@ if (!Function.prototype.bind) {
              * Returns language codes for defined names
              * @return {String[]} language codes
              */
-            getNameLanguages: function() {
+            getNameLanguages: function () {
                 return this._getLanguages(this.get('_name'));
             },
             /**
              * Returns language codes for defined names
              * @return {String[]} language codes
              */
-            getDescLanguages: function() {
+            getDescLanguages: function () {
                 return this._getLanguages(this.get('_description'));
             },
 
@@ -342,7 +318,7 @@ if (!Function.prototype.bind) {
              * Returns legend url
              * @returns {String} legend url
              */
-            getLegendUrl: function() {
+            getLegendUrl: function () {
                 var adminBlock = this.getAdmin();
                 var capabilitiesBlock = this.getCapabilities();
 
@@ -357,12 +333,11 @@ if (!Function.prototype.bind) {
              * @param styleName  style name
              * @returns {String} legend url
              */
-            getStyleLegendUrl: function(styleName) {
+            getStyleLegendUrl: function (styleName) {
                 var capabilitiesBlock = this.getCapabilities();
 
-
                 if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
-                    var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function(style) {
+                    var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
                         return style.name === styleName;
                     });
 
@@ -377,17 +352,17 @@ if (!Function.prototype.bind) {
              * Returns style legend urls
              * @returns {String} legend url
              */
-            getStyleLegendUrls: function() {
+            getStyleLegendUrls: function () {
                 var capabilitiesBlock = this.getCapabilities(),
                     styleName,
                     legends = [];
 
                 if (capabilitiesBlock && this.getStyles()) {
-                    for (i = 0; i < this.getStyles().length; i += 1) {
+                    for (var i = 0; i < this.getStyles().length; i += 1) {
                         styleName = this.getStyles()[i].getName();
 
                         if (styleName && capabilitiesBlock.styles) {
-                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function(style) {
+                            var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
                                 return style.name === styleName;
                             });
 
@@ -408,7 +383,7 @@ if (!Function.prototype.bind) {
              * @return {String[]} [description]
              * @private
              */
-            _getLanguages: function(attr) {
+            _getLanguages: function (attr) {
                 var langList = [];
                 // add languages from possible object value
                 if (attr && typeof attr === 'object') {
@@ -420,7 +395,7 @@ if (!Function.prototype.bind) {
                 }
 
                 // add any missing languages
-                _.each(this.supportedLanguages, function(lang) {
+                _.each(this.supportedLanguages, function (lang) {
                     if (jQuery.inArray(lang, langList) === -1) {
                         langList.push(lang);
                     }

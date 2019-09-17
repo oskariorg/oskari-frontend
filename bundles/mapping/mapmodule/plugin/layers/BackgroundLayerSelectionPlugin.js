@@ -83,7 +83,7 @@ Oskari.clazz.define(
                  */
                 AfterRearrangeSelectedMapLayerEvent: function (event) {
                     // Update selection, bottom baselayer might've changed
-                    //this._updateUISelection();
+                    // this._updateUISelection();
                     this.refresh();
                 },
 
@@ -98,7 +98,7 @@ Oskari.clazz.define(
                     // TODO Check if event.getMapLayer() id is in our layers first...
                     // if not, still do this._updateUISelection() as the selected
                     // layer might still have changed
-                    //this._createLayerSelectionElements();
+                    // this._createLayerSelectionElements();
                     this.refresh();
                 },
 
@@ -113,7 +113,7 @@ Oskari.clazz.define(
                     // TODO Check if event.getMapLayer() id is in our layers first...
                     // if not, still do this._updateUISelection() as the selected
                     // layer might still have changed
-                    //this._createLayerSelectionElements();
+                    // this._createLayerSelectionElements();
                     this.refresh();
                 },
 
@@ -125,7 +125,7 @@ Oskari.clazz.define(
                  */
                 MapLayerEvent: function (event) {
                     // TODO add check for event.getMapLayer().getId() here?
-                    //this._createLayerSelectionElements();
+                    // this._createLayerSelectionElements();
                     this.refresh();
                 },
 
@@ -135,7 +135,7 @@ Oskari.clazz.define(
                  * Changes selector into dropdown if map is too narrow to fit buttons
                  */
                 MapSizeChangedEvent: function (evt) {
-                    if(this._config.showAsDropdown) {
+                    if (this._config.showAsDropdown) {
                         return; // already shown as dropdown
                     }
                     var el = this.getElement();
@@ -332,7 +332,7 @@ Oskari.clazz.define(
             }
             var me = this,
                 element = me.getElement();
-            if(!element) {
+            if (!element) {
                 return;
             }
             var layer,
@@ -361,7 +361,7 @@ Oskari.clazz.define(
                         layer.getName()
                     );
                     list.append(listItem);
-                    listItem.bind('click', selectionUpdateHandler);
+                    listItem.on('click', selectionUpdateHandler);
                 }
             }
             // force update selection
@@ -381,16 +381,14 @@ Oskari.clazz.define(
         _createControlElement: function () {
             var me = this,
                 conf = me.getConfig(),
-                el,
-                containerClasses = 'bottom center',
-                position = 0;
+                el;
 
             if (me.error) {
                 // No baseLayers in config, show error.
                 el = me.errorTemplate.clone();
             } else {
                 el = me.template.clone();
-                el.find('div.currentSelection').bind(
+                el.find('div.currentSelection').on(
                     'click',
                     function () {
                         me._toggleSelection();

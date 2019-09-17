@@ -51,7 +51,7 @@ Oskari.clazz.define("Oskari.mapping.maprotator.MapRotatorBundle", function () {
          "src" : "../../../../bundles/mapping/maprotator/request/rotate.map.js"
       }, {
           "type": "text/css",
-          "src": "../../../../bundles/mapping/maprotator/resources/css/maprotator.css"
+          "src": "../../../../bundles/mapping/maprotator/resources/scss/maprotator.scss"
       }],
       "locales" : [{
           "lang": "en",

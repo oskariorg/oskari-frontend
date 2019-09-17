@@ -1,4 +1,4 @@
-# Search
+# Search Plugin
 
 ## Description
 

@@ -8,7 +8,7 @@
                 // exted given object (layer) with this one
                 if (model) {
                     for (var key in model) {
-                        if(model[key] && typeof model[key] === 'function') {
+                        if (model[key] && typeof model[key] === 'function') {
                             var prop = model[key];
                             this[key] = prop.bind(this.attributes);
                         }
@@ -23,9 +23,9 @@
              * Selects the first style so legendImage will show initial value
              * @return {[type]} [description]
              */
-            _selectFirstStyle : function() {
+            _selectFirstStyle: function () {
                 var styles = this.getStyles();
-                if(styles.length) {
+                if (styles.length) {
                     this.selectStyle(styles[0].getName());
                 }
             },
@@ -39,14 +39,14 @@
                     this._sortCapabilities(resp);
                 }
                 this.set({
-                    "capabilities": resp
+                    'capabilities': resp
                 });
             },
             _sortCapabilities: function (capabilities) {
                 var me = this,
                     sortFunction = me._getPropertyComparatorFor('title');
                 capabilities.layers.sort(sortFunction);
-                if(capabilities.groups) {
+                if (capabilities.groups) {
                     capabilities.groups.sort(sortFunction);
                     _.each(capabilities.groups, function (group) {
                         me._sortCapabilities(group);
@@ -70,27 +70,27 @@
              */
             _setupFromCapabilitiesValues: function (capabilitiesNode) {
                 var sb = Oskari.getSandbox();
-                sb.printDebug("Found:", capabilitiesNode);
+                Oskari.log('admin-layerselector~layerModel').debug('Found:', capabilitiesNode);
                 var mapLayerService = sb.getService('Oskari.mapframework.service.MapLayerService'),
                     mapLayer = mapLayerService.createMapLayer(capabilitiesNode),
                     dataToKeep = null;
                 // clear existing values
-                var capabilities = this.get("capabilities");
-                var adminBlock = this.get("_admin");
+                var capabilities = this.get('capabilities');
+                var adminBlock = this.get('_admin');
 
                 var typeFunction = this._typeHandlers[mapLayer.getLayerType()];
-                if(typeFunction) {
+                if (typeFunction) {
                     dataToKeep = typeFunction.apply(this);
                 }
                 this.clear({
                     silent: true
                 });
 
-                if(dataToKeep && typeFunction) {
+                if (dataToKeep && typeFunction) {
                     typeFunction.apply(this, [dataToKeep, mapLayer]);
                 }
                 // move credentials for maplayer data
-                if(adminBlock && mapLayer._admin) {
+                if (adminBlock && mapLayer._admin) {
                     mapLayer._admin.username = adminBlock.username;
                     mapLayer._admin.password = adminBlock.password;
                 }
@@ -108,8 +108,8 @@
              * @param  {Object} GetWfsLayerconfiguration response from server
              */
             setWfsConfigurationResponse: function (resp) {
-                var adminBlock = this.get("_admin");
-                if(adminBlock) {
+                var adminBlock = this.get('_admin');
+                if (adminBlock) {
                     adminBlock.passtrough = resp;
                 }
             },
@@ -119,7 +119,7 @@
              * If data is not given assume getter, otherwise setup data.
              * @type {Object}
              */
-            _typeHandlers : {
+            _typeHandlers: {
             },
             /**
              * Recursive function to search capabilities by layerName.
@@ -141,7 +141,7 @@
                 }
                 // layer node
                 // title is also used for matching because of duplicate layernames in capabilities
-                if(title) {
+                if (title) {
                     if (capabilities.layerName === layerName && capabilities.title === title) {
                         if (!additionalId) {
                             me._setupFromCapabilitiesValues(capabilities);
@@ -151,8 +151,7 @@
                             return true;
                         }
                     }
-                }
-                else {
+                } else {
                     if (capabilities.layerName === layerName) {
                         if (!additionalId) {
                             me._setupFromCapabilitiesValues(capabilities);
@@ -186,7 +185,6 @@
                 }
                 return found;
             },
-
 
             /**
              * Returns XSLT if defined or null if not
@@ -324,15 +322,27 @@
              * Returns legend url
              * @returns {String} legend url
              */
-            getLegendUrl: function() {
+            getLegendUrl: function () {
                 var adminBlock = this.getAdmin();
                 var capabilitiesBlock = this.getCapabilities();
 
                 if (capabilitiesBlock && adminBlock) {
-                        return adminBlock.legendImage;
+                    return adminBlock.legendImage;
                 }
 
                 return '';
+            },
+
+            /**
+             * Returns capabilities update rate in seconds
+             * @returns {Number} update rate
+             */
+            getCapabilitiesUpdateRate: function () {
+                var adminBlock = this.getAdmin();
+                if (adminBlock) {
+                    return adminBlock.capabilitiesUpdateRate;
+                }
+                return null;
             },
             /**
              * Returns style legend url
@@ -342,15 +352,14 @@
             getStyleLegendUrl: function (styleName) {
                 var capabilitiesBlock = this.getCapabilities();
 
-
                 if (capabilitiesBlock && styleName && capabilitiesBlock.styles) {
-                        var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
-                            return style.name === styleName;
-                        });
+                    var selectedStyle = jQuery.grep(capabilitiesBlock.styles || [], function (style) {
+                        return style.name === styleName;
+                    });
 
-                        if (selectedStyle.length > 0) {
-                            return selectedStyle[0].legend;
-                        }
+                    if (selectedStyle.length > 0) {
+                        return selectedStyle[0].legend;
+                    }
                 }
 
                 return '';
@@ -365,7 +374,7 @@
                     legends = [];
 
                 if (capabilitiesBlock && this.getStyles()) {
-                    for (i = 0; i < this.getStyles().length; i += 1) {
+                    for (var i = 0; i < this.getStyles().length; i += 1) {
                         styleName = this.getStyles()[i].getName();
 
                         if (styleName && capabilitiesBlock.styles) {
@@ -374,7 +383,7 @@
                             });
 
                             if (selectedStyle.length > 0) {
-                                legends.push( selectedStyle[0].legend);
+                                legends.push(selectedStyle[0].legend);
                             }
                         }
                     }
@@ -383,13 +392,13 @@
                 return legends;
             },
 
-            getMissingProjections: function() {
+            getMissingProjections: function () {
                 var defaultUniqueEPSG = {};
-                Oskari.app.getSystemDefaultViews().forEach(function(view) {
+                Oskari.app.getSystemDefaultViews().forEach(function (view) {
                     defaultUniqueEPSG[view.srsName] = true;
                 });
                 var supported = this.getSrsList() || [];
-                supported.forEach(function(srs) {
+                supported.forEach(function (srs) {
                     delete defaultUniqueEPSG[srs];
                 });
 
@@ -408,7 +417,7 @@
                 // add languages from possible object value
                 if (attr && typeof attr === 'object') {
                     for (var key in attr) {
-                        if(attr.hasOwnProperty(key)) {
+                        if (attr.hasOwnProperty(key)) {
                             langList.push(key);
                         }
                     }

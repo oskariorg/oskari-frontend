@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.coordinatetool.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.CoordinateToolBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -28,7 +28,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
         /**
          * Needed by sandbox.register()
          */
-        init : function() {},
+        init: function () {},
 
         /**
          * @method setSandbox
@@ -50,7 +50,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function () {
-            var me = this;
         },
         /**
          * @method getLocalization
@@ -91,15 +90,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
             me.setSandbox(sandbox);
             this.coordinateToolService = this.createService(sandbox, conf);
             var mapModule = sandbox.findRegisteredModuleInstance('MainMapModule');
-            var locale = this.getLocalization('display');
+            var locale = Oskari.getMsg.bind(null, 'coordinatetool');
             var plugin = Oskari.clazz.create('Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin', this, conf, locale, mapModule, sandbox);
             mapModule.registerPlugin(plugin);
             mapModule.startPlugin(plugin);
             this.plugin = plugin;
             sandbox.register(me);
 
-
-            //get the plugin order straight in mobile toolbar even for the tools coming in late
+            // get the plugin order straight in mobile toolbar even for the tools coming in late
             if (Oskari.util.isMobile() && this.plugin.hasUI()) {
                 mapModule.redrawPluginUIs(true);
             }
@@ -108,7 +106,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @method  @public isOpen
          * @return {Boolean} is popup open
          */
-        isOpen: function(){
+        isOpen: function () {
             var me = this;
             return (me.plugin) ? me.plugin.isOpen() : false;
         },
@@ -120,7 +118,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @param  {}  configuration   conf.reverseGeocodingIds is in use
          * @return {Oskari.mapframework.bundle.coordinatetool.CoordinateToolService}
          */
-        createService: function(sandbox, conf) {
+        createService: function (sandbox, conf) {
             var coordinateToolService = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.coordinatetool.CoordinateToolService',
                 this, conf || {}
@@ -134,7 +132,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatetool.CoordinateToolBun
          * @method getService
          * @return {Oskari.mapframework.bundle.myplacesimport.MyPlacesImportService}
          */
-        getService: function() {
+        getService: function () {
             return this.coordinateToolService;
         },
         /**

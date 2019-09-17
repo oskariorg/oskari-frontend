@@ -43,9 +43,9 @@ Oskari.clazz.define(
             this.instance.getLocalization('searchResults') + ' ${count} ' +
             this.instance.getLocalization('searchResultsDescription') + ' ${search}</h3></div>');
     }, {
-    	__templates : {
-			main : _.template(
-			    '<div class="searchContainer">' +
+        __templates: {
+            main: _.template(
+                '<div class="searchContainer">' +
                 '  <div class="searchDescription">${desc}</div>' +
                 '  <div class="controls">' +
                 '  </div>' +
@@ -54,26 +54,25 @@ Oskari.clazz.define(
                 '  <div><br></div>' +
                 '  <div class="resultList"></div>' +
                 '</div>'),
-            resultTable : _.template(
-            	'<table class="search_result oskari-grid">' +
+            resultTable: _.template(
+                '<table class="search_result oskari-grid">' +
                 '  <thead><tr></tr></thead>' +
                 '  <tbody></tbody>' +
                 '</table>'),
-            resultTableHeader : _.template('<th><a href="JavaScript:void(0);">${title}</a></th>'),
-            resultTableRow : _.template(
+            resultTableHeader: _.template('<th><a href="JavaScript:void(0);">${title}</a></th>'),
+            resultTableRow: _.template(
                 '<tr>' +
                 '  <td><a href="JavaScript:void(0);">${name}</a></td>' +
                 '  <td>${region}</td>' +
                 '  <td>${type}</td>' +
                 '</tr>')
-    	},
+        },
         /**
          * @method createUi
          * Creates the UI for a fresh start
          */
         createUi: function (container) {
             var me = this;
-            var sandbox = me.getSandbox();
             var ui = jQuery(container);
             ui.empty();
             // create ui
@@ -84,11 +83,11 @@ Oskari.clazz.define(
             var doSearch = function () {
                 field.setEnabled(false);
                 button.setEnabled(false);
-            	me.__doSearch();
+                me.__doSearch();
             };
 
-            var doAutocompleteSearch = function(e) {
-                if(e.keyCode === 38 || e.keyCode === 40 ) { // arrow keys up/down
+            var doAutocompleteSearch = function (e) {
+                if (e.keyCode === 38 || e.keyCode === 40) { // arrow keys up/down
                     return;
                 }
                 me.__doAutocompleteSearch();
@@ -97,9 +96,9 @@ Oskari.clazz.define(
             button.setHandler(doSearch);
             field.bindEnterKey(doSearch);
 
-            if(this.instance.conf.autocomplete === true) {
+            if (this.instance.conf.autocomplete === true) {
                 field.bindUpKey(doAutocompleteSearch);
-                field.bindAutocompleteSelect(function(event, ui){
+                field.bindAutocompleteSelect(function (event, ui) {
                     field.setValue(ui.item.value);
                     doSearch();
                 });
@@ -112,53 +111,53 @@ Oskari.clazz.define(
             // add it to container
             ui.append(searchContainer);
         },
-        getContainer : function() {
-        	if(!this._searchContainer) {
-	            var searchContainer = this.__templates.main({
-	            	desc : this.instance.getLocalization('searchDescription')
-	            });
-	            this._searchContainer = jQuery(searchContainer);
-	        }
-        	return this._searchContainer;
+        getContainer: function () {
+            if (!this._searchContainer) {
+                var searchContainer = this.__templates.main({
+                    desc: this.instance.getLocalization('searchDescription')
+                });
+                this._searchContainer = jQuery(searchContainer);
+            }
+            return this._searchContainer;
         },
         /**
          * The search field
          * @return {Oskari.userinterface.component.FormInput}
          */
-        getField : function() {
-        	var me = this;
-        	if(!this._searchField) {
-        		// TODO: change to TextInput, but it doesn't have setIds()
-	            var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
-	            this._searchField = field;
-	            field.setPlaceholder(this.instance.getLocalization('searchAssistance'));
-	            field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
+        getField: function () {
+            var me = this;
+            if (!this._searchField) {
+                // TODO: change to TextInput, but it doesn't have setIds()
+                var field = Oskari.clazz.create('Oskari.userinterface.component.FormInput');
+                this._searchField = field;
+                field.setPlaceholder(this.instance.getLocalization('searchAssistance'));
+                field.setIds('oskari_search_forminput', 'oskari_search_forminput_searchassistance');
 
-	            if (this.instance.safeChars) {
-	                var regex = /[\s\w\d\.\,\?\!\-äöåÄÖÅ]*\*?$/;
-	                field.setContentCheck(true, this.instance.getLocalization('invalid_characters'), regex);
-	            }
+                if (this.instance.safeChars) {
+                    var regex = /[\s\w\d.,?!\-äöåÄÖÅ]*\*?$/;
+                    field.setContentCheck(true, this.instance.getLocalization('invalid_characters'), regex);
+                }
 
-	            field.bindChange(function (event) {
-	            	me.__searchTextChanged(field.getValue());
-	            });
-	            field.addClearButton('oskari_search_forminput_clearbutton');
-        	}
-        	return this._searchField;
+                field.bindChange(function (event) {
+                    me.__searchTextChanged(field.getValue());
+                });
+                field.addClearButton('oskari_search_forminput_clearbutton');
+            }
+            return this._searchField;
         },
         /**
          * The search field
          * @return {Oskari.userinterface.component.FormInput}
          */
-        getButton : function() {
-        	if(!this._searchBtn) {
-	            var button = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
-	            button.setId('oskari_search_button_search');
-	            this._searchBtn = button;
-        	}
+        getButton: function () {
+            if (!this._searchBtn) {
+                var button = Oskari.clazz.create('Oskari.userinterface.component.buttons.SearchButton');
+                button.setId('oskari_search_button_search');
+                this._searchBtn = button;
+            }
             return this._searchBtn;
         },
-        __searchTextChanged : function(value) {
+        __searchTextChanged: function (value) {
             var me = this;
             var sandbox = me.getSandbox();
             var searchContainer = this.getContainer();
@@ -172,16 +171,16 @@ Oskari.clazz.define(
                 searchContainer.find('div.resultList').empty();
 
                 // try to remove markers if request is available when field is emptied
-                var reqBuilder = sandbox.getRequestBuilder('MapModulePlugin.RemoveMarkersRequest');
+                var reqBuilder = Oskari.requestBuilder('MapModulePlugin.RemoveMarkersRequest');
                 if (reqBuilder) {
                     sandbox.request(me.instance.getName(), reqBuilder());
                 }
             }
         },
 
-        __doSearch : function() {
-        	var me = this;
-			var field = this.getField();
+        __doSearch: function () {
+            var me = this;
+            var field = this.getField();
             var button = this.getButton();
             var searchContainer = this.getContainer();
 
@@ -198,17 +197,17 @@ Oskari.clazz.define(
                 return;
             }
 
-            var reqBuilder = me.getSandbox().getRequestBuilder('SearchRequest');
-            if(reqBuilder) {
+            var reqBuilder = Oskari.requestBuilder('SearchRequest');
+            if (reqBuilder) {
                 var request = reqBuilder(searchKey);
                 me.getSandbox().request(this.instance, request);
             }
         },
-        __doAutocompleteSearch : function() {
+        __doAutocompleteSearch: function () {
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
-            this.searchservice.doAutocompleteSearch(searchKey, function(result) {
-                var autocompleteValues =  [];
+            this.searchservice.doAutocompleteSearch(searchKey, function (result) {
+                var autocompleteValues = [];
                 for (var i = 0; i < result.methods.length; i++) {
                     autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });
                 }
@@ -216,11 +215,11 @@ Oskari.clazz.define(
             });
         },
 
-        handleSearchResult : function(isSuccess, result, searchedFor) {
+        handleSearchResult: function (isSuccess, result, searchedFor) {
             var me = this;
             var field = this.getField();
             var button = this.getButton();
-            if(isSuccess) {
+            if (isSuccess) {
                 field.setEnabled(true);
                 button.setEnabled(true);
                 me._renderResults(result, searchedFor);
@@ -265,7 +264,7 @@ Oskari.clazz.define(
 
             // invalid characters (or a star in the wrong place...)
             if (me.instance.safeChars) {
-                if (!/^[a-zåäöA-ZÅÄÖ \.,\?\!0-9]+\**$/.test(key)) {
+                if (!/^[a-zåäöA-ZÅÄÖ .,?!0-9]+\**$/.test(key)) {
                     me._showError(me.instance.getLocalization('invalid_characters'));
                     return false;
                 }
@@ -281,19 +280,19 @@ Oskari.clazz.define(
             dialog.makeModal();
 
             dialog.show(
-                    this.instance.getLocalization('searchservice_search_alert_title'),
-                    error, [okButton]
+                this.instance.getLocalization('searchservice_search_alert_title'),
+                error, [okButton]
             );
         },
-        __getSearchResultHeader : function(count, hasMore) {
-        	var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
-        	var msg = intro({count : count});
-        	msg = msg + '<br/>';
+        __getSearchResultHeader: function (count, hasMore) {
+            var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
+            var msg = intro({count: count});
+            msg = msg + '<br/>';
 
             if (hasMore) {
                 // more results available
-        		msg = msg + this.instance.getLocalization('searchResultDescriptionMoreResults');
-        		msg = msg + '<br/>';
+                msg = msg + this.instance.getLocalization('searchResultDescriptionMoreResults');
+                msg = msg + '<br/>';
             }
             return msg + this.instance.getLocalization('searchResultDescriptionOrdering');
         },
@@ -318,16 +317,16 @@ Oskari.clazz.define(
             // error handling
             if (result.totalCount === -1) {
                 resultList.append(
-                	this.instance.getLocalization('searchservice_search_alert_title') + ': ' +
-                	this.instance.getLocalization(result.errorText));
+                    this.instance.getLocalization('searchservice_search_alert_title') + ': ' +
+                    this.instance.getLocalization(result.errorText));
                 return;
             } else if (result.totalCount === 0) {
                 resultList.append(
-                	inst.getLocalization('searchservice_search_alert_title') + ': ' +
-                	inst.getLocalization('searchservice_search_not_found_anything_text'));
+                    inst.getLocalization('searchservice_search_alert_title') + ': ' +
+                    inst.getLocalization('searchservice_search_not_found_anything_text'));
                 return;
             } else {
-            	info.append(this.__getSearchResultHeader(result.totalCount, result.hasMore));
+                info.append(this.__getSearchResultHeader(result.totalCount, result.hasMore));
             }
 
             if (result.totalCount === 1) {
@@ -339,11 +338,11 @@ Oskari.clazz.define(
                 tableHeaderRow = table.find('thead tr'),
                 tableBody = table.find('tbody');
 
-            _.each(this.resultHeaders, function(headerItem) {
-                var header = me.__templates.resultTableHeader({ title : headerItem.title });
+            _.each(this.resultHeaders, function (headerItem) {
+                var header = me.__templates.resultTableHeader({ title: headerItem.title });
                 header = jQuery(header);
                 var link = header.find('a');
-                link.bind('click',  function () {
+                link.on('click', function () {
                     // clear table for sorted results
                     tableBody.empty();
                     // default to descending sort
@@ -372,18 +371,18 @@ Oskari.clazz.define(
 
             this._populateResultTable(tableBody, result.locations);
             resultList.append(this.__templates.resultheading({
-            	count : result.totalCount,
-            	search : searchKey
+                count: result.totalCount,
+                search: searchKey
             }));
             resultList.append(table);
         },
 
         _populateResultTable: function (resultsTableBody, locations) {
             var me = this;
-            _.each(locations, function(row) {
+            _.each(locations, function (row) {
                 var resultRow = me.__templates.resultTableRow(row);
                 resultRow = jQuery(resultRow);
-                resultRow.find('a').click(function() {
+                resultRow.find('a').on('click', function () {
                     me._resultClicked(row);
                     return false;
                 });
@@ -398,10 +397,10 @@ Oskari.clazz.define(
                 sandbox = inst.sandbox;
             // good to go
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = sandbox.getRequestBuilder('MapMoveRequest'),
+            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
-            if(result.zoomScale) {
-                zoom = {scale : result.zoomScale};
+            if (result.zoomScale) {
+                zoom = {scale: result.zoomScale};
             }
             sandbox.request(
                 me.instance.getName(),
@@ -430,7 +429,7 @@ Oskari.clazz.define(
             closeAction.group = 1;
             closeAction.action = function () {
                 var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = sandbox.getRequestBuilder(rN),
+                    rB = Oskari.requestBuilder(rN),
                     request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
@@ -447,12 +446,12 @@ Oskari.clazz.define(
             };
 
             var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = sandbox.getRequestBuilder(rN),
+                rB = Oskari.requestBuilder(rN),
                 request = rB(
                     popupId,
                     loc.title,
                     content,
-                    {   
+                    {
                         lon: result.lon,
                         lat: result.lat
                     },
@@ -473,7 +472,6 @@ Oskari.clazz.define(
          *
          */
         _sortResults: function (pAttribute, pDescending, locations) {
-            var me = this;
             if (!this.lastResult) {
                 return;
             }
@@ -494,8 +492,8 @@ Oskari.clazz.define(
         removeSearchResultAction: function (name) {
             delete this.resultActions[name];
         },
-        getSandbox : function() {
-        	return this.sandbox;
+        getSandbox: function () {
+            return this.sandbox;
         },
         /**
          * @method setState

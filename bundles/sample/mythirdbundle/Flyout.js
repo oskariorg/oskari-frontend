@@ -46,7 +46,6 @@ Oskari.clazz.define('Oskari.sample.bundle.mythirdbundle.Flyout',
          * Interface method implementation, assigns the HTML templates that will be used to create the UI
          */
         startPlugin: function () {
-            var me = this;
             this.template = jQuery('<div></div>');
         },
         /**
@@ -93,9 +92,6 @@ Oskari.clazz.define('Oskari.sample.bundle.mythirdbundle.Flyout',
          * Creates the UI for a fresh start
          */
         createUI: function () {
-            var me = this,
-                sandbox = me.instance.getSandbox();
-
             // clear container
             var cel = jQuery(this.container);
             cel.empty();

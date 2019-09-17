@@ -5,7 +5,7 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RemoveMarkersRequest', function (id) {
     this._id = id;
 }, {
-    __name: "MapModulePlugin.RemoveMarkersRequest",
+    __name: 'MapModulePlugin.RemoveMarkersRequest',
     getName: function () {
         return this.__name;
     },

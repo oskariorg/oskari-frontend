@@ -17,44 +17,44 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.ToolButtonStateR
  * @param {Boolean}
  *            state true if enabled, false to disable
  */
-function(id, group, state) {
-    this._id = id;
-    this._group = group;
-    this._state = (state === true);
-}, {
+    function (id, group, state) {
+        this._id = id;
+        this._group = group;
+        this._state = (state === true);
+    }, {
     /** @static @property __name request name */
-    __name : "Toolbar.ToolButtonStateRequest",
-    /**
+        __name: 'Toolbar.ToolButtonStateRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
+        getName: function () {
+            return this.__name;
+        },
 
-    /**
+        /**
      * @method getId
      * @return {String} identifier so we can manage the button with subsequent requests
      */
-    getId : function() {
-        return this._id;
-    },
-    /**
+        getId: function () {
+            return this._id;
+        },
+        /**
      * @method getGroup
      * @return {String} identifier for organizing buttons
      */
-    getGroup : function() {
-        return this._group;
-    },
-    /**
+        getGroup: function () {
+            return this._group;
+        },
+        /**
      * @method getState
      * @return {Boolean} true to enable, false to disable
      */
-    getState : function() {
-        return this._state;
-    }
-}, {
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        getState: function () {
+            return this._state;
+        }
+    }, {
+        'protocol': ['Oskari.mapframework.request.Request']
+    });
 
 /* Inheritance */

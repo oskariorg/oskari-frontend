@@ -30,13 +30,13 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             targets = jQuery(targetSelector);
             me._overlays = _.map(targets, function (target) {
                 return {
-                  overlay: me.template.clone(),
-                  target: jQuery(target)
+                    overlay: me.template.clone(),
+                    target: jQuery(target)
                 };
             });
             _.forEach(me._overlays, function (overlay) {
                 overlay.target.append(overlay.overlay);
-                if(addSpinner) {
+                if (addSpinner) {
                     var spinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
                     spinner.insertTo(overlay.overlay);
                     spinner.start();
@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
             });
             me._setupSizeAndLocation();
             _.forEach(me._overlays, function (overlay) {
-                overlay.overlay.bind('click', function (event) {
+                overlay.overlay.on('click', function (event) {
                     event.preventDefault();
                 });
             });
@@ -71,7 +71,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         followResizing: function (useWindow) {
             var me = this;
             if (useWindow) {
-                jQuery(window).resize(function () {
+                jQuery(window).on('resize', function () {
                     me.resize();
                 });
             } else {
@@ -84,10 +84,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         close: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
-               overlay.overlay.remove();
-               if(overlay.spinner) {
+                overlay.overlay.remove();
+                if (overlay.spinner) {
                     overlay.spinner.stop();
-               }
+                }
             });
             if (this._resizingWorkaround) {
                 clearTimeout(this._resizingWorkaround);
@@ -98,7 +98,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Overlay',
         bindClickToClose: function () {
             var me = this;
             _.forEach(me._overlays, function (overlay) {
-                overlay.overlay.bind('click', function() {
+                overlay.overlay.on('click', function () {
                     me.close();
                 });
             });

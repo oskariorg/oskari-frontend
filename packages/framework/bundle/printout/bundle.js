@@ -59,7 +59,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.printout.PrintoutBundle", functi
             "src": "../../../../bundles/framework/printout/event/PrintCanceledEvent.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/printout/resources/css/style.css"
+            "src": "../../../../bundles/framework/printout/resources/scss/style.scss"
         }],
 
         "locales": [{

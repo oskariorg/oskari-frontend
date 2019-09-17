@@ -44,11 +44,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.geometrycutter.GeometryCutterBun
             }, {
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/geometrycutter/event/GeometryCuttingEvent.js"
-            }, {
-                "type" : "text/javascript",
-                "expose": "jsts",
-    			"src" : "../../../../libraries/jsts/jsts-1.4.0.min.js"
-    		}],
+            }],
             "locales": []
         },
         "bundle": {

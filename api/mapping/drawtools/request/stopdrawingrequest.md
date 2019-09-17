@@ -25,6 +25,9 @@ If the user is allowed to draw on the map this request can be used to complete t
 <tr>
   <td> clearCurrent</td><td> Boolean</td><td> true - all selection will be removed from the map after stopping plugin.<br> false - will keep selection on the map.</td><td> false</td>
 </tr>
+<tr>
+  <td> supressEvent</td><td> Boolean</td><td> true - does not send out an DrawingEvent.<br> false - sends out DrawingEvent.</td><td> false</td>
+</tr>
 </table>
 
 ## Examples
@@ -43,6 +46,13 @@ var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StopDrawingRequest', ['myplaces', true]);
 ```
 Again, this expects that drawing has been started for id 'myplaces' and will result in an 'DrawingEvent' where id is 'myplaces' with the drawn shape as geojson available in event.getGeoJson().
+
+
+Complete a draw but don't send out an event:
+```javascript
+var sb = Oskari.getSandbox();
+sb.postRequestByName('DrawTools.StopDrawingRequest', ['measure', true, true]);
+```
 
 ## Related api
 

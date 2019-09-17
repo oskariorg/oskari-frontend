@@ -37,7 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.infobox.request.RefreshInfoBoxRe
                     this.popupPlugin.removeContentData(popupId, contentId);
                 } else {
                     // Send a status report of the popup (is it open)
-                    evtB = sandbox.getEventBuilder('InfoBox.InfoBoxEvent');
+                    evtB = Oskari.eventBuilder('InfoBox.InfoBoxEvent');
                     evt = evtB(popupId, true, contentId);
                     sandbox.notifyAll(evt);
                 }

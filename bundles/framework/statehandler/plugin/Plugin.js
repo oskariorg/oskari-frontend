@@ -13,14 +13,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
      */
 
     function () {
-        throw "Oskari.mapframework.bundle.statehandler.Plugin should not be instantiated";
+        throw new Error('Oskari.mapframework.bundle.statehandler.Plugin should not be instantiated');
     }, {
         /**
          * @method getName
          * @throws "Implement your own"
          */
         getName: function () {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         },
         /**
          * @method setHandler
@@ -30,7 +30,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
          * @throws "Implement your own"
          */
         setHandler: function (stateHandler) {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         },
         /**
          * @method startPlugin
@@ -39,7 +39,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
          * @throws "Implement your own"
          */
         startPlugin: function (sandbox) {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         },
         /**
          * @method stopPlugin
@@ -48,7 +48,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
          * @throws "Implement your own"
          */
         stopPlugin: function (sandbox) {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         },
         /**
          * @method getState
@@ -56,7 +56,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
          * @throws "Implement your own"
          */
         getState: function () {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         },
         /**
          * @method resetState
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
          * @throws "Implement your own"
          */
         resetState: function () {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         },
         /**
          * @method saveState
@@ -77,6 +77,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.statehandler.plugin.Plugin',
          * @throws "Implement your own"
          */
         saveState: function (viewName, state) {
-            throw "Implement your own";
+            throw new Error('Implement your own');
         }
     });

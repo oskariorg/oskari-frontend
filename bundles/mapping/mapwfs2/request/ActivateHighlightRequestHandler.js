@@ -3,7 +3,7 @@
  *
  * Handles WFS highlight activation functionality.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.mapwfs2.request.ActivateHighlightRequestHandler",
+Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ActivateHighlightRequestHandler',
 
     /**
      * @method create called automatically on construction

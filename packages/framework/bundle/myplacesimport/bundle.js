@@ -29,7 +29,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplacesimport.MyPlacesImportBun
             "src": "../../../../bundles/framework/myplacesimport/UserLayersTab.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/framework/myplacesimport/resources/css/style.css"
+            "src": "../../../../bundles/framework/myplacesimport/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "fi",

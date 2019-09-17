@@ -18,21 +18,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.ClassificationChangedEven
          * Returns event name
          * @return {String} The event name.
          */
-        getName : function () {
+        getName: function () {
             return 'StatsGrid.ClassificationChangedEvent';
         },
         /**
          * Current active indicator
          * @return {Object}
          */
-        getCurrent : function() {
+        getCurrent: function () {
             return this.current;
         },
         /**
          * Previously active indicator
          * @return {Object}
          */
-        getPrevious : function() {
+        getPrevious: function () {
             return this.previous;
         }
     }, {

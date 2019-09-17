@@ -10,40 +10,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.search.event.TabChangedEvent',
  * @param {String} previousTabId id of closed tab
  * @param {String} newTabId id of opened tab
  */
-function(previousTabId, newTabId) {
-    this._previousTabId = previousTabId;
-    this._newTabId = newTabId;
-}, {
+    function (previousTabId, newTabId) {
+        this._previousTabId = previousTabId;
+        this._newTabId = newTabId;
+    }, {
     /** @static @property __name event name */
-    __name : "Search.TabChangedEvent",
-    /**
+        __name: 'Search.TabChangedEvent',
+        /**
      * @method getName
      * Returns event name
      * @return {String}
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getPreviousTabId
      * Returns the id of closed tab
      * @return {String}
      */
-    getPreviousTabId : function() {
-        return this._previousTabId;
-    },
-    /**
+        getPreviousTabId: function () {
+            return this._previousTabId;
+        },
+        /**
      * @method isModification
      * Returns the id of opened tab
      * @return {String}
      */
-    getNewTabId : function() {
-        return this._newTabId;
-    }
-}, {
+        getNewTabId: function () {
+            return this._newTabId;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.event.Event']
-});
+        'protocol': ['Oskari.mapframework.event.Event']
+    });

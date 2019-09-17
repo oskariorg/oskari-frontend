@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
         this._scale = scale;
     }, {
         /** @static @property __name event name */
-        __name: "AfterMapMoveEvent",
+        __name: 'AfterMapMoveEvent',
         /**
          * @method getName
          * @return {String} event name

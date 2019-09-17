@@ -43,11 +43,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var toolbarNotReady = false;
             var wasVisible = this._visible;
             this._visible = visible;
-            if(!this.getElement() && visible) {
+            if (!this.getElement() && visible) {
                 toolbarNotReady = this.redrawUI(this.getMapModule().getMobileMode());
             }
-            // toggle element
-            if (this.getElement() && wasVisible !== visible) {
+            // toggle element - wasVisible might not be in sync with the UI if the elements are recreated - so always hide on setVisible(false)
+            if (this.getElement() && (wasVisible !== visible || !visible)) {
                 this.getElement().toggle(visible);
             }
             return toolbarNotReady;
@@ -58,40 +58,39 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
-        redrawUI: function(mapInMobileMode, forced) {
-            if(!this.isVisible()) {
+        redrawUI: function (mapInMobileMode, forced) {
+            if (!this.isVisible()) {
                 // no point in drawing the ui if we are not visible
                 return;
             }
             var me = this;
-            var sandbox = me.getSandbox();
-            if(this.getElement()) {
+            if (this.getElement()) {
                 // ui already in place no need to do anything, override in plugins to do responsive
                 return;
             }
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
         },
-        addToPluginContainer : function(element) {
-            //var element = this.getElement();
-            if(!element) {
+        addToPluginContainer: function (element) {
+            // var element = this.getElement();
+            if (!element) {
                 // no element to place, log a warning
                 return;
             }
             this._element = element;
             element.attr('data-clazz', this.getClazz());
-            try{
+            try {
                 this.getMapModule().setMapControlPlugin(
                     element,
                     this.getLocation(),
                     this.getIndex()
                 );
-            } catch(e){
+            } catch (e) {
                 this.getSandbox().printWarn('"' + this.getName() + '" ', e);
             }
         },
-        removeFromPluginContainer : function(element, preserve) {
-            if(!element) {
+        removeFromPluginContainer: function (element, preserve) {
+            if (!element) {
                 // no element to remove, log a warning
                 return;
             }
@@ -101,16 +100,16 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 this.inLayerToolsEditMode(),
                 !!preserve
             );
-            if(!preserve) {
+            if (!preserve) {
                 this._element = null;
             }
         },
 
-        teardownUI : function() {
-            //remove old element
+        teardownUI: function () {
+            // remove old element
             this.removeFromPluginContainer(this.getElement());
         },
-        getMobileDefs : function() {
+        getMobileDefs: function () {
             return this._mobileDefs || {};
         },
 
@@ -136,7 +135,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             var clazz = this._clazz;
             // Throw a fit if clazz is not set, it'd probably break things.
             if (clazz === null || clazz === undefined || clazz.length < 1) {
-                throw 'No clazz provided for ' + this.getName() + '!';
+                throw new Error('No clazz provided for ' + this.getName() + '!');
             }
             return clazz;
         },
@@ -191,6 +190,9 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          */
         setLocation: function (location) {
+            if (Oskari.util.isMobile()) {
+                return;
+            }
             var me = this,
                 el = me.getElement();
 
@@ -317,16 +319,16 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
          *
          * @return {Object} style object used by mapmodule or null if not available.
          */
-        getToolStyleFromMapModule: function() {
+        getToolStyleFromMapModule: function () {
             var value = this.getMapModule().getToolStyle();
-            return value ? value : null;
+            return value || null;
         },
         /**
          * @public @method getToolStyleFromMapModule
          *
          * @return {String} the font used by mapmodule or null if not available.
          */
-        getToolFontFromMapModule: function() {
+        getToolFontFromMapModule: function () {
             return this.getMapModule().getToolFont();
         },
 
@@ -366,12 +368,11 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                 el.addClass(classToAdd);
             }
         },
-        addToolbarButtons : function(buttons, group) {
-            var me  =this;
+        addToolbarButtons: function (buttons, group) {
             var sandbox = this.getSandbox();
             var toolbar = this.getMapModule().getMobileToolbar();
             var themeColors = this.getMapModule().getThemeColours();
-            if(buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
+            if (buttons && !sandbox.hasHandler('Toolbar.AddToolButtonRequest')) {
                 return true;
             }
             var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
@@ -381,22 +382,22 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
                     var buttonConf = buttons[tool];
                     buttonConf.toolbarid = toolbar;
                     // add active color if sticky and toggleChangeIcon
-                    if(buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
-                        buttonConf.activeColour =  themeColors.activeColour;
+                    if (buttonConf.sticky === true && buttonConf.toggleChangeIcon === true && !buttonConf.activeColor) {
+                        buttonConf.activeColour = themeColors.activeColour;
                     }
                     sandbox.request(this, addToolButtonBuilder(tool, group, buttonConf));
                 }
             }
         },
-        removeToolbarButtons : function(buttons, group) {
+        removeToolbarButtons: function (buttons, group) {
             var sandbox = this.getSandbox();
-            if(!sandbox) {
+            if (!sandbox) {
                 return true;
             }
 
             // don't do anything now if request is not available.
             // When returning false, this will be called again when the request is available
-            if(buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
+            if (buttons && !sandbox.hasHandler('Toolbar.RemoveToolButtonRequest')) {
                 return true;
             }
             var removeToolButtonBuilder = Oskari.requestBuilder('Toolbar.RemoveToolButtonRequest');
@@ -411,7 +412,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
         /**
          * Set a tool's mobile icon back to it's initial state after popup closing.
          */
-        _resetMobileIcon: function(el, iconCls) {
+        _resetMobileIcon: function (el, iconCls) {
             var me = this,
                 restoreCls;
 
@@ -420,7 +421,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin',
             el.removeClass(iconCls + '-light');
             el.removeClass(iconCls + '-dark');
 
-            restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls+'-light' : iconCls+'-dark';
+            restoreCls = (Oskari.util.isDarkColor(me.getMapModule().getThemeColours().activeColour)) ? iconCls + '-light' : iconCls + '-dark';
             el.addClass(restoreCls);
         }
     }, {

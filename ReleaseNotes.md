@@ -1,5 +1,204 @@
 # Release Notes
 
+## 1.50.0
+
+Updated CometD client library to work with updated server components.
+
+## 1.49.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/14?closed=1
+
+### Build script
+
+The build script has now been completely migrated to Webpack and the old tools-scripts have been removed. Changes for the new script from 1.48.0 is that builds no longer point to a single minifierAppsetup.json but a directory hosting apps that can have the json-file OR main.js file as it's a common use case to have at least one app for the geoportal and another for the embedded maps.
+The parameter for builds changed from "env.appdef=applications/application/guest/minifierAppSetup.json" in 1.48.0
+ to "env.appdef=applications/application" in 1.49.0. When the build is run it also generates a "main.js" file based on the minifierAppsetup.json. You can remove the json-file after running the build for the
+ first time and start using the main.js as the main entrypoint for the app.
+
+ Bundles can now be loaded "lazily" meaning "lazy" bundles are not part of oskari.min.js but can be loaded and started as usual when referenced. This can be used to minimize the initial JavaScript payload users have to download. Bundles that aren't used by all the users like admin bundles should be included in the app as "lazy".
+
+ The devserver now passes additional http headers to Jetty so forwarded requests like logging in work properly with it.
+
+ The separate css-files that were previously referenced on the HTML (forms.css, portal.css and overwritten.css) have all been included in the oskari.min.css file. Icons.css is still a separate file. jQuery is now included in oskari.min.js as well.
+
+#### Other build script improvements
+- Build script now provides a way to be used from another repository while referencing code from  oskari-frontend/oskari-frontend-contrib repositories enabling application specific repositories like nls-oskari/pti-frontend.
+- Added a flag for build script to use absolute paths instead of relative
+- Added a script to create the sprite image for customized/app-specific icons.
+- `babel-polyfill` has been added to the build for IE support
+
+### Code quality
+
+The code base has been formatted with ESLint configured settings. Any pull requests made in GitHub are now automatically checked against these rules using Travis CI. You can also check the settings by running "npm run test".
+
+Most of the calls to deprecated functions inside the oskari-frontend code have been updated to use the new versions of the functions so the developer console should only have warning for customized apps using deprecated functions. Note that the deprecated functions will be removed in a future version and you should update your apps to match the changes (see the browsers developer console for details). If you see no warnings it's all good for your app.
+
+### Cleanup
+
+Much of the app-specific functionalities and unmaintained code have been moved to a new repository: oskari-frontend-contrib. These can still be used with any oskari-applications, but they are not "officially" supported.
+Now everything in the oskari-frontend repository should work with new versions.
+
+Also removed CSS-files that had corresponding SCSS files so it's clear which one to edit.
+
+### Thematic maps improvements
+- Improvements for diagram flyout
+- Selected indicators are now listed on the indicator selection flyout and selections can be removed from that listing without the need to go the data table flyout
+- Performance improvements
+- Flickering reduced on statistical timeseries/indicator switching
+- Color animation added for timeseries
+- Other improvements and error handling added
+- The select component has been changed for indicator selection flyout
+- Map region borders are now shown even on point visualization
+
+### Other changes
+- Initial support for MVT vector tiles (the new example app now uses OpenMapTiles as basemap)
+- Vector tile layers can be styled using the Oskari style definition OR Mapbox styles
+- Openlayers updated to 5.2.0 (as npm dependency so using it has changed to ES6 imports instead of using the global "ol" object)
+- Some of the code like the mapmodule implementation has started migrating towards ES6-modules.
+- User geolocation can no longer move the map outside the map extent
+- Color selection for myplaces etc user generated styles now have a new color picker component
+- The info icon placement has been modified in printout and publisher to match the UI guide
+- MapLayerService.registerLayerModel() now supports functions/constructors as modelbuilders in addition to name to pass to Oskari.clazz.create()
+- CSS-styles have been streamlined and references to missing resources have been removed.
+- Publisher theme selection and the theme on map are now in sync. Previously you mnight have gotten the geoportal style on preview, but end up with the default style embedded map. This happened if the geoportal had customized style/didn't have the default style
+- Content-editor and Download-basket bundles have been updated to work with current Oskari libraries (OpenLayers 5)
+- Fixed a bug in printout where zoom-levels on the map got mixed up after visiting the printout functionality
+- Admin layerselector now has a field for layer "options" which content is layer type specific (vectortilelayer styles are added using options)
+- Metadata presentation fixes and error handling
+- Fix for customized styles when user draws on the map
+- Link tool now allows user to select if guided tour should be skipped on link and if center marker should be shown
+- Toolbars tool selection color now works better on themes with light background
+- Fixed https://github.com/oskariorg/oskari-docs/issues/79
+
+
+## 1.48.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/12?closed=1
+
+- Timeseries support for statistical maps.
+- Lots of improvements for statistical maps in general.
+- Cross-site request forgery protection added for the server and frontend now sends the token in XHR calls.
+- Action routes changed from using HTTP POST instead of GET for write operations to prevent CSRF issues.
+- Some (internal) changes to the class system to make it more compliant with Webpack based build and ES6+ modules.
+- A new request 'VectorLayerRequest' has been added that enables vector features to have hover functionality in conjunction with 'AddFeaturesToMapRequest'.
+- Some of the features in 'AddFeaturesToMapRequest' are now part of 'VectorLayerRequest' and have been deprecated/will be removed in a future version. See api/CHANGELOG.md for details.
+- jQuery version compatibility changes. Frontend code now works with 3.3.1 jQuery and server has been updated to use it.
+- jQuery 1.10.2 works as well, but from now on it's assumed that the newer version is used.
+- jQuery UI has been updated from 1.9.2 to 1.12.1
+- Publisher tools handling and resuming normal operations after publisher has been improved.
+- Improved placement for UI-elements/plugins that are shown on top of the map.
+- API doc improvements
+- 3D map engine improvements (under paikkatietoikkuna as it's still app specific)
+- Popup now tries harder to stay on screen on small displays.
+- Fixed an issue with map layer admin and adding/editing grouplayers.
+- A new function Oskari.getNumberFormatter([optional fraction digits count like 2]) has been added to the core for formatting numbers with given decimal accuracy.
+- Improved projection/axis order handling for userlayers and my places.
+- Improvements to drawtools.
+- Measurements for myplaces listing and measurement/draw tools are now calculated with the same method in mapmodule instead of myplaces having another function for it.
+- Mapmodules measurement function now works properly for MultiPolygons and degree based projections.
+- Fixed an issue where map drag/pan was broken with the Chrome 69 after zooming with double click
+
+New build script has been introduced for 1.48.0. The old one still works, but will be dropped in the next version:
+
+### Webpack build
+
+It is now possible to build the front-end application code with Webpack. In the next release (1.49.0) this will be the only supported build method.
+
+#### Preparations
+
+Make sure you have at least Node 8.x / NPM 5.x. Run `npm install` in the front-end repo root.
+
+#### Run in development
+
+Webpack dev server is used to serve the JS bundle and assets when running in local development. XHR calls will be proxied to the Java backend assumed to be running on localhost:8080.
+
+So that the server knows to look for the JS bundle and assets from the right place, we need to change the Oskari-server `oskari-ext.properties` and add
+
+```
+# set development to false or comment it out to load using minified javascript
+development=false
+oskari.client.version=dist/devapp
+```
+
+To start Webpack dev server, we point it to the miniferAppSetup.json file for the application we want to start, here Sample app as example:
+`npm start -- --env.appdef=applications/sample/servlet/minifierAppSetup.json`
+
+When you see "Compiled successfully." in the terminal, you can open the app in the browser at localhost:8081.
+
+The dev server has automatic reloading enabled when you save changes to JS code and hot reloading for S/CSS without need for full browser reload.
+
+#### Build for production
+
+To build minifed JS and assets, run:
+`npm run build -- --env.appdef=1.48.0:applications/sample/servlet/minifierAppSetup.json`
+
+The number before the colon sets the directory name, here producing files under dist/1.48.0/servlet/
+
+Note: The 1.48.0 release of Oskari server still has a reference to bundles/bundle.js in the JSP. This file is no longer needed because it's part of the webpack bundle. Replace this file with an empty text file on the production server if you intend to use the webpack produced bundle.
+
+
+## 1.47.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/13?closed=1
+
+- Fix for user generated statistical indicator removal.
+- Fix for loading progressbar for layers using single tile loading.
+- Fix for coordinatetool localization handling.
+
+## 1.47.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/9?closed=1
+
+- Statistical maps now allow for filtering listings based on regionsets and adding more than one indicator at a time
+- Users can now use and save custom indicators for statistical maps
+- Fixes for statistical maps UI in geoportal
+- Layer filters in layer selector are now hidden when selecting the filter would result in empty layer listing
+- Geoportal map style is now properly reset after exiting publisher functionality (previously always reset to default style)
+- More plugins now support styling in publisher functionality
+- Timeseries functionality can now be included in embedded maps (when there's a layer providing timeseries data)
+- Publisher can now be opened automatically on startup (Usability improvement when having embedded maps in multiple projections)
+- Checking "Don't show this again" in guided tour now works again
+- Bugfixes on publisher, hierarchical layerselector and feature data table
+
+## 1.46.3
+
+- Fixed JS errors when saving myplaces features.
+- Fixed an issue where featuredata button was shown on the UI when is should have stayed hidden after browser window resize.
+
+## 1.46.2
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/11?closed=1
+
+- publisher now remembers the original tool style and no longer resets to default style on exit
+- fixed layer/group sorting issues on the hierarchichal layerselector
+- fixed a JS error on layer removal
+- fixed an issue where adding imported datasets/userlayers to the map zoomed to the extent of the layer always. Now it just zooms on initial import and when clicking the layer on personaldata listing. This fixes an issue where embedded maps could start from the dataset extent instead of the original saved center point.
+
+## 1.46.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/10?closed=1
+
+- Layer loading API has been changed from having the layers inside group structure (and possibly multiple times/layer) to a flat array beside the group structure. The groups will still have layers array in the internal runtime data structure, but instead of the JSON presentation the array items are instances of Oskari.mapframework.domain.AbstractLayer like any other layer references returned by the service.
+- Iframe snippet in publisher now includes 'allow="geolocation"' because: https://sites.google.com/a/chromium.org/dev/Home/chromium-security/deprecating-permissions-in-cross-origin-iframes
+- Line width style setting for userlayer/dataset import works properly now on import
+- Statistical map now resets when the regionset layer is removed from selected layers
+- Statistical map now resets properly when the reset button is hit
+- UI fixes for statistical map legend and classification form
+- Reverse colors control in statistical map classification form now works instead of doing nothing
+- Sandbox.removeMapLayer() was deprecated as unused and Sandbox.getMap().removeLayer() is the drop-in replacement for it.
+- Some variable leaking (to global scope) issues fixed.
+- Timeseries UI is no longer shown if the layer with timeseries isn't shown to the user (due to being hidden or incompatible CRS)
+- Group and organization is now properly removed from the admin UI when deleted from the database.
+- Oskari.urls.getRoute() default value changed from 'N/A' to '/action?' as it's the default for Oskari-server
+- Oskari.urls.getLocation() default value changed from 'N/A' to undefined so  developers don't need to know the default value for checking if it's configured
+- Personaldata, analyse and publisher2 bundles now support Oskari.urls.getLocation('login') and Oskari.urls.getLocation('register') for url configuration. Bundle-specific config is still available and used as priority.
+
 ## 1.46.0
 
 For a full list of changes see: https://github.com/oskariorg/oskari-frontend/milestone/7?closed=1

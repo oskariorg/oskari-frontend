@@ -13,9 +13,17 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
      *            lon longitude on mouse location
      * @param {Number}
      *            lat latitude on mouse location
+     * @param {Boolean}
+     *            isPaused
+     * @param {Number}
+     *            pageX mouse location x
+     * @param {Number}
+     *            pageY mouse location y
+     * @param {Boolean}
+     *            isDrawing true when drawtools is active
      */
 
-    function (lon, lat, isPaused) {
+    function (lon, lat, isPaused, pageX, pageY, isDrawing) {
         this._creator = null;
 
         this._lon = lon;
@@ -24,9 +32,14 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
 
         this._paused = isPaused;
 
+        this._pageX = pageX;
+
+        this._pageY = pageY;
+
+        this._isDrawing = isDrawing;
     }, {
         /** @static @property __name event name */
-        __name: "MouseHoverEvent",
+        __name: 'MouseHoverEvent',
         /**
          * @method getName
          * @return {String} event name
@@ -58,12 +71,13 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
          * @param {Number}
          *            lat latitude on mouse location
          */
-        set: function (lon, lat, isPaused, pageX, pageY) {
+        set: function (lon, lat, isPaused, pageX, pageY, isDrawing) {
             this._lon = lon;
             this._lat = lat;
             this._paused = isPaused;
             this._pageX = pageX;
             this._pageY = pageY;
+            this._isDrawing = isDrawing;
         },
 
         isPaused: function () {
@@ -75,6 +89,9 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MouseHoverEvent',
         },
         getPageY: function () {
             return this._pageY;
+        },
+        isDrawing: function () {
+            return this._isDrawing;
         }
     }, {
         /**

@@ -41,7 +41,7 @@ Oskari.clazz.define(
 
         me.cometd.configure({
             url: me.cometURL,
-            //logLevel : "debug",
+            // logLevel : "debug",
             // if connection can't be established add this time to waiting time before trying again (ms)
             backoffIncrement: me.config.backoffIncrement || 1000,
             // maximum time of backoff (not incremented after reaching) (ms)
@@ -70,14 +70,15 @@ Oskari.clazz.define(
         }
 
         // Disconnect when the page unloads
-        jQuery(window).unload(function () {
-            me.disconnect(); });
+        jQuery(window).on('beforeunload', function () {
+            me.disconnect();
+        });
     }, {
         /**
          * @method connect
          */
         connect: function () {
-            if(!this._connected && !this._handshakeInProcess) {
+            if (!this._connected && !this._handshakeInProcess) {
                 this._handshakeInProcess = true;
                 this.cometd.handshake();
             }
@@ -194,7 +195,7 @@ Oskari.clazz.define(
                 me.cometd.batch(function () {
                     me._errorSub = me.cometd.subscribe(
                         '/error',
-                        me.getError
+                        me.getError.bind(me)
                     );
                     me.plugin.getIO().subscribe();
                     me.plugin.getIO().startup({

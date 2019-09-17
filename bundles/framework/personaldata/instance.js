@@ -5,7 +5,7 @@
  *
  * See Oskari.mapframework.bundle.personaldata.PersonalDataBundle for bundle definition.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PersonalDataBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -29,18 +29,18 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method getName
          * @return {String} the name for the component
          */
-        "getName": function () {
+        'getName': function () {
             return this.__name;
         },
 
-        openProfileTab: function() {
-          Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
-          var flyout = this.plugins['Oskari.userinterface.Flyout'];
-          flyout.tabsContainer.panels.forEach(function(panel){
-            if(panel.id === "account") {
-              flyout.tabsContainer.select(panel);
-            }
-          });
+        openProfileTab: function () {
+            Oskari.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'attach']);
+            var flyout = this.plugins['Oskari.userinterface.Flyout'];
+            flyout.tabsContainer.panels.forEach(function (panel) {
+                if (panel.id === 'account') {
+                    flyout.tabsContainer.select(panel);
+                }
+            });
         },
         /**
          * @method setSandbox
@@ -79,7 +79,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 this._localization = Oskari.getLocalization(this.getName());
             }
             if (key) {
-
                 return this._localization[key];
             }
             return this._localization;
@@ -88,7 +87,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method start
          * implements BundleInstance protocol start methdod
          */
-        "start": function () {
+        'start': function () {
             var me = this;
 
             if (me.started) {
@@ -104,7 +103,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 p;
 
             me.sandbox = sandbox;
-            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', sandbox.getAjaxUrl());
+            this.viewService = Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.service.ViewService', Oskari.urls.getRoute());
 
             sandbox.register(me);
             for (p in me.eventHandlers) {
@@ -113,9 +112,8 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 }
             }
 
-
-            //Let's extend UI
-            var request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(this);
+            // Let's extend UI
+            var request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
 
             sandbox.request(this, request);
 
@@ -126,10 +124,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             this.requestHandlers = {
                 addTabRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.personaldata.request.AddTabRequestHandler', sandbox, this.plugins['Oskari.userinterface.Flyout'])
             };
-            sandbox.addRequestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
+            sandbox.requestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
             // Personaldata available
-            var eventBuilder = sandbox.getEventBuilder('Personaldata.PersonaldataLoadedEvent');
+            var eventBuilder = Oskari.eventBuilder('Personaldata.PersonaldataLoadedEvent');
             var event = eventBuilder();
             sandbox.notifyAll(event);
             this._registerForGuidedTour();
@@ -138,14 +136,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method init
          * implements Module protocol init method - adds tab request handler
          */
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        "update": function () {
+        'update': function () {
 
         },
         /**
@@ -154,14 +152,12 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
          */
         onEvent: function (event) {
-
             var handler = this.eventHandlers[event.getName()];
             if (!handler) {
                 return;
             }
 
             return handler.apply(this, [event]);
-
         },
         /**
          * @property {Object} eventHandlers
@@ -173,7 +169,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        "stop": function () {
+        'stop': function () {
             var sandbox = this.sandbox(),
                 p;
             for (p in this.eventHandlers) {
@@ -183,7 +179,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
             }
             sandbox.removeRequestHandler('PersonalData.AddTabRequest', this.requestHandlers.addTabRequestHandler);
 
-            var request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            var request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(this, request);
 
@@ -237,8 +233,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * (re)creates the UI for "personal data" functionality
          */
         createUi: function () {
-            var me = this;
-
             this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
@@ -250,10 +244,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          */
         __guidedTourDelegateTemplate: {
             priority: 50,
-            show: function(){
+            show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
             },
-            hide: function(){
+            hide: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
             },
             getTitle: function () {
@@ -264,13 +258,13 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 content.append(this.getLocalization().guidedTour.message);
                 return content;
             },
-            getLinks: function() {
+            getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization().guidedTour;
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
+                openLink.on('click',
                     function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'PersonalData']);
                         openLink.hide();
@@ -278,7 +272,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
+                closeLink.on('click',
                     function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'PersonalData']);
                         openLink.show();
@@ -294,16 +288,16 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if(requestBuilder){
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
-                    for(var prop in me.__guidedTourDelegateTemplate){
-                        if(typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
@@ -313,14 +307,14 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
                 }
             }
 
-            function handler(msg){
-                if(msg.id === 'guidedtour') {
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
             }
 
             var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
-            if(tourInstance) {
+            if (tourInstance) {
                 sendRegister();
             } else {
                 Oskari.on('bundle.start', handler);
@@ -331,5 +325,5 @@ Oskari.clazz.define("Oskari.mapframework.bundle.personaldata.PersonalDataBundleI
          * @property {String[]} protocol
          * @static
          */
-        "protocol": ["Oskari.bundle.BundleInstance", 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
+        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module', 'Oskari.userinterface.Extension']
     });

@@ -26,14 +26,13 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
      */
     'eventHandlers': {
         MapLayerEvent: function (event) {
-            if(event.getOperation() === 'update' ||
+            if (event.getOperation() === 'update' ||
                 event.getOperation() === 'add') {
                 // schedule to be updated
                 this._scheduleUpdateForLayer(event.getLayerId());
                 this._triggerLayerUpdateCountdown();
-            }
-            else if(event.getOperation() === 'remove') {
-                if(this.view) {
+            } else if (event.getOperation() === 'remove') {
+                if (this.view) {
                     // check that view has been initialized before calling remove
                     this.view.removeLayer(event.getLayerId());
                 }
@@ -44,7 +43,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             });
         }
     },
-    _triggerLayerUpdateCountdown : function() {
+    _triggerLayerUpdateCountdown: function () {
         // trigger after interval since events are being spammed by backendstatus
         // this way browser doesn't crash
         var interval = 500,
@@ -55,29 +54,28 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             me._previousLayerUpdateTimer = null;
         }
         me._previousLayerUpdateTimer = setTimeout(function () {
-            if(!me._layerUpdateHandler()) {
+            if (!me._layerUpdateHandler()) {
                 // try again if not successful - accessed too quickly etc
                 me._triggerLayerUpdateCountdown();
             }
         }, interval);
     },
-    _scheduleUpdateForLayer : function(layerId) {
-        if(!this._scheduledLayers) {
+    _scheduleUpdateForLayer: function (layerId) {
+        if (!this._scheduledLayers) {
             this._scheduledLayers = [];
         }
         var sandbox = this.getSandbox(),
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
 
         // TODO: maybe check layer type and not update if myplaces etc?
-        if(layerId) {
+        if (layerId) {
             // single layer
             var layer = mapLayerService.findMapLayer(layerId);
             if (layer) {
                 // layer found -> schedule for update
                 this._scheduledLayers.push(layer);
             }
-        }
-        else {
+        } else {
             this._scheduledLayers = mapLayerService.getAllLayers();
         }
     },
@@ -92,16 +90,15 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         var success = false;
         if (this.view !== null && this.view !== undefined) {
-            if(blnForceCreate || !this._scheduledLayers || this._scheduledLayers.length > 30) {
+            if (blnForceCreate || !this._scheduledLayers || this._scheduledLayers.length > 30) {
                 // if more than 30 layers require update -> make full re-render
                 success = this.view.createUI(mapLayerService.getAllLayers());
-            }
-            else {
+            } else {
                 success = this.view.addToCollection(this._scheduledLayers);
             }
-            if(success) {
-               // clear schedule layer updates
-               this._scheduledLayers = [];
+            if (success) {
+                // clear schedule layer updates
+                this._scheduledLayers = [];
             }
         }
         return success;
@@ -146,15 +143,12 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
             me: me
         }, me.handleAction);
 
-        var locale = me.getLocalization(),
-            confRequirementsConfig =
-                (this.getConfiguration() || {}).requirementsConfig,
-            requirementsConfig =
-                confRequirementsConfig || this.requirementsConfig;
+        var requirementsConfig = this.requirementsConfig;
+        // eslint-disable-next-line
+        requirementsConfig.paths._bundle = __webpack_public_path__ + 'assets/admin-layerselector'
 
-        require.config(requirementsConfig);
-        require(['_bundle/views/layerSelectorView'], function (LayerSelectorView) {
-
+        window.require.config(requirementsConfig);
+        window.require(['_bundle/views/layerSelectorView'], function (LayerSelectorView) {
             // Finally, we kick things off by creating the **App**.
             // We need to pass container element for the view and
             // instance.
@@ -178,8 +172,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
         e.stopPropagation();
         var me = e.data.me,
             sandbox = me.getSandbox(),
-            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
-            parentLayerId;
+            mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
         /*
          *****************
          * NORMAL LAYERS *
@@ -199,8 +192,7 @@ Oskari.clazz.define('Oskari.integration.bundle.admin-layerselector.View', functi
                 // Otherwise just add it to the map layer service.
                 if (mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                     mapLayerService.addLayer(mapLayer);
-                }
-                else {
+                } else {
                     me._showDialog(me.instance.getLocalization('admin')['errorTitle'], me.instance.getLocalization('admin')['errorInsertAllreadyExists']);
                     // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
                 }

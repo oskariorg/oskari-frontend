@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         me.loc = Oskari.getMsg.bind(null, 'timeseries');
         me._d3TimeDef = Oskari.getLocalization('timeseries').d3TimeDef;
         me._widthMargin = conf.widthMargin || 130;
+        me._topMargin = conf.topMargin || 0;
         me._waitingForFrame = false;
 
         me._delegate = delegate;
@@ -42,8 +43,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
         this._uiState.currentTime = delegate.getCurrentTime();
         this._validSkipOptions = this._filterSkipOptions(this._uiState.times);
 
-        me._isMobileVisible = false;
+        me._isMobileVisible = true;
         me._inMobileMode = false;
+        me._isStopped = false;
 
         me._mobileDefs = {
             buttons: {
@@ -53,9 +55,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                     sticky: true,
                     toggleChangeIcon: true,
                     show: true,
+                    selected: true,
                     callback: function () {
                         if (me._isMobileVisible) {
                             me.teardownUI();
+
+                            var el = jQuery(me.getMapModule().getMobileDiv())
+                                .find('.mobile-timeseries');
+
+                            me._resetMobileIcon(el, 'mobile-timeseries');
                         } else {
                             me._isMobileVisible = true;
                             me._buildUI(true);
@@ -73,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             { key: 'normal', value: 2000 },
             { key: 'slow', value: 3000 }
         ],
-        __skipOptions : [
+        __skipOptions: [
             { key: 'none', value: '' },
             { key: 'minute', value: 'minutes' },
             { key: 'hour', value: 'hours' },
@@ -87,13 +95,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param  {String[]} times time instants in timeseries, ISO-string
          */
         _filterSkipOptions: function (times) {
-            times = times.map(function (t) { return moment(t) }); // optimization: parse time strings once
+            times = times.map(function (t) { return moment(t); }); // optimization: parse time strings once
             var shortestInterval = Number.MAX_VALUE;
             for (var i = 0; i < times.length - 1; i++) {
                 var current = times[i];
-                var next = times[i+1];
+                var next = times[i + 1];
                 var difference = next.diff(current);
-                if(difference < shortestInterval) {
+                if (difference < shortestInterval) {
                     shortestInterval = difference;
                 }
             }
@@ -116,7 +124,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _requestNewTime: function () {
             var me = this;
-            var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime) + 1;
             var nextTime = null;
             if (me._uiState.isAnimating) {
                 nextTime = this._getNextTime(this._uiState.currentTime);
@@ -149,19 +156,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 return;
             }
             var nextTime = this._getNextTime(this._uiState.currentTime);
-
             if (!nextTime) {
-                var index = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
-                nextTime = this._uiState.times[index];
                 this._setAnimationState(false);
+                return;
             }
-
-            if (this._uiState.currentTime !== nextTime) {
-                this._uiState.currentTime = nextTime;
-                this._requestNewTime();
-                this._renderHandle();
-                this._updateTimeDisplay();
-            }
+            this._uiState.currentTime = nextTime;
+            this._requestNewTime();
+            this._renderHandle();
+            this._updateTimeDisplay();
         },
         /**
          * @method _getNextTime Get time instant for next animation frame
@@ -178,10 +180,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 index = d3.bisectRight(this._uiState.times, targetTime.toISOString());
             }
+            var endIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
             if (targetTime.toISOString() > this._uiState.rangeEnd) {
                 return null;
-
-            } else if (index >= this._uiState.times.length - 1) {
+            } else if (index > endIndex) {
                 return null;
             }
             return this._uiState.times[index];
@@ -192,7 +194,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _createControlElement: function () {
             var me = this,
-                sandbox = me.getSandbox(),
                 el = jQuery(
                     '<div class="mapplugin timeseriescontrolplugin">' +
                     '<div class="timeseries-timelines"><svg class="timeline-svg">' +
@@ -221,7 +222,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 index = index1;
             }
+            index = this._getRangeCheckedIndex(index);
             return this._uiState.times[index];
+        },
+        /**
+         * @method _getRangeCheckedIndex Performs uistate range check for the time index
+         * @param  {Number} index uistate time index
+         * @return {Number} index, rangeStart index or rangeEnd index if given index was outside the range.
+         */
+        _getRangeCheckedIndex: function (index) {
+            var rangeStartIndex = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeStart), 0);
+            var rangeEndIndex = Math.max(d3.bisect(this._uiState.times, this._uiState.rangeEnd) - 1, 0);
+            if (index < rangeStartIndex) {
+                return rangeStartIndex;
+            } else if (index > rangeEndIndex) {
+                return rangeEndIndex;
+            }
+            return index;
         },
         /**
          * @method _doSingleStep Step current time forward/back (in response to step forward/back buttons)
@@ -234,7 +251,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
             var index = d3.bisectLeft(this._uiState.times, this._uiState.currentTime);
             var newTime = this._uiState.times[index + delta];
-            if (newTime && newTime > this._uiState.rangeStart && newTime < this._uiState.rangeEnd) {
+            if (newTime && newTime >= this._uiState.rangeStart && newTime <= this._uiState.rangeEnd) {
                 this._uiState.currentTime = newTime;
                 this._throttleNewTime();
                 this._renderHandle();
@@ -264,6 +281,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+                var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')('mobile-timeseries', 'mobileToolbar-mobile-toolbar');
+                sandbox.request(me, toolbarRequest);
             }
             if (!mapInMobileMode) {
                 me._buildUI(mapInMobileMode);
@@ -276,6 +295,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _buildUI: function (isMobile) {
             var me = this;
+            if (me._isStopped) {
+                return;
+            }
             me._element = me._createControlElement();
             this.addToPluginContainer(me._element);
             var aux = '<div class="timeseries-aux"></div>';
@@ -285,8 +307,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._setRange(times[0], times[times.length - 1]);
                 me._element.toggleClass('mobile', isMobile);
                 me._element.append(aux);
+                me._isMobileVisible = true;
             } else {
                 me._setWidth(me.getSandbox().getMap().getWidth(), true);
+                me._applyTopMargin(this._topMargin);
                 me._element.prepend(aux);
                 me._initMenus();
                 me._makeDraggable();
@@ -318,6 +342,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             }
         },
         /**
+         * @method _applyTopMargin
+         * @private
+         *
+         * @param  {number | string} topMargin Top margin for control as number representing px or css syntax using "px" or "%".
+         */
+        _applyTopMargin: function (topMargin) {
+            if (!this._inMobileMode) {
+                if (typeof topMargin === 'string') {
+                    if (topMargin.indexOf('%') !== -1) {
+                        var mapHeight = this.getSandbox().getMap().getHeight() || 200;
+                        var percetageFromTop = topMargin.substr(0, topMargin.length - 1);
+                        if (!isNaN(percetageFromTop)) {
+                            var margin = mapHeight / 100 * percetageFromTop;
+                            this._element.css('margin-top', margin + 'px');
+                        }
+                    } else {
+                        this._element.css('margin-top', topMargin);
+                    }
+                } else if (typeof topMargin === 'number') {
+                    this._element.css('margin-top', margin + 'px');
+                }
+            }
+        },
+        /**
          * @method _generateSelectOptions Generate localized options for <select> dropdowns
          * @private
          * @param  {String} prefix localization path prefix
@@ -330,7 +378,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 return {
                     title: me.loc(prefix + e.key),
                     value: e.value
-                }
+                };
             });
         },
         /**
@@ -377,11 +425,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 dateTime.text(me.loc('dateRender', { val: new Date(me._uiState.currentTime) }));
             };
             template.find('.timeseries-playpause').on('click', function (e) {
-                me._setAnimationState(!me._uiState.isAnimating);
+                if (me._uiState.isAnimating) {
+                    me._setAnimationState(false);
+                    return;
+                }
+                var times = me._uiState.times;
+                var curIndex = Math.max(d3.bisectLeft(times, me._uiState.currentTime), 0);
+                var endIndex = Math.max(d3.bisect(times, me._uiState.rangeEnd) - 1, 0);
+                if (curIndex >= endIndex) {
+                    me._restartAnimation();
+                } else {
+                    me._setAnimationState(true);
+                }
             });
             template.find('.timeseries-back').on('click', this._doSingleStep.bind(this, -1));
             template.find('.timeseries-forward').on('click', this._doSingleStep.bind(this, 1));
             this._element.find('.timeseries-aux').append(template);
+        },
+        /**
+         * @method _restartAnimation Moves the handle to the beginning of the series and starts the animation.
+         */
+        _restartAnimation: function () {
+            const startIndex = Math.max(d3.bisectLeft(this._uiState.times, this._uiState.rangeStart), 0);
+            this._updateCurrentTime(this._uiState.times[startIndex]);
+            setTimeout(() => this._setAnimationState(true), this._uiState.frameInterval);
         },
         /**
          * @method _updateCurrentTime Update current time in response to user input
@@ -411,24 +478,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
             } else {
                 formatterFunction = d3.timeFormat.bind(d3);
             }
-            var formatMillisecond = formatterFunction(".%L"),
-                formatSecond = formatterFunction(":%S"),
-                formatMinute = formatterFunction(locale ? "%H:%M" : "%I:%M"),
-                formatHour = formatterFunction(locale ? "%H:%M" : "%I %p"),
-                formatDay = formatterFunction(locale ? "%d.%m." : "%d %b"),
-                formatMonth = formatterFunction("%b"),
-                formatYear = formatterFunction("%Y");
+            var formatMillisecond = formatterFunction('.%L'),
+                formatSecond = formatterFunction(':%S'),
+                formatMinute = formatterFunction(locale ? '%H:%M' : '%I:%M'),
+                formatHour = formatterFunction(locale ? '%H:%M' : '%I %p'),
+                formatDay = formatterFunction(locale ? '%d.%m.' : '%d %b'),
+                formatMonth = formatterFunction('%b'),
+                formatYear = formatterFunction('%Y');
 
-            return function multiFormat(date) {
+            return function multiFormat (date) {
                 var textEl = d3.select(this);
                 return (d3.timeSecond(date) < date ? formatMillisecond
                     : d3.timeMinute(date) < date ? formatSecond
-                    : d3.timeHour(date) < date ? formatMinute
-                    : d3.timeDay(date) < date ? formatHour
-                    : d3.timeMonth(date) < date ? formatDay
-                    : d3.timeYear(date) < date ? formatMonth
-                    : (textEl.classed('bold', true), formatYear))(date);
-            }
+                        : d3.timeHour(date) < date ? formatMinute
+                            : d3.timeDay(date) < date ? formatHour
+                                : d3.timeMonth(date) < date ? formatDay
+                                    : d3.timeYear(date) < date ? formatMonth
+                                        : (textEl.classed('bold', true), formatYear))(date);
+            };
         },
         /**
          * @method _updateTimelines Update timelines SVG
@@ -437,7 +504,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          */
         _updateTimelines: function (isMobile) {
             var me = this;
-            var margin = { left: 15, right: 15 }
+            var margin = { left: 15, right: 15 };
             var tickFormatter = me._getTickFormatter();
             var tickCount = me._timelineWidth / 60;
             var svg = d3.select(this._element.find('.timeline-svg').get(0));
@@ -473,16 +540,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
 
             var handle = svg.select('g.drag-handle')
                 .attr('transform', 'translate(' + scaleSubset(new Date(this._uiState.currentTime)) + ',80)')
-                .on(".drag", null); // remove old event handlers
+                .on('.drag', null); // remove old event handlers
 
-
-            function renderHandle() {
+            function renderHandle () {
                 var newX = scaleSubset(new Date(me._uiState.currentTime));
                 handle.attr('transform', 'translate(' + newX + ',80)');
             }
             me._renderHandle = renderHandle;
 
-            function timeFromMouse(newX) {
+            function timeFromMouse (newX) {
                 var scaleRange = scaleSubset.range();
                 if (newX > scaleRange[1]) {
                     newX = scaleRange[1];
@@ -493,7 +559,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 me._updateCurrentTime(scaleSubset.invert(newX).toISOString());
             }
 
-            function updateFullAxisControls() {
+            function updateFullAxisControls () {
                 var range = scaleSubset.domain().map(scaleFull);
                 svg.selectAll('.full-axis-controls circle').each(function (d, i) {
                     d3.select(this).attr('cx', range[i]);
@@ -530,7 +596,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 var brush = d3.brushX()
                     .extent([[margin.left, 0], [this._timelineWidth - margin.right, 50]])
                     .handleSize(40)
-                    .on(".brush", null) // remove old event handlers
+                    .on('.brush', null) // remove old event handlers
                     .on('brush', brushed);
 
                 svg.select('.full-axis-brush')
@@ -543,10 +609,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
                 updateFullAxisControls();
             }
 
-            function brushed() {
+            function brushed () {
                 var selection = d3.event.selection;
-                var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString() });
-                scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)) }));
+                var inverted = selection.map(function (e) { return scaleFull.invert(e).toISOString(); });
+                scaleSubset.domain(inverted.map(function (t) { return new Date(me._getClosestTime(t)); }));
                 svg.select('.subset-axis').call(axisSubset);
 
                 var changedTime = me._uiState.currentTime;
@@ -605,10 +671,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesControlPlug
          * @param {Oskari.Sandbox} sandbox
          */
         _stopPluginImpl: function (sandbox) {
-            this._setAnimationState(false);
-            this.removeFromPluginContainer(this.getElement());
-        },
+            this._isStopped = true;
+            if (this._element) {
+                this._setAnimationState(false);
+                this.removeFromPluginContainer(this.getElement());
+            }
+        }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
-        'protocol': ["Oskari.mapframework.module.Module", "Oskari.mapframework.ui.module.common.mapmodule.Plugin"]
+        'protocol': ['Oskari.mapframework.module.Module', 'Oskari.mapframework.ui.module.common.mapmodule.Plugin']
     });

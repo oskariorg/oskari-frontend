@@ -11,7 +11,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
      * Implement protocol, never instantiate
      */
     function () {
-        throw new Error("Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol should not be instantiated");
+        throw new Error('Oskari.mapframework.bundle.timeseries.TimeseriesDelegateProtocol should not be instantiated');
     }, {
         /**
          * @method getTimes
@@ -20,7 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
          * @throws always override this
          */
         getTimes: function () {
-            throw new Error("Implement your own");
+            throw new Error('Implement your own');
         },
         /**
          * @method getCurrentTime
@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
          * @throws always override this
          */
         getCurrentTime: function () {
-            throw new Error("Implement your own");
+            throw new Error('Implement your own');
         },
         /**
          * @method getSubsetRange
@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
          * @throws always override this
          */
         getSubsetRange: function () {
-            throw new Error("Implement your own");
+            throw new Error('Implement your own');
         },
         /**
          * @method setSubsetRange
@@ -47,7 +47,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
          * @throws always override this
          */
         setSubsetRange: function (range) {
-            throw new Error("Implement your own");
+            throw new Error('Implement your own');
         },
         /**
          * @method requestNewTime
@@ -58,7 +58,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
          * @throws always override this
          */
         requestNewTime: function (newTime, nextTime, doneCallback) {
-            throw new Error("Implement your own");
+            throw new Error('Implement your own');
         },
         /**
          * @method destroy
@@ -66,6 +66,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesDelegatePro
          * @throws always override this
          */
         destroy: function () {
-            throw new Error("Implement your own");
+            throw new Error('Implement your own');
         }
     });

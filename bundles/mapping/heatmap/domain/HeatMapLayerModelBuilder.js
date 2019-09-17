@@ -19,12 +19,12 @@ Oskari.clazz.define(
             var me = this,
                 toolBuilder = Oskari.clazz.builder('Oskari.mapframework.domain.Tool');
 
-            if (!layer.isLayerOfType("HEATMAP")) {
-            	return;
+            if (!layer.isLayerOfType('HEATMAP')) {
+                return;
             }
             var locLabel = this.localization['tool_label'],
                 toolHeatmap = toolBuilder();
-            toolHeatmap.setName("heatmap");
+            toolHeatmap.setName('heatmap');
             toolHeatmap.setTitle(locLabel);
             toolHeatmap.setTooltip(locLabel);
             toolHeatmap.setCallback(function () {

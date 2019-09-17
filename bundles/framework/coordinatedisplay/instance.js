@@ -4,7 +4,7 @@
  * Registers and starts the
  * Oskari.mapframework.bundle.coordinatedisplay.plugin.CoordinatesPlugin plugin for main map.
  */
-Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance",
+Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisplayBundleInstance',
 
     /**
      * @method create called automatically on construction
@@ -44,7 +44,6 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
          * implements BundleInstance protocol update method - does nothing atm
          */
         update: function () {
-            var me = this;
         },
         /**
          * @method getLocalization

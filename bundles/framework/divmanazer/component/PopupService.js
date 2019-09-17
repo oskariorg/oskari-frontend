@@ -26,10 +26,9 @@ Oskari.clazz.define(
                 me.sandbox.registerForEventByName(me, p);
             }
         }
-
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.userinterface.component.PopupService",
+        __qname: 'Oskari.userinterface.component.PopupService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -38,7 +37,7 @@ Oskari.clazz.define(
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "PopupService",
+        __name: 'PopupService',
         /**
          * @method getName
          * @return {String} service name
@@ -67,33 +66,33 @@ Oskari.clazz.define(
          */
         eventHandlers: {
         },
-        stop: function() {
+        stop: function () {
             var me = this,
                 p;
             for (p in me.eventHandlers) {
                 if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+                    this.sandbox.unregisterFromEventByName(me, p);
                 }
             }
         },
         /**
          * @method createPopup Creates a popup and adds to internal bookkeeping
          */
-        createPopup: function() {
+        createPopup: function () {
             var me = this,
                 popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
 
-            popup.onShow(function() {
-                //add the popup to bookkeeping
+            popup.onShow(function () {
+                // add the popup to bookkeeping
                 me.popups.push(popup);
             });
 
-            popup.onClose(function() {
+            popup.onClose(function () {
                 var found = false,
                     i;
                 for (i = 0; i < me.popups.length; i++) {
                     if (popup === me.popups[i]) {
-                        //found
+                        // found
                         found = true;
                         break;
                     }
@@ -103,8 +102,6 @@ Oskari.clazz.define(
                     me.popups[i].clearListeners();
                     me.popups.splice(i, 1);
                 }
-
-                return;
             });
             return popup;
         },
@@ -112,9 +109,9 @@ Oskari.clazz.define(
          * @method closeAllPopups Close all registered popups.
          * @param {bool} closeFlyouts Optional. If provided, closes all open flyouts as well.
          */
-        closeAllPopups: function(closeFlyouts) {
-            _.each(this.popups, function(popup) {
-                //publisher toolbar seems to need this for the tools to stay intact...
+        closeAllPopups: function (closeFlyouts) {
+            _.each(this.popups, function (popup) {
+                // publisher toolbar seems to need this for the tools to stay intact...
                 popup.getJqueryContent().detach();
                 popup.close();
             });
@@ -122,6 +119,5 @@ Oskari.clazz.define(
             if (closeFlyouts) {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', null]);
             }
-            return;
         }
     });

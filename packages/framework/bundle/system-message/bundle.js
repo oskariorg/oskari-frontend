@@ -36,7 +36,7 @@ Oskari.clazz.define("Oskari.framework.bundle.system-message.SystemBundle", funct
           "src" : "../../../../bundles/framework/system-message/request/ShowMessageRequestHandler.js"
       },{
           "type": "text/css",
-          "src": "../../../../bundles/framework/system-message/resources/css/systemmessage.css"
+          "src": "../../../../bundles/framework/system-message/resources/scss/systemmessage.scss"
       }],
       "locales" : [{
           "lang": "en",

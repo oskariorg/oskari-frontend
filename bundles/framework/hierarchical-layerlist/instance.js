@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
      * @method create called automatically on construction
      * @static
      */
-    function() {
+    function () {
         this.sandbox = null;
         this.started = false;
         this.plugins = {};
@@ -32,15 +32,15 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method  _loadLayers
          * @private
          */
-        _loadLayers: function() {
+        _loadLayers: function () {
             var me = this;
             var mapLayerService = me.sandbox.getService(
                 'Oskari.mapframework.service.MapLayerService'
             );
-            var successCB = function() {
+            var successCB = function () {
                 me.plugins['Oskari.userinterface.Flyout'].updateSelectedLayers();
             };
-            var failureCB = function() {
+            var failureCB = function () {
                 alert(me.getLocalization('errors').loadFailed);
             };
             mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB);
@@ -54,36 +54,36 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          */
         _guidedTourDelegateTemplate: {
             priority: 20,
-            show: function() {
+            show: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'hierarchical-layerlist']);
             },
-            hide: function() {
+            hide: function () {
                 this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'hierarchical-layerlist']);
             },
-            getTitle: function() {
+            getTitle: function () {
                 return this.getLocalization('guidedTour').title;
             },
-            getContent: function() {
+            getContent: function () {
                 var content = jQuery('<div></div>');
                 content.append(this.getLocalization('guidedTour').message);
                 return content;
             },
-            getLinks: function() {
+            getLinks: function () {
                 var me = this;
                 var loc = this.getLocalization('guidedTour');
                 var linkTemplate = jQuery('<a href="#"></a>');
                 var openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
-                openLink.bind('click',
-                    function() {
+                openLink.on('click',
+                    function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'hierarchical-layerlist']);
                         openLink.hide();
                         closeLink.show();
                     });
                 var closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
-                closeLink.bind('click',
-                    function() {
+                closeLink.on('click',
+                    function () {
                         me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'hierarchical-layerlist']);
                         openLink.show();
                         closeLink.hide();
@@ -98,12 +98,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method _registerForGuidedTour
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
-        _registerForGuidedTour: function() {
+        _registerForGuidedTour: function () {
             var me = this;
 
-            function sendRegister() {
+            function sendRegister () {
                 var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
-                if (requestBuilder) {
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
                     var delegate = {
                         bundleName: me.getName()
                     };
@@ -118,7 +118,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             }
 
-            function handler(msg) {
+            function handler (msg) {
                 if (msg.id === 'guidedtour') {
                     sendRegister();
                 }
@@ -139,7 +139,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getName
          * @return {String} the name for the component
          */
-        getName: function() {
+        getName: function () {
             return this.__name;
         },
         /**
@@ -147,14 +147,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @param {Oskari.Sandbox} sandbox
          * Sets the sandbox reference to this component
          */
-        setSandbox: function(sandbox) {
+        setSandbox: function (sandbox) {
             this.sandbox = sandbox;
         },
         /**
          * @method getSandbox
          * @return {Oskari.Sandbox}
          */
-        getSandbox: function() {
+        getSandbox: function () {
             return this.sandbox;
         },
 
@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          *     JSON object for complete data depending on localization
          *     structure and if parameter key is given
          */
-        getLocalization: function(key) {
+        getLocalization: function (key) {
             if (!this._localization) {
                 this._localization = Oskari.getMsg.bind(null, this.getName());
             }
@@ -182,13 +182,12 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method start
          * implements BundleInstance protocol start method
          */
-        start: function() {
+        start: function () {
             var me = this,
                 conf = me.conf,
                 sandboxName = conf ? conf.sandbox : 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                request,
-                p;
+                request;
 
             if (me.started) {
                 return;
@@ -203,7 +202,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             var notifierService = Oskari.clazz.create('Oskari.framework.bundle.hierarchical-layerlist.OskariEventNotifierService');
             sandbox.registerService(notifierService);
             me.notifierService = notifierService;
-            me.notifierService.eventHandlers.forEach(function(eventName){
+            me.notifierService.eventHandlers.forEach(function (eventName) {
                 sandbox.registerForEventByName(me.notifierService, eventName);
             });
 
@@ -215,16 +214,16 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             var layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
 
-            //Let's extend UI
-            request = sandbox.getRequestBuilder('userinterface.AddExtensionRequest')(me);
+            // Let's extend UI
+            request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
             sandbox.request(me, request);
 
             // create and register request handlers
             var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('ShowFilteredLayerListRequest', reqHandler);
+            sandbox.requestHandler('ShowFilteredLayerListRequest', reqHandler);
 
             var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
-            sandbox.addRequestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
+            sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
             // draw ui
             me.createUi();
@@ -236,26 +235,25 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
             this._loadLayers();
         },
 
-
         /**
          * @method init
          * implements Module protocol init method - does nothing atm
          */
-        init: function() {
+        init: function () {
             return null;
         },
         /**
          * @method update
          * implements BundleInstance protocol update method - does nothing atm
          */
-        update: function() {
+        update: function () {
         },
 
         /**
          * @method stop
          * implements BundleInstance protocol stop method
          */
-        stop: function() {
+        stop: function () {
             var me = this,
                 sandbox = me.sandbox(),
                 request,
@@ -267,7 +265,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 }
             }
 
-            request = sandbox.getRequestBuilder('userinterface.RemoveExtensionRequest')(this);
+            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
 
             sandbox.request(me, request);
 
@@ -282,7 +280,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * Oskari.framework.bundle.hierarchical-layerlist.Flyout
          * Oskari.framework.bundle.hierarchical-layerlist.Tile
          */
-        startExtension: function() {
+        startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
                 'Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                 this
@@ -297,7 +295,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements Oskari.userinterface.Extension protocol stopExtension method
          * Clears references to flyout and tile
          */
-        stopExtension: function() {
+        stopExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = null;
             this.plugins['Oskari.userinterface.Tile'] = null;
         },
@@ -306,28 +304,28 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * implements Oskari.userinterface.Extension protocol getPlugins method
          * @return {Object} references to flyout and tile
          */
-        getPlugins: function() {
+        getPlugins: function () {
             return this.plugins;
         },
         /**
          * @method getTitle
          * @return {String} localized text for the title of the component
          */
-        getTitle: function() {
+        getTitle: function () {
             return this.getLocalization('title');
         },
         /**
          * @method getDescription
          * @return {String} localized text for the description of the component
          */
-        getDescription: function() {
+        getDescription: function () {
             return this.getLocalization('desc');
         },
         /**
          * @method createUi
          * (re)creates the UI for "all layers" functionality
          */
-        createUi: function() {
+        createUi: function () {
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].createUi();
             me.plugins['Oskari.userinterface.Tile'].refresh();
@@ -337,7 +335,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method setState
          * @param {Object} state bundle state as JSON
          */
-        setState: function(state) {
+        setState: function (state) {
             this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
         },
 
@@ -345,7 +343,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
          * @method getState
          * @return {Object} bundle state as JSON
          */
-        getState: function() {
+        getState: function () {
             return this.plugins['Oskari.userinterface.Flyout'].getContentState();
         }
     }, {

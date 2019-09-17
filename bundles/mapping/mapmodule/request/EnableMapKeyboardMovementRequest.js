@@ -16,22 +16,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapKeybo
  * @method create called automatically on construction
  * @static
  */
-function() {
-    this._creator = null;
-}, {
+    function (options) {
+        this._creator = null;
+        this._options = options;
+    }, {
     /** @static @property __name request name */
-    __name : "EnableMapKeyboardMovementRequest",
-    /**
+        __name: 'EnableMapKeyboardMovementRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    }
-}, {
+        getName: function () {
+            return this.__name;
+        },
+        getOptions: function (option) {
+            if (option && this._options) {
+                return this._options.findIndex(function (o) {
+                    return o === option;
+                }) > -1;
+            } else if (option) {
+                return true;
+            }
+            return this._options;
+        }
+    }, {
     /**
      * @property {String[]} protocol array of superclasses as {String}
      * @static
      */
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

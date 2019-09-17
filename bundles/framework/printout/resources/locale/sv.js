@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Du kan förstora förhandsgranskningsbilden genom att klicka på den.",
                 "pending": "Förhandsgransningsvyn uppdateras inom kort.",
                 "notes": {
-                    "extent": "Du kan kontrollera kartans omfattning för utskriften i förhandsgranskningsbilden.",
-                    "restriction": "Alla kartlager visas inte i förhandsgransningsvyn"
+                    "extent": "Du kan kontrollera kartans omfattning för utskriften i förhandsgranskningsbilden."
                 }
             },
             "buttons": {
@@ -99,8 +98,8 @@ Oskari.registerLocalization(
                 "options": [
                     {
                         "id": "pageLogo",
-                        "label": "Visa finska geoportal Paikkatietoikkuna logotyp i utskriften.",
-                        "tooltip": "Du kan dölja finska geoportal Paikkatietoikkuna logotyp vid behov.",
+                        "label": "Inkludera logotyp i utskriften.",
+                        "tooltip": "Du kan dölja logotyp vid behov.",
                         "checked": "kontrollerad"
                     },
                     {
@@ -125,6 +124,14 @@ Oskari.registerLocalization(
                 "nohelp": "Ingen hjälp finns tillgänglig.",
                 "saveFailed": "Utskriften av kartvyn lyckades inte. Försök igen senare.",
                 "nameIllegalCharacters": "Namnet innehåller otillåtna tecken. Tillåtna tecken är bokstäverna az samt å, ä och ö, siffror, backsteg och bindestreck."
+            },
+            "scale": {
+                "label": "Skala",
+                "tooltip": "Ange skalan som ska användas för utskrift",
+                "mapScale": "Använd kartskalan",
+                "definedScale": "Välj en skala",
+                "unsupportedLayersMessage": "Följande kartläggare visas inte på utskriften",
+                "unsupportedLayersTitle": "Utskriften visar inte alla lager"
             }
         },
         "StartView": {

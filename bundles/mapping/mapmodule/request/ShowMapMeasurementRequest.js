@@ -29,7 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.ShowMapMeasurementReques
         this._geometryMimeType = geometryMimeType;
     }, {
         /** @static @property __name request name */
-        __name: "ShowMapMeasurementRequest",
+        __name: 'ShowMapMeasurementRequest',
         /**
          * @method getName
          * @return {String} request name

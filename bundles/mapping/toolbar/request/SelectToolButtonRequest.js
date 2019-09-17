@@ -16,33 +16,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.request.SelectToolButton
  * @param {String}
  *            group identifier for button group (ignored if id is not given)
  */
-function(id, group) {
-    this._id = id;
-    this._group = group;
-}, {
+    function (id, group) {
+        this._id = id;
+        this._group = group;
+    }, {
     /** @static @property __name request name */
-    __name : "Toolbar.SelectToolButtonRequest",
-    /**
+        __name: 'Toolbar.SelectToolButtonRequest',
+        /**
      * @method getName
      * @return {String} request name
      */
-    getName : function() {
-        return this.__name;
-    },
-    /**
+        getName: function () {
+            return this.__name;
+        },
+        /**
      * @method getId
      * @return {String} identifier for the button
      */
-    getId : function() {
-        return this._id;
-    },
-    /**
+        getId: function () {
+            return this._id;
+        },
+        /**
      * @method getGroup
      * @return {String} identifier for button group
      */
-    getGroup : function() {
-        return this._group;
-    }
-}, {
-    'protocol' : ['Oskari.mapframework.request.Request']
-});
+        getGroup: function () {
+            return this._group;
+        }
+    }, {
+        'protocol': ['Oskari.mapframework.request.Request']
+    });

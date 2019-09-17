@@ -21,7 +21,7 @@ Oskari.clazz.define(
             cap: this.defaultValues.cap,
             corner: this.defaultValues.corner,
             width: this.defaultValues.width,
-            color: this.defaultValues.color
+            color: '#' + this.defaultValues.color
         };
 
         this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
@@ -30,7 +30,7 @@ Oskari.clazz.define(
 
         this.basicColors = ['#ffffff', '#666666', '#ffde00', '#f8931f', '#ff3334', '#bf2652',
             '#000000', '#cccccc', '#652d90', '#3233ff', '#26bf4b', '#00ff01'
-            ];
+        ];
         this.paper = null;
         this.activeColorCell = -1;
         // Default color
@@ -57,16 +57,7 @@ Oskari.clazz.define(
             '<div class="column2">' +
             '<div class="column21">' +
             '<label>' + this.loc.color.label + '</label>' +
-            '<div class="color-grid">' +
-            '<div class="color-rectangle"></div>' +
-            '</div>' +
-            '<div class="color-label">' +
-            '<label>' + this.loc.color.labelOr + '</label>' +
-            '</div>' +
-            '<div class="color-source-selector">' +
-            '<label id="color-line-custom-rgb-label" for="color-line-custom-rgb">' + this.loc.color.labelCustom + '</label>' +
-            '</div>' +
-            '<div class="custom-colors"></div>' +
+            '<div class="color-picker-wrapper"></div>' +
             '</div>' +
             '<div class="column22">' +
             '<label>' + this.loc.preview.label + '</label>' +
@@ -195,8 +186,8 @@ Oskari.clazz.define(
                     this._styleSelectedButton(styleBtnContainer);
                 }
                 // FIXME create function outside loop
-                styleBtnContainer.click(function () {
-                    newValue = parseInt(jQuery(this).attr('id').charAt(0),10);
+                styleBtnContainer.on('click', function () {
+                    newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('style', newValue);
                     me.values.style = newValue;
                     me._updatePreview(dialogContent);
@@ -214,7 +205,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(capBtnContainer);
                 }
                 // FIXME create function outside loop
-                capBtnContainer.click(function () {
+                capBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('cap', newValue);
                     me.values.cap = newValue;
@@ -233,7 +224,7 @@ Oskari.clazz.define(
                     this._styleSelectedButton(cornerBtnContainer);
                 }
                 // FIXME create function outside loop
-                cornerBtnContainer.click(function () {
+                cornerBtnContainer.on('click', function () {
                     newValue = parseInt(jQuery(this).attr('id').charAt(0), 10);
                     me._selectButton('corner', newValue);
                     me.values.corner = newValue;
@@ -245,7 +236,7 @@ Oskari.clazz.define(
             // Line width
             content = dialogContent.find('div.width');
             var widthSpinner = me.templateWidthValue.clone();
-            widthSpinner.change(function () {
+            widthSpinner.on('change', function () {
                 var newValue = parseInt(widthSpinner.val(), 10);
                 if (!isNaN(newValue)) {
                     me.values.width = newValue;
@@ -255,152 +246,15 @@ Oskari.clazz.define(
             widthSpinner.val(me.values.width !== null && me.values.width !== undefined ? me.values.width : 1);
             content.append(widthSpinner);
 
-            var statedChosenColor = false,
-                colorCell,
-                idExt,
-                id,
-                cellIndex,
-                activeCell;
-            // Color chooser
-            content = dialogContent.find('.color-rectangle');
-            for (i = 0; i < me.basicColors.length; i += 1) {
-                colorCell = me.templateColorCell.clone();
-                colorCell.css('background-color', me.basicColors[i]);
-                idExt = 'ColorCell';
-                id = i + idExt;
-                if (id.length === idExt.length + 1) {
-                    id = '0' + id;
-                }
-                colorCell.attr('id', id);
-                colorCell.click(function () {
-                    if (jQuery('.color-source').prop('checked')) {
-                        jQuery('.color-source').attr('checked', false);
-                        jQuery('input.custom-color').prop('disabled', true);
-                    }
-                    cellIndex = parseInt(this.id.substring(0, 2), 10);
-                    if (cellIndex === me.activeColorCell) {
-                        return;
-                    }
-                    if (me.activeColorCell > -1) {
-                        activeCell = me.activeColorCell.toString();
-                        if (me.activeColorCell < 10) {
-                            activeCell = '0' + activeCell;
-                        }
-                        jQuery('#' + activeCell + 'ColorCell').css('border', '1px solid #000000');
-                    }
-                    me.values.color = Oskari.util.rgbToHex(this.style.backgroundColor);
-                    me.activeColorCell = cellIndex;
-                    if (cellIndex < 10) {
-                        cellIndex = '0' + cellIndex.toString();
-                    }
-                    jQuery('#' + cellIndex + 'ColorCell').css('border', '3px solid #ffffff');
-                    me._updatePreview(dialogContent);
-                });
-                //instead of selecting always black,
-                // we should use the color that comes from the state
-                if ('#' + me.values.color === me.basicColors[i]) {
-                    colorCell.css('border', '3px solid #ffffff');
-                    me.activeColorCell = i;
-                    statedChosenColor = true;
-                }
-                content.append(colorCell);
-            }
+            // Create color picker element
+            me._createColorPicker();
+            var colorPickerWrapper = dialogContent.find('.color-picker-wrapper');
+            colorPickerWrapper.append(me._colorPicker.getElement());
+            me._colorPicker.setValue(me.values.color);
 
-            // Custom color
-            content = dialogContent.find('.color-source-selector');
-            var colorCheckbox = me.templateColorSource.clone();
-            // If the default value is not included in the color cells
-            if (me.activeColorCell === -1) {
-                colorCheckbox.attr('checked', true);
-            }
-            colorCheckbox.change(function () {
-                jQuery('input.custom-color').prop('disabled', !this.checked);
-                var cell = me.activeColorCell.toString();
-                if (me.activeColorCell < 10) {
-                    cell = '0' + cell;
-                }
-                var activeCell = jQuery('#' + cell + 'ColorCell');
-                if (this.checked) {
-                    activeCell.css('border', '1px solid #000000');
-                    jQuery('.custom-red-value').val(parseInt(me.values.color.substring(0, 2), 16));
-                    jQuery('.custom-green-value').val(parseInt(me.values.color.substring(2, 4), 16));
-                    jQuery('.custom-blue-value').val(parseInt(me.values.color.substring(4), 16));
-                    me.activeColorCell = -1;
-                } else {
-                    // activeCell.css('border','3px solid #ffffff');
-                }
+            colorPickerWrapper.on('change', function () {
+                me.values.color = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
-            });
-            content.prepend(colorCheckbox);
-
-            // if the color is not picked from selection, it must be users own color
-            // select user colors checkbox
-            if (!statedChosenColor) {
-                colorCheckbox.checked = true;
-                content.find('input.color-source').prop('disabled', false).attr('checked', 'checked');
-            }
-
-            content = dialogContent.find('.custom-colors');
-            var customColorEditor = this.templateCustomColor.clone();
-            content.append(customColorEditor);
-
-            var redValue = me.templateColorValue.clone();
-            redValue.addClass('custom-red-value');
-            if (me.activeColorCell === -1) {
-                redValue.val(parseInt(me.values.color.substring(0, 2), 16));
-                redValue.prop('disabled', false);
-            }
-            dialogContent.find('.colorcolumn1').append(redValue);
-            dialogContent.find('label.custom-red-value').text('R');
-
-            var greenValue = me.templateColorValue.clone();
-            greenValue.addClass('custom-green-value');
-            if (me.activeColorCell === -1) {
-                greenValue.val(parseInt(me.values.color.substring(2, 4), 16));
-                greenValue.prop('disabled', false);
-            }
-            dialogContent.find('.colorcolumn21').append(greenValue);
-            dialogContent.find('label.custom-green-value').text('G');
-
-            var blueValue = me.templateColorValue.clone();
-            blueValue.addClass('custom-blue-value');
-            if (me.activeColorCell === -1) {
-                blueValue.val(parseInt(me.values.color.substring(4), 16));
-                blueValue.prop('disabled', false);
-            }
-            dialogContent.find('.colorcolumn22').append(blueValue);
-            dialogContent.find('label.custom-blue-value').text('B');
-
-            // if the color is not picked from selection, it must be users own color
-            // add color values to the input fields
-            if (!statedChosenColor) {
-                var rgb = Oskari.util.hexToRgb(me.values.color);
-                dialogContent.find('input.custom-color.custom-red-value').val(rgb.r);
-                dialogContent.find('input.custom-color.custom-green-value').val(rgb.g);
-                dialogContent.find('input.custom-color.custom-blue-value').val(rgb.b);
-                dialogContent.find('input.custom-color').prop('disabled', false);
-            }
-
-            dialogContent.find('.custom-color').change(function () {
-                var values = [],
-                    i,
-                    intValue;
-                values[0] = jQuery('input.custom-color.custom-red-value').val();
-                values[1] = jQuery('input.custom-color.custom-green-value').val();
-                values[2] = jQuery('input.custom-color.custom-blue-value').val();
-                // From integer to hex values
-                for (i = 0; i < 3; i += 1) {
-                    intValue = parseInt(values[i],10);
-                    if ((intValue < 0) || (intValue > 255)) {
-                        return;
-                    }
-                    values[i] = intValue.toString(16);
-                    if (values[i].length === 1) {
-                        values[i] = '0' + values[i];
-                    }
-                }
-                me.values.color = values.join('');
-                me._updatePreview();
             });
 
             this._updatePreview(dialogContent);
@@ -430,6 +284,7 @@ Oskari.clazz.define(
 
             me._updatePreview();
             saveBtn.focus();
+            me._colorPicker.reflow();
             return renderDialog;
         },
         setSaveHandler: function (param) {
@@ -448,6 +303,15 @@ Oskari.clazz.define(
             this._styleSelectedButton(jQuery('div#' + selectedButton + 'line' + property + '.icon-button'));
         },
 
+        /**
+         * @method createColorPicker
+         * Creates a color picker component
+         */
+        _createColorPicker: function () {
+            var options = {flat: true};
+            this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options);
+        },
+
         _updatePreview: function (dialog) {
             var me = this,
                 view = dialog === undefined || dialog === null ? jQuery('.lineform') : dialog,
@@ -459,7 +323,7 @@ Oskari.clazz.define(
             var previewTemplate = me._previewTemplates[me.values.style].clone();
 
             previewTemplate.find('path').attr({
-                'stroke': '#' + me.values.color,
+                'stroke': me.values.color,
                 'fill': 'none',
                 'stroke-width': me.values.width,
                 'stroke-linejoin': me.values.corner === 0 ? 'miter' : 'round',

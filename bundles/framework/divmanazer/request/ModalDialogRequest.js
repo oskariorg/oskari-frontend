@@ -4,13 +4,13 @@
 Oskari.clazz
     .define('Oskari.userinterface.request.ModalDialogRequest',
         function (title, message, buttons, onshow) {
-            this._title = title ? title : "Untitled";
-            this._message = message ? message : "Lorem ipsum";
-            this._buttons = buttons ? buttons : {};
-            this._parent = parent ? parent : jQuery('#mapdiv');
-            this._onshow = onshow ? onshow : null;
+            this._title = title || 'Untitled';
+            this._message = message || 'Lorem ipsum';
+            this._buttons = buttons || {};
+            this._parent = parent || jQuery('#mapdiv');
+            this._onshow = onshow || null;
         }, {
-            __name: "userinterface.ModalDialogRequest",
+            __name: 'userinterface.ModalDialogRequest',
             getName: function () {
                 return this.__name;
             },

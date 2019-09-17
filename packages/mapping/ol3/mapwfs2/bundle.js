@@ -25,7 +25,7 @@ function() {
         "scripts" : [{
             "type" : "text/javascript",
             "expose" : "org.cometd",
-            "src" : "../../../../libraries/cometd/comp.js"
+            "src" : "../../../../libraries/cometd/jquery.cometd4.comp.js"
         },{
             "type" : "text/javascript",
             "src" : "../../../../libraries/jquery/plugins/jquery.cookie.js"
@@ -46,7 +46,7 @@ function() {
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSStatusChangedEvent.js"
         },{
             "type" : "text/javascript",
-            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol3.js"
+            "src" : "../../../../bundles/mapping/mapwfs2/plugin/WfsLayerPlugin.ol.js"
         }, {
             "type" : "text/javascript",
             "src" : "../../../../bundles/mapping/mapwfs2/event/WFSFeatureEvent.js"
@@ -97,7 +97,7 @@ function() {
             "src" : "../../../../bundles/framework/divmanazer/component/visualization-form/AreaForm.js"
         },{
             "type": "text/css",
-            "src": "../../../../bundles/mapping/mapwfs2/resources/css/style.css"
+            "src": "../../../../bundles/mapping/mapwfs2/resources/scss/style.scss"
         }],
         "locales" : [{
             "lang" : "en",

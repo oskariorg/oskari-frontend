@@ -3,7 +3,7 @@
  *
  *
  */
-Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
+Oskari.clazz.define('Oskari.userinterface.extension.DefaultModule',
 
     /**
      * @method create called automatically on construction
@@ -12,7 +12,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
      */
     function () {
     }, {
-        name : 'Oskari.userinterface.extension.DefaultModule',
+        name: 'Oskari.userinterface.extension.DefaultModule',
         /**
          * @method getSandbox
          * Convenience method to call from Tile and Flyout
@@ -51,16 +51,14 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             var me = this,
                 sandboxName = (conf ? conf.sandbox : null) || 'sandbox',
                 sandbox = Oskari.getSandbox(sandboxName),
-                request,
                 p;
-
 
             me.sandbox = sandbox;
             sandbox.register(this);
 
             for (p in me.requestHandlers) {
                 if (me.requestHandlers.hasOwnProperty(p)) {
-                    sandbox.addRequestHandler(p, this);
+                    sandbox.requestHandler(p, this);
                 }
             }
             for (p in me.eventHandlers) {
@@ -88,15 +86,15 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          */
         stop: function () {
             var sandbox = this.sandbox,
-            p;
+                p;
 
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+            for (p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(this, p);
                 }
             }
-            for (p in me.requestHandlers) {
-                if (me.requestHandlers.hasOwnProperty(p)) {
+            for (p in this.requestHandlers) {
+                if (this.requestHandlers.hasOwnProperty(p)) {
                     sandbox.removeRequestHandler(p, this);
                 }
             }
@@ -105,7 +103,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             this.sandbox = null;
         },
 
-        "init": function () {
+        'init': function () {
             return null;
         },
         /**
@@ -121,7 +119,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         getConfiguration: function () {
             return this.conf || {};
         },
-        getState : function() {
+        getState: function () {
             return this.state || {};
         },
 
@@ -129,10 +127,10 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
          * @property eventHandlers
          * may be overridden in derived classes to get some events
          */
-        "eventHandlers": {
+        'eventHandlers': {
 
         },
-        "requestHandlers": {
+        'requestHandlers': {
 
         },
 
@@ -166,16 +164,14 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
             return handler.apply(this, [request]);
         },
 
-
         /**
          * @method getLang
          * helper to get current language from Oskari
          *
          */
-        "getLang": function () {
+        'getLang': function () {
             return Oskari.getLang();
         },
-
 
         /* o2 helpers for notifications and requetss */
         slicer: Array.prototype.slice,
@@ -191,7 +187,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         issue: function () {
             var requestName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getRequestBuilder(requestName);
+            var builder = Oskari.requestBuilder(requestName);
             var request = builder.apply(builder, args);
             return this.getSandbox().request(this.getName(), request);
         },
@@ -202,7 +198,7 @@ Oskari.clazz.define("Oskari.userinterface.extension.DefaultModule",
         notify: function () {
             var eventName = arguments[0];
             var args = this.slicer.apply(arguments, [1]);
-            var builder = this.getSandbox().getEventBuilder(eventName);
+            var builder = Oskari.eventBuilder(eventName);
             var evt = builder.apply(builder, args);
             return this.getSandbox().notifyAll(evt);
         }

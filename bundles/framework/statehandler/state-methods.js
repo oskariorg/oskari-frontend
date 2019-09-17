@@ -18,6 +18,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             return [];
         }
         this.sandbox.useState(state);
+        this._log = Oskari.log('StateHandlerBundleInstance');
     },
 
     /**
@@ -38,10 +39,9 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         me._historyPrevious = [];
         me._historyNext = [];
 
-
         for (pluginName in me._pluginInstances) {
             if (me._pluginInstances.hasOwnProperty(pluginName)) {
-                me.sandbox.printDebug('[' + me.getName() + ']' + ' resetting state on ' + pluginName);
+                me._log.debug('resetting state on ' + pluginName);
                 me._pluginInstances[pluginName].resetState();
             }
         }
@@ -55,11 +55,16 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
         if (startupState) {
             me.useState(startupState);
         } else {
+            var data = {
+                uuid: Oskari.app.getUuid(),
+                noSavedState: true
+            };
             jQuery.ajax({
-                dataType: "json",
-                type: "GET",
+                dataType: 'json',
+                data: data,
+                type: 'GET',
                 // noSavedState=true parameter tells we dont want the state saved in session
-                url: me.sandbox.getAjaxUrl() + 'action_route=GetAppSetup&noSavedState=true',
+                url: Oskari.urls.getRoute('GetAppSetup'),
                 success: function (data) {
                     if (data && data.configuration) {
                         me._setStartupState(data.configuration);
@@ -90,7 +95,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
     _getStartupState: function () {
         var ret;
         if (this._startupState) {
-            ret =  jQuery.extend(true, {}, this._startupState);
+            ret = jQuery.extend(true, {}, this._startupState);
         } else {
             ret = this._startupState;
         }
@@ -129,7 +134,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.statehandler.StateHandlerBundl
             }
             return;
         }
-        this.sandbox.printDebug('[' + this.getName() + ']' + ' saving state with ' + pluginName);
+        this._log.debug('saving state with ' + pluginName);
         this._pluginInstances[pluginName].saveState(view);
     },
     /**

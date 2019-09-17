@@ -45,7 +45,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                     '    </div>' +
                     '</div>');
 
-            el.mousedown(function (event) {
+            el.on('mousedown', function (event) {
                 event.stopPropagation();
             });
             // Store coordinate value elements so we can update them fast
@@ -64,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
                 conf = me._config,
                 roundToDecimals = 0;
 
-            if(conf && conf.roundToDecimals) {
+            if (conf && conf.roundToDecimals) {
                 roundToDecimals = conf.roundToDecimals;
             }
 
@@ -113,7 +113,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatedisplay.plugin.Coordin
          * @static @property {string[]} protocol array of superclasses
          */
         'protocol': [
-            "Oskari.mapframework.module.Module",
-            "Oskari.mapframework.ui.module.common.mapmodule.Plugin"
+            'Oskari.mapframework.module.Module',
+            'Oskari.mapframework.ui.module.common.mapmodule.Plugin'
         ]
     });

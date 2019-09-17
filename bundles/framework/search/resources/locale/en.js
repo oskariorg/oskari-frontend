@@ -9,7 +9,7 @@ Oskari.registerLocalization(
         "invalid_characters": "The search term contains illegal characters. Allowed characters are letters (a-z, å, ä, ö, A-Z, Å, Ä, Ö), numbers (0-9), a dot (.), a comma (,), a hyphen (-) and an exclamation mark (!). You can also replace one mark with a question mark (?) or an end part with an asterisk (*).",
         "searchDescription": "Search location by placename, address or real estate unit identifier.",
         "searchAssistance": "Type search term",
-        "searchResultCount": "You search returned",
+        "searchResultCount": "Your search returned",
         "searchResultCount2": "results.",
         "searchResultDescriptionMoreResults": "Decrease search results by defining the search term.",
         "searchResultDescriptionOrdering": "Sort search results by clicking a column heading in the table below.",

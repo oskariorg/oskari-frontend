@@ -1,11 +1,12 @@
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MarkerVisibilityRequestHandler', function (sandbox, markersPlugin) {
     this.sandbox = sandbox;
     this.markersPlugin = markersPlugin;
+    this._log = Oskari.log('MarkerVisibilityRequestHandler');
 }, {
     handleRequest: function (core, request) {
-        this.sandbox.printDebug('[Oskari.mapframework.bundle.mapmodule.request.MarkerVisibilityRequestHandler] Change Marker Visibility');
+        this._log.debug('Change Marker Visibility');
 
-        this.markersPlugin.changeMapMarkerVisibility(request.isVisible(),request.getID());
+        this.markersPlugin.changeMapMarkerVisibility(request.isVisible(), request.getID());
     }
 }, {
     protocol: ['Oskari.mapframework.core.RequestHandler']

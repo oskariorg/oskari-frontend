@@ -9,7 +9,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
      * @static
      */
     function () {
-        
         this._clazz = 'Oskari.userinterface.component.Component';
         this._element = null;
         this._visible = true;
@@ -21,7 +20,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} cleanup True if destroy is called just for cleanup
          */
         destroy: function (cleanup) {
-            
             this._destroyImpl(cleanup);
             if (!cleanup) {
                 if (this._element) {
@@ -38,7 +36,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} cleanup True if destroy is called just for cleanup
          */
         _destroyImpl: function (cleanup) {
-            
             return undefined;
         },
 
@@ -47,7 +44,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {Array} Component classes in an array
          */
         _getClasses: function () {
-            
             if (this._element && this._element.className) {
                 return this._element.className.split(/\s+/).sort();
             }
@@ -59,8 +55,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} className
          */
         addClass: function (className) {
-            
-            if(!this._element) {
+            if (!this._element) {
                 return;
             }
             var classes = this._getClasses();
@@ -75,8 +70,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} className
          */
         removeClass: function (className) {
-            
-            if(!this._element) {
+            if (!this._element) {
                 return;
             }
             var classes = this._getClasses(),
@@ -93,7 +87,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} toggle
          */
         toggleClass: function (className, toggle) {
-            
             if (toggle) {
                 this.addClass(className);
             } else {
@@ -106,7 +99,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {String} clazz
          */
         getClazz: function () {
-            
             return this._clazz;
         },
 
@@ -115,7 +107,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {HTMLElement} element
          */
         getElement: function () {
-            
             return this._element;
         },
 
@@ -124,7 +115,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {String} name
          */
         getName: function () {
-            
             return undefined;
         },
 
@@ -133,7 +123,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} name
          */
         setName: function (name) {
-            
             return undefined;
         },
 
@@ -142,7 +131,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {String} title
          */
         getTitle: function () {
-            
             return undefined;
         },
 
@@ -151,7 +139,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {String} title
          */
         setTitle: function (title) {
-            
             return undefined;
         },
 
@@ -160,7 +147,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @return {Boolean}
          */
         isVisible: function () {
-            
             return this._visible;
         },
 
@@ -169,7 +155,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} visible
          */
         setVisible: function (visible) {
-            
             if (typeof visible !== 'boolean') {
                 throw new TypeError(
                     this.getClazz() +
@@ -184,7 +169,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {Boolean} visible
          */
         _setVisibleImpl: function (visible) {
-            
             return undefined;
         },
 
@@ -193,7 +177,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Component',
          * @param {HTMLElement} container
          */
         insertTo: function (container) {
-            
             var cont;
             if (!container) {
                 throw new TypeError(

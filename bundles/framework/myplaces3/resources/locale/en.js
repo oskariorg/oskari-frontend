@@ -85,7 +85,7 @@ Oskari.registerLocalization(
             "area": {
                 "title": "Add Area to Own Places",
                 "tooltip": "Draw an area and add it to your own places.",
-                "add": "Draw an area to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\". You can draw a hole to an area by keeping \"Alt\"-key down.",
+                "add": "Draw an area to the map. Click breaking points. Finally double-click an ending point and click \"Save My Place\".",
                 "next": "You can draw several areas in one feature.",
                 "edit": "You can move breaking points to another location by clicking them with a mouse.",
                 "save": "Save My Place",

@@ -54,7 +54,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             if (this.panels.length === 1) {
                 // select first by default
                 this.select(panel);
-                headerContainer.bind('change', function () {
+                headerContainer.on('change', function () {
                     me.select(me.panels[this.selectedIndex]);
                 });
             }
@@ -154,7 +154,7 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
                     break;
                 }
             }
-            //remove header
+            // remove header
             var headerContainer = this.ui.find('ul li select :selected');
             for (i = 0; i < headerContainer.length; i++) {
                 header = jQuery(headerContainer[i]);
@@ -182,5 +182,5 @@ Oskari.clazz.define('Oskari.userinterface.component.TabDropdownContainer',
             return false;
         }
     }, {
-        extend : ['Oskari.userinterface.component.TabContainer']
+        extend: ['Oskari.userinterface.component.TabContainer']
     });

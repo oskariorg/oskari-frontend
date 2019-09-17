@@ -26,14 +26,14 @@ Oskari.clazz.define(
          * @return {jQuery}
          * Plugin jQuery element
          */
-        _createControlElement: function() {
-            var me = this;
-            el = jQuery(
-                '<div class="mapplugin fullscreenDiv">' +
-                '<img class="fullscreenDivImg" src="' + me._getImagePath('hide-navigation.png') + '"></img>' +
-                '</div>'
-            );
-            el.find('.fullscreenDivImg').bind('click', function (event) {
+        _createControlElement: function () {
+            var me = this,
+                el = jQuery(
+                    '<div class="mapplugin fullscreenDiv">' +
+                    '<img class="fullscreenDivImg" src="' + me.getImagePath('hide-navigation.png') + '"></img>' +
+                    '</div>'
+                );
+            el.find('.fullscreenDivImg').on('click', function (event) {
                 event.preventDefault();
                 if (me.state.fullscreen) {
                     me._showNavigation();
@@ -49,7 +49,7 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        _startPluginImpl : function(sandbox) {
+        _startPluginImpl: function (sandbox) {
             var me = this;
             me.setEnabled(me._enabled);
             return me.setVisible(me._visible);
@@ -60,12 +60,8 @@ Oskari.clazz.define(
          * @param {Oskari.mapframework.sandbox.Sandbox} sandbox
          *          reference to application sandbox
          */
-        _stopPluginImpl : function(sandbox) {
+        _stopPluginImpl: function (sandbox) {
             this.removeFromPluginContainer(this.getElement());
-        },
-
-        _getImagePath: function(image) {
-            return this.getMapModule().getImageUrl() + '/mapping/mapmodule/resources/images/' + image;
         },
 
         /**
@@ -82,43 +78,49 @@ Oskari.clazz.define(
                     )
             };
         },
-        setState: function(state){
+        setState: function (state) {
             var me = this;
             me.state = state || {};
 
-            if(me.state.fullscreen) {
+            if (me.state.fullscreen) {
                 me._hideNavigation();
             } else {
                 me._showNavigation();
             }
         },
-        getState: function() {
+        getState: function () {
             var me = this;
             return me.state;
         },
-        _showNavigation: function(){
+        _showNavigation: function () {
             var me = this;
-            if(!me._element) {
+            if (!me._element) {
                 return;
             }
-            me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('hide-navigation.png'));
+            me._element.find('.fullscreenDivImg').attr('src', me.getImagePath('hide-navigation.png'));
             me.state = {
                 fullscreen: false
             };
 
             me.getMapModule().getMapEl().parents('#contentMap').removeClass('oskari-map-window-fullscreen');
-            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
-        },
-        _hideNavigation: function(){
-            var me = this;
-            if(!me._element) {
+            if (!me._sandbox.hasHandler('MapFull.MapWindowFullScreenRequest')) {
                 return;
             }
-            me._element.find('.fullscreenDivImg').attr('src', me._getImagePath('show-navigation.png'));
+            me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
+        },
+        _hideNavigation: function () {
+            var me = this;
+            if (!me._element) {
+                return;
+            }
+            me._element.find('.fullscreenDivImg').attr('src', me.getImagePath('show-navigation.png'));
             me.state = {
                 fullscreen: true
             };
             me.getMapModule().getMapEl().parents('#contentMap').addClass('oskari-map-window-fullscreen');
+            if (!me._sandbox.hasHandler('MapFull.MapWindowFullScreenRequest')) {
+                return;
+            }
             me._sandbox.postRequestByName('MapFull.MapWindowFullScreenRequest');
         }
     },

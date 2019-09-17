@@ -55,8 +55,7 @@ Oskari.registerLocalization(
                 "tooltip": "Suurema eelvaate nägemiseks uues aknas klõpsa pisipildil.",
                 "pending": "Eelvaade värskendatakse",
                 "notes": {
-                    "extent": "Kaardiulatust saab kontrollida eelvaate aknas.",
-                    "restriction": "Ainult aluskaart on nähtav eelvaate aknas."
+                    "extent": "Kaardiulatust saab kontrollida eelvaate aknas."
                 }
             },
             "buttons": {

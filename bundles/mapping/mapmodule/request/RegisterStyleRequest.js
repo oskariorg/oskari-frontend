@@ -14,8 +14,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleR
     getKey: function () {
         return this._key;
     },
-    getStyles: function() {
-    	return this._styles;
+    getStyles: function () {
+        return this._styles;
     }
 }, {
     'protocol': ['Oskari.mapframework.request.Request']

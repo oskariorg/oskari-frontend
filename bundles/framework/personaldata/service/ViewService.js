@@ -18,7 +18,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
         this._viewUrl = viewUrl;
     }, {
         /** @static @property __qname fully qualified name for service */
-        __qname: "Oskari.mapframework.bundle.personaldata.service.ViewService",
+        __qname: 'Oskari.mapframework.bundle.personaldata.service.ViewService',
         /**
          * @method getQName
          * @return {String} fully qualified name for service
@@ -27,7 +27,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
             return this.__qname;
         },
         /** @static @property __name service name */
-        __name: "ViewService",
+        __name: 'ViewService',
         /**
          * @method getName
          * @return {String} service name
@@ -57,10 +57,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                     viewType: type
                 },
                 type: 'POST',
-                dataType: "json",
+                dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (response) {
@@ -92,7 +92,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                 type: 'POST',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (response) {
@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (response) {
@@ -168,7 +168,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                 dataType: 'json',
                 beforeSend: function (x) {
                     if (x && x.overrideMimeType) {
-                        x.overrideMimeType("application/j-son;charset=UTF-8");
+                        x.overrideMimeType('application/j-son;charset=UTF-8');
                     }
                 },
                 success: function (response) {
@@ -196,7 +196,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                 status: false,
                 msg: 'error'
             };
-            //data.state.mapfull.state.selectedLayers[{id:<layerid>}]
+            // data.state.mapfull.state.selectedLayers[{id:<layerid>}]
             if (viewData &&
                 viewData.state &&
                 viewData.state.mapfull &&
@@ -205,8 +205,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.service.ViewService
                 var selected = viewData.state.mapfull.state.selectedLayers,
                     mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService'),
                     loaded = mapLayerService.isAllLayersLoaded(),
-                    layerMissing = !mapLayerService.hasLayers(selected.map(function(l){return l.id}));
-                    
+                    layerMissing = !mapLayerService.hasLayers(selected.map(function (l) { return l.id; }));
+
                 if (loaded) {
                     // layers loaded
                     if (layerMissing) {

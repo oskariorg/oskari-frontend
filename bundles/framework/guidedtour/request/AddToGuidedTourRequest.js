@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequest',
         this._delegate = delegate;
     },
     {
-        __name: "Guidedtour.AddToGuidedTourRequest",
+        __name: 'Guidedtour.AddToGuidedTourRequest',
         getName: function () {
             return this.__name;
         },
@@ -22,4 +22,4 @@ Oskari.clazz.define('Oskari.framework.bundle.guidedtour.AddToGuidedTourRequest',
     },
     {
         'protocol': ['Oskari.mapframework.request.Request']
-});
+    });

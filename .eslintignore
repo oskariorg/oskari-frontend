@@ -1,0 +1,14 @@
+typings/**
+tools/**
+tests/**
+src/**
+resources/**
+packages/**
+node_modules/**
+locale/**
+libraries/**
+dist/**
+applications/**
+api/**
+bundles/**/locale/*.js
+*.min.js

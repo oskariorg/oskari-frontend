@@ -6,7 +6,7 @@
 Oskari.clazz.category(
     'Oskari.userinterface.component.Grid',
     'sort', {
-        /* Sort options.*/
+        /* Sort options. */
         sortOptions: {},
 
         /* last sort parameters are saved so we can change sort direction if the
@@ -21,8 +21,8 @@ Oskari.clazz.category(
          * @param {String} scopedValue Attributename to sort by (e.g. result[pAttribute])
          * @param {Boolean} descending true if sort direction is descending
          */
-        sortBy: function(scopedValue, descending) {
-            if(!this.model || !this.table) {
+        sortBy: function (scopedValue, descending) {
+            if (!this.model || !this.table) {
                 return;
             }
             var me = this;
@@ -32,7 +32,7 @@ Oskari.clazz.category(
             me._sortBy(scopedValue, descending);
             // populate table content
             var fieldNames = me.visibleColumns;
-            if(fieldNames.length === 0) {
+            if (fieldNames.length === 0) {
                 fieldNames = me.fieldNames;
             }
             // if visible fields not given, show all
@@ -43,15 +43,15 @@ Oskari.clazz.category(
             me._renderBody(this.table, fieldNames);
 
             // Highlight selected back
-            selected.values.forEach(function(value){
-                me.table.find('tr[data-id="'+value+'"]').addClass('selected');
+            selected.values.forEach(function (value) {
+                me.table.find('tr[data-id="' + value + '"]').addClass('selected');
             });
 
             me._moveSelectedRowsTop();
 
             me.trigger('sort', {
-                column : scopedValue,
-                ascending : !descending
+                column: scopedValue,
+                ascending: !descending
             });
         },
         /**
@@ -63,7 +63,7 @@ Oskari.clazz.category(
          * @param {Boolean} pDescending true if sort direction is descending
          */
         _sortBy: function (pAttribute, pDescending) {
-            if(!this.model) {
+            if (!this.model) {
                 return;
             }
             var me = this,
@@ -85,12 +85,6 @@ Oskari.clazz.category(
 
                 var nameA = me._getAttributeValue(a, pAttribute);
                 var nameB = me._getAttributeValue(b, pAttribute);
-
-                var renderer = me.valueRenderer[pAttribute];
-                if (renderer) {
-                    nameA = renderer(nameA);
-                    nameB = renderer(nameB);
-                }
 
                 return Oskari.util.naturalSort(nameA, nameB, pDescending);
             });
