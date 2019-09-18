@@ -20,7 +20,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this._config = config;
         this.__name = 'WfsVectorLayerPlugin';
         this._clazz = 'Oskari.wfs.WfsVectorLayerPlugin';
-        this.renderMode = config.renderMode;
+        this.renderMode = config.renderMode || RENDER_MODE_VECTOR;
         this.visualizationForm = null;
         this.oskariStyleSupport = true;
         this.layertype = 'wfs';
