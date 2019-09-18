@@ -17,10 +17,8 @@
   "license": "MIT",
   "main": "grunt.js",
   "scripts": {
-    "build": "webpack --progress --mode production --env.appdef=devapp:../sample-application/applications",
     "lintfix": "eslint . --quiet --fix",
     "sprite": "node webpack/sprite.js",
-    "start": "webpack-dev-server --hot --env.appdef=devapp:../sample-application/applications",
     "storybook": "start-storybook",
     "test": "eslint . --quiet && jest",
     "test:coverage": "jest --coverage",
