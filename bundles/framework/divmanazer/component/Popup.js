@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup draggablestack"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
@@ -175,6 +175,9 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         addClass: function (pClass) {
             this.dialog.addClass(pClass);
         },
+        getElement: function () {
+            return this.dialog;
+        },
 
         setColourScheme: function (colourScheme) {
             if (colourScheme.bgColour) {
@@ -315,7 +318,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (alignment && jQuery.inArray(alignment, this.alignment) !== -1) {
                 align = alignment;
             }
-
             if (align === 'right') {
                 left = (left + targetWidth) + 5;
                 top = top + (targetHeight / 2) - (dialogHeight / 2);
@@ -366,10 +368,30 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 'margin-left': 0,
                 'margin-top': 0
             });
-
             if (topOffsetElement) {
                 me._adjustPopupTop(topOffsetElement);
             }
+        },
+        /**
+         * @method showFromModal
+         * Shows an info popup over target popup and removes from draggable stack.
+         * @param {jQuery} target - modal popup
+         * @param {String} title
+         * @param {String} message
+         * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
+         * @param {String} alignment - one of #alignment (optional, defaults to center)
+         */
+        showFromModal: function (target, title, message, buttons, alignment = 'center') {
+            if (!this.dialog || !target) return;
+            this.moveTo(target, alignment);
+            this.dialog.css('z-index', target.css('z-index'));
+            this.dialog.removeClass('draggablestack');
+            // remove draggable if set
+            if (this.dialog.hasClass('ui-draggable')) {
+                this.dialog.draggable('destroy');
+            }
+
+            this.show(title, message, buttons);
         },
         /**
          * @method @private _adjustPopupTop
@@ -539,10 +561,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             var me = this,
                 dragOptions = options || {
                     scroll: false,
-                    stack: '.divmanazerpopup',
+                    stack: '.divmanazerpopup.draggablestack',
                     handle: '.popupHeader'
                 };
             me.dialog.css('position', 'absolute');
+
+            // keep modal draggable top of overlay
+            dragOptions.drag = evt => {
+                if (me.overlay) {
+                    me.dialog.css('z-index', me.overlay.getZIndexForModal());
+                }
+            };
             me.dialog.draggable(dragOptions);
         },
 

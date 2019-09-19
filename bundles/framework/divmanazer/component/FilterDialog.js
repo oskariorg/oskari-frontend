@@ -869,12 +869,10 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 popupTitle = (this.loc.error && this.loc.error.title) ? this.loc.error.title : '',
                 popupContent = '<h4>' + loc.title + '</h4>',
                 i;
-
             for (i = 0; i < errors.length; ++i) {
                 popupContent += '<p>' + loc[errors[i]] + '</p>';
             }
-
-            popup.show(popupTitle, popupContent, [closeButton]);
+            popup.showFromModal(this.popup.getElement(), popupTitle, popupContent, [closeButton]);
         },
 
         /**
