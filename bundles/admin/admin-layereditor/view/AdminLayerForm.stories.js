@@ -9,7 +9,7 @@ import '../../../mapping/mapmodule/domain/AbstractLayer';
 import '../../../mapping/mapmodule/domain/style';
 import '../resources/locale/fi';
 
-import { GenericContext } from '../../../../src/react/util';
+import { GenericContext } from 'oskari-ui/util';
 
 const Oskari = window.Oskari;
 const sandbox = Oskari.getSandbox();

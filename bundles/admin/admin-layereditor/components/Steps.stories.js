@@ -1,6 +1,6 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { Steps, Step } from './Steps';
+import { Steps, Step } from 'oskari-ui';
 
 const defaultProps = {};
 storiesOf('Steps', module)

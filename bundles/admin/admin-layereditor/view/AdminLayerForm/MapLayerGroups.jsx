@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox } from '../../components/Checkbox';
-import { Collapse, Panel } from '../../components/Collapse';
-import { List, ListItem } from '../../components/List';
+import { Checkbox, Collapse, Panel, List, ListItem } from 'oskari-ui';
 import { withContext } from '../../../../../src/react/util.jsx';
 
 const MapLayerGroups = (props) => {

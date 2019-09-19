@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DataProviderSelect } from './DataProviderSelect';
-import { TextInput } from '../../components/TextInput';
-import { UrlInput } from '../../components/UrlInput';
-import { Collapse, Panel } from '../../components/Collapse';
+import { TextInput, UrlInput, Collapse, Panel } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
-import { withContext } from '../../../../../src/react/util.jsx';
+import { withContext } from 'oskari-ui/util.jsx';
 
 const GeneralTabPane = (props) => {
     const { mapLayerGroups, dataProviders, layer, service, loc } = props;

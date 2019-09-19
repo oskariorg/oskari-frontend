@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
 import { AdminLayerFormService } from './AdminLayerFormService';
-import { GenericContext } from '../../../../src/react/util.jsx';
+import { GenericContext } from 'oskari-ui/util.jsx';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 

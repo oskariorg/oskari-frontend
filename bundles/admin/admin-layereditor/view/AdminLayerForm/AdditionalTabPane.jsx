@@ -1,12 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {TextInput} from '../../components/TextInput';
-import {TextAreaInput} from '../../components/TextAreaInput';
-import {StyledTab, StyledComponent} from './AdminLayerFormStyledComponents';
-import {withContext} from '../../../../../src/react/util.jsx';
+import { TextInput, TextAreaInput } from 'oskari-ui';
+import { StyledTab, StyledComponent } from './AdminLayerFormStyledComponents';
+import { withContext } from 'oskari-ui/util';
 
 const AdditionalTabPane = (props) => {
-    const {layer, service, loc} = props;
+    const { layer, service, loc } = props;
     return (
         <StyledTab>
             <label>{loc('metaInfoId')}</label>
