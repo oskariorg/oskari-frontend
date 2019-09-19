@@ -72,7 +72,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     _initImpl () {
         super._initImpl();
         const sandbox = this.getSandbox();
-        this.renderMode = this.renderMode || (this.getMapModule().getSupports3D() ? RENDER_MODE_VECTOR : RENDER_MODE_MVT);
+        if (this.getMapModule().getSupports3D() && this.renderMode !== RENDER_MODE_VECTOR) {
+            // 3D mapmodule doesn't support MVT
+            this._log.warn('Changing WFS render mode (3d only supports GeoJSON). Configuration was for: ' + this.renderMode);
+            this.renderMode = RENDER_MODE_VECTOR;
+        }
         this.reqEventHandler = new ReqEventHandler(sandbox);
         this.visualizationForm = new VisualizationForm();
         this.WFSLayerService = new WFSLayerService(sandbox);
