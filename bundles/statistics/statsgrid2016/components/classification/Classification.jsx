@@ -23,7 +23,7 @@ class Classification extends React.Component {
     getContentWrapperStyle () {
         const docHeight = document.documentElement.offsetHeight;
         return {
-            maxHeight: docHeight - 35 + 'px', // header + border
+            maxHeight: docHeight - 50 + 'px', // header + border,
             overflowY: 'auto'
         };
     }
