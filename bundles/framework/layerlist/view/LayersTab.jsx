@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
 import { StateHandler } from './LayerCollapse/StateHandler';
+import { FilterButtons } from './FilterButtons/FilterButtons';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -39,7 +40,8 @@ Oskari.clazz.define(
             keywordType: '<div class="type"></div>',
             layerFilter: '<div class="layer-filter layerselector2-layer-filter">' +
                 '</div><div style="clear:both;"></div>',
-            layerListMountPoint: '<div class="layer-list-mount-pt"></div>'
+            layerListMountPoint: '<div class="layer-list-mount-pt"></div>',
+            layerFiltersMountPoint: '<div class="layer-filters-mount-pt"></div>'
         };
         this.layerCollapseStateHandler = new StateHandler();
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
@@ -155,8 +157,9 @@ Oskari.clazz.define(
             me._createInfoIcon(oskarifield);
 
             if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
-                layerFilter = jQuery(me.templates.layerFilter);
-                me.tabPanel.getContainer().append(layerFilter);
+                me.layerFiltersMountPoint = jQuery(me.templates.layerFiltersMountPoint);
+                me.tabPanel.getContainer().append(me.layerFiltersMountPoint);
+                ReactDOM.render(<FilterButtons layerListRenderHandler = {this._renderLayers.bind(this)}/>, me.layerFiltersMountPoint[0]);
             }
 
             me.tabPanel.getContainer().append(oskarifield);
@@ -252,6 +255,83 @@ Oskari.clazz.define(
                 // get new suggestions if user input is long enough
                 me._relatedKeywordsPopup(keyword, event, me);
             }
+        },
+        /**
+         * @method _renderLayers
+         * @private
+         */
+        _renderLayers: function (layers) {
+            const layerGroups = this._getLayerGroups(layers, this.groupingMethod);
+            this.showLayerGroups(layerGroups);
+        },
+        /**
+         * @method _getLayerGroups
+         * @private
+         *//**
+         * @method _getLayerGroups
+         * @private
+         */
+        _getLayerGroups: function (layers, groupingMethod) {
+            var groupList = [];
+            var group = null;
+            var n;
+            var layer;
+            var groupAttr;
+
+            const _layerListComparator = this._layerListComparator;
+
+            // sort layers by grouping & name
+            layers.sort(function (a, b) {
+                return _layerListComparator(a, b, groupingMethod);
+            });
+
+            for (n = 0; n < layers.length; n += 1) {
+                layer = layers[n];
+                if (layer.getMetaType && layer.getMetaType() === 'published') {
+                    // skip published layers
+                    continue;
+                }
+                groupAttr = layer[groupingMethod]();
+                if (!group || group.getTitle() !== groupAttr) {
+                    group = Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                        groupAttr
+                    );
+                    groupList.push(group);
+                }
+
+                group.addLayer(layer);
+            }
+            var sortedGroupList = jQuery.grep(groupList, function (group, index) {
+                return group.getLayers().length > 0;
+            });
+            return sortedGroupList;
+        },
+
+        /**
+        * @method _layerListComparator
+        * Uses the private property #grouping to sort layer objects in the wanted order for rendering
+        * The #grouping property is the method name that is called on layer objects.
+        * If both layers have same group, they are ordered by layer.getName()
+        * @private
+        * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
+        * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
+        * @param {String} groupingMethod method name to sort by
+        */
+        _layerListComparator: function (a, b, groupingMethod) {
+            var nameA = a[groupingMethod]().toLowerCase();
+            var nameB = b[groupingMethod]().toLowerCase();
+            if (nameA === nameB && (a.getName() && b.getName())) {
+                nameA = a.getName().toLowerCase();
+                nameB = b.getName().toLowerCase();
+            }
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
         },
         /**
          * Show layer groups
