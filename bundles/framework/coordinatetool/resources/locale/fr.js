@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "Coordonnées ETRS89-TM35FIN",
                 "EPSG:3575": "Coordonnées de la projection équivalente de Lambert de l'Europe centrée sur le pôle Nord",
+                "EPSG:3857": "Coordonnées WGS 84 / Pseudo-Mercator",
                 "default": "Coordonnées {crs}"
             },
             "popup": {
@@ -85,7 +86,8 @@ Oskari.registerLocalization(
                     "EPSG:3386": "Zone 0 KKJ",
                     "EPSG:2391": "Zone 1 KKJ",
                     "EPSG:2392": "Zone 2 KKJ",
-                    "EPSG:2394": "Zone 4 KKJ"
+                    "EPSG:2394": "Zone 4 KKJ",
+                    "EPSG:3857": "WGS 84 / Pseudo-Mercator"
                 },
                 "emergencyCallLabel": "Les coordonnées dont on recommande l'utilisation lors d'appels d'urgence sont",
                 "emergencyCallLabelAnd": "et",

@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "ETRS89-TM35FIN -koordinaatit",
                 "EPSG:3575": "North Pole LAEA Europe -koordinaatit",
+                "EPSG:3857": "WGS 84 / Pseudo-Mercator -koordinaatit",
                 "default": "{crs} -koordinaatit"
             },
             "popup": {
@@ -85,7 +86,8 @@ Oskari.registerLocalization(
                     "EPSG:3386": "KKJ kaista 0",
                     "EPSG:2391": "KKJ kaista 1",
                     "EPSG:2392": "KKJ kaista 2",
-                    "EPSG:2394": "KKJ kaista 4"
+                    "EPSG:2394": "KKJ kaista 4",
+                    "EPSG:3857": "WGS 84 / Pseudo-Mercator"
                 },
                 "emergencyCallLabel": "Hätäpuheluissa käytettäväksi suositellut koordinaatit ovat",
                 "emergencyCallLabelAnd": "ja",
