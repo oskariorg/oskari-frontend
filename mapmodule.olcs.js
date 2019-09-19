@@ -186,7 +186,7 @@ class MapModuleOlCesium extends MapModuleOl {
             this._sandbox.notifyAll(mapClickedEvent);
         });
 
-        map.on('dblclick', function () {
+        map.on('dblclick', () => {
             if (this.getDrawingMode()) {
                 return false;
             }
