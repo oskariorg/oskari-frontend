@@ -29,20 +29,30 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var zoom = request.getZoom();
-            var srsName = request.getSrsName();
-            var lonlat = {
+            const requestZoom = request.getZoom();
+            const srsName = request.getSrsName();
+            const animation = request.getAnimation();
+            const requestLonlat = {
                 lon: request.getCenterX(),
                 lat: request.getCenterY()
             };
+            let zoom;
 
             // transform coordinates to given projection
-            lonlat = this.mapModule.transformCoordinates(lonlat, srsName);
+            const lonlat = this.mapModule.transformCoordinates(requestLonlat, srsName);
 
-            var zoomChange = (zoom || zoom === 0);
+            // check if zoom is not null or undefined
+            if (requestZoom != null) {
+                // check if request is scale or zoom
+                zoom = requestZoom.scale
+                    ? { type: 'scale', value: this.mapModule.getResolutionForScale(requestZoom.scale) }
+                    : { type: 'zoom', value: requestZoom };
+            }
+
+            this.mapModule.centerMap(lonlat, zoom, false, animation);
 
             // if zoom is about to change -> Suppress the event
-            this.mapModule.centerMap(lonlat, null, !!zoomChange);
+            var zoomChange = (zoom || zoom === 0);
             if (zoomChange) {
                 const { left, top, bottom, right } = zoom;
 
@@ -56,9 +66,8 @@ Oskari.clazz.define(
                 }
                 if (zoom.scale) {
                     this.mapModule.zoomToScale(zoom.scale, false, false);
-                    return;
                 }
-                this.mapModule.setZoomLevel(zoom, false);
+                // this.mapModule.setZoomLevel(zoom, false);
             }
         }
     }, {

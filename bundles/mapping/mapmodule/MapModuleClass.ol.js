@@ -7,6 +7,7 @@ import olView from 'ol/View';
 import { METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT } from 'ol/proj/Units';
 import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
+import { easeIn, easeOut } from 'ol/easing';
 import olMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
@@ -531,6 +532,76 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
+     * @method animateToLonLat
+     * Animate from current x/y to requested x/y
+     * Usable animations: fly/pan/zoomPan
+     * @param {Object} lonlat coordinates to move the map to
+     * @param {Number} zoom absolute zoomlevel to set the map to
+     * @param {String} animation animation name
+     * @return {Boolean} success
+     */
+    animateToLonLat (lonlat, zoom, animation) {
+        lonlat = this.normalizeLonLat(lonlat);
+        if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
+            return false;
+        }
+
+        const location = [lonlat.lon, lonlat.lat];
+        const view = this.getMap().getView();
+        const duration = 3000;
+
+        switch (animation) {
+        case 'pan':
+            view.animate({
+                center: location,
+                duration: duration
+            });
+            break;
+        case 'fly':
+            view.animate({
+                center: location,
+                duration: duration
+            });
+            if (view.getZoom() === zoom) {
+                view.animate({
+                    zoom: zoom - 1,
+                    duration: duration / 2
+                }, {
+                    zoom: zoom,
+                    duration: duration / 2
+                });
+            } else {
+                view.animate({
+                    zoom: zoom,
+                    duration: 500
+                }, {
+                    zoom: zoom - 1,
+                    duration: (duration - 500) / 2,
+                    easing: easeIn
+                }, {
+                    zoom: zoom,
+                    duration: (duration - 500) / 2,
+                    easing: easeOut
+                });
+            }
+            break;
+        case 'zoomPan':
+            view.animate({
+                center: location,
+                zoom: zoom,
+                duration: duration,
+                easing: easeOut
+            });
+            break;
+        default:
+            view.setCenter([lonlat.lon, lonlat.lat]);
+            view.setZoom(zoom);
+            break;
+        }
+        return true;
+    }
+
+    /**
      * @method centerMap
      * Moves the map to the given position and zoomlevel.
      * @param {Number[] | Object} lonlat coordinates to move the map to
@@ -538,24 +609,38 @@ export class MapModule extends AbstractMapModule {
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @param {String} animation animation name as string
+     *  Usable animations: fly/pan
      * @return {Boolean} success
      */
-    centerMap (lonlat, zoom, suppressEnd) {
+    centerMap (lonlat, zoom, suppressEnd, animation) {
+        const view = this.getMap().getView();
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
-        this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
+
         if (zoom === null || zoom === undefined) {
             zoom = this.getMapZoom();
         }
-        this.getMap().getView().setZoom(zoom);
+
+        const zoomN = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+
+        // if animation is set, use animation, else just go there
+        if (animation) {
+            this.animateToLonLat(lonlat, zoomN, animation);
+        } else {
+            view.setCenter([lonlat.lon, lonlat.lat]);
+            view.setZoom(zoomN);
+        }
+
         this.updateDomain();
         if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
         return true;
     }
+
     /**
      * Get maps current extent.
      * @method getCurrentExtent
