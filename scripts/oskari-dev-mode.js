@@ -7,9 +7,7 @@ fs.lstat('./node_modules/oskari-frontend', (err, stats) => {
         helper.exit(1);
     }
     const isEnabled = stats.isSymbolicLink();
-    isEnabled ? helper.devModeEnabled() : helper.devModeDisabled();
 
-    let expectEnabled = true;
     if (process.argv.length > 3) {
         helper.devModeCheckInvalidArgs();
         helper.exit(2);
@@ -20,9 +18,12 @@ fs.lstat('./node_modules/oskari-frontend', (err, stats) => {
         helper.exit(3);
     }
     if (mode === 'check') {
+        isEnabled ? helper.devModeEnabled() : helper.devModeDisabled();
         helper.exit();
     }
-    expectEnabled = mode === 'enabled';
+    const expectEnabled = mode === 'enabled';
+    expectEnabled ? helper.expectEnabled() : helper.expectDisabled();
+
     if (expectEnabled !== isEnabled) {
         isEnabled ? helper.runInDevMode() : helper.runInNormalMode();
         helper.exit(4);
