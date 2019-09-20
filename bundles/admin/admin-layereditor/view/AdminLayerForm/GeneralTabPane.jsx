@@ -4,7 +4,7 @@ import { DataProviderSelect } from './DataProviderSelect';
 import { TextInput, UrlInput, Collapse, Panel } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
-import { withContext } from 'oskari-ui/util.jsx';
+import { withContext } from 'oskari-ui/util';
 
 const GeneralTabPane = (props) => {
     const { mapLayerGroups, dataProviders, layer, service, loc } = props;

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Collapse, Panel, List, ListItem } from 'oskari-ui';
-import { withContext } from '../../../../../src/react/util.jsx';
+import { withContext } from 'oskari-ui/util';
 
 const MapLayerGroups = (props) => {
     const { layer, mapLayerGroups, service, lang } = props;
