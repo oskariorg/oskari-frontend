@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "Координаты ETRS89-TM35FIN",
                 "EPSG:3575": "Координаты в азимутальной равновеликой проекции Ламберта Северного полюса (Европа)",
+                "EPSG:3857": "WGS 84 / Pseudo-Mercator координаты",
                 "default": "{crs} координаты"
             },
             "popup": {
@@ -85,7 +86,8 @@ Oskari.registerLocalization(
                     "EPSG:3386": "KKJ zone 0",
                     "EPSG:2391": "KKJ zone 1",
                     "EPSG:2392": "KKJ zone 2",
-                    "EPSG:2394": "KKJ zone 4"
+                    "EPSG:2394": "KKJ zone 4",
+                    "EPSG:3857": "WGS 84 / Pseudo-Mercator"
                 },
                 "emergencyCallLabel": "Координаты, рекомендуемые для использования при экстренных вызовах:",
                 "emergencyCallLabelAnd": "и",

@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "ETRS89-TM35FIN koordinater",
                 "EPSG:3575": "North Pole LAEA Europe koordinater",
+                "EPSG:3857": "WGS 84 / Pseudo-Mercator koordinater",
                 "default": "{crs} koordinater"
             },
             "popup": {
@@ -85,7 +86,8 @@ Oskari.registerLocalization(
                     "EPSG:3386": "KKJ zon 0",
                     "EPSG:2391": "KKJ zon 1",
                     "EPSG:2392": "KKJ zon 2",
-                    "EPSG:2394": "KKJ zon 4"
+                    "EPSG:2394": "KKJ zon 4",
+                    "EPSG:3857": "WGS 84 / Pseudo-Mercator"
                 },
                 "emergencyCallLabel": "Koordinaterna som rekommenderas att användas i nödsamtal är",
                 "emergencyCallLabelAnd": "och",
