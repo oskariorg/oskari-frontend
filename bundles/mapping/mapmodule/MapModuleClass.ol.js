@@ -540,7 +540,7 @@ export class MapModule extends AbstractMapModule {
      * @param {String} animation animation name
      * @return {Boolean} success
      */
-    animateToLonLat (lonlat, zoom, animation) {
+    animateTo (lonlat, zoom, animation) {
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
@@ -549,6 +549,7 @@ export class MapModule extends AbstractMapModule {
         const location = [lonlat.lon, lonlat.lat];
         const view = this.getMap().getView();
         const duration = 3000;
+        const flyZoom = view.getZoom();
 
         switch (animation) {
         case 'pan':
@@ -562,28 +563,13 @@ export class MapModule extends AbstractMapModule {
                 center: location,
                 duration: duration
             });
-            if (view.getZoom() === zoom) {
-                view.animate({
-                    zoom: zoom - 1,
-                    duration: duration / 2
-                }, {
-                    zoom: zoom,
-                    duration: duration / 2
-                });
-            } else {
-                view.animate({
-                    zoom: zoom,
-                    duration: 500
-                }, {
-                    zoom: zoom - 1,
-                    duration: (duration - 500) / 2,
-                    easing: easeIn
-                }, {
-                    zoom: zoom,
-                    duration: (duration - 500) / 2,
-                    easing: easeOut
-                });
-            }
+            view.animate({
+                zoom: flyZoom - 1,
+                duration: duration / 2
+            }, {
+                zoom: flyZoom,
+                duration: duration / 2
+            });
             break;
         case 'zoomPan':
             view.animate({
@@ -628,7 +614,7 @@ export class MapModule extends AbstractMapModule {
 
         // if animation is set, use animation, else just go there
         if (animation) {
-            this.animateToLonLat(lonlat, zoomN, animation);
+            this.animateTo(lonlat, zoomN, animation);
         } else {
             view.setCenter([lonlat.lon, lonlat.lat]);
             view.setZoom(zoomN);
