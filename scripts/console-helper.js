@@ -30,8 +30,16 @@ const log = str => console.log(base(str));
 const messages = {
     devModeEnabled: log.bind(null, `Oskari development mode is ${highlight('enabled')}.\nUser is in full control over oskari-frontend dependency.\n`),
     devModeDisabled: log.bind(null, `Oskari development mode is ${highlight('disabled')}.\nUsing GitHub repository as oskari-frontend dependency.\n`),
-    runInNormalMode: log.bind(null, error('Run npm commands (build & start) without ') + highlight(':dev') + error('-option.')),
-    runInDevMode: log.bind(null, error('Run npm commands (build & start) with ') + highlight(':dev') + error('-option.')),
+    expectEnabled: log.bind(null, `Expecting Oskari development mode to be enabled.`),
+    expectDisabled: log.bind(null, `Expecting Oskari development mode to be disabled.`),
+    runInNormalMode: log.bind(null,
+        'Cannot run the command when Oskari development mode is disabled. ' +
+        error('Try running npm commands (build & start) without ') + highlight(':dev') + error('-option.\n') +
+        `To enable development mode, run ${highlight('dev-mode:enable')}.`),
+    runInDevMode: log.bind(null,
+        'Cannot run the command when Oskari development mode is enabled. ' +
+        error('Try running npm commands (build & start) with ') + highlight(':dev') + error('-option.\n') +
+        `To disable development mode, run ${highlight('dev-mode:disable')}.`),
     installFailed: log.bind(null, error('Install failed!')),
     oskariModuleNotFound: log.bind(null, `Oskari dependency was not found.\nRun ${highlight('npm install')}.`),
     oskariPeerNotFound: log.bind(null, `Oskari dependency was not found.\nRun ${highlight('npm install')}.`),
