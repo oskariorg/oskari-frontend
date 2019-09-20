@@ -1,11 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSelect } from './StyleSelect';
-import { Slider } from '../../components/Slider';
-import { TextAreaInput } from '../../components/TextAreaInput';
-import { Opacity } from '../../components/Opacity';
 import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './AdminLayerFormStyledComponents';
-import { withContext } from '../../../../../src/react/util.jsx';
+import { Slider, TextAreaInput, Opacity } from 'oskari-ui';
+import { withContext } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const VerticalComponent = styled(StyledComponent)`

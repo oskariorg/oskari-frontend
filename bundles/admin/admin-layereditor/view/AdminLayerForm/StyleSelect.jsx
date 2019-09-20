@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Select, Option} from '../../components/Select';
+import { Select, Option } from 'oskari-ui';
 
-export const StyleSelect = ({styles, currentStyle, service}) => {
+export const StyleSelect = ({ styles, currentStyle, service }) => {
     const options = styles.map((style) =>
         <Option key={style.name} value={style.name}>{style.title}</Option>
     );

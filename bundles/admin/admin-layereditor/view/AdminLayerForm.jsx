@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, TabPane } from '../components/Tabs';
-import { Button } from '../components/Button';
 import { GeneralTabPane } from './AdminLayerForm/GeneralTabPane';
 import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
 import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
 import { StyledRoot } from './AdminLayerForm/AdminLayerFormStyledComponents';
-import { Alert } from '../components/Alert';
-import { withContext } from '../../../../src/react/util';
-import { Confirm } from '../components/Confirm';
+import { withContext } from 'oskari-ui/util';
+import { Confirm, Alert, Button, Tabs, TabPane } from 'oskari-ui';
 import styled from 'styled-components';
 
 const PaddedButton = styled(Button)`

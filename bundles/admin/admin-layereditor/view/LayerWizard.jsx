@@ -1,11 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
-import { Steps, Step } from '../components/Steps';
+import { Steps, Step, Button } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { LayerDetails } from './LayerWizard/LayerDetails';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
-import { Button } from '../components/Button';
 import { StateHandler } from './LayerWizard/StateHandler';
 
 const StyledRootEl = styled('div')`
