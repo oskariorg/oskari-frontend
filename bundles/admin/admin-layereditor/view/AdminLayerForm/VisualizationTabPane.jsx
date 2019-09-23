@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyleSelect } from './StyleSelect';
-import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './AdminLayerFormStyledComponents';
+import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './StyledFormComponents';
 import { Slider, TextAreaInput, Opacity } from 'oskari-ui';
-import { withContext } from 'oskari-ui/util';
+import { withLocale } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const VerticalComponent = styled(StyledComponent)`
@@ -13,29 +13,29 @@ const VerticalComponent = styled(StyledComponent)`
 `;
 
 const VisualizationTabPane = (props) => {
-    const { layer, service, loc } = props;
+    const { layer, service, getMessage } = props;
     return (
         <StyledTab>
             <StyledColumnLeft>
-                <label>{loc('opacity')}</label>
+                <label>{getMessage('opacity')}</label>
                 <StyledComponent>
                     <Opacity key={layer.layer_id} defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
                 </StyledComponent>
-                <label>{loc('style')}</label>
+                <label>{getMessage('style')}</label>
                 <StyledComponent>
                     <StyleSelect styles={layer.styles} currentStyle={layer.style} service={service} />
                 </StyledComponent>
-                <label>{loc('styleJSON')}</label>
+                <label>{getMessage('styleJSON')}</label>
                 <StyledComponent>
                     <TextAreaInput rows={6} value={layer.styleJSON} onChange={(evt) => service.setStyleJSON(evt.target.value)} />
                 </StyledComponent>
-                <label>{loc('hoverJSON')}</label>
+                <label>{getMessage('hoverJSON')}</label>
                 <StyledComponent>
                     <TextAreaInput rows={6} value={layer.hoverJSON} onChange={(evt) => service.setHoverJSON(evt.target.value)}/>
                 </StyledComponent>
             </StyledColumnLeft>
             <StyledColumnRight>
-                <label>{loc('minAndMaxScale')}</label>
+                <label>{getMessage('minAndMaxScale')}</label>
                 <VerticalComponent>
                     <Slider key={layer.layer_id}
                         vertical
@@ -54,8 +54,8 @@ VisualizationTabPane.propTypes = {
     layer: PropTypes.object,
     service: PropTypes.any,
     visualizationProps: PropTypes.any,
-    loc: PropTypes.func
+    getMessage: PropTypes.func
 };
 
-const contextWrap = withContext(VisualizationTabPane);
+const contextWrap = withLocale(VisualizationTabPane);
 export { contextWrap as VisualizationTabPane };

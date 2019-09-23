@@ -4,8 +4,8 @@ import { GeneralTabPane } from './AdminLayerForm/GeneralTabPane';
 import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
 import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
-import { StyledRoot } from './AdminLayerForm/AdminLayerFormStyledComponents';
-import { withContext } from 'oskari-ui/util';
+import { StyledRoot } from './AdminLayerForm/StyledFormComponents';
+import { withLocale, withMutator } from 'oskari-ui/util';
 import { Confirm, Alert, Button, Tabs, TabPane } from 'oskari-ui';
 import styled from 'styled-components';
 
@@ -21,10 +21,10 @@ const AdminLayerForm = ({
     onCancel,
     onDelete,
     onSave,
-    loc
+    getMessage
 }) => {
     if (message.key) {
-        message.text = loc(message.key);
+        message.text = getMessage(message.key);
     }
     return (
         <StyledRoot>
@@ -32,39 +32,39 @@ const AdminLayerForm = ({
                 <Alert message={message.text} type={message.type} />
             }
             <Tabs>
-                <TabPane tab={loc('generalTabTitle')} key='general'>
+                <TabPane tab={getMessage('generalTabTitle')} key='general'>
                     <GeneralTabPane
                         dataProviders={dataProviders}
                         mapLayerGroups={mapLayerGroups}
                         layer={layer}
                         service={mutator} />
                 </TabPane>
-                <TabPane tab={loc('visualizationTabTitle')} key='visual'>
+                <TabPane tab={getMessage('visualizationTabTitle')} key='visual'>
                     <VisualizationTabPane layer={layer} service={mutator} />
                 </TabPane>
-                <TabPane tab={loc('additionalTabTitle')} key='additional'>
+                <TabPane tab={getMessage('additionalTabTitle')} key='additional'>
                     <AdditionalTabPane layer={layer} service={mutator} />
                 </TabPane>
-                <TabPane tab={loc('permissionsTabTitle')} key='permissions'>
+                <TabPane tab={getMessage('permissionsTabTitle')} key='permissions'>
                     <PermissionsTabPane />
                 </TabPane>
             </Tabs>
             <PaddedButton type='primary' onClick={() => onSave()}>
                 { layer.isNew &&
-                    loc('add')
+                    getMessage('add')
                 }
                 { !layer.isNew &&
-                    loc('save')
+                    getMessage('save')
                 }
             </PaddedButton>
             { !layer.isNew &&
-                <Confirm title={loc('messages.confirmDeleteLayer')} onConfirm={() => onDelete()}
-                    okText={loc('ok')} cancelText={loc('cancel')} placement='bottomLeft'>
-                    <PaddedButton>{loc('delete')}</PaddedButton>
+                <Confirm title={getMessage('messages.confirmDeleteLayer')} onConfirm={() => onDelete()}
+                    okText={getMessage('ok')} cancelText={getMessage('cancel')} placement='bottomLeft'>
+                    <PaddedButton>{getMessage('delete')}</PaddedButton>
                 </Confirm>
             }
             { onCancel &&
-                <Button onClick={() => onCancel()}>{loc('cancel')}</Button>
+                <Button onClick={() => onCancel()}>{getMessage('cancel')}</Button>
             }
         </StyledRoot>
     );
@@ -79,8 +79,8 @@ AdminLayerForm.propTypes = {
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
-    loc: PropTypes.func.isRequired
+    getMessage: PropTypes.func.isRequired
 };
 
-const contextWrap = withContext(AdminLayerForm);
+const contextWrap = withMutator(withLocale(AdminLayerForm));
 export { contextWrap as AdminLayerForm };

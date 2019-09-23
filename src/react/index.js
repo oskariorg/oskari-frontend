@@ -8,7 +8,7 @@ export { List, ListItem } from '../../bundles/admin/admin-layereditor/components
 export { NumberInput } from '../../bundles/admin/admin-layereditor/components/NumberInput';
 export { Opacity } from '../../bundles/admin/admin-layereditor/components/Opacity';
 export { Radio } from '../../bundles/admin/admin-layereditor/components/RadioButton';
-export { Select } from '../../bundles/admin/admin-layereditor/components/Select';
+export { Select, Option } from '../../bundles/admin/admin-layereditor/components/Select';
 export { Slider } from '../../bundles/admin/admin-layereditor/components/Slider';
 export { Step, Steps } from '../../bundles/admin/admin-layereditor/components/Steps';
 export { Switch } from '../../bundles/admin/admin-layereditor/components/Switch';
