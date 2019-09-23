@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
 import { StateHandler } from './LayerCollapse/StateHandler';
-import { FilterButtons } from './FilterButtons/FilterButtons';
+import { LayerFilters } from './LayerFilters/LayerFilters';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -159,7 +159,7 @@ Oskari.clazz.define(
             if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
                 me.layerFiltersMountPoint = jQuery(me.templates.layerFiltersMountPoint);
                 me.tabPanel.getContainer().append(me.layerFiltersMountPoint);
-                ReactDOM.render(<FilterButtons layerListRenderHandler = {this._renderLayers.bind(this)}/>, me.layerFiltersMountPoint[0]);
+                ReactDOM.render(<LayerFilters layerListRenderHandler = {this._renderLayers.bind(this)}/>, me.layerFiltersMountPoint[0]);
             }
 
             me.tabPanel.getContainer().append(oskarifield);
