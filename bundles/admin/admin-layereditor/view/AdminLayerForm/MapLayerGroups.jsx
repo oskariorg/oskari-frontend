@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Checkbox, Collapse, Panel, List, ListItem } from 'oskari-ui';
+import { Checkbox, Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
 import { withContext } from 'oskari-ui/util';
 
 const MapLayerGroups = (props) => {
@@ -18,9 +18,9 @@ const MapLayerGroups = (props) => {
     };
     return (
         <Collapse>
-            <Panel header={props.loc('selectMapLayerGroupsButton')}>
+            <CollapsePanel header={props.loc('selectMapLayerGroupsButton')}>
                 <List dataSource={dataSource} renderItem={renderItem} />
-            </Panel>
+            </CollapsePanel>
         </Collapse>
     );
 };
