@@ -27,7 +27,7 @@ export function withMutator (Component) {
     return function StateMutatingComponent (props) {
         return (
         <MutatorContext.Consumer>
-            { getMutator => <Component {...props} mutator={getMutator()} />}
+            { service => <Component {...props} mutator={service.getMutator()} />}
         </MutatorContext.Consumer>
     );
 }
