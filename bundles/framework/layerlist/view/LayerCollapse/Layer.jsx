@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Switch } from '../../../../admin/admin-layereditor/components/Switch';
+import { Switch } from 'oskari-ui';
 import { LayerTools } from './Layer/LayerTools';
 
 const LayerDiv = styled('div')`

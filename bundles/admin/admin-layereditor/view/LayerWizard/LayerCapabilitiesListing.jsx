@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {List, ListItem} from '../../components/List';
+import { List, ListItem } from 'oskari-ui';
 
 export class LayerCapabilitiesListing extends React.Component {
     getItem (item) {

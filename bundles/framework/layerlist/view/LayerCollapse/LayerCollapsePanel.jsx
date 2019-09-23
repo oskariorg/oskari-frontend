@@ -1,10 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem } from '../../../../admin/admin-layereditor/components/List';
+import { Badge, CollapsePanel, List, ListItem } from 'oskari-ui';
 import { Layer } from './Layer';
-import { Panel } from '../../../../admin/admin-layereditor/components/Collapse';
-import { Badge } from '../../../../admin/admin-layereditor/components/Badge';
 import styled from 'styled-components';
 
 const StyledListItem = styled(ListItem)`
@@ -50,13 +48,13 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
-        <Panel {...propsNeededForPanel}
+        <CollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
             }>
             <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
-        </Panel>
+        </CollapsePanel>
     );
 };
 

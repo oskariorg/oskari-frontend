@@ -2,7 +2,7 @@ export { Alert } from '../../bundles/admin/admin-layereditor/components/Alert';
 export { Badge } from '../../bundles/admin/admin-layereditor/components/Badge';
 export { Button } from '../../bundles/admin/admin-layereditor/components/Button';
 export { Checkbox } from '../../bundles/admin/admin-layereditor/components/Checkbox';
-export { Collapse, Panel } from '../../bundles/admin/admin-layereditor/components/Collapse';
+export { Collapse, Panel as CollapsePanel } from '../../bundles/admin/admin-layereditor/components/Collapse';
 export { Confirm } from '../../bundles/admin/admin-layereditor/components/Confirm';
 export { List, ListItem } from '../../bundles/admin/admin-layereditor/components/List';
 export { NumberInput } from '../../bundles/admin/admin-layereditor/components/NumberInput';
