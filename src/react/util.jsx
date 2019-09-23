@@ -17,19 +17,21 @@ export function withContext (Component) {
 export function withLocale (Component) {
     return function LocalizedComponent (props) {
         return (
-        <LocaleContext.Consumer>
-            { value => <Component {...props} getMessage={value} />}
-        </LocaleContext.Consumer>
-    );
+            <LocaleContext.Consumer>
+                { value => <Component {...props} getMessage={value} />}
+            </LocaleContext.Consumer>
+        );
+    };
 }
 
 export function withMutator (Component) {
     return function StateMutatingComponent (props) {
         return (
-        <MutatorContext.Consumer>
-            { service => <Component {...props} mutator={service.getMutator()} />}
-        </MutatorContext.Consumer>
-    );
+            <MutatorContext.Consumer>
+                { service => <Component {...props} mutator={service.getMutator()} />}
+            </MutatorContext.Consumer>
+        );
+    };
 }
 
 // re-binds all object methods starting with 'handle',
