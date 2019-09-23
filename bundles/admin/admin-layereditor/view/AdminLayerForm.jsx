@@ -4,7 +4,7 @@ import { GeneralTabPane } from './AdminLayerForm/GeneralTabPane';
 import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
 import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
-import { StyledRoot } from './AdminLayerForm/AdminLayerFormStyledComponents';
+import { StyledRoot } from './AdminLayerForm/StyledFormComponents';
 import { withLocale } from 'oskari-ui/util';
 import { Confirm, Alert, Button, Tabs, TabPane } from 'oskari-ui';
 import styled from 'styled-components';
