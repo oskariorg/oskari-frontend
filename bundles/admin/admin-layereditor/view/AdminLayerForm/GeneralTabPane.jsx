@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DataProviderSelect } from './DataProviderSelect';
-import { TextInput, UrlInput, Collapse, Panel } from 'oskari-ui';
+import { TextInput, UrlInput, Collapse, CollapsePanel } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
 import { withContext } from 'oskari-ui/util';
@@ -51,12 +51,12 @@ const GeneralTabPane = (props) => {
                     </StyledComponent>
                     <StyledComponent>
                         <Collapse>
-                            <Panel header={loc('otherLanguages')}>
+                            <CollapsePanel header={loc('otherLanguages')}>
                                 <div>{loc('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
                                 <div>{loc('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
                                 <div>{loc('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
                                 <div>{loc('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
-                            </Panel>
+                            </CollapsePanel>
                         </Collapse>
                     </StyledComponent>
                 </StyledComponentGroup>
@@ -73,12 +73,12 @@ const GeneralTabPane = (props) => {
                     </StyledComponent>
                     <StyledComponent>
                         <Collapse>
-                            <Panel header={loc('otherLanguages')}>
+                            <CollapsePanel header={loc('otherLanguages')}>
                                 <div>{loc('fi.placeholder')} <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
                                 <div>{loc('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
                                 <div>{loc('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
                                 <div>{loc('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
-                            </Panel>
+                            </CollapsePanel>
                         </Collapse>
                     </StyledComponent>
                 </StyledComponentGroup>
@@ -95,12 +95,12 @@ const GeneralTabPane = (props) => {
                     </StyledComponent>
                     <StyledComponent>
                         <Collapse>
-                            <Panel header={loc('otherLanguages')}>
+                            <CollapsePanel header={loc('otherLanguages')}>
                                 <div>{loc('fi.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
                                 <div>{loc('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
                                 <div>{loc('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
                                 <div>{loc('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
-                            </Panel>
+                            </CollapsePanel>
                         </Collapse>
                     </StyledComponent>
                 </StyledComponentGroup>
