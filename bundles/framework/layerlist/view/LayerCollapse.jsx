@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse } from '../../../admin/admin-layereditor/components/Collapse';
-import { Alert } from '../../../admin/admin-layereditor/components/Alert';
+import { Alert, Collapse } from 'oskari-ui';
 import { LayerCollapsePanel } from './LayerCollapse/LayerCollapsePanel';
 import styled from 'styled-components';
 
