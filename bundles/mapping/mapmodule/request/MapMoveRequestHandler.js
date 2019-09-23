@@ -31,7 +31,7 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
-            const animation = request.getAnimation();
+            const options = request.options;
             const requestLonlat = {
                 lon: request.getCenterX(),
                 lat: request.getCenterY()
@@ -49,7 +49,7 @@ Oskari.clazz.define(
                     : { type: 'zoom', value: requestZoom };
             }
 
-            this.mapModule.centerMap(lonlat, zoom, false, animation);
+            this.mapModule.centerMap(lonlat, zoom, false, options);
 
             // if zoom is about to change -> Suppress the event
             var zoomChange = (zoom || zoom === 0);

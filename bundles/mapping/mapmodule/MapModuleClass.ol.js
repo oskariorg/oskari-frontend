@@ -538,17 +538,16 @@ export class MapModule extends AbstractMapModule {
      * @param {Object} lonlat coordinates to move the map to
      * @param {Number} zoom absolute zoomlevel to set the map to
      * @param {String} animation animation name
+     * @param {Number}  duration animation duration time
      * @return {Boolean} success
      */
-    animateTo (lonlat, zoom, animation) {
-        lonlat = this.normalizeLonLat(lonlat);
+    _animateTo (lonlat, zoom, animation, duration = 3000) {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
 
         const location = [lonlat.lon, lonlat.lat];
         const view = this.getMap().getView();
-        const duration = 3000;
         const flyZoom = view.getZoom();
 
         switch (animation) {
@@ -595,11 +594,11 @@ export class MapModule extends AbstractMapModule {
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-     * @param {String} animation animation name as string
+     * @param {Object} options animation name as string
      *  Usable animations: fly/pan
      * @return {Boolean} success
      */
-    centerMap (lonlat, zoom, suppressEnd, animation) {
+    centerMap (lonlat, zoom, suppressEnd, options) {
         const view = this.getMap().getView();
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
@@ -611,13 +610,12 @@ export class MapModule extends AbstractMapModule {
         }
 
         const zoomN = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-
         // if animation is set, use animation, else just go there
-        if (animation) {
-            this.animateTo(lonlat, zoomN, animation);
-        } else {
+        if (typeof options === 'undefined') {
             view.setCenter([lonlat.lon, lonlat.lat]);
             view.setZoom(zoomN);
+        } else {
+            this.animateTo(lonlat, zoomN, options.animation, options.duration);
         }
 
         this.updateDomain();
