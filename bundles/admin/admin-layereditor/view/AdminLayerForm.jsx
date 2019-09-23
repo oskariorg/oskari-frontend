@@ -5,7 +5,7 @@ import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
 import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
 import { StyledRoot } from './AdminLayerForm/StyledFormComponents';
-import { withLocale } from 'oskari-ui/util';
+import { withLocale, withMutator } from 'oskari-ui/util';
 import { Confirm, Alert, Button, Tabs, TabPane } from 'oskari-ui';
 import styled from 'styled-components';
 
@@ -82,5 +82,5 @@ AdminLayerForm.propTypes = {
     getMessage: PropTypes.func.isRequired
 };
 
-const contextWrap = withLocale(AdminLayerForm);
+const contextWrap = withMutator(withLocale(AdminLayerForm));
 export { contextWrap as AdminLayerForm };
