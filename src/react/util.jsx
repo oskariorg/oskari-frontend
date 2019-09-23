@@ -1,15 +1,35 @@
 import React from 'react';
 
 export const GenericContext = React.createContext();
+export const LocaleContext = React.createContext();
+export const MutatorContext = React.createContext();
 
 export function withContext (Component) {
-    return function ContextComponent (props) {
+    return function ContextedComponent (props) {
         return (
             <GenericContext.Consumer>
                 {context => <Component {...props} {...context} />}
             </GenericContext.Consumer>
         );
     };
+}
+
+export function withLocale (Component) {
+    return function LocalizedComponent (props) {
+        return (
+        <LocaleContext.Consumer>
+            { value => <Component {...props} getMessage={value} />}
+        </LocaleContext.Consumer>
+    );
+}
+
+export function withMutator (Component) {
+    return function StateMutatingComponent (props) {
+        return (
+        <MutatorContext.Consumer>
+            { getMutator => <Component {...props} mutator={getMutator()} />}
+        </MutatorContext.Consumer>
+    );
 }
 
 // re-binds all object methods starting with 'handle',

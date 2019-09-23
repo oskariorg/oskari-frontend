@@ -9,7 +9,7 @@ import '../../../mapping/mapmodule/domain/AbstractLayer';
 import '../../../mapping/mapmodule/domain/style';
 import '../resources/locale/fi';
 
-import { GenericContext } from 'oskari-ui/util';
+import { LocaleContext } from 'oskari-ui/util';
 
 const Oskari = window.Oskari;
 const sandbox = Oskari.getSandbox();
@@ -28,7 +28,7 @@ service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)
     .add('layout', () => (
-        <GenericContext.Provider value={{ loc: loc }}>
+        <LocaleContext.Provider value={loc}>
             <AdminLayerForm
                 mutator={service.getMutator()}
                 mapLayerGroups={[]}
@@ -38,5 +38,5 @@ storiesOf('AdminLayerForm', module)
                 onDelete={() => {}}
                 onSave={() => {}}
                 onCancel={() => {}} />
-        </GenericContext.Provider>
+        </LocaleContext.Provider>
     ));

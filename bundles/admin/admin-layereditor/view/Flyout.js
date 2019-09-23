@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
 import { AdminLayerFormService } from './AdminLayerFormService';
-import { GenericContext } from 'oskari-ui/util';
+import { LocaleContext, MutatorContext } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -61,20 +61,23 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (layer === null || !el) {
             return;
         }
-        const renderUI = () => {
-            ReactDOM.render(
-                <GenericContext.Provider value={{ loc: loc }}>
+
+        const Content = () => (
+            <LocaleContext.Provider value={loc}>
+                <MutatorContext.Provider value={this.service}>
                     <AdminLayerForm
-                        mutator={this.service.getMutator()}
                         mapLayerGroups={mapLayerGroups}
                         dataProviders={dataProviders}
                         layer={this.service.getLayer()}
                         message={this.service.getMessage()}
                         onDelete={() => this.service.deleteLayer()}
                         onSave={() => this.service.saveLayer()}
-                        onCancel={() => me.hide()} />
-                </GenericContext.Provider>,
-                el.get(0));
+                        onCancel={() => me.hide()} />);
+                </MutatorContext.Provider>
+            </LocaleContext.Provider>);
+
+        const renderUI = () => {
+            ReactDOM.render(Content, el.get(0));
         };
         this.service.initLayerState(layer);
         this.service.setListener(renderUI);
