@@ -4,7 +4,7 @@ import { DataProviderSelect } from './DataProviderSelect';
 import { TextInput, UrlInput, Collapse, CollapsePanel } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
-import { withContext } from 'oskari-ui/util';
+import { withLocale } from 'oskari-ui/util';
 
 const GeneralTabPane = (props) => {
     const { mapLayerGroups, dataProviders, layer, service, loc } = props;
@@ -128,5 +128,5 @@ GeneralTabPane.propTypes = {
     loc: PropTypes.func
 };
 
-const contextWrap = withContext(GeneralTabPane);
+const contextWrap = withLocale(GeneralTabPane);
 export { contextWrap as GeneralTabPane };

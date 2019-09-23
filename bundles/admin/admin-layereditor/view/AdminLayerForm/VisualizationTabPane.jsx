@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSelect } from './StyleSelect';
 import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './AdminLayerFormStyledComponents';
 import { Slider, TextAreaInput, Opacity } from 'oskari-ui';
-import { withContext } from 'oskari-ui/util';
+import { withLocale } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const VerticalComponent = styled(StyledComponent)`
@@ -57,5 +57,5 @@ VisualizationTabPane.propTypes = {
     loc: PropTypes.func
 };
 
-const contextWrap = withContext(VisualizationTabPane);
+const contextWrap = withLocale(VisualizationTabPane);
 export { contextWrap as VisualizationTabPane };

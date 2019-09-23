@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, TextAreaInput } from 'oskari-ui';
 import { StyledTab, StyledComponent } from './AdminLayerFormStyledComponents';
-import { withContext } from 'oskari-ui/util';
+import { withLocale } from 'oskari-ui/util';
 
 const AdditionalTabPane = (props) => {
     const { layer, service, loc } = props;
@@ -32,5 +32,5 @@ AdditionalTabPane.propTypes = {
     loc: PropTypes.func
 };
 
-const contextWrap = withContext(AdditionalTabPane);
-export {contextWrap as AdditionalTabPane};
+const contextWrap = withLocale(AdditionalTabPane);
+export { contextWrap as AdditionalTabPane };

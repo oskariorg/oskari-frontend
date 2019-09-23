@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Collapse, CollapsePanel, List, ListItem } from 'oskari-ui';
-import { withContext } from 'oskari-ui/util';
+import { withLocale } from 'oskari-ui/util';
 
 const MapLayerGroups = (props) => {
     const { layer, mapLayerGroups, service, lang } = props;
@@ -33,5 +33,5 @@ MapLayerGroups.propTypes = {
     loc: PropTypes.func.isRequired
 };
 
-const contextWrap = withContext(MapLayerGroups);
+const contextWrap = withLocale(MapLayerGroups);
 export { contextWrap as MapLayerGroups };
