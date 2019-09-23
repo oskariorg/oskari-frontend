@@ -455,6 +455,35 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     /**
+     *
+     * @method centerMap
+     * Moves the map to the given position and zoomlevel.
+     * @param {Number[] | Object} lonlat coordinates to move the map to
+     * @param {Number} zoomLevel absolute zoomlevel to set the map to
+     * @param {Boolean} suppressEnd true to NOT send an event about the map move
+     *  (other components wont know that the map has moved, only use when chaining moves and
+     *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @param {Object} options  has values heading, pitch, roll and duration
+     */
+    centerMap (lonlat, zoom, suppressEnd, options) {
+        const { heading, pitch, roll, duration } = options;
+        const camera = this.getCesiumScene().camera;
+        const cameraHeight = zoom.type === 'scale' ? zoom.value * 500 : zoom.value * 5000;
+
+        lonlat = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
+        camera.flyTo({
+            destination: Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], cameraHeight),
+            orientation: {
+                heading: heading,
+                pitch: pitch,
+                roll: roll
+            },
+            duration: duration
+        });
+        return true;
+    }
+
+    /**
      * Returns state for mapmodule including plugins that have getStateParameters() function
      * @method getStateParameters
      * @return {String} link parameters for map state
