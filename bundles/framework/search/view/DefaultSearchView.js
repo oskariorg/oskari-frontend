@@ -399,11 +399,9 @@ Oskari.clazz.define(
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
             var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
                 zoom = result.zoomLevel;
-            debug.log("======================================");
             debug.log(result);
             debug.log(result.zoomLevel);
             debug.log(result.zoomScale);
-            debug.log("======================================");
             if (result.zoomScale) {
                 zoom = {scale: result.zoomScale};
             }
