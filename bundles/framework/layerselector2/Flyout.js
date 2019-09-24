@@ -24,6 +24,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this.addedButtons = {};
         this.filterComponents = [];
+        const me = this;
+        this.layerlistService.on('FilterActivate', () => me.populateLayers());
     }, {
 
         /**
