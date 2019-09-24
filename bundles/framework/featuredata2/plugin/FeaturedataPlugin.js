@@ -158,8 +158,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataP
                 if (!me._flyoutOpen) {
                     if (me._mapStatusChanged) {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
-                        var event = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent')();
-                        sandbox.notifyAll(event);
+                        var eventBuilder = Oskari.eventBuilder('WFSRefreshManualLoadLayersEvent');
+                        if (eventBuilder) {
+                            sandbox.notifyAll(event);
+                        }
                         me._mapStatusChanged = false;
                     } else {
                         sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [me._instance, 'detach']);
