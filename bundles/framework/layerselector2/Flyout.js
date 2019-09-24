@@ -20,8 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.layerTabs = [];
         this.filters = [];
         this._filterNewestCount = 20;
-
-
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this.addedButtons = {};
@@ -131,7 +129,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
-                    deactive: 'layer-newest-disabled'
+                    deactive: 'layer-newest-disabled',
+                    current: 'layer-newest-disabled'
                 },
                 'newest');
         },
