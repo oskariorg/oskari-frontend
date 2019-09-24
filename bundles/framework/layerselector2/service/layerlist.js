@@ -24,6 +24,32 @@
             getName: function () {
                 return this.__name;
             },
+            getMutator () {
+                const me = this;
+                return {
+                    setCurrentFilter (filterId) {
+                        me.currentFilter = me.currentFilter === filterId ? null : filterId;
+                        if (me.currentFilter) {
+                            // Set current filter style to active and others to deactive
+                            const currentFilter = Object.values(me.layerlistFilterButtons).filter(b => b.id === me.currentFilter)[0];
+                            currentFilter.cls.current = currentFilter.cls.active;
+                            const otherFilters = Object.values(me.layerlistFilterButtons).filter(b => b.id !== me.currentFilter);
+                            if (otherFilters) {
+                                otherFilters.map(o => {
+                                    o.cls.current = o.cls.deactive;
+                                    return o;
+                                });
+                            }
+                        } else {
+                            Object.values(me.layerlistFilterButtons).map(o => {
+                                o.cls.current = o.cls.deactive;
+                                return o;
+                            });
+                        }
+                        me.trigger('FilterActivate');
+                    }
+                };
+            },
             registerLayerlistFilterButton: function (text, tooltip, cls, filterId) {
                 var me = this;
 
@@ -50,11 +76,11 @@
                 }
                 return me.layerlistFilterButtons;
             },
+            getLayerlistFilterButtons: function () {
+                return this.layerlistFilterButtons;
+            },
             getCurrentFilter: function () {
                 return this.currentFilter;
-            },
-            setCurrentFilter: function (filterId) {
-                this.currentFilter = filterId;
             }
         }, {
             'protocol': ['Oskari.mapframework.service.Service']
