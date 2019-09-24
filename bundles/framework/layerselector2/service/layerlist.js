@@ -2,6 +2,7 @@
     Oskari.clazz.define('Oskari.mapframework.service.LayerlistService',
         function () {
             this.layerlistFilterButtons = {};
+            this.currentFilter = null;
             Oskari.makeObservable(this);
         },
         {
@@ -48,6 +49,12 @@
                     return me.layerlistFilterButtons[filterId];
                 }
                 return me.layerlistFilterButtons;
+            },
+            getCurrentFilter: function () {
+                return this.currentFilter;
+            },
+            setCurrentFilter: function (filterId) {
+                this.currentFilter = filterId;
             }
         }, {
             'protocol': ['Oskari.mapframework.service.Service']
