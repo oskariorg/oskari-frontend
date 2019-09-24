@@ -3,25 +3,25 @@ import { shallow } from 'enzyme';
 import { LayerFilter } from './LayerFilter';
 
 describe('<LayerFilter/> ', () => {
-    const testText = 'test_text';
-    const testTooltip = 'test_tooltip';
-    const testFilterName = 'test_filterName';
-    const testClassNameDeactive = 'test_classNameDeactive';
+    const testText = 'someText';
+    const testTooltip = 'someTooltip';
+    const testFilterName = 'someFilterName';
+    const testCurrentStyle = 'someStyle';
 
-    test('sets props correctly', () => {
+    test('uses props correctly', () => {
         expect.assertions(4);
         const wrapper = shallow(<LayerFilter text={testText} tooltip={testTooltip}
-            filterName={testFilterName} classNameDeactive={testClassNameDeactive} clickHandler={() => console.log('Not used in this test')}/>);
+            filterName={testFilterName} currentStyle={testCurrentStyle} clickHandler={() => console.log('Not called in this test')}/>);
 
         expect(wrapper.find('div').last().text()).toEqual(testText);
         expect(wrapper.find('center').props().title).toEqual(testTooltip);
         expect(wrapper.find('center').props().filtername).toEqual(testFilterName);
-        expect(wrapper.find('div').first().hasClass(testClassNameDeactive)).toBeTruthy();
+        expect(wrapper.find('div').first().hasClass(testCurrentStyle)).toBeTruthy();
     });
-    test('calls clickhandler once when clicked', () => {
+    test('calls click handler once when filter is clicked', () => {
         expect.assertions(1);
         const testClickHandler = jest.fn();
-        const wrapper = shallow(<LayerFilter text={testText} tooltip={testTooltip} filterName={testFilterName} classNameDeactive={testClassNameDeactive} clickHandler={testClickHandler}/>);
+        const wrapper = shallow(<LayerFilter text={testText} tooltip={testTooltip} filterName={testFilterName} currentStyle={testCurrentStyle} clickHandler={testClickHandler}/>);
         wrapper.find('center').simulate('click');
         expect(testClickHandler.mock.calls.length).toEqual(1);
     });
