@@ -62,7 +62,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
 
-        const Content = () => (
+        const createForm = () => (
             <LocaleContext.Provider value={loc}>
                 <MutatorContext.Provider value={this.service}>
                     <AdminLayerForm
@@ -77,7 +77,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             </LocaleContext.Provider>);
 
         const renderUI = () => {
-            ReactDOM.render(Content, el.get(0));
+            ReactDOM.render(createForm(), el.get(0));
         };
         this.service.initLayerState(layer);
         this.service.setListener(renderUI);
