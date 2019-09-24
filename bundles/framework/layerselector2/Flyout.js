@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 me.filterComponents.push(filterButton);
 
                 filterButton.on('FilterActivate', function (currentFilter) {
-                    me.layerlistService.setCurrentFilter(currentFilter);
+                    me.layerlistService.getMutator().setCurrentFilter(currentFilter);
                     me.populateLayers();
                 });
             });
