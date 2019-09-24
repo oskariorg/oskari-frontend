@@ -457,40 +457,26 @@ class MapModuleOlCesium extends MapModuleOl {
     /**
      *
      * @method centerMap
-     * Moves the map to the given position and zoomlevel.
+     * Moves the map to the given position and zoomlevel. Overrides 2d centerMap function.
      * @param {Number[] | Object} lonlat coordinates to move the map to
      * @param {Number} zoomLevel absolute zoomlevel to set the map to
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-     * @param {Object} options  has values heading, pitch, roll and duration
+     * @param {Object} options  has values for heading, pitch, roll and duration
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
-        // Adjust cameraHeight from zoom
+        lonlat = this.normalizeLonLat(lonlat);
         const cameraHeight = zoom.type === 'scale' ? zoom.value * 500 : zoom.value * 5000;
-        const duration = options && options.duration ? options.duration : 3000;
         const camera = this.getCesiumScene().camera;
-        lonlat = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
-        let heading = Cesium.Math.toRadians(0);
-        let pitch = Cesium.Math.toRadians(0);
-        let roll = 0.0;
-        if (options && options.heading && options.pitch && options.roll) {
-            heading = options.heading;
-            pitch = options.pitch;
-            roll = options.roll;
-        }
+        const duration = 3;
 
+        lonlat = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
         camera.flyTo({
             destination: Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], cameraHeight),
-            orientation: {
-                heading: heading,
-                pitch: pitch,
-                roll: roll
-            },
             duration: duration
         });
 
-        this.updateDomain();
         if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
