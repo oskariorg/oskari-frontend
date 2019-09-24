@@ -615,7 +615,7 @@ export class MapModule extends AbstractMapModule {
             view.setCenter([lonlat.lon, lonlat.lat]);
             view.setZoom(zoomN);
         } else {
-            this.animateTo(lonlat, zoomN, options.animation, options.duration);
+            this._animateTo(lonlat, zoomN, options.animation, options.duration);
         }
 
         this.updateDomain();
