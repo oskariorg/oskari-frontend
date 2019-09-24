@@ -6,6 +6,51 @@ import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormComponents';
 import { withLocale } from 'oskari-ui/util';
 
+const getLocalizedLabels = (lang, getMessage) => {
+    let prefix = typeof getMessage(lang) === 'object' ? lang : 'generic';
+    return {
+        name: getMessage(`${prefix}.placeholder`, [lang]),
+        description: getMessage(`${prefix}.descplaceholder`, [lang])
+    };
+};
+
+const LocalizedLayerInfo = ({ layer, lang, service, getMessage }) => {
+    const selectedLang = Oskari.getLang();
+    const name = layer[`name_${lang}`];
+    const description = layer[`title_${lang}`];
+    const labels = getLocalizedLabels(lang, getMessage);
+    const onNameChange = evt => service.setLocalizedLayerName(lang, evt.target.value);
+    const onDescriptionChange = evt => service.setLocalizedLayerDescription(lang, evt.target.value);
+    const nameInput = <TextInput type='text' value={name} onChange={onNameChange} />;
+    const descInput = <TextInput type='text' value={description} onChange={onDescriptionChange} />;
+    if (selectedLang === lang) {
+        return (
+            <React.Fragment>
+                <label>{labels.name}</label>
+                <StyledComponent>
+                    {nameInput}
+                </StyledComponent>
+                <label>{labels.description}</label>
+                <StyledComponent>
+                    {descInput}
+                </StyledComponent>
+            </React.Fragment>
+        );
+    }
+    return (
+        <React.Fragment>
+            <div>{labels.name}{nameInput}</div>
+            <div>{labels.description}{descInput}</div>
+        </React.Fragment>
+    );
+};
+LocalizedLayerInfo.propTypes = {
+    lang: PropTypes.string.isRequired,
+    service: PropTypes.object.isRequired,
+    layer: PropTypes.object.isRequired,
+    getMessage: PropTypes.func.isRequired
+};
+
 const GeneralTabPane = (props) => {
     const { mapLayerGroups, dataProviders, layer, service, getMessage } = props;
     const lang = Oskari.getLang();
@@ -39,72 +84,25 @@ const GeneralTabPane = (props) => {
             <StyledComponent>
                 <TextInput type='text' value={layer.layerName} onChange={(evt) => service.setLayerName(evt.target.value)} />
             </StyledComponent>
-            {lang === 'fi' &&
-                <StyledComponentGroup>
-                    <label>{getMessage('fi.placeholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)} />
-                    </StyledComponent>
-                    <label>{getMessage('fi.descplaceholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)} />
-                    </StyledComponent>
-                    <StyledComponent>
-                        <Collapse>
-                            <CollapsePanel header={getMessage('otherLanguages')}>
-                                <div>{getMessage('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
-                                <div>{getMessage('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
-                                <div>{getMessage('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
-                                <div>{getMessage('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
-                            </CollapsePanel>
-                        </Collapse>
-                    </StyledComponent>
-                </StyledComponentGroup>
-            }
-            {lang === 'en' &&
-                <StyledComponentGroup>
-                    <label>{getMessage('en.placeholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)} />
-                    </StyledComponent>
-                    <label>{getMessage('en.descplaceholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)} />
-                    </StyledComponent>
-                    <StyledComponent>
-                        <Collapse>
-                            <CollapsePanel header={getMessage('otherLanguages')}>
-                                <div>{getMessage('fi.placeholder')} <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
-                                <div>{getMessage('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
-                                <div>{getMessage('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
-                                <div>{getMessage('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
-                            </CollapsePanel>
-                        </Collapse>
-                    </StyledComponent>
-                </StyledComponentGroup>
-            }
-            {lang === 'sv' &&
-                <StyledComponentGroup>
-                    <label>{getMessage('sv.placeholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)} />
-                    </StyledComponent>
-                    <label>{getMessage('sv.descplaceholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)} />
-                    </StyledComponent>
-                    <StyledComponent>
-                        <Collapse>
-                            <CollapsePanel header={getMessage('otherLanguages')}>
-                                <div>{getMessage('fi.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
-                                <div>{getMessage('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
-                                <div>{getMessage('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
-                                <div>{getMessage('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
-                            </CollapsePanel>
-                        </Collapse>
-                    </StyledComponent>
-                </StyledComponentGroup>
-            }
+            <StyledComponentGroup>
+                <LocalizedLayerInfo layer={layer} lang={lang} service={service} getMessage={getMessage} />
+                <StyledComponent>
+                    <Collapse>
+                        <CollapsePanel header={getMessage('otherLanguages')}>
+                            {
+                                Oskari.getSupportedLanguages()
+                                    .filter(supportedLang => supportedLang !== lang)
+                                    .map(lang => <LocalizedLayerInfo
+                                        key={layer.layer_id + lang}
+                                        layer={layer}
+                                        lang={lang}
+                                        service={service}
+                                        getMessage={getMessage} />)
+                            }
+                        </CollapsePanel>
+                    </Collapse>
+                </StyledComponent>
+            </StyledComponentGroup>
             <label>{getMessage('dataProvider')}</label>
             <StyledComponent>
                 <DataProviderSelect key={layer.layer_id}
