@@ -7,7 +7,7 @@ import olView from 'ol/View';
 import { METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT } from 'ol/proj/Units';
 import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
-import { easeIn, easeOut } from 'ol/easing';
+import { easeOut } from 'ol/easing';
 import olMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
@@ -532,7 +532,7 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
-     * @method animateToLonLat
+     * @method animateTo
      * Animate from current x/y to requested x/y
      * Usable animations: fly/pan/zoomPan
      * @param {Object} lonlat coordinates to move the map to
@@ -548,7 +548,6 @@ export class MapModule extends AbstractMapModule {
 
         const location = [lonlat.lon, lonlat.lat];
         const view = this.getMap().getView();
-        const flyZoom = view.getZoom();
 
         switch (animation) {
         case 'pan':
@@ -558,6 +557,7 @@ export class MapModule extends AbstractMapModule {
             });
             break;
         case 'fly':
+            const flyZoom = view.getZoom();
             view.animate({
                 center: location,
                 duration: duration
@@ -571,6 +571,7 @@ export class MapModule extends AbstractMapModule {
             });
             break;
         case 'zoomPan':
+
             view.animate({
                 center: location,
                 zoom: zoom,
@@ -579,8 +580,12 @@ export class MapModule extends AbstractMapModule {
             });
             break;
         default:
-            view.setCenter([lonlat.lon, lonlat.lat]);
-            view.setZoom(zoom);
+            view.animate({
+                center: location,
+                zoom: zoom,
+                duration: duration,
+                easing: easeOut
+            });
             break;
         }
         return true;
@@ -595,7 +600,7 @@ export class MapModule extends AbstractMapModule {
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      * @param {Object} options animation name as string
-     *  Usable animations: fly/pan
+     *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
@@ -604,16 +609,18 @@ export class MapModule extends AbstractMapModule {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
-
         if (zoom === null || zoom === undefined) {
             zoom = this.getMapZoom();
         }
 
         const zoomN = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-        // if animation is set, use animation, else just go there
         if (typeof options === 'undefined') {
-            view.setCenter([lonlat.lon, lonlat.lat]);
-            view.setZoom(zoomN);
+            view.animate({
+                center: [lonlat.lon, lonlat.lat],
+                zoom: zoomN,
+                duration: 3000,
+                easing: easeOut
+            });
         } else {
             this._animateTo(lonlat, zoomN, options.animation, options.duration);
         }
