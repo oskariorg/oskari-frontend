@@ -24,6 +24,7 @@ Oskari.clazz.define(
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
+        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
@@ -45,6 +46,8 @@ Oskari.clazz.define(
         };
         this.layerCollapseStateHandler = new StateHandler();
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
+        this.layerlistService.on('Layerlist.Filter.Button.Add', () => this.renderLayerFilters());
+        this.layerlistService.on('FilterActivate', () => this.renderLayerFilters());
         this._createUI(id);
     }, {
 
@@ -128,8 +131,7 @@ Oskari.clazz.define(
          */
         _createUI: function (oskarifieldId) {
             var me = this,
-                oskarifield,
-                layerFilter;
+                oskarifield;
 
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
@@ -159,7 +161,6 @@ Oskari.clazz.define(
             if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
                 me.layerFiltersMountPoint = jQuery(me.templates.layerFiltersMountPoint);
                 me.tabPanel.getContainer().append(me.layerFiltersMountPoint);
-                ReactDOM.render(<LayerFilters layerListRenderHandler = {this._renderLayers.bind(this)}/>, me.layerFiltersMountPoint[0]);
             }
 
             me.tabPanel.getContainer().append(oskarifield);
@@ -648,6 +649,11 @@ Oskari.clazz.define(
 
         updateLayerContent: function (layerId, layer) {
             console.warn('LayerTab.updateLayerContent is deprecated');
+        },
+
+        renderLayerFilters: function () {
+            ReactDOM.render(<LayerFilters filters = {this.layerlistService.getLayerlistFilterButtons()}
+                service = {this.layerlistService.getMutator()}/>, this.layerFiltersMountPoint[0]);
         }
     }
 );
