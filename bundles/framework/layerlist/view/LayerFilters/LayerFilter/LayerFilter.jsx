@@ -10,11 +10,11 @@ const StyledFilter = styled.div`
     margin-left: -1px;
 `;
 
-export const LayerFilter = ({ text, tooltip, filterName, classNameDeactive, clickHandler }) => {
+export const LayerFilter = ({ text, tooltip, filterName, currentStyle, clickHandler }) => {
     return (
         <StyledFilter>
             <center title={tooltip} filtername={filterName} onClick={(event) => clickHandler(event)}>
-                <div className={classNameDeactive}></div>
+                <div className={currentStyle}></div>
                 <div>{text}</div>
             </center>
         </StyledFilter>
@@ -25,6 +25,6 @@ LayerFilter.propTypes = {
     text: PropTypes.string.isRequired,
     tooltip: PropTypes.string.isRequired,
     filterName: PropTypes.string.isRequired,
-    classNameDeactive: PropTypes.string.isRequired,
+    currentStyle: PropTypes.string.isRequired,
     clickHandler: PropTypes.func.isRequired
 };
