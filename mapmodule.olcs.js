@@ -466,11 +466,20 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Object} options  has values heading, pitch, roll and duration
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
-        const { heading, pitch, roll, duration } = options;
-        const camera = this.getCesiumScene().camera;
+        // Adjust cameraHeight from zoom
         const cameraHeight = zoom.type === 'scale' ? zoom.value * 500 : zoom.value * 5000;
-
+        const duration = options && options.duration ? options.duration : 3000;
+        const camera = this.getCesiumScene().camera;
         lonlat = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
+        let heading = Cesium.Math.toRadians(0);
+        let pitch = Cesium.Math.toRadians(0);
+        let roll = 0.0;
+        if (options && options.heading && options.pitch && options.roll) {
+            heading = options.heading;
+            pitch = options.pitch;
+            roll = options.roll;
+        }
+
         camera.flyTo({
             destination: Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], cameraHeight),
             orientation: {
@@ -480,6 +489,11 @@ class MapModuleOlCesium extends MapModuleOl {
             },
             duration: duration
         });
+
+        this.updateDomain();
+        if (suppressEnd !== true) {
+            this.notifyMoveEnd();
+        }
         return true;
     }
 
