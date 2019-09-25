@@ -17,8 +17,8 @@ const getBadgeText = (group, visibleLayerCount) => {
     return badgeText;
 };
 
-const renderLayer = ({model, even, selected, mapSrs, mutator, locale}) => {
-    const itemProps = {model, even, selected, mapSrs, mutator, locale};
+const renderLayer = ({ model, even, selected, mapSrs, mutator, locale }) => {
+    const itemProps = { model, even, selected, mapSrs, mutator, locale };
     return (
         <StyledListItem>
             <Layer key={model.getId()} {...itemProps} />
@@ -34,7 +34,7 @@ renderLayer.propTypes = {
     locale: PropTypes.any
 };
 
-export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
+export const LayerCollapsePanel = ({ group, showLayers, selectedLayerIds, mapSrs, mutator, locale }) => {
     const layerRows = showLayers.map((layer, index) => {
         const layerProps = {
             model: layer,
@@ -47,8 +47,11 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
         return layerProps;
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
+    if (group.getTitle() === 'Geologia') {
+        console.log('rendering Geologia CollapsePanel');
+    }
     return (
-        <CollapsePanel {...propsNeededForPanel}
+        <CollapsePanel
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
@@ -66,3 +69,6 @@ LayerCollapsePanel.propTypes = {
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };
+
+const memoized = React.memo(LayerCollapsePanel);
+export { memoized as LayerCollapsePanelMemo };

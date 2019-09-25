@@ -26,6 +26,20 @@ const getNoResultsProps = locale => {
     return alertProps;
 };
 
+let previousProps = {};
+const propsEqualPrevious = props => {
+    let equals = true;
+    Object.getOwnPropertyNames(props).forEach(propname => {
+        if (props[propname] !== previousProps[propname]) {
+            console.log(propname + ' does not equal ');
+            equals = false;
+        }
+    });
+    if (equals) {
+        console.log('props equal, not rendering?');
+    }
+};
+
 export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mapSrs, mutator, locale }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
         return <StyledAlert {...getNoResultsProps(locale)}/>;
@@ -37,8 +51,12 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
             {
-                panels.map(({group, showLayers}) => {
-                    const panelProps = {group, showLayers, selectedLayerIds, mapSrs, mutator, locale};
+                panels.map(({ group, showLayers }) => {
+                    const panelProps = { group, showLayers, selectedLayerIds, mapSrs, mutator, locale };
+                    if (group.getTitle() === 'Geologia') {
+                        propsEqualPrevious(panelProps);
+                        previousProps = panelProps;
+                    }
                     return (
                         <LayerCollapsePanel key={group.getTitle()} {...panelProps} />
                     );
