@@ -489,7 +489,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function (previousTab, newTab) {
                 if (me._currentFilter) {
-                    me.activateFilter(me._currentFilter);
+                    me.setActiveFilter(me._currentFilter);
                 }
             });
             me.tabContainer.insertTo(cel);
@@ -597,7 +597,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     if (filterIcon.hasClass(iconClassDeactive)) {
                         // Activate this filter
                         me._setFilterIconClasses(filterName);
-                        me.activateFilter(filterName);
+                        me.setActiveFilter(filterName);
                         me._setFilterTooltip(filterName, loc.tooltips.remove);
                     } else {
                         // Deactivate all filters
@@ -611,11 +611,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         },
 
         /**
-         * Activate selected filter.
-         * @method @public activateFilter
+         * Set active filter.
+         * @method @public setActiveFilter
          * @param  {String} filterName activate filter name
          */
-        activateFilter: function (filterName) {
+        setActiveFilter: function (filterName) {
             var me = this;
             me._currentFilter = filterName;
 
@@ -668,7 +668,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             });
 
             if (!notDeactivateThisFilter) {
-                me.activateFilter();
+                me.setActiveFilter();
             }
         }
     }, {
