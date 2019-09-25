@@ -599,7 +599,7 @@ export class MapModule extends AbstractMapModule {
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
-     * @param {Object} options animation name as string
+     * @param {Object} options options, such as animation and duration
      *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
      */
