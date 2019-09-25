@@ -34,7 +34,8 @@ renderLayer.propTypes = {
     locale: PropTypes.any
 };
 
-export const LayerCollapsePanel = ({ group, showLayers, selectedLayerIds, mapSrs, mutator, locale }) => {
+const LayerCollapsePanel = (props) => {
+    const { group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel } = props;
     const layerRows = showLayers.map((layer, index) => {
         const layerProps = {
             model: layer,
@@ -51,7 +52,7 @@ export const LayerCollapsePanel = ({ group, showLayers, selectedLayerIds, mapSrs
         console.log('rendering Geologia CollapsePanel');
     }
     return (
-        <CollapsePanel
+        <CollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
@@ -70,5 +71,20 @@ LayerCollapsePanel.propTypes = {
     locale: PropTypes.any.isRequired
 };
 
-const memoized = React.memo(LayerCollapsePanel);
-export { memoized as LayerCollapsePanelMemo };
+const comparisonFn = (prevProps, nextProps) => {
+    // expandIcon is something the parent component adds as a context
+    const ignored = ['expandIcon'];
+    let useMemoized = true;
+    Object.getOwnPropertyNames(nextProps).forEach(name => {
+        if (ignored.includes(name)) {
+            return;
+        }
+        if (nextProps[name] !== prevProps[name]) {
+            console.log(name + ' does not equal ');
+            useMemoized = false;
+        }
+    });
+    return useMemoized;
+};
+const memoized = React.memo(LayerCollapsePanel, comparisonFn);
+export { memoized as LayerCollapsePanel };
