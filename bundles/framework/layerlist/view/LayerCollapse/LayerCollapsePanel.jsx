@@ -74,13 +74,19 @@ LayerCollapsePanel.propTypes = {
 const comparisonFn = (prevProps, nextProps) => {
     // expandIcon is something the parent component adds as a context
     const ignored = ['expandIcon'];
+    const arrayChildCheck = ['selectedLayerIds'];
     let useMemoized = true;
     Object.getOwnPropertyNames(nextProps).forEach(name => {
         if (ignored.includes(name)) {
             return;
         }
+        if (arrayChildCheck.includes(name)) {
+            if (!Oskari.util.arraysEqual(nextProps[name], prevProps[name])) {
+                useMemoized = false;
+            }
+            return;
+        }
         if (nextProps[name] !== prevProps[name]) {
-            console.log(name + ' does not equal ');
             useMemoized = false;
         }
     });

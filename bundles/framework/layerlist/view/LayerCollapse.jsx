@@ -38,9 +38,16 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
             {
                 panels.map(({ group, showLayers }) => {
-                    const panelProps = { group, showLayers, selectedLayerIds, mapSrs, mutator, locale };
+                    const selectedLayersInGroup = selectedLayerIds.filter(cur => showLayers.map(lyr => lyr.getId()).includes(cur));
                     return (
-                        <LayerCollapsePanel key={group.getTitle()} {...panelProps} />
+                        <LayerCollapsePanel key={group.getTitle()}
+                            selectedLayerIds={selectedLayersInGroup}
+                            group={group}
+                            showLayers={showLayers}
+                            mapSrs={mapSrs}
+                            mutator={mutator}
+                            locale={locale}
+                        />
                     );
                 })
             }
