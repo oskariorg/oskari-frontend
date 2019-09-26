@@ -430,7 +430,10 @@ div.hierarchical-layerlist {
             .layer-tools {
                 .layer-tool {
                     &.edit-layer {
-                        background-image: $editIcon;
+                        /* Requires !important because Oskari icons.css has .edit-layer that otherwise overrides these with using !important */
+                        background-image: $editIcon !important;
+                        background-repeat: no-repeat !important;
+                        background-position: center center !important;
                     }
                 }
             }
