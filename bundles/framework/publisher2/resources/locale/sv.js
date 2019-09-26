@@ -104,6 +104,22 @@ Oskari.registerLocalization(
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
                     "allowStyleChange": "Tillåta stiländring"
+                },
+                "mylocation": {
+                    "modes": {
+                        "single": "Enskild",
+                        "continuous": "Fortsatt"
+                    },
+                    "shows": {
+                        "both": "I båda",
+                        "desktop": "Vid skrivbordsversion",
+                        "mobile": "I mobilen"
+                    },
+                    "titles": {
+                        "mode": "Funktion",
+                        "showOnlyOn": "Visa endast",
+                        "centerMapAutomatically": "Centrera kartan automatiskt"
+                    }
                 }
             },
             "toollayout": {
