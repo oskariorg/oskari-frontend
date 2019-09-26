@@ -580,12 +580,8 @@ export class MapModule extends AbstractMapModule {
             });
             break;
         default:
-            view.animate({
-                center: location,
-                zoom: zoom,
-                duration: duration,
-                easing: easeOut
-            });
+            view.setCenter(location);
+            view.setZoom(zoom);
             break;
         }
         return true;
@@ -595,7 +591,7 @@ export class MapModule extends AbstractMapModule {
      * @method centerMap
      * Moves the map to the given position and zoomlevel.
      * @param {Number[] | Object} lonlat coordinates to move the map to
-     * @param {Number} zoomLevel absolute zoomlevel to set the map to
+     * @param {Object | Number} zoomLevel absolute zoomlevel to set the map to
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
@@ -605,29 +601,26 @@ export class MapModule extends AbstractMapModule {
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
         const view = this.getMap().getView();
+        const animation = options && options.animation ? options.animation : '';
+        const duration = options && options.duration ? options.duration : 3000;
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
         if (zoom === null || zoom === undefined) {
-            zoom = this.getMapZoom();
+            zoom = { type: 'zoom', value: this.getMapZoom() };
         }
-
-        const zoomN = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-        if (typeof options === 'undefined') {
-            view.animate({
-                center: [lonlat.lon, lonlat.lat],
-                zoom: zoomN,
-                duration: 3000,
-                easing: easeOut
-            });
-        } else {
-            this._animateTo(lonlat, zoomN, options.animation, options.duration);
+        if (zoom === Number) {
+            zoom = { type: 'zoom', value: zoom };
         }
+        const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+        this._animateTo(lonlat, zoomValue, animation, duration);
 
         this.updateDomain();
         if (suppressEnd !== true) {
-            this.notifyMoveEnd();
+            setTimeout(() => {
+                this.notifyMoveEnd();
+            }, duration);
         }
         return true;
     }
