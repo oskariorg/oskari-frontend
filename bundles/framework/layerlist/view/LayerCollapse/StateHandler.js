@@ -9,6 +9,7 @@ export class StateHandler {
         this.openGroupTitles = null;
         this.filtered = null;
         this.map = Oskari.getSandbox().getMap();
+        this.mutator = this._createMutator();
     }
     updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
         this.groups = groups || this.groups;
@@ -47,7 +48,7 @@ export class StateHandler {
     }
     _getState () {
         return {
-            mutator: this.getMutator(),
+            mutator: this.mutator,
             selectedLayerIds: this.selectedLayerIds,
             groups: this.groups,
             filtered: this.filtered,
@@ -59,7 +60,7 @@ export class StateHandler {
         const state = this._getState();
         this.listeners.forEach(consumer => consumer(state));
     }
-    getMutator () {
+    _createMutator () {
         const me = this;
         const sandbox = Oskari.getSandbox();
         return {

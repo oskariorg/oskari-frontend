@@ -75,7 +75,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         onCancel={() => {
                             this.service.clearMessages();
                             me.hide();
-                        }} />);
+                        }} />
                 </MutatorContext.Provider>
             </LocaleContext.Provider>);
 

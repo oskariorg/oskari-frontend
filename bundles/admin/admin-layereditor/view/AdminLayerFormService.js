@@ -27,34 +27,16 @@ export class AdminLayerFormService {
                 me.layer = { ...me.layer, layerName };
                 me.notify();
             },
-            // TODO refactor locale handling. Implementation has to support numerous languages.
-            //
-            setLayerNameInFinnish (name) {
-                me.layer = { ...me.layer, name_fi: name };
+            setLocalizedLayerName (lang, name) {
+                const localized = `name_${lang}`;
+                me.layer = { ...me.layer, [localized]: name };
                 me.notify();
             },
-            setLayerNameInEnglish (name) {
-                me.layer = { ...me.layer, name_en: name };
+            setLocalizedLayerDescription (lang, description) {
+                const localized = `title_${lang}`;
+                me.layer = { ...me.layer, [localized]: description };
                 me.notify();
             },
-            setLayerNameInSwedish (name) {
-                me.layer = { ...me.layer, name_sv: name };
-                me.notify();
-            },
-            setDescriptionInFinnish (description) {
-                me.layer = { ...me.layer, title_fi: description };
-                me.notify();
-            },
-            setDescriptionInEnglish (description) {
-                me.layer = { ...me.layer, title_en: description };
-                me.notify();
-            },
-            setDescriptionInSwedish (description) {
-                me.layer = { ...me.layer, title_sv: description };
-                me.notify();
-            },
-            //
-            // end refactor
             setDataProvider (dataProvider) {
                 me.layer = { ...me.layer, groupId: dataProvider };
                 me.notify();
@@ -120,6 +102,10 @@ export class AdminLayerFormService {
         };
     }
 
+    /**
+     * Initializes layer model used in UI
+     * @param {Oskari.mapframework.domain.AbstractLayer} layer
+     */
     initLayerState (layer) {
         var me = this;
 
@@ -139,16 +125,7 @@ export class AdminLayerFormService {
             username: layer ? layer.getAdmin().username : '',
             password: layer ? layer.getAdmin().password : '',
             layerName: layer ? layer.getLayerName() : '',
-            // TODO refactor locale handling. Implementation has to support numerous languages.
-            //
-            name_fi: layer ? layer.getName('fi') : '',
-            name_en: layer ? layer.getName('en') : '',
-            name_sv: layer ? layer.getName('sv') : '',
-            title_fi: layer ? layer.getDescription('fi') : '',
-            title_en: layer ? layer.getDescription('en') : '',
-            title_sv: layer ? layer.getDescription('sv') : '',
-            //
-            // end refactor
+            ...this._getLocalizedLayerInfo(layer),
             groupId: layer ? layer.getAdmin().organizationId : null,
             organizationName: layer ? layer.getOrganizationName() : '',
             maplayerGroups: layer ? [...layer.getGroups()] : [],
@@ -215,6 +192,17 @@ export class AdminLayerFormService {
             styleJson[styleKey] = mvtSrcLayerStyleDef;
         });
         return styleJson;
+    }
+
+    _getLocalizedLayerInfo (layer) {
+        const info = {};
+        Oskari.getSupportedLanguages().forEach(lang => {
+            const name = `name_${lang}`;
+            const description = `title_${lang}`;
+            info[name] = layer ? layer.getName(lang) : '';
+            info[description] = layer ? layer.getDescription(lang) : '';
+        });
+        return info;
     }
 
     saveLayer () {

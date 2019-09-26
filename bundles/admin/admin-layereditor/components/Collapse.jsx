@@ -3,18 +3,19 @@ import PropTypes from 'prop-types';
 import { Collapse as AntCollapse } from 'antd';
 import 'antd/es/collapse/style/';
 
-const AntPanel = AntCollapse.Panel;
-
-export const Collapse = ({children, ...other}) => (
+// Collapse component passes some extra properties to its panels.
+// When creating a custom Panel, those properties have to be carried.
+// See usage example in bundles/framework/layerlist/view/LayerCollapse.jsx
+export const Collapse = ({ children, ...other }) => (
     <AntCollapse {...other}>
         {children}
     </AntCollapse>
 );
 
-export const Panel = ({children, ...other}) => (
-    <AntPanel {...other}>
+export const Panel = ({ children, ...other }) => (
+    <AntCollapse.Panel {...other}>
         {children}
-    </AntPanel>
+    </AntCollapse.Panel>
 );
 
 Collapse.propTypes = {

@@ -14,18 +14,19 @@ Oskari.registerLocalization(
             "password": "Password",
             "usernameAndPassword": "Username and password",
             "uniqueName": "Unique name",
+            "generic": {
+                "placeholder": "Name in {0}",
+                "descplaceholder": "Description in {0}"
+            },
             "en": {
-                "title": "En",
                 "placeholder": "Name in English",
                 "descplaceholder": "Description in English"
             },
             "fi": {
-                "title": "Fi",
                 "placeholder": "Name in Finnish",
                 "descplaceholder": "Description in Finnish"
             },
             "sv": {
-                "title": "Sv",
                 "placeholder": "Name in Swedish",
                 "descplaceholder": "Description in Swedish"
             },

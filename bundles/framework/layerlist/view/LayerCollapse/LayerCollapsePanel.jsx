@@ -17,8 +17,8 @@ const getBadgeText = (group, visibleLayerCount) => {
     return badgeText;
 };
 
-const renderLayer = ({model, even, selected, mapSrs, mutator, locale}) => {
-    const itemProps = {model, even, selected, mapSrs, mutator, locale};
+const renderLayer = ({ model, even, selected, mapSrs, mutator, locale }) => {
+    const itemProps = { model, even, selected, mapSrs, mutator, locale };
     return (
         <StyledListItem>
             <Layer key={model.getId()} {...itemProps} />
@@ -34,7 +34,8 @@ renderLayer.propTypes = {
     locale: PropTypes.any
 };
 
-export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
+const LayerCollapsePanel = (props) => {
+    const { group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel } = props;
     const layerRows = showLayers.map((layer, index) => {
         const layerProps = {
             model: layer,
@@ -66,3 +67,27 @@ LayerCollapsePanel.propTypes = {
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };
+
+const comparisonFn = (prevProps, nextProps) => {
+    // expandIcon is something the parent component adds as a context
+    const ignored = ['expandIcon'];
+    const arrayChildCheck = ['selectedLayerIds'];
+    let useMemoized = true;
+    Object.getOwnPropertyNames(nextProps).forEach(name => {
+        if (ignored.includes(name)) {
+            return;
+        }
+        if (arrayChildCheck.includes(name)) {
+            if (!Oskari.util.arraysEqual(nextProps[name], prevProps[name])) {
+                useMemoized = false;
+            }
+            return;
+        }
+        if (nextProps[name] !== prevProps[name]) {
+            useMemoized = false;
+        }
+    });
+    return useMemoized;
+};
+const memoized = React.memo(LayerCollapsePanel, comparisonFn);
+export { memoized as LayerCollapsePanel };
