@@ -32,17 +32,10 @@ Oskari.clazz.define(
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
             const locations = request.getLocations();
+            // todo remove before merge req
             const lonlat = locations ? locations.map(loc => ({ lon: loc.lon, lat: loc.lat })) : [{ lon: 0, lat: 0 }];
             const coordinates = lonlat.map(ll => this.mapModule.transformCoordinates(ll, srsName));
             const options = request.getOptions();
-            // console.log('HandleRequest MapTour',
-            //     requestZoom,
-            //     srsName,
-            //     animation,
-            //     locations,
-            //     lonlat,
-            //     coordinates
-            // );
             let zoom;
             if (requestZoom != null) {
                 zoom = requestZoom.scale

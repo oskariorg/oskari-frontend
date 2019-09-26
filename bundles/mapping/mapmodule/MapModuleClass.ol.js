@@ -625,15 +625,13 @@ export class MapModule extends AbstractMapModule {
         return true;
     }
 
-    _flyTo (lonlat, done) {
+    _flyTo (lonlat, duration = 3000, zoom, done) {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
 
         const location = [lonlat.lon, lonlat.lat];
         const view = this.getMap().getView();
-        const duration = 2000;
-        const zoom = view.getZoom();
         let called = false;
         let parts = 2;
         function callback (complete) {
@@ -642,7 +640,6 @@ export class MapModule extends AbstractMapModule {
                 return;
             }
             if (parts === 0 || !complete) {
-                console.log('What up PIMPS!', location);
                 called = true;
                 done(complete);
             }
@@ -661,24 +658,35 @@ export class MapModule extends AbstractMapModule {
         return true;
     }
 
-    tourMap (coordinates, zoom, options) {
-        let index = -1;
+    tourMap (coordinates, zoom, options, completed, cancelled) {
+        const view = this.getMap().getView();
         const me = this;
-        function next (more) {
+        const duration = options && options.duration ? options.duration : 3000;
+        const delayOption = options && options.delay ? options.delay : 750;
+        if (zoom === null || zoom === undefined) {
+            zoom = { type: 'zoom', value: this.getMapZoom() };
+        }
+        const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+        // todo remove before merge req
+        completed = typeof completed === 'function' ? completed : () => console.log('completed');
+        cancelled = typeof cancelled === 'function' ? cancelled : () => console.log('cancelled');
+        let index = -1;
+
+        const next = (more) => {
             if (more) {
                 ++index;
                 if (index < coordinates.length) {
-                    var delay = index === 0 ? 0 : 750;
+                    let delay = index === 0 ? 0 : delayOption;
                     setTimeout(function () {
-                        me._flyTo(coordinates[index], next);
+                        me._flyTo(coordinates[index], duration, zoomValue, next);
                     }, delay);
                 } else {
-                    console.log('Tour complete');
+                    completed();
                 }
             } else {
-                console.log('Tour cancelled');
+                cancelled();
             }
-        }
+        };
         next(true);
     }
 
