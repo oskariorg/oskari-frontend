@@ -625,7 +625,15 @@ export class MapModule extends AbstractMapModule {
         return true;
     }
 
-    _flyTo (lonlat, duration = 3000, zoom, done) {
+    /**
+     * @method flyTo
+     *  Flies to map to location and returns callback for next point
+     * @param {Object} lonlat coordinates to move the map to
+     * @param {Number} duration animation duration
+     * @param {Number} zoom absolute zoomlevel to set the map to
+     * @param {Function} done function callback
+     */
+    _flyTo (lonlat, duration, zoom, done) {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
@@ -641,6 +649,7 @@ export class MapModule extends AbstractMapModule {
             }
             if (parts === 0 || !complete) {
                 called = true;
+                // Animation ready call next next point
                 done(complete);
             }
         }
@@ -658,6 +667,16 @@ export class MapModule extends AbstractMapModule {
         return true;
     }
 
+    /**
+     * @method tourMap
+     * Moves the map from point to point
+     * @param {Object[]} coordinates array of coordinates to move the map along
+     * @param {Object | Number} zoomLevel absolute zoomlevel to set the map to
+     * @param {Object} options options, such as animation and duration
+     *     Usable animations: fly/pan/zoomPan
+     * @param {Function} completed function to run when tour is completed
+     * @param {Function} cancelled function to run when tour is cancelled
+     */
     tourMap (coordinates, zoom, options, completed, cancelled) {
         const view = this.getMap().getView();
         const me = this;
