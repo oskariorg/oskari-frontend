@@ -17,20 +17,25 @@ const AdminLayerForm = ({
     mapLayerGroups,
     dataProviders,
     layer,
-    message = {},
+    messages = [],
     onCancel,
     onDelete,
     onSave,
     getMessage
 }) => {
-    if (message.key) {
-        message.text = getMessage(message.key);
-    }
+    const mappedMessages = [];
+    messages.forEach(m => {
+        if (m.key) {
+            m.text = getMessage(m.key);
+        }
+        if (m.text) {
+            mappedMessages.push(<Alert key={m.key} message={m.text} type={m.type} />);
+        }
+
+    });
     return (
         <StyledRoot>
-            { message.text &&
-                <Alert message={message.text} type={message.type} />
-            }
+            { mappedMessages }
             <Tabs>
                 <TabPane tab={getMessage('generalTabTitle')} key='general'>
                     <GeneralTabPane
@@ -75,7 +80,7 @@ AdminLayerForm.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
-    message: PropTypes.object,
+    messages: PropTypes.array,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
