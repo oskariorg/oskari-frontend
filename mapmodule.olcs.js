@@ -9,6 +9,8 @@ import { LAYER_ID } from 'oskari-frontend/bundles/mapping/mapmodule/domain/const
 import 'olcs/olcs.css';
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
+const SCALE_ZOOM_MULTIPLIER = 500;
+const ZOOM_MULTIPLIER = 5000;
 
 class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
@@ -459,7 +461,7 @@ class MapModuleOlCesium extends MapModuleOl {
      * @method centerMap
      * Moves the map to the given position and zoomlevel. Overrides 2d centerMap function.
      * @param {Number[] | Object} lonlat coordinates to move the map to
-     * @param {Number} zoomLevel absolute zoomlevel to set the map to
+     * @param {Number/OpenLayers.Bounds/Object} zoomLevel zoomlevel to set the map to
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
@@ -467,9 +469,15 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
         lonlat = this.normalizeLonLat(lonlat);
-        const cameraHeight = zoom.type === 'scale' ? zoom.value * 500 : zoom.value * 5000;
+        if (zoom === null || zoom === undefined) {
+            zoom = { type: 'zoom', value: this.getMapZoom() };
+        }
+        if (zoom === Number) {
+            zoom = { type: 'zoom', value: zoom };
+        }
+        const cameraHeight = zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
         const camera = this.getCesiumScene().camera;
-        const duration = 3;
+        const duration = options && options.duration ? options.duration / 1000 : 3;
 
         lonlat = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
         camera.flyTo({
@@ -478,7 +486,9 @@ class MapModuleOlCesium extends MapModuleOl {
         });
 
         if (suppressEnd !== true) {
-            this.notifyMoveEnd();
+            setTimeout(() => {
+                this.notifyMoveEnd();
+            }, duration * 1000);
         }
         return true;
     }
