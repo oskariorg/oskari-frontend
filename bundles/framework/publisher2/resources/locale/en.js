@@ -105,6 +105,22 @@ Oskari.registerLocalization(
                     "info": "Select the background map layer. You can select the default background map layer in the map preview.",
                     "selectAsBaselayer": "Select as baselayer",
                     "allowStyleChange": "Allow style change"
+                },
+                "mylocation": {
+                    "modes": {
+                        "single": "Single",
+                        "continuous": "Continuous"
+                    },
+                    "shows": {
+                        "both": "Both",
+                        "desktop": "Desktop",
+                        "mobile": "Mobile"
+                    },
+                    "titles": {
+                        "mode": "Mode",
+                        "showOnlyOn": "Show only on",
+                        "centerMapAutomatically": "Center map automatically"
+                    }
                 }
             },
             "toollayout": {
