@@ -625,6 +625,63 @@ export class MapModule extends AbstractMapModule {
         return true;
     }
 
+    _flyTo (lonlat, done) {
+        if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
+            return false;
+        }
+
+        const location = [lonlat.lon, lonlat.lat];
+        const view = this.getMap().getView();
+        const duration = 2000;
+        const zoom = view.getZoom();
+        let called = false;
+        let parts = 2;
+        function callback (complete) {
+            --parts;
+            if (called) {
+                return;
+            }
+            if (parts === 0 || !complete) {
+                console.log('What up PIMPS!', location);
+                called = true;
+                done(complete);
+            }
+        }
+        view.animate({
+            center: location,
+            duration: duration
+        }, callback);
+        view.animate({
+            zoom: zoom - 1,
+            duration: duration / 2
+        }, {
+            zoom: zoom,
+            duration: duration / 2
+        }, callback);
+        return true;
+    }
+
+    tourMap (coordinates, zoom, options) {
+        let index = -1;
+        const me = this;
+        function next (more) {
+            if (more) {
+                ++index;
+                if (index < coordinates.length) {
+                    var delay = index === 0 ? 0 : 750;
+                    setTimeout(function () {
+                        me._flyTo(coordinates[index], next);
+                    }, delay);
+                } else {
+                    console.log('Tour complete');
+                }
+            } else {
+                console.log('Tour cancelled');
+            }
+        }
+        next(true);
+    }
+
     /**
      * Get maps current extent.
      * @method getCurrentExtent
