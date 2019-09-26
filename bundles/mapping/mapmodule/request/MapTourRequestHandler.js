@@ -31,10 +31,18 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
-            const animation = request.getAnimation();
             const locations = request.getLocations();
-            const options = { animation: animation };
-            const lonlat = locations.map(loc => this.mapModule.transformCoordinates(loc, srsName));
+            const lonlat = locations ? locations.map(loc => ({ lon: loc.lon, lat: loc.lat })) : [{ lon: 0, lat: 0 }];
+            const coordinates = lonlat.map(ll => this.mapModule.transformCoordinates(ll, srsName));
+            const options = request.getOptions();
+            // console.log('HandleRequest MapTour',
+            //     requestZoom,
+            //     srsName,
+            //     animation,
+            //     locations,
+            //     lonlat,
+            //     coordinates
+            // );
             let zoom;
             if (requestZoom != null) {
                 zoom = requestZoom.scale
@@ -42,7 +50,7 @@ Oskari.clazz.define(
                     : { type: 'zoom', value: requestZoom };
             }
 
-            this.mapModule.tourMap(lonlat, zoom, options);
+            this.mapModule.tourMap(coordinates, zoom, options);
         }
     }, {
         /**

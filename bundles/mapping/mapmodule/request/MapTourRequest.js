@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapTourRequest',
         if (typeof options !== 'object') {
             options = {};
         }
+        this._options = options;
         this._projectionCode = options.srsName;
         this._animation = options.animation;
         this._zoom = options.zoom;
@@ -76,6 +77,14 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapTourRequest',
          */
         get3dAngles: function () {
             return this._3dAngles;
+        },
+
+        /**
+         * @method get3dAngles
+         * @return {Object} object with options
+         */
+        getOptions: function () {
+            return this._options;
         }
     }, {
         'protocol': ['Oskari.mapframework.request.Request']
