@@ -51,6 +51,9 @@ Oskari.registerLocalization(
                 "saveFailed": "A system error occurred. Data has not been updated.",
                 "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
                 "errorRemoveLayer": "The map layer could not be removed.",
+                "invalidStyleJson" : "Invalid Style JSON syntax.",
+                "invalidHoverJson" : "Invalid Hover JSON syntax.",
+                "errorInsertAllreadyExists": "The new map layer has been added. A map layer with same identifier already exists."
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",

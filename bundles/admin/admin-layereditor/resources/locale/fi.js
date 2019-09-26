@@ -52,6 +52,9 @@ Oskari.registerLocalization(
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
+                "invalidStyleJson" : "Style JSON-syntaksi on virheellinen.",
+                "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
+                "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso."
             },
             "otherLanguages": "Muut kielet",
             "styleJSON": "Style JSON",
