@@ -39,6 +39,9 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
             {
                 panels.map(({ group, showLayers }) => {
                     const selectedLayersInGroup = selectedLayerIds.filter(cur => showLayers.map(lyr => lyr.getId()).includes(cur));
+                    // Passes only ids the component is interested in.
+                    // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
+                    // When the properties remain unchanged, we can benefit from memoization.
                     return (
                         <LayerCollapsePanel key={group.getTitle()}
                             selectedLayerIds={selectedLayersInGroup}
