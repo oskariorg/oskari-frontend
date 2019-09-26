@@ -48,9 +48,6 @@ const LayerCollapsePanel = (props) => {
         return layerProps;
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
-    if (group.getTitle() === 'Geologia') {
-        console.log('rendering Geologia CollapsePanel');
-    }
     return (
         <CollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
