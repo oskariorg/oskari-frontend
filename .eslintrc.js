@@ -31,7 +31,8 @@ module.exports = {
     // ---- jest tests
     "describe": false,
     "expect": false,
-    "test": false
+    "test": false,
+    "jest": false
     // ----
   },
   "parserOptions": {

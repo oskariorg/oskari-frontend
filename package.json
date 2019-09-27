@@ -25,7 +25,10 @@
     "test:watch": "jest --watch"
   },
   "jest": {
-    "testEnvironment": "jsdom"
+    "testEnvironment": "jsdom",
+    "setupFilesAfterEnv": [
+      "<rootDir>/setupTests.js"
+    ]
   },
   "dependencies": {
     "@babel/core": "7.6.0",
@@ -41,6 +44,8 @@
     "copy-webpack-plugin": "5.0.4",
     "css-loader": "3.2.0",
     "dompurify": "1.0.11",
+    "enzyme": "3.10.0",
+    "enzyme-adapter-react-16": "1.14.0",
     "eslint": "5.15.3",
     "eslint-config-standard": "12.0.0",
     "eslint-import-resolver-webpack": "0.11.0",
