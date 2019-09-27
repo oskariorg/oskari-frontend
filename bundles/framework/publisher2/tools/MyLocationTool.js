@@ -15,7 +15,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
         defaultExtraOptions: {
             mode: 'single',
             centerMapAutomatically: false,
-            showOnlyOn: 'both'
+            mobileOnly: false
         },
         templates: {
             toolOptions: '<div class="tool-options mylocationplugin"></div>',
@@ -29,22 +29,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                 {
                     id: 'continuous'
                 }
-            ],
-            showOnlyOn: [
-                {
-                    id: 'both'
-                },
-                {
-                    id: 'desktop'
-                },
-                {
-                    id: 'mobile'
-                }
             ]
         },
         selected: {
             mode: null,
-            showOnlyOn: null,
+            mobileOnly: null,
             centerMapAutomatically: null
         },
         pluginSelected: false,
@@ -212,12 +201,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                 }
             }
             // initial mode selection if modify.
-            if (initialConf && initialConf.showOnlyOn) {
-                var selectedOptions = me.options.showOnlyOn.filter(function (option) {
-                    return (option.id === initialConf.showOnlyOn);
+            if (initialConf && initialConf.mobileOnly) {
+                var selectedOptions = me.options.mobileOnly.filter(function (option) {
+                    return (option.id === initialConf.mobileOnly);
                 });
                 if (selectedOptions && selectedOptions.length) {
-                    me.selected.showOnlyOn = selectedOptions[0].id;
+                    me.selected.mobileOnly = selectedOptions[0].id;
                 }
             }
             // initial centerMapAutomatically selection if modify.
@@ -243,22 +232,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                     value: me.selected.mode,
                     title: loc.mylocation.titles.mode
                 },
-                showOnlyOn: {
-                    clazz: 'Oskari.userinterface.component.RadioButtonGroup',
-                    handler: function (value) {
-                        me.selected.showOnlyOn = value;
-                    },
-                    options: me.options.showOnlyOn.map(function (option) {
-                        var title = loc.mylocation.shows[option.id];
-
-                        return {
-                            title: title,
-                            value: option.id
-                        };
-                    }),
-                    value: me.selected.showOnlyOn,
-                    title: loc.mylocation.titles.showOnlyOn
-                },
                 centerMapAutomatically: {
                     clazz: 'Oskari.userinterface.component.CheckboxInput',
                     handler: function (checked) {
@@ -266,6 +239,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                     },
                     title: loc.mylocation.titles.centerMapAutomatically,
                     value: me.selected.centerMapAutomatically
+                },
+                mobileOnly: {
+                    clazz: 'Oskari.userinterface.component.CheckboxInput',
+                    handler: function (checked) {
+                        me.selected.mobileOnly = (checked === 'on');
+                    },
+                    value: me.selected.mobileOnly,
+                    title: loc.mylocation.titles.mobileOnly
                 }
             };
         }

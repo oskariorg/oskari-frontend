@@ -31,7 +31,7 @@ Oskari.clazz.define(
                     sticky: false,
                     show: true,
                     callback: function (el) {
-                        me._setupLocation();
+                        me._toggleMode();
                     }
                 }
             },
@@ -41,6 +41,8 @@ Oskari.clazz.define(
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
         };
+
+        me._currentMode = null;
     }, {
         /**
          * @private @method _createControlElement
@@ -55,7 +57,7 @@ Oskari.clazz.define(
                 el = me._templates.plugin.clone();
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
             el.on('click', function () {
-                me._setupLocation();
+                me._toggleMode();
             });
 
             el.attr('title', me._loc.tooltip);
@@ -113,7 +115,7 @@ Oskari.clazz.define(
                 if (toolStyle !== null && toolStyle !== undefined) {
                     me.changeToolStyle(toolStyle, me.getElement());
                 }
-            }
+            }            
         },
 
         /**
@@ -198,6 +200,60 @@ Oskari.clazz.define(
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
+
+        _isMobileOn: function () {
+            var conf = this.getConfig();
+            if (conf.mobileOnly === true && !Oskari.util.isMobile(true)) {
+                return false;
+            }
+            return true;
+        },
+
+        _toggleMode: function() {
+            var conf = this.getConfig();
+            if (this._isMobileOn() && conf.mode === 'continuous' && this._currentMode === 'continuous') {
+                this._currentMode = 'single';
+                this._stopTracking();
+                this._setupLocation();
+            } else if (this._isMobileOn() && conf.mode === 'continuous' && this._currentMode === 'single') {
+                this._currentMode = 'continuous';
+                this._startTracking();
+            } else {
+                this._setupLocation();
+            }
+        },
+        _startTracking: function() {
+            var conf = this.getConfig();            
+            var sandbox = this.getSandbox();
+            if (conf.centerMapAutomatically === true) {
+                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'location', centerMap: 'single'}]);
+            } else {
+                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'location'}]);
+            }
+        },
+        _stopTracking: function() {
+            var sandbox = this.getSandbox();
+            sandbox.postRequestByName('StopUserLocationTrackingRequest');
+        },
+
+        /**
+         * @private @method _startPluginImpl
+         * Interface method for the plugin protocol.
+         * Creates the base marker layer.
+         */
+        _startPluginImpl: function () {
+            var me = this;
+            var conf = this.getConfig();
+
+            if (me._isMobileOn() && conf.mode === 'continuous') {
+                me._currentMode = 'continuous';
+                me._startTracking();
+            } else if (me._isMobileOn() && conf.centerMapAutomatically === true) {
+                me._currentMode = 'single';
+                me._setupLocation();
+            }
+            return true;
+        },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
          * @param {Oskari.Sandbox} sandbox
@@ -205,9 +261,25 @@ Oskari.clazz.define(
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
         },
+        _checkIfOutsideViewport(lon, lat) {
+            var sandbox = this.getSandbox();
+            if(!this._isMobileOn() || this._currentMode === 'single') {
+                // skip checking
+                return;
+            }
+            var bbox = sandbox.getMap().getBbox();
+            if (lon < bbox.left || lon > bbox.right || lat > bbox.top || lat < bbox.bottom ) {
+                // outside view port, center map again
+                sandbox.postRequestByName('MapMoveRequest', [lon, lat]);
+            }
+
+            sandbox.getMap().getBbox()
+        },
         _createEventHandlers: function () {
             return {
                 UserLocationEvent: (event) => {
+                    this._checkIfOutsideViewport(event.getLon(), event.getLat());
+                    
                     if (!this._active) {
                         return;
                     }
