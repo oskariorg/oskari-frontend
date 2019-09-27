@@ -141,7 +141,7 @@ export class StateHandler {
 
                 if (operation === 'tool') {
                     if (layerId) {
-                        this.layerChanged(layerId);
+                        this._refreshLayer(layerId);
                         return;
                     }
                     this._throttleRefresh();
