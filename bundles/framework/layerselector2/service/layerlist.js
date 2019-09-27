@@ -2,6 +2,8 @@
     Oskari.clazz.define('Oskari.mapframework.service.LayerlistService',
         function () {
             this.layerlistFilterButtons = {};
+            this.currentFilter = null;
+            this.mutator = this._createMutator();
             Oskari.makeObservable(this);
         },
         {
@@ -22,6 +24,9 @@
          */
             getName: function () {
                 return this.__name;
+            },
+            getMutator () {
+                return this.mutator;
             },
             registerLayerlistFilterButton: function (text, tooltip, cls, filterId) {
                 var me = this;
@@ -48,6 +53,42 @@
                     return me.layerlistFilterButtons[filterId];
                 }
                 return me.layerlistFilterButtons;
+            },
+            getLayerlistFilterButtons: function () {
+                return this.layerlistFilterButtons;
+            },
+            getCurrentFilter: function () {
+                return this.currentFilter;
+            },
+            _createMutator () {
+                const me = this;
+                return {
+                    setCurrentFilter (filterId) {
+                        me.currentFilter = me.currentFilter === filterId ? null : filterId;
+                        if (me.currentFilter) {
+                            // Set current filter style to active and others to deactive
+                            const currentFilter = Object.values(me.layerlistFilterButtons).filter(b => b.id === me.currentFilter)[0];
+                            currentFilter.cls.current = currentFilter.cls.active;
+                            this.layerlistFilterButtons = { currentFilter };
+
+                            const otherFilters = Object.values(me.layerlistFilterButtons).filter(b => b.id !== me.currentFilter);
+                            if (otherFilters) {
+                                const modifiedOtherFilters = otherFilters.map(o => {
+                                    o.cls.current = o.cls.deactive;
+                                    return o;
+                                });
+                                this.layerlistFilterButtons = { ...this.layerlistFilterButtons, ...modifiedOtherFilters };
+                            }
+                        } else {
+                            const modifiedFilterButtons = Object.values(me.layerlistFilterButtons).map(o => {
+                                o.cls.current = o.cls.deactive;
+                                return o;
+                            });
+                            this.layerlistFilterButtons = { ...modifiedFilterButtons };
+                        }
+                        me.trigger('FilterActivate');
+                    }
+                };
             }
         }, {
             'protocol': ['Oskari.mapframework.service.Service']

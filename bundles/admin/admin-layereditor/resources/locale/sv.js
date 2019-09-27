@@ -14,18 +14,19 @@ Oskari.registerLocalization(
             "password": "Lösenord",
             "usernameAndPassword": "Användarsnamn och lösenord",
             "uniqueName": "Unik namn för kartlager",
+            "generic": {
+                "placeholder": "Namn på {0}",
+                "descplaceholder": "Beskrivning på {0}"
+            },
             "en": {
-                "title": "En",
-                "placeholder": "Name in English",
-                "descplaceholder": "Description in English"
+                "placeholder": "Namn på engelska",
+                "descplaceholder": "Beskrivning på engelska"
             },
             "fi": {
-                "title": "Fi",
-                "placeholder": "Nimi suomeksi",
-                "descplaceholder": "Kuvaus suomeksi"
+                "placeholder": "Namn på finska",
+                "descplaceholder": "Beskrivning på finska"
             },
             "sv": {
-                "title": "Sv",
                 "placeholder": "Namn på svenska",
                 "descplaceholder": "Beskrivning på svenska"
             },
@@ -50,7 +51,7 @@ Oskari.registerLocalization(
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
-                "errorRemoveLayer": "Kartlager kunde inte tas bort.",
+                "errorRemoveLayer": "Kartlager kunde inte tas bort."
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",
