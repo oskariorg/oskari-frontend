@@ -112,7 +112,7 @@ Oskari.registerLocalization(
                     },
                     "titles": {
                         "mode": "Funktion",
-                        "mobileOnly": "Använd endast i mobilen",
+                        "mobileOnly": "Använd funktionen och kartans automatiska centrering endast i mobilen",
                         "centerMapAutomatically": "Centrera kartan automatiskt"
                     }
                 }
