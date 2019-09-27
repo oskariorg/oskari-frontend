@@ -1,5 +1,16 @@
 # Release Notes
 
+## 1.53.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/21?closed=1
+
+- Remove unnecessary scrollbar from search UI
+- Fix broken icon on admin-hierarchical-layerlist
+- Fix loading spinner on search when search term is invalid
+- Fix an error with adding layers on publisher when using it with hierarchical layerlist.
+- Allow empty domain for publication on RPC (previously made optional on publisher)
+
 ## 1.53.0
 
 Sample application has been removed from oskari-frontend/oskari-server to new repositories sample-application (for frontend) and sample-server-extension (for server). This is the way we see Oskari being used/developed in the future. More as a framework with applications developed on top of it. This also allows better separation of the application content/configuration regarding migrations etc. See README.md on both repositories for details on how to setup your own app.
