@@ -8,7 +8,7 @@ const LayerDiv = styled('div')`
     background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
     clear: both;
     position: relative;
-    padding: 6px 10px 6px 40px;
+    padding: 6px 70px 6px 40px;
     min-height: 14px;
     line-height: 14px;
     
@@ -32,10 +32,28 @@ const onSelect = (checked, layerId, mutator) => {
     checked ? mutator.addLayer(layerId) : mutator.removeLayer(layerId);
 };
 
+const onToolClick = tool => {
+    const cb = tool.getCallback();
+    if (cb) {
+        cb();
+    }
+};
+
 const Layer = ({ model, even, selected, mapSrs, mutator, locale }) => {
     return (
         <LayerDiv even={even} className="layer">
-            <CustomTools className="custom-tools"/>
+            <CustomTools className="custom-tools">
+                {
+                    model.getTools()
+                        .filter(tool => tool.getTypes().includes('layerList'))
+                        .map((tool, i) => (
+                            <div key={`${tool.getName()}_${i}`}
+                                className={tool.getIconCls()}
+                                title={tool.getTooltip()}
+                                onClick={() => onToolClick(tool)}/>)
+                        )
+                }
+            </CustomTools>
             <Label>
                 <FloatingSwitch size="small" checked={selected}
                     onChange={checked => onSelect(checked, model.getId(), mutator)}

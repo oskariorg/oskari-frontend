@@ -9,6 +9,16 @@ const StyledListItem = styled(ListItem)`
     padding: 0 !important;
     display: block !important;
 `;
+const Panel = styled(CollapsePanel)`
+    & .ant-collapse-content-box {
+        padding: 0;
+        margin: 0;
+    }
+    & .ant-collapse-content {
+        width: 100%;
+    }
+`;
+
 const getBadgeText = (group, visibleLayerCount) => {
     let badgeText = group.getLayers().length;
     if (visibleLayerCount !== group.getLayers().length) {
@@ -49,13 +59,13 @@ const LayerCollapsePanel = (props) => {
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
-        <CollapsePanel {...propsNeededForPanel}
+        <Panel {...propsNeededForPanel}
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
             }>
             <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
-        </CollapsePanel>
+        </Panel>
     );
 };
 
