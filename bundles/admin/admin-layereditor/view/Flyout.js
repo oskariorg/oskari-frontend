@@ -72,7 +72,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         message={this.service.getMessage()}
                         onDelete={() => this.service.deleteLayer()}
                         onSave={() => this.service.saveLayer()}
-                        onCancel={() => me.hide()} />);
+                        onCancel={() => me.hide()} />
                 </MutatorContext.Provider>
             </LocaleContext.Provider>);
 

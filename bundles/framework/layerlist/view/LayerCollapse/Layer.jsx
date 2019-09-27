@@ -32,7 +32,7 @@ const onSelect = (checked, layerId, mutator) => {
     checked ? mutator.addLayer(layerId) : mutator.removeLayer(layerId);
 };
 
-export const Layer = ({model, even, selected, mapSrs, mutator, locale}) => {
+const Layer = ({ model, even, selected, mapSrs, mutator, locale }) => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools"/>
@@ -55,3 +55,6 @@ Layer.propTypes = {
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };
+
+const memoized = React.memo(Layer);
+export { memoized as Layer };
