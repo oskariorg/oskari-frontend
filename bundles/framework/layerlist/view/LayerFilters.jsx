@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LayerFilter } from './LayerFilter/LayerFilter';
+import { LayerFilter } from './LayerFilters/LayerFilter';
 import styled from 'styled-components';
 
 const StyledFilters = styled.div`
