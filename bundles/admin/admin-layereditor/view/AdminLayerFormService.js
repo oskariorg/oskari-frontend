@@ -210,7 +210,7 @@ export class AdminLayerFormService {
 
         // Modify layer for backend
         const layer = { ...this.getLayer() };
-        const maplayerGroupsCopy = { ...layer.maplayerGroups };
+        const layerGroups = layer.maplayerGroups;
         layer.maplayerGroups = layer.maplayerGroups.map(cur => cur.id).join(',');
 
         const validationErrorMessages = this.validateUserInputValues(layer);
@@ -239,15 +239,15 @@ export class AdminLayerFormService {
             }
         }).then(data => {
             if (layer.layer_id) {
-                me.updateLayer(layer.layer_id, data, maplayerGroupsCopy);
+                data.groups = Object.values(layerGroups);
+                me.updateLayer(layer.layer_id, data);
             } else {
                 me.createlayer(data);
             }
         }).catch(error => me.log.error(error));
     }
 
-    updateLayer (layerId, layerData, maplayerGroups) {
-        layerData.groups = Object.values(maplayerGroups);
+    updateLayer (layerId, layerData) {
         this.mapLayerService.updateLayer(layerId, layerData);
     }
 
