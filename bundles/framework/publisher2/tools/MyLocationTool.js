@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                 var pluginConfig = this.getPlugin().getConfig();
 
                 // add selected extraoptions to conf
-                for(var key in me.selected) {
+                for (var key in me.selected) {
                     if (me.selected.hasOwnProperty(key)) {
                         pluginConfig[key] = me.selected[key];
                     }
@@ -96,10 +96,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             var template = jQuery(me.templates.toolOptions).clone();
             var titleTemplate = jQuery(me.templates.toolOptionTitle);
 
-            for (fkey in me.fields) {
+            for (var fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {
-                    data = me.fields[fkey];
-                    field = Oskari.clazz.create(data.clazz);
+                    var data = me.fields[fkey];
+                    var field = Oskari.clazz.create(data.clazz);
                     field.setName(fkey);
                     if (data.options) {
                         field.setOptions(data.options);
@@ -110,7 +110,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                     if (data.placeholder && typeof field.setPlaceHolder === 'function') {
                         field.setPlaceHolder(data.placeholder);
                     }
-
 
                     if (data.clazz === 'Oskari.userinterface.component.RadioButtonGroup') {
                         if (data.title) {
@@ -146,7 +145,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             }
 
             toolCheckbox.on('change', function () {
-                var checkbox = jQuery(this);
                 if (toolCheckbox.is(':checked')) {
                     template.show();
                 } else {
@@ -169,10 +167,10 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             var loc = Oskari.getLocalization('Publisher2').BasicView.maptools;
 
             var getPlugin = function () {
-                if(!pData && !pData.configuration && !pData.configuration.mapfull && !pData.configuration.mapfull.conf && !pData.configuration.mapfull.conf.plugins) {
+                if (!pData && !pData.configuration && !pData.configuration.mapfull && !pData.configuration.mapfull.conf && !pData.configuration.mapfull.conf.plugins) {
                     return null;
                 }
-                var plugin = pData.configuration.mapfull.conf.plugins.filter(function(obj) { return obj.id === 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin'});
+                var plugin = pData.configuration.mapfull.conf.plugins.filter(function (obj) { return obj.id === 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin'; });
 
                 if (plugin.length > 0) {
                     me.pluginSelected = true;
@@ -183,17 +181,18 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
 
             var getPluginConfig = function () {
                 var plugin = getPlugin();
-                if(plugin !== null){
+                if (plugin !== null) {
                     return plugin.config || me.defaultExtraOptions;
                 }
                 return me.defaultExtraOptions;
             };
 
             var initialConf = getPluginConfig();
+            var selectedOptions;
 
             // initial mode selection if modify.
             if (initialConf && initialConf.mode) {
-                var selectedOptions = me.options.mode.filter(function (option) {
+                selectedOptions = me.options.mode.filter(function (option) {
                     return (option.id === initialConf.mode);
                 });
                 if (selectedOptions && selectedOptions.length) {
@@ -202,7 +201,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
             }
             // initial mode selection if modify.
             if (initialConf && initialConf.mobileOnly) {
-                var selectedOptions = me.options.mobileOnly.filter(function (option) {
+                selectedOptions = me.options.mobileOnly.filter(function (option) {
                     return (option.id === initialConf.mobileOnly);
                 });
                 if (selectedOptions && selectedOptions.length) {

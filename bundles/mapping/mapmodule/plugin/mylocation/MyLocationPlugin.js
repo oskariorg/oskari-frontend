@@ -115,7 +115,7 @@ Oskari.clazz.define(
                 if (toolStyle !== null && toolStyle !== undefined) {
                     me.changeToolStyle(toolStyle, me.getElement());
                 }
-            }            
+            }
         },
 
         /**
@@ -217,21 +217,21 @@ Oskari.clazz.define(
          * Toggle mode continues/single or if not plugin is not configured continues mode then use only single mode.
          * @method @private _toggleMode
          */
-        _toggleMode: function() {
+        _toggleMode: function () {
             var conf = this.getConfig();
 
-            // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single 
+            // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single
             // (not draw user location and accurary circle and center map to user location)
             if (this._isDevice() && conf.mode === 'continuous' && this._currentMode === 'continuous') {
                 this._currentMode = 'single';
                 this._stopTracking();
                 this._setupLocation();
-            } 
+            }
             // else if plugin is configured continuous mode and current toggled mode is "single" then toggle mode to continuous.
             else if (this._isDevice() && conf.mode === 'continuous' && this._currentMode === 'single') {
                 this._currentMode = 'continuous';
                 this._startTracking();
-            } 
+            }
             // else if not plugin is not configured to continuous moden then use like "single"
             else {
                 this._setupLocation();
@@ -241,20 +241,20 @@ Oskari.clazz.define(
          * Start tracking.
          * @method @private _startTracking
          */
-        _startTracking: function() {
-            var conf = this.getConfig();            
+        _startTracking: function () {
+            var conf = this.getConfig();
             var sandbox = this.getSandbox();
             if (conf.centerMapAutomatically === true) {
-                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'location', centerMap: 'single'}]);
+                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location', centerMap: 'single' }]);
             } else {
-                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'location'}]);
+                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location' }]);
             }
         },
         /**
          * Stop tracking.
          * @method @private _stopTracking
          */
-        _stopTracking: function() {
+        _stopTracking: function () {
             var sandbox = this.getSandbox();
             sandbox.postRequestByName('StopUserLocationTrackingRequest');
         },
@@ -287,17 +287,17 @@ Oskari.clazz.define(
         /**
          * Checks at if device is outside of map viewport when mode is tracking.
          * If it is then move map to show device location.
-         * @param {Double} lon 
+         * @param {Double} lon
          * @param {Double} lat
          */
-        _checkIfOutsideViewport(lon, lat) {
+        _checkIfOutsideViewport (lon, lat) {
             var sandbox = this.getSandbox();
-            if(!this._isDevice() || this._currentMode === 'single') {
+            if (!this._isDevice() || this._currentMode === 'single') {
                 // skip checking
                 return;
             }
             var bbox = sandbox.getMap().getBbox();
-            if (lon < bbox.left || lon > bbox.right || lat > bbox.top || lat < bbox.bottom ) {
+            if (lon < bbox.left || lon > bbox.right || lat > bbox.top || lat < bbox.bottom) {
                 // outside view port, center map again
                 sandbox.postRequestByName('MapMoveRequest', [lon, lat]);
             }
@@ -306,7 +306,7 @@ Oskari.clazz.define(
             return {
                 UserLocationEvent: (event) => {
                     this._checkIfOutsideViewport(event.getLon(), event.getLat());
-                    
+
                     if (!this._active) {
                         return;
                     }
