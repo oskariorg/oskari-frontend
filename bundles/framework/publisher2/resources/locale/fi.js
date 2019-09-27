@@ -111,14 +111,9 @@ Oskari.registerLocalization(
                         "single": "Yksittäinen",
                         "continuous": "Jatkuva"
                     },
-                    "shows": {
-                        "both": "Molemmissa",
-                        "desktop": "Työpöydässä",
-                        "mobile": "Mobiilissa"
-                    },
                     "titles": {
                         "mode": "Toiminto",
-                        "showOnlyOn": "Näytä vain",
+                        "mobileOnly": "Käytä toimintoa ja kartan automaattista keskittämistä vain mobiilissa",
                         "centerMapAutomatically": "Keskitä karttaan automaattisesti"
                     }
                 }

@@ -111,14 +111,9 @@ Oskari.registerLocalization(
                         "single": "Single",
                         "continuous": "Continuous"
                     },
-                    "shows": {
-                        "both": "Both",
-                        "desktop": "Desktop",
-                        "mobile": "Mobile"
-                    },
                     "titles": {
                         "mode": "Mode",
-                        "showOnlyOn": "Show only on",
+                        "mobileOnly": "Only use the mode and auto-center the map on mobile",
                         "centerMapAutomatically": "Center map automatically"
                     }
                 }

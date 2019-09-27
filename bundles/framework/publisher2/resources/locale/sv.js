@@ -110,14 +110,9 @@ Oskari.registerLocalization(
                         "single": "Enskild",
                         "continuous": "Fortsatt"
                     },
-                    "shows": {
-                        "both": "I båda",
-                        "desktop": "Vid skrivbordsversion",
-                        "mobile": "I mobilen"
-                    },
                     "titles": {
                         "mode": "Funktion",
-                        "showOnlyOn": "Visa endast",
+                        "mobileOnly": "Använd endast i mobilen",
                         "centerMapAutomatically": "Centrera kartan automatiskt"
                     }
                 }
