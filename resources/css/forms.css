@@ -23,7 +23,7 @@ input::-ms-clear {
   display: none;
 }
 
-input[type=button], input[type=email], input[type=number], input[type=file], input[type=password], input[type=reset], input[type=search], input[type=submit], input[type=tel], input[type=text], input[type=url], select, textarea, .textarea, button {
+input[type=button]:not([class*="ant-"]), input[type=email], input[type=number], input[type=file], input[type=password], input[type=reset], input[type=search], input[type=submit], input[type=tel], input[type=text], input[type=url], select, textarea, .textarea, button {
   border: 1px solid;
   border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
   padding: 8px 5px;
@@ -36,13 +36,13 @@ input[type="image"] {
   padding: 0;
 }
 
-button::-moz-focus-inner, input[type="button"]::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+button:not([class*="ant-"])::-moz-focus-inner, input[type="button"]:not([class*="ant-"])::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
   padding: 0 !important;
   border: 0 none !important;
 }
 
 /* This is used in buttons */
-input[type="submit"], input[type="button"], input[type="reset"], button {
+input[type="submit"], input[type="button"]:not([class*="ant-"]), input[type="reset"], button {
   cursor: pointer;
   overflow: visible;
   padding: 8px 5px;
@@ -50,7 +50,11 @@ input[type="submit"], input[type="button"], input[type="reset"], button {
   min-width: 4em;
   width: auto;
 }
-input[type="submit"]:hover:enabled, input[type="submit"]:focus, input[type="button"]:hover:enabled, input[type="button"]:focus, input[type="reset"]:hover:enabled, input[type="reset"]:focus, button:hover:enabled, button:focus {
+input[type="submit"]:hover:enabled, input[type="submit"]:focus,
+input[type="button"]:not([class*="ant-"]):hover:enabled, input[type="button"]:not([class*="ant-"]):focus,
+input[type="reset"]:hover:enabled, input[type="reset"]:focus,
+button:not([class*="ant-"]):hover:enabled,
+button:not([class*="ant-"]):focus {
   background: #DFF4FF;
   border: 1px solid #A7CEDF;
   /* Hover color doesn't really matter... */
@@ -74,8 +78,8 @@ button:not([class*="ant-"]),
 /* This is used in buttons */
 input[type="submit"]:hover:enabled,
 input[type="reset"]:hover:enabled,
-input[type="button"]:hover:enabled:not([class*="ant-"]),
-button:hover:enabled:not([class*="ant-"]),
+input[type="button"]:not([class*="ant-"]):hover:enabled,
+button:not([class*="ant-"]):hover:enabled,
 .lfr-actions:hover, .lfr-actions:hover ul {
   background: #b9ced9 url(../images/application/state_hover_bg.png) repeat-x 0 0;
   border-color: #627782;
@@ -84,7 +88,11 @@ button:hover:enabled:not([class*="ant-"]),
 }
 
 /* This is used in buttons */
-input[type="submit"]:focus, input[type="button"]:focus, input[type="reset"]:focus, button:focus, .lfr-actions:focus, .lfr-actions:focus ul {
+input[type="submit"]:focus,
+input[type="button"]:not([class*="ant-"]):focus,
+input[type="reset"]:focus,
+button:not([class*="ant-"]):focus,
+.lfr-actions:focus, .lfr-actions:focus ul {
   background: #ebebeb url(../images/application/state_active_bg.png) repeat-x 0 0;
   border-color: #555;
 }
@@ -114,7 +122,7 @@ label > input:disabled + span {
     opacity: 0.5;
 }
 
-button:disabled,
+button:not([class*="ant-"]):disabled,
 input:disabled,
 select:disabled,
 textarea:disabled {
