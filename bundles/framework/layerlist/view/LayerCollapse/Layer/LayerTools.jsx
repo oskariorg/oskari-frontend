@@ -33,7 +33,7 @@ const SecondaryIcon = styled('div')`
 `;
 const Tools = styled('div')`
     position: absolute;
-    top: 6px;
+    display: inline-block;
     right: 5px;
 `;
 

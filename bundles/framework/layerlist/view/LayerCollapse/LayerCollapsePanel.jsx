@@ -5,17 +5,19 @@ import { Badge, CollapsePanel, List, ListItem } from 'oskari-ui';
 import { Layer } from './Layer';
 import styled from 'styled-components';
 
+const StyledCollapsePanel = styled(CollapsePanel)`
+    & > div:first-child {
+        min-height: 22px;
+    }
+`;
 const StyledListItem = styled(ListItem)`
     padding: 0 !important;
     display: block !important;
-`;
-const Panel = styled(CollapsePanel)`
-    & .ant-collapse-content-box {
-        padding: 0;
-        margin: 0;
+    &:first-child > div {
+        padding-top: 10px;
     }
-    & .ant-collapse-content {
-        width: 100%;
+    &:last-child > div {
+        padding-bottom: 10px;
     }
 `;
 
@@ -59,13 +61,13 @@ const LayerCollapsePanel = (props) => {
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
-        <Panel {...propsNeededForPanel}
+        <StyledCollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
             }>
             <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
-        </Panel>
+        </StyledCollapsePanel>
     );
 };
 

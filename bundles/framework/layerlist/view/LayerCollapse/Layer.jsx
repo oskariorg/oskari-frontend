@@ -16,6 +16,7 @@ const LayerDiv = styled('div')`
 const CustomTools = styled('div')`
     position: absolute;
     left: 5px;
+    display: inline-block;
     :hover {
         cursor: pointer;
     }
