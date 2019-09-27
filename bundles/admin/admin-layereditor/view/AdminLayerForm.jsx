@@ -12,6 +12,10 @@ import styled from 'styled-components';
 const PaddedButton = styled(Button)`
     margin-right: 5px;
 `;
+
+const PaddedAlert = styled(Alert)`
+    margin-bottom: 5px;
+`;
 const AdminLayerForm = ({
     mutator,
     mapLayerGroups,
@@ -29,7 +33,7 @@ const AdminLayerForm = ({
             m.text = getMessage(m.key);
         }
         if (m.text) {
-            mappedMessages.push(<Alert key={m.key} message={m.text} type={m.type} />);
+            mappedMessages.push(<PaddedAlert key={m.key} message={m.text} type={m.type} />);
         }
 
     });
