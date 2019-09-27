@@ -1,4 +1,7 @@
 import { LayerEditorFlyout } from './view/Flyout';
+import { OpenLayerEditorRequest } from './request/OpenLayerEditorRequest';
+import { OpenLayerEditorRequestHandler } from './request/OpenLayerEditorRequestHandler';
+
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
 Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
@@ -24,6 +27,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         _startImpl () {
             this._setupLayerTools();
             this._loadDataProviders();
+            this.sandbox.requestHandler(OpenLayerEditorRequest.NAME, new OpenLayerEditorRequestHandler(this));
         }
 
         _setDataProviders (dataProviders) {
@@ -79,17 +83,17 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             tool.setTypes(['layerList']);
 
             tool.setCallback(() => {
-                this._showEditor(layer.getId());
+                this.showEditor(layer.getId());
             });
 
             service.addToolForLayer(layer, tool, suppressEvent);
         }
         /**
-         * @private @method _showEditor
+         * @method _showEditor
          * Opens flyout with layer editor for given layerId
          * @param {Number} layerId
          */
-        _showEditor (layerId) {
+        showEditor (layerId) {
             const flyout = this._getFlyout();
             const layerService = this._getLayerService();
             flyout.setLocale(this.loc);

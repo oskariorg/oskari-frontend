@@ -1,5 +1,9 @@
 const LAYER_TIMEOUT_MS = 400;
 
+/**
+ * Holds and mutates layer list state.
+ * Handles events related to layer listing.
+ */
 export class StateHandler {
     constructor () {
         this.listeners = [];
