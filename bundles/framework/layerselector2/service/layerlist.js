@@ -3,34 +3,7 @@
         function () {
             this.layerlistFilterButtons = {};
             this.currentFilter = null;
-            const me = this;
-            this.mutator = {
-                setCurrentFilter (filterId) {
-                    me.currentFilter = me.currentFilter === filterId ? null : filterId;
-                    if (me.currentFilter) {
-                        // Set current filter style to active and others to deactive
-                        const currentFilter = Object.values(me.layerlistFilterButtons).filter(b => b.id === me.currentFilter)[0];
-                        currentFilter.cls.current = currentFilter.cls.active;
-                        this.layerlistFilterButtons = { currentFilter };
-
-                        const otherFilters = Object.values(me.layerlistFilterButtons).filter(b => b.id !== me.currentFilter);
-                        if (otherFilters) {
-                            const modifiedOtherFilters = otherFilters.map(o => {
-                                o.cls.current = o.cls.deactive;
-                                return o;
-                            });
-                            this.layerlistFilterButtons = { ...this.layerlistFilterButtons, ...modifiedOtherFilters };
-                        }
-                    } else {
-                        const modifiedFilterButtons = Object.values(me.layerlistFilterButtons).map(o => {
-                            o.cls.current = o.cls.deactive;
-                            return o;
-                        });
-                        this.layerlistFilterButtons = { ...modifiedFilterButtons };
-                    }
-                    me.trigger('FilterActivate');
-                }
-            };
+            this.mutator = this._createMutator();
             Oskari.makeObservable(this);
         },
         {
@@ -86,6 +59,36 @@
             },
             getCurrentFilter: function () {
                 return this.currentFilter;
+            },
+            _createMutator () {
+                const me = this;
+                return {
+                    setCurrentFilter (filterId) {
+                        me.currentFilter = me.currentFilter === filterId ? null : filterId;
+                        if (me.currentFilter) {
+                            // Set current filter style to active and others to deactive
+                            const currentFilter = Object.values(me.layerlistFilterButtons).filter(b => b.id === me.currentFilter)[0];
+                            currentFilter.cls.current = currentFilter.cls.active;
+                            this.layerlistFilterButtons = { currentFilter };
+
+                            const otherFilters = Object.values(me.layerlistFilterButtons).filter(b => b.id !== me.currentFilter);
+                            if (otherFilters) {
+                                const modifiedOtherFilters = otherFilters.map(o => {
+                                    o.cls.current = o.cls.deactive;
+                                    return o;
+                                });
+                                this.layerlistFilterButtons = { ...this.layerlistFilterButtons, ...modifiedOtherFilters };
+                            }
+                        } else {
+                            const modifiedFilterButtons = Object.values(me.layerlistFilterButtons).map(o => {
+                                o.cls.current = o.cls.deactive;
+                                return o;
+                            });
+                            this.layerlistFilterButtons = { ...modifiedFilterButtons };
+                        }
+                        me.trigger('FilterActivate');
+                    }
+                };
             }
         }, {
             'protocol': ['Oskari.mapframework.service.Service']
