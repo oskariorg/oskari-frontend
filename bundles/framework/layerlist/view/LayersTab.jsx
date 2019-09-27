@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
 import { StateHandler } from './LayerCollapse/StateHandler';
-import { LayerFilters } from './LayerFilters/LayerFilters';
+import { LayerFilters } from './LayerFilters';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -257,58 +257,6 @@ Oskari.clazz.define(
                 me._relatedKeywordsPopup(keyword, event, me);
             }
         },
-        /**
-         * @method _renderLayers
-         * @private
-         */
-        _renderLayers: function (layers) {
-            const layerGroups = this._getLayerGroups(layers, this.groupingMethod);
-            this.showLayerGroups(layerGroups);
-        },
-        /**
-         * @method _getLayerGroups
-         * @private
-         *//**
-         * @method _getLayerGroups
-         * @private
-         */
-        _getLayerGroups: function (layers, groupingMethod) {
-            var groupList = [];
-            var group = null;
-            var n;
-            var layer;
-            var groupAttr;
-
-            const _layerListComparator = this._layerListComparator;
-
-            // sort layers by grouping & name
-            layers.sort(function (a, b) {
-                return _layerListComparator(a, b, groupingMethod);
-            });
-
-            for (n = 0; n < layers.length; n += 1) {
-                layer = layers[n];
-                if (layer.getMetaType && layer.getMetaType() === 'published') {
-                    // skip published layers
-                    continue;
-                }
-                groupAttr = layer[groupingMethod]();
-                if (!group || group.getTitle() !== groupAttr) {
-                    group = Oskari.clazz.create(
-                        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        groupAttr
-                    );
-                    groupList.push(group);
-                }
-
-                group.addLayer(layer);
-            }
-            var sortedGroupList = jQuery.grep(groupList, function (group, index) {
-                return group.getLayers().length > 0;
-            });
-            return sortedGroupList;
-        },
-
         /**
         * @method _layerListComparator
         * Uses the private property #grouping to sort layer objects in the wanted order for rendering
