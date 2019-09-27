@@ -200,8 +200,12 @@ Oskari.clazz.define(
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
-
-        _isMobileOn: function () {
+        /**
+         * Check at if device is same than configured, or if not moblie is not configured then always return true.
+         * @method @private _isDevice
+         * @return {Boolean} is device same than configured
+         */
+        _isDevice: function () {
             var conf = this.getConfig();
             if (conf.mobileOnly === true && !Oskari.util.isMobile(true)) {
                 return false;
@@ -209,19 +213,34 @@ Oskari.clazz.define(
             return true;
         },
 
+        /**
+         * Toggle mode continues/single or if not plugin is not configured continues mode then use only single mode.
+         * @method @private _toggleMode
+         */
         _toggleMode: function() {
             var conf = this.getConfig();
-            if (this._isMobileOn() && conf.mode === 'continuous' && this._currentMode === 'continuous') {
+
+            // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single 
+            // (not draw user location and accurary circle and center map to user location)
+            if (this._isDevice() && conf.mode === 'continuous' && this._currentMode === 'continuous') {
                 this._currentMode = 'single';
                 this._stopTracking();
                 this._setupLocation();
-            } else if (this._isMobileOn() && conf.mode === 'continuous' && this._currentMode === 'single') {
+            } 
+            // else if plugin is configured continuous mode and current toggled mode is "single" then toggle mode to continuous.
+            else if (this._isDevice() && conf.mode === 'continuous' && this._currentMode === 'single') {
                 this._currentMode = 'continuous';
                 this._startTracking();
-            } else {
+            } 
+            // else if not plugin is not configured to continuous moden then use like "single"
+            else {
                 this._setupLocation();
             }
         },
+        /**
+         * Start tracking.
+         * @method @private _startTracking
+         */
         _startTracking: function() {
             var conf = this.getConfig();            
             var sandbox = this.getSandbox();
@@ -231,6 +250,10 @@ Oskari.clazz.define(
                 sandbox.postRequestByName('StartUserLocationTrackingRequest', [{addToMap: 'location'}]);
             }
         },
+        /**
+         * Stop tracking.
+         * @method @private _stopTracking
+         */
         _stopTracking: function() {
             var sandbox = this.getSandbox();
             sandbox.postRequestByName('StopUserLocationTrackingRequest');
@@ -245,10 +268,10 @@ Oskari.clazz.define(
             var me = this;
             var conf = this.getConfig();
 
-            if (me._isMobileOn() && conf.mode === 'continuous') {
+            if (me._isDevice() && conf.mode === 'continuous') {
                 me._currentMode = 'continuous';
                 me._startTracking();
-            } else if (me._isMobileOn() && conf.centerMapAutomatically === true) {
+            } else if (me._isDevice() && conf.centerMapAutomatically === true) {
                 me._currentMode = 'single';
                 me._setupLocation();
             }
@@ -261,9 +284,15 @@ Oskari.clazz.define(
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
         },
+        /**
+         * Checks at if device is outside of map viewport when mode is tracking.
+         * If it is then move map to show device location.
+         * @param {Double} lon 
+         * @param {Double} lat
+         */
         _checkIfOutsideViewport(lon, lat) {
             var sandbox = this.getSandbox();
-            if(!this._isMobileOn() || this._currentMode === 'single') {
+            if(!this._isDevice() || this._currentMode === 'single') {
                 // skip checking
                 return;
             }
@@ -272,8 +301,6 @@ Oskari.clazz.define(
                 // outside view port, center map again
                 sandbox.postRequestByName('MapMoveRequest', [lon, lat]);
             }
-
-            sandbox.getMap().getBbox()
         },
         _createEventHandlers: function () {
             return {

@@ -10,15 +10,29 @@ The plugin offers the user a center map a his geolocation.
 
 ## Bundle configuration
 
-No configuration is required, but there is one possible configuration:
+No configuration is required, following options are optionals:
 
 ```javascript
 {
-  "zoom" : 11
+  "zoom" : 11,
+  "mode": "single", 
+  "centerMapAutomatically": true
 }
 ```
 
-Setting zoom to wanted number will my location zoomed by wanted zoom level.
+Configurable options:
+* zoom: configure zoom level what is used when zoomed to user location
+* mode: "single" or "continuous". 
+    * Single mode: when clicking icon zoom map to user location. 
+    * Continuous mode: Show user location on the map (ball) and also show accurary cicle, location ball/circle move when user location changed. If user location is outside the map viewport then map is centered to user location.
+* centerMapAutomatically: `true` or `false`. When setted to `true` map is centered to user location automatically on startup.
+* mobileOnly: `true` or `false`. If setted to `true` then `centerMapAutomatically` and `mode` only take effects on mobile devices
+
+Default configuration:
+{
+  "mode: "single",
+  "centerMapAutomatically": false
+}
 
 ## Requests the plugin handles
 
@@ -33,7 +47,17 @@ Setting zoom to wanted number will my location zoomed by wanted zoom level.
 
 ## Requests the plugin sends out
 
-This plugin doesn't sends any requests.
+<table class="table">
+  <tr>
+    <th>Request</th><th>Where/why it's used</th>
+  </tr>
+  <tr>
+    <td>StartUserLocationTrackingRequest</td><td>Start user tracking</td>
+  </tr>
+  <tr>
+    <td>StopUserLocationTrackingRequest</td><td>Stop user tracking</td>
+  </tr>
+</table>
 
 ## Events the plugin listens to
 
