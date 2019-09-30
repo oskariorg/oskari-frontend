@@ -495,9 +495,34 @@ class MapModuleOlCesium extends MapModuleOl {
             return true;
         } else {
             this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            // this.getMap().getView().setZoom(zoom.value);
+            this.getMap().getView().setZoom(zoom.value);
             this.notifyMoveEnd();
         }
+    }
+
+    /**
+     * @method _flyTo fly to coords with options
+     *
+     * @param {Number} x longitude
+     * @param {Number} y latitude
+     * @param {Number} z zoom/cameraheight
+     * @param {Number} duration animation duration in seconds
+     * @param {Function} complete function to run when animation is completed
+     * @param {Function} cancel function to run when animation is cancelled
+     * @param {Number} delay delay for next point
+     */
+    _flyTo (x, y, z, duration, complete, cancel, delay, angles) {
+        const camera = this.getCesiumScene().camera;
+        let flyToParams = {
+            destination: Cesium.Cartesian3.fromDegrees(x, y, z),
+            duration: duration,
+            complete: complete,
+            cancel: cancel
+        };
+        flyToParams = angles ? { ...flyToParams, orientation: angles } : flyToParams;
+        setTimeout(function () {
+            camera.flyTo(flyToParams);
+        }, delay);
     }
 
     /**
@@ -511,7 +536,7 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Function} cancelled function to run when tour is cancelled
      */
     tourMap (coordinates, zoom, options, completed, cancelled) {
-        const camera = this.getCesiumScene().camera;
+        const me = this;
         const duration = options && options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
         const delayOption = options && options.delay ? options.delay : 750;
@@ -520,21 +545,23 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         const cameraHeight = zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
+        const angles = options && options.heading && options.roll && options.pitch
+            ? { heading: options.heading,
+                roll: options.roll,
+                pitch: options.pitch } : undefined;
         let index = -1;
+        let delay = 0;
 
         const next = () => {
             ++index;
             if (index < coordinates.length) {
-                let delay = index === 0 ? 0 : delayOption;
+                const location = coords[index];
                 setTimeout(function () {
-                    let coord = coords[index];
-                    camera.flyTo({
-                        destination: Cesium.Cartesian3.fromDegrees(coord[0], coord[1], cameraHeight),
-                        duration: animationDuration,
-                        complete: next,
-                        cancel: cancelled
-                    });
+                    me._flyTo(location[0], location[1], cameraHeight, animationDuration, next, cancelled, delay, angles);
                 }, delay);
+
+                // set Delay for next point
+                delay = location.delay || delayOption;
             } else {
                 completed();
             }
