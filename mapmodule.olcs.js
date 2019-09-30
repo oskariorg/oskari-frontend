@@ -469,6 +469,7 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
         lonlat = this.normalizeLonLat(lonlat);
+        const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
         }
@@ -477,20 +478,68 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         const cameraHeight = zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
         const camera = this.getCesiumScene().camera;
-        const duration = options && options.duration ? options.duration / 1000 : 3;
+        const duration = options && options.duration ? options.duration : 3000;
+        const animationDuration = duration / 1000;
 
-        lonlat = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
-        camera.flyTo({
-            destination: Cesium.Cartesian3.fromDegrees(lonlat[0], lonlat[1], cameraHeight),
-            duration: duration
-        });
+        if (options && options.animation) {
+            camera.flyTo({
+                destination: Cesium.Cartesian3.fromDegrees(location[0], location[1], cameraHeight),
+                duration: animationDuration
+            });
 
-        if (suppressEnd !== true) {
-            setTimeout(() => {
-                this.notifyMoveEnd();
-            }, duration * 1000);
+            if (suppressEnd !== true) {
+                setTimeout(() => {
+                    this.notifyMoveEnd();
+                }, duration);
+            }
+            return true;
+        } else {
+            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
+            // this.getMap().getView().setZoom(zoom.value);
+            this.notifyMoveEnd();
         }
-        return true;
+    }
+
+    /**
+     * @method tourMap
+     * Moves the map from point to point
+     * @param {Object[]} coordinates array of coordinates to move the map along
+     * @param {Object | Number} zoom absolute zoomlevel to set the map to
+     * @param {Object} options options, such as animation and duration
+     *     Usable animations: fly/pan/zoomPan
+     * @param {Function} completed function to run when tour is completed
+     * @param {Function} cancelled function to run when tour is cancelled
+     */
+    tourMap (coordinates, zoom, options, completed, cancelled) {
+        const camera = this.getCesiumScene().camera;
+        const duration = options && options.duration ? options.duration : 3000;
+        const animationDuration = duration / 1000;
+        const delayOption = options && options.delay ? options.delay : 750;
+        if (zoom === null || zoom === undefined) {
+            zoom = { type: 'zoom', value: this.getMapZoom() };
+        }
+        const cameraHeight = zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
+        const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
+        let index = -1;
+
+        const next = () => {
+            ++index;
+            if (index < coordinates.length) {
+                let delay = index === 0 ? 0 : delayOption;
+                setTimeout(function () {
+                    let coord = coords[index];
+                    camera.flyTo({
+                        destination: Cesium.Cartesian3.fromDegrees(coord[0], coord[1], cameraHeight),
+                        duration: animationDuration,
+                        complete: next,
+                        cancel: cancelled
+                    });
+                }, delay);
+            } else {
+                completed();
+            }
+        };
+        next(true);
     }
 
     /**
