@@ -10,7 +10,7 @@ The plugin offers the user a center map a his geolocation.
 
 ## Bundle configuration
 
-No configuration is required, following configuration options are optional:
+No configuration is required. The following configuration options are optional:
 
 ```javascript
 {
