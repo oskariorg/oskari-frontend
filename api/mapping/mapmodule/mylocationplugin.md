@@ -10,7 +10,7 @@ The plugin offers the user a center map a his geolocation.
 
 ## Bundle configuration
 
-No configuration is required, following options are optionals:
+No configuration is required, following configuration options are optional:
 
 ```javascript
 {
@@ -21,12 +21,12 @@ No configuration is required, following options are optionals:
 ```
 
 Configurable options:
-* zoom: configure zoom level what is used when zoomed to user location
+* zoom: configure zoom level that is used when zoomed to user location (otherwise zoomed based on accuracy)
 * mode: "single" or "continuous". 
-    * Single mode: when clicking icon zoom map to user location. 
-    * Continuous mode: Show user location on the map (ball) and also show accurary cicle, location ball/circle move when user location changed. If user location is outside the map viewport then map is centered to user location.
-* centerMapAutomatically: `true` or `false`. When setted to `true` map is centered to user location automatically on startup.
-* mobileOnly: `true` or `false`. If setted to `true` then `centerMapAutomatically` and `mode` only take effects on mobile devices
+    * Single mode: moves map to user location when used. 
+    * Continuous mode: Show user location on the map with accuracy circle and follow the user continuously. If user location is outside the map viewport then map is centered on user location.
+* centerMapAutomatically: `true` or `false`. When `true` map is centered to user location automatically on startup.
+* mobileOnly: `true` or `false`. Restrict functionality to mobile devices. When `true` the `centerMapAutomatically` and `mode` are ignored and the UI is not shown on desktop devices.
 
 Default configuration:
 {
