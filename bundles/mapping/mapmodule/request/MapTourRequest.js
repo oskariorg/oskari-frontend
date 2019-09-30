@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapTourRequest',
         this._animation = options.animation;
         this._zoom = options.zoom;
         this._duration = options.duration;
+        this._delay = options.delay;
         this._3dAngles = {
             heading: options.heading,
             pitch: options.pitch,
@@ -85,6 +86,22 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapTourRequest',
          */
         getOptions: function () {
             return this._options;
+        },
+
+        /**
+         * @method getDuration
+         * @return {Number} duration for animation as ms
+         */
+        getDuration: function () {
+            return this._duration;
+        },
+
+        /**
+         * @method getDelay
+         * @return {Number} delay for animation as ms
+         */
+        getDelay: function () {
+            return this._delay;
         }
     }, {
         'protocol': ['Oskari.mapframework.request.Request']

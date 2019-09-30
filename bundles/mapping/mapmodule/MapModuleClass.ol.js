@@ -539,45 +539,61 @@ export class MapModule extends AbstractMapModule {
      * @param {Number} zoom absolute zoomlevel to set the map to
      * @param {String} animation animation name
      * @param {Number}  duration animation duration time
+     * @param {Function} done function callback
      * @return {Boolean} success
      */
-    _animateTo (lonlat, zoom, animation, duration = 3000) {
+    _animateTo (lonlat, zoom, animation, duration, done) {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
 
         const location = [lonlat.lon, lonlat.lat];
         const view = this.getMap().getView();
+        let called = false;
+        let parts = animation === 'fly' ? 2 : 1;
+        duration = duration || 3000;
+        done = typeof (done) === 'function' ? done : (x) => x;
+
+        function callback (complete) {
+            --parts;
+            if (called) {
+                return;
+            }
+            if (parts === 0 || !complete) {
+                called = true;
+                // Animation ready, call the next point
+                done(complete);
+            }
+        }
 
         switch (animation) {
         case 'pan':
             view.animate({
                 center: location,
                 duration: duration
-            });
+            }, callback);
             break;
         case 'fly':
             const flyZoom = view.getZoom();
             view.animate({
                 center: location,
                 duration: duration
-            });
+            }, callback);
             view.animate({
                 zoom: flyZoom - 1,
                 duration: duration / 2
             }, {
                 zoom: flyZoom,
                 duration: duration / 2
-            });
+            }, callback);
             break;
         case 'zoomPan':
-
             view.animate({
                 center: location,
                 zoom: zoom,
                 duration: duration,
                 easing: easeOut
-            });
+            }, callback);
             break;
         default:
             view.setCenter(location);
@@ -603,10 +619,14 @@ export class MapModule extends AbstractMapModule {
         const view = this.getMap().getView();
         const animation = options && options.animation ? options.animation : '';
         const duration = options && options.duration ? options.duration : 3000;
+        // If no animation, notify without duration
+        const notifyDuration = animation === '' ? 0 : duration;
+
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
+
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
         }
@@ -614,56 +634,15 @@ export class MapModule extends AbstractMapModule {
             zoom = { type: 'zoom', value: zoom };
         }
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+
         this._animateTo(lonlat, zoomValue, animation, duration);
 
         this.updateDomain();
         if (suppressEnd !== true) {
             setTimeout(() => {
                 this.notifyMoveEnd();
-            }, duration);
+            }, notifyDuration);
         }
-        return true;
-    }
-
-    /**
-     * @method flyTo
-     *  Flies to map to location and returns callback for next point
-     * @param {Object} lonlat coordinates to move the map to
-     * @param {Number} duration animation duration
-     * @param {Number} zoom absolute zoomlevel to set the map to
-     * @param {Function} done function callback
-     */
-    _flyTo (lonlat, duration, zoom, done) {
-        if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
-            return false;
-        }
-
-        const location = [lonlat.lon, lonlat.lat];
-        const view = this.getMap().getView();
-        let called = false;
-        let parts = 2;
-        function callback (complete) {
-            --parts;
-            if (called) {
-                return;
-            }
-            if (parts === 0 || !complete) {
-                called = true;
-                // Animation ready call next next point
-                done(complete);
-            }
-        }
-        view.animate({
-            center: location,
-            duration: duration
-        }, callback);
-        view.animate({
-            zoom: zoom - 1,
-            duration: duration / 2
-        }, {
-            zoom: zoom,
-            duration: duration / 2
-        }, callback);
         return true;
     }
 
@@ -671,7 +650,7 @@ export class MapModule extends AbstractMapModule {
      * @method tourMap
      * Moves the map from point to point
      * @param {Object[]} coordinates array of coordinates to move the map along
-     * @param {Object | Number} zoomLevel absolute zoomlevel to set the map to
+     * @param {Object | Number} zoom absolute zoomlevel to set the map to
      * @param {Object} options options, such as animation and duration
      *     Usable animations: fly/pan/zoomPan
      * @param {Function} completed function to run when tour is completed
@@ -682,23 +661,34 @@ export class MapModule extends AbstractMapModule {
         const me = this;
         const duration = options && options.duration ? options.duration : 3000;
         const delayOption = options && options.delay ? options.delay : 750;
+        const animation = options && options.animation ? options.animation : '';
+
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
         }
-        const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-        // todo remove before merge req
-        completed = typeof completed === 'function' ? completed : () => console.log('completed');
-        cancelled = typeof cancelled === 'function' ? cancelled : () => console.log('cancelled');
+
+        const zoomDefault = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         let index = -1;
+        let delay = delayOption;
 
         const next = (more) => {
             if (more) {
                 ++index;
                 if (index < coordinates.length) {
-                    let delay = index === 0 ? 0 : delayOption;
+                    // Check if location has overrides for animation values
+                    const location = coordinates[index];
+                    const zoomValue = location.zoom || zoomDefault;
+                    const animationValue = location.animation || animation;
+                    const durationValue = location.duration || duration;
+                    // If first point, start tour immediately
+                    delay = index === 0 ? 0 : delay;
+
                     setTimeout(function () {
-                        me._flyTo(coordinates[index], duration, zoomValue, next);
+                        me._animateTo(location, zoomValue, animationValue, durationValue, next);
                     }, delay);
+
+                    // set Delay for next point
+                    delay = location.delay || delayOption;
                 } else {
                     completed();
                 }

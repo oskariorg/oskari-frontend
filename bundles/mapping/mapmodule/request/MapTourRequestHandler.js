@@ -31,11 +31,11 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
-            const locations = request.getLocations();
-            // todo remove before merge req
-            const lonlat = locations ? locations.map(loc => ({ lon: loc.lon, lat: loc.lat })) : [{ lon: 0, lat: 0 }];
-            const coordinates = lonlat.map(ll => this.mapModule.transformCoordinates(ll, srsName));
+            const coordinates = request.getLocations().map(ll => this.mapModule.transformCoordinates(ll, srsName));
             const options = request.getOptions();
+            const completed = typeof options.completed === 'function' ? options.completed : () => true;
+            const cancelled = typeof options.cancelled === 'function' ? options.cancelled : () => true;
+
             let zoom;
             if (requestZoom != null) {
                 zoom = requestZoom.scale
@@ -43,7 +43,7 @@ Oskari.clazz.define(
                     : { type: 'zoom', value: requestZoom };
             }
 
-            this.mapModule.tourMap(coordinates, zoom, options);
+            this.mapModule.tourMap(coordinates, zoom, options, completed, cancelled);
         }
     }, {
         /**

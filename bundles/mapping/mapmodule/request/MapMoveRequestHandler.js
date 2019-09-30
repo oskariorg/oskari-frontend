@@ -50,10 +50,11 @@ Oskari.clazz.define(
                     : { type: 'zoom', value: requestZoom };
             }
 
-            this.mapModule.centerMap(lonlat, zoom, false, options);
-            var zoomChange = (zoom || zoom === 0);
+            const zoomChange = (requestZoom || requestZoom === 0);
+            this.mapModule.centerMap(lonlat, zoom, !!zoomChange, options);
             if (zoomChange) {
                 const { left, top, bottom, right } = zoom;
+
                 if (left && top && bottom && right) {
                     const zoomOut = top === bottom && left === right;
                     this.mapModule.zoomToExtent(zoom, zoomOut, zoomOut);
