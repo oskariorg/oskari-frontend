@@ -31,7 +31,7 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
-            const coordinates = request.getLocations().map(ll => this.mapModule.transformCoordinates(ll, srsName));
+            const coordinates = request.getLocations().map(location => this.mapModule.transformCoordinates(location, srsName));
             const options = request.getOptions();
             const completed = typeof options.completed === 'function' ? options.completed : () => true;
             const cancelled = typeof options.cancelled === 'function' ? options.cancelled : () => true;
