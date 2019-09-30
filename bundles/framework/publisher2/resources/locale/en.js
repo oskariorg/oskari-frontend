@@ -113,7 +113,7 @@ Oskari.registerLocalization(
                     },
                     "titles": {
                         "mode": "Mode",
-                        "mobileOnly": "Only ahow UI and auto-center map on mobile devices",
+                        "mobileOnly": "Enable functionality only for mobile devices",
                         "centerMapAutomatically": "Center map on user location at startup"
                     }
                 }
