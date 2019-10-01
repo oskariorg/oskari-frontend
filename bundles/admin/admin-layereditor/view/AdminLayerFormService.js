@@ -239,7 +239,7 @@ export class AdminLayerFormService {
             }
         }).then(data => {
             if (layer.layer_id) {
-                data.groups = Object.values(layerGroups);
+                data.groups = layerGroups;
                 me.updateLayer(layer.layer_id, data);
             } else {
                 me.createlayer(data);
