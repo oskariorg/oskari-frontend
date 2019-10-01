@@ -2,8 +2,10 @@ import { stringify } from 'query-string';
 export class AdminLayerFormService {
     constructor () {
         this.layer = {};
-        this.message = {};
+        this.messages = [];
         this.listeners = [];
+        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.log = Oskari.log('AdminLayerFormService');
     }
 
     getMutator () {
@@ -90,10 +92,11 @@ export class AdminLayerFormService {
                 me.notify();
             },
             setMessage (key, type) {
-                me.message = {
-                    key: key,
-                    type: type
-                };
+                me.messages = [{ key: key, type: type }];
+                me.notify();
+            },
+            setMessages (messages) {
+                me.messages = messages;
                 me.notify();
             }
         };
@@ -132,15 +135,63 @@ export class AdminLayerFormService {
             style: layer ? layer.getCurrentStyle().getName() : '',
             styleTitle: layer ? layer.getCurrentStyle().getTitle() : '',
             styles: availableStyles,
-            styleJSON: '', // TODO
-            hoverJSON: '', // TODO
+            styleJSON: layer._options.styles ? JSON.stringify(this.getMVTStylesWithoutSrcLayer(layer._options.styles)) : '',
+            hoverJSON: layer._options.hover ? JSON.stringify(layer._options.hover) : '',
             metadataIdentifier: layer ? layer.getMetadataIdentifier() : '',
             gfiContent: layer ? layer.getGfiContent() : '',
             attributes: layer ? JSON.stringify(layer.getAttributes()) : '{}',
             isNew: !layer
         };
 
-        this.message = {};
+        this.messages = [];
+    }
+
+    /**
+     * @method getMVTStylesWithoutSrcLayer
+     * Styles in MVT layer options contain data source layer names as filtering keys.
+     * This function returns styles without the layer child.
+     * Useful when there is only one known data source layer for the styles.
+     * @return {Object} styles object without layer name filters for easier JSON editing.
+     */
+    getMVTStylesWithoutSrcLayer (styles) {
+        if (!styles) {
+            return;
+        }
+        // deep clone styles
+        var stylesCopy = JSON.parse(JSON.stringify(styles));
+        // remove mvt src layer key
+        Object.keys(stylesCopy).forEach(function (styleKey) {
+            var style = stylesCopy[styleKey];
+            Object.keys(style).forEach(function (layerKey) {
+                var layer = style[layerKey];
+                Object.keys(layer).forEach(function (styleDefKey) {
+                    var styleDef = layer[styleDefKey];
+                    style[styleDefKey] = styleDef;
+                    delete style[layerKey];
+                    stylesCopy[styleKey] = style;
+                });
+            });
+        });
+        return stylesCopy;
+    }
+
+    /**
+     * @method getMVTStylesWithSrcLayer
+     * Styles in MVT layer options contain data source layer names as filtering keys.
+     * This function set styles with the layer child.
+     * @return {Object} styles object with layer name filters for easier JSON editing.
+     */
+    getMVTStylesWithSrcLayer (styles, layerName) {
+        if (!styles) {
+            return;
+        }
+        const styleJson = JSON.parse(styles);
+        Object.keys(styleJson).forEach(function (styleKey) {
+            var mvtSrcLayerStyleDef = {};
+            mvtSrcLayerStyleDef[layerName] = styleJson[styleKey];
+            styleJson[styleKey] = mvtSrcLayerStyleDef;
+        });
+        return styleJson;
     }
 
     _getLocalizedLayerInfo (layer) {
@@ -159,8 +210,16 @@ export class AdminLayerFormService {
 
         // Modify layer for backend
         const layer = { ...this.getLayer() };
+        const layerGroups = layer.maplayerGroups;
         layer.maplayerGroups = layer.maplayerGroups.map(cur => cur.id).join(',');
 
+        const validationErrorMessages = this.validateUserInputValues(layer);
+
+        if (validationErrorMessages.length > 0) {
+            this.getMutator().setMessages(validationErrorMessages);
+            return;
+        }
+        this.setLayerOptions(layer);
         // TODO Reconsider using fetch directly here.
         // Maybe create common ajax request handling for Oskari?
         fetch(Oskari.urls.getRoute('SaveLayer'), {
@@ -170,14 +229,76 @@ export class AdminLayerFormService {
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
             body: stringify(layer)
-        }).then(function (response) {
+        }).then(response => {
             if (response.ok) {
                 me.getMutator().setMessage('messages.saveSuccess', 'success');
+                return response.json();
             } else {
                 me.getMutator().setMessage('messages.saveFailed', 'error');
+                return Promise.reject(Error('Save failed'));
             }
-            return response;
-        });
+        }).then(data => {
+            if (layer.layer_id) {
+                data.groups = layerGroups;
+                me.updateLayer(layer.layer_id, data);
+            } else {
+                me.createlayer(data);
+            }
+        }).catch(error => me.log.error(error));
+    }
+
+    updateLayer (layerId, layerData) {
+        this.mapLayerService.updateLayer(layerId, layerData);
+    }
+
+    createlayer (layerData) {
+        // TODO: Test this method when layer creation in tested with new wizard
+        const mapLayer = this.mapLayerService.createMapLayer(layerData);
+
+        if (layerData.baseLayerId) {
+            // If this is a sublayer, add it to its parent's sublayer array
+            this.mapLayerService.addSubLayer(layerData.baseLayerId, mapLayer);
+        } else {
+            // Otherwise just add it to the map layer service.
+            if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
+                this.mapLayerService.addLayer(mapLayer);
+            } else {
+                this.getMutator().setMessage('messages.errorInsertAllreadyExists', 'error');
+                // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
+            }
+        }
+    }
+
+    validateUserInputValues (layer) {
+        const validationErrors = [];
+        this.validateJsonValue(layer.styleJSON, 'messages.invalidStyleJson', validationErrors);
+        this.validateJsonValue(layer.hoverJSON, 'messages.invalidHoverJson', validationErrors);
+        return validationErrors;
+    }
+
+    validateJsonValue (value, msgKey, validationErrors) {
+        if (value === '' || typeof value === 'undefined') {
+            return;
+        }
+        try {
+            JSON.parse(value);
+        } catch (error) {
+            validationErrors.push({ key: msgKey, type: 'error' });
+        }
+    }
+    setLayerOptions (layer) {
+        if (layer.styleJSON !== '') {
+            const stylesWithSrcLayer = this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName);
+            layer.options = { ...layer.options, ...{ styles: stylesWithSrcLayer } };
+        }
+
+        if (layer.hoverJSON !== '') {
+            layer.options = { ...layer.options, ...{ hover: JSON.parse(layer.hoverJSON) } };
+        }
+
+        if (layer.options) {
+            layer.options = JSON.stringify(layer.options);
+        }
     }
 
     deleteLayer () {
@@ -208,8 +329,12 @@ export class AdminLayerFormService {
         return this.layer;
     }
 
-    getMessage () {
-        return this.message;
+    getMessages () {
+        return this.messages;
+    }
+
+    clearMessages () {
+        this.messages = [];
     }
 
     notify () {

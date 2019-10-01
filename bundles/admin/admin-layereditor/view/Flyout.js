@@ -69,10 +69,13 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         mapLayerGroups={mapLayerGroups}
                         dataProviders={dataProviders}
                         layer={this.service.getLayer()}
-                        message={this.service.getMessage()}
+                        messages={this.service.getMessages()}
                         onDelete={() => this.service.deleteLayer()}
                         onSave={() => this.service.saveLayer()}
-                        onCancel={() => me.hide()} />
+                        onCancel={() => {
+                            this.service.clearMessages();
+                            me.hide();
+                        }} />
                 </MutatorContext.Provider>
             </LocaleContext.Provider>);
 
@@ -89,5 +92,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
+        this.service.clearMessages();
     }
 }
