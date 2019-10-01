@@ -16,7 +16,8 @@ No configuration is required. The following configuration options are optional:
 {
   "zoom" : 11,
   "mode": "single", 
-  "centerMapAutomatically": true
+  "centerMapAutomatically": true,
+  "mobileOnly": true
 }
 ```
 
