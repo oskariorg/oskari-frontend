@@ -113,8 +113,8 @@ Oskari.registerLocalization(
                     },
                     "titles": {
                         "mode": "Toiminto",
-                        "mobileOnly": "Käytä toimintoa ja kartan automaattista keskittämistä vain mobiilissa",
-                        "centerMapAutomatically": "Keskitä karttaan automaattisesti"
+                        "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
+                        "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
                     }
                 }
             },
