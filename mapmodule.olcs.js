@@ -479,7 +479,7 @@ class MapModuleOlCesium extends MapModuleOl {
                 pitch: options.pitch } : undefined;
 
         if (options && options.animation) {
-            this._flyTo(ocation[0], location[1], cameraHeight, animationDuration, angles);
+            this._flyTo(location[0], location[1], cameraHeight, animationDuration, angles);
             if (suppressEnd !== true) {
                 setTimeout(() => {
                     this.notifyMoveEnd();
@@ -521,7 +521,7 @@ class MapModuleOlCesium extends MapModuleOl {
         if (typeof zoom !== 'object') {
             zoom = { type: 'zoom', value: zoom };
         }
-        return  zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
+        return zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
     }
 
     /**
