@@ -470,23 +470,16 @@ class MapModuleOlCesium extends MapModuleOl {
     centerMap (lonlat, zoom, suppressEnd, options) {
         lonlat = this.normalizeLonLat(lonlat);
         const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
-        if (zoom === null || zoom === undefined) {
-            zoom = { type: 'zoom', value: this.getMapZoom() };
-        }
-        if (zoom === Number) {
-            zoom = { type: 'zoom', value: zoom };
-        }
-        const cameraHeight = zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
-        const camera = this.getCesiumScene().camera;
+        const cameraHeight = this.adjustZoom(zoom);
         const duration = options && options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
+        const angles = options && options.heading && options.roll && options.pitch
+            ? { heading: options.heading,
+                roll: options.roll,
+                pitch: options.pitch } : undefined;
 
         if (options && options.animation) {
-            camera.flyTo({
-                destination: Cesium.Cartesian3.fromDegrees(location[0], location[1], cameraHeight),
-                duration: animationDuration
-            });
-
+            this._flyTo(ocation[0], location[1], cameraHeight, animationDuration, angles);
             if (suppressEnd !== true) {
                 setTimeout(() => {
                     this.notifyMoveEnd();
@@ -507,27 +500,33 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Number} y latitude
      * @param {Number} z zoom/cameraheight
      * @param {Number} duration animation duration in seconds
+     * @param {Object} angles orientation of camera, heading pitch and roll
      * @param {Function} complete function to run when animation is completed
      * @param {Function} cancel function to run when animation is cancelled
-     * @param {Number} delay delay for next point
      */
-    _flyTo (x, y, z, duration, complete, cancel, delay, angles) {
+    _flyTo (x, y, z, duration, angles, complete, cancel) {
         const camera = this.getCesiumScene().camera;
-        let flyToParams = {
-            destination: Cesium.Cartesian3.fromDegrees(x, y, z),
-            duration: duration,
-            complete: complete,
-            cancel: cancel
-        };
+        let flyToParams = { destination: Cesium.Cartesian3.fromDegrees(x, y, z) };
+        flyToParams = duration ? { ...flyToParams, duration: duration } : flyToParams;
         flyToParams = angles ? { ...flyToParams, orientation: angles } : flyToParams;
-        setTimeout(function () {
-            camera.flyTo(flyToParams);
-        }, delay);
+        flyToParams = complete ? { ...flyToParams, complete: complete } : flyToParams;
+        flyToParams = cancel ? { ...flyToParams, cancel: cancel } : flyToParams;
+        camera.flyTo(flyToParams);
+    }
+
+    adjustZoom (zoom) {
+        if (zoom === null || zoom === undefined) {
+            zoom = { type: 'zoom', value: this.getMapZoom() };
+        }
+        if (typeof zoom !== 'object') {
+            zoom = { type: 'zoom', value: zoom };
+        }
+        return  zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
     }
 
     /**
      * @method tourMap
-     * Moves the map from point to point
+     * Moves the map from point to point. Overrides 2d tourMap function.
      * @param {Object[]} coordinates array of coordinates to move the map along
      * @param {Object | Number} zoom absolute zoomlevel to set the map to
      * @param {Object} options options, such as animation and duration
@@ -540,10 +539,7 @@ class MapModuleOlCesium extends MapModuleOl {
         const duration = options && options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
         const delayOption = options && options.delay ? options.delay : 750;
-        if (zoom === null || zoom === undefined) {
-            zoom = { type: 'zoom', value: this.getMapZoom() };
-        }
-        const cameraHeight = zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
+        const cameraHeight = this.adjustZoom(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         const angles = options && options.heading && options.roll && options.pitch
             ? { heading: options.heading,
@@ -556,8 +552,11 @@ class MapModuleOlCesium extends MapModuleOl {
             ++index;
             if (index < coordinates.length) {
                 const location = coords[index];
+                const locOptions = coordinates[index];
+                const angleValues = locOptions.angles || angles;
+                const heightValue = locOptions.zoom ? me.adjustZoom(locOptions.zoom) : cameraHeight;
                 setTimeout(function () {
-                    me._flyTo(location[0], location[1], cameraHeight, animationDuration, next, cancelled, delay, angles);
+                    me._flyTo(location[0], location[1], heightValue, animationDuration, angleValues, next, cancelled);
                 }, delay);
 
                 // set Delay for next point
