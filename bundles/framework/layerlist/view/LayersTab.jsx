@@ -195,15 +195,16 @@ Oskari.clazz.define(
                     top: 80px;
                     line-height: 0;
                 `;
+                const OpenLayerWizardButton = () => (
+                    <PositionedButton
+                        size="large"
+                        onClick={Oskari.getSandbox().postRequestByName('OpenLayerEditorRequest', [])}
+                        icon="plus"
+                        title={this._locale.tooltip.addLayer} />
+                );
                 const layerWizardBtnMountPoint = jQuery(this.templates.layerWizardBtnMountPoint);
                 this.tabPanel.getContainer().append(layerWizardBtnMountPoint);
-                const onClick = () => {
-                    Oskari.getSandbox().postRequestByName('OpenLayerEditorRequest', []);
-                };
-                ReactDOM.render(
-                    <PositionedButton size="large" onClick={onClick} icon="plus" title={this._locale.tooltip.addLayer} />,
-                    layerWizardBtnMountPoint[0]
-                );
+                ReactDOM.render(<OpenLayerWizardButton/>, layerWizardBtnMountPoint[0]);
             }
         },
 

@@ -44,6 +44,7 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
                     // When the properties remain unchanged, we can benefit from memoization.
                     return (
                         <LayerCollapsePanel key={group.getTitle()}
+                            trimmed
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
                             showLayers={showLayers}
