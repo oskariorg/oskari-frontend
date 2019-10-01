@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
 import { StateHandler } from './LayerCollapse/StateHandler';
 import { LayerFilters } from './LayerFilters';
+import { Button } from 'oskari-ui';
+import styled from 'styled-components';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -39,15 +41,15 @@ Oskari.clazz.define(
                 '  <span class="keyword"></span>' +
                 '</a>',
             keywordType: '<div class="type"></div>',
-            layerFilter: '<div class="layer-filter layerselector2-layer-filter">' +
-                '</div><div style="clear:both;"></div>',
             layerListMountPoint: '<div class="layer-list-mount-pt"></div>',
-            layerFiltersMountPoint: '<div class="layer-filters-mount-pt"></div>'
+            layerFiltersMountPoint: '<div class="layer-filters-mount-pt"></div>',
+            layerWizardBtnMountPoint: '<div class="layer-wizard-btn-mount-pt"></div>'
         };
         this.layerCollapseStateHandler = new StateHandler();
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
         this.layerlistService.on('Layerlist.Filter.Button.Add', () => this.renderLayerFilters());
         this.layerlistService.on('FilterActivate', () => this.renderLayerFilters());
+        Oskari.on('app.start', () => this._addLayerWizardBtn());
         this._createUI(id);
     }, {
 
@@ -183,6 +185,26 @@ Oskari.clazz.define(
                     me._render();
                 }
             });
+        },
+
+        _addLayerWizardBtn: function () {
+            if (Oskari.getSandbox().hasHandler('OpenLayerEditorRequest')) {
+                const PositionedButton = styled(Button)`
+                    position: absolute;
+                    right: 40px;
+                    top: 80px;
+                    line-height: 0;
+                `;
+                const layerWizardBtnMountPoint = jQuery(this.templates.layerWizardBtnMountPoint);
+                this.tabPanel.getContainer().append(layerWizardBtnMountPoint);
+                const onClick = () => {
+                    Oskari.getSandbox().postRequestByName('OpenLayerEditorRequest', []);
+                };
+                ReactDOM.render(
+                    <PositionedButton size="large" onClick={onClick} icon="plus" title={this._locale.tooltip.addLayer} />,
+                    layerWizardBtnMountPoint[0]
+                );
+            }
         },
 
         /**
