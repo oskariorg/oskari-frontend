@@ -1,6 +1,6 @@
 import { LayerEditorFlyout } from './view/Flyout';
-import { OpenLayerEditorRequest } from './request/OpenLayerEditorRequest';
-import { OpenLayerEditorRequestHandler } from './request/OpenLayerEditorRequestHandler';
+import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
+import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -27,7 +27,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         _startImpl () {
             this._setupLayerTools();
             this._loadDataProviders();
-            this.sandbox.requestHandler(OpenLayerEditorRequest.NAME, new OpenLayerEditorRequestHandler(this));
+            this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
         }
 
         _setDataProviders (dataProviders) {

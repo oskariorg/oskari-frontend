@@ -188,7 +188,7 @@ Oskari.clazz.define(
         },
 
         _addLayerWizardBtn: function () {
-            if (Oskari.getSandbox().hasHandler('OpenLayerEditorRequest')) {
+            if (Oskari.getSandbox().hasHandler('ShowLayerEditorRequest')) {
                 const PositionedButton = styled(Button)`
                     position: absolute;
                     right: 40px;
@@ -198,7 +198,7 @@ Oskari.clazz.define(
                 const OpenLayerWizardButton = () => (
                     <PositionedButton
                         size="large"
-                        onClick={() => Oskari.getSandbox().postRequestByName('OpenLayerEditorRequest', [])}
+                        onClick={() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', [])}
                         icon="plus"
                         title={this._locale.tooltip.addLayer} />
                 );

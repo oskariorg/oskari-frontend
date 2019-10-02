@@ -1,11 +1,11 @@
 /**
- * @class OpenLayerEditorRequest
+ * @class ShowLayerEditorRequest
  * Request opening admin layer editor.
  */
-const NAME = 'OpenLayerEditorRequest';
-export class OpenLayerEditorRequest {
+const NAME = 'ShowLayerEditorRequest';
+export class ShowLayerEditorRequest {
     /**
-     * Creates a new OpenLayerEditorRequest.
+     * Creates a new ShowLayerEditorRequest.
      * @param {Number} layerId optional
      */
     constructor (layerId) {
@@ -18,10 +18,10 @@ export class OpenLayerEditorRequest {
         return this.layerId;
     }
 };
-OpenLayerEditorRequest.NAME = NAME;
+ShowLayerEditorRequest.NAME = NAME;
 
 Oskari.clazz.defineES(
-    'Oskari.admin.admin-layereditor.request.OpenLayerEditorRequest',
-    OpenLayerEditorRequest,
+    'Oskari.admin.admin-layereditor.request.ShowLayerEditorRequest',
+    ShowLayerEditorRequest,
     { protocol: ['Oskari.mapframework.request.Request'] }
 );

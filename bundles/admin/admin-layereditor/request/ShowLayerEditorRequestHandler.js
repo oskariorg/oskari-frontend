@@ -1,8 +1,8 @@
 /**
- * @class OpenLayerEditorRequestHandler
+ * @class ShowLayerEditorRequestHandler
  * Opens the layer editor form.
  */
-export class OpenLayerEditorRequestHandler {
+export class ShowLayerEditorRequestHandler {
     constructor (instance) {
         this.bundleInstance = instance;
     }
@@ -12,7 +12,7 @@ export class OpenLayerEditorRequestHandler {
 };
 
 Oskari.clazz.defineES(
-    'Oskari.admin.admin-layereditor.request.OpenLayerEditorRequestHandler',
-    OpenLayerEditorRequestHandler,
+    'Oskari.admin.admin-layereditor.request.ShowLayerEditorRequestHandler',
+    ShowLayerEditorRequestHandler,
     { protocol: ['Oskari.mapframework.core.RequestHandler'] }
 );
