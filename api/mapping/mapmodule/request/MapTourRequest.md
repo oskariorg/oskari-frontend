@@ -1,6 +1,6 @@
 # MapTourRequest [RPC]
 
-Allows user to move the map along locations until final destination
+Allows programmatic tour around the map showcasing multiple locations
 
 ## Use cases
 
