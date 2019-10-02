@@ -13,7 +13,7 @@ export const Collapse = ({ children, ...other }) => (
     </AntCollapse>
 );
 
-const StyledPanel = styled(AntCollapse.Panel)`
+const TrimmedPanel = styled(AntCollapse.Panel)`
     & .ant-collapse-content-box {
         padding: 0;
         margin: 0;
@@ -22,16 +22,16 @@ const StyledPanel = styled(AntCollapse.Panel)`
         width: 100%;
     }
 `;
-export const Panel = ({ children, ...other }) => (
-    <StyledPanel {...other}>
-        {children}
-    </StyledPanel>
-);
+export const Panel = ({ trimmed, ...other }) => {
+    const Component = trimmed === true ? TrimmedPanel : AntCollapse.Panel;
+    return <Component {...other}></Component>;
+};
 
 Collapse.propTypes = {
     children: PropTypes.any
 };
 
 Panel.propTypes = {
-    children: PropTypes.any
+    children: PropTypes.any,
+    trimmed: PropTypes.bool
 };
