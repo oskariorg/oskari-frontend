@@ -112,8 +112,8 @@ Oskari.registerLocalization(
                     },
                     "titles": {
                         "mode": "Funktion",
-                        "mobileOnly": "Använd funktionen och kartans automatiska centrering endast i mobilen",
-                        "centerMapAutomatically": "Centrera kartan automatiskt"
+                        "mobileOnly": "Tillåt funktionen endast för mobilapparater",
+                        "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
                     }
                 }
             },
