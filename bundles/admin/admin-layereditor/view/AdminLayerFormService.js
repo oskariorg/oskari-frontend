@@ -287,15 +287,9 @@ export class AdminLayerFormService {
         }
     }
     setLayerOptions (layer) {
-        if (layer.styleJSON !== '') {
-            const stylesWithSrcLayer = this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName);
-            layer.options = { ...layer.options, ...{ styles: stylesWithSrcLayer } };
-        }
-
-        if (layer.hoverJSON !== '') {
-            layer.options = { ...layer.options, ...{ hover: JSON.parse(layer.hoverJSON) } };
-        }
-
+        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName) : undefined;
+        const hoverStyle = layer.hoverJSON !== '' ? JSON.parse(layer.hoverJSON) : undefined;
+        layer.options = { ...layer.options, ...{ styles: styles, hover: hoverStyle } };
         if (layer.options) {
             layer.options = JSON.stringify(layer.options);
         }
