@@ -133,85 +133,40 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                     template.append(field.getElement());
                 }
             }
-
-            var toolCheckbox = toolContainer.find('input').first();
-            if (me.pluginSelected === true) {
-                toolCheckbox.prop('checked', true);
-            }
-            if (toolCheckbox.is(':checked')) {
-                template.show();
-            } else {
-                template.hide();
-            }
-
-            toolCheckbox.on('change', function () {
-                if (toolCheckbox.is(':checked')) {
-                    template.show();
-                } else {
-                    template.hide();
-                }
-            });
-
             return template;
         },
         /**
-         * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
-         * sets up validation etc. Prepopulates the form fields if pData parameter is given.
-         *
-         * @method init
-         * @param {Object} pData initial data
-         * @param {Object} modeChangedCB mode changed callback
-         */
-        init: function (pData, modeChangedCB) {
+        * Initialize tool
+        * Override if tool is not mapfull plugin
+        * @method init
+        * @public
+        */
+        init: function (pdata) {
             var me = this;
             var loc = Oskari.getLocalization('Publisher2').BasicView.maptools;
+            var data = pdata;
 
-            var getPlugin = function () {
-                if (!pData && !pData.configuration && !pData.configuration.mapfull && !pData.configuration.mapfull.conf && !pData.configuration.mapfull.conf.plugins) {
-                    return null;
-                }
-                var plugin = pData.configuration.mapfull.conf.plugins.filter(function (obj) { return obj.id === 'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin'; });
+            var config = {};
 
-                if (plugin.length > 0) {
-                    me.pluginSelected = true;
-                    return plugin[0];
-                }
-                return null;
-            };
-
-            var getPluginConfig = function () {
-                var plugin = getPlugin();
-                if (plugin !== null) {
-                    return plugin.config || me.defaultExtraOptions;
-                }
-                return me.defaultExtraOptions;
-            };
-
-            var initialConf = getPluginConfig();
-            var selectedOptions;
-
-            // initial mode selection if modify.
-            if (initialConf && initialConf.mode) {
-                selectedOptions = me.options.mode.filter(function (option) {
-                    return (option.id === initialConf.mode);
+            if (Oskari.util.keyExists(data, 'configuration.mapfull.conf.plugins')) {
+                data.configuration.mapfull.conf.plugins.forEach(function (plugin) {
+                    if (me.getTool().id === plugin.id) {
+                        me.setEnabled(true);
+                        config = plugin.config || me.defaultExtraOptions;
+                    }
                 });
-                if (selectedOptions && selectedOptions.length) {
-                    me.selected.mode = selectedOptions[0].id;
-                }
             }
-            // initial mode selection if modify.
-            if (initialConf && initialConf.mobileOnly) {
-                selectedOptions = me.options.mobileOnly.filter(function (option) {
-                    return (option.id === initialConf.mobileOnly);
-                });
-                if (selectedOptions && selectedOptions.length) {
-                    me.selected.mobileOnly = selectedOptions[0].id;
-                }
+
+            // initial selections if modify.
+            var mode = config.mode || me.defaultExtraOptions.mode;
+            var selectedOptions = me.options.mode.filter(function (option) {
+                return (option.id === mode);
+            });
+            if (selectedOptions && selectedOptions.length) {
+                me.selected.mode = selectedOptions[0].id;
             }
-            // initial centerMapAutomatically selection if modify.
-            if (initialConf && initialConf.centerMapAutomatically) {
-                me.selected.centerMapAutomatically = initialConf.centerMapAutomatically;
-            }
+            me.selected.mobileOnly = config.mobileOnly || me.defaultExtraOptions.mobileOnly;
+            me.selected.centerMapAutomatically = config.centerMapAutomatically || me.defaultExtraOptions.centerMapAutomatically;
 
             // initialise fields only after it's certain which option is selected (new / modify)
             me.fields = {
