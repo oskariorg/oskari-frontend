@@ -133,7 +133,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
 
                 contentPanel.append(ui);
 
-                ui.find('input').on('change', function () {
+                ui.find('input').first().on('change', function () {
                     var enabled = jQuery(this).is(':checked');
                     // TODO: maybe wrap in try catch and on error show the user a message about faulty functionality
                     tool.setEnabled(enabled);
@@ -150,7 +150,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     ui.find('.extraOptions').append(extraOptions);
                 }
 
-                var initStateEnabled = ui.find('input').is(':checked');
+                var initStateEnabled = ui.find('input').first().is(':checked');
                 tool.setEnabled(initStateEnabled);
                 if (initStateEnabled) {
                     ui.find('.extraOptions').show();
