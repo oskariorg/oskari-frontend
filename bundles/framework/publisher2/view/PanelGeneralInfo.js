@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 '</div>')
         };
         this.panel = null;
-        this.domainWarningTemplate = jQuery('<div class="domain-warning">TODO: tekstit lokaalisaatiotiedostosta</div>');
+        this.domainWarningTemplate = jQuery('<div class="domain-warning">' + this.loc.domain.inputWarning + '</div>');
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -59,21 +59,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     field.setLabel(data.label);
                     field.setTooltip(data.tooltip, data.helptags);
                     field.setPlaceholder(data.placeholder);
+
+                    const keyUpHandler = Oskari.util.throttle((event) => {
+                        const domainWarningDivs = jQuery('.domain-warning');
+                        if (domainWarningDivs.length === 0) {
+                            const domainWarning = me.domainWarningTemplate.clone();
+                            const domainDiv = jQuery('.basic_publisher').find('.oskarifield')[1];
+                            domainDiv.append(domainWarning[0]);
+                        }
+                        const domain = event.target.value;
+                        if (domain === '' || (domain.includes('.') && !domain.includes(' '))) {
+                            jQuery('.domain-warning').hide();
+                        } else {
+                            jQuery('.domain-warning').show();
+                        }
+                    }, 1000, { leading: false });
+
                     if (fkey === 'domain') {
-                        field.bindUpKey((event) => {
-                            const domainWarningDivs = jQuery('.domain-warning');
-                            if (domainWarningDivs.length === 0) {
-                                const domainWarning = me.domainWarningTemplate.clone();
-                                const domainDiv = jQuery('.basic_publisher').find('.oskarifield')[1];
-                                domainDiv.append(domainWarning[0]);
-                            }
-                            const domain = event.target.value;
-                            if (domain === '' || (domain.includes('.') && !domain.includes(' '))) {
-                                jQuery('.domain-warning').hide();
-                            } else {
-                                jQuery('.domain-warning').show();
-                            }
-                        });
+                        field.bindUpKey(keyUpHandler);
                     }
                     data.field = field;
                 }
