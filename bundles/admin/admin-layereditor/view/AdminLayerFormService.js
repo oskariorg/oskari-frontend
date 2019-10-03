@@ -293,9 +293,7 @@ export class AdminLayerFormService {
         const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName) : undefined;
         const hoverStyle = layer.hoverJSON !== '' ? JSON.parse(layer.hoverJSON) : undefined;
         layer.options = { ...layer.options, ...{ styles: styles, hover: hoverStyle } };
-        if (layer.options) {
-            layer.options = JSON.stringify(layer.options);
-        }
+        layer.options = JSON.stringify(layer.options);
     }
 
     deleteLayer () {
