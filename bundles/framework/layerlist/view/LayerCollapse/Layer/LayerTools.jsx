@@ -32,7 +32,9 @@ const SecondaryIcon = styled('div')`
     ${props => props.layer.hasTimeseries() && 'margin-right: 2px;'}
 `;
 const Tools = styled('div')`
-    float: right;
+    position: absolute;
+    display: inline-block;
+    right: 5px;
 `;
 
 const getBackendStatusIconProps = (layer, locale) => {
@@ -114,10 +116,10 @@ const getInfoIconClasses = layer => {
     return classes;
 };
 
-export const LayerTools = ({model, mapSrs, mutator, locale}) => {
+export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
     const infoClasses = getInfoIconClasses(model, locale);
     const layerIconProps = getLayerIconProps(model, locale);
-    const secondaryIconProps = getSecondaryIconProps(model);
+    const secondaryIconProps = getSecondaryIconProps(model, locale);
     const backendStatusProps = getBackendStatusIconProps(model, locale);
     return (
         <Tools className="layer-tools">
