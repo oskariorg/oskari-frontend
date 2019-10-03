@@ -281,24 +281,19 @@ export class AdminLayerFormService {
             return;
         }
         try {
-            JSON.parse(value);
+            const result = JSON.parse(value);
+            if (typeof result !== 'object') {
+                validationErrors.push({ key: msgKey, type: 'error' });
+            }
         } catch (error) {
             validationErrors.push({ key: msgKey, type: 'error' });
         }
     }
     setLayerOptions (layer) {
-        if (layer.styleJSON !== '') {
-            const stylesWithSrcLayer = this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName);
-            layer.options = { ...layer.options, ...{ styles: stylesWithSrcLayer } };
-        }
-
-        if (layer.hoverJSON !== '') {
-            layer.options = { ...layer.options, ...{ hover: JSON.parse(layer.hoverJSON) } };
-        }
-
-        if (layer.options) {
-            layer.options = JSON.stringify(layer.options);
-        }
+        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName) : undefined;
+        const hoverStyle = layer.hoverJSON !== '' ? JSON.parse(layer.hoverJSON) : undefined;
+        layer.options = { ...layer.options, ...{ styles: styles, hover: hoverStyle } };
+        layer.options = JSON.stringify(layer.options);
     }
 
     deleteLayer () {
