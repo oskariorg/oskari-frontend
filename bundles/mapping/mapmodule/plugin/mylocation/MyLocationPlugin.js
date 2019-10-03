@@ -172,8 +172,8 @@ Oskari.clazz.define(
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            if (!this.isVisible()) {
-                // no point in drawing the ui if we are not visible
+            if (!this.isVisible() || !this.isEnabled()) {
+                // no point in drawing the ui if we are not visible or enabled
                 return;
             }
             var me = this;
@@ -194,6 +194,8 @@ Oskari.clazz.define(
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
+
+            this._handleStartMode();
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
@@ -201,16 +203,19 @@ Oskari.clazz.define(
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
         /**
-         * Check at if device is same than configured, or if not moblie is not configured then always return true.
-         * @method @private _isDevice
-         * @return {Boolean} is device same than configured
+         * @public @method isEnabled
+         * Are the plugin's controls enabled
+         *
+         *
+         * @return {Boolean}
+         * True if plugin's tools are enabled
          */
-        _isDevice: function () {
+        isEnabled: function () {
             var conf = this.getConfig();
             if (conf.mobileOnly === true && !Oskari.util.isMobile(true)) {
                 return false;
-            }
-            return true;
+            } 
+            return this._enabled;
         },
 
         /**
@@ -222,13 +227,13 @@ Oskari.clazz.define(
 
             // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single
             // (not draw user location and accurary circle and center map to user location)
-            if (this._isDevice() && conf.mode === 'continuous' && this._currentMode === 'continuous') {
+            if (conf.mode === 'continuous' && this._currentMode === 'continuous') {
                 this._currentMode = 'single';
                 this._stopTracking();
                 this._setupLocation();
             }
             // else if plugin is configured continuous mode and current toggled mode is "single" then toggle mode to continuous.
-            else if (this._isDevice() && conf.mode === 'continuous' && this._currentMode === 'single') {
+            else if (conf.mode === 'continuous' && this._currentMode === 'single') {
                 this._currentMode = 'continuous';
                 this._startTracking();
             }
@@ -260,18 +265,17 @@ Oskari.clazz.define(
         },
 
         /**
-         * @private @method _startPluginImpl
-         * Interface method for the plugin protocol.
-         * Creates the base marker layer.
+         * Handle plugin start mode
+         * @private @method _handleStartMode
          */
-        _startPluginImpl: function () {
+        _handleStartMode: function () {
             var me = this;
             var conf = this.getConfig();
 
-            if (me._isDevice() && conf.mode === 'continuous') {
+            if (conf.mode === 'continuous') {
                 me._currentMode = 'continuous';
                 me._startTracking();
-            } else if (me._isDevice() && conf.centerMapAutomatically === true) {
+            } else if (conf.centerMapAutomatically === true) {
                 me._currentMode = 'single';
                 me._setupLocation();
             }
@@ -292,7 +296,7 @@ Oskari.clazz.define(
          */
         _checkIfOutsideViewport (lon, lat) {
             var sandbox = this.getSandbox();
-            if (!this._isDevice() || this._currentMode === 'single') {
+            if (!this.isEnabled() || this._currentMode === 'single') {
                 // skip checking
                 return;
             }
