@@ -25,10 +25,11 @@ export class StateHandler {
         return 'LayerCollapseStateHandler';
     }
     updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
+        const groupsChanged = groups && groups !== this.groups;
         this.groups = groups || this.groups;
         this.mutatedGroups = null;
         this.selectedLayerIds = selectedLayerIds || this.selectedLayerIds;
-        if (!this._filterStateChanged(filterKeyword)) {
+        if (!groupsChanged && !this._filterStateChanged(filterKeyword)) {
             this.notify();
             return;
         }

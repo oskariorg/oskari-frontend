@@ -179,12 +179,6 @@ Oskari.clazz.define(
             );
             me.layerListMountPoint = jQuery(me.templates.layerListMountPoint);
             me.tabPanel.getContainer().append(me.layerListMountPoint);
-
-            me.tabPanel.setSelectionHandler(selected => {
-                if (selected) {
-                    me._render();
-                }
-            });
         },
 
         _addLayerWizardBtn: function () {
@@ -314,7 +308,6 @@ Oskari.clazz.define(
         showLayerGroups: function (groups) {
             this.layerGroups = groups;
             this.filterLayers(this.filterField.getValue());
-            this._render();
         },
 
         /**
