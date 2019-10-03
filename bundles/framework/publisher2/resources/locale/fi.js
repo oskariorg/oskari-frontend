@@ -36,9 +36,10 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Julkaisutiedot",
-                "label": "Salli kartan upotus vain seuraavaan sivustoon",
+                "label": "Rajoita kartan upotus vain seuraavaan verkko-osoitteeseen:",
                 "placeholder": "Sivuston osoite",
-                "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com."
+                "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com.",
+                "inputWarning": "Tarkista syötetty verkko-osoite"
             },
             "name": {
                 "label": "Kartan nimi (pakollinen tieto)",
