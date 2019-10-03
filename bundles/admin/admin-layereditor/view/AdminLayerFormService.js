@@ -281,7 +281,10 @@ export class AdminLayerFormService {
             return;
         }
         try {
-            JSON.parse(value);
+            const result = JSON.parse(value);
+            if (typeof result !== 'object') {
+                validationErrors.push({ key: msgKey, type: 'error' });
+            }
         } catch (error) {
             validationErrors.push({ key: msgKey, type: 'error' });
         }
