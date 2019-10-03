@@ -1,6 +1,7 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { LayerFilters } from './LayerFilters';
+import { LayerFilter } from './LayerFilters/LayerFilter';
 
 describe('<LayerFilters/> ', () => {
     test('renders filters correctly', () => {
@@ -11,7 +12,7 @@ describe('<LayerFilters/> ', () => {
         mockButtons.button2 = getMockButtonForId(2);
 
         const wrapper = mount(<LayerFilters filters={mockButtons} service={mockServiceMutatorNotCalled}/>);
-        expect(wrapper.find('center').length).toEqual(Object.keys(mockButtons).length);
+        expect(wrapper.find(LayerFilter).length).toEqual(Object.keys(mockButtons).length);
     });
 
     test('passes service mutator correctly to subcomponents', () => {
@@ -23,7 +24,7 @@ describe('<LayerFilters/> ', () => {
         const mockButtons = {};
         mockButtons.button1 = getMockButtonForId(1);
         const wrapper = mount(<LayerFilters filters={mockButtons} service={mockServiceMutator}/>);
-        wrapper.find('center').simulate('click');
+        wrapper.find(LayerFilter).first().simulate('click');
         expect(mutatorSetter.mock.calls.length).toEqual(1);
     });
 
