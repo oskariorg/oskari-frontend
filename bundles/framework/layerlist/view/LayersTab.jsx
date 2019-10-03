@@ -46,6 +46,7 @@ Oskari.clazz.define(
             layerWizardBtnMountPoint: '<div class="layer-wizard-btn-mount-pt"></div>'
         };
         this.layerCollapseStateHandler = new StateHandler();
+        this.layerCollapseStateHandler.updateSelectedLayerIds();
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
         this.layerlistService.on('Layerlist.Filter.Button.Add', () => this.renderLayerFilters());
         this.layerlistService.on('FilterActivate', () => this.renderLayerFilters());
