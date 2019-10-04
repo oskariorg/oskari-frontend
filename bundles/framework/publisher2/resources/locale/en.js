@@ -36,10 +36,10 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Basic settings",
-                "label": "Restrict embedding only to the following web address:",
+                "label": "Restrict embedding only to the following <br>web address:",
                 "placeholder": "Allowed domain",
                 "tooltip": "Type a website URL-address without prefixes or a subpage address. For example: homepage.com.",
-                "inputWarning": "Verify inserted web address"
+                "inputWarning": "Verify typed web address"
             },
             "name": {
                 "label": "Map name (required)",
