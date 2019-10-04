@@ -214,7 +214,7 @@ Oskari.clazz.define(
             var conf = this.getConfig();
             if (conf.mobileOnly === true && !Oskari.util.isMobile(true)) {
                 return false;
-            } 
+            }
             return this._enabled;
         },
 
