@@ -239,6 +239,7 @@ Oskari.clazz.define(
             }
             // else if not plugin is not configured to continuous moden then use like "single"
             else {
+                this._stopTracking();
                 this._setupLocation();
             }
         },

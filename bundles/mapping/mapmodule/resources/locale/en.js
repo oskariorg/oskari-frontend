@@ -110,7 +110,7 @@ Oskari.registerLocalization(
                     "message": "Select a new location for your map marker by clicking the map.",
                     "error": {
                         "title": "Error for getting location!",
-                        "timeout": "Getting location takes longer than excepted...",
+                        "timeout": "Getting a location takes longer than excepted...",
                         "denied": "The site has blocked location. Please enable location and try again",
                         "noLocation": "Failed to determine location",
                         "close": "Close"
