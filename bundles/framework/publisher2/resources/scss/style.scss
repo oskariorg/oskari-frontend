@@ -302,7 +302,13 @@ div.publisher-color-picker-group-wrapper {
 }
 
 div.domain-warning {
-    color:red;
+    color: black;
+    padding-top: 10px;
+    div {
+        padding-left: 5px;
+        float: left;
+        padding-bottom: 5px;
+    }
 }
 
 div#publisher-custom-colours {

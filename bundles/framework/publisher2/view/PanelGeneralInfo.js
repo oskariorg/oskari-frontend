@@ -38,7 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 '</div>')
         };
         this.panel = null;
-        this.domainWarningTemplate = jQuery('<div class="domain-warning">' + this.loc.domain.inputWarning + '</div>');
+        this.domainWarningTemplate = jQuery('<div class="domain-warning"><div class="icon-warning-light"></div><div>' + this.loc.domain.inputWarning + '</div></div>');
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -67,8 +67,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                             const domainDiv = jQuery('.basic_publisher').find('.oskarifield')[1];
                             domainDiv.append(domainWarning[0]);
                         }
-                        const domain = event.target.value;
-                        if (domain === '' || (domain.includes('.') && !domain.includes(' '))) {
+                        if (this._isValidDomain(event.target.value)) {
                             jQuery('.domain-warning').hide();
                         } else {
                             jQuery('.domain-warning').show();
@@ -144,6 +143,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             me.langField.element = langElement;
 
             me._languageChanged(selectedLang);
+        },
+        /*
+         * Function implemented by modifying function introduced in https://miguelmota.com/bytes/validate-domain-regex/
+         */
+        _isValidDomain (v) {
+            if (!v) {
+                return true;
+            }
+            const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+            return re.test(v);
         },
 
         /**
