@@ -19,7 +19,7 @@ export const LayerFilters = ({ filters, service }) => {
                     tooltip={button.tooltip} filterName = {button.id}
                     currentStyle = {button.cls.current}
                     clickHandler={(event) => {
-                        const filterName = event.target.attributes.filtername || event.target.parentElement.attributes.filtername;
+                        const filterName = event.currentTarget.attributes.filtername;
                         service.setCurrentFilter(filterName.value);
                     }}>
                 </LayerFilter>

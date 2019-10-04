@@ -28,7 +28,11 @@
     "testEnvironment": "jsdom",
     "setupFilesAfterEnv": [
       "<rootDir>/setupTests.js"
-    ]
+    ],
+    "moduleNameMapper": {
+      "oskari-ui": "<rootDir>/src/react",
+      "^antd(.*?)style/index.js$": "<rootDir>/tests/styleMock.js"
+    }
   },
   "dependencies": {
     "@babel/core": "7.6.0",

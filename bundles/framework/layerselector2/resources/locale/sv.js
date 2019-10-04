@@ -34,7 +34,8 @@ Oskari.registerLocalization(
             "type-wfs": "Dataprodukt (WFS)",
             "type-wfs-manual": "Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action",
             "type-timeseries": "Kartlager med tidsserie",
-            "unsupported-srs": "Ostödd kartprojektion"
+            "unsupported-srs": "Ostödd kartprojektion",
+            "addLayer": "Tillägg lager"
         },
         "backendStatus": {
             "OK": {

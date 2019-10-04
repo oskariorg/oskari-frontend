@@ -51,7 +51,10 @@ Oskari.registerLocalization(
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
-                "errorRemoveLayer": "Kartlager kunde inte tas bort."
+                "errorRemoveLayer": "Kartlager kunde inte tas bort.",
+                "invalidStyleJson" : "Style JSON-syntaxen är ogiltig.",
+                "invalidHoverJson" : "Hover JSON-syntaxen är ogiltig.",
+                "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras."
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",

@@ -1,20 +1,35 @@
 const LAYER_TIMEOUT_MS = 400;
 
+/**
+ * Holds and mutates layer list state.
+ * Handles events related to layer listing.
+ */
 export class StateHandler {
     constructor () {
         this.listeners = [];
         this.selectedLayerIds = [];
         this.groups = [];
+        this.mutatedGroups = null;
         this.filterKeyword = null;
         this.openGroupTitles = null;
         this.filtered = null;
         this.map = Oskari.getSandbox().getMap();
         this.mutator = this._createMutator();
+        this.eventHandlers = this._createEventHandlers();
+        this._throttleRefresh = Oskari.util.throttle(this._refreshAllLayers.bind(this), 2000, { leading: false });
+    }
+    /**
+     * "Module" name for event handling
+     */
+    getName () {
+        return 'LayerCollapseStateHandler';
     }
     updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
+        const groupsChanged = groups && groups !== this.groups;
         this.groups = groups || this.groups;
+        this.mutatedGroups = null;
         this.selectedLayerIds = selectedLayerIds || this.selectedLayerIds;
-        if (!this._filterStateChanged(filterKeyword)) {
+        if (!groupsChanged && !this._filterStateChanged(filterKeyword)) {
             this.notify();
             return;
         }
@@ -35,7 +50,8 @@ export class StateHandler {
         if (!this.filterKeyword && this.filterKeyword !== 0) {
             return null;
         }
-        const results = this.groups.map(group => {
+        const groups = this.mutatedGroups || this.groups;
+        const results = groups.map(group => {
             const layers = group.getLayers()
                 .filter(lyr => group.matchesKeyword(lyr.getId(), this.filterKeyword));
                 // and some other rule?
@@ -50,7 +66,7 @@ export class StateHandler {
         return {
             mutator: this.mutator,
             selectedLayerIds: this.selectedLayerIds,
-            groups: this.groups,
+            groups: this.mutatedGroups || this.groups,
             filtered: this.filtered,
             openGroupTitles: this.openGroupTitles,
             mapSrs: this.map.getSrsName()
@@ -60,6 +76,20 @@ export class StateHandler {
         const state = this._getState();
         this.listeners.forEach(consumer => consumer(state));
     }
+
+    /**
+    * @method onEvent
+    * @param {Oskari.mapframework.event.Event} event a Oskari event object
+    * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+    */
+    onEvent (event) {
+        const handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    }
+
     _createMutator () {
         const me = this;
         const sandbox = Oskari.getSandbox();
@@ -105,5 +135,54 @@ export class StateHandler {
                 sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
             }
         };
+    }
+
+    _createEventHandlers () {
+        const sandbox = Oskari.getSandbox();
+        const handlers = {
+            MapLayerEvent: event => {
+                const layerId = event.getLayerId();
+                const operation = event.getOperation();
+
+                if (operation === 'tool') {
+                    if (layerId) {
+                        this._refreshLayer(layerId);
+                        return;
+                    }
+                    this._throttleRefresh();
+                }
+            }
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    _refreshLayer (id) {
+        if (!id || this.groups.length === 0) {
+            return;
+        }
+        this.mutatedGroups = this.groups.map(group => {
+            const layer = group.getLayers().find(lyr => lyr.getId() === id);
+            if (!layer) {
+                return group;
+            }
+            return this._cloneGroup(group);
+        });
+        this.filtered = this._getSearchResults();
+        this.notify();
+    }
+    _refreshAllLayers () {
+        if (this.groups.length === 0) {
+            return;
+        }
+        // Clone all groups and layers to ensure rerendering.
+        this.mutatedGroups = this.groups.map(this._cloneGroup);
+        this.filtered = this._getSearchResults();
+        this.notify();
+    }
+    _cloneGroup (group) {
+        let groupClone = Object.assign(Object.create(group), group);
+        groupClone.layers = groupClone.layers.map(lyr => Object.assign(Object.create(lyr), lyr));
+        return groupClone;
     }
 }

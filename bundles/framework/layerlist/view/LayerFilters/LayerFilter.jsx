@@ -1,23 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Button } from 'oskari-ui';
 
-const StyledFilter = styled.div`
+const StyledButton = styled(Button)`
     border: 1px solid #a4a4a4;
-    padding: 10px;
+    padding: 25px 15px;
     cursor: pointer;
     margin-bottom: 5px;
-    margin-left: -1px;
+    margin-left: 5px;
+`;
+
+const IconDiv = styled.div`
+    margin: 0;
+    position: absolute;
+    top: 30%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
 `;
 
 export const LayerFilter = ({ text, tooltip, filterName, currentStyle, clickHandler }) => {
     return (
-        <StyledFilter>
-            <center title={tooltip} filtername={filterName} onClick={(event) => clickHandler(event)}>
-                <div className={currentStyle}></div>
+        <StyledButton filtername={filterName} title={tooltip} onClick={(event) => clickHandler(event)}>
+            <div>
+                <IconDiv className={currentStyle}></IconDiv>
                 <div>{text}</div>
-            </center>
-        </StyledFilter>
+            </div>
+        </StyledButton>
     );
 };
 
