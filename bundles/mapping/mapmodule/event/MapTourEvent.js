@@ -1,5 +1,5 @@
 /**
- * @class Oskari.mapframework.event.common.AfterMapTourEvent
+ * @class Oskari.mapframework.event.common.MapTourEvent
  *
  * Notifies application bundles that a map has moved.
  * See Oskari.mapframework.request.common.MapMoveRequest
@@ -9,9 +9,11 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapTourEvent',
     /**
      * @static @method create called automatically on construction
      */
-    function (status, location) {
+    function (status, location, completed, cancelled) {
         this._status = status;
         this._location = location;
+        this._completed = completed;
+        this._cancelled = cancelled;
     }, {
         /** @static @property __name event name */
         __name: 'MapTourEvent',
@@ -40,10 +42,30 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapTourEvent',
             return this._location;
         },
 
+        /**
+         * @method getCompleted
+         * @return {Boolean} true if tour is completed
+         */
+        getCompleted: function () {
+            return this._completed;
+        },
+
+        /**
+         * @method getCancelled
+         * @return {Boolean} true if tour is cancelled
+         */
+        getCancelled: function () {
+            return this._cancelled;
+        },
+
+        /**
+         * @method getParams
+         */
         getParams: function () {
             return {
                 status: this.getStatus(),
-                location: this.getLocation()
+                location: this.getLocation(),
+                completed: this.getCompleted()
             };
         }
     }, {

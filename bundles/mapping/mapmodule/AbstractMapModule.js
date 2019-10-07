@@ -1070,6 +1070,16 @@ Oskari.clazz.define(
             var evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator);
             sandbox.notifyAll(evt);
         },
+
+        notifyTourEvent: function (status, cancelled = false) {
+            const sandbox = this.getSandbox();
+
+            const location = this.getMapCenter();
+            console.log(location);
+            const completed = status.steps === status.step;
+            const event = Oskari.eventBuilder('MapTourEvent')(status, location, completed, cancelled);
+            sandbox.notifyAll(event);
+        },
         /* --------------- /MAP STATE ------------------------ */
 
         /* ---------------- MAP MOBILE MODE ------------------- */

@@ -653,10 +653,8 @@ export class MapModule extends AbstractMapModule {
      * @param {Object | Number} zoom absolute zoomlevel to set the map to
      * @param {Object} options options, such as animation and duration
      *     Usable animations: fly/pan/zoomPan
-     * @param {Function} completed function to run when tour is completed
-     * @param {Function} cancelled function to run when tour is cancelled
      */
-    tourMap (coordinates, zoom, options, completed, cancelled) {
+    tourMap (coordinates, zoom, options) {
         const view = this.getMap().getView();
         const me = this;
         const duration = options && options.duration ? options.duration : 3000;
@@ -669,7 +667,8 @@ export class MapModule extends AbstractMapModule {
 
         const zoomDefault = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         let index = -1;
-        let delay = delayOption;
+        let delay = 0;
+        let status = { steps: coordinates.length };
 
         const next = (more) => {
             if (more) {
@@ -680,20 +679,20 @@ export class MapModule extends AbstractMapModule {
                     const zoomValue = location.zoom || zoomDefault;
                     const animationValue = location.animation || animation;
                     const durationValue = location.duration || duration;
-                    // If first point, start tour immediately
-                    delay = index === 0 ? 0 : delay;
+                    status = { ...status, step: index + 1 };
 
                     setTimeout(function () {
                         me._animateTo(location, zoomValue, animationValue, durationValue, next);
+                        setTimeout(() => me.notifyTourEvent(status), durationValue);
                     }, delay);
 
                     // set Delay for next point
                     delay = location.delay || delayOption;
                 } else {
-                    completed();
+                    me.notifyTourEvent(status);
                 }
             } else {
-                cancelled();
+                me.notifyTourEvent(status, true);
             }
         };
         next(true);
