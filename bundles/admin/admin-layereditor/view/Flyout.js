@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
 import { AdminLayerFormService } from './AdminLayerFormService';
-import { GenericContext } from '../../../../src/react/util.jsx';
+import { LocaleContext, MutatorContext } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -61,20 +61,26 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (layer === null || !el) {
             return;
         }
-        const renderUI = () => {
-            ReactDOM.render(
-                <GenericContext.Provider value={{ loc: loc }}>
+
+        const createForm = () => (
+            <LocaleContext.Provider value={loc}>
+                <MutatorContext.Provider value={this.service}>
                     <AdminLayerForm
-                        mutator={this.service.getMutator()}
                         mapLayerGroups={mapLayerGroups}
                         dataProviders={dataProviders}
                         layer={this.service.getLayer()}
-                        message={this.service.getMessage()}
+                        messages={this.service.getMessages()}
                         onDelete={() => this.service.deleteLayer()}
                         onSave={() => this.service.saveLayer()}
-                        onCancel={() => me.hide()} />
-                </GenericContext.Provider>,
-                el.get(0));
+                        onCancel={() => {
+                            this.service.clearMessages();
+                            me.hide();
+                        }} />
+                </MutatorContext.Provider>
+            </LocaleContext.Provider>);
+
+        const renderUI = () => {
+            ReactDOM.render(createForm(), el.get(0));
         };
         this.service.initLayerState(layer);
         this.service.setListener(renderUI);
@@ -86,5 +92,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
+        this.service.clearMessages();
     }
 }

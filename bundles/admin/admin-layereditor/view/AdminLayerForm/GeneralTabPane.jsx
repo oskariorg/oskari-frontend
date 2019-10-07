@@ -1,30 +1,73 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DataProviderSelect } from './DataProviderSelect';
-import { TextInput } from '../../components/TextInput';
-import { UrlInput } from '../../components/UrlInput';
-import { Collapse, Panel } from '../../components/Collapse';
+import { TextInput, UrlInput, Collapse, CollapsePanel } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
-import { StyledTab, StyledComponentGroup, StyledComponent } from './AdminLayerFormStyledComponents';
-import { withContext } from '../../../../../src/react/util.jsx';
+import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormComponents';
+import { withLocale } from 'oskari-ui/util';
+
+const getLocalizedLabels = (lang, getMessage) => {
+    let prefix = typeof getMessage(lang) === 'object' ? lang : 'generic';
+    return {
+        name: getMessage(`${prefix}.placeholder`, [lang]),
+        description: getMessage(`${prefix}.descplaceholder`, [lang])
+    };
+};
+
+const LocalizedLayerInfo = ({ layer, lang, service, getMessage }) => {
+    const selectedLang = Oskari.getLang();
+    const name = layer[`name_${lang}`];
+    const description = layer[`title_${lang}`];
+    const labels = getLocalizedLabels(lang, getMessage);
+    const onNameChange = evt => service.setLocalizedLayerName(lang, evt.target.value);
+    const onDescriptionChange = evt => service.setLocalizedLayerDescription(lang, evt.target.value);
+    const nameInput = <TextInput type='text' value={name} onChange={onNameChange} />;
+    const descInput = <TextInput type='text' value={description} onChange={onDescriptionChange} />;
+    if (selectedLang === lang) {
+        return (
+            <React.Fragment>
+                <label>{labels.name}</label>
+                <StyledComponent>
+                    {nameInput}
+                </StyledComponent>
+                <label>{labels.description}</label>
+                <StyledComponent>
+                    {descInput}
+                </StyledComponent>
+            </React.Fragment>
+        );
+    }
+    return (
+        <React.Fragment>
+            <div>{labels.name}{nameInput}</div>
+            <div>{labels.description}{descInput}</div>
+        </React.Fragment>
+    );
+};
+LocalizedLayerInfo.propTypes = {
+    lang: PropTypes.string.isRequired,
+    service: PropTypes.object.isRequired,
+    layer: PropTypes.object.isRequired,
+    getMessage: PropTypes.func.isRequired
+};
 
 const GeneralTabPane = (props) => {
-    const { mapLayerGroups, dataProviders, layer, service, loc } = props;
+    const { mapLayerGroups, dataProviders, layer, service, getMessage } = props;
     const lang = Oskari.getLang();
     const credentialProps = {
         allowCredentials: true,
         defaultOpen: false,
         usernameValue: layer.username,
         passwordValue: layer.password,
-        panelText: loc('usernameAndPassword'),
-        usernameText: loc('username'),
-        passwordText: loc('password'),
+        panelText: getMessage('usernameAndPassword'),
+        usernameText: getMessage('username'),
+        passwordText: getMessage('password'),
         usernameOnChange: service.setUsername,
         passwordOnChange: service.setPassword
     };
     return (
         <StyledTab>
-            <label>{loc('interfaceAddress')}</label>
+            <label>{getMessage('interfaceAddress')}</label>
             <StyledComponentGroup>
                 <StyledComponent>
                     <div>
@@ -37,84 +80,37 @@ const GeneralTabPane = (props) => {
                     </div>
                 </StyledComponent>
             </StyledComponentGroup>
-            <label>{loc('uniqueName')}</label>
+            <label>{getMessage('uniqueName')}</label>
             <StyledComponent>
                 <TextInput type='text' value={layer.layerName} onChange={(evt) => service.setLayerName(evt.target.value)} />
             </StyledComponent>
-            {lang === 'fi' &&
-                <StyledComponentGroup>
-                    <label>{loc('fi.placeholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)} />
-                    </StyledComponent>
-                    <label>{loc('fi.descplaceholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)} />
-                    </StyledComponent>
-                    <StyledComponent>
-                        <Collapse>
-                            <Panel header={loc('otherLanguages')}>
-                                <div>{loc('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
-                                <div>{loc('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
-                                <div>{loc('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
-                                <div>{loc('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
-                            </Panel>
-                        </Collapse>
-                    </StyledComponent>
-                </StyledComponentGroup>
-            }
-            {lang === 'en' &&
-                <StyledComponentGroup>
-                    <label>{loc('en.placeholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)} />
-                    </StyledComponent>
-                    <label>{loc('en.descplaceholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)} />
-                    </StyledComponent>
-                    <StyledComponent>
-                        <Collapse>
-                            <Panel header={loc('otherLanguages')}>
-                                <div>{loc('fi.placeholder')} <TextInput type='text' value={layer.name_fi} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
-                                <div>{loc('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
-                                <div>{loc('sv.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)}/></div>
-                                <div>{loc('sv.descplaceholder')} <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)}/></div>
-                            </Panel>
-                        </Collapse>
-                    </StyledComponent>
-                </StyledComponentGroup>
-            }
-            {lang === 'sv' &&
-                <StyledComponentGroup>
-                    <label>{loc('sv.placeholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInSwedish(evt.target.value)} />
-                    </StyledComponent>
-                    <label>{loc('sv.descplaceholder')}</label>
-                    <StyledComponent>
-                        <TextInput type='text' value={layer.title_sv} onChange={(evt) => service.setDescriptionInSwedish(evt.target.value)} />
-                    </StyledComponent>
-                    <StyledComponent>
-                        <Collapse>
-                            <Panel header={loc('otherLanguages')}>
-                                <div>{loc('fi.placeholder')} <TextInput type='text' value={layer.name_sv} onChange={(evt) => service.setLayerNameInFinnish(evt.target.value)}/></div>
-                                <div>{loc('fi.descplaceholder')} <TextInput type='text' value={layer.title_fi} onChange={(evt) => service.setDescriptionInFinnish(evt.target.value)}/></div>
-                                <div>{loc('en.placeholder')} <TextInput type='text' value={layer.name_en} onChange={(evt) => service.setLayerNameInEnglish(evt.target.value)}/></div>
-                                <div>{loc('en.descplaceholder')} <TextInput type='text' value={layer.title_en} onChange={(evt) => service.setDescriptionInEnglish(evt.target.value)}/></div>
-                            </Panel>
-                        </Collapse>
-                    </StyledComponent>
-                </StyledComponentGroup>
-            }
-            <label>{loc('dataProvider')}</label>
+            <StyledComponentGroup>
+                <LocalizedLayerInfo layer={layer} lang={lang} service={service} getMessage={getMessage} />
+                <StyledComponent>
+                    <Collapse>
+                        <CollapsePanel header={getMessage('otherLanguages')}>
+                            {
+                                Oskari.getSupportedLanguages()
+                                    .filter(supportedLang => supportedLang !== lang)
+                                    .map(lang => <LocalizedLayerInfo
+                                        key={layer.layer_id + lang}
+                                        layer={layer}
+                                        lang={lang}
+                                        service={service}
+                                        getMessage={getMessage} />)
+                            }
+                        </CollapsePanel>
+                    </Collapse>
+                </StyledComponent>
+            </StyledComponentGroup>
+            <label>{getMessage('dataProvider')}</label>
             <StyledComponent>
                 <DataProviderSelect key={layer.layer_id}
                     value={layer.organizationName}
                     onChange={(evt) => service.setDataProvider(evt)}
                     dataProviders={dataProviders} />
             </StyledComponent>
-            <label>{loc('mapLayerGroups')}</label>
+            <label>{getMessage('mapLayerGroups')}</label>
             <StyledComponent>
                 <MapLayerGroups layer={layer} mapLayerGroups={mapLayerGroups} service={service} lang={lang} />
             </StyledComponent>
@@ -127,8 +123,8 @@ GeneralTabPane.propTypes = {
     dataProviders: PropTypes.array.isRequired,
     service: PropTypes.any,
     layer: PropTypes.object,
-    loc: PropTypes.func
+    getMessage: PropTypes.func
 };
 
-const contextWrap = withContext(GeneralTabPane);
+const contextWrap = withLocale(GeneralTabPane);
 export { contextWrap as GeneralTabPane };

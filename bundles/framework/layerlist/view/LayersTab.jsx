@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
 import { StateHandler } from './LayerCollapse/StateHandler';
+import { LayerFilters } from './LayerFilters';
+import { Button } from 'oskari-ui';
+import styled from 'styled-components';
 
 /**
  * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
@@ -23,6 +26,7 @@ Oskari.clazz.define(
         this.showSearchSuggestions = (instance.conf && instance.conf.showSearchSuggestions === true);
         this.layerGroups = [];
         this.layerContainers = {};
+        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
 
         this.templates = {
             spinner: '<span class="spinner-text"></span>',
@@ -37,12 +41,16 @@ Oskari.clazz.define(
                 '  <span class="keyword"></span>' +
                 '</a>',
             keywordType: '<div class="type"></div>',
-            layerFilter: '<div class="layer-filter layerselector2-layer-filter">' +
-                '</div><div style="clear:both;"></div>',
-            layerListMountPoint: '<div class="layer-list-mount-pt"></div>'
+            layerListMountPoint: '<div class="layer-list-mount-pt"></div>',
+            layerFiltersMountPoint: '<div class="layer-filters-mount-pt"></div>',
+            layerWizardBtnMountPoint: '<div class="layer-wizard-btn-mount-pt"></div>'
         };
         this.layerCollapseStateHandler = new StateHandler();
+        this.layerCollapseStateHandler.updateSelectedLayerIds();
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
+        this.layerlistService.on('Layerlist.Filter.Button.Add', () => this.renderLayerFilters());
+        this.layerlistService.on('FilterActivate', () => this.renderLayerFilters());
+        Oskari.on('app.start', () => this._addLayerWizardBtn());
         this._createUI(id);
     }, {
 
@@ -126,8 +134,7 @@ Oskari.clazz.define(
          */
         _createUI: function (oskarifieldId) {
             var me = this,
-                oskarifield,
-                layerFilter;
+                oskarifield;
 
             me._locale = me.instance._localization;
             me.tabPanel = Oskari.clazz.create(
@@ -155,8 +162,8 @@ Oskari.clazz.define(
             me._createInfoIcon(oskarifield);
 
             if (!(this.instance.conf && this.instance.conf.hideLayerFilters && this.instance.conf.hideLayerFilters === true)) {
-                layerFilter = jQuery(me.templates.layerFilter);
-                me.tabPanel.getContainer().append(layerFilter);
+                me.layerFiltersMountPoint = jQuery(me.templates.layerFiltersMountPoint);
+                me.tabPanel.getContainer().append(me.layerFiltersMountPoint);
             }
 
             me.tabPanel.getContainer().append(oskarifield);
@@ -173,12 +180,27 @@ Oskari.clazz.define(
             );
             me.layerListMountPoint = jQuery(me.templates.layerListMountPoint);
             me.tabPanel.getContainer().append(me.layerListMountPoint);
+        },
 
-            me.tabPanel.setSelectionHandler(selected => {
-                if (selected) {
-                    me._render();
-                }
-            });
+        _addLayerWizardBtn: function () {
+            if (Oskari.getSandbox().hasHandler('ShowLayerEditorRequest')) {
+                const PositionedButton = styled(Button)`
+                    position: absolute;
+                    right: 40px;
+                    top: 80px;
+                    line-height: 0;
+                `;
+                const OpenLayerWizardButton = () => (
+                    <PositionedButton
+                        size="large"
+                        onClick={() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', [])}
+                        icon="plus"
+                        title={this._locale.tooltip.addLayer} />
+                );
+                const layerWizardBtnMountPoint = jQuery(this.templates.layerWizardBtnMountPoint);
+                this.tabPanel.getContainer().append(layerWizardBtnMountPoint);
+                ReactDOM.render(<OpenLayerWizardButton/>, layerWizardBtnMountPoint[0]);
+            }
         },
 
         /**
@@ -254,6 +276,31 @@ Oskari.clazz.define(
             }
         },
         /**
+        * @method _layerListComparator
+        * Uses the private property #grouping to sort layer objects in the wanted order for rendering
+        * The #grouping property is the method name that is called on layer objects.
+        * If both layers have same group, they are ordered by layer.getName()
+        * @private
+        * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
+        * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
+        * @param {String} groupingMethod method name to sort by
+        */
+        _layerListComparator: function (a, b, groupingMethod) {
+            var nameA = a[groupingMethod]().toLowerCase();
+            var nameB = b[groupingMethod]().toLowerCase();
+            if (nameA === nameB && (a.getName() && b.getName())) {
+                nameA = a.getName().toLowerCase();
+                nameB = b.getName().toLowerCase();
+            }
+            if (nameA < nameB) {
+                return -1;
+            }
+            if (nameA > nameB) {
+                return 1;
+            }
+            return 0;
+        },
+        /**
          * Show layer groups
          * @method  @public showLayerGroups
          *
@@ -262,7 +309,6 @@ Oskari.clazz.define(
         showLayerGroups: function (groups) {
             this.layerGroups = groups;
             this.filterLayers(this.filterField.getValue());
-            this._render();
         },
 
         /**
@@ -568,6 +614,11 @@ Oskari.clazz.define(
 
         updateLayerContent: function (layerId, layer) {
             console.warn('LayerTab.updateLayerContent is deprecated');
+        },
+
+        renderLayerFilters: function () {
+            ReactDOM.render(<LayerFilters filters = {this.layerlistService.getLayerlistFilterButtons()}
+                service = {this.layerlistService.getMutator()}/>, this.layerFiltersMountPoint[0]);
         }
     }
 );

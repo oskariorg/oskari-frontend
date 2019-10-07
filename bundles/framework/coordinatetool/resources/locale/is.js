@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "ETRS89-TM35FIN hnit",
                 "EPSG:3575": "Norðurpóll LAEA Evrópuhnit",
+                "EPSG:3857": "WGS 84 / Pseudo-Mercator hnit",
                 "default": "{crs} hnit"
             },
             "popup": {
@@ -85,7 +86,8 @@ Oskari.registerLocalization(
                     "EPSG:3386": "KKJ zone 0",
                     "EPSG:2391": "KKJ zone 1",
                     "EPSG:2392": "KKJ zone 2",
-                    "EPSG:2394": "KKJ zone 4"
+                    "EPSG:2394": "KKJ zone 4",
+                    "EPSG:3857": "WGS 84 / Pseudo-Mercator"
                 },
                 "emergencyCallLabel": "",
                 "emergencyCallLabelAnd": "",

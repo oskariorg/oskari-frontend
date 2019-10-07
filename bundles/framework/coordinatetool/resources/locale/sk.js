@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "ETRS89-TM35FIN súradnice",
                 "EPSG:3575": "Severný pól LAEA Európske súradnice",
+                "EPSG:3857": "WGS 84 / Pseudo-Mercator súradnice",
                 "default": "{crs} súradnice"
             },
             "popup": {
@@ -85,7 +86,8 @@ Oskari.registerLocalization(
                     "EPSG:3386": "KKJ zóna 0",
                     "EPSG:2391": "KKJ zóna 1",
                     "EPSG:2392": "KKJ zóna 2",
-                    "EPSG:2394": "KKJ zóna 4"
+                    "EPSG:2394": "KKJ zóna 4",
+                    "EPSG:3857": "WGS 84 / Pseudo-Mercator"
                 },
                 "emergencyCallLabel": "",
                 "emergencyCallLabelAnd": "",

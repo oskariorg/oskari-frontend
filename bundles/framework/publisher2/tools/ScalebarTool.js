@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ScalebarTool',
         allowedSiblings: [
             'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
-            'Oskari.statistics.bundle.statsgrid.plugin.ManageClassificationPlugin'
+            'Oskari.statistics.statsgrid.ClassificationPlugin'
         ],
         groupedSiblings: false,
 

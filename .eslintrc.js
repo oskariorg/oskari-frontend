@@ -1,4 +1,4 @@
-const resolveConfig = require('./webpack/resolveConfig.js');
+const resolveConfig = require('./webpack/config.js').RESOLVE;
 // http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
@@ -31,7 +31,8 @@ module.exports = {
     // ---- jest tests
     "describe": false,
     "expect": false,
-    "test": false
+    "test": false,
+    "jest": false
     // ----
   },
   "parserOptions": {

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select as AntSelect } from 'antd';
-import 'antd/es/select/style/';
+import 'antd/es/select/style/index.js';
 
 export const Select = ({children, ...other}) => {
     return (

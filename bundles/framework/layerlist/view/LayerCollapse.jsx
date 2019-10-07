@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse } from '../../../admin/admin-layereditor/components/Collapse';
-import { Alert } from '../../../admin/admin-layereditor/components/Alert';
+import { Alert, Collapse } from 'oskari-ui';
 import { LayerCollapsePanel } from './LayerCollapse/LayerCollapsePanel';
 import styled from 'styled-components';
 
@@ -33,15 +32,26 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
     }
     const panels = (filtered || groups).map(cur => ({
         group: cur.group || cur,
-        showLayers: cur.layers || cur.getLayers()
+        showLayers: cur.layers
     }));
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
             {
-                panels.map(({group, showLayers}) => {
-                    const panelProps = {group, showLayers, selectedLayerIds, mapSrs, mutator, locale};
+                panels.map(({ group, showLayers }) => {
+                    const selectedLayersInGroup = selectedLayerIds.filter(cur => showLayers.map(lyr => lyr.getId()).includes(cur));
+                    // Passes only ids the component is interested in.
+                    // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
+                    // When the properties remain unchanged, we can benefit from memoization.
                     return (
-                        <LayerCollapsePanel key={group.getTitle()} {...panelProps} />
+                        <LayerCollapsePanel key={group.getTitle()}
+                            trimmed
+                            selectedLayerIds={selectedLayersInGroup}
+                            group={group}
+                            showLayers={showLayers}
+                            mapSrs={mapSrs}
+                            mutator={mutator}
+                            locale={locale}
+                        />
                     );
                 })
             }

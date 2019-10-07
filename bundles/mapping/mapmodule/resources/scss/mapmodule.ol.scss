@@ -112,7 +112,12 @@ div.mapplugins {
                     margin-top: $pluginMargin;
                     margin-bottom: $pluginMargin;
                 }
-
+                &.plugin-drag-disabled {
+                    cursor: not-allowed;
+                }
+                .tool-drag-disabled {
+                    cursor: not-allowed;
+                }
             }
 
         }

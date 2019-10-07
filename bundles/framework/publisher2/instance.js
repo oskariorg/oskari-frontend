@@ -118,7 +118,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                         loc.layerFilter.tooltips.publishable,
                         {
                             active: 'layer-publishable',
-                            deactive: 'layer-publishable-disabled'
+                            deactive: 'layer-publishable-disabled',
+                            current: 'layer-publishable-disabled'
                         },
                         'publishable');
                 }

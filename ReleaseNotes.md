@@ -1,5 +1,45 @@
 # Release Notes
 
+## 1.53.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/21?closed=1
+
+- Remove unnecessary scrollbar from search UI
+- Fix broken icon on admin-hierarchical-layerlist
+- Fix loading spinner on search when search term is invalid
+- Fix an error with adding layers on publisher when using it with hierarchical layerlist.
+- Allow empty domain for publication on RPC (previously made optional on publisher)
+
+## 1.53.0
+
+Sample application has been removed from oskari-frontend/oskari-server to new repositories sample-application (for frontend) and sample-server-extension (for server). This is the way we see Oskari being used/developed in the future. More as a framework with applications developed on top of it. This also allows better separation of the application content/configuration regarding migrations etc. See README.md on both repositories for details on how to setup your own app.
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/18?closed=1
+
+- New WFS-implementation used be default. See oskari-server/MigrationGuide.md for changes required to application main.js
+- Improvements for styling vector features like hovering as all WFS-layers now use vectors on map instead of raster images
+- Vector features can now be clustered
+- Domain field for embedded maps is now optional
+- Loading spinners added and improved for search and statistical maps
+- StartUserLocationTrackingRequest/StopUserLocationTrackingRequest are now allowed over RPC by default
+- Improved the guided tour functionality
+- Added a way to register checks if layer is supported by the current application (projection & 3D checks for example)
+- Preparations for including a 3D mapmodule
+- Fixed opacity field/slider interaction
+- Initial Ant Design components theming with 'less' styles. Future for styling options is still under consideration as we now have SCSS, Less, styled-components and plain css
+- Toolbar now works better with light background
+- Improvements for user indicators on statistical maps
+- Refactored DefaultExtension bundles to use ExtraFlyout instead of DefaultFlyout so flyouts are handled similarly between functionalities.
+- Index map now shows the first visible WMS/WMTS layer by default instead of the first layer (that might be a vector layer without any features). 
+- Printing uses the same logic for preview image (showing the visible layer)
+- Layers with time series now include currently shown time on prints
+- Drawtools (like measurements etc) now use smaller snap tolerance on desktop to make it harder to accidentally stop measurement by clicking near the previous point
+- Initial test framework for frontend tests added using Jest
+- Build scripts now use version from package.json by default (overridable with the same syntax as before)
+- Other improvements
+
 ## 1.52.1
 
 Fixed an issue where markers added to map were always colored black. Now they can be made as colorful as before.

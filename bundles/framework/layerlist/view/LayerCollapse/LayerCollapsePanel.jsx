@@ -1,16 +1,26 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem } from '../../../../admin/admin-layereditor/components/List';
+import { Badge, CollapsePanel, List, ListItem } from 'oskari-ui';
 import { Layer } from './Layer';
-import { Panel } from '../../../../admin/admin-layereditor/components/Collapse';
-import { Badge } from '../../../../admin/admin-layereditor/components/Badge';
 import styled from 'styled-components';
 
+const StyledCollapsePanel = styled(CollapsePanel)`
+    & > div:first-child {
+        min-height: 22px;
+    }
+`;
 const StyledListItem = styled(ListItem)`
     padding: 0 !important;
     display: block !important;
+    &:first-child > div {
+        padding-top: 10px;
+    }
+    &:last-child > div {
+        padding-bottom: 10px;
+    }
 `;
+
 const getBadgeText = (group, visibleLayerCount) => {
     let badgeText = group.getLayers().length;
     if (visibleLayerCount !== group.getLayers().length) {
@@ -19,8 +29,8 @@ const getBadgeText = (group, visibleLayerCount) => {
     return badgeText;
 };
 
-const renderLayer = ({model, even, selected, mapSrs, mutator, locale}) => {
-    const itemProps = {model, even, selected, mapSrs, mutator, locale};
+const renderLayer = ({ model, even, selected, mapSrs, mutator, locale }) => {
+    const itemProps = { model, even, selected, mapSrs, mutator, locale };
     return (
         <StyledListItem>
             <Layer key={model.getId()} {...itemProps} />
@@ -36,7 +46,8 @@ renderLayer.propTypes = {
     locale: PropTypes.any
 };
 
-export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel}) => {
+const LayerCollapsePanel = (props) => {
+    const { group, showLayers, selectedLayerIds, mapSrs, mutator, locale, ...propsNeededForPanel } = props;
     const layerRows = showLayers.map((layer, index) => {
         const layerProps = {
             model: layer,
@@ -50,13 +61,13 @@ export const LayerCollapsePanel = ({group, showLayers, selectedLayerIds, mapSrs,
     });
     const visibleLayerCount = showLayers ? showLayers.length : 0;
     return (
-        <Panel {...propsNeededForPanel}
+        <StyledCollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
             extra={
                 <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
             }>
             <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
-        </Panel>
+        </StyledCollapsePanel>
     );
 };
 
@@ -68,3 +79,27 @@ LayerCollapsePanel.propTypes = {
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };
+
+const comparisonFn = (prevProps, nextProps) => {
+    // expandIcon is something the parent component adds as a context
+    const ignored = ['expandIcon'];
+    const arrayChildCheck = ['selectedLayerIds'];
+    let useMemoized = true;
+    Object.getOwnPropertyNames(nextProps).forEach(name => {
+        if (ignored.includes(name)) {
+            return;
+        }
+        if (arrayChildCheck.includes(name)) {
+            if (!Oskari.util.arraysEqual(nextProps[name], prevProps[name])) {
+                useMemoized = false;
+            }
+            return;
+        }
+        if (nextProps[name] !== prevProps[name]) {
+            useMemoized = false;
+        }
+    });
+    return useMemoized;
+};
+const memoized = React.memo(LayerCollapsePanel, comparisonFn);
+export { memoized as LayerCollapsePanel };

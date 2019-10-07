@@ -14,18 +14,19 @@ Oskari.registerLocalization(
             "password": "Salasana",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",
             "uniqueName": "Karttatason yksilöivä nimi",
+            "generic": {
+                "placeholder": "Nimi kielellä {0}",
+                "descplaceholder": "Kuvaus kielellä {0}"
+            },
             "en": {
-                "title": "En",
                 "placeholder": "Nimi englanniksi",
                 "descplaceholder": "Kuvaus englanniksi"
             },
             "fi": {
-                "title": "Fi",
                 "placeholder": "Nimi suomeksi",
                 "descplaceholder": "Kuvaus suomeksi"
             },
             "sv": {
-                "title": "Sv",
                 "placeholder": "Nimi ruotsiksi",
                 "descplaceholder": "Kuvaus ruotsiksi"
             },
@@ -52,6 +53,9 @@ Oskari.registerLocalization(
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
+                "invalidStyleJson" : "Style JSON-syntaksi on virheellinen.",
+                "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
+                "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso."
             },
             "otherLanguages": "Muut kielet",
             "styleJSON": "Style JSON",
