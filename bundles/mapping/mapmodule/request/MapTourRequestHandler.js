@@ -33,8 +33,6 @@ Oskari.clazz.define(
             const srsName = request.getSrsName();
             const coordinates = request.getLocations().map(location => this.mapModule.transformCoordinates(location, srsName));
             const options = request.getOptions();
-            const completed = typeof options.completed === 'function' ? options.completed : () => true;
-            const cancelled = typeof options.cancelled === 'function' ? options.cancelled : () => true;
 
             let zoom;
             if (requestZoom != null) {
@@ -43,7 +41,7 @@ Oskari.clazz.define(
                     : { type: 'zoom', value: requestZoom };
             }
 
-            this.mapModule.tourMap(coordinates, zoom, options, completed, cancelled);
+            this.mapModule.tourMap(coordinates, zoom, options);
         }
     }, {
         /**

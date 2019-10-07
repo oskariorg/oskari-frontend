@@ -23,7 +23,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapTourRequest',
         this._zoom = options.zoom;
         this._duration = options.duration;
         this._delay = options.delay;
-        this._3dAngles = {
+        this._camera = {
             heading: options.heading,
             pitch: options.pitch,
             roll: options.roll
@@ -73,15 +73,15 @@ Oskari.clazz.define('Oskari.mapframework.request.common.MapTourRequest',
         },
 
         /**
-         * @method get3dAngles
+         * @method getCamera
          * @return {Object} object with heading pitch and roll for 3d maps
          */
-        get3dAngles: function () {
-            return this._3dAngles;
+        getCamera: function () {
+            return this._camera;
         },
 
         /**
-         * @method get3dAngles
+         * @method getOptions
          * @return {Object} object with options
          */
         getOptions: function () {
