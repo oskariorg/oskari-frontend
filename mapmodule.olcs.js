@@ -473,13 +473,13 @@ class MapModuleOlCesium extends MapModuleOl {
         const cameraHeight = this.adjustZoom(zoom);
         const duration = options && options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
-        const angles = options && options.heading && options.roll && options.pitch
+        const camera = options && options.heading && options.roll && options.pitch
             ? { heading: options.heading,
                 roll: options.roll,
                 pitch: options.pitch } : undefined;
 
         if (options && options.animation) {
-            this._flyTo(location[0], location[1], cameraHeight, animationDuration, angles);
+            this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera);
             if (suppressEnd !== true) {
                 setTimeout(() => {
                     this.notifyMoveEnd();
@@ -500,15 +500,15 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Number} y latitude
      * @param {Number} z zoom/cameraheight
      * @param {Number} duration animation duration in seconds
-     * @param {Object} angles orientation of camera, heading pitch and roll
+     * @param {Object} camera orientation of camera, heading pitch and roll
      * @param {Function} complete function to run when animation is completed
      * @param {Function} cancel function to run when animation is cancelled
      */
-    _flyTo (x, y, z, duration, angles, complete, cancel) {
+    _flyTo (x, y, z, duration, cameraAngles, complete, cancel) {
         const camera = this.getCesiumScene().camera;
         let flyToParams = { destination: Cesium.Cartesian3.fromDegrees(x, y, z) };
         flyToParams = duration ? { ...flyToParams, duration: duration } : flyToParams;
-        flyToParams = angles ? { ...flyToParams, orientation: angles } : flyToParams;
+        flyToParams = cameraAngles ? { ...flyToParams, orientation: cameraAngles } : flyToParams;
         flyToParams = complete ? { ...flyToParams, complete: complete } : flyToParams;
         flyToParams = cancel ? { ...flyToParams, cancel: cancel } : flyToParams;
         camera.flyTo(flyToParams);
@@ -531,38 +531,40 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Object | Number} zoom absolute zoomlevel to set the map to
      * @param {Object} options options, such as animation and duration
      *     Usable animations: fly/pan/zoomPan
-     * @param {Function} completed function to run when tour is completed
-     * @param {Function} cancelled function to run when tour is cancelled
      */
-    tourMap (coordinates, zoom, options, completed, cancelled) {
+    tourMap (coordinates, zoom, options) {
         const me = this;
         const duration = options && options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
         const delayOption = options && options.delay ? options.delay : 750;
         const cameraHeight = this.adjustZoom(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
-        const angles = options && options.heading && options.roll && options.pitch
+        const camera = options && options.heading && options.roll && options.pitch
             ? { heading: options.heading,
                 roll: options.roll,
                 pitch: options.pitch } : undefined;
         let index = -1;
         let delay = 0;
+        let status = { steps: coordinates.length };
 
         const next = () => {
             ++index;
             if (index < coordinates.length) {
                 const location = coords[index];
                 const locOptions = coordinates[index];
-                const angleValues = locOptions.angles || angles;
+                const cameraValues = locOptions.camera || camera;
                 const heightValue = locOptions.zoom ? me.adjustZoom(locOptions.zoom) : cameraHeight;
+                status = { ...status, step: index + 1 };
+                let cancelled = () => me.notifyTourEvent(status, true);
                 setTimeout(function () {
-                    me._flyTo(location[0], location[1], heightValue, animationDuration, angleValues, next, cancelled);
+                    me._flyTo(location[0], location[1], heightValue, animationDuration, cameraValues, next, cancelled);
+                    setTimeout(() => me.notifyTourEvent(status), duration);
                 }, delay);
 
                 // set Delay for next point
                 delay = coordinates.delay || delayOption;
             } else {
-                completed();
+                me.notifyTourEvent(status);
             }
         };
         next(true);
