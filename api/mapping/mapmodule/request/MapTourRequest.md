@@ -109,4 +109,4 @@ sb.postRequestByName('MapTourRequest', [[location1, location2, location3], optio
 
 ## Related api
 
-- afterMapMoveEvent
+- MapTourEvent
