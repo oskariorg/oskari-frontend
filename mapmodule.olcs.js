@@ -560,7 +560,7 @@ class MapModuleOlCesium extends MapModuleOl {
                 }, delay);
 
                 // set Delay for next point
-                delay = location.delay || delayOption;
+                delay = coordinates.delay || delayOption;
             } else {
                 completed();
             }
