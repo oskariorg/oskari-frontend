@@ -51,6 +51,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             const me = this;
             let selectedLang = Oskari.getLang();
 
+            const domainValidatorKeyUpHandler = Oskari.util.throttle((event) => {
+                const domainWarningDivs = jQuery('.domain-warning');
+                if (domainWarningDivs.length === 0) {
+                    const domainWarning = me.domainWarningTemplate.clone();
+                    const domainDiv = jQuery('.basic_publisher').find('.oskarifield')[1];
+                    domainDiv.append(domainWarning[0]);
+                }
+                if (!event.target.value || Oskari.util.isValidDomain(event.target.value)) {
+                    jQuery('.domain-warning').hide();
+                } else {
+                    jQuery('.domain-warning').show();
+                }
+            }, 1000, { leading: false });
+
             for (const fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {
                     const data = me.fields[fkey];
@@ -60,22 +74,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     field.setTooltip(data.tooltip, data.helptags);
                     field.setPlaceholder(data.placeholder);
 
-                    const keyUpHandler = Oskari.util.throttle((event) => {
-                        const domainWarningDivs = jQuery('.domain-warning');
-                        if (domainWarningDivs.length === 0) {
-                            const domainWarning = me.domainWarningTemplate.clone();
-                            const domainDiv = jQuery('.basic_publisher').find('.oskarifield')[1];
-                            domainDiv.append(domainWarning[0]);
-                        }
-                        if (this._isValidDomain(event.target.value)) {
-                            jQuery('.domain-warning').hide();
-                        } else {
-                            jQuery('.domain-warning').show();
-                        }
-                    }, 1000, { leading: false });
-
                     if (fkey === 'domain') {
-                        field.bindUpKey(keyUpHandler);
+                        field.bindUpKey(domainValidatorKeyUpHandler);
                     }
                     data.field = field;
                 }
@@ -144,17 +144,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
 
             me._languageChanged(selectedLang);
         },
-        /*
-         * Function implemented by modifying function introduced in https://miguelmota.com/bytes/validate-domain-regex/
-         */
-        _isValidDomain (v) {
-            if (!v) {
-                return true;
-            }
-            const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
-            return re.test(v);
-        },
-
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
          *
