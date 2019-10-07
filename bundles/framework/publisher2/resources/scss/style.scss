@@ -103,12 +103,25 @@ div.basic_publisher {
             padding-left: 27px;
             padding-top: 5px;
         }
+
+        &.mylocationplugin {
+            padding-left: 27px;
+
+            fieldset {
+                &.oskari-formcomponent {
+                    &.oskari-radiobuttongroup {
+                        padding-left: 16px;
+                    }
+                }
+            }
+        }
     }
 
     div.tool,
     div.data {
         label {
             margin-right: 10px;
+            width: 300px;
         }
 
         input {
@@ -224,6 +237,8 @@ div.basic_publisher {
     label.oskari-languageselect {
         clear: left;
     }
+
+
 }
 
 div.publisher {

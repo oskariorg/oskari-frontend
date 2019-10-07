@@ -105,6 +105,17 @@ Oskari.registerLocalization(
                     "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
                     "selectAsBaselayer": "Taustakarttataso",
                     "allowStyleChange": "Salli esitystyylin valinta"
+                },
+                "mylocation": {
+                    "modes": {
+                        "single": "Yksittäinen",
+                        "continuous": "Jatkuva"
+                    },
+                    "titles": {
+                        "mode": "Toiminto",
+                        "mobileOnly": "Käytä toimintoja vain mobiililaitteissa",
+                        "centerMapAutomatically": "Keskitä käyttäjän sijaintiin automaattisesti kartan käynnistyessä"
+                    }
                 }
             },
             "toollayout": {
