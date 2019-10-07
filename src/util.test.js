@@ -916,3 +916,54 @@ describe('getErrorTextFromAjaxFailureObjects function', () => {
     });
 
 });
+
+describe('isValidDomain function', () => {
+
+    test('returns true when domain contains domain extension', () => {
+        expect(OskariMock.util.isValidDomain('example.com')).toEqual(true);
+    });
+
+    test('returns true when domain contains subdomain extension', () => {
+        expect(OskariMock.util.isValidDomain('foo.example.com')).toEqual(true);
+    });
+
+    test('returns true when domain contains multiple subdomain extensions', () => {
+        expect(OskariMock.util.isValidDomain('bar.foo.example.com')).toEqual(true);
+    });
+
+    test('returns true when domain contains dash and subdomain extension', () => {
+        expect(OskariMock.util.isValidDomain('exa-mple.co.uk')).toEqual(true);
+    });
+
+    test('returns false when domain parameter is not provided', () => {
+        expect(OskariMock.util.isValidDomain()).toEqual(false);
+    });
+
+    test('returns false with empty domain parameter', () => {
+        expect(OskariMock.util.isValidDomain('')).toEqual(false);
+    });
+
+    test('returns false when domain constains underscore', () => {
+        expect(OskariMock.util.isValidDomain('exa_mple.com')).toEqual(false);
+    });
+
+    test('returns false when domain does not contain domain name extension', () => {
+        expect(OskariMock.util.isValidDomain('example')).toEqual(false);
+    });
+
+    test('returns false when domain contains only domain extension ', () => {
+        expect(OskariMock.util.isValidDomain('.fi')).toEqual(false);
+    });
+
+    test('returns false when domain contains asterisk', () => {
+        expect(OskariMock.util.isValidDomain('ex*mple.com')).toEqual(false);
+    });
+
+    test('returns false when domain contains space', () => {
+        expect(OskariMock.util.isValidDomain('ex mple.com')).toEqual(false);
+    });
+
+    test('returns false when domain contains only numbers', () => {
+        expect(OskariMock.util.isValidDomain('3434')).toEqual(false);
+    });
+});

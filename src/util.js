@@ -734,6 +734,19 @@ Oskari.util = (function () {
         } catch (ignore) {}
         return error;
     }
-
+    /**
+    * Function to validate network domain.
+    * Implemented by modifying function introduced in https://miguelmota.com/bytes/validate-domain-regex/
+    *
+    * @param {domain} domain to be validated
+    * @return {Boolean} true if domain is valid, false otherwise.
+    */
+    util.isValidDomain = (domain) => {
+       if (!domain) {
+           return false;
+       }
+       const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
+       return re.test(domain);
+    }
     return util;
 }());

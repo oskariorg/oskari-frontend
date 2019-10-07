@@ -316,6 +316,16 @@ div.publisher-color-picker-group-wrapper {
     display: flex;
 }
 
+div.domain-warning {
+    color: black;
+    padding-top: 10px;
+    div {
+        padding-left: 5px;
+        float: left;
+        padding-bottom: 5px;
+    }
+}
+
 div#publisher-custom-colours {
     padding: 10px 20px;
 
