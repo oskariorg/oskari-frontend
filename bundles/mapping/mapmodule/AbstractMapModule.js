@@ -1075,7 +1075,6 @@ Oskari.clazz.define(
             const sandbox = this.getSandbox();
 
             const location = this.getMapCenter();
-            console.log(location);
             const completed = status.steps === status.step;
             const event = Oskari.eventBuilder('MapTourEvent')(status, location, completed, cancelled);
             sandbox.notifyAll(event);
