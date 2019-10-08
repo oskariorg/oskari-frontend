@@ -630,6 +630,11 @@ export class MapModule extends AbstractMapModule {
         if (zoom === Number) {
             zoom = { type: 'zoom', value: zoom };
         }
+        if (zoom && zoom.top && zoom.bottom && zoom.left && zoom.right) {
+            const zoomOut = zoom.top === zoom.bottom && zoom.left === zoom.right;
+            this.zoomToExtent(zoom, zoomOut, zoomOut);
+        }
+
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         this._animateTo(lonlat, zoomValue, animation, duration);
 
