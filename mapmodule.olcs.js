@@ -547,7 +547,15 @@ class MapModuleOlCesium extends MapModuleOl {
         let delay = 0;
         let status = { steps: coordinates.length };
 
-        const next = () => {
+        const next = (more) => {
+            if (index !== -1) {
+                // trigger if this wasn't the first call
+                me.notifyTourEvent(status, !more);
+            }
+            if (!more) {
+                // if we are done we can stop here
+                return;
+            }
             ++index;
             if (index < coordinates.length) {
                 const location = coords[index];
@@ -558,13 +566,10 @@ class MapModuleOlCesium extends MapModuleOl {
                 let cancelled = () => me.notifyTourEvent(status, true);
                 setTimeout(function () {
                     me._flyTo(location[0], location[1], heightValue, animationDuration, cameraValues, next, cancelled);
-                    setTimeout(() => me.notifyTourEvent(status), duration);
                 }, delay);
 
                 // set Delay for next point
                 delay = coordinates.delay || delayOption;
-            } else {
-                me.notifyTourEvent(status);
             }
         };
         next(true);
