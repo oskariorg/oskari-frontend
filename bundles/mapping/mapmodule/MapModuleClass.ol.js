@@ -671,28 +671,28 @@ export class MapModule extends AbstractMapModule {
         let status = { steps: coordinates.length };
 
         const next = (more) => {
-            if (more) {
-                ++index;
-                if (index < coordinates.length) {
-                    // Check if location has overrides for animation values
-                    const location = coordinates[index];
-                    const zoomValue = location.zoom || zoomDefault;
-                    const animationValue = location.animation || animation;
-                    const durationValue = location.duration || duration;
-                    status = { ...status, step: index + 1 };
-
-                    setTimeout(function () {
-                        me._animateTo(location, zoomValue, animationValue, durationValue, next);
-                        setTimeout(() => me.notifyTourEvent(status), durationValue);
-                    }, delay);
-
-                    // set Delay for next point
-                    delay = location.delay || delayOption;
-                } else {
-                    me.notifyTourEvent(status);
-                }
-            } else {
-                me.notifyTourEvent(status, true);
+            if (index !== -1) {
+                // trigger if this wasn't the first call
+                me.notifyTourEvent(status, !more);
+            }
+            if (!more) {
+                // if we are done we can stop here
+                return;
+            }
+            // go to the next step
+            ++index;
+            if (index < coordinates.length) {
+                // Check if location has overrides for animation values
+                const location = coordinates[index];
+                const zoomValue = location.zoom || zoomDefault;
+                const animationValue = location.animation || animation;
+                const durationValue = location.duration || duration;
+                status = { ...status, step: index + 1 };
+                setTimeout(function () {
+                    me._animateTo(location, zoomValue, animationValue, durationValue, next);
+                }, delay);
+                // set Delay for next point
+                delay = location.delay || delayOption;
             }
         };
         next(true);

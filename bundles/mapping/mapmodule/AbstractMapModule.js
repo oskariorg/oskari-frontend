@@ -1071,7 +1071,7 @@ Oskari.clazz.define(
             sandbox.notifyAll(evt);
         },
 
-        notifyTourEvent: function (status, cancelled = false) {
+        notifyTourEvent: function (status, cancelled) {
             const sandbox = this.getSandbox();
 
             const location = this.getMapCenter();
