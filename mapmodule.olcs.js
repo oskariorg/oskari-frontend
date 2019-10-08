@@ -545,13 +545,10 @@ class MapModuleOlCesium extends MapModuleOl {
                 pitch: options.pitch } : undefined;
         let index = -1;
         let delay = 0;
-        let status = { steps: coordinates.length };
+        let status = { steps: coordinates.length, step: 0 };
 
         const next = (more) => {
-            if (index !== -1) {
-                // trigger if this wasn't the first call
-                me.notifyTourEvent(status, !more);
-            }
+            me.notifyTourEvent(status, !more);
             if (!more) {
                 // if we are done we can stop here
                 return;
