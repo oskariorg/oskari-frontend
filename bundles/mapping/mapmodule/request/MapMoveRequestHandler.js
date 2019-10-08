@@ -49,20 +49,7 @@ Oskari.clazz.define(
                     ? { type: 'scale', value: this.mapModule.getResolutionForScale(requestZoom.scale) }
                     : { type: 'zoom', value: requestZoom };
             }
-
-            const zoomChange = (requestZoom || requestZoom === 0);
-            this.mapModule.centerMap(lonlat, zoom, !!zoomChange, options);
-            if (zoomChange) {
-                const { left, top, bottom, right } = zoom;
-
-                if (left && top && bottom && right) {
-                    const zoomOut = top === bottom && left === right;
-                    this.mapModule.zoomToExtent(zoom, zoomOut, zoomOut);
-                    if (zoomOut) {
-                        this.mapModule.zoomToScale(2000);
-                    }
-                }
-            }
+            this.mapModule.centerMap(lonlat, zoom, true, options);
         }
     }, {
         /**

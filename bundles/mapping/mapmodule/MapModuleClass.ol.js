@@ -598,6 +598,7 @@ export class MapModule extends AbstractMapModule {
         default:
             view.setCenter(location);
             view.setZoom(zoom);
+            callback(true);
             break;
         }
         return true;
@@ -608,9 +609,7 @@ export class MapModule extends AbstractMapModule {
      * Moves the map to the given position and zoomlevel.
      * @param {Number[] | Object} lonlat coordinates to move the map to
      * @param {Object | Number} zoomLevel absolute zoomlevel to set the map to
-     * @param {Boolean} suppressEnd true to NOT send an event about the map move
-     *  (other components wont know that the map has moved, only use when chaining moves and
-     *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @param {Boolean} suppressEnd deprecated
      * @param {Object} options options, such as animation and duration
      *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
@@ -619,8 +618,6 @@ export class MapModule extends AbstractMapModule {
         const view = this.getMap().getView();
         const animation = options && options.animation ? options.animation : '';
         const duration = options && options.duration ? options.duration : 3000;
-        // If no animation, notify without duration
-        const notifyDuration = animation === '' ? 0 : duration;
 
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
@@ -634,15 +631,8 @@ export class MapModule extends AbstractMapModule {
             zoom = { type: 'zoom', value: zoom };
         }
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-
         this._animateTo(lonlat, zoomValue, animation, duration);
 
-        this.updateDomain();
-        if (suppressEnd !== true) {
-            setTimeout(() => {
-                this.notifyMoveEnd();
-            }, notifyDuration);
-        }
         return true;
     }
 
@@ -668,13 +658,10 @@ export class MapModule extends AbstractMapModule {
         const zoomDefault = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         let index = -1;
         let delay = 0;
-        let status = { steps: coordinates.length };
+        let status = { steps: coordinates.length, step: 0 };
 
         const next = (more) => {
-            if (index !== -1) {
-                // trigger if this wasn't the first call
-                me.notifyTourEvent(status, !more);
-            }
+            me.notifyTourEvent(status, !more);
             if (!more) {
                 // if we are done we can stop here
                 return;
