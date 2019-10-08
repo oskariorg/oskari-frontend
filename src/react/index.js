@@ -16,3 +16,6 @@ export { Tabs, TabPane } from '../../bundles/admin/admin-layereditor/components/
 export { TextAreaInput } from '../../bundles/admin/admin-layereditor/components/TextAreaInput';
 export { TextInput } from '../../bundles/admin/admin-layereditor/components/TextInput';
 export { UrlInput } from '../../bundles/admin/admin-layereditor/components/UrlInput';
+export { Icon } from '../../bundles/admin/admin-layereditor/components/Icon';
+export { WarningIcon } from '../../bundles/admin/admin-layereditor/components/WarningIcon';
+export { Tooltip } from '../../bundles/admin/admin-layereditor/components/Tooltip';
