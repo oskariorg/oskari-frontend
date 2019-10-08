@@ -65,7 +65,8 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapTourEvent',
             return {
                 status: this.getStatus(),
                 location: this.getLocation(),
-                completed: this.getCompleted()
+                completed: this.getCompleted(),
+                cancelled: this.getCancelled()
             };
         }
     }, {
