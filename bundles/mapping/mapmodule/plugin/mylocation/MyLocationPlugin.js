@@ -206,7 +206,7 @@ Oskari.clazz.define(
         /**
          * @public @method isEnabled
          * Are the plugin's controls enabled
-         * @param {Boolean} mapInMobileMode
+         * @param {Boolean} showOnlyMobile force show only mobile state
          *
          * @return {Boolean}
          * True if plugin's tools are enabled
