@@ -10,12 +10,10 @@ export class LayerEditorFlyout extends ExtraFlyout {
     constructor (title, options) {
         super(title, options);
         this.element = null;
-        this.layerId = null;
-        this.layer = null;
         this.loc = null;
         this.dataProviders = [];
         this.mapLayerGroups = [];
-        this.service = new AdminLayerFormService();
+        this.service = new AdminLayerFormService(() => this.update());
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -38,15 +36,11 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.setElement(jQuery('<div></div>'));
         this.addClass('admin-layereditor-flyout');
         this.setContent(this.getElement());
-        this.update(this.layer, this.dataProviders, this.mapLayerGroups, this.loc);
-    }
-    setLayerId (layerId) {
-        this.layerId = layerId;
-        this.update(layerId);
+        this.update();
     }
     setLayer (layer) {
-        this.layer = layer;
-        this.update(layer, this.dataProviders, this.mapLayerGroups, this.loc);
+        this.service.initLayerState(layer);
+        this.update();
     }
     setDataProviders (dataProviders) {
         this.dataProviders = dataProviders;
@@ -55,19 +49,19 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.mapLayerGroups = mapLayerGroups;
     }
 
-    update (layer, dataProviders, mapLayerGroups, loc) {
+    update () {
         const me = this;
         const el = this.getElement();
-        if (layer === null || !el) {
+        if (!el) {
             return;
         }
 
-        const createForm = () => (
-            <LocaleContext.Provider value={loc}>
+        ReactDOM.render(
+            <LocaleContext.Provider value={this.loc}>
                 <MutatorContext.Provider value={this.service}>
                     <AdminLayerForm
-                        mapLayerGroups={mapLayerGroups}
-                        dataProviders={dataProviders}
+                        mapLayerGroups={this.mapLayerGroups}
+                        dataProviders={this.dataProviders}
                         layer={this.service.getLayer()}
                         messages={this.service.getMessages()}
                         onDelete={() => this.service.deleteLayer()}
@@ -77,14 +71,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                             me.hide();
                         }} />
                 </MutatorContext.Provider>
-            </LocaleContext.Provider>);
-
-        const renderUI = () => {
-            ReactDOM.render(createForm(), el.get(0));
-        };
-        this.service.initLayerState(layer);
-        this.service.setListener(renderUI);
-        renderUI();
+            </LocaleContext.Provider>, el.get(0));
     }
     cleanUp () {
         const el = this.getElement();

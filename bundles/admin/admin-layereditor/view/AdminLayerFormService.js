@@ -1,19 +1,53 @@
 import { stringify } from 'query-string';
 export class AdminLayerFormService {
-    constructor () {
+    constructor (consumer) {
         this.layer = {};
+        this.capabilities = [];
         this.messages = [];
-        this.listeners = [];
+        this.listeners = [consumer];
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.log = Oskari.log('AdminLayerFormService');
+        this.loading = false;
     }
 
     getMutator () {
         const me = this;
         return {
+            setType (type) {
+                me.layer = { ...me.layer, type };
+                me.notify();
+            },
             setLayerUrl (url) {
                 me.layer = { ...me.layer, layerUrl: url };
                 me.notify();
+            },
+            setVersion (version) {
+                if (!version) {
+                    me.capabilities = [];
+                    me.loading = false;
+                    // for moving back to previous step
+                    me.layer.version = undefined;
+                    me.notify();
+                    return;
+                }
+                me.loading = true;
+                me.notify();
+                setTimeout(() => {
+                    me.layer.version = version;
+                    me.capabilities = [{
+                        name: 'fake'
+                    }, {
+                        name: 'it'
+                    }, {
+                        name: 'till'
+                    }, {
+                        name: 'you'
+                    }, {
+                        name: 'make it'
+                    }];
+                    me.loading = false;
+                    me.notify();
+                }, 1000);
             },
             setUsername (username) {
                 me.layer = { ...me.layer, username };
@@ -101,13 +135,21 @@ export class AdminLayerFormService {
             }
         };
     }
-
+    resetLayer () {
+        this.layer = {
+            maplayerGroups: []
+        };
+    }
     /**
      * Initializes layer model used in UI
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
      */
     initLayerState (layer) {
         var me = this;
+        if (!layer) {
+            this.resetLayer();
+            return;
+        }
 
         const styles = layer ? layer.getStyles() : [];
         const availableStyles = [];
@@ -316,14 +358,25 @@ export class AdminLayerFormService {
         });
     }
 
-    setListener (consumer) {
-        this.listeners = [consumer];
-    }
-
     getLayer () {
         return this.layer;
     }
 
+    getLayerTypes () {
+        return ['WFS'];
+    }
+    hasType () {
+        return typeof this.layer.type !== 'undefined';
+    }
+    hasVersion () {
+        return typeof this.layer.version !== 'undefined';
+    }
+    isLoading () {
+        return this.loading;
+    }
+    getCapabilities () {
+        return this.capabilities || [];
+    }
     getMessages () {
         return this.messages;
     }
@@ -333,6 +386,6 @@ export class AdminLayerFormService {
     }
 
     notify () {
-        this.listeners.forEach(consumer => consumer());
+        this.listeners.forEach(consumer => consumer(this.getLayer()));
     }
 }
