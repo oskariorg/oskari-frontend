@@ -16,7 +16,6 @@ export const LayerURLForm = ({ layer, loading, service }) => {
     };
     return (
         <div>
-            Selected: {layer.type}
             <UrlInput
                 value={layer.url}
                 disabled={loading}

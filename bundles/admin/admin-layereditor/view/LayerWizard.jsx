@@ -42,18 +42,18 @@ const LayerWizard = ({
     children,
     getMessage
 }) => {
-    let typeTitle = 'Layer type';
+    let typeTitle = getMessage('wizard.type');
     if (layer.type) {
         typeTitle = `${typeTitle}: ${layer.type}`;
     }
     return (
         <div>
-            { getStep(layer) !== 3 &&
+            { (layer.isNew || getStep(layer) !== 3) &&
             <Steps current={getStep(layer)}>
                 <Step title={ typeTitle } />
-                <Step title="Service" />
-                <Step title="Layers" />
-                <Step title="Details" />
+                <Step title={getMessage('wizard.service')} />
+                <Step title={getMessage('wizard.layers')} />
+                <Step title={getMessage('wizard.details')} />
             </Steps>
             }
             { getStep(layer) === 0 &&
@@ -68,7 +68,7 @@ const LayerWizard = ({
                         loading={loading}
                         service={mutator} />
                     <hr/>
-                    <Button onClick={() => setStep(mutator, 0)}>Back</Button>
+                    <Button onClick={() => setStep(mutator, 0)}>{getMessage('cancel')}</Button>
                 </div>
             }
             { getStep(layer) === 2 &&
@@ -77,20 +77,20 @@ const LayerWizard = ({
                         onSelect={(item) => mutator.layerSelected(item.layerName)}
                         capabilities={capabilities} />
                     <hr/>
-                    <Button onClick={() => setStep(mutator, 1)}>Back</Button>
+                    <Button onClick={() => setStep(mutator, 1)}>{getMessage('cancel')}</Button>
                 </div>
             }
             { getStep(layer) === 3 &&
                 <div>
                     {children}
                     { layer.isNew &&
-                        <Button onClick={() => setStep(mutator, 2)}>Back</Button>
+                        <Button onClick={() => setStep(mutator, 2)}>{getMessage('cancel')}</Button>
                     }
                 </div>
             }
         </div>
     );
-}
+};
 
 LayerWizard.propTypes = {
     layer: PropTypes.object.isRequired,
@@ -98,6 +98,7 @@ LayerWizard.propTypes = {
     loading: PropTypes.bool,
     capabilities: PropTypes.array,
     layerTypes: PropTypes.array,
+    getMessage: PropTypes.func,
     children: PropTypes.any
 };
 

@@ -3,6 +3,12 @@ Oskari.registerLocalization(
         "lang": "fi",
         "key": "admin-layereditor",
         "value": {
+            "wizard": {
+                "type": "Tason tyyppi",
+                "service": "Rajapinta",
+                "layers": "Karttatasot",
+                "details": "Tason tiedot"
+            },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
             "generalTabTitle": "Yleiset",
