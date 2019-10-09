@@ -481,7 +481,7 @@ class MapModuleOlCesium extends MapModuleOl {
         if (zoom && top && bottom && left && right) {
             const zoomOut = top === bottom && left === right;
             this.zoomToExtent(zoom, zoomOut, zoomOut);
-            view.setCenter(lonlat);
+            this.getMap().getView().setCenter(lonlat);
             return true;
         }
 
