@@ -35,19 +35,31 @@ export class AdminLayerFormService {
                 setTimeout(() => {
                     me.layer.version = version;
                     me.capabilities = [{
-                        name: 'fake'
+                        layerName: 'fake'
                     }, {
-                        name: 'it'
+                        layerName: 'it'
                     }, {
-                        name: 'till'
+                        layerName: 'till'
                     }, {
-                        name: 'you'
+                        layerName: 'you'
                     }, {
-                        name: 'make it'
+                        layerName: 'make it'
                     }];
                     me.loading = false;
                     me.notify();
                 }, 1000);
+            },
+            layerSelected (name) {
+                const found = me.capabilities.find((item) => item.layerName === name);
+                if (found) {
+                    me.layer = {
+                        ...me.layer,
+                        ...found
+                    };
+                } else {
+                    Oskari.log('AdminLayerFormService').error('Layer not in capabilities: ' + name);
+                }
+                me.notify();
             },
             setUsername (username) {
                 me.layer = { ...me.layer, username };
@@ -183,7 +195,7 @@ export class AdminLayerFormService {
             metadataIdentifier: layer.getMetadataIdentifier() || '',
             gfiContent: layer.getGfiContent() || '',
             attributes: JSON.stringify(layer.getAttributes()),
-            isNew: !layer
+            isNew: !layer.getId()
         };
 
         this.messages = [];

@@ -74,7 +74,7 @@ const LayerWizard = ({
             { getStep(layer) === 2 &&
                 <div>
                     <LayerCapabilitiesListing
-                        onSelect={(item) => mutator.setName(item.name)}
+                        onSelect={(item) => mutator.layerSelected(item.layerName)}
                         capabilities={capabilities} />
                     <hr/>
                     <Button onClick={() => setStep(mutator, 1)}>Back</Button>
@@ -83,7 +83,9 @@ const LayerWizard = ({
             { getStep(layer) === 3 &&
                 <div>
                     {children}
-                    <Button onClick={() => setStep(mutator, 2)}>Back</Button>
+                    { layer.isNew &&
+                        <Button onClick={() => setStep(mutator, 2)}>Back</Button>
+                    }
                 </div>
             }
         </div>
