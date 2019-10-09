@@ -36,7 +36,6 @@ describe('Layer ', () => {
 });
 
 describe('groupUnsupportedLayerReasons', () => {
-
     test('returns undefined when reasons are not provided', () => {
         expect(map.groupUnsupportedLayerReasons()).toBeUndefined();
     });
@@ -74,7 +73,6 @@ describe('groupUnsupportedLayerReasons', () => {
 });
 
 describe('getMostSevereUnsupportedLayerReason', () => {
-
     test('returns undefined when reasons are not provided', () => {
         expect(map.getMostSevereUnsupportedLayerReason()).toBeUndefined();
     });

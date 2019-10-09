@@ -1,4 +1,3 @@
-const UnsupportedLayerReason = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason');
 /**
  * @class Oskari.mapframework.bundle.layerselection2.Flyout
  *
