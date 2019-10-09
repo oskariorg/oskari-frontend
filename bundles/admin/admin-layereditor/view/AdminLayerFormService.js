@@ -149,7 +149,8 @@ export class AdminLayerFormService {
     }
     resetLayer () {
         this.layer = {
-            maplayerGroups: []
+            maplayerGroups: [],
+            isNew: true
         };
     }
     /**
