@@ -42,6 +42,7 @@ export const LayerFilters = ({ filters, searchText, locale, mutator }) => {
             </StyledFilters>
             <TextInput
                 value={searchText}
+                allowClear
                 placeholder={locale.text}
                 suffix={<SearchInfo infoText={locale.description}/>}
                 onChange={(event) => mutator.setSearchText(event.currentTarget.value)}/>
