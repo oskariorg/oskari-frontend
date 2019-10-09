@@ -1,9 +1,9 @@
 /**
- * @class Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler
- * Handles MapMoveRequest requests
+ * @class Oskari.mapframework.bundle.mapmodule.request.MapTourRequestHandler
+ * Handles MapTourRequest requests
  */
 Oskari.clazz.define(
-    'Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler',
+    'Oskari.mapframework.bundle.mapmodule.request.MapTourRequestHandler',
 
     /**
      * @method create called automatically on construction
@@ -31,25 +31,17 @@ Oskari.clazz.define(
         handleRequest: function (core, request) {
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
-            const animation = request.getAnimation();
-            const requestLonlat = {
-                lon: request.getCenterX(),
-                lat: request.getCenterY()
-            };
-            const options = { animation: animation };
+            const coordinates = request.getLocations().map(location => this.mapModule.transformCoordinates(location, srsName));
+            const options = request.getOptions();
+
             let zoom;
-
-            // transform coordinates to given projection
-            const lonlat = this.mapModule.transformCoordinates(requestLonlat, srsName);
-
-            // check if zoom is not null or undefined
             if (requestZoom != null) {
-                // check if request is scale or zoom
                 zoom = requestZoom.scale
                     ? { type: 'scale', value: this.mapModule.getResolutionForScale(requestZoom.scale) }
                     : { type: 'zoom', value: requestZoom };
             }
-            this.mapModule.centerMap(lonlat, zoom, true, options);
+
+            this.mapModule.tourMap(coordinates, zoom, options);
         }
     }, {
         /**
