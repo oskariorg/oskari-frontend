@@ -1,10 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Steps, Step, Button } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
-import { LayerDetails } from './LayerWizard/LayerDetails';
 import { withLocale, withMutator } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
 
@@ -17,7 +15,7 @@ function setStep (mutator, requested) {
         mutator.setVersion();
         break;
     case 2:
-        mutator.setName();
+        mutator.setLayerName();
         break;
     }
 }
@@ -33,10 +31,6 @@ function getStep (layer) {
         return 2;
     }
     return 3;
-}
-
-function isStep (layer, input) {
-    return getStep(layer) === input;
 }
 
 const LayerWizard = ({

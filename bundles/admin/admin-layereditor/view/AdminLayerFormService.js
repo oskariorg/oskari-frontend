@@ -18,7 +18,7 @@ export class AdminLayerFormService {
                 me.notify();
             },
             setLayerUrl (url) {
-                me.layer = { ...me.layer, layerUrl: url };
+                me.layer = { ...me.layer, url };
                 me.notify();
             },
             setVersion (version) {
@@ -164,7 +164,7 @@ export class AdminLayerFormService {
             type: layer.getLayerType(),
             version: layer.getVersion(),
             layer_id: layer.getId(),
-            layerUrl: layer.getAdmin().url,
+            url: layer.getAdmin().url,
             username: layer.getAdmin().username,
             password: layer.getAdmin().password,
             layerName: layer.getLayerName(),
