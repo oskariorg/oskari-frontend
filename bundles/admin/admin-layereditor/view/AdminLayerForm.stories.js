@@ -17,7 +17,10 @@ const stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandb
 sandbox.registerService(stateService);
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
-const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
+
+// Binding Oskari.getMsg causes errors, using locales the old way.
+const locale = Oskari.getLocalization('admin-layereditor', 'fi');
+const loc = key => locale[key];
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
@@ -34,7 +37,7 @@ storiesOf('AdminLayerForm', module)
                     mapLayerGroups={[]}
                     dataProviders={[]}
                     layer={service.getLayer()}
-                    message={service.getMessage()}
+                    message={service.getMessages()}
                     onDelete={() => {}}
                     onSave={() => {}}
                     onCancel={() => {}} />

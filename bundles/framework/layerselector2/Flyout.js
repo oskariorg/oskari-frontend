@@ -131,8 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
-                    deactive: 'layer-newest-disabled',
-                    current: 'layer-newest-disabled'
+                    deactive: 'layer-newest-disabled'
                 },
                 'newest');
         },

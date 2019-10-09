@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { LayerCollapse } from '../../LayerCollapse';
-import { LayerGroup } from '../../../../layerselector2/model/LayerGroup.class';
+import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
 import { AbstractLayer, locale } from './mock';
 import { StateHandler } from '../StateHandler';
 

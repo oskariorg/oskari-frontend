@@ -8,7 +8,7 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerlist.LayerListBundle", func
 }, {
     "create": function () {
         var me = this;
-        var inst = Oskari.clazz.create("Oskari.mapframework.bundle.layerselector2.LayerSelectorBundleInstance");
+        var inst = Oskari.clazz.create("Oskari.mapframework.bundle.layerlist.LayerListBundleInstance");
 
         return inst;
 
@@ -21,28 +21,25 @@ Oskari.clazz.define("Oskari.mapframework.bundle.layerlist.LayerListBundle", func
     "source": {
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../bundles/framework/layerselector2/instance.js"
+            "src": "../../../bundles/framework/layerlist/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/framework/layerselector2/service/layerlist.js"
+            "src": "../../../bundles/framework/layerlist/Flyout.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/framework/layerselector2/Flyout.js"
+            "src": "../../../bundles/framework/layerlist/Tile.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/framework/layerselector2/Tile.js"
+            "src": "../../../bundles/framework/layerlist/service/layerlist.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../bundles/framework/layerlist/view/LayerList/LayersTab.js"
         }, {
             "type": "text/javascript",
             "src": "../../../bundles/framework/layerselector2/model/LayerGroup.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/framework/layerlist/view/LayersTab.jsx"
-        }, {
-            "type": "text/javascript",
             "src": "../../../bundles/framework/layerselector2/view/Layer.js"
-        }, {
-            "type": "text/javascript",
-            "src": "../../../bundles/framework/layerselector2/view/FilterButtons.js"
         }, {
             "type": "text/javascript",
             "src": "../../../bundles/framework/layerselector2/request/ShowFilteredLayerListRequest.js"

@@ -1,0 +1,296 @@
+import { StateHandler, withMutator } from 'oskari-ui/state';
+
+/**
+ * Holds and mutates layer list state.
+ * Handles events related to layer listing.
+ */
+class CollapseHandler extends StateHandler {
+    constructor () {
+        super();
+        this.sandbox = Oskari.getSandbox();
+        this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        this.map = this.sandbox.getMap();
+        this.groupingMethod = 'getInspireName';
+        this.groups = [];
+        this.mutatedGroups = null;
+        this.filterKeyword = null;
+        this.filtered = null;
+        this.filter = {
+            activeId: null,
+            text: ''
+        };
+        this._throttleLayerRefresh = Oskari.util.throttle(this._refreshAllLayers.bind(this), 2000, { leading: false });
+        this._throttleLayerSelection = Oskari.util.throttle(this.updateSelectedLayerIds.bind(this), 2000, { leading: false });
+        this.eventHandlers = {};
+        this.mutatingMethods = [
+            'addLayer',
+            'removeLayer',
+            'updateOpenGroupTitles',
+            'updateLayerGroups',
+            'updateSelectedLayerIds',
+            'showLayerMetadata',
+            'showLayerBackendStatus'
+        ];
+    }
+    /**
+     * "Module" name for event handling
+     */
+    getName () {
+        return 'LayerCollapse.StateHandler';
+    }
+    _init () {
+        this.state = {
+            groups: this.mutatedGroups || this.groups,
+            filtered: this.filtered,
+            openGroupTitles: [],
+            selectedLayerIds: this._getSelectedLayerIds(),
+            mapSrs: this.map.getSrsName()
+        };
+        this.eventHandlers = this._createEventHandlers();
+    }
+    updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
+        const groupsChanged = groups && groups !== this.groups;
+        this.groups = groups || this.groups;
+        this.mutatedGroups = null;
+        if (!groupsChanged && !this._filterStateChanged(filterKeyword)) {
+            this.notify();
+            return;
+        }
+        this.filterKeyword = filterKeyword;
+        this.filtered = this._getSearchResults();
+
+        const changes = {
+            groups: this.mutatedGroups || this.groups,
+            filtered: this.filtered,
+            openGroupTitles: this.filtered ? this.filtered.map(result => result.group.getTitle()) : []
+        };
+        if (selectedLayerIds) {
+            changes.selectedLayerIds = selectedLayerIds;
+        }
+        this.updateState(changes);
+    }
+    setGroupingMethod (groupingMethod) {
+        if (this.groupingMethod === groupingMethod) {
+            return;
+        }
+        this.groupingMethod = groupingMethod;
+        this.updateLayerGroups();
+    }
+    setFilter (activeId, text) {
+        this.filter = { activeId, text };
+        this.updateLayerGroups();
+    }
+    _getSelectedLayerIds () {
+        return this.map.getLayers().map(layer => layer.getId());
+    }
+    _filterStateChanged (nextFilterKeyword) {
+        return this.filterKeyword !== nextFilterKeyword;
+    }
+    _getSearchResults () {
+        if (!this.filterKeyword && this.filterKeyword !== 0) {
+            return null;
+        }
+        const groups = this.mutatedGroups || this.groups;
+        const results = groups.map(group => {
+            const layers = group.getLayers()
+                .filter(lyr => group.matchesKeyword(lyr.getId(), this.filterKeyword));
+                // and some other rule?
+            return { group, layers };
+        }).filter(result => result.layers.length !== 0);
+        return results;
+    }
+
+    /**
+     * @method _getLayerGroups
+     * @private
+     */
+    _getLayerGroups (layers, groupingMethod) {
+        var groupList = [];
+        var group = null;
+        var n;
+        var layer;
+        var groupAttr;
+
+        // sort layers by grouping & name
+        layers.sort((a, b) => this._layerListComparator(a, b, groupingMethod));
+
+        for (n = 0; n < layers.length; n += 1) {
+            layer = layers[n];
+            if (layer.getMetaType && layer.getMetaType() === 'published') {
+                // skip published layers
+                continue;
+            }
+            groupAttr = layer[groupingMethod]();
+            if (!group || group.getTitle() !== groupAttr) {
+                group = Oskari.clazz.create(
+                    'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                    groupAttr
+                );
+                groupList.push(group);
+            }
+
+            group.addLayer(layer);
+        }
+        var sortedGroupList = jQuery.grep(groupList, function (group, index) {
+            return group.getLayers().length > 0;
+        });
+        return sortedGroupList;
+    }
+
+    /**
+     * @method _layerListComparator
+     * Uses the private property #grouping to sort layer objects in the wanted order for rendering
+     * The #grouping property is the method name that is called on layer objects.
+     * If both layers have same group, they are ordered by layer.getName()
+     * @private
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
+     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
+     * @param {String} groupingMethod method name to sort by
+     */
+    _layerListComparator (a, b, groupingMethod) {
+        var nameA = a[groupingMethod]().toLowerCase();
+        var nameB = b[groupingMethod]().toLowerCase();
+        if (nameA === nameB && (a.getName() && b.getName())) {
+            nameA = a.getName().toLowerCase();
+            nameB = b.getName().toLowerCase();
+        }
+        if (nameA < nameB) {
+            return -1;
+        }
+        if (nameA > nameB) {
+            return 1;
+        }
+        return 0;
+    }
+
+    /**
+    * @method onEvent
+    * @param {Oskari.mapframework.event.Event} event a Oskari event object
+    * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+    */
+    onEvent (event) {
+        const handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    }
+
+    addLayer (id) {
+        if (!id || this.state.selectedLayerIds.includes(id)) {
+            return;
+        }
+        const selectedLayerIds = [...this.state.selectedLayerIds, id];
+        this.updateState({ selectedLayerIds });
+        setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [id]), 400);
+    }
+
+    removeLayer (id) {
+        const index = this.state.selectedLayerIds.indexOf(id);
+        if (index === -1) {
+            return;
+        }
+        const selectedLayerIds = [...this.state.selectedLayerIds];
+        selectedLayerIds.splice(index, 1);
+        this.updateState({ selectedLayerIds });
+        setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]), 400);
+    }
+
+    updateLayerGroups () {
+        const filterId = this.filter.activeId;
+        const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
+        this.groups = this._getLayerGroups([...layers], this.groupingMethod);
+        this.updateState({ groups: this.groups });
+    }
+
+    updateOpenGroupTitles (openGroupTitles) {
+        this.updateState({ openGroupTitles });
+    }
+
+    updateSelectedLayerIds (selectedLayerIds = this._getSelectedLayerIds()) {
+        this.updateState({ selectedLayerIds });
+    }
+
+    showLayerMetadata (layer) {
+        const uuid = layer.getMetadataIdentifier();
+        const subUuids = [];
+        if (layer.getSubLayers()) {
+            layer.getSubLayers().forEach(subLayer => {
+                const subUuid = subLayer.getMetadataIdentifier();
+                if (subUuid && subUuid !== uuid && !subUuids.includes[subUuid]) {
+                    subUuids.push(subUuid);
+                }
+            });
+        }
+        this.sandbox.postRequestByName('catalogue.ShowMetadataRequest', [
+            { uuid },
+            subUuids.map(sub => ({ uuid: sub }))
+        ]);
+    }
+
+    showLayerBackendStatus (layerId) {
+        this.sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
+    }
+
+    _createEventHandlers () {
+        const sandbox = Oskari.getSandbox();
+        const handlers = {
+            MapLayerEvent: event => {
+                const layerId = event.getLayerId();
+                const operation = event.getOperation();
+
+                if (operation === 'update') {
+
+                } else if (operation === 'add') {
+                    this.updateLayerGroups();
+                } else if (operation === 'remove') {
+                    this.updateLayerGroups();
+                } else if (operation === 'sticky') {
+
+                } else if (operation === 'tool') {
+                    if (layerId) {
+                        this._refreshLayer(layerId);
+                        return;
+                    }
+                    this._throttleLayerRefresh();
+                }
+            },
+            AfterMapLayerRemoveEvent: () => this._throttleLayerSelection(),
+            AfterMapLayerAddEvent: () => this._throttleLayerSelection()
+        };
+        Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));
+        return handlers;
+    }
+
+    _refreshLayer (id) {
+        if (!id || this.groups.length === 0) {
+            return;
+        }
+        this.mutatedGroups = this.groups.map(group => {
+            const layer = group.getLayers().find(lyr => lyr.getId() === id);
+            if (!layer) {
+                return group;
+            }
+            return this._cloneGroup(group);
+        });
+        this.filtered = this._getSearchResults();
+        this.notify();
+    }
+    _refreshAllLayers () {
+        if (this.groups.length === 0) {
+            return;
+        }
+        // Clone all groups and layers to ensure rerendering.
+        this.mutatedGroups = this.groups.map(this._cloneGroup);
+        this.filtered = this._getSearchResults();
+        this.notify();
+    }
+    _cloneGroup (group) {
+        let groupClone = Object.assign(Object.create(group), group);
+        groupClone.layers = groupClone.layers.map(lyr => Object.assign(Object.create(lyr), lyr));
+        return groupClone;
+    }
+}
+
+const handler = withMutator(CollapseHandler);
+export { handler as StateHandler };

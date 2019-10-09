@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LayerCollapse } from './LayerCollapse';
-import { StateHandler } from './LayerCollapse/StateHandler';
+import { StateHandler as LayerCollapseStateHandler } from './LayerCollapse/StateHandler';
+import { StateHandler as LayerFiltersStateHandler } from './LayerFilters/StateHandler';
 import { LayerFilters } from './LayerFilters';
 import { Button } from 'oskari-ui';
 import styled from 'styled-components';
 
 /**
- * @class Oskari.mapframework.bundle.layerselector2.view.LayersTab
+ * @class Oskari.mapframework.bundle.layerlist.view.LayersTab
  *
  *
  */
-Oskari.clazz.define(
-    'Oskari.mapframework.bundle.layerselector2.view.LayersTab',
+Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.view.LayersTab',
 
     /**
      * @method create called automatically on construction
@@ -45,11 +45,22 @@ Oskari.clazz.define(
             layerFiltersMountPoint: '<div class="layer-filters-mount-pt"></div>',
             layerWizardBtnMountPoint: '<div class="layer-wizard-btn-mount-pt"></div>'
         };
-        this.layerCollapseStateHandler = new StateHandler();
+        this.layerCollapseStateHandler = new LayerCollapseStateHandler();
         this.layerCollapseStateHandler.updateSelectedLayerIds();
         this.layerCollapseStateHandler.addListener(this._render.bind(this));
-        this.layerlistService.on('Layerlist.Filter.Button.Add', () => this.renderLayerFilters());
+
+        let activeFilterId = null;
+        const filterListener = state => {
+            this.renderLayerFilters(state);
+            if (activeFilterId !== state.activeFilterId) {
+                activeFilterId = state.activeFilterId;
+                this.instance.plugins['Oskari.userinterface.Flyout'].populateLayers();
+            }
+        };
+        this.layerFiltersStateHandler = new LayerFiltersStateHandler();
+        this.layerFiltersStateHandler.addListener(filterListener);
         this.layerlistService.on('FilterActivate', () => this.renderLayerFilters());
+
         Oskari.on('app.start', () => this._addLayerWizardBtn());
         this._createUI(id);
     }, {
@@ -616,9 +627,9 @@ Oskari.clazz.define(
             console.warn('LayerTab.updateLayerContent is deprecated');
         },
 
-        renderLayerFilters: function () {
-            ReactDOM.render(<LayerFilters filters = {this.layerlistService.getLayerlistFilterButtons()}
-                service = {this.layerlistService.getMutator()}/>, this.layerFiltersMountPoint[0]);
+        renderLayerFilters: function (state) {
+            let renderState = state || this.layerFiltersStateHandler.getState();
+            ReactDOM.render(<LayerFilters {...renderState}/>, this.layerFiltersMountPoint[0]);
         }
     }
 );
