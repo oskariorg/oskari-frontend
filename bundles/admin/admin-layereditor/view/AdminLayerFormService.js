@@ -161,27 +161,28 @@ export class AdminLayerFormService {
         }
 
         me.layer = {
-            version: layer ? layer.getVersion() : '',
-            layer_id: layer ? layer.getId() : null,
-            layerUrl: layer ? layer.getAdmin().url : '',
-            username: layer ? layer.getAdmin().username : '',
-            password: layer ? layer.getAdmin().password : '',
-            layerName: layer ? layer.getLayerName() : '',
+            type: layer.getLayerType(),
+            version: layer.getVersion(),
+            layer_id: layer.getId(),
+            layerUrl: layer.getAdmin().url,
+            username: layer.getAdmin().username,
+            password: layer.getAdmin().password,
+            layerName: layer.getLayerName(),
             ...this._getLocalizedLayerInfo(layer),
-            groupId: layer ? layer.getAdmin().organizationId : null,
-            organizationName: layer ? layer.getOrganizationName() : '',
-            maplayerGroups: layer ? [...layer.getGroups()] : [],
-            opacity: layer ? layer.getOpacity() : 100,
-            minScale: layer ? layer.getMinScale() : 1,
-            maxScale: layer ? layer.getMaxScale() : 1,
-            style: layer ? layer.getCurrentStyle().getName() : '',
-            styleTitle: layer ? layer.getCurrentStyle().getTitle() : '',
+            groupId: layer.getAdmin().organizationId,
+            organizationName: layer.getOrganizationName(),
+            maplayerGroups: [...layer.getGroups()],
+            opacity: layer.getOpacity() || 100,
+            minScale: layer.getMinScale() || 1,
+            maxScale: layer.getMaxScale() || 1,
+            style: layer.getCurrentStyle().getName(),
+            styleTitle: layer.getCurrentStyle().getTitle(),
             styles: availableStyles,
             styleJSON: layer._options.styles ? JSON.stringify(this.getMVTStylesWithoutSrcLayer(layer._options.styles)) : '',
             hoverJSON: layer._options.hover ? JSON.stringify(layer._options.hover) : '',
-            metadataIdentifier: layer ? layer.getMetadataIdentifier() : '',
-            gfiContent: layer ? layer.getGfiContent() : '',
-            attributes: layer ? JSON.stringify(layer.getAttributes()) : '{}',
+            metadataIdentifier: layer.getMetadataIdentifier() || '',
+            gfiContent: layer.getGfiContent() || '',
+            attributes: JSON.stringify(layer.getAttributes()),
             isNew: !layer
         };
 
@@ -364,12 +365,6 @@ export class AdminLayerFormService {
 
     getLayerTypes () {
         return ['WFS'];
-    }
-    hasType () {
-        return typeof this.layer.type !== 'undefined';
-    }
-    hasVersion () {
-        return typeof this.layer.version !== 'undefined';
     }
     isLoading () {
         return this.loading;

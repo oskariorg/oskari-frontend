@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
+import { LayerWizard } from './LayerWizard';
+
 import { AdminLayerFormService } from './AdminLayerFormService';
 import { LocaleContext, MutatorContext } from 'oskari-ui/util';
 
@@ -59,17 +61,23 @@ export class LayerEditorFlyout extends ExtraFlyout {
         ReactDOM.render(
             <LocaleContext.Provider value={this.loc}>
                 <MutatorContext.Provider value={this.service}>
-                    <AdminLayerForm
-                        mapLayerGroups={this.mapLayerGroups}
-                        dataProviders={this.dataProviders}
+                    <LayerWizard
                         layer={this.service.getLayer()}
-                        messages={this.service.getMessages()}
-                        onDelete={() => this.service.deleteLayer()}
-                        onSave={() => this.service.saveLayer()}
-                        onCancel={() => {
-                            this.service.clearMessages();
-                            me.hide();
-                        }} />
+                        capabilities={this.service.getCapabilities()}
+                        loading={this.service.isLoading()}
+                        layerTypes={this.service.getLayerTypes()}>
+                        <AdminLayerForm
+                            mapLayerGroups={this.mapLayerGroups}
+                            dataProviders={this.dataProviders}
+                            layer={this.service.getLayer()}
+                            messages={this.service.getMessages()}
+                            onDelete={() => this.service.deleteLayer()}
+                            onSave={() => this.service.saveLayer()}
+                            onCancel={() => {
+                                this.service.clearMessages();
+                                me.hide();
+                            }} />
+                    </LayerWizard>
                 </MutatorContext.Provider>
             </LocaleContext.Provider>, el.get(0));
     }

@@ -35,7 +35,6 @@ const AdminLayerForm = ({
         if (m.text) {
             mappedMessages.push(<PaddedAlert key={m.key} message={m.text} type={m.type} />);
         }
-
     });
     return (
         <StyledRoot>
