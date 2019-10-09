@@ -122,12 +122,15 @@ export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
     const layerIconProps = getLayerIconProps(model, locale);
     const secondaryIconProps = getSecondaryIconProps(model, locale);
     const backendStatusProps = getBackendStatusIconProps(model, locale);
+    const map = Oskari.getSandbox().getMap();
+    const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
+    const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
     return (
         <Tools className="layer-tools">
             {
-                !model.isSupportedSrs(mapSrs) &&
+                reason &&
                 <LeftFloatingIcon>
-                    <WarningIcon tooltip={locale.tooltip['unsupported-srs']}/>
+                    <WarningIcon tooltip={reason.getDescription()}/>
                 </LeftFloatingIcon>
             }
             <BackendStatus {...backendStatusProps} onClick={() => mutator.showLayerBackendStatus(model.getId())}/>
