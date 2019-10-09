@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LAYER_TYPE } from '../constants';
+import { WarningIcon } from 'oskari-ui';
 
 const getIconDiv = float => styled('div')`
     float: ${float};
@@ -125,9 +126,9 @@ export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
         <Tools className="layer-tools">
             {
                 !model.isSupportedSrs(mapSrs) &&
-                <RightFloatingIcon
-                    className="layer-not-supported icon-warning-light"
-                    title={locale.tooltip['unsupported-srs']} />
+                <LeftFloatingIcon>
+                    <WarningIcon tooltip={locale.tooltip['unsupported-srs']}/>
+                </LeftFloatingIcon>
             }
             <BackendStatus {...backendStatusProps} onClick={() => mutator.showLayerBackendStatus(model.getId())}/>
             <SecondaryIcon {...secondaryIconProps}/>
