@@ -10,14 +10,17 @@ const StyledFilters = styled.div`
     display: flex;
 `;
 
-export const LayerFilters = ({ filters, locale, mutator }) => {
-    const mappedFilters = [];
-    const getTextSearchSuffix = () => (
-        <Tooltip title={locale.description}>
-            <Icon type="info-circle" style={{ color: 'rgba(0,0,0,.45)' }} />
-        </Tooltip>
-    );
+const SearchInfo = ({ infoText }) => (
+    <Tooltip title={infoText}>
+        <Icon type="info-circle" style={{ color: 'rgba(0,0,0,.45)' }} />
+    </Tooltip>
+);
+SearchInfo.propTypes = {
+    infoText: PropTypes.string.isRequired
+};
 
+export const LayerFilters = ({ filters, searchText, locale, mutator }) => {
+    const mappedFilters = [];
     if (filters) {
         Object.values(filters).forEach(button => {
             mappedFilters.push(
@@ -37,13 +40,18 @@ export const LayerFilters = ({ filters, locale, mutator }) => {
             <StyledFilters>
                 {mappedFilters}
             </StyledFilters>
-            <TextInput placeholder={locale.text} suffix={getTextSearchSuffix()} />
+            <TextInput
+                value={searchText}
+                placeholder={locale.text}
+                suffix={<SearchInfo infoText={locale.description}/>}
+                onChange={(event) => mutator.setSearchText(event.currentTarget.value)}/>
         </React.Fragment>
     );
 };
 
 LayerFilters.propTypes = {
     filters: PropTypes.object.isRequired,
+    searchText: PropTypes.string.isRequired,
     locale: PropTypes.object.isRequired,
     mutator: PropTypes.object.isRequired
 };

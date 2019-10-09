@@ -4,8 +4,10 @@ class FilterHandler extends StateHandler {
     constructor () {
         super();
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+        this._throttleUpdateState = Oskari.util.throttle(this.updateState.bind(this), 1000, { leading: false });
         this.mutatingMethods = [
             'setActiveFilterId',
+            'setSearchText',
             'addFilterButton'
         ];
     }
@@ -46,6 +48,10 @@ class FilterHandler extends StateHandler {
             activeFilterId,
             filters
         });
+    }
+
+    setSearchText (searchText) {
+        this.updateState({ searchText });
     }
 
     addFilterButton (filterId, button) {

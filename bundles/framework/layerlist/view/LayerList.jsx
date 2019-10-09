@@ -21,29 +21,54 @@ export class LayerList extends React.Component {
         super(props);
         const { locale, showOrganizations } = this.props;
 
+        this.filterHandler = new FilterHandler();
         this.groupHandler = new CollapseHandler();
         this.groupHandler.setGroupingMethod(GROUPING_METHODS.GROUP);
+        if (showOrganizations) {
+            this.organizationHandler = new CollapseHandler();
+            this.organizationHandler.setGroupingMethod(GROUPING_METHODS.ORGANIZATION);
+        }
 
-        this.organizationHandler = new CollapseHandler();
-        this.organizationHandler.setGroupingMethod(GROUPING_METHODS.ORGANIZATION);
+        this.addHandlerListeners();
 
-        this.filterHandler = new FilterHandler();
+        this.state = {
+            showOrganizations,
+            locale,
+            groupCollapse: this.groupHandler.getState(),
+            filter: this.filterHandler.getState()
+        };
+        if (this.organizationHandler) {
+            this.state.organizationCollapse = this.organizationHandler.getState();
+        }
+    }
 
-        this.groupHandler.addStateListener((collapseState) => this.setState((state) => {
-            return {
-                ...state,
-                groupCollapse: collapseState
-            };
-        }));
-        this.organizationHandler.addStateListener((collapseState) => this.setState((state) => {
-            return {
-                ...state,
-                organizationCollapse: collapseState
-            };
-        }));
+    addHandlerListeners () {
+        const collapseListener = (tabKey) => {
+            let collapseKey = tabKey === TABS.ORGANIZATION ? 'organizationCollapse' : 'groupCollapse';
+            return (collapseState) => this.setState((state) => {
+                return {
+                    ...state,
+                    [collapseKey]: collapseState
+                };
+            });
+        };
+
+        this.groupHandler.addStateListener(collapseListener(TABS.GROUP));
+        if (this.organizationHandler) {
+            this.organizationHandler.addStateListener(collapseListener(TABS.ORGANIZATION));
+        }
+
+        const throttleCollapseFilterUpdates = Oskari.util.throttle(this.updateCollapseFilters.bind(this), 1000, { leading: false });
+
+        let previousFilterState = null;
         this.filterHandler.addStateListener((filterState) => {
-            this.groupHandler.setFilter(filterState.activeFilterId, '');
-            this.organizationHandler.setFilter(filterState.activeFilterId, '');
+            const { activeFilterId, searchText } = filterState;
+            if (previousFilterState && previousFilterState.searchText !== searchText) {
+                // Search text changed, give user some time to type in his search.
+                throttleCollapseFilterUpdates(activeFilterId, searchText);
+            } else {
+                this.updateCollapseFilters(activeFilterId, searchText);
+            }
             this.setState((state) => {
                 return {
                     ...state,
@@ -51,18 +76,13 @@ export class LayerList extends React.Component {
                 };
             });
         });
-
-        this.state = {
-            showOrganizations,
-            locale,
-            groupCollapse: this.groupHandler.getState(),
-            organizationCollapse: this.organizationHandler.getState(),
-            filter: this.filterHandler.getState()
-        };
     }
 
-    onTabClick (key) {
-        // Do something on filters?
+    updateCollapseFilters (activeFilterId, searchText) {
+        this.groupHandler.setFilter(activeFilterId, searchText);
+        if (this.organizationHandler) {
+            this.organizationHandler.setFilter(activeFilterId, searchText);
+        }
     }
 
     getAllLayersContent (tabKey) {
@@ -77,7 +97,7 @@ export class LayerList extends React.Component {
     render () {
         const { organization, inspire } = this.state.locale.filter;
         return (
-            <Tabs onTabClick={(key) => this.onTabClick(key)}>
+            <Tabs>
                 <TabPane tab={inspire} key={TABS.GROUP}>
                     { this.getAllLayersContent(TABS.GROUP) }
                 </TabPane>

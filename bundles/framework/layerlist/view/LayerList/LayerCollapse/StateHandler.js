@@ -11,10 +11,6 @@ class CollapseHandler extends StateHandler {
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.map = this.sandbox.getMap();
         this.groupingMethod = 'getInspireName';
-        this.groups = [];
-        this.mutatedGroups = null;
-        this.filterKeyword = null;
-        this.filtered = null;
         this.filter = {
             activeId: null,
             text: ''
@@ -40,8 +36,7 @@ class CollapseHandler extends StateHandler {
     }
     _init () {
         this.state = {
-            groups: this.mutatedGroups || this.groups,
-            filtered: this.filtered,
+            groups: [],
             openGroupTitles: [],
             selectedLayerIds: this._getSelectedLayerIds(),
             mapSrs: this.map.getSrsName()
@@ -49,25 +44,7 @@ class CollapseHandler extends StateHandler {
         this.eventHandlers = this._createEventHandlers();
     }
     updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
-        const groupsChanged = groups && groups !== this.groups;
-        this.groups = groups || this.groups;
-        this.mutatedGroups = null;
-        if (!groupsChanged && !this._filterStateChanged(filterKeyword)) {
-            this.notify();
-            return;
-        }
-        this.filterKeyword = filterKeyword;
-        this.filtered = this._getSearchResults();
-
-        const changes = {
-            groups: this.mutatedGroups || this.groups,
-            filtered: this.filtered,
-            openGroupTitles: this.filtered ? this.filtered.map(result => result.group.getTitle()) : []
-        };
-        if (selectedLayerIds) {
-            changes.selectedLayerIds = selectedLayerIds;
-        }
-        this.updateState(changes);
+        this.updateLayerGroups();
     }
     setGroupingMethod (groupingMethod) {
         if (this.groupingMethod === groupingMethod) {
@@ -76,28 +53,12 @@ class CollapseHandler extends StateHandler {
         this.groupingMethod = groupingMethod;
         this.updateLayerGroups();
     }
-    setFilter (activeId, text) {
-        this.filter = { activeId, text };
+    setFilter (activeId, searchText) {
+        this.filter = { activeId, searchText };
         this.updateLayerGroups();
     }
     _getSelectedLayerIds () {
         return this.map.getLayers().map(layer => layer.getId());
-    }
-    _filterStateChanged (nextFilterKeyword) {
-        return this.filterKeyword !== nextFilterKeyword;
-    }
-    _getSearchResults () {
-        if (!this.filterKeyword && this.filterKeyword !== 0) {
-            return null;
-        }
-        const groups = this.mutatedGroups || this.groups;
-        const results = groups.map(group => {
-            const layers = group.getLayers()
-                .filter(lyr => group.matchesKeyword(lyr.getId(), this.filterKeyword));
-                // and some other rule?
-            return { group, layers };
-        }).filter(result => result.layers.length !== 0);
-        return results;
     }
 
     /**
@@ -197,10 +158,19 @@ class CollapseHandler extends StateHandler {
     }
 
     updateLayerGroups () {
-        const filterId = this.filter.activeId;
+        const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
-        this.groups = this._getLayerGroups([...layers], this.groupingMethod);
-        this.updateState({ groups: this.groups });
+        let groups = this._getLayerGroups([...layers], this.groupingMethod);
+        if (!searchText) {
+            this.updateState({ groups });
+            return;
+        }
+        const textSearchResults = groups.map(group => {
+            const layers = group.getLayers()
+                .filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
+            return { group, layers };
+        }).filter(result => result.layers.length !== 0);
+        this.updateState({ groups: textSearchResults });
     }
 
     updateOpenGroupTitles (openGroupTitles) {
