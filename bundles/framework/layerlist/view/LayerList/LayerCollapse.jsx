@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Alert, Collapse } from 'oskari-ui';
+import { withMutator } from 'oskari-ui/util';
 import { LayerCollapsePanel } from './LayerCollapse/LayerCollapsePanel';
 import styled from 'styled-components';
 

@@ -1,17 +1,10 @@
-import { StateHandler, withMutator } from 'oskari-ui/state';
+import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 
-class FilterHandler extends StateHandler {
+class Service extends StateHandler {
     constructor () {
         super();
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this._throttleUpdateState = Oskari.util.throttle(this.updateState.bind(this), 1000, { leading: false });
-        this.mutatingMethods = [
-            'setActiveFilterId',
-            'setSearchText',
-            'addFilterButton'
-        ];
-    }
-    _init () {
         this.state = {
             activeFilterId: null
         };
@@ -64,5 +57,8 @@ class FilterHandler extends StateHandler {
     }
 }
 
-const handler = withMutator(FilterHandler);
-export { handler as StateHandler };
+export const FilterService = mutatorMixin(Service, [
+    'setActiveFilterId',
+    'setSearchText',
+    'addFilterButton'
+]);

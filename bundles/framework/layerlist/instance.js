@@ -73,69 +73,50 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * implements BundleInstance protocol start method
          */
         start: function () {
-            var me = this,
-                conf = me.conf,
-                sandboxName = conf ? conf.sandbox : 'sandbox',
-                sandbox = Oskari.getSandbox(sandboxName),
-                request,
-                mapLayerService,
-                successCB,
-                failureCB,
-                p;
+            const conf = this.conf;
+            const sandboxName = conf ? conf.sandbox : 'sandbox';
+            const sandbox = Oskari.getSandbox(sandboxName);
 
-            if (me.started) {
+            if (this.started) {
                 return;
             }
 
-            me.started = true;
-            me.sandbox = sandbox;
+            this.started = true;
+            this.sandbox = sandbox;
 
-            sandbox.register(me);
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(me, p);
+            sandbox.register(this);
+            for (let p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
                 }
             }
 
-            var layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
+            const layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
 
             // Let's extend UI
-            request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(me);
-            sandbox.request(me, request);
+            const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
+            sandbox.request(this, request);
 
             // create and register request handlers
-            var reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
+            const reqHandler = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.ShowFilteredLayerListRequestHandler', sandbox, this);
             sandbox.requestHandler('ShowFilteredLayerListRequest', reqHandler);
 
-            var reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
+            const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
             sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
-            // draw ui
-            me.createUi();
+            this._loadLayers();
 
-            mapLayerService = me.sandbox.getService(
-                'Oskari.mapframework.service.MapLayerService'
-            );
-
-            sandbox.registerAsStateful(me.mediator.bundleId, me);
-
-            successCB = function () {
-                // massive update so just recreate the whole ui
-                // me.plugins['Oskari.userinterface.Flyout'].populateLayers();
-                // added through maplayerevent
-            };
-            failureCB = function () {
-                alert(me.getLocalization('errors').loadFailed);
-            };
-            var options = {};
-            if (me.conf && me.conf.forceProxy) {
-                // forces proxy for all layers
-                options.forceProxy = me.conf.forceProxy;
-            }
-            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, options);
+            sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             this._registerForGuidedTour();
+        },
+        _loadLayers: function () {
+            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+            const successCB = () => this.createUi();
+            const failureCB = () => alert(this.getLocalization('errors').loadFailed);
+            const forceProxy = this.conf && this.conf.forceProxy;
+            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, { forceProxy });
         },
         /**
          * @method init
@@ -170,26 +151,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          */
         eventHandlers: {
             /**
-             * @method AfterMapLayerRemoveEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
-             */
-            AfterMapLayerRemoveEvent: function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
-            },
-
-            /**
-             * @method AfterMapLayerAddEvent
-             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
-             *
-             * Calls flyouts handleLayerSelectionChanged() method
-             */
-            AfterMapLayerAddEvent: function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true);
-            },
-
-            /**
              * @method MapLayerEvent
              * @param {Oskari.mapframework.event.common.MapLayerEvent} event
              */
@@ -199,48 +160,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 }
             },
 
-            'BackendStatus.BackendStatusChangedEvent': function (event) {
-                var layerId = event.getLayerId();
-                this.layerChanged(layerId);
-            },
-
             /**
              * @method ExtensionUpdatedEvent
              */
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this,
-                    plugin = me.plugins['Oskari.userinterface.Flyout'];
-
                 // ExtensionUpdateEvents are fired a lot, only let layerselector2 extension event to be handled when enabled
                 if (event.getExtension().getName() !== this.getName()) {
                     // wasn't me -> do nothing
                     return;
                 }
                 if (event.getViewState() !== 'close') {
-                    plugin.focus();
+                    this.plugins['Oskari.userinterface.Flyout'].focus();
+                    // Used to focus on search input
+                } else if (this.filteredLayerListOpenedByRequest) {
+                    // TODO; Make ShowFilteredLayerListRequest work
+                    this.plugins['Oskari.userinterface.Flyout'].deactivateAllFilters();
+                    this.filteredLayerListOpenedByRequest = false;
                 }
-                // Remove the filtering, if opened by ShowFilteredLayerListRequest.
-                else if (me.filteredLayerListOpenedByRequest) {
-                    plugin.deactivateAllFilters();
-                    me.filteredLayerListOpenedByRequest = false;
-                }
-            }
-        },
-        /**
-         * @method layerChanged
-         * Update layer view by given ID, or update all if given null
-         * @param {Number} layerId
-         */
-        layerChanged: function (layerId) {
-            const flyout = this.plugins['Oskari.userinterface.Flyout'];
-            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-
-            if (layerId === null || layerId === undefined) {
-                // Massive update so just recreate the whole ui
-                flyout.populateLayers();
-            } else {
-                let layer = mapLayerService.findMapLayer(layerId);
-                flyout.handleLayerModified(layer);
             }
         },
 

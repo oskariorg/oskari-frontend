@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, TabPane } from 'oskari-ui';
-import { AllLayersTab } from './LayerList/AllLayersTab';
-import { StateHandler as CollapseHandler } from './LayerList/LayerCollapse/StateHandler';
-import { StateHandler as FilterHandler } from './LayerList/LayerFilters/StateHandler';
-// import styled from 'styled-components';
+import { LayerFilters } from './LayerList/LayerFilters';
+import { FilterService } from './LayerList/LayerFilters/FilterService';
+import { LayerCollapse } from './LayerList/LayerCollapse';
+import { CollapseService } from './LayerList/LayerCollapse/CollapseService';
 
 const TABS = {
     ORGANIZATION: 'organizations',
@@ -21,28 +21,28 @@ export class LayerList extends React.Component {
         super(props);
         const { locale, showOrganizations } = this.props;
 
-        this.filterHandler = new FilterHandler();
-        this.groupHandler = new CollapseHandler();
-        this.groupHandler.setGroupingMethod(GROUPING_METHODS.GROUP);
+        this.filterService = new FilterService();
+        this.groupService = new CollapseService();
+        this.groupService.setGroupingMethod(GROUPING_METHODS.GROUP);
         if (showOrganizations) {
-            this.organizationHandler = new CollapseHandler();
-            this.organizationHandler.setGroupingMethod(GROUPING_METHODS.ORGANIZATION);
+            this.organizationService = new CollapseService();
+            this.organizationService.setGroupingMethod(GROUPING_METHODS.ORGANIZATION);
         }
 
-        this.addHandlerListeners();
+        this.addServiceListeners();
 
         this.state = {
             showOrganizations,
             locale,
-            groupCollapse: this.groupHandler.getState(),
-            filter: this.filterHandler.getState()
+            groupCollapse: this.groupService.getState(),
+            filter: this.filterService.getState()
         };
-        if (this.organizationHandler) {
-            this.state.organizationCollapse = this.organizationHandler.getState();
+        if (this.organizationService) {
+            this.state.organizationCollapse = this.organizationService.getState();
         }
     }
 
-    addHandlerListeners () {
+    addServiceListeners () {
         const collapseListener = (tabKey) => {
             let collapseKey = tabKey === TABS.ORGANIZATION ? 'organizationCollapse' : 'groupCollapse';
             return (collapseState) => this.setState((state) => {
@@ -53,15 +53,15 @@ export class LayerList extends React.Component {
             });
         };
 
-        this.groupHandler.addStateListener(collapseListener(TABS.GROUP));
-        if (this.organizationHandler) {
-            this.organizationHandler.addStateListener(collapseListener(TABS.ORGANIZATION));
+        this.groupService.addStateListener(collapseListener(TABS.GROUP));
+        if (this.organizationService) {
+            this.organizationService.addStateListener(collapseListener(TABS.ORGANIZATION));
         }
 
         const throttleCollapseFilterUpdates = Oskari.util.throttle(this.updateCollapseFilters.bind(this), 1000, { leading: false });
 
         let previousFilterState = null;
-        this.filterHandler.addStateListener((filterState) => {
+        this.filterService.addStateListener((filterState) => {
             const { activeFilterId, searchText } = filterState;
             if (previousFilterState && previousFilterState.searchText !== searchText) {
                 // Search text changed, give user some time to type in his search.
@@ -79,25 +79,50 @@ export class LayerList extends React.Component {
     }
 
     updateCollapseFilters (activeFilterId, searchText) {
-        this.groupHandler.setFilter(activeFilterId, searchText);
-        if (this.organizationHandler) {
-            this.organizationHandler.setFilter(activeFilterId, searchText);
+        this.groupService.setFilter(activeFilterId, searchText);
+        if (this.organizationService) {
+            this.organizationService.setFilter(activeFilterId, searchText);
+        }
+    }
+
+    getCollapseState (tabKey) {
+        if (tabKey === TABS.GROUP) {
+            return this.state.groupCollapse;
+        } else if (tabKey === TABS.ORGANIZATION) {
+            return this.state.organizationCollapse;
+        }
+    }
+
+    getCollapseMutator (tabKey) {
+        if (tabKey === TABS.GROUP) {
+            return this.groupService.getMutator();
+        } else if (tabKey === TABS.ORGANIZATION) {
+            return this.organizationService.getMutator();
         }
     }
 
     getAllLayersContent (tabKey) {
-        const { filter, locale, organizationCollapse, groupCollapse } = this.state;
+        const { filter, locale } = this.state;
+        const showAddButton = Oskari.getSandbox().hasHandler('ShowLayerEditorRequest');
         return (
-            <AllLayersTab
-                collapse = { tabKey === TABS.GROUP ? groupCollapse : organizationCollapse }
-                filter = { filter }
-                locale = { locale } />);
+            <React.Fragment>
+                <LayerFilters
+                    {...filter}
+                    mutator={this.filterService.getMutator()}
+                    showAddButton={showAddButton}
+                    locale={locale.filter} />
+                <LayerCollapse
+                    {...this.getCollapseState(tabKey)}
+                    mutator={this.getCollapseMutator(tabKey)}
+                    locale={locale}/>
+            </React.Fragment>
+        );
     }
 
     render () {
         const { organization, inspire } = this.state.locale.filter;
         return (
-            <Tabs>
+            <Tabs tabPosition='top'>
                 <TabPane tab={inspire} key={TABS.GROUP}>
                     { this.getAllLayersContent(TABS.GROUP) }
                 </TabPane>

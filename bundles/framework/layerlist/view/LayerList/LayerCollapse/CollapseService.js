@@ -1,10 +1,10 @@
-import { StateHandler, withMutator } from 'oskari-ui/state';
+import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 
 /**
  * Holds and mutates layer list state.
  * Handles events related to layer listing.
  */
-class CollapseHandler extends StateHandler {
+class Service extends StateHandler {
     constructor () {
         super();
         this.sandbox = Oskari.getSandbox();
@@ -18,23 +18,6 @@ class CollapseHandler extends StateHandler {
         this._throttleLayerRefresh = Oskari.util.throttle(this._refreshAllLayers.bind(this), 2000, { leading: false });
         this._throttleLayerSelection = Oskari.util.throttle(this.updateSelectedLayerIds.bind(this), 2000, { leading: false });
         this.eventHandlers = {};
-        this.mutatingMethods = [
-            'addLayer',
-            'removeLayer',
-            'updateOpenGroupTitles',
-            'updateLayerGroups',
-            'updateSelectedLayerIds',
-            'showLayerMetadata',
-            'showLayerBackendStatus'
-        ];
-    }
-    /**
-     * "Module" name for event handling
-     */
-    getName () {
-        return 'LayerCollapse.StateHandler';
-    }
-    _init () {
         this.state = {
             groups: [],
             openGroupTitles: [],
@@ -42,6 +25,12 @@ class CollapseHandler extends StateHandler {
             mapSrs: this.map.getSrsName()
         };
         this.eventHandlers = this._createEventHandlers();
+    }
+    /**
+     * "Module" name for event handling
+     */
+    getName () {
+        return 'LayerCollapse.StateHandler';
     }
     updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
         this.updateLayerGroups();
@@ -209,14 +198,10 @@ class CollapseHandler extends StateHandler {
                 const layerId = event.getLayerId();
                 const operation = event.getOperation();
 
-                if (operation === 'update') {
-
-                } else if (operation === 'add') {
+                if (['update', 'sticky'].includes(operation)) {
+                    this._refreshLayer(layerId);
+                } else if (['add', 'remove'].includes(operation)) {
                     this.updateLayerGroups();
-                } else if (operation === 'remove') {
-                    this.updateLayerGroups();
-                } else if (operation === 'sticky') {
-
                 } else if (operation === 'tool') {
                     if (layerId) {
                         this._refreshLayer(layerId);
@@ -226,34 +211,33 @@ class CollapseHandler extends StateHandler {
                 }
             },
             AfterMapLayerRemoveEvent: () => this._throttleLayerSelection(),
-            AfterMapLayerAddEvent: () => this._throttleLayerSelection()
+            AfterMapLayerAddEvent: () => this._throttleLayerSelection(),
+            'BackendStatus.BackendStatusChangedEvent': event => this._refreshLayer(event.getLayerId())
         };
         Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));
         return handlers;
     }
 
     _refreshLayer (id) {
-        if (!id || this.groups.length === 0) {
+        if (!id || this.state.groups.length === 0) {
             return;
         }
-        this.mutatedGroups = this.groups.map(group => {
+        const groups = this.state.groups.map(group => {
             const layer = group.getLayers().find(lyr => lyr.getId() === id);
             if (!layer) {
                 return group;
             }
             return this._cloneGroup(group);
         });
-        this.filtered = this._getSearchResults();
-        this.notify();
+        this.updateState({ groups });
     }
     _refreshAllLayers () {
-        if (this.groups.length === 0) {
+        if (this.state.groups.length === 0) {
             return;
         }
         // Clone all groups and layers to ensure rerendering.
-        this.mutatedGroups = this.groups.map(this._cloneGroup);
-        this.filtered = this._getSearchResults();
-        this.notify();
+        const groups = this.state.groups.map(this._cloneGroup);
+        this.updateState({ groups });
     }
     _cloneGroup (group) {
         let groupClone = Object.assign(Object.create(group), group);
@@ -262,5 +246,12 @@ class CollapseHandler extends StateHandler {
     }
 }
 
-const handler = withMutator(CollapseHandler);
-export { handler as StateHandler };
+export const CollapseService = mutatorMixin(Service, [
+    'addLayer',
+    'removeLayer',
+    'updateOpenGroupTitles',
+    'updateLayerGroups',
+    'updateSelectedLayerIds',
+    'showLayerMetadata',
+    'showLayerBackendStatus'
+]);

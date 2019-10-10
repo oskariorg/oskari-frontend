@@ -1,14 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { LayerFilter } from './LayerFilters/LayerFilter';
-import { TextInput, Tooltip, Icon } from 'oskari-ui';
+import { TextInput, Tooltip, Icon, Button } from 'oskari-ui';
 import styled from 'styled-components';
 
-const StyledFilters = styled.div`
-    margin: 10px;
+const ButtonRow = styled.div`
     color: #949494;
     display: flex;
+    margin-bottom: 10px;
 `;
+const StyledButton = styled(Button)`
+    margin-left: auto;
+    margin-top: auto;
+    margin-bottom: auto;
+`;
+const AddButton = ({ title }) => (
+    <StyledButton
+        size="large"
+        onClick={() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', [])}
+        icon="plus"
+        shape="circle"
+        title={title} />
+);
+AddButton.propTypes = {
+    title: PropTypes.string
+};
 
 const SearchInfo = ({ infoText }) => (
     <Tooltip title={infoText}>
@@ -19,27 +35,26 @@ SearchInfo.propTypes = {
     infoText: PropTypes.string.isRequired
 };
 
-export const LayerFilters = ({ filters, searchText, locale, mutator }) => {
-    const mappedFilters = [];
-    if (filters) {
-        Object.values(filters).forEach(button => {
-            mappedFilters.push(
-                <LayerFilter key={button.id} text={button.text}
-                    tooltip={button.tooltip} filterName = {button.id}
-                    currentStyle = {button.cls.current}
-                    clickHandler={(event) => {
-                        const filterName = event.currentTarget.attributes.filtername;
-                        mutator.setActiveFilterId(filterName.value);
-                    }}>
-                </LayerFilter>
-            );
-        });
-    }
+const getFilterButtons = (filters, mutator) => {
+    return Object.values(filters).map(filter => (
+        <LayerFilter key={filter.id} text={filter.text}
+            tooltip={filter.tooltip} filterName = {filter.id}
+            currentStyle = {filter.cls.current}
+            clickHandler={(event) => {
+                const filterName = event.currentTarget.attributes.filtername;
+                mutator.setActiveFilterId(filterName.value);
+            }}>
+        </LayerFilter>
+    ));
+};
+
+export const LayerFilters = ({ filters, searchText, showAddButton, locale, mutator }) => {
     return (
         <React.Fragment>
-            <StyledFilters>
-                {mappedFilters}
-            </StyledFilters>
+            <ButtonRow>
+                { getFilterButtons(filters, mutator) }
+                { showAddButton && <AddButton/> }
+            </ButtonRow>
             <TextInput
                 value={searchText}
                 allowClear
@@ -52,7 +67,8 @@ export const LayerFilters = ({ filters, searchText, locale, mutator }) => {
 
 LayerFilters.propTypes = {
     filters: PropTypes.object.isRequired,
-    searchText: PropTypes.string.isRequired,
+    searchText: PropTypes.string,
+    showAddButton: PropTypes.bool,
     locale: PropTypes.object.isRequired,
     mutator: PropTypes.object.isRequired
 };
