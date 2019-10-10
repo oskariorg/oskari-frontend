@@ -615,7 +615,6 @@ export class MapModule extends AbstractMapModule {
      * @return {Boolean} success
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
-        const { top, bottom, left, right } = zoom.value;
         const view = this.getMap().getView();
         const animation = options && options.animation ? options.animation : '';
         const duration = options && options.duration ? options.duration : 3000;
@@ -625,17 +624,20 @@ export class MapModule extends AbstractMapModule {
             return false;
         }
 
-        if (zoom && top && bottom && left && right) {
-            const zoomOut = top === bottom && left === right;
-            this.zoomToExtent(zoom, zoomOut, zoomOut);
-            view.setCenter(lonlat);
-            return true;
+        if (zoom === Number) {
+            // backwards compatibility
+            zoom = { type: 'zoom', value: zoom };
         }
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
-        }
-        if (zoom === Number) {
-            zoom = { type: 'zoom', value: zoom };
+        } else {
+            const { top, bottom, left, right } = zoom.value;
+            if (top && left && bottom && right) {
+                const zoomOut = top === bottom && left === right;
+                this.zoomToExtent(zoom, zoomOut, zoomOut);
+                view.setCenter(lonlat);
+                return true;
+            }
         }
 
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
