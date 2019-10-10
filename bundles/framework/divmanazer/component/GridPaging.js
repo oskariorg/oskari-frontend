@@ -59,7 +59,7 @@ Oskari.clazz.category(
                     }
                 };
 
-                var visibleCols = Array.apply(null, {length: groupCols}).map(Number.call, Number);
+                var visibleCols = Array.apply(null, { length: groupCols }).map(Number.call, Number);
 
                 // Get visible cols and shows them
                 // If page is first then show only first cols

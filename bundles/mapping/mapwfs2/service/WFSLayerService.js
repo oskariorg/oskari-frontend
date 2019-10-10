@@ -140,33 +140,34 @@ Oskari.clazz.define(
          * Handles status of selected features
          */
         setWFSFeaturesSelections: function (layerId, featureIds, makeNewSelection) {
-            var me = this,
-                existingFeatureSelections;
+            var me = this;
 
             if (makeNewSelection) {
-                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
-                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': featureIds});
+                _.remove(me.WFSFeatureSelections, { 'layerId': layerId });
+                me.WFSFeatureSelections.push({ 'layerId': layerId, 'featureIds': featureIds });
             } else {
-                existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
+                const existingFeatureSelections = _.pluck(_.where(me.WFSFeatureSelections, { 'layerId': layerId }), 'featureIds');
                 // no existing selections -> add all
                 if (!existingFeatureSelections || existingFeatureSelections.length === 0) {
                     existingFeatureSelections.push(featureIds);
                 } else {
-                    // existing selections found -> just add the features that weren't previously selected
-                    _.each(featureIds, function (featureId) {
-                        // add the features that weren't previously selected
-                        if (existingFeatureSelections[0].indexOf(featureId) < 0) {
-                            existingFeatureSelections[0].push(featureId);
-                        // remove the features that were previously selected
-                        } else {
-                            _.pull(existingFeatureSelections[0], featureId);
-                        }
-                    });
+                    // Either add all featureIds or remove all feature Ids from selection. Don't mix.
+                    const selectionArray = existingFeatureSelections[0];
+                    const someSelected = selectionArray.some(selected => featureIds.includes(selected));
+                    if (someSelected) {
+                        featureIds.forEach(id => {
+                            if (selectionArray.includes(id)) {
+                                selectionArray.splice(selectionArray.indexOf(id), 1);
+                            }
+                        });
+                        return;
+                    }
+                    featureIds.forEach(id => selectionArray.push(id));
                 }
                 // clear old selection
-                _.remove(me.WFSFeatureSelections, {'layerId': layerId});
+                _.remove(me.WFSFeatureSelections, { 'layerId': layerId });
                 // add the updated selection
-                me.WFSFeatureSelections.push({'layerId': layerId, 'featureIds': existingFeatureSelections[0]});
+                me.WFSFeatureSelections.push({ 'layerId': layerId, 'featureIds': existingFeatureSelections[0] });
             }
         },
 
@@ -192,7 +193,7 @@ Oskari.clazz.define(
         getSelectedFeatureIds: function (layerId) {
             var me = this,
                 featureIds;
-            featureIds = _.pluck(_.where(me.WFSFeatureSelections, {'layerId': layerId}), 'featureIds');
+            featureIds = _.pluck(_.where(me.WFSFeatureSelections, { 'layerId': layerId }), 'featureIds');
             return featureIds[0];
         },
 
@@ -207,7 +208,7 @@ Oskari.clazz.define(
             var me = this;
 
             if (me.getSelectedFeatureIds(layer._id)) {
-                _.remove(me.WFSFeatureSelections, {'layerId': layer._id});
+                _.remove(me.WFSFeatureSelections, { 'layerId': layer._id });
                 var event = Oskari.eventBuilder('WFSFeaturesSelectedEvent')([], layer, false);
                 me.sandbox.notifyAll(event);
             }

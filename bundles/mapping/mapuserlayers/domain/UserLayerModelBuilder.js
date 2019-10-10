@@ -4,13 +4,14 @@
  */
 Oskari.clazz.define(
     'Oskari.mapframework.bundle.myplacesimport.domain.UserLayerModelBuilder',
-    function (sandbox) {
+    function (sandbox, clusteringDistance) {
         this.sandbox = sandbox;
         this.localization = Oskari.getLocalization('MyPlacesImport');
         this.wfsBuilder = Oskari.clazz.create(
             'Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder',
             sandbox
         );
+        this.clusteringDistance = clusteringDistance;
     }, {
         /**
          * Parses any additional fields to model
@@ -24,6 +25,9 @@ Oskari.clazz.define(
             // call parent parseLayerData
             this.wfsBuilder.parseLayerData(layer, mapLayerJson, maplayerService);
             // set layer specific data
+            if (this.clusteringDistance && this.clusteringDistance > 0) {
+                layer.setClusteringDistance(this.clusteringDistance);
+            }
             layer.setOrganizationName(loclayer.organization);
             layer.setGroups([{
                 id: 'USERLAYER',
@@ -37,6 +41,9 @@ Oskari.clazz.define(
                 layer.setFeatureProperties(this.addHiddenFields(mapLayerJson.fields));
             } else {
                 layer.setFeatureProperties([]);
+            }
+            if (mapLayerJson.fieldLocales && mapLayerJson.fieldLocales !== 0) {
+                layer.setLocales(mapLayerJson.fieldLocales);
             }
         },
 

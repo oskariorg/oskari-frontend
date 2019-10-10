@@ -3,14 +3,13 @@
  */
 Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableFlyout', function (title, options, instance) {
     this.isEmbedded = instance.isEmbedded();
-    this.element = null;
+    this.uiElement = null;
     this._grid = Oskari.clazz.create('Oskari.statistics.statsgrid.Datatable', instance.getSandbox(), instance.getLocalization());
     var me = this;
     this.on('show', function () {
-        if (!me.getElement()) {
+        if (!me.getUiElement()) {
             me.createUi();
-            me.addClass('statsgrid-data-flyout');
-            me.setContent(me.getElement());
+            me.setContent(me.getUiElement());
         }
         me._grid._updateHeaderHeight();
         // Check also need hide no result texts
@@ -19,20 +18,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.TableFlyout', function (ti
 }, {
     _template: {
         error: _.template('<div class="datacharts-noactive">${ msg }</div>'),
-        container: jQuery('<div class="oskari-datacharts"></div>')
+        container: jQuery('<div></div>')
     },
-    setElement: function (el) {
-        this.element = el;
+    setUiElement: function (el) {
+        this.uiElement = el;
     },
-    getElement: function () {
-        return this.element;
+    getUiElement: function () {
+        return this.uiElement;
     },
     createUi: function () {
         var el = this._template.container.clone();
+        this.addClassForContent('oskari-datacharts');
         this._grid.showRegionsetSelector(!this.isEmbedded);
         this._grid.showIndicatorRemoval(!this.isEmbedded);
         this._grid.render(el);
-        this.setElement(el);
+        this.setUiElement(el);
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']

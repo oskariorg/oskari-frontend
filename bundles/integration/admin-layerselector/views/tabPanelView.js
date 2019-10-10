@@ -111,6 +111,10 @@ function (FilterLayersTemplate,
                 id: 'tiles3dlayer',
                 localeKey: 'tiles3d',
                 footer: false
+            }, {
+                id: 'bingmapslayer',
+                localeKey: 'bingmaps',
+                footer: false
             }];
             // filter out ones that are not registered in current appsetup
             var sandbox = this.instance.sandbox,
@@ -196,7 +200,7 @@ function (FilterLayersTemplate,
                         'lcId': group.id
                     });
 
-                        // grouping edit panels
+                    // grouping edit panels
                     groupPanel.find('.accordion-header')
                         .append(this.__createGroupingPanel(this.options.tabId, group));
                     // add group panel to this tab
@@ -260,7 +264,7 @@ function (FilterLayersTemplate,
                     }
                 };
 
-                // override some UI texts for inspire theme form
+            // override some UI texts for inspire theme form
             if (tabId === 'inspire') {
                 groupingConfig.title = adminLoc.addInspireName;
                 groupingConfig.desc = adminLoc.addInspireNameTitle;

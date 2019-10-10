@@ -189,9 +189,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelBtn.setTitle(this.loc.button.cancel);
             cancelBtn.setHandler(function () {
-                // destroy the active sketch, disable the selected control
-                me.selectionPlugin.stopDrawing();
-                dialog.close(true);
+                me.close(true);
             });
             cancelBtn.addClass('primary');
             cancelBtn.blur();
@@ -200,10 +198,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             dialog.addClass('tools_selection');
             dialog.show(popupLoc, content, controlButtons);
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
+            this.dialog = dialog;
+            this.isOpen = true;
 
             // tick the select from all layers - checkbox, if it was on previously
             if (me.WFSLayerService.isSelectFromAllLayers()) {
                 jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
+            }
+        },
+
+        close: function (selectDefault) {
+            if (!this.isOpen) {
+                return;
+            }
+            // destroy the active sketch, disable the selected control
+            this.selectionPlugin.stopDrawing();
+            this.dialog.close(true);
+            this.isOpen = false;
+
+            if (!selectDefault) {
+                return;
+            }
+            // ask toolbar to select default tool if available
+            var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+            if (toolbarRequest) {
+                this.instance.getSandbox().request(this.instance, toolbarRequest());
             }
         },
 

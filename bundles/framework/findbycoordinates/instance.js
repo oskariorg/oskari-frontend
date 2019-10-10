@@ -66,7 +66,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
                 }
             },
             'Toolbar.ToolSelectedEvent': function (event) {
-                if (event.getToolId() !== this.toolName) {
+                if (event.getToolId() !== this.toolName && event.getSticky()) {
                     this.stopTool();
                 }
             }
@@ -145,15 +145,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.findbycoordinates.FindByCoordina
          * @method stopTool
          */
         stopTool: function () {
-            var me = this,
-                sandbox = this.getSandbox(),
-                spinnerRequestBuilder = Oskari.requestBuilder('ShowProgressSpinnerRequest');
+            if (!this.tool.active) {
+                return;
+            }
+            var sandbox = this.getSandbox();
+            var spinnerRequestBuilder = Oskari.requestBuilder('ShowProgressSpinnerRequest');
             if (spinnerRequestBuilder) {
                 sandbox.request(this, spinnerRequestBuilder(false));
             }
-            me.tool.active = false;
+            this.tool.active = false;
             jQuery('#mapdiv').removeClass('findbycoordinates-cursor');
-            me.enableGFI(true);
+            this.enableGFI(true);
         },
         /**
          * @method enableGfi

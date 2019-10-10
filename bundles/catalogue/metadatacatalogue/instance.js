@@ -53,6 +53,7 @@ Oskari.clazz.define(
         this.searchResultActions = [];
         this.conf = this.conf || {};
         this.state = this.state || {};
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         /**
          * @static
@@ -445,6 +446,8 @@ Oskari.clazz.define(
             me.searchPanel.append(me.getLocalization('searching'));
             me.resultPanel.hide();
 
+            me.progressSpinner.insertTo(metadataCatalogueContainer);
+
             var metadataCatalogueDescription = metadataCatalogueContainer.find(
                 'div.metadataCatalogueDescription'
             );
@@ -476,14 +479,17 @@ Oskari.clazz.define(
             button.setId('oskari_metadatacatalogue_button_search');
 
             var doMetadataCatalogue = function () {
+                me.progressSpinner.start();
                 me._removeFeaturesFromMap();
                 metadataCatalogueContainer.find('.metadataOptions').hide();
                 metadataCatalogueContainer.find('.metadataSearching').show();
                 var search = {
-                    search: field.getValue()
+                    search: field.getValue().trim()
                 };
+                var isAdvancedSearch = false;
                 // Collect the advanced search options
                 if (moreLessLink.html() === me.getLocalization('showLess')) {
+                    isAdvancedSearch = true;
                     // Checkboxes
                     var checkboxRows = metadataCatalogueContainer.find('.checkboxRow'),
                         i,
@@ -520,16 +526,27 @@ Oskari.clazz.define(
                 }
                 me.lastSearch = field.getValue();
 
-                me.searchService.doSearch(search, function (data) {
-                    me._showResults(metadataCatalogueContainer, data);
-                }, function (data) {
-                    var key = field.getValue();
-                    if (key === null || key === undefined || key.length === 0) {
-                        me._showError(me.getLocalization('cannot_be_empty'));
-                    } else {
-                        me._showError(me.getLocalization('metadatasearchservice_not_found_anything_text'));
-                    }
+                // Check if any search fields has values, otherwise it's useless to send post request
+                var doSearch = false;
+
+                jQuery.each(search, function (key, value) {
+                    doSearch = value ? true : doSearch;
                 });
+                if (doSearch) {
+                    me.searchService.doSearch(search, function (data) {
+                        me._showResults(metadataCatalogueContainer, data);
+                        me.progressSpinner.stop();
+                    }, function (data) {
+                        me._showError(me.getLocalization('metadatasearchservice_error'));
+                        me.progressSpinner.stop();
+                    });
+                } else {
+                    if (isAdvancedSearch) {
+                        me._showError(me.getLocalization('no_search_selections'));
+                    } else {
+                        me._showError(me.getLocalization('cannot_be_empty'));
+                    }
+                }
             };
 
             button.setHandler(doMetadataCatalogue);
@@ -556,12 +573,13 @@ Oskari.clazz.define(
             moreLessLink.on('click', function () {
                 var advancedContainer = metadataCatalogueContainer.find('div.advanced');
                 if (moreLessLink.html() === me.getLocalization('showMore')) {
-                    // open advanced/toggle link text
-                    moreLessLink.html(me.getLocalization('showLess'));
                     if (advancedContainer.is(':empty')) {
                         me.optionService.getOptions(function (data) {
+                            // open advanced/toggle link text
+                            moreLessLink.html(me.getLocalization('showLess'));
                             me._createAdvancedPanel(data, advancedContainer, moreLessLink);
                         }, function (data) {
+                            // don't toggle link text on error
                             var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                             var okBtn = dialog.createCloseButton('OK');
                             var title = me.getLocalization('metadataoptionservice_alert_title');
@@ -569,6 +587,8 @@ Oskari.clazz.define(
                             dialog.show(title, msg, [okBtn]);
                         });
                     } else {
+                        // open advanced/toggle link text
+                        moreLessLink.html(me.getLocalization('showLess'));
                         advancedContainer.show();
                     }
                 } else {
@@ -611,7 +631,7 @@ Oskari.clazz.define(
                 dropdownDef,
                 emptyOption,
                 newOption,
-                renderCoverageButton = (_.filter(dataFields, {'field': 'coverage'}).length > 0),
+                renderCoverageButton = (_.filter(dataFields, { 'field': 'coverage' }).length > 0),
                 checkboxChange = function () {
                     me._updateOptions(advancedContainer);
                 };
@@ -1065,7 +1085,7 @@ Oskari.clazz.define(
                                     if (action.callback && typeof action.callback === 'function') {
                                         // Bind action click to bindCallbackTo if bindCallbackTo param exist
                                         callbackElement = actionElement.first();
-                                        callbackElement.css({'cursor': 'pointer'}).on('click', {metadata: row}, function (event) {
+                                        callbackElement.css({ 'cursor': 'pointer' }).on('click', { metadata: row }, function (event) {
                                             action.callback(event.data.metadata);
                                         });
                                     }

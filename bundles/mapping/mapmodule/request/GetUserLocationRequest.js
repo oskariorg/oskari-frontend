@@ -13,8 +13,9 @@ Oskari.clazz.define(
      * @static @method create called automatically on construction
      *
      */
-    function (centerMap) {
+    function (centerMap, options) {
         this._centerMap = centerMap;
+        this._options = options || {};
     }, {
         /** @static @property __name request name */
         __name: 'MyLocationPlugin.GetUserLocationRequest',
@@ -33,6 +34,9 @@ Oskari.clazz.define(
          */
         getCenterMap: function () {
             return this._centerMap;
+        },
+        getOptions: function () {
+            return this._options;
         }
     }, {
         /**

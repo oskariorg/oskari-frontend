@@ -1,4 +1,4 @@
-import SelectList from './SelectList';
+import { SelectList } from './SelectList';
 
 Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function (locale, sandbox) {
     this.locale = locale;
@@ -96,7 +96,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
         var panelLoc = locale.panels.newSearch;
 
         var cont = jQuery(this.__templates.main());
-        this.parentElement.append(cont);
+        this.parentElement.html(cont);
         this.container = cont;
         var seriesSelection = null;
         var indicators = me.service.getStateService().getIndicators();
@@ -124,10 +124,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorParameters', function 
                 if (selections[selected].time) {
                     options.multi = true;
                 }
-                var tempSelect = jQuery(me.__templates.select({id: selected, label: label}));
+                var tempSelect = jQuery(me.__templates.select({ id: selected, label: label }));
                 var select = new SelectList(selected);
                 dropdown = selections !== null ? select.create(selections[selected].values, options) : select.create(selections, options);
-                dropdown.css({width: '205px'});
+                dropdown.css({ width: '205px' });
                 var previousSelections = [];
                 for (var i in indicators) {
                     previousSelections.push(indicators[i].selections[selected]);

@@ -111,13 +111,10 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/plugin/TogglePlugin.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/Legend.js"
-            }, {
-                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/SeriesControl.js"
             }, {
                 "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/components/EditClassification.js"
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/SeriesToggleTool.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/components/RegionsetViewer.js"
@@ -147,10 +144,16 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/event/ParameterChangedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/AbstractStatsPluginTool.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/StatsTableTool.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/ClassificationTool.js"
+            }, {
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/publisher/ClassificationToggleTool.js"
             }, {
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/OpacityTool.js"
@@ -170,32 +173,36 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "type": "text/css",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/css/seriesplayback.css"
             }, {
-                "type" : "text/javascript",
-                "expose" : "geostats",
-                "src" : "../../../libraries/geostats/1.5.0/lib/geostats.min.js"
-            }, {
-                "type": "text/css",
-                "src" : "../../../libraries/geostats/1.5.0/lib/geostats.css"
-            }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.jquery.js",
                 "type": "text/javascript"
             }, {
                 "src": "../../../libraries/chosen/1.5.1/chosen.css",
                 "type": "text/css"
-            }
-        ],
-            "locales": [{
-                "lang": "fi",
-                "type": "text/javascript",
-                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/fi.js"
             }, {
+                "type" : "text/javascript",
+                "expose": "GeostatsHelper",
+                "src" : "../../../libraries/geostats/GeostatsHelper.js"
+            }],
+            "locales": [{
                 "lang": "en",
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/locale/en.js"
             }, {
+                "lang": "fi",
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/fi.js"
+            }, {
+                "lang": "fr",
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/fr.js"
+            }, {
                 "lang": "sv",
                 "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/resources/locale/sv.js"
+            }, {
+                "lang": "ru",
+                "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/resources/locale/ru.js"
             }]
         },
         "bundle": {

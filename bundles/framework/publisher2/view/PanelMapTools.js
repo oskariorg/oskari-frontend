@@ -126,7 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             me._sortTools();
             // Add tools to panel
             _.each(tools, function (tool) {
-                var ui = jQuery(me.templates.tool({title: tool.getTitle()}));
+                var ui = jQuery(me.templates.tool({ title: tool.getTitle() }));
                 // setup values when editing an existing map
                 ui.find('input').prop('checked', !!tool.isEnabled());
                 ui.find('input').prop('disabled', !!tool.isDisabled());
@@ -139,6 +139,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
                     tool.setEnabled(enabled);
                     if (enabled) {
                         ui.find('.extraOptions').show();
+                        me._setToolLocation(tool);
                     } else {
                         ui.find('.extraOptions').hide();
                     }
@@ -159,6 +160,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelMapTools',
             });
             me.panel = panel;
             return panel;
+        },
+        /**
+         * @private
+         * @method _setToolLocation
+         * Sets the tool's location according to users selection. (lefhanded/righthanded/userlayout)
+         */
+        _setToolLocation: function (tool) {
+            const layoutPanel = this.instance.publisher.panels.find(
+                panel => panel.getName && panel.getName() === 'Oskari.mapframework.bundle.publisher2.view.PanelToolLayout');
+            if (!layoutPanel || !tool[layoutPanel.activeToolLayout]) {
+                return;
+            }
+            if (!tool.config) {
+                tool.config = {};
+            }
+            if (!tool.config.location) {
+                tool.config.location = {};
+            }
+            const layout = layoutPanel.activeToolLayout;
+            tool.config.location.classes = tool[layout];
+            var plugin = tool.getPlugin();
+            if (plugin && plugin.setLocation) {
+                plugin.setLocation(tool.config.location.classes);
+            }
         },
         /**
          * Returns a hash containing ids of enabled plugins when restoring a published map.

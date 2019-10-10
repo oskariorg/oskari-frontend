@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Obs.",
         "unsupportedProj": "Vissa kartlager i denna kartvy kan inte visas med den aktuella kartprojektionen.",
+        "unsupported-layer": "Denna kartlager kan inte visas.",
+        "unsupported-layer-projection": "Denna kartlager kan inte visas med den valda kartprojektionen.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Användarvillkor",
@@ -40,7 +42,8 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Kartlager",
                 "chooseDefaultBaseLayer": "Välj bakgrundskarta",
-                "chooseOtherLayers": "Välj andra kartlager"
+                "chooseOtherLayers": "Välj andra kartlager",
+                "style": "Stil"
             },
             "SearchPlugin": {
                 "placeholder": "Sök plats/adress",
@@ -66,7 +69,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Tillbaka till standardvyn",
+                    "reset": "Gå tillbaka till standardvyn för kartvyn",
                     "back": "Tillbaka till föregående vy",
                     "next": "Flytta till nästa vy"
                 },
@@ -109,6 +112,11 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Centrera kartan till din plats"
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Gå tillbaka till standardvyn för kartvyn"
+                }
             }
         },
         "guidedTour": {

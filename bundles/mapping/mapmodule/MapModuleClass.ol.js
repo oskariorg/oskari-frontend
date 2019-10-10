@@ -1,27 +1,26 @@
-import olStyleStyle from 'ol/style/Style';
-import olStyleFill from 'ol/style/Fill';
-import olStyleStroke from 'ol/style/Stroke';
-import olStyleCircle from 'ol/style/Circle';
-import olStyleIcon from 'ol/style/Icon';
-import olStyleText from 'ol/style/Text';
+
 import * as olExtent from 'ol/extent';
-import {defaults as olInteractionDefaults} from 'ol/interaction';
+import { defaults as olInteractionDefaults } from 'ol/interaction';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olView from 'ol/View';
-import {METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT} from 'ol/proj/Units';
+import { METERS_PER_UNIT as olProjUnitsMETERS_PER_UNIT } from 'ol/proj/Units';
 import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import olMap from 'ol/Map';
-import {defaults as olControlDefaults} from 'ol/control';
+import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
+import { fromCircle } from 'ol/geom/Polygon';
+import olFeature from 'ol/Feature';
 
-import OskariImageWMS from './plugin/wmslayer/OskariImageWMS';
+import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
+import { getOlStyle } from './oskariStyle/generator.ol';
+import { LAYER_ID } from '../mapmodule/domain/constants';
 
 const AbstractMapModule = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapModule');
 
-export default class MapModule extends AbstractMapModule {
+export class MapModule extends AbstractMapModule {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
@@ -88,7 +87,6 @@ export default class MapModule extends AbstractMapModule {
         }));
 
         me._setupMapEvents(map);
-
         return map;
     }
 
@@ -167,6 +165,46 @@ export default class MapModule extends AbstractMapModule {
         this._registerVectorFeatureService();
         this.getMap().render();
         return true;
+    }
+
+    /**
+     * @override @method getStyle
+     * @param styleDef Oskari style definition
+     * @param geomType One of 'line', 'dot', 'area' | optional
+     * @return {ol/style/Style}
+     **/
+    getStyle (styleDef, geomType) {
+        return getOlStyle(this, styleDef, geomType);
+    }
+
+    getDefaultMarkerSize () {
+        return this._defaultMarker.size;
+    }
+
+    /**
+     * @method _getFeaturesAtPixelImpl
+     * To get feature properties at given mouse location on screen / div element.
+     * @param  {Float} x
+     * @param  {Float} y
+     * @return {Array} list containing objects with props `properties` and  `layerId`
+     */
+    _getFeaturesAtPixelImpl (x, y) {
+        const hits = [];
+        const addHit = (ftr, layer) => {
+            hits.push({
+                featureProperties: ftr.getProperties(),
+                layerId: layer.get(LAYER_ID)
+            });
+        };
+        this.getMap().forEachFeatureAtPixel([x, y], (feature, layer) => {
+            // Cluster source
+            if (feature && feature.get('features')) {
+                feature.get('features').forEach(cur => addHit(cur, layer));
+                return;
+            }
+            addHit(feature, layer);
+        });
+        return hits;
     }
 
     /* OL3 specific - check if this can be done in a common way
@@ -271,7 +309,7 @@ export default class MapModule extends AbstractMapModule {
             return geometry.getArea();
         }
         var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-        return Math.abs(olSphere.getArea(geom, {projection: 'EPSG:4326', radius: 6378137}));
+        return Math.abs(olSphere.getArea(geom, { projection: 'EPSG:4326', radius: 6378137 }));
     }
 
     /**
@@ -347,7 +385,7 @@ export default class MapModule extends AbstractMapModule {
                 unit = ' km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
-                decimals = 1;
+                decimals = 0;
                 unit = ' m';
             }
         } else {
@@ -378,7 +416,33 @@ export default class MapModule extends AbstractMapModule {
 
         return olExtent.containsCoordinate(extent, lonlatArray);
     }
-
+    getLocationGeoJSON (position, addAccuracy) {
+        const coord = [position.lon, position.lat];
+        const accuracy = position.accuracy;
+        var features = [];
+        features.push(new olFeature({
+            geometry: new olGeom.Point(coord),
+            name: 'location'
+        }));
+        if (accuracy && addAccuracy !== false) {
+            features.push(new olFeature({
+                geometry: fromCircle(new olGeom.Circle(coord, accuracy), 50),
+                name: 'accuracy'
+            }));
+        }
+        return this.getGeoJSONFromFeatures(features);
+    }
+    getLocationPathGeoJSON (lineCoords) {
+        var geom = new olGeom.LineString(lineCoords);
+        if (geom) {
+            var feature = new olFeature({
+                geometry: geom,
+                name: 'path'
+            });
+            return this.getGeoJSONFromFeatures([feature]);
+        }
+        return null;
+    }
     /* <------------- / OL3 specific ----------------------------------- */
 
     /* Impl specific - found in ol2 AND ol3 modules
@@ -474,11 +538,12 @@ export default class MapModule extends AbstractMapModule {
      * @param {Boolean} suppressEnd true to NOT send an event about the map move
      *  (other components wont know that the map has moved, only use when chaining moves and
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @return {Boolean} success
      */
     centerMap (lonlat, zoom, suppressEnd) {
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
-            return;
+            return false;
         }
         this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
         if (zoom === null || zoom === undefined) {
@@ -489,6 +554,7 @@ export default class MapModule extends AbstractMapModule {
         if (suppressEnd !== true) {
             this.notifyMoveEnd();
         }
+        return true;
     }
     /**
      * Get maps current extent.
@@ -671,7 +737,7 @@ export default class MapModule extends AbstractMapModule {
         var olBounds = olGeometry.getExtent();
         var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
         var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
-        return {lon: x, lat: y};
+        return { lon: x, lat: y };
     }
 
     getClosestPointFromGeoJSON (geojson) {
@@ -681,14 +747,14 @@ export default class MapModule extends AbstractMapModule {
         var x = olBounds[0] + (olBounds[2] - olBounds[0]) / 2;
         var y = olBounds[1] + (olBounds[3] - olBounds[1]) / 2;
         var coord = olGeometry.getClosestPoint([x, y]);
-        return {lon: coord[0], lat: coord[1]};
+        return { lon: coord[0], lat: coord[1] };
     }
 
     // TODO: check LayersPlugin.ol3 getGeometryBounds
     getBoundsFromGeoJSON (geojson) {
         var olGeometry = this.getOLGeometryFromGeoJSON(geojson);
         var extent = olGeometry.getExtent();
-        return {left: extent[0], bottom: extent[1], right: extent[2], top: extent[3]};
+        return { left: extent[0], bottom: extent[1], right: extent[2], top: extent[3] };
     }
 
     isPointInExtent (extent, x, y) {
@@ -850,197 +916,6 @@ export default class MapModule extends AbstractMapModule {
     }
 
     /**
-     * Creates style based on JSON
-     * @return {ol/style/Style} style ol3 specific!
-     */
-    getStyle (styleDef) {
-        var me = this;
-        var style = jQuery.extend(true, {}, styleDef);
-        var olStyle = {};
-        if (Oskari.util.keyExists(style, 'fill.color')) {
-            var color = style.fill.color;
-            if (style.effect) {
-                switch (style.effect) {
-                case 'darken' : color = Oskari.util.alterBrightness(color, -50); break;
-                case 'lighten' : color = Oskari.util.alterBrightness(color, 50); break;
-                }
-            }
-            if (Oskari.util.keyExists(style, 'image.opacity')) {
-                var rgb = null;
-                if (color.charAt(0) === '#') {
-                    // check if color is hex
-                    rgb = Oskari.util.hexToRgb(color);
-                    color = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + style.image.opacity + ')';
-                } else if (color.indexOf('rgb(') > -1) {
-                    // else check at if color is rgb
-                    var hexColor = '#' + Oskari.util.rgbToHex(color);
-                    rgb = Oskari.util.hexToRgb(hexColor);
-                    color = 'rgba(' + rgb.r + ',' + rgb.g + ',' + rgb.b + ',' + style.image.opacity + ')';
-                }
-            }
-            olStyle.fill = new olStyleFill({
-                color: color
-            });
-        }
-        if (style.stroke) {
-            olStyle.stroke = me.__getStrokeStyle(style);
-        }
-        if (style.image) {
-            olStyle.image = me.__getImageStyle(style);
-        }
-        if (style.text) {
-            var textStyle = me.__getTextStyle(style.text);
-            if (textStyle) {
-                olStyle.text = textStyle;
-            }
-        }
-        return new olStyleStyle(olStyle);
-    }
-
-    /**
-     * Parses stroke style from json
-     * @method __getStrokeStyle
-     * @param {Object} style json
-     * @return {ol/style/Stroke}
-     */
-    __getStrokeStyle (styleDef) {
-        var stroke = {};
-        if (styleDef.stroke.width === 0) {
-            return null;
-        }
-        if (styleDef.stroke.color) {
-            stroke.color = styleDef.stroke.color;
-        }
-
-        if (styleDef.stroke.width) {
-            stroke.width = styleDef.stroke.width;
-        }
-        if (styleDef.stroke.lineDash) {
-            if (_.isArray(styleDef.stroke.lineDash)) {
-                stroke.lineDash = styleDef.stroke.lineDash;
-            } else {
-                stroke.lineDash = [styleDef.stroke.lineDash];
-            }
-        }
-        if (styleDef.stroke.lineCap) {
-            stroke.lineCap = styleDef.stroke.lineCap;
-        }
-        return new olStyleStroke(stroke);
-    }
-
-    /**
-     * Parses image style from json
-     * @method __getImageStyle
-     * @param {Object} style json
-     * @return {ol/style/Circle}
-     */
-    __getImageStyle (styleDef) {
-        var me = this;
-        var image = {};
-        var size = this._defaultMarker.size;
-
-        if (styleDef.image && styleDef.image.sizePx) {
-            size = styleDef.image.sizePx;
-        } else if (styleDef.image && styleDef.image.size) {
-            size = this.getPixelForSize(styleDef.image.size);
-        }
-
-        if (typeof size !== 'number') {
-            size = this._defaultMarker.size;
-        }
-
-        styleDef.image.size = size;
-
-        if (me.isSvg(styleDef.image)) {
-            var svg = me.getSvg(styleDef.image);
-            return new olStyleIcon({
-                src: svg,
-                size: [size, size],
-                imgSize: [size, size],
-                opacity: styleDef.image.opacity || 1
-            });
-        } else if (styleDef.image && styleDef.image.shape) {
-            var offsetX = (!isNaN(styleDef.image.offsetX)) ? styleDef.image.offsetX : 16;
-            var offsetY = (!isNaN(styleDef.image.offsetY)) ? styleDef.image.offsetY : 16;
-            return new olStyleIcon({
-                src: styleDef.image.shape,
-                anchorYUnits: 'pixels',
-                anchorXUnits: 'pixels',
-                anchorOrigin: 'bottom-left',
-                anchor: [offsetX, offsetY],
-                opacity: styleDef.image.opacity || 1
-            });
-        }
-
-        if (styleDef.image.radius) {
-            image.radius = styleDef.image.radius;
-        } else {
-            image.radius = 1;
-        }
-        if (styleDef.snapToPixel) {
-            image.snapToPixel = styleDef.snapToPixel;
-        }
-        if (Oskari.util.keyExists(styleDef.image, 'fill.color')) {
-            image.fill = new olStyleFill({
-                color: styleDef.image.fill.color
-            });
-        }
-        if (styleDef.stroke) {
-            image.stroke = this.__getStrokeStyle(styleDef);
-        }
-        return new olStyleCircle(image);
-    }
-
-    /**
-     * Parses JSON and returns matching ol/style/Text
-     * @param  {Object} textStyleJSON text style definition
-     * @return {ol/style/Text} parsed style or undefined if no param is given
-     */
-    __getTextStyle (textStyleJSON) {
-        if (!textStyleJSON) {
-            return;
-        }
-        var text = {};
-        if (textStyleJSON.scale) {
-            text.scale = textStyleJSON.scale;
-        }
-        if (textStyleJSON.offsetX) {
-            text.offsetX = textStyleJSON.offsetX;
-        }
-        if (textStyleJSON.offsetY) {
-            text.offsetY = textStyleJSON.offsetY;
-        }
-        if (textStyleJSON.rotation) {
-            text.rotation = textStyleJSON.rotation;
-        }
-        if (textStyleJSON.textAlign) {
-            text.textAlign = textStyleJSON.textAlign;
-        }
-        if (textStyleJSON.textBaseline) {
-            text.textBaseline = textStyleJSON.textBaseline;
-        }
-        if (textStyleJSON.font) {
-            text.font = textStyleJSON.font;
-        }
-        if (Oskari.util.keyExists(textStyleJSON, 'fill.color')) {
-            text.fill = new olStyleFill({
-                color: textStyleJSON.fill.color
-            });
-        }
-        if (textStyleJSON.stroke) {
-            text.stroke = this.__getStrokeStyle(textStyleJSON);
-        }
-        if (textStyleJSON.labelText) {
-            if (typeof textStyleJSON.labelText === 'number') {
-                text.text = textStyleJSON.labelText.toString();
-            } else {
-                text.text = textStyleJSON.labelText;
-            }
-        }
-        return new olStyleText(text);
-    }
-
-    /**
      * Create a feature from a wkt and calculate a new map viewport to be able to view entire geometry and center to it
      * @param {String} wkt Well known text representation of the geometry
      */
@@ -1114,13 +989,20 @@ export default class MapModule extends AbstractMapModule {
     }
 
     getGeoJSONGeometryFromOL (feature) {
-        var olGeoJSON = new olFormatGeoJSON();
-        var geojsonStr = olGeoJSON.writeFeature(feature);
-        var geojson = JSON.parse(geojsonStr);
-        if (geojson.geometry) {
-            return geojson.geometry;
+        var geojson = this.getGeoJSONFromFeatures([feature]);
+        if (geojson.features & geojson.features.length > 0) {
+            return geojson.features[0].geometry;
         }
         return null;
+    }
+    /**
+     * @method getGeoJSONFromFeatures
+     * @param {Array] features
+     * @return {Object} geojson FeatureCollection
+     */
+    getGeoJSONFromFeatures (features) {
+        var olGeoJSON = new olFormatGeoJSON();
+        return olGeoJSON.writeFeaturesObject(features);
     }
 
     getOLGeometryFromGeoJSON (geojson) {

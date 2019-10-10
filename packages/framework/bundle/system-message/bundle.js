@@ -39,13 +39,17 @@ Oskari.clazz.define("Oskari.framework.bundle.system-message.SystemBundle", funct
           "src": "../../../../bundles/framework/system-message/resources/scss/systemmessage.scss"
       }],
       "locales" : [{
-          "lang": "en",
-          "type": "text/javascript",
-          "src": "../../../../bundles/framework/system-message/resources/locale/en.js"
+        "lang": "en",
+        "type": "text/javascript",
+        "src": "../../../../bundles/framework/system-message/resources/locale/en.js"
       },{
-          "lang": "fi",
-          "type": "text/javascript",
-          "src": "../../../../bundles/framework/system-message/resources/locale/fi.js"
+        "lang": "fi",
+        "type": "text/javascript",
+        "src": "../../../../bundles/framework/system-message/resources/locale/fi.js"
+      },{
+        "lang": "ru",
+        "type": "text/javascript",
+        "src": "../../../../bundles/framework/system-message/resources/locale/ru.js"
       }]
   },
   "bundle": {

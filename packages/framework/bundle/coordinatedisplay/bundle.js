@@ -143,6 +143,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.coordinatedisplay.CoordinateDisp
             "lang": "uk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/uk.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/coordinatedisplay/resources/locale/ru.js"
         }]
     },
     "bundle": {

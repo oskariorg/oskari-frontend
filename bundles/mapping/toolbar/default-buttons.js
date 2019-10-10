@@ -169,7 +169,7 @@ Oskari.clazz.category(
                     'link': {
                         iconCls: 'tool-link',
                         tooltip: loc.link.tooltip,
-                        sticky: false,
+                        sticky: true,
                         callback: function () {
                             if (me.dialog) {
                                 me.dialog.close(true);
@@ -215,13 +215,15 @@ Oskari.clazz.category(
             this.dialog.onClose(() => {
                 sandbox.postRequestByName('EnableMapKeyboardMovementRequest');
                 this.dialog = null;
+                var builder = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest');
+                sandbox.request(this, builder());
             });
             if (!viewUuid) {
                 this.dialog.show(loc.link.title, loc.link.cannot, [closeBtn]);
                 return;
             }
 
-            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid;
+            var baseUrl = mapUrlPrefix + linkParams + '&uuid=' + viewUuid + '&noSavedState=true';
 
             content.append(linkContent);
             // checkbox
@@ -234,15 +236,18 @@ Oskari.clazz.category(
                 linkContent.text(url);
             });
             options.append(addMarker.getElement());
-            var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
-            skipInfo.setTitle(loc.link.skipInfo);
-            skipInfo.setChecked(skipInfoBln);
-            skipInfo.setHandler(checked => {
-                skipInfoBln = checked;
-                url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
-                linkContent.text(url);
-            });
-            options.append(skipInfo.getElement());
+
+            if (Oskari.bundle('guidedtour')) {
+                var skipInfo = Oskari.clazz.create('Oskari.userinterface.component.CheckboxInput');
+                skipInfo.setTitle(loc.link.skipInfo);
+                skipInfo.setChecked(skipInfoBln);
+                skipInfo.setHandler(checked => {
+                    skipInfoBln = checked;
+                    url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
+                    linkContent.text(url);
+                });
+                options.append(skipInfo.getElement());
+            }
             content.append(options);
             // buttons
             closeBtn.addClass('primary');

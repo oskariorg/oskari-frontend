@@ -1,4 +1,4 @@
-import manualClassificationEditor from './editor';
+import { manualClassificationEditor } from './editor';
 import '../../resources/scss/manualClassification.scss';
 
 const loc = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -6,7 +6,7 @@ const loc = Oskari.getMsg.bind(null, 'StatsGrid');
  * @class ManualClassificationView
  * Wrapper for classification editor UI
  */
-export default class ManualClassificationView {
+export class ManualClassificationView {
     /**
      *
      * @param {Object} classificationService
@@ -25,10 +25,10 @@ export default class ManualClassificationView {
     /**
      * @method setData
      * Sets reference to indicator data for use in histogram
-     * @param {Object} indicatorData object withr region ids as keys and indicator data as values
+     * @param {Array|Object} indicatorData array of values or object with region ids as keys and indicator data as values
      */
     setData (indicatorData) {
-        this.indicatorData = Object.values(indicatorData);
+        this.indicatorData = Array.isArray(indicatorData) ? indicatorData : Object.values(indicatorData);
     }
     /**
      * @method getBounds
@@ -52,7 +52,7 @@ export default class ManualClassificationView {
         okButton.setHandler(() => {
             dialog.close();
             this.manualBounds = editedBounds;
-            okCallback();
+            okCallback(this.manualBounds);
         });
         const buttons = [dialog.createCloseButton(), okButton];
         const content = jQuery('<div class="manual-class-view"></div>');
@@ -67,7 +67,7 @@ export default class ManualClassificationView {
         });
 
         dialog.makeModal();
-        dialog.show(loc('classify.editClassifyTitle'), content, buttons);
+        dialog.show(loc('classify.edit.title'), content, buttons);
         content.parent().css('margin', '10px 0');
     }
 }

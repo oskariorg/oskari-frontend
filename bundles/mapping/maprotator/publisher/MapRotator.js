@@ -42,13 +42,14 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
         init: function (data) {
             var me = this;
 
-            if (!data || !data.configuration[me.bundleName]) {
+            var bundleData = data && data.configuration[me.bundleName];
+            if (!bundleData) {
                 return;
             }
-            me.setEnabled(true);
-
-            var conf = data.configuration[me.bundleName].conf || {};
+            var conf = bundleData.conf || {};
+            me.setEnabled(conf.enabled);
             me.noUiIsCheckedInModifyMode = !!conf.noUI;
+            this.getMapRotatorInstance().setState(bundleData.state);
         },
         /**
          * Get values.
@@ -70,12 +71,13 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
                 if (me.noUI) {
                     pluginConfig.noUI = me.noUI;
                 }
+                pluginConfig.enabled = me.state.enabled;
                 var json = {
                     configuration: {}
                 };
                 json.configuration[me.bundleName] = {
                     conf: pluginConfig,
-                    state: {}
+                    state: this.getMapRotatorInstance().getState()
                 };
                 return json;
             } else {

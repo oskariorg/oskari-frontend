@@ -1,1 +1,0 @@
-# DrawFilterPlugin.StopDrawFilteringRequest

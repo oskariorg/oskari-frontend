@@ -5,7 +5,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */
@@ -16,7 +16,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
     }, {
         /* Layer type specific functions */
 
-    /**
+        /**
      * Sets the wms url for the layer.
      *
      * @method setWmsUrl
@@ -47,6 +47,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmyplaces.domain.MyPlacesLayer
      */
         getWmsName: function () {
             return this._wmsName;
+        },
+        isFilterSupported: function () {
+            // this defaults to false in AbstractLayer, but WFSLayer returns true.
+            // Not sure if this is something we want, but it's the same behavior as before but NOT having
+            // WFS and analysis referenced in AbstractLayer
+            return false;
         }
 
     }, {

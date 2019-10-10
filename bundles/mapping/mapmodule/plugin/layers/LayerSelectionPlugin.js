@@ -37,10 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             },
             buttonGroup: 'mobile-toolbar'
         };
+        me._styleSelectable = !!this.getConfig().isStyleSelectable;
     }, {
         _toggleToolState: function () {
             var el = this.getElement();
-
             if (this.popup && this.popup.isVisible()) {
                 if (el) {
                     el.removeClass('active');
@@ -81,7 +81,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             // same as in main, only used when returning from some other layout to default (publisher)
             me.templates.defaultArrow = jQuery('<div class="header-icon icon-arrow-white-right"></div>');
             me.templates.layer = jQuery(
-                '<div class="layer"><label><span></span></label></div>'
+                `<div class="layer">
+                    <div><label><span></span></label></div>
+                    <div class="style-selector">${me._loc.style}<select></select></div>
+                </div>`
             );
             me.templates.checkbox = jQuery('<input type="checkbox" />');
             me.templates.radiobutton = jQuery(
@@ -162,7 +165,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                     }
                 },
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanged({width: evt.getWidth(), height: evt.getHeight()});
+                    this._handleMapSizeChanged({ width: evt.getWidth(), height: evt.getHeight() });
                 }
             };
         },
@@ -179,10 +182,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             }
             var header = this.getElement().find('div.header');
             header.off('click');
-            if (this.inLayerToolsEditMode() && this.popup.isVisible()) {
-                this.popup.getJqueryContent().detach();
-                this.popup.close(true);
-                this.popup = null;
+            if (this.inLayerToolsEditMode()) {
+                if (this.popup && this.popup.isVisible()) {
+                    this.popup.getJqueryContent().detach();
+                    this.popup.close(true);
+                    this.popup = null;
+                }
+                this.closeSelection();
             } else {
                 this._bindHeader(header);
             }
@@ -215,7 +221,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             input.prop('checked', true);
             this._changedBaseLayer();
         },
-
+        /**
+         * @method setStyleSelectable
+         * Set if layer styles should be selectable by user
+         * @param {Boolean} isSelectable
+         */
+        setStyleSelectable: function (isSelectable) {
+            this._styleSelectable = !!isSelectable;
+            this._checkSelectable();
+        },
+        /**
+         * @method getStyleSelectable
+         * @return {Boolean} can layer styles be selectable by user
+         */
+        getStyleSelectable: function () {
+            return this._styleSelectable;
+        },
+        /**
+         * @private @method _checkSelectable
+         * Show / hide UI for style selection
+         */
+        _checkSelectable: function () {
+            if (!this.layerContent) {
+                return;
+            }
+            const divs = this.layerContent.find('div.style-selector');
+            if (this.getStyleSelectable()) {
+                divs.show();
+            } else {
+                divs.hide();
+            }
+        },
         /**
          * @method addLayer
          * Adds given layer to the selection
@@ -257,9 +293,37 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 layersDiv.parent().find('.layerHeader').remove();
                 layersDiv.before(header);
             }
+
+            me._setupStyleChange(layer, div);
+
             me.sortLayers();
         },
-
+        /**
+         * @private @method _setupStyleChange
+         * Set up UI for layer style change dropdown
+         * @param {AbstractLayer} layer
+         * @param {jQuery} layerDiv
+         */
+        _setupStyleChange: function (layer, layerDiv) {
+            const styles = layer.getStyles();
+            const selectorDiv = layerDiv.find('.style-selector');
+            if (styles.length < 2) {
+                selectorDiv.remove();
+            } else {
+                const sel = selectorDiv.find('select');
+                sel.prop('data-layer', layer.getId());
+                styles.forEach((style) => {
+                    const opt = jQuery('<option value="' + style.getName() + '">' + style.getTitle() + '</option>');
+                    sel.append(opt);
+                });
+                if (layer.getCurrentStyle()) {
+                    sel.val(layer.getCurrentStyle().getName());
+                }
+            }
+            if (!this.getStyleSelectable()) {
+                selectorDiv.hide();
+            }
+        },
         /**
          * @method updateLayer
          * Updates input state (checked or not) for the layer according to layer visibility
@@ -283,7 +347,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
         },
-        _rebindCheckboxes: function () {
+        _rebindHandlers: function () {
             var me = this,
                 sandbox = this.getSandbox();
 
@@ -304,6 +368,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             });
             me.layerContent.find('input[type=checkbox]').each(function () {
                 reBind(jQuery(this));
+            });
+            me.layerContent.find('.style-selector select').each(function () {
+                const sel = jQuery(this);
+                sel.on('change', () => {
+                    const val = sel.find('option:selected').val();
+                    me.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [sel.prop('data-layer'), val]);
+                });
             });
         },
         /**
@@ -373,7 +444,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
             if (div.parent().hasClass('baselayers')) {
                 return;
             }
-            div.remove();
+            div.detach();
 
             var input = div.find('input');
             input.remove();
@@ -414,7 +485,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
          */
         removeBaseLayer: function (layer) {
             var div = this.layerRefs[layer.getId()];
-            div.remove();
+            div.detach();
 
             var input = div.find('input'),
                 isActive = input.is(':checked');
@@ -650,7 +721,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionP
                 }
             }
 
-            me._rebindCheckboxes();
+            me._rebindHandlers();
         },
         /**
          * @method getBaseLayers

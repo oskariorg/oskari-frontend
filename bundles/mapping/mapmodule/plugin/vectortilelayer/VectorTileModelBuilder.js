@@ -1,6 +1,6 @@
 const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
 
-export default class VectorTileModelBuilder {
+export class VectorTileModelBuilder {
     parseLayerData (layer, mapLayerJson, maplayerService) {
         const { options } = mapLayerJson;
         if (!options) {

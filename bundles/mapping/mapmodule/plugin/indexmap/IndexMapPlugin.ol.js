@@ -52,9 +52,12 @@ Oskari.clazz.define(
             me._indElement = jQuery('<div class="mapplugin ol_indexmap"></div>');
             el.append(me._indElement);
 
-            var toggleButton = jQuery('<div class="indexmapToggle"></div>');
+            var toggleButton = jQuery('<div class="indexmapToggle"><div class="icon"></div></div>');
             // button has to be added separately so the element order is correct...
             el.append(toggleButton);
+            var toolStyle = this.getToolStyleFromMapModule();
+            this.changeToolStyle(toolStyle, el);
+
             // add toggle functionality to button
             me._bindIcon(toggleButton);
             return el;
@@ -68,7 +71,7 @@ Oskari.clazz.define(
                 // Add index map control - remove old one
                 if (!me._indexMap || me._indexMap.getCollapsed()) {
                     // get/Set only base layer to index map
-                    var layer = me._getBaseLayer();
+                    var layer = me.getMapModule().getBaseOLMapLayer();
                     if (layer) {
                         if (typeof layer.createIndexMapLayer === 'function') {
                             // this is used for statslayer to create a copied layer as indexmap
@@ -77,7 +80,6 @@ Oskari.clazz.define(
                             // - in some cases indexmap + normal map going to an infinite update-loop when zooming out
                             layer = layer.createIndexMapLayer();
                         }
-
                         var controlOptions = {
                             target: me._indElement[0],
                             layers: [ layer ],
@@ -94,8 +96,8 @@ Oskari.clazz.define(
                         me._indexMap = new olControlOverviewMap(controlOptions);
                         me._indexMap.setCollapsible(true);
                         me.getMap().addControl(me._indexMap);
+                        me._indexMap.setCollapsed(false);
                     }
-                    me._indexMap.setCollapsed(false);
                 } else {
                     me._indexMap.setCollapsed(true);
                 }
@@ -120,38 +122,37 @@ Oskari.clazz.define(
                 }
             };
         },
+        changeToolStyle: function (style, div) {
+            var el = div || this.getElement();
 
+            if (!el) {
+                return;
+            }
+            el = el.find('.indexmapToggle');
+
+            el.removeClass((index, className) => {
+                let matchedClasses = className.match(/(^|\s)toolstyle-\S+/g);
+                return (matchedClasses || []).join('');
+            });
+
+            el.addClass('toolstyle-' + (style || 'default'));
+        },
         _setLayerToolsEditModeImpl: function () {
             var icon = this.getElement().find('.indexmapToggle');
 
             if (this.inLayerToolsEditMode()) {
                 // close map
-                var miniMap = this.getElement().find(
-                    '.olControlOverviewMapElement'
-                );
-                miniMap.hide();
+                if (this._indexMap) {
+                    this._indexMap.setCollapsed(true);
+                }
                 // disable icon
                 icon.off('click');
             } else {
                 // enable icon
                 this._bindIcon(icon);
             }
-        },
-        /**
-         * Get 1st visible bottom layer
-         * @returns {*}
-         * @private
-         */
-        _getBaseLayer: function () {
-            var layer = null;
-            for (var i = 0; i < this._map.getLayers().getLength(); i += 1) {
-                layer = this._map.getLayers().item(i);
-                if (layer.getVisible()) {
-                    return layer;
-                }
-            }
-            return null;
         }
+
     },
     {
         extend: ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],

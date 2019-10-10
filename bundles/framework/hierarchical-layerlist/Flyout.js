@@ -162,8 +162,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @private
          */
         _getLayerGroups: function (groupingMethod) {
-            var me = this,
-                groupList = [];
+            var me = this;
+            var groupList = [];
 
             var allGroups = (me._currentFilter) ? me.mapLayerService.getFilteredLayerGroups(me._currentFilter) : me.mapLayerService.getAllLayerGroups();
 
@@ -171,6 +171,8 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             var layersCopy = layers.slice(0);
             var notLoadedBackend = {};
 
+            // layers that come in mapfull.config only have a dummy group with no name until layers have been
+            // loaded by the layerselector -  remove such groups from the result
             layersCopy.forEach(function (layer) {
                 var group = layer.getGroups()[0];
                 if (group && isNaN(group.id) && !me.mapLayerService.getAllLayerGroups(group.name)) {
@@ -184,7 +186,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                         });
                         notLoadedBackend[group.name].getName()[Oskari.getLang()] = group.name;
                     }
-                    notLoadedBackend[group.name].getChildren().push({id: layer.getId(), type: 'layer'});
+                    notLoadedBackend[group.name].getChildren().push({ id: layer.getId(), type: 'layer' });
                     notLoadedBackend[group.name].layersModels.push(layer);
                 }
             });
@@ -293,6 +295,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          * @method setEl
          * @param {Object} el
          *     reference to the container in browser
+         * @param {Object} flyout jQuery
          * @param {Number} width
          *     container size(?) - not used
          * @param {Number} height
@@ -300,12 +303,14 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
          *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el, flyout, width, height) {
             this.container = el[0];
             if (!jQuery(this.container).hasClass('hierarchical-layerlist')) {
                 jQuery(this.container).addClass('hierarchical-layerlist');
             }
-            jQuery(this.container).parents('.oskari-flyout').addClass('hierarchical-layerlist-flyout');
+            if (!flyout.hasClass('hierarchical-layerlist-flyout')) {
+                flyout.addClass('hierarchical-layerlist-flyout');
+            }
         },
 
         /**
@@ -484,7 +489,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function (previousTab, newTab) {
                 if (me._currentFilter) {
-                    me.activateFilter(me._currentFilter);
+                    me.setActiveFilter(me._currentFilter);
                 }
             });
             me.tabContainer.insertTo(cel);
@@ -592,7 +597,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
                     if (filterIcon.hasClass(iconClassDeactive)) {
                         // Activate this filter
                         me._setFilterIconClasses(filterName);
-                        me.activateFilter(filterName);
+                        me.setActiveFilter(filterName);
                         me._setFilterTooltip(filterName, loc.tooltips.remove);
                     } else {
                         // Deactivate all filters
@@ -606,11 +611,11 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
         },
 
         /**
-         * Activate selected filter.
-         * @method @public activateFilter
+         * Set active filter.
+         * @method @public setActiveFilter
          * @param  {String} filterName activate filter name
          */
-        activateFilter: function (filterName) {
+        setActiveFilter: function (filterName) {
             var me = this;
             me._currentFilter = filterName;
 
@@ -663,7 +668,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             });
 
             if (!notDeactivateThisFilter) {
-                me.activateFilter();
+                me.setActiveFilter();
             }
         }
     }, {

@@ -1,5 +1,124 @@
 # Release Notes
 
+## 1.53.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/21?closed=1
+
+- Remove unnecessary scrollbar from search UI
+- Fix broken icon on admin-hierarchical-layerlist
+- Fix loading spinner on search when search term is invalid
+- Fix an error with adding layers on publisher when using it with hierarchical layerlist.
+- Allow empty domain for publication on RPC (previously made optional on publisher)
+
+## 1.53.0
+
+Sample application has been removed from oskari-frontend/oskari-server to new repositories sample-application (for frontend) and sample-server-extension (for server). This is the way we see Oskari being used/developed in the future. More as a framework with applications developed on top of it. This also allows better separation of the application content/configuration regarding migrations etc. See README.md on both repositories for details on how to setup your own app.
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/18?closed=1
+
+- New WFS-implementation used be default. See oskari-server/MigrationGuide.md for changes required to application main.js
+- Improvements for styling vector features like hovering as all WFS-layers now use vectors on map instead of raster images
+- Vector features can now be clustered
+- Domain field for embedded maps is now optional
+- Loading spinners added and improved for search and statistical maps
+- StartUserLocationTrackingRequest/StopUserLocationTrackingRequest are now allowed over RPC by default
+- Improved the guided tour functionality
+- Added a way to register checks if layer is supported by the current application (projection & 3D checks for example)
+- Preparations for including a 3D mapmodule
+- Fixed opacity field/slider interaction
+- Initial Ant Design components theming with 'less' styles. Future for styling options is still under consideration as we now have SCSS, Less, styled-components and plain css
+- Toolbar now works better with light background
+- Improvements for user indicators on statistical maps
+- Refactored DefaultExtension bundles to use ExtraFlyout instead of DefaultFlyout so flyouts are handled similarly between functionalities.
+- Index map now shows the first visible WMS/WMTS layer by default instead of the first layer (that might be a vector layer without any features). 
+- Printing uses the same logic for preview image (showing the visible layer)
+- Layers with time series now include currently shown time on prints
+- Drawtools (like measurements etc) now use smaller snap tolerance on desktop to make it harder to accidentally stop measurement by clicking near the previous point
+- Initial test framework for frontend tests added using Jest
+- Build scripts now use version from package.json by default (overridable with the same syntax as before)
+- Other improvements
+
+## 1.52.1
+
+Fixed an issue where markers added to map were always colored black. Now they can be made as colorful as before.
+
+## 1.52.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/17?closed=1
+
+- Styling for vector features has been improved. See new options in http://oskari.org/documentation/examples/oskari-style
+- New bundle "language-selector" has been added. It requires an element with id "language-selector-root" where it renders itself. Allows the user to change between the supported languages of the Oskari instance.
+- Added support to show localized variants of placenames on the geoportal search result listing
+- Session timeout notification now allows user to extend the session
+- Improved performance of the layer listing with long layer lists
+- Improved performance of the feature data table when multiple features are selected
+- Fixed issues with publisher when preview had open menus and user clicked "change location of components"
+- Fixed an issue where publisher terms of use acceptance wasn't handled properly
+- Fixed an issue in thematic maps where guest users couldn't view indicators they just added
+- Fixed an issue in thematic maps where indicator data having 0 as value was handled as no data
+- Fixed an issue on hierarchical layer-admin where some buttons were placed outside the UI on some screen resolutions
+- Fixed an issue on hierarchical layer-admin where removing layer group or moving one to a new parent caused an error
+- Fixed an issue on hierarchical layer-admin with changing layer style
+- Fix for sprite generation tool for customizing icons on an Oskari instance
+- Added French and Russian localizations
+- Other small fixes and tuning
+- ESLint rules tuned
+- Library updates
+
+Frontend changes for the new WFS-integration system:
+- add "wfsvector" after mapwfs2 bundle import in main.js if you want to try the new backend (see oskari-server migration guide):
+```
+import 'oskari-loader!oskari-frontend/packages/mapping/ol3/mapwfs2/bundle.js';
+import 'oskari-loader!oskari-frontend/packages/mapping/ol3/wfsvector/bundle.js';
+```
+
+Initial React-based UI changes (work in progress still):
+- Thematic map legend has been rewritten and is now implemented with React components
+- Added "Storybook" to improve developer experience on component development (https://storybook.js.org). Run "npm run storybook" to see how it looks.
+- Added utils for React-based development to src/react (also has an alias "oskari-ui" for Webpack/imports) 
+- Initial React based UI-components added but still need work as they have some global styling that affect rest of the UI
+- Added styled-components library to dependencies (current plan is to move away from SCSS start migrating towards styles-components)
+- New implementation for React-based maplayer admin has been added to bundles/admin/admin-layereditor (the new UI components are under this bundle for now and the functionality is not finished yet)
+
+## 1.51.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/16?closed=1
+
+- The diagram window for thematic maps functionality is now resizable and the bars are now colored based on the classification.
+- Fixed an issue with hovering point symbols on thematic maps.
+- Thematic maps now skips empty data sets when user adds multiple indicators at once.
+- Thematic maps indicator description is now provided in the UI if data source includes description.
+- Thematic maps rendering and performance improvements.
+- Thematic maps manual classification now has discrete steps instead of continuous histogram.
+- Thematic maps tools are now in the same container in embedded maps instead of being scattered between toolbar and thematic maps UI toggle.
+- Build now supports React-based components.
+- Fixed an issued with 'Square' shape in drawtools.
+- Added an alternative frontend functionality for handling WFS-layers (based on MVT and GeoJSON).
+- Link tool no longer shows Guided tour option if it's not available on the instance.
+- Link tool now skips any saved state from cookies.
+- Layer filtering fixed on hierarchical layerselector.
+- Fixed an issue with admin functionalities on hierarchical layerselector.
+- Empty searches are no longer sent to server on metadata catalogue.
+- Fixed an issue where marker text input was breaking out of the popup it's shown in.
+- Fix for attribute name localization on userlayers.
+- Unified how decimals are shown on different functionalities showing measurements.
+- Unified button order on UIs (cancel/ok in same order on each functionality).
+- Added french localizations.
+- The latest RPC-client version is now recognized as supported.
+- Map rotation is now saved in state (saved views/embedded maps/page reload).
+- Myplaces functionality now uses WMS 1.1.1 to work around axis order issues.
+- User location detection now supports tracking and drawing the route on map (no UI for this, usable via RPC).
+- User location now supports accuracy for location and configurable zoom level.
+- Users can now add map layer style menu for embedded maps.
+- Toolbar button logic has been rewritten https://github.com/oskariorg/oskari-frontend/pull/754
+- Session expiration dialog now shows a countdown and reloads the page after session has expired.
+- Support for Bing maps added (required API key from Bing).
+- Other small improvements and bug fixes.
+
 ## 1.50.0
 
 Updated CometD client library to work with updated server components.

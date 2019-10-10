@@ -7,6 +7,7 @@
             <select id="add-layer-interface-version"  class="admin-interface-version"  <% if(model.getId()){ %>readonly<% } %>>
                 <option value="1.1.0" <% if(model.getVersion() == '1.1.0' ) { %>selected<% } %> >1.1.0</option>
                 <option value="2.0.0" <% if(model.getVersion() == '2.0.0' ) { %>selected<% } %> >2.0.0</option>
+                <% if (supportsWFS3) { %><option value="3.0.0" <% if(model.getVersion() == '3.0.0' ) { %>selected<% } %> >3.0.0</option><% } %>
             </select>
         </div>
     </div>

@@ -7,7 +7,7 @@ const { existsSync } = require('fs');
 module.exports = function generateEntries (appsetupPaths, isProd, context) {
     const entries = {};
     const plugins = [
-        new IgnorePlugin(/^\.\/locale$/),
+        new IgnorePlugin(/^\.\/locale$/, /moment$/),
         new CopyWebpackPlugin(
             [
                 { from: 'resources', to: 'resources', context },
@@ -36,7 +36,7 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
             { from: 'resources/icons.png', to: appName, context }
         ];
         if (!isProd) {
-            copyDef.push({ from: 'empty.js', to: path.join(appName, 'oskari.min.css'), context }); // empty CSS to keep browser happy in dev mode
+            copyDef.push({ from: 'webpack/empty.js', to: path.join(appName, 'oskari.min.css'), context }); // empty CSS to keep browser happy in dev mode
         }
         entries[appName] = [
             path.resolve(context, './webpack/polyfill.js'),
@@ -47,5 +47,5 @@ module.exports = function generateEntries (appsetupPaths, isProd, context) {
         plugins.push(new LocalizationPlugin(appName));
     });
 
-    return {entries, plugins};
+    return { entries, plugins };
 };

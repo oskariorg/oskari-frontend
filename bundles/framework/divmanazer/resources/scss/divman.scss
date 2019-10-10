@@ -6,7 +6,7 @@
 
     /* For some reason sass didn't like this in one line... */
     filter: unquote("progid:DXImageTransform.Microsoft.gradient(startColorstr='") + $from + unquote("', endColorstr='") + $to + unquote("')");
-    background: linear-gradient(top, $from, $to);
+    background: linear-gradient($from, $to);
 }
 
 /* setup document body so flyouts will not make scrollbars to browser window */
@@ -132,7 +132,7 @@ body {
 .oskari-flyout {
     background-color: #fafafa;
     position: absolute;
-    z-index: 16000;
+    z-index: 20000;
     margin: 0px;
     padding: 0px;
     border: 1px solid rgba(0, 0, 0, 0.2);

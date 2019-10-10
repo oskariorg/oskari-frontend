@@ -10,6 +10,12 @@ Oskari.registerLocalization(
         "tooltip":"Show map legends",
         "singleLegend":"Map legend: ",
         "infotext": "Choose the map layer, for which legend is shown:",
-        "newtab":"Open in a new tab"
+        "newtab":"Open in a new tab",
+        "guidedTour": {
+            "title": "Map Legends",
+            "message": "Map legends are visual explanations of the symbols and colours used on the map.",
+            "openLink": "Show Map Legends",
+            "closeLink": "Hide Map Legends"
+        }
     }
 });

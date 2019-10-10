@@ -309,17 +309,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 me.currentMeasureTool = null;
 
                 /* we'll show prompt if measure tool has been selected */
-                if (!me.measureTools[event.getGroupId()]) {
+                if (!me.measureTools[event.getGroupId()] || !me.measureTools[event.getGroupId()][event.getToolId()]) {
+                    if (!event.getSticky()) {
+                        return;
+                    }
+                    me.requestHandlers.showMapMeasurementRequestHandler.stopMeasuring(false);
                     return;
                 }
-                if (!me.measureTools[event.getGroupId()][event.getToolId()]) {
-                    return;
-                }
+
                 me.currentMeasureTool = event.getToolId();
 
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
 
                 sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
+            },
+            'UIChangeEvent': function (evt) {
+                // select default tool
+                this.getSandbox().postRequestByName('Toolbar.SelectToolButtonRequest');
             }
         },
 
@@ -393,7 +399,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 var toolbar = this.getToolbarContainer();
 
                 // remove any old selection
-                this._removeToolSelections();
+                this._deactiveTools(group);
 
                 var groupContainer = toolbar.find('div.toolrow[tbgroup=' + group + ']');
                 if (groupContainer.length > 0) {
@@ -532,7 +538,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplate: {
-            priority: 60,
+            priority: 80,
             getTitle: function () {
                 return this.getLocalization().guidedTour.title;
             },

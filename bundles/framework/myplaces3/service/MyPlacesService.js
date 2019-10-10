@@ -217,20 +217,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 category.setId(layers[i].id);
                 category.setName(Oskari.util.sanitize(properties.category_name));
                 category.setDefault(properties.default === true);
-                category.setLineWidth(properties.stroke_width);
-                category.setLineStyle(properties.stroke_dasharray);
-                category.setLineCap(properties.stroke_linecap);
-                category.setLineCorner(properties.stroke_linejoin);
-                category.setLineColor(properties.stroke_color);
-                category.setAreaLineWidth(properties.border_width);
-                category.setAreaLineStyle(properties.border_dasharray);
-                category.setAreaLineCorner(properties.border_linejoin);
-                category.setAreaLineColor(properties.border_color);
-                category.setAreaFillColor(properties.fill_color);
-                category.setAreaFillStyle(properties.fill_pattern);
-                category.setDotShape(properties.dot_shape);
-                category.setDotColor(properties.dot_color);
-                category.setDotSize(properties.dot_size);
+                category.setStyle(properties.style);
                 category.setUuid(properties.uuid);
                 if (properties.publisher_name) {
                     category.setPublic(true);
@@ -580,20 +567,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 category.properties = {
                     'category_name': cat.getName(),
                     'default': cat.isDefault(),
-                    'stroke_width': cat.getLineWidth(),
-                    'stroke_dasharray': cat.getLineStyle(),
-                    'stroke_linecap': cat.getLineCap(),
-                    'stroke_linejoin': cat.getLineCorner(),
-                    'stroke_color': cat.getLineColor(),
-                    'border_width': cat.getAreaLineWidth(),
-                    'border_dasharray': cat.getAreaLineStyle(),
-                    'border_linejoin': cat.getAreaLineCorner(),
-                    'border_color': typeof cat.getAreaLineColor() === 'string' ? cat.getAreaLineColor() : null,
-                    'fill_color': typeof cat.getAreaFillColor() === 'string' ? cat.getAreaFillColor() : null,
-                    'fill_pattern': cat.getAreaFillStyle(),
-                    'dot_color': cat.getDotColor(),
-                    'dot_size': cat.getDotSize(),
-                    'dot_shape': cat.getDotShape()
+                    'style': cat.getStyle()
                 };
                 // FIXME: should setup two lists to work properly. Now just uses the last category as "everything is new or old"
                 isNew = !category.id;
@@ -603,7 +577,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 type: isNew ? 'POST' : 'PUT',
                 dataType: 'json',
                 contentType: 'application/json',
-                data: JSON.stringify({'features': categories}),
+                data: JSON.stringify({ 'features': categories }),
                 url: Oskari.urls.getRoute('MyPlacesLayers'),
                 success: function (response) {
                     if (response) {
@@ -653,23 +627,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.service.MyPlacesServic
                 categoryModel.setUuid(properties.uuid);
                 categoryModel.setDefault(!!properties.default);
                 categoryModel.setPublic(!!properties.publisher_name);
-
-                categoryModel.setDotSize(properties.dot_size);
-                categoryModel.setDotColor(properties.dot_color);
-                categoryModel.setDotShape(properties.dot_shape);
-
-                categoryModel.setLineWidth(properties.stroke_width);
-                categoryModel.setLineColor(properties.stroke_color);
-                categoryModel.setLineCap(properties.stroke_linecap);
-                categoryModel.setLineCorner(properties.stroke_linejoin);
-                categoryModel.setLineStyle(properties.stroke_dasharray);
-
-                categoryModel.setAreaLineWidth(properties.border_width);
-                categoryModel.setAreaLineCorner(properties.border_linejoin);
-                categoryModel.setAreaLineStyle(properties.border_dasharray);
-                categoryModel.setAreaLineColor(properties.border_color);
-                categoryModel.setAreaFillColor(properties.fill_color);
-                categoryModel.setAreaFillStyle(properties.fill_pattern);
+                categoryModel.setStyle(properties.style);
                 if (isNew) {
                     me._addCategory(categoryModel);
                 }

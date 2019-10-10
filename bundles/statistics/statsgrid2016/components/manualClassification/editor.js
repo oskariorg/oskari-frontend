@@ -1,8 +1,8 @@
-import histogram from './histogram';
-import edgeLines from './edgeLines';
-import inputGuide from './inputGuide';
-import updateBandBlocks from './updateBandBlocks';
-import updateDragHandles from './updateDragHandles';
+import { histogram } from './histogram';
+import { edgeLines } from './edgeLines';
+import { inputGuide } from './inputGuide';
+import { updateBandBlocks } from './updateBandBlocks';
+import { updateDragHandles } from './updateDragHandles';
 
 const width = 500;
 const height = 303;
@@ -17,7 +17,7 @@ const histoHeight = 200;
  * @param {String[]} colorSet colors corresponding to classes
  * @param {Function} changeCallback function that is called with updated bounds, when user makes changes
  */
-export default function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
+export function manualClassificationEditor (el, manualBounds, indicatorData, colorSet, changeCallback) {
     const svg = d3.select(el)
         .append('svg')
         .attr('width', width)
@@ -29,7 +29,7 @@ export default function manualClassificationEditor (el, manualBounds, indicatorD
     const boundsLines = svg.append('g');
     const dragHandles = svg.append('g');
 
-    const histogramGenerator = d3.histogram().thresholds(20);
+    const histogramGenerator = d3.histogram().thresholds(50);
     const histoData = histogramGenerator(indicatorData);
 
     const y = d3.scaleLinear()

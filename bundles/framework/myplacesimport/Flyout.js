@@ -10,13 +10,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
      *      reference to component that created the flyout
      */
 
-    function (instance, locale) {
+    function (instance) {
         this.instance = instance;
-        this.locale = locale;
+        this.loc = Oskari.getMsg.bind(null, 'MyPlacesImport');
+        this.maxFileSize = isNaN(parseInt(this.instance.conf.maxFileSizeMb)) ? 10 : parseInt(this.instance.conf.maxFileSizeMb);
         this.container = undefined;
         this.template = undefined;
         this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
         this.progressBarFile = Oskari.clazz.create('Oskari.userinterface.component.ProgressBar');
+        this.fileInput = null;
+        this.styleForm = Oskari.clazz.create('Oskari.userinterface.component.VisualizationForm');
     }, {
         __name: 'Oskari.mapframework.bundle.myplacesimport.Flyout',
         __templates: {
@@ -27,16 +30,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
             help: '<div class="help icon-info"></div>',
             file: '<div class="file-import">' +
                     '<form id="myplacesimport-form" enctype="multipart/form-data">' +
-                        '<div class="file-import"><input type="file" name="file-import" accept="application/zip"></input></div>' +
-                        '<div class="name"><label>Name</label><input type="text" name="layer-name" /></div>' +
-                        '<div class="desc"><label>Description</label><input type="text" name="layer-desc" /></div>' +
-                        '<div class="source"><label>Data source</label><input type="text" name="layer-source" /></div>' +
+                        '<div class="file-input-container"></div>' +
+                        '<div class="name"><label>Name</label><input type="text" /></div>' +
+                        '<div class="desc"><label>Description</label><input type="text"/></div>' +
+                        '<div class="source"><label>Data source</label><input type="text"/></div>' +
+                        '<div class="source-srs oskari-hidden"><label>Source EPSG</label><input type="text" placeholder="4326"/></div>' +
                         '<div class="style">' +
                             '<label>Layer style</label>' +
                             '<div class="style-form"></div>' +
-                            '<input type="hidden" name="layer-style" />' +
                         '</div>' +
-                        '<input type="button" value="Submit" class="primary" />' +
+                        '<input type="button" class="primary" />' +
                     '</form>' +
                 '</div>'
         },
@@ -64,6 +67,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
         getTemplate: function () {
             return this.template;
         },
+        setEl: function (el, flyout) {
+            this.container = jQuery(el[0]);
+            this.container.addClass('myplacesimport');
+            flyout.addClass('myplacesimport');
+        },
+
         /**
          * Interface method implementation, assigns the HTML templates
          * that will be used to create the UI
@@ -71,17 +80,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @method startPlugin
          */
         startPlugin: function () {
-            var container = this.getEl(),
-                tooltipCont = jQuery(this.__templates.help).clone();
-            container.addClass('myplacesimport');
-            tooltipCont.attr('title', this.locale.help);
-            container.append(tooltipCont);
+            var tooltipCont = jQuery(this.__templates.help).clone();
+            tooltipCont.attr('title', this.loc('flyout.help'));
+            this.container.append(tooltipCont);
+
+            this.fileInput = Oskari.clazz.create('Oskari.userinterface.component.FileInput', {
+                'allowMultipleFiles': false,
+                'maxFileSize': parseInt(this.instance.conf.maxFileSizeMb),
+                'allowedFileTypes': ['application/zip', 'application/octet-stream', 'application/x-zip-compressed', 'multipart/x-zip'],
+                'allowedFileExtensions': ['zip']
+            });
 
             this.setTemplate(this.createUi());
-            container.append(this.getTemplate());
+            this.container.append(this.getTemplate());
+            this.bindListeners();
+
             /* progress */
-            this.progressSpinner.insertTo(container);
-            this.progressBarFile.create(container);
+            this.progressSpinner.insertTo(this.container);
+            this.progressBarFile.create(this.container);
         },
         /**
          * Interface method implementation
@@ -101,6 +117,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          */
         refresh: function () {
             this.setTemplate(this.createUi());
+            this.fileInput.removeFiles();
+            this.bindListeners();
         },
         /**
          * Creates the UI for a fresh start.
@@ -109,63 +127,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @return {jQuery} returns the template to place on the DOM
          */
         createUi: function () {
-            var locale = this.getLocalization(),
-                template = jQuery(this.__templates.base).clone();
-
+            var template = jQuery(this.__templates.base).clone();
             template.find('div.info')
-                .html(locale.description.replace(/<xx>/g, this.instance.conf.maxFileSizeMb));
+                .html(this.loc('flyout.description', { maxSize: this.maxFileSize }));
             template.find('div.state')
-                .html(this.__createFileImportTemplate(locale));
-
+                .html(this.__createFileImportTemplate());
             return template;
         },
-        /**
-        * Checks the file upload form file size
-        * @private
-        */
-        /*
-        __checkFileSize: function(locale){
-            var me = this,
-                maxFileSizeMb = me.instance.conf.maxFileSizeMb,
-                fileSize = null,
-                fileInput = me.container.find('input[name=file-import]');
-
-            // Checks modern browsers (FF, Safari, Opera, Chore and IE 10 >)
-            if(fileInput[0]  && fileInput[0].files) {
-                fileSize = fileInput[0].files[0].size //size in kb
-                fileSize = fileSize / 1048576; //size in mb
-            }
-
-            // Check IE 9
-            if(fileSize===null && navigator.userAgent.match(/msie/i)) {
-                try{
-                    var hasAX = "ActiveXObject" in window;
-                    if(hasAX){
-                        var objFSO = new ActiveXObject("Scripting.FileSystemObject");
-                        var filePath = jQuery("#" + fileid)[0].value;
-                        var objFile = objFSO.getFile(filePath);
-                        var fileSize = objFile.size; //size in kb
-                        fileSize = fileSize / 1048576; //size in mb
-                    }
-                } catch(e){
-                    // ActiveX not supported, please check at it's enabled
-                    // If ActiveX not enabled, check file size on backend code.
+        bindListeners: function () {
+            var btn = this.container.find('form input[type=button]');
+            this.fileInput.on('file-input', function (hasFile) {
+                if (hasFile) {
+                    btn.prop('disabled', false);
+                } else {
+                    btn.prop('disabled', true);
                 }
-            }
-
-            if(fileSize!==null && fileSize>maxFileSizeMb) {
-                var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                    btn = dialog.createCloseButton(locale.file.fileOverSizeError.close);
-                dialog.show(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), [btn]);
-                dialog.makeModal();
-                dialog.onClose(function() {
-                    me.container.find('form input[type=submit]').prop('disabled', true);
-                });
-            } else {
-                me.container.find('form input[type=submit]').prop('disabled', false);
-            }
-
-        }, */
+            });
+        },
         /**
          * Creates the template for file upload form
          *
@@ -174,181 +152,113 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {Object} locale
          * @return {jQuery}
          */
-        __createFileImportTemplate: function (locale) {
-            var me = this,
-                file = jQuery(this.__templates.file).clone(),
-                action = this.instance.getService().getFileImportUrl(),
-                styleForm = Oskari.clazz.create(
-                    'Oskari.userinterface.component.VisualizationForm'
-                );
-
-            file.find('div.name label').html(locale.layer.name);
-            file.find('div.desc label').html(locale.layer.desc);
-            file.find('div.source label').html(locale.layer.source);
-            file.find('div.style label').html(locale.layer.style);
-            file.find('div.style-form').html(styleForm.getForm());
-            file.find('input[type=button]').val(locale.file.submit);
-
-            file.find('input[name=file-import]').on('change', function (e) {
-                var file = this.files[0],
-                    maxFileSizeMb = me.instance.conf.maxFileSizeMb;
-                if ((file.size / 1048576) > maxFileSizeMb) { // size in mb
-                    me.container.find('form input[type=button]').prop('disabled', true);
-                    me.__showMessage(locale.file.fileOverSizeError.title, locale.file.fileOverSizeError.message.replace(/<xx>/g, maxFileSizeMb), false);
-                } else {
-                    me.container.find('form input[type=button]').prop('disabled', false);
-                }
-            });
+        __createFileImportTemplate: function () {
+            var me = this;
+            var file = jQuery(this.__templates.file).clone();
+            file.find('.file-input-container').append(this.fileInput.getElement());
+            file.find('div.name label').html(this.loc('flyout.layer.name'));
+            file.find('div.desc label').html(this.loc('flyout.layer.desc'));
+            file.find('div.source label').html(this.loc('flyout.layer.source'));
+            file.find('div.style label').html(this.loc('flyout.layer.style'));
+            file.find('div.source-srs label').html(this.loc('flyout.layer.srs'));
+            file.find('div.style-form').html(this.styleForm.getForm());
+            file.find('input[type=button]').val(this.loc('flyout.actions.submit'));
 
             file.find('input[type=button]').on('click', function (e) {
-                var styleJson = JSON.stringify(me.__getStyleValues(styleForm)),
-                    form = file.find('form'); // jQuery(this).parent()
-                // Set the value of the hidden style field
-                form.find('input[name=layer-style]').val(styleJson);
                 // Prevent from sending if there were missing fields
-                if (me.__validateForm(form, locale)) {
-                    return; // e.preventDefault()
+                if (!me.__validateForm()) {
+                    return;
                 }
-
-                jQuery.ajax({
-                    url: action,
-                    type: 'POST',
-                    data: new FormData(form[0]),
-                    cache: false,
-                    contentType: false, // multipart/form-data
-                    processData: false,
-                    // timeout : ,
-                    // dataType: 'json',
-                    xhr: function () {
-                        var myXhr = jQuery.ajaxSettings.xhr();// new XMLHttpRequest()
-                        if (myXhr.upload) {
-                            myXhr.upload.addEventListener('loadstart', function (e) {
-                                me.progressSpinner.start();
-                            });
-                            myXhr.upload.addEventListener('progress', function (e) {
-                                if (e.lengthComputable) {
-                                    me.progressBarFile.show();
-                                    me.progressBarFile.updateProgressBar(e.total, e.loaded);
-                                }
-                            });
-                        }
-                        return myXhr;
-                    },
-
-                    success: function (data, textStatus, jqXHR) {
-                        me.progressSpinner.stop();
-                        me.__finish(data, locale);
-                    },
-                    error: function (jqXHR, textStatus, errorThrown) {
-                        var msg = null,
-                            title = locale.finish.failure.title,
-                            error = null,
-                            warning = null,
-                            err;
-                        me.progressSpinner.stop();
-                        if (textStatus === 'error') {
-                            try {
-                                err = JSON.parse(jqXHR.responseText);
-                                if (err.error !== null && err.error !== undefined) {
-                                    error = err.error;
-                                    if (err.error.warning !== undefined && err.error.warning.featuresSkipped) {
-                                        warning = locale.warning.features_skipped.replace(/<xx>/g, err.warning.featuresSkipped);
-                                    }
-                                }
-                            } catch (e) {
-                                Oskari.log(me.getName())
-                                    .warn('Error whilst parsing json', e);
-                            }
-                        } else if (textStatus === 'timeout') {
-                            error = textStatus;
-                        } else if (textStatus === 'abort') {
-                            error = textStatus;
-                        } else if (textStatus === 'parsererror') {
-                            error = textStatus;
-                        }
-
-                        // textual portion of the HTTP status
-                        if (errorThrown) {
-                            Oskari.log(me.getName()).warn('Error whilst importing userlayer: ' + errorThrown);
-                        }
-
-                        if (typeof error === 'string' && locale.error[error.toLowerCase()]) {
-                            msg = locale.error[error.toLowerCase()];
-                        } else {
-                            msg = locale.error.generic;
-                        }
-                        if (warning) {
-                            msg = msg + ' ' + warning;
-                        }
-                        me.__showMessage(title, msg, false);
-                    }
-                });
-                // Prevent page from submitting
-                return false;
+                me.submitUserLayer();
             });
             return file;
         },
-
-        /**
-         * Returns the visualization form's values.
-         *
-         * @method __getStyleValues
-         * @private
-         * @param  {Oskari.userinterface.component.VisualizationForm} styleForm
-         * @return {Object}
-         */
-        __getStyleValues: function (styleForm) {
-            var formValues = styleForm.getValues(),
-                values = {};
-
-            if (formValues) {
-                values.dot = {
-                    size: formValues.dot.size,
-                    color: formValues.dot.color,
-                    shape: formValues.dot.shape
-                };
-                values.line = {
-                    width: formValues.line.width,
-                    color: formValues.line.color,
-                    cap: formValues.line.cap,
-                    corner: formValues.line.corner,
-                    style: formValues.line.style
-                };
-                values.area = {
-                    lineWidth: formValues.area.lineWidth,
-                    lineColor: formValues.area.lineColor === null ? null : formValues.area.lineColor,
-                    fillColor: formValues.area.fillColor === null ? null : formValues.area.fillColor,
-                    lineStyle: formValues.area.lineStyle,
-                    fillStyle: formValues.area.fillStyle,
-                    lineCorner: formValues.area.lineCorner
-                };
-            }
-            return values;
+        submitUserLayer: function () {
+            var me = this;
+            var formValues = this.getFormValues();
+            var formData = new FormData();
+            var url = this._getImportUrl(formValues.epsg);
+            formData.append('layer-name', formValues.name);
+            formData.append('layer-desc', formValues.desc);
+            formData.append('layer-source', formValues.source);
+            formData.append('file-import', this.fileInput.getFiles());
+            formData.append('layer-style', JSON.stringify(this.styleForm.getOskariStyle()));
+            jQuery.ajax({
+                url: url,
+                type: 'POST',
+                data: formData,
+                cache: false,
+                contentType: false, // 'multipart/form-data',
+                processData: false,
+                dataType: 'json',
+                xhr: function () {
+                    var myXhr = jQuery.ajaxSettings.xhr();// new XMLHttpRequest()
+                    if (myXhr.upload) {
+                        myXhr.upload.addEventListener('loadstart', function (e) {
+                            me.progressSpinner.start();
+                        });
+                        myXhr.upload.addEventListener('progress', function (e) {
+                            if (e.lengthComputable) {
+                                me.progressBarFile.show();
+                                me.progressBarFile.updateProgressBar(e.total, e.loaded);
+                            }
+                        });
+                    }
+                    return myXhr;
+                },
+                success: function (data, textStatus, jqXHR) {
+                    me.__finish(data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    me.__error(jqXHR);
+                }
+            });
+        },
+        getFormValues: function () {
+            var form = this.getTemplate().find('form');
+            return {
+                name: form.find('.name input').val().trim(),
+                desc: form.find('.desc input').val(),
+                source: form.find('.source input').val(),
+                epsg: form.find('.source-srs input').val().trim()
+            };
         },
         /**
          * Validates the form inputs (currently that the name and file are present).
-         * Returns true if there were any errors (missing values).
+         * Returns false if there were any errors (missing values).
          *
          * @method __validateForm
          * @private
-         * @param  {jQuery} form
-         * @param  {Object} locale
          * @return {Boolean}
          */
-        __validateForm: function (form, locale) {
-            var fileInput = form.find('input[type=file]'),
-                nameInput = form.find('input[name=layer-name]'),
-                errors = false,
-                errorTitle, errorMsg;
-
-            if (!fileInput.val() || !nameInput.val()) {
-                errors = true;
-                errorTitle = locale.validations.error.title;
-                errorMsg = locale.validations.error.message;
-                this.__showMessage(errorTitle, errorMsg);
+        __validateForm: function () {
+            var values = this.getFormValues();
+            var errors = [];
+            if (!values.name) {
+                errors.push(this.loc('flyout.validations.error.name'));
             }
-
-            return errors;
+            if (!this.fileInput.hasFiles()) {
+                errors.push(this.loc('flyout.validations.error.file'));
+            }
+            // if value (string) exists, has to be not NaN and length 4-5
+            if (values.epsg && (isNaN(values.epsg) || values.epsg.length < 4 || values.epsg.length > 5)) {
+                errors.push(this.loc('flyout.validations.error.epsg'));
+            }
+            if (errors.length === 0) {
+                return true;
+            }
+            this.__showMessage(this.loc('flyout.validations.error.title'), this.loc('flyout.validations.error.message'), false, errors, 'li');
+            return false;
+        },
+        _showEpsgInput: function (bln) {
+            this.getTemplate().find('.source-srs').removeClass('oskari-hidden');
+        },
+        _getImportUrl: function (epsgValue) {
+            var url = this.instance.getService().getFileImportUrl();
+            if (epsgValue) {
+                return url + '&sourceEpsg=EPSG:' + epsgValue;
+            }
+            return url;
         },
         /**
          * Shows a message on success.
@@ -359,19 +269,74 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param {Object} json
          * @param {Object} locale
          */
-        __finish: function (json, locale) {
-            var title = locale.finish.success.title,
-                msg = locale.finish.success.message,
-                fadeout = true;
+        __finish: function (json) {
+            this.progressSpinner.stop();
+            var title = this.loc('flyout.finish.success.title');
+            var msg = this.loc('flyout.finish.success.message', { count: json.featuresCount });
+            var fadeout = true;
 
             if (json.warning !== undefined && json.warning.featuresSkipped) {
-                msg = msg + ' ' + locale.warning.features_skipped.replace(/<xx>/g, json.warning.featuresSkipped);
+                msg = msg + ' ' + this.loc('flyout.warning.features_skipped', { count: json.warning.featuresSkipped });
                 fadeout = false;
             }
             this.instance.addUserLayer(json);
-            msg = msg.replace(/<xx>/g, json.featuresCount);
             this.__showMessage(title, msg, fadeout);
             this.refresh();
+        },
+        __error: function (response) {
+            this.progressSpinner.stop();
+            var errors = this.loc('flyout.error');
+            if (response.status === 404 || !response.responseJSON || !response.responseJSON.info) {
+                this.__showMessage(errors.title, errors.generic, false);
+                return;
+            }
+            var list = [];
+            var msg;
+            const errorInfo = response.responseJSON.info;
+            const key = errorInfo.error;
+            switch (key) {
+            case 'multiple_extensions':
+                msg = this.loc('flyout.error.multiple_extensions', { extension: errorInfo.extensions });
+                break;
+            case 'multiple_main_file':
+                msg = this.loc('flyout.error.multiple_main_file', { extensions: errorInfo.extensions });
+                break;
+            case 'file_over_size':
+                msg = this.loc('flyout.error.file_over_size', { maxSize: this.maxFileSize });
+                break;
+            case 'no_main_file':
+                list.push(errors.no_main_file);
+                if (errorInfo.ignored) {
+                    if (Object.keys(errorInfo.ignored).some(key => errorInfo.ignored[key] === 'folder')) {
+                        list.push(errors.hasFolders);
+                    }
+                }
+                break;
+            case 'parser_error':
+                if (errorInfo.cause === 'unknown_projection') {
+                    this._showEpsgInput();
+                    msg = errors.noSrs;
+                    if (errorInfo.parser === 'shp') {
+                        msg = errors.shpNoSrs;
+                    }
+                    break;
+                }
+                // common parser error
+                list.push(errors[errorInfo.parser]);
+                if (errorInfo.cause === 'format_failure') {
+                    list.push(errors.format_failure);
+                } else {
+                    list.push(errors.parserGeneric);
+                }
+                break;
+            default:
+                if (errors[key]) {
+                    msg = errors[key];
+                } else {
+                    msg = errors.generic;
+                }
+            }
+            this.__showMessage(errors.title, msg, false, list);
         },
 
         /**
@@ -383,13 +348,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.Flyout',
          * @param  {String} message
          * @param  {boolean} fadeout
          */
-        __showMessage: function (title, message, fadeout) {
+        __showMessage: function (title, message, fadeout, msgList, listType) {
             fadeout = fadeout !== false;
-            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                btn = dialog.createCloseButton(this.locale.actions.close);
-
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var btn = dialog.createCloseButton(this.loc('flyout.actions.close'));
+            dialog.addClass('myplacesimport');
+            var content = message === undefined ? '' : message + ' ';
+            if (Array.isArray(msgList)) {
+                if (listType === 'li') {
+                    content += '<ul><li>' + msgList.join('</li><li>') + '</li></ul>';
+                } else if (listType === 'p') {
+                    content += '<p>' + msgList.join('</p><p>') + '</p>';
+                } else {
+                    content += msgList.join(' ');
+                }
+            }
             dialog.makeModal();
-            dialog.show(title, message, [btn]);
+            dialog.show(title, content, [btn]);
             if (fadeout) {
                 dialog.fadeout(5000);
             }

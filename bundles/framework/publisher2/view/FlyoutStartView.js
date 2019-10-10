@@ -1,3 +1,5 @@
+import { UnsupportedLayerSrs } from '../../../mapping/mapmodule/domain/UnsupportedLayerSrs';
+
 /**
  * @class Oskari.mapframework.bundle.publisher2.view.StartView
  *
@@ -80,7 +82,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             });
             me.buttons['continue'] = continueButton;
             me._updateContinueButton();
-            continueButton.insertTo(content.find('div.buttons')[0]);
 
             var cancelButton = Oskari.clazz.create('Oskari.userinterface.component.Button');
             cancelButton.setTitle(me.loc.buttons.cancel);
@@ -90,6 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             me.buttons.cancel = cancelButton;
 
             cancelButton.insertTo(content.find('div.buttons'));
+            continueButton.insertTo(content.find('div.buttons'));
 
             me._renderLayerLists();
 
@@ -116,7 +118,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layers = [];
             var deniedLayers = [];
             me.instance.sandbox.findAllSelectedMapLayers().forEach(function (layer) {
-                if (!me.service.hasPublishRight(layer) || !layer.isSupported(me.instance.sandbox.getMap().getSrsName())) {
+                if (!me.service.hasPublishRight(layer) || !me.instance.sandbox.getMap().isLayerSupported(layer)) {
                     deniedLayers.push(layer);
                 } else {
                     layers.push(layer);
@@ -174,6 +176,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
             var layerList = this.templateLayerList.clone();
             var listElement = layerList.find('ul');
             var listItemTemplate = this.templateListItem;
+            var map = this.instance.sandbox.getMap();
 
             (list || []).forEach((layer) => {
                 var item = listItemTemplate.clone();
@@ -186,8 +189,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                 if (!this.service.hasPublishRight(layer)) {
                     reasons.push(this.loc.noRights);
                 }
-                if (!layer.isSupported(this.instance.sandbox.getMap().getSrsName())) {
-                    reasons.push(this.loc.unsupportedProjection);
+                if (!map.isLayerSupported(layer)) {
+                    reasons = reasons.concat(map.getUnsupportedLayerReasons(layer).map(
+                        cur => cur instanceof UnsupportedLayerSrs
+                            ? this.loc.unsupportedProjection : cur.getDescription().replace(/\./g, '')
+                    ));
                 }
                 if (reasons.length) {
                     txt += ' (' + reasons.join(', ') + ')';
@@ -261,7 +267,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.FlyoutStartView'
                     this.success(false);
                 },
                 success: function (resp) {
-                    me.hasAcceptedTou = resp;
+                    // response is "true" or "false" string
+                    me.hasAcceptedTou = ('' + resp === 'true');
                     me._updateContinueButton();
                 }
             });

@@ -40,6 +40,10 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
         id: 'tiles3dlayer',
         localeKey: 'tiles3d',
         footer: false
+    }, {
+        id: 'bingmapslayer',
+        localeKey: 'bingmaps',
+        footer: false
     }];
     this._init();
     this._setupSupportedLayerTypes();
@@ -59,7 +63,9 @@ Oskari.clazz.define('Oskari.admin.hierarchical-layerlist.Layer', function (insta
         var requirementsConfig = {
             waitSeconds: 15,
             paths: {
-                '_bundle': '../../../Oskari/bundles/integration/admin-layerselector'
+                // reference to files under oskari-frontend/bundles/integration/admin-layerselector
+                // that Webpack build copies as assets
+                '_bundle': __webpack_public_path__ + 'assets/admin-layerselector'
             }
         };
         window.require.config(requirementsConfig);

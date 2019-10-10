@@ -89,6 +89,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         me.previewImgDiv = null;
 
         me.contentOptionDivs = {};
+        me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
     }, {
         __templates: {
             preview: '<div class="preview"><img /><span></span></div>',
@@ -97,7 +98,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tool: '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
             buttons: '<div class="buttons"></div>',
             help: '<div class="help icon-info"></div>',
-            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/></form>' + '</div>',
+            main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
             formatOptionTool: '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
             title: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
@@ -298,8 +299,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             contentPanel.append(mapTitle);
 
+            const areLayersWithTimeSeriesSelected =
+                me.instance.sandbox.findAllSelectedMapLayers()
+                    .filter(l => l.getAttributes().times).length > 0;
+
             /* CONTENT options from localisations files */
             me.contentOptions.forEach(function (dat) {
+                if (dat.id === 'pageTimeSeriesTime' && (typeof me.timeseriesPlugin === 'undefined' || !areLayersWithTimeSeriesSelected)) {
+                    return;
+                }
                 var opt = me.template.option.clone();
                 opt.find('input').attr('id', dat.id).prop('checked', !!dat.checked);
                 opt.find('label').html(dat.label).attr({
@@ -513,16 +521,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          */
         _updateMapPreview: function () {
             var me = this;
-            var selections = me._gatherSelections('image/png');
-            var urlBase = me.backendConfiguration.formatProducers[selections.format];
-            var maplinkArgs = selections.maplinkArgs;
-            var pageSizeArgs = '&pageSize=' + selections.pageSize;
-            var previewScaleArgs = '&scaledWidth=200';
-            var url = urlBase + maplinkArgs + pageSizeArgs + previewScaleArgs;
-
+            const { url, cls } = this._gatherSelectionsForPreview(200);
             me.previewContent.removeClass('preview-portrait');
             me.previewContent.removeClass('preview-landscape');
-            me.previewContent.addClass(me.sizeOptionsMap[selections.pageSize].classForPreview);
+            me.previewContent.addClass(cls);
 
             me.progressSpinner.start();
             window.setTimeout(function () {
@@ -540,14 +542,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @public @method showFullScaleMapPreview
          */
         showFullScaleMapPreview: function () {
-            var me = this;
-            var selections = me._gatherSelections('image/png');
-            var urlBase = me.backendConfiguration.formatProducers[selections.format];
-            var maplinkArgs = selections.maplinkArgs;
-            var pageSizeArgs = '&pageSize=' + selections.pageSize;
-            var url = urlBase + maplinkArgs + pageSizeArgs;
-
-            me.openURLinWindow(url, selections);
+            const { url, isLandscape } = this._gatherSelectionsForPreview();
+            this.openURLinWindow(url, isLandscape);
         },
 
         /**
@@ -589,13 +585,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.setHandler(function () {
-                var map = me.instance.sandbox.getMap();
-                // FIXME: nope, don't go saving to some random "geojs" variable on the sandbox.getMap()
-                var features = (map.geojs === undefined || map.geojs === null) ? null : map.geojs;
                 var selections = me._gatherSelections();
-
                 if (selections) {
-                    me._printMap(selections, features);
+                    me._printMap(selections);
                 }
             });
             saveBtn.insertTo(buttonCont);
@@ -632,12 +624,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 resolution: resolution,
                 scaleText: scaleText
             });
-
             var selections = {
                 pageTitle: title,
                 pageSize: size,
                 maplinkArgs: maplinkArgs,
-                format: selectedFormat || 'application/pdf'
+                format: selectedFormat || 'application/pdf',
+                customStyles: this._getSelectedCustomStyles()
             };
 
             if (!size) {
@@ -647,23 +639,64 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
 
             for (var p in me.contentOptionsMap) {
-                if (me.contentOptionsMap.hasOwnProperty(p)) {
+                if (me.contentOptionsMap.hasOwnProperty(p) && me.contentOptionDivs[p]) {
                     selections[p] = me.contentOptionDivs[p].find('input').prop('checked');
                 }
             }
             return selections;
         },
+        _gatherSelectionsForPreview: function (scaledWidth) {
+            const pageSize = this.mainPanel.find('input[name=size]:checked').val() || 'A4';
+            const map = Oskari.getSandbox().getMap();
+            const baseLayer = this.mapmodule.getBaseLayer();
 
+            let mapLayers = '';
+            if (baseLayer) {
+                mapLayers = baseLayer.getId() + ' ' +
+                baseLayer.getOpacity() + ' ' +
+                baseLayer.getCurrentStyle().getName();
+            }
+
+            let url = Oskari.urls.getRoute('GetPrint') +
+                '&format=image/png' +
+                '&pageSize=' + pageSize +
+                '&resolution=' + map.getResolution() +
+                '&srs=' + map.getSrsName() +
+                '&coord=' + map.getX() + '_' + map.getY() +
+                '&mapLayers=' + mapLayers;
+
+            if (Number.isInteger(scaledWidth)) {
+                url += '&scaledWidth=' + scaledWidth;
+            }
+
+            return {
+                url,
+                cls: this.sizeOptionsMap[pageSize].classForPreview,
+                isLandscape: pageSize.includes('Land')
+            };
+        },
+        _getSelectedCustomStyles: function () {
+            const customStyles = {};
+            const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
+
+            selectedLayers.forEach(l => {
+                if (l.getCurrentStyle().getName() === 'oskari_custom') {
+                    customStyles[l.getId()] = l.getCustomStyle();
+                }
+            });
+
+            return customStyles;
+        },
         /**
          * @public @method openURLinWindow
          *
          * @param {String} infoUrl
-         * @param {Object} selections
+         * @param {boolean} isLandscape
          *
          */
-        openURLinWindow: function (infoUrl, selections) {
+        openURLinWindow: function (infoUrl, isLandscape) {
             var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
-            if (this._isLandscape(selections)) {
+            if (isLandscape) {
                 wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=1200,' + 'height=850';
             }
             var link = infoUrl;
@@ -688,6 +721,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             }
             var link = printUrl;
             me.mainPanel.find('#oskari_print_formID').attr('action', link);
+            me.mainPanel.find('input[name=customStyles]').val(JSON.stringify(selections.customStyles));
 
             if (geoJson) {
                 // UTF-8 Base64 encoding
@@ -723,10 +757,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * Sends the gathered map data to the server to save them/publish the map.
          *
          * @param {Object} selections map data as returned by _gatherSelections()
-         * @param {Object} features map data as returned by _gatherFeatures()
          *
          */
-        _printMap: function (selections, features) {
+        _printMap: function (selections) {
             var me = this;
             // base url + layers/location
             var url = Oskari.urls.getRoute('GetPrint') + '&' + selections.maplinkArgs;
@@ -757,18 +790,33 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 url = url + '&scaleText=' + selections.scaleText;
             }
 
+            if (typeof me.timeseriesPlugin !== 'undefined') {
+                const areLayersWithTimeSeriesSelected =
+                    me.instance.sandbox.findAllSelectedMapLayers()
+                        .filter(l => l.getAttributes().times).length > 0;
+
+                if (areLayersWithTimeSeriesSelected) {
+                    url = url + '&time=' + me.timeseriesPlugin.getCurrentTime();
+                }
+                if (selections.pageTimeSeriesTime) {
+                    url = url + '&formattedTime=' + me.timeseriesPlugin.getCurrentTimeFormatted();
+                    url = url + '&timeseriesPrintLabel=' + me.contentOptionsMap.pageTimeSeriesTime.printLabel;
+                }
+            }
+            const hasCustomStyles = Object.keys(selections.customStyles).length > 0;
+            const hasTileData = Object.keys(me.instance.tileData).length > 0;
             // We need to use the POST method if there's GeoJSON or tile data.
-            if (me.instance.geoJson || !jQuery.isEmptyObject(me.instance.tileData) || me.instance.tableJson) {
-                var stringifiedJson = me._stringifyGeoJson(me.instance.geoJson);
+            if (hasTileData || hasCustomStyles || me.instance.tableJson) {
+                var stringifiedJson = me._stringifyGeoJson(null);
                 var stringifiedTileData = me._stringifyTileData(me.instance.tileData);
                 var stringifiedTableData = me._stringifyTableData(me.instance.tableJson);
-
                 Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
                 me.openPostURLinWindow(stringifiedJson, stringifiedTileData, stringifiedTableData, url, selections);
             } else {
                 // Otherwise GET is satisfiable.
                 Oskari.log('BasicPrintout').debug('PRINT URL ' + url);
-                me.openURLinWindow(url, selections);
+                const isLandscape = this._isLandscape(selections);
+                me.openURLinWindow(url, isLandscape);
             }
         },
 

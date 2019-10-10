@@ -1,3 +1,4 @@
+const resolveConfig = require('./webpack/resolveConfig.js');
 // http://eslint.org/docs/user-guide/configuring
 
 module.exports = {
@@ -15,8 +16,7 @@ module.exports = {
     "ClipperLib": false,
     "d3": false,
     "define": false,
-    "DOMPurify": false,
-    "geostats": false,
+    "GeostatsHelper": false,
     "jQuery": false,
     "jsts": false,
     "MobileDetect": false,
@@ -26,17 +26,24 @@ module.exports = {
     "OskariNavigation": false,
     "OskariPinchZoom": false,
     "Proj4js": false,
-    "turf": false
+    "turf": false,
+    "__webpack_public_path__": false,
+    // ---- jest tests
+    "describe": false,
+    "expect": false,
+    "test": false
+    // ----
   },
   "parserOptions": {
-    "ecmaVersion": 6,
+    "ecmaVersion": 9,
     "sourceType": "module"
   },
   // https://github.com/feross/standard/blob/master/RULES.md#javascript-standard-style
   "extends": [
     "standard",
     "plugin:import/errors",
-    "plugin:import/warnings"
+    "plugin:import/warnings",
+    "plugin:react/recommended"
   ],
   // add your custom rules here
   "rules": {
@@ -56,6 +63,7 @@ module.exports = {
     "no-unused-vars": ["error", { "vars": "all", "args": "none", "ignoreRestSiblings": false }],
     "no-fallthrough": "off",
     "standard/no-callback-literal": "off",
+    "import/no-default-export": "error",
 
     // Temporary warn level for Travis-CI
     "brace-style": ["warn", "1tbs", { "allowSingleLine": true }],
@@ -67,5 +75,17 @@ module.exports = {
     "no-unneeded-ternary": ["warn", { "defaultAssignment": false }],
     "one-var": ["warn", { "initialized": "never" }],
     "no-labels": ["warn", { "allowLoop": false, "allowSwitch": false }]
+  },
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": {
+          "resolve": resolveConfig
+        }
+      }
+    },
+    "react": {
+      "version": "detect"
+    }
   }
 }

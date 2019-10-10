@@ -3,8 +3,8 @@ import olLayerImage from 'ol/layer/Image';
 import olProjProjection from 'ol/proj/Projection';
 import * as olProj from 'ol/proj';
 
-import OskariImageWMS from './OskariImageWMS';
-import OskariTileWMS from './OskariTileWMS';
+import { OskariImageWMS } from './OskariImageWMS';
+import { OskariTileWMS } from './OskariTileWMS';
 
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin

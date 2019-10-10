@@ -49,9 +49,17 @@ Oskari.clazz.define("Oskari.mapframework.bundle.heatmap.HeatmapBundle", function
             "type": "text/javascript",
             "src": "../../../../bundles/mapping/heatmap/resources/locale/fi.js"
         }, {
+            "lang": "fr",
+            "type": "text/javascript",
+            "src": "../../../../bundles/mapping/heatmap/resources/locale/fr.js"
+        }, {
             "lang": "sv",
             "type": "text/javascript",
             "src": "../../../../bundles/mapping/heatmap/resources/locale/sv.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/mapping/heatmap/resources/locale/ru.js"
         }]
     }
 });

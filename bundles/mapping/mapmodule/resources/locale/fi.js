@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Huom.",
         "unsupportedProj": "Joitain karttatasoja ei voida näyttää tässä karttaprojektiossa.",
+        "unsupported-layer": "Karttatasoa ei voida näyttää.",
+        "unsupported-layer-projection": "Karttatasoa ei voida näyttää tässä karttaprojektiossa.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Käyttöehdot",
@@ -40,7 +42,8 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Karttatasot",
                 "chooseDefaultBaseLayer": "Valitse taustakartta",
-                "chooseOtherLayers": "Valitse muut karttatasot"
+                "chooseOtherLayers": "Valitse muut karttatasot",
+                "style": "Tyyli"
             },
             "SearchPlugin": {
                 "placeholder": "Paikkahaku",
@@ -66,7 +69,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "testi",
                 "history": {
-                    "reset": "Siirry oletusnäkymään.",
+                    "reset": "Palaa alkutilaan.",
                     "back": "Siirry edelliseen näkymään.",
                     "next": "Siirry seuraavaan näkymään."
                 },
@@ -108,7 +111,19 @@ Oskari.registerLocalization(
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Keskitä kartta omaan sijaintiisi."
+                "tooltip": "Keskitä kartta omaan sijaintiisi.",
+                "error": {
+                    "title": "Virhe paikannuksessa!",
+                    "timeout": "Paikannuksessa kestää odotettua kauemmin...",
+                    "denied": "Sivustolta on estetty paikannus. Salli paikannus ja yritä uudelleen",
+                    "noLocation": "Sijainnin määritys epäonnistui",
+                    "close": "Sulje"
+                }
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Palaa alkutilaan"
+                }
             }
         },
         "guidedTour": {

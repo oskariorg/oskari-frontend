@@ -1,3 +1,5 @@
+import { UnsupportedLayerSrs } from './domain/UnsupportedLayerSrs';
+
 /**
  * @class Oskari.mapping.mapmodule.AbstractMapModule
  *
@@ -106,6 +108,7 @@ Oskari.clazz.define(
         me._mobileToolbar = null;
         me._mobileToolbarId = 'mobileToolbar';
         me._toolbarContent = null;
+        me._supports3D = false;
 
         // possible custom css cursor set via rpc
         this._cursorStyle = '';
@@ -172,6 +175,9 @@ Oskari.clazz.define(
             sandbox.registerService(stateService);
             this.handleMapLinkParams(stateService);
 
+            // Add srs check for layers
+            stateService.addLayerSupportCheck(new UnsupportedLayerSrs());
+
             if (me._options) {
                 if (me._options.resolutions) {
                     me._mapResolutions = me._options.resolutions;
@@ -181,6 +187,7 @@ Oskari.clazz.define(
                     // set srsName to Oskari.mapframework.domain.Map
                     if (me._sandbox) {
                         me._sandbox.getMap().setSrsName(me._projectionCode);
+                        me._sandbox.getMap().setSupports3D(me.getSupports3D());
                     }
                 }
             }
@@ -244,6 +251,8 @@ Oskari.clazz.define(
                 mapMoveRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapMoveRequestHandler', sandbox, this),
                 showSpinnerRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.ShowProgressSpinnerRequestHandler', sandbox, this),
                 userLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetUserLocationRequestHandler', sandbox, this),
+                startUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler', sandbox, this),
+                stopUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
                 mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService)
             };
@@ -252,6 +261,8 @@ Oskari.clazz.define(
             sandbox.requestHandler('MapMoveRequest', this.requestHandlers.mapMoveRequestHandler);
             sandbox.requestHandler('ShowProgressSpinnerRequest', this.requestHandlers.showSpinnerRequestHandler);
             sandbox.requestHandler('MyLocationPlugin.GetUserLocationRequest', this.requestHandlers.userLocationRequestHandler);
+            sandbox.requestHandler('StartUserLocationTrackingRequest', this.requestHandlers.startUserLocationRequestHandler);
+            sandbox.requestHandler('StopUserLocationTrackingRequest', this.requestHandlers.stopUserLocationRequestHandler);
             sandbox.requestHandler('MapModulePlugin.RegisterStyleRequest', this.requestHandlers.registerStyleRequestHandler);
             sandbox.requestHandler('activate.map.layer', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('AddMapLayerRequest', this.requestHandlers.mapLayerHandler);
@@ -296,7 +307,7 @@ Oskari.clazz.define(
                 this.afterRearrangeSelectedMapLayerEvent(event);
             },
             MapSizeChangedEvent: function (evt) {
-                this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
+                this._handleMapSizeChanges({ width: evt.getWidth(), height: evt.getHeight() });
             },
             'Toolbar.ToolbarLoadedEvent': function () {
                 this.startLazyPlugins();
@@ -362,6 +373,9 @@ Oskari.clazz.define(
          */
         panMapByPixels: Oskari.AbstractFunc('panMapByPixels'),
         orderLayersByZIndex: Oskari.AbstractFunc('orderLayersByZIndex'),
+        getSupports3D: function () {
+            return this._supports3D;
+        },
         /* --------- /Impl specific --------------------------------------> */
 
         /* Impl specific - PRIVATE
@@ -397,7 +411,6 @@ Oskari.clazz.define(
         _addMapControlImpl: Oskari.AbstractFunc('_addMapControlImpl(ctl)'),
         _removeMapControlImpl: Oskari.AbstractFunc('_removeMapControlImpl(ctl)'),
         getStyle: Oskari.AbstractFunc('getStyle'),
-        set3dEnabled: Oskari.AbstractFunc('set3dEnabled'),
         getCamera: Oskari.AbstractFunc('getCamera'),
         setCamera: Oskari.AbstractFunc('setCamera'),
         /* --------- /Impl specific - PARAM DIFFERENCES  ----------------> */
@@ -544,53 +557,6 @@ Oskari.clazz.define(
             lonlat.lat = Number(lonlat.lat);
 
             return lonlat;
-        },
-        /**
-         * Tries to get the user location. Signals with an UserLocationEvent and callback with lon and lat params
-         * when successfully got the location or without params as error indicator.
-         * @param  {Function} callback function that is called with lon, lat as params on happy case
-         * @param  {Object}   options  options for navigator.geolocation.getCurrentPosition()
-         */
-        getUserLocation: function (callback, options) {
-            var me = this;
-            var sandbox = me.getSandbox();
-            var evtBuilder = Oskari.eventBuilder('UserLocationEvent');
-            // normalize opts with defaults
-            var opts = options || {};
-            if (!opts.hasOwnProperty('maximumAge')) {
-                // don't accept cached position
-                opts.maximumAge = 0;
-            }
-            if (!opts.hasOwnProperty('timeout')) {
-                // timeout after 6 seconds
-                opts.timeout = 6000;
-            }
-
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function (position) {
-                        // transform coordinates from browser projection to current
-                        var lonlat = me.transformCoordinates({
-                            lon: position.coords.longitude,
-                            lat: position.coords.latitude }, 'EPSG:4326');
-                        sandbox.notifyAll(evtBuilder(lonlat.lon, lonlat.lat));
-                        // notify callback
-                        if (typeof callback === 'function') {
-                            callback(lonlat.lon, lonlat.lat);
-                        }
-                    },
-                    function (errors) {
-                        // if users just ignores/closes the browser dialog
-                        // -> error handler won't be called in most browsers
-                        me.log.warn('Error getting user location', errors);
-                        // notify callback and event without lonlat to signal failure
-                        sandbox.notifyAll(evtBuilder());
-                        if (typeof callback === 'function') {
-                            callback();
-                        }
-                    }, opts
-                );
-            }
         },
         /* --------------- /MAP LOCATION ------------------------ */
 
@@ -791,6 +757,21 @@ Oskari.clazz.define(
             }
             return this.getResolutionArray()[resIndex];
         },
+
+        /**
+         * @method getFeaturesAtPixel
+         * To get feature properties at given mouse location on screen / dom element.
+         * @param  {Float} x
+         * @param  {Float} y
+         * @return {Array} list containing objects with props `properties` and  `layerId`
+         */
+        getFeaturesAtPixel (x, y) {
+            if (typeof this._getFeaturesAtPixelImpl === 'function') {
+                return this._getFeaturesAtPixelImpl(x, y);
+            }
+            throw new Error('Not implemented _getFeaturesAtPixelImpl function.');
+        },
+
         /**
          * @method calculateLayerScales
          * Calculate a subset of maps scales array that matches the given boundaries.
@@ -830,6 +811,25 @@ Oskari.clazz.define(
                 }
             }
             return layerResolutions;
+        },
+        /**
+         * @method zoomToFitMeters
+         * Adjusts zoom to closest level where given metric value fits.
+         * @param {Number} meters that must fit to viewport
+         */
+        zoomToFitMeters: function (meters) {
+            if (meters <= 0) return;
+            var mapSize = this.getSize();
+            var viewportPx = Math.min(mapSize.height, mapSize.width);
+            var zoom = 0;
+            var reso = this.getResolutionArray();
+            for (var i = reso.length - 1; i > 0; i--) {
+                if (meters < viewportPx * reso[i]) {
+                    zoom = i;
+                    break;
+                }
+            }
+            this.setZoomLevel(zoom);
         },
         /* --------------- /MAP ZOOM ------------------------ */
 
@@ -2282,7 +2282,7 @@ Oskari.clazz.define(
             var publisherService = sandbox.getService('Oskari.mapframework.bundle.publisher2.PublisherService');
             var isPublisherActive = publisherService && publisherService.getIsActive();
 
-            if (!layer.isSupported(sandbox.getMap().getSrsName()) && !isPublisherActive) {
+            if (!sandbox.getMap().isLayerSupported(layer) && !isPublisherActive) {
                 this._mapLayerService.showUnsupportedPopup();
             }
 
@@ -2372,7 +2372,7 @@ Oskari.clazz.define(
          * Function "this" context is bound to bundle instance
          */
         __guidedTourDelegateTemplates: [{
-            priority: 70,
+            priority: 90,
             getTitle: function () {
                 return this.getLocalization().guidedTour.help1.title;
             },
@@ -2387,7 +2387,7 @@ Oskari.clazz.define(
             positionAlign: 'left'
         },
         {
-            priority: 80,
+            priority: 100,
             getTitle: function () {
                 return this.getLocalization().guidedTour.help2.title;
             },
@@ -2447,6 +2447,34 @@ Oskari.clazz.define(
             } else {
                 Oskari.on('bundle.start', handler);
             }
+        },
+        /**
+         * Get 1st visible image layer.
+         * fallback to first visible layer
+         * @returns {Layer} null|undefined if not found
+         */
+        getBaseLayer: function () {
+            const selectedLayers = Oskari.getSandbox().findAllSelectedMapLayers();
+
+            if (selectedLayers.length === 0) return null;
+
+            const layer = selectedLayers.find(l => {
+                const type = l.getLayerType();
+                return l.isVisible() && (type === 'wmts' || type === 'wms');
+            });
+            if (layer) return layer;
+            return selectedLayers.find(l => l.isVisible());
+        },
+        /**
+         * Get 1st visible ol image layer.
+         * fallback to first visible ol layer
+         * @returns {ol/layer/Layer} null if not found
+         */
+        getBaseOLMapLayer: function () {
+            const layer = this.getBaseLayer();
+            if (!layer) return null;
+            const olLayers = this.getOLMapLayers(layer.getId());
+            return olLayers && olLayers.length > 0 ? olLayers[0] : null;
         }
         /* --------------- /MAP LAYERS ------------------------ */
     }, {

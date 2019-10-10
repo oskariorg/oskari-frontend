@@ -13,11 +13,12 @@ This plugin provides a maplayer selection "dropdown" on top of the map.
 ```javascript
 {
   baseLayers : ['<layerid 1>','<layerid 2>','<layerid 3>'],
-  defaultBase : '<layerid 1>'
+  defaultBaseLayer : '<layerid 1>',
+  isStyleSelectable: <boolean>
 }
 ```
 
-Configuration is not required, but it can be used to set some selected layers as "base layers". Baselayers differ from normal layers that only one base layer is shown at a time.
+Configuration is not required, but it can be used to set some selected layers as "base layers". Baselayers differ from normal layers that only one base layer is shown at a time. Setting `isStyleSelectable` to true will allow the user to change the style of map layers that have more than one style. This flag can be set in the publisher tool for layer selection.
 
 The styling, font and colour scheme of the plugin are configurable, with variables `toolStyle` (String), `font` (String) and `colourScheme` (Object) respectively. A CSS class of `oskari-publisher-font-<font>` is expected to be defined with font-family definition. Following values are supported for the `toolStyle`: `rounded-light`, `rounded-dark`, `sharp-dark`, `sharp-light`, `3d-dark` and `3d-light`. An image `map-layer-button-<toolStyle>.png` is expected to be found in plugin's image resources directory. The `colourScheme` object should have keys `bgColour`, `titleColour` and `iconCls`.
 

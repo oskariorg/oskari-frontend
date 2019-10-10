@@ -340,7 +340,22 @@ Oskari.clazz.define(
                  */ 
                 {
                     "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayer.js"
+                },
+                {
+                    "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/plugin/vectortilelayer/VectorTileLayerPlugin.js"
+                },
+                /**
+                 * Bing maps
+                 */ 
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/bingmapslayer/BingMapsLayer.js"
+                },
+                {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/plugin/bingmapslayer/BingMapsLayerPlugin.js"
                 },
                 /**
                  * GeoLocation plugin
@@ -469,6 +484,18 @@ Oskari.clazz.define(
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapmodule/request/VectorLayerRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StartUserLocationTrackingRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StartUserLocationTrackingRequestHandler.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StopUserLocationTrackingRequest.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapmodule/request/StopUserLocationTrackingRequestHandler.js"
                 },
 
                 /**
@@ -654,6 +681,10 @@ Oskari.clazz.define(
                 "lang" : "uk",
                 "type": "text/javascript",
                 "src": "../../../../bundles/mapping/mapmodule/resources/locale/uk.js"
+            }, {
+                "lang" : "ru",
+                "type": "text/javascript",
+                "src": "../../../../bundles/mapping/mapmodule/resources/locale/ru.js"
             }]
         },
         "bundle": {

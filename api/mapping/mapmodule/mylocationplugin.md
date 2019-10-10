@@ -10,7 +10,15 @@ The plugin offers the user a center map a his geolocation.
 
 ## Bundle configuration
 
-No configuration is required.
+No configuration is required, but there is one possible configuration:
+
+```javascript
+{
+  "zoom" : 11
+}
+```
+
+Setting zoom to wanted number will my location zoomed by wanted zoom level.
 
 ## Requests the plugin handles
 

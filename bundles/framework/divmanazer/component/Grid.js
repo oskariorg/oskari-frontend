@@ -712,7 +712,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                         if (renderer) {
                             value = renderer(value, data);
                         } else if (typeof value === 'number') {
-                            value = me._loc('Grid.cellValue', {value: value});
+                            value = me._loc('Grid.cellValue', { value: value });
                         }
                         cell.append(value);
                         row.append(cell);
@@ -820,7 +820,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
                             'for': 'oskari-grid-column-selector-' + field,
                             'class': 'column-label'
                         })
-                        .html(field);
+                        .html(me.uiNames[field] || field);
                     newColumn.css({
                         'margin': '5px'
                     });
@@ -1350,8 +1350,8 @@ Oskari.clazz.define('Oskari.userinterface.component.Grid',
         _prepareData: function (data) {
             if (data instanceof Date) {
                 data = String(data);
-            } else if (!isNaN(data)) {
-                data = String(data);
+            } else if (Oskari.util.isNumber(data)) {
+                data = parseFloat(data);
             }
             return data;
         },

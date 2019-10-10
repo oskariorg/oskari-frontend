@@ -215,6 +215,10 @@ Oskari.clazz.define("Oskari.mapframework.bundle.myplaces3.MyPlacesBundle", funct
             "lang": "uk",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/myplaces3/resources/locale/uk.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/myplaces3/resources/locale/ru.js"
         }]
     },
     "bundle": {

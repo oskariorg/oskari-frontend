@@ -39,9 +39,7 @@ Oskari.clazz.define(
                 prop: 'type'
             }
         ];
-        this.__templates.resultheading = _.template('<div><h3>' +
-            this.instance.getLocalization('searchResults') + ' ${count} ' +
-            this.instance.getLocalization('searchResultsDescription') + ' ${search}</h3></div>');
+        this.progressSpinner = Oskari.clazz.create('Oskari.userinterface.component.ProgressSpinner');
     }, {
         __templates: {
             main: _.template(
@@ -79,6 +77,7 @@ Oskari.clazz.define(
             var searchContainer = this.getContainer();
             var field = this.getField();
             var button = this.getButton();
+            me.progressSpinner.insertTo(searchContainer);
 
             var doSearch = function () {
                 field.setEnabled(false);
@@ -186,9 +185,6 @@ Oskari.clazz.define(
 
             searchContainer.find('div.resultList').empty();
             searchContainer.find('div.info').empty();
-
-            // TODO: make some gif go round and round so user knows
-            // something is happening
             var searchKey = field.getValue(this.instance.safeChars);
 
             if (!this._validateSearchKey(field.getValue(false))) {
@@ -197,6 +193,7 @@ Oskari.clazz.define(
                 return;
             }
 
+            me.progressSpinner.start();
             var reqBuilder = Oskari.requestBuilder('SearchRequest');
             if (reqBuilder) {
                 var request = reqBuilder(searchKey);
@@ -204,9 +201,13 @@ Oskari.clazz.define(
             }
         },
         __doAutocompleteSearch: function () {
+            var me = this;
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
+            me.progressSpinner.start();
+
             this.searchservice.doAutocompleteSearch(searchKey, function (result) {
+                me.progressSpinner.stop();
                 var autocompleteValues = [];
                 for (var i = 0; i < result.methods.length; i++) {
                     autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });
@@ -219,6 +220,7 @@ Oskari.clazz.define(
             var me = this;
             var field = this.getField();
             var button = this.getButton();
+            me.progressSpinner.stop();
             if (isSuccess) {
                 field.setEnabled(true);
                 button.setEnabled(true);
@@ -286,7 +288,7 @@ Oskari.clazz.define(
         },
         __getSearchResultHeader: function (count, hasMore) {
             var intro = _.template(this.instance.getLocalization('searchResultCount') + ' ${count} ' + this.instance.getLocalization('searchResultCount2'));
-            var msg = intro({count: count});
+            var msg = intro({ count: count });
             msg = msg + '<br/>';
 
             if (hasMore) {
@@ -329,6 +331,8 @@ Oskari.clazz.define(
                 info.append(this.__getSearchResultHeader(result.totalCount, result.hasMore));
             }
 
+            result.locations.forEach(cur => this._setMatchingTitle(cur, searchKey));
+
             if (result.totalCount === 1) {
                 // move map etc
                 me._resultClicked(result.locations[0]);
@@ -370,11 +374,24 @@ Oskari.clazz.define(
             });
 
             this._populateResultTable(tableBody, result.locations);
-            resultList.append(this.__templates.resultheading({
-                count: result.totalCount,
-                search: searchKey
-            }));
             resultList.append(table);
+        },
+
+        _setMatchingTitle: function (location, searchKey) {
+            if (!location || !location.localized) {
+                return;
+            }
+            // find exact match
+            let match = location.localized.find(cur => cur.name.toUpperCase() === searchKey.toUpperCase());
+            if (match) {
+                location.name = match.name;
+                return;
+            }
+            // try matching starting with
+            match = location.localized.find(cur => cur.name.toUpperCase().startsWith(searchKey.toUpperCase()));
+            if (match) {
+                location.name = match.name;
+            }
         },
 
         _populateResultTable: function (resultsTableBody, locations) {
@@ -391,26 +408,26 @@ Oskari.clazz.define(
         },
 
         _resultClicked: function (result) {
-            var me = this,
-                popupId = 'searchResultPopup',
-                inst = this.instance,
-                sandbox = inst.sandbox;
-            // good to go
+            var me = this;
+            var popupId = 'searchResultPopup';
+            var inst = this.instance;
+            var sandbox = inst.sandbox;
             // Note! result.ZoomLevel is deprecated. ZoomScale should be used instead
-            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest'),
-                zoom = result.zoomLevel;
+            var moveReqBuilder = Oskari.requestBuilder('MapMoveRequest');
+            var zoom = result.zoomLevel;
+
             if (result.zoomScale) {
-                zoom = {scale: result.zoomScale};
+                zoom = { scale: result.zoomScale };
             }
             sandbox.request(
                 me.instance.getName(),
                 moveReqBuilder(result.lon, result.lat, zoom)
             );
 
-            var loc = this.instance.getLocalization('resultBox'),
-                resultActions = [],
-                resultAction,
-                action;
+            var loc = this.instance.getLocalization('resultBox');
+            var resultActions = [];
+            var resultAction;
+            var action;
             for (var name in this.resultActions) {
                 if (this.resultActions.hasOwnProperty(name)) {
                     action = this.resultActions[name];
@@ -428,15 +445,16 @@ Oskari.clazz.define(
             closeAction.type = 'link';
             closeAction.group = 1;
             closeAction.action = function () {
-                var rN = 'InfoBox.HideInfoBoxRequest',
-                    rB = Oskari.requestBuilder(rN),
-                    request = rB(popupId);
+                var rN = 'InfoBox.HideInfoBoxRequest';
+                var rB = Oskari.requestBuilder(rN);
+                var request = rB(popupId);
                 sandbox.request(me.instance.getName(), request);
             };
             resultActions.push(closeAction);
 
+            const alternatives = me._createAlternativeNamesHTMLBlock(result);
             var contentItem = {
-                html: '<h3>' + result.name + '</h3>' + '<p>' + result.region + '<br/>' + result.type + '</p>',
+                html: '<h3>' + result.name + '</h3>' + alternatives + '<p>' + result.region + '<br/>' + result.type + '</p>',
                 actions: resultActions
             };
             var content = [contentItem];
@@ -445,20 +463,47 @@ Oskari.clazz.define(
                 hidePrevious: true
             };
 
-            var rN = 'InfoBox.ShowInfoBoxRequest',
-                rB = Oskari.requestBuilder(rN),
-                request = rB(
-                    popupId,
-                    loc.title,
-                    content,
-                    {
-                        lon: result.lon,
-                        lat: result.lat
-                    },
-                    options
-                );
+            var rN = 'InfoBox.ShowInfoBoxRequest';
+            var rB = Oskari.requestBuilder(rN);
+            var request = rB(
+                popupId,
+                loc.title,
+                content,
+                {
+                    lon: result.lon,
+                    lat: result.lat
+                },
+                options
+            );
 
             sandbox.request(this.instance.getName(), request);
+        },
+
+        _createAlternativeNamesHTMLBlock: function (result) {
+            if (!result || !result.localized) {
+                return '';
+            }
+            const alternatives = result.localized
+                .filter(cur => cur.name !== result.name)
+                .map(cur => `${cur.name} [${cur.locale}]`)
+                .sort();
+            if (alternatives.length === 0) {
+                return '';
+            }
+            const loc = this.instance.getLocalization('resultBox');
+            const div = document.createElement('div');
+            div.style.fontSize = '12px';
+            const list = document.createElement('ul');
+            alternatives.forEach(txt => {
+                const item = document.createElement('li');
+                item.append(document.createTextNode(txt));
+                list.append(item);
+            });
+            list.style.marginTop = '5px';
+            list.style.listStylePosition = 'inside';
+            div.append(document.createTextNode(loc.alternatives));
+            div.append(list);
+            return div.outerHTML;
         },
 
         /**

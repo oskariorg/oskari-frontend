@@ -40,6 +40,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
 
             // get help content
             this.helper = Oskari.clazz.create('Oskari.userinterface.component.UIHelper', sandbox);
+            this.localization = Oskari.getLocalization(this.getName());
+            this._registerForGuidedTour();
         },
         /**
          * @property {Object} eventHandlers
@@ -68,9 +70,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
          */
 
         displayContent: function (isOpen) {
-            var me = this,
-                newtab,
-                i;
+            var me = this;
+            var newtab;
+            var i;
             if (!isOpen) {
                 return;
             }
@@ -85,8 +87,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
 
             function closureMagic (tagsTxt) {
                 return function (isSuccess, pContent) {
-                    var content = pContent,
-                        errorTxt = 'error.generic';
+                    var content = pContent;
+                    var errorTxt = 'error.generic';
                     if (me.getLocalization('error') &&
                         me.getLocalization('error').generic) {
                         errorTxt = me.getLocalization('error').generic;
@@ -135,6 +137,89 @@ Oskari.clazz.define('Oskari.mapframework.bundle.userguide.UserGuideBundleInstanc
             // this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
+        },
+        /**
+         * @static
+         * @property __guidedTourDelegateTemplate
+         * Delegate object given to guided tour bundle instance. Handles content & actions of guided tour popup.
+         * Function "this" context is bound to bundle instance
+         */
+        __guidedTourDelegateTemplate: {
+            priority: 70,
+            show: function () {
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'userinterface.UserGuide']);
+            },
+            hide: function () {
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'userinterface.UserGuide']);
+            },
+            getTitle: function () {
+                return this.localization.guidedTour.title;
+            },
+            getContent: function () {
+                var content = jQuery('<div></div>');
+                content.append(this.localization.guidedTour.message);
+                return content;
+            },
+            getLinks: function () {
+                var me = this;
+                var loc = this.localization.guidedTour;
+                var linkTemplate = jQuery('<a href="#"></a>');
+                var openLink = linkTemplate.clone();
+                openLink.append(loc.openLink);
+                openLink.on('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'userinterface.UserGuide']);
+                        openLink.hide();
+                        closeLink.show();
+                    });
+                var closeLink = linkTemplate.clone();
+                closeLink.append(loc.closeLink);
+                closeLink.on('click',
+                    function () {
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'userinterface.UserGuide']);
+                        openLink.show();
+                        closeLink.hide();
+                    });
+                closeLink.show();
+                openLink.hide();
+                return [openLink, closeLink];
+            }
+        },
+        /**
+         * @method _registerForGuidedTour
+         * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
+         */
+        _registerForGuidedTour: function () {
+            var me = this;
+            function sendRegister () {
+                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
+                    var delegate = {
+                        bundleName: me.getName()
+                    };
+                    for (var prop in me.__guidedTourDelegateTemplate) {
+                        if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = me.__guidedTourDelegateTemplate[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if (tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
     }, {
         /**

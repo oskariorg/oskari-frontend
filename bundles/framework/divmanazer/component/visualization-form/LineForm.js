@@ -24,7 +24,7 @@ Oskari.clazz.define(
             color: '#' + this.defaultValues.color
         };
 
-        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed', 'icon-double-line'];
+        this.styleButtonNames = ['icon-line-basic', 'icon-line-dashed'];
         this.capButtonNames = ['icon-line-flat_cap', 'icon-line-round_cap'];
         this.cornerButtonNames = ['icon-corner-sharp', 'icon-corner-round'];
 
@@ -253,7 +253,7 @@ Oskari.clazz.define(
             me._colorPicker.setValue(me.values.color);
 
             colorPickerWrapper.on('change', function () {
-                me.values.color = me._colorPicker.getValue();
+                me.values.pickedColor = me._colorPicker.getValue();
                 me._updatePreview(dialogContent);
             });
 
@@ -263,6 +263,10 @@ Oskari.clazz.define(
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.addClass('primary showSelection');
             saveBtn.setHandler(function () {
+                if (!me.creator.validateWidth('strokeWidth', me.values.width)) {
+                    return;
+                }
+                me.values.color = me.values.pickedColor;
                 renderDialog.close();
                 if (me.saveCallback) {
                     me.saveCallback();
@@ -308,7 +312,7 @@ Oskari.clazz.define(
          * Creates a color picker component
          */
         _createColorPicker: function () {
-            var options = {flat: true};
+            var options = { flat: true };
             this._colorPicker = Oskari.clazz.create('Oskari.userinterface.component.ColorPickerInput', options);
         },
 
@@ -323,7 +327,7 @@ Oskari.clazz.define(
             var previewTemplate = me._previewTemplates[me.values.style].clone();
 
             previewTemplate.find('path').attr({
-                'stroke': me.values.color,
+                'stroke': me.values.pickedColor,
                 'fill': 'none',
                 'stroke-width': me.values.width,
                 'stroke-linejoin': me.values.corner === 0 ? 'miter' : 'round',

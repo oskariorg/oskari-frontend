@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     init: function (pdata) {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (stats) {
-            stats.createClassficationView(true);
+            stats.createClassficationView();
         }
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             this.setEnabled(true);
@@ -39,47 +39,16 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
         return this.__tool;
     },
-    _getStatsLayer: function () {
-        var selectedLayers = this.__sandbox.findAllSelectedMapLayers();
-        var statsLayer = null;
-        var layer;
-        for (var i = 0; i < selectedLayers.length; i += 1) {
-            layer = selectedLayers[i];
-            if (layer.getId() === 'STATS_LAYER') {
-                statsLayer = layer;
-                break;
-            }
-        }
-        return statsLayer;
-    },
     setEnabled: function (enabled) {
         if (typeof enabled !== 'boolean') {
             enabled = false;
         }
 
         this.state.enabled = enabled;
-        this.getPlugin().enableClassification(enabled);
-    },
-    isDisplayed: function (data) {
-        var hasStatsLayerOnMap = this._getStatsLayer() !== null;
-        if (hasStatsLayerOnMap) {
-            // If there's a statslayer on the map show the tool for statistics functionality
-            // relevant when creating a new published map
-            return true;
+        const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+        if (service) {
+            service.getStateService().updateClassificationPluginState('editEnabled', enabled);
         }
-        // If there isn't one, the user hasn't visited the functionality on this session
-        // Check if the user is editing a map with statslayer
-        var configExists = Oskari.util.keyExists(data, 'configuration.statsgrid.conf');
-        if (!configExists) {
-            return false;
-        }
-        if (!Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid')) {
-            Oskari.log('Oskari.mapframework.publisher.tool.ClassificationTool')
-                .warn("Published map had config, but current appsetup doesn't include StatsGrid! " +
-                  'The thematic map functionality will be removed if user saves the map!!');
-            return false;
-        }
-        return true;
     },
     getValues: function () {
         var me = this;
@@ -112,13 +81,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
     * @public
     */
     stop: function () {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (stats) {
-            stats.enableClassification(true);
-            stats.createClassficationView(false);
+        const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');
+        if (service) {
+            service.getStateService().resetClassificationPluginState('editEnabled');
         }
+        // HACK: remove when publisher doesn't delete all draggables
+        setTimeout(() => this.getPlugin()._makeDraggable(), 500);
     }
 }, {
-    'extend': ['Oskari.mapframework.publisher.tool.AbstractPluginTool'],
+    'extend': ['Oskari.mapframework.publisher.tool.AbstractStatsPluginTool'],
     'protocol': ['Oskari.mapframework.publisher.Tool']
 });

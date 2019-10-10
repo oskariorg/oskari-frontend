@@ -292,26 +292,24 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
      * Creates WFSPropertiesEvent
      */
     getWFSProperties: function (data) {
-        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId),
-            self = this;
+        var layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(data.data.layerId);
+        var self = this;
 
-        if (layer.getLayerType() !== 'analysis') {
-            var oldFields = layer.getFields(),
-                oldLocales = layer.getLocales();
-
-            if (oldFields.length > 0 && !this.plugin.isArrayEqual(data.data.fields, oldFields) && !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
-                this.plugin.mapMoveHandler();
-            }
-
+        if (!layer.isLayerOfType('analysislayer')) {
             if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder()) {
                 // this is a "userlayer" type layer
+                // don't set locales because userlayer contains localized fields
                 this.setOrderForFeatureProperties(layer, data.data.fields);
                 layer.setFields(this.sortArrayByFeaturePropertyIndexes(layer, data.data.fields));
-                layer.setLocales(this.sortArrayByFeaturePropertyIndexes(layer, data.data.locales));
             } else {
                 // this is any other layer supported by transport
+                var oldFields = layer.getFields();
+                var oldLocales = layer.getLocales();
                 layer.setFields(data.data.fields);
                 layer.setLocales(data.data.locales);
+                if (oldFields.length > 0 && !this.plugin.isArrayEqual(data.data.fields, oldFields) && !this.plugin.isArrayEqual(data.data.locales, oldLocales)) {
+                    this.plugin.mapMoveHandler();
+                }
             }
         }
 
@@ -383,7 +381,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             if (!this.__isSelectionLayer(layer.getId())) {
                 return;
             }
-            if (data.data.features !== 'empty') {
+            if (data.data.feature !== 'empty') {
                 data.data.features.forEach(function (featureData) {
                     featureIds.push(featureData[0]);
                 });
@@ -397,7 +395,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
 
             me.WFSLayerService.emptyWFSFeatureSelections(layer);
 
-            if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder() && data.data.features !== 'empty') {
+            if (typeof layer.getFeatureProperties === 'function' && layer.hasOrder() && data.data.feature !== 'empty') {
                 // this is a "userlayer" type layer - props are sorted to match the original order
                 var features = data.data.features;
                 for (var i = 0; i < features.length; i++) {
@@ -458,7 +456,7 @@ Oskari.clazz.category('Oskari.mapframework.bundle.mapwfs2.service.Mediator', 'ge
             selectFeatures = true,
             topWFSLayer = this.WFSLayerService.getTopWFSLayer(),
             analysisWFSLayer = this.WFSLayerService.getAnalysisWFSLayerId(),
-            hasNoFeatures = data.data.features === 'empty';
+            hasNoFeatures = data.data.feature === 'empty';
 
         // if user has not used Ctrl during selection, make totally new selection
         var makeNewSelection = !data.data.keepPrevious;

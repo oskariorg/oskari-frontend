@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Impordi andmed oma arvutist kokkupakituna(*.zip failina). Enne iportimist veendu et andmed oleks õiges formaadis ja koordinaatsüsteemis.",
             "actions": {
                 "cancel": "Tühista",
-                "next": "Järgmine"
-            },
-            "file": {
-                "submit": "Impordi",
-                "fileOverSizeError": {
-                    "title": "Viga",
-                    "message": "Lisatav fail on liiga suur. Maksimum <xx> mb.",
-                    "close": "Sulge"
-                }
+                "next": "Järgmine",
+                "close": "Sulge",
+                "submit": "Impordi"
             },
             "layer": {
                 "title": "Andmestiku info",

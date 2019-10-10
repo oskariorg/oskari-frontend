@@ -82,6 +82,7 @@ $updateCapabilitiesIcon: url("../images/glyphicons-82-refresh.png");
 
             div.oskari-flyoutcontentcontainer {
                 max-height: 650px;
+                background-color: #fafafa;
             }
         }
     }
@@ -93,6 +94,7 @@ $updateCapabilitiesIcon: url("../images/glyphicons-82-refresh.png");
 
             div.oskari-flyoutcontentcontainer {
                 max-height: 700px;
+                background-color: #fafafa;
             }
         }
     }
@@ -428,7 +430,10 @@ div.hierarchical-layerlist {
             .layer-tools {
                 .layer-tool {
                     &.edit-layer {
-                        background-image: $editIcon;
+                        /* Requires !important because Oskari icons.css has .edit-layer that otherwise overrides these with using !important */
+                        background-image: $editIcon !important;
+                        background-repeat: no-repeat !important;
+                        background-position: center center !important;
                     }
                 }
             }

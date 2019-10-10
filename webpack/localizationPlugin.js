@@ -83,7 +83,6 @@ class LocalizationPlugin {
                         const mergedEnglish = merge.recursive(true, englishForKey, locForKey);
                         const mergedOverride = merge.recursive(true, mergedEnglish, overrideForKey);
                         mergedOverride.lang = lang; // value for "lang" key might be from fallback. Ensuring it's correct
-
                         return mergedOverride;
                     });
 

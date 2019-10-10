@@ -20,10 +20,12 @@ Oskari.clazz.define(
         this._loc = this._getLocalization('DivManazer');
         this.lineCapMap = ['butt', 'round'];
         this.lineCornerMap = ['mitre', 'round', 'bevel'];
-        this.lineStyleMap = ['', '5 2', 'D'];
+        this.lineStyleMap = ['', '5 2'];
+        this._oskariLineStyleMap = ['solid', 'dash'];
         this.dialog = null;
 
         var defaultOptions = {
+            validateValues: true,
             // include all forms by default
             forms: ['dot', 'line', 'area'],
             formValues: {
@@ -72,7 +74,23 @@ Oskari.clazz.define(
             '<div class="renderButton"></div>'
         );
     }, {
-
+        validateWidth: function (key, width) {
+            if (!this._options.validateValues) {
+                return true;
+            }
+            const isValid = Oskari.util.isNumberBetween(width, 1, 50);
+            if (!isValid) {
+                this.showMessage(this._loc.validation.title, this._loc.validation[key]);
+            }
+            return isValid;
+        },
+        showMessage: function (title, message) {
+            var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            var okBtn = dialog.createCloseButton();
+            okBtn.setPrimary(true, true);
+            dialog.fadeout();
+            dialog.show(title, message, [okBtn]);
+        },
         /**
          * @public @method getForm
          * Creates dom elements for each forms and binds click events to them
@@ -127,6 +145,96 @@ Oskari.clazz.define(
             }
 
             return values;
+        },
+
+        /**
+         * @public @method getOskariStyle
+         * Returns Oskari JSON style
+         *
+         * @return {Object}
+         */
+        getOskariStyle: function () {
+            const values = this.getValues();
+            var oskariStyle = {
+                fill: {
+                    color: values.area.fillColor,
+                    area: {
+                        pattern: values.area.fillStyle
+                    }
+                },
+                stroke: {
+                    color: values.line.color,
+                    width: values.line.width,
+                    lineDash: this._oskariLineStyleMap[this.lineStyleMap.indexOf(values.line.style)],
+                    lineCap: values.line.cap,
+                    lineJoin: values.line.corner,
+                    area: {
+                        color: values.area.lineColor,
+                        width: values.area.lineWidth,
+                        lineDash: this._oskariLineStyleMap[this.lineStyleMap.indexOf(values.area.lineStyle)],
+                        lineJoin: values.area.lineCorner
+                    }
+                },
+                text: {
+                    labelText: values.dot.message
+                },
+                image: {
+                    fill: {
+                        color: values.dot.color
+                    },
+                    shape: values.dot.shape,
+                    size: values.dot.size
+                }
+            };
+            return oskariStyle;
+        },
+
+        /**
+         * @public @method setOskariStyleValues
+         * Sets values using Oskari style defined JSON
+         *
+         * @param {Object} featureStyle
+         */
+        setOskariStyleValues: function (featureStyle) {
+            if (featureStyle === null || featureStyle === undefined) {
+                return;
+            }
+            var formClazzes = this._getFormClazz();
+            var fClazzName;
+            var fClazz;
+            for (fClazzName in formClazzes) {
+                if (formClazzes.hasOwnProperty(fClazzName)) {
+                    fClazz = formClazzes[fClazzName];
+                    switch (fClazzName) {
+                    case 'dot':
+                        fClazz.setValues({
+                            color: featureStyle.image.fill.color,
+                            shape: featureStyle.image.shape,
+                            size: featureStyle.image.size
+                        });
+                        break;
+                    case 'line':
+                        fClazz.setValues({
+                            color: featureStyle.stroke.color,
+                            width: featureStyle.stroke.width,
+                            cap: featureStyle.stroke.lineCap,
+                            corner: featureStyle.stroke.lineJoin,
+                            style: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.lineDash)]
+                        });
+                        break;
+                    case 'area':
+                        fClazz.setValues({
+                            fillColor: (typeof featureStyle.fill.color === 'string' ? featureStyle.fill.color : null),
+                            fillStyle: featureStyle.fill.area.pattern,
+                            lineColor: (typeof featureStyle.stroke.area.color === 'string' ? featureStyle.stroke.area.color : null),
+                            lineCorner: featureStyle.stroke.area.lineJoin,
+                            lineStyle: this.lineStyleMap[this._oskariLineStyleMap.indexOf(featureStyle.stroke.area.lineDash)],
+                            lineWidth: featureStyle.stroke.area.width
+                        });
+                        break;
+                    }
+                }
+            }
         },
 
         /**

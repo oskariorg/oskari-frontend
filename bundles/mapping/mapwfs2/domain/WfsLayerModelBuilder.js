@@ -1,3 +1,4 @@
+const Style = Oskari.clazz.get('Oskari.mapframework.domain.Style');
 /*
  * @class Oskari.mapframework.bundle.mapwfs.domain.WfsLayerModelBuilder
  * JSON-parsing for wfs layer
@@ -55,25 +56,49 @@ Oskari.clazz.define(
             }
 
             // create a default style
-            var locDefaultStyle = this.localization['default-style'],
-                defaultStyle = Oskari.clazz.create('Oskari.mapframework.domain.Style'),
-                i;
+            const locDefaultStyle = this.localization['default-style'];
+            const defaultStyle = new Style();
             defaultStyle.setName('default');
             defaultStyle.setTitle(locDefaultStyle);
             defaultStyle.setLegend('');
 
-            // check if default style comes and give localization for it if found
-            if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
-                for (i = 0; i < mapLayerJson.styles.length; i++) {
-                    if (mapLayerJson.styles[i].name === 'default') {
-                        mapLayerJson.styles[i].title = locDefaultStyle;
-                        break;
+            const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            let layerType = layer.getLayerType();
+            if (layerType === 'userlayer' || layerType === 'myplaces') {
+                layerType = 'wfs';
+            }
+            const wfsPlugin = mapModule.getLayerPlugins(layerType);
+
+            if (wfsPlugin && wfsPlugin.oskariStyleSupport) {
+                layer.addStyle(defaultStyle);
+                // Read options object for styles and hover options
+                const { options } = mapLayerJson;
+                if (options) {
+                    if (options.styles) {
+                        Object.keys(options.styles).forEach(styleName => {
+                            if (styleName !== 'default') {
+                                const style = new Style();
+                                style.setName(styleName);
+                                style.setTitle(styleName);
+                                layer.addStyle(style);
+                            }
+                        });
+                    }
+                    layer.setHoverOptions(options.hover);
+                    layer.selectStyle(defaultStyle.getName());
+                }
+            } else {
+                // check if default style comes and give localization for it if found
+                if (mapLayerJson.styles && mapLayerJson.styles.length > 0) {
+                    const definedDefaultStyle = mapLayerJson.styles.find(style => style.name === 'default');
+                    if (definedDefaultStyle) {
+                        definedDefaultStyle.title = locDefaultStyle;
                     }
                 }
-            }
 
-            // default style for WFS is given as last parameter
-            maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
+                // default style for WFS is given as last parameter
+                maplayerService.populateStyles(layer, mapLayerJson, defaultStyle);
+            }
 
             // Set current Style
             if (mapLayerJson.style) {
@@ -83,6 +108,23 @@ Oskari.clazz.define(
             // WMS link layer id for wfs rendering option
             if (mapLayerJson.WMSLayerId) {
                 layer.setWMSLayerId(mapLayerJson.WMSLayerId);
+            }
+        },
+        /**
+         * To set default render mode on a layer
+         * @param {Oskari.mapframework.domain.WfsLayer} layer oskari layer
+         * @param {String} renderMode 'vector' or 'mvt'
+         */
+        setDefaultRenderMode (layer, renderMode) {
+            const mapModule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
+            const plugin = mapModule.getLayerPlugins('wfs');
+            if (!plugin || !layer || !plugin.isRenderModeSupported || !plugin.isRenderModeSupported(renderMode)) {
+                return;
+            }
+            const options = layer.getOptions() || {};
+            if (!options.renderMode) {
+                options.renderMode = renderMode;
+                layer.setOptions(options);
             }
         }
     });

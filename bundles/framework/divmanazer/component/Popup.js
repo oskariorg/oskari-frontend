@@ -10,7 +10,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
      */
 
     function () {
-        this.template = jQuery('<div class="divmanazerpopup"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
+        this.template = jQuery('<div class="divmanazerpopup draggablestack"><h3 class="popupHeader"></h3><div class="popup-body"><div class="content"></div><div class="actions"></div></div></div>');
         this.templateButton = jQuery('<div class="button"><a href="JavaScript:void(0);"></a></div>');
         this.dialog = this.template.clone();
         this.overlay = null;
@@ -29,15 +29,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          */
         show: function (title, message, buttons) {
             this._closingInProgress = false;
-            var me = this,
-                contentDiv = this.dialog.find('div.content'),
-                actionDiv = this.dialog.find('div.actions'),
-                i,
-                contentHeight,
-                reasonableHeight,
-                focusedButton = -1,
-                screenWidth = window.innerWidth,
-                screenHeight = window.innerHeight;
+            var me = this;
+            var contentDiv = this.dialog.find('div.content');
+            var actionDiv = this.dialog.find('div.actions');
+            var i;
+            var focusedButton = -1;
+            var screenWidth = window.innerWidth;
+            var screenHeight = window.innerHeight;
+
             this.setTitle(title);
             this.setContent(message);
 
@@ -63,16 +62,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 buttons[focusedButton].focus();
             }
 
-            contentHeight = contentDiv.height();
-            reasonableHeight = jQuery(document).height() * 0.6;
-            if (contentHeight > reasonableHeight) {
-                contentDiv.height(reasonableHeight);
-                contentDiv.css('overflow-y', 'auto');
-            }
-
-            // center on screen
-            me.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
-            me.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+            this._setReasonableHeight();
 
             // make popup to visible
             me.dialog.css('opacity', 1);
@@ -89,10 +79,35 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 });
             }
 
+            this._centralize();
             this._bringMobilePopupToTop();
 
             me.__notifyListeners('show');
         },
+
+        /**
+         * @method _setReasonableHeight
+         * Restricts content height to be max 60% of the document's height.
+         */
+        _setReasonableHeight: function () {
+            const contentDiv = this.getJqueryContent();
+            const contentHeight = contentDiv.height();
+            const reasonableHeight = jQuery(document).height() * 0.6;
+            if (contentHeight > reasonableHeight) {
+                contentDiv.height(reasonableHeight);
+                contentDiv.css('overflow-y', 'auto');
+            }
+        },
+
+        /**
+         * @method _centralize
+         * Centers the dialog to it's top left corner location.
+         */
+        _centralize: function () {
+            this.dialog.css('margin-left', -(this.dialog.width() / 2) + 'px');
+            this.dialog.css('margin-top', -(this.dialog.height() / 2) + 'px');
+        },
+
         /**
          * @method _getMaxHeights
          * Calculates max heights for popup and content.
@@ -160,14 +175,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         addClass: function (pClass) {
             this.dialog.addClass(pClass);
         },
+        getElement: function () {
+            return this.dialog;
+        },
 
         setColourScheme: function (colourScheme) {
             if (colourScheme.bgColour) {
-                this.dialog.find('h3.popupHeader').css({'background-color': colourScheme.bgColour});
+                this.dialog.find('h3.popupHeader').css({ 'background-color': colourScheme.bgColour });
             }
 
             if (colourScheme.titleColour) {
-                this.dialog.find('h3.popupHeader').css({'color': colourScheme.titleColour});
+                this.dialog.find('h3.popupHeader').css({ 'color': colourScheme.titleColour });
             }
 
             if (colourScheme.iconCls) {
@@ -177,7 +195,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             }
 
             if (colourScheme.bodyBgColour) {
-                this.dialog.find('.popup-body').css({'background-color': colourScheme.bodyBgColour});
+                this.dialog.find('.popup-body').css({ 'background-color': colourScheme.bodyBgColour });
             }
 
             /* buttons and actionlinks */
@@ -196,7 +214,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         },
 
         setFont: function (font) {
-            this.dialog.find('h3.popupHeader').css({'font-family': font});
+            this.dialog.find('h3.popupHeader').css({ 'font-family': font });
         },
 
         /**
@@ -207,14 +225,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @return {Oskari.userinterface.component.Button} button that closes the dialog
          */
         createCloseButton: function (label) {
-            var me = this,
-                okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
-            if (label) {
-                okBtn.setTitle(label);
-            }
-            okBtn.setHandler(function () {
-                me.close(true);
-            });
+            const okBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.CloseButton');
+            label = label || Oskari.getMsg('DivManazer', 'buttons.close');
+            okBtn.setTitle(label);
+            okBtn.setHandler(() => this.close(true));
             return okBtn;
         },
 
@@ -304,7 +318,6 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             if (alignment && jQuery.inArray(alignment, this.alignment) !== -1) {
                 align = alignment;
             }
-
             if (align === 'right') {
                 left = (left + targetWidth) + 5;
                 top = top + (targetHeight / 2) - (dialogHeight / 2);
@@ -355,10 +368,30 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
                 'margin-left': 0,
                 'margin-top': 0
             });
-
             if (topOffsetElement) {
                 me._adjustPopupTop(topOffsetElement);
             }
+        },
+        /**
+         * @method showFromModal
+         * Shows an info popup over target popup and removes from draggable stack.
+         * @param {jQuery} target - modal popup
+         * @param {String} title
+         * @param {String} message
+         * @param {Oskari.userinterface.component.Button[]} buttons buttons to show on dialog
+         * @param {String} alignment - one of #alignment (optional, defaults to center)
+         */
+        showFromModal: function (target, title, message, buttons, alignment = 'center') {
+            if (!this.dialog || !target) return;
+            this.moveTo(target, alignment);
+            this.dialog.css('z-index', target.css('z-index'));
+            this.dialog.removeClass('draggablestack');
+            // remove draggable if set
+            if (this.dialog.hasClass('ui-draggable')) {
+                this.dialog.draggable('destroy');
+            }
+
+            this.show(title, message, buttons);
         },
         /**
          * @method @private _adjustPopupTop
@@ -400,6 +433,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
         makeModal: function () {
             var overlay = Oskari.clazz.create('Oskari.userinterface.component.Overlay');
             overlay.overlay('body');
+            this.dialog.css('z-index', overlay.getZIndexForModal());
             this.overlay = overlay;
             overlay.followResizing(true);
         },
@@ -440,7 +474,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @param {HTML/DOM/jQueryObject}
          */
         setContent: function (content) {
-            var contentEl = this.dialog.find('div.content');
+            var contentEl = this.dialog.find('div.popup-body > div.content');
             contentEl.empty();
             contentEl.append(content);
         },
@@ -451,11 +485,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
          * @return {String} dialog content
          */
         getContent: function () {
-            return this.dialog.find('div.content')[0].textContent;
+            return this.dialog.find('div.popup-body > div.content')[0].textContent;
         },
 
         getJqueryContent: function () {
-            return this.dialog.find('div.content');
+            return this.dialog.find('div.popup-body > div.content');
         },
 
         /**
@@ -527,9 +561,17 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
             var me = this,
                 dragOptions = options || {
                     scroll: false,
+                    stack: '.divmanazerpopup.draggablestack',
                     handle: '.popupHeader'
                 };
             me.dialog.css('position', 'absolute');
+
+            // keep modal draggable top of overlay
+            dragOptions.drag = evt => {
+                if (me.overlay) {
+                    me.dialog.css('z-index', me.overlay.getZIndexForModal());
+                }
+            };
             me.dialog.draggable(dragOptions);
         },
 
@@ -545,7 +587,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Popup',
 
             this.eventHandlers = {
                 MapSizeChangedEvent: function (evt) {
-                    this._handleMapSizeChanges({width: evt.getWidth(), height: evt.getHeight()});
+                    this._handleMapSizeChanges({ width: evt.getWidth(), height: evt.getHeight() });
                 }
             };
 

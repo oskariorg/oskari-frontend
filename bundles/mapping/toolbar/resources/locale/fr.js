@@ -7,7 +7,8 @@ Oskari.registerLocalization(
             "link": {
                 "tooltip": "Lien",
                 "ok": "OK",
-                "title": "Faire un lien vers la vue cartographique."
+                "title": "Faire un lien vers la vue cartographique.",
+                "cannot": "Aucun lien possible pour cette vue cartographique. Veuillez créer une nouvelle vue cartographique et réessayer."
             },
             "history": {
                 "reset": "Revenir à la vue cartographique par défaut",
@@ -30,8 +31,8 @@ Oskari.registerLocalization(
             }
         },
         "guidedTour": {
-            "title": "Tools",
-            "message": "Use the tools to add places, save a map view, share a link to a map view or return to an earlier map view. Keep your mouse pointer on top of a tool for a moment to see its tool tip."
+            "title": "Outils",
+            "message": "Utilisez les outils pour ajouter des lieux, enregistrer une vue cartographique, partager un lien vers une vue cartographique ou retourner à une vue cartographique antérieure. Gardez le pointeur de votre souris dans le haut d'un outil pendant un instant pour en voir l'extrémité."
         }
     }
 });

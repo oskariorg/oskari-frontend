@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "Upload a dataset from your computer as a zipped file. Please check that all the files are in the correct file format and coordinate reference system.",
             "actions": {
                 "cancel": "Prekliči",
-                "next": "Naslednji"
-            },
-            "file": {
-                "submit": "Pošlji",
-                "fileOverSizeError": {
-                    "title": "Napaka",
-                    "message": "Izbrana datoteka je prevelika. B+velikost je omejena na  <xx> mb.",
-                    "close": "Zapri"
-                }
+                "next": "Naslednji",
+                "close": "Zapri",
+                "submit": "Pošlji"
             },
             "layer": {
                 "title": "Shrani informacije o naboru podatkov",

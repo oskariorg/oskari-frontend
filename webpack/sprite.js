@@ -49,12 +49,15 @@ function copyPngIcons (src, dest) {
     try {
         fs.copySync(src, dest, {
             // overwrite any existing file
-            clobber: true,
+            overwrite: true,
             // dereference symlinks
             dereference: true,
             // only include png files
-            filter: function (file) {
-                return file.endsWith('.png');
+            filter: function (path) {
+                if (fs.lstatSync(path).isDirectory()) {
+                    return true;
+                }
+                return path.endsWith('.png');
             }
         });
     } catch (e) {
@@ -310,6 +313,7 @@ if (!param) {
     failWarn('Version & appsetup directory must be given as param, eg. 1.48:applications/paikkatietoikkuna.fi');
 }
 
+// TODO: get version from package.json like build
 const [version, appsetupPath] = param.split(':');
 
 const targets = getDirectories(path.resolve(appsetupPath)).map((dirPath) => {

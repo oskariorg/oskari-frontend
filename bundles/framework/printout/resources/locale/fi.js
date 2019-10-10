@@ -113,6 +113,13 @@ Oskari.registerLocalization(
                         "label": "Näytä päivämäärä",
                         "tooltip": "Näytä tulosteessa sen laatimispäivämäärä.",
                         "checked": "checked"
+                    },
+                    {
+                        "id": "pageTimeSeriesTime",
+                        "label": "Näytä aikasarjan ajanhetki",
+                        "tooltip": "Näytä tulosteessa aikasarjan ajanhetki.",
+                        "checked": "checked",
+                        "printLabel": "Aikasarjan ajanhetki"
                     }
                 ]
             },

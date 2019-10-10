@@ -133,6 +133,10 @@ function() {
             "lang": "fr",
             "type": "text/javascript",
             "src": "../../../../bundles/framework/mapfull/resources/locale/fr.js"
+        }, {
+            "lang": "ru",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/mapfull/resources/locale/ru.js"
         }]
     },
     "bundle" : {

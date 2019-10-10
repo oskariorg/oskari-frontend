@@ -36,7 +36,7 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Julkaisutiedot",
-                "label": "Verkkosivuston osoite (ilman http- ja www-etuliitteitä)",
+                "label": "Salli kartan upotus vain seuraavaan sivustoon",
                 "placeholder": "Sivuston osoite",
                 "tooltip": "Anna verkkosivuston osoite eli domain-nimi ilman http- tai www-etuliitettä tai alasivun osoitetta. Esimerkiksi: omakotisivu.com."
             },
@@ -103,7 +103,8 @@ Oskari.registerLocalization(
                 },
                 "layerselection": {
                     "info": "Valitse taustakarttoina näytettävät karttatasot. Oletusvalinnan voit tehdä esikatselukartassa.",
-                    "selectAsBaselayer": "Taustakarttataso"
+                    "selectAsBaselayer": "Taustakarttataso",
+                    "allowStyleChange": "Salli esitystyylin valinta"
                 }
             },
             "toollayout": {
@@ -121,7 +122,9 @@ Oskari.registerLocalization(
                 "grid": "Näytä tilastotiedot taulukossa",
                 "allowClassification": "Salli luokittelu",
                 "transparent": "Aseta luokittelun tausta läpinäkyväksi",
-                "displayDiagram" : "Näytä pylväsdiagrammi"
+                "displayDiagram" : "Näytä pylväsdiagrammi",
+                "allowHidingClassification" : "Salli luokittelun piilottaminen",
+                "allowHidingSeriesControl" : "Salli sarjatoistimen piilottaminen"
             },
             "layout": {
                 "label": "Ulkoasu",

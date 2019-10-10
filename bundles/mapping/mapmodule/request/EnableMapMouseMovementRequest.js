@@ -10,7 +10,7 @@
  */
 Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.EnableMapMouseMovementRequest',
 
-/**
+    /**
  * @method create called automatically on construction
  * @static
  */

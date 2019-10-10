@@ -14,15 +14,9 @@ Oskari.registerLocalization(
             "help": "",
             "actions": {
                 "cancel": "Abbrechen",
-                "next": "Weiter"
-            },
-            "file": {
-                "submit": "Senden",
-                "fileOverSizeError": {
-                    "title": "",
-                    "message": "",
-                    "close": ""
-                }
+                "next": "Weiter",
+                "close": "",
+                "submit": "Senden"
             },
             "layer": {
                 "title": "Informationen zum Datensatz speichern:",

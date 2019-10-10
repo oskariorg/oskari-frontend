@@ -273,6 +273,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             return this._styles;
         },
         /**
+         * @method getStyleDef
+         * @param {String} styleName
+         * @return {Object}
+         */
+        getStyleDef (styleName) {
+            if (styleName === 'oskari_custom') {
+                return { [this._layerName]: { featureStyle: this.getCustomStyle() } };
+            }
+            if (this._options.styles) {
+                return this._options.styles[styleName];
+            }
+        },
+        /**
+         * To get distance between features when clustering kicks in.
+         *  @method getClusteringDistance
+         *  @return {Number} Distance between features in pixels
+         */
+        getClusteringDistance () {
+            return this._options.clusteringDistance;
+        },
+        /**
+         * To setup clustering. Sets the minimum distance between features before clustering kicks in.
+         *  @method setClusteringDistance
+         *  @return {Number} Distance between features in pixels
+         */
+        setClusteringDistance (distance) {
+            this._options.clusteringDistance = distance;
+        },
+        /**
+         * @method isSupportedSrs
+         * Wfs layer is always supported
+         */
+        isSupportedSrs () {
+            return true;
+        },
+        /**
          * @method setWMSLayerId
          * @param {String} id
          * Unique identifier for map layer used to reference the WMS layer,
@@ -290,7 +326,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          */
         getWMSLayerId: function () {
             return this._WMSLayerId;
+        },
+        /**
+         * @method getLayerUrl
+         * Superclass override
+         */
+        getLayerUrl: function () {
+            return Oskari.urls.getRoute('GetWFSVectorTile') + `&id=${this.getId()}&srs={epsg}&z={z}&x={x}&y={y}`;
+        },
+        isFilterSupported: function () {
+            return true;
         }
     }, {
-        'extend': ['Oskari.mapframework.domain.AbstractLayer']
+        'extend': ['Oskari.mapframework.mapmodule.VectorTileLayer']
     });

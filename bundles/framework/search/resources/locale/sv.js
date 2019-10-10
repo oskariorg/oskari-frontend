@@ -29,7 +29,8 @@ Oskari.registerLocalization(
         },
         "resultBox": {
             "close": "Stäng",
-            "title": "Sökresultat"
+            "title": "Sökresultat",
+            "alternatives": "Den här platsen har följande alternativa namn:"
         },
         "guidedTour": {
             "title": "Sök",

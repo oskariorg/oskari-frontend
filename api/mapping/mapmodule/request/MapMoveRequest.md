@@ -25,7 +25,32 @@ Requests a map to be moved to certain zoom level and location. Triggers afterMap
   <td> \* y </td><td> Number </td><td> y coordinate of the desired map location </td><td> </td>
 </tr>
 <tr>
-  <td> \* zoomLevel </td><td> Number </td><td> desired zoom level </td><td> </td>
+  <td> zoomLevel </td>
+  <td> Number|Object </td>
+  <td> 
+    Desired zoomlevel as a number <br>
+    Or
+    ```javascript
+    { scale }
+    // or
+    { left, top, bottom, right }
+    ```
+    </td>
+  <td> </td>
+</tr>
+<tr>
+  <td> options </td>
+  <td> Object </td>
+  <td> 
+  Optional parameters 
+  ```javascript
+  { 
+    srsName: 'EPSG:3857',
+    animation: 'fly'|'pan'
+  }
+  ``` 
+  </td>
+  <td> </td>
 </tr>
 </table>
 

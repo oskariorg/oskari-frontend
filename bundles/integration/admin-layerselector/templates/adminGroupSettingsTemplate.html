@@ -4,15 +4,16 @@
 
     <%
         var names = model.getNameLanguages();
+        var loc = Oskari.getLocalization('DivManazer').LanguageSelect.languages;
         for (var i = 0; i < names.length; i++) {
-            var lang = names[i] %>
+            var lang = names[i]; %>
             <div class="add-group-record">
                 <div class="add-class-label-area">
-                    <label for="add-class-<%= lang %>-name" class="add-class-label" title="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].title : lang %>"><%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].lang : lang + ':' %></label>
+                    <label for="add-class-<%= lang %>-name" class="add-class-label" title="<%= (loc[lang] || lang) + ':' %>"><%= (loc[lang] || lang) + ':' %></label>
                 </div>
                 <div  class="add-class-input-area">
                     <div class="input-controls">
-                        <input type="text" id="add-group-<%= lang %>-name" class="add-class-input mid" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', lang) %>" value="<%= model.getName(lang) %>" />
+                        <input type="text" id="add-group-<%= lang %>-name" class="add-class-input mid" placeholder="<%= instance.getLocalization('admin')[lang] ? instance.getLocalization('admin')[lang].placeholder : instance.getLocalization('admin')['generic'].placeholder.replace('{0}', (loc[lang] || lang)) %>" value="<%= model.getName(lang) %>" />
                         <div class="icon-close"></div>
                     </div>
                 </div>
@@ -36,10 +37,10 @@
         </div>
 
         <div class="add-layer-record">
-        <div class="add-layer-label-area">
-            <%= instance.locale('admin.maplayerGroups') %>
-        </div>
-        <div class="add-layer-input-area">
+            <div class="add-layer-label-area">
+                <label class="add-layer-label"><%= instance.locale('admin.maplayerGroups') %></label>
+            </div>
+            <div class="add-layer-input-area">
                 <div class="input-controls">
                     <div class="admin-maplayer-groups-list">
                         <% for(var i = 0; maplayerGroups != null && i < maplayerGroups.length; i++) { %>

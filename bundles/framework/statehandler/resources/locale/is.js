@@ -6,7 +6,7 @@ Oskari.registerLocalization(
         "session": {
             "expiring": {
                 "title": "Lotan er að renna út",
-                "message": "Lotan er að renna út. Vinsamlegast smelltu {lengja} til að vera áfram skráð/ur inn.",
+                "message": "Lotan er að renna út. Vinsamlegast smelltu {extend} til að vera áfram skráð/ur inn.",
                 "extend": "Halda lotu áfram."
             },
             "expired": {

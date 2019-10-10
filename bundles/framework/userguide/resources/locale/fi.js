@@ -40,14 +40,16 @@ Oskari.registerLocalization(
             {
                 "title": "Teemakartat",
                 "tags": "ohje_teemakartat"
-            },
-            {
-                "title": "Analyysi",
-                "tags": "ohje_analyysi"
             }
         ],
         "help": {
             "tags": "karttaikkuna,pikaohje"
+        },
+        "guidedTour": {
+            "title": "Käyttöohje",
+            "message": "Käyttöohjeesta löydät opastusta tämän palvelun käyttöön.",
+            "openLink": "Näytä Käyttöohje",
+            "closeLink": "Piilota Käyttöohje"
         }
     }
 });

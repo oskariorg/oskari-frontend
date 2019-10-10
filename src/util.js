@@ -1,4 +1,6 @@
+import DOMPurify from 'dompurify';
 
+const MobileDetect = require('mobile-detect');
 /*
 * @class Oskari.util
 * Util class instance for static methods what may be used to for checks values.
@@ -163,7 +165,7 @@ Oskari.util = (function () {
             return null;
         }
         if (typeof value === 'object') {
-            for (i = 0; i < value.length; i++) {
+            for (let i = 0; i < value.length; i++) {
                 val = value[i] + '';
                 val = val.split('.');
                 if (val.length === 2 && maxDecimals < val[1].length) {
@@ -228,9 +230,14 @@ Oskari.util = (function () {
      * Returns a new color string for lighter or darker color than the original.
      * @param {String} colorStr color to change
      * @param {Number} amount amount of change. Positive number for lighter, negative for darker color.
+     * @param {Number} lightColorFlip if color is light the change will be flipped.
      */
-    util.alterBrightness = function (colorStr, amount) {
+    util.alterBrightness = function (colorStr, amount, lightColorFlip) {
         var usePound = false;
+
+        if (lightColorFlip && this.isLightColor(colorStr)) {
+            amount = -amount;
+        }
 
         if (colorStr.indexOf('rgba') === 0) {
             // Alpha is not supported
@@ -418,8 +425,11 @@ Oskari.util = (function () {
         return this.getColorBrightness(color) === 'light';
     };
 
-    util.isMobile = function () {
+    util.isMobile = function (ignoreSize) {
         var md = new MobileDetect(window.navigator.userAgent);
+        if (ignoreSize === true) {
+            return !!md.mobile();
+        }
         var mobileDefs = {
             width: 500,
             height: 400
@@ -588,7 +598,7 @@ Oskari.util = (function () {
     util.coordinateIsDegrees = function (point) {
         var matches1 = coordinateDMSDecode(point[0]);
         var matches2 = coordinateDMSDecode(point[1]);
-        return (matches1 && matches2);
+        return (matches1 != null && matches1.length > 0 && matches2 != null && matches2.length > 0);
     };
 
     /**
@@ -601,13 +611,23 @@ Oskari.util = (function () {
      */
     util.getRequestParam = function (name, defaultValue) {
         var query = location.search.substr(1);
-        var result = {};
-        query.split('&').forEach(function (part) {
-            var item = part.split('=');
-            result[item[0]] = decodeURIComponent(item[1]);
-        });
+        var result = util.getRequestParameters(query);
         return result[name] || defaultValue;
     };
+
+    /**
+     * @method getRequestParameters
+     * Returns request parameters from query string as an object
+     * @return {Object} parameters
+     */
+    util.getRequestParameters = function (query) {
+        const params = {};
+        query.split('&').forEach(part => {
+            const item = part.split('=');
+            params[item[0]] = decodeURIComponent(item[1]);
+        });
+        return params;
+    }
     /**
      * Returns true if first param is a number with value between start-stop parameters
      * @param  {Number}  num   [description]
@@ -659,6 +679,61 @@ Oskari.util = (function () {
         }
         return true;
     };
+
+    /**
+     * Checks if two arrays have equal primitive values and order.
+     * Shallow test.
+     * 
+     * @return {Boolean} true if the arrays are equal
+     */
+    util.arraysEqual = function (a, b) {
+        if (a === b) {
+            return true;
+        }
+        if (!Array.isArray(a) || !Array.isArray(b)) {
+            return false;
+        }
+        if (a.length !== b.length) {
+            return false;
+        }
+        let i;
+        for (i = 0; i < a.length; i++) {
+            if (a[i] !== b[i]) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Sql LIKE like operator.
+     * Supports % and * as zero to n characters and _ as a single character.
+     * @param  {String|Number} value value to check
+     * @param  {String|Number} likePattern pattern to check against
+     * @return {Boolean} true if pattern exists in the value
+     */
+    util.stringLike = (value, likePattern) => {
+        const regExpSpecials = '\\' + ['/', '.', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\');
+        const likeRegExp = new RegExp(`^${likePattern.toString()
+            .replace(new RegExp(regExpSpecials, 'g'), '\\$1')
+            .replace(/%|\*/g, '.*')
+            .replace(/_/g, '.')}$`);
+        return likeRegExp.test(value.toString());
+    }
+    /**
+    * Function to get errorText from objects received in jQuery.ajax request failure.
+    *
+    * @param {jqXHR} jqXHR The jqXHR (in jQuery 1.4.x, XMLHttpRequest) object
+    * @param {String} errorThrown exception object
+    */
+    util.getErrorTextFromAjaxFailureObjects = (jqXHR, errorThrown) => {
+        var error = errorThrown.message || errorThrown;
+        try {
+            const err = JSON.parse(jqXHR.responseText).error;
+            if (err !== null && err !== undefined) {
+                error = err;
+            }
+        } catch (ignore) {}
+        return error;
+    }
 
     return util;
 }());

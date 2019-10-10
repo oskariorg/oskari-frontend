@@ -40,14 +40,16 @@ Oskari.registerLocalization(
             {
                 "title": "Temakartor",
                 "tags": "guide_thematic"
-            },
-            {
-                "title": "Analys",
-                "tags": "guide_analysis"
             }
         ],
         "help": {
             "tags": "kartfönstret,snappguide"
+        },
+        "guidedTour": {
+            "title": "Bruksanvisningar",
+            "message": "Läs mer om hur du använder den här tjänsten, genom att läsa bruksanvisningar.",
+            "openLink": "Visa Bruksanvisningar",
+            "closeLink": "Göm Bruksanvisningar"
         }
     }
 });

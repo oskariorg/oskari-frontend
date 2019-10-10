@@ -120,7 +120,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     btn = {
                         iconCls: 'tool-feature-selection',
                         tooltip: localization.tools.select.tooltip,
-                        sticky: false,
+                        sticky: true,
                         callback: function () {
                             me.popupHandler.showSelectionTools();
                         }
@@ -246,6 +246,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
             me.sandbox.notifyAll(event);
         },
 
+        __refreshLoadingStatus: function () {
+            const status = {
+                loading: [],
+                error: []
+            };
+            Object.entries(this.__loadingStatus).forEach(([key, value]) => status[value].push(key));
+            if (status.loading.length === 0) {
+                // no layers in loading state
+                this.plugin.showLoadingIndicator(false);
+            }
+            // setup error indicator based on error statuses
+            this.plugin.showErrorIndicator(status.error.length > 0);
+        },
+
         /**
          * @property {Object} eventHandlers
          * @static
@@ -280,23 +294,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                     }
                 }
                 if (event.getStatus() === event.status.error) {
-                    this.__loadingStatus['' + event.getLayerId()] = 'error';
+                    if (this.__loadingStatus.hasOwnProperty('' + event.getLayerId())) {
+                        this.__loadingStatus['' + event.getLayerId()] = 'error';
+                    }
                     this.plugins['Oskari.userinterface.Flyout'].showLoadingIndicator(event.getLayerId(), false);
                     this.plugins['Oskari.userinterface.Flyout'].showErrorIndicator(event.getLayerId(), true);
                 }
-                var status = {
-                    loading: [],
-                    error: []
-                };
-                _.each(this.__loadingStatus, function (value, key) {
-                    status[value].push(key);
-                });
-                if (status.loading.length === 0) {
-                    // no layers in loading state
-                    this.plugin.showLoadingIndicator(false);
-                }
-                // setup error indicator based on error statuses
-                this.plugin.showErrorIndicator(status.error.length > 0);
+                this.__refreshLoadingStatus();
             },
             'MapLayerEvent': function (event) {
                 if (event.getOperation() !== 'add') {
@@ -321,6 +325,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 if (event.getMapLayer().hasFeatureData()) {
                     this.plugin.refresh();
                     this.plugins['Oskari.userinterface.Flyout'].layerRemoved(event.getMapLayer());
+                    delete this.__loadingStatus['' + event.getMapLayer().getId()];
+                    this.__refreshLoadingStatus();
                 }
             },
 
@@ -343,8 +349,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'WFSPropertiesEvent': function (event) {
                 // update grid information [don't update the grid if not active]
-                var layer = event.getLayer();
-                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (flyout.isActive()) {
+                    flyout.updateData(event.getLayer());
+                }
             },
 
             /**
@@ -353,8 +361,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
              */
             'WFSFeatureEvent': function (event) {
                 // update grid information [don't update the grid if not active]
-                var layer = event.getLayer();
-                this.plugins['Oskari.userinterface.Flyout'].updateData(layer);
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                if (flyout.isActive()) {
+                    flyout.updateData(event.getLayer());
+                }
             },
 
             /**
@@ -440,6 +450,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.FeatureDataBundleIn
                 var me = this;
                 me.plugin.mapStatusChanged();
                 this.plugins['Oskari.userinterface.Flyout'].locateOnMapFID = null;
+            },
+            'Toolbar.ToolSelectedEvent': function (event) {
+                if (event.getGroupId() === 'selectiontools' || event.getToolId() === 'dialog') {
+                    return;
+                }
+                if (!event.getSticky()) {
+                    return;
+                }
+                if (this.popupHandler) {
+                    this.popupHandler.close();
+                }
             },
 
             WFSFeatureGeometriesEvent: null

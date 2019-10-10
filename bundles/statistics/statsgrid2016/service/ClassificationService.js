@@ -1,4 +1,6 @@
-import equalSizeBands from '../util/equalSizeBands';
+import { equalSizeBands } from '../util/equalSizeBands';
+import geostats from 'geostats/lib/geostats.min.js';
+import 'geostats/lib/geostats.css';
 
 /**
  * @class Oskari.statistics.statsgrid.ClassificationService
@@ -33,7 +35,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             // values recognized by the code (and geostats)
             method: ['jenks', 'quantile', 'equal', 'manual'],
             // values recognized by the code (and geostats)
-            mode: ['distinct', 'discontinuous']
+            mode: ['distinct', 'discontinuous'],
+            // values recognized by the code (and geostats)
+            mapStyle: ['choropleth', 'points']
         },
         getAvailableMethods: function () {
             return this.limits.method.slice(0);
@@ -41,9 +45,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
         getAvailableModes: function () {
             return this.limits.mode.slice(0);
         },
+        getAvailableMapStyles: function () {
+            return this.limits.mapStyle.slice(0);
+        },
         getAvailableOptions: function (data) {
             var validOpts = {};
-            var list = this._getDataAsList(data);
+            var list = Array.isArray(data) ? data : this._getDataAsList(data);
             validOpts.maxCount = list.length - 1;
             return validOpts;
         },
@@ -98,7 +105,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
             const setBounds = (stats) => {
                 if (opts.method === 'jenks') {
                     // Luonnolliset välit
-                    response.bounds = stats.getJenks(opts.count);
+                    // geostats.js has performance problems when calculating jenks natural breaks
+                    // hence we are using different function implemented in GeostatsHelper for that
+                    const geostatsHelper = new GeostatsHelper();
+                    response.bounds = geostatsHelper.getJenks(stats.serie, opts.count);
+                    stats.setBounds(response.bounds);
+                    stats.setRanges();
                 } else if (opts.method === 'quantile') {
                     // Kvantiilit
                     response.bounds = stats.getQuantile(opts.count);
@@ -123,8 +135,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 }
                 var groupOpts = groupStats.classificationOptions || {};
                 var calculateBounds =
-                    (!groupOpts.method || groupOpts.method !== opts.method) ||
-                    (!groupOpts.count || groupOpts.count !== opts.count);
+                    !groupStats.classificationOptions ||
+                    groupOpts.method !== opts.method ||
+                    groupOpts.count !== opts.count ||
+                    (opts.method === 'manual' && !Oskari.util.arraysEqual(groupStats.bounds, opts.manualBounds));
 
                 if (calculateBounds) {
                     setBounds(groupStats);
@@ -215,12 +229,25 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                         formatter
                     );
                 }
-
                 // Choropleth  legend
                 stats.setColors(colors);
+
                 return stats.getHtmlLegend(null, title || '', true, formatter.format, opts.mode);
             };
             this.lastUsedBounds = response.bounds;
+            var maxBounds = [];
+            if (response.bounds) {
+                // max bounds are calculated for color scale used in diagram
+                var values = stats.sorted();
+                var j = 1;
+                for (var i = 0; i < values.length; i++) {
+                    if (parseFloat(values[i]) > parseFloat(response.bounds[j])) {
+                        maxBounds.push(values[i]);
+                        j++;
+                    }
+                }
+            }
+            response.maxBounds = maxBounds;
             return response;
         },
         getPixelForSize: function (index, size, range) {
@@ -376,7 +403,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
 
                 var circle = point.find('circle');
                 circle.attr({
-                    'fill': '#' + color
+                    'fill': color
                 });
 
                 svg.find('svg.symbols').prepend(point.html());

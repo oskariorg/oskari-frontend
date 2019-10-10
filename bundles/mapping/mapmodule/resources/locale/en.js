@@ -21,6 +21,8 @@ Oskari.registerLocalization(
         },
         "unsupportedProjHeader": "Notice",
         "unsupportedProj": "Some layers added to this map view cannot be shown with the current map projection.",
+        "unsupported-layer": "Map Layer cannot be shown.",
+        "unsupported-layer-projection": "Map layer cannot be shown in selected map projection.",
         "plugin": {
             "LogoPlugin": {
                 "terms": "Terms of Use",
@@ -40,7 +42,8 @@ Oskari.registerLocalization(
             "LayerSelectionPlugin": {
                 "title": "Map layers",
                 "chooseDefaultBaseLayer": "Select background map",
-                "chooseOtherLayers": "Select other map layers"
+                "chooseOtherLayers": "Select other map layers",
+                "style": "Style"
             },
             "SearchPlugin": {
                 "placeholder": "Search location",
@@ -66,7 +69,7 @@ Oskari.registerLocalization(
             "PublisherToolbarPlugin": {
                 "test": "test",
                 "history": {
-                    "reset": "Move to default view",
+                    "reset": "Move to the original map view",
                     "back": "Move to previous view",
                     "next": "Move to next view"
                 },
@@ -109,6 +112,11 @@ Oskari.registerLocalization(
             },
             "MyLocationPlugin": {
                 "tooltip": "Center map to your location"
+            },
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Move to the original map view"
+                }
             }
         },
         "guidedTour": {

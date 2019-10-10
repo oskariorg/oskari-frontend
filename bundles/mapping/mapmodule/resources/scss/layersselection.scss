@@ -65,6 +65,12 @@ div.mapplugin.layerselection {
         margin-left: 30px;
         word-break: break-word;
       }
+
+      .style-selector select{
+        max-width: 120px;
+        display: inline-block;
+        margin-left: 5px; 
+      }
     }
 
     div.styled-header-arrow {
@@ -215,6 +221,12 @@ div.mapplugin {
       div.baseLayerHeader, div.layerHeader {
         font-weight: bold;
         padding-bottom: 6px;
+      }
+
+      .style-selector select{
+        max-width: 120px;
+        display: inline-block;
+        margin-left: 5px; 
       }
 
       div.layerHeader {

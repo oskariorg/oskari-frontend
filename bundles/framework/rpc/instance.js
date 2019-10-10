@@ -32,7 +32,8 @@ Oskari.clazz.define(
             if (!clientVer) {
                 return false;
             }
-            return clientVer.indexOf('2.0.') === 0;
+            const [major, minor, patch] = clientVer.split('.').map(p => parseInt(p));
+            return major === 2 && minor <= 1 && patch >= 0;
         },
         /**
          * @public @method start
@@ -51,11 +52,6 @@ Oskari.clazz.define(
 
             if (!Channel) {
                 me.log.warn('RemoteProcedureCallInstance.startPlugin(): JSChannel not found.');
-                return;
-            }
-
-            if (domain === null || domain === undefined || !domain.length) {
-                me.log.warn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
                 return;
             }
 
@@ -193,7 +189,10 @@ Oskari.clazz.define(
                     'DrawTools.StopDrawingRequest',
                     'MapModulePlugin.ZoomToFeaturesRequest',
                     'MapModulePlugin.MapLayerUpdateRequest',
-                    'rotate.map'];
+                    'rotate.map',
+                    'StartUserLocationTrackingRequest',
+                    'StopUserLocationTrackingRequest'
+                ];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);
             // try to get event/request builder for each of these to see that they really are supported!!
@@ -447,6 +446,10 @@ Oskari.clazz.define(
             }
             // Allow subdomains and different ports
             var domain = this.conf.domain;
+            if (domain === null || domain === undefined || !domain.length) {
+                // Publication is not restricted by domain
+                return true;
+            }
 
             var url = document.createElement('a');
             url.href = origin;

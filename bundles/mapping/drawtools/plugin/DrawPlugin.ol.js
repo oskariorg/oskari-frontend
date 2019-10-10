@@ -1,7 +1,7 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 import * as olExtent from 'ol/extent';
-import olInteractionDraw, {createRegularPolygon} from 'ol/interaction/Draw';
+import olInteractionDraw, { createRegularPolygon } from 'ol/interaction/Draw';
 import olInteractionModify from 'ol/interaction/Modify';
 import * as olEventsCondition from 'ol/events/condition';
 import olOverlay from 'ol/Overlay';
@@ -12,7 +12,7 @@ import GeometryCollection from 'ol/geom/GeometryCollection';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olCollection from 'ol/Collection';
 import jstsOL3Parser from 'jsts/org/locationtech/jts/io/OL3Parser';
-import {BufferOp, BufferParameters} from 'jsts/org/locationtech/jts/operation/buffer';
+import { BufferOp, BufferParameters } from 'jsts/org/locationtech/jts/operation/buffer';
 import isValidOp from 'jsts/org/locationtech/jts/operation/valid/IsValidOp';
 
 const olParser = new jstsOL3Parser();
@@ -247,7 +247,7 @@ Oskari.clazz.define(
                 feat,
                 feats = [];
             geometries.forEach(function (geom) {
-                feat = new olFeature({geometry: geom});
+                feat = new olFeature({ geometry: geom });
                 feat.setId(me.generateNewFeatureId());
                 feats.push(feat);
                 if (checkIntersection) {
@@ -516,9 +516,15 @@ Oskari.clazz.define(
 
             switch (me.getCurrentDrawShape()) {
             case 'Point':
+            case 'LineString':
                 if (requestedBuffer > 0) {
                     me.addBufferPropertyToFeatures(features, requestedBuffer);
                 }
+                break;
+            case 'Square':
+                features.forEach(function (f) {
+                    me._featuresValidity[f.getId()] = true;
+                });
                 break;
             case 'Circle':
                 // Do common stuff
@@ -530,11 +536,6 @@ Oskari.clazz.define(
                     features = me.getCircleAsPolygonFeature(features);
                 }
                 break;
-            case 'LineString':
-                if (requestedBuffer > 0) {
-                    me.addBufferPropertyToFeatures(features, requestedBuffer);
-                }
-                break;
             }
 
             var geojson = me.getFeaturesAsGeoJSON(features);
@@ -543,17 +544,22 @@ Oskari.clazz.define(
 
             var measures = me.sumMeasurements(features);
             var data = {
-                length: measures.length,
-                area: measures.area,
                 buffer: requestedBuffer,
                 bufferedGeoJson: bufferedGeoJson,
                 shape: me.getCurrentDrawShape()
             };
+
+            if (measures.length) {
+                data.length = measures.length;
+            }
+            if (measures.area) {
+                data.area = measures.area;
+            }
+
             var showMeasureUI = !!me.getOpts('showMeasureOnMap');
             if (showMeasureUI) {
                 data.showMeasureOnMap = showMeasureUI;
             }
-
             if (options.clearCurrent) {
                 me.clearDrawing(id);
             }
@@ -638,7 +644,7 @@ Oskari.clazz.define(
 
                 var multiGeometry = me.createMultiGeometry(geometries);
 
-                feature = new olFeature({geometry: multiGeometry});
+                feature = new olFeature({ geometry: multiGeometry });
                 feature.setId(me.generateNewFeatureId());
 
                 jsonObject = me.formJsonObject(feature, measures, buffer);
@@ -712,14 +718,20 @@ Oskari.clazz.define(
          */
         sumMeasurements: function (features) {
             var me = this;
-            var value = {
-                length: 0,
-                area: 0
-            };
+            var value = {};
             var mapmodule = this.getMapModule();
             features.forEach(function (f) {
-                value.length += mapmodule.getGeomLength(f.getGeometry());
-                if (me._featuresValidity[f.getId()]) {
+                const geomType = f.getGeometry().getType();
+                if (geomType === 'LineString' || geomType === 'Polygon') {
+                    if (!value.length) {
+                        value.length = 0;
+                    }
+                    value.length += mapmodule.getGeomLength(f.getGeometry());
+                }
+                if (me._featuresValidity[f.getId()] && geomType === 'Polygon') {
+                    if (!value.area) {
+                        value.area = 0;
+                    }
                     value.area += mapmodule.getGeomArea(f.getGeometry());
                 }
             });
@@ -735,7 +747,7 @@ Oskari.clazz.define(
             var me = this;
             var vector = new olLayerVector({
                 id: layerId,
-                source: new olSourceVector({features: new olCollection()}),
+                source: new olSourceVector({ features: new olCollection() }),
                 style: me._styles.draw
             });
             me.getMap().addLayer(vector);
@@ -840,13 +852,19 @@ Oskari.clazz.define(
                     return geometry;
                 };
             }
-            var drawInteraction = new olInteractionDraw({
+            const opts = {
                 features: me._drawLayers[layerId].getSource().getFeaturesCollection(),
                 type: geometryType,
                 style: me._styles.draw,
                 geometryFunction: geometryFunction,
                 maxPoints: maxPoints
-            });
+            };
+
+            if (!Oskari.util.isMobile(true)) {
+                // use smaller snap tolerance on desktop
+                opts.snapTolerance = 3;
+            }
+            var drawInteraction = new olInteractionDraw(opts);
             // does this need to be registered here and/or for each functionalityId?
             me._draw[functionalityId] = drawInteraction;
 
@@ -928,11 +946,19 @@ Oskari.clazz.define(
                 // intersection is allowed or geometry isn't being drawn currently
                 return;
             }
-            if (geometry.getCoordinates()[0].length < 4 || !isValidOp.isValid(olParser.read(geometry))) {
-                // lines intersect -> problem!!
-                currentDrawing.setStyle(me._styles.intersect);
-                me._featuresValidity[currentDrawing.getId()] = false;
-                return;
+
+            const coordinates = geometry.getCoordinates()[0];
+            // This function is called twice when modifying geometry from the point where the drawing initially began
+            // That is because the first and the last point of the geometry are being modified at the same time
+            // The points should have identical values but in the first call they don't
+            // So the first call is ignored by the if statement below since it would otherwise throw an error from a 3rd party library
+            if (coordinates.length >= 4 && _.isEqual(coordinates[0], coordinates[coordinates.length - 1])) {
+                if (!isValidOp.isValid(olParser.read(geometry))) {
+                    // lines intersect -> problem!!
+                    currentDrawing.setStyle(me._styles.intersect);
+                    me._featuresValidity[currentDrawing.getId()] = false;
+                    return;
+                }
             }
             // geometry is valid
             if (geometry.getArea() > 0) {
@@ -965,7 +991,7 @@ Oskari.clazz.define(
                     if (area < 10000) {
                         area = area.toFixed(0) + ' m&sup2;';
                     } else if (area > 1000000) {
-                        area = (area / 1000000).toFixed(2) + ' km&sup2;';
+                        area = (area / 1000000).toFixed(3) + ' km&sup2;';
                     } else {
                         area = (area / 10000).toFixed(2) + ' ha';
                     }
@@ -1075,6 +1101,7 @@ Oskari.clazz.define(
                     } else if (shape === 'Polygon' && options.selfIntersection !== false) {
                         me.checkIntersection(me._sketch.getGeometry());
                     }
+                    me.pointerMoveHandler();
                     me.sendDrawingEvent(me._id, options);
                     // probably safe to start listening again
                     me.toggleDrawLayerChangeFeatureEventHandler(true);

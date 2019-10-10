@@ -17,16 +17,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
         this.backendStatus = 'UNKNOWN'; // see also 'backendstatus-ok'
         this.ui = this._createLayerContainer(layer);
     }, {
-        __template: '<div class="layer"><input type="checkbox" /> ' +
-                    '<div class="layer-tools">' +
-                    '   <div class="layer-not-supported icon-warning-light" title="" ></div>' +
-                    '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
-                    '   <div class="layer-icon-secondary"></div>' +
-                    '   <div class="layer-icon"></div>' +
-                    '   <div class="layer-info"></div>' +
-                    '</div>' +
-                    '<div class="layer-title"></div>' +
-        '</div>',
+        __template: '<div class="layer">' +
+                        '<div class="custom-tools"></div>' +
+                        '<input type="checkbox" /> ' +
+                        '<div class="layer-tools">' +
+                        '   <div class="layer-not-supported icon-warning-light" title="" ></div>' +
+                        '   <div class="layer-backendstatus-icon backendstatus-unknown" title=""></div>' +
+                        '   <div class="layer-icon-secondary"></div>' +
+                        '   <div class="layer-icon"></div>' +
+                        '   <div class="layer-info"></div>' +
+                        '</div>' +
+                        '<div class="layer-title"></div>' +
+                    '</div>',
         /**
          * @method getId
          * @return {String} layer id
@@ -204,7 +206,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
                 .on('click', function () {
                     layerDiv.find('input').prop('checked', !layerDiv.find('input').prop('checked')).trigger('change');
                 })
-                .toggleClass('not-supported', !layer.isSupported(sandbox.getMap().getSrsName()));
+                .toggleClass('not-supported', !layer.isSupportedSrs(sandbox.getMap().getSrsName()));
 
             layerDiv.find('input').on('change', function () {
                 checkbox = jQuery(this);
@@ -219,6 +221,24 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
             if (layer.isSticky()) {
                 layerDiv.find('input').prop('disabled', true);
             }
+
+            /* add custom tools */
+            const customToolsDiv = layerDiv.find('div.custom-tools');
+            layer.getTools()
+                .filter(tool => tool.getTypes().includes('layerList'))
+                .forEach(tool => {
+                    const toolContainer = jQuery('<div></div>');
+                    toolContainer.addClass(tool.getIconCls());
+                    toolContainer.attr('title', tool.getTooltip());
+                    toolContainer.click(() => {
+                        const cb = tool.getCallback();
+                        if (cb) {
+                            cb();
+                        }
+                        return false;
+                    });
+                    customToolsDiv.append(toolContainer);
+                });
 
             /*
              * backend status
@@ -246,7 +266,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.view.Layer',
              * Supported projection
              */
             tools.find('.layer-not-supported')
-                .css('display', !layer.isSupported(sandbox.getMap().getSrsName()) ? null : 'none')
+                .css('display', !sandbox.getMap().isLayerSupported(layer) ? null : 'none')
                 .attr('title', this.localization.tooltip['unsupported-srs']);
 
             return layerDiv;

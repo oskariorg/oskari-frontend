@@ -1,25 +1,34 @@
 const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const resolveConfig = require('./webpack/resolveConfig.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
+const { NormalModuleReplacementPlugin } = require('webpack');
 
 const proxyPort = 8081;
 
 module.exports = (env, argv) => {
     const isProd = argv.mode === 'production';
 
-    const {version, pathParam, publicPathPrefix} = parseParams(env);
+    const { version, pathParam, publicPathPrefix, theme } = parseParams(env);
 
     const isDirectory = source => lstatSync(source).isDirectory();
     const getDirectories = source => readdirSync(source).map(name => path.join(source, name)).filter(isDirectory);
     const appsetupPaths = getDirectories(path.resolve(pathParam));
 
-    const {entries, plugins} = generateEntries(appsetupPaths, isProd, __dirname);
+    const { entries, plugins } = generateEntries(appsetupPaths, isProd, __dirname);
     plugins.push(new MiniCssExtractPlugin({
         filename: '[name]/oskari.min.css'
     }));
+
+    // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
+    const replacement = path.resolve(__dirname, 'ant-globals.less');
+    plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
+
+    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, './ant-theme.less');
 
     const styleLoaderImpl = isProd ? {
         loader: MiniCssExtractPlugin.loader,
@@ -48,21 +57,25 @@ module.exports = (env, argv) => {
                     use: 'imports-loader?define=>undefined,exports=>undefined'
                 },
                 {
-                    test: /\.js$/,
+                    test: /\.(js|jsx)$/,
                     exclude: [/libraries/, /\.min\.js$/],
                     use: {
                         loader: 'babel-loader',
                         options: {
                             presets: [
                                 [
-                                    require.resolve('@babel/preset-env'), // Resolve path for use from external porojects
+                                    require.resolve('@babel/preset-env'), // Resolve path for use from external projects
                                     {
                                         useBuiltIns: 'entry',
                                         targets: '> 0.25%, not dead, ie 11'
                                     }
-                                ]
+                                ],
+                                require.resolve('@babel/preset-react') // Resolve path for use from external projects
                             ],
-                            plugins: [require.resolve('babel-plugin-transform-remove-strict-mode')] // Resolve path for use from external porojects
+                            plugins: [
+                                require.resolve('babel-plugin-styled-components'), // Resolve path for use from external projects
+                                require.resolve('babel-plugin-transform-remove-strict-mode')
+                            ]
                         }
                     }
                 },
@@ -70,19 +83,35 @@ module.exports = (env, argv) => {
                     test: /\.css$/,
                     use: [
                         styleLoaderImpl,
-                        { loader: 'css-loader', options: { minimize: true } }
+                        { loader: 'css-loader', options: { } }
                     ]
                 },
                 {
                     test: /\.scss$/,
                     use: [
                         styleLoaderImpl,
-                        { loader: 'css-loader', options: { minimize: true } },
+                        { loader: 'css-loader', options: { } },
                         'sass-loader' // compiles Sass to CSS
                     ]
                 },
                 {
-                    test: /\.(ttf|png|jpg|gif)$/,
+                    test: /\.less$/,
+                    use: [
+                        styleLoaderImpl,
+                        { loader: 'css-loader' },
+                        {
+                            loader: 'less-loader',
+                            options: {
+                                modifyVars: {
+                                    'hack': `true; @import "${themeFile}";`
+                                },
+                                javascriptEnabled: true
+                            }
+                        }
+                    ]
+                },
+                {
+                    test: /\.(ttf|png|jpg|gif|svg)$/,
                     use: [
                         {
                             loader: 'file-loader',
@@ -113,13 +142,7 @@ module.exports = (env, argv) => {
                 'oskari-lazy-loader': path.resolve(__dirname, './webpack/oskariLazyLoader.js')
             }
         },
-        resolve: {
-            alias: {
-
-            },
-            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow use of oskari-frontend node_modules from external projects
-            symlinks: false
-        }
+        resolve: resolveConfig
     };
 
     // Mode specific config
@@ -129,7 +152,8 @@ module.exports = (env, argv) => {
                 new UglifyJsPlugin({
                     sourceMap: true,
                     parallel: true
-                })
+                }),
+                new OptimizeCSSAssetsPlugin({})
             ]
         };
     } else {

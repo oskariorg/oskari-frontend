@@ -32,9 +32,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
                     show: true,
                     callback: function () {
                         if (me.popup && me.popup.isVisible()) {
-                            me.popup.getJqueryContent().detach();
-                            me.popup.close(true);
-                            me.popup = null;
+                            me._closeToolsPopup();
                             var sandbox = me.getSandbox();
                             var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')(null, 'mobileToolbar-mobile-toolbar');
                             sandbox.request(me, toolbarRequest);
@@ -212,7 +210,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             }
             if (this.inLayerToolsEditMode()) {
                 // close toolbar
-                this.getElement().find('.' + this.toolbarContainer).hide();
+                this._closeToolsPopup();
                 // disable icon
                 this.getElement().find('div.icon').off('click');
             } else {
@@ -272,16 +270,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
         },
 
         teardownUI: function () {
-            var me = this;
-
             // remove old element
             this.removeFromPluginContainer(this.getElement());
 
-            if (me.popup && me.popup.isVisible()) {
-                me.popup.getJqueryContent().detach();
-                me.popup.close(true);
-                me.popup = null;
-            }
+            this._closeToolsPopup();
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
@@ -456,15 +448,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
             icon.off('click');
             icon.on('click', function () {
                 if (me.popup && me.popup.isVisible()) {
-                    me.popup.getJqueryContent().detach();
-                    me.popup.close(true);
-                    me.popup = null;
+                    me._closeToolsPopup();
                 } else {
                     me._openToolsPopup();
                 }
             });
         },
-
+        _closeToolsPopup: function () {
+            if (this.popup) {
+                this.popup.getJqueryContent().detach();
+                this.popup.close(true);
+                this.popup = null;
+            }
+        },
         _openToolsPopup: function () {
             var me = this,
                 mapmodule = me.getMapModule(),
@@ -480,7 +476,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolba
 
             me.popup = popupService.createPopup();
             me.popup.addClass('toolbar-popup');
-            me.popup.setColourScheme({'bgColour': '#e6e6e6'});
+            me.popup.setColourScheme({ 'bgColour': '#e6e6e6' });
             if (isMobile) {
                 popupService.closeAllPopups(true);
             }
