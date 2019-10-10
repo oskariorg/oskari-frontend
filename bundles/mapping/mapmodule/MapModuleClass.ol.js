@@ -624,20 +624,20 @@ export class MapModule extends AbstractMapModule {
             return false;
         }
 
-        if (zoom === Number) {
-            // backwards compatibility
-            zoom = { type: 'zoom', value: zoom };
-        }
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
         } else {
-            const { top, bottom, left, right } = zoom.value;
+            const { top, bottom, left, right } = zoom.value || zoom;
             if (top && left && bottom && right) {
                 const zoomOut = top === bottom && left === right;
                 this.zoomToExtent(zoom, zoomOut, zoomOut);
                 view.setCenter(lonlat);
                 return true;
             }
+        }
+        if (zoom === Number) {
+            // backwards compatibility
+            zoom = { type: 'zoom', value: zoom };
         }
 
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
