@@ -1,100 +1,120 @@
 import React from 'react';
-import styled from 'styled-components';
+import PropTypes from 'prop-types';
 import { Steps, Step, Button } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
-import { LayerDetails } from './LayerWizard/LayerDetails';
+import { withLocale, withMutator } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
-import { StateHandler } from './LayerWizard/StateHandler';
 
-const StyledRootEl = styled('div')`
-margin: 10px;
-padding: 10px;
-`;
+const WIZARD_STEP = {
+    INITIAL: 0,
+    SERVICE: 1,
+    LAYER: 2,
+    DETAILS: 3
+};
 
-export class LayerWizard extends React.Component {
-    constructor (props) {
-        super(props);
-        this.state = {};
-        this.service = new StateHandler(() => this.setState({ layer: this.service.getLayer() }));
-    }
-    setStep (requested) {
-        switch (requested) {
-        case 0:
-            this.service.getMutator().setType();
-            break;
-        case 1:
-            this.service.getMutator().setVersion();
-            break;
-        case 2:
-            this.service.getMutator().setName();
-            break;
-        }
-    }
-    getStep () {
-        if (!this.service.hasType()) {
-            return 0;
-        }
-        if (!this.service.hasVersion()) {
-            return 1;
-        }
-        if (!this.service.getLayer().name) {
-            return 2;
-        }
-        return 3;
-    }
-    isStep (input) {
-        return this.getStep() === input;
-    }
-    render () {
-        const layer = this.state.layer || {};
-        const service = this.service;
-        let typeTitle = 'Layer type';
-        if (layer.type) {
-            typeTitle = `${typeTitle}: ${layer.type}`;
-        }
-        const mutator = service.getMutator();
-        return (
-            <StyledRootEl>
-                <Steps current={this.getStep()}>
-                    <Step title={typeTitle} />
-                    <Step title="Service" />
-                    <Step title="Layers" />
-                    <Step title="Details" />
-                </Steps>
-                { this.isStep(0) &&
-                    <LayerTypeSelection
-                        types={service.getLayerTypes()}
-                        onSelect={(type) => mutator.setType(type)} />
-                }
-                { this.isStep(1) &&
-                    <div>
-                        <LayerURLForm
-                            layer={layer}
-                            loading={service.isLoading()}
-                            service={mutator} />
-                        <hr/>
-                        <Button onClick={() => this.setStep(0)}>Back</Button>
-                    </div>
-                }
-                { this.isStep(2) &&
-                    <div>
-                        <LayerCapabilitiesListing
-                            onSelect={(item) => mutator.setName(item.name)}
-                            capabilities={service.getCapabilities()} />
-                        <hr/>
-                        <Button onClick={() => this.setStep(1)}>Back</Button>
-                    </div>
-                }
-                { this.isStep(3) &&
-                    <div>
-                        <LayerDetails
-                            layer={layer} />
-                        <hr/>
-                        <Button onClick={() => this.setStep(2)}>Back</Button>
-                    </div>
-                }
-            </StyledRootEl>
-        );
+function setStep (mutator, requested) {
+    switch (requested) {
+    case WIZARD_STEP.INITIAL:
+        mutator.setType();
+        break;
+    case WIZARD_STEP.SERVICE:
+        mutator.setVersion();
+        break;
+    case WIZARD_STEP.LAYER:
+        mutator.setLayerName();
+        break;
     }
 }
+
+function getStep (layer) {
+    if (typeof layer.type === 'undefined') {
+        return WIZARD_STEP.INITIAL;
+    }
+    if (typeof layer.version === 'undefined') {
+        return WIZARD_STEP.SERVICE;
+    }
+    if (typeof layer.layerName === 'undefined') {
+        return WIZARD_STEP.LAYER;
+    }
+    return WIZARD_STEP.DETAILS;
+}
+
+const LayerWizard = ({
+    mutator,
+    layer,
+    capabilities = [],
+    layerTypes = [],
+    loading,
+    children,
+    getMessage
+}) => {
+    let typeTitle = getMessage('wizard.type');
+    if (layer.type) {
+        typeTitle = `${typeTitle}: ${layer.type}`;
+    }
+    const currentStep = getStep(layer);
+    const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
+    const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
+    return (
+        <div>
+            { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
+            <Steps current={currentStep}>
+                <Step title={ typeTitle } />
+                <Step title={getMessage('wizard.service')} />
+                <Step title={getMessage('wizard.layers')} />
+                <Step title={getMessage('wizard.details')} />
+            </Steps>
+            }
+            { currentStep === WIZARD_STEP.INITIAL &&
+                <div>
+                    <h4>{typeTitle}</h4>
+                    <p>{getMessage('wizard.typeDescription')}</p>
+                    <LayerTypeSelection
+                        types={layerTypes || []}
+                        onSelect={(type) => mutator.setType(type)} />
+                </div>
+            }
+            { currentStep === WIZARD_STEP.SERVICE &&
+                <div>
+                    <h4>{getMessage('wizard.service')}</h4>
+                    <p>{getMessage('wizard.serviceDescription')}</p>
+                    <LayerURLForm
+                        layer={layer}
+                        loading={loading}
+                        service={mutator} />
+                </div>
+            }
+            { currentStep === WIZARD_STEP.LAYER &&
+                <div>
+                    <h4>{getMessage('wizard.layers')}</h4>
+                    <p>{getMessage('wizard.layersDescription')}</p>
+                    <LayerCapabilitiesListing
+                        onSelect={(item) => mutator.layerSelected(item.layerName)}
+                        capabilities={capabilities} />  
+                </div>
+            }
+            { currentStep === WIZARD_STEP.DETAILS &&
+                <>
+                    {children}
+                </>
+            }
+            { !isFirstStep && !isDetailsForOldLayer &&
+                <Button onClick={() => setStep(mutator, getStep(layer) - 1)}>{getMessage('cancel')}</Button>
+            }
+        </div>
+    );
+};
+
+LayerWizard.propTypes = {
+    layer: PropTypes.object.isRequired,
+    mutator: PropTypes.object.isRequired,
+    getMessage: PropTypes.func.isRequired,
+    loading: PropTypes.bool,
+    capabilities: PropTypes.array,
+    layerTypes: PropTypes.array,
+    children: PropTypes.any
+};
+
+const contextWrap = withMutator(withLocale(LayerWizard));
+export { contextWrap as LayerWizard };

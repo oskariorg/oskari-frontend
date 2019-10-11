@@ -6,7 +6,7 @@ export class LayerCapabilitiesListing extends React.Component {
     getItem (item) {
         return (
             <ListItem onClick={() => this.props.onSelect(item)}>
-                {item.name}
+                {item.layerName}
             </ListItem>
         );
     }
