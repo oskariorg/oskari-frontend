@@ -82,7 +82,7 @@ const GeneralTabPane = (props) => {
             </StyledComponentGroup>
             <label>{getMessage('uniqueName')}</label>
             <StyledComponent>
-                <TextInput type='text' value={layer.layerName} onChange={(evt) => service.setLayerName(evt.target.value)} />
+                <TextInput type='text' value={layer.name} onChange={(evt) => service.setLayerName(evt.target.value)} />
             </StyledComponent>
             <StyledComponentGroup>
                 <LocalizedLayerInfo layer={layer} lang={lang} service={service} getMessage={getMessage} />

@@ -34,7 +34,7 @@ function getStep (layer) {
     if (typeof layer.version === 'undefined') {
         return WIZARD_STEP.SERVICE;
     }
-    if (typeof layer.layerName === 'undefined') {
+    if (typeof layer.name === 'undefined') {
         return WIZARD_STEP.LAYER;
     }
     return WIZARD_STEP.DETAILS;
@@ -90,8 +90,8 @@ const LayerWizard = ({
                     <h4>{getMessage('wizard.layers')}</h4>
                     <p>{getMessage('wizard.layersDescription')}</p>
                     <LayerCapabilitiesListing
-                        onSelect={(item) => mutator.layerSelected(item.layerName)}
-                        capabilities={capabilities} />  
+                        onSelect={(item) => mutator.layerSelected(item.name)}
+                        capabilities={capabilities} />
                 </div>
             }
             { currentStep === WIZARD_STEP.DETAILS &&

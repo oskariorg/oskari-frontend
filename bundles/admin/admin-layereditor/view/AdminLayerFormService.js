@@ -30,27 +30,10 @@ export class AdminLayerFormService {
                     me.notify();
                     return;
                 }
-                me.loading = true;
-                me.notify();
-                setTimeout(() => {
-                    me.layer.version = version;
-                    me.capabilities = [{
-                        layerName: 'fake'
-                    }, {
-                        layerName: 'it'
-                    }, {
-                        layerName: 'till'
-                    }, {
-                        layerName: 'you'
-                    }, {
-                        layerName: 'make it'
-                    }];
-                    me.loading = false;
-                    me.notify();
-                }, 1000);
+                me.fetchCapabilities(version);
             },
             layerSelected (name) {
-                const found = me.capabilities.find((item) => item.layerName === name);
+                const found = me.capabilities.find((item) => item.name === name);
                 if (found) {
                     me.layer = {
                         ...me.layer,
@@ -69,8 +52,8 @@ export class AdminLayerFormService {
                 me.layer = { ...me.layer, password };
                 me.notify();
             },
-            setLayerName (layerName) {
-                me.layer = { ...me.layer, layerName };
+            setLayerName (name) {
+                me.layer = { ...me.layer, name };
                 me.notify();
             },
             setLocalizedLayerName (lang, name) {
@@ -180,7 +163,7 @@ export class AdminLayerFormService {
             url: layer.getAdmin().url,
             username: layer.getAdmin().username,
             password: layer.getAdmin().password,
-            layerName: layer.getLayerName(),
+            name: layer.getLayerName(),
             ...this._getLocalizedLayerInfo(layer),
             groupId: layer.getAdmin().organizationId,
             organizationName: layer.getOrganizationName(),
@@ -346,7 +329,7 @@ export class AdminLayerFormService {
         }
     }
     setLayerOptions (layer) {
-        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName) : undefined;
+        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.name) : undefined;
         const hoverStyle = layer.hoverJSON !== '' ? JSON.parse(layer.hoverJSON) : undefined;
         layer.options = { ...layer.options, ...{ styles: styles, hover: hoverStyle } };
         layer.options = JSON.stringify(layer.options);
@@ -369,6 +352,51 @@ export class AdminLayerFormService {
                 me.getMutator().setMessage('messages.errorRemoveLayer', 'error');
             }
             return response;
+        });
+    }
+
+    /*
+        Calls action route like:
+        http://localhost:8080/action?action_route=LayerAdmin&url=https://my.domain/geoserver/ows&type=wfslayer&version=1.1.0
+
+        me.capabilities = [{
+            name: 'fake'
+        }, {
+            name: 'it'
+        }, {
+            name: 'till'
+        }, {
+            name: 'you'
+        }, {
+            name: 'make it'
+        }];
+    */
+    fetchCapabilities (version) {
+        this.loading = true;
+        this.notify();
+        const layer = this.getLayer();
+        var params = {
+            type: layer.type,
+            version: version,
+            url: layer.url
+        };
+        const me = this;
+        fetch(Oskari.urls.getRoute('LayerAdmin', params), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            if (response.ok) {
+                me.layer.version = version;
+            } else {
+                me.getMutator().setMessage('TODO', 'error');
+            }
+            return response.json();
+        }).then(function (json) {
+            me.loading = false;
+            me.capabilities = json.layers || [];
+            me.notify();
         });
     }
 

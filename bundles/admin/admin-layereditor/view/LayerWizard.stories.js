@@ -12,15 +12,15 @@ const Oskari = window.Oskari;
 const service = new AdminLayerFormService(() => console.log('State update'));
 service.initLayerState();
 service.capabilities = [{
-    layerName: 'fake'
+    name: 'fake'
 }, {
-    layerName: 'it'
+    name: 'it'
 }, {
-    layerName: 'till'
+    name: 'till'
 }, {
-    layerName: 'you'
+    name: 'you'
 }, {
-    layerName: 'make it'
+    name: 'make it'
 }];
 const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
 const layerTypes = service.getLayerTypes();

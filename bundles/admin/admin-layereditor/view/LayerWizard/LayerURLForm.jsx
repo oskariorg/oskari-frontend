@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { Button, UrlInput } from 'oskari-ui';
 
 const versionsAvailable = {
-    'WFS': ['3.0']
+    'wmslayer': ['1.1.0', '1.3.0'],
+    'wfslayer': ['1.1.1', '2.0.0', '3.0']
 };
 
 function getVersions (type) {
