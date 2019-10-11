@@ -3,6 +3,12 @@ Oskari.registerLocalization(
         "lang": "sv",
         "key": "admin-layereditor",
         "value": {
+            "wizard": {
+                "type": "Kartlagrets typ",
+                "service": "Gränssnitt",
+                "layers": "Kartlager",
+                "details": "Uppgifter om kartlagret"
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",

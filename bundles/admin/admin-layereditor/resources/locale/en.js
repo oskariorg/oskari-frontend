@@ -3,6 +3,12 @@ Oskari.registerLocalization(
         "lang": "en",
         "key": "admin-layereditor",
         "value": {
+            "wizard": {
+                "type": "Map layer type",
+                "service": "Interface",
+                "layers": "Map layers",
+                "details": "Map layer details"
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",
