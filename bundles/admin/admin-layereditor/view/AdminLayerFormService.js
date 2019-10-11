@@ -136,6 +136,33 @@ export class AdminLayerFormService {
             isNew: true
         };
     }
+
+    // http://localhost:8080/action?action_route=LayerAdmin&id=889
+    fetchLayer (id) {
+        if (!id) {
+            this.resetLayer();
+            return;
+        }
+        this.loading = true;
+        this.notify();
+        const me = this;
+        fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            if (!response.ok) {
+                me.getMutator().setMessage('TODO', 'error');
+            }
+            return response.json();
+        }).then(function (json) {
+            me.loading = false;
+            me.layer = { ...json.layer };
+            me.notify();
+        });
+    }
+
     /**
      * Initializes layer model used in UI
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
