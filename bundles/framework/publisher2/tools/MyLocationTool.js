@@ -198,6 +198,12 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.MyLocationTool',
                     clazz: 'Oskari.userinterface.component.CheckboxInput',
                     handler: function (checked) {
                         me.selected.mobileOnly = (checked === 'on');
+                        var plugin = me.getPlugin();
+                        plugin.teardownUI();
+                        var enabled = plugin.isEnabled(me.selected.mobileOnly);
+                        if (enabled) {
+                            plugin.redrawUI(Oskari.util.isMobile());
+                        }
                     },
                     value: me.selected.mobileOnly,
                     title: loc.mylocation.titles.mobileOnly

@@ -202,17 +202,20 @@ Oskari.clazz.define(
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
         },
+
         /**
          * @public @method isEnabled
          * Are the plugin's controls enabled
-         *
+         * @param {Boolean} showOnlyMobile force show only mobile state
          *
          * @return {Boolean}
          * True if plugin's tools are enabled
          */
-        isEnabled: function () {
+        isEnabled: function (showOnlyMobile) {
             var conf = this.getConfig();
-            if (conf.mobileOnly === true && !Oskari.util.isMobile(true)) {
+            var mobileOnly = showOnlyMobile || conf.mobileOnly;
+
+            if (mobileOnly === true && !Oskari.util.isMobile(true)) {
                 return false;
             }
             return this._enabled;
