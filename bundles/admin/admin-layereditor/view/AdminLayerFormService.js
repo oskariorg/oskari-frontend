@@ -394,6 +394,6 @@ export class AdminLayerFormService {
     }
 
     notify () {
-        this.listeners.forEach(consumer => consumer(this.getLayer()));
+        this.listeners.forEach(consumer => consumer());
     }
 }
