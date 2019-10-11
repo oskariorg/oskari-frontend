@@ -97,7 +97,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             sandbox.registerService(layerlistService);
 
             // Add newest layers filter.
-            const loc = this.instance.getLocalization('layerFilter');
+            const loc = this.getLocalization('layerFilter');
             layerlistService.registerLayerlistFilterButton(
                 loc.buttons.newest,
                 loc.tooltips.newest.replace('##', FILTER_NEWEST_COUNT), {
