@@ -5,8 +5,11 @@ Oskari.registerLocalization(
         "value": {
             "wizard": {
                 "type": "Map layer type",
-                "service": "Interface",
+                "service": "Service",
                 "layers": "Map layers",
+                "typeDescription": "Select the type of the service for layer you are adding",
+                "serviceDescription": "Fill in the url and version for the service",
+                "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
                 "details": "Map layer details"
             },
             "editor-tool": "Edit layer",

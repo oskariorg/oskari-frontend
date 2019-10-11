@@ -67,20 +67,32 @@ const LayerWizard = ({
             </Steps>
             }
             { currentStep === WIZARD_STEP.INITIAL &&
-                <LayerTypeSelection
-                    types={layerTypes || []}
-                    onSelect={(type) => mutator.setType(type)} />
+                <div>
+                    <h4>{typeTitle}</h4>
+                    <p>{getMessage('wizard.typeDescription')}</p>
+                    <LayerTypeSelection
+                        types={layerTypes || []}
+                        onSelect={(type) => mutator.setType(type)} />
+                </div>
             }
             { currentStep === WIZARD_STEP.SERVICE &&
+                <div>
+                    <h4>{getMessage('wizard.service')}</h4>
+                    <p>{getMessage('wizard.serviceDescription')}</p>
                     <LayerURLForm
                         layer={layer}
                         loading={loading}
                         service={mutator} />
+                </div>
             }
             { currentStep === WIZARD_STEP.LAYER &&
+                <div>
+                    <h4>{getMessage('wizard.layers')}</h4>
+                    <p>{getMessage('wizard.layersDescription')}</p>
                     <LayerCapabilitiesListing
                         onSelect={(item) => mutator.layerSelected(item.layerName)}
-                        capabilities={capabilities} />
+                        capabilities={capabilities} />  
+                </div>
             }
             { currentStep === WIZARD_STEP.DETAILS &&
                 <>
