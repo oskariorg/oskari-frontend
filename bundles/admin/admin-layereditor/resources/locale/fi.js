@@ -5,10 +5,10 @@ Oskari.registerLocalization(
         "value": {
             "wizard": {
                 "type": "Tason tyyppi",
-                "typeDescription": "Valitse lisättävän rajapinnan tyyppi",
                 "service": "Rajapinta",
-                "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
                 "layers": "Karttatasot",
+                "typeDescription": "Valitse lisättävän rajapinnan tyyppi",
+                "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
                 "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
                 "details": "Tason tiedot"
             },
