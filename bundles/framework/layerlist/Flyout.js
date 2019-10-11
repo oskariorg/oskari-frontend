@@ -17,9 +17,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this._filterNewestCount = 20;
-        this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
-        this.addedButtons = {};
     }, {
 
         /**
@@ -60,22 +57,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             var elParent = this.container.parentElement.parentElement;
             var elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
             elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
-
-            this.addNewestFilter();
-        },
-
-        /**
-         * Add newest filter.
-         * @method  @public addNewestFilter
-         */
-        addNewestFilter: function () {
-            const loc = this.instance.getLocalization('layerFilter');
-            this.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
-                loc.tooltips.newest.replace('##', this._filterNewestCount), {
-                    active: 'layer-newest',
-                    deactive: 'layer-newest-disabled'
-                },
-                'newest');
         },
         /**
          * @method stopPlugin
@@ -112,10 +93,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * @param {Object} state a content state
          */
         setContentState: function (state) {
+            // TODO; Set filter and selected tab
             console.warn('Unimplemented layer list flyout function: setContentState');
         },
 
         getContentState: function () {
+            // TODO; get filter and selected tab
             console.warn('Unimplemented layer list flyout function: getContentState');
             return {};
         },

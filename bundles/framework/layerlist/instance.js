@@ -1,3 +1,5 @@
+const FILTER_NEWEST_COUNT = 20;
+
 /**
  * @class Oskari.mapframework.bundle.layerlist.LayerListBundleInstance
  *
@@ -94,6 +96,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             const layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
 
+            // Add newest layers filter.
+            const loc = this.instance.getLocalization('layerFilter');
+            layerlistService.registerLayerlistFilterButton(
+                loc.buttons.newest,
+                loc.tooltips.newest.replace('##', FILTER_NEWEST_COUNT), {
+                    active: 'layer-newest',
+                    deactive: 'layer-newest-disabled'
+                },
+                'newest');
+
             // Let's extend UI
             const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
             sandbox.request(this, request);
@@ -159,24 +171,20 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * implements BundleInstance protocol stop method
          */
         stop: function () {
-            var me = this,
-                sandbox = me.sandbox(),
-                request,
-                p;
+            const sandbox = this.sandbox();
 
-            for (p in me.eventHandlers) {
-                if (me.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(me, p);
+            for (let p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.unregisterFromEventByName(this, p);
                 }
             }
 
-            request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+            const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
+            sandbox.request(this, request);
 
-            sandbox.request(me, request);
-
-            me.sandbox.unregisterStateful(me.mediator.bundleId);
-            me.sandbox.unregister(me);
-            me.started = false;
+            this.sandbox.unregisterStateful(this.mediator.bundleId);
+            this.sandbox.unregister(this);
+            this.started = false;
         },
         /**
          * @method startExtension
