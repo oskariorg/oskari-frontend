@@ -111,13 +111,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
 
             this.plugins['Oskari.userinterface.Flyout'].createUi();
         },
-        _loadLayers: function () {
-            const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
-            const successCB = () => this.createUi();
-            const failureCB = () => alert(this.getLocalization('errors').loadFailed);
-            const forceProxy = this.conf && this.conf.forceProxy;
-            mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, { forceProxy });
-        },
         /**
          * @method init
          * implements Module protocol init method - does nothing atm

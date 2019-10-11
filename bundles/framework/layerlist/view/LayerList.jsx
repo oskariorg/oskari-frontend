@@ -14,6 +14,8 @@ const GROUPED_LAYERS_TABS = {
     ORGANIZATION: 'organizations',
     GROUP: 'groups'
 };
+const TAB_CHANGE_ANIMATION_TIMEOUT = 500;
+const TEXT_SEARCH_THROTTLE = 1000;
 
 const StyledTabs = styled(Tabs)`
     max-width: 600px;
@@ -92,7 +94,8 @@ export class LayerList extends React.Component {
                 }
             });
         };
-        const throttledLayerFilterUpdate = Oskari.util.throttle(updateLayerFilters, 1000, { leading: false });
+        const throttledLayerFilterUpdate = Oskari.util.throttle(
+            updateLayerFilters, TEXT_SEARCH_THROTTLE, { leading: false });
 
         let previousFilterState = null;
         this.filterService.addStateListener(filterState => {
@@ -148,7 +151,7 @@ export class LayerList extends React.Component {
 
     handleTabChange (tab) {
         // Wait until the input is visible
-        setTimeout(() => this.focusOnSearchField(tab), 500);
+        setTimeout(() => this.focusOnSearchField(tab), TAB_CHANGE_ANIMATION_TIMEOUT);
     }
 
     render () {
