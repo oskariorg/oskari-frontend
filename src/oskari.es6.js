@@ -18,6 +18,32 @@ function getUrl (key) {
     return _urls[key];
 }
 
+function encodeParams(params) {
+    if (typeof params !== 'object') {
+        return '';
+    }
+    return Object.keys(params)
+        .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k]))
+        .join('&');
+    
+}
+
+function appendQueryToURL(url, query) {
+    if (typeof query === 'undefined' || query === '') {
+        return url;
+    }
+    if (url.indexOf('?') === -1) {
+        return `${url}?${query}`;
+    }
+    if (url.endsWith('?')) {
+        return url + query;
+    }
+    if (url.endsWith('&')) {
+        return url + query;
+    }
+    return `${url}&${query}`;
+}
+
 const Oskari = {
     VERSION: '1.54.0-dev',
     setMarkers (markers) {
@@ -80,11 +106,11 @@ const Oskari = {
              * @param  {String} route [description]
              * @return {String} url to use when making API calls
              */
-            getRoute: function (route) {
-                var url = getUrl('api') || '/action?';
+            getRoute: function (route, optionalParams) {
+                var url = appendQueryToURL(getUrl('api') || '/action?', encodeParams(optionalParams));
+
                 if (route) {
-                    // TODO: check if url ends with ? or &
-                    return url + 'action_route=' + route;
+                    return appendQueryToURL(url, 'action_route=' + route);
                 }
                 return url;
             }
