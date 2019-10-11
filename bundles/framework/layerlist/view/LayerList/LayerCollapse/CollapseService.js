@@ -1,4 +1,5 @@
 import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { groupLayers } from './util';
 
 export const GROUPING_METHODS = {
     ORGANIZATION: 'getOrganizationName',
@@ -6,6 +7,8 @@ export const GROUPING_METHODS = {
 };
 
 const MIN_SEARCH_TEXT_LENGTH = 2;
+const ANIMATION_TIMEOUT = 400;
+const LAYER_REFRESH_THROTTLE = 2000;
 
 /**
  * Holds and mutates layer list state.
@@ -22,8 +25,6 @@ class UIService extends StateHandler {
             activeId: null,
             text: null
         };
-        this._throttleLayerRefresh = Oskari.util.throttle(this._refreshAllLayers.bind(this), 2000, { leading: false });
-        this._throttleLayerSelection = Oskari.util.throttle(this.updateSelectedLayerIds.bind(this), 2000, { leading: false });
         this.state = {
             groups: [],
             openGroupTitles: [],
@@ -47,76 +48,13 @@ class UIService extends StateHandler {
         return this.map.getLayers().map(layer => layer.getId());
     }
 
-    /**
-     * @method _getLayerGroups
-     * @private
-     */
-    _getLayerGroups (layers, groupingMethod) {
-        var groupList = [];
-        var group = null;
-        var n;
-        var layer;
-        var groupAttr;
-
-        // sort layers by grouping & name
-        layers.sort((a, b) => this._layerListComparator(a, b, groupingMethod));
-
-        for (n = 0; n < layers.length; n += 1) {
-            layer = layers[n];
-            if (layer.getMetaType && layer.getMetaType() === 'published') {
-                // skip published layers
-                continue;
-            }
-            groupAttr = layer[groupingMethod]();
-            if (!group || group.getTitle() !== groupAttr) {
-                group = Oskari.clazz.create(
-                    'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                    groupAttr
-                );
-                groupList.push(group);
-            }
-
-            group.addLayer(layer);
-        }
-        var sortedGroupList = jQuery.grep(groupList, function (group, index) {
-            return group.getLayers().length > 0;
-        });
-        return sortedGroupList;
-    }
-
-    /**
-     * @method _layerListComparator
-     * Uses the private property #grouping to sort layer objects in the wanted order for rendering
-     * The #grouping property is the method name that is called on layer objects.
-     * If both layers have same group, they are ordered by layer.getName()
-     * @private
-     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
-     * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
-     * @param {String} groupingMethod method name to sort by
-     */
-    _layerListComparator (a, b, groupingMethod) {
-        var nameA = a[groupingMethod]().toLowerCase();
-        var nameB = b[groupingMethod]().toLowerCase();
-        if (nameA === nameB && (a.getName() && b.getName())) {
-            nameA = a.getName().toLowerCase();
-            nameB = b.getName().toLowerCase();
-        }
-        if (nameA < nameB) {
-            return -1;
-        }
-        if (nameA > nameB) {
-            return 1;
-        }
-        return 0;
-    }
-
     addLayer (id) {
         if (!id || this.state.selectedLayerIds.includes(id)) {
             return;
         }
         const selectedLayerIds = [...this.state.selectedLayerIds, id];
         this.updateState({ selectedLayerIds });
-        setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [id]), 400);
+        setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
     removeLayer (id) {
@@ -127,22 +65,22 @@ class UIService extends StateHandler {
         const selectedLayerIds = [...this.state.selectedLayerIds];
         selectedLayerIds.splice(index, 1);
         this.updateState({ selectedLayerIds });
-        setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]), 400);
+        setTimeout(() => this.sandbox.postRequestByName('RemoveMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
-        let groups = this._getLayerGroups([...layers], this.groupingMethod);
+        let groups = groupLayers([...layers], this.groupingMethod);
         if (!searchText || searchText.length <= MIN_SEARCH_TEXT_LENGTH) {
             this.updateState({ groups });
             return;
         }
-        const textSearchResults = groups.map(group => {
-            const layers = group.getLayers()
-                .filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
-            return { group, layers };
-        }).filter(result => result.layers.length !== 0);
+        const textSearchResults = groups.map(group => ({
+            group,
+            layers: group.getLayers().filter(lyr => group.matchesKeyword(lyr.getId(), searchText))
+        })).filter(result => result.layers.length !== 0);
+
         this.updateState({ groups: textSearchResults });
     }
 
@@ -199,8 +137,13 @@ class UIService extends StateHandler {
 
     _createEventHandlers () {
         const sandbox = Oskari.getSandbox();
+        const throttleRefreshAll = Oskari.util.throttle(
+            this._refreshAllLayers.bind(this),
+            LAYER_REFRESH_THROTTLE,
+            { leading: false }
+        );
         const handlers = {
-            MapLayerEvent: event => {
+            'MapLayerEvent': event => {
                 const layerId = event.getLayerId();
                 const operation = event.getOperation();
 
@@ -213,11 +156,11 @@ class UIService extends StateHandler {
                         this._refreshLayer(layerId);
                         return;
                     }
-                    this._throttleLayerRefresh();
+                    throttleRefreshAll();
                 }
             },
-            AfterMapLayerRemoveEvent: () => this.updateSelectedLayerIds(),
-            AfterMapLayerAddEvent: () => this.updateSelectedLayerIds(),
+            'AfterMapLayerRemoveEvent': () => this.updateSelectedLayerIds(),
+            'AfterMapLayerAddEvent': () => this.updateSelectedLayerIds(),
             'BackendStatus.BackendStatusChangedEvent': event => this._refreshLayer(event.getLayerId())
         };
         Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));

@@ -1,18 +1,23 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, TabPane, Icon } from 'oskari-ui';
+import { Tabs, TabPane, Spin } from 'oskari-ui';
 import { handleBinder } from 'oskari-ui/util';
 import { LayerFilters } from './LayerList/LayerFilters';
 import { LayerListAlert } from './LayerList/LayerListAlert';
 import { FilterService } from './LayerList/LayerFilters/FilterService';
 import { LayerCollapse } from './LayerList/LayerCollapse';
 import { CollapseService, GROUPING_METHODS } from './LayerList/LayerCollapse/CollapseService';
+import styled from 'styled-components';
 
 const GROUPED_LAYERS_TABS = {
     ORGANIZATION: 'organizations',
     GROUP: 'groups'
 };
+
+const StyledTabs = styled(Tabs)`
+    max-width: 600px;
+`;
 
 export class LayerList extends React.Component {
     constructor (props) {
@@ -152,12 +157,12 @@ export class LayerList extends React.Component {
             return <LayerListAlert showIcon type="error" description={this.state.error}/>;
         }
         if (this.state.loading) {
-            return <Icon type="loading" spin />;
+            return <Spin />;
         }
         const orgKey = GROUPED_LAYERS_TABS.ORGANIZATION;
         const groupKey = GROUPED_LAYERS_TABS.GROUP;
         return (
-            <Tabs tabPosition='top' onChange={this.handleTabChange}>
+            <StyledTabs tabPosition='top' onChange={this.handleTabChange}>
                 <TabPane tab={inspire} key={groupKey}>
                     { this.getGroupedLayers(groupKey) }
                 </TabPane>
@@ -167,10 +172,7 @@ export class LayerList extends React.Component {
                         { this.getGroupedLayers(orgKey) }
                     </TabPane>
                 }
-                <TabPane tab={'Selected'} key='selected'>
-                    Selected layers should be presented here
-                </TabPane>
-            </Tabs>
+            </StyledTabs>
         );
     }
 }

@@ -15,8 +15,7 @@ const StyledButton = styled(Button)`
     margin-bottom: auto;
 `;
 const InputHolder = styled('div')`
-    padding: 0,
-    margin: 0
+    margin-bottom: 10px;
 `;
 const AddButton = ({ title }) => (
     <StyledButton
