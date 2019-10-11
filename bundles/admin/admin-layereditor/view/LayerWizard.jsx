@@ -53,47 +53,42 @@ const LayerWizard = ({
     if (layer.type) {
         typeTitle = `${typeTitle}: ${layer.type}`;
     }
+    const currentStep = getStep(layer);
+    const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
+    const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
     return (
         <div>
-            { (layer.isNew || getStep(layer) !== WIZARD_STEP.DETAILS) &&
-            <Steps current={getStep(layer)}>
+            { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
+            <Steps current={currentStep}>
                 <Step title={ typeTitle } />
                 <Step title={getMessage('wizard.service')} />
                 <Step title={getMessage('wizard.layers')} />
                 <Step title={getMessage('wizard.details')} />
             </Steps>
             }
-            { getStep(layer) === WIZARD_STEP.INITIAL &&
+            { currentStep === WIZARD_STEP.INITIAL &&
                 <LayerTypeSelection
                     types={layerTypes || []}
                     onSelect={(type) => mutator.setType(type)} />
             }
-            { getStep(layer) === WIZARD_STEP.SERVICE &&
-                <div>
+            { currentStep === WIZARD_STEP.SERVICE &&
                     <LayerURLForm
                         layer={layer}
                         loading={loading}
                         service={mutator} />
-                    <hr/>
-                    <Button onClick={() => setStep(mutator, WIZARD_STEP.INITIAL)}>{getMessage('cancel')}</Button>
-                </div>
             }
-            { getStep(layer) === WIZARD_STEP.LAYER &&
-                <div>
+            { currentStep === WIZARD_STEP.LAYER &&
                     <LayerCapabilitiesListing
                         onSelect={(item) => mutator.layerSelected(item.layerName)}
                         capabilities={capabilities} />
-                    <hr/>
-                    <Button onClick={() => setStep(mutator, WIZARD_STEP.SERVICE)}>{getMessage('cancel')}</Button>
-                </div>
             }
-            { getStep(layer) === WIZARD_STEP.DETAILS &&
-                <div>
+            { currentStep === WIZARD_STEP.DETAILS &&
+                <>
                     {children}
-                    { layer.isNew &&
-                        <Button onClick={() => setStep(mutator, WIZARD_STEP.LAYER)}>{getMessage('cancel')}</Button>
-                    }
-                </div>
+                </>
+            }
+            { !isFirstStep && !isDetailsForOldLayer &&
+                <Button onClick={() => setStep(mutator, getStep(layer) - 1)}>{getMessage('cancel')}</Button>
             }
         </div>
     );
@@ -102,10 +97,10 @@ const LayerWizard = ({
 LayerWizard.propTypes = {
     layer: PropTypes.object.isRequired,
     mutator: PropTypes.object.isRequired,
+    getMessage: PropTypes.func.isRequired,
     loading: PropTypes.bool,
     capabilities: PropTypes.array,
     layerTypes: PropTypes.array,
-    getMessage: PropTypes.func,
     children: PropTypes.any
 };
 
