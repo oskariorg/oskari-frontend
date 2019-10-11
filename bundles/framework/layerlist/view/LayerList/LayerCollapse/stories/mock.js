@@ -9,7 +9,7 @@ const stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandb
 sandbox.registerService(stateService);
 
 const mockInstance = {
-    sandbox
+    getSandbox: () => sandbox
 };
 
 export const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
