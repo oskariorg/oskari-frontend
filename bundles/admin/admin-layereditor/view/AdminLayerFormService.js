@@ -377,7 +377,7 @@ export class AdminLayerFormService {
     }
 
     getLayerTypes () {
-        return ['WFS'];
+        return ['wfslayer', 'wmslayer'];
     }
     isLoading () {
         return this.loading;
