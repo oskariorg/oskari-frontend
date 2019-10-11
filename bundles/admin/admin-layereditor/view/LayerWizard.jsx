@@ -6,15 +6,22 @@ import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { withLocale, withMutator } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
 
+const WIZARD_STEP = {
+    INITIAL: 0,
+    SERVICE: 1,
+    LAYER: 2,
+    DETAILS: 3
+};
+
 function setStep (mutator, requested) {
     switch (requested) {
-    case 0:
+    case WIZARD_STEP.INITIAL:
         mutator.setType();
         break;
-    case 1:
+    case WIZARD_STEP.SERVICE:
         mutator.setVersion();
         break;
-    case 2:
+    case WIZARD_STEP.LAYER:
         mutator.setLayerName();
         break;
     }
@@ -22,15 +29,15 @@ function setStep (mutator, requested) {
 
 function getStep (layer) {
     if (typeof layer.type === 'undefined') {
-        return 0;
+        return WIZARD_STEP.INITIAL;
     }
     if (typeof layer.version === 'undefined') {
-        return 1;
+        return WIZARD_STEP.SERVICE;
     }
     if (typeof layer.layerName === 'undefined') {
-        return 2;
+        return WIZARD_STEP.LAYER;
     }
-    return 3;
+    return WIZARD_STEP.DETAILS;
 }
 
 const LayerWizard = ({
@@ -48,7 +55,7 @@ const LayerWizard = ({
     }
     return (
         <div>
-            { (layer.isNew || getStep(layer) !== 3) &&
+            { (layer.isNew || getStep(layer) !== WIZARD_STEP.DETAILS) &&
             <Steps current={getStep(layer)}>
                 <Step title={ typeTitle } />
                 <Step title={getMessage('wizard.service')} />
@@ -56,35 +63,35 @@ const LayerWizard = ({
                 <Step title={getMessage('wizard.details')} />
             </Steps>
             }
-            { getStep(layer) === 0 &&
+            { getStep(layer) === WIZARD_STEP.INITIAL &&
                 <LayerTypeSelection
                     types={layerTypes || []}
                     onSelect={(type) => mutator.setType(type)} />
             }
-            { getStep(layer) === 1 &&
+            { getStep(layer) === WIZARD_STEP.SERVICE &&
                 <div>
                     <LayerURLForm
                         layer={layer}
                         loading={loading}
                         service={mutator} />
                     <hr/>
-                    <Button onClick={() => setStep(mutator, 0)}>{getMessage('cancel')}</Button>
+                    <Button onClick={() => setStep(mutator, WIZARD_STEP.INITIAL)}>{getMessage('cancel')}</Button>
                 </div>
             }
-            { getStep(layer) === 2 &&
+            { getStep(layer) === WIZARD_STEP.LAYER &&
                 <div>
                     <LayerCapabilitiesListing
                         onSelect={(item) => mutator.layerSelected(item.layerName)}
                         capabilities={capabilities} />
                     <hr/>
-                    <Button onClick={() => setStep(mutator, 1)}>{getMessage('cancel')}</Button>
+                    <Button onClick={() => setStep(mutator, WIZARD_STEP.SERVICE)}>{getMessage('cancel')}</Button>
                 </div>
             }
-            { getStep(layer) === 3 &&
+            { getStep(layer) === WIZARD_STEP.DETAILS &&
                 <div>
                     {children}
                     { layer.isNew &&
-                        <Button onClick={() => setStep(mutator, 2)}>{getMessage('cancel')}</Button>
+                        <Button onClick={() => setStep(mutator, WIZARD_STEP.LAYER)}>{getMessage('cancel')}</Button>
                     }
                 </div>
             }
