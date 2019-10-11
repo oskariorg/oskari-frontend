@@ -1,135 +1,170 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Tabs, TabPane } from 'oskari-ui';
+import { Tabs, TabPane, Icon } from 'oskari-ui';
+import { handleBinder } from 'oskari-ui/util';
 import { LayerFilters } from './LayerList/LayerFilters';
+import { LayerListAlert } from './LayerList/LayerListAlert';
 import { FilterService } from './LayerList/LayerFilters/FilterService';
 import { LayerCollapse } from './LayerList/LayerCollapse';
-import { CollapseService } from './LayerList/LayerCollapse/CollapseService';
+import { CollapseService, GROUPING_METHODS } from './LayerList/LayerCollapse/CollapseService';
 
-const TABS = {
+const GROUPED_LAYERS_TABS = {
     ORGANIZATION: 'organizations',
     GROUP: 'groups'
-};
-const GROUPING_METHODS = {
-    ORGANIZATION: 'getOrganizationName',
-    GROUP: 'getInspireName'
 };
 
 export class LayerList extends React.Component {
     constructor (props) {
         super(props);
-        const { locale, showOrganizations } = this.props;
+        this.instance = this.props.instance;
+        this.locale = this.instance.getLocalization();
+        this.selectedTab = GROUPED_LAYERS_TABS.GROUP;
+        this.layerGroupings = {};
 
-        this.filterService = new FilterService();
-        this.groupService = new CollapseService();
-        this.groupService.setGroupingMethod(GROUPING_METHODS.GROUP);
-        if (showOrganizations) {
-            this.organizationService = new CollapseService();
-            this.organizationService.setGroupingMethod(GROUPING_METHODS.ORGANIZATION);
-        }
+        Object.keys(GROUPED_LAYERS_TABS).forEach(key => {
+            const tabKey = GROUPED_LAYERS_TABS[key];
+            this.layerGroupings[tabKey] = {
+                key,
+                searchFieldRef: React.createRef(),
+                service: null
+            };
+        });
 
-        this.addServiceListeners();
+        this.initFilteringServices();
 
         this.state = {
-            showOrganizations,
-            locale,
-            groupCollapse: this.groupService.getState(),
-            filter: this.filterService.getState()
+            loading: true
         };
-        if (this.organizationService) {
-            this.state.organizationCollapse = this.organizationService.getState();
-        }
+        this.loadLayers();
+        handleBinder(this);
     }
 
-    addServiceListeners () {
-        const collapseListener = (tabKey) => {
-            let collapseKey = tabKey === TABS.ORGANIZATION ? 'organizationCollapse' : 'groupCollapse';
-            return (collapseState) => this.setState((state) => {
-                return {
-                    ...state,
-                    [collapseKey]: collapseState
-                };
+    loadLayers () {
+        const mapLayerService = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        const successCB = () => {
+            this.initLayerGroupServices();
+            this.setState(state => ({ ...state, loading: false }));
+        };
+        const failureCB = () => {
+            this.setState(state => ({
+                ...state,
+                error: this.locale.errors.loadFailed,
+                loading: false
+            }));
+            alert(this.locale.errors.loadFailed);
+        };
+        const forceProxy = this.instance.conf && this.instance.conf.forceProxy;
+        mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, { forceProxy });
+    }
+
+    initLayerGroupServices () {
+        if (!this.props.showOrganizations) {
+            delete this.layerGroupings[GROUPED_LAYERS_TABS.ORGANIZATION];
+        }
+        const changes = {};
+        Object.keys(this.layerGroupings).forEach(tabKey => {
+            const grouping = this.layerGroupings[tabKey];
+            const service = new CollapseService(this.instance);
+            service.setGroupingMethod(GROUPING_METHODS[grouping.key]);
+            service.addStateListener(groupState => this.setState(state => ({
+                ...state,
+                [tabKey]: groupState
+            })));
+            changes[tabKey] = service.getState();
+            grouping.service = service;
+        });
+        this.setState(state => ({ ...state, ...changes }));
+    }
+
+    initFilteringServices () {
+        this.filterService = new FilterService(this.instance);
+
+        const updateLayerFilters = (activeFilterId, searchText) => {
+            Object.values(this.layerGroupings).forEach(grouping => {
+                if (grouping.service) {
+                    grouping.service.setFilter(activeFilterId, searchText);
+                }
             });
         };
-
-        this.groupService.addStateListener(collapseListener(TABS.GROUP));
-        if (this.organizationService) {
-            this.organizationService.addStateListener(collapseListener(TABS.ORGANIZATION));
-        }
-
-        const throttleCollapseFilterUpdates = Oskari.util.throttle(this.updateCollapseFilters.bind(this), 1000, { leading: false });
+        const throttledLayerFilterUpdate = Oskari.util.throttle(updateLayerFilters, 1000, { leading: false });
 
         let previousFilterState = null;
-        this.filterService.addStateListener((filterState) => {
+        this.filterService.addStateListener(filterState => {
             const { activeFilterId, searchText } = filterState;
             if (previousFilterState && previousFilterState.searchText !== searchText) {
                 // Search text changed, give user some time to type in his search.
-                throttleCollapseFilterUpdates(activeFilterId, searchText);
+                throttledLayerFilterUpdate(activeFilterId, searchText);
             } else {
-                this.updateCollapseFilters(activeFilterId, searchText);
+                updateLayerFilters(activeFilterId, searchText);
             }
-            this.setState((state) => {
-                return {
-                    ...state,
-                    filter: filterState
-                };
-            });
+            this.focusOnSearchField();
+            this.setState(state => ({
+                ...state,
+                filter: filterState
+            }));
         });
     }
 
-    updateCollapseFilters (activeFilterId, searchText) {
-        this.groupService.setFilter(activeFilterId, searchText);
-        if (this.organizationService) {
-            this.organizationService.setFilter(activeFilterId, searchText);
-        }
-    }
-
-    getCollapseState (tabKey) {
-        if (tabKey === TABS.GROUP) {
-            return this.state.groupCollapse;
-        } else if (tabKey === TABS.ORGANIZATION) {
-            return this.state.organizationCollapse;
-        }
-    }
-
-    getCollapseMutator (tabKey) {
-        if (tabKey === TABS.GROUP) {
-            return this.groupService.getMutator();
-        } else if (tabKey === TABS.ORGANIZATION) {
-            return this.organizationService.getMutator();
-        }
-    }
-
-    getAllLayersContent (tabKey) {
-        const { filter, locale } = this.state;
+    getGroupedLayers (tab) {
         const showAddButton = Oskari.getSandbox().hasHandler('ShowLayerEditorRequest');
+        const ref = this.layerGroupings[tab].searchFieldRef;
+        const layerGroupingMutator = this.layerGroupings[tab].service.getMutator();
         return (
             <React.Fragment>
                 <LayerFilters
-                    {...filter}
-                    mutator={this.filterService.getMutator()}
+                    {...this.state.filter}
                     showAddButton={showAddButton}
-                    locale={locale.filter} />
+                    ref={ref}
+                    mutator={this.filterService.getMutator()}
+                    locale={this.locale.filter} />
                 <LayerCollapse
-                    {...this.getCollapseState(tabKey)}
-                    mutator={this.getCollapseMutator(tabKey)}
-                    locale={locale}/>
+                    {...this.state[tab]}
+                    mutator={layerGroupingMutator}
+                    locale={this.locale}/>
             </React.Fragment>
         );
     }
 
+    focusOnSearchField (tab = this.selectedTab) {
+        this.selectedTab = tab;
+        if (!this.layerGroupings[tab]) {
+            return;
+        }
+        const ref = this.layerGroupings[tab].searchFieldRef;
+        if (!ref || !ref.current) {
+            return;
+        }
+        const input = ref.current.querySelector('input:first-of-type');
+        if (input) {
+            input.focus();
+        }
+    }
+
+    handleTabChange (tab) {
+        // Wait until the input is visible
+        setTimeout(() => this.focusOnSearchField(tab), 500);
+    }
+
     render () {
-        const { organization, inspire } = this.state.locale.filter;
+        const { organization, inspire } = this.locale.filter;
+        if (this.state.error) {
+            return <LayerListAlert showIcon type="error" description={this.state.error}/>;
+        }
+        if (this.state.loading) {
+            return <Icon type="loading" spin />;
+        }
+        const orgKey = GROUPED_LAYERS_TABS.ORGANIZATION;
+        const groupKey = GROUPED_LAYERS_TABS.GROUP;
         return (
-            <Tabs tabPosition='top'>
-                <TabPane tab={inspire} key={TABS.GROUP}>
-                    { this.getAllLayersContent(TABS.GROUP) }
+            <Tabs tabPosition='top' onChange={this.handleTabChange}>
+                <TabPane tab={inspire} key={groupKey}>
+                    { this.getGroupedLayers(groupKey) }
                 </TabPane>
 
-                { this.state.showOrganizations &&
-                    <TabPane tab={organization} key={TABS.ORGANIZATION}>
-                        { this.getAllLayersContent(TABS.ORGANIZATION) }
+                { this.props.showOrganizations &&
+                    <TabPane tab={organization} key={orgKey}>
+                        { this.getGroupedLayers(orgKey) }
                     </TabPane>
                 }
                 <TabPane tab={'Selected'} key='selected'>
@@ -142,5 +177,5 @@ export class LayerList extends React.Component {
 
 LayerList.propTypes = {
     showOrganizations: PropTypes.bool,
-    locale: PropTypes.object.isRequired
+    instance: PropTypes.object.isRequired
 };

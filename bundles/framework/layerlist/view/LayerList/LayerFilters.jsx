@@ -14,6 +14,10 @@ const StyledButton = styled(Button)`
     margin-top: auto;
     margin-bottom: auto;
 `;
+const InputHolder = styled('div')`
+    padding: 0,
+    margin: 0
+`;
 const AddButton = ({ title }) => (
     <StyledButton
         size="large"
@@ -48,22 +52,24 @@ const getFilterButtons = (filters, mutator) => {
     ));
 };
 
-export const LayerFilters = ({ filters, searchText, showAddButton, locale, mutator }) => {
-    return (
-        <React.Fragment>
-            <ButtonRow>
-                { getFilterButtons(filters, mutator) }
-                { showAddButton && <AddButton/> }
-            </ButtonRow>
+export const LayerFilters = React.forwardRef(({ filters, searchText, showAddButton, locale, mutator }, ref) => (
+    <React.Fragment>
+        <ButtonRow>
+            { getFilterButtons(filters, mutator) }
+            { showAddButton && <AddButton/> }
+        </ButtonRow>
+        <InputHolder ref={ref}>
             <TextInput
                 value={searchText}
+                autoFocus
                 allowClear
                 placeholder={locale.text}
                 suffix={<SearchInfo infoText={locale.description}/>}
                 onChange={(event) => mutator.setSearchText(event.currentTarget.value)}/>
-        </React.Fragment>
-    );
-};
+        </InputHolder>
+    </React.Fragment>
+));
+LayerFilters.displayName = 'LayerFilters';
 
 LayerFilters.propTypes = {
     filters: PropTypes.object.isRequired,

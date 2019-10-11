@@ -1,23 +1,29 @@
 import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 
+export const GROUPING_METHODS = {
+    ORGANIZATION: 'getOrganizationName',
+    GROUP: 'getInspireName'
+};
+
+const MIN_SEARCH_TEXT_LENGTH = 2;
+
 /**
  * Holds and mutates layer list state.
  * Handles events related to layer listing.
  */
-class Service extends StateHandler {
-    constructor () {
+class UIService extends StateHandler {
+    constructor (instance) {
         super();
-        this.sandbox = Oskari.getSandbox();
+        this.sandbox = instance.getSandbox();
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.map = this.sandbox.getMap();
-        this.groupingMethod = 'getInspireName';
+        this.groupingMethod = null;
         this.filter = {
             activeId: null,
-            text: ''
+            text: null
         };
         this._throttleLayerRefresh = Oskari.util.throttle(this._refreshAllLayers.bind(this), 2000, { leading: false });
         this._throttleLayerSelection = Oskari.util.throttle(this.updateSelectedLayerIds.bind(this), 2000, { leading: false });
-        this.eventHandlers = {};
         this.state = {
             groups: [],
             openGroupTitles: [],
@@ -25,15 +31,6 @@ class Service extends StateHandler {
             mapSrs: this.map.getSrsName()
         };
         this.eventHandlers = this._createEventHandlers();
-    }
-    /**
-     * "Module" name for event handling
-     */
-    getName () {
-        return 'LayerCollapse.StateHandler';
-    }
-    updateStateWithProps ({ groups, selectedLayerIds, filterKeyword }) {
-        this.updateLayerGroups();
     }
     setGroupingMethod (groupingMethod) {
         if (this.groupingMethod === groupingMethod) {
@@ -113,19 +110,6 @@ class Service extends StateHandler {
         return 0;
     }
 
-    /**
-    * @method onEvent
-    * @param {Oskari.mapframework.event.Event} event a Oskari event object
-    * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-    */
-    onEvent (event) {
-        const handler = this.eventHandlers[event.getName()];
-        if (!handler) {
-            return;
-        }
-        return handler.apply(this, [event]);
-    }
-
     addLayer (id) {
         if (!id || this.state.selectedLayerIds.includes(id)) {
             return;
@@ -150,7 +134,7 @@ class Service extends StateHandler {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
         let groups = this._getLayerGroups([...layers], this.groupingMethod);
-        if (!searchText) {
+        if (!searchText || searchText.length <= MIN_SEARCH_TEXT_LENGTH) {
             this.updateState({ groups });
             return;
         }
@@ -191,6 +175,28 @@ class Service extends StateHandler {
         this.sandbox.postRequestByName('ShowMapLayerInfoRequest', [layerId]);
     }
 
+    /// Oskari event handling ////////////////////////////////////////////////////////////
+
+    /**
+     * "Module" name for event handling
+     */
+    getName () {
+        return 'LayerCollapse.CollapseService';
+    }
+
+    /**
+    * @method onEvent
+    * @param {Oskari.mapframework.event.Event} event a Oskari event object
+    * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+    */
+    onEvent (event) {
+        const handler = this.eventHandlers[event.getName()];
+        if (!handler) {
+            return;
+        }
+        return handler.apply(this, [event]);
+    }
+
     _createEventHandlers () {
         const sandbox = Oskari.getSandbox();
         const handlers = {
@@ -210,8 +216,8 @@ class Service extends StateHandler {
                     this._throttleLayerRefresh();
                 }
             },
-            AfterMapLayerRemoveEvent: () => this._throttleLayerSelection(),
-            AfterMapLayerAddEvent: () => this._throttleLayerSelection(),
+            AfterMapLayerRemoveEvent: () => this.updateSelectedLayerIds(),
+            AfterMapLayerAddEvent: () => this.updateSelectedLayerIds(),
             'BackendStatus.BackendStatusChangedEvent': event => this._refreshLayer(event.getLayerId())
         };
         Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));
@@ -246,7 +252,7 @@ class Service extends StateHandler {
     }
 }
 
-export const CollapseService = mutatorMixin(Service, [
+export const CollapseService = mutatorMixin(UIService, [
     'addLayer',
     'removeLayer',
     'updateOpenGroupTitles',

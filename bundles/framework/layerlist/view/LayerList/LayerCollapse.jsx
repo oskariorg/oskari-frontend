@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Alert, Collapse } from 'oskari-ui';
-import { withMutator } from 'oskari-ui/util';
+import { Collapse } from 'oskari-ui';
 import { LayerCollapsePanel } from './LayerCollapse/LayerCollapsePanel';
+import { LayerListAlert } from './LayerListAlert';
 import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`
@@ -14,22 +14,10 @@ const StyledCollapse = styled(Collapse)`
         }
     }
 `;
-const StyledAlert = styled(Alert)`
-    margin: 10px;
-`;
-
-const getNoResultsProps = locale => {
-    const alertProps = {
-        description: locale.errors.noResults,
-        type: 'info',
-        showIcon: true
-    };
-    return alertProps;
-};
 
 export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mapSrs, mutator, locale }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
-        return <StyledAlert {...getNoResultsProps(locale)}/>;
+        return <LayerListAlert showIcon type="info" description={locale.errors.noResults}/>;
     }
     const panels = (filtered || groups).map(cur => ({
         group: cur.group || cur,

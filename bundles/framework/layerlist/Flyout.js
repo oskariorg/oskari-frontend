@@ -18,10 +18,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.instance = instance;
         this.container = null;
         this._filterNewestCount = 20;
-        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this.addedButtons = {};
-        this.filterComponents = [];
     }, {
 
         /**
@@ -122,20 +120,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             return {};
         },
 
-        focus: function () {
-            console.warn('Unimplemented layer list flyout function: focus');
-        },
-
-        deactivateAllFilters: function () {
-            console.warn('Unimplemented layer list flyout function: deactivateAllFilters');
-        },
-
         /**
          * @method createUi
          * Creates the UI for a fresh start
          */
         createUi: function () {
-            ReactDOM.render(<LayerList showOrganizations locale={this.instance._localization} />, this.container);
+            ReactDOM.render(<LayerList showOrganizations instance={this.instance} />, this.container);
         }
     }, {
 

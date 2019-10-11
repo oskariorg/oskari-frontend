@@ -105,11 +105,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
             sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
 
-            this._loadLayers();
-
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             this._registerForGuidedTour();
+
+            this.plugins['Oskari.userinterface.Flyout'].createUi();
         },
         _loadLayers: function () {
             const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -157,25 +157,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             MapLayerEvent: function (event) {
                 if (['add', 'remove', 'sticky'].includes(event.getOperation())) {
                     this.plugins['Oskari.userinterface.Tile'].refresh();
-                }
-            },
-
-            /**
-             * @method ExtensionUpdatedEvent
-             */
-            'userinterface.ExtensionUpdatedEvent': function (event) {
-                // ExtensionUpdateEvents are fired a lot, only let layerselector2 extension event to be handled when enabled
-                if (event.getExtension().getName() !== this.getName()) {
-                    // wasn't me -> do nothing
-                    return;
-                }
-                if (event.getViewState() !== 'close') {
-                    this.plugins['Oskari.userinterface.Flyout'].focus();
-                    // Used to focus on search input
-                } else if (this.filteredLayerListOpenedByRequest) {
-                    // TODO; Make ShowFilteredLayerListRequest work
-                    this.plugins['Oskari.userinterface.Flyout'].deactivateAllFilters();
-                    this.filteredLayerListOpenedByRequest = false;
                 }
             }
         },

@@ -2,8 +2,8 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { LayerCollapse } from '../../LayerCollapse';
 import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
-import { AbstractLayer, locale } from './mock';
-import { StateHandler } from '../StateHandler';
+import { AbstractLayer, instance, locale } from './mock';
+import { CollapseService } from '../CollapseService';
 
 let lyrCount = 0;
 const createLayer = (name, type) => {
@@ -43,7 +43,7 @@ const createLayerGroups = layers => {
     return groups;
 };
 
-const service = new StateHandler();
+const service = new CollapseService(instance);
 let groups = [];
 let layers = [];
 let wms = null;
@@ -51,9 +51,8 @@ let wms = null;
 const resetStoryState = () => {
     layers = createLayers();
     groups = createLayerGroups(layers);
-    service.updateStateWithProps({
+    service.updateState({
         groups,
-        filterKeyword: '',
         selectedLayerIds: []
     });
 };
@@ -62,7 +61,7 @@ storiesOf('LayerCollapse', module)
 
     .add('empty', () => {
         resetStoryState();
-        service.updateStateWithProps({
+        service.updateState({
             groups: []
         });
         return <LayerCollapse {...service._getState()} locale={locale} />;
@@ -73,21 +72,21 @@ storiesOf('LayerCollapse', module)
     })
     .add('with filter "wfs"', () => {
         resetStoryState();
-        service.updateStateWithProps({
+        service.updateState({
             filterKeyword: 'wfs'
         });
         return <LayerCollapse {...service._getState()} locale={locale} />;
     })
     .add('with filter "wms"', () => {
         resetStoryState();
-        service.updateStateWithProps({
+        service.updateState({
             filterKeyword: 'wms'
         });
         return <LayerCollapse {...service._getState()} locale={locale} />;
     })
     .add('WMS selected', () => {
         resetStoryState();
-        service.updateStateWithProps({
+        service.updateState({
             selectedLayerIds: [wms.getId()]
         });
         const state = service._getState();
@@ -96,7 +95,7 @@ storiesOf('LayerCollapse', module)
     })
     .add('Sticky WMS', () => {
         resetStoryState();
-        service.updateStateWithProps({
+        service.updateState({
             selectedLayerIds: [wms.getId()]
         });
         const state = service._getState();
