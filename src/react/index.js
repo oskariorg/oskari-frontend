@@ -10,6 +10,7 @@ export { Opacity } from '../../bundles/admin/admin-layereditor/components/Opacit
 export { Radio } from '../../bundles/admin/admin-layereditor/components/RadioButton';
 export { Select, Option } from '../../bundles/admin/admin-layereditor/components/Select';
 export { Slider } from '../../bundles/admin/admin-layereditor/components/Slider';
+export { Spin } from '../../bundles/admin/admin-layereditor/components/Spin';
 export { Step, Steps } from '../../bundles/admin/admin-layereditor/components/Steps';
 export { Switch } from '../../bundles/admin/admin-layereditor/components/Switch';
 export { Tabs, TabPane } from '../../bundles/admin/admin-layereditor/components/Tabs';

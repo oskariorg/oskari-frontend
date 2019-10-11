@@ -73,7 +73,7 @@ const GeneralTabPane = (props) => {
                     <div>
                         <UrlInput
                             key={layer.layer_id}
-                            value={layer.layerUrl}
+                            value={layer.url}
                             onChange={(url) => service.setLayerUrl(url)}
                             credentials={credentialProps}
                         />

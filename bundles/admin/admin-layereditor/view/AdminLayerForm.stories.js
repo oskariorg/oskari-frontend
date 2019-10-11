@@ -37,7 +37,7 @@ storiesOf('AdminLayerForm', module)
                     mapLayerGroups={[]}
                     dataProviders={[]}
                     layer={service.getLayer()}
-                    message={service.getMessages()}
+                    messages={service.getMessages()}
                     onDelete={() => {}}
                     onSave={() => {}}
                     onCancel={() => {}} />

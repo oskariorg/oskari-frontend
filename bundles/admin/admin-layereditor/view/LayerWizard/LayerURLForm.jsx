@@ -16,12 +16,11 @@ export const LayerURLForm = ({ layer, loading, service }) => {
     };
     return (
         <div>
-            Selected: {layer.type}
             <UrlInput
                 value={layer.url}
                 disabled={loading}
                 credentials={credentials}
-                onChange={(url) => service.setUrl(url)} />
+                onChange={(url) => service.setLayerUrl(url)} />
             {getVersions(layer.type).map((version, key) => (
                 <Button type="primary" key={key}
                     onClick={() => service.setVersion(version)}
