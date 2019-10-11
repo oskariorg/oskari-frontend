@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
-
 import { AdminLayerFormService } from './AdminLayerFormService';
+import { Spin } from 'oskari-ui';
 import { LocaleContext, MutatorContext } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
@@ -78,6 +78,9 @@ export class LayerEditorFlyout extends ExtraFlyout {
                                 me.hide();
                             }} />
                     </LayerWizard>
+                    { this.service.isLoading() &&
+                        <Spin />
+                    }
                 </MutatorContext.Provider>
             </LocaleContext.Provider>, el.get(0));
     }
