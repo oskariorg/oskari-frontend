@@ -469,7 +469,6 @@ class MapModuleOlCesium extends MapModuleOl {
      */
     centerMap (lonlat, zoom, suppressEnd, options) {
         lonlat = this.normalizeLonLat(lonlat);
-        const { top, bottom, left, right } = zoom.value;
         const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
         const cameraHeight = this.adjustZoom(zoom);
         const duration = options && options.duration ? options.duration : 3000;
@@ -478,10 +477,11 @@ class MapModuleOlCesium extends MapModuleOl {
             ? { heading: options.heading,
                 roll: options.roll,
                 pitch: options.pitch } : undefined;
+        const { top, bottom, left, right } = zoom.value || zoom;
         if (zoom && top && bottom && left && right) {
             const zoomOut = top === bottom && left === right;
             this.zoomToExtent(zoom, zoomOut, zoomOut);
-            this.getMap().getView().setCenter(lonlat);
+            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
             return true;
         }
 
