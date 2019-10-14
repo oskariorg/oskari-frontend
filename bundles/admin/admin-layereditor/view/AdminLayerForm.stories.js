@@ -18,9 +18,9 @@ sandbox.registerService(stateService);
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 
-// Binding Oskari.getMsg causes errors, using locales the old way.
-const locale = Oskari.getLocalization('admin-layereditor', 'fi');
-const loc = key => locale[key];
+const locale = Oskari.getMsg.bind(null, 'admin-layereditor');
+// Message parameters causes missing library errors, skip them.
+const loc = (key, ...ingnoredMessageParams) => locale(key);
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
