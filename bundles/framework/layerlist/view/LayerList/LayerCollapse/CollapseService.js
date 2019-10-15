@@ -54,6 +54,8 @@ class UIService extends StateHandler {
         }
         const selectedLayerIds = [...this.state.selectedLayerIds, id];
         this.updateState({ selectedLayerIds });
+        // Adding a map layer can be a resource exhausting task.
+        // Delay request to allow switch animation play smoothly.
         setTimeout(() => this.sandbox.postRequestByName('AddMapLayerRequest', [id]), ANIMATION_TIMEOUT);
     }
 
