@@ -87,11 +87,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             this.sandbox = sandbox;
 
             sandbox.register(this);
-            for (let p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.registerForEventByName(this, p);
-                }
-            }
 
             const layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
@@ -137,34 +132,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         update: function () {
 
         },
-        /**
-         * @method onEvent
-         * @param {Oskari.mapframework.event.Event} event a Oskari event object
-         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
-         */
-        onEvent: function (event) {
-            var handler = this.eventHandlers[event.getName()];
-            if (!handler) {
-                return;
-            }
-
-            return handler.apply(this, [event]);
-        },
-        /**
-         * @property {Object} eventHandlers
-         * @static
-         */
-        eventHandlers: {
-            /**
-             * @method MapLayerEvent
-             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
-             */
-            MapLayerEvent: function (event) {
-                if (['add', 'remove', 'sticky'].includes(event.getOperation())) {
-                    this.plugins['Oskari.userinterface.Tile'].refresh();
-                }
-            }
-        },
 
         /**
          * @method stop
@@ -172,12 +139,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          */
         stop: function () {
             const sandbox = this.sandbox();
-
-            for (let p in this.eventHandlers) {
-                if (this.eventHandlers.hasOwnProperty(p)) {
-                    sandbox.unregisterFromEventByName(this, p);
-                }
-            }
 
             const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
@@ -237,7 +198,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         createUi: function () {
             var me = this;
             me.plugins['Oskari.userinterface.Flyout'].createUi();
-            me.plugins['Oskari.userinterface.Tile'].refresh();
         },
 
         /**

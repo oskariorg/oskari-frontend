@@ -11,13 +11,7 @@ const comparator = (a, b, method) => {
         nameA = a.getName().toLowerCase();
         nameB = b.getName().toLowerCase();
     }
-    if (nameA < nameB) {
-        return -1;
-    }
-    if (nameA > nameB) {
-        return 1;
-    }
-    return 0;
+    return Oskari.util.naturalSort(nameA, nameB);
 };
 
 /**
