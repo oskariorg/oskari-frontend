@@ -1,9 +1,8 @@
 export const mutatorMixin = (Service, mutatingMethods) => class extends Service {
     constructor (...args) {
         super(...args);
-
-        this.mutatingMethods = mutatingMethods || [];
-        if (!this.mutatingMethods) {
+        this.mutatingMethods = mutatingMethods;
+        if (!Array.isArray(this.mutatingMethods)) {
             Oskari.log().warn('Mutator does not have mutating methods!');
             this.mutatingMethods = [];
         }
