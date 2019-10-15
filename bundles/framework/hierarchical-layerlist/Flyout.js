@@ -369,8 +369,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
-                    deactive: 'layer-newest-disabled',
-                    current: 'layer-newest-disabled'
+                    deactive: 'layer-newest-disabled'
                 },
                 'newest');
         },
@@ -386,8 +385,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.Flyout',
             me.layerlistService.registerLayerlistFilterButton(loc.buttons.featuredata,
                 loc.tooltips.featuredata, {
                     active: 'layer-stats',
-                    deactive: 'layer-stats-disabled',
-                    current: 'layer-stats-disabled'
+                    deactive: 'layer-stats-disabled'
                 },
                 'featuredata');
         },
