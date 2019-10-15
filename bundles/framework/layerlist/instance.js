@@ -195,13 +195,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          */
         startExtension: function () {
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.layerlist.Flyout',
-                this
-            );
+                'Oskari.mapframework.bundle.layerlist.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
-                'Oskari.mapframework.bundle.layerlist.Tile',
-                this
-            );
+                'Oskari.userinterface.extension.DefaultTile', this, this.getLocalization());
         },
         /**
          * @method stopExtension
