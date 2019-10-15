@@ -17,6 +17,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
+        this.log = Oskari.log('layerlist');
     }, {
 
         /**
@@ -51,13 +52,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         /**
          * @method startPlugin
          *
-         * Interface method implementation, assigns the HTML templates that will be used to create the UI
+         * Interface method implementation, does nothing atm
          */
-        startPlugin: function () {
-            var elParent = this.container.parentElement.parentElement;
-            var elId = jQuery(elParent).find('.oskari-flyouttoolbar .oskari-flyouttools .oskari-flyouttool-close');
-            elId.attr('id', 'oskari_layerselector2_flyout_oskari_flyouttool_close');
-        },
+        startPlugin: function () { },
         /**
          * @method stopPlugin
          *
@@ -94,13 +91,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          */
         setContentState: function (state) {
             // TODO; Set filter and selected tab
-            console.warn('Unimplemented layer list flyout function: setContentState');
+            this.log.warn('Called an unimplemented function: setContentState');
         },
 
         getContentState: function () {
-            // TODO; get filter and selected tab
-            console.warn('Unimplemented layer list flyout function: getContentState');
+            // TODO; Get filter and selected tab
+            this.log.warn('Called an unimplemented function: getContentState');
             return {};
+        },
+
+        setActiveFilter: function () {
+            // TODO; Called from ShowFilteredLayerListRequestHandler
+            this.log.warn('Called an unimplemented function: setActiveFilter');
         },
 
         /**
