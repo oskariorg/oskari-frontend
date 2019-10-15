@@ -1,7 +1,7 @@
-// commented core (global styles) out.
-// @import '~antd/es/style/core/index.less';
+// modified content of ~antd/es/style/core/index.less
+// Removed global styles by commenting 'base' out.
 
-div.ant-tooltip-inner {
-    box-sizing: border-box;
-    text-align: center;
-}
+@import '~antd/es/style/mixins/index';
+// @import 'base';
+@import '~antd/es/style/core/iconfont';
+@import '~antd/es/style/core/motion';
