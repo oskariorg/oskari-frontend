@@ -67,37 +67,37 @@ const LayerWizard = ({
             </Steps>
             }
             { currentStep === WIZARD_STEP.INITIAL &&
-                <div>
+                <React.Fragment>
                     <h4>{typeTitle}</h4>
                     <p>{getMessage('wizard.typeDescription')}</p>
                     <LayerTypeSelection
                         types={layerTypes || []}
                         onSelect={(type) => mutator.setType(type)} />
-                </div>
+                </React.Fragment>
             }
             { currentStep === WIZARD_STEP.SERVICE &&
-                <div>
+                <React.Fragment>
                     <h4>{getMessage('wizard.service')}</h4>
                     <p>{getMessage('wizard.serviceDescription')}</p>
                     <LayerURLForm
                         layer={layer}
                         loading={loading}
                         service={mutator} />
-                </div>
+                </React.Fragment>
             }
             { currentStep === WIZARD_STEP.LAYER &&
-                <div>
+                <React.Fragment>
                     <h4>{getMessage('wizard.layers')}</h4>
                     <p>{getMessage('wizard.layersDescription')}</p>
                     <LayerCapabilitiesListing
-                        onSelect={(item) => mutator.layerSelected(item.name)}
-                        capabilities={capabilities} />
-                </div>
+                        onSelect={(item) => mutator.layerSelected(item.layerName)}
+                        capabilities={capabilities} />  
+                </React.Fragment>
             }
             { currentStep === WIZARD_STEP.DETAILS &&
-                <>
+                <React.Fragment>
                     {children}
-                </>
+                </React.Fragment>
             }
             { !isFirstStep && !isDetailsForOldLayer &&
                 <Button onClick={() => setStep(mutator, getStep(layer) - 1)}>{getMessage('cancel')}</Button>
