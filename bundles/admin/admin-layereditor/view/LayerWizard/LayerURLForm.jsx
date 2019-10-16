@@ -16,7 +16,7 @@ export const LayerURLForm = ({ layer, loading, service }) => {
         defaultOpen: true
     };
     return (
-        <div>
+        <React.Fragment>
             <UrlInput
                 value={layer.url}
                 disabled={loading}
@@ -28,7 +28,7 @@ export const LayerURLForm = ({ layer, loading, service }) => {
                     disabled={!layer.url}
                     loading={loading}>{version}</Button>
             ))}
-        </div>
+        </React.Fragment>
     );
 };
 
