@@ -7,6 +7,7 @@ export { Confirm } from '../../bundles/admin/admin-layereditor/components/Confir
 export { List, ListItem } from '../../bundles/admin/admin-layereditor/components/List';
 export { NumberInput } from '../../bundles/admin/admin-layereditor/components/NumberInput';
 export { Opacity } from '../../bundles/admin/admin-layereditor/components/Opacity';
+export { Popover } from '../../bundles/admin/admin-layereditor/components/Popover';
 export { Radio } from '../../bundles/admin/admin-layereditor/components/RadioButton';
 export { Select, Option } from '../../bundles/admin/admin-layereditor/components/Select';
 export { Slider } from '../../bundles/admin/admin-layereditor/components/Slider';
