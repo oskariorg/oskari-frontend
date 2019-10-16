@@ -375,6 +375,7 @@ export class AdminLayerFormService {
 
     fetchRolesAndPermissionTypes () {
         const me = this;
+        this.loading = true;
         fetch(Oskari.urls.getRoute('GetAllRolesAndPermissionTypes')).then(response => {
             if (response.ok) {
                 return response.json();
@@ -383,6 +384,7 @@ export class AdminLayerFormService {
             }
         }).then(data => {
             me.rolesAndPermissionTypes = data;
+            me.loading = false;
             me.notify();
         }).catch(error => {
             me.log.error(error);
