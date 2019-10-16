@@ -103,7 +103,8 @@ const Oskari = {
             },
             /**
              * Action route urls
-             * @param  {String} route [description]
+             * @param  {String} route optional route name. Returns base url if name is not given.
+             * @param  {Object} optionalParams optional object that will be encoded as querystring parameters for the URL.
              * @return {String} url to use when making API calls
              */
             getRoute: function (route, optionalParams) {

@@ -7,8 +7,7 @@ const StyledButton = styled(Button)`
     border: 1px solid #a4a4a4;
     padding: 25px 15px;
     cursor: pointer;
-    margin-bottom: 5px;
-    margin-left: 5px;
+    margin-right: 5px;
 `;
 
 const IconDiv = styled.div`

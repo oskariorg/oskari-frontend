@@ -28,8 +28,7 @@ Oskari.clazz.define(
                 layerlistService.registerLayerlistFilterButton(me.localization.layerFilter.featuredata,
                     me.localization.layerFilter.tooltip, {
                         active: 'layer-stats',
-                        deactive: 'layer-stats-disabled',
-                        current: 'layer-stats-disabled'
+                        deactive: 'layer-stats-disabled'
                     },
                     'featuredata');
             });
