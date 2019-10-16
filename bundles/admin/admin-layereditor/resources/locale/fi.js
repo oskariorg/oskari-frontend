@@ -55,11 +55,19 @@ Oskari.registerLocalization(
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
                 "invalidStyleJson" : "Style JSON-syntaksi on virheellinen.",
                 "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
-                "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso."
+                "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
+                "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut"
             },
             "otherLanguages": "Muut kielet",
             "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON"
+            "hoverJSON": "Hover JSON",
+            "rights": {
+                "PUBLISH": "Julkaisuoikeus",
+                "VIEW_LAYER": "Katseluoikeus",
+                "DOWNLOAD": "Latausoikeus",
+                "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa",
+                "role": "Rooli"
+            }
         }
     }
 );
