@@ -4,7 +4,6 @@ import { Collapse as AntCollapse } from 'antd';
 import styled from 'styled-components';
 import 'antd/es/collapse/style/index.js';
 
-
 // Collapse component passes some extra properties to its panels.
 // When creating a custom Panel, those properties have to be carried.
 // See usage example in bundles/framework/layerlist/view/LayerCollapse.jsx
@@ -15,12 +14,12 @@ export const Collapse = ({ children, ...other }) => (
 );
 
 const TrimmedPanel = styled(AntCollapse.Panel)`
-    & .ant-collapse-content-box {
-        padding: 0;
-        margin: 0;
-    }
-    & .ant-collapse-content {
+    > .ant-collapse-content {
         width: 100%;
+        > .ant-collapse-content-box {
+            padding: 0;
+            margin: 0;
+        }
     }
 `;
 export const Panel = ({ trimmed, ...other }) => {

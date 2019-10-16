@@ -11,7 +11,7 @@ const StyledRootEl = styled('div')`
 `;
 
 export const LayerTypeSelection = (props) => {
-    const {types, text, onSelect} = props;
+    const { types, text, onSelect } = props;
     function buttonClick (event) {
         if (onSelect) {
             onSelect(event.target.textContent);

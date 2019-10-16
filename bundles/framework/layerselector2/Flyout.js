@@ -20,12 +20,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         this.layerTabs = [];
         this.filters = [];
         this._filterNewestCount = 20;
+        this._currentFilter = null;
+
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
         this.addedButtons = {};
         this.filterComponents = [];
-        const me = this;
-        this.layerlistService.on('FilterActivate', () => me.populateLayers());
     }, {
 
         /**
@@ -103,7 +103,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 me.filterComponents.push(filterButton);
 
                 filterButton.on('FilterActivate', function (currentFilter) {
-                    me.layerlistService.getMutator().setCurrentFilter(currentFilter);
+                    me._currentFilter = currentFilter;
                     me.populateLayers();
                 });
             });
@@ -131,8 +131,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
             me.layerlistService.registerLayerlistFilterButton(loc.buttons.newest,
                 loc.tooltips.newest.replace('##', me._filterNewestCount), {
                     active: 'layer-newest',
-                    deactive: 'layer-newest-disabled',
-                    current: 'layer-newest-disabled'
+                    deactive: 'layer-newest-disabled'
                 },
                 'newest');
         },
@@ -231,8 +230,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
             // Add filter tab change listener
             me.tabContainer.addTabChangeListener(function (previousTab, newTab) {
-                if (me.layerlistService.getCurrentFilter()) {
-                    me.setActiveFilter(me.layerlistService.getCurrentFilter());
+                if (me._currentFilter) {
+                    me.setActiveFilter(me._currentFilter);
                 }
             });
             me.tabContainer.insertTo(cel);
@@ -277,7 +276,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
         populateLayers: function () {
             var me = this;
             // populate layer list
-            var layers = (me.layerlistService.getCurrentFilter()) ? me.mapLayerService.getFilteredLayers(me.layerlistService.getCurrentFilter()) : me.mapLayerService.getAllLayers();
+            var layers = (me._currentFilter) ? me.mapLayerService.getFilteredLayers(me._currentFilter) : me.mapLayerService.getAllLayers();
             this.layerTabs.forEach(function (tab) {
                 // populate tab if it has grouping method
                 if (tab.groupingMethod) {

@@ -3,6 +3,15 @@ Oskari.registerLocalization(
         "lang": "en",
         "key": "admin-layereditor",
         "value": {
+            "wizard": {
+                "type": "Map layer type",
+                "service": "Service",
+                "layers": "Map layers",
+                "typeDescription": "Select the type of the service for layer you are adding",
+                "serviceDescription": "Fill in the url and version for the service",
+                "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
+                "details": "Map layer details"
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",

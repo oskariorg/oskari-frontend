@@ -25,10 +25,10 @@ module.exports = (env, argv) => {
     }));
 
     // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
-    const replacement = path.resolve(__dirname, 'ant-globals.less');
+    const replacement = path.join(__dirname, 'src/react/ant-globals.less');
     plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
-    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, './ant-theme.less');
+    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, 'src/react/ant-theme.less');
 
     // Common config for both prod & dev
     const config = {

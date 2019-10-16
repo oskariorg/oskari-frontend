@@ -81,8 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesToolBundleI
                     loc('layerFilter.timeseries'),
                     loc('layerFilter.tooltip'), {
                         active: 'layer-timeseries',
-                        deactive: 'layer-timeseries-disabled',
-                        current: 'layer-timeseries-disabled'
+                        deactive: 'layer-timeseries-disabled'
                     },
                     'timeseries'
                 );
