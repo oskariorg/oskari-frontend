@@ -6,6 +6,7 @@ export class AdminLayerFormService {
         this.listeners = [];
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.log = Oskari.log('AdminLayerFormService');
+        this.fetchRolesAndPermissionTypes();
     }
 
     getMutator () {
@@ -315,6 +316,28 @@ export class AdminLayerFormService {
             return response;
         });
     }
+
+    fetchRolesAndPermissionTypes () {
+        const me = this;
+        fetch(Oskari.urls.getRoute('GetAllRolesAndPermissionTypes')).then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(Error('Fetching user roles and permission types failed'));
+            }
+        }).then(data => {
+            me.rolesAndPermissionTypes = data;
+            me.notify();
+        }).catch(error => {
+            me.log.error(error);
+            me.getMutator().setMessage('messages.errorFetchUserRolesAndPermissionTypes', 'error');
+            me.notify();
+        });
+    }
+
+    getRolesAndPermissionTypes () {
+        return this.rolesAndPermissionTypes;
+    };
 
     setListener (consumer) {
         this.listeners = [consumer];
