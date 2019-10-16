@@ -15,6 +15,10 @@ const StyledListItem = styled(ListItem)`
     }
 `;
 
+const SpinnerDiv = styled.div`
+   padding: 20px;
+`;
+
 const renderRow = (rowModel) => {
     return (
         <StyledListItem>
@@ -27,6 +31,7 @@ const PermissionsTabPane = (props) => {
     const { getMessage, rolesAndPermissionTypes } = props;
     var permissionDataModel;
     if (rolesAndPermissionTypes) {
+        // TODO: Refactor data model in next iteration
         const permissionTypes = [...rolesAndPermissionTypes.permissionTypes];
         const headerSelections = permissionTypes.map(permission => {
             const copy = JSON.parse(JSON.stringify(permission));
@@ -57,7 +62,7 @@ const PermissionsTabPane = (props) => {
     return (
         permissionDataModel
             ? <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
-            : <Spin/>
+            : <SpinnerDiv><Spin/></SpinnerDiv>
     );
 };
 
