@@ -90,7 +90,7 @@ const LayerWizard = ({
                     <h4>{getMessage('wizard.layers')}</h4>
                     <p>{getMessage('wizard.layersDescription')}</p>
                     <LayerCapabilitiesListing
-                        onSelect={(item) => mutator.layerSelected(item.layerName)}
+                        onSelect={(item) => mutator.layerSelected(item.name)}
                         capabilities={capabilities} />  
                 </React.Fragment>
             }
