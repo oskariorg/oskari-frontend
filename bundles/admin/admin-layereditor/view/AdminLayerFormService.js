@@ -7,7 +7,7 @@ export class AdminLayerFormService {
         this.listeners = [consumer];
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.log = Oskari.log('AdminLayerFormService');
-        this.loading = false;
+        this.loadingCount = 0;
     }
 
     getMutator () {
@@ -24,7 +24,6 @@ export class AdminLayerFormService {
             setVersion (version) {
                 if (!version) {
                     me.capabilities = [];
-                    me.loading = false;
                     // for moving back to previous step
                     me.layer.version = undefined;
                     me.notify();
@@ -143,7 +142,7 @@ export class AdminLayerFormService {
             this.resetLayer();
             return;
         }
-        this.loading = true;
+        this.loadingCount++;
         this.notify();
         const me = this;
         fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
@@ -157,7 +156,7 @@ export class AdminLayerFormService {
             }
             return response.json();
         }).then(function (json) {
-            me.loading = false;
+            me.loadingCount--;
             me.layer = { ...json.layer };
             me.notify();
         });
@@ -399,7 +398,7 @@ export class AdminLayerFormService {
         }];
     */
     fetchCapabilities (version) {
-        this.loading = true;
+        this.loadingCount++;
         this.notify();
         const layer = this.getLayer();
         var params = {
@@ -421,7 +420,7 @@ export class AdminLayerFormService {
             }
             return response.json();
         }).then(function (json) {
-            me.loading = false;
+            me.loadingCount--;
             me.capabilities = json.layers || [];
             me.notify();
         });
@@ -435,7 +434,7 @@ export class AdminLayerFormService {
         return ['wfslayer', 'wmslayer'];
     }
     isLoading () {
-        return this.loading;
+        return this.loadingCount > 0;
     }
     getCapabilities () {
         return this.capabilities || [];
