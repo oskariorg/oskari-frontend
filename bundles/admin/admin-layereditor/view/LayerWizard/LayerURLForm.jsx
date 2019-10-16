@@ -25,8 +25,7 @@ export const LayerURLForm = ({ layer, loading, service }) => {
             {getVersions(layer.type).map((version, key) => (
                 <Button type="primary" key={key}
                     onClick={() => service.setVersion(version)}
-                    disabled={!layer.url}
-                    loading={loading}>{version}</Button>
+                    disabled={!layer.url || loading}>{version}</Button>
             ))}
         </React.Fragment>
     );
