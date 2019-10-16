@@ -69,10 +69,10 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         show: function () {
             var me = this;
             if (me.isVisible()) {
+                me.bringToTop();
                 return;
             }
             me._popup.show();
-            me.bringToTop();
             me._visible = true;
             this.trigger('show');
         },
