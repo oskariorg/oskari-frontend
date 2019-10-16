@@ -7,7 +7,7 @@ export class AdminLayerFormService {
         this.listeners = [consumer];
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.log = Oskari.log('AdminLayerFormService');
-        this.loading = false;
+        this.loadingCount = 0;
         this.fetchRolesAndPermissionTypes();
     }
 
@@ -25,7 +25,6 @@ export class AdminLayerFormService {
             setVersion (version) {
                 if (!version) {
                     me.capabilities = [];
-                    me.loading = false;
                     // for moving back to previous step
                     me.layer.version = undefined;
                     me.notify();
@@ -154,6 +153,33 @@ export class AdminLayerFormService {
             isNew: true
         };
     }
+
+    // http://localhost:8080/action?action_route=LayerAdmin&id=889
+    fetchLayer (id) {
+        if (!id) {
+            this.resetLayer();
+            return;
+        }
+        this.loadingCount++;
+        this.notify();
+        const me = this;
+        fetch(Oskari.urls.getRoute('LayerAdmin', { id }), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            if (!response.ok) {
+                me.getMutator().setMessage('TODO', 'error');
+            }
+            return response.json();
+        }).then(function (json) {
+            me.loadingCount--;
+            me.layer = { ...json.layer };
+            me.notify();
+        });
+    }
+
     /**
      * Initializes layer model used in UI
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
@@ -373,9 +399,53 @@ export class AdminLayerFormService {
         });
     }
 
+     /*
+        Calls action route like:
+        http://localhost:8080/action?action_route=LayerAdmin&url=https://my.domain/geoserver/ows&type=wfslayer&version=1.1.0
+        me.capabilities = [{
+            name: 'fake'
+        }, {
+            name: 'it'
+        }, {
+            name: 'till'
+        }, {
+            name: 'you'
+        }, {
+            name: 'make it'
+        }];
+    */
+    fetchCapabilities (version) {
+        this.loadingCount++;
+        this.notify();
+        const layer = this.getLayer();
+        var params = {
+            type: layer.type,
+            version: version,
+            url: layer.url
+        };
+        const me = this;
+        fetch(Oskari.urls.getRoute('LayerAdmin', params), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(function (response) {
+            if (response.ok) {
+                me.layer.version = version;
+            } else {
+                me.getMutator().setMessage('TODO', 'error');
+            }
+            return response.json();
+        }).then(function (json) {
+            me.loadingCount--;
+            me.capabilities = json.layers || [];
+            me.notify();
+        });
+    }
+
     fetchRolesAndPermissionTypes () {
         const me = this;
-        this.loading = true;
+        this.loadingCount++;
         fetch(Oskari.urls.getRoute('GetAllRolesAndPermissionTypes')).then(response => {
             if (response.ok) {
                 return response.json();
@@ -384,7 +454,7 @@ export class AdminLayerFormService {
             }
         }).then(data => {
             me.rolesAndPermissionTypes = data;
-            me.loading = false;
+            me.loadingCount--;
             me.notify();
         }).catch(error => {
             me.log.error(error);
@@ -405,7 +475,7 @@ export class AdminLayerFormService {
         return ['WFS'];
     }
     isLoading () {
-        return this.loading;
+        return this.loadingCount > 0;
     }
     getCapabilities () {
         return this.capabilities || [];
