@@ -1,17 +1,23 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { List, ListItem } from 'oskari-ui';
+import { List, ListItem, Popover } from 'oskari-ui';
+
+export const LayerCapabilitiesListing = (props) => {
+    return (<List dataSource={props.capabilities} rowKey="name" renderItem={item => getItem(props.onSelect, item)}></List>);
+};
 
 const getItem = (onSelect, item) => {
     return (
-        <ListItem onClick={() => onSelect(item)}>
-            {item.name}
-        </ListItem>
+        <Popover content={generateContent(item)} title={item.name} placement="right">
+            <ListItem onClick={() => onSelect(item)}>
+                {item.name}
+            </ListItem>
+        </Popover>
     );
 };
 
-export const LayerCapabilitiesListing = (props) => {
-    return (<List dataSource={props.capabilities} renderItem={item => getItem(props.onSelect, item)}></List>);
+const generateContent = (item) => {
+    return <pre>{JSON.stringify(item.locale, null, 2)}</pre>;
 };
 
 LayerCapabilitiesListing.propTypes = {
