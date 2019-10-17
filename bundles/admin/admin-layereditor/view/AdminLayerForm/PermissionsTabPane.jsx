@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionTabPane/PermissionRow';
-import { List, ListItem, Spin } from 'oskari-ui';
+import { List, ListItem } from 'oskari-ui';
 import { withLocale } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
@@ -13,10 +13,6 @@ const StyledListItem = styled(ListItem)`
     &:last-child > div {
         padding-bottom: 20px;
     }
-`;
-
-const SpinnerDiv = styled.div`
-   padding: 20px;
 `;
 
 const renderRow = (rowModel) => {
@@ -60,9 +56,8 @@ const PermissionsTabPane = (props) => {
     }
 
     return (
-        permissionDataModel
-            ? <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
-            : <SpinnerDiv><Spin/></SpinnerDiv>
+        permissionDataModel &&
+            <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
     );
 };
 
