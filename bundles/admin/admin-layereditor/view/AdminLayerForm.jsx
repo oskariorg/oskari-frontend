@@ -89,7 +89,7 @@ AdminLayerForm.propTypes = {
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
-    rolesAndPermissionTypes: PropTypes.object.isRequired
+    rolesAndPermissionTypes: PropTypes.object
 };
 
 const contextWrap = withMutator(withLocale(AdminLayerForm));
