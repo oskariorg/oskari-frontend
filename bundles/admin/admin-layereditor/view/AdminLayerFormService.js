@@ -399,7 +399,7 @@ export class AdminLayerFormService {
         });
     }
 
-     /*
+    /*
         Calls action route like:
         http://localhost:8080/action?action_route=LayerAdmin&url=https://my.domain/geoserver/ows&type=wfslayer&version=1.1.0
         me.capabilities = [{
