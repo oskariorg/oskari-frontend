@@ -9,7 +9,7 @@ Allows user to add features to map.
 
 ## Description
 
-Vector features can be added on the map. The request must contain the geometries of the features. The geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest) before adding features.
+Vector features can be added on the map. The request must contain the geometries of the features. The geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
 
 WKT
 ```javascript
@@ -50,6 +50,36 @@ var geojsonObject = {
       ]
 };
 ```
+
+Options object
+```javascript
+{
+  layerId: 'MY_VECTOR_LAYER',
+  animationDuration: 500,
+  attributes: {},
+  centerTo: true,
+  clearPrevious: true,
+  cursor: 'zoom-in',
+  prio: 1
+}
+```
+<ul>
+    <li>
+        <b>layerId</b> - Layer's id to specify which layer you want to add features (if the layer does not exist one will be created).
+    </li><li>
+        <b>animationDuration</b> - On update requests it's possible to animate fill color change. Specify animation duration in ms.
+    </li><li>
+        <b>attributes</b> - Feature's attributes, especially handy when the geometry is a WKT-string.
+    </li><li>
+        <b>clearPrevious</b> - when true, the previous features will be cleared
+    </li><li>
+        <b>centerTo</b> - Whether to zoom to the added features.
+    </li><li>
+        <b>cursor</b> - Mouse cursor when cursor is over the feature.
+    </li><li>
+        <b>prio</b> - Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.
+    </li>
+<ul>
 
 Geometry can also feature properties object. This will identify feature what you want to update. This is usefull for example highlight feature.
 ```javascript
@@ -97,18 +127,13 @@ var geojsonObject = {
 
 // Add the features on a specific layer
 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-var layerOptions = {
+var options = {
   layerId: 'MY_VECTOR_LAYER',
   centerTo: true
 };
 
 Oskari.getSandbox().postRequestByName(rn, [geojsonObject, layerOptions]);
 ```
-<b>layerId</b> - In case you want to add features on a specified layer (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer.
-
-See [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest) for vector layer options definitions.
-
-See [Oskari JSON style](/documentation/examples/oskari-style) for Oskari style object definition.
 
 Usage example (WKT)
 
@@ -123,7 +148,7 @@ var attributes = {
 
 // Add features
 var rn = 'MapModulePlugin.AddFeaturesToMapRequest';
-var layerOptions = {
+var options = {
   layerId: 'MY_VECTOR_LAYER',
   centerTo: true,
   attributes
@@ -133,7 +158,8 @@ Oskari.getSandbox().postRequestByName(rn, [WKT, layerOptions]);
 ```
 
 
-Update specific feature.
+Usage example - Update specific feature.
+
 ```javascript
 // First add feature, feature format can be an WKT or GeoJSON
 // Define a wkt-geometry
@@ -165,11 +191,13 @@ var featureStyle = {
 
 // Define wanted feature attributes
 var updatedFeatureAttributes = {'test_property':1};
-var params = [updatedFeatureAttributes, {
+var params = [updatedFeatureAttributes, options];
+
+var options = {
     featureStyle: featureStyle,
     layerId: 'MY_VECTOR_LAYER',
     animationDuration: 1000
-}];
+};
 
 Oskari.getSandbox().postRequestByName(
     'MapModulePlugin.AddFeaturesToMapRequest',
@@ -177,8 +205,12 @@ Oskari.getSandbox().postRequestByName(
 );
 ```
 
-## Related api
+## RPC examples
+See [Add or remove vector features](/examples/rpc-api/rpc_example.html) for full example.
 
+## Related api
 - VectorLayerRequest
 - RemoveFeaturesFromMapRequest
+
+
 

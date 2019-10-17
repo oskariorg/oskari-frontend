@@ -24,14 +24,8 @@ Options object
     layerPermissions: {
         'publish': 'publication_permission_ok'
     },
-    animationDuration: null,
-    attributes: null,
-    clearPrevious: true,
-    centerTo: true,
-    cursor: 'zoom-in',
-    prio: 1,
+    minScale: 1451336,
     maxScale: 1,
-    minScale: 1451336,    
     featureStyle: {},
     optionalStyles: [],  
     hover: {}
@@ -55,18 +49,6 @@ Options object
     </li><li>
         <b>layerPermissions</b> - Layer permissions.
     </li><li>
-        <b>animationDuration</b> - On update requests it's possible to animate fill color change. Specify animation duration in ms.
-    </li><li>
-        <b>attributes</b> - Feature's attributes, especially handy when the geometry is a WKT-string.
-    </li><li>
-		<b>clearPrevious</b> - when true, the previous features will be cleared
-	</li><li>
-        <b>centerTo</b> - Whether to zoom to the added features.
-    </li><li>
-        <b>cursor</b> - Mouse cursor when cursor is over the feature.
-    </li><li>
-        <b>prio</b> - Feature prio. The lowest number is the must important feature (top on the map). The highest number is the least important.
-    </li><li>
         <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
     </li><li>
         <b>maxScale</b> - Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
@@ -85,7 +67,7 @@ See [Oskari JSON style](/documentation/examples/oskari-style) for style object d
 
 ## Examples
 ### Adding a new layer example
-Only prepares a layer for later use. To add features to this layer see [AddFeaturesToMapRequest](/api/requests/#unreleased/mapping/mapmodule/request/addfeaturestomaprequest).
+Only prepares a layer for later use. To add features to this layer see [AddFeaturesToMapRequest](/api/requests/#unreleased/mapping/mapmodule/request/addfeaturestomaprequest.md).
 
 ```javascript
 const options = {
