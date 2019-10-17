@@ -50,9 +50,32 @@ const getStyleFileRules = (isProd, antThemeFile) => {
     return rules;
 };
 
+const regexpPathSep = `\\${path.sep}`;
+const joinRegexpPath = parts => parts.join(regexpPathSep);
+
+const blacklistedModules = ['react-dom', joinRegexpPath(['@ant-design','icons'])];
+const getBlacklistedModules = () => [
+        ...blacklistedModules.map(cur => new RegExp(joinRegexpPath(['node_modules', cur]))),
+        ...blacklistedModules.map(cur => new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules', cur])))
+    ];
+
+const whitelistedModules = [];
+const getWhitelistedModules = () => {
+    const modules = whitelistedModules.join('|');
+    return [
+        new RegExp(`node_modules${regexpPathSep}(?!(${modules}))`),
+        new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules']) + `${regexpPathSep}(?!(${modules}))`)
+    ]
+}
+
 const BABEL_LOADER_RULE = {
     test: /\.(js|jsx)$/,
-    exclude: [/libraries/, /\.min\.js$/],
+    exclude: [
+        /libraries/,
+        /\.min\.js$/,
+        ...getBlacklistedModules(),
+        ...getWhitelistedModules()
+    ],
     use: {
         loader: 'babel-loader',
         options: {
