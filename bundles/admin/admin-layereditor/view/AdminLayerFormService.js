@@ -380,7 +380,7 @@ export class AdminLayerFormService {
             if (response.ok) {
                 return response.json();
             } else {
-                return Promise.reject(Error('Fetching user roles and permission types failed'));
+                return Promise.reject(new Error('Fetching user roles and permission types failed'));
             }
         }).then(data => {
             me.rolesAndPermissionTypes = data;
@@ -396,10 +396,6 @@ export class AdminLayerFormService {
     getRolesAndPermissionTypes () {
         return this.rolesAndPermissionTypes;
     };
-
-    setListener (consumer) {
-        this.listeners = [consumer];
-    }
 
     getLayer () {
         return this.layer;
