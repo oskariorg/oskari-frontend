@@ -55,8 +55,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 const domainWarningDivs = jQuery('.domain-warning');
                 if (domainWarningDivs.length === 0) {
                     const domainWarning = me.domainWarningTemplate.clone();
-                    const domainDiv = jQuery('.basic_publisher').find('.oskarifield')[1];
-                    domainDiv.append(domainWarning[0]);
+                    const fieldsDiv = jQuery('.basic_publisher').find('.oskarifield');
+                    // if user clicks save/cancel before throttled function triggers
+                    // there will be no fields so we need to check for that
+                    if (fieldsDiv.length > 1) {
+                        // domain field is the second one
+                        fieldsDiv[1].append(domainWarning[0]);
+                    }
                 }
                 if (!event.target.value || Oskari.util.isValidDomain(event.target.value)) {
                     jQuery('.domain-warning').hide();
