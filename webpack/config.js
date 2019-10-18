@@ -69,6 +69,15 @@ const getWhitelistedModules = modules => {
     ];
 };
 
+/**
+ * Optimizing babel transpiling by excluding specified node_modules.
+ * Transpiling all node module dependencies is an expensive task, but some modules require ES6 transpiling for IE to work.
+ *
+ * Modules can be whitelisted (only these node modules will be transpiled) or blacklisted (transpile all other node modules).
+ *
+ * @param {string[]} modules Modules we wan't to give a special treatment to.
+ * @param {boolean} blacklisted Blacklisted or whitelist. Defaults to blacklisting.
+ */
 const getExcludedNodeModules = (modules, blacklisted = true) => {
     return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules);
 };
