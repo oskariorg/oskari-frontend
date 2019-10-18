@@ -32,7 +32,11 @@ export class AdminLayerFormService {
                 me.fetchCapabilities(version);
             },
             layerSelected (name) {
-                const found = me.capabilities.find((item) => item.name === name);
+                if (!me.capabilities || !me.capabilities.layers) {
+                    me.log.error('Capabilities not available. Tried to select layer: ' + name);
+                    return;
+                }
+                const found = me.capabilities.layers[name];
                 if (found) {
                     me.layer = {
                         ...me.layer,
@@ -384,18 +388,6 @@ export class AdminLayerFormService {
     /*
         Calls action route like:
         http://localhost:8080/action?action_route=LayerAdmin&url=https://my.domain/geoserver/ows&type=wfslayer&version=1.1.0
-
-        me.capabilities = [{
-            name: 'fake'
-        }, {
-            name: 'it'
-        }, {
-            name: 'till'
-        }, {
-            name: 'you'
-        }, {
-            name: 'make it'
-        }];
     */
     fetchCapabilities (version) {
         this.loadingCount++;
@@ -421,7 +413,7 @@ export class AdminLayerFormService {
             return response.json();
         }).then(function (json) {
             me.loadingCount--;
-            me.capabilities = json.layers || [];
+            me.capabilities = json || {};
             me.notify();
         });
     }

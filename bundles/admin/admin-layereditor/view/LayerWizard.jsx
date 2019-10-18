@@ -111,7 +111,7 @@ LayerWizard.propTypes = {
     mutator: PropTypes.object.isRequired,
     getMessage: PropTypes.func.isRequired,
     loading: PropTypes.bool,
-    capabilities: PropTypes.array,
+    capabilities: PropTypes.object,
     layerTypes: PropTypes.array,
     children: PropTypes.any
 };
