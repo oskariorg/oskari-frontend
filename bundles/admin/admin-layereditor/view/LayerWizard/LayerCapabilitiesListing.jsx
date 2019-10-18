@@ -2,22 +2,17 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { List, ListItem } from 'oskari-ui';
 
-export class LayerCapabilitiesListing extends React.Component {
-    getItem (item) {
-        return (
-            <ListItem onClick={() => this.props.onSelect(item)}>
-                {item.layerName}
-            </ListItem>
-        );
-    }
-    render () {
-        return (
-            <div>
-                <List dataSource={this.props.capabilities} renderItem={item => this.getItem(item)}></List>
-            </div>
-        );
-    }
-}
+const getItem = (onSelect, item) => {
+    return (
+        <ListItem onClick={() => onSelect(item)}>
+            {item.name}
+        </ListItem>
+    );
+};
+
+export const LayerCapabilitiesListing = (props) => {
+    return (<List dataSource={props.capabilities} renderItem={item => getItem(props.onSelect, item)}></List>);
+};
 
 LayerCapabilitiesListing.propTypes = {
     capabilities: PropTypes.arrayOf(PropTypes.object),
