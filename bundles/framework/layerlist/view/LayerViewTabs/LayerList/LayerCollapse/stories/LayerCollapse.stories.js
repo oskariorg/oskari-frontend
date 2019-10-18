@@ -69,20 +69,6 @@ storiesOf('LayerCollapse', module)
         resetStoryState();
         return <LayerCollapse {...service.getState()} locale={locale} />;
     })
-    .add('with filter "wfs"', () => {
-        resetStoryState();
-        service.updateState({
-            filterKeyword: 'wfs'
-        });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
-    })
-    .add('with filter "wms"', () => {
-        resetStoryState();
-        service.updateState({
-            filterKeyword: 'wms'
-        });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
-    })
     .add('WMS selected', () => {
         resetStoryState();
         service.updateState({
