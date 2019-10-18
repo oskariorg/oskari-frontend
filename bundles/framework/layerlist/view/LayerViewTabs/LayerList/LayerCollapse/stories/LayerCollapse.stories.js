@@ -1,9 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { LayerCollapse } from '../../LayerCollapse';
-import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
+import { LayerCollapse, CollapseService } from '..';
+import { LayerGroup } from '../../../../../../layerselector2/model/LayerGroup.class';
 import { AbstractLayer, instance, locale } from './mock';
-import { CollapseService } from '../CollapseService';
 
 let lyrCount = 0;
 const createLayer = (name, type) => {
