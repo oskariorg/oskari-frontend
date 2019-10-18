@@ -68,7 +68,7 @@ const PermissionsTabPane = (props) => {
 };
 
 PermissionsTabPane.propTypes = {
-    rolesAndPermissionTypes: PropTypes.object.isRequired,
+    rolesAndPermissionTypes: PropTypes.object,
     getMessage: PropTypes.func.isRequired
 };
 
