@@ -54,9 +54,9 @@ const regexpPathSep = `\\${path.sep}`;
 const joinRegexpPath = parts => parts.join(regexpPathSep);
 
 const getBlacklistedModules = modules => [
-        ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', cur]))),
-        ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules', cur])))
-    ];
+    ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', cur]))),
+    ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules', cur])))
+];
 
 const getWhitelistedModules = modules => {
     if (!Array.isArray(modules) || modules.length === 0) {
@@ -66,12 +66,12 @@ const getWhitelistedModules = modules => {
     return [
         new RegExp(`node_modules${regexpPathSep}(?!(${moduleStr}))`),
         new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules']) + `${regexpPathSep}(?!(${moduleStr}))`)
-    ]
-}
+    ];
+};
 
 const getExcludedNodeModules = (modules, blacklisted = true) => {
-    return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules)
-}
+    return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules);
+};
 
 const BABEL_LOADER_RULE = {
     test: /\.(js|jsx)$/,
