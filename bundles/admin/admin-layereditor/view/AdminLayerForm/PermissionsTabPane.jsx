@@ -2,62 +2,68 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionTabPane/PermissionRow';
-import { List, ListItem } from 'oskari-ui';
+import { List, ListItem, Checkbox } from 'oskari-ui';
 import { withLocale } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
     &:first-child > div {
-        padding-top: 5px;
         font-weight: bold;
     }
-    &:last-child > div {
-        padding-bottom: 20px;
+    &:not(:first-child) {
+        background-color: ${props => props.children.props.even ? '#ffffff' : '#f3f3f3'};
     }
 `;
 
-const renderRow = (rowModel) => {
+const ListDiv = styled.div`
+    padding-bottom: 20px;
+`;
+
+const renderRow = (row) => {
     return (
         <StyledListItem>
-            <PermissionRow {...rowModel}/>
+            {row}
         </StyledListItem>
     );
 };
 
 const PermissionsTabPane = (props) => {
     const { getMessage, rolesAndPermissionTypes } = props;
-    var permissionDataModel;
-    if (rolesAndPermissionTypes) {
-        // TODO: Refactor data model in next iteration
-        const permissionTypes = [...rolesAndPermissionTypes.permissionTypes];
-        const headerSelections = permissionTypes.map(permission => {
-            const copy = JSON.parse(JSON.stringify(permission));
-            copy.selectionText = getMessage('rights.' + permission.id);
-            copy.header = true;
-            return copy;
-        });
-
-        const header = {
-            rowId: 'header',
-            rowText: getMessage('rights.role'),
-            permissionTypes: headerSelections,
-            isHeaderRow: true
-        };
-
-        const data = rolesAndPermissionTypes.roles.map(role => {
-            return {
-                rowId: role.id,
-                rowText: role.name,
-                role: role,
-                permissionTypes: rolesAndPermissionTypes.permissionTypes,
-                isHeaderRow: false
-            };
-        });
-        permissionDataModel = [header, ...data];
+    if (!rolesAndPermissionTypes) {
+        return;
     }
 
+    const permissionTypes = [...rolesAndPermissionTypes.permissionTypes];
+    const roles = [...rolesAndPermissionTypes.roles];
+
+    const checkboxOnChangeHandler = (event) => {
+        // TODO: Replace console.log with service mutator call to mutate state of selected permissions
+        const role = event.target.role;
+        const permission = event.target.permission;
+        console.log('Checkbox with role ' + role + ' and permission ' + permission);
+    };
+
+    const headerCheckboxes = permissionTypes.map(permission => {
+        return <Checkbox key={permission.id + '_' + 'all'}
+            selectionText={getMessage('rights.' + permission.id)}
+            permission={permission.id} role={'all'}
+            onChange = {checkboxOnChangeHandler}/>;
+    });
+
+    const header = <PermissionRow key={'header'} even={false} isHeaderRow={true} text={getMessage('rights.role')} checkboxes={headerCheckboxes}/>;
+
+    const rolePermissionRows = roles.map((role, index) => {
+        const rolePermissionCheckboxes = permissionTypes.map((permission) => {
+            return <Checkbox key={permission.id + '_' + role.id}
+                selectionText={getMessage('rights.' + permission.id)}
+                permission={permission.id} role={role.id}
+                onChange = {checkboxOnChangeHandler}/>;
+        });
+        return <PermissionRow key={role.id} even={index % 2 === 0} isHeaderRow={false} text={role.name} checkboxes={rolePermissionCheckboxes}/>;
+    });
+    const permissionDataModel = [header, ...rolePermissionRows];
+
     return (
-        permissionDataModel &&
-            <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
+        <ListDiv><List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/></ListDiv>
     );
 };
 

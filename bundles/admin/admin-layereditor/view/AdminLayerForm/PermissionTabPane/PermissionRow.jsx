@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Checkbox } from 'oskari-ui';
 
 const RowContainer = styled.div`
     display: flex;
@@ -11,12 +10,8 @@ const RowContainer = styled.div`
 const TextColumn = styled.div`
     flex-grow: 1;
     width: 195px;
-`;
-
-const HeaderTextColumn = styled.div`
-    flex-grow: 1;
-    width: 195px;
-    align-self: flex-end;
+    padding-left: 5px;
+    align-self: ${props => props.isHeaderRow ? 'flex-end' : 'stretch'};
 `;
 
 const StyledPermissionDiv = styled.div`
@@ -32,7 +27,6 @@ const StyledPermissionDiv = styled.div`
 const Break = styled.div`
     flex-basis: 100%;
     height: 0;
-  
 `;
 
 const HeaderPermissionText = styled.div`
@@ -47,35 +41,27 @@ const SelectAllDiv = styled.div`
 `;
 
 export const PermissionRow = (props) => {
-    const permissionTypes = [];
-    props.permissionTypes.forEach(permission => {
+    const checkboxDivs = [];
+    props.checkboxes.forEach(checkbox => {
         if (props.isHeaderRow) {
-            permissionTypes.push(<StyledPermissionDiv key={permission.id}><HeaderPermissionText>{permission.selectionText}</HeaderPermissionText><Break/><SelectAllDiv><Checkbox/></SelectAllDiv></StyledPermissionDiv>);
+            checkboxDivs.push(<StyledPermissionDiv key={checkbox.key}><HeaderPermissionText >{checkbox.props.selectionText}</HeaderPermissionText><Break/><SelectAllDiv>{checkbox}</SelectAllDiv></StyledPermissionDiv>);
         } else {
-            permissionTypes.push(<StyledPermissionDiv key={permission.id}><Checkbox/></StyledPermissionDiv>);
+            checkboxDivs.push(<StyledPermissionDiv key={checkbox.key}>{checkbox}</StyledPermissionDiv>);
         }
     });
 
     return (
-        props.isHeaderRow
-            ? <RowContainer>
-                <HeaderTextColumn>
-                    { props.rowText}
-                </HeaderTextColumn>
-                { permissionTypes }
-            </RowContainer>
-            : <RowContainer>
-                <TextColumn>
-                    { props.rowText}
-                </TextColumn>
-                { permissionTypes }
-            </RowContainer>
+        <RowContainer>
+            <TextColumn isHeaderRow={props.isHeaderRow}>
+                { props.text }
+            </TextColumn>
+            { checkboxDivs }
+        </RowContainer>
     );
 };
 
 PermissionRow.propTypes = {
-    rowText: PropTypes.string.isRequired,
-    role: PropTypes.object,
-    permissionTypes: PropTypes.array.isRequired,
+    text: PropTypes.string.isRequired,
+    checkboxes: PropTypes.array.isRequired,
     isHeaderRow: PropTypes.bool.isRequired
 };
