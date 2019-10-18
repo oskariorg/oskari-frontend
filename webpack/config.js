@@ -53,19 +53,24 @@ const getStyleFileRules = (isProd, antThemeFile) => {
 const regexpPathSep = `\\${path.sep}`;
 const joinRegexpPath = parts => parts.join(regexpPathSep);
 
-const blacklistedModules = ['react-dom', joinRegexpPath(['@ant-design','icons'])];
-const getBlacklistedModules = () => [
-        ...blacklistedModules.map(cur => new RegExp(joinRegexpPath(['node_modules', cur]))),
-        ...blacklistedModules.map(cur => new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules', cur])))
+const getBlacklistedModules = modules => [
+        ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', cur]))),
+        ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules', cur])))
     ];
 
-const whitelistedModules = [];
-const getWhitelistedModules = () => {
-    const modules = whitelistedModules.join('|');
+const getWhitelistedModules = modules => {
+    if (!Array.isArray(modules) || modules.length === 0) {
+        return [];
+    }
+    const moduleStr = modules.join('|');
     return [
-        new RegExp(`node_modules${regexpPathSep}(?!(${modules}))`),
-        new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules']) + `${regexpPathSep}(?!(${modules}))`)
+        new RegExp(`node_modules${regexpPathSep}(?!(${moduleStr}))`),
+        new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules']) + `${regexpPathSep}(?!(${moduleStr}))`)
     ]
+}
+
+const getExcludedNodeModules = (modules, blacklisted = true) => {
+    return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules)
 }
 
 const BABEL_LOADER_RULE = {
@@ -73,8 +78,7 @@ const BABEL_LOADER_RULE = {
     exclude: [
         /libraries/,
         /\.min\.js$/,
-        ...getBlacklistedModules(),
-        ...getWhitelistedModules()
+        getExcludedNodeModules(['react-dom', '@ant-design', 'antd'])
     ],
     use: {
         loader: 'babel-loader',
