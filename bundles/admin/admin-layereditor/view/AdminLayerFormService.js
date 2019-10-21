@@ -2,7 +2,7 @@ import { stringify } from 'query-string';
 export class AdminLayerFormService {
     constructor (consumer) {
         this.layer = {};
-        this.capabilities = [];
+        this.capabilities = {};
         this.messages = [];
         this.listeners = [consumer];
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
@@ -23,7 +23,7 @@ export class AdminLayerFormService {
             },
             setVersion (version) {
                 if (!version) {
-                    me.capabilities = [];
+                    me.capabilities = {};
                     // for moving back to previous step
                     me.layer.version = undefined;
                     me.notify();
@@ -429,7 +429,7 @@ export class AdminLayerFormService {
         return this.loadingCount > 0;
     }
     getCapabilities () {
-        return this.capabilities || [];
+        return this.capabilities || {};
     }
     getMessages () {
         return this.messages;

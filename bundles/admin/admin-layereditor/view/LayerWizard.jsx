@@ -91,7 +91,7 @@ const LayerWizard = ({
                     <p>{getMessage('wizard.layersDescription')}</p>
                     <LayerCapabilitiesListing
                         onSelect={(item) => mutator.layerSelected(item.name)}
-                        capabilities={capabilities} />  
+                        capabilities={capabilities} />
                 </React.Fragment>
             }
             { currentStep === WIZARD_STEP.DETAILS &&
