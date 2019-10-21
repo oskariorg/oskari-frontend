@@ -23,6 +23,10 @@ background-color: lightcoral;
 export const StylePopUl = styled.ul`
 max-width: 400px;
 `;
+export const StylePopLi = styled.li`
+overflow: hidden;
+text-overflow: ellipsis;
+`;
 
 const compare = (a, b, next) => {
     if (a && b) {
@@ -44,6 +48,7 @@ export const LayerCapabilitiesListing = (props) => {
     return (
         <React.Fragment>
             <LayerCapabilitiesFilter
+                placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
             <List dataSource={layers} rowKey="name" renderItem={item => getItem(props.onSelect, item)}></List>
@@ -106,10 +111,10 @@ const getItem = (onSelect, item) => {
 
 const generateContent = (item) => (
     <StylePopUl>
-        <li>Exists: {'' + item.isExisting}</li>
-        <li>Problematic: {'' + item.isProblematic}</li>
-        <li>Unsupported: {'' + item.isUnsupported}</li>
-        <li>{JSON.stringify(item.layer)}</li>
+        <StylePopLi>Exists: {'' + item.isExisting}</StylePopLi>
+        <StylePopLi>Problematic: {'' + item.isProblematic}</StylePopLi>
+        <StylePopLi>Unsupported: {'' + item.isUnsupported}</StylePopLi>
+        <StylePopLi>{JSON.stringify(item.layer)}</StylePopLi>
     </StylePopUl>
 
 );
