@@ -138,6 +138,7 @@ export class AdminLayerFormService {
             maplayerGroups: [],
             isNew: true
         };
+        this.notify();
     }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889

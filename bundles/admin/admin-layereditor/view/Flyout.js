@@ -41,8 +41,11 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.update();
     }
     setLayer (layer) {
-        this.service.initLayerState(layer);
-        this.update();
+        if (!layer) {
+            this.service.resetLayer();
+        } else {
+            this.service.fetchLayer(layer.getId());
+        }
     }
     setDataProviders (dataProviders) {
         this.dataProviders = dataProviders;
