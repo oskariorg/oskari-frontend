@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'oskari-ui';
-import { LayerCollapsePanel } from './LayerCollapse/LayerCollapsePanel';
-import { LayerListAlert } from './LayerListAlert';
+import { LayerCollapsePanel } from './LayerCollapsePanel';
+import { LayerListAlert } from '../';
 import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`

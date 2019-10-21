@@ -3,11 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs, TabPane, Spin } from 'oskari-ui';
 import { handleBinder } from 'oskari-ui/util';
-import { LayerFilters } from './LayerList/LayerFilters';
-import { LayerListAlert } from './LayerList/LayerListAlert';
-import { FilterService } from './LayerList/LayerFilters/FilterService';
-import { LayerCollapse } from './LayerList/LayerCollapse';
-import { CollapseService, GROUPING_METHODS } from './LayerList/LayerCollapse/CollapseService';
+import { LayerFilters, FilterService } from './LayerFilters/';
+import { LayerCollapse, CollapseService, GROUPING_METHODS } from './LayerCollapse/';
+import { LayerListAlert } from '.';
 import styled from 'styled-components';
 
 const GROUPED_LAYERS_TABS = {
