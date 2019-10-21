@@ -26,7 +26,7 @@ const StyledBadge = styled.div`
     height: 20px;
     color: #000;
     background: #ffd400;
-    border-radius: 2px;
+    border-radius: 4px;
     text-align: center;
     padding: 2px 8px;
     font-size: 12px;
@@ -145,9 +145,7 @@ export class LayerList extends React.Component {
     }
 
     getSelectedLayers () {
-        const sandbox = Oskari.getSandbox();
-        const layers = sandbox.findAllSelectedMapLayers();
-        return layers;
+        return Oskari.getSandbox().findAllSelectedMapLayers();
     }
 
     getGroupedLayers (tab) {
