@@ -43,7 +43,7 @@ function getStep (layer) {
 const LayerWizard = ({
     mutator,
     layer,
-    capabilities = [],
+    capabilities = {},
     layerTypes = [],
     loading,
     children,
