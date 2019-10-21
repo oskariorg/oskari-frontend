@@ -41,13 +41,19 @@ const SelectAllDiv = styled.div`
 `;
 
 export const PermissionRow = (props) => {
-    const checkboxDivs = [];
-    props.checkboxes.forEach(checkbox => {
+    const checkboxDivs = props.checkboxes.map(checkbox => {
+        var content = checkbox;
         if (props.isHeaderRow) {
-            checkboxDivs.push(<StyledPermissionDiv key={checkbox.key}><HeaderPermissionText >{checkbox.props.selectionText}</HeaderPermissionText><Break/><SelectAllDiv>{checkbox}</SelectAllDiv></StyledPermissionDiv>);
-        } else {
-            checkboxDivs.push(<StyledPermissionDiv key={checkbox.key}>{checkbox}</StyledPermissionDiv>);
+            content = (
+                <React.Fragment>
+                    <HeaderPermissionText>{checkbox.props.permissionDescription}</HeaderPermissionText>
+                    <Break/>
+                    <SelectAllDiv>{content}</SelectAllDiv>
+                </React.Fragment>);
         }
+        return (<StyledPermissionDiv key={checkbox.key}>
+            {content}
+        </StyledPermissionDiv>);
     });
 
     return (

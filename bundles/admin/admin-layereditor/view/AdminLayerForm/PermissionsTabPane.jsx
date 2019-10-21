@@ -10,7 +10,12 @@ const StyledListItem = styled(ListItem)`
         font-weight: bold;
     }
     &:not(:first-child) {
-        background-color: ${props => props.children.props.even ? '#ffffff' : '#f3f3f3'};
+        &:nth-child(even) {
+            background-color: #ffffff;
+        }
+        &:nth-child(odd) {
+            background-color: #f3f3f3;
+        }
     }
 `;
 
@@ -18,12 +23,28 @@ const ListDiv = styled.div`
     padding-bottom: 20px;
 `;
 
-const renderRow = (row) => {
-    return (
-        <StyledListItem>
-            {row}
-        </StyledListItem>
-    );
+const checkboxOnChangeHandler = (event) => {
+    // TODO: Replace console.log with service mutator call to mutate state of selected permissions
+    const role = event.target.role;
+    const permission = event.target.permission;
+    console.log('Checkbox with role ' + role + ' and permission ' + permission);
+};
+
+const renderRow = (modelRow) => {
+    const role = modelRow.isHeaderRow ? 'all' : modelRow.role.id;
+    const rowKey = modelRow.isHeaderRow ? 'header' : modelRow.role.id;
+
+    const checkboxes = modelRow.permissionTypes.map(permission => {
+        return <Checkbox key={permission.id + '_' + role}
+            permissionDescription={permission.localizedText}
+            permission={permission.id}
+            role={role}
+            onChange = {checkboxOnChangeHandler}/>;
+    });
+
+    return (<StyledListItem>
+        <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
+    </StyledListItem>);
 };
 
 const PermissionsTabPane = (props) => {
@@ -31,36 +52,29 @@ const PermissionsTabPane = (props) => {
     if (!rolesAndPermissionTypes) {
         return;
     }
+    const { roles, permissionTypes } = rolesAndPermissionTypes;
 
-    const permissionTypes = [...rolesAndPermissionTypes.permissionTypes];
-    const roles = [...rolesAndPermissionTypes.roles];
+    const localizedPermissionTypes = permissionTypes.map(permission => {
+        permission.localizedText = getMessage('rights.' + permission.id);
+        return permission;
+    });
 
-    const checkboxOnChangeHandler = (event) => {
-        // TODO: Replace console.log with service mutator call to mutate state of selected permissions
-        const role = event.target.role;
-        const permission = event.target.permission;
-        console.log('Checkbox with role ' + role + ' and permission ' + permission);
+    const headerRow = {
+        isHeaderRow: true,
+        text: getMessage('rights.role'),
+        permissionTypes: localizedPermissionTypes
     };
 
-    const headerCheckboxes = permissionTypes.map(permission => {
-        return <Checkbox key={permission.id + '_' + 'all'}
-            selectionText={getMessage('rights.' + permission.id)}
-            permission={permission.id} role={'all'}
-            onChange = {checkboxOnChangeHandler}/>;
+    const dataRows = roles.map(role => {
+        return {
+            isHeaderRow: false,
+            text: role.name,
+            permissionTypes: permissionTypes,
+            role: role
+        };
     });
 
-    const header = <PermissionRow key={'header'} even={false} isHeaderRow={true} text={getMessage('rights.role')} checkboxes={headerCheckboxes}/>;
-
-    const rolePermissionRows = roles.map((role, index) => {
-        const rolePermissionCheckboxes = permissionTypes.map((permission) => {
-            return <Checkbox key={permission.id + '_' + role.id}
-                selectionText={getMessage('rights.' + permission.id)}
-                permission={permission.id} role={role.id}
-                onChange = {checkboxOnChangeHandler}/>;
-        });
-        return <PermissionRow key={role.id} even={index % 2 === 0} isHeaderRow={false} text={role.name} checkboxes={rolePermissionCheckboxes}/>;
-    });
-    const permissionDataModel = [header, ...rolePermissionRows];
+    const permissionDataModel = [headerRow, ...dataRows];
 
     return (
         <ListDiv><List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/></ListDiv>
