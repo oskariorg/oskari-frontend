@@ -71,6 +71,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                             dataProviders={this.dataProviders}
                             layer={this.service.getLayer()}
                             messages={this.service.getMessages()}
+                            rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
                             onDelete={() => this.service.deleteLayer()}
                             onSave={() => this.service.saveLayer()}
                             onCancel={() => {
