@@ -63,11 +63,19 @@ Oskari.registerLocalization(
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
                 "invalidStyleJson" : "Style JSON-syntaxen är ogiltig.",
                 "invalidHoverJson" : "Hover JSON-syntaxen är ogiltig.",
-                "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras."
+                "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
+                "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter."
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON"
+            "hoverJSON": "Hover JSON",
+            "rights": {
+                "PUBLISH": "rätt att publicera",
+                "VIEW_LAYER": "rätt att visa",
+                "DOWNLOAD": "rätt att ladda ner",
+                "VIEW_PUBLISHED": "rätt att visa en publicerat vy",
+                "role": "Roll"
+            }
         }
     }
 );

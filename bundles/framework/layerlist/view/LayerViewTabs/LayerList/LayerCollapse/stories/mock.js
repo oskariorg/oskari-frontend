@@ -1,7 +1,7 @@
-import '../../../../../../../src/global';
-import '../../../../../../mapping/mapmodule/service/map.state';
-import '../../../../../../mapping/mapmodule/domain/AbstractLayer';
-import '../../../../../layerselector2/resources/locale/fi.js';
+import '../../../../../../../../src/global';
+import '../../../../../../../mapping/mapmodule/service/map.state';
+import '../../../../../../../mapping/mapmodule/domain/AbstractLayer';
+import '../../../../../../layerselector2/resources/locale/fi.js';
 
 const Oskari = window.Oskari;
 const sandbox = Oskari.getSandbox();

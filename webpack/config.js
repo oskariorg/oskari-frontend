@@ -50,9 +50,45 @@ const getStyleFileRules = (isProd, antThemeFile) => {
     return rules;
 };
 
+const regexpPathSep = `\\${path.sep}`;
+const joinRegexpPath = parts => parts.join(regexpPathSep);
+
+const getBlacklistedModules = modules => [
+    ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', cur]))),
+    ...modules.map(cur => new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules', cur])))
+];
+
+const getWhitelistedModules = modules => {
+    if (!Array.isArray(modules) || modules.length === 0) {
+        return [];
+    }
+    const moduleStr = modules.join('|');
+    return [
+        new RegExp(`node_modules${regexpPathSep}(?!(${moduleStr}))`),
+        new RegExp(joinRegexpPath(['node_modules', 'oskari-frontend', 'node_modules']) + `${regexpPathSep}(?!(${moduleStr}))`)
+    ];
+};
+
+/**
+ * Optimizing babel transpiling by excluding specified node_modules.
+ * Transpiling all node module dependencies is an expensive task, but some modules require ES6 transpiling for IE to work.
+ *
+ * Modules can be whitelisted (only these node modules will be transpiled) or blacklisted (transpile all other node modules).
+ *
+ * @param {string[]} modules Modules we wan't to give a special treatment to.
+ * @param {boolean} blacklisted Blacklisted or whitelist. Defaults to blacklisting.
+ */
+const getExcludedNodeModules = (modules, blacklisted = true) => {
+    return blacklisted ? getBlacklistedModules(modules) : getWhitelistedModules(modules);
+};
+
 const BABEL_LOADER_RULE = {
     test: /\.(js|jsx)$/,
-    exclude: [/libraries/, /\.min\.js$/],
+    exclude: [
+        /libraries/,
+        /\.min\.js$/,
+        getExcludedNodeModules(['react-dom', '@ant-design', 'antd'])
+    ],
     use: {
         loader: 'babel-loader',
         options: {

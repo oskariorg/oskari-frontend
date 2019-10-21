@@ -100,7 +100,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             flyout.setDataProviders(this._getDataProviders());
             flyout.setMapLayerGroups(layerService.getAllLayerGroups());
             flyout.setLayer(layerService.findMapLayer(layerId));
-            flyout.show();
+            if (flyout.isVisible()) {
+                flyout.bringToTop();
+            } else {
+                flyout.show();
+            }
         }
 
         /**
