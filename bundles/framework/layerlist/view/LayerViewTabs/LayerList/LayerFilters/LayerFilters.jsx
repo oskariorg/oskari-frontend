@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { LayerFilter } from './LayerFilters/LayerFilter';
+import { LayerFilter } from './LayerFilter';
 import { TextInput, Tooltip, Icon, Button } from 'oskari-ui';
 import styled from 'styled-components';
 

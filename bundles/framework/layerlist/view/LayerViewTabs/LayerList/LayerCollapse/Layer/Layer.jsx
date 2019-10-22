@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch } from 'oskari-ui';
-import { LayerTools } from './Layer/LayerTools';
+import { LayerTools } from './LayerTools';
 
 const LayerDiv = styled('div')`
     background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};

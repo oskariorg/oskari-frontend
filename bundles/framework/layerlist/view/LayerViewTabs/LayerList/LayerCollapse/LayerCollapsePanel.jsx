@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge, CollapsePanel, List, ListItem } from 'oskari-ui';
-import { Layer } from './Layer';
+import { Layer } from './Layer/';
 import styled from 'styled-components';
 
 const StyledCollapsePanel = styled(CollapsePanel)`

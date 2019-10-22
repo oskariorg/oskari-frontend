@@ -1,9 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import { LayerFilters } from './LayerFilters';
-import { LayerFilter } from './LayerFilters/LayerFilter';
-import '../../../../../src/global';
-import '../../../layerselector2/resources/locale/en.js';
+import { LayerFilter } from './LayerFilter';
+import '../../../../../../../src/global';
+import '../../../../../layerselector2/resources/locale/en.js';
 
 const Oskari = window.Oskari;
 const locale = Oskari.getMsg.bind(null, 'LayerSelector')('filter');

@@ -1,9 +1,8 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { LayerCollapse } from '../../LayerCollapse';
-import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
+import { LayerCollapse, CollapseService } from '..';
+import { LayerGroup } from '../../../../../../layerselector2/model/LayerGroup.class';
 import { AbstractLayer, instance, locale } from './mock';
-import { CollapseService } from '../CollapseService';
 
 let lyrCount = 0;
 const createLayer = (name, type) => {
@@ -68,20 +67,6 @@ storiesOf('LayerCollapse', module)
     })
     .add('with groups', () => {
         resetStoryState();
-        return <LayerCollapse {...service.getState()} locale={locale} />;
-    })
-    .add('with filter "wfs"', () => {
-        resetStoryState();
-        service.updateState({
-            filterKeyword: 'wfs'
-        });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
-    })
-    .add('with filter "wms"', () => {
-        resetStoryState();
-        service.updateState({
-            filterKeyword: 'wms'
-        });
         return <LayerCollapse {...service.getState()} locale={locale} />;
     })
     .add('WMS selected', () => {

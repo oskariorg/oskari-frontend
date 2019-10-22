@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerList } from './view/LayerList';
+import { LayerViewTabs } from './view/LayerViewTabs/';
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
  *
@@ -110,7 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Creates the UI for a fresh start
          */
         createUi: function () {
-            ReactDOM.render(<LayerList showOrganizations instance={this.instance} />, this.container);
+            ReactDOM.render(<LayerViewTabs showOrganizations instance={this.instance} />, this.container);
         }
     }, {
 
