@@ -1,11 +1,6 @@
 import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 
-export const GROUPING_METHODS = {
-    ORGANIZATION: 'getOrganizationName',
-    GROUP: 'getInspireName'
-};
-
 const MIN_SEARCH_TEXT_LENGTH = 2;
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
@@ -15,12 +10,12 @@ const LAYER_REFRESH_THROTTLE = 2000;
  * Handles events related to layer listing.
  */
 class UIService extends StateHandler {
-    constructor (instance) {
+    constructor (instance, groupingMethod = 'getInspireName') {
         super();
         this.sandbox = instance.getSandbox();
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.map = this.sandbox.getMap();
-        this.groupingMethod = null;
+        this.groupingMethod = groupingMethod;
         this.filter = {
             activeId: null,
             text: null
@@ -197,7 +192,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const CollapseService = mutatorMixin(UIService, [
+export const CollapseHandler = mutatorMixin(UIService, [
     'addLayer',
     'removeLayer',
     'updateOpenGroupTitles',

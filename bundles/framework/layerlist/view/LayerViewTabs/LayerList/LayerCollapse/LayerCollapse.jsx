@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'oskari-ui';
 import { LayerCollapsePanel } from './LayerCollapsePanel';
-import { LayerListAlert } from '../';
+import { Alert } from '../Alert';
 import styled from 'styled-components';
 
 const StyledCollapse = styled(Collapse)`
@@ -17,7 +17,7 @@ const StyledCollapse = styled(Collapse)`
 
 export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mapSrs, mutator, locale }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
-        return <LayerListAlert showIcon type="info" description={locale.errors.noResults}/>;
+        return <Alert showIcon type="info" description={locale.errors.noResults}/>;
     }
     const panels = (filtered || groups).map(cur => ({
         group: cur.group || cur,

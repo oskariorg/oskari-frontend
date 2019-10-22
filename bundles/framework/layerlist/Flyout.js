@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerViewTabs } from './view/LayerViewTabs/';
+import { LayerList, LayerListHandler } from './view/LayerViewTabs/LayerList';
+
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
  *
@@ -18,6 +19,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.instance = instance;
         this.container = null;
         this.log = Oskari.log('layerlist');
+        this.handler = new LayerListHandler(instance);
+        this.handler.loadLayers();
+        this.handler.addStateListener(state => this.render(state));
     }, {
 
         /**
@@ -51,10 +55,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
 
         /**
          * @method startPlugin
-         *
-         * Interface method implementation, does nothing atm
          */
-        startPlugin: function () { },
+        startPlugin: function () {
+            this.render();
+        },
         /**
          * @method stopPlugin
          *
@@ -105,12 +109,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             this.log.warn('Called an unimplemented function: setActiveFilter');
         },
 
+        _initLayerGrouping: function () {
+            this.groupings = {
+
+            };
+        },
+
         /**
-         * @method createUi
-         * Creates the UI for a fresh start
+         * @method render
+         * Renders React content
          */
-        createUi: function () {
-            ReactDOM.render(<LayerViewTabs showOrganizations instance={this.instance} />, this.container);
+        render: function (uiState = this.handler.getState()) {
+            ReactDOM.render(<LayerList {...uiState} mutator={this.handler.getMutator()} locale={this.instance.getLocalization()} />, this.container);
         }
     }, {
 
