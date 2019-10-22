@@ -202,6 +202,12 @@ export class AdminLayerFormService {
     }
 
     saveLayer () {
+        const notImplementedYet = true;
+        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
+        if (notImplementedYet) {
+            alert('Not implemented yet');
+            return;
+        }
         const me = this;
 
         // Modify layer for backend
@@ -293,6 +299,7 @@ export class AdminLayerFormService {
     }
 
     deleteLayer () {
+        // FIXME: This should use LayerAdmin route instead but this probably works anyway
         const layer = this.getLayer();
         const me = this;
         fetch(Oskari.urls.getRoute('DeleteLayer'), {
