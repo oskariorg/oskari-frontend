@@ -67,7 +67,7 @@ const prepareData = (capabilities) => {
             name: layer.name,
             isProblematic: !!capabilities.layersWithErrors.includes(layer.name),
             isUnsupported: !!capabilities.unsupportedLayers.includes(layer.name),
-            isExisting: !!capabilities.existingLayers.includes(layer.name),
+            isExisting: !!capabilities.existingLayers[layer.name],
             layer
         };
     });
