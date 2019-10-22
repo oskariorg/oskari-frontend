@@ -1,5 +1,5 @@
 /*
- * @class Oskari.mapframework.bundle.layerselection2.Tile
+ * @class Oskari.mapframework.bundle.layerlist.Tile
  *
  * Renders the "selected layers" tile.
  */
@@ -7,8 +7,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
     /**
      * @method create called automatically on construction
      * @static
-     * @param
-     * {Oskari.mapframework.bundle.layerlist.LayerSelectionBundleInstance}
+     * @param {Oskari.mapframework.bundle.layerlist.LayerSelectionBundleInstance}
      * instance
      *      reference to component that created the tile
      */
@@ -92,7 +91,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
             this._blink(status, 2);
         },
         _blink: function (element, count) {
-            var me = this;
+            const me = this;
             if (!element) {
                 return;
             }
