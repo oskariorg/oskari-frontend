@@ -28,19 +28,6 @@ overflow: hidden;
 text-overflow: ellipsis;
 `;
 
-const compare = (a, b, next) => {
-    if (a && b) {
-        return 1;
-    }
-    if (!a && !b) {
-        return -1;
-    }
-    if (next) {
-        return next();
-    }
-    return 0;
-};
-
 export const LayerCapabilitiesListing = (props) => {
     const [filter, setfilter] = useState('');
     const allLayers = prepareData(props.capabilities);
@@ -81,6 +68,20 @@ const sortLayers = (layers) => {
     });
 };
 
+// FIXME: this isn't working properly but first decide how we want to sort existing/problematic etc layers
+const compare = (a, b, next) => {
+    if (a && b) {
+        return 1;
+    }
+    if (!a && !b) {
+        return -1;
+    }
+    if (next) {
+        return next();
+    }
+    return 0;
+};
+
 /**
  * Splits filter from spaces and returns all layers where name and/or title has all the parts of the filter
  * @param {Array} layers array of objects with name and title keys
@@ -109,6 +110,7 @@ const getItem = (onSelect, item) => {
     );
 };
 
+// FIXME: this is dummy content to show tech details/for debugging
 const generateContent = (item) => (
     <StylePopUl>
         <StylePopLi>Exists: {'' + item.isExisting}</StylePopLi>
