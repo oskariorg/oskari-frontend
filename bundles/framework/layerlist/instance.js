@@ -118,6 +118,112 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
 
             this.plugins['Oskari.userinterface.Flyout'].createUi();
         },
+
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            const handler = this.eventHandlers[event.getName()];
+            if (!handler) { return; }
+            // Tiistain makkelle, Chekkaa eventit yo man chicago
+            console.log('ON EVENT instance layerlist');
+
+            // Skip events, if internally linked layer
+            if (typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer()) {
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method AfterMapLayerRemoveEvent
+             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
+             *
+             * Calls flyouts handleLayerSelectionChanged() method
+             */
+            'AfterMapLayerRemoveEvent': function (event) {
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
+            },
+            /**
+             * @method AfterMapLayerAddEvent
+             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
+             *
+             * Calls flyouts handleLayerSelectionChanged() method
+             */
+            'AfterMapLayerAddEvent': function (event) {
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true, event.getKeepLayersOrder());
+            },
+            /**
+             * @method MapLayerEvent
+             * @param {Oskari.mapframework.event.common.MapLayerEvent} event
+             */
+            'MapLayerEvent': function (event) {
+                const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+                const flyout = this.plugins['Oskari.userinterface.Flyout'];
+                const layerId = event.getLayerId();
+                let layer;
+                if (event.getOperation() === 'update' || event.getOperation() === 'tool') {
+                    if (layerId) {
+                        layer = mapLayerService.findMapLayer(layerId);
+                        flyout.handleLayerModified(layer);
+                    } else {
+                        // no layer specified, update all layers
+                        var layers = this.sandbox.findAllSelectedMapLayers();
+                        _.each(layers, function (layer) {
+                            flyout.handleLayerModified(layer);
+                        });
+                    }
+                } else if (event.getOperation() === 'sticky') {
+                    layer = mapLayerService.findMapLayer(layerId);
+                    flyout.handleLayerSticky(layer);
+                }
+            },
+            /**
+             * @method MapLayerVisibilityChangedEvent
+             */
+            'MapLayerVisibilityChangedEvent': function (event) {
+                this.plugins['Oskari.userinterface.Flyout'].handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
+            },
+            /**
+             * @method AfterChangeMapLayerOpacityEvent
+             */
+            'AfterChangeMapLayerOpacityEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerOpacityChanged(event.getMapLayer());
+                }
+            },
+            /**
+             * @method AfterChangeMapLayerStyleEvent
+             */
+            'AfterChangeMapLayerStyleEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerStyleChanged(event.getMapLayer());
+                }
+            },
+            /**
+             * @method AfterRearrangeSelectedMapLayerEvent
+             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
+             *
+             * Rearranges layers
+             */
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    // Layer order has been changed by someone else, resort layers
+                    this.plugins['Oskari.userinterface.Tile'].refresh();
+                    this.plugins['Oskari.userinterface.Flyout'].handleLayerOrderChanged(event.getMovedMapLayer(), event.getFromPosition(), event.getToPosition());
+                }
+            }
+        },
         /**
          * @method init
          * implements Module protocol init method - does nothing atm
@@ -196,8 +302,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * (re)creates the UI for "all layers" functionality
          */
         createUi: function () {
-            var me = this;
-            me.plugins['Oskari.userinterface.Flyout'].createUi();
+            this.plugins['Oskari.userinterface.Flyout'].createUi();
+            this.plugins['Oskari.userinterface.Tile'].refresh();
         },
 
         /**

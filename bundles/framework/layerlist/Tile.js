@@ -8,7 +8,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
      * @method create called automatically on construction
      * @static
      * @param
-     * {Oskari.mapframework.bundle.layerselection2.LayerSelectionBundleInstance}
+     * {Oskari.mapframework.bundle.layerlist.LayerSelectionBundleInstance}
      * instance
      *      reference to component that created the tile
      */
@@ -23,20 +23,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
      * @return {String} the name for the component
      */
         getName: function () {
-            return 'Oskari.mapframework.bundle.layerselection2.Tile';
+            return 'Oskari.mapframework.bundle.layerlist.Tile';
         },
         /**
          * @method setEl
          * @param {Object} el
          *      reference to the container in browser
-         * @param {Number} width
-         *      container size(?) - not used
-         * @param {Number} height
-         *      container size(?) - not used
-         *
          * Interface method implementation
          */
-        setEl: function (el, width, height) {
+        setEl: function (el) {
             this.container = jQuery(el);
         },
         /**
@@ -48,9 +43,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
             this.refresh();
         },
         _addTileStyleClasses: function () {
-            var isContainer = !!((this.container && this.instance.mediator));
-            var isBundleId = !!((isContainer && this.instance.mediator.bundleId));
-            var isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
+            const isContainer = !!((this.container && this.instance.mediator));
+            const isBundleId = !!((isContainer && this.instance.mediator.bundleId));
+            const isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
 
             if (isInstanceId && !this.container.hasClass(this.instance.mediator.instanceId)) {
                 this.container.addClass(this.instance.mediator.instanceId);
@@ -81,13 +76,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
             return this.instance.getLocalization('desc');
         },
         /**
-         * @method getOptions
-         * Interface method implementation, does nothing atm
-         */
-        getOptions: function () {
-
-        },
-        /**
          * @method setState
          * @param {Object} state
          *      state that this component should use
@@ -96,7 +84,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
         setState: function (state) {
         },
         notifyUser: function () {
-            var status = this.container.children('.oskari-tile-status');
+            const status = this.container.children('.oskari-tile-status');
 
             // stop current animation
             status.stop();
@@ -132,14 +120,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
          * Creates the UI for a fresh start
          */
         refresh: function () {
-            var me = this;
-            var instance = me.instance;
+            const instance = this.instance;
 
-            var sandbox = instance.getSandbox();
-            var layers = sandbox.findAllSelectedMapLayers();
-            var layerCount = layers.length;
+            const sandbox = instance.getSandbox();
+            const layers = sandbox.findAllSelectedMapLayers();
+            const layerCount = layers.length;
 
-            var status = this.container.children('.oskari-tile-status');
+            const status = this.container.children('.oskari-tile-status');
             status.addClass('icon-bubble-right');
             status.html(layerCount);
 
