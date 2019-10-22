@@ -33,6 +33,7 @@ const StyledBadge = styled.div`
     display: inline;
     line-height: 20px;
     margin-left: 5px;
+    font-weight: 700;
 `;
 
 const SelectedTab = ({ num, text }) => {
@@ -148,6 +149,14 @@ export class LayerList extends React.Component {
         return Oskari.getSandbox().findAllSelectedMapLayers();
     }
 
+    selectedLayersView (layers) {
+        return (
+            <ul>
+                {layers.map((layer, i) => <li key={i}>{layer._name}</li>)}
+            </ul>
+        );
+    }
+
     getGroupedLayers (tab) {
         const showAddButton = Oskari.getSandbox().hasHandler('ShowLayerEditorRequest');
         const ref = this.layerGroupings[tab].searchFieldRef;
@@ -213,9 +222,7 @@ export class LayerList extends React.Component {
                     </TabPane>
                 }
                 <TabPane tab={<SelectedTab num={numLayers} text={selected} />} key={selectedKey}>
-                    <ul>
-                        {layers.map((layer, i) => <li key={i}>{layer._name}</li>)}
-                    </ul>
+                    {this.selectedLayersView(layers)}
                 </TabPane>
             </StyledTabs>
         );
