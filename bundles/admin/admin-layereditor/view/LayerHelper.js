@@ -136,7 +136,7 @@ export const LayerHelper = (Oskari) => {
         // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
         delete transformed.gfiContent;
         // server response has role_permissions:
-        // role_permissions: {Karttajulkaisija_GTK: [], Karttajulkaisija_Helsinki: [], Karttajulkaisija_SKV: [],…}
+        // role_permissions: {Admin: [], User: [], Guest: [],…}
         return transformed;
     };
 
