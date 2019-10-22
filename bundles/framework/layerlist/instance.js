@@ -155,7 +155,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              */
             'AfterMapLayerRemoveEvent': function (event) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), false);
             },
             /**
              * @method AfterMapLayerAddEvent
@@ -165,29 +164,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
              */
             'AfterMapLayerAddEvent': function (event) {
                 this.plugins['Oskari.userinterface.Tile'].refresh();
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerSelectionChanged(event.getMapLayer(), true, event.getKeepLayersOrder());
-            },
-            /**
-             * @method MapLayerVisibilityChangedEvent
-             */
-            'MapLayerVisibilityChangedEvent': function (event) {
-                this.plugins['Oskari.userinterface.Flyout'].handleLayerVisibilityChanged(event.getMapLayer(), event.isInScale(), event.isGeometryMatch());
-            },
-            /**
-             * @method AfterChangeMapLayerOpacityEvent
-             */
-            'AfterChangeMapLayerOpacityEvent': function (event) {
-                if (event._creator !== this.getName()) {
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerOpacityChanged(event.getMapLayer());
-                }
-            },
-            /**
-             * @method AfterChangeMapLayerStyleEvent
-             */
-            'AfterChangeMapLayerStyleEvent': function (event) {
-                if (event._creator !== this.getName()) {
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerStyleChanged(event.getMapLayer());
-                }
             },
             /**
              * @method AfterRearrangeSelectedMapLayerEvent
@@ -199,7 +175,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 if (event._creator !== this.getName()) {
                     // Layer order has been changed by someone else, resort layers
                     this.plugins['Oskari.userinterface.Tile'].refresh();
-                    this.plugins['Oskari.userinterface.Flyout'].handleLayerOrderChanged(event.getMovedMapLayer(), event.getFromPosition(), event.getToPosition());
                 }
             }
         },
