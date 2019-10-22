@@ -19,37 +19,6 @@ const StyledTabs = styled(Tabs)`
     max-width: 600px;
 `;
 
-const StyledBadge = styled.div`
-    min-width: 20px;
-    height: 20px;
-    color: #000;
-    background: #ffd400;
-    border-radius: 4px;
-    text-align: center;
-    padding: 2px 8px;
-    font-size: 12px;
-    display: inline;
-    line-height: 20px;
-    margin-left: 5px;
-    font-weight: 700;
-`;
-
-const SelectedTab = ({ num, text }) => {
-    return (
-        <span>
-            {text}
-            <StyledBadge>
-                {num}
-            </StyledBadge>
-        </span>
-    );
-};
-
-SelectedTab.propTypes = {
-    num: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired
-};
-
 export class LayerList extends React.Component {
     constructor (props) {
         super(props);
@@ -143,18 +112,6 @@ export class LayerList extends React.Component {
         });
     }
 
-    getSelectedLayers () {
-        return Oskari.getSandbox().findAllSelectedMapLayers();
-    }
-
-    selectedLayersView (layers) {
-        return (
-            <ul>
-                {layers.map((layer, i) => <li key={i}>{layer._name}</li>)}
-            </ul>
-        );
-    }
-
     getGroupedLayers (tab) {
         const showAddButton = Oskari.getSandbox().hasHandler('ShowLayerEditorRequest');
         const ref = this.layerGroupings[tab].searchFieldRef;
@@ -196,7 +153,7 @@ export class LayerList extends React.Component {
     }
 
     render () {
-        const { organization, inspire, selected } = this.locale.filter;
+        const { organization, inspire } = this.locale.filter;
         if (this.state.error) {
             return <LayerListAlert showIcon type="error" description={this.state.error}/>;
         }
@@ -205,23 +162,16 @@ export class LayerList extends React.Component {
         }
         const orgKey = GROUPED_LAYERS_TABS.ORGANIZATION;
         const groupKey = GROUPED_LAYERS_TABS.GROUP;
-        const selectedKey = 666;
-        const layers = this.getSelectedLayers();
-        const numLayers = layers.length;
         return (
             <StyledTabs tabPosition='top' onChange={this.handleTabChange}>
                 <TabPane tab={inspire} key={groupKey}>
                     { this.getGroupedLayers(groupKey) }
                 </TabPane>
-
                 { this.props.showOrganizations &&
                     <TabPane tab={organization} key={orgKey}>
                         { this.getGroupedLayers(orgKey) }
                     </TabPane>
                 }
-                <TabPane tab={<SelectedTab num={numLayers} text={selected} />} key={selectedKey}>
-                    {this.selectedLayersView(layers)}
-                </TabPane>
             </StyledTabs>
         );
     }
