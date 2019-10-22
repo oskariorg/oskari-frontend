@@ -11,17 +11,50 @@ import '../resources/locale/en';
 const Oskari = window.Oskari;
 const service = new AdminLayerFormService(() => console.log('State update'));
 service.initLayerState();
-service.capabilities = [{
-    name: 'fake'
-}, {
-    name: 'it'
-}, {
-    name: 'till'
-}, {
-    name: 'you'
-}, {
-    name: 'make it'
-}];
+service.capabilities = {
+    layers: [{
+        name: 'fake',
+        locale: {
+            en: {
+                name: 'Layer name from service'
+            }
+        }
+    }, {
+        name: 'it',
+        locale: {
+            en: {
+                name: 'Layer name from service'
+            }
+        }
+    }, {
+        name: 'till',
+        locale: {
+            en: {
+                name: 'Layer name from service'
+            }
+        }
+    }, {
+        name: 'you',
+        locale: {
+            en: {
+                name: 'Layer name from service'
+            }
+        }
+    }, {
+        name: 'make it',
+        locale: {
+            en: {
+                name: 'Layer name from service'
+            }
+        }
+    }],
+    existingLayers: {
+        'fake': [1]
+    },
+    layersWithErrors: ['it'],
+    capabilitiesFailed: ['you'],
+    unsupportedLayers: ['till']
+};
 const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
 const layerTypes = service.getLayerTypes();
 const capabilities = service.getCapabilities();
@@ -74,7 +107,7 @@ storiesOf('LayerWizard', module)
         Oskari.setLang('en');
         const layer = {
             ...service.getLayer(),
-            type: 'WFS'
+            type: 'wfslayer'
         };
         return (
             <LocaleContext.Provider value={loc}>
@@ -92,7 +125,7 @@ storiesOf('LayerWizard', module)
         Oskari.setLang('en');
         const layer = {
             ...service.getLayer(),
-            type: 'WFS',
+            type: 'wfslayer',
             url: 'testing.com',
             version: '3.0'
         };
@@ -112,10 +145,10 @@ storiesOf('LayerWizard', module)
         Oskari.setLang('en');
         const layer = {
             ...service.getLayer(),
-            type: 'WFS',
+            type: 'wfslayer',
             url: 'testing.com',
             version: '3.0',
-            layerName: 'make it'
+            name: 'make it'
         };
         return (
             <LocaleContext.Provider value={loc}>
@@ -133,10 +166,10 @@ storiesOf('LayerWizard', module)
         Oskari.setLang('en');
         const layer = {
             ...service.getLayer(),
-            type: 'WFS',
+            type: 'wfslayer',
             url: 'testing.com',
             version: '3.0',
-            layerName: 'make it',
+            name: 'make it',
             isNew: false
         };
         return (
