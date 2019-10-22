@@ -88,13 +88,17 @@ export const LayerHelper = (Oskari) => {
         };
     };
 
+    /**
+     * Maps a locale object {en: {name: '', subtitle: ''}} to internal model {name_en:'', title_en: ''}}
+     * @param {Object} locale object from server response
+     */
     const _getLocalizedLayerInfoFromServer = (locale) => {
         const info = {};
         Object.keys(locale).forEach(lang => {
             const name = `name_${lang}`;
             const description = `title_${lang}`;
             info[name] = locale[lang].name || '';
-            info[description] = locale[lang].title || '';
+            info[description] = locale[lang].subtitle || '';
         });
         return info;
     };
@@ -127,6 +131,7 @@ export const LayerHelper = (Oskari) => {
         delete transformed.groups;
         delete transformed.locale;
         // FIXME: do something with these / layer specific stuff
+        // FIXME: https://github.com/oskariorg/oskari-server/pull/461 "Assumes that frontend passes capabilities json back when requesting insert or update."
         delete transformed.capabilities;
         // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
         delete transformed.gfiContent;
