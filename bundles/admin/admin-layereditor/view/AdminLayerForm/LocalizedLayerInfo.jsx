@@ -22,7 +22,7 @@ export const LocalizedLayerInfo = ({ layer, lang, service, getMessage }) => {
     const descInput = <TextInput type='text' value={description} onChange={onDescriptionChange} />;
     if (selectedLang === lang) {
         return (
-            <>
+            <React.Fragment>
                 <label>{labels.name}</label>
                 <StyledComponent>
                     {nameInput}
@@ -31,7 +31,7 @@ export const LocalizedLayerInfo = ({ layer, lang, service, getMessage }) => {
                 <StyledComponent>
                     {descInput}
                 </StyledComponent>
-            </>
+            </React.Fragment>
         );
     }
     return (
