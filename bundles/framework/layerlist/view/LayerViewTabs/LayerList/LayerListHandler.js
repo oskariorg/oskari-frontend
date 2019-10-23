@@ -1,24 +1,12 @@
 import { StateHandler, mutatorMixin } from 'oskari-ui/util';
-import { FilterHandler } from './FilterHandler';
-import { CollapseHandler } from './LayerCollapse/';
+import { FilterHandler } from './Filter/';
+import { LayerCollapseHandler } from './LayerCollapse/';
 import { GroupingOption } from '../../../model/GroupingOption';
+import { GROUPING_PRESET } from './preset';
 
 const TEXT_SEARCH_THROTTLE = 1000;
 const UI_UPDATE_TIMEOUT = 100;
 const HEAVY_UI_UPDATE_TIMEOUT = 300;
-
-const GROUPING_PRESET = [
-    {
-        key: 'THEME',
-        localeKey: 'inspire',
-        method: 'getInspireName'
-    },
-    {
-        key: 'ORGANIZATION',
-        localeKey: 'organization',
-        method: 'getOrganizationName'
-    }
-];
 
 class UIStateHandler extends StateHandler {
     constructor (instance) {
@@ -32,7 +20,7 @@ class UIStateHandler extends StateHandler {
             new GroupingOption(option.key, this.locale.filter[option.localeKey], option.method));
 
         this._initFilterHandler();
-        this._initCollapseHandlers(groupingOptions);
+        this._initLayerCollapseHandlers(groupingOptions);
 
         this.state = {
             loading: false,
@@ -45,11 +33,11 @@ class UIStateHandler extends StateHandler {
         this._updateCollapse();
     }
 
-    _initCollapseHandlers (groupingOptions) {
+    _initLayerCollapseHandlers (groupingOptions) {
         const handlers = {};
         groupingOptions.forEach(option => {
-            const handler = new CollapseHandler(this.instance, option.getMethod());
-            handler.addStateListener(state => {
+            const handler = new LayerCollapseHandler(this.instance, option.getMethod());
+            handler.addStateListener(() => {
                 if (option.getKey() !== this.state.grouping.selected) {
                     // Not the active grouping, ignore.
                     return;
@@ -58,7 +46,7 @@ class UIStateHandler extends StateHandler {
             });
             handlers[option.getKey()] = handler;
         });
-        this.collapseHandlers = handlers;
+        this.layerCollapseHandlers = handlers;
     }
 
     _initFilterHandler () {
@@ -69,7 +57,7 @@ class UIStateHandler extends StateHandler {
             previousFilter = filterState;
             const { activeFilterId, searchText } = filterState;
             setTimeout(() => {
-                this._getCurrentCollapseHandler().setFilter(activeFilterId, searchText);
+                this._getCollapseHandler().setFilter(activeFilterId, searchText);
             }, UI_UPDATE_TIMEOUT);
         };
 
@@ -90,8 +78,8 @@ class UIStateHandler extends StateHandler {
         this.filterHandler = uiHandler;
     }
 
-    _getCurrentCollapseHandler () {
-        return this.collapseHandlers[this.state.grouping.selected];
+    _getCollapseHandler (grouping = this.state.grouping.selected) {
+        return this.layerCollapseHandlers[grouping];
     }
 
     _updateFilter () {
@@ -104,7 +92,7 @@ class UIStateHandler extends StateHandler {
     }
 
     _updateCollapse () {
-        const handler = this._getCurrentCollapseHandler();
+        const handler = this._getCollapseHandler();
         this.updateState({
             collapse: {
                 state: handler.getState(),
@@ -131,7 +119,7 @@ class UIStateHandler extends StateHandler {
     }
 
     setGrouping (groupingKey) {
-        const handler = this.collapseHandlers[groupingKey];
+        const handler = this._getCollapseHandler(groupingKey);
         if (!handler) {
             return;
         }

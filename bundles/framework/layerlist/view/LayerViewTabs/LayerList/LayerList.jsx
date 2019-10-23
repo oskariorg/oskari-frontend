@@ -3,12 +3,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select } from 'oskari-ui';
 import { LayerCollapse } from './LayerCollapse/';
-import { Alert } from './Alert';
-import styled from 'styled-components';
-import { GroupingOption } from '../../../model/GroupingOption';
+import { Filter } from './Filter/';
 import { Grouping } from './Grouping';
-import { Filter } from './Filter';
 import { Spinner } from './Spinner';
+import { Alert } from './Alert';
+import { GroupingOption } from '../../../model/GroupingOption';
+import styled from 'styled-components';
 
 const ContentDiv = styled('div')`
     max-width: 600px;
@@ -32,7 +32,8 @@ export const LayerList = props => {
     }
     const { grouping, filter, collapse } = props;
 
-    // Force select to render on filter change. Clear btn click did not clear the value properly without this.
+    // Force select to render on filter change by making the component fully controlled.
+    // Clear btn won't clear the value properly without this.
     const filterKey = `${filter.state.activeFilterId}`;
 
     return (

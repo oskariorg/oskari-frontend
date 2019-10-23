@@ -1,22 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { Filter } from './Filter';
+import { Filter } from '.';
+import { testFilters } from './Filter.test.util';
 import { Select, Option } from 'oskari-ui';
 
 describe('<Filter/> ', () => {
-    const testFilters = [
-        {
-            id: 'newest',
-            text: 'Newest',
-            tooltip: 'The 20 newest layers'
-        },
-        {
-            id: 'oldest',
-            text: 'Oldest',
-            tooltip: 'The 20 oldest layers'
-        }
-    ];
-
     const mockFilterSelected = jest.fn();
     const mutator = {
         setActiveFilterId: mockFilterSelected
@@ -26,15 +14,15 @@ describe('<Filter/> ', () => {
         expect.assertions(2);
         const wrapper = shallow(<Filter filters={testFilters} activeFilterId={testFilters[1].id} mutator={mutator} />);
 
-        expect(wrapper.find(Select).length).toEqual(1);
-        expect(wrapper.find(Option).length).toEqual(2);
+        expect(wrapper.find(Select).length).toBe(1);
+        expect(wrapper.find(Option).length).toBe(2);
     });
 
     test('calls for update', () => {
         expect.assertions(1);
         const wrapper = shallow(<Filter filters={testFilters} activeFilterId={testFilters[1].id} mutator={mutator} />);
         wrapper.find(Select).simulate('change');
-        expect(mockFilterSelected.mock.calls.length).toEqual(1);
+        expect(mockFilterSelected).toHaveBeenCalled();
     });
 
     test('checks prop types', () => {

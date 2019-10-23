@@ -19,15 +19,15 @@ describe('<Grouping/> ', () => {
     test('renders correct amount of options', () => {
         expect.assertions(2);
         const wrapper = shallow(<Grouping selected={options[1].getKey()} options={options} mutator={mutator} />);
-        expect(wrapper.find(Select).length).toEqual(1);
-        expect(wrapper.find(Option).length).toEqual(3);
+        expect(wrapper.find(Select).length).toBe(1);
+        expect(wrapper.find(Option).length).toBe(3);
     });
 
     test('calls for update', () => {
         expect.assertions(1);
         const wrapper = shallow(<Grouping selected={options[1].getKey()} options={options} mutator={mutator} />);
         wrapper.find(Select).simulate('change');
-        expect(mockGroupingSelected.mock.calls.length).toEqual(1);
+        expect(mockGroupingSelected).toHaveBeenCalled();
     });
 
     test('checks prop types', () => {

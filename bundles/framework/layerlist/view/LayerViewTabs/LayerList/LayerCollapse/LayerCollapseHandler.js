@@ -192,7 +192,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const CollapseHandler = mutatorMixin(UIService, [
+export const LayerCollapseHandler = mutatorMixin(UIService, [
     'addLayer',
     'removeLayer',
     'updateOpenGroupTitles',

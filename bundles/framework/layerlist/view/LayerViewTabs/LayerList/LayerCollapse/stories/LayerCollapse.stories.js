@@ -1,8 +1,10 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { LayerCollapse, CollapseService } from '..';
+import { LayerCollapse, LayerCollapseHandler } from '..';
 import { LayerGroup } from '../../../../../../layerselector2/model/LayerGroup.class';
-import { AbstractLayer, instance, locale } from './mock';
+import { AbstractLayer, instance } from './mock';
+
+const locale = instance.getLocalization();
 
 let lyrCount = 0;
 const createLayer = (name, type) => {
@@ -42,7 +44,7 @@ const createLayerGroups = layers => {
     return groups;
 };
 
-const service = new CollapseService(instance);
+const service = new LayerCollapseHandler(instance);
 let groups = [];
 let layers = [];
 let wms = null;

@@ -8,6 +8,7 @@ class UIService extends StateHandler {
         this.layerlistService = this.sandbox.getService('Oskari.mapframework.service.LayerlistService');
         this.state = {
             activeFilterId: null,
+            searchText: null,
             filters: Object.values(this.layerlistService.getLayerlistFilterButtons())
         };
         this.layerlistService.on('Layerlist.Filter.Button.Add',

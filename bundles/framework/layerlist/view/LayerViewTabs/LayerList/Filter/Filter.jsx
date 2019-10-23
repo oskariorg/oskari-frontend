@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option } from 'oskari-ui';
-import { Label } from './Label';
+import { Label } from '../Label';
 
 export const Filter = ({ filters, activeFilterId, mutator }) => {
     const props = {

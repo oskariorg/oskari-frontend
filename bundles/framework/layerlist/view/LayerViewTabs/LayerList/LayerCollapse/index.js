@@ -1,2 +1,2 @@
 export { LayerCollapse } from './LayerCollapse';
-export { CollapseHandler } from './CollapseHandler';
+export { LayerCollapseHandler } from './LayerCollapseHandler';
