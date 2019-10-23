@@ -55,7 +55,9 @@ const AdminLayerForm = ({
                     <AdditionalTabPane layer={layer} service={mutator} />
                 </TabPane>
                 <TabPane tab={getMessage('permissionsTabTitle')} key='permissions'>
-                    <PermissionsTabPane rolesAndPermissionTypes={rolesAndPermissionTypes}/>
+                    <PermissionsTabPane
+                        rolesAndPermissionTypes={rolesAndPermissionTypes}
+                        permissions={layer.role_permissions} />
                 </TabPane>
             </Tabs>
             <PaddedButton type='primary' onClick={() => onSave()}>

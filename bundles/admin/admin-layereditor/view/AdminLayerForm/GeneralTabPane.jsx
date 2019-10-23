@@ -72,7 +72,7 @@ const GeneralTabPane = (props) => {
                 <StyledComponent>
                     <div>
                         <UrlInput
-                            key={layer.layer_id}
+                            key={layer.id}
                             value={layer.url}
                             onChange={(url) => service.setLayerUrl(url)}
                             credentials={credentialProps}
@@ -82,7 +82,7 @@ const GeneralTabPane = (props) => {
             </StyledComponentGroup>
             <label>{getMessage('uniqueName')}</label>
             <StyledComponent>
-                <TextInput type='text' value={layer.layerName} onChange={(evt) => service.setLayerName(evt.target.value)} />
+                <TextInput type='text' value={layer.name} onChange={(evt) => service.setLayerName(evt.target.value)} />
             </StyledComponent>
             <StyledComponentGroup>
                 <LocalizedLayerInfo layer={layer} lang={lang} service={service} getMessage={getMessage} />
@@ -93,7 +93,7 @@ const GeneralTabPane = (props) => {
                                 Oskari.getSupportedLanguages()
                                     .filter(supportedLang => supportedLang !== lang)
                                     .map(lang => <LocalizedLayerInfo
-                                        key={layer.layer_id + lang}
+                                        key={layer.id + lang}
                                         layer={layer}
                                         lang={lang}
                                         service={service}
@@ -105,7 +105,7 @@ const GeneralTabPane = (props) => {
             </StyledComponentGroup>
             <label>{getMessage('dataProvider')}</label>
             <StyledComponent>
-                <DataProviderSelect key={layer.layer_id}
+                <DataProviderSelect key={layer.id}
                     value={layer.organizationName}
                     onChange={(evt) => service.setDataProvider(evt)}
                     dataProviders={dataProviders} />
