@@ -1,11 +1,11 @@
-export const LayerHelper = (Oskari) => {
+export const getLayerHelper = (supportedLanguages) => {
     /**
      * Returns an object with name_[langcode] and title_[langcode] keys for all supported languages
      * @param {*} layer AbstractLayer
      */
     const _getLocalizedLayerInfoFromAbstract = (layer) => {
         const info = {};
-        Oskari.getSupportedLanguages().forEach(lang => {
+        supportedLanguages.forEach(lang => {
             const name = `name_${lang}`;
             const description = `title_${lang}`;
             info[name] = layer ? layer.getName(lang) : '';

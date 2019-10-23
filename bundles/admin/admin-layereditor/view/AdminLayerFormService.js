@@ -1,5 +1,5 @@
 import { stringify } from 'query-string';
-import { LayerHelper } from './LayerHelper';
+import { getLayerHelper } from './LayerHelper';
 
 export class AdminLayerFormService {
     constructor (consumer) {
@@ -10,7 +10,7 @@ export class AdminLayerFormService {
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.log = Oskari.log('AdminLayerFormService');
         this.loadingCount = 0;
-        this.layerHelper = LayerHelper(Oskari);
+        this.layerHelper = getLayerHelper(Oskari.getSupportedLanguages());
         this.fetchRolesAndPermissionTypes();
     }
 
