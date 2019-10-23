@@ -23,8 +23,7 @@ class UIService extends StateHandler {
         this.state = {
             groups: [],
             openGroupTitles: [],
-            selectedLayerIds: this._getSelectedLayerIds(),
-            mapSrs: this.map.getSrsName()
+            selectedLayerIds: this._getSelectedLayerIds()
         };
         this.eventHandlers = this._createEventHandlers();
     }
