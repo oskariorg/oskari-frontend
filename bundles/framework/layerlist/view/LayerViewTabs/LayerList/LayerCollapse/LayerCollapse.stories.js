@@ -1,9 +1,15 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { LayerCollapse, LayerCollapseHandler } from '..';
-import { LayerGroup } from '../../../../../../layerselector2/model/LayerGroup.class';
-import { AbstractLayer, instance } from './mock';
+import { initServices, getBundleInstance } from '../../test.util';
+import { LayerCollapse, LayerCollapseHandler } from '.';
+import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
+import '../../../../../../../src/global';
+import '../../../../../../mapping/mapmodule/domain/AbstractLayer';
 
+initServices();
+
+const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
+const instance = getBundleInstance();
 const locale = instance.getLocalization();
 
 let lyrCount = 0;
@@ -44,7 +50,7 @@ const createLayerGroups = layers => {
     return groups;
 };
 
-const service = new LayerCollapseHandler(instance);
+const handler = new LayerCollapseHandler(instance);
 let groups = [];
 let layers = [];
 let wms = null;
@@ -52,41 +58,42 @@ let wms = null;
 const resetStoryState = () => {
     layers = createLayers();
     groups = createLayerGroups(layers);
-    service.updateState({
+    handler.setState({
         groups,
-        selectedLayerIds: []
+        selectedLayerIds: [],
+        openGroupTitles: []
     });
 };
+
+const render = () => <LayerCollapse {...handler.getState()} mutator={handler.getMutator()} locale={locale} />;
 
 storiesOf('LayerCollapse', module)
 
     .add('empty', () => {
         resetStoryState();
-        service.updateState({
+        handler.updateState({
             groups: []
         });
-        return <LayerCollapse {...service.getState()} locale={locale} />;
+        return render();
     })
     .add('with groups', () => {
         resetStoryState();
-        return <LayerCollapse {...service.getState()} locale={locale} />;
+        return render();
     })
     .add('WMS selected', () => {
         resetStoryState();
-        service.updateState({
-            selectedLayerIds: [wms.getId()]
+        handler.updateState({
+            selectedLayerIds: [wms.getId()],
+            openGroupTitles: groups.map(cur => cur.getTitle())
         });
-        const state = service.getState();
-        state.openGroupTitles = groups.map(cur => cur.getTitle());
-        return <LayerCollapse {...state} locale={locale} />;
+        return render();
     })
     .add('Sticky WMS', () => {
         resetStoryState();
-        service.updateState({
-            selectedLayerIds: [wms.getId()]
+        handler.updateState({
+            selectedLayerIds: [wms.getId()],
+            openGroupTitles: groups.map(cur => cur.getTitle())
         });
-        const state = service.getState();
-        state.openGroupTitles = groups.map(cur => cur.getTitle());
         wms.setSticky(true);
-        return <LayerCollapse {...state} locale={locale} />;
+        return render();
     });

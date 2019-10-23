@@ -1,6 +1,6 @@
-import { FilterHandler } from './FilterHandler';
+import { FilterHandler } from '.';
 import { testFilters } from './Filter.test.util';
-import { initServices, getBundleInstance } from '../test.util';
+import { initServices, getBundleInstance } from '../../test.util';
 
 describe('FilterHandler', () => {
     initServices();
