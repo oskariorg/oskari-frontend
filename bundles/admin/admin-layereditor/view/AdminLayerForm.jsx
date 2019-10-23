@@ -12,25 +12,34 @@ import styled from 'styled-components';
 const PaddedButton = styled(Button)`
     margin-right: 5px;
 `;
+
+const PaddedAlert = styled(Alert)`
+    margin-bottom: 5px;
+`;
 const AdminLayerForm = ({
     mutator,
     mapLayerGroups,
     dataProviders,
     layer,
-    message = {},
+    messages = [],
     onCancel,
     onDelete,
     onSave,
-    getMessage
+    getMessage,
+    rolesAndPermissionTypes
 }) => {
-    if (message.key) {
-        message.text = getMessage(message.key);
-    }
+    const mappedMessages = [];
+    messages.forEach(m => {
+        if (m.key) {
+            m.text = getMessage(m.key);
+        }
+        if (m.text) {
+            mappedMessages.push(<PaddedAlert key={m.key} message={m.text} type={m.type} />);
+        }
+    });
     return (
         <StyledRoot>
-            { message.text &&
-                <Alert message={message.text} type={message.type} />
-            }
+            { mappedMessages }
             <Tabs>
                 <TabPane tab={getMessage('generalTabTitle')} key='general'>
                     <GeneralTabPane
@@ -46,7 +55,7 @@ const AdminLayerForm = ({
                     <AdditionalTabPane layer={layer} service={mutator} />
                 </TabPane>
                 <TabPane tab={getMessage('permissionsTabTitle')} key='permissions'>
-                    <PermissionsTabPane />
+                    <PermissionsTabPane rolesAndPermissionTypes={rolesAndPermissionTypes}/>
                 </TabPane>
             </Tabs>
             <PaddedButton type='primary' onClick={() => onSave()}>
@@ -75,11 +84,12 @@ AdminLayerForm.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
-    message: PropTypes.object,
+    messages: PropTypes.array,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
-    getMessage: PropTypes.func.isRequired
+    getMessage: PropTypes.func.isRequired,
+    rolesAndPermissionTypes: PropTypes.object
 };
 
 const contextWrap = withMutator(withLocale(AdminLayerForm));

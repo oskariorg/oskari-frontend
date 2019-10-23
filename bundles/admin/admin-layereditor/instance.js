@@ -1,4 +1,7 @@
 import { LayerEditorFlyout } from './view/Flyout';
+import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
+import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
+
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
 Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
@@ -24,6 +27,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         _startImpl () {
             this._setupLayerTools();
             this._loadDataProviders();
+            this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
         }
 
         _setDataProviders (dataProviders) {
@@ -79,24 +83,28 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             tool.setTypes(['layerList']);
 
             tool.setCallback(() => {
-                this._showEditor(layer.getId());
+                this.showEditor(layer.getId());
             });
 
             service.addToolForLayer(layer, tool, suppressEvent);
         }
         /**
-         * @private @method _showEditor
+         * @method _showEditor
          * Opens flyout with layer editor for given layerId
          * @param {Number} layerId
          */
-        _showEditor (layerId) {
+        showEditor (layerId) {
             const flyout = this._getFlyout();
             const layerService = this._getLayerService();
             flyout.setLocale(this.loc);
             flyout.setDataProviders(this._getDataProviders());
             flyout.setMapLayerGroups(layerService.getAllLayerGroups());
             flyout.setLayer(layerService.findMapLayer(layerId));
-            flyout.show();
+            if (flyout.isVisible()) {
+                flyout.bringToTop();
+            } else {
+                flyout.show();
+            }
         }
 
         /**

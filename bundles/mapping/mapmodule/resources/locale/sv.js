@@ -111,7 +111,14 @@ Oskari.registerLocalization(
                 }
             },
             "MyLocationPlugin": {
-                "tooltip": "Centrera kartan till din plats"
+                "tooltip": "Centrera kartan till din plats",
+                "error": {
+                    "title": "Fel vid sökning av plats!",
+                    "timeout": "Att söka platsen tar längre tid än förväntat...",
+                    "denied": "Sidan har blockerat platsen. Vänligen möjliggör att din plats visas och försök på nytt.",
+                    "noLocation": "Definiering av plats misslyckades",
+                    "close": "Stäng"
+                }
             },
             "PanButtonsPlugin": {
                 "center" : {

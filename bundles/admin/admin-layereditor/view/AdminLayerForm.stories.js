@@ -17,7 +17,10 @@ const stateService = Oskari.clazz.create('Oskari.mapframework.domain.Map', sandb
 sandbox.registerService(stateService);
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
-const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
+
+const locale = Oskari.getMsg.bind(null, 'admin-layereditor');
+// Message parameters causes missing library errors, skip them.
+const loc = (key, ...ingnoredMessageParams) => locale(key);
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
@@ -34,7 +37,7 @@ storiesOf('AdminLayerForm', module)
                     mapLayerGroups={[]}
                     dataProviders={[]}
                     layer={service.getLayer()}
-                    message={service.getMessage()}
+                    messages={service.getMessages()}
                     onDelete={() => {}}
                     onSave={() => {}}
                     onCancel={() => {}} />

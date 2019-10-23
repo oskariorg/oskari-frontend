@@ -36,9 +36,10 @@ Oskari.registerLocalization(
             },
             "domain": {
                 "title": "Webbplats",
-                "label": "Tillåt inbäddning endast på följande webbplats",
+                "label": "Begränsa inbäddning endast till följande <br>webbadress:",
                 "placeholder": "Webbplats adress",
-                "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com"
+                "tooltip": "Skriv namnet på webbplatsens hemsida dvs. domainnamn utan prefixerna http och www samt utan undersida. Exempel: minhemsida.com",
+                "inputWarning": "Kontrollera nätverksadressen du angav"
             },
             "name": {
                 "label": "Kartans namn",
@@ -104,6 +105,17 @@ Oskari.registerLocalization(
                     "info": "Välj bakgrundskartlager. Du kan göra förval i förhandsgranskningsvyn.",
                     "selectAsBaselayer": "Välj bakgrundskartlager",
                     "allowStyleChange": "Tillåta stiländring"
+                },
+                "mylocation": {
+                    "modes": {
+                        "single": "Enskild",
+                        "continuous": "Fortsatt"
+                    },
+                    "titles": {
+                        "mode": "Funktion",
+                        "mobileOnly": "Tillåt funktionen endast för mobilapparater",
+                        "centerMapAutomatically": "Centrera kartan till användarens plats vid start"
+                    }
                 }
             },
             "toollayout": {

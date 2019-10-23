@@ -29,37 +29,27 @@ Oskari.clazz.define(
          *      request to handle
          */
         handleRequest: function (core, request) {
-            var zoom = request.getZoom();
-            var srsName = request.getSrsName();
-            var lonlat = {
+            const requestZoom = request.getZoom();
+            const srsName = request.getSrsName();
+            const animation = request.getAnimation();
+            const requestLonlat = {
                 lon: request.getCenterX(),
                 lat: request.getCenterY()
             };
+            const options = { animation: animation };
+            let zoom;
 
             // transform coordinates to given projection
-            lonlat = this.mapModule.transformCoordinates(lonlat, srsName);
+            const lonlat = this.mapModule.transformCoordinates(requestLonlat, srsName);
 
-            var zoomChange = (zoom || zoom === 0);
-
-            // if zoom is about to change -> Suppress the event
-            this.mapModule.centerMap(lonlat, null, !!zoomChange);
-            if (zoomChange) {
-                const { left, top, bottom, right } = zoom;
-
-                if (left && top && bottom && right) {
-                    const zoomOut = top === bottom && left === right;
-                    this.mapModule.zoomToExtent(zoom, zoomOut, zoomOut);
-                    if (zoomOut) {
-                        this.mapModule.zoomToScale(2000);
-                    }
-                    return;
-                }
-                if (zoom.scale) {
-                    this.mapModule.zoomToScale(zoom.scale, false, false);
-                    return;
-                }
-                this.mapModule.setZoomLevel(zoom, false);
+            // check if zoom is not null or undefined
+            if (requestZoom != null) {
+                // check if request is scale or zoom
+                zoom = requestZoom.scale
+                    ? { type: 'scale', value: this.mapModule.getResolutionForScale(requestZoom.scale) }
+                    : { type: 'zoom', value: requestZoom };
             }
+            this.mapModule.centerMap(lonlat, zoom, true, options);
         }
     }, {
         /**

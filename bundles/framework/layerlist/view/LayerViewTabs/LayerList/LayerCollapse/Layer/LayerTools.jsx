@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LAYER_TYPE } from '../constants';
+import { WarningIcon } from 'oskari-ui';
 
 const getIconDiv = float => styled('div')`
     float: ${float};
@@ -32,7 +33,9 @@ const SecondaryIcon = styled('div')`
     ${props => props.layer.hasTimeseries() && 'margin-right: 2px;'}
 `;
 const Tools = styled('div')`
-    float: right;
+    position: absolute;
+    display: inline-block;
+    right: 5px;
 `;
 
 const getBackendStatusIconProps = (layer, locale) => {
@@ -114,18 +117,21 @@ const getInfoIconClasses = layer => {
     return classes;
 };
 
-export const LayerTools = ({model, mapSrs, mutator, locale}) => {
+export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
     const infoClasses = getInfoIconClasses(model, locale);
     const layerIconProps = getLayerIconProps(model, locale);
-    const secondaryIconProps = getSecondaryIconProps(model);
+    const secondaryIconProps = getSecondaryIconProps(model, locale);
     const backendStatusProps = getBackendStatusIconProps(model, locale);
+    const map = Oskari.getSandbox().getMap();
+    const reasons = !map.isLayerSupported(model) ? map.getUnsupportedLayerReasons(model) : undefined;
+    const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
     return (
         <Tools className="layer-tools">
             {
-                !model.isSupportedSrs(mapSrs) &&
-                <RightFloatingIcon
-                    className="layer-not-supported icon-warning-light"
-                    title={locale.tooltip['unsupported-srs']} />
+                reason &&
+                <LeftFloatingIcon>
+                    <WarningIcon tooltip={reason.getDescription()}/>
+                </LeftFloatingIcon>
             }
             <BackendStatus {...backendStatusProps} onClick={() => mutator.showLayerBackendStatus(model.getId())}/>
             <SecondaryIcon {...secondaryIconProps}/>

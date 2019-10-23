@@ -254,7 +254,8 @@ Oskari.clazz.define(
                 startUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StartUserLocationTrackingRequestHandler', sandbox, this),
                 stopUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
-                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService)
+                mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService),
+                mapTourRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapTourRequestHandler', sandbox, this)
             };
 
             sandbox.requestHandler('MapModulePlugin.MapLayerUpdateRequest', this.requestHandlers.mapLayerUpdateHandler);
@@ -270,6 +271,7 @@ Oskari.clazz.define(
             sandbox.requestHandler('RearrangeSelectedMapLayerRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('ChangeMapLayerOpacityRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('ChangeMapLayerStyleRequest', this.requestHandlers.mapLayerHandler);
+            sandbox.requestHandler('MapTourRequest', this.requestHandlers.mapTourRequestHandler);
 
             this.started = this._startImpl();
             this.setMobileMode(Oskari.util.isMobile());
@@ -1067,6 +1069,15 @@ Oskari.clazz.define(
             this.updateDomain();
             var evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator);
             sandbox.notifyAll(evt);
+        },
+
+        notifyTourEvent: function (status, cancelled) {
+            const sandbox = this.getSandbox();
+
+            const location = this.getMapCenter();
+            const completed = status.steps === status.step;
+            const event = Oskari.eventBuilder('MapTourEvent')(status, location, completed, cancelled);
+            sandbox.notifyAll(event);
         },
         /* --------------- /MAP STATE ------------------------ */
 

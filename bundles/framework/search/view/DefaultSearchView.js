@@ -83,7 +83,6 @@ Oskari.clazz.define(
                 field.setEnabled(false);
                 button.setEnabled(false);
                 me.__doSearch();
-                me.progressSpinner.start();
             };
 
             var doAutocompleteSearch = function (e) {
@@ -186,9 +185,6 @@ Oskari.clazz.define(
 
             searchContainer.find('div.resultList').empty();
             searchContainer.find('div.info').empty();
-
-            // TODO: make some gif go round and round so user knows
-            // something is happening
             var searchKey = field.getValue(this.instance.safeChars);
 
             if (!this._validateSearchKey(field.getValue(false))) {
@@ -197,6 +193,7 @@ Oskari.clazz.define(
                 return;
             }
 
+            me.progressSpinner.start();
             var reqBuilder = Oskari.requestBuilder('SearchRequest');
             if (reqBuilder) {
                 var request = reqBuilder(searchKey);
@@ -204,13 +201,10 @@ Oskari.clazz.define(
             }
         },
         __doAutocompleteSearch: function () {
-            var me = this;
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
-            me.progressSpinner.start();
 
             this.searchservice.doAutocompleteSearch(searchKey, function (result) {
-                me.progressSpinner.stop();
                 var autocompleteValues = [];
                 for (var i = 0; i < result.methods.length; i++) {
                     autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });

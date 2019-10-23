@@ -9,6 +9,7 @@ module.exports = async ({ config, mode }) => {
     // Make whatever fine-grained changes you need
     OskariConfig.getStyleFileRules().forEach(rule => config.module.rules.push(rule));
     config.resolve = OskariConfig.RESOLVE;
+    config.module.rules.push(OskariConfig.BABEL_LOADER_RULE);
 
     // Return the altered config
     return config;

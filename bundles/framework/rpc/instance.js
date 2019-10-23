@@ -55,11 +55,6 @@ Oskari.clazz.define(
                 return;
             }
 
-            if (domain === null || domain === undefined || !domain.length) {
-                me.log.warn('RemoteProcedureCallInstance.startPlugin(): missing domain.');
-                return;
-            }
-
             if (domain === '*') {
                 me.log.warn('RemoteProcedureCallInstance.startPlugin(): * is not an allowed domain.');
                 return;
@@ -144,7 +139,7 @@ Oskari.clazz.define(
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
                     'RouteResultEvent', 'FeedbackResultEvent', 'SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-                    'RPCUIEvent', 'map.rotated'];
+                    'RPCUIEvent', 'map.rotated', 'MapTourEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -181,6 +176,7 @@ Oskari.clazz.define(
                     'MapModulePlugin.RemoveMarkersRequest',
                     'MapModulePlugin.MarkerVisibilityRequest',
                     'MapMoveRequest',
+                    'MapTourRequest',
                     'ShowProgressSpinnerRequest',
                     'GetRouteRequest',
                     'GetFeedbackServiceRequest',
@@ -451,6 +447,10 @@ Oskari.clazz.define(
             }
             // Allow subdomains and different ports
             var domain = this.conf.domain;
+            if (domain === null || domain === undefined || !domain.length) {
+                // Publication is not restricted by domain
+                return true;
+            }
 
             var url = document.createElement('a');
             url.href = origin;

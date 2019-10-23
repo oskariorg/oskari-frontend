@@ -34,7 +34,8 @@ Oskari.registerLocalization(
             "type-wfs": "Data product (WFS)",
             "type-wfs-manual": "Refresh feature data by clicking 'Feature Data' or 'Refresh' button in the map window.",
             "type-timeseries": "Time series layer",
-            "unsupported-srs": "Unsupported map projection"
+            "unsupported-srs": "Unsupported map projection",
+            "addLayer": "Add map layer"
         },
         "backendStatus": {
             "OK": {
