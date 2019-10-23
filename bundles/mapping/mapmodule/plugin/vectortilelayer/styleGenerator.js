@@ -1,4 +1,5 @@
 import olStyleStyle from 'ol/style/Style';
+import { filterOptionalStyle, getOptionalStyleFilter } from '../../../mapmodule/oskariStyle/filter';
 
 const invisible = new olStyleStyle();
 
@@ -31,8 +32,7 @@ export function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState
         if (optionalStyles) {
             styles.optional = optionalStyles.map((optionalDef) => {
                 const optional = {
-                    key: optionalDef.property.key,
-                    value: optionalDef.property.value,
+                    filter: getOptionalStyleFilter(optionalDef),
                     style: styleFactory(Object.assign({}, featureStyle, optionalDef))
                 };
                 if (hoverStyle) {
@@ -51,9 +51,7 @@ export function styleGenerator (styleFactory, styleDef, hoverOptions, hoverState
             return invisible;
         }
         if (styles.optional) {
-            var found = styles.optional.find((op) => {
-                return feature.get(op.key) === op.value;
-            });
+            var found = styles.optional.find(op => filterOptionalStyle(op.filter, feature));
             if (found) {
                 return hovered && found.hoverStyle ? found.hoverStyle : found.style;
             }
