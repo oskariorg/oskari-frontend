@@ -34,7 +34,7 @@ function getStep (layer) {
     if (typeof layer.version === 'undefined') {
         return WIZARD_STEP.SERVICE;
     }
-    if (typeof layer.layerName === 'undefined') {
+    if (typeof layer.name === 'undefined') {
         return WIZARD_STEP.LAYER;
     }
     return WIZARD_STEP.DETAILS;
@@ -43,7 +43,7 @@ function getStep (layer) {
 const LayerWizard = ({
     mutator,
     layer,
-    capabilities = [],
+    capabilities = {},
     layerTypes = [],
     loading,
     children,
@@ -90,8 +90,8 @@ const LayerWizard = ({
                     <h4>{getMessage('wizard.layers')}</h4>
                     <p>{getMessage('wizard.layersDescription')}</p>
                     <LayerCapabilitiesListing
-                        onSelect={(item) => mutator.layerSelected(item.layerName)}
-                        capabilities={capabilities} />  
+                        onSelect={(item) => mutator.layerSelected(item.name)}
+                        capabilities={capabilities} />
                 </React.Fragment>
             }
             { currentStep === WIZARD_STEP.DETAILS &&
@@ -111,7 +111,7 @@ LayerWizard.propTypes = {
     mutator: PropTypes.object.isRequired,
     getMessage: PropTypes.func.isRequired,
     loading: PropTypes.bool,
-    capabilities: PropTypes.array,
+    capabilities: PropTypes.object,
     layerTypes: PropTypes.array,
     children: PropTypes.any
 };

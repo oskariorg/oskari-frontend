@@ -2,8 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
-
 import { AdminLayerFormService } from './AdminLayerFormService';
+import { Spin } from 'oskari-ui';
 import { LocaleContext, MutatorContext } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
@@ -41,8 +41,11 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.update();
     }
     setLayer (layer) {
-        this.service.initLayerState(layer);
-        this.update();
+        if (!layer) {
+            this.service.resetLayer();
+        } else {
+            this.service.fetchLayer(layer.getId());
+        }
     }
     setDataProviders (dataProviders) {
         this.dataProviders = dataProviders;
@@ -50,36 +53,42 @@ export class LayerEditorFlyout extends ExtraFlyout {
     setMapLayerGroups (mapLayerGroups) {
         this.mapLayerGroups = mapLayerGroups;
     }
-
     update () {
-        const me = this;
         const el = this.getElement();
         if (!el) {
             return;
         }
+        let uiCode = this.getEditorUI();
+        // TODO: Move spinner logic inside of LayerWizard
+        if (this.service.isLoading()) {
+            uiCode = <Spin>{ uiCode }</Spin>;
+        }
 
-        ReactDOM.render(
-            <LocaleContext.Provider value={this.loc}>
-                <MutatorContext.Provider value={this.service}>
-                    <LayerWizard
+        ReactDOM.render(uiCode, el.get(0));
+    }
+    getEditorUI () {
+        return (<LocaleContext.Provider value={this.loc}>
+            <MutatorContext.Provider value={this.service}>
+                <LayerWizard
+                    layer={this.service.getLayer()}
+                    capabilities={this.service.getCapabilities()}
+                    loading={this.service.isLoading()}
+                    layerTypes={this.service.getLayerTypes()}>
+                    <AdminLayerForm
+                        mapLayerGroups={this.mapLayerGroups}
+                        dataProviders={this.dataProviders}
                         layer={this.service.getLayer()}
-                        capabilities={this.service.getCapabilities()}
-                        loading={this.service.isLoading()}
-                        layerTypes={this.service.getLayerTypes()}>
-                        <AdminLayerForm
-                            mapLayerGroups={this.mapLayerGroups}
-                            dataProviders={this.dataProviders}
-                            layer={this.service.getLayer()}
-                            messages={this.service.getMessages()}
-                            onDelete={() => this.service.deleteLayer()}
-                            onSave={() => this.service.saveLayer()}
-                            onCancel={() => {
-                                this.service.clearMessages();
-                                me.hide();
-                            }} />
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>, el.get(0));
+                        messages={this.service.getMessages()}
+                        rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
+                        onDelete={() => this.service.deleteLayer()}
+                        onSave={() => this.service.saveLayer()}
+                        onCancel={() => {
+                            this.service.clearMessages();
+                            this.hide();
+                        }} />
+                </LayerWizard>
+            </MutatorContext.Provider>
+        </LocaleContext.Provider>);
     }
     cleanUp () {
         const el = this.getElement();

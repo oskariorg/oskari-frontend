@@ -25,7 +25,8 @@ const AdminLayerForm = ({
     onCancel,
     onDelete,
     onSave,
-    getMessage
+    getMessage,
+    rolesAndPermissionTypes
 }) => {
     const mappedMessages = [];
     messages.forEach(m => {
@@ -54,7 +55,9 @@ const AdminLayerForm = ({
                     <AdditionalTabPane layer={layer} service={mutator} />
                 </TabPane>
                 <TabPane tab={getMessage('permissionsTabTitle')} key='permissions'>
-                    <PermissionsTabPane />
+                    <PermissionsTabPane
+                        rolesAndPermissionTypes={rolesAndPermissionTypes}
+                        permissions={layer.role_permissions} />
                 </TabPane>
             </Tabs>
             <PaddedButton type='primary' onClick={() => onSave()}>
@@ -87,7 +90,8 @@ AdminLayerForm.propTypes = {
     onCancel: PropTypes.func,
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
-    getMessage: PropTypes.func.isRequired
+    getMessage: PropTypes.func.isRequired,
+    rolesAndPermissionTypes: PropTypes.object
 };
 
 const contextWrap = withMutator(withLocale(AdminLayerForm));
