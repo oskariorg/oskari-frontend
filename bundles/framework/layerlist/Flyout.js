@@ -21,7 +21,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.log = Oskari.log('layerlist');
         this.handler = new LayerListHandler(instance);
         this.handler.loadLayers();
-        this.handler.addStateListener(state => this.render(state));
+        this.handler.addStateListener(() => this.render());
     }, {
 
         /**
@@ -45,12 +45,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          */
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
-            if (!jQuery(this.container).hasClass('layerlist')) {
-                jQuery(this.container).addClass('layerlist');
-            }
-            if (!flyout.hasClass('layerlist')) {
-                flyout.addClass('layerlist');
-            }
         },
 
         /**
@@ -109,18 +103,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             this.log.warn('Called an unimplemented function: setActiveFilter');
         },
 
-        _initLayerGrouping: function () {
-            this.groupings = {
-
-            };
-        },
-
         /**
          * @method render
          * Renders React content
          */
-        render: function (uiState = this.handler.getState()) {
-            ReactDOM.render(<LayerList {...uiState} mutator={this.handler.getMutator()} locale={this.instance.getLocalization()} />, this.container);
+        render: function () {
+            ReactDOM.render(
+                <LayerList
+                    {...this.handler.getState()}
+                    mutator={this.handler.getMutator()}
+                    locale={this.instance.getLocalization()} />, this.container);
         }
     }, {
 
