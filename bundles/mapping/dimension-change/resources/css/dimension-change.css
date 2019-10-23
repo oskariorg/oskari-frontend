@@ -1,0 +1,21 @@
+.tool.dimension-tool,.tool.dimension-tool-back {
+    color: #FFDE00;
+    font-size: 15px;
+    font-weight: 900;
+    text-align: center;
+    width: 32px;
+    height: 32px;
+    line-height: 32px;
+}
+.tool.dimension-tool {
+    text-shadow:
+        0 1px 0 hsl(52, 100%, 30%),
+        1px 2px 0 hsl(52, 100%, 27%),
+        1px 1px 3px rgba(0,0,0,.3)
+}
+.tool.dimension-tool::before {
+    content: '3D';
+}
+.tool.dimension-tool-back::before {
+    content: '2D';
+}
