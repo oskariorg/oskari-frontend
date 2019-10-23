@@ -59,6 +59,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         let uiCode = this.getEditorUI();
+        // TODO: Move spinner logic inside of LayerWizard
         if (this.service.isLoading()) {
             uiCode = <Spin>{ uiCode }</Spin>;
         }
