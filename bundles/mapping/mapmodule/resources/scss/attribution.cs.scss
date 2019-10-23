@@ -1,0 +1,15 @@
+div.cesium-credit-container {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    text-shadow: 0 0 2px #000000;
+    z-index: 1;
+    color: #ffffff;
+    font-size: 10px;
+    padding-right: 5px;
+    max-width: 350px;
+
+    .cesium-credit-logoContainer {
+        visibility: hidden;
+    }
+}
