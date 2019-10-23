@@ -1,47 +1,35 @@
 /*
  * @class Oskari.mapframework.bundle.layerlist.Tile
  *
- * Renders the "selected layers" tile.
+ * Renders the "map layers" tile.
  */
-Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
-    /**
-     * @method create called automatically on construction
-     * @static
-     * @param {Oskari.mapframework.bundle.layerlist.LayerSelectionBundleInstance}
-     * instance
-     *      reference to component that created the tile
-     */
-    function (instance) {
-        this.instance = instance;
-        this.container = null;
-        this.template = null;
-        this.shownLayerCount = null;
-    }, {
-    /**
-     * @method getName
-     * @return {String} the name for the component
-     */
-        getName: function () {
-            return 'Oskari.mapframework.bundle.layerlist.Tile';
-        },
+const BasicTile = Oskari.clazz.get('Oskari.userinterface.extension.DefaultTile');
+
+Oskari.clazz.defineES('Oskari.mapframework.bundle.layerlist.Tile',
+    class LayerListTile extends BasicTile {
+        constructor (instance) {
+            super();
+            this.instance = instance;
+            this.container = null;
+            this.template = null;
+            this.shownLayerCount = null;
+        }
         /**
-         * @method setEl
-         * @param {Object} el
-         *      reference to the container in browser
-         * Interface method implementation
+         * @method getName
+         * @return {String} the name for the component
          */
-        setEl: function (el) {
-            this.container = jQuery(el);
-        },
+        getName () {
+            return 'Oskari.mapframework.bundle.layerlist.Tile';
+        }
         /**
          * @method startPlugin
          * Interface method implementation, calls #refresh()
          */
-        startPlugin: function () {
+        startPlugin () {
             this._addTileStyleClasses();
             this.refresh();
-        },
-        _addTileStyleClasses: function () {
+        }
+        _addTileStyleClasses () {
             const isContainer = !!((this.container && this.instance.mediator));
             const isBundleId = !!((isContainer && this.instance.mediator.bundleId));
             const isInstanceId = !!((isContainer && this.instance.mediator.instanceId));
@@ -52,78 +40,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
             if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
                 this.container.addClass(this.instance.mediator.bundleId);
             }
-        },
-        /**
-         * @method stopPlugin
-         * Interface method implementation, clears the container
-         */
-        stopPlugin: function () {
-            this.container.empty();
-        },
+        }
         /**
          * @method getTitle
          * @return {String} localized text for the title of the tile
          */
-        getTitle: function () {
+        getTitle () {
             return this.instance.getLocalization('title');
-        },
+        }
         /**
          * @method getDescription
          * @return {String} localized text for the description of the tile
          */
-        getDescription: function () {
+        getDescription () {
             return this.instance.getLocalization('desc');
-        },
-        /**
-         * @method setState
-         * @param {Object} state
-         *      state that this component should use
-         * Interface method implementation, does nothing atm
-         */
-        setState: function (state) {
-        },
-        notifyUser: function () {
+        }
+        notifyUser () {
             const status = this.container.children('.oskari-tile-status');
-
-            // stop current animation
             status.stop();
-            // blink 2 times
-            this._blink(status, 2);
-        },
-        _blink: function (element, count) {
-            const me = this;
+            this._blink(status);
+        }
+        _blink (element) {
             if (!element) {
                 return;
             }
-            if (!count) {
-                count = 1;
-            }
-            // animate to low opacity
-            element.animate({
-                opacity: 0.25
-            }, 500, function () {
-            // on complete, animate back to fully visible
-                element.animate({
-                    opacity: 1
-                }, 500, function () {
-                // on complete, check and adjust the count parameter
-                // recurse if count has not been reached yet
-                    if (count > 1) {
-                        me._blink(element, --count);
-                    }
-                });
-            });
-        },
-        /**
-         * @method refresh
-         * Creates the UI for a fresh start
-         */
-        refresh: function () {
+            element.removeClass('blink').addClass('blink');
+            setTimeout(function () {
+                element.removeClass('blink');
+            }, 3000);
+        }
+        refresh () {
             const instance = this.instance;
 
             const sandbox = instance.getSandbox();
-            const layers = sandbox.findAllSelectedMapLayers();
-            const layerCount = layers.length;
+            const layerCount = sandbox.findAllSelectedMapLayers().length;
 
             const status = this.container.children('.oskari-tile-status');
             status.addClass('icon-bubble-right');
@@ -131,10 +81,5 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Tile',
 
             this.notifyUser();
         }
-    }, {
-    /**
-     * @property {String[]} protocol
-     * @static
-     */
-        'protocol': ['Oskari.userinterface.Tile']
-    });
+    }
+);
