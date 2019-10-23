@@ -28,9 +28,9 @@ overflow: hidden;
 text-overflow: ellipsis;
 `;
 
-export const LayerCapabilitiesListing = (props) => {
+export const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {} }) => {
     const [filter, setfilter] = useState('');
-    const allLayers = prepareData(props.capabilities);
+    const allLayers = prepareData(capabilities);
     const layers = sortLayers(filterLayers(allLayers, filter));
     return (
         <React.Fragment>
@@ -38,8 +38,13 @@ export const LayerCapabilitiesListing = (props) => {
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
-            <List dataSource={layers} rowKey="name" renderItem={item => getItem(props.onSelect, item)}></List>
+            <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item)}></List>
         </React.Fragment>);
+};
+
+LayerCapabilitiesListing.propTypes = {
+    capabilities: PropTypes.object,
+    onSelect: PropTypes.func
 };
 
 /**
@@ -120,8 +125,3 @@ const generateContent = (item) => (
     </StylePopUl>
 
 );
-
-LayerCapabilitiesListing.propTypes = {
-    capabilities: PropTypes.object,
-    onSelect: PropTypes.func
-};
