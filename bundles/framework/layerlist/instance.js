@@ -91,6 +91,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             const layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
 
+            for (let p in this.eventHandlers) {
+                if (this.eventHandlers.hasOwnProperty(p)) {
+                    sandbox.registerForEventByName(this, p);
+                }
+            }
+
             // Add newest layers filter.
             const loc = this.getLocalization('layerFilter');
             layerlistService.registerLayerlistFilterButton(
@@ -115,6 +121,60 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             this._registerForGuidedTour();
+        },
+
+        /**
+         * @method onEvent
+         * @param {Oskari.mapframework.event.Event} event a Oskari event object
+         * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+         */
+        onEvent: function (event) {
+            const handler = this.eventHandlers[event.getName()];
+            if (!handler) { return; }
+
+            // Skip events, if internally linked layer
+            if (typeof event.getMapLayer === 'function' && event.getMapLayer().isLinkedLayer()) {
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+                return;
+            }
+
+            return handler.apply(this, [event]);
+        },
+        /**
+         * @property {Object} eventHandlers
+         * @static
+         */
+        eventHandlers: {
+            /**
+             * @method AfterMapLayerRemoveEvent
+             * @param {Oskari.mapframework.event.common.AfterMapLayerRemoveEvent} event
+             *
+             * Calls flyouts handleLayerSelectionChanged() method
+             */
+            'AfterMapLayerRemoveEvent': function (event) {
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+            },
+            /**
+             * @method AfterMapLayerAddEvent
+             * @param {Oskari.mapframework.event.common.AfterMapLayerAddEvent} event
+             *
+             * Calls flyouts handleLayerSelectionChanged() method
+             */
+            'AfterMapLayerAddEvent': function (event) {
+                this.plugins['Oskari.userinterface.Tile'].refresh();
+            },
+            /**
+             * @method AfterRearrangeSelectedMapLayerEvent
+             * @param {Oskari.mapframework.event.common.AfterRearrangeSelectedMapLayerEvent} event
+             *
+             * Rearranges layers
+             */
+            'AfterRearrangeSelectedMapLayerEvent': function (event) {
+                if (event._creator !== this.getName()) {
+                    // Layer order has been changed by someone else, resort layers
+                    this.plugins['Oskari.userinterface.Tile'].refresh();
+                }
+            }
         },
         /**
          * @method init
@@ -156,7 +216,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             this.plugins['Oskari.userinterface.Flyout'] = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.layerlist.Flyout', this);
             this.plugins['Oskari.userinterface.Tile'] = Oskari.clazz.create(
-                'Oskari.userinterface.extension.DefaultTile', this, this.getLocalization());
+                'Oskari.mapframework.bundle.layerlist.Tile', this, this.getLocalization());
         },
         /**
          * @method stopExtension
@@ -188,6 +248,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          */
         getDescription: function () {
             return this.getLocalization('desc');
+        },
+        /**
+         * @method createUi
+         * (re)creates the UI for "all layers" functionality
+         */
+        createUi: function () {
+            this.plugins['Oskari.userinterface.Tile'].refresh();
         },
 
         /**
@@ -224,15 +291,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 return this.getLocalization('guidedTour').title;
             },
             getContent: function () {
-                var content = jQuery('<div></div>');
+                const content = jQuery('<div></div>');
                 content.append(this.getLocalization('guidedTour').message);
                 return content;
             },
             getLinks: function () {
-                var me = this;
-                var loc = this.getLocalization('guidedTour');
-                var linkTemplate = jQuery('<a href="#"></a>');
-                var openLink = linkTemplate.clone();
+                const me = this;
+                const loc = this.getLocalization('guidedTour');
+                const linkTemplate = jQuery('<a href="#"></a>');
+                const openLink = linkTemplate.clone();
                 openLink.append(loc.openLink);
                 openLink.on('click',
                     function () {
@@ -240,7 +307,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                         openLink.hide();
                         closeLink.show();
                     });
-                var closeLink = linkTemplate.clone();
+                const closeLink = linkTemplate.clone();
                 closeLink.append(loc.closeLink);
                 closeLink.on('click',
                     function () {
@@ -259,14 +326,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * Registers bundle for guided tour help functionality. Waits for guided tour load if not found
          */
         _registerForGuidedTour: function () {
-            var me = this;
+            const me = this;
             function sendRegister () {
-                var requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                const requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
                 if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
-                    var delegate = {
+                    const delegate = {
                         bundleName: me.getName()
                     };
-                    for (var prop in me.__guidedTourDelegateTemplate) {
+                    for (let prop in me.__guidedTourDelegateTemplate) {
                         if (typeof me.__guidedTourDelegateTemplate[prop] === 'function') {
                             delegate[prop] = me.__guidedTourDelegateTemplate[prop].bind(me); // bind methods to bundle instance
                         } else {
@@ -283,7 +350,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 }
             }
 
-            var tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            const tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
             if (tourInstance) {
                 sendRegister();
             } else {

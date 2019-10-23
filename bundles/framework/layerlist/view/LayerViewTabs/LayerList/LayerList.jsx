@@ -49,8 +49,8 @@ export const LayerList = props => {
 };
 
 const stateful = {
-    state: PropTypes.object,
-    mutator: PropTypes.object
+    state: PropTypes.object.isRequired,
+    mutator: PropTypes.object.isRequired
 };
 const grouping = {
     selected: PropTypes.string,

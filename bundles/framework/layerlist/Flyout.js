@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerList, LayerListHandler } from './view/LayerViewTabs/LayerList';
+import { LayerViewTabs, LayerListHandler } from './view/LayerViewTabs/';
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -19,9 +19,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.instance = instance;
         this.container = null;
         this.log = Oskari.log('layerlist');
-        this.handler = new LayerListHandler(instance);
-        this.handler.loadLayers();
-        this.handler.addStateListener(() => this.render());
+        this.layerListHandler = new LayerListHandler(instance);
+        this.layerListHandler.loadLayers();
+        this.layerListHandler.addStateListener(() => this.render());
     }, {
 
         /**
@@ -108,11 +108,12 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Renders React content
          */
         render: function () {
-            ReactDOM.render(
-                <LayerList
-                    {...this.handler.getState()}
-                    mutator={this.handler.getMutator()}
-                    locale={this.instance.getLocalization()} />, this.container);
+            const locale = this.instance.getLocalization();
+            const layerList = {
+                state: this.layerListHandler.getState(),
+                mutator: this.layerListHandler.getMutator()
+            };
+            ReactDOM.render(<LayerViewTabs layerList={layerList} locale={locale} />, this.container);
         }
     }, {
 
