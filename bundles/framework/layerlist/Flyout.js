@@ -110,6 +110,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Creates the UI for a fresh start
          */
         createUi: function () {
+            console.log(this.instance);
             ReactDOM.render(<LayerViewTabs showOrganizations instance={this.instance} locale={this.instance.getLocalization() } />, this.container);
         }
     }, {
