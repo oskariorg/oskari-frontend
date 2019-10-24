@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Tabs, TabPane } from 'oskari-ui';
 import { LayerList } from './LayerList/';
+import { SelectedLayers } from './SelectedLayers/';
 
 const StyledTabs = styled(Tabs)`
     max-width: 600px;
@@ -51,13 +52,7 @@ export const LayerViewTabs = props => {
                 <LayerList {...props} />
             </TabPane>
             <TabPane tab={<SelectedTab num={numLayers} text={selected} />} key={selectedKey}>
-                <ul>
-                    {layers.map((layer, i) => {
-                        return (
-                            <li key={i}>{layer.getName()}</li>
-                        );
-                    })}
-                </ul>
+                <SelectedLayers layers={layers} />
             </TabPane>
         </StyledTabs>
     );
