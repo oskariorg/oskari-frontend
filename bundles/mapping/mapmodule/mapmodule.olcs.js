@@ -4,8 +4,8 @@ import * as olProj from 'ol/proj';
 import OLMap from 'ol/Map';
 import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
-import { MapModule as MapModuleOl } from 'oskari-frontend/bundles/mapping/mapmodule/MapModuleClass.ol';
-import { LAYER_ID } from 'oskari-frontend/bundles/mapping/mapmodule/domain/constants';
+import { MapModule as MapModuleOl } from './MapModuleClass.ol';
+import { LAYER_ID } from './domain/constants';
 import 'olcs/olcs.css';
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
