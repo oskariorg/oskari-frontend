@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         'lang': 'fi',
-        'key': 'LayerSelector',
+        'key': 'LayerList',
         'value': {
             'title': 'Karttatasot',
             'desc': '',

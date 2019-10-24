@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         'lang': 'sv',
-        'key': 'LayerSelector',
+        'key': 'LayerList',
         'value': {
             'title': 'Kartlager',
             'desc': '',

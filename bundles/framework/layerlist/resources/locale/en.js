@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         'lang': 'en',
-        'key': 'LayerSelector',
+        'key': 'LayerList',
         'value': {
             'title': 'Map Layers',
             'desc': '',
