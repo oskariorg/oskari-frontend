@@ -22,10 +22,10 @@ Oskari.clazz.define("Oskari.map3dtiles.bundle.tiles3d.Map3DTilesBundle", functio
     "source": {
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/tiles3d/domain/Tiles3DLayer.js"
+            "src": "../../../bundles/mapping/tiles3d/domain/Tiles3DLayer.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/tiles3d/plugin/Tiles3DLayerPlugin.js"
+            "src": "../../../bundles/mapping/tiles3d/plugin/Tiles3DLayerPlugin.js"
         }]
     },
     "bundle": {

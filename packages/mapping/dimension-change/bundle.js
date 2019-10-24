@@ -15,23 +15,23 @@ Oskari.clazz.define(
         "source": {
             "scripts": [{
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/dimension-change/instance.js"
+                "src": "../../../bundles/mapping/dimension-change/instance.js"
             }, {
                 "type": "text/css",
-                "src": "../../../../bundles/mapping/dimension-change/resources/css/dimension-change.css"
+                "src": "../../../bundles/mapping/dimension-change/resources/css/dimension-change.css"
             }],
             "locales": [{
                 "lang": "en",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/dimension-change/resources/locale/en.js"
+                "src": "../../../bundles/mapping/dimension-change/resources/locale/en.js"
             }, {
                 "lang": "fi",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/dimension-change/resources/locale/fi.js"
+                "src": "../../../bundles/mapping/dimension-change/resources/locale/fi.js"
             }, {
                 "lang": "sv",
                 "type": "text/javascript",
-                "src": "../../../../bundles/mapping/dimension-change/resources/locale/sv.js"
+                "src": "../../../bundles/mapping/dimension-change/resources/locale/sv.js"
             }]
         },
         "bundle": {
