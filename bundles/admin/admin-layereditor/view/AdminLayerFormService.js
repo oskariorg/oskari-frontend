@@ -1,13 +1,16 @@
 import { stringify } from 'query-string';
+import { getLayerHelper } from './LayerHelper';
+
 export class AdminLayerFormService {
     constructor (consumer) {
         this.layer = {};
-        this.capabilities = [];
+        this.capabilities = {};
         this.messages = [];
         this.listeners = [consumer];
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.log = Oskari.log('AdminLayerFormService');
         this.loadingCount = 0;
+        this.layerHelper = getLayerHelper(Oskari.getSupportedLanguages());
         this.fetchRolesAndPermissionTypes();
     }
 
@@ -24,38 +27,25 @@ export class AdminLayerFormService {
             },
             setVersion (version) {
                 if (!version) {
-                    me.capabilities = [];
+                    me.capabilities = {};
                     // for moving back to previous step
                     me.layer.version = undefined;
                     me.notify();
                     return;
                 }
-                me.loading = true;
-                me.notify();
-                setTimeout(() => {
-                    me.layer.version = version;
-                    me.capabilities = [{
-                        layerName: 'fake'
-                    }, {
-                        layerName: 'it'
-                    }, {
-                        layerName: 'till'
-                    }, {
-                        layerName: 'you'
-                    }, {
-                        layerName: 'make it'
-                    }];
-                    me.loading = false;
-                    me.notify();
-                }, 1000);
+                me.fetchCapabilities(version);
             },
             layerSelected (name) {
-                const found = me.capabilities.find((item) => item.layerName === name);
+                if (!me.capabilities || !me.capabilities.layers) {
+                    me.log.error('Capabilities not available. Tried to select layer: ' + name);
+                    return;
+                }
+                const found = me.capabilities.layers[name];
                 if (found) {
-                    me.layer = {
+                    me.layer = me.layerHelper.fromServer({
                         ...me.layer,
                         ...found
-                    };
+                    });
                 } else {
                     Oskari.log('AdminLayerFormService').error('Layer not in capabilities: ' + name);
                 }
@@ -69,8 +59,8 @@ export class AdminLayerFormService {
                 me.layer = { ...me.layer, password };
                 me.notify();
             },
-            setLayerName (layerName) {
-                me.layer = { ...me.layer, layerName };
+            setLayerName (name) {
+                me.layer = { ...me.layer, name };
                 me.notify();
             },
             setLocalizedLayerName (lang, name) {
@@ -108,8 +98,8 @@ export class AdminLayerFormService {
             setMinAndMaxScale (values) {
                 me.layer = {
                     ...me.layer,
-                    maxScale: values[0],
-                    minScale: values[1]
+                    maxscale: values[0],
+                    minscale: values[1]
                 };
                 me.notify();
             },
@@ -125,8 +115,8 @@ export class AdminLayerFormService {
                 me.layer = { ...me.layer, hoverJSON };
                 me.notify();
             },
-            setMetadataIdentifier (metadataIdentifier) {
-                me.layer = { ...me.layer, metadataIdentifier };
+            setMetadataIdentifier (metadataid) {
+                me.layer = { ...me.layer, metadataid };
                 me.notify();
             },
             setGfiContent (gfiContent) {
@@ -134,7 +124,7 @@ export class AdminLayerFormService {
                 me.notify();
             },
             setAttributes (attributes) {
-                me.layer = { ...me.layer, attributes };
+                me.layer = { ...me.layer, attributes: JSON.parse(attributes) };
                 me.notify();
             },
             setMessage (key, type) {
@@ -148,14 +138,13 @@ export class AdminLayerFormService {
         };
     }
     resetLayer () {
-        this.layer = {
-            maplayerGroups: [],
-            isNew: true
-        };
+        this.layer = this.layerHelper.createEmpty();
+        this.notify();
     }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
     fetchLayer (id) {
+        this.clearMessages();
         if (!id) {
             this.resetLayer();
             return;
@@ -169,13 +158,13 @@ export class AdminLayerFormService {
                 'Accept': 'application/json'
             }
         }).then(function (response) {
+            me.loadingCount--;
             if (!response.ok) {
                 me.getMutator().setMessage('TODO', 'error');
             }
             return response.json();
         }).then(function (json) {
-            me.loadingCount--;
-            me.layer = { ...json.layer };
+            me.layer = me.layerHelper.fromServer(json.layer);
             me.notify();
         });
     }
@@ -185,77 +174,12 @@ export class AdminLayerFormService {
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
      */
     initLayerState (layer) {
-        var me = this;
+        this.clearMessages();
         if (!layer) {
             this.resetLayer();
             return;
         }
-
-        const styles = layer ? layer.getStyles() : [];
-        const availableStyles = [];
-        for (let i = 0; i < styles.length; i++) {
-            availableStyles.push({
-                name: styles[i].getName(),
-                title: styles[i].getTitle()
-            });
-        }
-
-        me.layer = {
-            type: layer.getLayerType(),
-            version: layer.getVersion(),
-            layer_id: layer.getId(),
-            url: layer.getAdmin().url,
-            username: layer.getAdmin().username,
-            password: layer.getAdmin().password,
-            layerName: layer.getLayerName(),
-            ...this._getLocalizedLayerInfo(layer),
-            groupId: layer.getAdmin().organizationId,
-            organizationName: layer.getOrganizationName(),
-            maplayerGroups: [...layer.getGroups()],
-            opacity: layer.getOpacity() || 100,
-            minScale: layer.getMinScale() || 1,
-            maxScale: layer.getMaxScale() || 1,
-            style: layer.getCurrentStyle().getName(),
-            styleTitle: layer.getCurrentStyle().getTitle(),
-            styles: availableStyles,
-            styleJSON: layer._options.styles ? JSON.stringify(this.getMVTStylesWithoutSrcLayer(layer._options.styles)) : '',
-            hoverJSON: layer._options.hover ? JSON.stringify(layer._options.hover) : '',
-            metadataIdentifier: layer.getMetadataIdentifier() || '',
-            gfiContent: layer.getGfiContent() || '',
-            attributes: JSON.stringify(layer.getAttributes()),
-            isNew: !layer.getId()
-        };
-
-        this.messages = [];
-    }
-
-    /**
-     * @method getMVTStylesWithoutSrcLayer
-     * Styles in MVT layer options contain data source layer names as filtering keys.
-     * This function returns styles without the layer child.
-     * Useful when there is only one known data source layer for the styles.
-     * @return {Object} styles object without layer name filters for easier JSON editing.
-     */
-    getMVTStylesWithoutSrcLayer (styles) {
-        if (!styles) {
-            return;
-        }
-        // deep clone styles
-        var stylesCopy = JSON.parse(JSON.stringify(styles));
-        // remove mvt src layer key
-        Object.keys(stylesCopy).forEach(function (styleKey) {
-            var style = stylesCopy[styleKey];
-            Object.keys(style).forEach(function (layerKey) {
-                var layer = style[layerKey];
-                Object.keys(layer).forEach(function (styleDefKey) {
-                    var styleDef = layer[styleDefKey];
-                    style[styleDefKey] = styleDef;
-                    delete style[layerKey];
-                    stylesCopy[styleKey] = style;
-                });
-            });
-        });
-        return stylesCopy;
+        this.layer = this.layerHelper.fromAbstractLayer(layer);
     }
 
     /**
@@ -277,18 +201,13 @@ export class AdminLayerFormService {
         return styleJson;
     }
 
-    _getLocalizedLayerInfo (layer) {
-        const info = {};
-        Oskari.getSupportedLanguages().forEach(lang => {
-            const name = `name_${lang}`;
-            const description = `title_${lang}`;
-            info[name] = layer ? layer.getName(lang) : '';
-            info[description] = layer ? layer.getDescription(lang) : '';
-        });
-        return info;
-    }
-
     saveLayer () {
+        const notImplementedYet = true;
+        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
+        if (notImplementedYet) {
+            alert('Not implemented yet');
+            return;
+        }
         const me = this;
 
         // Modify layer for backend
@@ -321,9 +240,9 @@ export class AdminLayerFormService {
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
-            if (layer.layer_id) {
+            if (layer.id) {
                 data.groups = layerGroups;
-                me.updateLayer(layer.layer_id, data);
+                me.updateLayer(layer.id, data);
             } else {
                 me.createlayer(data);
             }
@@ -373,13 +292,14 @@ export class AdminLayerFormService {
         }
     }
     setLayerOptions (layer) {
-        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.layerName) : undefined;
+        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.name) : undefined;
         const hoverStyle = layer.hoverJSON !== '' ? JSON.parse(layer.hoverJSON) : undefined;
         layer.options = { ...layer.options, ...{ styles: styles, hover: hoverStyle } };
         layer.options = JSON.stringify(layer.options);
     }
 
     deleteLayer () {
+        // FIXME: This should use LayerAdmin route instead but this probably works anyway
         const layer = this.getLayer();
         const me = this;
         fetch(Oskari.urls.getRoute('DeleteLayer'), {
@@ -402,17 +322,6 @@ export class AdminLayerFormService {
     /*
         Calls action route like:
         http://localhost:8080/action?action_route=LayerAdmin&url=https://my.domain/geoserver/ows&type=wfslayer&version=1.1.0
-        me.capabilities = [{
-            name: 'fake'
-        }, {
-            name: 'it'
-        }, {
-            name: 'till'
-        }, {
-            name: 'you'
-        }, {
-            name: 'make it'
-        }];
     */
     fetchCapabilities (version) {
         this.loadingCount++;
@@ -438,7 +347,7 @@ export class AdminLayerFormService {
             return response.json();
         }).then(function (json) {
             me.loadingCount--;
-            me.capabilities = json.layers || [];
+            me.capabilities = json || {};
             me.notify();
         });
     }
@@ -472,13 +381,13 @@ export class AdminLayerFormService {
     }
 
     getLayerTypes () {
-        return ['WFS'];
+        return ['wfslayer', 'wmslayer'];
     }
     isLoading () {
         return this.loadingCount > 0;
     }
     getCapabilities () {
-        return this.capabilities || [];
+        return this.capabilities || {};
     }
     getMessages () {
         return this.messages;

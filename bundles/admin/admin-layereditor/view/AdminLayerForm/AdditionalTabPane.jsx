@@ -11,7 +11,7 @@ const AdditionalTabPane = (props) => {
             <label>{getMessage('metaInfoId')}</label>
             <StyledComponent>
                 <TextInput placeholder={getMessage('metaInfoIdDesc')}
-                    value={layer.metadataIdentifier} onChange={(evt) => service.setMetadataIdentifier(evt.target.value)} />
+                    value={layer.metadataid} onChange={(evt) => service.setMetadataIdentifier(evt.target.value)} />
             </StyledComponent>
             <label>{getMessage('gfiContent')}</label>
             <StyledComponent>
@@ -19,7 +19,7 @@ const AdditionalTabPane = (props) => {
             </StyledComponent>
             <label>{getMessage('attributes')}</label>
             <StyledComponent>
-                <TextAreaInput rows={6} value={layer.attributes} onChange={(evt) => service.setAttributes(evt.target.value)} />
+                <TextAreaInput rows={6} value={JSON.stringify(layer.attributes || {}, null, 2)} onChange={(evt) => service.setAttributes(evt.target.value)} />
             </StyledComponent>
         </StyledTab>
     );
