@@ -57,6 +57,9 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/mapmodule.ol.js'
                 }, {
                     'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/mapmodule.olcs.js'
+                }, {
+                    'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/Plugin.js'
                 },
                 /*
@@ -196,6 +199,9 @@ Oskari.clazz.define(
                 {
                     'type': 'text/css',
                     'src': '../../../../bundles/mapping/mapmodule/resources/scss/attribution.ol.scss'
+                }, {
+                    'type': 'text/css',
+                    'src': '../../../../bundles/mapping/mapmodule/resources/scss/attribution.cs.scss'
                 },
                 // Markers plugin
                 {
@@ -272,6 +278,10 @@ Oskari.clazz.define(
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol.js'
+                },
+                {
+                    'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.olcs.js'
                 },
 
                 {
