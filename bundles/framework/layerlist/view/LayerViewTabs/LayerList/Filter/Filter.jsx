@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Select, Option } from 'oskari-ui';
 import { Label } from '../Label';
 
-export const Filter = ({ filters, activeFilterId, mutator }) => {
+const Filter = ({ filters, activeFilterId, mutator }) => {
     const props = {
         allowClear: true,
         placeholder: 'locale.filter.placeholder'
@@ -31,3 +31,6 @@ Filter.propTypes = {
     activeFilterId: PropTypes.string,
     mutator: PropTypes.object.isRequired
 };
+
+const memoized = React.memo(Filter);
+export { memoized as Filter };
