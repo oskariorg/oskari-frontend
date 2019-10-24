@@ -278,11 +278,6 @@ Oskari.clazz.define(
                 },
                 {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.olcs.js'
-                },
-
-                {
-                    'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequest.js'
                 },
                 {

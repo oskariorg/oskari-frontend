@@ -271,11 +271,6 @@ Oskari.clazz.define(
                 /**
                  * Layers plugin
                  */
-
-                {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol.js'
-                },
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.olcs.js'
