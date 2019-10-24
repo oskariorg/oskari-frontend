@@ -273,7 +273,7 @@ Oskari.registerLocalization(
             'title': 'Индикаторы',
             'removeAll': 'Remove all',
             'emptyMsg': 'Отсутствуют выбранные индикаторы'
-        }
+        },
         'sumo': {
             'locale': ['ОК', 'Отменить', 'Выбрать все']
         }
