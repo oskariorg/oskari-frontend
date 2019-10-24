@@ -167,7 +167,6 @@ export class LayerList extends React.Component {
                 <TabPane tab={inspire} key={groupKey}>
                     { this.getGroupedLayers(groupKey) }
                 </TabPane>
-
                 { this.props.showOrganizations &&
                     <TabPane tab={organization} key={orgKey}>
                         { this.getGroupedLayers(orgKey) }
