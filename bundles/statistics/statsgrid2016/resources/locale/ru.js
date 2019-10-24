@@ -143,7 +143,8 @@ Oskari.registerLocalization(
                 "max": "Максимум",
                 "color": "Цвет",
                 "transparency": "Прозрачность",
-                "showValues": "Показать значения"
+                "showValues": "Показать значения",
+                'fractionDigits': 'Количество десятичных знаков'
             }
         },
         "colorset": {
@@ -267,6 +268,14 @@ Oskari.registerLocalization(
                 "edit": "Редактировать",
                 "remove": "Удалить"
             }
+        },
+        'indicatorList': {
+            'title': 'Индикаторы',
+            'removeAll': 'Remove all',
+            'emptyMsg': 'Отсутствуют выбранные индикаторы'
+        }
+        'sumo': {
+            'locale': ['ОК', 'Отменить', 'Выбрать все']
         }
     }
 });

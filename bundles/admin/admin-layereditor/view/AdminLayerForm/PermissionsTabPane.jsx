@@ -39,6 +39,7 @@ const renderRow = (modelRow) => {
             permissionDescription={permission.localizedText}
             permission={permission.id}
             role={role}
+            checked={modelRow.permissions.includes(permission.id)}
             onChange = {checkboxOnChangeHandler}/>;
     });
 
@@ -47,8 +48,7 @@ const renderRow = (modelRow) => {
     </StyledListItem>);
 };
 
-const PermissionsTabPane = (props) => {
-    const { getMessage, rolesAndPermissionTypes } = props;
+const PermissionsTabPane = ({ getMessage, rolesAndPermissionTypes, permissions = {} }) => {
     if (!rolesAndPermissionTypes) {
         return;
     }
@@ -62,6 +62,7 @@ const PermissionsTabPane = (props) => {
     const headerRow = {
         isHeaderRow: true,
         text: getMessage('rights.role'),
+        permissions: [],
         permissionTypes: localizedPermissionTypes
     };
 
@@ -69,6 +70,7 @@ const PermissionsTabPane = (props) => {
         return {
             isHeaderRow: false,
             text: role.name,
+            permissions: permissions[role.name] || [],
             permissionTypes: permissionTypes,
             role: role
         };
@@ -83,6 +85,7 @@ const PermissionsTabPane = (props) => {
 
 PermissionsTabPane.propTypes = {
     rolesAndPermissionTypes: PropTypes.object,
+    permissions: PropTypes.object,
     getMessage: PropTypes.func.isRequired
 };
 

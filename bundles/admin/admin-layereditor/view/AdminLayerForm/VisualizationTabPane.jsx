@@ -19,7 +19,7 @@ const VisualizationTabPane = (props) => {
             <StyledColumnLeft>
                 <label>{getMessage('opacity')}</label>
                 <StyledComponent>
-                    <Opacity key={layer.layer_id} defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
+                    <Opacity key={layer.id} defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
                 </StyledComponent>
                 <label>{getMessage('style')}</label>
                 <StyledComponent>
@@ -37,10 +37,10 @@ const VisualizationTabPane = (props) => {
             <StyledColumnRight>
                 <label>{getMessage('minAndMaxScale')}</label>
                 <VerticalComponent>
-                    <Slider key={layer.layer_id}
+                    <Slider key={layer.id}
                         vertical
                         range
-                        defaultValue={[layer.minScale, layer.maxScale]}
+                        defaultValue={[layer.minscale, layer.maxscale]}
                         min={0}
                         max={100000000}
                         onChange={(values) => service.setMinAndMaxScale(values)} />

@@ -7,9 +7,10 @@ const BasicTile = Oskari.clazz.get('Oskari.userinterface.extension.DefaultTile')
 
 Oskari.clazz.defineES('Oskari.mapframework.bundle.layerlist.Tile',
     class LayerListTile extends BasicTile {
-        constructor (instance) {
+        constructor (instance, locale) {
             super();
             this.instance = instance;
+            this.locale = locale;
             this.container = null;
             this.template = null;
             this.shownLayerCount = null;
@@ -40,20 +41,6 @@ Oskari.clazz.defineES('Oskari.mapframework.bundle.layerlist.Tile',
             if (isBundleId && !this.container.hasClass(this.instance.mediator.bundleId)) {
                 this.container.addClass(this.instance.mediator.bundleId);
             }
-        }
-        /**
-         * @method getTitle
-         * @return {String} localized text for the title of the tile
-         */
-        getTitle () {
-            return this.instance.getLocalization('title');
-        }
-        /**
-         * @method getDescription
-         * @return {String} localized text for the description of the tile
-         */
-        getDescription () {
-            return this.instance.getLocalization('desc');
         }
         notifyUser () {
             const status = this.container.children('.oskari-tile-status');

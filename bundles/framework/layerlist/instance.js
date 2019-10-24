@@ -26,7 +26,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * @static
          * @property __name
          */
-        __name: 'LayerSelector',
+        __name: 'LayerList',
         /**
          * @method getName
          * @return {String} the name for the component
