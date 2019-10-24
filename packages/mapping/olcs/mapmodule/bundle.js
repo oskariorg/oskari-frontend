@@ -54,7 +54,7 @@ Oskari.clazz.define(
                  */
                 {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/mapmodule.ol.js'
+                    'src': '../../../../bundles/mapping/mapmodule/mapmodule.olcs.js'
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/Plugin.js'
