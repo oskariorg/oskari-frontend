@@ -2,33 +2,39 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Tooltip } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
-import { Label } from '../Label';
+import { Flex } from '../Flex';
 
 const Filter = ({ filters, activeFilterId, mutator, locale }) => {
-    const props = {
-        allowClear: true,
-        placeholder: 'locale.filter.placeholder'
+    const { title, placeholder } = locale.filter;
+    const filterSelect = {
+        placeholder,
+        onChange: mutator.setActiveFilterId
     };
     let tooltip;
+
     if (activeFilterId) {
         // Don't set null value to Select. It would replace the placeholder.
-        props.value = activeFilterId;
+        filterSelect.value = activeFilterId;
         // Show tooltip of the active filter.
         const active = filters.find(cur => cur.id === activeFilterId);
         if (active) {
             tooltip = active.tooltip;
         }
     }
-    const { title, placeholder } = locale.filter;
+
     return (
-        <div>
-            <Label>{title}</Label>
+        <Flex label={title}>
             <Tooltip title={tooltip}>
-                <Select {...props} placeholder={placeholder} onChange={mutator.setActiveFilterId}>
-                    { filters.map(filter => <Option key={filter.id} value={filter.id}>{filter.text}</Option>) }
+                <Select {...filterSelect} allowClear>
+                    {
+                        filters.map(filter => {
+                            const { id, text } = filter;
+                            return <Option key={id} value={id}>{text}</Option>;
+                        })
+                    }
                 </Select>
             </Tooltip>
-        </div>
+        </Flex>
     );
 };
 

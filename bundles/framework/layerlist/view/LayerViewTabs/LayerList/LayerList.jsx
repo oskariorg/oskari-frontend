@@ -18,16 +18,12 @@ const Controllers = styled('div')`
     display: flex;
     align-items: center;
     padding-bottom: 15px;
-    > :not(:last-child) {
-        margin-right: 10px;
-    }
-`;
-const SearchController = styled(Search)`
-    felx: 0 0 600px;
-`;
-const SelectControllers = styled(Controllers)`
-    > {
-        felx: 0 0 250px;
+    > * {
+        width: 250px;
+        flex-grow: 1;
+        & :not(:last-child) {
+            margin-right: 15px;
+        }
     }
 `;
 
@@ -53,9 +49,9 @@ const LayerList = props => {
     return (
         <ContentDiv>
             <Controllers>
-                <SearchController searchText={searchText} mutator={filter.mutator} locale={locale} />
+                <Search searchText={searchText} mutator={filter.mutator} locale={locale} />
             </Controllers>
-            <SelectControllers>
+            <Controllers>
                 <Grouping
                     selected={grouping.selected}
                     options={grouping.options}
@@ -66,7 +62,7 @@ const LayerList = props => {
                     activeFilterId={activeFilterId}
                     mutator={filter.mutator}
                     locale={locale}/>
-            </SelectControllers>
+            </Controllers>
             { loading && <Spinner/> }
             { !loading &&
                 <Indicator show={updating}>

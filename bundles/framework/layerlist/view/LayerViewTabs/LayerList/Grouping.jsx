@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { GroupingOption } from '../../../model/GroupingOption';
-import { Label } from './Label';
+import { Flex } from './Flex';
 import { Select, Option } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
 
 const Grouping = ({ selected, options, mutator, locale }) =>
-    <div>
-        <Label>{ locale.grouping.title }</Label>
+    <Flex label={locale.grouping.title}>
         <Select value={selected} onChange={mutator.setGrouping}>
             {
                 options.map(cur =>
@@ -17,7 +16,7 @@ const Grouping = ({ selected, options, mutator, locale }) =>
                 )
             }
         </Select>
-    </div>;
+    </Flex>;
 
 Grouping.propTypes = {
     selected: PropTypes.string,
