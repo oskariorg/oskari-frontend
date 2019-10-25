@@ -2,9 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LAYER_TYPE } from '../constants';
-import { WarningIcon } from 'oskari-ui';
+import { WarningIcon, Tooltip } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
-import { Tooltip } from 'antd';
 
 const getIconDiv = float => styled('div')`
     float: ${float};
