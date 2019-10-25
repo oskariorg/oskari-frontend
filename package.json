@@ -30,7 +30,7 @@
       "<rootDir>/setupTests.js"
     ],
     "moduleNameMapper": {
-      "oskari-ui": "<rootDir>/src/react",
+      "^oskari-ui(.*)$": "<rootDir>/src/react/$1",
       "^antd(.*?)style/index.js$": "<rootDir>/tests/styleMock.js"
     }
   },

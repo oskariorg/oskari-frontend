@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerViewTabs } from './view/LayerViewTabs/';
+import { LayerViewTabs, LayerListHandler } from './view/LayerViewTabs/';
+
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
  *
@@ -18,6 +19,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.instance = instance;
         this.container = null;
         this.log = Oskari.log('layerlist');
+        this.layerListHandler = new LayerListHandler(instance);
+        this.layerListHandler.loadLayers();
+        this.layerListHandler.addStateListener(() => this.render());
     }, {
 
         /**
@@ -41,20 +45,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          */
         setEl: function (el, flyout, width, height) {
             this.container = el[0];
-            if (!jQuery(this.container).hasClass('layerlist')) {
-                jQuery(this.container).addClass('layerlist');
-            }
-            if (!flyout.hasClass('layerlist')) {
-                flyout.addClass('layerlist');
-            }
         },
 
         /**
          * @method startPlugin
-         *
-         * Interface method implementation, does nothing atm
          */
-        startPlugin: function () { },
+        startPlugin: function () {
+            this.render();
+        },
         /**
          * @method stopPlugin
          *
@@ -106,11 +104,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         },
 
         /**
-         * @method createUi
-         * Creates the UI for a fresh start
+         * @method render
+         * Renders React content
          */
-        createUi: function () {
-            ReactDOM.render(<LayerViewTabs showOrganizations instance={this.instance} locale={this.instance.getLocalization() } />, this.container);
+        render: function () {
+            const locale = this.instance.getLocalization();
+            const layerList = {
+                state: this.layerListHandler.getState(),
+                mutator: this.layerListHandler.getMutator()
+            };
+            ReactDOM.render(<LayerViewTabs layerList={layerList} locale={locale} />, this.container);
         }
     }, {
 
