@@ -59,7 +59,7 @@ const hasSubLayerMetadata = layer => {
     return !!subLayers.find(sub => !!sub.getMetadataIdentifier());
 };
 
-export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
+export const LayerTools = ({ model, mutator, locale }) => {
     const layerIcon = {
         classes: ['layer-icon', model.getIconClassname()],
         tooltip: getLayerIconTooltip(model, locale)
@@ -106,7 +106,6 @@ export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
 
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
-    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
     locale: PropTypes.any.isRequired
 };
