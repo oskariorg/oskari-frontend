@@ -4,40 +4,37 @@ import { Mutator } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
-const InputHolder = styled('div')`
+const FlexBox = styled('div')`
     display: flex;
     align-items: center;
-    flex: 1 1 200px;
     > :not(:last-child) {
-        margin-right: 5px;
+        margin-right: 15px;
     }
 `;
 
-const InfoIcon = styled(Icon)`
-    color: rgba(0,0,0,.45);
-    font-size: 22px;
+const SearchInput = styled(TextInput)`
+    flex: 1 1 500px;
 `;
 
-const Info = ({ infoText }) =>
-    <Tooltip title={infoText}>
-        <InfoIcon type="question-circle" />
-    </Tooltip>;
-
-Info.propTypes = {
-    infoText: PropTypes.string.isRequired
-};
+const InfoIcon = styled(Icon)`
+    color: #979797;
+    font-size: 20px;
+    flex: 0 0 30px;
+`;
 
 export const Search = ({ searchText, locale, mutator }) =>
-    <InputHolder>
-        <TextInput
+    <FlexBox>
+        <SearchInput
             value={searchText}
             autoFocus
             allowClear
-            placeholder={locale.text}
+            placeholder={locale.filter.search.placeholder}
             prefix={<Icon type="search"/>}
             onChange={event => mutator.setSearchText(event.currentTarget.value)}/>
-        <Info infoText={locale.description} size="large"/>
-    </InputHolder>;
+        <Tooltip title={locale.filter.search.tooltip}>
+            <InfoIcon type="question-circle" />
+        </Tooltip>
+    </FlexBox>;
 
 Search.propTypes = {
     searchText: PropTypes.string,

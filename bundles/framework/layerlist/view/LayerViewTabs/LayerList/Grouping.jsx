@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { GroupingOption } from '../../../model/GroupingOption';
 import { Label } from './Label';
 import { Select, Option } from 'oskari-ui';
+import { Mutator } from 'oskari-ui/util';
 
-const Grouping = ({ selected, options, mutator }) =>
+const Grouping = ({ selected, options, mutator, locale }) =>
     <div>
-        <Label>locale.group</Label>
+        <Label>{ locale.grouping.title }</Label>
         <Select value={selected} onChange={mutator.setGrouping}>
             {
                 options.map(cur =>
@@ -21,7 +22,8 @@ const Grouping = ({ selected, options, mutator }) =>
 Grouping.propTypes = {
     selected: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.instanceOf(GroupingOption)).isRequired,
-    mutator: PropTypes.object.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    locale: PropTypes.object.isRequired
 };
 
 const memoized = React.memo(Grouping);

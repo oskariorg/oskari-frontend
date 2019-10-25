@@ -26,7 +26,7 @@ class UIStateHandler extends StateHandler {
 
         // Replace GROUPING_PRESET with bundle configuration later.
         const groupingOptions = GROUPING_PRESET.map(option =>
-            new GroupingOption(option.key, this.locale.filter[option.localeKey], option.method));
+            new GroupingOption(option.key, this.locale.grouping[option.localeKey], option.method));
 
         this.filterHandler = this._createFilterHandler();
         this.layerCollapseHandlers = this._createLayerCollapseHandlers(groupingOptions);

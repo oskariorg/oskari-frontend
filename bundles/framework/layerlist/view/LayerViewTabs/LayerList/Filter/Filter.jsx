@@ -1,22 +1,33 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option } from 'oskari-ui';
+import { Select, Option, Tooltip } from 'oskari-ui';
+import { Mutator } from 'oskari-ui/util';
 import { Label } from '../Label';
 
-const Filter = ({ filters, activeFilterId, mutator }) => {
+const Filter = ({ filters, activeFilterId, mutator, locale }) => {
     const props = {
         allowClear: true,
         placeholder: 'locale.filter.placeholder'
     };
+    let tooltip;
     if (activeFilterId) {
+        // Don't set null value to Select. It would replace the placeholder.
         props.value = activeFilterId;
+        // Show tooltip of the active filter.
+        const active = filters.find(cur => cur.id === activeFilterId);
+        if (active) {
+            tooltip = active.tooltip;
+        }
     }
+    const { title, placeholder } = locale.filter;
     return (
         <div>
-            <Label>locale.filter</Label>
-            <Select {...props} onChange={mutator.setActiveFilterId}>
-                { filters.map(filter => <Option key={filter.id} value={filter.id}>{filter.text}</Option>) }
-            </Select>
+            <Label>{title}</Label>
+            <Tooltip title={tooltip}>
+                <Select {...props} placeholder={placeholder} onChange={mutator.setActiveFilterId}>
+                    { filters.map(filter => <Option key={filter.id} value={filter.id}>{filter.text}</Option>) }
+                </Select>
+            </Tooltip>
         </div>
     );
 };
@@ -29,7 +40,8 @@ const filterBtnShape = {
 Filter.propTypes = {
     filters: PropTypes.arrayOf(PropTypes.shape(filterBtnShape)).isRequired,
     activeFilterId: PropTypes.string,
-    mutator: PropTypes.object.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    locale: PropTypes.object.isRequired
 };
 
 const memoized = React.memo(Filter);

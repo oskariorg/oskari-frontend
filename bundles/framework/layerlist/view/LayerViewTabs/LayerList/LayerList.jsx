@@ -1,7 +1,8 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select, Spin } from 'oskari-ui';
+import { shapes } from '../propTypes';
+import { Spin } from 'oskari-ui';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
 import { Grouping } from './Grouping';
@@ -13,15 +14,20 @@ import styled from 'styled-components';
 const ContentDiv = styled('div')`
     max-width: 600px;
 `;
-const ListControllers = styled('div')`
+const Controllers = styled('div')`
     display: flex;
     align-items: center;
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     > :not(:last-child) {
         margin-right: 10px;
     }
-    ${Select} {
-        min-width: 180px;
+`;
+const SearchController = styled(Search)`
+    felx: 0 0 600px;
+`;
+const SelectControllers = styled(Controllers)`
+    > {
+        felx: 0 0 250px;
     }
 `;
 
@@ -46,19 +52,21 @@ const LayerList = props => {
 
     return (
         <ContentDiv>
-            <ListControllers>
-                <Search searchText={searchText} mutator={filter.mutator} locale={locale.filter} />
-            </ListControllers>
-            <ListControllers>
+            <Controllers>
+                <SearchController searchText={searchText} mutator={filter.mutator} locale={locale} />
+            </Controllers>
+            <SelectControllers>
                 <Grouping
                     selected={grouping.selected}
                     options={grouping.options}
-                    mutator={mutator}/>
+                    mutator={mutator}
+                    locale={locale}/>
                 <Filter key={filterKey}
                     filters={filters}
                     activeFilterId={activeFilterId}
-                    mutator={filter.mutator}/>
-            </ListControllers>
+                    mutator={filter.mutator}
+                    locale={locale}/>
+            </SelectControllers>
             { loading && <Spinner/> }
             { !loading &&
                 <Indicator show={updating}>
@@ -69,10 +77,6 @@ const LayerList = props => {
     );
 };
 
-const stateful = {
-    state: PropTypes.object.isRequired,
-    mutator: PropTypes.object.isRequired
-};
 const grouping = {
     selected: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.instanceOf(GroupingOption)).isRequired
@@ -82,8 +86,8 @@ LayerList.propTypes = {
     loading: PropTypes.bool,
     updating: PropTypes.bool,
     locale: PropTypes.object.isRequired,
-    collapse: PropTypes.shape(stateful).isRequired,
-    filter: PropTypes.shape(stateful).isRequired,
+    collapse: shapes.stateful.isRequired,
+    filter: shapes.stateful.isRequired,
     mutator: PropTypes.object.isRequired,
     grouping: PropTypes.shape(grouping).isRequired
 };
