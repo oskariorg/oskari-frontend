@@ -15,7 +15,7 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mapSrs, mutator, locale }) => {
+export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mutator, locale }) => {
     if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
         return <Alert showIcon type="info" description={locale.errors.noResults}/>;
     }
@@ -37,7 +37,6 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
                             showLayers={showLayers}
-                            mapSrs={mapSrs}
                             mutator={mutator}
                             locale={locale}
                         />
@@ -53,7 +52,6 @@ LayerCollapse.propTypes = {
     openGroupTitles: PropTypes.array.isRequired,
     filtered: PropTypes.array,
     selectedLayerIds: PropTypes.array.isRequired,
-    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };
