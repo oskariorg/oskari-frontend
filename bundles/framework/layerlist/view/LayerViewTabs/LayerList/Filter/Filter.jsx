@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Tooltip } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
-import { Flex } from '../Flex';
+import { Labelled } from '../Labelled';
 
 const Filter = ({ filters, activeFilterId, mutator, locale }) => {
     const { title, placeholder } = locale.filter;
@@ -23,7 +23,7 @@ const Filter = ({ filters, activeFilterId, mutator, locale }) => {
     }
 
     return (
-        <Flex label={title}>
+        <Labelled label={title}>
             <Tooltip title={tooltip}>
                 <Select {...filterSelect} allowClear>
                     {
@@ -34,7 +34,7 @@ const Filter = ({ filters, activeFilterId, mutator, locale }) => {
                     }
                 </Select>
             </Tooltip>
-        </Flex>
+        </Labelled>
     );
 };
 

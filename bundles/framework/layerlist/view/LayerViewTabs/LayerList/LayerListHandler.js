@@ -36,6 +36,7 @@ class UIStateHandler extends StateHandler {
         this.state = {
             loading: false,
             updating: false,
+            showAddButton: this.sandbox.hasHandler('ShowLayerEditorRequest'),
             grouping: {
                 selected: selectedGrouping,
                 options: groupingOptions
@@ -121,7 +122,7 @@ class UIStateHandler extends StateHandler {
     }
 
     loadLayers () {
-        const mapLayerService = this.instance.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        const mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.updateState({ loading: true });
         const successCB = () => {
             this.updateState({ loading: false });
@@ -135,6 +136,12 @@ class UIStateHandler extends StateHandler {
         };
         const forceProxy = this.instance.conf && this.instance.conf.forceProxy;
         mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, { forceProxy });
+    }
+
+    updateAdminState () {
+        this.updateState({
+            showAddButton: this.sandbox.hasHandler('ShowLayerEditorRequest')
+        });
     }
 
     setGrouping (groupingKey) {

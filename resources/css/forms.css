@@ -42,7 +42,7 @@ button:not([class*="ant-"])::-moz-focus-inner, input[type="button"]:not([class*=
 }
 
 /* This is used in buttons */
-input[type="submit"], input[type="button"]:not([class*="ant-"]), input[type="reset"], button {
+input[type="submit"], input[type="button"]:not([class*="ant-"]), input[type="reset"], button:not([class*="ant-"]) {
   cursor: pointer;
   overflow: visible;
   padding: 8px 5px;

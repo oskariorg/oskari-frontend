@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from '../propTypes';
-import { Spin } from 'oskari-ui';
+import { Button, Spin, Tooltip, Icon } from 'oskari-ui';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
 import { Grouping } from './Grouping';
@@ -11,21 +11,49 @@ import { Alert } from './Alert';
 import { GroupingOption } from '../../../model/GroupingOption';
 import styled from 'styled-components';
 
-const ContentDiv = styled('div')`
-    max-width: 600px;
-`;
-const Controllers = styled('div')`
+const Column = styled('div')`
     display: flex;
-    align-items: center;
-    padding-bottom: 15px;
-    > * {
-        width: 250px;
-        flex-grow: 1;
-        & :not(:last-child) {
-            margin-right: 15px;
+    flex-direction: column;
+    flex-grow: 1;
+    ${props => props.spacing && `
+        > :not(:last-child) {
+            margin-bottom: ${props.spacing};
         }
+    `}
+`;
+const Row = styled('div')`
+    display: flex;
+    min-width: 200px;
+    ${props => props.spacing && `
+        > :not(:last-child) {
+            margin-right: ${props.spacing};
+        }
+    `}
+`;
+const ControlsRow = styled(Row)`
+    > * {
+        flex-grow: 1;
+        flex-basis: 200px;
     }
 `;
+
+const InfoIcon = styled(Icon)`
+    color: #979797;
+    font-size: 20px;
+    margin-left: 8px;
+    margin-top: 5px;
+`;
+
+const AddButton = styled(Button)`
+    margin-left: 8px;
+`;
+
+const Content = styled(Column)`
+    max-width: 600px;
+    min-width: 500px;
+`;
+
+const addLayer = () => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []);
 
 const Indicator = ({ show, children }) => {
     if (show) {
@@ -39,7 +67,7 @@ const LayerList = props => {
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
-    const { grouping, filter, collapse } = props;
+    const { grouping, filter, collapse, showAddButton } = props;
 
     // Force select to render on filter change by making the component fully controlled.
     // Clear btn won't clear the value properly without this.
@@ -47,29 +75,39 @@ const LayerList = props => {
     const { searchText, filters, activeFilterId } = filter.state;
 
     return (
-        <ContentDiv>
-            <Controllers>
-                <Search searchText={searchText} mutator={filter.mutator} locale={locale} />
-            </Controllers>
-            <Controllers>
-                <Grouping
-                    selected={grouping.selected}
-                    options={grouping.options}
-                    mutator={mutator}
-                    locale={locale}/>
-                <Filter key={filterKey}
-                    filters={filters}
-                    activeFilterId={activeFilterId}
-                    mutator={filter.mutator}
-                    locale={locale}/>
-            </Controllers>
+        <Content spacing={'15px'}>
+            <Row>
+                <Column spacing={'10px'}>
+                    <Search searchText={searchText} mutator={filter.mutator} locale={locale} />
+                    <ControlsRow spacing={'10px'}>
+                        <Grouping
+                            selected={grouping.selected}
+                            options={grouping.options}
+                            mutator={mutator}
+                            locale={locale}/>
+                        <Filter key={filterKey}
+                            filters={filters}
+                            activeFilterId={activeFilterId}
+                            mutator={filter.mutator}
+                            locale={locale}/>
+                    </ControlsRow>
+                </Column>
+                <Tooltip title={locale.filter.search.tooltip}>
+                    <InfoIcon type="question-circle" />
+                </Tooltip>
+                { showAddButton &&
+                    <Tooltip title={locale.tooltip.addLayer}>
+                        <AddButton icon="plus" onClick={addLayer} />
+                    </Tooltip>
+                }
+            </Row>
             { loading && <Spinner/> }
             { !loading &&
                 <Indicator show={updating}>
                     <LayerCollapse {...collapse.state} mutator={collapse.mutator} locale={locale}/>
                 </Indicator>
             }
-        </ContentDiv>
+        </Content>
     );
 };
 
@@ -84,6 +122,7 @@ LayerList.propTypes = {
     locale: PropTypes.object.isRequired,
     collapse: shapes.stateful.isRequired,
     filter: shapes.stateful.isRequired,
+    showAddButton: PropTypes.bool,
     mutator: PropTypes.object.isRequired,
     grouping: PropTypes.shape(grouping).isRequired
 };
