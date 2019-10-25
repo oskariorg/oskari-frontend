@@ -6,51 +6,29 @@ class UIService extends StateHandler {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.layerlistService = this.sandbox.getService('Oskari.mapframework.service.LayerlistService');
-        this._throttleUpdateState = Oskari.util.throttle(this.updateState.bind(this), 1000, { leading: false });
         this.state = {
-            activeFilterId: null
+            activeFilterId: null,
+            searchText: null,
+            filters: Object.values(this.layerlistService.getLayerlistFilterButtons())
         };
-        this.state.filters = this._initFilterButtons();
-        this._initServiceListeners();
+        this.layerlistService.on('Layerlist.Filter.Button.Add',
+            ({ properties }) => this.addFilter(properties));
+
         this.eventHandlers = this._createEventHandlers();
-    }
-    _initServiceListeners () {
-        this.layerlistService.on('Layerlist.Filter.Button.Add', ({ filterId, properties }) => {
-            this.addFilterButton(filterId, properties);
-        });
-    }
-    _initFilterButtons () {
-        const buttons = this.layerlistService.getLayerlistFilterButtons();
-        Object.values(buttons).forEach(button => this._setFilterStyle(button));
-        return buttons;
-    }
-    _setFilterStyle (button, activeFilterId = this.state.activeFilterId) {
-        const isActive = activeFilterId && activeFilterId === button.id;
-        button.cls.current = isActive ? button.cls.active : button.cls.deactive;
     }
 
     setActiveFilterId (filterId) {
-        let { activeFilterId, filters } = this.state;
-        activeFilterId = activeFilterId === filterId ? null : filterId;
-        Object.values(filters).forEach(button => this._setFilterStyle(button, activeFilterId));
-        filters = { ...filters };
-        this.updateState({
-            activeFilterId,
-            filters
-        });
+        const { activeFilterId: previous } = this.state;
+        const activeFilterId = previous === filterId ? null : filterId;
+        this.updateState({ activeFilterId });
     }
 
     setSearchText (searchText) {
         this.updateState({ searchText });
     }
 
-    addFilterButton (filterId, button) {
-        this._setFilterStyle(button);
-        const filters = {
-            ...this.state.filters,
-            [filterId]: button
-        };
-        this.updateState({ filters });
+    addFilter (filter) {
+        this.updateState({ filters: [...this.state.filters, filter] });
     }
 
     /// Oskari event handling ////////////////////////////////////////////////////////////
@@ -59,7 +37,7 @@ class UIService extends StateHandler {
      * "Module" name for event handling
      */
     getName () {
-        return 'LayerFilters.FilterService';
+        return 'FilterHandler';
     }
     /**
     * @method onEvent
@@ -93,8 +71,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const FilterService = mutatorMixin(UIService, [
+export const FilterHandler = mutatorMixin(UIService, [
     'setActiveFilterId',
-    'setSearchText',
-    'addFilterButton'
+    'setSearchText'
 ]);

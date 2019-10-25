@@ -121,8 +121,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             this._registerForGuidedTour();
-
-            this.plugins['Oskari.userinterface.Flyout'].createUi();
         },
 
         /**
@@ -256,7 +254,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          * (re)creates the UI for "all layers" functionality
          */
         createUi: function () {
-            this.plugins['Oskari.userinterface.Flyout'].createUi();
             this.plugins['Oskari.userinterface.Tile'].refresh();
         },
 

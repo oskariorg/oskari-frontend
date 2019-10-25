@@ -40,7 +40,7 @@ const onToolClick = tool => {
     }
 };
 
-const Layer = ({ model, even, selected, mapSrs, mutator, locale }) => {
+const Layer = ({ model, even, selected, mutator, locale }) => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools">
@@ -61,7 +61,7 @@ const Layer = ({ model, even, selected, mapSrs, mutator, locale }) => {
                     disabled={model.isSticky()} />
                 {model.getName()}
             </Label>
-            <LayerTools model={model} mutator={mutator} locale={locale} mapSrs={mapSrs}/>
+            <LayerTools model={model} mutator={mutator} locale={locale}/>
         </LayerDiv>
     );
 };
@@ -70,7 +70,6 @@ Layer.propTypes = {
     model: PropTypes.any.isRequired,
     even: PropTypes.bool.isRequired,
     selected: PropTypes.bool.isRequired,
-    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

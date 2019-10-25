@@ -13,7 +13,7 @@ export class StateHandler {
         this.state = {
             ...this.state,
             ...props
-        }
+        };
         this.notify();
     }
     addStateListener (consumer) {
