@@ -69,8 +69,6 @@ export class MapModule extends AbstractMapModule {
             target: this.getMapElementId(),
             controls: controls,
             interactions: interactions,
-            loadTilesWhileInteracting: true,
-            loadTilesWhileAnimating: true,
             moveTolerance: 2
         });
 
