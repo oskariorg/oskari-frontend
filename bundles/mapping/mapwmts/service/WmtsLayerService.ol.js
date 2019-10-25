@@ -129,7 +129,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
     __createWMTSLayer: function (caps, layer) {
         var config = this.__getLayerConfig(caps, layer);
         var options = optionsFromCapabilities(caps, config);
-        // this doesn't get merged automatically by ol3
+        // this doesn't get merged automatically by ol
         options.crossOrigin = config.crossOrigin;
         if (config.url) {
             // override capabilities url with the configured one

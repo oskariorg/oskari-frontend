@@ -418,7 +418,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
          * TODO: maybe config for expansion frame size
          * TODO: doesn't work correctly with degrees
          * if this is used for single point to avoid zooming too close, should use zoomLevel with mapmoverequest
-         * or something like VectorLayerPlugin.ol3.js -> getBufferedExtent(extent, percentage)
+         * or something like VectorLayerPlugin.ol.js -> getBufferedExtent(extent, percentage)
          */
         _fitBounds: function (gbounds) {
             if (gbounds.bottom === gbounds.top && gbounds.left === gbounds.right) {

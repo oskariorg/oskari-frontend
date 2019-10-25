@@ -316,7 +316,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     defaultDefs[conf] = defs[conf];
                 }
             });
-            // OL3 uses proj4
+            // OL uses proj4
             if (window.proj4) {
                 // ensure static projections are defined
                 jQuery.each(defaultDefs, function (srs, defs) {

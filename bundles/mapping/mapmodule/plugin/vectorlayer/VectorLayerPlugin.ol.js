@@ -1067,7 +1067,7 @@ Oskari.clazz.define(
          *         }
          *     }
          * }
-         * @param {Object} feature ol3 feature
+         * @param {Object} feature ol feature
          * @param {Boolean} update update feature style
          */
         getStyle: function (options, feature, update) {

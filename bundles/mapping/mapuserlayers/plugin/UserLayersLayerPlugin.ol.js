@@ -85,7 +85,7 @@ Oskari.clazz.define(
             if (layer.getMinScale() && layer.getMinScale() !== -1) {
                 var maxResolution = map.getResolutionForScale(layer.getMinScale());
                 if (maxResolution !== map.getResolutionArray()[0]) {
-                    // ol3 maxReso is exclusive so don't set if it's the map max resolution
+                    // ol maxReso is exclusive so don't set if it's the map max resolution
                     model.maxResolution = maxResolution;
                 }
             }
