@@ -87,10 +87,17 @@ export const LayerBox = ({ layer }) => {
             <Col style={{ paddingRight: '0px' }}>
                 <StyledBox>
                     <Row>
-                        <ColAuto>{visible ? <EyeOpen onClick={handleToggleVisibility} /> : <EyeShut onClick={handleToggleVisibility} />}</ColAuto>
+                        <ColAuto>
+                            {visible ? <EyeOpen onClick={handleToggleVisibility} />
+                                : <EyeShut onClick={handleToggleVisibility} />}
+                        </ColAuto>
                         <Col><b>{name}</b><br/>{organizationName}</Col>
                         <ColAutoRight>
-                            <Icon type="close" onClick={handleRemoveLayer} style={{ marginTop: '10px', fontSize: '12px', marginRight: '4px' }} />
+                            <Icon
+                                type="close"
+                                onClick={handleRemoveLayer}
+                                style={{ marginTop: '10px', fontSize: '12px', marginRight: '4px' }}
+                            />
                         </ColAutoRight>
                     </Row>
                     <GrayRow>
@@ -99,14 +106,28 @@ export const LayerBox = ({ layer }) => {
                         </ColAuto>
                         <ColAuto>
                             <StyledSlider>
-                                <Slider value={slider} onChange={handleOpacityChange} style={{ margin: '0px' }} />
+                                <Slider
+                                    value={slider}
+                                    onChange={handleOpacityChange}
+                                    style={{ margin: '0px' }}
+                                />
                             </StyledSlider>
                         </ColAuto>
                         <ColAuto>
-                            <StyledNumberInput min={0} max={100} value={slider} onChange={handleOpacityChange} formatter={value => `${value} %`} />
+                            <StyledNumberInput
+                                min={0}
+                                max={100}
+                                value={slider}
+                                onChange={handleOpacityChange}
+                                formatter={value => `${value} %`}
+                            />
                         </ColAuto>
                         <ColAutoRight>
-                            <Icon type="menu" onClick={handleOpenMenu} style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }} />
+                            <Icon
+                                type="menu"
+                                onClick={handleOpenMenu}
+                                style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
+                            />
                         </ColAutoRight>
                     </GrayRow>
                 </StyledBox>
