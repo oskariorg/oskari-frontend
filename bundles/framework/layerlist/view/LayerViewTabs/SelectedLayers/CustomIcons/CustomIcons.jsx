@@ -85,7 +85,7 @@ export const TimeSerieIcon = props => <Icon component={TimeSerieSvg} {...props} 
 
 export const DragIcon = props => <Icon component={DragSvg} {...props} />;
 
-export const OwnIcon = props => <Icon component={OwnSvg} {...props} />;
+export const UserDataIcon = props => <Icon component={OwnSvg} {...props} />;
 
 export const ThemeMapIcon = props => <Icon component={ThemeMapSvg} {...props} />;
 
