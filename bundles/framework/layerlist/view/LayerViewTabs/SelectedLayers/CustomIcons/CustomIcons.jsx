@@ -51,7 +51,7 @@ const ThemeMapSvg = () => (
     </svg>
 );
 
-const WfsSvg = () => (
+const VectorSvg = () => (
     <svg width="20px" height="20px" viewBox="0 0 20 20">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g transform="translate(-10.000000, -10.000000)" fill="#979797">
@@ -61,7 +61,7 @@ const WfsSvg = () => (
     </svg>
 );
 
-const WmsSvg = () => (
+const RasterSvg = () => (
     <svg width="20px" height="20px" viewBox="0 0 20 20">
         <g stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
             <g transform="translate(-10.000000, -10.000000)" fill="#979797">
@@ -89,6 +89,6 @@ export const OwnIcon = props => <Icon component={OwnSvg} {...props} />;
 
 export const ThemeMapIcon = props => <Icon component={ThemeMapSvg} {...props} />;
 
-export const DataLayerIcon = props => <Icon component={WfsSvg} {...props} />;
+export const DataLayerIcon = props => <Icon component={VectorSvg} {...props} />;
 
-export const ImageLayerIcon = props => <Icon component={WmsSvg} {...props} />;
+export const ImageLayerIcon = props => <Icon component={RasterSvg} {...props} />;
