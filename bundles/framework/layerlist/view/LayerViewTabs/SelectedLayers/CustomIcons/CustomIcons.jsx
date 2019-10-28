@@ -72,11 +72,11 @@ const WmsSvg = () => (
 );
 
 export const EyeOpen = (props) => (
-    <Icon type="eye" theme="filled" style={{ fontSize: '20px', color: '#006ce8', marginRight: '5px' }} {...props} />
+    <Icon type="eye" theme="filled" style={{ fontSize: '18px', color: '#006ce8', marginRight: '5px', marginTop: '2px' }} {...props} />
 );
 
 export const EyeShut = (props) => (
-    <Icon type="eye-invisible" style={{ fontSize: '20px', marginRight: '5px' }} {...props} />
+    <Icon type="eye-invisible" style={{ fontSize: '18px', marginRight: '5px', marginTop: '2px' }} {...props} />
 );
 
 export const ThreeDIcon = props => <Icon component={ThreeDSvg} {...props} />;
