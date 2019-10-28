@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { LayerBox } from './LayerBox';
 
 export const SelectedLayers = ({ layers }) => {
-    console.log(layers);
     return (
-        <div>
+        <React.Fragment>
             {layers.map(layer => {
                 const id = layer.getId();
                 return (
@@ -15,7 +14,7 @@ export const SelectedLayers = ({ layers }) => {
                     />
                 );
             })}
-        </div>
+        </React.Fragment>
     );
 };
 
