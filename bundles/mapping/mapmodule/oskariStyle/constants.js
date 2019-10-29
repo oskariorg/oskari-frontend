@@ -52,3 +52,16 @@ export const FILL_STYLE = {
     TRANSPAREN: 4,
     SOLID: 5
 };
+
+export const FILTER = {
+    EQUAL: 'value',
+    IN: 'in',
+    NOT_IN: 'notIn',
+    LIKE: 'like',
+    NOT_LIKE: 'notLike',
+    LESS: 'lessThan',
+    LESS_EQUAL: 'atMost',
+    GREATER: 'greaterThan',
+    GREATER_EQUAL: 'atLeast',
+    REG_EXP: 'regexp'
+};

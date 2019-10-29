@@ -1,6 +1,8 @@
 import React from 'react';
-export { mutatorMixin } from './mutatorMixin';
-export { StateHandler } from './StateHandler';
+export { mutatorMixin } from './util/mixins';
+export { Mutator } from './util/Mutator';
+export { StateHandler } from './util/StateHandler';
+export { Timeout } from './util/Timeout';
 
 export const GenericContext = React.createContext();
 export const LocaleContext = React.createContext();
