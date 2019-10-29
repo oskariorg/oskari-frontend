@@ -54,7 +54,7 @@ Oskari.clazz.define(
                  */
                 {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/mapmodule.ol.js'
+                    'src': '../../../../bundles/mapping/mapmodule/mapmodule.olcs.js'
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/plugin/Plugin.js'
@@ -271,11 +271,11 @@ Oskari.clazz.define(
                 /**
                  * Layers plugin
                  */
-
                 {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.ol.js'
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/layers/LayersPlugin.olcs.js'
                 },
+
                 {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/MapLayerVisibilityRequest.js'
