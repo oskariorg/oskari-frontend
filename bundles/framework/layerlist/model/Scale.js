@@ -5,7 +5,7 @@ export class Scale {
         this.rangeMin = rangeMin;
         this.rangeMax = rangeMax;
         this.outOfRange = outOfRange;
-        if (d3) {
+        if (typeof d3 !== 'undefined') {
             this.scale = d3.scaleLinear()
                 .domain([min, max])
                 .range([rangeMin, rangeMax]);
