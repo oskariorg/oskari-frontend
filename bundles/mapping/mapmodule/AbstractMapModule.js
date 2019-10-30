@@ -378,6 +378,11 @@ Oskari.clazz.define(
         getSupports3D: function () {
             return this._supports3D;
         },
+        set3dEnabled: function (enabled) {
+            if (this.getSupports3D()) {
+                this._set3DModeEnabled(enabled);
+            }
+        },
         /* --------- /Impl specific --------------------------------------> */
 
         /* Impl specific - PRIVATE
