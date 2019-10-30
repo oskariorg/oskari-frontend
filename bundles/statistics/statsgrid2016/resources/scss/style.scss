@@ -214,6 +214,30 @@ div.oskari-flyout {
             /* TODO: limits the description from blowing up the flyout, but this needs to be handled in some other way */
             max-width : 450px;
 
+            .oskari-select {
+                // Placeholder styles not depended on enabled/disabled state
+                .SumoSelect {
+                    .placeholder {
+                        font-style: normal;
+                    }
+                }
+                // Placeholder styles for enabled select
+                [class='SumoSelect'] {
+                    .placeholder {
+                        color: #595959;
+                    }
+                }
+                // Placeholder styles for disabled select
+                [class='SumoSelect disabled'] {
+                    p {
+                        background-color: #f5f5f5;
+                    }
+                    .placeholder {
+                        color: #979797;
+                    }
+                }
+            }
+
             div.selection {
                 padding-top: 0;
                 padding-bottom: 6px;
