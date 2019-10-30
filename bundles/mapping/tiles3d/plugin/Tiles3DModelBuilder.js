@@ -6,7 +6,7 @@ export class Tiles3DModelBuilder {
             return;
         }
         const options = mapLayerJson.options;
-        const styles = jQuery.extend({}, options.styles || {}, options.externalStyles || {});
+        const styles = {...options.styles, ...options.externalStyles};
         Object.keys(styles).forEach((styleName) => {
             const style = new Style();
             style.setName(styleName);
