@@ -117,7 +117,7 @@ const getInfoIconClasses = layer => {
     return classes;
 };
 
-export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
+export const LayerTools = ({ model, mutator, locale }) => {
     const infoClasses = getInfoIconClasses(model, locale);
     const layerIconProps = getLayerIconProps(model, locale);
     const secondaryIconProps = getSecondaryIconProps(model, locale);
@@ -143,7 +143,6 @@ export const LayerTools = ({ model, mapSrs, mutator, locale }) => {
 
 LayerTools.propTypes = {
     model: PropTypes.any.isRequired,
-    mapSrs: PropTypes.string.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
 };

@@ -30,7 +30,7 @@
       "<rootDir>/setupTests.js"
     ],
     "moduleNameMapper": {
-      "oskari-ui": "<rootDir>/src/react",
+      "^oskari-ui(.*)$": "<rootDir>/src/react/$1",
       "^antd(.*?)style/index.js$": "<rootDir>/tests/styleMock.js"
     }
   },
@@ -41,10 +41,11 @@
     "@babel/preset-react": "7.0.0",
     "@storybook/react": "5.1.11",
     "@types/jest": "24.0.18",
-    "antd": "3.23.3",
+    "antd": "3.24.2",
     "babel-loader": "8.0.6",
     "babel-plugin-styled-components": "1.10.6",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
+    "cesium": "^1.58.0",
     "copy-webpack-plugin": "5.0.4",
     "css-loader": "3.2.0",
     "dompurify": "1.0.11",
@@ -78,6 +79,7 @@
     "node-sass": "4.12.0",
     "ol": "6.0.1",
     "ol-mapbox-style": "5.0.2",
+    "olcs": "2.10.0",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "query-string": "6.8.3",
     "react": "16.9.0",

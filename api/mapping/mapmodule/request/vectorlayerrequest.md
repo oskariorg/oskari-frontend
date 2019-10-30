@@ -9,7 +9,7 @@ Adds a new feature layer to map or updates an existing layer.
 
 ## Description
 
-Prepares a layer for later use. See AddFeaturesToMapRequest.
+Prepares a layer for later use.
 
 Options object
 ```javascript
@@ -24,7 +24,11 @@ Options object
     layerPermissions: {
         'publish': 'publication_permission_ok'
     },
-    hover: null
+    minScale: 1451336,
+    maxScale: 1,
+    featureStyle: {},
+    optionalStyles: [],  
+    hover: {}
 }
 ```
 <ul>
@@ -45,75 +49,61 @@ Options object
     </li><li>
         <b>layerPermissions</b> - Layer permissions.
     </li><li>
-        <b>hover</b> - Layer hover options.
+        <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
+    </li><li>
+        <b>maxScale</b> - Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
+    </li><li>
+        <b>featureStyle</b> - A Oskari style object.
+    </li><li>
+        <b>optionalStyles</b> - Array of Oskari styles for geojson features. Style is used, if filtering values matches to feature properties.
+    </li><li>
+        <b>hover</b> - Layer hover options. Oskari style with hover options.
     </li>
 </ul>
 
-Hover options describes how to visualize features on hover and what kind of tooltip should be shown. Note that features isn't hovered while drawing is active (DrawTools).
-```javascript
-hover: {
-    // Apply hover style only on features having property "class" with value "building"
-    filter: [
-        {key: 'class', value: 'building'}
-    ],
-    featureStyle: {
-        inherit: true,
-        effect: 'darken',
-        stroke: {
-            width: 3
-        }
-    },
-    // Tooltips content as an array. Each object creates a row to the tooltip.
-    content: [
-        // "key" is a label and will be rendered as is.
-        { key: 'Feature Data' },
-        // "valueProperty" and "keyProperty" are fetched from the feature's properties.
-        { key: 'Feature ID', valueProperty: 'id' },
-        { keyProperty: 'name', valueProperty: 'value' }
-    ]
-}
-```
+FeatureStyle property defines a generic style used for all the features. With optionalStyles property you can specify style for certain features only. Hover options describes how to visualize features on hover and what kind of tooltip should be shown. Note that features isn't hovered while drawing is active (DrawTools).
 
-Feature style in hover options
+See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
+
+## Examples
+### Adding a new layer example
+Only prepares a layer for later use. To add features to this layer see [AddFeaturesToMapRequest](/api/requests/#unreleased/mapping/mapmodule/request/addfeaturestomaprequest.md).
+
 ```javascript
-featureStyle: {
-  inherit: true, // Inherit feature's current style and override with own properties
-  effect: 'darken', // Make feature's fill color darker. Other option is 'lighten'
-  fill: { // fill styles
-    color: '#ff00ff' // fill color
-  },
-  stroke: { // stroke styles
-    color: '#ff00ff', // stroke color
-    width: 3, // stroke width
-    lineDash: 'dot', // line dash, also supported: dash, dashdot, longdash, longdashdot or solid
-    lineCap: 'but' // line cap, also supported: round or square
-  },
-  text: { // text style
-    fill: { // text fill style
-      color: '#0000ff' // fill color
+const options = {
+    layerId: 'MY_VECTOR_LAYER',
+    layerInspireName: 'Inspire theme name',
+    layerOrganizationName: 'Organization name',
+    showLayer: true,
+    opacity: 80,
+    layerName: 'Layer name',
+    layerDescription: 'Description text',
+    layerPermissions: {
+        'publish': 'publication_permission_ok'
     },
-    stroke: { // text stroke style
-      color: '#ff00ff', // stroke color
-      width: 4 // stroke width
-    },
-    font: 'bold 12px Arial', // font
-    textAlign: 'top', // text align
-    offsetX: 12, // text offset x
-    offsetY: 12, // text offset y
-    labelText: 'example', // label text
-    labelProperty: 'propertyName' // read label from feature property
-  },
-  image: { // image style
-    shape: 'marker.png', // external icon
-    size: 3, // Oskari icon size.
-    sizePx: 20, // Exact icon px size. Used if 'size' not defined.
-    offsetX: 0, // image offset x
-    offsetY: 0, // image offset y
-    opacity: 0.7, // image opacity
-    radius: 2 // image radius
-  }
-}
+    maxScale: 1,
+    minScale: 1451336
+};
+Oskari.getSandbox().postRequestByName('VectorLayerRequest', [options]); 
+
 ```
+### Update layer properties example
+Define layerId which matches layer's id which should be updated. Add properties which should be updated. Note that if id doesn't match any existing layer, a new layer will be created.
+
+```javascript
+const newOptions = {
+    layerId: 'MY_VECTOR_LAYER', // existing id
+    opacity: 100,
+    featureStyle: {},
+    optionalStyles: [],
+    hover: {}
+};
+Oskari.getSandbox().postRequestByName('VectorLayerRequest', [newOptions]); 
+```
+FeatureStyle property defines a generic style used for all the features. With optionalStyles property you can specify style for certain features only. The constructor is the same for both of these styles but in optionalStyle you also need to specify the feature it is used for.
+
+See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
+
 ## Related api
 
 - VectorLayerRequest

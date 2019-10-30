@@ -1,6 +1,6 @@
 /* eslint-disable new-cap */
 import { Style as olStyle, Circle as olCircleStyle, Stroke as olStroke, Fill as olFill, Text as olText } from 'ol/style';
-
+import { filterOptionalStyle, getOptionalStyleFilter } from '../../../../mapmodule/oskariStyle/filter';
 const defaults = {
     style: {
         fill: {
@@ -129,7 +129,7 @@ const getStyleFunction = (styleValues, hoverHandler) => {
 
         let styleTypes = null;
         if (styleValues.optional) {
-            const found = styleValues.optional.find(op => feature.get(op.key) === op.value);
+            const found = styleValues.optional.find(op => filterOptionalStyle(op.filter, feature));
             if (found) {
                 styleTypes = getTypedStyles(found, isHovered, isSelected);
             }
@@ -214,8 +214,7 @@ export const styleGenerator = (styleFactory, layer, hoverHandler) => {
                 hoverDef = merge(featureStyle, optionalDef, hoverStyle);
             }
             const optional = {
-                key: optionalDef.property.key,
-                value: optionalDef.property.value,
+                filter: getOptionalStyleFilter(optionalDef),
                 customized: getGeomTypedStyles(merge(featureStyle, optionalDef), styleFactory),
                 selected: getGeomTypedStyles(merge(featureStyle, optionalDef, defaults.selected), styleFactory),
                 hover: getGeomTypedStyles(hoverDef, styleFactory),

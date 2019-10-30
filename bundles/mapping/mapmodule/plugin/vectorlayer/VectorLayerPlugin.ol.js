@@ -11,6 +11,7 @@ import * as olGeom from 'ol/geom';
 import LinearRing from 'ol/geom/LinearRing';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID, SERVICE_LAYER_REQUEST } from '../../domain/constants';
+import { filterOptionalStyle } from '../../oskariStyle/filter';
 
 const olParser = new jstsOL3Parser();
 olParser.inject(olGeom.Point, olGeom.LineString, LinearRing, olGeom.Polygon, olGeom.MultiPoint, olGeom.MultiLineString, olGeom.MultiPolygon, GeometryCollection);
@@ -1078,7 +1079,6 @@ Oskari.clazz.define(
             const overrideStyle = options.featureStyle || me._layerStyles[options.layerId] || {};
             const baseStyle = update && cached.oskari ? cached.oskari : this._defaultStyle;
             cached.oskari = jQuery.extend(true, {}, baseStyle, overrideStyle);
-
             // Optional styles based on property values
             if (feature && options.optionalStyles) {
                 const optionalStyleDef = me.getOptionalStyle(options.optionalStyles, cached.oskari, feature);
@@ -1105,18 +1105,12 @@ Oskari.clazz.define(
          * */
         getOptionalStyle: function (optionalStyles, defStyle, feature) {
             for (var i in optionalStyles) {
-                if (optionalStyles[i].hasOwnProperty('property') && feature.getProperties()) {
-                    // check feature property  values and take style, if there is match case
-                    var property = optionalStyles[i].property;
-                    if (property.hasOwnProperty('key') && property.hasOwnProperty('value') && feature.getProperties().hasOwnProperty(property.key)) {
-                        if (property.value === feature.getProperties()[property.key]) {
-                            // overriding default style with feature style
-                            return jQuery.extend(true, {}, defStyle, optionalStyles[i]);
-                        }
-                    }
+                if (filterOptionalStyle(optionalStyles[i], feature)) {
+                    return jQuery.extend(true, {}, defStyle, optionalStyles[i]);
                 }
             }
         },
+
         /**
          * @method zoomToFeatures
          *  - zooms to features
