@@ -46,8 +46,6 @@ class MapModuleOlCesium extends MapModuleOl {
             target: this.getMapElementId(),
             controls: controls,
             interactions: me._olInteractionDefaults,
-            loadTilesWhileInteracting: true,
-            loadTilesWhileAnimating: true,
             moveTolerance: 2
         });
 
