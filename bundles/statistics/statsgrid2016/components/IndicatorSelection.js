@@ -77,6 +77,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
             if (hasRegionSetRestriction) {
                 select.disableOptions(disabledIndicatorIDs);
             }
+            if (select.getOptions().options.length > 0) {
+                me._enableIndicatorSelection();
+            }
 
             if (result.complete) {
                 me.spinner.stop();
@@ -88,6 +91,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 }
             }
         });
+    },
+    _enableIndicatorSelection () {
+        const sumoSelectDiv = jQuery('.stats-ind-selector').find('.SumoSelect');
+        sumoSelectDiv.removeClass('disabled');
+        const select = sumoSelectDiv.find('.SumoUnder');
+        select.removeAttr('disabled');
     },
     setElement: function (el) {
         this.element = el;
@@ -167,7 +176,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         me.spinner.insertTo(indicatorSelector);
         var indicOptions = {
             placeholder: panelLoc.selectIndicatorPlaceholder,
-            multi: true
+            multi: true,
+            disabled: true
         };
         var indicSelect = new SelectList();
         var indicDropdown = indicSelect.create(null, indicOptions);
