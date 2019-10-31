@@ -56,14 +56,14 @@ class UIStateHandler extends StateHandler {
         const handlers = {};
         groupingOptions.forEach(option => {
             const handler = new LayerCollapseHandler(this.instance, option.getMethod());
-            handler.addStateListener(state => {
+            handler.addStateListener(collapseState => {
                 if (option.getKey() !== this.state.grouping.selected) {
                     // Not the active grouping, ignore.
                     return;
                 }
                 this.updateState({
                     collapse: {
-                        state,
+                        state: collapseState,
                         mutator: handler.getMutator()
                     },
                     updating: false
@@ -108,7 +108,6 @@ class UIStateHandler extends StateHandler {
             // Search text changed, give user some time to type in his search.
             // The longer the search text the shorted delay.
             let typingTimeoutMs = this.typingTimeoutScale.getValue(searchText.length);
-            console.log(typingTimeoutMs);
             typingTimeout = new Timeout(updateLayerFilters, typingTimeoutMs);
 
             this.updateState(immediateStateChange);
