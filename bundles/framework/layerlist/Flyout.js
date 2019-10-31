@@ -19,7 +19,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.instance = instance;
         this.container = null;
         this.log = Oskari.log('layerlist');
-        this.layerListHandler = this.instance.getLayerListHandler();
+        this.layerListHandler = new LayerListHandler(this.instance);
+        this.layerListHandler.loadLayers();
         this.layerListHandler.addStateListener(() => this.render());
         Oskari.on('app.start', () => this.layerListHandler.updateAdminState());
     }, {
