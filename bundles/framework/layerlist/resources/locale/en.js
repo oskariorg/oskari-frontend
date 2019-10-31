@@ -31,11 +31,7 @@ Oskari.registerLocalization(
                 'organization': 'By Data Provider'
             },
             'tooltip': {
-                'type-base': 'Background map',
-                'type-wms': 'Map layer (WMS, WMTS)',
-                'type-wfs': 'Data product (WFS)',
-                'type-timeseries': 'Time series layer',
-                'addLayer': 'Add map layer'
+                'timeseries': 'Time series layer'
             },
             'backendStatus': {
                 'OK': 'The map layer is currently available.',

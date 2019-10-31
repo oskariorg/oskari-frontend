@@ -31,11 +31,7 @@ Oskari.registerLocalization(
                 'organization': 'Enligt dataproducent'
             },
             'tooltip': {
-                'type-base': 'Bakgrundskarta',
-                'type-wms': 'Kartlager (WMS, WMTS)',
-                'type-wfs': 'Dataprodukt (WFS)',
-                'type-timeseries': 'Kartlager med tidsserie',
-                'addLayer': 'Tillägg lager'
+                'timeseries': 'Kartlager med tidsserie'
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',

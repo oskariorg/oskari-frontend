@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { LAYER_TYPE } from '../constants';
 import { WarningIcon, Tooltip } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
 import { TimeSerieIcon } from '../../../CustomIcons';
@@ -68,7 +67,7 @@ export const LayerTools = ({ model, mutator, locale }) => {
                 <WarningIcon tooltip={reason.getDescription()}/>
             }
             { model.hasTimeseries() &&
-                <Tooltip title={locale.tooltip[LAYER_TYPE.TIMESERIES]}>
+                <Tooltip title={locale.tooltip.timeseries}>
                     <TimeSerieIcon />
                 </Tooltip>
             }

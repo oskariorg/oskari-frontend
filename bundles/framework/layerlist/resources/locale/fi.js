@@ -31,11 +31,7 @@ Oskari.registerLocalization(
                 'organization': 'Tiedontuottajittain'
             },
             'tooltip': {
-                'type-base': 'Taustakartta',
-                'type-wms': 'Karttataso',
-                'type-wfs': 'Tietotuote',
-                'type-timeseries': 'Aikasarjataso',
-                'addLayer': 'Lisää karttataso'
+                'timeseries': 'Aikasarjataso'
             },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',
