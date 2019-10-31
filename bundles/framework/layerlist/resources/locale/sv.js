@@ -38,30 +38,12 @@ Oskari.registerLocalization(
                 'addLayer': 'Tillägg lager'
             },
             'backendStatus': {
-                'OK': {
-                    'tooltip': 'Kartlagret är tillgängligt just nu.',
-                    'iconClass': 'backendstatus-ok'
-                },
-                'DOWN': {
-                    'tooltip': 'Kartlagret är inte tillgängligt just nu.',
-                    'iconClass': 'backendstatus-down'
-                },
-                'ERROR': {
-                    'tooltip': 'Kartlagret är inte tillgängligt just nu.',
-                    'iconClass': 'backendstatus-error'
-                },
-                'MAINTENANCE': {
-                    'tooltip': 'Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.',
-                    'iconClass': 'backendstatus-maintenance'
-                },
-                'UNKNOWN': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unknown'
-                },
-                'UNSTABLE': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unstable'
-                }
+                'OK': 'Kartlagret är tillgängligt just nu.',
+                'DOWN': 'Kartlagret är inte tillgängligt just nu.',
+                'ERROR': 'Kartlagret är inte tillgängligt just nu.',
+                'MAINTENANCE': 'Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.',
+                'UNKNOWN': '',
+                'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Kartlager',

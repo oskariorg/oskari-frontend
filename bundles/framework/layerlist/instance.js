@@ -1,3 +1,5 @@
+import { LayerListHandler } from './view/LayerViewTabs';
+
 const FILTER_NEWEST_COUNT = 20;
 
 /**
@@ -20,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         this.started = false;
         this.plugins = {};
         this.localization = null;
+        this.layerListHandler = null;
         this.filteredLayerListOpenedByRequest = false;
     }, {
         /**
@@ -104,6 +107,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 loc.newest.tooltip.replace('##', FILTER_NEWEST_COUNT),
                 {},
                 'newest');
+
+            // Create ui handler for all layers -tab
+            this.layerListHandler = new LayerListHandler(this);
+            this.layerListHandler.loadLayers();
 
             // Let's extend UI
             const request = Oskari.requestBuilder('userinterface.AddExtensionRequest')(this);
@@ -246,6 +253,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          */
         getDescription: function () {
             return this.getLocalization('desc');
+        },
+        /**
+         * @method getLayerListHandler
+         * To get UI handler for All layer -tab.
+         * @return {LayerListHandler} ui handler
+         */
+        getLayerListHandler: function () {
+            return this.layerListHandler;
         },
         /**
          * @method createUi
