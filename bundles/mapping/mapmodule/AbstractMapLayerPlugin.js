@@ -41,7 +41,7 @@ Oskari.clazz.define(
         },
         /**
          * @method getMap
-         * @return {Object} reference to map-engine (ol2/ol3)
+         * @return {Object} reference to map-engine (ol)
          */
         getMap: function () {
             return this.getMapModule().getMap();

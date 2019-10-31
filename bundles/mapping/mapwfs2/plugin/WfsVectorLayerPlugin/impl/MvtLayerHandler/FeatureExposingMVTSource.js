@@ -78,34 +78,33 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
         const key = this.tileCache.peekFirstKey();
         const z = tileCoordFromKey(key)[0]; // most recent zoom level in cache
 
-        Object.values(this.sourceTiles_)
-            .forEach(tile => {
-                const tileCoord = tile.getTileCoord();
-                if (z !== tileCoord[0]) {
-                    return; // wrong zoom level
+        Object.values(this.sourceTileByCoordKey_).forEach(tile => {
+            const tileCoord = tile.getTileCoord();
+            if (z !== tileCoord[0]) {
+                return; // wrong zoom level
+            }
+            const tileExtent = this.getTileGrid().getTileCoordExtent(tileCoord);
+            if (!intersects(tileExtent, extent)) {
+                return; // tile not in extent
+            }
+            const features = tile.getFeatures();
+            if (!features) {
+                return;
+            }
+            const matching = features.filter(feature => {
+                const id = feature.get(WFS_ID_KEY);
+                if (skipIds.has(id)) {
+                    return false;
                 }
-                const tileExtent = this.getTileGrid().getTileCoordExtent(tileCoord);
-                if (!intersects(tileExtent, extent)) {
-                    return; // tile not in extent
-                }
-                const features = tile.getFeatures();
-                if (!features) {
-                    return;
-                }
-                const matching = features.filter(feature => {
-                    const id = feature.get(WFS_ID_KEY);
-                    if (skipIds.has(id)) {
-                        return false;
-                    }
-                    const ftrExtent = feature instanceof olRenderFeature
-                        ? this._getRenderFeatureExtent(feature, tile) : feature.getGeometry().getExtent();
-                    return intersects(ftrExtent, extent);
-                });
-                if (!matching.length) {
-                    return;
-                }
-                continuation(matching, tile);
+                const ftrExtent = feature instanceof olRenderFeature
+                    ? this._getRenderFeatureExtent(feature, tile) : feature.getGeometry().getExtent();
+                return intersects(ftrExtent, extent);
             });
+            if (!matching.length) {
+                return;
+            }
+            continuation(matching, tile);
+        });
     }
 
     /**
@@ -117,7 +116,7 @@ export class FeatureExposingMVTSource extends olSourceVectorTile {
      * @param {ol/VectorTile} tile
      */
     _getRenderFeatureExtent (renderFeature, tile) {
-        if (intersects(renderFeature.getExtent(), tile.getExtent())) {
+        if (intersects(renderFeature.getExtent(), tile.extent)) {
             renderFeature.extent_ = null;
         }
         return renderFeature.getExtent();

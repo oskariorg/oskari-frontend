@@ -74,7 +74,7 @@ Returns object including all the parameters, for example:
 
 ## Examples
 
-Mapmodule.ol3 catches map click and send MapCLickedEvent:
+Mapmodule.ol catches map click and send MapCLickedEvent:
 <pre class="event-code-block">
 <code>
 map.on('singleclick', function (evt) {

@@ -15,7 +15,7 @@ const TRANSPARENT = 'rgba(0,0,0,0)';
  * @param {AbstractMapModule} mapModule
  * @param styleDef Oskari style definition
  * @param geomType One of 'area', 'line', 'dot' | optional
- * @return {ol/style/Style} style ol3 specific!
+ * @return {ol/style/Style} style ol specific!
  */
 export const getOlStyle = (mapModule, styleDef, geomType) => {
     const style = jQuery.extend(true, {}, styleDef);

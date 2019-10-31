@@ -81,7 +81,7 @@ Returns all the parameters of the event as an object:
 
 ## Examples
 
-Mapmodule.ol3 catches map move and sends AfterMapMoveEvent:
+Mapmodule.ol catches map move and sends AfterMapMoveEvent:
 
 <pre class="event-code-block">
 <code>

@@ -136,7 +136,7 @@ export class OskariAsyncTileImage extends olSourceTileImage {
                 : this.tileUrlFunction(urlTileCoord, pixelRatio, projection);
             var tile = new this.tileClass(
                 tileCoord,
-                // always set state as LOADING since loading is handled outside ol3
+                // always set state as LOADING since loading is handled outside ol
                 // IDLE state will result in a call to loadTileFunction and block rendering on other sources if
                 // we don't get results because of async load errors/job cancellation etc
                 olTileState.LOADING,
