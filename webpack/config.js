@@ -96,6 +96,7 @@ const BABEL_LOADER_RULE = {
                 [
                     require.resolve('@babel/preset-env'), // Resolve path for use from external projects
                     {
+                        corejs: 3,
                         useBuiltIns: 'entry',
                         targets: '> 0.25%, not dead, ie 11'
                     }
