@@ -486,6 +486,7 @@ class MapModuleOlCesium extends MapModuleOl {
         }
 
         if (options && options.animation) {
+            // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera);
             return true;
         } else {
@@ -531,7 +532,7 @@ class MapModuleOlCesium extends MapModuleOl {
      * Moves the map from point to point. Overrides 2d tourMap function.
      * @param {Object[]} coordinates array of coordinates to move the map along
      * @param {Object | Number} zoom absolute zoomlevel to set the map to
-     * @param {Object} options options, such as animation and duration
+     * @param {Object} options options, such as animation, duration, delay and camera
      *     Usable animations: fly/pan/zoomPan
      */
     tourMap (coordinates, zoom, options) {
@@ -541,37 +542,36 @@ class MapModuleOlCesium extends MapModuleOl {
         const delayOption = options && options.delay ? options.delay : 750;
         const cameraHeight = this.adjustZoom(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
-        const camera = options && options.heading && options.roll && options.pitch
-            ? { heading: options.heading,
-                roll: options.roll,
-                pitch: options.pitch } : undefined;
-        let index = -1;
+        // check for 3d map options
+        const cameraOptions = options.camera;
+        const camera = cameraOptions
+            ? { heading: Cesium.Math.toRadians(cameraOptions.heading),
+                roll: Cesium.Math.toRadians(cameraOptions.roll),
+                pitch: Cesium.Math.toRadians(cameraOptions.pitch) } : undefined;
+        let index = 0;
         let delay = 0;
         let status = { steps: coordinates.length, step: 0 };
 
-        const next = (more) => {
-            me.notifyTourEvent(status, !more);
-            if (!more) {
-                // if we are done we can stop here
-                return;
-            }
-            ++index;
+        const next = () => {
+            this.notifyTourEvent(status);
             if (index < coordinates.length) {
                 const location = coords[index];
                 const locOptions = coordinates[index];
-                const cameraValues = locOptions.camera || camera;
-                const heightValue = locOptions.zoom ? me.adjustZoom(locOptions.zoom) : cameraHeight;
+                const cameraValues = locOptions.camera
+                    ? { heading: Cesium.Math.toRadians(locOptions.camera.heading),
+                        roll: Cesium.Math.toRadians(locOptions.camera.roll),
+                        pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
+                const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
                 status = { ...status, step: index + 1 };
-                let cancelled = () => me.notifyTourEvent(status, true);
+                let cancelled = () => this.notifyTourEvent(status, true);
                 setTimeout(function () {
                     me._flyTo(location[0], location[1], heightValue, animationDuration, cameraValues, next, cancelled);
+                    delay = coordinates.delay || delayOption;
+                    index++;
                 }, delay);
-
-                // set Delay for next point
-                delay = coordinates.delay || delayOption;
             }
         };
-        next(true);
+        next();
     }
 
     /**
