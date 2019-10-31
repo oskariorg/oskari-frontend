@@ -98,13 +98,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             }
 
             // Add newest layers filter.
-            const loc = this.getLocalization('layerFilter');
+            const loc = this.getLocalization('filter');
             layerlistService.registerLayerlistFilterButton(
-                loc.buttons.newest,
-                loc.tooltips.newest.replace('##', FILTER_NEWEST_COUNT), {
-                    active: 'layer-newest',
-                    deactive: 'layer-newest-disabled'
-                },
+                loc.newest.title,
+                loc.newest.tooltip.replace('##', FILTER_NEWEST_COUNT),
+                {},
                 'newest');
 
             // Let's extend UI

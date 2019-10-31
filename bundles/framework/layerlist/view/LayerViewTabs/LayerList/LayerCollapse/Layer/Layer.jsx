@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Switch } from 'oskari-ui';
+import { Switch, Tooltip } from 'oskari-ui';
 import { LayerTools } from './LayerTools';
 
 const LayerDiv = styled('div')`
@@ -47,11 +47,10 @@ const Layer = ({ model, even, selected, mutator, locale }) => {
                 {
                     model.getTools()
                         .filter(tool => tool.getTypes().includes('layerList'))
-                        .map((tool, i) => (
-                            <div key={`${tool.getName()}_${i}`}
-                                className={tool.getIconCls()}
-                                title={tool.getTooltip()}
-                                onClick={() => onToolClick(tool)}/>)
+                        .map((tool, i) =>
+                            <Tooltip key={`${tool.getName()}_${i}`} title={tool.getTooltip()}>
+                                <div className={tool.getIconCls()} onClick={() => onToolClick(tool)}/>
+                            </Tooltip>
                         )
                 }
             </CustomTools>

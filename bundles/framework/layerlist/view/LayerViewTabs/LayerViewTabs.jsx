@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { shapes } from './propTypes';
 import styled from 'styled-components';
 import { Tabs, TabPane } from 'oskari-ui';
 import { LayerList } from './LayerList/';
@@ -14,24 +15,20 @@ export const LayerViewTabs = ({ layerList, locale }) => {
     const selectedKey = 1;
     const layers = Oskari.getSandbox().findAllSelectedMapLayers();
     const numLayers = layers.length;
-    const { text, selected } = locale.filter;
+    const { tabs } = locale;
     return (
         <StyledTabs tabPosition='top'>
-            <TabPane tab={text} key={layerKey}>
+            <TabPane tab={tabs.layerList} key={layerKey}>
                 <LayerList {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
-            <TabPane tab={<SelectedTab num={numLayers} text={selected} />} key={selectedKey}>
+            <TabPane tab={<SelectedTab num={numLayers} text={tabs.selectedLayers} />} key={selectedKey}>
                 <SelectedLayers layers={layers} />
             </TabPane>
         </StyledTabs>
     );
 };
 
-const stateful = {
-    state: PropTypes.object.isRequired,
-    mutator: PropTypes.object.isRequired
-};
 LayerViewTabs.propTypes = {
-    layerList: PropTypes.shape(stateful).isRequired,
-    locale: PropTypes.shape({ filter: PropTypes.object }).isRequired
+    layerList: shapes.stateful.isRequired,
+    locale: PropTypes.shape({ tabs: PropTypes.object }).isRequired
 };

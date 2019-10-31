@@ -1,6 +1,10 @@
+import { memo } from 'react';
 import { Alert as OAlert } from 'oskari-ui';
 import styled from 'styled-components';
 
-export const Alert = styled(OAlert)`
+const Alert = styled(OAlert)`
     margin: 10px;
 `;
+
+const memoized = memo(Alert);
+export { memoized as Alert };

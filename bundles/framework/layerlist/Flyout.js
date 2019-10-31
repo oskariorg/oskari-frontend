@@ -22,6 +22,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.layerListHandler = new LayerListHandler(instance);
         this.layerListHandler.loadLayers();
         this.layerListHandler.addStateListener(() => this.render());
+        Oskari.on('app.start', () => this.layerListHandler.updateAdminState());
     }, {
 
         /**
@@ -48,11 +49,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         },
 
         /**
+         * Interface method implementation, does nothing atm
          * @method startPlugin
          */
-        startPlugin: function () {
-            this.render();
-        },
+        startPlugin: function () { },
         /**
          * @method stopPlugin
          *
@@ -108,6 +108,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Renders React content
          */
         render: function () {
+            if (!this.container) {
+                return;
+            }
             const locale = this.instance.getLocalization();
             const layerList = {
                 state: this.layerListHandler.getState(),
