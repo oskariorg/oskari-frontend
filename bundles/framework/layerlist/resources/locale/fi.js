@@ -31,37 +31,15 @@ Oskari.registerLocalization(
                 'organization': 'Tiedontuottajittain'
             },
             'tooltip': {
-                'type-base': 'Taustakartta',
-                'type-wms': 'Karttataso',
-                'type-wfs': 'Tietotuote',
-                'type-timeseries': 'Aikasarjataso',
-                'addLayer': 'Lisää karttataso'
+                'timeseries': 'Aikasarjataso'
             },
             'backendStatus': {
-                'OK': {
-                    'tooltip': 'Karttataso on käytettävissä tällä hetkellä.',
-                    'iconClass': 'backendstatus-ok'
-                },
-                'DOWN': {
-                    'tooltip': 'Karttataso ei tällä hetkellä käytettävissä.',
-                    'iconClass': 'backendstatus-down'
-                },
-                'ERROR': {
-                    'tooltip': 'Karttataso ei tällä hetkellä käytettävissä.',
-                    'iconClass': 'backendstatus-error'
-                },
-                'MAINTENANCE': {
-                    'tooltip': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
-                    'iconClass': 'backendstatus-maintenance'
-                },
-                'UNKNOWN': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unknown'
-                },
-                'UNSTABLE': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unstable'
-                }
+                'OK': 'Karttataso on käytettävissä tällä hetkellä.',
+                'DOWN': 'Karttataso ei tällä hetkellä käytettävissä.',
+                'ERROR': 'Karttataso ei tällä hetkellä käytettävissä.',
+                'MAINTENANCE': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
+                'UNKNOWN': '',
+                'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Karttatasot',

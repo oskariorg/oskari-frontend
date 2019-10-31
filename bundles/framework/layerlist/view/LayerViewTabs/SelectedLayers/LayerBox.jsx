@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Slider, Icon, NumberInput } from 'oskari-ui';
-import { EyeOpen, EyeShut, DataLayerIcon, ImageLayerIcon, DragIcon } from './CustomIcons/CustomIcons';
+import { EyeOpen, EyeShut, DragIcon } from '../CustomIcons';
+import { LayerIcon } from '../LayerIcon';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -32,21 +33,6 @@ const StyledNumberInput = styled(NumberInput)`
     font-size: 15px;
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
 `;
-
-const LayerIcon = ({ type }) => {
-    if (type === 'wmts') {
-        return (
-            <ImageLayerIcon style={{ marginTop: '5px' }} title={type} />
-        );
-    }
-    return (
-        <DataLayerIcon style={{ marginTop: '5px' }} title={type} />
-    );
-};
-
-LayerIcon.propTypes = {
-    type: PropTypes.string
-};
 
 export const LayerBox = ({ layer }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
@@ -102,7 +88,7 @@ export const LayerBox = ({ layer }) => {
                     </Row>
                     <GrayRow>
                         <ColAuto>
-                            <LayerIcon type={layerType} />
+                            <LayerIcon style={{ marginTop: '5px' }} type={layerType} />
                         </ColAuto>
                         <ColAuto>
                             <StyledSlider>

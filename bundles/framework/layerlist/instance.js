@@ -20,6 +20,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         this.started = false;
         this.plugins = {};
         this.localization = null;
+        this.layerListHandler = null;
         this.filteredLayerListOpenedByRequest = false;
     }, {
         /**

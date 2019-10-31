@@ -156,7 +156,13 @@ class UIService extends StateHandler {
             },
             'AfterMapLayerRemoveEvent': () => this.updateSelectedLayerIds(),
             'AfterMapLayerAddEvent': () => this.updateSelectedLayerIds(),
-            'BackendStatus.BackendStatusChangedEvent': event => this._refreshLayer(event.getLayerId())
+            'BackendStatus.BackendStatusChangedEvent': event => {
+                if (event.getLayerId()) {
+                    this._refreshLayer(event.getLayerId());
+                } else {
+                    throttleRefreshAll();
+                }
+            }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));
         return handlers;

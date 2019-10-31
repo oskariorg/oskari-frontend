@@ -31,37 +31,15 @@ Oskari.registerLocalization(
                 'organization': 'By Data Provider'
             },
             'tooltip': {
-                'type-base': 'Background map',
-                'type-wms': 'Map layer (WMS, WMTS)',
-                'type-wfs': 'Data product (WFS)',
-                'type-timeseries': 'Time series layer',
-                'addLayer': 'Add map layer'
+                'timeseries': 'Time series layer'
             },
             'backendStatus': {
-                'OK': {
-                    'tooltip': 'The map layer is currently available.',
-                    'iconClass': 'backendstatus-ok'
-                },
-                'DOWN': {
-                    'tooltip': 'The map layer is not currently available.',
-                    'iconClass': 'backendstatus-down'
-                },
-                'ERROR': {
-                    'tooltip': 'The map layer is not currently available.',
-                    'iconClass': 'backendstatus-error'
-                },
-                'MAINTENANCE': {
-                    'tooltip': 'The map layer may be periodically not available during the next few days.',
-                    'iconClass': 'backendstatus-maintenance'
-                },
-                'UNKNOWN': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unknown'
-                },
-                'UNSTABLE': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unstable'
-                }
+                'OK': 'The map layer is currently available.',
+                'DOWN': 'The map layer is not currently available.',
+                'ERROR': 'The map layer is not currently available.',
+                'MAINTENANCE': 'The map layer may be periodically not available during the next few days.',
+                'UNKNOWN': '',
+                'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Map layers',
