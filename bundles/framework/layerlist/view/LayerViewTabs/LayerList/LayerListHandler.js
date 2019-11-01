@@ -105,9 +105,10 @@ class UIStateHandler extends StateHandler {
                 typingTimeout.cancel();
             }
 
+            const textLength = searchText ? searchText.length : 0;
             // Search text changed, give user some time to type in his search.
             // The longer the search text the shorted delay.
-            let typingTimeoutMs = this.typingTimeoutScale.getValue(searchText.length);
+            let typingTimeoutMs = this.typingTimeoutScale.getValue(textLength);
             typingTimeout = new Timeout(updateLayerFilters, typingTimeoutMs);
 
             this.updateState(immediateStateChange);

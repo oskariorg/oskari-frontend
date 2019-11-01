@@ -6,6 +6,7 @@ import { Tabs, TabPane } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
 import { LayerList } from './LayerList/';
 import { SelectedLayers, SelectedTab } from './SelectedLayers/';
+import { TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from '.';
 
 const StyledTabs = styled(Tabs)`
     max-width: 600px;
@@ -15,14 +16,11 @@ const ControlledTabs = ({ tab, ...rest }) => {
     if (tab) {
         return <StyledTabs activeKey={tab} {...rest} />;
     }
-    return <StyledTabs defaultActiveKey={TAB_KEY_ALL_LAYERS} {...rest} />;
+    return <StyledTabs defaultActiveKey={TABS_ALL_LAYERS} {...rest} />;
 };
 ControlledTabs.propTypes = {
     tab: PropTypes.string
 };
-
-const TAB_KEY_ALL_LAYERS = 'ALL';
-const TAB_KEY_SELECTED_LAYERS = 'SELECTED';
 
 export const LayerViewTabs = ({ tab, layerList, mutator, locale }) => {
     const layers = Oskari.getSandbox().findAllSelectedMapLayers();
@@ -30,10 +28,10 @@ export const LayerViewTabs = ({ tab, layerList, mutator, locale }) => {
     const { tabs } = locale;
     return (
         <ControlledTabs tabPosition='top' tab={tab} onChange={mutator.setTab}>
-            <TabPane tab={tabs.layerList} key={TAB_KEY_ALL_LAYERS}>
+            <TabPane tab={tabs.layerList} key={TABS_ALL_LAYERS}>
                 <LayerList {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
-            <TabPane tab={<SelectedTab num={numLayers} text={tabs.selectedLayers} />} key={TAB_KEY_SELECTED_LAYERS}>
+            <TabPane tab={<SelectedTab num={numLayers} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
                 <SelectedLayers layers={layers} />
             </TabPane>
         </ControlledTabs>

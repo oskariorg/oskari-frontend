@@ -19,6 +19,10 @@ export class StateHandler {
         this.notify();
     }
     stashCurrentState () {
+        if (this.stashedState) {
+            // Prevent accidentally overwriting stashed state.
+            return;
+        }
         this.stashedState = { ...this.state };
     }
     hasStashedState () {

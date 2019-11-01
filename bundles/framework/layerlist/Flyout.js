@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerViewTabs, LayerViewTabsHandler } from './view/LayerViewTabs/';
+import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -82,8 +82,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          */
         setActiveFilter: function (activeFilterId) {
             const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
+            this.tabsHandler.stashCurrentState();
             filterHandler.stashCurrentState();
-            filterHandler.updateState({ activeFilterId });
+            this.tabsHandler.setTab(TABS_ALL_LAYERS);
+            filterHandler.setActiveFilterId(activeFilterId);
         },
 
         /**
@@ -98,8 +100,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             ReactDOM.render(
                 <LayerViewTabs {... this.tabsHandler.getState()}
                     mutator={this.tabsHandler.getMutator()}
-                    locale={locale} />
-                , this.container);
+                    locale={locale} />,
+                this.container);
         }
     }, {
 
