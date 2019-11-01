@@ -150,10 +150,17 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                 stats.setBounds(groupStats.bounds);
                 stats.setRanges();
             } else {
-                if (list.length < 3) {
+                if (list.length < 2) {
                     return;
-                }
-                if (opts.count >= list.length) {
+                } else if (list.length === 2) {
+                    opts.count = list.length;
+                    /* With two values switch method jenks to quantile since geostatsHelper.getJenks()
+                     * does not return bounds correctly with two values
+                     */
+                    if (opts.method === 'jenks') {
+                        opts.method = 'quantile';
+                    }
+                } else if (opts.count >= list.length) {
                     opts.count = list.length - 1;
                 }
                 setBounds(stats);
