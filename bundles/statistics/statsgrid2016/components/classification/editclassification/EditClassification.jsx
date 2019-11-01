@@ -68,6 +68,10 @@ const getDisabledOptions = props => {
     return disabled;
 };
 
+const getDisabledClassificationMethods = valueCount => {
+    return valueCount < 3 ? ['jenks'] : [];
+};
+
 const handleSelectChange = (mutator, properties, value) => {
     if (properties.valueType === 'int') {
         value = parseInt(value);
@@ -84,6 +88,7 @@ const EditClassification = props => {
     const { methods, values, modes, colors, types, mapStyles } = props.classifications;
     const disabledOptions = getDisabledOptions(props);
     const disabled = !editEnabled;
+    const valueCount = Object.values(indicatorData.data).filter(d => d !== undefined).length;
 
     return (
         <div className="classification-edit">
@@ -99,7 +104,7 @@ const EditClassification = props => {
 
                 <Select value = {values.method} disabled = {disabled}
                     handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
-                    options = {getLocalizedOptions(methods, loc('classify.methods'))}
+                    options = {getLocalizedOptions(methods, loc('classify.methods'), getDisabledClassificationMethods(valueCount))}
                     properties = {{
                         id: 'method',
                         class: 'classification-method',
