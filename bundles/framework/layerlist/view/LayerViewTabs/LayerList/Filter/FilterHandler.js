@@ -60,9 +60,8 @@ class UIService extends StateHandler {
                     // wasn't me -> do nothing
                     return;
                 }
-                if (event.getViewState() === 'close' && this.instance.filteredLayerListOpenedByRequest) {
-                    this.filteredLayerListOpenedByRequest = false;
-                    this.updateState({ activeFilterId: null });
+                if (event.getViewState() === 'close' && this.hasStashedState()) {
+                    this.useStashedState();
                 }
             }
         };

@@ -1,2 +1,2 @@
 export { LayerViewTabs } from './LayerViewTabs';
-export { LayerListHandler } from './LayerList/';
+export { LayerViewTabsHandler } from './LayerViewTabsHandler';
