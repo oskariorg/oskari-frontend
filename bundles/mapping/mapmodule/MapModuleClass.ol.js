@@ -171,10 +171,11 @@ export class MapModule extends AbstractMapModule {
      * @override @method getStyle
      * @param styleDef Oskari style definition
      * @param geomType One of 'line', 'dot', 'area' | optional
+     * @param requestedStyle layer's or feature's style definition (not overrided with defaults)
      * @return {ol/style/Style}
      **/
-    getStyle (styleDef, geomType) {
-        return getOlStyle(this, styleDef, geomType);
+    getStyle (styleDef, geomType, requestedStyle) {
+        return getOlStyle(this, styleDef, geomType, requestedStyle);
     }
 
     getDefaultMarkerSize () {
