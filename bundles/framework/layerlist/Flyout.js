@@ -84,8 +84,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
             this.tabsHandler.stashCurrentState();
             filterHandler.stashCurrentState();
+            filterHandler.updateState({
+                activeFilterId,
+                searchText: null
+            });
             this.tabsHandler.setTab(TABS_ALL_LAYERS);
-            filterHandler.setActiveFilterId(activeFilterId);
         },
 
         /**
