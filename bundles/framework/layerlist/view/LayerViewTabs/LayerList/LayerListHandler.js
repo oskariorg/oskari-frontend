@@ -31,7 +31,7 @@ class UIStateHandler extends StateHandler {
         this.filterHandler = this._createFilterHandler();
         this.layerCollapseHandlers = this._createLayerCollapseHandlers(groupingOptions);
         const selectedGrouping = groupingOptions[0].getKey();
-        const collapseHandler = this._getCollapseHandler(selectedGrouping);
+        const collapseHandler = this.getCollapseHandler(selectedGrouping);
 
         this.state = {
             loading: false,
@@ -82,7 +82,7 @@ class UIStateHandler extends StateHandler {
             previousState = handler.getState();
             const { activeFilterId, searchText } = previousState;
             this.updateState({ updating: true });
-            setTimeout(() => this._getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
+            setTimeout(() => this.getCollapseHandler().setFilter(activeFilterId, searchText), UI_UPDATE_TIMEOUT);
         };
 
         let typingTimeout = null;
@@ -105,9 +105,10 @@ class UIStateHandler extends StateHandler {
                 typingTimeout.cancel();
             }
 
+            const textLength = searchText ? searchText.length : 0;
             // Search text changed, give user some time to type in his search.
             // The longer the search text the shorted delay.
-            let typingTimeoutMs = this.typingTimeoutScale.getValue(searchText.length);
+            let typingTimeoutMs = this.typingTimeoutScale.getValue(textLength);
             typingTimeout = new Timeout(updateLayerFilters, typingTimeoutMs);
 
             this.updateState(immediateStateChange);
@@ -116,7 +117,11 @@ class UIStateHandler extends StateHandler {
         return handler;
     }
 
-    _getCollapseHandler (grouping = this.state.grouping.selected) {
+    getFilterHandler () {
+        return this.filterHandler;
+    }
+
+    getCollapseHandler (grouping = this.state.grouping.selected) {
         return this.layerCollapseHandlers[grouping];
     }
 
@@ -144,7 +149,7 @@ class UIStateHandler extends StateHandler {
     }
 
     setGrouping (groupingKey) {
-        const handler = this._getCollapseHandler(groupingKey);
+        const handler = this.getCollapseHandler(groupingKey);
         if (!handler) {
             return;
         }
