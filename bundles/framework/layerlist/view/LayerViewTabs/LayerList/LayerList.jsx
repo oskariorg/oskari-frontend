@@ -62,7 +62,7 @@ const Indicator = ({ show, children }) => {
     return children;
 };
 
-const LayerList = props => {
+const LayerList = React.forwardRef((props, ref) => {
     const { error, loading = false, updating = false, locale, mutator } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
@@ -78,7 +78,7 @@ const LayerList = props => {
         <Content spacing={'15px'}>
             <Row>
                 <Column spacing={'10px'}>
-                    <Search searchText={searchText} mutator={filter.mutator} locale={locale} />
+                    <Search ref={ref} searchText={searchText} mutator={filter.mutator} locale={locale} />
                     <ControlsRow spacing={'10px'}>
                         <Grouping
                             selected={grouping.selected}
@@ -109,8 +109,8 @@ const LayerList = props => {
             }
         </Content>
     );
-};
-
+});
+LayerList.displayName = 'LayerList';
 const grouping = {
     selected: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.instanceOf(GroupingOption)).isRequired
