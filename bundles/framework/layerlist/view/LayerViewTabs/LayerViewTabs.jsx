@@ -22,17 +22,15 @@ ControlledTabs.propTypes = {
     tab: PropTypes.string
 };
 
-export const LayerViewTabs = ({ tab, layerList, mutator, locale }) => {
-    const layers = Oskari.getSandbox().findAllSelectedMapLayers();
-    const numLayers = layers.length;
+export const LayerViewTabs = ({ tab, layerList, selectedLayers, mutator, locale }) => {
     const { tabs } = locale;
     return (
         <ControlledTabs tabPosition='top' tab={tab} onChange={mutator.setTab}>
             <TabPane tab={tabs.layerList} key={TABS_ALL_LAYERS}>
                 <LayerList {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
-            <TabPane tab={<SelectedTab num={numLayers} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
-                <SelectedLayers layers={layers} />
+            <TabPane tab={<SelectedTab num={selectedLayers.state.layers.length} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
+                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator}/>
             </TabPane>
         </ControlledTabs>
     );
@@ -40,6 +38,7 @@ export const LayerViewTabs = ({ tab, layerList, mutator, locale }) => {
 
 LayerViewTabs.propTypes = {
     layerList: shapes.stateful.isRequired,
+    selectedLayers: shapes.stateful.isRequired,
     tab: PropTypes.string,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
     locale: PropTypes.shape({ tabs: PropTypes.object }).isRequired

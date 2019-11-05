@@ -1,6 +1,7 @@
 
 import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 import { LayerListHandler } from './LayerList';
+import { SelectedLayersHandler } from './SelectedLayers';
 
 class UIStateHandler extends StateHandler {
     constructor (instance) {
@@ -14,10 +15,21 @@ class UIStateHandler extends StateHandler {
                 mutator: this.state.layerList.mutator
             }
         }));
+        this.selectedLayersHandler = new SelectedLayersHandler(instance);
+        this.selectedLayersHandler.addStateListener(selectedLayersState => this.updateState({
+            selectedLayers: {
+                state: selectedLayersState,
+                mutator: this.state.selectedLayers.mutator
+            }
+        }));
         this.state = {
             layerList: {
                 state: this.layerListHandler.getState(),
                 mutator: this.layerListHandler.getMutator()
+            },
+            selectedLayers: {
+                state: this.selectedLayersHandler.getState(),
+                mutator: this.selectedLayersHandler.getMutator()
             }
         };
         this.eventHandlers = this._createEventHandlers();
@@ -53,6 +65,7 @@ class UIStateHandler extends StateHandler {
     }
 
     _createEventHandlers () {
+        const updateSelectedLayers = () => this.selectedLayersHandler.updateLayers();
         const handlers = {
             'userinterface.ExtensionUpdatedEvent': event => {
                 // ExtensionUpdateEvents are fired a lot, only let layerlist extension event to be handled when enabled
@@ -64,7 +77,10 @@ class UIStateHandler extends StateHandler {
                     this.useStashedState();
                     this.getLayerListHandler().getFilterHandler().useStashedState();
                 }
-            }
+            },
+            'AfterMapLayerRemoveEvent': updateSelectedLayers,
+            'AfterMapLayerAddEvent': updateSelectedLayers,
+            'AfterRearrangeSelectedMapLayerEvent': updateSelectedLayers
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
