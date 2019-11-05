@@ -1091,7 +1091,7 @@ Oskari.clazz.define(
             if (cached.ol) {
                 zIndex = cached.ol.getZIndex();
             }
-            cached.ol = me.getMapModule().getStyle(cached.oskari);
+            cached.ol = me.getMapModule().getStyle(cached.oskari, null, overrideStyle);
             cached.ol.setZIndex(zIndex);
             return cached.ol;
         },

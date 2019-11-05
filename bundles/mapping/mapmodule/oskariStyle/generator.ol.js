@@ -15,9 +15,10 @@ const TRANSPARENT = 'rgba(0,0,0,0)';
  * @param {AbstractMapModule} mapModule
  * @param styleDef Oskari style definition
  * @param geomType One of 'area', 'line', 'dot' | optional
+ * @param requestedStyle layer's or feature's style definition (not overrided with defaults)
  * @return {ol/style/Style} style ol specific!
  */
-export const getOlStyle = (mapModule, styleDef, geomType) => {
+export const getOlStyle = (mapModule, styleDef, geomType, requestedStyle = {}) => {
     const style = jQuery.extend(true, {}, styleDef);
 
     const olStyle = {};
@@ -29,7 +30,7 @@ export const getOlStyle = (mapModule, styleDef, geomType) => {
         olStyle.stroke = getStrokeStyle(style);
     }
     if (style.image) {
-        olStyle.image = getImageStyle(mapModule, style);
+        olStyle.image = getImageStyle(mapModule, style, requestedStyle);
     }
     if (style.text) {
         const textStyle = getTextStyle(style);
@@ -187,9 +188,10 @@ const getStrokeStyle = styleDef => {
  * Parses image style from json
  * @method getImageStyle
  * @param {Object} style json
+ * @param {Object} requestedStyle layer's or feature's style definition (not overrided with defaults)
  * @return {ol/style/Circle}
  */
-const getImageStyle = (mapModule, styleDef) => {
+const getImageStyle = (mapModule, styleDef, requestedStyle) => {
     const image = {};
     let size = mapModule.getDefaultMarkerSize();
 
@@ -203,7 +205,6 @@ const getImageStyle = (mapModule, styleDef) => {
         size = mapModule.getDefaultMarkerSize();
     }
 
-    styleDef.image.size = size;
     styleDef.image.size = size;
 
     let fillColor = styleDef.image.fill ? styleDef.image.fill.color : undefined;
@@ -222,15 +223,18 @@ const getImageStyle = (mapModule, styleDef) => {
     } else if (styleDef.image && styleDef.image.shape) {
         const offsetX = (!isNaN(styleDef.image.offsetX)) ? styleDef.image.offsetX : 16;
         const offsetY = (!isNaN(styleDef.image.offsetY)) ? styleDef.image.offsetY : 16;
-        return new olStyleIcon({
+        const iconOpts = {
             src: styleDef.image.shape,
             anchorYUnits: 'pixels',
             anchorXUnits: 'pixels',
             anchorOrigin: 'bottom-left',
             anchor: [offsetX, offsetY],
-            color: fillColor,
             opacity
-        });
+        };
+        if (Oskari.util.keyExists(requestedStyle, 'image.fill.color')) {
+            iconOpts.color = fillColor;
+        }
+        return new olStyleIcon(iconOpts);
     }
 
     if (styleDef.image.radius) {
