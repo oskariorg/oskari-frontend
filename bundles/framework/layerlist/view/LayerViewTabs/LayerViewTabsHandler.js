@@ -65,6 +65,7 @@ class UIStateHandler extends StateHandler {
     }
 
     _createEventHandlers () {
+        const updateSelectedLayers = () => this.selectedLayersHandler.updateLayers();
         const handlers = {
             'userinterface.ExtensionUpdatedEvent': event => {
                 // ExtensionUpdateEvents are fired a lot, only let layerlist extension event to be handled when enabled
@@ -77,15 +78,9 @@ class UIStateHandler extends StateHandler {
                     this.getLayerListHandler().getFilterHandler().useStashedState();
                 }
             },
-            'AfterMapLayerRemoveEvent': function (event) {
-                this.selectedLayersHandler.getMutator().layerSelectionChanged(event.getMapLayer(), false);
-            },
-            'AfterMapLayerAddEvent': event => {
-                this.selectedLayersHandler.getMutator().layerSelectionChanged(event.getMapLayer(), true, event.getKeepLayersOrder());
-            },
-            'AfterRearrangeSelectedMapLayerEvent': event => {
-                this.selectedLayersHandler.getMutator().chageLayerOrder(event.getFromPosition(), event.getToPosition());
-            }
+            'AfterMapLayerRemoveEvent': updateSelectedLayers,
+            'AfterMapLayerAddEvent': updateSelectedLayers,
+            'AfterRearrangeSelectedMapLayerEvent': updateSelectedLayers
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
