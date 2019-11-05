@@ -151,7 +151,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationService',
                     return;
                 } else if (list.length === 2) {
                     opts.count = list.length;
-                    /* With two values switch method jenks to quantile since geostatsHelper.getJenks()
+                    /* Switch method from jenks to quantile with value length of two since geostats.getClassJenks()
                      * does not return bounds correctly with two values
                      */
                     if (opts.method === 'jenks') {
