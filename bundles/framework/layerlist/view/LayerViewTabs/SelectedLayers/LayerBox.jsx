@@ -14,6 +14,7 @@ const StyledBox = styled.div`
     margin-left: 5px;
     margin-right: 5px;
     border: 1px #fff solid;
+    background-color: #fff;
 `;
 
 const GrayRow = styled(Row)`

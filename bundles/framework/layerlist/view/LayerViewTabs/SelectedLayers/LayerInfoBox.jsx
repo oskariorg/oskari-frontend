@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ColAuto, ColAutoRight } from './Grid';
 import { Slider, Icon, NumberInput } from 'oskari-ui';
-import { DataLayerIcon, ImageLayerIcon } from './CustomIcons/CustomIcons';
+import { DataLayerIcon, ImageLayerIcon, TimeSerieIcon, UserDataIcon, ThemeMapIcon, ThreeDIcon } from './CustomIcons/CustomIcons';
 
 const StyledSlider = styled.div`
     border: solid 2px #d9d9d9;
@@ -23,6 +23,23 @@ const LayerIcon = ({ type }) => {
         return (
             <ImageLayerIcon style={{ marginTop: '5px' }} title={type} />
         );
+    } else if (type === 'myplaces' || type === 'analysis' || type === 'userlayer') {
+        return (
+            <UserDataIcon style={{ marginTop: '5px' }} title={type} />
+        );
+    } else if (type === 'timeseries') {
+        return (
+            <TimeSerieIcon style={{ marginTop: '5px' }} title={type} />
+        );
+    } else if (type === 'thememap') {
+        return (
+            <ThemeMapIcon style={{ marginTop: '5px' }} title={type} />
+        );
+    // this is wrong :D
+    } else if (type === '3d') {
+        return (
+            <ThreeDIcon style={{ marginTop: '5px' }} title={type} />
+        );
     }
     return (
         <DataLayerIcon style={{ marginTop: '5px' }} title={type} />
@@ -33,11 +50,8 @@ LayerIcon.propTypes = {
     type: PropTypes.string
 };
 
-export const LayerInfoBox = ({ layerType, slider, handleOpacityChange, handleOpenMenu }) => (
+const LayerSlider = ({ slider, handleOpacityChange }) => (
     <>
-        <ColAuto>
-            <LayerIcon type={layerType} />
-        </ColAuto>
         <ColAuto>
             <StyledSlider>
                 <Slider
@@ -56,6 +70,33 @@ export const LayerInfoBox = ({ layerType, slider, handleOpacityChange, handleOpe
                 formatter={value => `${value} %`}
             />
         </ColAuto>
+    </>
+);
+
+LayerSlider.propTypes = {
+    slider: PropTypes.number.isRequired,
+    handleOpacityChange: PropTypes.func.isRequired
+};
+
+const LayerScaleBox = () => {
+    return (
+        <>
+            :D
+        </>
+    );
+};
+
+export const LayerInfoBox = ({ layerType, slider, handleOpacityChange, handleOpenMenu }) => {
+    return (
+    <>
+        <ColAuto>
+            <LayerIcon type={layerType} />
+        </ColAuto>
+        {/* conditional stuff under here */}
+        <LayerSlider
+            slider={slider}
+            handleOpacityChange={handleOpacityChange}
+        />
         <ColAutoRight>
             <Icon
                 type="menu"
@@ -64,7 +105,8 @@ export const LayerInfoBox = ({ layerType, slider, handleOpacityChange, handleOpe
             />
         </ColAutoRight>
     </>
-);
+    );
+};
 
 LayerInfoBox.propTypes = {
     layerType: PropTypes.string.isRequired,
