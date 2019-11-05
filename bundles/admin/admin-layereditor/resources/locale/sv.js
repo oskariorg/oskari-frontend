@@ -3,6 +3,15 @@ Oskari.registerLocalization(
         "lang": "sv",
         "key": "admin-layereditor",
         "value": {
+            "wizard": {
+                "type": "Kartlagrets typ",
+                "service": "Gränssnitt",
+                "layers": "Kartlager",
+                "typeDescription": "Välj vilken typ av gränssnitt du vill lägga till",
+                "serviceDescription": "Ange adress och versionnummer för gränssnittet du vill lägga till",
+                "layersDescription": "Från lagren i gränssnittet väljer du det du vill lägga till som kartlager",
+                "details": "Uppgifter om kartlagret"
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",
@@ -14,18 +23,19 @@ Oskari.registerLocalization(
             "password": "Lösenord",
             "usernameAndPassword": "Användarsnamn och lösenord",
             "uniqueName": "Unik namn för kartlager",
+            "generic": {
+                "placeholder": "Namn på {0}",
+                "descplaceholder": "Beskrivning på {0}"
+            },
             "en": {
-                "title": "En",
-                "placeholder": "Name in English",
-                "descplaceholder": "Description in English"
+                "placeholder": "Namn på engelska",
+                "descplaceholder": "Beskrivning på engelska"
             },
             "fi": {
-                "title": "Fi",
-                "placeholder": "Nimi suomeksi",
-                "descplaceholder": "Kuvaus suomeksi"
+                "placeholder": "Namn på finska",
+                "descplaceholder": "Beskrivning på finska"
             },
             "sv": {
-                "title": "Sv",
                 "placeholder": "Namn på svenska",
                 "descplaceholder": "Beskrivning på svenska"
             },
@@ -51,10 +61,21 @@ Oskari.registerLocalization(
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
+                "invalidStyleJson" : "Style JSON-syntaxen är ogiltig.",
+                "invalidHoverJson" : "Hover JSON-syntaxen är ogiltig.",
+                "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
+                "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter."
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON"
+            "hoverJSON": "Hover JSON",
+            "rights": {
+                "PUBLISH": "rätt att publicera",
+                "VIEW_LAYER": "rätt att visa",
+                "DOWNLOAD": "rätt att ladda ner",
+                "VIEW_PUBLISHED": "rätt att visa en publicerat vy",
+                "role": "Roll"
+            }
         }
     }
 );

@@ -3,6 +3,15 @@ Oskari.registerLocalization(
         "lang": "fi",
         "key": "admin-layereditor",
         "value": {
+            "wizard": {
+                "type": "Tason tyyppi",
+                "service": "Rajapinta",
+                "layers": "Karttatasot",
+                "typeDescription": "Valitse lisättävän rajapinnan tyyppi",
+                "serviceDescription": "Syötä lisättävän rajapinnan osoite ja versionumero",
+                "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
+                "details": "Tason tiedot"
+            },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
             "generalTabTitle": "Yleiset",
@@ -14,18 +23,19 @@ Oskari.registerLocalization(
             "password": "Salasana",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",
             "uniqueName": "Karttatason yksilöivä nimi",
+            "generic": {
+                "placeholder": "Nimi kielellä {0}",
+                "descplaceholder": "Kuvaus kielellä {0}"
+            },
             "en": {
-                "title": "En",
                 "placeholder": "Nimi englanniksi",
                 "descplaceholder": "Kuvaus englanniksi"
             },
             "fi": {
-                "title": "Fi",
                 "placeholder": "Nimi suomeksi",
                 "descplaceholder": "Kuvaus suomeksi"
             },
             "sv": {
-                "title": "Sv",
                 "placeholder": "Nimi ruotsiksi",
                 "descplaceholder": "Kuvaus ruotsiksi"
             },
@@ -52,10 +62,21 @@ Oskari.registerLocalization(
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
+                "invalidStyleJson" : "Style JSON-syntaksi on virheellinen.",
+                "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
+                "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
+                "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut"
             },
             "otherLanguages": "Muut kielet",
             "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON"
+            "hoverJSON": "Hover JSON",
+            "rights": {
+                "PUBLISH": "Julkaisuoikeus",
+                "VIEW_LAYER": "Katseluoikeus",
+                "DOWNLOAD": "Latausoikeus",
+                "VIEW_PUBLISHED": "Katseluoikeus upotetussa kartassa",
+                "role": "Rooli"
+            }
         }
     }
 );

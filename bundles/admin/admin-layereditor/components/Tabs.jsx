@@ -1,17 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Tabs as AntTabs } from 'antd';
-import 'antd/es/tabs/style/';
+import 'antd/es/tabs/style/index.js';
 
 const AntTabPane = AntTabs.TabPane;
 
-export const Tabs = ({children, ...other}) => (
+export const Tabs = ({ children, ...other }) => (
     <AntTabs {...other}>
         {children}
     </AntTabs>
 );
 
-export const TabPane = ({children, ...other}) => (
+export const TabPane = ({ children, ...other }) => (
     <AntTabPane {...other}>
         {children}
     </AntTabPane>

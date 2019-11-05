@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Button } from '../../components/Button';
+import { Button } from 'oskari-ui';
 
 const StyledButton = styled(Button)`
     margin: 10px;
@@ -11,7 +11,7 @@ const StyledRootEl = styled('div')`
 `;
 
 export const LayerTypeSelection = (props) => {
-    const {types, text, onSelect} = props;
+    const { types, text, onSelect } = props;
     function buttonClick (event) {
         if (onSelect) {
             onSelect(event.target.textContent);

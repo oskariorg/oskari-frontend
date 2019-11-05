@@ -9,6 +9,25 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.54.0
+
+### [add] [rpc] New MapTourRequest Request
+
+Request to move along the map from point to point.
+
+locations
+List of locations as an array of objects.
+Contains longitude, latitude and various optional override options
+```javascript
+[ { lon, lat }, { lon, lat, duration, delay, zoom, camera: { heading, pitch, roll }, animation } ]
+```
+
+options
+Object with optional parameters for options as default for all locations.
+```javascript
+{ duration, delay, zoom, camera: { heading, pitch, roll }, animation, srsName }
+```
+
 ## 1.53.0
 
 ### [mod] [rpc] MapMoveRequest

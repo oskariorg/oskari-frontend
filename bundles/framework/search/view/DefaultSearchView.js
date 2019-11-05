@@ -201,13 +201,10 @@ Oskari.clazz.define(
             }
         },
         __doAutocompleteSearch: function () {
-            var me = this;
             var field = this.getField();
             var searchKey = field.getValue(this.instance.safeChars);
-            me.progressSpinner.start();
 
             this.searchservice.doAutocompleteSearch(searchKey, function (result) {
-                me.progressSpinner.stop();
                 var autocompleteValues = [];
                 for (var i = 0; i < result.methods.length; i++) {
                     autocompleteValues.push({ value: result.methods[i], data: result.methods[i] });

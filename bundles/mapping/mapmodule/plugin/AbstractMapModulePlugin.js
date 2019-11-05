@@ -21,6 +21,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         me._pluginName = me._name;
         me._requestHandlers = {};
         me._sandbox = null;
+        me._fixedLocation = false;
     }, {
         /**
          * @public @method getName
@@ -196,10 +197,16 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
         inLayerToolsEditMode: function () {
             return this._isInLayerToolsEditMode;
         },
+        isFixedLocation: function () {
+            return this._fixedLocation;
+        },
 
         _setLayerToolsEditMode: function (isInEditMode) {
             this._isInLayerToolsEditMode = isInEditMode;
             this._setLayerToolsEditModeImpl();
+            if (this.isFixedLocation()) {
+                this.handleDragDisabled();
+            }
         },
 
         /**
@@ -209,6 +216,29 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
          *
          */
         _setLayerToolsEditModeImpl: function () {},
+
+        /**
+         * @method handleDragDisabled
+         * Disable draggable inLayerToolsEditMode if plugin's location is fixed (publisher edit own tools layout)
+         */
+        handleDragDisabled: function (isInEditMode) {
+            const elem = this.getElement();
+            if (!elem) {
+                return;
+            }
+            const draggable = elem.hasClass('ui-draggable');
+            if (this.inLayerToolsEditMode()) {
+                elem.addClass('plugin-drag-disabled');
+                if (draggable) {
+                    elem.draggable('disable');
+                }
+            } else {
+                elem.removeClass('plugin-drag-disabled');
+                if (draggable) {
+                    elem.draggable('enable');
+                }
+            }
+        },
 
         /**
          * @public @method startPlugin

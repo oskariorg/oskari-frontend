@@ -2,7 +2,7 @@ const path = require('path');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const resolveConfig = require('./webpack/resolveConfig.js');
+const OskariConfig = require('./webpack/config.js');
 const parseParams = require('./webpack/parseParams.js');
 const { lstatSync, readdirSync } = require('fs');
 const generateEntries = require('./webpack/generateEntries.js');
@@ -25,17 +25,10 @@ module.exports = (env, argv) => {
     }));
 
     // Replace ant design global styles with a custom solution to prevent global styles affecting the app.
-    const replacement = path.resolve(__dirname, 'ant-globals.less');
+    const replacement = path.join(__dirname, 'src/react/ant-globals.less');
     plugins.push(new NormalModuleReplacementPlugin(/..\/..\/style\/index\.less/, replacement));
 
-    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, './ant-theme.less');
-
-    const styleLoaderImpl = isProd ? {
-        loader: MiniCssExtractPlugin.loader,
-        options: {
-            publicPath: '../'
-        }
-    } : 'style-loader';
+    const themeFile = theme ? path.resolve(theme) : path.join(__dirname, 'src/react/ant-theme.less');
 
     // Common config for both prod & dev
     const config = {
@@ -51,98 +44,11 @@ module.exports = (env, argv) => {
             filename: '[name]/oskari.min.js'
         },
         module: {
-            rules: [
-                {
-                    test: require.resolve('sumoselect'),
-                    use: 'imports-loader?define=>undefined,exports=>undefined'
-                },
-                {
-                    test: /\.(js|jsx)$/,
-                    exclude: [/libraries/, /\.min\.js$/],
-                    use: {
-                        loader: 'babel-loader',
-                        options: {
-                            presets: [
-                                [
-                                    require.resolve('@babel/preset-env'), // Resolve path for use from external projects
-                                    {
-                                        useBuiltIns: 'entry',
-                                        targets: '> 0.25%, not dead, ie 11'
-                                    }
-                                ],
-                                require.resolve('@babel/preset-react') // Resolve path for use from external projects
-                            ],
-                            plugins: [
-                                require.resolve('babel-plugin-styled-components'), // Resolve path for use from external projects
-                                require.resolve('babel-plugin-transform-remove-strict-mode')
-                            ]
-                        }
-                    }
-                },
-                {
-                    test: /\.css$/,
-                    use: [
-                        styleLoaderImpl,
-                        { loader: 'css-loader', options: { } }
-                    ]
-                },
-                {
-                    test: /\.scss$/,
-                    use: [
-                        styleLoaderImpl,
-                        { loader: 'css-loader', options: { } },
-                        'sass-loader' // compiles Sass to CSS
-                    ]
-                },
-                {
-                    test: /\.less$/,
-                    use: [
-                        styleLoaderImpl,
-                        { loader: 'css-loader' },
-                        {
-                            loader: 'less-loader',
-                            options: {
-                                modifyVars: {
-                                    'hack': `true; @import "${themeFile}";`
-                                },
-                                javascriptEnabled: true
-                            }
-                        }
-                    ]
-                },
-                {
-                    test: /\.(ttf|png|jpg|gif|svg)$/,
-                    use: [
-                        {
-                            loader: 'file-loader',
-                            options: {
-                                outputPath: 'assets/'
-                            }
-                        }
-                    ]
-                },
-                {
-                    type: 'javascript/auto',
-                    test: /minifierAppSetup.json$/,
-                    use: [
-                        {
-                            loader: path.resolve(__dirname, './webpack/minifierLoader.js')
-                        }
-                    ]
-                }
-            ]
+            rules: OskariConfig.getModuleRules(isProd, themeFile)
         },
         plugins,
-        resolveLoader: {
-            modules: [path.resolve(__dirname, 'node_modules'), 'node_modules'], // allow external projects to use loaders in oskari-frontend node_modules
-            extensions: ['.js', '.json'],
-            mainFields: ['loader', 'main'],
-            alias: {
-                'oskari-loader': path.resolve(__dirname, './webpack/oskariLoader.js'),
-                'oskari-lazy-loader': path.resolve(__dirname, './webpack/oskariLazyLoader.js')
-            }
-        },
-        resolve: resolveConfig
+        resolveLoader: OskariConfig.RESOLVE_LOADER,
+        resolve: OskariConfig.RESOLVE
     };
 
     // Mode specific config

@@ -1,5 +1,9 @@
 # Release Notes
 
+## 1.54.0
+
+- OpenLayers map engine upgrade to version 6
+
 ## 1.53.1
 
 For a full list of changes see:

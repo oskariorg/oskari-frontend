@@ -2,14 +2,14 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
 }, {
     index: 1,
     group: 'data',
-    allowedLocations: ['top left', 'top right', 'bottom-right'],
+    allowedLocations: ['bottom right'],
     lefthanded: 'bottom right',
     righthanded: 'bottom right',
 
     allowedSiblings: [
-        'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-        'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-        'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+        'Oskari.mapframework.bundle.mapmodule.plugin.ScaleBarPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.LogoPlugin',
+        'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
     ],
     init: function (pdata) {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');

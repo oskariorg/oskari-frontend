@@ -1,134 +1,19 @@
 $filter-border-color: #a4a4a4;
 
-div.layerselector2 {
-    div.layer-filter {
-        margin: 10px;
-        color: #949494;
-    }
+@keyframes blinking {
+    0% {opacity: 1;}
+    50% {opacity: 0.25;}
+    100% {opacity: 1;}
+}
 
-    div.filter {
-        border: 1px solid $filter-border-color;
-        padding: 10px;
-        float: left;
-        cursor: pointer;
-        margin-bottom: 5px;
-        margin-left: -1px;
-    }
-
-    div.layer {
-       
-        label.layer-title {
-            /* Let's just imagine this is tabular data... */
-            font-size: 12px;
-        }
-
-        .layer-title.not-supported {
-            color: #888;
-        }
-
-        div.layer-not-supported {
-            float: left;
-            margin-right: 4px;
-            background-repeat: no-repeat;
-            margin-top: -2px;
-        }
-
-    }
-
-    div.layerGroup {
-        background-color: #f3f3f3;
-        border: 1px solid #c0d0d0;
-        margin: 0;
-        padding: 0;
-
-        &.open {
-            background-color: #FFFFFF;
-        }
-
-        div.groupIcon {
-            display: inline-block;
-            margin-left: 12px;
-            vertical-align: middle;
-        }
-
-        div.groupHeader {
-            display: inline-block;
-            padding: 8px 10px 8px 12px;
-        }
-    }
-
-    div.tab-content {
-        padding: 0;
-
-        div.oskarifield {
-            margin: 10px;
-            position: relative;
-
-            input[type=text] {
-                width: 90%;
-            }
-
-            .icon-close {
-                margin-right: -20px;
-            }
-
-            .field-description {
-                padding: 3px 0;
-                color: #666;
-
-                .icon-info {
-                    display: inline-block;
-                }
-            }
-
-            .related-keywords {
-                display: none;
-                overflow: hidden;
-                height: 30px;
-                line-height: 30px;
-
-                .keywords-title {
-                    box-sizing: border-box;
-                    height: 30px;
-                    line-height: 30px;
-                    color: #000;
-                    font-weight: bold;
-                    float: left;
-                }
-
-                .keyword-cont {
-                    display: block;
-                    box-sizing: border-box;
-                    height: 30px;
-                    line-height: 30px;
-                    padding: 0 10px;
-                    color: #0085D1;
-                    float: left;
-
-                    .keyword {
-                        float: left;
-                        min-width: 91px;
-                    }
-
-                    .type {
-                        background-color: #333438;
-                        border: solid 2px #FFDE00;
-                        color: #FFDE00;
-                        width: 34px;
-                        line-height: 16px;
-                        padding: 3px;
-                        margin: 2px;
-                        float: right;
-                        display: inline-block;
-                        text-align: center;
-                    }
-                }
-
-                .focus {
-                    background-color: #333438;
-                    color: white;
-                }
-            }
-        }
+div.layerlist {
+    div.blink {
+        -webkit-animation-name: blinking;
+        -webkit-animation-duration: 1s;
+        -webkit-animation-iteration-count: 2;
+        animation-name: blinking;
+        animation-duration: 1s;
+        animation-iteration-count: 2;
+        opacity: 1;
     }
 }

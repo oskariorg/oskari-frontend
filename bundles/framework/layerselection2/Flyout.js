@@ -1,4 +1,3 @@
-const UnsupportedLayerReason = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason');
 /**
  * @class Oskari.mapframework.bundle.layerselection2.Flyout
  *
@@ -262,24 +261,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
         _createUnsupportedFooter: function (layer) {
             var me = this;
             var sandbox = me.instance.getSandbox();
+            var map = sandbox.getMap();
             var footer;
-            var reasons = sandbox.getMap().getUnsupportedLayerReasons(layer);
+            var reasons = map.getUnsupportedLayerReasons(layer);
 
             if (reasons && reasons.length > 0) {
                 footer = me.templateUnsupportedClean.clone();
-                const grouped = reasons.reduce((groups, cur) => {
-                    if (cur.getSeverity() >= UnsupportedLayerReason.FATAL) {
-                        groups.fatals = groups.fatals || [];
-                        groups.fatals.push(cur);
-                    } else if (cur.getSeverity() < UnsupportedLayerReason.WARNING) {
-                        groups.infos = groups.infos || [];
-                        groups.infos.push(cur);
-                    } else {
-                        groups.warnings = groups.warnings || [];
-                        groups.warnings.push(cur);
-                    }
-                    return groups;
-                }, {});
+                const grouped = map.groupUnsupportedLayerReasons(reasons);
                 const { fatals, warnings, infos } = grouped;
                 const selected = fatals || warnings || infos;
                 selected

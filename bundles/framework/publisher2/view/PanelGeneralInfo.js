@@ -38,6 +38,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                 '</div>')
         };
         this.panel = null;
+        this.domainWarningTemplate = jQuery('<div class="domain-warning"><div class="icon-warning-light"></div><div>' + this.loc.domain.inputWarning + '</div></div>');
     }, {
         /**
          * Creates the set of Oskari.userinterface.component.FormInput to be shown on the panel and
@@ -50,6 +51,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
             const me = this;
             let selectedLang = Oskari.getLang();
 
+            const domainValidatorKeyUpHandler = Oskari.util.throttle((event) => {
+                const domainWarningDivs = jQuery('.domain-warning');
+                if (domainWarningDivs.length === 0) {
+                    const domainWarning = me.domainWarningTemplate.clone();
+                    const fieldDivs = jQuery('.basic_publisher').find('.oskarifield');
+                    // if user clicks save/cancel before throttled function triggers
+                    // there will be no fields so we need to check for that
+                    if (fieldDivs.length > 1) {
+                        // domain field is the second one
+                        fieldDivs[1].append(domainWarning[0]);
+                    }
+                }
+                if (!event.target.value || Oskari.util.isValidDomain(event.target.value)) {
+                    jQuery('.domain-warning').hide();
+                } else {
+                    jQuery('.domain-warning').show();
+                }
+            }, 1000, { leading: false });
+
             for (const fkey in me.fields) {
                 if (me.fields.hasOwnProperty(fkey)) {
                     const data = me.fields[fkey];
@@ -58,6 +78,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
                     field.setLabel(data.label);
                     field.setTooltip(data.tooltip, data.helptags);
                     field.setPlaceholder(data.placeholder);
+
+                    if (fkey === 'domain') {
+                        field.bindUpKey(domainValidatorKeyUpHandler);
+                    }
                     data.field = field;
                 }
             }
@@ -125,7 +149,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.view.PanelGeneralInfo
 
             me._languageChanged(selectedLang);
         },
-
         /**
          * Returns the UI panel and populates it with the data that we want to show the user.
          *

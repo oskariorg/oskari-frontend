@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import {Select, Option} from '../../components/Select';
+import { Select, Option } from 'oskari-ui';
 
 export const DataProviderSelect = (props) => {
     const options = props.dataProviders.map((dataProvider) =>

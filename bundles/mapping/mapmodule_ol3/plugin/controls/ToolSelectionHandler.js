@@ -34,6 +34,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
             var stateHandler;
             var type = null;
             var id = null;
+            const mapModule = me.publisherToolbarPlugin.getMapModule();
             switch (toolName) {
             case 'map_control_tool_prev':
                 // custom history (TODO: more testing needed + do this with request
@@ -59,6 +60,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 }
                 break;
             case 'map_control_zoom_tool':
+                mapModule.set3dEnabled(false);
                 me.publisherToolbarPlugin.mouseDragZoomInteraction();
                 break;
             case 'map_control_measure_tool':
@@ -66,16 +68,19 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 id = 'measureline';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
                     allowMultipleDrawing: 'single',
-                    showMeasureOnMap: true }]);
+                    showMeasureOnMap: true
+                }]);
                 break;
             case 'map_control_measure_area_tool':
                 type = 'Polygon';
                 id = 'measurearea';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
                     allowMultipleDrawing: 'single',
-                    showMeasureOnMap: true }]);
+                    showMeasureOnMap: true
+                }]);
                 break;
             default:
+                mapModule.setDrawingMode(false);
                 break;
             }
         }

@@ -127,6 +127,7 @@ Oskari.clazz.define('Oskari.framework.bundle.hierarchical-layerlist.SelectedLaye
         if (typeof handler === 'function') {
             tool.off('click');
             tool.on('click', function (evt) {
+                evt.stopPropagation();
                 handler(evt);
             });
         }

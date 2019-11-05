@@ -31,7 +31,7 @@ Oskari.clazz.define(
                     sticky: false,
                     show: true,
                     callback: function (el) {
-                        me._setupLocation();
+                        me._toggleMode();
                     }
                 }
             },
@@ -41,6 +41,8 @@ Oskari.clazz.define(
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
         };
+
+        me._currentMode = null;
     }, {
         /**
          * @private @method _createControlElement
@@ -55,7 +57,7 @@ Oskari.clazz.define(
                 el = me._templates.plugin.clone();
             me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
             el.on('click', function () {
-                me._setupLocation();
+                me._toggleMode();
             });
 
             el.attr('title', me._loc.tooltip);
@@ -170,8 +172,8 @@ Oskari.clazz.define(
          * @param {Boolean} forced application has started and ui should be rendered with assets that are available
          */
         redrawUI: function (mapInMobileMode, forced) {
-            if (!this.isVisible()) {
-                // no point in drawing the ui if we are not visible
+            if (!this.isVisible() || !this.isEnabled()) {
+                // no point in drawing the ui if we are not visible or enabled
                 return;
             }
             var me = this;
@@ -192,11 +194,96 @@ Oskari.clazz.define(
                 me.refresh();
                 this.addToPluginContainer(me._element);
             }
+
+            this._handleStartMode();
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
             var mobileDefs = this.getMobileDefs();
             this.removeToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
+        },
+
+        /**
+         * @public @method isEnabled
+         * Are the plugin's controls enabled
+         * @param {Boolean} showOnlyMobile force show only mobile state
+         *
+         * @return {Boolean}
+         * True if plugin's tools are enabled
+         */
+        isEnabled: function (showOnlyMobile) {
+            var conf = this.getConfig();
+            var mobileOnly = showOnlyMobile || conf.mobileOnly;
+
+            if (mobileOnly === true && !Oskari.util.isMobile(true)) {
+                return false;
+            }
+            return this._enabled;
+        },
+
+        /**
+         * Toggle mode continues/single or if not plugin is not configured continues mode then use only single mode.
+         * @method @private _toggleMode
+         */
+        _toggleMode: function () {
+            var conf = this.getConfig();
+
+            // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single
+            // (not draw user location and accurary circle and center map to user location)
+            if (conf.mode === 'continuous' && this._currentMode === 'continuous') {
+                this._currentMode = 'single';
+                this._stopTracking();
+                this._setupLocation();
+            }
+            // else if plugin is configured continuous mode and current toggled mode is "single" then toggle mode to continuous.
+            else if (conf.mode === 'continuous' && this._currentMode === 'single') {
+                this._currentMode = 'continuous';
+                this._startTracking();
+            }
+            // else if not plugin is not configured to continuous moden then use like "single"
+            else {
+                this._stopTracking();
+                this._setupLocation();
+            }
+        },
+        /**
+         * Start tracking.
+         * @method @private _startTracking
+         */
+        _startTracking: function () {
+            var conf = this.getConfig();
+            var sandbox = this.getSandbox();
+            if (conf.centerMapAutomatically === true) {
+                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location', centerMap: 'single' }]);
+            } else {
+                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location' }]);
+            }
+        },
+        /**
+         * Stop tracking.
+         * @method @private _stopTracking
+         */
+        _stopTracking: function () {
+            var sandbox = this.getSandbox();
+            sandbox.postRequestByName('StopUserLocationTrackingRequest');
+        },
+
+        /**
+         * Handle plugin start mode
+         * @private @method _handleStartMode
+         */
+        _handleStartMode: function () {
+            var me = this;
+            var conf = this.getConfig();
+
+            if (conf.mode === 'continuous') {
+                me._currentMode = 'continuous';
+                me._startTracking();
+            } else if (conf.centerMapAutomatically === true) {
+                me._currentMode = 'single';
+                me._setupLocation();
+            }
+            return true;
         },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
@@ -205,9 +292,29 @@ Oskari.clazz.define(
         _stopPluginImpl: function (sandbox) {
             this.teardownUI();
         },
+        /**
+         * Checks at if device is outside of map viewport when mode is tracking.
+         * If it is then move map to show device location.
+         * @param {Double} lon
+         * @param {Double} lat
+         */
+        _checkIfOutsideViewport (lon, lat) {
+            var sandbox = this.getSandbox();
+            if (!this.isEnabled() || this._currentMode === 'single') {
+                // skip checking
+                return;
+            }
+            var bbox = sandbox.getMap().getBbox();
+            if (lon < bbox.left || lon > bbox.right || lat > bbox.top || lat < bbox.bottom) {
+                // outside view port, center map again
+                sandbox.postRequestByName('MapMoveRequest', [lon, lat]);
+            }
+        },
         _createEventHandlers: function () {
             return {
                 UserLocationEvent: (event) => {
+                    this._checkIfOutsideViewport(event.getLon(), event.getLat());
+
                     if (!this._active) {
                         return;
                     }

@@ -1,0 +1,6 @@
+import './src/global';
+import './tests/throwPropTypeErrors';
+import { configure } from 'enzyme';
+import Adapter from 'enzyme-adapter-react-16';
+
+configure({ adapter: new Adapter() });

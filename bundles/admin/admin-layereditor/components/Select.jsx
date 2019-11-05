@@ -1,33 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
 import { Select as AntSelect } from 'antd';
-import 'antd/es/select/style/';
+import 'antd/es/select/style/index.js';
+import styled from 'styled-components';
 
-export const Select = ({children, ...other}) => {
-    return (
-        <AntSelect {...other}>
-            {
-                children.map(c => {
-                    const {children, ...other} = c.props;
-                    return (
-                        <AntSelect.Option key={c.key} {...other}>{children}</AntSelect.Option>
-                    );
-                })
-            }
-        </AntSelect>
-    );
-};
-
-export const Option = ({children, ...other}) => (
-    <AntSelect.Option {...other}>
-        {children}
-    </AntSelect.Option>
-);
-
-Select.propTypes = {
-    children: PropTypes.any
-};
-
-Option.propTypes = {
-    children: PropTypes.any
-};
+// Wrap to styled so components can be referred in component styling.
+export const Select = styled(AntSelect)``;
+export const Option = styled(AntSelect.Option)``;

@@ -190,13 +190,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
                 popupTitle = loc('display.popup.title'),
                 popupContent = me._templates.popupContent.clone(),
                 crs = me.getMapModule().getProjection(),
-                crsDefaultText = loc('display.crs.default', { crs: crs }),
                 popupName = 'xytoolpopup',
                 popupLocation,
                 isMobile = Oskari.util.isMobile(),
                 mapmodule = me.getMapModule(),
                 popupService = me.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
+            const crsText = loc('display.crs')[crs] || loc('display.crs.default', { crs: crs });
             me._popup = popupService.createPopup();
             var popupEl = me._popup.getJqueryContent().parent().parent();
 
@@ -299,7 +299,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.coordinatetool.plugin.Coordinate
             }
 
             if (!me._getPreciseTransform) {
-                popupContent.find('.srs').html(crsDefaultText);
+                popupContent.find('.srs').html(crsText);
             }
 
             me._popup.createCloseIcon();

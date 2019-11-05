@@ -103,12 +103,25 @@ div.basic_publisher {
             padding-left: 27px;
             padding-top: 5px;
         }
+
+        &.mylocationplugin {
+            padding-left: 27px;
+
+            fieldset {
+                &.oskari-formcomponent {
+                    &.oskari-radiobuttongroup {
+                        padding-left: 16px;
+                    }
+                }
+            }
+        }
     }
 
     div.tool,
     div.data {
         label {
             margin-right: 10px;
+            width: 300px;
         }
 
         input {
@@ -224,6 +237,8 @@ div.basic_publisher {
     label.oskari-languageselect {
         clear: left;
     }
+
+
 }
 
 div.publisher {
@@ -299,6 +314,16 @@ div#publisher-colour-inputs {
 
 div.publisher-color-picker-group-wrapper {
     display: flex;
+}
+
+div.domain-warning {
+    color: black;
+    margin-top: 10px;
+    div {
+        margin-right: 5px;
+        float: left;
+        margin-bottom: 5px;
+    }
 }
 
 div#publisher-custom-colours {

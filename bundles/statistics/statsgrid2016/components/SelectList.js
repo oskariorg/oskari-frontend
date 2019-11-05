@@ -161,6 +161,9 @@ export class SelectList extends FormComponent {
         if (options.multi) {
             select.prop('multiple', true);
         }
+        if (options.disabled) {
+            select.prop('disabled', true);
+        }
         // Initialize SumoSelect
         select.SumoSelect(options);
         // Sumo selects the first value by default. Reset to placeholder.
