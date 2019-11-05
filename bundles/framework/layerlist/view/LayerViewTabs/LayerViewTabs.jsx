@@ -30,7 +30,7 @@ export const LayerViewTabs = ({ tab, layerList, selectedLayers, mutator, locale 
                 <LayerList {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
             <TabPane tab={<SelectedTab num={selectedLayers.state.layers.length} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
-                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator}/>
+                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator} />
             </TabPane>
         </ControlledTabs>
     );

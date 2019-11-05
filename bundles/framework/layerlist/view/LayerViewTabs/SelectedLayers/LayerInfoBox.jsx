@@ -44,7 +44,7 @@ LayerSlider.propTypes = {
     handleOpacityChange: PropTypes.func.isRequired
 };
 
-const LayerScaleBox = () => {
+export const LayerScaleBox = () => {
     return (
         <>
             :D

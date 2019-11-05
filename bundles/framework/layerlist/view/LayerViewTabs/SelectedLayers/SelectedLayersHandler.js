@@ -1,4 +1,4 @@
-import { StateHandler } from 'oskari-ui/util';
+import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 
 class UIService extends StateHandler {
     constructor (instance) {
@@ -19,4 +19,4 @@ class UIService extends StateHandler {
     }
 }
 
-export { UIService as SelectedLayersHandler };
+export const SelectedLayersHandler = mutatorMixin(UIService, []);
