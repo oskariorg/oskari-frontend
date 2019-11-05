@@ -1890,7 +1890,7 @@ Oskari.clazz.define(
          */
         __addPositionMarks: function (svgObject) {
             let htmlObject = svgObject.data;
-            if (typeof svgObject !== 'object') {
+            if (typeof svgObject.data !== 'object') {
                 htmlObject = jQuery(svgObject.data);
             }
             const defaultCenter = this._defaultMarker.size / 2;
