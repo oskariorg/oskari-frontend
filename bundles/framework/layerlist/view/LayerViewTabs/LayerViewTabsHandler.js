@@ -10,6 +10,7 @@ class UIStateHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.layerListHandler = new LayerListHandler(instance);
         this.layerListHandler.addStateListener(layerListState => this.updateState({
+            autoFocusSearch: false,
             layerList: {
                 state: layerListState,
                 mutator: this.state.layerList.mutator
@@ -30,7 +31,8 @@ class UIStateHandler extends StateHandler {
             selectedLayers: {
                 state: this.selectedLayersHandler.getState(),
                 mutator: this.selectedLayersHandler.getMutator()
-            }
+            },
+            autoFocusSearch: true
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -40,7 +42,10 @@ class UIStateHandler extends StateHandler {
     }
 
     setTab (tab) {
-        this.updateState({ tab });
+        this.updateState({
+            autoFocusSearch: true,
+            tab
+        });
     }
 
     /// Oskari event handling ////////////////////////////////////////////////////////////
@@ -71,6 +76,10 @@ class UIStateHandler extends StateHandler {
                 // ExtensionUpdateEvents are fired a lot, only let layerlist extension event to be handled when enabled
                 if (event.getExtension().getName() !== this.instance.getName()) {
                     // wasn't me -> do nothing
+                    return;
+                }
+                if (event.getViewState() === 'attach') {
+                    this.updateState({ autoFocusSearch: true });
                     return;
                 }
                 if (event.getViewState() === 'close' && this.hasStashedState()) {
