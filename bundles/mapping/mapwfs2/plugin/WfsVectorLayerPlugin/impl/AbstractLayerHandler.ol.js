@@ -36,7 +36,8 @@ export class AbstractLayerHandler {
     createEventHandlers () {
         return {
             AfterChangeMapLayerStyleEvent: event => this._updateLayerStyle(event.getMapLayer()),
-            AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer())
+            AfterChangeMapLayerOpacityEvent: event => this._updateLayerOpacity(event.getMapLayer()),
+            MapLayerVisibilityChangedEvent: event => this._updateLayerStyle(event.getMapLayer())
         };
     }
     /**
