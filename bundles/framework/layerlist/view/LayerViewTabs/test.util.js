@@ -1,5 +1,5 @@
 import '../../../layerselector2/service/layerlist';
-import '../../../layerselector2/resources/locale/en';
+import '../../../layerlist/resources/locale/en';
 import '../../../../mapping/mapmodule/service/map.state';
 
 export const initServices = () => {
@@ -12,5 +12,5 @@ export const initServices = () => {
 
 export const getBundleInstance = () => ({
     getSandbox: () => Oskari.getSandbox(),
-    getLocalization: () => Oskari.getLocalization('LayerSelector')
+    getLocalization: () => Oskari.getLocalization('LayerList')
 });

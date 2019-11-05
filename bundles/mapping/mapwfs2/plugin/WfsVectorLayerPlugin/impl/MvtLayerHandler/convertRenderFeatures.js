@@ -34,12 +34,12 @@ export function convertRenderFeatures (inputFeatures, tile, source) {
         return inputFeatures.slice();
     }
 
-    const tileProjection = tile.getProjection();
+    const tileProjection = tile.projection;
     let transformer = null;
     if (!equivalent(tileProjection, viewProjection)) {
         if (tileProjection.getUnits() === Units.TILE_PIXELS) {
             transformer = function (coords) {
-                const pixelExtent = tile.getExtent();
+                const pixelExtent = tile.extent;
                 const projectedExtent = source.getTileGrid().getTileCoordExtent(tile.getTileCoord());
                 const scale = getHeight(projectedExtent) / getHeight(pixelExtent);
                 composeTransform(tmpTransform,

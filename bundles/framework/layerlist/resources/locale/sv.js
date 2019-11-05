@@ -6,84 +6,40 @@ Oskari.registerLocalization(
             'title': 'Kartlager',
             'desc': '',
             'errors': {
-                'title': 'Fel!',
-                'generic': 'Systemfel. Försök på nytt senare.',
                 'loadFailed': 'Fel i laddningen av kartlager. Ladda ned sidan på nytt i din läsare och välj kartlagren igen.',
-                'noResults': 'Inga resultat hittades.',
-                'noResultsForKeyword': 'Inga kartlager hittades av detta sökord.',
-                'minChars': 'Skriv minst fyra tecken. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror, backsteg och bindestreck.'
+                'noResults': 'Inga resultat hittades.'
             },
-            'loading': 'Söker...',
+            'tabs': {
+                'layerList': 'Sök kartlager',
+                'selectedLayers': 'Valda kartlager'
+            },
             'filter': {
-                'text': 'Sök kartlager',
-                'keywordsTitle': 'Nyckelord:',
-                'shortDescription': 'Sök kartlager med namnet på kartlagret, namnet på dataproducenten eller nyckelordet som beskriver kartlagret.',
-                'description': 'Skriv en del av namnet på kartlagret, namnet på dataproducenten eller nyckelordet som beskriver kartlagret. Nyckelordssökningen startar när minst fyra tecken har skrivits. Tillåtna tecken är bokstäverna a-z samt å, ä och ö, siffror, backsteg och bindestreck.',
-                'inspire': 'Enligt tema',
-                'organization': 'Enligt dataproducent',
-                'selected': 'Valda kartlager',
-                'published': 'Användare',
-                'didYouMean': 'Menade du:'
+                'title': 'Visa',
+                'placeholder': 'Alla kartlager',
+                'search': {
+                    'placeholder': 'Sök kartlager med namnet, dataproducenten eller nyckelordet',
+                    'tooltip': 'Sök kartlager med namnet, dataproducenten eller nyckelordet som beskriver kartlagret. Skriv en del av namnet på kartlagret, dataproducenten eller nyckelordet som beskriver kartlagret.'
+                },
+                'newest': {
+                    'title': 'Nyaste',
+                    'tooltip': 'Visa de ## nyaste kartlager'
+                }
             },
-            'published': {
-                'organization': 'Publicerat kartlager',
-                'inspire': 'Publicerat kartlager'
+            'grouping': {
+                'title': 'Gruppering',
+                'inspire': 'Enligt tema',
+                'organization': 'Enligt dataproducent'
             },
             'tooltip': {
-                'type-base': 'Bakgrundskarta',
-                'type-wms': 'Kartlager (WMS, WMTS)',
-                'type-wfs': 'Dataprodukt (WFS)',
-                'type-wfs-manual': 'Data product (WFS) - Layer is drawn on a map via Feature Data or via Refresh button action',
-                'type-timeseries': 'Kartlager med tidsserie',
-                'unsupported-srs': 'Ostödd kartprojektion',
-                'addLayer': 'Tillägg lager'
+                'timeseries': 'Kartlager med tidsserie'
             },
             'backendStatus': {
-                'OK': {
-                    'tooltip': 'Kartlagret är tillgängligt just nu.',
-                    'iconClass': 'backendstatus-ok'
-                },
-                'DOWN': {
-                    'tooltip': 'Kartlagret är inte tillgängligt just nu.',
-                    'iconClass': 'backendstatus-down'
-                },
-                'ERROR': {
-                    'tooltip': 'Kartlagret är inte tillgängligt just nu.',
-                    'iconClass': 'backendstatus-error'
-                },
-                'MAINTENANCE': {
-                    'tooltip': 'Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.',
-                    'iconClass': 'backendstatus-maintenance'
-                },
-                'UNKNOWN': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unknown'
-                },
-                'UNSTABLE': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unstable'
-                }
-            },
-            'buttons': {
-                'ok': 'OK'
-            },
-            'types': {
-                'syn': 'Synonym',
-                'lk': 'Relaterat begrepp',
-                'vk': 'Koordinatbegrepp',
-                'ak': 'Underordnat begrepp',
-                'yk': 'Överordnat begrepp'
-            },
-            'layerFilter': {
-                'buttons': {
-                    'newest': 'Nyaste',
-                    'featuredata': 'Vektorlager'
-                },
-                'tooltips': {
-                    'newest': 'Visa de ## nyaste kartlager',
-                    'featuredata': 'Visa endast vektorlager',
-                    'remove': 'Ta bort filter'
-                }
+                'OK': 'Kartlagret är tillgängligt just nu.',
+                'DOWN': 'Kartlagret är inte tillgängligt just nu.',
+                'ERROR': 'Kartlagret är inte tillgängligt just nu.',
+                'MAINTENANCE': 'Avbrott i kartlagrets tillgänglighet är att vänta inom de närmaste dagarna.',
+                'UNKNOWN': '',
+                'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Kartlager',

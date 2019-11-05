@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LayerViewTabs, LayerListHandler } from './view/LayerViewTabs/';
+import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
 
 /**
  * @class Oskari.mapframework.bundle.layerlist.Flyout
@@ -19,9 +19,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         this.instance = instance;
         this.container = null;
         this.log = Oskari.log('layerlist');
-        this.layerListHandler = new LayerListHandler(instance);
-        this.layerListHandler.loadLayers();
-        this.layerListHandler.addStateListener(() => this.render());
+        this.tabsHandler = new LayerViewTabsHandler(this.instance);
+        this.tabsHandler.getLayerListHandler().loadLayers();
+        this.tabsHandler.addStateListener(() => this.render());
+        Oskari.on('app.start', () => this.tabsHandler.getLayerListHandler().updateAdminState());
     }, {
 
         /**
@@ -48,11 +49,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         },
 
         /**
+         * Interface method implementation, does nothing atm
          * @method startPlugin
          */
-        startPlugin: function () {
-            this.render();
-        },
+        startPlugin: function () { },
         /**
          * @method stopPlugin
          *
@@ -77,30 +77,18 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
         },
 
         /**
-         * @method getOptions
-         * Interface method implementation, does nothing atm
+         * For request handler. This is used when opening the layerlist from outside this bundle.
+         * @param {string} activeFilterId
          */
-        getOptions: function () { },
-
-        /**
-         * Set content state
-         * @method  @public setContentState
-         * @param {Object} state a content state
-         */
-        setContentState: function (state) {
-            // TODO; Set filter and selected tab
-            this.log.warn('Called an unimplemented function: setContentState');
-        },
-
-        getContentState: function () {
-            // TODO; Get filter and selected tab
-            this.log.warn('Called an unimplemented function: getContentState');
-            return {};
-        },
-
-        setActiveFilter: function () {
-            // TODO; Called from ShowFilteredLayerListRequestHandler
-            this.log.warn('Called an unimplemented function: setActiveFilter');
+        setActiveFilter: function (activeFilterId) {
+            const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
+            this.tabsHandler.stashCurrentState();
+            filterHandler.stashCurrentState();
+            filterHandler.updateState({
+                activeFilterId,
+                searchText: null
+            });
+            this.tabsHandler.setTab(TABS_ALL_LAYERS);
         },
 
         /**
@@ -108,12 +96,15 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Renders React content
          */
         render: function () {
+            if (!this.container) {
+                return;
+            }
             const locale = this.instance.getLocalization();
-            const layerList = {
-                state: this.layerListHandler.getState(),
-                mutator: this.layerListHandler.getMutator()
-            };
-            ReactDOM.render(<LayerViewTabs layerList={layerList} locale={locale} />, this.container);
+            ReactDOM.render(
+                <LayerViewTabs {... this.tabsHandler.getState()}
+                    mutator={this.tabsHandler.getMutator()}
+                    locale={locale} />,
+                this.container);
         }
     }, {
 

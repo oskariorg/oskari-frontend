@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Icon } from 'oskari-ui';
-import { EyeOpen, EyeShut, DragIcon } from './CustomIcons/CustomIcons';
+import { EyeOpen, EyeShut, DragIcon } from '../CustomIcons';
 import { LayerInfoBox } from './LayerInfoBox';
+import { LayerIcon } from '../LayerIcon';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -70,6 +71,9 @@ export const LayerBox = ({ layer }) => {
                         </ColAutoRight>
                     </Row>
                     <GrayRow>
+                        <ColAuto>
+                            <LayerIcon type={layerType} />
+                        </ColAuto>
                         <LayerInfoBox
                             layerType={layerType}
                             slider={slider}

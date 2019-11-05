@@ -20,7 +20,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         this.started = false;
         this.plugins = {};
         this.localization = null;
-        this.filteredLayerListOpenedByRequest = false;
     }, {
         /**
          * @static
@@ -98,13 +97,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             }
 
             // Add newest layers filter.
-            const loc = this.getLocalization('layerFilter');
+            const loc = this.getLocalization('filter');
             layerlistService.registerLayerlistFilterButton(
-                loc.buttons.newest,
-                loc.tooltips.newest.replace('##', FILTER_NEWEST_COUNT), {
-                    active: 'layer-newest',
-                    deactive: 'layer-newest-disabled'
-                },
+                loc.newest.title,
+                loc.newest.tooltip.replace('##', FILTER_NEWEST_COUNT),
+                {},
                 'newest');
 
             // Let's extend UI
@@ -117,8 +114,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
 
             const reqHandlerAddLayerListFilter = Oskari.clazz.create('Oskari.mapframework.bundle.layerselector2.request.AddLayerListFilterRequestHandler', sandbox, this);
             sandbox.requestHandler('AddLayerListFilterRequest', reqHandlerAddLayerListFilter);
-
-            sandbox.registerAsStateful(this.mediator.bundleId, this);
 
             this._registerForGuidedTour();
         },
@@ -201,7 +196,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
             const request = Oskari.requestBuilder('userinterface.RemoveExtensionRequest')(this);
             sandbox.request(this, request);
 
-            this.sandbox.unregisterStateful(this.mediator.bundleId);
             this.sandbox.unregister(this);
             this.started = false;
         },
@@ -255,22 +249,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
          */
         createUi: function () {
             this.plugins['Oskari.userinterface.Tile'].refresh();
-        },
-
-        /**
-         * @method setState
-         * @param {Object} state bundle state as JSON
-         */
-        setState: function (state) {
-            this.plugins['Oskari.userinterface.Flyout'].setContentState(state);
-        },
-
-        /**
-         * @method getState
-         * @return {Object} bundle state as JSON
-         */
-        getState: function () {
-            return this.plugins['Oskari.userinterface.Flyout'].getContentState();
         },
 
         /**

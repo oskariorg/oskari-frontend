@@ -1,57 +1,116 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Select } from 'oskari-ui';
+import { shapes } from '../propTypes';
+import { Button, Spin, Tooltip, Icon } from 'oskari-ui';
 import { LayerCollapse } from './LayerCollapse/';
-import { Filter } from './Filter/';
+import { Filter, Search } from './Filter/';
 import { Grouping } from './Grouping';
 import { Spinner } from './Spinner';
 import { Alert } from './Alert';
 import { GroupingOption } from '../../../model/GroupingOption';
 import styled from 'styled-components';
 
-const ContentDiv = styled('div')`
-    max-width: 600px;
-`;
-const ListControllers = styled('div')`
+const Column = styled('div')`
     display: flex;
-    align-items: center;
-    padding-bottom: 5px;
-    > :not(:last-child) {
-        margin-right: 10px;
-    }
-    ${Select} {
-        min-width: 180px;
+    flex-direction: column;
+    flex-grow: 1;
+    ${props => props.spacing && `
+        > :not(:last-child) {
+            margin-bottom: ${props.spacing};
+        }
+    `}
+`;
+const Row = styled('div')`
+    display: flex;
+    min-width: 200px;
+    ${props => props.spacing && `
+        > :not(:last-child) {
+            margin-right: ${props.spacing};
+        }
+    `}
+`;
+const ControlsRow = styled(Row)`
+    > * {
+        flex-grow: 1;
+        flex-basis: 200px;
     }
 `;
 
-export const LayerList = props => {
-    const { error, loading = false, locale, mutator } = props;
+const InfoIcon = styled(Icon)`
+    color: #979797;
+    font-size: 20px;
+    margin-left: 8px;
+    margin-top: 5px;
+`;
+
+const AddButton = styled(Button)`
+    margin-left: 8px;
+`;
+
+const Content = styled(Column)`
+    max-width: 600px;
+    min-width: 500px;
+`;
+
+const addLayer = () => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []);
+
+const Indicator = ({ show, children }) => {
+    if (show) {
+        return <Spin size="large">{ children }</Spin>;
+    }
+    return children;
+};
+
+const LayerList = props => {
+    const { error, loading = false, updating = false, locale, mutator } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
-    const { grouping, filter, collapse } = props;
+    const { grouping, filter, collapse, showAddButton } = props;
 
     // Force select to render on filter change by making the component fully controlled.
     // Clear btn won't clear the value properly without this.
     const filterKey = `${filter.state.activeFilterId}`;
+    const { searchText, filters, activeFilterId } = filter.state;
 
     return (
-        <ContentDiv>
-            <ListControllers>
-                <Grouping selected={grouping.selected} options={grouping.options} mutator={mutator}/>
-                <Filter key={filterKey} {...filter.state} mutator={filter.mutator}/>
-            </ListControllers>
+        <Content spacing={'15px'}>
+            <Row>
+                <Column spacing={'10px'}>
+                    <Search searchText={searchText} mutator={filter.mutator} locale={locale} />
+                    <ControlsRow spacing={'10px'}>
+                        <Grouping
+                            selected={grouping.selected}
+                            options={grouping.options}
+                            mutator={mutator}
+                            locale={locale}/>
+                        <Filter key={filterKey}
+                            filters={filters}
+                            activeFilterId={activeFilterId}
+                            mutator={filter.mutator}
+                            locale={locale}/>
+                    </ControlsRow>
+                </Column>
+                <Tooltip title={locale.filter.search.tooltip}>
+                    <InfoIcon type="question-circle" />
+                </Tooltip>
+                { showAddButton &&
+                    <Tooltip title={locale.tooltip.addLayer}>
+                        <AddButton icon="plus" onClick={addLayer} />
+                    </Tooltip>
+                }
+            </Row>
             { loading && <Spinner/> }
-            { !loading && <LayerCollapse {...collapse.state} mutator={collapse.mutator} locale={locale}/> }
-        </ContentDiv>
+            { !loading &&
+                <Indicator show={updating}>
+                    <LayerCollapse {...collapse.state} mutator={collapse.mutator} locale={locale}/>
+                </Indicator>
+            }
+        </Content>
     );
 };
 
-const stateful = {
-    state: PropTypes.object.isRequired,
-    mutator: PropTypes.object.isRequired
-};
 const grouping = {
     selected: PropTypes.string,
     options: PropTypes.arrayOf(PropTypes.instanceOf(GroupingOption)).isRequired
@@ -59,9 +118,14 @@ const grouping = {
 LayerList.propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool,
+    updating: PropTypes.bool,
     locale: PropTypes.object.isRequired,
-    collapse: PropTypes.shape(stateful).isRequired,
-    filter: PropTypes.shape(stateful).isRequired,
+    collapse: shapes.stateful.isRequired,
+    filter: shapes.stateful.isRequired,
+    showAddButton: PropTypes.bool,
     mutator: PropTypes.object.isRequired,
     grouping: PropTypes.shape(grouping).isRequired
 };
+
+const memoized = React.memo(LayerList);
+export { memoized as LayerList };

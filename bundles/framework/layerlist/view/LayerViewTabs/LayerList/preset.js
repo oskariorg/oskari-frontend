@@ -10,3 +10,10 @@ export const GROUPING_PRESET = [
         method: 'getOrganizationName'
     }
 ];
+
+export const TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS = {
+    MIN_CHAR_COUNT: 1,
+    MAX_CHAR_COUNT: 8,
+    MAX: 2000,
+    MIN: 200
+};

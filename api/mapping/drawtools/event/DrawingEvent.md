@@ -145,7 +145,7 @@ Returns all the params of the event.
 
 ## Examples
 
-DrawPlugin.ol3 sends DrawingEvent:
+DrawPlugin.ol sends DrawingEvent:
 <pre class="event-code-block">
 <code>
 /**

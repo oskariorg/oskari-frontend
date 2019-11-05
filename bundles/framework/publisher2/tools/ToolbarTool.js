@@ -200,7 +200,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
             // we want toolbar always with no default tools
             retValue.configuration.toolbar = { conf: { 'history': false, 'basictools': false, 'viewtools': false } };
 
-            // PublishedMyPlaces is not supported with ol3
+            // PublishedMyPlaces is not supported with ol
 
             /*
             if (me.publishedmyplaces2Config && me.publishedmyplaces2Config.layer && selectedDrawTools) {
@@ -366,7 +366,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ToolbarTool',
         },
         _checkAdminDrawControls: function () {
             // show drawing controls for admin users
-            // TODO: PublishedMyPlaces is not supported with ol3!
+            // TODO: PublishedMyPlaces is not supported with ol!
         },
         /**
          *  Manages drawlayer options in checked and unchecked cases

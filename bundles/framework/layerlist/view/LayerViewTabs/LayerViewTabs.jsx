@@ -1,37 +1,45 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { shapes } from './propTypes';
 import styled from 'styled-components';
 import { Tabs, TabPane } from 'oskari-ui';
+import { Mutator } from 'oskari-ui/util';
 import { LayerList } from './LayerList/';
 import { SelectedLayers, SelectedTab } from './SelectedLayers/';
+import { TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from '.';
 
 const StyledTabs = styled(Tabs)`
     max-width: 600px;
 `;
 
-export const LayerViewTabs = ({ layerList, locale }) => {
-    const layerKey = 0;
-    const selectedKey = 1;
-    const layers = Oskari.getSandbox().findAllSelectedMapLayers();
-    const numLayers = layers.length;
-    const { text, selected } = locale.filter;
+const ControlledTabs = ({ tab, ...rest }) => {
+    if (tab) {
+        return <StyledTabs activeKey={tab} {...rest} />;
+    }
+    return <StyledTabs defaultActiveKey={TABS_ALL_LAYERS} {...rest} />;
+};
+ControlledTabs.propTypes = {
+    tab: PropTypes.string
+};
+
+export const LayerViewTabs = ({ tab, layerList, selectedLayers, mutator, locale }) => {
+    const { tabs } = locale;
     return (
-        <StyledTabs tabPosition='top'>
-            <TabPane tab={text} key={layerKey}>
+        <ControlledTabs tabPosition='top' tab={tab} onChange={mutator.setTab}>
+            <TabPane tab={tabs.layerList} key={TABS_ALL_LAYERS}>
                 <LayerList {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
-            <TabPane tab={<SelectedTab num={numLayers} text={selected} />} key={selectedKey}>
-                <SelectedLayers layers={layers} />
+            <TabPane tab={<SelectedTab num={selectedLayers.state.layers.length} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
+                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator}/>
             </TabPane>
-        </StyledTabs>
+        </ControlledTabs>
     );
 };
 
-const stateful = {
-    state: PropTypes.object.isRequired,
-    mutator: PropTypes.object.isRequired
-};
 LayerViewTabs.propTypes = {
-    layerList: PropTypes.shape(stateful).isRequired,
-    locale: PropTypes.shape({ filter: PropTypes.object }).isRequired
+    layerList: shapes.stateful.isRequired,
+    selectedLayers: shapes.stateful.isRequired,
+    tab: PropTypes.string,
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    locale: PropTypes.shape({ tabs: PropTypes.object }).isRequired
 };

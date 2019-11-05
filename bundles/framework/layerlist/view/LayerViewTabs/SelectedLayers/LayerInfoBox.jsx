@@ -3,13 +3,11 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ColAuto, ColAutoRight } from './Grid';
 import { Slider, Icon, NumberInput } from 'oskari-ui';
-import { DataLayerIcon, ImageLayerIcon, TimeSerieIcon, UserDataIcon, ThemeMapIcon, ThreeDIcon } from './CustomIcons/CustomIcons';
 
 const StyledSlider = styled.div`
-    border: solid 2px #d9d9d9;
     border-radius: 4px;
     width: 150px;
-    padding: 8px 15px;
+    padding: 12px 19px;
 `;
 
 const StyledNumberInput = styled(NumberInput)`
@@ -17,38 +15,6 @@ const StyledNumberInput = styled(NumberInput)`
     font-size: 15px;
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
 `;
-
-const LayerIcon = ({ type }) => {
-    if (type === 'wmts') {
-        return (
-            <ImageLayerIcon style={{ marginTop: '5px' }} title={type} />
-        );
-    } else if (type === 'myplaces' || type === 'analysis' || type === 'userlayer') {
-        return (
-            <UserDataIcon style={{ marginTop: '5px' }} title={type} />
-        );
-    } else if (type === 'timeseries') {
-        return (
-            <TimeSerieIcon style={{ marginTop: '5px' }} title={type} />
-        );
-    } else if (type === 'thememap') {
-        return (
-            <ThemeMapIcon style={{ marginTop: '5px' }} title={type} />
-        );
-    // this is wrong :D
-    } else if (type === '3d') {
-        return (
-            <ThreeDIcon style={{ marginTop: '5px' }} title={type} />
-        );
-    }
-    return (
-        <DataLayerIcon style={{ marginTop: '5px' }} title={type} />
-    );
-};
-
-LayerIcon.propTypes = {
-    type: PropTypes.string
-};
 
 const LayerSlider = ({ slider, handleOpacityChange }) => (
     <>
@@ -86,13 +52,9 @@ const LayerScaleBox = () => {
     );
 };
 
-export const LayerInfoBox = ({ layerType, slider, handleOpacityChange, handleOpenMenu }) => {
+export const LayerInfoBox = ({ slider, handleOpacityChange, handleOpenMenu }) => {
     return (
     <>
-        <ColAuto>
-            <LayerIcon type={layerType} />
-        </ColAuto>
-        {/* conditional stuff under here */}
         <LayerSlider
             slider={slider}
             handleOpacityChange={handleOpacityChange}
@@ -109,7 +71,6 @@ export const LayerInfoBox = ({ layerType, slider, handleOpacityChange, handleOpe
 };
 
 LayerInfoBox.propTypes = {
-    layerType: PropTypes.string.isRequired,
     slider: PropTypes.number.isRequired,
     handleOpacityChange: PropTypes.func.isRequired,
     handleOpenMenu: PropTypes.func.isRequired

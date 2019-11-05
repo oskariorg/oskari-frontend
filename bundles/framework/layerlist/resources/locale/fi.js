@@ -6,84 +6,40 @@ Oskari.registerLocalization(
             'title': 'Karttatasot',
             'desc': '',
             'errors': {
-                'title': 'Virhe',
-                'generic': 'Järjestelmässä tapahtui virhe.',
                 'loadFailed': 'Karttatasojen lataaminen epäonnistui. Päivitä sivu selaimessasi ja valitse karttatasot uudelleen.',
-                'noResults': 'Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.',
-                'noResultsForKeyword': 'Karttatasoja ei löytynyt. Tarkista hakusana ja yritä uudelleen.',
-                'minChars': 'Antamasi hakusana on liian lyhyt. Hakusanassa on oltava vähintään neljä merkkiä.'
+                'noResults': 'Hakutuloksia ei löytynyt. Tarkista hakusana ja yritä uudelleen.'
             },
-            'loading': 'Haetaan...',
+            'tabs': {
+                'layerList': 'Hae karttatasoja',
+                'selectedLayers': 'Valitut tasot'
+            },
             'filter': {
-                'text': 'Hae karttatasoja',
-                'keywordsTitle': 'Avainsanat',
-                'shortDescription': 'Hae karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella.',
-                'description': 'Voit hakea karttatasoa karttatason nimen, tiedontuottajan nimen tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä. Hakusanassa on oltava vähintään neljä merkkiä.',
-                'inspire': 'Aiheittain',
-                'organization': 'Tiedontuottajittain',
-                'selected': 'Valitut tasot',
-                'published': 'Käyttäjät',
-                'didYouMean': 'Tarkoititko:'
+                'title': 'Näytä',
+                'placeholder': 'Kaikki karttatasot',
+                'search': {
+                    'placeholder': 'Hae karttatasoa nimen, tiedontuottajan tai avainsanan perusteella',
+                    'tooltip': 'Voit hakea karttatasoa nimen, tiedontuottajan tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä.',    
+                },
+                'newest': {
+                    'title': 'Uusimmat',
+                    'tooltip': 'Näytä ## uusinta karttatasoa'
+                }
             },
-            'published': {
-                'organization': 'Julkaistu karttataso',
-                'inspire': 'Julkaistu karttataso'
+            'grouping': {
+                'title': 'Ryhmittely',
+                'inspire': 'Aiheittain',
+                'organization': 'Tiedontuottajittain'
             },
             'tooltip': {
-                'type-base': 'Taustakartta',
-                'type-wms': 'Karttataso',
-                'type-wfs': 'Tietotuote',
-                'type-wfs-manual': 'Päivitä kohdetiedot kartalla klikkaamalla Kohdetiedot- tai Päivitä-painiketta karttanäkymässä.',
-                'type-timeseries': 'Aikasarjataso',
-                'unsupported-srs': 'Väärä karttaprojektio',
-                'addLayer': 'Lisää karttataso'
+                'timeseries': 'Aikasarjataso'
             },
             'backendStatus': {
-                'OK': {
-                    'tooltip': 'Karttataso on käytettävissä tällä hetkellä.',
-                    'iconClass': 'backendstatus-ok'
-                },
-                'DOWN': {
-                    'tooltip': 'Karttataso ei tällä hetkellä käytettävissä.',
-                    'iconClass': 'backendstatus-down'
-                },
-                'ERROR': {
-                    'tooltip': 'Karttataso ei tällä hetkellä käytettävissä.',
-                    'iconClass': 'backendstatus-error'
-                },
-                'MAINTENANCE': {
-                    'tooltip': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
-                    'iconClass': 'backendstatus-maintenance'
-                },
-                'UNKNOWN': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unknown'
-                },
-                'UNSTABLE': {
-                    'tooltip': '',
-                    'iconClass': 'backendstatus-unstable'
-                }
-            },
-            'buttons': {
-                'ok': 'OK'
-            },
-            'types': {
-                'syn': 'Synonyymi',
-                'lk': 'Lähikäsite',
-                'vk': 'Vieruskäsite',
-                'ak': 'Alakäsite',
-                'yk': 'Yläkäsite'
-            },
-            'layerFilter': {
-                'buttons': {
-                    'newest': 'Uusimmat',
-                    'featuredata': 'Vektoritasot'
-                },
-                'tooltips': {
-                    'newest': 'Näytä ## uusinta karttatasoa',
-                    'featuredata': 'Näytä vain vektoritasot',
-                    'remove': 'Poista suodatus'
-                }
+                'OK': 'Karttataso on käytettävissä tällä hetkellä.',
+                'DOWN': 'Karttataso ei tällä hetkellä käytettävissä.',
+                'ERROR': 'Karttataso ei tällä hetkellä käytettävissä.',
+                'MAINTENANCE': 'Karttataso voi olla ajoittain poissa käytöstä lähipäivinä.',
+                'UNKNOWN': '',
+                'UNSTABLE': ''
             },
             'guidedTour': {
                 'title': 'Karttatasot',

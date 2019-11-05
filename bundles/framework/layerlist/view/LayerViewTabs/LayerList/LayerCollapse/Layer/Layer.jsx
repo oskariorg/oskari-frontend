@@ -1,32 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Switch } from 'oskari-ui';
+import { Switch, Tooltip } from 'oskari-ui';
 import { LayerTools } from './LayerTools';
 
-const LayerDiv = styled('div')`
+const Flex = styled('div')`
+    display: flex;
+    align-items: center;
+`;
+const LayerDiv = styled(Flex)`
     background-color: ${props => props.even ? '#ffffff' : '#f3f3f3'};
     clear: both;
-    position: relative;
-    padding: 6px 70px 6px 40px;
-    min-height: 14px;
-    line-height: 14px;
-    
+    padding: 6px;
+    min-height: 16px;
+    line-height: 16px;
 `;
-const CustomTools = styled('div')`
-    position: absolute;
-    left: 5px;
-    display: inline-block;
-    :hover {
+const CustomTools = styled(Flex)`
+    min-width: 20px;
+    margin-right: 5px;
+    div:hover {
         cursor: pointer;
     }
 `;
-const FloatingSwitch = styled(Switch)`
-    float: left;
-    margin: 0 8px 0 0 !important;
-`;
 const Label = styled('label')`
+    display: flex;
+    align-items: center;
     cursor: pointer;
+    > div {
+        margin-left: 8px;
+    }
+`;
+const Body = styled(Flex)`
+    flex-grow: 1;
 `;
 
 const onSelect = (checked, layerId, mutator) => {
@@ -47,20 +52,21 @@ const Layer = ({ model, even, selected, mutator, locale }) => {
                 {
                     model.getTools()
                         .filter(tool => tool.getTypes().includes('layerList'))
-                        .map((tool, i) => (
-                            <div key={`${tool.getName()}_${i}`}
-                                className={tool.getIconCls()}
-                                title={tool.getTooltip()}
-                                onClick={() => onToolClick(tool)}/>)
+                        .map((tool, i) =>
+                            <Tooltip key={`${tool.getName()}_${i}`} title={tool.getTooltip()}>
+                                <div className={tool.getIconCls()} onClick={() => onToolClick(tool)}/>
+                            </Tooltip>
                         )
                 }
             </CustomTools>
-            <Label>
-                <FloatingSwitch size="small" checked={selected}
-                    onChange={checked => onSelect(checked, model.getId(), mutator)}
-                    disabled={model.isSticky()} />
-                {model.getName()}
-            </Label>
+            <Body>
+                <Label>
+                    <Switch size="small" checked={selected}
+                        onChange={checked => onSelect(checked, model.getId(), mutator)}
+                        disabled={model.isSticky()} />
+                    <div>{model.getName()}</div>
+                </Label>
+            </Body>
             <LayerTools model={model} mutator={mutator} locale={locale}/>
         </LayerDiv>
     );

@@ -1068,7 +1068,7 @@ Oskari.clazz.define(
          *         }
          *     }
          * }
-         * @param {Object} feature ol3 feature
+         * @param {Object} feature ol feature
          * @param {Boolean} update update feature style
          */
         getStyle: function (options, feature, update) {
@@ -1091,7 +1091,7 @@ Oskari.clazz.define(
             if (cached.ol) {
                 zIndex = cached.ol.getZIndex();
             }
-            cached.ol = me.getMapModule().getStyle(cached.oskari);
+            cached.ol = me.getMapModule().getStyle(cached.oskari, null, overrideStyle);
             cached.ol.setZIndex(zIndex);
             return cached.ol;
         },

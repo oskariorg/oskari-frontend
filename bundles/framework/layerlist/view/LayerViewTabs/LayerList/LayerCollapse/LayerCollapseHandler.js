@@ -1,7 +1,6 @@
 import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 
-const MIN_SEARCH_TEXT_LENGTH = 2;
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
 
@@ -68,7 +67,7 @@ class UIService extends StateHandler {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
         let groups = groupLayers([...layers], this.groupingMethod);
-        if (!searchText || searchText.length <= MIN_SEARCH_TEXT_LENGTH) {
+        if (!searchText) {
             this.updateState({ groups });
             return;
         }
@@ -157,7 +156,13 @@ class UIService extends StateHandler {
             },
             'AfterMapLayerRemoveEvent': () => this.updateSelectedLayerIds(),
             'AfterMapLayerAddEvent': () => this.updateSelectedLayerIds(),
-            'BackendStatus.BackendStatusChangedEvent': event => this._refreshLayer(event.getLayerId())
+            'BackendStatus.BackendStatusChangedEvent': event => {
+                if (event.getLayerId()) {
+                    this._refreshLayer(event.getLayerId());
+                } else {
+                    throttleRefreshAll();
+                }
+            }
         };
         Object.getOwnPropertyNames(handlers).forEach(p => sandbox.registerForEventByName(this, p));
         return handlers;

@@ -36,7 +36,7 @@ describe('LayerListHandler', () => {
         handler.getMutator().setGrouping(invalidGroupingKey);
         expect(handler.getState().grouping.selected).toBe(existingGrouping);
 
-        // Setting an invalid group ket won't change the state.
+        // Setting an invalid group key won't change the state.
         expect(mockFn).toHaveBeenCalledTimes(1);
     });
 });

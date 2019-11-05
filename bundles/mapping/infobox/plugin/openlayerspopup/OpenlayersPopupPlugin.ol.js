@@ -315,7 +315,7 @@ Oskari.clazz.define(
                     if (refresh) {
                         popup.setPositioning(null);
                     }
-                    // update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol3)
+                    // update the correct positioning (width + height now known so the position in pixels gets calculated correctly by ol)
                     popup.setPositioning(positioning);
                 } else {
                     me._adaptPopupSize(id, refresh);
