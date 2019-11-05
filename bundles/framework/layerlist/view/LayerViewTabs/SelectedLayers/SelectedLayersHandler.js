@@ -29,14 +29,18 @@ class UIService extends StateHandler {
             // Layer wasn't actually moved, ignore
             return;
         }
-        if (fromPosition >= this.state.layers.length) {
+        const { layers } = this.state;
+        if (fromPosition >= layers.length) {
             return;
         }
-        if (toPosition >= this.state.layers.length) {
+        if (toPosition >= layers.length) {
             return;
         }
-        const layerId = this.state.layers[fromPosition].getId();
-        this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, toPosition]);
+        const layerId = layers[fromPosition].getId();
+        // the layer order is reversed in presentation
+        // the lowest layer has the highest index
+        const toDataPosition = (layers.length - 1) - toPosition;
+        this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, toDataPosition]);
     }
 }
 
