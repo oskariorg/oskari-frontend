@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { ColAuto, ColAutoRight } from './Grid';
@@ -7,18 +7,18 @@ import { Slider, Icon, NumberInput } from 'oskari-ui';
 const StyledSlider = styled.div`
     border-radius: 4px;
     width: 150px;
-    padding: 12px 19px;
+    padding: 10px;
 `;
 
 const StyledNumberInput = styled(NumberInput)`
-    width: 70px !important;
+    width: 50px !important;
     font-size: 15px;
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
 `;
 
 const LayerSlider = ({ slider, handleOpacityChange }) => (
-    <>
-        <ColAuto>
+    <Fragment>
+        <ColAuto >
             <StyledSlider>
                 <Slider
                     value={slider}
@@ -33,10 +33,10 @@ const LayerSlider = ({ slider, handleOpacityChange }) => (
                 max={100}
                 value={slider}
                 onChange={handleOpacityChange}
-                formatter={value => `${value} %`}
             />
+            %
         </ColAuto>
-    </>
+    </Fragment>
 );
 
 LayerSlider.propTypes = {
@@ -46,27 +46,27 @@ LayerSlider.propTypes = {
 
 export const LayerScaleBox = () => {
     return (
-        <>
+        <Fragment>
             :D
-        </>
+        </Fragment>
     );
 };
 
 export const LayerInfoBox = ({ slider, handleOpacityChange, handleOpenMenu }) => {
     return (
-    <>
-        <LayerSlider
-            slider={slider}
-            handleOpacityChange={handleOpacityChange}
-        />
-        <ColAutoRight>
-            <Icon
-                type="menu"
-                onClick={handleOpenMenu}
-                style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
+        <Fragment>
+            <LayerSlider
+                slider={slider}
+                handleOpacityChange={handleOpacityChange}
             />
-        </ColAutoRight>
-    </>
+            <ColAutoRight>
+                <Icon
+                    type="menu"
+                    onClick={handleOpenMenu}
+                    style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
+                />
+            </ColAutoRight>
+        </Fragment>
     );
 };
 

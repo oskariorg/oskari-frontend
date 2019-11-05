@@ -1,20 +1,17 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { LayerBox } from './LayerBox';
 
 export const SelectedLayers = ({ layers }) => {
     return (
-        <React.Fragment>
-            {layers.map(layer => {
-                const id = layer.getId();
-                return (
-                    <LayerBox
-                        key={id}
-                        layer={layer}
-                    />
-                );
-            })}
-        </React.Fragment>
+        <Fragment>
+            {layers.map(layer => (
+                <LayerBox
+                    key={layer.getId()}
+                    layer={layer}
+                />
+            ))}
+        </Fragment>
     );
 };
 

@@ -72,7 +72,7 @@ export const LayerBox = ({ layer }) => {
                     </Row>
                     <GrayRow>
                         <ColAuto>
-                            <LayerIcon type={layerType} />
+                            <LayerIcon type={layerType} style={{ marginTop: '5px' }} />
                         </ColAuto>
                         <LayerInfoBox
                             layerType={layerType}
