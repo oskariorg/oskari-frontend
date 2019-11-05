@@ -1,4 +1,4 @@
-import { StateHandler } from 'oskari-ui/util';
+import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 
 class UIService extends StateHandler {
     constructor (instance) {
@@ -6,17 +6,40 @@ class UIService extends StateHandler {
         this.instance = instance;
         this.sandbox = instance.getSandbox();
         this.state = {
-            layers: this.getLayers()
+            layers: this._getLayers()
         };
     }
 
-    getLayers () {
+    _getLayers () {
         return [...this.sandbox.findAllSelectedMapLayers()].reverse();
     }
 
     updateLayers () {
-        this.updateState({ layers: this.getLayers() });
+        this.updateState({ layers: this._getLayers() });
+    }
+
+    reorderLayers (fromPosition, toPosition) {
+        if (isNaN(fromPosition)) {
+            throw new Error('reorderLayers: fromPosition is Not a Number: ' + fromPosition);
+        }
+        if (isNaN(toPosition)) {
+            throw new Error('reorderLayers: toPosition is Not a Number: ' + toPosition);
+        }
+        if (fromPosition === toPosition) {
+            // Layer wasn't actually moved, ignore
+            return;
+        }
+        if (fromPosition >= this.state.layers.length) {
+            return;
+        }
+        if (toPosition >= this.state.layers.length) {
+            return;
+        }
+        const layerId = this.state.layers[fromPosition].getId();
+        this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layerId, toPosition]);
     }
 }
 
-export { UIService as SelectedLayersHandler };
+export const SelectedLayersHandler = mutatorMixin(UIService, [
+    'reorderLayers'
+]);
