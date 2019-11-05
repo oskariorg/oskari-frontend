@@ -16,7 +16,6 @@ module.exports = {
     "ClipperLib": false,
     "d3": false,
     "define": false,
-    "GeostatsHelper": false,
     "jQuery": false,
     "jsts": false,
     "MobileDetect": false,
