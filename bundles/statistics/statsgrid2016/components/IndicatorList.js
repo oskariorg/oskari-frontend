@@ -68,7 +68,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
             me.service.getUILabels(ind, function (labels) {
                 const regexFourDigitYearBetweenParenthesesAtTheEnd = /\(\d{4}\)$/;
                 var indElem = jQuery(me.__templates.indicator({
-                    name: Oskari.util.cutSentenceToLength(labels.full, 50, regexFourDigitYearBetweenParenthesesAtTheEnd),
+                    name: Oskari.util.cutSentenceToLength(labels.full, 60, regexFourDigitYearBetweenParenthesesAtTheEnd),
                     indHash: ind.hash
                 }));
                 content.find('.statsgrid-indicator-list').append(indElem);
