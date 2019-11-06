@@ -35,8 +35,7 @@ Oskari.registerLocalization(
                     'timeseries': 'Kartlager med tidsserie'
                 },
                 'styles': {
-                    'title': 'Stil',
-                    'default': 'Standard stil'
+                    'title': 'Stil'
                 }
             },
             'backendStatus': {

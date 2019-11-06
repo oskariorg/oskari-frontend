@@ -35,8 +35,7 @@ Oskari.registerLocalization(
                     'timeseries': 'Time series layer'
                 },
                 'styles': {
-                    'title': 'Style',
-                    'default': 'Default style'
+                    'title': 'Style'
                 }
             },
             'backendStatus': {

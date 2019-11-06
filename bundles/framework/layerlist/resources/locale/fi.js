@@ -38,8 +38,7 @@ Oskari.registerLocalization(
                     'timeseries': 'Aikasarjataso'
                 },
                 'styles': {
-                    'title': 'Tyyli',
-                    'default': 'Oletustyyli'
+                    'title': 'Tyyli'
                 }
             },
             'backendStatus': {
