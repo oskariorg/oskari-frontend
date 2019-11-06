@@ -5,12 +5,14 @@ import { Mutator } from 'oskari-ui/util';
 import { LayerBox } from './LayerBox';
 
 // Ensuring the whole list does not re-render when the droppable re-renders
-const Layers = React.memo(({ layers }) => (
-    layers.map((layer, index) => <LayerBox key={layer.getId()} layer={layer} index={index} />)
+const Layers = React.memo(({ layers, mutator }) => (
+    layers.map((layer, index) => <LayerBox key={layer.getId()} layer={layer} index={index} mutator={mutator} />)
 ));
 Layers.displayName = 'Layers';
+
 Layers.propTypes = {
-    layers: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+    layers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
 
 const reorder = (result, mutator) => {
@@ -25,7 +27,7 @@ export const SelectedLayers = ({ layers, mutator }) => (
         <Droppable droppableId="layers">
             {provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                    <Layers layers={layers}/>
+                    <Layers layers={layers} mutator={mutator} />
                     {provided.placeholder}
                 </div>
             )}

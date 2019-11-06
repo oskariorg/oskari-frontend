@@ -1,4 +1,4 @@
-import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, mutatorMixin, Timeout } from 'oskari-ui/util';
 
 class UIService extends StateHandler {
     constructor (instance) {
@@ -46,9 +46,10 @@ class UIService extends StateHandler {
         this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layer.getId(), toDataPosition]);
     }
 
-    hideLayer (layer) {
-        this.sandbox.postRequestByName('MapLayerVisibilityRequestHandler', layer);
-        this.updateState({ layers: this._getLayers() });
+    async toggleLayerVisibility (layer) {
+        const visibility = layer.isVisible();
+        this.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), !visibility]);
+        this.updateLayers();
     }
 
     changeOpacity (layer, opacity) {
@@ -63,5 +64,8 @@ class UIService extends StateHandler {
 }
 
 export const SelectedLayersHandler = mutatorMixin(UIService, [
-    'reorderLayers'
+    'reorderLayers',
+    'removeLayer',
+    'changeOpacity',
+    'toggleLayerVisibility'
 ]);

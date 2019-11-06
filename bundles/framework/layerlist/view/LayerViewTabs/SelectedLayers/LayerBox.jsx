@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Mutator } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon } from 'oskari-ui';
+import { Icon, Dropdown, Menu } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../CustomIcons';
 import { LayerInfoBox } from './LayerInfoBox';
 import { LayerIcon } from '../LayerIcon';
@@ -24,28 +25,44 @@ const GrayRow = styled(Row)`
     padding-left: 60px;
 `;
 
-export const LayerBox = ({ layer, index }) => {
+const SelectedLayerDropdown = () => {
+    const items = [{
+        title: 'test',
+        action: () => console.log('test')
+    }];
+    const menu = <Menu items={items} />;
+    return (
+        <Dropdown menu={menu} click={false}>
+            <React.Fragment>
+                <Icon
+                    type="menu"
+                    style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
+                />
+            </React.Fragment>
+        </Dropdown>
+    );
+};
+
+export const LayerBox = ({ layer, index, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
+    const [visible, setVisible] = useState(layer.isVisible());
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
-    const visible = layer.isVisible();
     const layerType = layer.getLayerType();
     // const isInScale = layer.isInScale();
     // const srs = layer.isSupportedSrs();
     // Try to find this somewhere
     // const activeFeats = layer.getActiveFeatures().length;
     const handleOpacityChange = value => {
-        layer.setOpacity(value);
         setSlider(value);
+        mutator.changeOpacity(layer, value);
     };
     const handleToggleVisibility = () => {
-        console.log('Toggle visibility');
-    };
-    const handleOpenMenu = () => {
-        console.log('Open menu');
+        setVisible(!visible);
+        mutator.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
-        console.log('Remove layer');
+        mutator.removeLayer(layer);
     };
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
@@ -79,14 +96,9 @@ export const LayerBox = ({ layer, index }) => {
                                         layerType={layerType}
                                         slider={slider}
                                         handleOpacityChange={handleOpacityChange}
-                                        handleOpenMenu={handleOpenMenu}
                                     />
                                     <ColAutoRight>
-                                        <Icon
-                                            type="menu"
-                                            onClick={handleOpenMenu}
-                                            style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
-                                        />
+                                        <SelectedLayerDropdown />
                                     </ColAutoRight>
                                 </GrayRow>
                             </StyledBox>
@@ -100,5 +112,6 @@ export const LayerBox = ({ layer, index }) => {
 
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };

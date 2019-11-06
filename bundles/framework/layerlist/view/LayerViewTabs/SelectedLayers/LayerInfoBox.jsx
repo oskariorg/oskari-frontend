@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ColAuto, ColAutoRight } from './Grid';
-import { Slider, Icon, NumberInput } from 'oskari-ui';
+import { ColAuto } from './Grid';
+import { Slider, NumberInput } from 'oskari-ui';
 
 const StyledSlider = styled.div`
     border-radius: 4px;
@@ -56,7 +56,7 @@ export const LayerScaleBox = () => {
     );
 };
 
-export const LayerInfoBox = ({ slider, handleOpacityChange, handleOpenMenu }) => {
+export const LayerInfoBox = ({ slider, handleOpacityChange }) => {
     return (
         <Fragment>
             <LayerSlider
@@ -69,6 +69,5 @@ export const LayerInfoBox = ({ slider, handleOpacityChange, handleOpenMenu }) =>
 
 LayerInfoBox.propTypes = {
     slider: PropTypes.number.isRequired,
-    handleOpacityChange: PropTypes.func.isRequired,
-    handleOpenMenu: PropTypes.func.isRequired
+    handleOpacityChange: PropTypes.func.isRequired
 };
