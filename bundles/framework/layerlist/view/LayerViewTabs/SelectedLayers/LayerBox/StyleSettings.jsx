@@ -19,8 +19,8 @@ const handleOwnStyleClick = ownStyleCallback => {
     }
 };
 
-const getOption = (style, ...rest) => (
-    <Option key={style.getName()} value={style.getName()} {...rest}>
+const getOption = (style) => (
+    <Option key={style.getName()} value={style.getName()}>
         {style.getTitle()}
     </Option>
 );
