@@ -13,6 +13,6 @@ export const Dropdown = ({ children, menu, click = true }) => (
 
 Dropdown.propTypes = {
     children: PropTypes.element.isRequired,
-    menu: PropTypes.any,
+    menu: PropTypes.any.isRequired,
     click: PropTypes.bool
 };

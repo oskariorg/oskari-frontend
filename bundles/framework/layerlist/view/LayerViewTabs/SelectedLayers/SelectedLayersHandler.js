@@ -1,4 +1,4 @@
-import { StateHandler, mutatorMixin, Timeout } from 'oskari-ui/util';
+import { StateHandler, mutatorMixin } from 'oskari-ui/util';
 
 class UIService extends StateHandler {
     constructor (instance) {
