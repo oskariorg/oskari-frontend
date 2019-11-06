@@ -948,3 +948,44 @@ describe('isValidDomain function', () => {
         expect(Oskari.util.isValidDomain('3434')).toEqual(false);
     });
 });
+
+describe('cutSentenceToLength function', () => {
+
+    test('returns undefined no parameters are provided', () => {
+        expect(Oskari.util.cutSentenceToLength()).toBeUndefined();
+    });
+    test('returns original sentence when maxCutLength is not provided', () => {
+        const sentence = 'This is test string';
+        expect(Oskari.util.cutSentenceToLength(sentence)).toEqual(sentence);
+    });
+    test('returns original sentence when maxCutLength is provided and value is greater than length of sentence', () => {
+        const sentence = 'This is test sentence';
+        const maxCutLength = 22;
+        expect(Oskari.util.cutSentenceToLength(sentence,maxCutLength)).toEqual(sentence);
+    });
+    test('returns original sentence when maxCutLength is provided and value equals length of sentence', () => {
+        const sentence = 'word1 word2';
+        expect(Oskari.util.cutSentenceToLength(sentence,sentence.length)).toEqual(sentence);
+    });
+    test('cuts sentence to given maxCutLength when length of sentence is greater length parameter', () => {
+        const input = 'This is sentence with some words';
+        const expectedOutput = 'This is sentence...';
+        const maxCutLength = 20;
+        expect(Oskari.util.cutSentenceToLength(input,maxCutLength)).toEqual(expectedOutput);
+    });
+    test('includes test result at the end of result if regex matches', () => {
+        const input = 'This is long test string containing year in parenthesis at the end (2019)';
+        const expectedOutput = 'This is long... (2019)';
+        const maxCutLength = 26;
+        const regexFourDigitYearBetweenParenthesesAtTheEnd = /\(\d{4}\)$/;
+        expect(Oskari.util.cutSentenceToLength(input,maxCutLength,regexFourDigitYearBetweenParenthesesAtTheEnd)).toEqual(expectedOutput);
+    });
+
+    test('doest not include test result at the end of result when regex do not match', () => {
+        const input = 'This is long test string which does not containing year at the end';
+        const expectedOutput = 'This is long test...';
+        const maxCutLength = 26;
+        const regexFourDigitYearBetweenParenthesesAtTheEnd = /\(\d{4}\)$/;
+        expect(Oskari.util.cutSentenceToLength(input,maxCutLength,regexFourDigitYearBetweenParenthesesAtTheEnd)).toEqual(expectedOutput);
+    });
+});
