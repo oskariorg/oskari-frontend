@@ -1805,18 +1805,10 @@ Oskari.clazz.define(
                 var rgbColor = 'rgb(' + shadowRgb.r + ',' + shadowRgb.g + ',' + shadowRgb.b + ')';
                 marker.find('.shading-color').attr('fill', rgbColor);
             }
+            marker.attr('height', style.size || this._defaultMarker.size);
+            marker.attr('width', style.size || this._defaultMarker.size);
 
-            var markerHTML = marker.outerHTML();
-
-            if (style.size) {
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', style.size);
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', style.size);
-            } else {
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'height', this._defaultMarker.size);
-                markerHTML = this.__changeSvgAttribute(markerHTML, 'width', this._defaultMarker.size);
-            }
-
-            var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(markerHTML);
+            var svgSrc = 'data:image/svg+xml,' + encodeURIComponent(marker.outerHTML());
 
             return svgSrc;
         },
@@ -1893,55 +1885,56 @@ Oskari.clazz.define(
         /**
          * Add x and y attributes to svg image
          * @method  @private __addPositionMarks
-         * @param  {Object} svgObject the svg object
+         * @param  {Object} svgObject object with svg as "data" and offsetX/offsetY keys.
          * @return {String} svg string
          */
         __addPositionMarks: function (svgObject) {
-            var htmlObject = jQuery(svgObject.data);
-            var defaultCenter = this._defaultMarker.size / 2;
+            let htmlObject = svgObject.data;
+            if (typeof svgObject.data !== 'object') {
+                htmlObject = jQuery(svgObject.data);
+            }
+            const defaultCenter = this._defaultMarker.size / 2;
 
-            var dx = !isNaN(svgObject.offsetX) ? svgObject.offsetX : 16;
-            var dy = !isNaN(svgObject.offsetY) ? svgObject.offsetY : 16;
+            const dx = !isNaN(svgObject.offsetX) ? svgObject.offsetX : 16;
+            const dy = !isNaN(svgObject.offsetY) ? svgObject.offsetY : 16;
 
-            var x = defaultCenter - dx;
-            var y = defaultCenter - (defaultCenter - dy);
+            const x = defaultCenter - dx;
+            const y = defaultCenter - (defaultCenter - dy);
 
             if (!isNaN(x) && !isNaN(y)) {
                 htmlObject.attr('x', x);
                 htmlObject.attr('y', y);
             }
 
+            if (typeof svgObject === 'object') {
+                // if jQuery object was given, return one
+                return htmlObject;
+            }
+            // if string was given, return string as well
             return htmlObject.outerHTML();
         },
         /**
          * Changes svg path attributes
          * @method  @private __changePathAttribute description]
-         * @param  {String} svg   svg format
+         * @param  {String|jQuery} svg   svg format
          * @param  {String} attr  attribute name
          * @param  {String} value attribute value
-         * @return {String} svg string
+         * @return {String|jQuery} svg string or jQuery object if parameter was jQuery object
          */
         __changePathAttribute: function (svg, attr, value) {
+            if (typeof svg === 'object') {
+                // assume jQuery object
+                svg.find('path').attr(attr, value);
+                return svg;
+            }
+            // assume svg is string
             var htmlObject = jQuery(svg);
             htmlObject.find('path').attr(attr, value);
 
             if (htmlObject.find('path').length > 1) {
-                this.log.warn('Founded more than one <path> in SVG. SVG can maybe looks confusing');
+                this.log.warn(`Found more than one <path> in SVG. Replaced all ${attr} attributes in SVG paths to ${value}.`);
             }
 
-            return htmlObject.outerHTML();
-        },
-        /**
-         * Changes svg attribute
-         * @method  @private __changeSvgAttribute
-         * @param  {String} svg   svg format
-         * @param  {String} attr  attribute name
-         * @param  {String} value attribute value
-         * @return {String} svg string
-         */
-        __changeSvgAttribute: function (svg, attr, value) {
-            var htmlObject = jQuery(svg);
-            htmlObject.attr(attr, value);
             return htmlObject.outerHTML();
         },
         /**

@@ -184,7 +184,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             lyr.set(LAYER_ID, layer.getId(), silent);
             lyr.set(LAYER_TYPE, layer.getLayerType(), silent);
             lyr.set(LAYER_HOVER, layer.getHoverOptions(), silent);
-            lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
+            if (layer.isVisible()) {
+                // Only set style if visible as it's an expensive operation
+                // assumes style will be set on MapLayerVisibilityChangedEvent when layer is made visible
+                lyr.setStyle(this.getCurrentStyleFunction(layer, handler));
+            }
         });
     }
     /**
