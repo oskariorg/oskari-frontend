@@ -46,7 +46,7 @@ class UIService extends StateHandler {
         this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layer.getId(), toDataPosition]);
     }
 
-    async toggleLayerVisibility (layer) {
+    toggleLayerVisibility (layer) {
         const visibility = layer.isVisible();
         this.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), !visibility]);
         this.updateLayers();
