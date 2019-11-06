@@ -3,9 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Slider, Icon, NumberInput } from 'oskari-ui';
-import { EyeOpen, EyeShut, DragIcon } from '../CustomIcons';
-import { LayerIcon } from '../LayerIcon';
+import { Slider, Icon, NumberInput, InputGroup } from 'oskari-ui';
+import { Mutator } from 'oskari-ui/util';
+import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { LayerIcon } from '../../LayerIcon';
+import { StyleSettings } from './StyleSettings';
+import { THEME_COLOR } from '.';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -20,27 +23,37 @@ const StyledBox = styled.div`
 const GrayRow = styled(Row)`
     background-color: #f3f3f3;
     padding-left: 60px;
+    justify-content: flex-start;
+    ${ColAuto}, ${ColAutoRight} {
+        display: flex;
+        align-items: center;
+        padding-left: 0;
+        > :not(:last-child) {
+            margin-right: 5px;
+        }
+    }
 `;
 
 const StyledSlider = styled.div`
     border: solid 2px #d9d9d9;
     border-radius: 4px;
-    width: 150px;
+    width: 120px;
     padding: 8px 15px;
 `;
 
 const StyledNumberInput = styled(NumberInput)`
-    width: 70px !important;
+    width: 60px !important;
     font-size: 15px;
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
 `;
 
-export const LayerBox = ({ layer, index }) => {
+export const LayerBox = ({ layer, index, locale, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const visible = layer.isVisible();
     const layerType = layer.getLayerType();
+
     // const isInScale = layer.isInScale();
     // const srs = layer.isSupportedSrs();
     // Try to find this somewhere
@@ -88,31 +101,36 @@ export const LayerBox = ({ layer, index }) => {
                                 </Row>
                                 <GrayRow>
                                     <ColAuto>
-                                        <LayerIcon style={{ marginTop: '5px' }} type={layerType} />
+                                        <LayerIcon type={layerType} />
                                     </ColAuto>
                                     <ColAuto>
-                                        <StyledSlider>
-                                            <Slider
+                                        <InputGroup compact>
+                                            <StyledSlider>
+                                                <Slider
+                                                    value={slider}
+                                                    onChange={handleOpacityChange}
+                                                    style={{ margin: '0px' }}
+                                                />
+                                            </StyledSlider>
+                                            <StyledNumberInput
+                                                min={0}
+                                                max={100}
                                                 value={slider}
                                                 onChange={handleOpacityChange}
-                                                style={{ margin: '0px' }}
+                                                formatter={value => `${value} %`}
                                             />
-                                        </StyledSlider>
+                                        </InputGroup>
                                     </ColAuto>
-                                    <ColAuto>
-                                        <StyledNumberInput
-                                            min={0}
-                                            max={100}
-                                            value={slider}
-                                            onChange={handleOpacityChange}
-                                            formatter={value => `${value} %`}
-                                        />
-                                    </ColAuto>
+                                    <StyleSettings
+                                        layer={layer}
+                                        locale={locale}
+                                        mutator={mutator}
+                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}/>
                                     <ColAutoRight>
                                         <Icon
                                             type="menu"
                                             onClick={handleOpenMenu}
-                                            style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
+                                            style={{ color: THEME_COLOR, fontSize: '16px' }}
                                         />
                                     </ColAutoRight>
                                 </GrayRow>
@@ -127,5 +145,7 @@ export const LayerBox = ({ layer, index }) => {
 
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
-    index: PropTypes.number.isRequired
+    index: PropTypes.number.isRequired,
+    locale: PropTypes.object.isRequired,
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };

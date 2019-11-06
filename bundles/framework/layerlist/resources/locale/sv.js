@@ -30,8 +30,13 @@ Oskari.registerLocalization(
                 'inspire': 'Enligt tema',
                 'organization': 'Enligt dataproducent'
             },
-            'tooltip': {
-                'timeseries': 'Kartlager med tidsserie'
+            'layer': {
+                'tooltip': {
+                    'timeseries': 'Kartlager med tidsserie'
+                },
+                'styles': {
+                    'title': 'Stil'
+                }
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',

@@ -67,7 +67,7 @@ export const LayerTools = ({ model, mutator, locale }) => {
                 <WarningIcon tooltip={reason.getDescription()}/>
             }
             { model.hasTimeseries() &&
-                <Tooltip title={locale.tooltip.timeseries}>
+                <Tooltip title={locale.layer.tooltip.timeseries}>
                     <TimeSerieIcon />
                 </Tooltip>
             }
