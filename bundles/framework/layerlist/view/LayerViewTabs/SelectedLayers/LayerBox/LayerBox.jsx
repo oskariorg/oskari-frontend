@@ -5,9 +5,11 @@ import { Mutator } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Icon, Dropdown, Menu } from 'oskari-ui';
-import { EyeOpen, EyeShut, DragIcon } from '../CustomIcons';
+import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
 import { LayerInfoBox } from './LayerInfoBox';
-import { LayerIcon } from '../LayerIcon';
+import { LayerIcon } from '../../LayerIcon';
+import { StyleSettings } from './StyleSettings';
+import { THEME_COLOR } from '.';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -23,6 +25,15 @@ const StyledBox = styled.div`
 const GrayRow = styled(Row)`
     background-color: #f3f3f3;
     padding-left: 60px;
+    justify-content: flex-start;
+    ${ColAuto}, ${ColAutoRight} {
+        display: flex;
+        align-items: center;
+        padding-left: 0;
+        > :not(:last-child) {
+            margin-right: 5px;
+        }
+    }
 `;
 
 const SelectedLayerDropdown = ({ tools }) => {
@@ -32,7 +43,7 @@ const SelectedLayerDropdown = ({ tools }) => {
     const menu = <Menu items={items} />;
     return (
         <Dropdown menu={menu} placement="bottomRight">
-            <Icon type="menu" style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }} />
+            <Icon type="menu" style={{ color: THEME_COLOR, fontSize: '16px', marginTop: '8px' }} />
         </Dropdown>
     );
 };
@@ -41,13 +52,14 @@ SelectedLayerDropdown.propTypes = {
     tools: PropTypes.array.isRequired
 };
 
-export const LayerBox = ({ layer, index, mutator }) => {
+export const LayerBox = ({ layer, index, locale, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
     const [visible, setVisible] = useState(layer.isVisible());
     const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const layerType = layer.getLayerType();
+
     // const isInScale = layer.isInScale();
     // const srs = layer.isSupportedSrs();
     // Try to find this somewhere
@@ -89,12 +101,17 @@ export const LayerBox = ({ layer, index, mutator }) => {
                                 </Row>
                                 <GrayRow>
                                     <ColAuto>
-                                        <LayerIcon style={{ marginTop: '5px' }} type={layerType} />
+                                        <LayerIcon type={layerType} />
                                     </ColAuto>
                                     <LayerInfoBox
                                         slider={slider}
                                         handleOpacityChange={handleOpacityChange}
                                     />
+                                    <StyleSettings
+                                        layer={layer}
+                                        locale={locale}
+                                        mutator={mutator}
+                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}/>
                                     <ColAutoRight>
                                         <SelectedLayerDropdown tools={tools} />
                                     </ColAutoRight>
@@ -111,5 +128,6 @@ export const LayerBox = ({ layer, index, mutator }) => {
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
+    locale: PropTypes.object.isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired
 };

@@ -61,11 +61,16 @@ class UIService extends StateHandler {
         this.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
         this.updateState({ layers: this._getLayers() });
     }
+
+    changeLayerStyle (layer, styleName) {
+        this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), styleName]);
+    }
 }
 
 export const SelectedLayersHandler = mutatorMixin(UIService, [
     'reorderLayers',
     'removeLayer',
     'changeOpacity',
-    'toggleLayerVisibility'
+    'toggleLayerVisibility',
+    'changeLayerStyle'
 ]);
