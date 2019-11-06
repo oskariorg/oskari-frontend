@@ -45,8 +45,13 @@ class UIService extends StateHandler {
         const toDataPosition = (layers.length - 1) - toPosition;
         this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layer.getId(), toDataPosition]);
     }
+
+    changeLayerStyle (layer, styleName) {
+        this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), styleName]);
+    }
 }
 
 export const SelectedLayersHandler = mutatorMixin(UIService, [
-    'reorderLayers'
+    'reorderLayers',
+    'changeLayerStyle'
 ]);

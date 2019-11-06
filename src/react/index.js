@@ -19,6 +19,7 @@ export { Switch } from '../../bundles/admin/admin-layereditor/components/Switch'
 export { Tabs, TabPane } from '../../bundles/admin/admin-layereditor/components/Tabs';
 export { TextAreaInput } from '../../bundles/admin/admin-layereditor/components/TextAreaInput';
 export { TextInput } from '../../bundles/admin/admin-layereditor/components/TextInput';
+export { InputGroup } from '../../bundles/admin/admin-layereditor/components/InputGroup';
 export { UrlInput } from '../../bundles/admin/admin-layereditor/components/UrlInput';
 export { Icon } from '../../bundles/admin/admin-layereditor/components/Icon';
 export { WarningIcon } from '../../bundles/admin/admin-layereditor/components/WarningIcon';

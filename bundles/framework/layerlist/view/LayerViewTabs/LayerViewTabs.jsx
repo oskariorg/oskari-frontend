@@ -52,7 +52,7 @@ export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch,
                 <LayerList ref={searchTermInputRef} {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
             <TabPane tab={<SelectedTab num={selectedLayers.state.layers.length} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
-                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator}/>
+                <SelectedLayers {...selectedLayers.state} locale={locale} mutator={selectedLayers.mutator}/>
             </TabPane>
         </ControlledTabs>
     );

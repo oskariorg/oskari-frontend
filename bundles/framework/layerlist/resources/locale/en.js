@@ -30,8 +30,14 @@ Oskari.registerLocalization(
                 'inspire': 'By Theme',
                 'organization': 'By Data Provider'
             },
-            'tooltip': {
-                'timeseries': 'Time series layer'
+            'layer': {
+                'tooltip': {
+                    'timeseries': 'Time series layer'
+                },
+                'styles': {
+                    'title': 'Style',
+                    'default': 'Default style'
+                }
             },
             'backendStatus': {
                 'OK': 'The map layer is currently available.',

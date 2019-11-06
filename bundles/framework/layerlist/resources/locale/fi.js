@@ -33,6 +33,15 @@ Oskari.registerLocalization(
             'tooltip': {
                 'timeseries': 'Aikasarjataso'
             },
+            'layer': {
+                'tooltip': {
+                    'timeseries': 'Aikasarjataso'
+                },
+                'styles': {
+                    'title': 'Tyyli',
+                    'default': 'Oletustyyli'
+                }
+            },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',
                 'DOWN': 'Karttataso ei tällä hetkellä käytettävissä.',
