@@ -45,6 +45,21 @@ class UIService extends StateHandler {
         const toDataPosition = (layers.length - 1) - toPosition;
         this.sandbox.postRequestByName('RearrangeSelectedMapLayerRequest', [layer.getId(), toDataPosition]);
     }
+
+    hideLayer (layer) {
+        this.sandbox.postRequestByName('MapLayerVisibilityRequestHandler', layer);
+        this.updateState({ layers: this._getLayers() });
+    }
+
+    changeOpacity (layer, opacity) {
+        this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), opacity]);
+        this.updateState({ layers: this._getLayers() });
+    }
+
+    removeLayer (layer) {
+        this.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
+        this.updateState({ layers: this._getLayers() });
+    }
 }
 
 export const SelectedLayersHandler = mutatorMixin(UIService, [

@@ -81,6 +81,13 @@ export const LayerBox = ({ layer, index }) => {
                                         handleOpacityChange={handleOpacityChange}
                                         handleOpenMenu={handleOpenMenu}
                                     />
+                                    <ColAutoRight>
+                                        <Icon
+                                            type="menu"
+                                            onClick={handleOpenMenu}
+                                            style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
+                                        />
+                                    </ColAutoRight>
                                 </GrayRow>
                             </StyledBox>
                         </Col>

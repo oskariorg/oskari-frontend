@@ -16,6 +16,10 @@ const StyledNumberInput = styled(NumberInput)`
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
 `;
 
+const Percentage = styled.span`
+    margin-left: 5px;
+`;
+
 const LayerSlider = ({ slider, handleOpacityChange }) => (
     <Fragment>
         <ColAuto >
@@ -34,7 +38,7 @@ const LayerSlider = ({ slider, handleOpacityChange }) => (
                 value={slider}
                 onChange={handleOpacityChange}
             />
-            %
+            <Percentage>%</Percentage>
         </ColAuto>
     </Fragment>
 );
@@ -59,13 +63,6 @@ export const LayerInfoBox = ({ slider, handleOpacityChange, handleOpenMenu }) =>
                 slider={slider}
                 handleOpacityChange={handleOpacityChange}
             />
-            <ColAutoRight>
-                <Icon
-                    type="menu"
-                    onClick={handleOpenMenu}
-                    style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
-                />
-            </ColAutoRight>
         </Fragment>
     );
 };
