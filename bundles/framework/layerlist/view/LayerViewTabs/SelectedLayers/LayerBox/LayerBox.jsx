@@ -3,21 +3,12 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Slider, Icon, NumberInput, Select, Option, InputGroup, Button } from 'oskari-ui';
+import { Slider, Icon, NumberInput, InputGroup } from 'oskari-ui';
 import { Mutator } from 'oskari-ui/util';
-import { EyeOpen, EyeShut, DragIcon } from '../CustomIcons';
-import { LayerIcon } from '../LayerIcon';
-
-// Fix me: Missing theme handling
-const themeColor = '#006ce8';
-
-const StyleSelect = styled(Select)`
-    width: 120px;
-`;
-const StyleLabel = styled('div')`
-    width: 40px;
-    text-align: right;
-`;
+import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { LayerIcon } from '../../LayerIcon';
+import { StyleSettings } from './StyleSettings';
+import { THEME_COLOR } from '.';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -56,24 +47,12 @@ const StyledNumberInput = styled(NumberInput)`
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
 `;
 
-const handleOwnStyleClick = ownStyleCallback => {
-    if (typeof ownStyleCallback === 'function') {
-        ownStyleCallback();
-    }
-};
 export const LayerBox = ({ layer, index, locale, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const visible = layer.isVisible();
     const layerType = layer.getLayerType();
-
-    const styles = layer.getStyles();
-    const currentStyle = {
-        value: layer.getCurrentStyle().getName(),
-        title: styles.length > 1 ? layer.getCurrentStyle().getTitle() : locale.layer.styles.default
-    };
-    const styleTool = layer.getTool('ownStyle');
 
     // const isInScale = layer.isInScale();
     // const srs = layer.isSupportedSrs();
@@ -142,38 +121,16 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                             />
                                         </InputGroup>
                                     </ColAuto>
-                                    <ColAuto>
-                                        <StyleLabel>{ locale.layer.styles.title }</StyleLabel>
-                                        <InputGroup compact>
-                                            <StyleSelect
-                                                value={currentStyle.value}
-                                                disabled={styles.length < 2}
-                                                onChange={styleName => mutator.changeLayerStyle(layer, styleName)}
-                                            >
-                                                { styles.length < 2 &&
-                                                    <Option value={currentStyle.value}>{currentStyle.title}</Option>
-                                                }
-                                                { styles.length >= 2 &&
-                                                    styles.map(style =>
-                                                        <Option key={style.getName()} value={style.getName()}>
-                                                            {style.getTitle()}
-                                                        </Option>
-                                                    )
-                                                }
-                                            </StyleSelect>
-                                            { styleTool &&
-                                                <Button style={{ paddingLeft: '5px', paddingRight: '5px' }}
-                                                    onClick={() => handleOwnStyleClick(styleTool.getCallback())}>
-                                                    <Icon type="edit" style={{ color: themeColor, fontSize: '16px' }}/>
-                                                </Button>
-                                            }
-                                        </InputGroup>
-                                    </ColAuto>
+                                    <StyleSettings
+                                        layer={layer}
+                                        locale={locale}
+                                        mutator={mutator}
+                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}/>
                                     <ColAutoRight>
                                         <Icon
                                             type="menu"
                                             onClick={handleOpenMenu}
-                                            style={{ color: themeColor, fontSize: '16px' }}
+                                            style={{ color: THEME_COLOR, fontSize: '16px' }}
                                         />
                                     </ColAutoRight>
                                 </GrayRow>

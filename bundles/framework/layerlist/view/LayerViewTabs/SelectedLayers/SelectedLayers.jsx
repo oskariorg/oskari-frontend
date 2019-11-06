@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { Mutator } from 'oskari-ui/util';
-import { LayerBox } from './LayerBox';
+import { LayerBox } from './LayerBox/';
 
 // Ensuring the whole list does not re-render when the droppable re-renders
 const Layers = React.memo(({ layers, ...rest }) => (
