@@ -92,7 +92,6 @@ export const LayerBox = ({ layer, index, mutator }) => {
                                         <LayerIcon style={{ marginTop: '5px' }} type={layerType} />
                                     </ColAuto>
                                     <LayerInfoBox
-                                        layerType={layerType}
                                         slider={slider}
                                         handleOpacityChange={handleOpacityChange}
                                     />

@@ -20,49 +20,34 @@ const Percentage = styled.span`
     margin-left: 5px;
 `;
 
-const LayerSlider = ({ slider, handleOpacityChange }) => (
-    <Fragment>
-        <ColAuto >
-            <StyledSlider>
-                <Slider
-                    value={slider}
-                    onChange={handleOpacityChange}
-                    style={{ margin: '0px' }}
-                />
-            </StyledSlider>
-        </ColAuto>
-        <ColAuto>
-            <StyledNumberInput
-                min={0}
-                max={100}
-                value={slider}
-                onChange={handleOpacityChange}
-            />
-            <Percentage>%</Percentage>
-        </ColAuto>
-    </Fragment>
-);
-
-LayerSlider.propTypes = {
-    slider: PropTypes.number.isRequired,
-    handleOpacityChange: PropTypes.func.isRequired
-};
-
+// TODO
 export const LayerScaleBox = () => {
     return (
-        <Fragment>
-            :D
-        </Fragment>
+        <Fragment></Fragment>
     );
 };
 
 export const LayerInfoBox = ({ slider, handleOpacityChange }) => {
     return (
         <Fragment>
-            <LayerSlider
-                slider={slider}
-                handleOpacityChange={handleOpacityChange}
-            />
+            <ColAuto >
+                <StyledSlider>
+                    <Slider
+                        value={slider}
+                        onChange={handleOpacityChange}
+                        style={{ margin: '0px' }}
+                    />
+                </StyledSlider>
+            </ColAuto>
+            <ColAuto>
+                <StyledNumberInput
+                    min={0}
+                    max={100}
+                    value={slider}
+                    onChange={handleOpacityChange}
+                />
+                <Percentage>%</Percentage>
+            </ColAuto>
         </Fragment>
     );
 };
