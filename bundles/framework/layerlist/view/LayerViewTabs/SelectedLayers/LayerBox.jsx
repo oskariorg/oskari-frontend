@@ -25,27 +25,26 @@ const GrayRow = styled(Row)`
     padding-left: 60px;
 `;
 
-const SelectedLayerDropdown = () => {
-    const items = [{
-        title: 'test',
-        action: () => console.log('test')
-    }];
+const SelectedLayerDropdown = ({ tools }) => {
+    const items = tools.map(tool => {
+        return { title: tool._title ? tool._title : tool._name, action: () => true };
+    });
     const menu = <Menu items={items} />;
     return (
-        <Dropdown menu={menu} click={false}>
-            <React.Fragment>
-                <Icon
-                    type="menu"
-                    style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }}
-                />
-            </React.Fragment>
+        <Dropdown menu={menu} placement="bottomRight">
+            <Icon type="menu" style={{ color: '#006ce8', fontSize: '16px', marginTop: '8px' }} />
         </Dropdown>
     );
+};
+
+SelectedLayerDropdown.propTypes = {
+    tools: PropTypes.array.isRequired
 };
 
 export const LayerBox = ({ layer, index, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
     const [visible, setVisible] = useState(layer.isVisible());
+    const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const layerType = layer.getLayerType();
@@ -98,7 +97,7 @@ export const LayerBox = ({ layer, index, mutator }) => {
                                         handleOpacityChange={handleOpacityChange}
                                     />
                                     <ColAutoRight>
-                                        <SelectedLayerDropdown />
+                                        <SelectedLayerDropdown tools={tools} />
                                     </ColAutoRight>
                                 </GrayRow>
                             </StyledBox>
