@@ -66,9 +66,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         var indicators = me._getIndicators();
         indicators.forEach(function (ind, id) {
             me.service.getUILabels(ind, function (labels) {
-                const regexFourDigitYearBetweenParenthesesAtTheEnd = /\(\d{4}\)$/;
                 var indElem = jQuery(me.__templates.indicator({
-                    name: Oskari.util.cutSentenceToLength(labels.full, 60, regexFourDigitYearBetweenParenthesesAtTheEnd),
+                    name: me._getIndicatorText(labels.indicator, labels.params),
                     indHash: ind.hash
                 }));
                 content.find('.statsgrid-indicator-list').append(indElem);
@@ -83,6 +82,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
             });
         });
         return content;
+    },
+    _getIndicatorText (indicator, params) {
+        var cutLength = 55;
+        const dots = '... ';
+        if (indicator && indicator.length > cutLength) {
+            if (params) {
+                cutLength = cutLength - dots.length - params.length;
+                return indicator.substring(0, cutLength) + dots + params;
+            } else {
+                cutLength = cutLength - dots.length;
+                return indicator.substring(0, cutLength) + dots;
+            }
+        } else {
+            return indicator;
+        }
     },
     /**
      * @method _initializeElement
