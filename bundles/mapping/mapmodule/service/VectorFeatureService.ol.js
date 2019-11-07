@@ -216,7 +216,6 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
          *
          * @param {Oskari.mapframework.event.common.MouseHoverEvent} event
          * @return {Promise} Promise resolving to an object containing the topmost feature and it's layer on the mouse location.
-         * An empty object if features were not found.
          */
         async _getHoveredFeatureAndLayer (event) {
             let feature, layer;
