@@ -42,13 +42,6 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
-const getTextForLayerBox = (inScale, locale) => {
-    if (!inScale) {
-        return locale.layer.moveToScale;
-    }
-    return '';
-};
-
 const SelectedLayerDropdown = ({ tools }) => {
     const items = tools.map(tool => {
         return { title: tool._title ? tool._title : tool._name, action: () => true };
@@ -65,19 +58,16 @@ SelectedLayerDropdown.propTypes = {
     tools: PropTypes.array.isRequired
 };
 
-export const LayerBox = ({ layer, index, locale, mutator }) => {
+export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
     const [visible, setVisible] = useState(layer.isVisible());
-    console.log(layer);
     const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const layerType = layer.getLayerType();
     const publishable = layer.getPermission('publish');
     const isInScale = layer.isInScale();
-    const layerBoxText = getTextForLayerBox(isInScale, locale);
-    // const srs = layer.isSupportedSrs();
-    // const activeFeats = layer.getActiveFeatures().length;
+    const geometryMatch = visibilityInfo.geometryMatch;
     const handleOpacityChange = value => {
         setSlider(value);
         mutator.changeOpacity(layer, value);
@@ -138,10 +128,16 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                     {!isInScale &&
                                     <LayerScaleLocateBox
                                         handleClick={handleLocateScaleLayer}
-                                        text={layerBoxText}
+                                        text={locale.layer.moveToScale}
                                     />
                                     }
-                                    {isInScale &&
+                                    {!geometryMatch &&
+                                    <LayerScaleLocateBox
+                                        handleClick={handleLocateScaleLayer}
+                                        text={locale.layer.moveToContentArea}
+                                    />
+                                    }
+                                    {isInScale && geometryMatch &&
                                     <>
                                     <LayerInfoBox
                                         slider={slider}
@@ -172,5 +168,6 @@ LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     locale: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    visibilityInfo: PropTypes.object.isRequired
 };
