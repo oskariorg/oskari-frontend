@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Mutator } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Slider, Icon, NumberInput, InputGroup } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Icon, Dropdown, Menu } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
+import { LayerInfoBox } from './LayerInfoBox';
 import { LayerIcon } from '../../LayerIcon';
 import { StyleSettings } from './StyleSettings';
 import { THEME_COLOR } from '.';
@@ -18,6 +19,7 @@ const StyledBox = styled.div`
     margin-left: 5px;
     margin-right: 5px;
     border: 1px #fff solid;
+    background-color: #fff;
 `;
 
 const GrayRow = styled(Row)`
@@ -34,24 +36,28 @@ const GrayRow = styled(Row)`
     }
 `;
 
-const StyledSlider = styled.div`
-    border: solid 2px #d9d9d9;
-    border-radius: 4px;
-    width: 120px;
-    padding: 8px 15px;
-`;
+const SelectedLayerDropdown = ({ tools }) => {
+    const items = tools.map(tool => {
+        return { title: tool._title ? tool._title : tool._name, action: () => true };
+    });
+    const menu = <Menu items={items} />;
+    return (
+        <Dropdown menu={menu} placement="bottomRight">
+            <Icon type="menu" style={{ color: THEME_COLOR, fontSize: '16px', marginTop: '8px' }} />
+        </Dropdown>
+    );
+};
 
-const StyledNumberInput = styled(NumberInput)`
-    width: 60px !important;
-    font-size: 15px;
-    box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
-`;
+SelectedLayerDropdown.propTypes = {
+    tools: PropTypes.array.isRequired
+};
 
 export const LayerBox = ({ layer, index, locale, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
+    const [visible, setVisible] = useState(layer.isVisible());
+    const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
-    const visible = layer.isVisible();
     const layerType = layer.getLayerType();
 
     // const isInScale = layer.isInScale();
@@ -59,21 +65,15 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
     // Try to find this somewhere
     // const activeFeats = layer.getActiveFeatures().length;
     const handleOpacityChange = value => {
-        // TODO send event instead of manipulating layer
-        layer.setOpacity(value);
         setSlider(value);
+        mutator.changeOpacity(layer, value);
     };
     const handleToggleVisibility = () => {
-        // TODO
-        console.log('Toggle visibility');
-    };
-    const handleOpenMenu = () => {
-        // TODO
-        console.log('Open menu');
+        setVisible(!visible);
+        mutator.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
-        // TODO
-        console.log('Remove layer');
+        mutator.removeLayer(layer);
     };
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
@@ -103,35 +103,17 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                     <ColAuto>
                                         <LayerIcon type={layerType} />
                                     </ColAuto>
-                                    <ColAuto>
-                                        <InputGroup compact>
-                                            <StyledSlider>
-                                                <Slider
-                                                    value={slider}
-                                                    onChange={handleOpacityChange}
-                                                    style={{ margin: '0px' }}
-                                                />
-                                            </StyledSlider>
-                                            <StyledNumberInput
-                                                min={0}
-                                                max={100}
-                                                value={slider}
-                                                onChange={handleOpacityChange}
-                                                formatter={value => `${value} %`}
-                                            />
-                                        </InputGroup>
-                                    </ColAuto>
+                                    <LayerInfoBox
+                                        slider={slider}
+                                        handleOpacityChange={handleOpacityChange}
+                                    />
                                     <StyleSettings
                                         layer={layer}
                                         locale={locale}
                                         mutator={mutator}
                                         onChange={styleName => mutator.changeLayerStyle(layer, styleName)}/>
                                     <ColAutoRight>
-                                        <Icon
-                                            type="menu"
-                                            onClick={handleOpenMenu}
-                                            style={{ color: THEME_COLOR, fontSize: '16px' }}
-                                        />
+                                        <SelectedLayerDropdown tools={tools} />
                                     </ColAutoRight>
                                 </GrayRow>
                             </StyledBox>

@@ -11,6 +11,7 @@ const Layers = React.memo(({ layers, ...rest }) => (
     ))
 ));
 Layers.displayName = 'Layers';
+
 Layers.propTypes = {
     layers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     locale: PropTypes.object.isRequired,

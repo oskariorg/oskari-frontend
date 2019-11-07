@@ -5,17 +5,14 @@ import 'antd/es/dropdown/style/index.js';
 
 export const Dropdown = ({ children, menu, click = true }) => (
     <AntDropdown overlay={menu} trigger={click ? ['click'] : ['hover']}>
-        {click &&
-            <a className="ant-dropdown-link" href="#">
-                {children}
-            </a>
-        }
-        {!click && children}
+        <a className="ant-dropdown-link" href="#">
+            {children}
+        </a>
     </AntDropdown>
 );
 
 Dropdown.propTypes = {
-    children: PropTypes.node.isRequired,
+    children: PropTypes.element.isRequired,
     menu: PropTypes.any.isRequired,
     click: PropTypes.bool
 };
