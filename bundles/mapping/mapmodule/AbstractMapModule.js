@@ -53,7 +53,13 @@ Oskari.clazz.define(
         me._options = {
             resolutions: [2000, 1000, 500, 200, 100, 50, 20, 10, 4, 2, 1, 0.5, 0.25],
             srsName: 'EPSG:3067',
-            units: 'm'
+            units: 'm',
+            maxExtent: {
+                left: 0,
+                bottom: 0,
+                right: 10000000,
+                top: 10000000
+            }
         };
         if (options) {
             for (var key in options) {
@@ -75,12 +81,7 @@ Oskari.clazz.define(
         me._mapScales = [];
 
         // props: left,bottom,right, top
-        me._maxExtent = me._options.maxExtent || {
-            left: 0,
-            bottom: 0,
-            right: 10000000,
-            top: 10000000
-        };
+        me._maxExtent = me._options.maxExtent;
 
         me._sandbox = null;
 
