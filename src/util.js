@@ -748,47 +748,5 @@ Oskari.util = (function () {
        const re = /^(?!:\/\/)([a-zA-Z0-9-]+\.){0,5}[a-zA-Z0-9-][a-zA-Z0-9-]+\.[a-zA-Z]{2,64}?$/gi;
        return re.test(domain);
     }
-    /**
-     * Function to cut sentence shorter.
-     * Whole words from sentence is added to result until given length is reached.
-     * When sentence is cut:
-     * - Three dots are always added at the end of result
-     * - If given regular expression matches to sentence, first match is added after the three dots
-     *   at the end of result.
-     *
-     * @param sentenceToCut Sentence to be shortened
-     * @param maxCutLength maximux length of result string containin dots and regexp result.
-     * Result returned might be shorter than value of this parameter if next word does not fit in compeletely.
-     * @param regexp If given, sentenceToCut is tested against this parameter and first match result is
-     * placed at the end of string returned from this function.
-     * @return Manipulated sentenceToCut as described above.
-     */
-    util.cutSentenceToLength = (sentenceToCut, maxCutLength, regexp) => {
-        const dots = '...';
-
-        if(!sentenceToCut){
-            return;
-        } else if(!maxCutLength || sentenceToCut.length <= maxCutLength){
-            return sentenceToCut;
-        } else if (sentenceToCut.length > maxCutLength) {
-            var testResult = '';
-            if(regexp) {
-                const match = sentenceToCut.match(regexp);
-                testResult = match ? ' ' + match[0] : '';
-            }
-            const words = sentenceToCut.split(' ');
-            var sentence = '';
-            for(let w of words) {
-                if(sentence.length + ' '.length + w.length + dots.length + testResult.length <= maxCutLength) {
-                    sentence = sentence === '' ? sentence + w : sentence + ' ' + w;
-                } else {
-                    break;
-                }
-            }
-            return sentence + dots + testResult;
-        } else {
-            return;
-        }
-    }
     return util;
 }());
