@@ -960,7 +960,7 @@ background-color: #888888;
  * Indicator list
  * ********************************************/
  ol.statsgrid-indicator-list {
-    min-width: 430px !important;
+    min-width: 430px;
     li:nth-child(2n) {
         background-color: #f3f3f3;
     }
