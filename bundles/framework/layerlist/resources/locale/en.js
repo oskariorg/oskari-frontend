@@ -39,7 +39,7 @@ Oskari.registerLocalization(
                 },
                 'moveToScale': 'Move to a suitable map level',
                 'moveToContentArea': 'Move to a suitable location',
-                'pubilshable': 'Publishable'
+                'publishable': 'Publishable'
             },
             'backendStatus': {
                 'OK': 'The map layer is currently available.',
