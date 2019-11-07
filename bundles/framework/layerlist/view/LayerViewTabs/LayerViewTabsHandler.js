@@ -90,7 +90,10 @@ class UIStateHandler extends StateHandler {
             'AfterMapLayerRemoveEvent': updateSelectedLayers,
             'AfterMapLayerAddEvent': updateSelectedLayers,
             'AfterRearrangeSelectedMapLayerEvent': updateSelectedLayers,
-            'AfterChangeMapLayerStyleEvent': updateSelectedLayers
+            'AfterChangeMapLayerStyleEvent': updateSelectedLayers,
+            'MapLayerVisibilityChangedEvent': updateSelectedLayers,
+            'MapSizeChangedEvent': updateSelectedLayers,
+            'AfterChangeMapLayerOpacityEvent': updateSelectedLayers
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
