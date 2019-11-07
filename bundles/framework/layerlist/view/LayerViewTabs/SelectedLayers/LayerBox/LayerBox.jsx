@@ -6,7 +6,7 @@ import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Icon, Dropdown, Menu } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
-import { LayerInfoBox } from './LayerInfoBox';
+import { LayerInfoBox, LayerScaleLocateBox } from './LayerInfoBox';
 import { LayerIcon } from '../../LayerIcon';
 import { StyleSettings } from './StyleSettings';
 import { THEME_COLOR } from '.';
@@ -36,6 +36,19 @@ const GrayRow = styled(Row)`
     }
 `;
 
+const Publishable = styled.span`
+    font-style: italic;
+    font-size: 14px;
+    margin-left: 5px;
+`;
+
+const getTextForLayerBox = (inScale, locale) => {
+    if (!inScale) {
+        return locale.layer.moveToScale;
+    }
+    return '';
+};
+
 const SelectedLayerDropdown = ({ tools }) => {
     const items = tools.map(tool => {
         return { title: tool._title ? tool._title : tool._name, action: () => true };
@@ -43,7 +56,7 @@ const SelectedLayerDropdown = ({ tools }) => {
     const menu = <Menu items={items} />;
     return (
         <Dropdown menu={menu} placement="bottomRight">
-            <Icon type="menu" style={{ color: THEME_COLOR, fontSize: '16px', marginTop: '8px' }} />
+            <Icon type="more" style={{ color: THEME_COLOR, fontSize: '24px' }} />
         </Dropdown>
     );
 };
@@ -55,14 +68,15 @@ SelectedLayerDropdown.propTypes = {
 export const LayerBox = ({ layer, index, locale, mutator }) => {
     const [slider, setSlider] = useState(layer.getOpacity());
     const [visible, setVisible] = useState(layer.isVisible());
+    console.log(layer);
     const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const layerType = layer.getLayerType();
-
-    // const isInScale = layer.isInScale();
+    const publishable = layer.getPermission('publish');
+    const isInScale = layer.isInScale();
+    const layerBoxText = getTextForLayerBox(isInScale, locale);
     // const srs = layer.isSupportedSrs();
-    // Try to find this somewhere
     // const activeFeats = layer.getActiveFeatures().length;
     const handleOpacityChange = value => {
         setSlider(value);
@@ -74,6 +88,9 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
     };
     const handleRemoveLayer = () => {
         mutator.removeLayer(layer);
+    };
+    const handleLocateScaleLayer = () => {
+        mutator.locateLayer(layer);
     };
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
@@ -90,12 +107,27 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                         {visible ? <EyeOpen onClick={handleToggleVisibility} />
                                             : <EyeShut onClick={handleToggleVisibility} />}
                                     </ColAuto>
-                                    <Col><b>{name}</b><br/>{organizationName}</Col>
+                                    <Col>
+                                        <Row style={{ padding: '0px' }}>
+                                            <ColAuto style={{ padding: '0px' }}>
+                                                <b>{name}</b><br/>
+                                                {organizationName}
+                                            </ColAuto>
+                                            <ColAutoRight style={{ padding: '0px', marginTop: '20px' }}>
+                                                {publishable &&
+                                                <>
+                                                <Icon type="check" style={{ color: '#01ca79' }} />
+                                                <Publishable>{locale.layer.publishable}</Publishable>
+                                                </>
+                                                }
+                                            </ColAutoRight>
+                                        </Row>
+                                    </Col>
                                     <ColAutoRight>
                                         <Icon
                                             type="close"
                                             onClick={handleRemoveLayer}
-                                            style={{ marginTop: '10px', fontSize: '12px', marginRight: '4px' }}
+                                            style={{ fontSize: '12px', marginRight: '4px' }}
                                         />
                                     </ColAutoRight>
                                 </Row>
@@ -103,6 +135,14 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                     <ColAuto>
                                         <LayerIcon type={layerType} />
                                     </ColAuto>
+                                    {!isInScale &&
+                                    <LayerScaleLocateBox
+                                        handleClick={handleLocateScaleLayer}
+                                        text={layerBoxText}
+                                    />
+                                    }
+                                    {isInScale &&
+                                    <>
                                     <LayerInfoBox
                                         slider={slider}
                                         handleOpacityChange={handleOpacityChange}
@@ -111,7 +151,10 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                         layer={layer}
                                         locale={locale}
                                         mutator={mutator}
-                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}/>
+                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}
+                                    />
+                                    </>
+                                    }
                                     <ColAutoRight>
                                         <SelectedLayerDropdown tools={tools} />
                                     </ColAutoRight>
