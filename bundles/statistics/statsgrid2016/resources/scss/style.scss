@@ -959,9 +959,12 @@ background-color: #888888;
 /* ********************************************
  * Indicator list
  * ********************************************/
- ol.statsgrid-indicator-list li:nth-child(2n) {
-    background-color: #f3f3f3;
-}
+ ol.statsgrid-indicator-list {
+    min-width: 430px !important;
+    li:nth-child(2n) {
+        background-color: #f3f3f3;
+    }
+ }
 .indicator-list-remove, .indicator-list-info {
     cursor: pointer;
     float: right;
