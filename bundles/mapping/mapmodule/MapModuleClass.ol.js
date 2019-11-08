@@ -75,7 +75,7 @@ export class MapModule extends AbstractMapModule {
         var projection = olProj.get(me.getProjection());
         projection.setExtent(this.__boundsToArray(this.getMaxExtent()));
 
-        map.setView(new olView({
+        const viewOpts = {
             extent: projection.getExtent(),
             projection: projection,
             // actual startup location is set with MapMoveRequest later on
@@ -83,7 +83,15 @@ export class MapModule extends AbstractMapModule {
             center: [0, 0],
             zoom: 0,
             resolutions: this.getResolutionArray()
-        }));
+        };
+
+        const worldProjections = ['EPSG:3857', 'EPSG:4326'];
+        if (!worldProjections.includes(me.getProjection())) {
+            // constraint center to extent allowing viewport to extend beyond extent for "local" projections
+            viewOpts.constrainOnlyCenter = true;
+        }
+
+        map.setView(new olView(viewOpts));
 
         me._setupMapEvents(map);
         return map;
