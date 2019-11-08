@@ -20,7 +20,12 @@ class UIService extends StateHandler {
 
     updateLayers () {
         const layers = this._getLayers();
-        this.updateState({ layers });
+        const visibilityInfo = layers.map(layer => {
+            const id = layer.getId();
+            const geometryMatch = this.state.visibilityInfo.find(vis => vis.id === id) || true;
+            return { id, geometryMatch };
+        });
+        this.setState({ ...this.state, layers, visibilityInfo });
     }
 
     updateLayerVisibility (event) {
