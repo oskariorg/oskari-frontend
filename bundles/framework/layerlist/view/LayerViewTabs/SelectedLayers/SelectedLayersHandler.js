@@ -23,7 +23,7 @@ class UIService extends StateHandler {
         this.updateState({ layers });
     }
 
-    updateVisibility (event) {
+    updateLayerVisibility (event) {
         const layerId = event.getMapLayer().getId();
         const geometryMatch = event.isGeometryMatch();
         const visibilityInfo = this.state.visibilityInfo.map(vis => {
@@ -67,17 +67,14 @@ class UIService extends StateHandler {
     toggleLayerVisibility (layer) {
         const visibility = layer.isVisible();
         this.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), !visibility]);
-        this.updateLayers();
     }
 
     changeOpacity (layer, opacity) {
         this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), opacity]);
-        this.updateLayers();
     }
 
     removeLayer (layer) {
         this.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
-        this.updateLayers();
     }
 
     changeLayerStyle (layer, styleName) {

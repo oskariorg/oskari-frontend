@@ -88,7 +88,7 @@ class UIStateHandler extends StateHandler {
                 }
             },
             'MapLayerVisibilityChangedEvent': event => {
-                this.selectedLayersHandler.updateVisibility(event);
+                this.selectedLayersHandler.updateLayerVisibility(event);
                 updateSelectedLayers();
             },
             'AfterMapLayerRemoveEvent': updateSelectedLayers,

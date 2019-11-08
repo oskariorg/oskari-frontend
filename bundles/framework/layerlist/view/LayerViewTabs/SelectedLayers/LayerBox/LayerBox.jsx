@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { LayerBoxFooter } from './LayerBoxFooter';
 import { Mutator } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon, Dropdown, Menu } from 'oskari-ui';
+import { Icon } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
-import { LayerInfoBox, LayerScaleLocateBox } from './LayerInfoBox';
-import { LayerIcon } from '../../LayerIcon';
-import { StyleSettings } from './StyleSettings';
-import { THEME_COLOR } from '.';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -22,65 +19,23 @@ const StyledBox = styled.div`
     background-color: #fff;
 `;
 
-const GrayRow = styled(Row)`
-    background-color: #f3f3f3;
-    padding-left: 60px;
-    justify-content: flex-start;
-    ${ColAuto}, ${ColAutoRight} {
-        display: flex;
-        align-items: center;
-        padding-left: 0;
-        > :not(:last-child) {
-            margin-right: 5px;
-        }
-    }
-`;
-
 const Publishable = styled.span`
     font-style: italic;
     font-size: 14px;
     margin-left: 5px;
 `;
 
-const SelectedLayerDropdown = ({ tools }) => {
-    const items = tools.map(tool => {
-        return { title: tool._title ? tool._title : tool._name, action: () => true };
-    });
-    const menu = <Menu items={items} />;
-    return (
-        <Dropdown menu={menu} placement="bottomRight">
-            <Icon type="more" style={{ color: THEME_COLOR, fontSize: '24px' }} />
-        </Dropdown>
-    );
-};
-
-SelectedLayerDropdown.propTypes = {
-    tools: PropTypes.array.isRequired
-};
-
 export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
-    const [slider, setSlider] = useState(layer.getOpacity());
     const [visible, setVisible] = useState(layer.isVisible());
-    const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
-    const layerType = layer.getLayerType();
     const publishable = layer.getPermission('publish');
-    const isInScale = layer.isInScale();
-    const geometryMatch = visibilityInfo.geometryMatch;
-    const handleOpacityChange = value => {
-        setSlider(value);
-        mutator.changeOpacity(layer, value);
-    };
     const handleToggleVisibility = () => {
         setVisible(!visible);
         mutator.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
         mutator.removeLayer(layer);
-    };
-    const handleLocateScaleLayer = () => {
-        mutator.locateLayer(layer);
     };
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
@@ -105,10 +60,10 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                             </ColAuto>
                                             <ColAutoRight style={{ padding: '0px', marginTop: '20px' }}>
                                                 {publishable &&
-                                                <>
-                                                <Icon type="check" style={{ color: '#01ca79' }} />
-                                                <Publishable>{locale.layer.publishable}</Publishable>
-                                                </>
+                                                <Fragment>
+                                                    <Icon type="check" style={{ color: '#01ca79' }} />
+                                                    <Publishable>{locale.layer.publishable}</Publishable>
+                                                </Fragment>
                                                 }
                                             </ColAutoRight>
                                         </Row>
@@ -121,40 +76,7 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <GrayRow>
-                                    <ColAuto>
-                                        <LayerIcon type={layerType} />
-                                    </ColAuto>
-                                    {!isInScale &&
-                                    <LayerScaleLocateBox
-                                        handleClick={handleLocateScaleLayer}
-                                        text={locale.layer.moveToScale}
-                                    />
-                                    }
-                                    {!geometryMatch &&
-                                    <LayerScaleLocateBox
-                                        handleClick={handleLocateScaleLayer}
-                                        text={locale.layer.moveToContentArea}
-                                    />
-                                    }
-                                    {isInScale && geometryMatch &&
-                                    <>
-                                    <LayerInfoBox
-                                        slider={slider}
-                                        handleOpacityChange={handleOpacityChange}
-                                    />
-                                    <StyleSettings
-                                        layer={layer}
-                                        locale={locale}
-                                        mutator={mutator}
-                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}
-                                    />
-                                    </>
-                                    }
-                                    <ColAutoRight>
-                                        <SelectedLayerDropdown tools={tools} />
-                                    </ColAutoRight>
-                                </GrayRow>
+                                <LayerBoxFooter layer={layer} mutator={mutator} visibilityInfo={visibilityInfo} locale={locale} />
                             </StyledBox>
                         </Col>
                     </Row>
