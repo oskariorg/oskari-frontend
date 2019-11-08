@@ -8,9 +8,7 @@ class UIService extends StateHandler {
         const layers = this._getLayers();
         this.state = {
             layers,
-            visibilityInfo: layers.map(layer => (
-                { id: layer.getId(), geometryMatch: true }
-            ))
+            visibilityInfo: layers.map(lyr => this._getInitialVisibilityInfoForLayer(lyr))
         };
     }
 
@@ -18,21 +16,43 @@ class UIService extends StateHandler {
         return [...this.sandbox.findAllSelectedMapLayers()].reverse();
     }
 
+    _getInitialVisibilityInfoForLayer (layer) {
+        if (!layer) {
+            return;
+        }
+        const info = {
+            id: layer.getId(),
+            visible: layer.isVisible(),
+            inScale: layer.isInScale(),
+            geometryMatch: true
+        };
+        const map = this.sandbox.getMap();
+        if (!map.isLayerSupported(layer)) {
+            info.unsupported = map.getMostSevereUnsupportedLayerReason(layer);
+        }
+        return info;
+    }
+
     updateLayers () {
         const layers = this._getLayers();
         const visibilityInfo = layers.map(layer => {
-            const id = layer.getId();
-            return this.state.visibilityInfo.find(vis => vis.id === id) || { id, geometryMatch: true };
+            const existingInfo = this.state.visibilityInfo.find(vis => vis.id === layer.getId());
+            if (existingInfo) {
+                return existingInfo;
+            }
+            return this._getInitialVisibilityInfoForLayer(layer);
         });
-        this.setState({ ...this.state, layers, visibilityInfo });
+        this.setState({ layers, visibilityInfo });
     }
 
-    updateLayerVisibility (event) {
-        const layerId = event.getMapLayer().getId();
+    updateVisibilityInfo (event) {
+        const layer = event.getMapLayer();
         const geometryMatch = event.isGeometryMatch();
+        const inScale = layer.isInScale();
+        const visible = layer.isVisible();
         const visibilityInfo = this.state.visibilityInfo.map(vis => {
-            if (vis.id === layerId) {
-                return { ...vis, geometryMatch };
+            if (vis.id === layer.getId()) {
+                return { ...vis, visible, inScale, geometryMatch };
             } else {
                 return vis;
             }

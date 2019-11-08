@@ -87,10 +87,7 @@ class UIStateHandler extends StateHandler {
                     this.getLayerListHandler().getFilterHandler().useStashedState();
                 }
             },
-            'MapLayerVisibilityChangedEvent': event => {
-                this.selectedLayersHandler.updateLayerVisibility(event);
-                updateSelectedLayers();
-            },
+            'MapLayerVisibilityChangedEvent': event => this.selectedLayersHandler.updateVisibilityInfo(event),
             'AfterMapLayerRemoveEvent': updateSelectedLayers,
             'AfterMapLayerAddEvent': updateSelectedLayers,
             'AfterRearrangeSelectedMapLayerEvent': updateSelectedLayers,

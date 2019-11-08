@@ -1,7 +1,7 @@
 import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { LayerBoxFooter } from './LayerBoxFooter';
+import { Footer } from './Footer/';
 import { Mutator } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
@@ -76,7 +76,7 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <LayerBoxFooter layer={layer} mutator={mutator} visibilityInfo={visibilityInfo} locale={locale} />
+                                <Footer layer={layer} mutator={mutator} visibilityInfo={visibilityInfo} locale={locale} />
                             </StyledBox>
                         </Col>
                     </Row>
