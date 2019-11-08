@@ -65,6 +65,10 @@ class UIService extends StateHandler {
     changeLayerStyle (layer, styleName) {
         this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), styleName]);
     }
+
+    locateLayer (layer) {
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layer.getId(), true]);
+    }
 }
 
 export const SelectedLayersHandler = mutatorMixin(UIService, [
@@ -72,5 +76,6 @@ export const SelectedLayersHandler = mutatorMixin(UIService, [
     'removeLayer',
     'changeOpacity',
     'toggleLayerVisibility',
-    'changeLayerStyle'
+    'changeLayerStyle',
+    'locateLayer'
 ]);
