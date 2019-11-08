@@ -14,6 +14,7 @@ import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
+import { toPng } from 'html-to-image';
 
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
@@ -25,6 +26,7 @@ export class MapModule extends AbstractMapModule {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
+        this.log = Oskari.log('MapModule');
     }
 
     /**
@@ -244,9 +246,8 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
-     * Produces an dataurl for PNG-image from the map contents.
+     * Produces an dataurl for PNG-image from the map contents and calls given callback with it.
      * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
-     * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
      */
     getScreenshot (callback, numOfTries) {
         if (typeof callback !== 'function') {
@@ -268,16 +269,27 @@ export class MapModule extends AbstractMapModule {
             }, 1000);
             return;
         }
-        try {
-            var imageData = null;
-            me.getMap().once('postcompose', function (event) {
-                var canvas = event.context.canvas;
-                imageData = canvas.toDataURL('image/png');
+
+        const exportOptions = {
+            filter: (element) => {
+                // Don't include map controls to screenshot
+                return element.className ? element.className.indexOf('mapplugin') === -1 : true;
+            }
+        };
+
+        me.getMap().once('rendercomplete', () => {
+            toPng(me.getMap().getTargetElement(), exportOptions).then((dataUrl) => {
+                callback(dataUrl);
+            }).catch(err => {
+                me.log.warn('Error producing a screenshot png data url: ' + err);
+                callback('');
             });
+        });
+
+        try {
             me.getMap().renderSync();
-            callback(imageData);
         } catch (err) {
-            me.getSandbox().printWarn('Error producing a screenshot' + err);
+            me.log.warn('Error in screenshot map render sync: ' + err);
             callback('');
         }
     }
