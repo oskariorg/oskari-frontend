@@ -39,7 +39,8 @@ Oskari.registerLocalization(
                 },
                 'moveToScale': 'Gå till en lämplig skalnivå',
                 'moveToContentArea': 'Flytta till en lämplig plats',
-                'publishable': 'Får publiceras'
+                'publishable': 'Får publiceras',
+                'hidden': 'Kartlagret är tillfälligt dolt.'
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',
