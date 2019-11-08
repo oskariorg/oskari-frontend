@@ -345,7 +345,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
                     // sliderEl.slider('value', jQuery(this).val());
                     me._layerOpacityChanged(layer, jQuery(this).val());
                 });
-                input.on('keydown', e => e.stopPropagation());
             }
 
             return slider;
