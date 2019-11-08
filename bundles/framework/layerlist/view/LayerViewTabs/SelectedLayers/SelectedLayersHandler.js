@@ -5,8 +5,12 @@ class UIService extends StateHandler {
         super();
         this.instance = instance;
         this.sandbox = instance.getSandbox();
+        const layers = this._getLayers();
         this.state = {
-            layers: this._getLayers()
+            layers,
+            visibilityInfo: layers.map(layer => (
+                { id: layer.getId(), geometryMatch: true }
+            ))
         };
     }
 
@@ -15,7 +19,21 @@ class UIService extends StateHandler {
     }
 
     updateLayers () {
-        this.updateState({ layers: this._getLayers() });
+        const layers = this._getLayers();
+        this.updateState({ layers });
+    }
+
+    updateLayerVisibility (event) {
+        const layerId = event.getMapLayer().getId();
+        const geometryMatch = event.isGeometryMatch();
+        const visibilityInfo = this.state.visibilityInfo.map(vis => {
+            if (vis.id === layerId) {
+                return { ...vis, geometryMatch };
+            } else {
+                return vis;
+            }
+        });
+        this.updateState({ visibilityInfo });
     }
 
     reorderLayers (fromPosition, toPosition) {
@@ -49,21 +67,22 @@ class UIService extends StateHandler {
     toggleLayerVisibility (layer) {
         const visibility = layer.isVisible();
         this.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), !visibility]);
-        this.updateLayers();
     }
 
     changeOpacity (layer, opacity) {
         this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), opacity]);
-        this.updateState({ layers: this._getLayers() });
     }
 
     removeLayer (layer) {
         this.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
-        this.updateState({ layers: this._getLayers() });
     }
 
     changeLayerStyle (layer, styleName) {
         this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), styleName]);
+    }
+
+    locateLayer (layer) {
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layer.getId(), true]);
     }
 }
 
@@ -72,5 +91,6 @@ export const SelectedLayersHandler = mutatorMixin(UIService, [
     'removeLayer',
     'changeOpacity',
     'toggleLayerVisibility',
-    'changeLayerStyle'
+    'changeLayerStyle',
+    'locateLayer'
 ]);

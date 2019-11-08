@@ -36,7 +36,10 @@ Oskari.registerLocalization(
                 },
                 'styles': {
                     'title': 'Stil'
-                }
+                },
+                'moveToScale': 'Gå till en lämplig skalnivå',
+                'moveToContentArea': 'Flytta till en lämplig plats',
+                'publishable': 'Får publiceras'
             },
             'backendStatus': {
                 'OK': 'Kartlagret är tillgängligt just nu.',

@@ -1,15 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { LayerBoxFooter } from './LayerBoxFooter';
 import { Mutator } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon, Dropdown, Menu } from 'oskari-ui';
+import { Icon } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
-import { LayerInfoBox } from './LayerInfoBox';
-import { LayerIcon } from '../../LayerIcon';
-import { StyleSettings } from './StyleSettings';
-import { THEME_COLOR } from '.';
 
 const StyledBox = styled.div`
     min-height: 100px;
@@ -22,52 +19,17 @@ const StyledBox = styled.div`
     background-color: #fff;
 `;
 
-const GrayRow = styled(Row)`
-    background-color: #f3f3f3;
-    padding-left: 60px;
-    justify-content: flex-start;
-    ${ColAuto}, ${ColAutoRight} {
-        display: flex;
-        align-items: center;
-        padding-left: 0;
-        > :not(:last-child) {
-            margin-right: 5px;
-        }
-    }
+const Publishable = styled.span`
+    font-style: italic;
+    font-size: 14px;
+    margin-left: 5px;
 `;
 
-const SelectedLayerDropdown = ({ tools }) => {
-    const items = tools.map(tool => {
-        return { title: tool._title ? tool._title : tool._name, action: () => true };
-    });
-    const menu = <Menu items={items} />;
-    return (
-        <Dropdown menu={menu} placement="bottomRight">
-            <Icon type="menu" style={{ color: THEME_COLOR, fontSize: '16px', marginTop: '8px' }} />
-        </Dropdown>
-    );
-};
-
-SelectedLayerDropdown.propTypes = {
-    tools: PropTypes.array.isRequired
-};
-
-export const LayerBox = ({ layer, index, locale, mutator }) => {
-    const [slider, setSlider] = useState(layer.getOpacity());
+export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
     const [visible, setVisible] = useState(layer.isVisible());
-    const tools = layer.getTools();
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
-    const layerType = layer.getLayerType();
-
-    // const isInScale = layer.isInScale();
-    // const srs = layer.isSupportedSrs();
-    // Try to find this somewhere
-    // const activeFeats = layer.getActiveFeatures().length;
-    const handleOpacityChange = value => {
-        setSlider(value);
-        mutator.changeOpacity(layer, value);
-    };
+    const publishable = layer.getPermission('publish');
     const handleToggleVisibility = () => {
         setVisible(!visible);
         mutator.toggleLayerVisibility(layer);
@@ -90,32 +52,31 @@ export const LayerBox = ({ layer, index, locale, mutator }) => {
                                         {visible ? <EyeOpen onClick={handleToggleVisibility} />
                                             : <EyeShut onClick={handleToggleVisibility} />}
                                     </ColAuto>
-                                    <Col><b>{name}</b><br/>{organizationName}</Col>
+                                    <Col>
+                                        <Row style={{ padding: '0px' }}>
+                                            <ColAuto style={{ padding: '0px' }}>
+                                                <b>{name}</b><br/>
+                                                {organizationName}
+                                            </ColAuto>
+                                            <ColAutoRight style={{ padding: '0px', marginTop: '20px' }}>
+                                                {publishable &&
+                                                <Fragment>
+                                                    <Icon type="check" style={{ color: '#01ca79' }} />
+                                                    <Publishable>{locale.layer.publishable}</Publishable>
+                                                </Fragment>
+                                                }
+                                            </ColAutoRight>
+                                        </Row>
+                                    </Col>
                                     <ColAutoRight>
                                         <Icon
                                             type="close"
                                             onClick={handleRemoveLayer}
-                                            style={{ marginTop: '10px', fontSize: '12px', marginRight: '4px' }}
+                                            style={{ fontSize: '12px', marginRight: '4px' }}
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <GrayRow>
-                                    <ColAuto>
-                                        <LayerIcon type={layerType} />
-                                    </ColAuto>
-                                    <LayerInfoBox
-                                        slider={slider}
-                                        handleOpacityChange={handleOpacityChange}
-                                    />
-                                    <StyleSettings
-                                        layer={layer}
-                                        locale={locale}
-                                        mutator={mutator}
-                                        onChange={styleName => mutator.changeLayerStyle(layer, styleName)}/>
-                                    <ColAutoRight>
-                                        <SelectedLayerDropdown tools={tools} />
-                                    </ColAutoRight>
-                                </GrayRow>
+                                <LayerBoxFooter layer={layer} mutator={mutator} visibilityInfo={visibilityInfo} locale={locale} />
                             </StyledBox>
                         </Col>
                     </Row>
@@ -129,5 +90,6 @@ LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     locale: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    visibilityInfo: PropTypes.object.isRequired
 };
