@@ -6,7 +6,7 @@ import { VisibilityInfo } from './VisibilityInfo';
 import { OpacitySlider } from './OpacitySlider';
 import { StyleSettings } from './StyleSettings';
 import { ToolMenu } from './ToolMenu';
-import { Mutator, Timeout } from 'oskari-ui/util';
+import { Mutator } from 'oskari-ui/util';
 import { Row, ColAuto, ColAutoRight } from '../Grid';
 
 const GrayRow = styled(Row)`
