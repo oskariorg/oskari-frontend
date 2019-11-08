@@ -42,7 +42,7 @@ class UIService extends StateHandler {
             }
             return this._getInitialVisibilityInfoForLayer(layer);
         });
-        this.setState({ layers, visibilityInfo });
+        this.updateState({ layers, visibilityInfo });
     }
 
     updateVisibilityInfo (event) {

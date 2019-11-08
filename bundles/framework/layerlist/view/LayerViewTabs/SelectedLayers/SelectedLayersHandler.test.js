@@ -1,4 +1,5 @@
 import { SelectedLayersHandler } from './SelectedLayersHandler';
+import { initServices } from '../test.util';
 import '../../../../../mapping/mapmodule/domain/AbstractLayer';
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
@@ -11,6 +12,7 @@ const createLayers = (idArray, isBaseLayer) => idArray.map(id => {
 });
 
 describe('SelectedLayersHandler', () => {
+    initServices();
     const instance = {
         getSandbox: () => Oskari.getSandbox('SelectedLayersHandlerTest')
     };
