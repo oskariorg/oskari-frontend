@@ -2,6 +2,7 @@
 import * as olExtent from 'ol/extent';
 import { defaults as olInteractionDefaults } from 'ol/interaction';
 import KeyboardPan from 'ol/interaction/KeyboardPan';
+import KeyboardZoom from 'ol/interaction/KeyboardZoom';
 import { noModifierKeys, targetNotEditable } from 'ol/events/condition';
 import Collection from 'ol/Collection';
 import olFormatWKT from 'ol/format/WKT';
@@ -106,7 +107,7 @@ export class MapModule extends AbstractMapModule {
             altShiftDragRotate: false,
             pinchRotate: false
         };
-        const keyboardPanOptions = {
+        const keyboardInteractionOptions = {
             condition: mapBrowserEvent => {
                 if (!noModifierKeys(mapBrowserEvent) || !targetNotEditable(mapBrowserEvent)) {
                     return false;
@@ -121,7 +122,10 @@ export class MapModule extends AbstractMapModule {
         const interactions = olInteractionDefaults(interactionOptions).getArray()
             .map(interaction => {
                 if (interaction instanceof KeyboardPan) {
-                    return new KeyboardPan(keyboardPanOptions);
+                    return new KeyboardPan(keyboardInteractionOptions);
+                }
+                if (interaction instanceof KeyboardZoom) {
+                    return new KeyboardZoom(keyboardInteractionOptions);
                 }
                 return interaction;
             });
