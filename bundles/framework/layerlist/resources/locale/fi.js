@@ -39,7 +39,11 @@ Oskari.registerLocalization(
                 },
                 'styles': {
                     'title': 'Tyyli'
-                }
+                },
+                'moveToScale': 'Siirry soveltuvalle mittakaavatasolle',
+                'moveToContentArea': 'Paikanna kohteet',
+                'publishable': 'Julkaistavissa',
+                'hidden': 'Karttataso on tilapäisesti piilotettu.'
             },
             'backendStatus': {
                 'OK': 'Karttataso on käytettävissä tällä hetkellä.',

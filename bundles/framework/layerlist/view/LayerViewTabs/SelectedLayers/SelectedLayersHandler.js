@@ -5,8 +5,10 @@ class UIService extends StateHandler {
         super();
         this.instance = instance;
         this.sandbox = instance.getSandbox();
+        const layers = this._getLayers();
         this.state = {
-            layers: this._getLayers()
+            layers,
+            visibilityInfo: layers.map(lyr => this._getInitialVisibilityInfoForLayer(lyr))
         };
     }
 
@@ -14,8 +16,48 @@ class UIService extends StateHandler {
         return [...this.sandbox.findAllSelectedMapLayers()].reverse();
     }
 
+    _getInitialVisibilityInfoForLayer (layer) {
+        if (!layer) {
+            return;
+        }
+        const info = {
+            id: layer.getId(),
+            visible: layer.isVisible(),
+            inScale: layer.isInScale(),
+            geometryMatch: true
+        };
+        const map = this.sandbox.getMap();
+        if (!map.isLayerSupported(layer)) {
+            info.unsupported = map.getMostSevereUnsupportedLayerReason(layer);
+        }
+        return info;
+    }
+
     updateLayers () {
-        this.updateState({ layers: this._getLayers() });
+        const layers = this._getLayers();
+        const visibilityInfo = layers.map(layer => {
+            const existingInfo = this.state.visibilityInfo.find(vis => vis.id === layer.getId());
+            if (existingInfo) {
+                return existingInfo;
+            }
+            return this._getInitialVisibilityInfoForLayer(layer);
+        });
+        this.updateState({ layers, visibilityInfo });
+    }
+
+    updateVisibilityInfo (event) {
+        const layer = event.getMapLayer();
+        const geometryMatch = event.isGeometryMatch();
+        const inScale = layer.isInScale();
+        const visible = layer.isVisible();
+        const visibilityInfo = this.state.visibilityInfo.map(vis => {
+            if (vis.id === layer.getId()) {
+                return { ...vis, visible, inScale, geometryMatch };
+            } else {
+                return vis;
+            }
+        });
+        this.updateState({ visibilityInfo });
     }
 
     reorderLayers (fromPosition, toPosition) {
@@ -49,21 +91,22 @@ class UIService extends StateHandler {
     toggleLayerVisibility (layer) {
         const visibility = layer.isVisible();
         this.sandbox.postRequestByName('MapModulePlugin.MapLayerVisibilityRequest', [layer.getId(), !visibility]);
-        this.updateLayers();
     }
 
     changeOpacity (layer, opacity) {
         this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), opacity]);
-        this.updateState({ layers: this._getLayers() });
     }
 
     removeLayer (layer) {
         this.sandbox.postRequestByName('RemoveMapLayerRequest', [layer.getId()]);
-        this.updateState({ layers: this._getLayers() });
     }
 
     changeLayerStyle (layer, styleName) {
         this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), styleName]);
+    }
+
+    locateLayer (layer) {
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layer.getId(), true]);
     }
 }
 
@@ -72,5 +115,6 @@ export const SelectedLayersHandler = mutatorMixin(UIService, [
     'removeLayer',
     'changeOpacity',
     'toggleLayerVisibility',
-    'changeLayerStyle'
+    'changeLayerStyle',
+    'locateLayer'
 ]);
