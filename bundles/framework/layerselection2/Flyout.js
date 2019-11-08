@@ -341,10 +341,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselection2.Flyout',
 
             if (input) {
                 input.val(layer.getOpacity());
-                input.on('change paste keyup', function () {
+                input.on('change paste keyup', function (e) {
                     // sliderEl.slider('value', jQuery(this).val());
                     me._layerOpacityChanged(layer, jQuery(this).val());
                 });
+                input.on('keydown', e => e.stopPropagation());
             }
 
             return slider;
