@@ -30,7 +30,7 @@ const focus = ref => {
     }
 };
 
-export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator, locale }) => {
+export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, blink, mutator, locale }) => {
     const searchTermInputRef = useRef(null);
     const { tabs } = locale;
     useEffect(() => {
@@ -51,7 +51,15 @@ export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch,
             <TabPane tab={tabs.layerList} key={TABS_ALL_LAYERS}>
                 <LayerList ref={searchTermInputRef} {...layerList.state} mutator={layerList.mutator} locale={locale} />
             </TabPane>
-            <TabPane tab={<SelectedTab num={selectedLayers.state.layers.length} text={tabs.selectedLayers} />} key={TABS_SELECTED_LAYERS}>
+            <TabPane
+                tab={
+                    <SelectedTab
+                        key={selectedLayers.state.layers.length}
+                        blink={blink}
+                        num={selectedLayers.state.layers.length}
+                        text={tabs.selectedLayers}/>
+                }
+                key={TABS_SELECTED_LAYERS}>
                 <SelectedLayers {...selectedLayers.state} locale={locale} mutator={selectedLayers.mutator}/>
             </TabPane>
         </ControlledTabs>
@@ -63,6 +71,7 @@ LayerViewTabs.propTypes = {
     selectedLayers: shapes.stateful.isRequired,
     tab: PropTypes.string,
     autoFocusSearch: PropTypes.bool,
+    blink: PropTypes.bool,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
     locale: PropTypes.shape({ tabs: PropTypes.object }).isRequired
 };
