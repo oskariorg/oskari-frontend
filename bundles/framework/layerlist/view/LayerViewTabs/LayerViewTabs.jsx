@@ -30,7 +30,7 @@ const focus = ref => {
     }
 };
 
-export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, blink, mutator, locale }) => {
+export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator, locale }) => {
     const searchTermInputRef = useRef(null);
     const { tabs } = locale;
     useEffect(() => {
