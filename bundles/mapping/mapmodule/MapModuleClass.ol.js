@@ -1,6 +1,10 @@
 
 import * as olExtent from 'ol/extent';
 import { defaults as olInteractionDefaults } from 'ol/interaction';
+import KeyboardPan from 'ol/interaction/KeyboardPan';
+import KeyboardZoom from 'ol/interaction/KeyboardZoom';
+import { noModifierKeys, targetNotEditable } from 'ol/events/condition';
+import Collection from 'ol/Collection';
 import olFormatWKT from 'ol/format/WKT';
 import olFormatGeoJSON from 'ol/format/GeoJSON';
 import olView from 'ol/View';
@@ -60,15 +64,12 @@ export class MapModule extends AbstractMapModule {
             },
             rotate: false
         });
-        var interactions = olInteractionDefaults({
-            altShiftDragRotate: false,
-            pinchRotate: false
-        });
+
         var map = new olMap({
             keyboardEventTarget: document,
             target: this.getMapElementId(),
             controls: controls,
-            interactions: interactions,
+            interactions: this._initInteractions(),
             moveTolerance: 2
         });
 
@@ -95,6 +96,40 @@ export class MapModule extends AbstractMapModule {
 
         me._setupMapEvents(map);
         return map;
+    }
+
+    /**
+     * Creates interactions for map.
+     * Fixes keyboard event bubbling from focusable elements.
+     */
+    _initInteractions () {
+        const interactionOptions = {
+            altShiftDragRotate: false,
+            pinchRotate: false
+        };
+        const keyboardInteractionOptions = {
+            condition: mapBrowserEvent => {
+                if (!noModifierKeys(mapBrowserEvent) || !targetNotEditable(mapBrowserEvent)) {
+                    return false;
+                }
+                const { originalEvent } = mapBrowserEvent;
+                if (originalEvent && originalEvent.target) {
+                    return !['INPUT', 'SELECT', 'TEXTAREA'].includes(originalEvent.target.tagName);
+                }
+                return true;
+            }
+        };
+        const interactions = olInteractionDefaults(interactionOptions).getArray()
+            .map(interaction => {
+                if (interaction instanceof KeyboardPan) {
+                    return new KeyboardPan(keyboardInteractionOptions);
+                }
+                if (interaction instanceof KeyboardZoom) {
+                    return new KeyboardZoom(keyboardInteractionOptions);
+                }
+                return interaction;
+            });
+        return new Collection(interactions, { unique: true });
     }
 
     /**
