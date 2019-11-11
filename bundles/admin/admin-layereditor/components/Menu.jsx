@@ -5,9 +5,9 @@ import 'antd/es/menu/style/index.js';
 
 export const Menu = ({ items }) => (
     <AntMenu>
-        {items.forEach(item => (
-            <AntMenu.Item>
-                <a onClick={() => item.action}>{item.title}</a>
+        {items.map(item => (
+            <AntMenu.Item key={item.title}>
+                <a onClick={item.action}>{item.title}</a>
             </AntMenu.Item>
         ))}
     </AntMenu>
