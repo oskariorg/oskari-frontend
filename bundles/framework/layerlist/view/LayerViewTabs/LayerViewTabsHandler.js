@@ -8,21 +8,8 @@ class UIStateHandler extends StateHandler {
         super();
         this.instance = instance;
         this.sandbox = instance.getSandbox();
-        this.layerListHandler = new LayerListHandler(instance);
-        this.layerListHandler.addStateListener(layerListState => this.updateState({
-            autoFocusSearch: false,
-            layerList: {
-                state: layerListState,
-                mutator: this.state.layerList.mutator
-            }
-        }));
-        this.selectedLayersHandler = new SelectedLayersHandler(instance);
-        this.selectedLayersHandler.addStateListener(selectedLayersState => this.updateState({
-            selectedLayers: {
-                state: selectedLayersState,
-                mutator: this.state.selectedLayers.mutator
-            }
-        }));
+        this.layerListHandler = this._createLayerListHandler();
+        this.selectedLayersHandler = this._createSelectedLayersHandler();
         this.state = {
             layerList: {
                 state: this.layerListHandler.getState(),
@@ -37,6 +24,30 @@ class UIStateHandler extends StateHandler {
         this.eventHandlers = this._createEventHandlers();
     }
 
+    _createLayerListHandler () {
+        const handler = new LayerListHandler(this.instance);
+        handler.addStateListener(layerListState => this.updateState({
+            autoFocusSearch: false,
+            layerList: {
+                state: layerListState,
+                mutator: this.state.layerList.mutator
+            }
+        }));
+        return handler;
+    }
+
+    _createSelectedLayersHandler () {
+        const handler = new SelectedLayersHandler(this.instance);
+        handler.addStateListener(selectedLayersState => {
+            this.updateState({
+                selectedLayers: {
+                    state: selectedLayersState,
+                    mutator: this.state.selectedLayers.mutator
+                }
+            });
+        });
+        return handler;
+    }
     getLayerListHandler () {
         return this.layerListHandler;
     }
@@ -70,6 +81,7 @@ class UIStateHandler extends StateHandler {
     }
 
     _createEventHandlers () {
+        const refresh = () => this.notify();
         const updateSelectedLayers = () => this.selectedLayersHandler.updateLayers();
         const handlers = {
             'userinterface.ExtensionUpdatedEvent': event => {
@@ -91,9 +103,9 @@ class UIStateHandler extends StateHandler {
             'AfterMapLayerRemoveEvent': updateSelectedLayers,
             'AfterMapLayerAddEvent': updateSelectedLayers,
             'AfterRearrangeSelectedMapLayerEvent': updateSelectedLayers,
-            'AfterChangeMapLayerStyleEvent': updateSelectedLayers,
-            'MapSizeChangedEvent': updateSelectedLayers,
-            'AfterChangeMapLayerOpacityEvent': updateSelectedLayers
+            'AfterChangeMapLayerStyleEvent': refresh,
+            'MapSizeChangedEvent': refresh,
+            'AfterChangeMapLayerOpacityEvent': refresh
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
