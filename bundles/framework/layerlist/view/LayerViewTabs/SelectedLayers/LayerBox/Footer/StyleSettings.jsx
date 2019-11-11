@@ -1,9 +1,8 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { ColAuto } from './Grid';
 import { Icon, Select, Option, InputGroup, Button } from 'oskari-ui';
-import { THEME_COLOR } from '.';
+import { THEME_COLOR } from '..';
 
 const StyledSelect = styled(Select)`
     width: 120px;
@@ -33,7 +32,7 @@ export const StyleSettings = ({ layer, locale, onChange }) => {
         return null;
     }
     return (
-        <ColAuto>
+        <Fragment>
             <Label>{ locale.layer.styles.title }</Label>
             <InputGroup compact>
                 <StyledSelect
@@ -55,7 +54,7 @@ export const StyleSettings = ({ layer, locale, onChange }) => {
                     </Button>
                 }
             </InputGroup>
-        </ColAuto>
+        </Fragment>
     );
 };
 StyleSettings.propTypes = {

@@ -574,12 +574,19 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
          *  1. First fatal if present
          *  2. First warning if present
          *  3. First info if present
-         * @param {UnsupportedLayerReason[]} reasons
+         * @param {UnsupportedLayerReason[] | layer} reasonsOrLayer
          * @return {UnsupportedLayerReason} reason
          */
-        getMostSevereUnsupportedLayerReason: function (reasons) {
-            if (!reasons) {
+        getMostSevereUnsupportedLayerReason: function (reasonsOrLayer) {
+            if (!reasonsOrLayer) {
                 return;
+            }
+            let reasons = reasonsOrLayer;
+            if (!Array.isArray(reasonsOrLayer)) {
+                reasons = this.getUnsupportedLayerReasons(reasonsOrLayer);
+                if (!reasons) {
+                    return;
+                }
             }
             const grouped = this.groupUnsupportedLayerReasons(reasons);
             const { fatals, warnings, infos } = grouped;
