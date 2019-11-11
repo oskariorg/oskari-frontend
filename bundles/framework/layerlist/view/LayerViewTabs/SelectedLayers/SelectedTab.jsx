@@ -53,6 +53,5 @@ export const SelectedTab = ({ num, text }) => {
 
 SelectedTab.propTypes = {
     num: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired,
-    blink: PropTypes.bool
+    text: PropTypes.string.isRequired
 };

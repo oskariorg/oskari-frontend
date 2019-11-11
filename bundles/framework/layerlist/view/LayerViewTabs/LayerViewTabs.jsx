@@ -55,7 +55,6 @@ export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch,
                 tab={
                     <SelectedTab
                         key={selectedLayers.state.layers.length}
-                        blink={blink}
                         num={selectedLayers.state.layers.length}
                         text={tabs.selectedLayers}/>
                 }
@@ -71,7 +70,6 @@ LayerViewTabs.propTypes = {
     selectedLayers: shapes.stateful.isRequired,
     tab: PropTypes.string,
     autoFocusSearch: PropTypes.bool,
-    blink: PropTypes.bool,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
     locale: PropTypes.shape({ tabs: PropTypes.object }).isRequired
 };
