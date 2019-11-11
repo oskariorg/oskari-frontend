@@ -4,6 +4,7 @@
  */
 export class SetTimeRequestHandler {
     handleRequest (core, request) {
+        console.log(request);
     }
 };
 
