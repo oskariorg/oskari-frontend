@@ -272,6 +272,10 @@ export class MapModule extends AbstractMapModule {
 
         const exportOptions = {
             filter: (element) => {
+                // Don't include canvas elements with zero width to screenshot
+                if (element instanceof HTMLCanvasElement && element.width === 0) {
+                    return false;
+                }
                 // Don't include map controls to screenshot
                 return element.className ? element.className.indexOf('mapplugin') === -1 : true;
             }
