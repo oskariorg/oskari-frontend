@@ -63,6 +63,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMovementCon
                         interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                     }
                 } else {
+                    console.log('disabled keyboard interactions ' + new Date());
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardPan));
                     interactions.push(this.getMapModule().getInteractionInstance(olInteractionKeyboardZoom));
                 }

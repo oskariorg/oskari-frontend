@@ -80,7 +80,7 @@ Oskari.clazz.define(
                  */
                 {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ControlsPlugin.ol.js'
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/controls/ControlsPlugin.ol.js'
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/DisableMapKeyboardMovementRequest.js'
@@ -95,7 +95,7 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/request/EnableMapMouseMovementRequest.js'
                 }, {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule_ol3/request/MapMovementControlsRequestHandler.js'
+                    'src': '../../../../bundles/mapping/mapmodule/request/MapMovementControlsRequestHandler.js'
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/ShowMapMeasurementRequest.js'
@@ -461,7 +461,7 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/request/MapTourRequest.js'
                 }, {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule_ol3/plugin/controls/ToolSelectionHandler.js'
+                    'src': '../../../../bundles/mapping/mapmodule/plugin/controls/ToolSelectionHandler.js'
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/MapLayerUpdateRequest.js'
