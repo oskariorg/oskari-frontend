@@ -30,11 +30,16 @@ const StyledBadge = styled.div`
         animation-iteration-count: ${BLINK_COUNT};`}
 `;
 
-export const SelectedTab = ({ num, text, blink }) => {
-    const [isBlinking, setBlinking] = useState(blink);
+let lastNumProp = null;
+
+export const SelectedTab = ({ num, text }) => {
+    const [isBlinking, setBlinking] = useState(lastNumProp !== num);
+    lastNumProp = num;
     // Prevents blinking when flyout is hidden and shown again.
     useEffect(() => {
-        setTimeout(() => setBlinking(false), TOTAL_DURATION_IN_MS);
+        const timeout = setTimeout(() => setBlinking(false), TOTAL_DURATION_IN_MS);
+        const cleanUp = () => clearTimeout(timeout);
+        return cleanUp;
     });
     return (
         <span>

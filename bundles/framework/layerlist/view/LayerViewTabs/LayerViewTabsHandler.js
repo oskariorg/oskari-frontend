@@ -19,8 +19,7 @@ class UIStateHandler extends StateHandler {
                 state: this.selectedLayersHandler.getState(),
                 mutator: this.selectedLayersHandler.getMutator()
             },
-            autoFocusSearch: true,
-            blink: false
+            autoFocusSearch: true
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -39,12 +38,8 @@ class UIStateHandler extends StateHandler {
 
     _createSelectedLayersHandler () {
         const handler = new SelectedLayersHandler(this.instance);
-        let previousState;
         handler.addStateListener(selectedLayersState => {
-            const blink = !previousState || previousState.layers.length !== selectedLayersState.layers.length;
-            previousState = selectedLayersState;
             this.updateState({
-                blink,
                 selectedLayers: {
                     state: selectedLayersState,
                     mutator: this.state.selectedLayers.mutator
