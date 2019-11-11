@@ -53,6 +53,8 @@ export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch,
             </TabPane>
             <TabPane
                 tab={
+                    // The initial render causes the badge to blink.
+                    // When the key changes, React creates a new instance of the component and the blinking starts again.
                     <SelectedTab
                         key={selectedLayers.state.layers.length}
                         num={selectedLayers.state.layers.length}
