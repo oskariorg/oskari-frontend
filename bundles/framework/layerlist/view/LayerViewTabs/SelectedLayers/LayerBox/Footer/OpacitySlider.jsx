@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Slider, NumberInput, InputGroup } from 'oskari-ui';
@@ -24,16 +24,10 @@ const StyledNumberInput = styled(NumberInput)`
 `;
 
 export const OpacitySlider = ({ value, onChange }) => {
-    const [sliderValue, updateSlider] = useState(value);
-    const [previousValue, setPreviousValue] = useState(value);
+    const [sliderValue, setSliderValue] = useState(value);
     const [eventTimeout, setEventTimeout] = useState(null);
-    if (previousValue !== value) {
-        // equal to get derived state from props
-        updateSlider(value);
-        setPreviousValue(value);
-    }
     const instantValueChange = val => {
-        updateSlider(val);
+        setSliderValue(val);
         const delayedAction = () => onChange(val);
         if (eventTimeout && eventTimeout.isPending()) {
             eventTimeout.reset(delayedAction);
@@ -41,6 +35,9 @@ export const OpacitySlider = ({ value, onChange }) => {
         }
         setEventTimeout(new Timeout(delayedAction, OPACITY_EVENT_FIRING_DELAY));
     };
+    React.useEffect(() => {
+        setSliderValue(value);
+    }, [value]);
     return (
         <InputGroup compact>
             <Border>
