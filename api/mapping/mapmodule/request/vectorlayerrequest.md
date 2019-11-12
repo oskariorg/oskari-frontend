@@ -25,31 +25,7 @@ The request takes one parameter, options.
 | layerPermissions | object | Permissions ```{ publish: 'publication_permission_ok' }``` |
 | minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
 | maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
-| hover | object | Describes how to visualize features on mouse hover and what kind of tooltip should be shown. Note that features are not hovered while drawing is active (DrawTools).
-Hover has two optional keys `featureStyle` and `content`.
-See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions. 
-
-Content should be content of tooltip as an array. Each object creates a row to the tooltip.
-Each row object has `key` or `keyProperty` and `valueProperty`.
-`key` is a label and will be rendered as is.
-`valueProperty` and `keyProperty` will be fetched from the feature's properties.
-
-```javascript
-"hover": {
-    "featureStyle":  {...},
-    "content": [
-        { "key": "Feature Data" },
-        { "key": 'Feature ID', "valueProperty": "id" },
-        { "keyProperty": "type", "valueProperty": "name" }
-    ]
-}
-```
-Exampe above would create a tooltip like
-
-Feature Data
-Feature ID: 23098523243
-Road: Main Street
-|
+| hover | object | See Hover Settings section below |
 
 Example object
 ```javascript
@@ -74,10 +50,11 @@ Example object
 }
 ```
 
-#### Hover settings
+### Hover Settings
 
-Hover describes how to visualize features on mouse hover and what kind of tooltip should be shown.
-Hover has two optional keys `featureStyle` and `content`.
+Hover describes how to visualize features on mouse hover and what kind of tooltip should be shown. Note that features are not hovered while drawing is active (DrawTools). 
+
+Hover has two optional keys `featureStyle` and `content`. See [Oskari JSON style](/documentation/examples/oskari-style) for `featureStyle` definition.
 
 Content should be content of tooltip as an array. Each object creates a row to the tooltip.
 Each row object has `key` or `keyProperty` and `valueProperty`.
@@ -85,12 +62,12 @@ Each row object has `key` or `keyProperty` and `valueProperty`.
 `valueProperty` and `keyProperty` will be fetched from the feature's properties.
 
 ```javascript
-"hover": {
-    "featureStyle":  {...},
-    "content": [
-        { "key": "Feature Data" },
-        { "key": 'Feature ID', "valueProperty": "id" },
-        { "keyProperty": "type", "valueProperty": "name" }
+'hover': {
+    'featureStyle':  {...},
+    'content': [
+        { 'key': 'Feature Data' },
+        { 'key': 'Feature ID', 'valueProperty': 'id' },
+        { 'keyProperty': 'type', 'valueProperty': 'name' }
     ]
 }
 ```
