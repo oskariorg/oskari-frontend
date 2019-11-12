@@ -64,7 +64,7 @@ Road: Main Street
 Only prepares a layer for later use. To add features to this layer see [AddFeaturesToMapRequest](/api/requests/#unreleased/mapping/mapmodule/request/addfeaturestomaprequest.md).
 
 ```javascript
-const options = {
+var options = {
     layerId: 'MY_VECTOR_LAYER',
     layerInspireName: 'Inspire theme name',
     layerOrganizationName: 'Organization name',
@@ -76,7 +76,13 @@ const options = {
         'publish': 'publication_permission_ok'
     },
     maxScale: 1,
-    minScale: 1451336
+    minScale: 1451336,
+    hover: {
+        'featureStyle':  {
+            'inherit': true,
+            'effect': 'darken'
+        }
+    }
 };
 Oskari.getSandbox().postRequestByName('VectorLayerRequest', [options]); 
 
@@ -85,12 +91,16 @@ Oskari.getSandbox().postRequestByName('VectorLayerRequest', [options]);
 Define layerId which matches layer's id which should be updated. Add properties which should be updated. Note that if id doesn't match any existing layer, a new layer will be created.
 
 ```javascript
-const newOptions = {
+var newOptions = {
     layerId: 'MY_VECTOR_LAYER', // existing id
     opacity: 100,
     hover: {
+        'featureStyle':  {
+            'inherit': true,
+            'effect': 'darken'
+        },
         'content': [
-            { 'key': 'Feature ID', 'valueProperty': 'id' }
+            { 'key': 'Feature ID', 'valueProperty': 'test_property' }
         ]
     }
 };
