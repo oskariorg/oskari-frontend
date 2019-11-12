@@ -38,9 +38,13 @@ Each row object has `key` or `keyProperty` and `valueProperty`.
 `key` is a label and will be rendered as is.
 `valueProperty` and `keyProperty` will be fetched from the feature's properties.
 
+For example:
 ```javascript
-'hover': {
-    'featureStyle':  {...},
+{
+    'featureStyle':  {
+        'inherit': true,
+        'effect': 'darken'
+    },
     'content': [
         { 'key': 'Feature Data' },
         { 'key': 'Feature ID', 'valueProperty': 'id' },
@@ -48,7 +52,7 @@ Each row object has `key` or `keyProperty` and `valueProperty`.
     ]
 }
 ```
-Exampe above would create a tooltip like:
+The features would be darker on mouse hover and they would have a tooltip like:
 ```
 Feature Data
 Feature ID: 23098523243
