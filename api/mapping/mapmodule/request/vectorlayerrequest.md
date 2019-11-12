@@ -25,40 +25,11 @@ The request takes one parameter, options.
 | layerPermissions | object | Permissions | `{ publish: 'publication_permission_ok' }` |
 | minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1451336` |
 | maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1` |
-| hover | object | See Hover Settings section below | ```
-{
-    'content': [
-        { 'key': 'Feature ID', 'valueProperty': 'id' }
-    ]
-}
-```|
-
-Example object
-```javascript
-{
-    layerId: 'MY_VECTOR_LAYER',
-    layerInspireName: 'Inspire theme name',
-    layerOrganizationName: 'Organization name',
-    showLayer: true,
-    opacity: 80,
-    layerName: 'Layer name',
-    layerDescription: 'Description text',
-    layerPermissions: {
-        'publish': 'publication_permission_ok'
-    },
-    minScale: 1451336,
-    maxScale: 1,
-    hover: {
-        'content': [
-            { 'key': 'Feature ID', 'valueProperty': 'id' }
-        ]
-    }
-}
-```
+| hover | Describes how to visualize features on hover and what kind of tooltip should be shown. | See Hover Settings section below |
 
 ### Hover Settings
 
-Hover describes how to visualize features on mouse hover and what kind of tooltip should be shown. Note that features are not hovered while drawing is active (DrawTools). 
+Note that features are not hovered while drawing is active (DrawTools). 
 
 Hover has two optional keys `featureStyle` and `content`. See [Oskari JSON style](/documentation/examples/oskari-style) for `featureStyle` definition.
 
