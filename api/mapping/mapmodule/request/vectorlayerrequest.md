@@ -22,7 +22,7 @@ The request takes one parameter, options.
 | opacity | number | Opacity value, 0-100 |
 | layerName | string | Name |
 | layerDescription | string | Description |
-| layerPermissions | object | Permissions { publish: 'publication_permission_ok' }` |
+| layerPermissions | object | Permissions `{ publish: 'publication_permission_ok' }` |
 | minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
 | maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
 | hover | object | See Hover Settings section below |
