@@ -34,10 +34,12 @@ export const OpacitySlider = ({ value, onChange }) => {
     }
     const instantValueChange = val => {
         updateSlider(val);
+        const delayedAction = () => onChange(val);
         if (eventTimeout && eventTimeout.isPending()) {
-            eventTimeout.cancel();
+            eventTimeout.reset(delayedAction);
+            return;
         }
-        setEventTimeout(new Timeout(() => onChange(val), OPACITY_EVENT_FIRING_DELAY));
+        setEventTimeout(new Timeout(delayedAction, OPACITY_EVENT_FIRING_DELAY));
     };
     return (
         <InputGroup compact>
