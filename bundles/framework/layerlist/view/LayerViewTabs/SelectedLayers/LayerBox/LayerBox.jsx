@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Footer } from './Footer/';
@@ -26,16 +26,15 @@ const Publishable = styled.span`
 `;
 
 export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
-    const [visible, setVisible] = useState(visibilityInfo.visible);
-    const [previousVisible, setPreviousVisible] = useState(visibilityInfo.visible);
-    if (previousVisible !== visibilityInfo.visible) {
-        // Handle prop changed, equal to get derived state from props
-        setVisible(visibilityInfo.visible);
-        setPreviousVisible(visibilityInfo.visible);
-    }
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
+
+    const [visible, setVisible] = useState(visibilityInfo.visible);
+    React.useEffect(() => {
+        setVisible(visibilityInfo.visible);
+    }, [visibilityInfo]);
+
     const handleToggleVisibility = () => {
         setVisible(!visible);
         mutator.toggleLayerVisibility(layer);
