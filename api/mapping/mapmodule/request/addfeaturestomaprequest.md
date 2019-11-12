@@ -84,17 +84,17 @@ The second parameter is options.
 }
 ```
 
-|Key|Description|
-|---:|---|
-|layerId|Layer's id to specify which layer you want to add features (if the layer does not exist one will be created).|
-|animationDuration|On update requests it's possible to animate fill color change. Specify animation duration in ms.|
-|attributes|Feature's attributes, especially handy when the geometry is a WKT-string.|
-|clearPrevious|when true, the previous features will be cleared|
-|centerTo|Whether to zoom to the added features.|
-|cursor|Mouse cursor when cursor is over the feature.|
-|prio|Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.|
-|featureStyle|A Oskari style object. Defines a generic style used for all the features.|
-|optionalStyles|Array of Oskari styles for geojson features. Style is used, if filtering values matches to feature properties.|
+|Key|Type|Description|
+|---|---|---|
+| layerId | string | Layer's id to specify which layer you want to add features (if the layer does not exist one will be created).|
+| animationDuration | number | On update requests it's possible to animate fill color change. Specify animation duration in ms.|
+| attributes | object | Feature's attributes, especially handy when the geometry is a WKT-string.|
+| clearPrevious | boolean | when true, the previous features will be cleared|
+| centerTo | boolean | Whether to zoom to the added features.|
+| cursor | string | Mouse cursor when cursor is over the feature.|
+| prio | number | Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.|
+| featureStyle | Oskari style object | Defines a generic style used for all the features.|
+| optionalStyles | object | Array of Oskari styles for geojson features. Style is used, if filtering values matches to feature properties.|
 
 See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
 
