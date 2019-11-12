@@ -9,7 +9,13 @@ Allows user to add features to map.
 
 ## Description
 
-Vector features can be added on the map. The request must contain the geometries of the features. The geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
+Adds vector features to the map or updates the features. The request takes two parameters. The first describes the features and second is for options. When updating existing features on map, the first parameter is an object containing feature attributes that are used for feature matching.
+
+Options are same on both cases.
+
+### Adding features to map
+
+The geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
 
 WKT
 ```javascript
@@ -51,7 +57,17 @@ var geojsonObject = {
 };
 ```
 
-Options object
+### Updating existing features on map
+
+The first parameter is an object containing feature attributes that are used for feature matching.
+
+```javascript
+var updateFeature = {'test_property':2};
+```
+
+### Options
+Second parameter is options.
+
 ```javascript
 {
   layerId: 'MY_VECTOR_LAYER',
@@ -60,7 +76,9 @@ Options object
   centerTo: true,
   clearPrevious: true,
   cursor: 'zoom-in',
-  prio: 1
+  prio: 1,
+  featureStyle: {},
+  optionalStyles: []
 }
 ```
 <ul>
@@ -78,13 +96,14 @@ Options object
         <b>cursor</b> - Mouse cursor when cursor is over the feature.
     </li><li>
         <b>prio</b> - Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.
+    </li><li>
+        <b>featureStyle</b> - A Oskari style object. Defines a generic style used for all the features.
+    </li><li>
+        <b>optionalStyles</b> - Array of Oskari styles for geojson features. Style is used, if filtering values matches to feature properties.
     </li>
 <ul>
 
-Geometry can also feature properties object. This will identify feature what you want to update. This is usefull for example highlight feature.
-```javascript
-var updateFeature = {'test_property':2};
-```
+See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
 
 ## Examples
 

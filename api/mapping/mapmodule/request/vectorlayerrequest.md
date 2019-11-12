@@ -26,8 +26,6 @@ Options object
     },
     minScale: 1451336,
     maxScale: 1,
-    featureStyle: {},
-    optionalStyles: [],  
     hover: {}
 }
 ```
@@ -53,17 +51,9 @@ Options object
     </li><li>
         <b>maxScale</b> - Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
     </li><li>
-        <b>featureStyle</b> - A Oskari style object.
-    </li><li>
-        <b>optionalStyles</b> - Array of Oskari styles for geojson features. Style is used, if filtering values matches to feature properties.
-    </li><li>
-        <b>hover</b> - Layer hover options. Oskari style with hover options.
+        <b>hover</b> - Layer hover options. Oskari style with hover options. Describes how to visualize features on hover and what kind of tooltip should be shown. Note that features are not hovered while drawing is active (DrawTools). See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
     </li>
 </ul>
-
-FeatureStyle property defines a generic style used for all the features. With optionalStyles property you can specify style for certain features only. Hover options describes how to visualize features on hover and what kind of tooltip should be shown. Note that features isn't hovered while drawing is active (DrawTools).
-
-See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
 
 ## Examples
 ### Adding a new layer example
@@ -94,15 +84,10 @@ Define layerId which matches layer's id which should be updated. Add properties 
 const newOptions = {
     layerId: 'MY_VECTOR_LAYER', // existing id
     opacity: 100,
-    featureStyle: {},
-    optionalStyles: [],
     hover: {}
 };
 Oskari.getSandbox().postRequestByName('VectorLayerRequest', [newOptions]); 
 ```
-FeatureStyle property defines a generic style used for all the features. With optionalStyles property you can specify style for certain features only. The constructor is the same for both of these styles but in optionalStyle you also need to specify the feature it is used for.
-
-See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
 
 ## Related api
 
