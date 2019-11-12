@@ -9,13 +9,15 @@ Allows user to add features to map.
 
 ## Description
 
-Adds vector features to the map or updates the features. The request takes two parameters. The first describes the features and second is for options. When updating existing features on map, the first parameter is an object containing feature attributes that are used for feature matching.
+Adds vector features to the map or updates existing features.
 
-Options are same on both cases.
+The request takes two parameters. The first describes the features. When updating existing features on map, the first parameter is an object containing feature attributes that are used for feature matching. The second parameter is for options which are the same in both cases.
 
 ### Adding features to map
 
-The geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
+The first parameter, geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. 
+
+Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
 
 WKT
 ```javascript
@@ -62,11 +64,11 @@ var geojsonObject = {
 The first parameter is an object containing feature attributes that are used for feature matching.
 
 ```javascript
-var updateFeature = {'test_property':2};
+var updateFeatureWithAttributes = {'test_property':2};
 ```
 
 ### Options
-Second parameter is options.
+The second parameter is options.
 
 ```javascript
 {
