@@ -14,7 +14,7 @@ Prepares a layer for later use or updates an existing layer.
 The request takes one parameter, options.
 
 |Key|Type|Description|Example value|
-|---:|:---:|:---|---|
+|---:|:---:|:---|:---:|
 | layerId | string | In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties. | `'MY_VECTOR_LAYER'` |
 | layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). | `'Inspire theme name'` |
 | layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). | `'Organization name'` |
@@ -25,7 +25,7 @@ The request takes one parameter, options.
 | layerPermissions | object | Permissions | `{ publish: 'publication_permission_ok' }` |
 | minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1451336` |
 | maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1` |
-| hover | Describes how to visualize features on hover and what kind of tooltip should be shown. | See Hover Settings section below |
+| hover | object | Describes how to visualize features on hover and what kind of tooltip should be shown. | See Hover Settings section below |
 
 ### Hover Settings
 
@@ -48,11 +48,12 @@ Each row object has `key` or `keyProperty` and `valueProperty`.
     ]
 }
 ```
-Exampe above would create a tooltip like
-
+Exampe above would create a tooltip like:
+```
 Feature Data
 Feature ID: 23098523243
 Road: Main Street
+```
 
 ## Examples
 ### Adding a new layer example
