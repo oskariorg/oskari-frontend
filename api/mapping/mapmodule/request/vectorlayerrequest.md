@@ -9,9 +9,49 @@ Adds a new feature layer to map or updates an existing layer.
 
 ## Description
 
-Prepares a layer for later use.
+Prepares a layer for later use or updates an existing layer. 
 
-Options object
+The request takes one parameter, options.
+
+|Key|Type|Description|
+|---:|:---:|:---|---|
+| layerId | string | In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties. |
+| layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). |
+| layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). |
+| showLayer | boolean | Adds layer to layer selector as a selected map layer. |
+| opacity | number | Opacity value, 0-100 |
+| layerName | string | Name |
+| layerDescription | string | Description |
+| layerPermissions | object | Permissions ```{ publish: 'publication_permission_ok' }``` |
+| minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
+| maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
+| hover | object | Describes how to visualize features on mouse hover and what kind of tooltip should be shown. Note that features are not hovered while drawing is active (DrawTools).
+Hover has two optional keys `featureStyle` and `content`.
+See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions. 
+
+Content should be content of tooltip as an array. Each object creates a row to the tooltip.
+Each row object has `key` or `keyProperty` and `valueProperty`.
+`key` is a label and will be rendered as is.
+`valueProperty` and `keyProperty` will be fetched from the feature's properties.
+
+```javascript
+"hover": {
+    "featureStyle":  {...},
+    "content": [
+        { "key": "Feature Data" },
+        { "key": 'Feature ID', "valueProperty": "id" },
+        { "keyProperty": "type", "valueProperty": "name" }
+    ]
+}
+```
+Exampe above would create a tooltip like
+
+Feature Data
+Feature ID: 23098523243
+Road: Main Street
+|
+
+Example object
 ```javascript
 {
     layerId: 'MY_VECTOR_LAYER',
@@ -26,34 +66,39 @@ Options object
     },
     minScale: 1451336,
     maxScale: 1,
-    hover: {}
+    hover: {
+        'content': [
+            { 'key': 'Feature ID', 'valueProperty': 'id' }
+        ]
+    }
 }
 ```
-<ul>
-    <li>
-        <b>layerId</b> - In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties.
-    </li><li>
-        <b>layerInspireName</b> - Layer Inspire name when adding layer to visible (see showLayer).
-    </li><li>
-        <b>layerOrganizationName</b> - Layer organization name when adding layer to visible (see showLayer).
-    </li><li>
-        <b>showLayer</b> - Adds layer to layer selector as a selected map layer.
-    </li><li>
-        <b>opacity</b> - Layer opacity.
-    </li><li>
-        <b>layerName</b> - Layer name. If already added layer then update layer name.
-    </li><li>
-        <b>layerDescription</b> - Layer description. If already added layer then update layer description.
-    </li><li>
-        <b>layerPermissions</b> - Layer permissions.
-    </li><li>
-        <b>minScale</b> - Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
-    </li><li>
-        <b>maxScale</b> - Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features.
-    </li><li>
-        <b>hover</b> - Layer hover options. Oskari style with hover options. Describes how to visualize features on hover and what kind of tooltip should be shown. Note that features are not hovered while drawing is active (DrawTools). See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
-    </li>
-</ul>
+
+#### Hover settings
+
+Hover describes how to visualize features on mouse hover and what kind of tooltip should be shown.
+Hover has two optional keys `featureStyle` and `content`.
+
+Content should be content of tooltip as an array. Each object creates a row to the tooltip.
+Each row object has `key` or `keyProperty` and `valueProperty`.
+`key` is a label and will be rendered as is.
+`valueProperty` and `keyProperty` will be fetched from the feature's properties.
+
+```javascript
+"hover": {
+    "featureStyle":  {...},
+    "content": [
+        { "key": "Feature Data" },
+        { "key": 'Feature ID', "valueProperty": "id" },
+        { "keyProperty": "type", "valueProperty": "name" }
+    ]
+}
+```
+Exampe above would create a tooltip like
+
+Feature Data
+Feature ID: 23098523243
+Road: Main Street
 
 ## Examples
 ### Adding a new layer example
@@ -84,7 +129,11 @@ Define layerId which matches layer's id which should be updated. Add properties 
 const newOptions = {
     layerId: 'MY_VECTOR_LAYER', // existing id
     opacity: 100,
-    hover: {}
+    hover: {
+        'content': [
+            { 'key': 'Feature ID', 'valueProperty': 'id' }
+        ]
+    }
 };
 Oskari.getSandbox().postRequestByName('VectorLayerRequest', [newOptions]); 
 ```
