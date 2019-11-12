@@ -13,19 +13,25 @@ Prepares a layer for later use or updates an existing layer.
 
 The request takes one parameter, options.
 
-|Key|Type|Description|
-|---:|:---:|:---|
-| layerId | string | In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties. |
-| layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). |
-| layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). |
-| showLayer | boolean | Adds layer to layer selector as a selected map layer. |
-| opacity | number | Opacity value, 0-100 |
-| layerName | string | Name |
-| layerDescription | string | Description |
-| layerPermissions | object | Permissions `{ publish: 'publication_permission_ok' }` |
-| minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
-| maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. |
-| hover | object | See Hover Settings section below |
+|Key|Type|Description|Example value|
+|---:|:---:|:---|---|
+| layerId | string | In case you want to add layer with specified id (if the layer does not exist one will be created). Needed, if at a later point you need to be able to remove features on only that specific layer or update the layer's properties. | `'MY_VECTOR_LAYER'` |
+| layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). | `'Inspire theme name'` |
+| layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). | `'Organization name'` |
+| showLayer | boolean | Adds layer to layer selector as a selected map layer. | `true` |
+| opacity | number | Opacity value, 0-100 | `80` |
+| layerName | string | Name | `'Layer name'` |
+| layerDescription | string | Description | `'Description text'` | 
+| layerPermissions | object | Permissions | `{ publish: 'publication_permission_ok' }` |
+| minScale | number | Feature min scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1451336` |
+| maxScale | number | Feature max scale when zoomTo option is used. Don't let map scale to go below the defined scale when zoomed to features. | `1` |
+| hover | object | See Hover Settings section below | ```
+{
+    'content': [
+        { 'key': 'Feature ID', 'valueProperty': 'id' }
+    ]
+}
+```|
 
 Example object
 ```javascript
