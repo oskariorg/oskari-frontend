@@ -33,7 +33,7 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
     const [visible, setVisible] = useState(visibilityInfo.visible);
     React.useEffect(() => {
         setVisible(visibilityInfo.visible);
-    }, [visibilityInfo]);
+    }, [visibilityInfo.visible]);
 
     const handleToggleVisibility = () => {
         setVisible(!visible);
