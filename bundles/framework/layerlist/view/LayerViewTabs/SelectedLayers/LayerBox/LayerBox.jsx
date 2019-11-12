@@ -26,7 +26,13 @@ const Publishable = styled.span`
 `;
 
 export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
-    const [visible, setVisible] = useState(layer.isVisible());
+    const [visible, setVisible] = useState(visibilityInfo.visible);
+    const [previousVisible, setPreviousVisible] = useState(visibilityInfo.visible);
+    if (previousVisible !== visibilityInfo.visible) {
+        // Handle prop changed, equal to get derived state from props
+        setVisible(visibilityInfo.visible);
+        setPreviousVisible(visibilityInfo.visible);
+    }
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
