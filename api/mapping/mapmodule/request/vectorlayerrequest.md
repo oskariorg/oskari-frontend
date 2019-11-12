@@ -19,7 +19,7 @@ The request takes one parameter, options.
 | layerInspireName | string | Layer Inspire name (theme) when adding layer to visible (see showLayer). | `'Inspire theme name'` |
 | layerOrganizationName | string | Layer organization name when adding layer to visible (see showLayer). | `'Organization name'` |
 | showLayer | boolean | Adds layer to layer selector as a selected map layer. | `true` |
-| opacity | number | Opacity value, 0-100 | `80` |
+| opacity | number | 0-100 | `80` |
 | layerName | string | Name | `'Layer name'` |
 | layerDescription | string | Description | `'Description text'` | 
 | layerPermissions | object | Permissions | `{ publish: 'publication_permission_ok' }` |
