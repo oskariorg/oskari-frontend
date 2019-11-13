@@ -64,7 +64,6 @@ const LayerCollapsePanel = (props) => {
 
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
-    showLayers: PropTypes.array.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
     mutator: PropTypes.any.isRequired,
     locale: PropTypes.any.isRequired
