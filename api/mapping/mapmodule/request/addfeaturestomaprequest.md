@@ -72,8 +72,8 @@ The property value can also be an object of properties that will be added to mat
 ```javascript
 var updateFeatureWithProperty = {
   'test_property': [
-    { 'value': 1, 'newly_added_property': 10 },
-    { 'value': 2, 'new_added_property': 20 },
+    { 'value': 1, 'properties': { 'newly_added_property': 10 }},
+    { 'value': 2, 'properties': { 'newly_added_property': 20 }},
   ]
 };
 ```
