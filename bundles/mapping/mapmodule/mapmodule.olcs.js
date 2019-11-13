@@ -699,6 +699,14 @@ class MapModuleOlCesium extends MapModuleOl {
         const lonlat = { lon: location[0], lat: location[1] };
         return lonlat;
     }
+
+    setTime (date) {
+        this._map3D.time = () => Cesium.JulianDate.fromIso8601(date);
+    }
+
+    getTime () {
+        return this._map3D.time;
+    }
 }
 
 Oskari.clazz.defineES(

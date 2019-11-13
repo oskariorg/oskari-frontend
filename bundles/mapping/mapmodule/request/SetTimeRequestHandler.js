@@ -1,15 +1,37 @@
 /**
- * @class ShowLayerEditorRequestHandler
- * Opens the layer editor form.
+ * @class Oskari.mapframework.bundle.mapmodule.request.SetTimeRequestHandler
+ * Set time for map
  */
-export class SetTimeRequestHandler {
-    handleRequest (core, request) {
-        console.log(request);
-    }
-};
+Oskari.clazz.define(
+    'Oskari.mapframework.bundle.mapmodule.request.SetTimeRequestHandler',
 
-Oskari.clazz.defineES(
-    'Oskari.mapframework.request.common.SetTimeRequestHandler',
-    SetTimeRequestHandler,
-    { protocol: ['Oskari.mapframework.core.RequestHandler'] }
+    /**
+     * @method create called automatically on construction
+     * @static
+     *
+     * @param {Oskari.Sandbox}
+     *            sandbox reference to sandbox
+     * @param {Oskari.mapframework.ui.module.common.MapModule}
+     *            mapModule reference to mapmodule
+     */
+    function (mapModule) {
+        this.mapModule = mapModule;
+    }, {
+        handleRequest: function (core, request) {
+            const formattedDate = request.formatDate();
+            if (!formattedDate) {
+                const log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+                log.warn('Invalid date and/or time format. Valid formats are d/m and HH:mm');
+                return;
+            }
+
+            this.mapModule.setTime(formattedDate);
+        }
+    }, {
+        /**
+         * @property {String[]} protocol array of superclasses as {String}
+         * @static
+         */
+        protocol: ['Oskari.mapframework.core.RequestHandler']
+    }
 );
