@@ -78,7 +78,7 @@ var updateFeatureWithProperty = {
 };
 ```
 
-Updating supports only `prio` and `featureStyle` options.
+Updating supports `layerId`, `prio` and `featureStyle` options.
 
 #### Options
 The second parameter is options.
