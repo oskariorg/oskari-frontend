@@ -130,7 +130,7 @@ var options = {
   centerTo: true
 };
 
-Oskari.getSandbox().postRequestByName(rn, [geojsonObject, layerOptions]);
+Oskari.getSandbox().postRequestByName(rn, [geojsonObject, options]);
 ```
 
 Add feature using WKT
@@ -152,7 +152,7 @@ var options = {
   attributes
 };
 
-Oskari.getSandbox().postRequestByName(rn, [WKT, layerOptions]);
+Oskari.getSandbox().postRequestByName(rn, [WKT, options]);
 ```
 
 Update specific feature
@@ -188,7 +188,6 @@ var featureStyle = {
 
 // Define wanted feature attributes
 var updatedFeatureAttributes = {'test_property':1};
-var params = [updatedFeatureAttributes, options];
 
 var options = {
     featureStyle: featureStyle,
@@ -198,7 +197,7 @@ var options = {
 
 Oskari.getSandbox().postRequestByName(
     'MapModulePlugin.AddFeaturesToMapRequest',
-    params
+     [updatedFeatureAttributes, options]
 );
 ```
 
