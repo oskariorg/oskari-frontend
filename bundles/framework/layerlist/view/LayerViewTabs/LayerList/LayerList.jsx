@@ -96,7 +96,7 @@ const LayerList = React.forwardRef((props, ref) => {
                     <InfoIcon type="question-circle" />
                 </Tooltip>
                 { showAddButton &&
-                    <Tooltip title={locale.tooltip.addLayer}>
+                    <Tooltip title={locale.layer.tooltip.addLayer}>
                         <AddButton icon="plus" onClick={addLayer} />
                     </Tooltip>
                 }
