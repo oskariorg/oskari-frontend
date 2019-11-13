@@ -81,7 +81,6 @@ class UIStateHandler extends StateHandler {
     }
 
     _createEventHandlers () {
-        const refresh = () => this.notify();
         const updateSelectedLayers = () => this.selectedLayersHandler.updateLayers();
         const handlers = {
             'userinterface.ExtensionUpdatedEvent': event => {
@@ -103,9 +102,8 @@ class UIStateHandler extends StateHandler {
             'AfterMapLayerRemoveEvent': updateSelectedLayers,
             'AfterMapLayerAddEvent': updateSelectedLayers,
             'AfterRearrangeSelectedMapLayerEvent': updateSelectedLayers,
-            'AfterChangeMapLayerStyleEvent': refresh,
-            'MapSizeChangedEvent': refresh,
-            'AfterChangeMapLayerOpacityEvent': refresh
+            'AfterChangeMapLayerStyleEvent': updateSelectedLayers,
+            'AfterChangeMapLayerOpacityEvent': updateSelectedLayers
         };
         Object.getOwnPropertyNames(handlers).forEach(p => this.sandbox.registerForEventByName(this, p));
         return handlers;
