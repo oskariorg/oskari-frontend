@@ -11,7 +11,7 @@ Allows user to add features to map.
 
 Adds vector features to the map or updates existing features.
 
-The request takes two parameters. The first describes the features. When updating existing features on map, the first parameter is an object containing feature attributes that are used for feature matching. The second parameter is for options which are the same in both cases.
+The request takes two parameters. The first describes the features. When updating existing features on map, the first parameter is an object containing feature attributes that are used for feature matching. The second parameter options.
 
 #### Adding features to map
 
@@ -77,6 +77,8 @@ var updateFeatureWithProperty = {
   ]
 };
 ```
+
+Updating supports only `prio` and `featureStyle` options.
 
 #### Options
 The second parameter is options.
