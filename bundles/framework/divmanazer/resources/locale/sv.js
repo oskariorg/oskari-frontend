@@ -143,6 +143,10 @@ Oskari.registerLocalization(
             }
         },
         "VisualizationForm": {
+            "subheaders" : {
+                "name" : "Namnet på stilen",
+                "style" : "Stil"
+            },
             "tooltips": {
                 "dot": "Redigera punktens stil",
                 "area": "Redigera områdets stil",
