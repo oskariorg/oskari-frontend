@@ -44,4 +44,10 @@ export class LayerGroup {
         var searchableIndex = this.searchIndex[layerId];
         return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
     }
+    clone () {
+        const clone = new LayerGroup(this.name);
+        clone.layers = [...this.layers];
+        clone.searchIndex = { ...this.searchIndex };
+        return clone;
+    }
 };
