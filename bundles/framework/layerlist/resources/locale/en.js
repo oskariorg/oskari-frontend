@@ -32,7 +32,8 @@ Oskari.registerLocalization(
             },
             'layer': {
                 'tooltip': {
-                    'timeseries': 'Time series layer'
+                    'timeseries': 'Time series layer',
+                    'addLayer': 'Add a new map layer'
                 },
                 'styles': {
                     'title': 'Style'
