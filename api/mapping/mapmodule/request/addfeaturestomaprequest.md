@@ -61,10 +61,21 @@ var geojsonObject = {
 
 #### Updating existing features on map
 
-The first parameter is an object containing feature attributes that are used for feature matching.
+The first parameter is an object containing a feature property that is used for feature matching. The value can be an array or a single value.
 
 ```javascript
-var updateFeatureWithAttributes = {'test_property':2};
+var updateFeatureWithProperty = {'test_property': [1,2]};
+```
+
+The property value can also be an object of properties that will be added to matching features.
+
+```javascript
+var updateFeatureWithProperty = {
+  'test_property': [
+    { 'value': 1, 'newly_added_property': 10 },
+    { 'value': 2, 'new_added_property': 20 },
+  ]
+};
 ```
 
 #### Options
