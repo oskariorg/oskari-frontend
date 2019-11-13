@@ -33,8 +33,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
             var layerId = request.getMapLayerId();
             var zoomToExtent = request.getZoomToExtent();
             var layer = this.sandbox.findMapLayerFromSelectedMapLayers(layerId);
-            var newZoom;
-            var center;
             if (!layer) {
                 return;
             }
@@ -45,19 +43,19 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                     var bounds = this.layersPlugin.getGeometryBounds(layer.getGeometry()[0]);
                     // suppress mapmove-event
                     this.layersPlugin.getMapModule().zoomToExtent(bounds, true, true);
-                    center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
+                    const center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
                     this.layersPlugin.getMapModule().moveMapToLonLat(center);
 
                     if (!layer.isInScale()) {
                         // set zoom level by layer scales
-                        newZoom = this.layersPlugin.getMapModule().getClosestZoomLevel(layer.getMinScale(), layer.getMaxScale());
+                        const newZoom = this.layersPlugin.getMapModule().getClosestZoomLevel(layer.getMinScale(), layer.getMaxScale());
                         // suppress mapmove-event here and send it after we have possibly also moved the map
                         this.layersPlugin.getMapModule().setZoomLevel(newZoom, true);
                     }
                 }
             } else {
                 // set zoom level by layer scales
-                newZoom = this.layersPlugin.getMapModule().getClosestZoomLevel(layer.getMinScale(), layer.getMaxScale());
+                const newZoom = this.layersPlugin.getMapModule().getClosestZoomLevel(layer.getMinScale(), layer.getMaxScale());
                 // suppress mapmove-event here and send it after we have possibly also moved the map
                 this.layersPlugin.getMapModule().setZoomLevel(newZoom, true);
                 // move map to geometries if available
@@ -66,7 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapmodule.request.MapMoveByLayer
                     var containsGeometry = this.layersPlugin.isInGeometry(layer);
                     // only move if not currently in geometry
                     if (!containsGeometry) {
-                        center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
+                        const center = this.layersPlugin.getGeometryCenter(layer.getGeometry()[0]);
                         this.layersPlugin.getMapModule().moveMapToLonLat(center);
                     }
                 }

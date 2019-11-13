@@ -655,7 +655,9 @@ export class MapModule extends AbstractMapModule {
             break;
         default:
             view.setCenter(location);
-            view.setZoom(zoom);
+            if (zoom === Number) {
+                view.setZoom(zoom);
+            }
             callback(true);
             break;
         }
@@ -689,7 +691,7 @@ export class MapModule extends AbstractMapModule {
             if (top && left && bottom && right) {
                 const zoomOut = top === bottom && left === right;
                 this.zoomToExtent(zoom, zoomOut, zoomOut);
-                view.setCenter(lonlat);
+                view.setCenter([lonlat.lon, lonlat.lat]);
                 return true;
             }
         }
@@ -700,7 +702,6 @@ export class MapModule extends AbstractMapModule {
 
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         this._animateTo(lonlat, zoomValue, animation, duration);
-
         return true;
     }
 
