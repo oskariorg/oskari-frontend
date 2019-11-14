@@ -83,7 +83,8 @@ export class MapModule extends AbstractMapModule {
             // still these need to be set to prevent errors
             center: [0, 0],
             zoom: 0,
-            resolutions: this.getResolutionArray()
+            resolutions: this.getResolutionArray(),
+            constrainResolution: true
         };
 
         const worldProjections = ['EPSG:3857', 'EPSG:4326'];
@@ -549,7 +550,7 @@ export class MapModule extends AbstractMapModule {
      */
     zoomToExtent (bounds, suppressStart, suppressEnd) {
         var extent = this.__boundsToArray(bounds);
-        this.getMap().getView().fit(extent, this.getMap().getSize());
+        this.getMap().getView().fit(extent);
         this.updateDomain();
         // send note about map change
         if (suppressStart !== true) {
@@ -688,7 +689,11 @@ export class MapModule extends AbstractMapModule {
             const { top, bottom, left, right } = zoom.value || zoom;
             if (top && left && bottom && right) {
                 const zoomOut = top === bottom && left === right;
-                this.zoomToExtent(zoom, zoomOut, zoomOut);
+                const suppressEvent = zoomOut;
+                this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
+                if (zoomOut) {
+                    this.zoomToScale(2000);
+                }
                 view.setCenter([lonlat.lon, lonlat.lat]);
                 return true;
             }
