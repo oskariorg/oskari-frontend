@@ -565,7 +565,7 @@ class MapModuleOlCesium extends MapModuleOl {
                 let cancelled = () => this.notifyTourEvent(status, true);
                 setTimeout(function () {
                     me._flyTo(location[0], location[1], heightValue, locationDuration, cameraValues, next, cancelled);
-                    delay = locOptions.delay ? locOptions.delay : delayOption;
+                    delay = locOptions.delay !== null || locOptions.delay !== undefined ? locOptions.delay : delayOption;
                     index++;
                 }, delay);
             }
