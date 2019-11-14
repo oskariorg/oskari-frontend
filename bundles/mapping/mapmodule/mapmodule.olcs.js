@@ -537,7 +537,7 @@ class MapModuleOlCesium extends MapModuleOl {
         const me = this;
         const duration = options && options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
-        const delayOption = options && options.delay ? options.delay : 750;
+        const delayOption = options && (options.delay !== null || options.delay !== undefined) ? options.delay : 750;
         const cameraHeight = this.adjustZoom(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
@@ -560,11 +560,12 @@ class MapModuleOlCesium extends MapModuleOl {
                         roll: Cesium.Math.toRadians(locOptions.camera.roll),
                         pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
                 const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
+                const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
                 status = { ...status, step: index + 1 };
                 let cancelled = () => this.notifyTourEvent(status, true);
                 setTimeout(function () {
-                    me._flyTo(location[0], location[1], heightValue, animationDuration, cameraValues, next, cancelled);
-                    delay = coordinates.delay || delayOption;
+                    me._flyTo(location[0], location[1], heightValue, locationDuration, cameraValues, next, cancelled);
+                    delay = locOptions.delay ? locOptions.delay : delayOption;
                     index++;
                 }, delay);
             }
