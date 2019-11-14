@@ -702,10 +702,11 @@ class MapModuleOlCesium extends MapModuleOl {
 
     setTime (date) {
         this._map3D.time = () => Cesium.JulianDate.fromIso8601(date);
+        this.notifyTimeChanged(date);
     }
 
     getTime () {
-        return this._map3D.time;
+        return this._map3D.time();
     }
 }
 

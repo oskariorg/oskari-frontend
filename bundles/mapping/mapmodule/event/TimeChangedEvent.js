@@ -1,7 +1,7 @@
 /**
  * @class Oskari.mapframework.event.common.TimeChangedEvent
  */
-Oskari.clazz.define('Oskari.mapframework.event.common.MapTourEvent',
+Oskari.clazz.define('Oskari.mapframework.event.common.TimeChangedEvent',
     /**
      * @static @method create called automatically on construction
      */
@@ -9,7 +9,7 @@ Oskari.clazz.define('Oskari.mapframework.event.common.MapTourEvent',
         this._time = time;
     }, {
         /** @static @property __name event name */
-        __name: 'MapTourEvent',
+        __name: 'TimeChangedEvent',
 
         /**
          * @method getName
