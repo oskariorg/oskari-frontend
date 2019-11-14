@@ -533,11 +533,11 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Object} options options, such as animation, duration, delay and camera
      *     Usable animations: fly/pan/zoomPan
      */
-    tourMap (coordinates, zoom, options) {
+    tourMap (coordinates, zoom, options = {}) {
         const me = this;
-        const duration = options && options.duration ? options.duration : 3000;
+        const duration = !isNaN(options.duration) ? options.duration : 3000;
+        const delayOption = !isNaN(options.delay) ? options.delay : 750;
         const animationDuration = duration / 1000;
-        const delayOption = options && (options.delay !== null || options.delay !== undefined) ? options.delay : 750;
         const cameraHeight = this.adjustZoom(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
@@ -561,11 +561,12 @@ class MapModuleOlCesium extends MapModuleOl {
                         pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
                 const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
                 const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
+                console.log(delay);
                 status = { ...status, step: index + 1 };
                 let cancelled = () => this.notifyTourEvent(status, true);
                 setTimeout(function () {
                     me._flyTo(location[0], location[1], heightValue, locationDuration, cameraValues, next, cancelled);
-                    delay = locOptions.delay !== null || locOptions.delay !== undefined ? locOptions.delay : delayOption;
+                    delay = !isNaN(locOptions.delay) ? locOptions.delay : delayOption;
                     index++;
                 }, delay);
             }
