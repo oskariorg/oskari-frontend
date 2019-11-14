@@ -561,7 +561,6 @@ class MapModuleOlCesium extends MapModuleOl {
                         pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
                 const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
                 const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
-                console.log(delay);
                 status = { ...status, step: index + 1 };
                 let cancelled = () => this.notifyTourEvent(status, true);
                 setTimeout(function () {
