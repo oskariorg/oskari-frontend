@@ -440,6 +440,12 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/request/add.map.layer.js'
                 }, {
                     'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/request/GetMapCameraRequest.js'
+                }, {
+                    'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/request/GetMapCameraRequestHandler.js'
+                }, {
+                    'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/remove.map.layer.js'
                 }, {
                     'type': 'text/javascript',
