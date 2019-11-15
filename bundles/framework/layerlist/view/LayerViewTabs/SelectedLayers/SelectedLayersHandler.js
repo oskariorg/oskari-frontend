@@ -33,30 +33,33 @@ class UIService extends StateHandler {
         return info;
     }
 
+    _refreshVisibilityInfoForLayer (layer) {
+        const oldInfo = this.state.visibilityInfo.find(info => info.id === layer.getId());
+        const geometryMatch = oldInfo ? oldInfo.geometryMatch : true;
+        return {
+            ...this._getInitialVisibilityInfoForLayer(layer),
+            geometryMatch
+        };
+    }
+
     updateLayers () {
         const layers = this._getLayers();
-        const visibilityInfo = layers.map(layer => {
-            const existingInfo = this.state.visibilityInfo.find(vis => vis.id === layer.getId());
-            if (existingInfo) {
-                return existingInfo;
-            }
-            return this._getInitialVisibilityInfoForLayer(layer);
-        });
+        const visibilityInfo = layers.map(layer => this._refreshVisibilityInfoForLayer(layer));
         this.updateState({ layers, visibilityInfo });
     }
 
     updateVisibilityInfo (event) {
-        const layer = event.getMapLayer();
-        const geometryMatch = event.isGeometryMatch();
-        const inScale = layer.isInScale();
-        const visible = layer.isVisible();
-        const visibilityInfo = this.state.visibilityInfo.map(vis => {
-            if (vis.id === layer.getId()) {
-                return { ...vis, visible, inScale, geometryMatch };
-            } else {
-                return vis;
+        // refresh all
+        const visibilityInfo = this.state.layers.map(layer => this._refreshVisibilityInfoForLayer(layer));
+        if (event) {
+            const layer = event.getMapLayer();
+            const layerData = visibilityInfo.find(info => info.id === layer.getId());
+            if (!layerData) {
+                // layer not included in selected layers.
+                return;
             }
-        });
+            layerData.geometryMatch = event.isGeometryMatch();
+        }
         this.updateState({ visibilityInfo });
     }
 

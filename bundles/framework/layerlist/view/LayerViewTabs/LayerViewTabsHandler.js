@@ -98,6 +98,19 @@ class UIStateHandler extends StateHandler {
                     this.getLayerListHandler().getFilterHandler().useStashedState();
                 }
             },
+            'MapLayerEvent': event => {
+                if (!['update', 'sticky', 'tool'].includes(event.getOperation())) {
+                    return;
+                }
+                const layerId = event.getLayerId();
+                if (layerId) {
+                    const { layers } = this.selectedLayersHandler.getState();
+                    if (!layers.find(layer => layer.getId() === layerId)) {
+                        return;
+                    }
+                }
+                updateSelectedLayers();
+            },
             'MapLayerVisibilityChangedEvent': event => this.selectedLayersHandler.updateVisibilityInfo(event),
             'AfterMapLayerRemoveEvent': updateSelectedLayers,
             'AfterMapLayerAddEvent': updateSelectedLayers,
