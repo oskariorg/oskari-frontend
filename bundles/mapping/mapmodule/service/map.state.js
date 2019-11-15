@@ -619,7 +619,6 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
                 const event = Oskari.eventBuilder('MapLayerEvent')(null, 'update');
                 this._sandbox.notifyAll(event);
             }
-
         }
     }, {
         /**
