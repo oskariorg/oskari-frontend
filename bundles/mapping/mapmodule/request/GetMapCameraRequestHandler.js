@@ -28,7 +28,9 @@ Oskari.clazz.define(
          */
         handleRequest: function (core, request) {
             const camera = this.mapModule.getCamera();
-            console.log(camera);
+            const name = request.getName();
+            const event = Oskari.eventBuilder('GetMapCameraEvent')(name, camera);
+            this.sandbox.notifyAll(event);
         }
     }, {
         /**

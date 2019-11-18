@@ -559,6 +559,9 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/event/MapTourEvent.js'
                 }, {
                     'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/event/GetMapCameraEvent.js'
+                }, {
+                    'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/event/GetInfoResultEvent.js'
                 }, {
                     'type': 'text/javascript',
