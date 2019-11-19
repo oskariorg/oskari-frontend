@@ -2,7 +2,7 @@
 
 ## Description
 
-''Provides functionality to draw vector layers on the map.''
+ Provides functionality to draw vector layers on the map.
 
 ## Bundle configuration
 
