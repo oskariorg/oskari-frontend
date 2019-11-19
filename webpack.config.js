@@ -1,5 +1,5 @@
 const path = require('path');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const OskariConfig = require('./webpack/config.js');
@@ -55,9 +55,13 @@ module.exports = (env, argv) => {
     if (isProd) {
         config.optimization = {
             minimizer: [
-                new UglifyJsPlugin({
-                    sourceMap: true,
-                    parallel: true
+                new TerserPlugin({
+                    cache: true,
+                    parallel: true,
+                    sourceMap: true, // Must be set to true if using source-maps in production
+                    terserOptions: {
+                    // https://github.com/webpack-contrib/terser-webpack-plugin#terseroptions
+                    }
                 }),
                 new OptimizeCSSAssetsPlugin({})
             ]
