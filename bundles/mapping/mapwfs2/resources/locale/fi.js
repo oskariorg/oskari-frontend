@@ -7,6 +7,9 @@ Oskari.registerLocalization(
         "desc": "",
         "default-style": "Oletustyyli",
         "own-style": "Oma tyyli",
+        "own-styles-flyout-title": "Omat tyylit",
+        "styles" : "Tyylit",
+        "add-style" : "Lisää uusi tyyli",
         "refresh": "Päivitä",
         "refresh_title": "Päivitä vektoritasot, jotka eivät päivity automaattisesti kartalla.",
         "tile": {
