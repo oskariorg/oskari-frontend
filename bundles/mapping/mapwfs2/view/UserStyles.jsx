@@ -5,6 +5,9 @@ import { List, ListItem, Icon } from 'oskari-ui';
 import { withLocale, withMutator } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
 
+// TODO: Fix this once style accessible smarter way
+const secondaryColor = '#006ce8';
+
 const Header = styled.div`
     display: flex;
     margin-bottom: 10px;
@@ -18,11 +21,12 @@ const HeaderText = styled.div`
 
 const AddStyle = styled.div`
     font-weight: bold;
+    text-align: center;
     flex-grow: 1;
     background-color: #ffffff;
     padding: 10px;
     cursor: pointer;
-    color: #006ce8;
+    color: ${secondaryColor};
 `;
 
 const StyledListItem = styled(ListItem)`

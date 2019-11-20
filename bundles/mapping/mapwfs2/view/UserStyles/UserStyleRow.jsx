@@ -3,6 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Icon } from 'oskari-ui';
 
+// TODO: Fix this once style accessible smarter way
+const secondaryColor = '#006ce8';
+
 const RowContainer = styled.div`
     display: flex;
 `;
@@ -25,7 +28,7 @@ const IconColumn = styled.div`
 `;
 
 const IconColumnEdit = styled(IconColumn)`
-    color: #006ce8;
+    color: ${secondaryColor};
 `;
 
 export const UserStyleRow = ({ styleName, editUserStyleHandler, removeUserStyleHandler }) => {
