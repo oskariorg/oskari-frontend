@@ -148,16 +148,20 @@ export class MapModule extends AbstractMapModule {
             me.notifyStartMove();
         });
 
-        function wasInfoBoxClosed (event) {
-            const target = event.target || event.srcElement || {};
-            return target.id === 'oskari_getinforesult_headerCloseButton';
+        function wasInfoBoxClicked (event) {
+            // - Chrome supports event.path.
+            // - Most others composedPath() https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
+            // - Polyfilled for IE/Edge on src/polyfills.js
+            var path = event.path || (event.composedPath && event.composedPath()) || [];
+            const foundInfoBox = path.find(item => item.id === 'getinforesult');
+            return typeof foundInfoBox !== 'undefined';
         }
 
         map.on('singleclick', function (evt) {
             if (me.getDrawingMode()) {
                 return;
             }
-            if (wasInfoBoxClosed(evt.originalEvent)) {
+            if (wasInfoBoxClicked(evt.originalEvent)) {
                 // After OL 6 upgrade:
                 // - ol/MapBrowserEventHandler.emulateClick_ receives map click, dispatches it and schedules it to be triggered again after small delay
                 // - infobox/OpenlayersPopupPlugin receives the click in _setClickEvent() popupElement.onclick -> closes the popup so it's no longer on map
