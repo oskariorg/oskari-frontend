@@ -164,7 +164,7 @@ Oskari.clazz.define(
                     values[fClazzName] = fClazz.getValues();
                 }
             }
-            const styleNameInputValue = jQuery('#visualization-form').find('input[name="styleNameInput"]').val();
+            const styleNameInputValue = jQuery('.wfs_own_style').find('input[name="styleNameInput"]').val();
             if (styleNameInputValue && styleNameInputValue.length > 0) {
                 values.name = styleNameInputValue;
             }
