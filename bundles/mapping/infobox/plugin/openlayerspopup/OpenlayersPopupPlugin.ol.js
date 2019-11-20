@@ -236,15 +236,16 @@ Oskari.clazz.define(
                 jQuery(popup.dialog).css('background-color', 'inherit');
             } else {
                 popupType = 'desktop';
+                popupElement.html(popupContentHtml);
                 popup = new olOverlay({
                     element: popupElement[0],
                     // start with null positioning
                     positioning: null,
+                    stopEvent: true,
                     offset: [offsetX, offsetY]
                 });
                 mapModule.getMap().addOverlay(popup);
                 popup.setPosition(lonlatArray);
-                jQuery(popup.getElement()).html(popupContentHtml);
                 setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
 
                 jQuery(popup.div).css('overflow', 'visible');
@@ -470,9 +471,9 @@ Oskari.clazz.define(
         },
 
         _setClickEvent: function (id, popup, contentData, additionalTools, isMobilePopup) {
-            var me = this,
-                sandbox = this.getMapModule().getSandbox(),
-                popupElement;
+            const me = this;
+            const sandbox = this.getMapModule().getSandbox();
+            let popupElement;
 
             if (isMobilePopup) {
                 popupElement = popup.dialog[0];
@@ -481,13 +482,15 @@ Oskari.clazz.define(
             }
 
             popupElement.onclick = function (evt) {
-                var link = jQuery(evt.target || evt.srcElement);
+                const link = jQuery(evt.target || evt.srcElement);
 
                 if (link.hasClass('olPopupCloseBox')) { // Close button
                     me.close(id);
+                    evt.stopPropagation();
+                    return;
                 } else { // Action links
-                    var i = link.attr('contentdata'),
-                        text = link.attr('value');
+                    const i = link.attr('contentdata');
+                    let text = link.attr('value');
                     if (!text) {
                         text = link.html();
                     }
@@ -513,6 +516,7 @@ Oskari.clazz.define(
                 if (!link.is('a') || link.parents('.getinforesult_table').length) {
                     evt.stopPropagation();
                 }
+                return false;
             };
         },
 

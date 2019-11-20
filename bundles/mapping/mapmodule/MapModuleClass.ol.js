@@ -148,10 +148,24 @@ export class MapModule extends AbstractMapModule {
             me.notifyStartMove();
         });
 
+        function wasInfoBoxClosed (event) {
+            const target = event.target || event.srcElement || {};
+            return target.id === 'oskari_getinforesult_headerCloseButton';
+        }
+
         map.on('singleclick', function (evt) {
             if (me.getDrawingMode()) {
                 return;
             }
+            if (wasInfoBoxClosed(evt.originalEvent)) {
+                // After OL 6 upgrade:
+                // - ol/MapBrowserEventHandler.emulateClick_ receives map click, dispatches it and schedules it to be triggered again after small delay
+                // - infobox/OpenlayersPopupPlugin receives the click in _setClickEvent() popupElement.onclick -> closes the popup so it's no longer on map
+                // - the delayed event from emulateClick_ triggers and detects that there is no overlay on the spot that was
+                //   clicked (since infobox was removed from that spot on the previous step) triggering a new MapClickedEvent and opening another infobox
+                return;
+            }
+
             var CtrlPressed = evt.originalEvent.ctrlKey;
             var lonlat = {
                 lon: evt.coordinate[0],
