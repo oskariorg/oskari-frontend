@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Slider, NumberInput, InputGroup } from 'oskari-ui';
 import { Timeout } from 'oskari-ui/util';
 
-const OPACITY_EVENT_FIRING_DELAY = 200;
+const OPACITY_EVENT_FIRING_DELAY = 100;
 
 const Border = styled('div')`
     border-radius: 4px;

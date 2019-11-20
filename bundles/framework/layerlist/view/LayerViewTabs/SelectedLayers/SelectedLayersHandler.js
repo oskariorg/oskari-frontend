@@ -94,6 +94,9 @@ class UIService extends StateHandler {
     }
 
     changeOpacity (layer, opacity) {
+        if (opacity === '') {
+            opacity = 0;
+        }
         this.sandbox.postRequestByName('ChangeMapLayerOpacityRequest', [layer.getId(), opacity]);
     }
 
