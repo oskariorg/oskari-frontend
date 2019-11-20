@@ -208,7 +208,8 @@ Oskari.clazz.define(
                     },
                     shape: values.dot.shape,
                     size: values.dot.size
-                }
+                },
+                name: values.name
             };
             return oskariStyle;
         },
@@ -226,6 +227,8 @@ Oskari.clazz.define(
             var formClazzes = this._getFormClazz();
             var fClazzName;
             var fClazz;
+            this._options = jQuery.extend(this._options, { name: featureStyle.name });
+
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
                     fClazz = formClazzes[fClazzName];
