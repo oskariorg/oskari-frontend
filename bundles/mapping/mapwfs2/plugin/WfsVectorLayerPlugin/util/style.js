@@ -150,7 +150,7 @@ const getStyleFunction = (styleValues, hoverHandler) => {
         case 'MultiPoint':
             style = styleTypes.dot || styleTypes; break;
         };
-        const textStyle = style.getText();
+        const textStyle = style ? style.getText() : undefined;
         if (styleTypes.labelProperty && textStyle) {
             _setFeatureLabel(feature, textStyle, styleTypes.labelProperty);
         }
