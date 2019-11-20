@@ -27,8 +27,8 @@ export class UserStyleService {
                 me.trigger('update');
             },
             removeStyle (layerId, styleId) {
-                this.removeUserStyle(layerId,styleId);
-                this.removeUserStyleFromLayer(layerId,styleId);
+                this.removeUserStyle(layerId, styleId);
+                this.removeUserStyleFromLayer(layerId, styleId);
             },
             removeUserStyle (layerId, styleId) {
                 if (!layerId || !styleId) {
