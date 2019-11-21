@@ -20,6 +20,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._mapReady = false;
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
+        this._time = null;
     }
 
     /**
@@ -59,12 +60,12 @@ class MapModuleOlCesium extends MapModuleOl {
             resolutions: this.getResolutionArray()
         }));
 
-        var time = Cesium.JulianDate.fromIso8601('2017-07-11T12:00:00Z');
+        this.setTime('2019-06-01T12:00:00Z');
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
         this._map3D = new OLCesium({
             map: map,
-            time: () => time,
+            time: () => this.getTime(),
             sceneOptions: {
                 showCredit: true,
                 creditContainer,
@@ -81,6 +82,7 @@ class MapModuleOlCesium extends MapModuleOl {
         // Setting olcs property 'altitudeMode': 'clampToGround' to vector layer had some effect but wasn't good enough.
         // DepthTestAgainstTerrain should be enabled when 3D-tiles (buildings) are visible.
         scene.globe.depthTestAgainstTerrain = false;
+        scene.globe.enableLighting = true;
         scene.shadowMap.darkness = 0.7;
         scene.skyBox = this._createSkyBox();
 
@@ -244,6 +246,15 @@ class MapModuleOlCesium extends MapModuleOl {
             layerId: layer.get(LAYER_ID)
         });
         return hits;
+    }
+
+    getTime () {
+        return this._time;
+    }
+
+    setTime (time) {
+        this._time = Cesium.JulianDate.fromIso8601(time);
+        this.notifyTimeChanged(time);
     }
 
     getMapZoom () {
@@ -698,15 +709,6 @@ class MapModuleOlCesium extends MapModuleOl {
         location = olProj.transform(location, 'EPSG:4326', this.getProjection());
         const lonlat = { lon: location[0], lat: location[1] };
         return lonlat;
-    }
-
-    setTime (date) {
-        this._map3D.time = () => Cesium.JulianDate.fromIso8601(date);
-        this.notifyTimeChanged(date);
-    }
-
-    getTime () {
-        return this._map3D.time();
     }
 }
 
