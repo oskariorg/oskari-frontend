@@ -139,7 +139,7 @@ Oskari.clazz.define(
             if (allowedEvents === null || allowedEvents === undefined) {
                 allowedEvents = ['AfterMapMoveEvent', 'MapClickedEvent', 'AfterAddMarkerEvent', 'MarkerClickEvent',
                     'RouteResultEvent', 'FeedbackResultEvent', 'SearchResultEvent', 'UserLocationEvent', 'DrawingEvent', 'FeatureEvent', 'InfoboxActionEvent', 'InfoBox.InfoBoxEvent',
-                    'RPCUIEvent', 'map.rotated', 'MapTourEvent', 'GetMapCameraEvent'];
+                    'RPCUIEvent', 'map.rotated', 'MapTourEvent'];
             }
 
             if (allowedFunctions === null || allowedFunctions === undefined) {
@@ -192,8 +192,7 @@ Oskari.clazz.define(
                     'MapModulePlugin.MapLayerUpdateRequest',
                     'rotate.map',
                     'StartUserLocationTrackingRequest',
-                    'StopUserLocationTrackingRequest',
-                    'GetMapCameraRequest'
+                    'StopUserLocationTrackingRequest'
                 ];
             }
             me._allowedFunctions = this.__arrayToObject(allowedFunctions);

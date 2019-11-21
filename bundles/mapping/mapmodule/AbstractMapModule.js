@@ -256,7 +256,6 @@ Oskari.clazz.define(
                 stopUserLocationRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.StopUserLocationTrackingRequestHandler', sandbox, this),
                 registerStyleRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.RegisterStyleRequestHandler', sandbox, this),
                 mapLayerHandler: Oskari.clazz.create('map.layer.handler', sandbox.getMap(), this._mapLayerService),
-                getMapCameraRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.GetMapCameraRequestHandler', sandbox, this),
                 mapTourRequestHandler: Oskari.clazz.create('Oskari.mapframework.bundle.mapmodule.request.MapTourRequestHandler', sandbox, this)
             };
 
@@ -274,7 +273,6 @@ Oskari.clazz.define(
             sandbox.requestHandler('ChangeMapLayerOpacityRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('ChangeMapLayerStyleRequest', this.requestHandlers.mapLayerHandler);
             sandbox.requestHandler('MapTourRequest', this.requestHandlers.mapTourRequestHandler);
-            sandbox.requestHandler('GetMapCameraRequest', this.requestHandlers.getMapCameraRequestHandler);
 
             this.started = this._startImpl();
             this.setMobileMode(Oskari.util.isMobile());

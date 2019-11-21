@@ -164,6 +164,26 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     /**
+     * @method notifyMoveEnd
+     * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
+     * sandbox map domain object with the current map properties.
+     * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
+     * (this class) calls this automatically if not stated otherwise in API documentation.
+     * @param {String} creator
+     *        class identifier of object that sends event
+     */
+    notifyMoveEnd (creator) {
+        const sandbox = this.getSandbox();
+        sandbox.getMap().setMoving(false);
+        const camera = this.getCamera().orientation;
+
+        const lonlat = this.getMapCenter();
+        this.updateDomain();
+        const evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator, camera);
+        sandbox.notifyAll(evt);
+    }
+
+    /**
      * Add map event handlers
      * @method @private _setupMapEvents
      */

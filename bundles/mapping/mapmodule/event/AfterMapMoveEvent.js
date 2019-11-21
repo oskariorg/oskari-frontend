@@ -21,8 +21,9 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
      * @param {String} creator
      *            class identifier of an object that sends an event
      */
-    function (centerX, centerY, zoom, scale, creator) {
+    function (centerX, centerY, zoom, scale, creator, camera) {
         this._creator = creator || null;
+        this._camera = camera || null;
         this._centerX = centerX;
         this._centerY = centerY;
         this._zoom = zoom;
@@ -71,6 +72,10 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
          */
         getScale: function () {
             return this._scale;
+        },
+
+        getCamera: function () {
+            return this._camera;
         },
 
         getParams: function () {

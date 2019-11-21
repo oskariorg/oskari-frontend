@@ -440,12 +440,6 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/request/add.map.layer.js'
                 }, {
                     'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/GetMapCameraRequest.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/request/GetMapCameraRequestHandler.js'
-                }, {
-                    'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/request/remove.map.layer.js'
                 }, {
                     'type': 'text/javascript',
@@ -557,9 +551,6 @@ Oskari.clazz.define(
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/event/MapTourEvent.js'
-                }, {
-                    'type': 'text/javascript',
-                    'src': '../../../../bundles/mapping/mapmodule/event/GetMapCameraEvent.js'
                 }, {
                     'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/event/GetInfoResultEvent.js'
