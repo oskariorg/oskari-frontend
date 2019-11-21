@@ -516,7 +516,6 @@ Oskari.clazz.define(
                 if (!link.is('a') || link.parents('.getinforesult_table').length) {
                     evt.stopPropagation();
                 }
-                return false;
             };
         },
 
