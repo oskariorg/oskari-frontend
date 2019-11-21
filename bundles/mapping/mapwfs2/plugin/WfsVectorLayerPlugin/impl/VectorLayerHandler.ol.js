@@ -229,7 +229,11 @@ export class VectorLayerHandler extends AbstractLayerHandler {
                     this.updateLayerProperties(layer, source);
                     updateLoadingStatus(LOADING_STATUS_VALUE.COMPLETE);
                 },
-                error: () => updateLoadingStatus(LOADING_STATUS_VALUE.ERROR)
+                error: () => {
+                    updateLoadingStatus(LOADING_STATUS_VALUE.ERROR);
+                    // mark failed loading so OL retries it later if map moves
+                    source.removeLoadedExtent(extent);
+                }
             });
         };
     }
