@@ -491,14 +491,17 @@ class MapModuleOlCesium extends MapModuleOl {
         }
 
         if (options.animation) {
+            const complete = () => this.notifyMoveEnd();
             // 3d map now only supports one animation so ignore the parameter, and just fly
-            this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera);
-            this.notifyMoveEnd();
+            this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
             return true;
         } else {
-            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            this.getMap().getView().setZoom(zoom.value || zoom);
+            const view = this.getMap().getView();
+            const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+            view.setCenter([lonlat.lon, lonlat.lat]);
+            view.setZoom(zoomValue);
             this.notifyMoveEnd();
+            return true;
         }
     }
 
