@@ -672,7 +672,7 @@ export class MapModule extends AbstractMapModule {
             break;
         default:
             view.setCenter(location);
-            if (zoom === Number) {
+            if (!isNaN(zoom)) {
                 view.setZoom(zoom);
             }
             callback(true);
@@ -691,10 +691,10 @@ export class MapModule extends AbstractMapModule {
      *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
      */
-    centerMap (lonlat, zoom, suppressEnd, options) {
+    centerMap (lonlat, zoom, suppressEnd, options = {}) {
         const view = this.getMap().getView();
-        const animation = options && options.animation ? options.animation : '';
-        const duration = options && options.duration ? options.duration : 3000;
+        const animation = options.animation ? options.animation : '';
+        const duration = options.duration ? options.duration : 3000;
 
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
@@ -716,7 +716,7 @@ export class MapModule extends AbstractMapModule {
                 return true;
             }
         }
-        if (zoom === Number) {
+        if (!isNaN(zoom)) {
             // backwards compatibility
             zoom = { type: 'zoom', value: zoom };
         }
