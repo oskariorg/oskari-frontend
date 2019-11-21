@@ -465,16 +465,16 @@ class MapModuleOlCesium extends MapModuleOl {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      * @param {Object} options  has values for heading, pitch, roll and duration
      */
-    centerMap (lonlat, zoom, suppressEnd, options) {
+    centerMap (lonlat, zoom, suppressEnd, options = {}) {
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
         const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
         const cameraHeight = this.adjustZoom(zoom);
-        const duration = options && options.duration ? options.duration : 3000;
+        const duration = options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
-        const camera = options && options.heading && options.roll && options.pitch
+        const camera = options.heading && options.roll && options.pitch
             ? { heading: options.heading,
                 roll: options.roll,
                 pitch: options.pitch } : undefined;
@@ -490,13 +490,14 @@ class MapModuleOlCesium extends MapModuleOl {
             return true;
         }
 
-        if (options && options.animation) {
+        if (options.animation) {
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera);
+            this.notifyMoveEnd();
             return true;
         } else {
             this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            this.getMap().getView().setZoom(zoom.value);
+            this.getMap().getView().setZoom(zoom.value || zoom);
             this.notifyMoveEnd();
         }
     }
