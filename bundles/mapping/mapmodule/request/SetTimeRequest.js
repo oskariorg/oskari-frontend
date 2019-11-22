@@ -62,7 +62,7 @@ Oskari.clazz.define('Oskari.mapframework.request.common.SetTimeRequest',
          * @return {Bool} true if valid date
          */
         validateDate: function () {
-            const matches = /^(\d{1,2})[/](\d{1,2})$/.exec(this._date);
+            const matches = /^(0[1-9]|1[0-9]|2[0-9]|3[0-1]|[1-9])[/](0[0-9]|1[0-2]|[0-9])$/.exec(this._date);
             if (matches === null) {
                 return false;
             }
