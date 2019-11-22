@@ -536,6 +536,64 @@ class MapModuleOlCesium extends MapModuleOl {
         return zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
     }
 
+    altitudeToZoom (altitude) {
+        var A = 40487.57;
+        var B = 0.00007096758;
+        var C = 91610.74;
+        var D = -40467.74;
+
+        return D + (A - D) / (1 + Math.pow(altitude / C, B));
+    }
+
+    zoomToAltitude (zoom) {
+        const zoomLevel = zoom + 4;
+        const A = 40487.57;
+        const B = 0.00007096758;
+        const C = 91610.74;
+        const D = -40467.74;
+
+        return C * Math.pow((A - D) / (zoomLevel - D) - 1, 1 / B);
+    }
+
+    adjustZoom2 (zoom) {
+        switch (zoom) {
+        case 0:
+            return 4046280;
+        case 1:
+            return 2023212;
+        case 2:
+            return 1011607;
+        case 3:
+            return 505803;
+        case 4:
+            return 252902;
+        case 5:
+            return 126450;
+        case 6:
+            return 63225;
+        case 7:
+            return 31613;
+        case 8:
+            return 15806;
+        case 9:
+            return 7903;
+        case 10:
+            return 4022;
+        case 11:
+            return 2046;
+        case 12:
+            return 1058;
+        case 13:
+            return 564;
+        case 14:
+            return 316;
+        case 15:
+            return 193;
+        case 16:
+            return 90;
+        }
+    }
+
     /**
      * @method tourMap
      * Moves the map from point to point. Overrides 2d tourMap function.
