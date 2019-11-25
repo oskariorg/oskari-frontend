@@ -281,6 +281,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.view.PlaceForm',
          */
         _getOnScreenForm: function () {
             // unbind live so
-            return jQuery('div.myplacesform');
+            return jQuery('div.myplacesform').filter(':visible');
         }
     });
