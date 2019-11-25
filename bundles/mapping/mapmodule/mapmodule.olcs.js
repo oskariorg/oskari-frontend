@@ -170,50 +170,49 @@ class MapModuleOlCesium extends MapModuleOl {
         cam.moveStart.addEventListener(this.notifyStartMove.bind(this));
         cam.moveEnd.addEventListener(this.notifyMoveEnd.bind(this));
 
-        map.on('singleclick', evt => {
-            if (this.getDrawingMode()) {
-                return;
-            }
-            const { pixel, originalEvent } = evt;
-            const position = Cesium.Cartesian2.fromArray(pixel);
-            const lonlat = this.getMouseLocation(position);
-            if (!lonlat) {
-                return;
-            }
-            const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, ...evt.pixel, originalEvent.ctrlKey);
-            this._sandbox.notifyAll(mapClickedEvent);
-        });
+        const handler = new Cesium.ScreenSpaceEventHandler(this.getCesiumScene().canvas);
 
-        map.on('dblclick', () => {
-            if (this.getDrawingMode()) {
-                return false;
-            }
-        });
+        const getClickHandler = ctrlModifier => {
+            return ({ position }) => {
+                if (this.getDrawingMode()) {
+                    return;
+                }
+                const lonlat = this.getMouseLocation(position);
+                if (!lonlat) {
+                    return;
+                }
+                const { x, y } = position;
+                const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, x, y, ctrlModifier);
+                this._sandbox.notifyAll(mapClickedEvent);
+            };
+        };
+
+        handler.setInputAction(getClickHandler(false), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        handler.setInputAction(getClickHandler(true), Cesium.ScreenSpaceEventType.LEFT_CLICK, Cesium.KeyboardEventModifier.CTRL);
 
         const notifyMouseHover = (lonlat, pixel, paused) => {
             var hoverEvent = Oskari.eventBuilder('MouseHoverEvent')(
                 lonlat.lon,
                 lonlat.lat,
                 paused,
-                ...pixel,
+                pixel.x,
+                pixel.y,
                 this.getDrawingMode()
             );
             this._sandbox.notifyAll(hoverEvent);
         };
 
         let mouseMoveTimer;
-        map.on('pointermove', evt => {
-            const { pixel } = evt;
-            const position = Cesium.Cartesian2.fromArray(pixel);
-            const lonlat = this.getMouseLocation(position);
+        handler.setInputAction(({ endPosition }) => {
+            const lonlat = this.getMouseLocation(endPosition);
             if (!lonlat) {
                 return;
             }
-            notifyMouseHover(lonlat, pixel, false);
+            notifyMouseHover(lonlat, endPosition, false);
             clearTimeout(mouseMoveTimer);
             // No mouse move in 1000 ms - mouse move paused
-            mouseMoveTimer = setTimeout(notifyMouseHover.bind(this, lonlat, pixel, true), 1000);
-        });
+            mouseMoveTimer = setTimeout(notifyMouseHover.bind(this, lonlat, endPosition, true), 1000);
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     }
 
     /**
@@ -458,9 +457,7 @@ class MapModuleOlCesium extends MapModuleOl {
      * Moves the map to the given position and zoomlevel. Overrides 2d centerMap function.
      * @param {Number[] | Object} lonlat coordinates to move the map to
      * @param {Number/OpenLayers.Bounds/Object} zoomLevel zoomlevel to set the map to
-     * @param {Boolean} suppressEnd true to NOT send an event about the map move
-     *  (other components wont know that the map has moved, only use when chaining moves and
-     *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @param {Boolean} suppressEnd deprecated
      * @param {Object} options  has values for heading, pitch, roll and duration
      */
     centerMap (lonlat, zoom, suppressEnd, options = {}) {
@@ -469,16 +466,20 @@ class MapModuleOlCesium extends MapModuleOl {
             return false;
         }
 
-        const { top, bottom, left, right } = zoom.value || zoom;
-        if (zoom && top && bottom && left && right) {
-            const zoomOut = top === bottom && left === right;
-            const suppressEvent = zoomOut;
-            this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
-            if (zoomOut) {
-                this.zoomToScale(2000);
+        if (zoom === null || zoom === undefined) {
+            zoom = { type: 'zoom', value: this.getMapZoom() };
+        } else {
+            const { top, bottom, left, right } = zoom.value || zoom;
+            if (!isNaN(top) && !isNaN(bottom) && !isNaN(left) && !isNaN(right)) {
+                const zoomOut = top === bottom && left === right;
+                const suppressEvent = zoomOut;
+                this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
+                if (zoomOut) {
+                    this.zoomToScale(2000);
+                }
+                this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
+                return true;
             }
-            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            return true;
         }
 
         if (options.animation) {
