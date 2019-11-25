@@ -94,6 +94,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         this._initTerrainProvider();
         this._setupMapEvents(map);
+        this._fixDuplicateOverlays();
 
         var updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
@@ -117,6 +118,32 @@ class MapModuleOlCesium extends MapModuleOl {
                 negativeZ: `${skyboxIconsDir}/tycho2t3_80_mz.jpg`
             }
         });
+    }
+
+    /**
+     * Fixes an issue with olcs. ol/Overlays are visible for both 2d and 3d map instances at the same time.
+     */
+    _fixDuplicateOverlays (hide2dOverlay) {
+        const className = 'fix-olcs-hideoverlay';
+        if (!this.duplicateOverlayFix) {
+            this.duplicateOverlayFix = document.createElement('style');
+            const css = `
+                .${className} > .ol-overlay-container {
+                    display:none;
+                }
+            }`;
+            this.duplicateOverlayFix.appendChild(document.createTextNode(css));
+            document.head.appendChild(this.duplicateOverlayFix);
+        }
+        const { classList } = document.querySelector('.ol-viewport > .ol-overlaycontainer-stopevent');
+        if (hide2dOverlay) {
+            if (classList.contains(className)) {
+                return;
+            }
+            classList.add(className);
+            return;
+        }
+        classList.remove(className);
     }
 
     /**
@@ -343,6 +370,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     map.removeInteraction(cur);
                 });
             }
+            this._fixDuplicateOverlays(true);
         } else {
             // Add default interactions to 2d view.
             interactions = olInteractionDefaults({
@@ -352,6 +380,7 @@ class MapModuleOlCesium extends MapModuleOl {
             interactions.forEach(function (cur) {
                 map.addInteraction(cur);
             });
+            this._fixDuplicateOverlays(false);
         }
         this._map3D.setEnabled(enable);
     }
