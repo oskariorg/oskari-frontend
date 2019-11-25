@@ -1,4 +1,4 @@
-import React, { useState, Fragment } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Footer } from './Footer/';
@@ -26,10 +26,15 @@ const Publishable = styled.span`
 `;
 
 export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
-    const [visible, setVisible] = useState(layer.isVisible());
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
+
+    const [visible, setVisible] = useState(visibilityInfo.visible);
+    useEffect(() => {
+        setVisible(visibilityInfo.visible);
+    }, [visibilityInfo]);
+
     const handleToggleVisibility = () => {
         setVisible(!visible);
         mutator.toggleLayerVisibility(layer);
@@ -58,9 +63,10 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                                 <b>{name}</b><br/>
                                                 {organizationName}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px', marginTop: '20px' }}>
+                                            <ColAutoRight style={{ padding: '0px' }}>
                                                 {publishable &&
                                                 <Fragment>
+                                                    <br/>
                                                     <Icon type="check" style={{ color: '#01ca79' }} />
                                                     <Publishable>{locale.layer.publishable}</Publishable>
                                                 </Fragment>

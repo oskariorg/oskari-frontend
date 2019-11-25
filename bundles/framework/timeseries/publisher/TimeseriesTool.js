@@ -95,7 +95,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         * @returns {Boolean} is tool disabled
         */
         isDisabled: function (data) {
-            return typeof this._getTimeseriesService().getActiveTimeseries() === 'undefined';
+            const service = this._getTimeseriesService();
+            return typeof service === 'undefined' || typeof service.getActiveTimeseries() === 'undefined';
         },
         /**
         * Get values.

@@ -600,7 +600,25 @@ import { UnsupportedLayerReason } from '../domain/UnsupportedLayerReason';
          * @param {UnsupportedLayerReason} layerUnsupportedReason
          */
         addLayerSupportCheck: function (layerUnsupportedReason) {
+            if (typeof layerUnsupportedReason.getLayerCheckFunction !== 'function') {
+                return;
+            }
             this._layerSupportedChecks[layerUnsupportedReason.getId()] = layerUnsupportedReason.getLayerCheckFunction();
+
+            // notify change on unsupported layers
+            const affectedLayers = this.getLayers()
+                .map(layer => {
+                    const supported = layerUnsupportedReason.getLayerCheckFunction()(layer);
+                    if (supported instanceof UnsupportedLayerReason) {
+                        return layer;
+                    }
+                })
+                .filter(layer => typeof layer !== 'undefined');
+
+            if (affectedLayers.length !== 0) {
+                const event = Oskari.eventBuilder('MapLayerEvent')(null, 'update');
+                this._sandbox.notifyAll(event);
+            }
         }
     }, {
         /**

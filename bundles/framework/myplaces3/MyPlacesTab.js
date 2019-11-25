@@ -142,7 +142,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.MyPlacesTab',
             var mapModule = this.instance.getSandbox().findRegisteredModuleInstance('MainMapModule');
             var center = mapModule.getCentroidFromGeoJSON(geometry);
             var bounds = mapModule.getBoundsFromGeoJSON(geometry);
-            var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.x, center.y, bounds);
+            var mapmoveRequest = Oskari.requestBuilder('MapMoveRequest')(center.lon, center.lat, bounds);
             this.instance.sandbox.request(this.instance, mapmoveRequest);
             // add the myplaces layer to map
             var layerId = 'myplaces_' + categoryId;

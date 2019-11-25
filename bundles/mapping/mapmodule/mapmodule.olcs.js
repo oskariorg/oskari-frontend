@@ -476,32 +476,43 @@ class MapModuleOlCesium extends MapModuleOl {
      *     wanting to notify at end of the chain for performance reasons or similar) (optional)
      * @param {Object} options  has values for heading, pitch, roll and duration
      */
-    centerMap (lonlat, zoom, suppressEnd, options) {
+    centerMap (lonlat, zoom, suppressEnd, options = {}) {
         lonlat = this.normalizeLonLat(lonlat);
+        if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
+            return false;
+        }
         const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
         const cameraHeight = this.adjustZoom(zoom);
-        const duration = options && options.duration ? options.duration : 3000;
+        const duration = options.duration ? options.duration : 3000;
         const animationDuration = duration / 1000;
-        const camera = options && options.heading && options.roll && options.pitch
+        const camera = options.heading && options.roll && options.pitch
             ? { heading: options.heading,
                 roll: options.roll,
                 pitch: options.pitch } : undefined;
         const { top, bottom, left, right } = zoom.value || zoom;
         if (zoom && top && bottom && left && right) {
             const zoomOut = top === bottom && left === right;
-            this.zoomToExtent(zoom, zoomOut, zoomOut);
+            const suppressEvent = zoomOut;
+            this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
+            if (zoomOut) {
+                this.zoomToScale(2000);
+            }
             this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
             return true;
         }
 
-        if (options && options.animation) {
+        if (options.animation) {
+            const complete = () => this.notifyMoveEnd();
             // 3d map now only supports one animation so ignore the parameter, and just fly
-            this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera);
+            this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
             return true;
         } else {
-            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            this.getMap().getView().setZoom(zoom.value);
+            const view = this.getMap().getView();
+            const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+            view.setCenter([lonlat.lon, lonlat.lat]);
+            view.setZoom(zoomValue);
             this.notifyMoveEnd();
+            return true;
         }
     }
 
@@ -544,11 +555,11 @@ class MapModuleOlCesium extends MapModuleOl {
      * @param {Object} options options, such as animation, duration, delay and camera
      *     Usable animations: fly/pan/zoomPan
      */
-    tourMap (coordinates, zoom, options) {
+    tourMap (coordinates, zoom, options = {}) {
         const me = this;
-        const duration = options && options.duration ? options.duration : 3000;
+        const duration = !isNaN(options.duration) ? options.duration : 3000;
+        const delayOption = !isNaN(options.delay) ? options.delay : 750;
         const animationDuration = duration / 1000;
-        const delayOption = options && options.delay ? options.delay : 750;
         const cameraHeight = this.adjustZoom(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
@@ -571,11 +582,12 @@ class MapModuleOlCesium extends MapModuleOl {
                         roll: Cesium.Math.toRadians(locOptions.camera.roll),
                         pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
                 const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
+                const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
                 status = { ...status, step: index + 1 };
                 let cancelled = () => this.notifyTourEvent(status, true);
                 setTimeout(function () {
-                    me._flyTo(location[0], location[1], heightValue, animationDuration, cameraValues, next, cancelled);
-                    delay = coordinates.delay || delayOption;
+                    me._flyTo(location[0], location[1], heightValue, locationDuration, cameraValues, next, cancelled);
+                    delay = !isNaN(locOptions.delay) ? locOptions.delay : delayOption;
                     index++;
                 }, delay);
             }

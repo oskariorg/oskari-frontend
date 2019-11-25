@@ -87,7 +87,8 @@ const BABEL_LOADER_RULE = {
     exclude: [
         /libraries/,
         /\.min\.js$/,
-        getExcludedNodeModules(['react-dom', '@ant-design', 'antd'])
+        // https://github.com/zloirock/core-js/issues/514 core-js shouldn't be run through babel
+        getExcludedNodeModules(['react-dom', '@ant-design', 'antd', 'core-js'])
     ],
     use: {
         loader: 'babel-loader',

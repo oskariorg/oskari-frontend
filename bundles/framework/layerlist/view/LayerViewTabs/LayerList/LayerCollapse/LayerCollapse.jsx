@@ -15,19 +15,16 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayerIds, mutator, locale }) => {
-    if (!Array.isArray(groups) || groups.length === 0 || (filtered && filtered.length === 0)) {
+export const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator, locale }) => {
+    if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type="info" description={locale.errors.noResults}/>;
     }
-    const panels = (filtered || groups).map(cur => ({
-        group: cur.group || cur,
-        showLayers: cur.layers
-    }));
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
             {
-                panels.map(({ group, showLayers }) => {
-                    const selectedLayersInGroup = selectedLayerIds.filter(cur => showLayers.map(lyr => lyr.getId()).includes(cur));
+                groups.map(group => {
+                    const layerIds = group.getLayers().map(lyr => lyr.getId());
+                    const selectedLayersInGroup = selectedLayerIds.filter(id => layerIds.includes(id));
                     // Passes only ids the component is interested in.
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
@@ -36,7 +33,6 @@ export const LayerCollapse = ({ groups, openGroupTitles, filtered, selectedLayer
                             trimmed
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
-                            showLayers={showLayers}
                             mutator={mutator}
                             locale={locale}
                         />

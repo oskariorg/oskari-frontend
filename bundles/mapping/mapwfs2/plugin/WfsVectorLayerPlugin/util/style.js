@@ -1,6 +1,9 @@
 /* eslint-disable new-cap */
 import { Style as olStyle, Circle as olCircleStyle, Stroke as olStroke, Fill as olFill, Text as olText } from 'ol/style';
 import { filterOptionalStyle, getOptionalStyleFilter } from '../../../../mapmodule/oskariStyle/filter';
+
+const log = Oskari.log('WfsVectorLayerPlugin.util.style');
+
 const defaults = {
     style: {
         fill: {
@@ -108,6 +111,36 @@ const _setFeatureLabel = (feature, textStyle, labelProperty) => {
     textStyle.setText(feature.get(prop));
 };
 
+const getStyleForGeometry = (geometry, styleTypes) => {
+    if (!geometry || !styleTypes) {
+        return;
+    }
+
+    let style = null;
+    switch (geometry.getType()) {
+    case 'LineString':
+    case 'MultiLineString':
+        style = styleTypes.line || styleTypes; break;
+    case 'Polygon':
+    case 'MultiPolygon':
+        style = styleTypes.area || styleTypes; break;
+    case 'Point':
+    case 'MultiPoint':
+        style = styleTypes.dot || styleTypes; break;
+    case 'GeometryCollection':
+        const geometries = geometry.getGeometries();
+        if (geometries && geometries.length > 0) {
+            const geometryNames = geometries.map(g => g.getType());
+            log.info('Received GeometryCollection with geometries ' + geometryNames + '. Using first one to determine feature style.');
+            style = getStyleForGeometry(geometries[0], styleTypes);
+        } else {
+            log.info('Received GeometryCollection without geometries. Feature style cannot be determined.');
+        }
+        break;
+    };
+    return style;
+};
+
 const getStyleFunction = (styleValues, hoverHandler) => {
     const getTypedStyles = (styles, isHovered, isSelected) => {
         if (!styles) {
@@ -137,20 +170,8 @@ const getStyleFunction = (styleValues, hoverHandler) => {
         if (!styleTypes) {
             styleTypes = getTypedStyles(styleValues, isHovered, isSelected);
         }
-
-        let style = null;
-        switch (feature.getGeometry().getType()) {
-        case 'LineString':
-        case 'MultiLineString':
-            style = styleTypes.line || styleTypes; break;
-        case 'Polygon':
-        case 'MultiPolygon':
-            style = styleTypes.area || styleTypes; break;
-        case 'Point':
-        case 'MultiPoint':
-            style = styleTypes.dot || styleTypes; break;
-        };
-        const textStyle = style.getText();
+        const style = getStyleForGeometry(feature.getGeometry(), styleTypes);
+        const textStyle = style ? style.getText() : undefined;
         if (styleTypes.labelProperty && textStyle) {
             _setFeatureLabel(feature, textStyle, styleTypes.labelProperty);
         }

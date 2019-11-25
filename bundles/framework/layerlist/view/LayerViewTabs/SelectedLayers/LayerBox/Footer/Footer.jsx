@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LayerIcon } from '../../../LayerIcon';
@@ -17,6 +17,9 @@ const GrayRow = styled(Row)`
         display: flex;
         align-items: center;
         padding-left: 0;
+        :nth-last-child(2) {
+            padding-right: 0;
+        }
         > :not(:last-child) {
             margin-right: 5px;
         }
@@ -45,12 +48,8 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, locale, mutator }) => {
 };
 
 export const Footer = ({ locale, layer, mutator, visibilityInfo }) => {
-    const [slider, setSlider] = useState(layer.getOpacity());
-    const handleOpacityChange = value => {
-        setSlider(value);
-        mutator.changeOpacity(layer, value);
-    };
     const tools = layer.getTools();
+    const opacity = layer.getOpacity();
     const layerType = layer.getLayerType();
     const visibilityInfoProps = getVisibilityInfoProps({ locale, layer, mutator, visibilityInfo });
     return (
@@ -67,8 +66,8 @@ export const Footer = ({ locale, layer, mutator, visibilityInfo }) => {
                 <Fragment>
                     <ColAuto>
                         <OpacitySlider
-                            value={slider}
-                            onChange={handleOpacityChange}
+                            value={opacity}
+                            onChange={value => mutator.changeOpacity(layer, value)}
                         />
                     </ColAuto>
                     <ColAuto>

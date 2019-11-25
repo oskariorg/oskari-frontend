@@ -18,6 +18,7 @@ import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
+import { toPng } from 'html-to-image';
 
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
@@ -29,6 +30,7 @@ export class MapModule extends AbstractMapModule {
     constructor (id, imageUrl, options, mapDivId) {
         super(id, imageUrl, options, mapDivId);
         this._dpi = 72; //   25.4 / 0.28;  use OL2 dpi so scales are calculated the same way
+        this.log = Oskari.log('MapModule');
     }
 
     /**
@@ -40,8 +42,6 @@ export class MapModule extends AbstractMapModule {
     _initImpl (sandbox, options, map) {
         // css references use olMap as selectors so we need to add it
         this.getMapEl().addClass('olMap');
-        // disables text-selection on map (fixes an issue in Chrome 69 where dblclick on map selects text and prevents dragging the map)
-        this.getMapEl().addClass('disable-select');
         return map;
     }
 
@@ -83,7 +83,8 @@ export class MapModule extends AbstractMapModule {
             // still these need to be set to prevent errors
             center: [0, 0],
             zoom: 0,
-            resolutions: this.getResolutionArray()
+            resolutions: this.getResolutionArray(),
+            constrainResolution: true
         };
 
         const worldProjections = ['EPSG:3857', 'EPSG:4326'];
@@ -147,10 +148,28 @@ export class MapModule extends AbstractMapModule {
             me.notifyStartMove();
         });
 
+        function wasInfoBoxClicked (event) {
+            // - Chrome supports event.path.
+            // - Most others composedPath() https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
+            // - Polyfilled for IE/Edge on src/polyfills.js
+            var path = event.path || (event.composedPath && event.composedPath()) || [];
+            const foundInfoBox = path.find(item => item.id === 'getinforesult');
+            return typeof foundInfoBox !== 'undefined';
+        }
+
         map.on('singleclick', function (evt) {
             if (me.getDrawingMode()) {
                 return;
             }
+            if (wasInfoBoxClicked(evt.originalEvent)) {
+                // After OL 6 upgrade:
+                // - ol/MapBrowserEventHandler.emulateClick_ receives map click, dispatches it and schedules it to be triggered again after small delay
+                // - infobox/OpenlayersPopupPlugin receives the click in _setClickEvent() popupElement.onclick -> closes the popup so it's no longer on map
+                // - the delayed event from emulateClick_ triggers and detects that there is no overlay on the spot that was
+                //   clicked (since infobox was removed from that spot on the previous step) triggering a new MapClickedEvent and opening another infobox
+                return;
+            }
+
             var CtrlPressed = evt.originalEvent.ctrlKey;
             var lonlat = {
                 lon: evt.coordinate[0],
@@ -279,9 +298,8 @@ export class MapModule extends AbstractMapModule {
     }
 
     /**
-     * Produces an dataurl for PNG-image from the map contents.
+     * Produces an dataurl for PNG-image from the map contents and calls given callback with it.
      * Fails if canvas is "tainted" == contains layers restricting cross-origin use.
-     * @return {String} dataurl, if empty the screenshot failed due to an error (most likely tainted canvas)
      */
     getScreenshot (callback, numOfTries) {
         if (typeof callback !== 'function') {
@@ -303,16 +321,31 @@ export class MapModule extends AbstractMapModule {
             }, 1000);
             return;
         }
-        try {
-            var imageData = null;
-            me.getMap().once('postcompose', function (event) {
-                var canvas = event.context.canvas;
-                imageData = canvas.toDataURL('image/png');
+
+        const exportOptions = {
+            filter: (element) => {
+                // Don't include canvas elements with zero width to screenshot
+                if (element instanceof HTMLCanvasElement && element.width === 0) {
+                    return false;
+                }
+                // Don't include map controls to screenshot
+                return element.className ? element.className.indexOf('mapplugin') === -1 : true;
+            }
+        };
+
+        me.getMap().once('rendercomplete', () => {
+            toPng(me.getMap().getTargetElement(), exportOptions).then((dataUrl) => {
+                callback(dataUrl);
+            }).catch(err => {
+                me.log.warn('Error producing a screenshot png data url: ' + err);
+                callback('');
             });
+        });
+
+        try {
             me.getMap().renderSync();
-            callback(imageData);
         } catch (err) {
-            me.getSandbox().printWarn('Error producing a screenshot' + err);
+            me.log.warn('Error in screenshot map render sync: ' + err);
             callback('');
         }
     }
@@ -535,7 +568,7 @@ export class MapModule extends AbstractMapModule {
      */
     zoomToExtent (bounds, suppressStart, suppressEnd) {
         var extent = this.__boundsToArray(bounds);
-        this.getMap().getView().fit(extent, this.getMap().getSize());
+        this.getMap().getView().fit(extent);
         this.updateDomain();
         // send note about map change
         if (suppressStart !== true) {
@@ -639,7 +672,9 @@ export class MapModule extends AbstractMapModule {
             break;
         default:
             view.setCenter(location);
-            view.setZoom(zoom);
+            if (!isNaN(zoom)) {
+                view.setZoom(zoom);
+            }
             callback(true);
             break;
         }
@@ -656,10 +691,10 @@ export class MapModule extends AbstractMapModule {
      *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
      */
-    centerMap (lonlat, zoom, suppressEnd, options) {
+    centerMap (lonlat, zoom, suppressEnd, options = {}) {
         const view = this.getMap().getView();
-        const animation = options && options.animation ? options.animation : '';
-        const duration = options && options.duration ? options.duration : 3000;
+        const animation = options.animation ? options.animation : '';
+        const duration = options.duration ? options.duration : 3000;
 
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
@@ -672,19 +707,22 @@ export class MapModule extends AbstractMapModule {
             const { top, bottom, left, right } = zoom.value || zoom;
             if (top && left && bottom && right) {
                 const zoomOut = top === bottom && left === right;
-                this.zoomToExtent(zoom, zoomOut, zoomOut);
-                view.setCenter(lonlat);
+                const suppressEvent = zoomOut;
+                this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
+                if (zoomOut) {
+                    this.zoomToScale(2000);
+                }
+                view.setCenter([lonlat.lon, lonlat.lat]);
                 return true;
             }
         }
-        if (zoom === Number) {
+        if (!isNaN(zoom)) {
             // backwards compatibility
             zoom = { type: 'zoom', value: zoom };
         }
 
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         this._animateTo(lonlat, zoomValue, animation, duration);
-
         return true;
     }
 
