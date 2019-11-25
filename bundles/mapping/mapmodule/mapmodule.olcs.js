@@ -94,7 +94,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         this._initTerrainProvider();
         this._setupMapEvents(map);
-        this._fixDuplicateOverlays();
+        this._fixDuplicateOverlays(true);
 
         var updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
