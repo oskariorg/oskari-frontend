@@ -111,8 +111,8 @@ class UIService extends StateHandler {
         this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [layer.getId(), styleName]);
     }
 
-    locateLayer (layer) {
-        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layer.getId(), true]);
+    locateLayer (layer, zoomToExtent) {
+        this.sandbox.postRequestByName('MapModulePlugin.MapMoveByLayerContentRequest', [layer.getId(), zoomToExtent]);
     }
 }
 
