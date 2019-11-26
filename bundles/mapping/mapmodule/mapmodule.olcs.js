@@ -526,6 +526,14 @@ class MapModuleOlCesium extends MapModuleOl {
         camera.flyTo(flyToParams);
     }
 
+    /**
+     * @method _altitudeToZoom
+     *
+     * Formula taken from
+     * https://stackoverflow.com/questions/36544209/converting-altitude-to-z-level-and-vice-versa/41260276#41260276
+     * @param {Number} altitude
+     * @return {Number} zoomLevel for OL maps
+     */
     _altitudeToZoom (altitude) {
         const A = 40487.57;
         const B = 0.00007096758;
@@ -535,6 +543,14 @@ class MapModuleOlCesium extends MapModuleOl {
         return (D + (A - D) / (1 + Math.pow(altitude / C, B))) - 4;
     }
 
+    /**
+     * @method _zoomToAltitude
+     *
+     * Formula taken from
+     * https://stackoverflow.com/questions/36544209/converting-altitude-to-z-level-and-vice-versa/37142662#37142662
+     * @param {Object | Number} zoom zoom as number, scale or zoom objext
+     * @return {Number} Altitude for 3d maps
+     */
     _zoomToAltitude (zoom) {
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
