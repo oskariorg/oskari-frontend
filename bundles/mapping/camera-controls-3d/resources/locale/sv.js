@@ -4,8 +4,8 @@ Oskari.registerLocalization(
         "key": "CameraControls3d",
         "value": {
             "tooltip": {
-                "up": "Flytta upp",
-                "down": "Flytta ner"
+                "up": "Flytta upp på kartan",
+                "down": "Flytta ner på kartan"
             }
         }
     }

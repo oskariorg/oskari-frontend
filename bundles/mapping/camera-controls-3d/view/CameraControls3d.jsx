@@ -64,7 +64,6 @@ const MapControl = styled.div`
 `;
 
 const MobileContainer = styled.div`
-    float:left;
     margin-top: 5px;
     margin-right: 5px;
 `;
