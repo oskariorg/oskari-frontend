@@ -161,6 +161,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         // Properties id, type and hover are being used in VectorFeatureService.
         const vectorTileLayer = new olLayerVectorTile({
             opacity: layer.getOpacity() / 100,
+            visible: layer.isInScale(this.getMapModule().getMapScale()) && layer.isVisible(),
             renderMode: 'hybrid',
             source: this.createSource(layer, sourceOpts)
         });
@@ -169,6 +170,20 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         vectorTileLayer.set(LAYER_ID, layer.getId(), silent);
         vectorTileLayer.set(LAYER_TYPE, layer.getLayerType(), silent);
         vectorTileLayer.set(LAYER_HOVER, layer.getHoverOptions(), silent);
+
+        if (!this.getSandbox().getMap().isLayerSupported(layer)) {
+            layer.setVisible(false);
+            vectorTileLayer.setVisible(false);
+        }
+
+        // Set min max Resolutions
+        if (layer.getMaxScale() && layer.getMaxScale() !== -1) {
+            vectorTileLayer.setMinResolution(this.getMapModule().getResolutionForScale(layer.getMaxScale()));
+        }
+        // No definition, if scale is greater than max resolution scale
+        if (layer.getMinScale() && layer.getMinScale() !== -1 && (layer.getMinScale() < this.getMapModule().getScaleArray()[0])) {
+            vectorTileLayer.setMaxResolution(this.getMapModule().getResolutionForScale(layer.getMinScale()));
+        }
 
         this.mapModule.addLayer(vectorTileLayer, !keepLayerOnTop);
         this.setOLMapLayers(layer.getId(), vectorTileLayer);
