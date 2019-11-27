@@ -5,7 +5,9 @@ Oskari.registerLocalization(
         "value": {
             "tooltip": {
                 "up": "Flytta upp på kartan",
-                "down": "Flytta ner på kartan"
+                "down": "Flytta ner på kartan",
+                "move": "flytta karta",
+                "rotate": "rotera kartan"
             }
         }
     }

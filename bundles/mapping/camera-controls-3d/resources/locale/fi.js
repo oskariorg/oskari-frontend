@@ -5,7 +5,10 @@ Oskari.registerLocalization(
         "value": {
             "tooltip": {
                 "up": "Siirry kartalla ylöspäin",
-                "down": "Siirry kartalla alaspäin "
+                "down": "Siirry kartalla alaspäin ",
+                "move": "Liikuta karttaa",
+                "rotate": "Kierrä karttaa"
+
             }
         }
     }

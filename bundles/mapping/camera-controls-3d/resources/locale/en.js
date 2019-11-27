@@ -5,7 +5,9 @@ Oskari.registerLocalization(
         "value": {
             "tooltip": {
                 "up": "Move up in map",
-                "down": "Move down in map"
+                "down": "Move down in map",
+                "move": "Move map",
+                "rotate": "Rotate map"
             }
         }
     }
