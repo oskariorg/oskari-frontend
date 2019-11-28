@@ -9,8 +9,6 @@ import { LAYER_ID } from './domain/constants';
 import 'olcs/olcs.css';
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
-const SCALE_ZOOM_MULTIPLIER = 500;
-const ZOOM_MULTIPLIER = 5000;
 
 class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
@@ -496,14 +494,6 @@ class MapModuleOlCesium extends MapModuleOl {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
-        const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
-        const cameraHeight = this.adjustZoom(zoom);
-        const duration = options.duration ? options.duration : 3000;
-        const animationDuration = duration / 1000;
-        const camera = options.heading && options.roll && options.pitch
-            ? { heading: options.heading,
-                roll: options.roll,
-                pitch: options.pitch } : undefined;
 
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
@@ -522,6 +512,14 @@ class MapModuleOlCesium extends MapModuleOl {
         }
 
         if (options.animation) {
+            const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
+            const cameraHeight = this._zoomToAltitude(zoom);
+            const duration = options.duration ? options.duration : 3000;
+            const animationDuration = duration / 1000;
+            const camera = options.heading && options.roll && options.pitch
+                ? { heading: options.heading,
+                    roll: options.roll,
+                    pitch: options.pitch } : undefined;
             const complete = () => this.notifyMoveEnd();
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
@@ -557,14 +555,45 @@ class MapModuleOlCesium extends MapModuleOl {
         camera.flyTo(flyToParams);
     }
 
-    adjustZoom (zoom) {
+    /**
+     * @method _altitudeToZoom
+     *
+     * Formula taken from
+     * https://stackoverflow.com/questions/36544209/converting-altitude-to-z-level-and-vice-versa/41260276#41260276
+     * @param {Number} altitude
+     * @return {Number} zoomLevel for OL maps
+     */
+    _altitudeToZoom (altitude) {
+        const A = 40487.57;
+        const B = 0.00007096758;
+        const C = 91610.74;
+        const D = -40467.74;
+
+        return (D + (A - D) / (1 + Math.pow(altitude / C, B))) - 4;
+    }
+
+    /**
+     * @method _zoomToAltitude
+     *
+     * Formula taken from
+     * https://stackoverflow.com/questions/36544209/converting-altitude-to-z-level-and-vice-versa/37142662#37142662
+     * @param {Object | Number} zoom zoom as number, scale or zoom objext
+     * @return {Number} Altitude for 3d maps
+     */
+    _zoomToAltitude (zoom) {
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
         }
         if (typeof zoom !== 'object') {
             zoom = { type: 'zoom', value: zoom };
         }
-        return zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
+        const zoomLevel = zoom.type === 'scale' ? this.getResolutionForScale(zoom.value) : zoom.value;
+        const A = 40487.57;
+        const B = 0.00007096758;
+        const C = 91610.74;
+        const D = -40467.74;
+
+        return C * Math.pow((A - D) / ((zoomLevel + 4) - D) - 1, 1 / B);
     }
 
     /**
@@ -580,7 +609,7 @@ class MapModuleOlCesium extends MapModuleOl {
         const duration = !isNaN(options.duration) ? options.duration : 3000;
         const delayOption = !isNaN(options.delay) ? options.delay : 750;
         const animationDuration = duration / 1000;
-        const cameraHeight = this.adjustZoom(zoom);
+        const cameraHeight = this._zoomToAltitude(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
         const cameraOptions = options.camera;
@@ -601,7 +630,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     ? { heading: Cesium.Math.toRadians(locOptions.camera.heading),
                         roll: Cesium.Math.toRadians(locOptions.camera.roll),
                         pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
-                const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
+                const heightValue = locOptions.zoom ? this._zoomToAltitude(locOptions.zoom) : cameraHeight;
                 const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
                 status = { ...status, step: index + 1 };
                 let cancelled = () => this.notifyTourEvent(status, true);

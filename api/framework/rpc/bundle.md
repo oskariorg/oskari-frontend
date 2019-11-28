@@ -6,327 +6,12 @@ Provides RPC functionality, i.e. a published map can be controlled from the pare
 
 ## Example
 
-<script src="/js/rpc/rpc-client.min.js"></script>
-<style>
-    iframe {
-        background-clip: padding-box;
-        border: none;
-        border-radius: 12px;
-        box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
-        clear: both;
-        display: block;
-        margin-bottom: 12px;
-        width: 740px;
-        height: 525px;
-    }
-    #rpcControls {
-        text-align: center;
-        width: 740px;   
-    }
-
-    #rpcControls button,
-    #rpcControls output,
-    #rpcControls input {
-        display: inline-block;
-        margin-top: 6px;
-    }
-</style>
-<iframe id="Oskari" src="http://www.paikkatietoikkuna.fi/published/fi/f8ad2bf1-eaf0-44ff-ac90-de4fe3077812"></iframe>
-<div id="rpcControls">
-    <button id="mml">MML</button>
-    <button id="helsinki">Messukeskus</button>
-    <button id="lehka">Lehijärvi</button>
-    <output id="coords"></output>
-</div>
-<script>
-    var channel = OskariRPC.connect(
-            document.getElementById('Oskari'),
-            'http://www.paikkatietoikkuna.fi'
-        ),
-        coords = document.getElementById('coords'),
-        setCoords = function(x, y) {
-            coords.textContent = x + ', ' + y;
-        },
-        moveMap = function(centerX, centerY, zoomLevel) {
-            channel.postRequest(
-                'MapMoveRequest',
-                [
-                    centerX,
-                    centerY,
-                    zoomLevel === undefined ? 9 : zoomLevel
-                ],
-                function() {
-                    channel.log('MapMoveRequest posted');
-                }
-            );
-        },
-        showGFI = function (lon, lat) {
-            channel.postRequest(
-                'MapModulePlugin.GetFeatureInfoRequest',
-                [
-                    lon,
-                    lat
-                ],
-                function() {
-                    channel.log('GetFeatureInfoRequest posted');
-                }
-            );
-        },
-        zoombar;
-
-channel.onReady(function() {
-
-    channel.getZoomRange(
-        function(data) {
-            zoombar = document.createElement('input');
-            zoombar.type = 'range';
-            zoombar.min = data.min;
-            zoombar.max = data.max;
-            zoombar.value = data.current;
-            zoombar.onchange = function(event) {
-                var zoomLevel = this.value;
-                // There's no setZoomLevel for now, so we use MapMoveRequest with
-                // getMapPosition's x and y coords
-                channel.getMapPosition(
-                    function(data) {
-                        if (console && console.log) {
-                            console.log('getMapPosition', JSON.stringify(data));
-                        }
-                        moveMap(data.centerX, data.centerY, zoomLevel);
-                    },
-                    function(error, message) {
-                        if (console && console.log) {
-                            console.log('error', error, message);
-                        }
-                    }
-                );
-            };
-            document.getElementById('rpcControls').appendChild(zoombar);
-        }
-    );
-    
-            'GetPixelMeasuresInScale': function () {
-                // A4 example ( size in mm units and portrait orientation
-                var me = scale = document.getElementById("inputPlotScale").value;
-                if(scale && Number(scale) < 1){
-                    jQuery('#publishedMap').parent().find('#id_plot_bbox').remove();
-                    channel.log('GetPixelMeasuresInScale: ', ' old plot area removed, if any exists');
-                    savedPlotAreaData = null;
-                    return;
-                }
-                if(!scale || scale === ''){
-                    channel.getMapPosition(function(data){
-                        savedPlotAreaData = [[210, 297], data.scale];
-                    });
-                }
-                else {
-                    savedPlotAreaData = [[210, 297], scale];
-                }
-    
-                plotPlotArea([[210, 297], scale]);
-    
-            },
-
-    // Get current map position
-    channel.getMapPosition(
-        function(data) {
-            if (console && console.log) {
-                console.log('getMapPosition', JSON.stringify(data));
-            }
-            setCoords(data.centerX, data.centerY);
-        },
-        function(error, message) {
-            if (console && console.log) {
-                console.log('error', error, message);
-            }
-        }
-    );
-
-    // Get current map bbox
-    channel.getMapBbox(
-        function(data) {
-            if (console && console.log) {
-                console.log('getMapBbox', JSON.stringify(data));
-            }
-        },
-        function(error, message) {
-            if (console && console.log) {
-                console.log('error', error, message);
-            }
-        }
-    );
-
-    channel.getAllLayers(
-        function(data) {
-            if (console && console.log) {
-                console.log('getAllLayers', JSON.stringify(data));
-            }
-            // Layer names aren't available through RPC as it might contain sensitive data
-            var localization = {
-                '24': 'Orthophotos',
-                'base_2': 'Topographic map',
-                'base_35': 'Background map serie'
-            };
-            var gfiLayerId = '343';
-            data.forEach(function(layer) {
-                if (layer.id + '' !== gfiLayerId) {
-                    var layerButton = document.createElement('button');
-                    layerButton.id = layer.id;
-                    layerButton.textContent = localization[layer.id];
-                    layerButton.onclick = function() {
-                        var lid = this.id;
-                        if (console && console.log) {
-                            console.log('Showing layer ' + localization[lid]);
-                        }
-                        data.forEach(function(l) {
-                            channel.postRequest(
-                                'MapModulePlugin.MapLayerVisibilityRequest',
-                                [
-                                    l.id,
-                                    l.id + '' === lid || l.id + '' === gfiLayerId
-                                ]
-                            );
-                        });
-                    };
-                    document.getElementById('rpcControls').appendChild(layerButton);
-                }
-            });
-        },
-        function(error, message) {
-            if (console && console.log) {
-                console.log('error', error, message);
-            }
-        }
-    );
-});
-
-    channel.handleEvent(
-        'AfterMapMoveEvent',
-        function(data) {
-            if (console && console.log) {
-                console.log('AfterMapMoveEvent', JSON.stringify(data));
-            }
-            setCoords(data.centerX, data.centerY);
-            if (zoombar) {
-                zoombar.value = data.zoom;
-            }
-        },
-        function(error, message) {
-            if (console && console.log) {
-                console.log('error', error, message);
-            }
-        }
-    );
-
-    channel.handleEvent(
-        'MapClickedEvent',
-        function(data) {
-            if (console && console.log) {
-                console.log('MapClickedEvent', JSON.stringify(data));
-            }
-            channel.postRequest(
-                'MapModulePlugin.AddMarkerRequest', [{
-                        x: data.lon,
-                        y: data.lat
-                    },
-                    'RPCMarker'
-                ],
-                function(error, message) {
-                    if (console && console.log) {
-                        console.log('error', error, message);
-                    }
-                }
-            );
-        },
-        function(error, message) {
-            if (console && console.log) {
-                console.log('error', error, message);
-            }
-        }
-    );
-
-    document.getElementById('lehka').onclick = function() {
-        if (console && console.log) {
-            console.log('Lehijärvi');
-        }
-        moveMap(354490.70442968, 6770658.0402485);
-    };
-
-    document.getElementById('helsinki').onclick = function() {
-        if (console && console.log) {
-            console.log('Messukeskus');
-        }
-        moveMap(385597.68323541, 6675813.1806321);
-    };
-
-    document.getElementById('mml').onclick = function () {
-        if (console && console.log) {
-            console.log('MML GFI');
-        }
-        moveMap(385587.00507322, 6675359.2539665);
-        showGFI(385587.00507322, 6675359.2539665);
-    };
-</script>
+Examples of all the RPC functionalities can be found [here](https://www.oskari.org/examples/rpc-api/rpc_example.html).
 
 ## Bundle configuration
 
-No configuration is required, but it can be used to define allowed functions, events and requests. 
-If configuration is not set these defaults will be used:
-
-```javascript
-{
-    "allowedFunctions" : [
-        "getAllLayers",
-        "getMapPosition",
-        "getSupportedEvents",
-        "getSupportedFunctions",
-        "getSupportedRequests",
-        "getZoomRange",
-        "getPixelMeasuresInScale",
-        "getMapBbox",
-        "resetState",
-        "getCurrentState",
-        "useState",
-        "getFeatures"
-    ],
-    "allowedEvents" : [
-        "AfterMapMoveEvent",
-        "MapClickedEvent",
-        "AfterAddMarkerEvent",
-        "MarkerClickEvent",
-        "RouteResultEvent",
-        "UserLocationEvent",
-        "DrawingEvent"
-    ],
-    "allowedRequests" : [
-        "MapModulePlugin.AddMarkerRequest",
-        "VectorLayerRequest",
-        "MapModulePlugin.AddFeaturesToMapRequest",
-        "MapModulePlugin.RemoveFeaturesFromMapRequest",
-        "MapModulePlugin.GetFeatureInfoRequest",
-        "MapModulePlugin.MapLayerVisibilityRequest",
-        "MapModulePlugin.RemoveMarkersRequest",
-        "MapModulePlugin.MarkerVisibilityRequest",
-        "MapMoveRequest",
-        "ShowProgressSpinnerRequest",
-        "GetRouteRequest",
-        "GetFeedbackServiceRequest",
-        "GetFeedbackServiceDefinitionRequest",
-        "GetFeedbackRequest",
-        "PostFeedbackRequest",
-        "SearchRequest",
-        "ChangeMapLayerOpacityRequest",
-        "MyLocationPlugin.GetUserLocationRequest",
-        "DrawTools.StartDrawingRequest",
-        "DrawTools.StopDrawingRequest",
-        "MapModulePlugin.ZoomToFeaturesRequest",
-        "MapModulePlugin.MapLayerUpdateRequest",
-        "rotate.map",
-        "StartUserLocationTrackingRequest",
-        "StopUserLocationTrackingRequest"
-    ]
-}
-```
+No configuration is required, but it can be used to define allowed functions, events and requests.
+By default the [events](https://www.oskari.org/api/events) and [requests](https://www.oskari.org/api/requests) that have the RPC tag in their api documentation are allowed.
 
 ### Allowed functions
 
@@ -339,16 +24,20 @@ Defaults at the moment are all the functions defined in RPC-bundles availableFun
 - getSupportedFunctions()
 - getSupportedRequests()
 - getZoomRange()
-- getPixelMeasuresInScale([mm_measure1, mm_measure2,..],scale)
+- zoomIn()
+- zoomOut()
+- zoomTo()
+- getPixelMeasuresInScale(mmMeasures, scale)
 - getMapBbox()
 - resetState()
 - getCurrentState()
-- useState(stateObject)
-- getFeatures(layerId)
+- useState(state)
+- getFeatures(includeFeatures)
+- setCursorStyle(cursorStyle)
+- sendUIEvent(bundleId, payload)
 
 All functions take callbacks as parameters for successhandler and (optional) errorhandler. Most functions are getters and only require the success callback. 
-useState() is the only function currently that takes other type of parameters. However all functions are mapped in a similar fashion and the first parameter for function call can be used
-to send parameters to the function. The parameters to send should be sent as an array:
+useState() is the only function currently that takes other type of parameters. However all functions are mapped in a similar fashion and the first parameter for function call can be used to send parameters to the function. The parameters to send should be sent as an array:
 
     channel.useState([stateObject], successCB, errorCB);
 
@@ -358,7 +47,7 @@ to send parameters to the function. The parameters to send should be sent as an 
         console.log('Error!", err);
     });
 
-If the first parameter is is a function, it's treated as the success callback.
+If the first parameter is a function, it's treated as the success callback.
 
 **getInfo(clientVersion)**
 
@@ -408,7 +97,7 @@ Returns information about map position:
 
 **getSupportedEvents()**
 
-Returns event that are supported by rpc functionality.
+Returns events that are supported by rpc functionality. For example:
 
     {
         "AfterMapMoveEvent": true,
@@ -424,7 +113,7 @@ Returns event that are supported by rpc functionality.
 
 **getSupportedFunctions()**
 
-Returns functions that are supported by rpc functionality.
+Returns functions that are supported by rpc functionality. For example:
 
     {
         "getSupportedEvents": true,
@@ -444,7 +133,7 @@ Returns functions that are supported by rpc functionality.
 
 **getSupportedRequests()**
 
-Returns requests that are supported  by rpc functionality
+Returns requests that are supported  by rpc functionality. For example:
 
     {
         "InfoBox.ShowInfoBoxRequest": true,
@@ -496,7 +185,6 @@ Returns current zoom level after zooming.
           "scale": "100000",
           "zoomLevel": "5"
         }
-
 
 
 **resetState()**
@@ -551,6 +239,13 @@ For example in RPC-client you can:
        channel.log('GetFeatures: ', data);
     });
 
+**setCursorStyle(cursorStyle)**
+
+Functionality to change the mouse cursor on the map to any valid cursor css declaration ('crosshair','progress' etc.) supported by the browser.
+
+**sendUIEvent(bundleId, payload)**
+
+Used to toggle tools (e.g. coordinatetool) visible.
 
 **getScreenshot() (beta)**
 
@@ -593,7 +288,7 @@ If you're using the Oskari backend, this is injected automatically based on the 
 Next we'll need a map and the required libraries:
 ```html
 <script src="/js/rpc/rpc-client.min.js"></script>
-<iframe id="Oskari" src="http://demo.paikkatietoikkuna.fi/published/fi/8184"></iframe>
+<iframe id="Oskari" src="https://dev.oskari.org/?lang=en&viewId=4"></iframe>
 ```
 
 Here we open communications with the published map (the URL parameter is the domain of the iframe.src):
@@ -601,7 +296,7 @@ Here we open communications with the published map (the URL parameter is the dom
 <script>
 var channel = OskariRPC.connect(
     document.getElementById('Oskari'),
-    'http://demo.paikkatietoikkuna.fi'
+    'https://dev.oskari.org/'
 );
 </script>
 ```
@@ -669,15 +364,15 @@ No statehandling has been implemented for the bundle.
 
 ## Requests the bundle handles
 
-This bundle doesn't handles any requests.
+This bundle doesn't handle any requests.
 
 ## Requests the bundle sends out
 
-Depends wholly on the setup.
+Depends on the setup.
 
 ## Events the bundle listens to
 
-Depends wholly on the setup.
+Depends on the setup.
 
 ## Events the bundle sends out
 
@@ -712,7 +407,7 @@ This bundle doesn't send any events.
     <th> Dependency </th><th> Linked from </th><th> Purpose</th>
   </tr>
   <tr>
-    <td> [JSChannel](https://github.com/nls-oskari/jschannel) </td>
+    <td> [JSChannel](https://www.npmjs.com/package/jschannel) </td>
     <td> RPC bundle </td>
     <td> Used at both ends of the pipe for the RPC communication.</td>
   </tr>
