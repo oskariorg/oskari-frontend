@@ -96,22 +96,22 @@ Parameters for options-object:
 var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StartDrawingRequest', [
 		'bufferedLineSelection',
-		'LineString']
+		'LineString',
 		{
         	buffer: 200,
             allowMultipleDrawing: 'single',
 			drawControl: true,
             modifyControl: false
-        }		
+        }]
 );
 ```
 
 Start to draw for 'measure' functionality and keep the drawing on the map:
 ```javascript
 var sb = Oskari.getSandbox();
-sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString'], {
+sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString', {
 	showMeasureOnMap: true
-});
+})];
 ```
 
 After the drawing is completed a 'DrawingEvent' is triggered where id is 'measure' with the measure data available in event.getData().
@@ -119,9 +119,9 @@ After the drawing is completed a 'DrawingEvent' is triggered where id is 'measur
 Add a buffer of 50 units (metric) for the line shape we got from the previous 'measure' event:
 ```javascript
 var sb = Oskari.getSandbox();
-sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString'], {
+sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString', {
 	buffer: 50
-});
+})];
 ```
 
 Start to draw a circle for 'myplaces' functionality (disabling the buffer by dragging feature and don't setup modify control after finishing):
