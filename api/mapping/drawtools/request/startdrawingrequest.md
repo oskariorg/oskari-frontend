@@ -111,7 +111,7 @@ Start to draw for 'measure' functionality and keep the drawing on the map:
 var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString', {
 	showMeasureOnMap: true
-})];
+}]);
 ```
 
 After the drawing is completed a 'DrawingEvent' is triggered where id is 'measure' with the measure data available in event.getData().
@@ -121,7 +121,7 @@ Add a buffer of 50 units (metric) for the line shape we got from the previous 'm
 var sb = Oskari.getSandbox();
 sb.postRequestByName('DrawTools.StartDrawingRequest', ['measure', 'LineString', {
 	buffer: 50
-})];
+}]);
 ```
 
 Start to draw a circle for 'myplaces' functionality (disabling the buffer by dragging feature and don't setup modify control after finishing):
