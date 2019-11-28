@@ -229,6 +229,7 @@ div.oskari-flyout {
                 }
                 // Placeholder styles for disabled select
                 [class='SumoSelect disabled'] {
+                    cursor: auto;
                     p {
                         background-color: #f5f5f5;
                     }
