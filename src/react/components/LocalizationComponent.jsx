@@ -1,13 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'styled-components';
 
-export const LocalizationComponent = ({ languages, onChange, value, labels, children }) => {
+const Label = styled('div')`
+    display: inline-block;
+`;
+
+export const LocalizationComponent = ({ languages, onChange, value, labels, LabelComponent = Label, children }) => {
     if (languages.length === 0) {
         return null;
     }
     const [internalValue, setInternalValue] = useState(value);
     const nodes = React.Children.toArray(children);
     const getElementValueChangeHandler = (lang, name) => {
+        if (!name) {
+            return null;
+        }
         return event => {
             const clone = { ...internalValue };
             clone[lang][name] = event.target.value;
@@ -24,16 +32,20 @@ export const LocalizationComponent = ({ languages, onChange, value, labels, chil
         <React.Fragment>
             {
                 languages.map(lang => nodes.map((element, index) => {
+                    if (!React.isValidElement(element)) {
+                        // Text or some other non-react node.
+                        return element;
+                    }
                     const { name } = element.props;
                     const elementValue = (internalValue && internalValue[lang] && internalValue[lang][name]) || '';
                     const onElementValueChange = getElementValueChangeHandler(lang, name);
                     return (
-                        <div key={`${lang}_${index}`}>
+                        <React.Fragment key={`${lang}_${index}`}>
                             { name && labels && labels[lang] && labels[lang][name] &&
-                                <div>{ labels[lang][name] }</div>
+                                <LabelComponent>{ labels[lang][name] }</LabelComponent>
                             }
                             <element.type {...element.props} value={elementValue} onChange={onElementValueChange}/>
-                        </div>
+                        </React.Fragment>
                     );
                 }))
             }
@@ -46,6 +58,7 @@ LocalizationComponent.propTypes = {
     onChange: PropTypes.func,
     value: PropTypes.object,
     labels: PropTypes.object,
+    LabelComponent: PropTypes.instanceOf(React.Component),
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),
         PropTypes.node
