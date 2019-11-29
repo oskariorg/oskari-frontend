@@ -66,11 +66,31 @@ const upDownClickHandler = (directionUp) => {
     Oskari.getSandbox().postRequestByName('MapMoveRequest');
 };
 
-const moveMapClickHandler = () => {
-    console.log('TODO: implemetation');
+const getCamera = () => {
+    const mapmodule = Oskari.getSandbox().getStatefulComponents().mapfull.getMapModule();
+    return mapmodule.getCesiumScene().camera;
 };
-const rotateMapClickHandler = () => {
-    console.log('TODO: implemetation');
+
+const refreshCamera = (camera) => {
+    // TODO: Better way to reftresh camera than saying look where u are looking right now?
+    camera.lookAt(camera.position, new Cesium.HeadingPitchRange(camera.heading, camera.pitch, camera.roll));
+};
+
+const setCameraToMoveMode = (activeMapMoveMethod) => {
+    if (activeMapMoveMethod === mapMoveMethodMove) {
+        return;
+    }
+    const camera = getCamera();
+    camera.constrainedAxis = undefined;
+    refreshCamera(camera);
+};
+const setCameraToRotateMode = (activeMapMoveMethod) => {
+    if (activeMapMoveMethod === mapMoveMethodRotate) {
+        return;
+    }
+    const camera = getCamera();
+    camera.constrainedAxis = Cesium.Cartesian3.UNIT_Z;
+    refreshCamera(camera);
 };
 
 const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
@@ -78,12 +98,12 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
 
     const moveMapControl = <MoveMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodMove);
-        moveMapClickHandler();
+        setCameraToMoveMode(activeMapMoveMethod);
     }} title={getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>;
 
     const rotateMapControl = <RotateMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodRotate);
-        rotateMapClickHandler();
+        setCameraToRotateMode(activeMapMoveMethod);
     }} title={getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>;
 
     const upControl = <UpIcon mapInMobileMode={mapInMobileMode}
