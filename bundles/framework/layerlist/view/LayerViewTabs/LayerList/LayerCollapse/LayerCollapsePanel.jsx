@@ -21,8 +21,8 @@ const StyledListItem = styled(ListItem)`
     }
 `;
 
-const renderLayer = ({ model, even, selected, mutator, locale }) => {
-    const itemProps = { model, even, selected, mutator, locale };
+const renderLayer = ({ model, even, selected, mutator }) => {
+    const itemProps = { model, even, selected, mutator };
     return (
         <StyledListItem>
             <Layer key={model.getId()} {...itemProps} />
@@ -33,19 +33,17 @@ renderLayer.propTypes = {
     model: PropTypes.any,
     even: PropTypes.any,
     selected: PropTypes.any,
-    mutator: PropTypes.any,
-    locale: PropTypes.any
+    mutator: PropTypes.any
 };
 
 const LayerCollapsePanel = (props) => {
-    const { group, selectedLayerIds, mutator, locale, ...propsNeededForPanel } = props;
+    const { group, selectedLayerIds, mutator, ...propsNeededForPanel } = props;
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             model: layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            mutator,
-            locale
+            mutator
         };
         return layerProps;
     });
@@ -65,8 +63,7 @@ const LayerCollapsePanel = (props) => {
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
-    mutator: PropTypes.any.isRequired,
-    locale: PropTypes.any.isRequired
+    mutator: PropTypes.any.isRequired
 };
 
 const comparisonFn = (prevProps, nextProps) => {

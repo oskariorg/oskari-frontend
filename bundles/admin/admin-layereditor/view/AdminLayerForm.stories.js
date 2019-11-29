@@ -20,7 +20,7 @@ const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer
 
 const locale = Oskari.getMsg.bind(null, 'admin-layereditor');
 // Message parameters causes missing library errors, skip them.
-const loc = (key, ...ingnoredMessageParams) => locale(key);
+const customGetMessageImpl = (key, ...ingnoredMessageParams) => locale(key);
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
@@ -31,7 +31,7 @@ service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)
     .add('layout', () => (
-        <LocaleContext.Provider value={loc}>
+        <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor', getMessage: customGetMessageImpl }}>
             <MutatorContext.Provider value={service}>
                 <AdminLayerForm
                     mapLayerGroups={[]}

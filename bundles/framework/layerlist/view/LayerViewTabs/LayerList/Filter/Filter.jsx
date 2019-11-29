@@ -1,13 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Tooltip } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Mutator, withLocale } from 'oskari-ui/util';
 import { Labelled } from '../Labelled';
 
-const Filter = ({ filters, activeFilterId, mutator, locale }) => {
-    const { title, placeholder } = locale.filter;
+const Filter = ({ filters, activeFilterId, mutator, getMessage }) => {
     const filterSelect = {
-        placeholder,
+        placeholder: getMessage('filter.placeholder'),
         onChange: mutator.setActiveFilterId
     };
     let tooltip;
@@ -23,7 +22,7 @@ const Filter = ({ filters, activeFilterId, mutator, locale }) => {
     }
 
     return (
-        <Labelled label={title}>
+        <Labelled label={'filter.title'}>
             <Tooltip title={tooltip}>
                 <Select {...filterSelect} allowClear>
                     {
@@ -47,8 +46,8 @@ Filter.propTypes = {
     filters: PropTypes.arrayOf(PropTypes.shape(filterBtnShape)).isRequired,
     activeFilterId: PropTypes.string,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
-    locale: PropTypes.object.isRequired
+    getMessage: PropTypes.func.isRequired
 };
 
-const memoized = React.memo(Filter);
+const memoized = React.memo(withLocale(Filter));
 export { memoized as Filter };
