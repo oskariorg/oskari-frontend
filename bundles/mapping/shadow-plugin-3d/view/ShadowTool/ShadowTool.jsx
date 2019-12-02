@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Icon, TimePicker, DatePicker } from 'oskari-ui';
 import moment from 'moment';
@@ -20,18 +21,21 @@ const StyledIcon = styled(Icon)`
     margin-right: 15px;
 `;
 
-export const ShadowPlugin = () => {
+export const ShadowPlugin = ({ getMessage }) => {
     const onChange = (date, dateString) => {
         console.log(date, dateString);
     };
     const format = 'HH:mm';
     return (
         <Background>
-            <Title>Varjostus</Title>
+            <Title>{getMessage('title')}</Title>
             <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
             <DatePicker defaultValue={moment('06-06', 'MM-DD')} onChange={onChange} /><br/>
             <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
             <TimePicker defaultValue={moment('12:08', format)} format={format} />
         </Background>
     );
+};
+ShadowPlugin.propTypes = {
+    getMessage: PropTypes.func.isRequired
 };
