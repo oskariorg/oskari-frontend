@@ -9,8 +9,6 @@ import { LAYER_ID } from './domain/constants';
 import 'olcs/olcs.css';
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
-const SCALE_ZOOM_MULTIPLIER = 500;
-const ZOOM_MULTIPLIER = 5000;
 
 class MapModuleOlCesium extends MapModuleOl {
     constructor (id, imageUrl, options, mapDivId) {
@@ -96,6 +94,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         this._initTerrainProvider();
         this._setupMapEvents(map);
+        this._fixDuplicateOverlays(true);
 
         var updateReadyStatus = function () {
             scene.postRender.removeEventListener(updateReadyStatus);
@@ -119,6 +118,32 @@ class MapModuleOlCesium extends MapModuleOl {
                 negativeZ: `${skyboxIconsDir}/tycho2t3_80_mz.jpg`
             }
         });
+    }
+
+    /**
+     * Fixes an issue with olcs. ol/Overlays are visible for both 2d and 3d map instances at the same time.
+     */
+    _fixDuplicateOverlays (hide2dOverlay) {
+        const className = 'fix-olcs-hideoverlay';
+        if (!this.duplicateOverlayFix) {
+            this.duplicateOverlayFix = document.createElement('style');
+            const css = `
+                .${className} > .ol-overlay-container {
+                    display:none;
+                }
+            }`;
+            this.duplicateOverlayFix.appendChild(document.createTextNode(css));
+            document.head.appendChild(this.duplicateOverlayFix);
+        }
+        const { classList } = document.querySelector('.ol-viewport > .ol-overlaycontainer-stopevent');
+        if (hide2dOverlay) {
+            if (classList.contains(className)) {
+                return;
+            }
+            classList.add(className);
+            return;
+        }
+        classList.remove(className);
     }
 
     /**
@@ -166,6 +191,24 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     /**
+     * @method notifyMoveEnd
+     * Notify other components that the map has moved. Sends a AfterMapMoveEvent and updates the
+     * sandbox map domain object with the current map properties.
+     * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
+     * (this class) calls this automatically if not stated otherwise in API documentation.
+     */
+    notifyMoveEnd () {
+        const sandbox = this.getSandbox();
+        sandbox.getMap().setMoving(false);
+        const camera = this.getCamera().orientation;
+
+        const lonlat = this.getMapCenter();
+        this.updateDomain();
+        const evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), camera);
+        sandbox.notifyAll(evt);
+    }
+
+    /**
      * Add map event handlers
      * @method @private _setupMapEvents
      */
@@ -174,50 +217,49 @@ class MapModuleOlCesium extends MapModuleOl {
         cam.moveStart.addEventListener(this.notifyStartMove.bind(this));
         cam.moveEnd.addEventListener(this.notifyMoveEnd.bind(this));
 
-        map.on('singleclick', evt => {
-            if (this.getDrawingMode()) {
-                return;
-            }
-            const { pixel, originalEvent } = evt;
-            const position = Cesium.Cartesian2.fromArray(pixel);
-            const lonlat = this.getMouseLocation(position);
-            if (!lonlat) {
-                return;
-            }
-            const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, ...evt.pixel, originalEvent.ctrlKey);
-            this._sandbox.notifyAll(mapClickedEvent);
-        });
+        const handler = new Cesium.ScreenSpaceEventHandler(this.getCesiumScene().canvas);
 
-        map.on('dblclick', () => {
-            if (this.getDrawingMode()) {
-                return false;
-            }
-        });
+        const getClickHandler = ctrlModifier => {
+            return ({ position }) => {
+                if (this.getDrawingMode()) {
+                    return;
+                }
+                const lonlat = this.getMouseLocation(position);
+                if (!lonlat) {
+                    return;
+                }
+                const { x, y } = position;
+                const mapClickedEvent = Oskari.eventBuilder('MapClickedEvent')(lonlat, x, y, ctrlModifier);
+                this._sandbox.notifyAll(mapClickedEvent);
+            };
+        };
+
+        handler.setInputAction(getClickHandler(false), Cesium.ScreenSpaceEventType.LEFT_CLICK);
+        handler.setInputAction(getClickHandler(true), Cesium.ScreenSpaceEventType.LEFT_CLICK, Cesium.KeyboardEventModifier.CTRL);
 
         const notifyMouseHover = (lonlat, pixel, paused) => {
             var hoverEvent = Oskari.eventBuilder('MouseHoverEvent')(
                 lonlat.lon,
                 lonlat.lat,
                 paused,
-                ...pixel,
+                pixel.x,
+                pixel.y,
                 this.getDrawingMode()
             );
             this._sandbox.notifyAll(hoverEvent);
         };
 
         let mouseMoveTimer;
-        map.on('pointermove', evt => {
-            const { pixel } = evt;
-            const position = Cesium.Cartesian2.fromArray(pixel);
-            const lonlat = this.getMouseLocation(position);
+        handler.setInputAction(({ endPosition }) => {
+            const lonlat = this.getMouseLocation(endPosition);
             if (!lonlat) {
                 return;
             }
-            notifyMouseHover(lonlat, pixel, false);
+            notifyMouseHover(lonlat, endPosition, false);
             clearTimeout(mouseMoveTimer);
             // No mouse move in 1000 ms - mouse move paused
-            mouseMoveTimer = setTimeout(notifyMouseHover.bind(this, lonlat, pixel, true), 1000);
-        });
+            mouseMoveTimer = setTimeout(notifyMouseHover.bind(this, lonlat, endPosition, true), 1000);
+        }, Cesium.ScreenSpaceEventType.MOUSE_MOVE);
     }
 
     /**
@@ -355,6 +397,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     map.removeInteraction(cur);
                 });
             }
+            this._fixDuplicateOverlays(true);
         } else {
             // Add default interactions to 2d view.
             interactions = olInteractionDefaults({
@@ -364,6 +407,7 @@ class MapModuleOlCesium extends MapModuleOl {
             interactions.forEach(function (cur) {
                 map.addInteraction(cur);
             });
+            this._fixDuplicateOverlays(false);
         }
         this._map3D.setEnabled(enable);
     }
@@ -471,9 +515,7 @@ class MapModuleOlCesium extends MapModuleOl {
      * Moves the map to the given position and zoomlevel. Overrides 2d centerMap function.
      * @param {Number[] | Object} lonlat coordinates to move the map to
      * @param {Number/OpenLayers.Bounds/Object} zoomLevel zoomlevel to set the map to
-     * @param {Boolean} suppressEnd true to NOT send an event about the map move
-     *  (other components wont know that the map has moved, only use when chaining moves and
-     *     wanting to notify at end of the chain for performance reasons or similar) (optional)
+     * @param {Boolean} suppressEnd deprecated
      * @param {Object} options  has values for heading, pitch, roll and duration
      */
     centerMap (lonlat, zoom, suppressEnd, options = {}) {
@@ -481,27 +523,32 @@ class MapModuleOlCesium extends MapModuleOl {
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
             return false;
         }
-        const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
-        const cameraHeight = this.adjustZoom(zoom);
-        const duration = options.duration ? options.duration : 3000;
-        const animationDuration = duration / 1000;
-        const camera = options.heading && options.roll && options.pitch
-            ? { heading: options.heading,
-                roll: options.roll,
-                pitch: options.pitch } : undefined;
-        const { top, bottom, left, right } = zoom.value || zoom;
-        if (zoom && top && bottom && left && right) {
-            const zoomOut = top === bottom && left === right;
-            const suppressEvent = zoomOut;
-            this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
-            if (zoomOut) {
-                this.zoomToScale(2000);
+
+        if (zoom === null || zoom === undefined) {
+            zoom = { type: 'zoom', value: this.getMapZoom() };
+        } else {
+            const { top, bottom, left, right } = zoom.value || zoom;
+            if (!isNaN(top) && !isNaN(bottom) && !isNaN(left) && !isNaN(right)) {
+                const zoomOut = top === bottom && left === right;
+                const suppressEvent = zoomOut;
+                this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
+                if (zoomOut) {
+                    this.zoomToScale(2000);
+                }
+                this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
+                return true;
             }
-            this.getMap().getView().setCenter([lonlat.lon, lonlat.lat]);
-            return true;
         }
 
         if (options.animation) {
+            const location = olProj.transform([lonlat.lon, lonlat.lat], this.getProjection(), 'EPSG:4326');
+            const cameraHeight = this._zoomToAltitude(zoom);
+            const duration = options.duration ? options.duration : 3000;
+            const animationDuration = duration / 1000;
+            const camera = options.heading && options.roll && options.pitch
+                ? { heading: options.heading,
+                    roll: options.roll,
+                    pitch: options.pitch } : undefined;
             const complete = () => this.notifyMoveEnd();
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
@@ -537,14 +584,45 @@ class MapModuleOlCesium extends MapModuleOl {
         camera.flyTo(flyToParams);
     }
 
-    adjustZoom (zoom) {
+    /**
+     * @method _altitudeToZoom
+     *
+     * Formula taken from
+     * https://stackoverflow.com/questions/36544209/converting-altitude-to-z-level-and-vice-versa/41260276#41260276
+     * @param {Number} altitude
+     * @return {Number} zoomLevel for OL maps
+     */
+    _altitudeToZoom (altitude) {
+        const A = 40487.57;
+        const B = 0.00007096758;
+        const C = 91610.74;
+        const D = -40467.74;
+
+        return (D + (A - D) / (1 + Math.pow(altitude / C, B))) - 4;
+    }
+
+    /**
+     * @method _zoomToAltitude
+     *
+     * Formula taken from
+     * https://stackoverflow.com/questions/36544209/converting-altitude-to-z-level-and-vice-versa/37142662#37142662
+     * @param {Object | Number} zoom zoom as number, scale or zoom objext
+     * @return {Number} Altitude for 3d maps
+     */
+    _zoomToAltitude (zoom) {
         if (zoom === null || zoom === undefined) {
             zoom = { type: 'zoom', value: this.getMapZoom() };
         }
         if (typeof zoom !== 'object') {
             zoom = { type: 'zoom', value: zoom };
         }
-        return zoom.type === 'scale' ? zoom.value * SCALE_ZOOM_MULTIPLIER : zoom.value * ZOOM_MULTIPLIER;
+        const zoomLevel = zoom.type === 'scale' ? this.getResolutionForScale(zoom.value) : zoom.value;
+        const A = 40487.57;
+        const B = 0.00007096758;
+        const C = 91610.74;
+        const D = -40467.74;
+
+        return C * Math.pow((A - D) / ((zoomLevel + 4) - D) - 1, 1 / B);
     }
 
     /**
@@ -560,7 +638,7 @@ class MapModuleOlCesium extends MapModuleOl {
         const duration = !isNaN(options.duration) ? options.duration : 3000;
         const delayOption = !isNaN(options.delay) ? options.delay : 750;
         const animationDuration = duration / 1000;
-        const cameraHeight = this.adjustZoom(zoom);
+        const cameraHeight = this._zoomToAltitude(zoom);
         const coords = coordinates.map(coord => olProj.transform([coord.lon, coord.lat], this.getProjection(), 'EPSG:4326'));
         // check for 3d map options
         const cameraOptions = options.camera;
@@ -581,7 +659,7 @@ class MapModuleOlCesium extends MapModuleOl {
                     ? { heading: Cesium.Math.toRadians(locOptions.camera.heading),
                         roll: Cesium.Math.toRadians(locOptions.camera.roll),
                         pitch: Cesium.Math.toRadians(locOptions.camera.pitch) } : camera;
-                const heightValue = locOptions.zoom ? this.adjustZoom(locOptions.zoom) : cameraHeight;
+                const heightValue = locOptions.zoom ? this._zoomToAltitude(locOptions.zoom) : cameraHeight;
                 const locationDuration = locOptions.duration ? locOptions.duration / 1000 : animationDuration;
                 status = { ...status, step: index + 1 };
                 let cancelled = () => this.notifyTourEvent(status, true);

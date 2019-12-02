@@ -40,9 +40,10 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, locale, mutator }) => {
         };
     }
     if (!inScale || !geometryMatch) {
+        const zoomToExtent = !geometryMatch;
         return {
-            action: () => mutator.locateLayer(layer),
-            text: inScale ? locale.layer.moveToContentArea : locale.layer.moveToScale
+            action: () => mutator.locateLayer(layer, zoomToExtent),
+            text: zoomToExtent ? locale.layer.moveToContentArea : locale.layer.moveToScale
         };
     }
 };

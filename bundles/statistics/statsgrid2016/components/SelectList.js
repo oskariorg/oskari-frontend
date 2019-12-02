@@ -201,16 +201,19 @@ export class SelectList extends FormComponent {
      * @method selectFirstValue Select the first non-placeholder value
      */
     selectFirstValue () {
-        this._getSumoInstance().selectItem(0);
+        const val = this._element.find('option:enabled').first().val();
+        if (val) {
+            this.setValue(val);
+        }
     }
 
     /**
      * @method selectLastValue Select the last value
      */
     selectLastValue () {
-        const lastIndex = this._element.find('select').find('option:last-child').prop('index');
-        if (lastIndex || lastIndex === 0) {
-            this._getSumoInstance().selectItem(lastIndex);
+        const val = this._element.find('option:enabled').last().val();
+        if (val) {
+            this.setValue(val);
         }
     }
 

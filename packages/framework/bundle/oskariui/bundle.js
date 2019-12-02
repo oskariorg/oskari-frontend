@@ -63,7 +63,19 @@ Oskari.clazz.define("Oskari.mapframework.bundle.oskariui.OskariUIBundle", functi
 			"type" : "text/javascript",
 			"src" : "../../../../bundles/framework/oskariui/Layout.js"
 		}],
-		"locales" : []
+		"locales" : [{
+            "lang": "en",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/oskariui/resources/locale/en.js"
+        }, {
+            "lang": "fi",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/oskariui/resources/locale/fi.js"
+        }, {
+            "lang": "sv",
+            "type": "text/javascript",
+            "src": "../../../../bundles/framework/oskariui/resources/locale/sv.js"
+        }]
 	},
 	"bundle" : {
 		"manifest" : {

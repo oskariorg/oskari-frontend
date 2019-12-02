@@ -1066,16 +1066,14 @@ Oskari.clazz.define(
          * sandbox map domain object with the current map properties.
          * if they move the map through OpenLayers reference. All map movement methods implemented in mapmodule
          * (this class) calls this automatically if not stated otherwise in API documentation.
-         * @param {String} creator
-         *        class identifier of object that sends event
          */
-        notifyMoveEnd: function (creator) {
+        notifyMoveEnd: function () {
             var sandbox = this.getSandbox();
             sandbox.getMap().setMoving(false);
 
             var lonlat = this.getMapCenter();
             this.updateDomain();
-            var evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), creator);
+            var evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale());
             sandbox.notifyAll(evt);
         },
 

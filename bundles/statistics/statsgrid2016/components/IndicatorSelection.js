@@ -78,7 +78,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 select.disableOptions(disabledIndicatorIDs);
             }
             if (select.getOptions().options.length > 0) {
-                me._enableIndicatorSelection();
+                select.setEnabled(true);
+            } else {
+                select.setEnabled(false);
             }
 
             if (result.complete) {
@@ -91,12 +93,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
                 }
             }
         });
-    },
-    _enableIndicatorSelection () {
-        const sumoSelectDiv = jQuery('.stats-ind-selector').find('.SumoSelect');
-        sumoSelectDiv.removeClass('disabled');
-        const select = sumoSelectDiv.find('.SumoUnder');
-        select.removeAttr('disabled');
     },
     setElement: function (el) {
         this.element = el;
