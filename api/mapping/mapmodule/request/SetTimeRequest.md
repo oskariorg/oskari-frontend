@@ -42,11 +42,11 @@ Requests time to be changed Triggers TimeChangedEvent.
 
 Set time
 ```javascript
-const sb = Oskari.getSandbox();
+var sb = Oskari.getSandbox();
 
-const date = "28/2";
-const time = "12:00";
-const year = 2010
+var date = "28/2";
+var time = "12:00";
+var year = 2010
 
 sb.postRequestByName('SetTimeRequest', [date, time, year]);
 ```
