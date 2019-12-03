@@ -30,7 +30,7 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, mutator }) => {
     const { unsupported, visible, inScale, geometryMatch } = visibilityInfo;
     if (!visible) {
         return {
-            text: 'layer.hidden'
+            messageKey: 'layer.hidden'
         };
     }
     if (unsupported) {
@@ -43,7 +43,7 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, mutator }) => {
         const zoomToExtent = !geometryMatch;
         return {
             action: () => mutator.locateLayer(layer, zoomToExtent),
-            text: zoomToExtent ? 'layer.moveToContentArea' : 'layer.moveToScale'
+            messageKey: zoomToExtent ? 'layer.moveToContentArea' : 'layer.moveToScale'
         };
     }
 };
