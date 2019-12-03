@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 const Label = styled('div')`
     display: inline-block;
 `;
-
-const getMsg = Oskari.getMsg.bind(null, 'oskariui');
 
 export const LocalizationComponent = ({ languages, onChange, value, labels, LabelComponent = Label, collapse = true, defaultOpen = false, children }) => {
     if (languages.length === 0) {
@@ -64,7 +62,7 @@ export const LocalizationComponent = ({ languages, onChange, value, labels, Labe
         <React.Fragment>
             { firstLocalizedElement }
             <Collapse bordered defaultActiveKey={defaultOpen === true ? panelKey : null}>
-                <CollapsePanel header={getMsg('otherLanguages')} key={panelKey}>
+                <CollapsePanel header={<Message bundleKey='oskariui' messageKey='otherLanguages' />} key={panelKey}>
                     { localizedElements }
                 </CollapsePanel>
             </Collapse>

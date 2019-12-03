@@ -6,8 +6,6 @@ const Label = styled('div')`
     display: inline-block;
 `;
 
-const logger = Oskari.log();
-
 export const Message = ({ bundleKey, messageKey, messageArgs, getMessage, LabelComponent = Label }) => {
     if (!messageKey) {
         return null;
@@ -16,7 +14,7 @@ export const Message = ({ bundleKey, messageKey, messageArgs, getMessage, LabelC
         ? getMessage(messageKey, messageArgs)
         : Oskari.getMsg(bundleKey, messageKey, messageArgs);
     return (
-        <LabelComponent onClick={() => logger.debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
+        <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
             { message }
         </LabelComponent>
     );
