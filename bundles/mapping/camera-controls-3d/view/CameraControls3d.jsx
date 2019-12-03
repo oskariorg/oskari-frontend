@@ -54,8 +54,12 @@ const Break = styled.div`
     height: 0;
 `;
 
+const getMapModule = () => {
+    return Oskari.getSandbox().getStatefulComponents().mapfull.getMapModule();
+};
+
 const upDownClickHandler = (directionUp) => {
-    const mapmodule = Oskari.getSandbox().getStatefulComponents().mapfull.getMapModule();
+    const mapmodule = getMapModule();
     const cam = mapmodule.getCamera();
     if (directionUp) {
         cam.location.altitude = cam.location.altitude * ((100 + upDownChangePercent) / 100);
@@ -66,31 +70,17 @@ const upDownClickHandler = (directionUp) => {
     Oskari.getSandbox().postRequestByName('MapMoveRequest');
 };
 
-const getCamera = () => {
-    const mapmodule = Oskari.getSandbox().getStatefulComponents().mapfull.getMapModule();
-    return mapmodule.getCesiumScene().camera;
-};
-
-const refreshCamera = (camera) => {
-    // TODO: Better way to reftresh camera than saying look where u are looking right now?
-    camera.lookAt(camera.position, new Cesium.HeadingPitchRange(camera.heading, camera.pitch, camera.roll));
-};
-
 const setCameraToMoveMode = (activeMapMoveMethod) => {
     if (activeMapMoveMethod === mapMoveMethodMove) {
         return;
     }
-    const camera = getCamera();
-    camera.constrainedAxis = undefined;
-    refreshCamera(camera);
+    getMapModule().setCameraToMoveMode();
 };
 const setCameraToRotateMode = (activeMapMoveMethod) => {
     if (activeMapMoveMethod === mapMoveMethodRotate) {
         return;
     }
-    const camera = getCamera();
-    camera.constrainedAxis = Cesium.Cartesian3.UNIT_Z;
-    refreshCamera(camera);
+    getMapModule().setCameraToRotateMode();
 };
 
 const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
@@ -99,17 +89,17 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
     const moveMapControl = <MoveMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodMove);
         setCameraToMoveMode(activeMapMoveMethod);
-    }} title={getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>;
+    }} title={mapInMobileMode ? '' : getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>;
 
     const rotateMapControl = <RotateMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodRotate);
         setCameraToRotateMode(activeMapMoveMethod);
-    }} title={getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>;
+    }} title={ mapInMobileMode ? '' : getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>;
 
     const upControl = <UpIcon mapInMobileMode={mapInMobileMode}
-        clickHandler={() => upDownClickHandler(true)} title={getMessage('tooltip.up')}/>;
+        clickHandler={() => upDownClickHandler(true)} title={mapInMobileMode ? '' : getMessage('tooltip.up')}/>;
     const downControl = <DownIcon mapInMobileMode={mapInMobileMode}
-        clickHandler={() => upDownClickHandler(false)} title={getMessage('tooltip.down')}/>;
+        clickHandler={() => upDownClickHandler(false)} title={mapInMobileMode ? '' : getMessage('tooltip.down')}/>;
 
     let controls;
 
