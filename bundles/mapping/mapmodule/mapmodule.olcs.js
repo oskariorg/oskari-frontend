@@ -6,6 +6,7 @@ import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
+import moment from 'moment';
 import 'olcs/olcs.css';
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
@@ -290,13 +291,38 @@ class MapModuleOlCesium extends MapModuleOl {
         return hits;
     }
 
+    /**
+     * @method getTime
+     * Gets time set for map shadowing
+     * @return {Cesium.JulianDate}
+     */
     getTime () {
         return this._time;
     }
 
+    /**
+     * @method setTime
+     * Sets time for map shadowing
+     * @param {String} time in Iso8601 format
+     */
     setTime (time) {
         this._time = Cesium.JulianDate.fromIso8601(time);
         this.notifyTimeChanged(time);
+    }
+
+    /**
+     * @method notifyTimeChanged
+     * Notify other components that the time has changed. Sends a TimeChangedEvent
+     * @param {String} time in Iso8601 format
+     */
+    notifyTimeChanged (time) {
+        const sandbox = this.getSandbox();
+
+        const dateObject = new Date(time);
+        const date = moment(dateObject).format('D/M');
+        const clock = moment(dateObject).format('H:mm');
+        const event = Oskari.eventBuilder('TimeChangedEvent')(date, clock);
+        sandbox.notifyAll(event);
     }
 
     getMapZoom () {
