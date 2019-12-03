@@ -19,11 +19,11 @@ Oskari.clazz.define(
         this.log = Oskari.log('Oskari.mapframework.bundle.mapmodule.request.SetTimeRequestHandler');
     }, {
         handleRequest: function (core, request) {
-            if (!this.validateTime()) {
+            if (!request.validateTime()) {
                 this.log.warn('Invalid time format. Valid format is HH:mm');
                 return;
             }
-            if (!this.validateDate()) {
+            if (!request.validateDate()) {
                 this.log.warn('Invalid date format. Valid format is D/M.');
                 return;
             }
