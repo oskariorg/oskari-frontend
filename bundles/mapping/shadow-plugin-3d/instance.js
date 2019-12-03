@@ -4,7 +4,7 @@ Oskari.app.playBundle(
   bundlename : 'shadow-plugin-3d'
 });
 */
-Oskari.clazz.define('Oskari.mapping.shadowplugin3d.ShadowPlugin3dBundleInstance',
+Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowPlugin3dBundleInstance',
     function () {
         this._started = false;
         this.plugin = null;
@@ -42,8 +42,8 @@ Oskari.clazz.define('Oskari.mapping.shadowplugin3d.ShadowPlugin3dBundleInstance'
             if (this.plugin) {
                 return;
             }
-            var conf = this.conf || {};
-            var plugin = Oskari.clazz.create('Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin', conf);
+            const conf = {};
+            const plugin = Oskari.clazz.create('Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin', conf);
             this._mapmodule.registerPlugin(plugin);
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;

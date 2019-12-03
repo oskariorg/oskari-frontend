@@ -19,6 +19,9 @@ Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle"
         }, {
             "type": "text/javascript",
             "src": "../../../bundles/mapping/shadow-plugin-3d/plugin/ShadowingPluginClass.js"
+        }, {
+            "type": "text/javascript",
+            "src": "../../../bundles/mapping/shadow-plugin-3d/tool/ShadowiTool.js"
         }],
         "locales": [{
             "lang": "fi",
