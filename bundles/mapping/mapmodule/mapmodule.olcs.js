@@ -6,6 +6,7 @@ import { defaults as olControlDefaults } from 'ol/control';
 import OLCesium from 'olcs/OLCesium';
 import { MapModule as MapModuleOl } from './MapModuleClass.ol';
 import { LAYER_ID } from './domain/constants';
+import moment from 'moment';
 import 'olcs/olcs.css';
 
 const TILESET_DEFAULT_COLOR = '#ffd2a6';
@@ -18,6 +19,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._mapReady = false;
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
+        this._time = null;
     }
 
     /**
@@ -57,12 +59,12 @@ class MapModuleOlCesium extends MapModuleOl {
             resolutions: this.getResolutionArray()
         }));
 
-        var time = Cesium.JulianDate.fromIso8601('2017-07-11T12:00:00Z');
+        this.setTime('2019-06-01T12:00:00Z');
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
         this._map3D = new OLCesium({
             map: map,
-            time: () => time,
+            time: () => this.getTime(),
             sceneOptions: {
                 showCredit: true,
                 creditContainer,
@@ -79,6 +81,7 @@ class MapModuleOlCesium extends MapModuleOl {
         // Setting olcs property 'altitudeMode': 'clampToGround' to vector layer had some effect but wasn't good enough.
         // DepthTestAgainstTerrain should be enabled when 3D-tiles (buildings) are visible.
         scene.globe.depthTestAgainstTerrain = false;
+        scene.globe.enableLighting = true;
         scene.shadowMap.darkness = 0.7;
         scene.skyBox = this._createSkyBox();
 
@@ -286,6 +289,40 @@ class MapModuleOlCesium extends MapModuleOl {
             layerId: layer.get(LAYER_ID)
         });
         return hits;
+    }
+
+    /**
+     * @method getTime
+     * Gets time set for map shadowing
+     * @return {Cesium.JulianDate}
+     */
+    getTime () {
+        return this._time;
+    }
+
+    /**
+     * @method setTime
+     * Sets time for map shadowing
+     * @param {String} time in Iso8601 format
+     */
+    setTime (time) {
+        this._time = Cesium.JulianDate.fromIso8601(time);
+        this.notifyTimeChanged(time);
+    }
+
+    /**
+     * @method notifyTimeChanged
+     * Notify other components that the time has changed. Sends a TimeChangedEvent
+     * @param {String} time in Iso8601 format
+     */
+    notifyTimeChanged (time) {
+        const sandbox = this.getSandbox();
+
+        const dateObject = new Date(time);
+        const date = moment(dateObject).format('D/M');
+        const clock = moment(dateObject).format('H:mm');
+        const event = Oskari.eventBuilder('TimeChangedEvent')(date, clock);
+        sandbox.notifyAll(event);
     }
 
     getMapZoom () {

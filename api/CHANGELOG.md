@@ -9,6 +9,30 @@ Some extra tags:
 - [rpc] tag indicates that the change affects RPC API
 - [breaking] tag indicates that the change is not backwards compatible
 
+## 1.55.0
+
+### [add] [rpc] New SetTimeRequest Request
+
+Request to set time for 3d map.
+
+date
+Date as a string D/M
+```javascript
+'28/2' || '1/2' || '01/02' || '01/2'
+```
+
+time
+Time as a string H:m
+```javascript
+'10:22' || '9:02'
+```
+
+year
+Year as a number, defaults to current year (optional)
+```javascript
+2019 || 2010
+```
+
 ## 1.54.0
 
 ### [add] [rpc] New MapTourRequest Request
