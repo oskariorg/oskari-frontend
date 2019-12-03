@@ -1087,14 +1087,7 @@ Oskari.clazz.define(
             const event = Oskari.eventBuilder('MapTourEvent')(status, location, completed, cancelled);
             sandbox.notifyAll(event);
         },
-
-        notifyTimeChanged: function (time) {
-            const sandbox = this.getSandbox();
-
-            const event = Oskari.eventBuilder('TimeChangedEvent')(time);
-            sandbox.notifyAll(event);
-        },
-        /* --------------- /MAP STATE --- --------------------- */
+        /* --------------- /MAP STATE ------------------------ */
 
         /* ---------------- MAP MOBILE MODE ------------------- */
 

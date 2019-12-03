@@ -16,14 +16,18 @@ Oskari.clazz.define(
      */
     function (mapModule) {
         this.mapModule = mapModule;
+        this.log = Oskari.log('Oskari.mapframework.bundle.mapmodule.request.SetTimeRequestHandler');
     }, {
         handleRequest: function (core, request) {
-            const formattedDate = request.formatDate();
-            if (!formattedDate) {
-                const log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
-                log.warn('Invalid date and/or time format. Valid formats are d/m and HH:mm');
+            if (!this.validateTime()) {
+                this.log.warn('Invalid time format. Valid format is HH:mm');
                 return;
             }
+            if (!this.validateDate()) {
+                this.log.warn('Invalid date format. Valid format is D/M.');
+                return;
+            }
+            const formattedDate = request.formatDate();
 
             this.mapModule.setTime(formattedDate);
         }

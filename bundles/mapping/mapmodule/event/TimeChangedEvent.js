@@ -5,9 +5,9 @@ Oskari.clazz.define('Oskari.mapframework.event.common.TimeChangedEvent',
     /**
      * @static @method create called automatically on construction
      */
-    function (dateTime) {
-        this._dateTime = dateTime;
-        this._dateObject = new Date(dateTime);
+    function (date, time) {
+        this._date = date;
+        this._time = time;
     }, {
         /** @static @property __name event name */
         __name: 'TimeChangedEvent',
@@ -20,21 +20,12 @@ Oskari.clazz.define('Oskari.mapframework.event.common.TimeChangedEvent',
             return this.__name;
         },
 
-        getDateTime: function () {
-            return this._dateTime;
-        },
-
-        getDateObject: function () {
-            return this._dateObject;
-        },
-
         /**
          * @method getDate
          * @return {String} date formatted as D/M
          */
         getDate: function () {
-            const date = this.getDateObject();
-            return `${date.getDate()}/${date.getMonth() + 1}`;
+            return this._date;
         },
 
         /**
@@ -42,8 +33,14 @@ Oskari.clazz.define('Oskari.mapframework.event.common.TimeChangedEvent',
          * @return {String} time formatted as HH:mm
          */
         getTime: function () {
-            const date = this.getDateObject();
-            return `${date.getHours()}:${date.getMinutes()}`;
+            return this._time;
+        },
+
+        getParams: function () {
+            return {
+                'date': this.getDate(),
+                'time': this.getTime()
+            };
         }
     }, {
         /**
