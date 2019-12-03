@@ -6,7 +6,7 @@ import { VisibilityInfo } from './VisibilityInfo';
 import { OpacitySlider } from './OpacitySlider';
 import { StyleSettings } from './StyleSettings';
 import { ToolMenu } from './ToolMenu';
-import { Mutator, withLocale } from 'oskari-ui/util';
+import { Mutator } from 'oskari-ui/util';
 import { Row, ColAuto, ColAutoRight } from '../Grid';
 
 const GrayRow = styled(Row)`
@@ -48,7 +48,7 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, mutator }) => {
     }
 };
 
-const Footer = ({ layer, mutator, visibilityInfo }) => {
+export const Footer = ({ layer, mutator, visibilityInfo }) => {
     const tools = layer.getTools();
     const opacity = layer.getOpacity();
     const layerType = layer.getLayerType();
@@ -89,9 +89,5 @@ const Footer = ({ layer, mutator, visibilityInfo }) => {
 Footer.propTypes = {
     layer: PropTypes.object.isRequired,
     visibilityInfo: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    getMessage: PropTypes.func.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
-
-const wrapper = withLocale(Footer);
-export { wrapper as Footer };

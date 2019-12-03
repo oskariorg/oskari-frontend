@@ -16,9 +16,9 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator, getMessage }) => {
+const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator, Message }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
-        return <Alert showIcon type="info" description={getMessage('errors.noResults')}/>;
+        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults'/>}/>;
     }
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
@@ -49,7 +49,7 @@ LayerCollapse.propTypes = {
     filtered: PropTypes.array,
     selectedLayerIds: PropTypes.array.isRequired,
     mutator: PropTypes.any.isRequired,
-    getMessage: PropTypes.func.isRequired
+    Message: PropTypes.elementType.isRequired
 };
 
 const wrapped = withLocale(LayerCollapse);

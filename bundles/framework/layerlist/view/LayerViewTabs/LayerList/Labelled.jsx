@@ -16,16 +16,16 @@ const Elastic = styled('div')`
     }
 `;
 
-const Labelled = ({ label, children, Message }) =>
+const Labelled = ({ messageKey, children, Message }) =>
     <Elastic>
-        { label &&
-            <Message messageKey={label} LabelComponent={Label} />
+        { messageKey &&
+            <Message messageKey={messageKey} LabelComponent={Label} />
         }
         { children }
     </Elastic>;
 
 Labelled.propTypes = {
-    label: PropTypes.string,
+    messageKey: PropTypes.string,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.element),
         PropTypes.element

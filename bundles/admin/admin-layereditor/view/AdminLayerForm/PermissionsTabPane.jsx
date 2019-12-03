@@ -43,25 +43,27 @@ const renderRow = (modelRow) => {
             onChange = {checkboxOnChangeHandler}/>;
     });
 
-    return (<StyledListItem>
-        <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
-    </StyledListItem>);
+    return (
+        <StyledListItem>
+            <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
+        </StyledListItem>
+    );
 };
 
-const PermissionsTabPane = ({ getMessage, rolesAndPermissionTypes, permissions = {} }) => {
+const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, Message }) => {
     if (!rolesAndPermissionTypes) {
         return;
     }
     const { roles, permissionTypes } = rolesAndPermissionTypes;
 
     const localizedPermissionTypes = permissionTypes.map(permission => {
-        permission.localizedText = getMessage('rights.' + permission.id);
+        permission.localizedText = <Message messageKey={`rights.${permission.id}`}/>;
         return permission;
     });
 
     const headerRow = {
         isHeaderRow: true,
-        text: getMessage('rights.role'),
+        text: <Message messageKey='rights.role'/>,
         permissions: [],
         permissionTypes: localizedPermissionTypes
     };
@@ -86,7 +88,7 @@ const PermissionsTabPane = ({ getMessage, rolesAndPermissionTypes, permissions =
 PermissionsTabPane.propTypes = {
     rolesAndPermissionTypes: PropTypes.object,
     permissions: PropTypes.object,
-    getMessage: PropTypes.func.isRequired
+    Message: PropTypes.elementType.isRequired
 };
 
 const contextWrap = withLocale(PermissionsTabPane);

@@ -25,7 +25,7 @@ export const Message = ({ bundleKey, messageKey, messageArgs, getMessage, LabelC
 Message.propTypes = {
     bundleKey: PropTypes.string.isRequired,
     messageKey: PropTypes.string.isRequired,
-    messageArgs: PropTypes.arrayOf(PropTypes.oneOf([PropTypes.string, PropTypes.number])),
+    messageArgs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     getMessage: PropTypes.func,
     LabelComponent: PropTypes.elementType
 };

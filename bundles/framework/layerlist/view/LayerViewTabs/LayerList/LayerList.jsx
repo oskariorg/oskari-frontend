@@ -64,7 +64,7 @@ const Indicator = ({ show, children }) => {
 };
 
 const LayerList = React.forwardRef((props, ref) => {
-    const { error, loading = false, updating = false, mutator, getMessage } = props;
+    const { error, loading = false, updating = false, mutator, Message } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
@@ -91,11 +91,11 @@ const LayerList = React.forwardRef((props, ref) => {
                             mutator={filter.mutator}/>
                     </ControlsRow>
                 </Column>
-                <Tooltip title={getMessage('filter.search.tooltip')}>
+                <Tooltip title={<Message messageKey='filter.search.tooltip'/>}>
                     <InfoIcon type="question-circle" />
                 </Tooltip>
                 { showAddButton &&
-                    <Tooltip title={getMessage('layer.tooltip.addLayer')}>
+                    <Tooltip title={<Message messageKey='layer.tooltip.addLayer'/>}>
                         <AddButton icon="plus" onClick={addLayer} />
                     </Tooltip>
                 }
@@ -123,7 +123,7 @@ LayerList.propTypes = {
     showAddButton: PropTypes.bool,
     grouping: PropTypes.shape(grouping).isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
-    getMessage: PropTypes.func.isRequired
+    Message: PropTypes.elementType.isRequired
 };
 
 const wrapped = withLocale(React.memo(LayerList));

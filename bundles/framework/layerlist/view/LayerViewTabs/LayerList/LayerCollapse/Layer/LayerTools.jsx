@@ -28,10 +28,10 @@ const hasSubLayerMetadata = layer => {
     return !!subLayers.find(sub => !!sub.getMetadataIdentifier());
 };
 
-const getBackendStatus = (layer, getMessage) => {
+const getBackendStatus = layer => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {
-        text: getMessage(`backendStatus.${backendStatus}`),
+        messageKey: `backendStatus.${backendStatus}`,
         color: getStatusColor(backendStatus)
     };
     return status;
@@ -50,8 +50,8 @@ const getStatusColor = status => {
     }
 };
 
-const LayerTools = ({ model, mutator, getMessage }) => {
-    const backendStatus = getBackendStatus(model, getMessage);
+const LayerTools = ({ model, mutator, Message }) => {
+    const backendStatus = getBackendStatus(model);
     const infoIcon = {
         classes: ['layer-info']
     };
@@ -67,11 +67,11 @@ const LayerTools = ({ model, mutator, getMessage }) => {
                 <WarningIcon tooltip={reason.getDescription()}/>
             }
             { model.hasTimeseries() &&
-                <Tooltip title={getMessage('layer.tooltip.timeseries')}>
+                <Tooltip title={<Message messageKey='layer.tooltip.timeseries'/>}>
                     <TimeSerieIcon />
                 </Tooltip>
             }
-            <Tooltip title={backendStatus.text}>
+            <Tooltip title={<Message messageKey={backendStatus.messageKey}/>}>
                 <LayerIcon
                     fill={backendStatus.color}
                     type={model.getLayerType()}
@@ -87,7 +87,7 @@ const LayerTools = ({ model, mutator, getMessage }) => {
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
-    getMessage: PropTypes.func.isRequired
+    Message: PropTypes.elementType.isRequired
 };
 
 const wrapped = withLocale(LayerTools);
