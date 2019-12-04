@@ -28,6 +28,7 @@ class UIStateHandler extends StateHandler {
         const groupingOptions = GROUPING_PRESET.map(option =>
             new GroupingOption(option.key, this.locale.grouping[option.localeKey], option.method));
 
+        this.adminToolService = this._createAdminToolService();
         this.filterHandler = this._createFilterHandler();
         this.layerCollapseHandlers = this._createLayerCollapseHandlers(groupingOptions);
         const selectedGrouping = groupingOptions[0].getKey();
@@ -36,7 +37,7 @@ class UIStateHandler extends StateHandler {
         this.state = {
             loading: false,
             updating: false,
-            showAddButton: this.sandbox.hasHandler('ShowLayerEditorRequest'),
+            createTools: this._getCreateTools(),
             grouping: {
                 selected: selectedGrouping,
                 options: groupingOptions
@@ -50,6 +51,22 @@ class UIStateHandler extends StateHandler {
                 mutator: collapseHandler.getMutator()
             }
         };
+    }
+
+    _createAdminToolService () {
+        const service = this.sandbox.getService('Oskari.mapframework.service.LayerAdminToolService');
+        service.on('add', ({ tool }) => {
+            if (tool && tool.getTypes().includes(service.TYPE_CREATE)) {
+                this.updateState({ createTools: this._getCreateTools() });
+            }
+        });
+        return service;
+    }
+
+    _getCreateTools () {
+        const createTools = Object.values(this.adminToolService.getTools())
+            .filter(tool => tool.getTypes().includes(this.adminToolService.CREATE));
+        return createTools;
     }
 
     _createLayerCollapseHandlers (groupingOptions) {
@@ -144,7 +161,7 @@ class UIStateHandler extends StateHandler {
 
     updateAdminState () {
         this.updateState({
-            showAddButton: this.sandbox.hasHandler('ShowLayerEditorRequest')
+            createTools: this._getCreateTools()
         });
     }
 

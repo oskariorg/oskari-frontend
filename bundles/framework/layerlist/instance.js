@@ -1,3 +1,5 @@
+import './service/LayerAdminToolService';
+
 const FILTER_NEWEST_COUNT = 20;
 
 /**
@@ -89,6 +91,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
 
             const layerlistService = Oskari.clazz.create('Oskari.mapframework.service.LayerlistService');
             sandbox.registerService(layerlistService);
+
+            const adminToolService = Oskari.clazz.create('Oskari.mapframework.service.LayerAdminToolService');
+            sandbox.registerService(adminToolService);
 
             for (let p in this.eventHandlers) {
                 if (this.eventHandlers.hasOwnProperty(p)) {

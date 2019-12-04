@@ -18,11 +18,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.log = Oskari.log('layerlist');
         this.tabsHandler = new LayerViewTabsHandler(this.instance);
         this.tabsHandler.getLayerListHandler().loadLayers();
         this.tabsHandler.addStateListener(() => this.render());
-        Oskari.on('app.start', () => this.tabsHandler.getLayerListHandler().updateAdminState());
     }, {
 
         /**
@@ -52,7 +50,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Interface method implementation, does nothing atm
          * @method startPlugin
          */
-        startPlugin: function () { },
+        startPlugin: function () {
+            this.render();
+        },
         /**
          * @method stopPlugin
          *
@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * @param {string} activeFilterId
          */
         setActiveFilter: function (activeFilterId) {
-            const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
+            const filterHandler = this.tabsHandler.getFilterHandler();
             this.tabsHandler.stashCurrentState();
             filterHandler.stashCurrentState();
             filterHandler.updateState({
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             }
             const locale = this.instance.getLocalization();
             ReactDOM.render(
-                <LayerViewTabs {... this.tabsHandler.getState()}
+                <LayerViewTabs {...this.tabsHandler.getState()}
                     mutator={this.tabsHandler.getMutator()}
                     locale={locale} />,
                 this.container);
