@@ -4,6 +4,7 @@ import { LocaleContext } from 'oskari-ui/util';
 import { CameraControls3d } from '../view/CameraControls3d';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
+const shortName = 'CameraControls3dPlugin';
 
 Oskari.clazz.define(className,
     function () {
@@ -11,12 +12,19 @@ Oskari.clazz.define(className,
         this._defaultLocation = 'top right';
         this._toolOpen = false;
         this._index = 80;
-        this._log = Oskari.log(className);
+        this._log = Oskari.log(shortName);
         this.loc = Oskari.getMsg.bind(null, 'CameraControls3d');
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
     }, {
         getName: function () {
-            return className;
+            return shortName;
+        },
+        /**
+         * @method resetState
+         * Resets the state in the plugin
+         */
+        resetState: function () {
+            this.redrawUI(Oskari.util.isMobile());
         },
         /**
          * @public @method changeToolStyle
@@ -33,12 +41,10 @@ Oskari.clazz.define(className,
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          */
         redrawUI: function (mapInMobileMode) {
-            if (this.getElement()) {
-                this.teardownUI();
-            }
+            this.teardownUI();
             this._createUI(mapInMobileMode);
         },
-        teardownUI: function (mapInMobileMode) {
+        teardownUI: function () {
             if (!this.getElement()) {
                 return;
             }
