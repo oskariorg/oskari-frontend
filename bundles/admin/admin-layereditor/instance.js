@@ -57,15 +57,15 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             const event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             this.sandbox.notifyAll(event);
 
-            // add admin tool for adding new layers
-            const adminToolService = this.sandbox.getService('Oskari.mapframework.service.LayerAdminToolService');
-            if (adminToolService) {
+            // add layerlist tool for adding new layers
+            const toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
+            if (toolingService) {
                 const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
                 tool.setName('layer-editor-add-layer');
                 tool.setTitle(this.loc('addLayer'));
                 tool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
-                tool.setTypes([adminToolService.TYPE_CREATE]);
-                adminToolService.addTool(tool);
+                tool.setTypes([toolingService.TYPE_CREATE]);
+                toolingService.addTool(tool);
             }
         }
 

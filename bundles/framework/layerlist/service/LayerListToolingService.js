@@ -1,4 +1,4 @@
-class LayerAdminToolService {
+class LayerListToolingService {
     constructor () {
         this.tools = {};
         Oskari.makeObservable(this);
@@ -9,7 +9,7 @@ class LayerAdminToolService {
      * @return {String} service name
      */
     getName () {
-        return 'LayerAdminToolService';
+        return 'LayerListToolingService';
     }
 
     /**
@@ -17,7 +17,7 @@ class LayerAdminToolService {
      * @return {String} fully qualified name for service
      */
     getQName () {
-        return 'Oskari.mapframework.service.LayerAdminToolService';
+        return 'Oskari.mapframework.service.LayerListToolingService';
     }
 
     /**
@@ -39,9 +39,9 @@ class LayerAdminToolService {
     }
 }
 
-LayerAdminToolService.TYPE_CREATE = 'create';
+LayerListToolingService.TYPE_CREATE = 'create';
 
-Oskari.clazz.defineES('Oskari.mapframework.service.LayerAdminToolService',
-    LayerAdminToolService,
+Oskari.clazz.defineES('Oskari.mapframework.service.LayerListToolingService',
+    LayerListToolingService,
     { 'protocol': ['Oskari.mapframework.service.Service'] }
 );
