@@ -81,7 +81,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * @param {string} activeFilterId
          */
         setActiveFilter: function (activeFilterId) {
-            const filterHandler = this.tabsHandler.getFilterHandler();
+            const filterHandler = this.tabsHandler.getLayerListHandler().getFilterHandler();
             this.tabsHandler.stashCurrentState();
             filterHandler.stashCurrentState();
             filterHandler.updateState({

@@ -32,8 +32,7 @@ Oskari.registerLocalization(
             },
             'layer': {
                 'tooltip': {
-                    'timeseries': 'Kartlager med tidsserie',
-                    'addLayer': 'Lägg till ett nytt kartlager'
+                    'timeseries': 'Kartlager med tidsserie'
                 },
                 'styles': {
                     'title': 'Stil'

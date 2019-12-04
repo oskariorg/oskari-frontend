@@ -62,8 +62,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             if (adminToolService) {
                 const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
                 tool.setName('layer-editor-add-layer');
-                tool.setTitle('Add new Layer');
-                tool.setTooltip('Add new Layer');
+                tool.setTitle(this.loc('addLayer'));
                 tool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
                 tool.setTypes([adminToolService.TYPE_CREATE]);
                 adminToolService.addTool(tool);
