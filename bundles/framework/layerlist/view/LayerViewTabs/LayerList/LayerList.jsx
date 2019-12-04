@@ -70,7 +70,7 @@ const LayerList = React.forwardRef((props, ref) => {
 
     return (
         <Content spacing={'15px'}>
-            <Row spacing={'5px'}>
+            <Row spacing={'8px'}>
                 <Column spacing={'10px'}>
                     <Search ref={ref} searchText={searchText} mutator={filter.mutator} locale={locale} />
                     <ControlsRow spacing={'10px'}>

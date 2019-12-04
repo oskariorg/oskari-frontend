@@ -11,7 +11,7 @@ export const CreateTools = ({ tools }) => {
     const items = tools.map(tool => ({ title: getToolTitle(tool), action: tool.getCallback() }));
     return (
         <Dropdown placement="bottomRight" items={items} click={false}>
-            <Button icon="plus"></Button>
+            <Button icon="plus" />
         </Dropdown>
     );
 };

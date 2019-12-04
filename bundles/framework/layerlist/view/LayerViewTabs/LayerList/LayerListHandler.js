@@ -159,12 +159,6 @@ class UIStateHandler extends StateHandler {
         mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, { forceProxy });
     }
 
-    updateAdminState () {
-        this.updateState({
-            createTools: this._getCreateTools()
-        });
-    }
-
     setGrouping (groupingKey) {
         const handler = this.getCollapseHandler(groupingKey);
         if (!handler) {
