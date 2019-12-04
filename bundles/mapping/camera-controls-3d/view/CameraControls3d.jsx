@@ -34,6 +34,8 @@ const MapControlContainer = styled.div`
     -webkit-box-shadow: ${iconShadow};
     -o-box-shadow: ${iconShadow};
     background-color: ${props => props.controlIsActive && !props.isMobile ? secondaryColor : darkBgColor};
+    opacity: ${props => props.disabled ? 0.3 : 1.0};
+    pointer-events: ${props => props.disabled ? 'none': 'auto'};
 `;
 
 const MapControl = styled.div`
@@ -88,12 +90,12 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
 
     const moveMapControl = <MoveMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodMove);
-        setCameraToMoveMode(activeMapMoveMethod);
+        setCameraToMoveMode();
     }} title={mapInMobileMode ? '' : getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>;
 
     const rotateMapControl = <RotateMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodRotate);
-        setCameraToRotateMode(activeMapMoveMethod);
+        setCameraToRotateMode();
     }} title={ mapInMobileMode ? '' : getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>;
 
     const upControl = <UpIcon mapInMobileMode={mapInMobileMode}
@@ -112,10 +114,10 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
                 <MapControl>{rotateMapControl}</MapControl>
             </MapControlContainer>
             <Break/>
-            <MapControlContainer>
+            <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
                 <MapControl>{upControl}</MapControl>
             </MapControlContainer>
-            <MapControlContainer>
+            <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
                 <MapControl>{downControl}</MapControl>
             </MapControlContainer>
         </MapControlsContainer>;
