@@ -26,60 +26,50 @@ const AdminLayerForm = ({
     onDelete,
     onSave,
     getMessage,
+    Message,
     rolesAndPermissionTypes
-}) => {
-    const mappedMessages = [];
-    messages.forEach(m => {
-        if (m.key) {
-            m.text = getMessage(m.key);
+}) => (
+    <StyledRoot>
+        { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
+        <Tabs>
+            <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
+                <GeneralTabPane dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} layer={layer} service={mutator} />
+            </TabPane>
+            <TabPane key='visual' tab={<Message messageKey='visualizationTabTitle'/>}>
+                <VisualizationTabPane layer={layer} service={mutator} />
+            </TabPane>
+            <TabPane key='additional' tab={<Message messageKey='additionalTabTitle'/>}>
+                <AdditionalTabPane layer={layer} service={mutator} />
+            </TabPane>
+            <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
+                <PermissionsTabPane
+                    rolesAndPermissionTypes={rolesAndPermissionTypes}
+                    permissions={layer.role_permissions} />
+            </TabPane>
+        </Tabs>
+        <PaddedButton type='primary' onClick={() => onSave()}>
+            <Message messageKey={layer.isNew ? 'add' : 'save'}/>
+        </PaddedButton>
+        { !layer.isNew &&
+            <Confirm
+                title={<Message messageKey='messages.confirmDeleteLayer'/>}
+                onConfirm={() => onDelete()}
+                okText={getMessage('ok')}
+                cancelText={getMessage('cancel')}
+                placement='bottomLeft'
+            >
+                <PaddedButton>
+                    <Message messageKey='delete'/>
+                </PaddedButton>
+            </Confirm>
         }
-        if (m.text) {
-            mappedMessages.push(<PaddedAlert key={m.key} message={m.text} type={m.type} />);
+        { onCancel &&
+            <Button onClick={() => onCancel()}>
+                <Message messageKey='cancel'/>
+            </Button>
         }
-    });
-    return (
-        <StyledRoot>
-            { mappedMessages }
-            <Tabs>
-                <TabPane tab={getMessage('generalTabTitle')} key='general'>
-                    <GeneralTabPane
-                        dataProviders={dataProviders}
-                        mapLayerGroups={mapLayerGroups}
-                        layer={layer}
-                        service={mutator} />
-                </TabPane>
-                <TabPane tab={getMessage('visualizationTabTitle')} key='visual'>
-                    <VisualizationTabPane layer={layer} service={mutator} />
-                </TabPane>
-                <TabPane tab={getMessage('additionalTabTitle')} key='additional'>
-                    <AdditionalTabPane layer={layer} service={mutator} />
-                </TabPane>
-                <TabPane tab={getMessage('permissionsTabTitle')} key='permissions'>
-                    <PermissionsTabPane
-                        rolesAndPermissionTypes={rolesAndPermissionTypes}
-                        permissions={layer.role_permissions} />
-                </TabPane>
-            </Tabs>
-            <PaddedButton type='primary' onClick={() => onSave()}>
-                { layer.isNew &&
-                    getMessage('add')
-                }
-                { !layer.isNew &&
-                    getMessage('save')
-                }
-            </PaddedButton>
-            { !layer.isNew &&
-                <Confirm title={getMessage('messages.confirmDeleteLayer')} onConfirm={() => onDelete()}
-                    okText={getMessage('ok')} cancelText={getMessage('cancel')} placement='bottomLeft'>
-                    <PaddedButton>{getMessage('delete')}</PaddedButton>
-                </Confirm>
-            }
-            { onCancel &&
-                <Button onClick={() => onCancel()}>{getMessage('cancel')}</Button>
-            }
-        </StyledRoot>
-    );
-};
+    </StyledRoot>
+);
 
 AdminLayerForm.propTypes = {
     mutator: PropTypes.object.isRequired,
@@ -91,6 +81,7 @@ AdminLayerForm.propTypes = {
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
+    Message: PropTypes.elementType.isRequired,
     rolesAndPermissionTypes: PropTypes.object
 };
 

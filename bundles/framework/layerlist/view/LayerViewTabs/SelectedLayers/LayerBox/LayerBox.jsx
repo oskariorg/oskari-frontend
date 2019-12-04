@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Footer } from './Footer/';
-import { Mutator } from 'oskari-ui/util';
+import { Mutator, withLocale } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Icon } from 'oskari-ui';
@@ -25,7 +25,7 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
-export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
+const LayerBox = ({ layer, index, visibilityInfo, mutator, Message }) => {
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
@@ -68,7 +68,9 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                                 <Fragment>
                                                     <br/>
                                                     <Icon type="check" style={{ color: '#01ca79' }} />
-                                                    <Publishable>{locale.layer.publishable}</Publishable>
+                                                    <Publishable>
+                                                        <Message messageKey={'layer.publishable'} />
+                                                    </Publishable>
                                                 </Fragment>
                                                 }
                                             </ColAutoRight>
@@ -82,7 +84,7 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <Footer layer={layer} mutator={mutator} visibilityInfo={visibilityInfo} locale={locale} />
+                                <Footer layer={layer} mutator={mutator} visibilityInfo={visibilityInfo}/>
                             </StyledBox>
                         </Col>
                     </Row>
@@ -95,7 +97,10 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-    locale: PropTypes.object.isRequired,
+    visibilityInfo: PropTypes.object.isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
-    visibilityInfo: PropTypes.object.isRequired
+    Message: PropTypes.elementType.isRequired
 };
+
+const wrapped = withLocale(LayerBox);
+export { wrapped as LayerBox };

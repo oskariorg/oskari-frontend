@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse } from 'oskari-ui';
+import { withLocale } from 'oskari-ui/util';
 import { LayerCollapsePanel } from './LayerCollapsePanel';
 import { Alert } from '../Alert';
 import styled from 'styled-components';
@@ -15,9 +16,9 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-export const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator, locale }) => {
+const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator, Message }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
-        return <Alert showIcon type="info" description={locale.errors.noResults}/>;
+        return <Alert showIcon type='info' message={<Message messageKey='errors.noResults'/>}/>;
     }
     return (
         <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
@@ -34,7 +35,6 @@ export const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutat
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
                             mutator={mutator}
-                            locale={locale}
                         />
                     );
                 })
@@ -49,5 +49,8 @@ LayerCollapse.propTypes = {
     filtered: PropTypes.array,
     selectedLayerIds: PropTypes.array.isRequired,
     mutator: PropTypes.any.isRequired,
-    locale: PropTypes.any.isRequired
+    Message: PropTypes.elementType.isRequired
 };
+
+const wrapped = withLocale(LayerCollapse);
+export { wrapped as LayerCollapse };

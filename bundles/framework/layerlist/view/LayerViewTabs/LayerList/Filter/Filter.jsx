@@ -1,20 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Tooltip } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Mutator, withLocale } from 'oskari-ui/util';
 import { Labelled } from '../Labelled';
 
-const Filter = ({ filters, activeFilterId, mutator, locale }) => {
-    const { title, placeholder } = locale.filter;
-    const filterSelect = {
-        placeholder,
-        onChange: mutator.setActiveFilterId
-    };
+const Filter = ({ filters, activeFilterId, mutator, Message }) => {
     let tooltip;
-
+    let activeFilterProps = {};
     if (activeFilterId) {
         // Don't set null value to Select. It would replace the placeholder.
-        filterSelect.value = activeFilterId;
+        activeFilterProps.value = activeFilterId;
         // Show tooltip of the active filter.
         const active = filters.find(cur => cur.id === activeFilterId);
         if (active) {
@@ -23,14 +18,18 @@ const Filter = ({ filters, activeFilterId, mutator, locale }) => {
     }
 
     return (
-        <Labelled label={title}>
+        <Labelled messageKey='filter.title'>
             <Tooltip title={tooltip}>
-                <Select {...filterSelect} allowClear>
+                <Select
+                    placeholder={<Message messageKey='filter.placeholder'/>}
+                    onChange={mutator.setActiveFilterId}
+                    allowClear
+                    {...activeFilterProps}
+                >
                     {
-                        filters.map(filter => {
-                            const { id, text } = filter;
-                            return <Option key={id} value={id}>{text}</Option>;
-                        })
+                        filters.map(({ id, text }) => (
+                            <Option key={id} value={id}>{text}</Option>
+                        ))
                     }
                 </Select>
             </Tooltip>
@@ -47,8 +46,8 @@ Filter.propTypes = {
     filters: PropTypes.arrayOf(PropTypes.shape(filterBtnShape)).isRequired,
     activeFilterId: PropTypes.string,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
-    locale: PropTypes.object.isRequired
+    Message: PropTypes.elementType.isRequired
 };
 
-const memoized = React.memo(Filter);
+const memoized = React.memo(withLocale(Filter));
 export { memoized as Filter };

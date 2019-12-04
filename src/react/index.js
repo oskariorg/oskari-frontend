@@ -25,3 +25,4 @@ export { Icon } from '../../bundles/admin/admin-layereditor/components/Icon';
 export { WarningIcon } from '../../bundles/admin/admin-layereditor/components/WarningIcon';
 export { Tooltip } from '../../bundles/admin/admin-layereditor/components/Tooltip';
 export { LocalizationComponent } from './components/LocalizationComponent';
+export { Message } from './components/Message';
