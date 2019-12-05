@@ -13,29 +13,29 @@ const VerticalComponent = styled(StyledComponent)`
 `;
 
 const VisualizationTabPane = (props) => {
-    const { layer, service, getMessage } = props;
+    const { layer, service, Message } = props;
     return (
         <StyledTab>
             <StyledColumnLeft>
-                <label>{getMessage('opacity')}</label>
+                <Message messageKey='opacity'/>
                 <StyledComponent>
                     <Opacity key={layer.id} defaultValue={layer.opacity} onChange={(value) => service.setOpacity(value)} />
                 </StyledComponent>
-                <label>{getMessage('style')}</label>
+                <Message messageKey='style'/>
                 <StyledComponent>
                     <StyleSelect styles={layer.styles} currentStyle={layer.style} service={service} />
                 </StyledComponent>
-                <label>{getMessage('styleJSON')}</label>
+                <Message messageKey='styleJSON'/>
                 <StyledComponent>
                     <TextAreaInput rows={6} value={layer.styleJSON} onChange={(evt) => service.setStyleJSON(evt.target.value)} />
                 </StyledComponent>
-                <label>{getMessage('hoverJSON')}</label>
+                <Message messageKey='hoverJSON'/>
                 <StyledComponent>
                     <TextAreaInput rows={6} value={layer.hoverJSON} onChange={(evt) => service.setHoverJSON(evt.target.value)}/>
                 </StyledComponent>
             </StyledColumnLeft>
             <StyledColumnRight>
-                <label>{getMessage('minAndMaxScale')}</label>
+                <Message messageKey='minAndMaxScale'/>
                 <VerticalComponent>
                     <Slider key={layer.id}
                         vertical
@@ -54,7 +54,7 @@ VisualizationTabPane.propTypes = {
     layer: PropTypes.object,
     service: PropTypes.any,
     visualizationProps: PropTypes.any,
-    getMessage: PropTypes.func
+    Message: PropTypes.elementType.isRequired
 };
 
 const contextWrap = withLocale(VisualizationTabPane);

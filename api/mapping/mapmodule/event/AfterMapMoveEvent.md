@@ -27,7 +27,7 @@ Event is used to notify that map has been moved or zoomed.
   <td> \* scale </td><td> Number </td><td> map scale </td><td> </td>
 </tr>
 <tr>
-  <td> \* creator </td><td> String </td><td> class identifier of an object that sends an event </td><td> </td>
+  <td> \* camera </td><td> Object </td><td> camera orientation for 3d maps </td><td> </td>
 </tr>
 </table>
 
@@ -51,9 +51,6 @@ Event occurs after a map has been moved or zoomed.
 ### getName()
 Returns name of the event
 
-### getCreator()
-Returns class identifier of an object that sends an event
-
 ### getCenterX()
 Returns map center x coordinate
 
@@ -65,6 +62,9 @@ Returns map zoom level
 
 ### getScale()
 Returns map scale
+
+### getCamera()
+Returns object for camera orientation containing heading, pitch and roll. (Only in 3d map)
 
 ### getParams()
 Returns all the parameters of the event as an object:

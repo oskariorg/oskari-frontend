@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withLocale } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 export const Label = styled('div')`
@@ -15,18 +16,22 @@ const Elastic = styled('div')`
     }
 `;
 
-export const Labelled = ({ label, children }) =>
+const Labelled = ({ messageKey, children, Message }) =>
     <Elastic>
-        { label &&
-            <Label>{ label }</Label>
+        { messageKey &&
+            <Message messageKey={messageKey} LabelComponent={Label} />
         }
         { children }
     </Elastic>;
 
 Labelled.propTypes = {
-    label: PropTypes.string,
+    messageKey: PropTypes.string,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.element),
         PropTypes.element
-    ]).isRequired
+    ]).isRequired,
+    Message: PropTypes.elementType.isRequired
 };
+
+const wrapped = withLocale(Labelled);
+export { wrapped as Labelled };

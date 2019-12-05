@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { shapes } from './propTypes';
 import styled from 'styled-components';
 import { Tabs, TabPane } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Mutator, withMutator, withLocale } from 'oskari-ui/util';
 import { LayerList } from './LayerList/';
 import { SelectedLayers, SelectedTab } from './SelectedLayers/';
 import { TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from '.';
@@ -30,9 +30,8 @@ const focus = ref => {
     }
 };
 
-export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator, locale }) => {
+const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator, Message }) => {
     const searchTermInputRef = useRef(null);
-    const { tabs } = locale;
     useEffect(() => {
         if (autoFocusSearch) {
             focus(searchTermInputRef);
@@ -48,20 +47,23 @@ export const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch,
     };
     return (
         <ControlledTabs tabPosition='top' tab={tab} onChange={onChange}>
-            <TabPane tab={tabs.layerList} key={TABS_ALL_LAYERS}>
-                <LayerList ref={searchTermInputRef} {...layerList.state} mutator={layerList.mutator} locale={locale} />
+            <TabPane
+                key={TABS_ALL_LAYERS}
+                tab={<Message messageKey='tabs.layerList' />}
+            >
+                <LayerList ref={searchTermInputRef} {...layerList.state} mutator={layerList.mutator} />
             </TabPane>
             <TabPane
+                key={TABS_SELECTED_LAYERS}
                 tab={
                     // The initial render causes the badge to blink.
                     // When the key changes, React creates a new instance of the component and the blinking starts again.
                     <SelectedTab
                         key={selectedLayers.state.layers.length}
                         num={selectedLayers.state.layers.length}
-                        text={tabs.selectedLayers}/>
-                }
-                key={TABS_SELECTED_LAYERS}>
-                <SelectedLayers {...selectedLayers.state} locale={locale} mutator={selectedLayers.mutator}/>
+                        messageKey='tabs.selectedLayers'/>
+                }>
+                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator}/>
             </TabPane>
         </ControlledTabs>
     );
@@ -73,5 +75,8 @@ LayerViewTabs.propTypes = {
     tab: PropTypes.string,
     autoFocusSearch: PropTypes.bool,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
-    locale: PropTypes.shape({ tabs: PropTypes.object }).isRequired
+    Message: PropTypes.elementType.isRequired
 };
+
+const contextWrap = withMutator(withLocale(LayerViewTabs));
+export { contextWrap as LayerViewTabs };

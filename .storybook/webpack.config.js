@@ -9,7 +9,7 @@ module.exports = async ({ config, mode }) => {
     // Make whatever fine-grained changes you need
     OskariConfig.getStyleFileRules().forEach(rule => config.module.rules.push(rule));
     config.resolve = OskariConfig.RESOLVE;
-    
+
     const babelLoader = OskariConfig.BABEL_LOADER_RULE;
     babelLoader.exclude.push(/node_modules/);
     config.module.rules.push(babelLoader);

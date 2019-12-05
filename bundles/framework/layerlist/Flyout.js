@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { LocaleContext, MutatorContext } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
 
 /**
@@ -99,12 +100,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             if (!this.container) {
                 return;
             }
-            const locale = this.instance.getLocalization();
-            ReactDOM.render(
-                <LayerViewTabs {...this.tabsHandler.getState()}
-                    mutator={this.tabsHandler.getMutator()}
-                    locale={locale} />,
-                this.container);
+            const content = (
+                <LocaleContext.Provider value={{ bundleKey: this.instance.getName() }}>
+                    <MutatorContext.Provider value={this.tabsHandler}>
+                        <LayerViewTabs {...this.tabsHandler.getState()}/>
+                    </MutatorContext.Provider>
+                </LocaleContext.Provider>
+            );
+            ReactDOM.render(content, this.container);
         }
     }, {
 
