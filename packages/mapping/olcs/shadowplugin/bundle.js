@@ -15,26 +15,26 @@ Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle"
     "source": {
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../bundles/mapping/shadow-plugin-3d/instance.js"
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/mapping/shadow-plugin-3d/plugin/ShadowingPluginClass.js"
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/plugin/ShadowingPluginClass.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../bundles/mapping/shadow-plugin-3d/tool/ShadowiTool.js"
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/tool/ShadowTool.js"
         }],
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../bundles/mapping/shadow-plugin-3d/resources/locale/fi.js"
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../bundles/mapping/shadow-plugin-3d/resources/locale/sv.js"
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../bundles/mapping/shadow-plugin-3d/resources/locale/en.js"
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/locale/en.js"
         }]
     },
     "bundle": {
