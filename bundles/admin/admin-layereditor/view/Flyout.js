@@ -16,6 +16,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.dataProviders = [];
         this.mapLayerGroups = [];
         this.service = new AdminLayerFormService(() => this.update());
+        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.mapLayerService.addStateListener(() => this.update());
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -67,18 +69,20 @@ export class LayerEditorFlyout extends ExtraFlyout {
         ReactDOM.render(uiCode, el.get(0));
     }
     getEditorUI () {
+        const layer = this.service.getLayer();
         return (
             <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor' }}>
                 <MutatorContext.Provider value={this.service}>
                     <LayerWizard
-                        layer={this.service.getLayer()}
+                        layer={layer}
                         capabilities={this.service.getCapabilities()}
                         loading={this.service.isLoading()}
-                        layerTypes={this.service.getLayerTypes()}>
+                        layerTypes={this.mapLayerService.getLayerTypes()}
+                        versions = {this.mapLayerService.getVersionsForType(layer.type)}>
                         <AdminLayerForm
                             mapLayerGroups={this.mapLayerGroups}
                             dataProviders={this.dataProviders}
-                            layer={this.service.getLayer()}
+                            layer={layer}
                             messages={this.service.getMessages()}
                             rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
                             onDelete={() => this.service.deleteLayer()}

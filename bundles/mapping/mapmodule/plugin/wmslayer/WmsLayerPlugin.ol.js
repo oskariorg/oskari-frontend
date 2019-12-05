@@ -18,6 +18,7 @@ Oskari.clazz.define(
      */
     function () {
         this._log = Oskari.log(this.getName());
+        this.availableVersions = ['1.1.1', '1.3.0'];
     },
     {
         __name: 'WmsLayerPlugin',
@@ -26,6 +27,11 @@ Oskari.clazz.define(
 
         getLayerTypeSelector: function () {
             return 'WMS';
+        },
+
+        _initImpl () {
+            const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            mapLayerService.registerLayerModel(this.getLayerTypeSelector().toLowerCase() + 'layer', 'Oskari.mapframework.domain.WmsLayer', this.availableVersions);
         },
 
         _createPluginEventHandlers: function () {
