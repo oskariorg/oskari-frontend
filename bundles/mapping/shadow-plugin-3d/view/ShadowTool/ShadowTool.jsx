@@ -21,7 +21,7 @@ const StyledIcon = styled(Icon)`
     margin-right: 15px;
 `;
 
-export const ShadowPlugin = ({ getMessage }) => {
+export const ShadowTool = ({ getMessage }) => {
     const onChange = (date, dateString) => {
         console.log(date, dateString);
     };
@@ -36,6 +36,6 @@ export const ShadowPlugin = ({ getMessage }) => {
         </Background>
     );
 };
-ShadowPlugin.propTypes = {
+ShadowTool.propTypes = {
     getMessage: PropTypes.func.isRequired
 };

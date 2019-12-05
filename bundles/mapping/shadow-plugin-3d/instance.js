@@ -4,7 +4,7 @@ Oskari.app.playBundle(
   bundlename : 'shadow-plugin-3d'
 });
 */
-Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowPlugin3dBundleInstance',
+Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance',
     function () {
         this._started = false;
         this.plugin = null;
