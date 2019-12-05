@@ -1,41 +1,73 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Icon, TimePicker, DatePicker } from 'oskari-ui';
-import moment from 'moment';
+import { Icon, Button } from 'oskari-ui';
 
 const Background = styled.div`
     background-color: #3c3c3c;
-    border-radius: 5px;
-    height: 150px;
+    min-height: 90px;
     width: 250px;
     padding: 20px;
-`;
-
-const Title = styled.h1`
-    font-size: 16px;
-    color: #fff;
+    margin: -10px;
 `;
 
 const StyledIcon = styled(Icon)`
     margin-right: 15px;
 `;
 
-export const ShadowTool = ({ getMessage }) => {
-    const onChange = (date, dateString) => {
-        console.log(date, dateString);
+const Row = styled.div`
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-around;
+    flex-wrap: wrap;
+`;
+
+const Col = styled.div`
+    flex-basis: 0;
+    flex-grow: 1;
+    max-width: 100%;
+    position: relative;
+`;
+
+const StyledInput = styled.input`
+    border-radius: 2px;
+    box-shadow: inset 0.5px 0.5px 1.5px 0 rgba(0, 0, 0, 0.5);
+    width: 60px;
+    border: none;
+    height: 30px;
+`;
+
+const StyledButton = styled(Button)`
+    background: #ffd400;
+    color: #000;
+    width: 100%;
+    height: 30px;
+`;
+
+export const ShadowTool = () => {
+    const [time, setTime] = React.useState('12:00');
+    const [date, setDate] = React.useState('01/06');
+    const setCurrentTime = () => {
+        const date = new Date();
+        setTime(`${date.getHours()}:${date.getMinutes()}`);
+        setDate(`${date.getDate()}/${date.getMonth() + 1}`);
     };
-    const format = 'HH:mm';
     return (
         <Background>
-            <Title>{getMessage('title')}</Title>
-            <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-            <DatePicker defaultValue={moment('06-06', 'MM-DD')} onChange={onChange} /><br/>
-            <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-            <TimePicker defaultValue={moment('12:08', format)} format={format} />
+            <Row>
+                <Col>
+                    <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
+                    <StyledInput value={date} onChange={setDate} />
+                </Col>
+                <Col>
+                    <StyledButton onClick={setCurrentTime}>Nykyhetki</StyledButton>
+                </Col>
+            </Row>
+            <Row style={{ marginTop: '20px' }}>
+                <Col>
+                    <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
+                    <StyledInput value={time} onChange={setTime} />
+                </Col>
+            </Row>
         </Background>
     );
-};
-ShadowTool.propTypes = {
-    getMessage: PropTypes.func.isRequired
 };

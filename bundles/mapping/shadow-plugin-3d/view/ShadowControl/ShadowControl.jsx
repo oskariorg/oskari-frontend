@@ -1,12 +1,10 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withLocale } from 'oskari-ui/util';
 import { ShadowIcon } from '../../resources/icons/ShadowIcon';
 
 const iconShadow = '1px 1px 2px rgba(0,0,0,0.6)';
 const darkBgColor = 'rgba(20,20,20,0.8)';
-// TODO: Change secondary color reference later when global way available
 const secondaryColor = '#006ce8';
 
 const MapControlsContainer = styled.div`
@@ -42,25 +40,16 @@ const MapControl = styled.div`
     text-align: center;
 `;
 
-const openShadowTool = () => {
-    console.log('openTool');
-};
-
-const ShadowControl = ({ getMessage }) => {
+const ShadowControl = () => {
     return (
         <MapControlsContainer>
             <MapControlContainer>
                 <MapControl>
-                    <ShadowIcon clickHandler={() => {
-                        openShadowTool();
-                    }} />
+                    <ShadowIcon />
                 </MapControl>
             </MapControlContainer>
         </MapControlsContainer>
     );
-};
-ShadowControl.propTypes = {
-    getMessage: PropTypes.func.isRequired
 };
 
 const contextWrap = withLocale(ShadowControl);
