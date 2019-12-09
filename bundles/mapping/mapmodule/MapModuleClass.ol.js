@@ -153,7 +153,7 @@ export class MapModule extends AbstractMapModule {
             // - Most others composedPath() https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
             // - Polyfilled for IE/Edge on src/polyfills.js
             var path = event.path || (event.composedPath && event.composedPath()) || [];
-            const foundInfoBox = path.find(item => item.id === 'getinforesult');
+            const foundInfoBox = path.find(item => (item.className || '').indexOf('olPopup') !== -1);
             return typeof foundInfoBox !== 'undefined';
         }
 
