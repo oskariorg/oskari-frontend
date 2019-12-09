@@ -98,6 +98,9 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 } else {
                     me.options.container.append(popup);
                 }
+                if (me.options.showHeading === false) {
+                    popup.find('.oskari-flyoutheading').css('display', 'none');
+                }
                 popup.find('.icon-close').on('click', function () {
                     me.hide();
                 });

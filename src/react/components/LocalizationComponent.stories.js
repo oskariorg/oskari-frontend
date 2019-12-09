@@ -56,6 +56,12 @@ const value = {
         title: 'Title in german'
     }
 };
+const singleValue = {
+    fi: 'Otsikko',
+    sv: 'Titel',
+    en: 'Title',
+    it: 'Title in italian'
+};
 
 const Label = styled('div')`
     color: red;
@@ -90,6 +96,19 @@ storiesOf('LocalizationComponent', module)
         >
             <TextInput name="title"/>
             <TextInput name="subtitle"/>
+        </LocalizationComponent>
+    ))
+    .add('Single value', () => (
+        <LocalizationComponent
+            languages={Oskari.getSupportedLanguages()}
+            value={singleValue}
+            labels={labels}
+            onChange={console.log}
+            defaultOpen
+            single
+            LabelComponent={Label}
+        >
+            <TextInput/>
         </LocalizationComponent>
     ))
     .add('With inline content', () => (

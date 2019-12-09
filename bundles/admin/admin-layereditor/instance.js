@@ -1,6 +1,7 @@
 import { LayerEditorFlyout } from './view/Flyout';
 import { ShowLayerEditorRequest } from './request/ShowLayerEditorRequest';
 import { ShowLayerEditorRequestHandler } from './request/ShowLayerEditorRequestHandler';
+import { LocalizingFlyout } from './view/LocalizingFlyout';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
@@ -26,6 +27,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         }
         _startImpl () {
             this._setupLayerTools();
+            this._setupAdminTooling();
             this._loadDataProviders();
             this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
         }
@@ -56,16 +58,34 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             // update all layers at once since we suppressed individual events
             const event = Oskari.eventBuilder('MapLayerEvent')(null, 'tool');
             this.sandbox.notifyAll(event);
+        }
 
+        /**
+         * Adds admin tools to layer list
+         */
+        _setupAdminTooling () {
             // add layerlist tool for adding new layers
             const toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
             if (toolingService) {
-                const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                tool.setName('layer-editor-add-layer');
-                tool.setTitle(this.loc('addLayer'));
-                tool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
-                tool.setTypes([toolingService.TYPE_CREATE]);
-                toolingService.addTool(tool);
+                const addLayerTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+                addLayerTool.setName('layer-editor-add-layer');
+                addLayerTool.setTitle(this.loc('addLayer'));
+                addLayerTool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
+                addLayerTool.setTypes([toolingService.TYPE_CREATE]);
+                toolingService.addTool(addLayerTool);
+
+                const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+                addDataProviderTool.setName('layer-editor-add-data-provider');
+                addDataProviderTool.setTitle(this.loc('addDataProvider'));
+                addDataProviderTool.setCallback(evt => {
+                    const position = {
+                        left: evt.pageX - 100,
+                        top: evt.pageY - 200
+                    };
+                    this._showDataProviderForm(position);
+                });
+                addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
+                toolingService.addTool(addDataProviderTool);
             }
         }
 
@@ -98,6 +118,26 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
 
             service.addToolForLayer(layer, tool, suppressEvent);
         }
+
+        _showDataProviderForm (position) {
+            if (!this.dataProviderFlyout) {
+                this.dataProviderFlyout = new LocalizingFlyout(this.loc('addDataProvider'), {
+                    showHeading: false
+                });
+                this.dataProviderFlyout.makeDraggable({
+                    handle: '.oskari-flyouttoolbar',
+                    scroll: false
+                });
+            }
+            const { left, top } = position;
+            this.dataProviderFlyout.move(left, top, true);
+            if (this.dataProviderFlyout.isVisible()) {
+                this.dataProviderFlyout.bringToTop();
+            } else {
+                this.dataProviderFlyout.show();
+            }
+        }
+
         /**
          * @method _showEditor
          * Opens flyout with layer editor for given layerId
