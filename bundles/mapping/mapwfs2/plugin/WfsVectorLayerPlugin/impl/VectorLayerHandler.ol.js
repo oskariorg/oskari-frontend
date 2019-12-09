@@ -149,11 +149,14 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         if (!layer) {
             return;
         }
-        const source = this._getLayerSource(layer);
-        if (!source) {
-            return;
-        }
-        source.clear();
+        const olLayers = this.plugin.getOLMapLayers(layer.getId());
+        olLayers.forEach(olLayer => {
+            const source = olLayer.getSource();
+            if (!source) {
+                return;
+            }
+            source.refresh();
+        });
         this._loadFeaturesForLayer(layer);
     }
     /**
@@ -275,13 +278,14 @@ export class VectorLayerHandler extends AbstractLayerHandler {
         if (olLayers.length === 0) {
             return;
         }
-        const olLayer = olLayers[0];
-        if (!this._shouldLoadFeatures(olLayer, resolution)) {
-            return;
-        }
-        const strategy = this.loadingStrategies['' + lyr.getId()];
-        strategy(extent, resolution).forEach(tileExt => {
-            olLayer.getSource().loadFeatures(tileExt, resolution, projection);
+        olLayers.forEach(olLayer => {
+            if (!this._shouldLoadFeatures(olLayer, resolution)) {
+                return;
+            }
+            const strategy = this.loadingStrategies['' + lyr.getId()];
+            strategy(extent, resolution).forEach(tileExt => {
+                olLayer.getSource().loadFeatures(tileExt, resolution, projection);
+            });
         });
     }
 
