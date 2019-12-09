@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInput } from 'oskari-ui';
+import { TextInput, Message } from 'oskari-ui';
 import { withLocale } from 'oskari-ui/util';
 import { StyledComponent } from './StyledFormComponents';
 
-export const LocalizedLayerInfo = withLocale(({ layer, lang, service, getMessage, Message }) => {
+export const LocalizedLayerInfo = withLocale(({ layer, lang, service, getMessage }) => {
     const selectedLang = Oskari.getLang();
     const name = layer[`name_${lang}`];
     const description = layer[`title_${lang}`];

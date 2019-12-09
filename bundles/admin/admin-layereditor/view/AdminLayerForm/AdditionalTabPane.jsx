@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInput, TextAreaInput } from 'oskari-ui';
+import { TextInput, TextAreaInput, Message } from 'oskari-ui';
 import { StyledTab, StyledComponent } from './StyledFormComponents';
 import { withLocale } from 'oskari-ui/util';
 
-export const AdditionalTabPane = withLocale(({ layer, service, getMessage, Message }) => (
+export const AdditionalTabPane = withLocale(({ layer, service, getMessage }) => (
     <StyledTab>
         <Message messageKey='metainfoId'/>
         <StyledComponent>

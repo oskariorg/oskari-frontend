@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { WarningIcon, Tooltip } from 'oskari-ui';
+import { WarningIcon, Tooltip, Message } from 'oskari-ui';
 import { Mutator, withLocale } from 'oskari-ui/util';
 import { TimeSerieIcon } from '../../../CustomIcons';
 import { LayerIcon } from '../../../LayerIcon';
@@ -50,7 +50,7 @@ const getStatusColor = status => {
     }
 };
 
-const LayerTools = ({ model, mutator, Message }) => {
+const LayerTools = ({ model, mutator }) => {
     const backendStatus = getBackendStatus(model);
     const infoIcon = {
         classes: ['layer-info']
@@ -86,8 +86,7 @@ const LayerTools = ({ model, mutator, Message }) => {
 
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    Message: PropTypes.elementType.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
 
 const wrapped = withLocale(LayerTools);
