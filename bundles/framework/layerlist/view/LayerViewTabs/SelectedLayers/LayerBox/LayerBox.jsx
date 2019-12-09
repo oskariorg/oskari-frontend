@@ -5,7 +5,7 @@ import { Footer } from './Footer/';
 import { Mutator, withLocale } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon } from 'oskari-ui';
+import { Icon, Message } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
 
 const StyledBox = styled.div`
@@ -25,7 +25,7 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
-const LayerBox = ({ layer, index, visibilityInfo, mutator, Message }) => {
+const LayerBox = ({ layer, index, visibilityInfo, mutator }) => {
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
@@ -98,8 +98,7 @@ LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     visibilityInfo: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    Message: PropTypes.elementType.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
 
 const wrapped = withLocale(LayerBox);
