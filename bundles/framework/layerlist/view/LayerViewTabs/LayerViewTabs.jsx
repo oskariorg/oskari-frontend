@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from './propTypes';
 import styled from 'styled-components';
-import { Tabs, TabPane } from 'oskari-ui';
+import { Tabs, TabPane, Message } from 'oskari-ui';
 import { Mutator, withMutator, withLocale } from 'oskari-ui/util';
 import { LayerList } from './LayerList/';
 import { SelectedLayers, SelectedTab } from './SelectedLayers/';
@@ -30,7 +30,7 @@ const focus = ref => {
     }
 };
 
-const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator, Message }) => {
+const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator }) => {
     const searchTermInputRef = useRef(null);
     useEffect(() => {
         if (autoFocusSearch) {
@@ -74,8 +74,7 @@ LayerViewTabs.propTypes = {
     selectedLayers: shapes.stateful.isRequired,
     tab: PropTypes.string,
     autoFocusSearch: PropTypes.bool,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    Message: PropTypes.elementType.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
 
 const contextWrap = withMutator(withLocale(LayerViewTabs));
