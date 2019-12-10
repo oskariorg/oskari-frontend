@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Icon, Button } from 'oskari-ui';
+import { Mutator } from 'oskari-ui/util';
 
 const Background = styled.div`
     background-color: #3c3c3c;
@@ -43,9 +45,9 @@ const StyledButton = styled(Button)`
     height: 30px;
 `;
 
-export const ShadowTool = () => {
-    const [time, setTime] = React.useState('12:00');
-    const [date, setDate] = React.useState('01/06');
+export const ShadowTool = ({ mutator, date, time }) => {
+    const [timeValue, setTime] = React.useState(time);
+    const [dateValue, setDate] = React.useState(date);
     const setCurrentTime = () => {
         const date = new Date();
         setTime(`${date.getHours()}:${date.getMinutes()}`);
@@ -56,7 +58,7 @@ export const ShadowTool = () => {
             <Row>
                 <Col>
                     <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-                    <StyledInput value={date} onChange={setDate} />
+                    <StyledInput value={dateValue} onChange={setDate} />
                 </Col>
                 <Col>
                     <StyledButton onClick={setCurrentTime}>Nykyhetki</StyledButton>
@@ -65,9 +67,15 @@ export const ShadowTool = () => {
             <Row style={{ marginTop: '20px' }}>
                 <Col>
                     <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-                    <StyledInput value={time} onChange={setTime} />
+                    <StyledInput value={timeValue} onChange={setTime} />
                 </Col>
             </Row>
         </Background>
     );
+};
+
+ShadowTool.propTypes = {
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    date: PropTypes.string.isRequired,
+    time: PropTypes.string.isRequired
 };

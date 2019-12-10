@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleContext } from 'oskari-ui/util';
 import { ShadowControl } from '../view/ShadowControl/';
-import { ShadowTool } from '../view/ShadowTool/';
+import { ShadowTool, ShadowToolHandler } from '../view/ShadowTool/';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 const className = 'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin';
@@ -10,8 +10,9 @@ const className = 'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin';
  * @class Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin
  */
 class ShadowingPlugin extends BasicMapModulePlugin {
-    constructor () {
+    constructor (instance) {
         super();
+        this.instance = instance;
         this._clazz = className;
         this._name = 'ShadowingPlugin';
         this._defaultLocation = 'top right';
@@ -25,6 +26,8 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
         this._popupTemplate = jQuery('<div></div>');
+        this.stateHandler = new ShadowToolHandler(this.instance);
+        this.stateHandler.addStateListener(() => this._showPopup());
     }
     getName () {
         return className;
@@ -119,7 +122,6 @@ class ShadowingPlugin extends BasicMapModulePlugin {
                 el.removeClass('active');
             }
             this._toolOpen = false;
-            console.log(this._popup);
             this._popup.close(true);
         } else {
             if (el) {
@@ -138,7 +140,11 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         const popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
         this._popup = popupService.createPopup();
-        ReactDOM.render(<ShadowTool />, popupContent.get(0));
+        ReactDOM.render(
+            <ShadowTool {... this.stateHandler.getState()}
+                mutator={this.stateHandler.getMutator()}
+                locale={this.loc}/>,
+            popupContent.get(0));
         this._popupContent = popupContent;
 
         // create close icon

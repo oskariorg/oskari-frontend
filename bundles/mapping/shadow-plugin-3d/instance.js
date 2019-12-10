@@ -42,8 +42,7 @@ Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleI
             if (this.plugin) {
                 return;
             }
-            const conf = {};
-            const plugin = Oskari.clazz.create('Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin', conf);
+            const plugin = Oskari.clazz.create('Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin', this);
             this._mapmodule.registerPlugin(plugin);
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
