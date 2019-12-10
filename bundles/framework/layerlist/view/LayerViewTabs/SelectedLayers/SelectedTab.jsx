@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Message } from 'oskari-ui';
 import { withLocale } from 'oskari-ui/util';
 import styled, { css, keyframes } from 'styled-components';
 
@@ -31,7 +32,7 @@ const StyledBadge = styled.div`
         animation-iteration-count: ${BLINK_COUNT};`}
 `;
 
-export const SelectedTab = withLocale(({ num, messageKey, Message }) => {
+export const SelectedTab = withLocale(({ num, messageKey }) => {
     const [isBlinking, setBlinking] = useState(true);
     // Prevents blinking when flyout is hidden and shown again.
     useEffect(() => {

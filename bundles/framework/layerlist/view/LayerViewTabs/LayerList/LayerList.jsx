@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from '../propTypes';
-import { Button, Spin, Tooltip, Icon } from 'oskari-ui';
+import { Button, Spin, Tooltip, Icon, Message } from 'oskari-ui';
 import { Mutator, withLocale } from 'oskari-ui/util';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
@@ -64,7 +64,7 @@ const Indicator = ({ show, children }) => {
 };
 
 const LayerList = React.forwardRef((props, ref) => {
-    const { error, loading = false, updating = false, mutator, Message } = props;
+    const { error, loading = false, updating = false, mutator } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
@@ -122,8 +122,7 @@ LayerList.propTypes = {
     filter: shapes.stateful.isRequired,
     showAddButton: PropTypes.bool,
     grouping: PropTypes.shape(grouping).isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    Message: PropTypes.elementType.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
 
 const wrapped = withLocale(React.memo(LayerList));

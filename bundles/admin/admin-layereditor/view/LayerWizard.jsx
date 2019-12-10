@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Steps, Step, Button } from 'oskari-ui';
+import { Steps, Step, Button, Message } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { withLocale, withMutator } from 'oskari-ui/util';
@@ -41,7 +41,7 @@ function getStep (layer) {
     return WIZARD_STEP.DETAILS;
 }
 
-const LayerTypeTitle = withLocale(({ layer, Message, LabelComponent }) => (
+const LayerTypeTitle = withLocale(({ layer, LabelComponent }) => (
     <React.Fragment>
         <Message messageKey='wizard.type' LabelComponent={LabelComponent} />
         { layer.type && `: ${layer.type}` }
@@ -58,7 +58,6 @@ const LayerWizard = ({
     layerTypes = [],
     loading,
     children,
-    Message,
     versions
 }) => {
     const currentStep = getStep(layer);
@@ -120,7 +119,6 @@ const LayerWizard = ({
 LayerWizard.propTypes = {
     layer: PropTypes.object.isRequired,
     mutator: PropTypes.object.isRequired,
-    Message: PropTypes.elementType.isRequired,
     loading: PropTypes.bool,
     capabilities: PropTypes.object,
     layerTypes: PropTypes.array,
