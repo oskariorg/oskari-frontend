@@ -47,6 +47,10 @@ class UIService extends StateHandler {
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 
+    setCurrentTime (date, time) {
+        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
+    }
+
     /**
      * "Module" name for event handling
      */
@@ -66,7 +70,6 @@ class UIService extends StateHandler {
             'TimeChangedEvent': event => this.updateTimeEvent(event)
         };
         Object.getOwnPropertyNames(handlers).forEach(p => {
-            console.log(p);
             this.sandbox.registerForEventByName(this, p);
         });
         return handlers;
@@ -75,5 +78,6 @@ class UIService extends StateHandler {
 
 export const ShadowToolHandler = mutatorMixin(UIService, [
     'setTime',
-    'setDate'
+    'setDate',
+    'setCurrentTime'
 ]);

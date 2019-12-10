@@ -27,7 +27,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
         this._popupTemplate = jQuery('<div></div>');
         this.stateHandler = new ShadowToolHandler(this.instance);
-        this.stateHandler.addStateListener(() => this._showPopup());
+        // this.stateHandler.addStateListener(() => this._showPopup());
     }
     getName () {
         return className;
@@ -133,6 +133,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     }
 
     _showPopup () {
+        const me = this;
         const popupTitle = this.loc('title');
         const popupContent = this._popupTemplate.clone();
         const popupLocation = 'left';
@@ -150,11 +151,13 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         // create close icon
         this._popup.createCloseIcon();
         this._popup.onClose(function () {
-            const el = this.getPopUp();
+            const popup = me.getPopUp();
+            const el = me.getElement();
             if (el) {
                 el.removeClass('active');
             }
-            this._toolOpen = false;
+            me._toolOpen = false;
+            popup.close(true);
         });
 
         const themeColours = mapmodule.getThemeColours();
