@@ -30,12 +30,9 @@ const MapControlContainer = styled.div`
     margin-bottom: 5px;
     margin-left: 5px;
     box-shadow: ${iconShadow};
-    -moz-box-shadow: ${iconShadow};
-    -webkit-box-shadow: ${iconShadow};
-    -o-box-shadow: ${iconShadow};
     background-color: ${props => props.controlIsActive && !props.isMobile ? secondaryColor : darkBgColor};
     opacity: ${props => props.disabled ? 0.3 : 1.0};
-    pointer-events: ${props => props.disabled ? 'none': 'auto'};
+    pointer-events: ${props => props.disabled ? 'none' : 'auto'};
 `;
 
 const MapControl = styled.div`
