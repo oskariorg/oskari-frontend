@@ -100,33 +100,29 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
     const downControl = <DownIcon mapInMobileMode={mapInMobileMode}
         clickHandler={() => upDownClickHandler(false)} title={mapInMobileMode ? '' : getMessage('tooltip.down')}/>;
 
-    let controls;
-
-    if (!mapInMobileMode) {
-        controls = <MapControlsContainer>
-            <MapControlContainer isMobile={mapInMobileMode} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}>
-                <MapControl>{moveMapControl}</MapControl>
-            </MapControlContainer>
-            <MapControlContainer isMobile={mapInMobileMode} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}>
-                <MapControl>{rotateMapControl}</MapControl>
-            </MapControlContainer>
-            <Break/>
-            <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
-                <MapControl>{upControl}</MapControl>
-            </MapControlContainer>
-            <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
-                <MapControl>{downControl}</MapControl>
-            </MapControlContainer>
-        </MapControlsContainer>;
-    } else {
-        controls = <MobileContainer>
+    if (mapInMobileMode) {
+        return (<MobileContainer>
             {moveMapControl}
             {rotateMapControl}
             {upControl}
             {downControl}
-        </MobileContainer>;
+        </MobileContainer>);
     }
-    return (controls);
+    return (<MapControlsContainer>
+        <MapControlContainer isMobile={mapInMobileMode} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}>
+            <MapControl>{moveMapControl}</MapControl>
+        </MapControlContainer>
+        <MapControlContainer isMobile={mapInMobileMode} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}>
+            <MapControl>{rotateMapControl}</MapControl>
+        </MapControlContainer>
+        <Break/>
+        <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
+            <MapControl>{upControl}</MapControl>
+        </MapControlContainer>
+        <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
+            <MapControl>{downControl}</MapControl>
+        </MapControlContainer>
+    </MapControlsContainer>);
 };
 
 CameraControls3d.propTypes = {
