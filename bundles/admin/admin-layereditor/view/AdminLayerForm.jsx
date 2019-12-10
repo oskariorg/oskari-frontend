@@ -6,7 +6,7 @@ import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
 import { StyledRoot } from './AdminLayerForm/StyledFormComponents';
 import { withLocale, withMutator } from 'oskari-ui/util';
-import { Confirm, Alert, Button, Tabs, TabPane } from 'oskari-ui';
+import { Confirm, Alert, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 const PaddedButton = styled(Button)`
@@ -26,7 +26,6 @@ const AdminLayerForm = ({
     onDelete,
     onSave,
     getMessage,
-    Message,
     rolesAndPermissionTypes
 }) => (
     <StyledRoot>
@@ -81,7 +80,6 @@ AdminLayerForm.propTypes = {
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
-    Message: PropTypes.elementType.isRequired,
     rolesAndPermissionTypes: PropTypes.object
 };
 

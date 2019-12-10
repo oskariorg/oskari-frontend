@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { DataProviderSelect } from './DataProviderSelect';
-import { TextInput, UrlInput } from 'oskari-ui';
+import { TextInput, UrlInput, Message } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormComponents';
 import { withLocale } from 'oskari-ui/util';
@@ -9,7 +9,7 @@ import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 import { OtherLanguagesPane } from './OtherLanguagesPane';
 
 const GeneralTabPane = (props) => {
-    const { mapLayerGroups, dataProviders, layer, service, Message } = props;
+    const { mapLayerGroups, dataProviders, layer, service } = props;
     const lang = Oskari.getLang();
     const credentialProps = {
         allowCredentials: true,

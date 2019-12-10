@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionTabPane/PermissionRow';
-import { List, ListItem, Checkbox } from 'oskari-ui';
+import { List, ListItem, Checkbox, Message } from 'oskari-ui';
 import { withLocale } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
@@ -50,7 +50,7 @@ const renderRow = (modelRow) => {
     );
 };
 
-const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, Message }) => {
+const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {} }) => {
     if (!rolesAndPermissionTypes) {
         return;
     }
@@ -87,8 +87,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, Message
 
 PermissionsTabPane.propTypes = {
     rolesAndPermissionTypes: PropTypes.object,
-    permissions: PropTypes.object,
-    Message: PropTypes.elementType.isRequired
+    permissions: PropTypes.object
 };
 
 const contextWrap = withLocale(PermissionsTabPane);
