@@ -7,11 +7,11 @@ Oskari.clazz.define("Oskari.mapping.cameracontrols3d.CameraControls3dBundle", fu
 
 }, {
 	"create" : function() {
-		return Oskari.clazz.create("Oskari.mapping.cameracontrols3d.CameraControls3dBundleInstance");
+		return Oskari.clazz.create("Oskari.mapping.cameracontrols3d.instance");
 	}
 }, {
 
-	"protocol" : ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+	"protocol" : ["Oskari.bundle.Bundle"],
 	"source" : {
 		"scripts" : [{
 			"type" : "text/javascript",
@@ -39,15 +39,14 @@ Oskari.clazz.define("Oskari.mapping.cameracontrols3d.CameraControls3dBundle", fu
 			"Bundle-Identifier" : "camera-controls-3d",
 			"Bundle-Name" : "camera-controls-3d",
 			"Bundle-Author" : [{
-				"Name" : "mm",
+				"Name" : "mmldev",
 				"Organisation" : "nls.fi",
 				"Temporal" : {
 					"Start" : "2019"
 				},
-				"Copyleft" : {
-					"License" : {
-						"License-Name" : "EUPL",
-						"License-Online-Resource" : "http://www.paikkatietoikkuna.fi/license"
+				"Copyleft": {
+					"License": {
+						"License-Name": "EUPL"
 					}
 				}
 			}],
