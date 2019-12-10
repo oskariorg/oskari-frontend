@@ -66,8 +66,7 @@ GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     service: PropTypes.any,
-    layer: PropTypes.object,
-    Message: PropTypes.elementType.isRequired
+    layer: PropTypes.object
 };
 
 const contextWrap = withLocale(GeneralTabPane);

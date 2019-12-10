@@ -5,11 +5,18 @@ import { LocalizingFlyout } from './view/LocalizingFlyout';
 
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
+const FLYOUT = {
+    EDITOR: 'editor',
+    THEME: 'theme',
+    DATA_PROVIDER: 'dataProvider'
+};
+
 Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
     class AdminLayerEditor extends BasicBundle {
         constructor () {
             super();
-            this.loc = Oskari.getMsg.bind(null, 'admin-layereditor');
+            this.__name = 'admin-layereditor';
+            this.loc = Oskari.getMsg.bind(null, this.__name);
             this.eventHandlers = {
                 'MapLayerEvent': (event) => {
                     if (event.getOperation() !== 'add') {
@@ -71,21 +78,36 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 addLayerTool.setName('layer-editor-add-layer');
                 addLayerTool.setTitle(this.loc('addLayer'));
                 addLayerTool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
-                addLayerTool.setTypes([toolingService.TYPE_CREATE]);
-                toolingService.addTool(addLayerTool);
 
+                const offset = {
+                    x: -100,
+                    y: -200
+                };
+                const createPopupCallback = flyoutKey => {
+                    return evt => {
+                        const position = {
+                            left: evt.pageX + offset.x,
+                            top: evt.pageY + offset.y
+                        };
+                        this.showFormPopup(flyoutKey, position);
+                    };
+                };
                 const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
                 addDataProviderTool.setName('layer-editor-add-data-provider');
                 addDataProviderTool.setTitle(this.loc('addDataProvider'));
-                addDataProviderTool.setCallback(evt => {
-                    const position = {
-                        left: evt.pageX - 100,
-                        top: evt.pageY - 200
-                    };
-                    this._showDataProviderForm(position);
-                });
+                addDataProviderTool.setCallback(createPopupCallback(FLYOUT.DATA_PROVIDER));
+
+                const addThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+                addThemeTool.setName('layer-editor-add-theme');
+                addThemeTool.setTitle(this.loc('addTheme'));
+                addThemeTool.setCallback(createPopupCallback(FLYOUT.THEME));
+
+                addLayerTool.setTypes([toolingService.TYPE_CREATE]);
+                addThemeTool.setTypes([toolingService.TYPE_CREATE]);
                 addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
+                toolingService.addTool(addLayerTool);
                 toolingService.addTool(addDataProviderTool);
+                toolingService.addTool(addThemeTool);
             }
         }
 
@@ -119,22 +141,29 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             service.addToolForLayer(layer, tool, suppressEvent);
         }
 
-        _showDataProviderForm (position) {
-            if (!this.dataProviderFlyout) {
-                this.dataProviderFlyout = new LocalizingFlyout(this.loc('addDataProvider'), {
-                    showHeading: false
-                });
-                this.dataProviderFlyout.makeDraggable({
-                    handle: '.oskari-flyouttoolbar',
-                    scroll: false
-                });
+        /**
+         * @method showFormPopup To show a simple data input form.
+         * @param {string} flyoutKey FLYOUT.THEME or FLYOUT.DATA_PROVIDER
+         * @param {object} position where to place the popup
+         */
+        showFormPopup (flyoutKey, position) {
+            let flyout = null;
+            switch (flyoutKey) {
+            case FLYOUT.THEME:
+                flyout = this._getAddThemeFlyout();
+                break;
+            case FLYOUT.DATA_PROVIDER:
+                flyout = this._getAddDataProviderFlyout();
+                break;
+            default:
+                return;
             }
             const { left, top } = position;
-            this.dataProviderFlyout.move(left, top, true);
-            if (this.dataProviderFlyout.isVisible()) {
-                this.dataProviderFlyout.bringToTop();
+            flyout.move(left, top, true);
+            if (flyout.isVisible()) {
+                flyout.bringToTop();
             } else {
-                this.dataProviderFlyout.show();
+                flyout.show();
             }
         }
 
@@ -207,6 +236,87 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 });
             }
             return this.flyout;
+        }
+
+        /**
+         * @method _getAddThemeFlyout
+         * Ensures theme flyout exists and returns it.
+         * @return {LocalizingFlyout}
+         */
+        _getAddThemeFlyout () {
+            if (this.themeFlyout) {
+                return this.themeFlyout;
+            }
+            this.themeFlyout = new LocalizingFlyout(this, this.loc('addTheme'), {
+                showHeading: false,
+                headerMessageKey: 'themeName'
+            });
+            this.themeFlyout.makeDraggable({
+                handle: '.oskari-flyouttoolbar',
+                scroll: false
+            });
+            this.themeFlyout.setAction(value => {
+                // TODO add discreet notifications
+                jQuery.ajax({
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    url: Oskari.urls.getRoute('MapLayerGroups'),
+                    data: JSON.stringify({ locales: value }),
+                    success: response => {
+                        this.themeFlyout.hide();
+                        const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
+                        this._getLayerService().addLayerGroup(group);
+                    },
+                    error: () => {
+                        this.themeFlyout.setLoading(false);
+                    }
+                });
+            });
+            return this.themeFlyout;
+        }
+
+        /**
+         * @method _getAddDataProviderFlyout
+         * Ensures theme flyout exists and returns it.
+         * @return {LocalizingFlyout}
+         */
+        _getAddDataProviderFlyout () {
+            if (this.dataProviderFlyout) {
+                return this.dataProviderFlyout;
+            }
+            this.dataProviderFlyout = new LocalizingFlyout(this, this.loc('addDataProvider'), {
+                showHeading: false,
+                headerMessageKey: 'dataProviderName'
+            });
+            this.dataProviderFlyout.makeDraggable({
+                handle: '.oskari-flyouttoolbar',
+                scroll: false
+            });
+            this.dataProviderFlyout.setAction(value => {
+                // TODO add discreet notifications
+                jQuery.ajax({
+                    type: 'PUT',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    url: Oskari.urls.getRoute('SaveOrganization'),
+                    data: JSON.stringify({ locales: value }),
+                    success: response => {
+                        this.dataProviderFlyout.hide();
+                        const dataProvider = {
+                            id: response.id,
+                            name: Oskari.getLocalized(response.name)
+                        };
+                        const dataProviders = [...this.dataProviders, dataProvider];
+                        dataProviders.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+                        this._setDataProviders(dataProviders);
+                    },
+                    error: () => {
+                        this.dataProviderFlyout.setLoading(false);
+                    }
+                });
+            });
+            return this.dataProviderFlyout;
         }
     }
 );
