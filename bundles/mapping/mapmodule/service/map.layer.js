@@ -76,7 +76,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         };
 
         Oskari.makeObservable(this);
-        this.stateListeners = [];
     }, {
         /** @static @property __qname fully qualified name for service */
         __qname: 'Oskari.mapframework.service.MapLayerService',
@@ -948,7 +947,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this.typeMapping[type] = modelRef;
             if (availableVersionsForType) {
                 this.availableVersions[type] = availableVersionsForType;
-                this.notify();
+                this.trigger('availableVersionsUpdated');
             }
         },
         getVersionsForType (type) {
@@ -956,12 +955,6 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         },
         getLayerTypes () {
             return Object.keys(this.availableVersions) || [];
-        },
-        addStateListener (consumer) {
-            this.stateListeners.push(consumer);
-        },
-        notify () {
-            this.stateListeners.forEach(consumer => consumer());
         },
         /**
          * @method unregisterLayerModel

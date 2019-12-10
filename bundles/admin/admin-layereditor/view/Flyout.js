@@ -17,7 +17,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.mapLayerGroups = [];
         this.service = new AdminLayerFormService(() => this.update());
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        this.mapLayerService.addStateListener(() => this.update());
+        this.mapLayerService.on('availableVersionsUpdated', () => this.update());
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
