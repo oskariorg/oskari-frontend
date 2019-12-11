@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
         this._layerGroups = [];
+        this.availableVersions = {};
 
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
 
@@ -939,9 +940,21 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            Mapping from map-layer json "type" parameter to a class as in #typeMapping
          * @param {String|Function} modelRef
          *            layer model clazz name (like 'Oskari.mapframework.domain.WmsLayer') or constructor function
+         * @param {Array} availableVersionsForType
+         *            string array containing available versions for given type
          */
-        registerLayerModel: function (type, modelRef) {
+        registerLayerModel: function (type, modelRef, availableVersionsForType) {
             this.typeMapping[type] = modelRef;
+            if (availableVersionsForType) {
+                this.availableVersions[type] = availableVersionsForType;
+                this.trigger('availableVersionsUpdated');
+            }
+        },
+        getVersionsForType (type) {
+            return this.availableVersions[type] || [];
+        },
+        getLayerTypes () {
+            return Object.keys(this.availableVersions) || [];
         },
         /**
          * @method unregisterLayerModel
@@ -953,6 +966,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         unregisterLayerModel: function (type) {
             delete this.typeMapping[type];
+            delete this.availableVersions[type];
         },
 
         /**

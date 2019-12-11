@@ -57,7 +57,8 @@ const LayerWizard = ({
     capabilities = {},
     layerTypes = [],
     loading,
-    children
+    children,
+    versions
 }) => {
     const currentStep = getStep(layer);
     const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
@@ -88,7 +89,8 @@ const LayerWizard = ({
                     <LayerURLForm
                         layer={layer}
                         loading={loading}
-                        service={mutator} />
+                        service={mutator}
+                        versions= {versions} />
                 </React.Fragment>
             }
             { currentStep === WIZARD_STEP.LAYER &&
@@ -120,7 +122,8 @@ LayerWizard.propTypes = {
     loading: PropTypes.bool,
     capabilities: PropTypes.object,
     layerTypes: PropTypes.array,
-    children: PropTypes.any
+    children: PropTypes.any,
+    versions: PropTypes.array.isRequired
 };
 
 const contextWrap = withMutator(withLocale(LayerWizard));
