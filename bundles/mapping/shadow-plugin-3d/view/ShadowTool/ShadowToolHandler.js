@@ -69,9 +69,7 @@ class UIService extends StateHandler {
         const handlers = {
             'TimeChangedEvent': event => this.updateTimeEvent(event)
         };
-        Object.getOwnPropertyNames(handlers).forEach(p => {
-            this.sandbox.registerForEventByName(this, p);
-        });
+        this.sandbox.registerForEventByName(this, 'TimeChangedEvent');
         return handlers;
     }
 }

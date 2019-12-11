@@ -37,7 +37,15 @@ export const StyledInput = styled.input`
 
 export const StyledButton = styled(Button)`
     background: #ffd400;
-    color: #000;
+    color: #3c3c3c;
     width: 100%;
     height: 30px;
+    border: 0;
+    &:focus,
+    &:active,
+    &:hover {
+        background: #ecb900;
+        color: #3c3c3c;
+        border: 0;
+    }
 `;

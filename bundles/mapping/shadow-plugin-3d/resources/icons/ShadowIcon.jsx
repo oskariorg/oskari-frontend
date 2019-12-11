@@ -18,7 +18,8 @@ ShadowIconSvg.propTypes = {
     isMobile: PropTypes.bool
 };
 
-export const ShadowIcon = ({ fill, ...rest }) => <Icon component={() => <ShadowIconSvg fill={fill}/>} {...rest} />;
+export const ShadowIcon = ({ fill, isMobile, ...rest }) => <Icon component={() => <ShadowIconSvg fill={fill} isMobile={isMobile}/>} {...rest} />;
 ShadowIcon.propTypes = {
-    fill: PropTypes.string
+    fill: PropTypes.string,
+    isMobile: PropTypes.bool
 };

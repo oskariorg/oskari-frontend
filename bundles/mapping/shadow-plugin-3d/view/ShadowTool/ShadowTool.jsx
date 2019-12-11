@@ -14,16 +14,39 @@ export const ShadowTool = ({ mutator, date, time }) => {
         setDate(curDate);
         mutator.setCurrentTime(curDate, curTime);
     };
-    const changeTime = event => {
-        console.log(event.target.value);
-        mutator.setTime(event.target.value);
-        setTime(event.target.value);
+
+    const validateTime = (target) => {
+        const regex = /^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$/;
+        return regex.test(target);
     };
+
+    const validateDate = (target) => {
+        const matches = /^(0[1-9]|1[0-9]|2[0-9]|3[0-1]|[1-9])[/](0[1-9]|1[0-2]|[1-9])$/.exec(target);
+        if (matches === null) {
+            return false;
+        }
+        const d = parseInt(matches[1]);
+        const m = matches[2] - 1;
+        const dateObject = new Date(2019, m, d);
+        return dateObject.getDate() === d && dateObject.getMonth() === m;
+    };
+
+    const changeTime = event => {
+        const val = event.target.value;
+        if (validateTime(val)) {
+            mutator.setTime(val);
+        }
+        setTime(val);
+    };
+
     const changeDate = event => {
-        console.log(event.target.value);
-        mutator.setDate(event.target.value);
+        const val = event.target.value;
+        if (validateDate(val)) {
+            mutator.setDate(val);
+        }
         setDate(event.target.value);
     };
+
     return (
         <Background>
             <Row>
