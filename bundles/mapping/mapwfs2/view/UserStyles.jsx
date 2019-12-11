@@ -29,6 +29,10 @@ const AddStyle = styled.div`
     color: ${secondaryColor};
 `;
 
+const AddStyleText = styled.div`
+    display: inline-block;
+`;
+
 const StyledListItem = styled(ListItem)`
     &:nth-child(even) {
         background-color: #f3f3f3;
@@ -56,7 +60,7 @@ const UserStyles = ({ mutator, layerId, styles }) => {
                 <Message messageKey='styles' LabelComponent={HeaderText} />
                 <AddStyle onClick={() => showVisualizationForm(layerId, undefined, true)}>
                     <AddStyleIcon type="plus"/>
-                    <Message messageKey='add-style'/>
+                    <Message messageKey='add-style' LabelComponent={AddStyleText}/>
                 </AddStyle>
             </Header>
             { styles && styles.length > 0 &&
