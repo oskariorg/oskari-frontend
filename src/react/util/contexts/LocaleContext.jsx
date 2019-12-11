@@ -16,8 +16,14 @@ export function withLocale (Component) {
         return (
             <LocaleContext.Consumer>
                 {
-                    ({ bundleKey, getMessage = Oskari.getMsg.bind(null, bundleKey) }) =>
-                        <Component bundleKey={bundleKey} getMessage={getMessage} ref={ref} {...props} />
+                    value => {
+                        if (!value) {
+                            // No contex provider, just pass props through.
+                            return <Component ref={ref} {...props} />;
+                        }
+                        const { bundleKey, getMessage = Oskari.getMsg.bind(null, bundleKey) } = value;
+                        return <Component bundleKey={bundleKey} getMessage={getMessage} ref={ref} {...props} />;
+                    }
                 }
             </LocaleContext.Consumer>
         );
