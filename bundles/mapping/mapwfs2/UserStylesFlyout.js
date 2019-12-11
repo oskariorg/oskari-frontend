@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { UserStyles } from './view/UserStyles';
-import { LocaleContext, MutatorContext } from 'oskari-ui/util';
+import { LocaleContext } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -12,6 +12,8 @@ export class UserStylesFlyout extends ExtraFlyout {
         this.loc = Oskari.getMsg.bind(null, 'MapWfs2');
         this.service = Oskari.getSandbox().getService(
             'Oskari.mapframework.bundle.mapwfs2.service.UserStyleService');
+        this.removeUserStyleHandler = this.service.removeStyle.bind(this.service);
+
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -55,9 +57,7 @@ export class UserStylesFlyout extends ExtraFlyout {
         const styles = this.service.getUserStylesForLayer(this.layerId);
         return (
             <LocaleContext.Provider value={{ bundleKey: 'MapWfs2' }}>
-                <MutatorContext.Provider value={this.service}>
-                    <UserStyles layerId={this.layerId} styles={styles}></UserStyles>
-                </MutatorContext.Provider>
+                <UserStyles layerId={this.layerId} styles={styles} removeUserStyleHandler={this.removeUserStyleHandler}></UserStyles>
             </LocaleContext.Provider>
         );
     }

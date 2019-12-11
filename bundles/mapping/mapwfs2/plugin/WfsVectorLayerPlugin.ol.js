@@ -370,7 +370,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     saveUserStyle (layerId, styleId) {
         const style = this.visualizationForm.getOskariStyle();
         style.id = styleId;
-        this.userStyleService.getMutator().saveUserStyle(layerId, style);
+        this.userStyleService.saveUserStyle(layerId, style);
     }
 };
 

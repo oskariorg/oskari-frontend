@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Icon, Message } from 'oskari-ui';
-import { withLocale, withMutator } from 'oskari-ui/util';
+import { withLocale } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
 
 // TODO: Fix this once style accessible smarter way
@@ -53,7 +53,7 @@ const showVisualizationForm = (layerId, styleId, isCreateNew) => {
     Oskari.getSandbox().postRequestByName('ShowOwnStyleRequest', [layerId, styleId, isCreateNew]);
 };
 
-const UserStyles = ({ mutator, layerId, styles }) => {
+const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
     return (
         <div>
             <Header>
@@ -69,7 +69,7 @@ const UserStyles = ({ mutator, layerId, styles }) => {
                     <StyledListItem>
                         <UserStyleRow styleName={style.name}
                             editUserStyleHandler={() => showVisualizationForm(layerId, style.id, false)}
-                            removeUserStyleHandler={() => mutator.removeStyle(layerId, style.id)}/>
+                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, style.id)}/>
                     </StyledListItem>
                 );
             }}/>
@@ -79,10 +79,10 @@ const UserStyles = ({ mutator, layerId, styles }) => {
 };
 
 UserStyles.propTypes = {
-    mutator: PropTypes.object.isRequired,
     layerId: PropTypes.number.isRequired,
-    styles: PropTypes.array.isRequired
+    styles: PropTypes.array.isRequired,
+    removeUserStyleHandler: PropTypes.func.isRequired
 };
 
-const contextWrap = withMutator(withLocale(UserStyles));
+const contextWrap = withLocale(UserStyles);
 export { contextWrap as UserStyles };
