@@ -37,7 +37,7 @@ export class UserStylesFlyout extends ExtraFlyout {
     }
     createUi () {
         this.setElement(jQuery('<div></div>'));
-        this.addClass('user-styles-flyout');
+        this.addClass('user-own-styles-list-flyout');
         this.setContent(this.getElement());
         this.update();
     }
