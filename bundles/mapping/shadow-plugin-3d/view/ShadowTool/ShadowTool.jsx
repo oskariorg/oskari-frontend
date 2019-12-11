@@ -7,9 +7,9 @@ export const ShadowTool = ({ mutator, date, time }) => {
     const [timeValue, setTime] = React.useState(time);
     const [dateValue, setDate] = React.useState(date);
     const setCurrentTime = () => {
-        const date = new Date();
-        const curTime = `${date.getHours()}:${date.getMinutes()}`;
-        const curDate = `${date.getDate()}/${date.getMonth() + 1}`;
+        const d = new Date();
+        const curTime = `${d.getHours()}:${d.getMinutes()}`;
+        const curDate = `${d.getDate()}/${d.getMonth() + 1}`;
         setTime(curTime);
         setDate(curDate);
         mutator.setCurrentTime(curDate, curTime);

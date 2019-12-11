@@ -11,6 +11,7 @@ Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleI
         this._mapmodule = null;
         this._sandbox = null;
         this.state = undefined;
+        this._log = Oskari.log('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance');
     }, {
         __name: 'shadow-plugin-3d',
         /**
@@ -35,6 +36,10 @@ Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleI
             sandbox = sandbox || Oskari.getSandbox();
             this.setSandbox(sandbox);
             this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+            if (!this._mapmodule.getSupports3D()) {
+                this._log.warn('Shadowing plugin only supported in 3d mode');
+                return;
+            }
             this.createPlugin();
             sandbox.register(this);
         },
