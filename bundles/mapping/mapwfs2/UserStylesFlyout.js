@@ -54,7 +54,7 @@ export class UserStylesFlyout extends ExtraFlyout {
     getEditorUI () {
         const styles = this.service.getUserStylesForLayer(this.layerId);
         return (
-            <LocaleContext.Provider value={this.loc}>
+            <LocaleContext.Provider value={{ bundleKey: 'MapWfs2' }}>
                 <MutatorContext.Provider value={this.service}>
                     <UserStyles layerId={this.layerId} styles={styles}></UserStyles>
                 </MutatorContext.Provider>

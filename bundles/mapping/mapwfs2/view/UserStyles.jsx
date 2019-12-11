@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Icon } from 'oskari-ui';
+import { List, ListItem, Icon, Message } from 'oskari-ui';
 import { withLocale, withMutator } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
 
@@ -49,14 +49,14 @@ const showVisualizationForm = (layerId, styleId, isCreateNew) => {
     Oskari.getSandbox().postRequestByName('ShowOwnStyleRequest', [layerId, styleId, isCreateNew]);
 };
 
-const UserStyles = ({ mutator, getMessage, layerId, styles }) => {
+const UserStyles = ({ mutator, layerId, styles }) => {
     return (
         <div>
             <Header>
-                <HeaderText>{getMessage('styles')}</HeaderText>
+                <Message messageKey='styles' LabelComponent={HeaderText} />
                 <AddStyle onClick={() => showVisualizationForm(layerId, undefined, true)}>
                     <AddStyleIcon type="plus"/>
-                    {getMessage('add-style')}
+                    <Message messageKey='add-style'/>
                 </AddStyle>
             </Header>
             { styles && styles.length > 0 &&
@@ -76,7 +76,6 @@ const UserStyles = ({ mutator, getMessage, layerId, styles }) => {
 
 UserStyles.propTypes = {
     mutator: PropTypes.object.isRequired,
-    getMessage: PropTypes.func.isRequired,
     layerId: PropTypes.number.isRequired,
     styles: PropTypes.array.isRequired
 };
