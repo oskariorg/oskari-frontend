@@ -1,6 +1,3 @@
-export { mutatorMixin } from './mixins';
-export { Mutator } from './Mutator';
-export { StateHandler } from './StateHandler';
-export { Timeout } from './Timeout';
-export { handleBinder } from './handleBinder';
+export { StateHandler, Mutator, mutatorMixin } from './state';
+export { Timeout, handleBinder } from './extras';
 export { GenericContext, LocaleContext, MutatorContext, withContext, withLocale, withMutator } from './contexts';
