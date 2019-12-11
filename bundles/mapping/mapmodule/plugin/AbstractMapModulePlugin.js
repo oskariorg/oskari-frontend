@@ -269,7 +269,7 @@ Oskari.clazz.define('Oskari.mapping.mapmodule.plugin.AbstractMapModulePlugin',
             try {
                 waitingForToolbar = me._startPluginImpl(sandbox);
             } catch (e) {
-                Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + me.getName() + ' Reason:' + e);
+                Oskari.log('AbstractMapModulePlugin').error('Error starting plugin impl ' + me.getName());
             }
             // Make sure plugin's edit mode is set correctly
             // (we might already be in edit mode)

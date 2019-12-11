@@ -2063,10 +2063,10 @@ Oskari.clazz.define(
         _getContainerWithClasses: function (containerClasses) {
             var containerDiv = jQuery(
                 '<div class="mapplugins">' +
-                '  <div class="mappluginsContainer">' +
-                '    <div class="mappluginsContent"></div>' +
-                '  </div>' +
-                '</div>'
+                    '  <div class="mappluginsContainer">' +
+                    '    <div class="mappluginsContent"></div>' +
+                    '  </div>' +
+                    '</div>'
             );
 
             containerDiv.addClass(containerClasses);
