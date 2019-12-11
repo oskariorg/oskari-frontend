@@ -39,6 +39,7 @@ Oskari.registerLocalization(
                 "placeholder": "Namn på svenska",
                 "descplaceholder": "Beskrivning på svenska"
             },
+            "addLayer": "Lägg till ett nytt kartlager",
             "dataProvider": "Dataprovider",
             "addDataProvider": "Lägg till dataprovider",
             "mapLayerGroups": "Maplayer-grupper",
