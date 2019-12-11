@@ -34,8 +34,21 @@ class UIService extends StateHandler {
         this.updateLayerGroups();
     }
     setFilter (activeId, searchText) {
+        const previousSearchText = this.filter.searchText;
         this.filter = { activeId, searchText };
         this.updateLayerGroups();
+
+        if (searchText !== previousSearchText) {
+            if (searchText) {
+                // open all groups
+                this.updateState({
+                    openGroupTitles: this.state.groups.map(group => group.getTitle())
+                });
+            } else {
+                // close all groups
+                this.updateState({ openGroupTitles: [] });
+            }
+        }
     }
     _getSelectedLayerIds () {
         return this.map.getLayers().map(layer => layer.getId());
@@ -71,12 +84,13 @@ class UIService extends StateHandler {
             this.updateState({ groups });
             return;
         }
-        const textSearchResults = groups.map(group => ({
-            group,
-            layers: group.getLayers().filter(lyr => group.matchesKeyword(lyr.getId(), searchText))
-        })).filter(result => result.layers.length !== 0);
+        groups.forEach(group => {
+            group.unfilteredLayerCount = group.layers.length;
+            group.layers = group.layers.filter(lyr => group.matchesKeyword(lyr.getId(), searchText));
+        });
+        groups = groups.filter(group => group.layers.length > 0);
 
-        this.updateState({ groups: textSearchResults });
+        this.updateState({ groups });
     }
 
     updateOpenGroupTitles (openGroupTitles) {
@@ -173,11 +187,11 @@ class UIService extends StateHandler {
             return;
         }
         const groups = this.state.groups.map(group => {
-            const layer = group.getLayers().find(lyr => lyr.getId() === id);
+            const layer = group.layers.find(lyr => lyr.getId() === id);
             if (!layer) {
                 return group;
             }
-            return this._cloneGroup(group);
+            return group.clone();
         });
         this.updateState({ groups });
     }
@@ -186,13 +200,8 @@ class UIService extends StateHandler {
             return;
         }
         // Clone all groups and layers to ensure rerendering.
-        const groups = this.state.groups.map(this._cloneGroup);
+        const groups = this.state.groups.map(cur => cur.clone());
         this.updateState({ groups });
-    }
-    _cloneGroup (group) {
-        let groupClone = Object.assign(Object.create(group), group);
-        groupClone.layers = groupClone.layers.map(lyr => Object.assign(Object.create(lyr), lyr));
-        return groupClone;
     }
 }
 

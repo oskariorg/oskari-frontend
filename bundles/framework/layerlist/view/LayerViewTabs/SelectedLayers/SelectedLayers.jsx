@@ -14,8 +14,7 @@ const Layers = React.memo(({ layers, visibilityInfo, ...rest }) => (
 Layers.displayName = 'Layers';
 
 Layers.propTypes = {
-    layers: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    locale: PropTypes.object.isRequired,
+    layers: PropTypes.arrayOf(PropTypes.object).isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
     visibilityInfo: PropTypes.arrayOf(PropTypes.object)
 };
@@ -27,12 +26,12 @@ const reorder = (result, mutator) => {
     mutator.reorderLayers(result.source.index, result.destination.index);
 };
 
-export const SelectedLayers = ({ layers, locale, mutator, visibilityInfo }) => (
+export const SelectedLayers = ({ layers, mutator, visibilityInfo }) => (
     <DragDropContext onDragEnd={result => reorder(result, mutator)}>
         <Droppable droppableId="layers">
             {provided => (
                 <div ref={provided.innerRef} {...provided.droppableProps}>
-                    <Layers layers={layers} locale={locale} mutator={mutator} visibilityInfo={visibilityInfo} />
+                    <Layers layers={layers} mutator={mutator} visibilityInfo={visibilityInfo} />
                     {provided.placeholder}
                 </div>
             )}
@@ -42,7 +41,6 @@ export const SelectedLayers = ({ layers, locale, mutator, visibilityInfo }) => (
 
 SelectedLayers.propTypes = {
     layers: Layers.propTypes.layers,
-    locale: PropTypes.object.isRequired,
     mutator: PropTypes.instanceOf(Mutator).isRequired,
     visibilityInfo: PropTypes.arrayOf(PropTypes.object)
 };

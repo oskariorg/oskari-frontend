@@ -26,11 +26,11 @@ const GrayRow = styled(Row)`
     }
 `;
 
-const getVisibilityInfoProps = ({ layer, visibilityInfo, locale, mutator }) => {
+const getVisibilityInfoProps = ({ layer, visibilityInfo, mutator }) => {
     const { unsupported, visible, inScale, geometryMatch } = visibilityInfo;
     if (!visible) {
         return {
-            text: locale.layer.hidden
+            messageKey: 'layer.hidden'
         };
     }
     if (unsupported) {
@@ -40,18 +40,19 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, locale, mutator }) => {
         };
     }
     if (!inScale || !geometryMatch) {
+        const zoomToExtent = !geometryMatch;
         return {
-            action: () => mutator.locateLayer(layer),
-            text: inScale ? locale.layer.moveToContentArea : locale.layer.moveToScale
+            action: () => mutator.locateLayer(layer, zoomToExtent),
+            messageKey: zoomToExtent ? 'layer.moveToContentArea' : 'layer.moveToScale'
         };
     }
 };
 
-export const Footer = ({ locale, layer, mutator, visibilityInfo }) => {
+export const Footer = ({ layer, mutator, visibilityInfo }) => {
     const tools = layer.getTools();
     const opacity = layer.getOpacity();
     const layerType = layer.getLayerType();
-    const visibilityInfoProps = getVisibilityInfoProps({ locale, layer, mutator, visibilityInfo });
+    const visibilityInfoProps = getVisibilityInfoProps({ layer, mutator, visibilityInfo });
     return (
         <GrayRow>
             <ColAuto>
@@ -73,7 +74,6 @@ export const Footer = ({ locale, layer, mutator, visibilityInfo }) => {
                     <ColAuto>
                         <StyleSettings
                             layer={layer}
-                            locale={locale}
                             onChange={styleName => mutator.changeLayerStyle(layer, styleName)}
                         />
                     </ColAuto>
@@ -88,7 +88,6 @@ export const Footer = ({ locale, layer, mutator, visibilityInfo }) => {
 
 Footer.propTypes = {
     layer: PropTypes.object.isRequired,
-    locale: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    visibilityInfo: PropTypes.object.isRequired
+    visibilityInfo: PropTypes.object.isRequired,
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };

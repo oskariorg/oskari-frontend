@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { Slider, NumberInput, InputGroup } from 'oskari-ui';
 import { Timeout } from 'oskari-ui/util';
 
-const OPACITY_EVENT_FIRING_DELAY = 200;
+const OPACITY_EVENT_FIRING_DELAY = 100;
 
 const Border = styled('div')`
     border-radius: 4px;
@@ -21,6 +21,9 @@ const StyledNumberInput = styled(NumberInput)`
     font-size: 15px;
     box-shadow: inset 1px 1px 4px 0 rgba(87, 87, 87, 0.26);
     height: 34px !important;
+    .ant-input-number-input {
+        width: calc(100% - 11px);
+    }
 `;
 
 export const OpacitySlider = ({ value, onChange }) => {
@@ -35,7 +38,12 @@ export const OpacitySlider = ({ value, onChange }) => {
         }
         setEventTimeout(new Timeout(delayedAction, OPACITY_EVENT_FIRING_DELAY));
     };
-    React.useEffect(() => {
+    const inputValueChange = val => {
+        if (!isNaN(val)) {
+            onChange(val);
+        }
+    };
+    useEffect(() => {
         setSliderValue(value);
     }, [value]);
     return (
@@ -47,14 +55,18 @@ export const OpacitySlider = ({ value, onChange }) => {
                 min={0}
                 max={100}
                 value={sliderValue}
-                onChange={onChange}
+                onChange={inputValueChange}
                 formatter={value => `${value} %`}
+                step={5}
             />
         </InputGroup>
     );
 };
 
 OpacitySlider.propTypes = {
-    value: PropTypes.number.isRequired,
+    value: PropTypes.oneOfType([
+        PropTypes.string,
+        PropTypes.number
+    ]).isRequired,
     onChange: PropTypes.func.isRequired
 };

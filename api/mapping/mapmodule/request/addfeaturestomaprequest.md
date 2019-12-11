@@ -9,7 +9,15 @@ Allows user to add features to map.
 
 ## Description
 
-Vector features can be added on the map. The request must contain the geometries of the features. The geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
+Adds vector features to the map or updates existing features.
+
+The request takes two parameters. The first describes the features. When updating existing features on map, the first parameter is an object containing feature attributes that are used for feature matching. The second parameter options.
+
+#### Adding features to map
+
+The first parameter, geometry must be provided either as a WKT-string or a GeoJSON - object. Request creates a new feature layer if any layer with given layer id doesn't exist. Optionally, also additional layer control options such as features' style can be provided in a JSON-object. 
+
+Recommendable practice is to prepare a layer with [VectorLayerRequest](/api/requests/#unreleased/mapping/mapmodule/request/vectorlayerrequest.md) before adding features.
 
 WKT
 ```javascript
@@ -51,44 +59,47 @@ var geojsonObject = {
 };
 ```
 
-Options object
-```javascript
-{
-  layerId: 'MY_VECTOR_LAYER',
-  animationDuration: 500,
-  attributes: {},
-  centerTo: true,
-  clearPrevious: true,
-  cursor: 'zoom-in',
-  prio: 1
-}
-```
-<ul>
-    <li>
-        <b>layerId</b> - Layer's id to specify which layer you want to add features (if the layer does not exist one will be created).
-    </li><li>
-        <b>animationDuration</b> - On update requests it's possible to animate fill color change. Specify animation duration in ms.
-    </li><li>
-        <b>attributes</b> - Feature's attributes, especially handy when the geometry is a WKT-string.
-    </li><li>
-        <b>clearPrevious</b> - when true, the previous features will be cleared
-    </li><li>
-        <b>centerTo</b> - Whether to zoom to the added features.
-    </li><li>
-        <b>cursor</b> - Mouse cursor when cursor is over the feature.
-    </li><li>
-        <b>prio</b> - Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.
-    </li>
-<ul>
+#### Updating existing features on map
 
-Geometry can also feature properties object. This will identify feature what you want to update. This is usefull for example highlight feature.
+The first parameter is an object containing a feature property that is used for feature matching. The value can be an array or a single value.
+
 ```javascript
-var updateFeature = {'test_property':2};
+var updateFeatureWithProperty = {'test_property': [1,2]};
 ```
+
+The property value can also be an object of properties that will be added to matching features.
+
+```javascript
+var updateFeatureWithProperty = {
+  'test_property': [
+    { 'value': 1, 'properties': { 'newly_added_property': 10 }},
+    { 'value': 2, 'properties': { 'newly_added_property': 20 }},
+  ]
+};
+```
+
+Updating supports `layerId`, `prio` and `featureStyle` options.
+
+#### Options
+The second parameter is options.
+
+|Key|Type|Description|
+|---:|:---:|:---|
+| layerId | string | Layer's id to specify which layer you want to add features (if the layer does not exist one will be created).|
+| animationDuration | number | On update requests it's possible to animate fill color change. Specify animation duration in ms.|
+| attributes | object | Feature's attributes, especially handy when the geometry is a WKT-string.|
+| clearPrevious | boolean | when true, the previous features will be cleared|
+| centerTo | boolean | Whether to zoom to the added features.|
+| cursor | string | Mouse cursor when cursor is over the feature.|
+| prio | number | Feature prio. The lowest number is the must important feature (top on the layer). The highest number is the least important.|
+| featureStyle | object | Defines a generic style used for all the features.|
+| optionalStyles | array | Array of Oskari styles for geojson features. Style is used, if filtering values matches to feature properties.|
+
+See [Oskari JSON style](/documentation/examples/oskari-style) for style object definitions.
 
 ## Examples
 
-Usage example (GeoJSON)
+Add feature using GeoJSON
 
 ```javascript
 // Define the features as GeoJSON
@@ -132,10 +143,10 @@ var options = {
   centerTo: true
 };
 
-Oskari.getSandbox().postRequestByName(rn, [geojsonObject, layerOptions]);
+Oskari.getSandbox().postRequestByName(rn, [geojsonObject, options]);
 ```
 
-Usage example (WKT)
+Add feature using WKT
 
 ```javascript
 // Define a wkt-geometry
@@ -154,11 +165,10 @@ var options = {
   attributes
 };
 
-Oskari.getSandbox().postRequestByName(rn, [WKT, layerOptions]);
+Oskari.getSandbox().postRequestByName(rn, [WKT, options]);
 ```
 
-
-Usage example - Update specific feature.
+Update specific feature
 
 ```javascript
 // First add feature, feature format can be an WKT or GeoJSON
@@ -191,7 +201,6 @@ var featureStyle = {
 
 // Define wanted feature attributes
 var updatedFeatureAttributes = {'test_property':1};
-var params = [updatedFeatureAttributes, options];
 
 var options = {
     featureStyle: featureStyle,
@@ -201,7 +210,7 @@ var options = {
 
 Oskari.getSandbox().postRequestByName(
     'MapModulePlugin.AddFeaturesToMapRequest',
-    params
+     [updatedFeatureAttributes, options]
 );
 ```
 

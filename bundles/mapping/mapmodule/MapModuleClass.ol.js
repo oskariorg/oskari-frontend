@@ -42,8 +42,6 @@ export class MapModule extends AbstractMapModule {
     _initImpl (sandbox, options, map) {
         // css references use olMap as selectors so we need to add it
         this.getMapEl().addClass('olMap');
-        // disables text-selection on map (fixes an issue in Chrome 69 where dblclick on map selects text and prevents dragging the map)
-        this.getMapEl().addClass('disable-select');
         return map;
     }
 
@@ -85,7 +83,8 @@ export class MapModule extends AbstractMapModule {
             // still these need to be set to prevent errors
             center: [0, 0],
             zoom: 0,
-            resolutions: this.getResolutionArray()
+            resolutions: this.getResolutionArray(),
+            constrainResolution: true
         };
 
         const worldProjections = ['EPSG:3857', 'EPSG:4326'];
@@ -149,10 +148,28 @@ export class MapModule extends AbstractMapModule {
             me.notifyStartMove();
         });
 
+        function wasInfoBoxClicked (event) {
+            // - Chrome supports event.path.
+            // - Most others composedPath() https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
+            // - Polyfilled for IE/Edge on src/polyfills.js
+            var path = event.path || (event.composedPath && event.composedPath()) || [];
+            const foundInfoBox = path.find(item => (item.className || '').indexOf('olPopup') !== -1);
+            return typeof foundInfoBox !== 'undefined';
+        }
+
         map.on('singleclick', function (evt) {
             if (me.getDrawingMode()) {
                 return;
             }
+            if (wasInfoBoxClicked(evt.originalEvent)) {
+                // After OL 6 upgrade:
+                // - ol/MapBrowserEventHandler.emulateClick_ receives map click, dispatches it and schedules it to be triggered again after small delay
+                // - infobox/OpenlayersPopupPlugin receives the click in _setClickEvent() popupElement.onclick -> closes the popup so it's no longer on map
+                // - the delayed event from emulateClick_ triggers and detects that there is no overlay on the spot that was
+                //   clicked (since infobox was removed from that spot on the previous step) triggering a new MapClickedEvent and opening another infobox
+                return;
+            }
+
             var CtrlPressed = evt.originalEvent.ctrlKey;
             var lonlat = {
                 lon: evt.coordinate[0],
@@ -551,7 +568,7 @@ export class MapModule extends AbstractMapModule {
      */
     zoomToExtent (bounds, suppressStart, suppressEnd) {
         var extent = this.__boundsToArray(bounds);
-        this.getMap().getView().fit(extent, this.getMap().getSize());
+        this.getMap().getView().fit(extent);
         this.updateDomain();
         // send note about map change
         if (suppressStart !== true) {
@@ -655,7 +672,9 @@ export class MapModule extends AbstractMapModule {
             break;
         default:
             view.setCenter(location);
-            view.setZoom(zoom);
+            if (!isNaN(zoom)) {
+                view.setZoom(zoom);
+            }
             callback(true);
             break;
         }
@@ -672,10 +691,10 @@ export class MapModule extends AbstractMapModule {
      *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
      */
-    centerMap (lonlat, zoom, suppressEnd, options) {
+    centerMap (lonlat, zoom, suppressEnd, options = {}) {
         const view = this.getMap().getView();
-        const animation = options && options.animation ? options.animation : '';
-        const duration = options && options.duration ? options.duration : 3000;
+        const animation = options.animation ? options.animation : '';
+        const duration = options.duration ? options.duration : 3000;
 
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
@@ -688,19 +707,22 @@ export class MapModule extends AbstractMapModule {
             const { top, bottom, left, right } = zoom.value || zoom;
             if (top && left && bottom && right) {
                 const zoomOut = top === bottom && left === right;
-                this.zoomToExtent(zoom, zoomOut, zoomOut);
-                view.setCenter(lonlat);
+                const suppressEvent = zoomOut;
+                this.zoomToExtent({ top, bottom, left, right }, suppressEvent, suppressEvent);
+                if (zoomOut) {
+                    this.zoomToScale(2000);
+                }
+                view.setCenter([lonlat.lon, lonlat.lat]);
                 return true;
             }
         }
-        if (zoom === Number) {
+        if (!isNaN(zoom)) {
             // backwards compatibility
             zoom = { type: 'zoom', value: zoom };
         }
 
         const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
         this._animateTo(lonlat, zoomValue, animation, duration);
-
         return true;
     }
 
@@ -1200,6 +1222,11 @@ export class MapModule extends AbstractMapModule {
     getGeoJSONFromFeatures (features) {
         var olGeoJSON = new olFormatGeoJSON();
         return olGeoJSON.writeFeaturesObject(features);
+    }
+
+    setTime () {
+        var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+        log.warn('setTime only available in 3D map');
     }
 
     getOLGeometryFromGeoJSON (geojson) {

@@ -30,12 +30,10 @@ Oskari.registerLocalization(
                 'inspire': 'Aiheittain',
                 'organization': 'Tiedontuottajittain'
             },
-            'tooltip': {
-                'timeseries': 'Aikasarjataso'
-            },
             'layer': {
                 'tooltip': {
-                    'timeseries': 'Aikasarjataso'
+                    'timeseries': 'Aikasarjataso',
+                    'addLayer': 'Lisää uusi karttataso'
                 },
                 'styles': {
                     'title': 'Tyyli'

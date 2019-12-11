@@ -45,7 +45,7 @@ const onToolClick = tool => {
     }
 };
 
-const Layer = ({ model, even, selected, mutator, locale }) => {
+const Layer = ({ model, even, selected, mutator }) => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools">
@@ -67,7 +67,7 @@ const Layer = ({ model, even, selected, mutator, locale }) => {
                     <div>{model.getName()}</div>
                 </Label>
             </Body>
-            <LayerTools model={model} mutator={mutator} locale={locale}/>
+            <LayerTools model={model} mutator={mutator}/>
         </LayerDiv>
     );
 };
@@ -76,8 +76,7 @@ Layer.propTypes = {
     model: PropTypes.any.isRequired,
     even: PropTypes.bool.isRequired,
     selected: PropTypes.bool.isRequired,
-    mutator: PropTypes.any.isRequired,
-    locale: PropTypes.any.isRequired
+    mutator: PropTypes.any.isRequired
 };
 
 const memoized = React.memo(Layer);

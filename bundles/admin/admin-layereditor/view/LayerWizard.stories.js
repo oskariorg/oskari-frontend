@@ -55,7 +55,7 @@ service.capabilities = {
     capabilitiesFailed: ['you'],
     unsupportedLayers: ['till']
 };
-const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
+const localeProviderOptions = { bundleKey: 'admin-layereditor' };
 const layerTypes = service.getLayerTypes();
 const capabilities = service.getCapabilities();
 
@@ -64,7 +64,7 @@ storiesOf('LayerWizard', module)
     .add('Initial view', () => {
         Oskari.setLang('en');
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={service.getLayer()}
@@ -78,7 +78,7 @@ storiesOf('LayerWizard', module)
     .add('Initial view sv', () => {
         Oskari.setLang('sv');
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={service.getLayer()}
@@ -92,7 +92,7 @@ storiesOf('LayerWizard', module)
     .add('Initial view fi', () => {
         Oskari.setLang('fi');
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={service.getLayer()}
@@ -110,7 +110,7 @@ storiesOf('LayerWizard', module)
             type: 'wfslayer'
         };
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={layer}
@@ -130,7 +130,7 @@ storiesOf('LayerWizard', module)
             version: '3.0'
         };
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={layer}
@@ -151,7 +151,7 @@ storiesOf('LayerWizard', module)
             name: 'make it'
         };
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={layer}
@@ -173,7 +173,7 @@ storiesOf('LayerWizard', module)
             isNew: false
         };
         return (
-            <LocaleContext.Provider value={loc}>
+            <LocaleContext.Provider value={localeProviderOptions}>
                 <MutatorContext.Provider value={service}>
                     <LayerWizard
                         layer={layer}

@@ -21,16 +21,8 @@ const StyledListItem = styled(ListItem)`
     }
 `;
 
-const getBadgeText = (group, visibleLayerCount) => {
-    let badgeText = group.getLayers().length;
-    if (visibleLayerCount !== group.getLayers().length) {
-        badgeText = visibleLayerCount + ' / ' + badgeText;
-    }
-    return badgeText;
-};
-
-const renderLayer = ({ model, even, selected, mutator, locale }) => {
-    const itemProps = { model, even, selected, mutator, locale };
+const renderLayer = ({ model, even, selected, mutator }) => {
+    const itemProps = { model, even, selected, mutator };
     return (
         <StyledListItem>
             <Layer key={model.getId()} {...itemProps} />
@@ -41,29 +33,28 @@ renderLayer.propTypes = {
     model: PropTypes.any,
     even: PropTypes.any,
     selected: PropTypes.any,
-    mutator: PropTypes.any,
-    locale: PropTypes.any
+    mutator: PropTypes.any
 };
 
 const LayerCollapsePanel = (props) => {
-    const { group, showLayers, selectedLayerIds, mutator, locale, ...propsNeededForPanel } = props;
-    const layerRows = showLayers.map((layer, index) => {
+    const { group, selectedLayerIds, mutator, ...propsNeededForPanel } = props;
+    const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             model: layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            mutator,
-            locale
+            mutator
         };
         return layerProps;
     });
-    const visibleLayerCount = showLayers ? showLayers.length : 0;
+    const badgeText = group.unfilteredLayerCount
+        ? layerRows.length + ' / ' + group.unfilteredLayerCount
+        : layerRows.length;
     return (
         <StyledCollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
-            extra={
-                <Badge inversed={true} count={getBadgeText(group, visibleLayerCount)}/>
-            }>
+            extra={<Badge inversed={true} count={badgeText}/>}
+        >
             <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
         </StyledCollapsePanel>
     );
@@ -71,10 +62,8 @@ const LayerCollapsePanel = (props) => {
 
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
-    showLayers: PropTypes.array.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
-    mutator: PropTypes.any.isRequired,
-    locale: PropTypes.any.isRequired
+    mutator: PropTypes.any.isRequired
 };
 
 const comparisonFn = (prevProps, nextProps) => {

@@ -10,7 +10,9 @@ export const initServices = () => {
     sandbox.registerService(mapStateService);
 };
 
+const bundleName = 'LayerList';
 export const getBundleInstance = () => ({
     getSandbox: () => Oskari.getSandbox(),
-    getLocalization: () => Oskari.getLocalization('LayerList')
+    getName: () => bundleName,
+    getLocalization: () => Oskari.getLocalization(bundleName)
 });

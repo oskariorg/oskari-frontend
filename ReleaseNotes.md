@@ -2,7 +2,28 @@
 
 ## 1.54.0
 
-- OpenLayers map engine upgrade to version 6
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/20?closed=1
+
+- Optional 3D-capable mapmodule based on olcesium has been added to Oskari
+- OpenLayers version has been updated to 6.1.1 (Note! paths with /ol3/ references have been updated to /ol/ and you might need to manually update the main.js of your app. See oskari-server/MigrationGuide for details.)
+- Added new React-based bundle implementation for layer listing: framework/layerlist
+- Conditional styling API for vector features has been improved to support ranges etc
+- New option for MapMoveRequest to animate movement
+- New request MapTourRequest for programmatically moving the map through multiple places in a "tour like experience"
+- Performance improvements for vector feature layers
+- Fixed an issue on vector feature styling where a png-icon became "colored" unintentionally
+- Fixed an issue for autocomplete search where spinner was left spinning indefinitely
+- Added new config options for user location tracking (publisher functionality has UI for these to customise embedded maps)
+- Oskari.urls.getRoute() now supports a parameter object. Domain validation method has been added to Oskari.util.
+- Added some more russian translations
+- Other fixes and improvements.
+
+Build & components:
+- Added oskari-ui alias for Oskari's React/AntD-based UI-component library.
+- Improved naming for UI-components like Panel -> CollapsePanel to separate it from other types of Panels etc
+- Introduced a "mutator" concept that is passed to React components via context
+- Fixes for conflicts between current styles and AntD styles
 
 ## 1.53.1
 

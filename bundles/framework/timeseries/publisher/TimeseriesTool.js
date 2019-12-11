@@ -37,8 +37,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
             if (this.isDisabled()) {
                 this.controlConfig.showControl = false;
             }
-            // Apply configuration
-            this.setEnabled(this.controlConfig.showControl);
+            if (this.isDisplayed()) {
+                // Apply configuration
+                this.setEnabled(this.controlConfig.showControl);
+            }
         },
         _getTimeseriesService: function () {
             if (!this.service) {
@@ -95,7 +97,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.timeseries.TimeseriesTool',
         * @returns {Boolean} is tool disabled
         */
         isDisabled: function (data) {
-            return typeof this._getTimeseriesService().getActiveTimeseries() === 'undefined';
+            const service = this._getTimeseriesService();
+            return typeof service === 'undefined' || typeof service.getActiveTimeseries() === 'undefined';
+        },
+        /**
+         * Don't show the tool if this code is loaded BUT the timeseries bundle is not started as part of the appsetup
+         */
+        isDisplayed: function () {
+            return typeof this._getTimeseriesService() !== 'undefined';
         },
         /**
         * Get values.
