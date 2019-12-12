@@ -1,5 +1,14 @@
 # Release Notes
 
+## 1.54.1
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/23?closed=1
+
+- Fixed an issue where user generated my places seemed to disappear while adding new ones
+- Fixed an issue where clicking on an infobox that was NOT opened by map click/GFI caused a new map click to be triggered when clicking the close icon
+- Fixed an issue with statistics indicator selector not working properly on some mobile devices/native scroll component.
+
 ## 1.54.0
 
 For a full list of changes see:

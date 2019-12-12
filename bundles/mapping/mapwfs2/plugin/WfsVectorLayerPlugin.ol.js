@@ -32,6 +32,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.layerHandlersByLayerId = {};
         this.userStyleService = new UserStyleService();
         Oskari.getSandbox().registerService(this.userStyleService);
+        this.availableVersions = ['1.1.0', '2.0.0', '3.0'];
     }
 
     /* ---- AbstractMapModulePlugin functions ---- */
@@ -89,7 +90,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!this.mapLayerService || !this.vectorFeatureService) {
             return;
         }
-        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer');
+        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer', this.availableVersions);
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);

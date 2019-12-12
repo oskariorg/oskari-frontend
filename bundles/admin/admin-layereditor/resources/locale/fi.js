@@ -39,6 +39,7 @@ Oskari.registerLocalization(
                 "placeholder": "Nimi ruotsiksi",
                 "descplaceholder": "Kuvaus ruotsiksi"
             },
+            "addLayer": "Lisää uusi karttataso",
             "dataProvider": "Tiedontuottaja",
             "addDataProvider": "Lisää tiedontuottaja",
             "mapLayerGroups": "Tason ryhmät",
