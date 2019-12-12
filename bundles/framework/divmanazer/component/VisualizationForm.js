@@ -117,11 +117,10 @@ Oskari.clazz.define(
                 );
                 form.append(styleNameHeader);
 
-                const nameInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput', 'styleNameInput');
-                nameInput.setValue(me._options.name);
-
+                this.nameInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput', 'styleNameInput');
+                this.nameInput.setValue(me._options.name);
                 const nameContainer = this.templateNameContainer.clone();
-                nameInput.insertTo(nameContainer);
+                this.nameInput.insertTo(nameContainer);
                 form.append(nameContainer);
             }
             const styleHeader = jQuery(
@@ -164,9 +163,11 @@ Oskari.clazz.define(
                     values[fClazzName] = fClazz.getValues();
                 }
             }
-            const styleNameInputValue = jQuery('.wfs_own_style').find('input[name="styleNameInput"]').val();
-            if (styleNameInputValue && styleNameInputValue.length > 0) {
-                values.name = styleNameInputValue;
+            if (this._options.hasOwnProperty('name') && this.nameInput) {
+                const styleNameInputValue = this.nameInput.getValue();
+                if (styleNameInputValue && styleNameInputValue.length > 0) {
+                    values.name = styleNameInputValue;
+                }
             }
             return values;
         },
