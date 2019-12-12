@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Mutator } from 'oskari-ui/util';
-import { Background, StyledIcon, Row, Col, StyledInput, StyledButton } from './ShadowToolStyled';
+import { Option, InputGroup } from 'oskari-ui';
+import { Background, StyledIcon, Row, Col, ColFixed, StyledInput, StyledButton, StyledSlider, StyledSelect, Border } from './ShadowToolStyled';
 
 export const ShadowTool = ({ mutator, date, time }) => {
     const [timeValue, setTime] = React.useState(time);
@@ -31,8 +32,12 @@ export const ShadowTool = ({ mutator, date, time }) => {
         return dateObject.getDate() === d && dateObject.getMonth() === m;
     };
 
-    const changeTime = event => {
+    const inputChangeTime = event => {
         const val = event.target.value;
+        changeTime(val);
+    };
+
+    const changeTime = val => {
         if (validateTime(val)) {
             mutator.setTime(val);
         }
@@ -44,8 +49,56 @@ export const ShadowTool = ({ mutator, date, time }) => {
         if (validateDate(val)) {
             mutator.setDate(val);
         }
-        setDate(event.target.value);
+        setDate(val);
     };
+
+    const sliderValueForTime = () => {
+        const hoursMinutes = time.split(/[.:]/);
+        const hours = parseInt(hoursMinutes[0], 10) * 60;
+        const minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+        return hours + minutes;
+    };
+
+    const changeSliderTime = (val) => {
+        const hours = Math.floor(val / 60);
+        const minutes = val % 60;
+        const fMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        const timeString = `${hours}:${fMinutes}`;
+        setTime(timeString);
+    };
+
+    const marksForDate = () => {
+        const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const styledMark = {
+            color: '#fff'
+        };
+        return months.reduce((marks, month) => {
+            return {
+                ...marks,
+                [month]: {
+                    style: styledMark,
+                    label: month
+                }
+            };
+        }, {});
+    };
+
+    const marksForTime = {
+        6: '',
+        12: '',
+        18: ''
+    };
+
+    const speedValues = [
+        {
+            value: 1,
+            label: '1x'
+        },
+        {
+            value: 60,
+            label: '60x'
+        }
+    ];
 
     return (
         <Background>
@@ -54,6 +107,9 @@ export const ShadowTool = ({ mutator, date, time }) => {
                     <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
                     <StyledInput value={dateValue} onChange={changeDate} />
                 </Col>
+                <ColFixed>
+                    <StyledSlider marks={marksForDate()} min={1} max={13} step={0.01} />
+                </ColFixed>
                 <Col>
                     <StyledButton onClick={setCurrentTime}>Nykyhetki</StyledButton>
                 </Col>
@@ -61,7 +117,21 @@ export const ShadowTool = ({ mutator, date, time }) => {
             <Row style={{ marginTop: '20px' }}>
                 <Col>
                     <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-                    <StyledInput value={timeValue} onChange={changeTime} />
+                    <StyledInput value={timeValue} onChange={inputChangeTime} />
+                </Col>
+                <ColFixed>
+                    <InputGroup compact>
+                        <Border>
+                            <StyledSlider marks={marksForTime} min={0} max={1439} style={{ margin: 0 }} value={sliderValueForTime()} onChange={changeSliderTime} />
+                        </Border>
+                    </InputGroup>
+                </ColFixed>
+                <Col>
+                    <StyledSelect style={{ width: '100%' }}>
+                        {speedValues.map(speed => (
+                            <Option key={speed.value} value={speed.value}>{speed.label}</Option>
+                        ))}
+                    </StyledSelect>
                 </Col>
             </Row>
         </Background>

@@ -1,10 +1,10 @@
 import styled from 'styled-components';
-import { Icon, Button } from 'oskari-ui';
+import { Icon, Button, Slider, Select } from 'oskari-ui';
 
 export const Background = styled.div`
     background-color: #3c3c3c;
     min-height: 90px;
-    width: 250px;
+    width: 720px;
     padding: 20px;
     margin: -10px;
 `;
@@ -48,4 +48,26 @@ export const StyledButton = styled(Button)`
         color: #3c3c3c;
         border: 0;
     }
+`;
+
+export const StyledSlider = styled(Slider)`
+    .ant-slider-mark {
+        top: -21px;
+    }
+`;
+
+export const StyledSelect = styled(Select)``;
+
+export const ColFixed = styled.div`
+    flex: 0 0 55%;
+    width: auto;
+    max-width: 100%;
+    position: relative;
+`;
+
+export const Border = styled('div')`
+    border-radius: 4px;
+    border: 1px solid #d9d9d9;
+    width: 90%;
+    padding: 10px 15px;
 `;
