@@ -64,12 +64,12 @@ const UserStyles = ({ layerId, styles, removeUserStyleHandler }) => {
                 </AddStyle>
             </Header>
             { styles && styles.length > 0 &&
-            <List bordered={false} dataSource={styles} renderItem={style => {
+            <List bordered={false} dataSource={styles} renderItem={styleWithMetadata => {
                 return (
                     <StyledListItem>
-                        <UserStyleRow styleName={style.name}
-                            editUserStyleHandler={() => showVisualizationForm(layerId, style.id, false)}
-                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, style.id)}/>
+                        <UserStyleRow styleName={styleWithMetadata.name}
+                            editUserStyleHandler={() => showVisualizationForm(layerId, styleWithMetadata.style.id, false)}
+                            removeUserStyleHandler={() => removeUserStyleHandler(layerId, styleWithMetadata.style.id)}/>
                     </StyledListItem>
                 );
             }}/>

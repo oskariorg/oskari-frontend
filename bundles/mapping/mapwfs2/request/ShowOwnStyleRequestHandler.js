@@ -58,14 +58,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
             var content = this.template.wrapper.clone();
             const layer = this.plugin.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
             var customStyle;
-
+            var styleName;
             if (styleId) {
-                customStyle = this.service.getUserStyle(layerId, styleId);
+                const styleWithMetadata = this.service.getUserStyle(layerId, styleId);
+                customStyle = styleWithMetadata.style;
+                styleName = styleWithMetadata.name;
             } else {
                 customStyle = null;
             }
             // add form
-            content.append(this.plugin.getCustomStyleEditorForm(customStyle));
+            content.append(this.plugin.getCustomStyleEditorForm(customStyle, styleName));
 
             // buttons
             var self = this;

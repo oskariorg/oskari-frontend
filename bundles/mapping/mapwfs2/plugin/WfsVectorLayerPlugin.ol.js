@@ -227,10 +227,11 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return VisualizationForm's form element
      */
-    getCustomStyleEditorForm (customStyle) {
-        this.visualizationForm.setOskariStyleValues(customStyle);
+    getCustomStyleEditorForm (customStyle, styleName) {
         if (!customStyle) {
             this.visualizationForm = new VisualizationForm({ name: '' });
+        } else {
+            this.visualizationForm.setOskariStyleValues(customStyle, styleName);
         }
         return this.visualizationForm.getForm();
     }
@@ -368,9 +369,14 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
     saveUserStyle (layerId, styleId) {
-        const style = this.visualizationForm.getOskariStyle();
-        style.id = styleId;
-        this.userStyleService.saveUserStyle(layerId, style);
+        const oskariStyle = this.visualizationForm.getOskariStyle();
+        const name = this.visualizationForm.getOskariStyleName();
+        oskariStyle.id = styleId;
+        const styleWithMetadata = {
+            name: name,
+            style: oskariStyle
+        };
+        this.userStyleService.saveUserStyle(layerId, styleWithMetadata);
     }
 };
 

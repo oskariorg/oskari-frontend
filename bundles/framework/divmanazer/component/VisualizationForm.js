@@ -208,10 +208,12 @@ Oskari.clazz.define(
                     },
                     shape: values.dot.shape,
                     size: values.dot.size
-                },
-                name: values.name
+                }
             };
             return oskariStyle;
+        },
+        getOskariStyleName () {
+            return this.getValues().name;
         },
 
         /**
@@ -220,14 +222,14 @@ Oskari.clazz.define(
          *
          * @param {Object} featureStyle
          */
-        setOskariStyleValues: function (featureStyle) {
+        setOskariStyleValues: function (featureStyle, styleName) {
             if (featureStyle === null || featureStyle === undefined) {
                 return;
             }
             var formClazzes = this._getFormClazz();
             var fClazzName;
             var fClazz;
-            this._options = jQuery.extend(this._options, { name: featureStyle.name });
+            this._options = jQuery.extend(this._options, { name: styleName });
 
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
