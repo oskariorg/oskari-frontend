@@ -230,7 +230,9 @@ Oskari.clazz.define(
             var formClazzes = this._getFormClazz();
             var fClazzName;
             var fClazz;
-            this._options = jQuery.extend(this._options, { name: styleName });
+            if (styleName) {
+                this._options = jQuery.extend(this._options, { name: styleName });
+            }
 
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
