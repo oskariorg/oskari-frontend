@@ -73,42 +73,43 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         _setupAdminTooling () {
             // add layerlist tool for adding new layers
             const toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
-            if (toolingService) {
-                const addLayerTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                addLayerTool.setName('layer-editor-add-layer');
-                addLayerTool.setTitle(this.loc('addLayer'));
-                addLayerTool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
-
-                const offset = {
-                    x: -100,
-                    y: -200
-                };
-                const createPopupCallback = flyoutKey => {
-                    return evt => {
-                        const position = {
-                            left: evt.pageX + offset.x,
-                            top: evt.pageY + offset.y
-                        };
-                        this.showFormPopup(flyoutKey, position);
-                    };
-                };
-                const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                addDataProviderTool.setName('layer-editor-add-data-provider');
-                addDataProviderTool.setTitle(this.loc('addDataProvider'));
-                addDataProviderTool.setCallback(createPopupCallback(FLYOUT.DATA_PROVIDER));
-
-                const addThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
-                addThemeTool.setName('layer-editor-add-theme');
-                addThemeTool.setTitle(this.loc('addTheme'));
-                addThemeTool.setCallback(createPopupCallback(FLYOUT.THEME));
-
-                addLayerTool.setTypes([toolingService.TYPE_CREATE]);
-                addThemeTool.setTypes([toolingService.TYPE_CREATE]);
-                addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
-                toolingService.addTool(addLayerTool);
-                toolingService.addTool(addDataProviderTool);
-                toolingService.addTool(addThemeTool);
+            if (!toolingService) {
+                return;
             }
+            const addLayerTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            addLayerTool.setName('layer-editor-add-layer');
+            addLayerTool.setTitle(this.loc('addLayer'));
+            addLayerTool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
+
+            const offset = {
+                x: -100,
+                y: -200
+            };
+            const createPopupCallback = flyoutKey => {
+                return evt => {
+                    const position = {
+                        left: evt.pageX + offset.x,
+                        top: evt.pageY + offset.y
+                    };
+                    this.showFormPopup(flyoutKey, position);
+                };
+            };
+            const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            addDataProviderTool.setName('layer-editor-add-data-provider');
+            addDataProviderTool.setTitle(this.loc('addDataProvider'));
+            addDataProviderTool.setCallback(createPopupCallback(FLYOUT.DATA_PROVIDER));
+
+            const addThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            addThemeTool.setName('layer-editor-add-theme');
+            addThemeTool.setTitle(this.loc('addTheme'));
+            addThemeTool.setCallback(createPopupCallback(FLYOUT.THEME));
+
+            addLayerTool.setTypes([toolingService.TYPE_CREATE]);
+            addThemeTool.setTypes([toolingService.TYPE_CREATE]);
+            addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
+            toolingService.addTool(addLayerTool);
+            toolingService.addTool(addDataProviderTool);
+            toolingService.addTool(addThemeTool);
         }
 
         /**
@@ -248,14 +249,13 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 return this.themeFlyout;
             }
             this.themeFlyout = new LocalizingFlyout(this, this.loc('addTheme'), {
-                showHeading: false,
                 headerMessageKey: 'themeName'
             });
             this.themeFlyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
             });
-            this.themeFlyout.setAction(value => {
+            this.themeFlyout.setSaveAction(value => {
                 // TODO add discreet notifications
                 jQuery.ajax({
                     type: 'PUT',
@@ -286,14 +286,13 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 return this.dataProviderFlyout;
             }
             this.dataProviderFlyout = new LocalizingFlyout(this, this.loc('addDataProvider'), {
-                showHeading: false,
                 headerMessageKey: 'dataProviderName'
             });
             this.dataProviderFlyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
             });
-            this.dataProviderFlyout.setAction(value => {
+            this.dataProviderFlyout.setSaveAction(value => {
                 // TODO add discreet notifications
                 jQuery.ajax({
                     type: 'PUT',

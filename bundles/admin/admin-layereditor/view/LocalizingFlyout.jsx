@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
+// NOTE: Everything is in the single file for demonstrating purposes.
 export class LocalizingFlyout extends ExtraFlyout {
     constructor (instance, title, options = {}) {
         super(title, options);
@@ -30,7 +31,7 @@ export class LocalizingFlyout extends ExtraFlyout {
         // Here we are telling the UI to re render on state change, making the UI respond to user actions.
         this.uiHandler.addStateListener(this.onUpdate);
     }
-    setAction (action) {
+    setSaveAction (action) {
         this.uiHandler.setSaveAction(action);
     }
     setLoading (loading) {
@@ -50,10 +51,10 @@ export class LocalizingFlyout extends ExtraFlyout {
         // The UI handler itself should never be passed to a component.
         // Instead, the handler should provide a mutator object, a subset of the handlers methods.
         // The mutator should contain only methods the components require.
-        const mutator = this.handler.getMutator();
+        const mutator = this.uiHandler.getMutator();
         let ui = (
             <LocaleContext.Provider value={{ bundleKey: this.instance.getName() }}>
-                <LocalizedContent { ...this.handler.getState() } mutator={mutator}/>
+                <LocalizedContent { ...this.uiHandler.getState() } mutator={mutator}/>
             </LocaleContext.Provider>
         );
         ReactDOM.render(ui, this.mountPoint);
@@ -64,16 +65,16 @@ export class LocalizingFlyout extends ExtraFlyout {
 class UIService extends StateHandler {
     constructor (instance) {
         super();
-        this.getMsg = Oskari.getMsg.bind(null, instance.getName());
+        const getMsg = Oskari.getMsg.bind(null, instance.getName());
+        const labels = {};
+        Oskari.getSupportedLanguages().forEach(lang => {
+            labels[lang] = getMsg(`${lang}.lang`);
+        });
         this.setState({
             loading: false,
             headerMessageKey: null,
             value: {},
-            labels: {
-                en: this.getMsg('en.lang'),
-                fi: this.getMsg('fi.lang'),
-                sv: this.getMsg('sv.lang')
-            }
+            labels
         });
         this.saveAction = null;
         this.cancelAction = null;
