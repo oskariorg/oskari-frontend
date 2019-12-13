@@ -13,7 +13,6 @@ Oskari.clazz.define(className,
         this._toolOpen = false;
         this._index = 80;
         this._log = Oskari.log(shortName);
-        this.loc = Oskari.getMsg.bind(null, 'CameraControls3d');
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
@@ -74,7 +73,7 @@ Oskari.clazz.define(className,
                 this.addToPluginContainer(this._element);
             }
             ReactDOM.render(
-                <LocaleContext.Provider value={this.loc}>
+                <LocaleContext.Provider value={{ bundleKey: 'CameraControls3d' }}>
                     <CameraControls3d mapInMobileMode={mapInMobileMode}/>
                 </LocaleContext.Provider>, this._element.get(0));
         },
