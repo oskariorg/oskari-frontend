@@ -8,19 +8,15 @@ export class UserStyleService {
         if (!layerId || !styleWithMetadata) {
             return;
         }
-        const layerStyles = this.styles.get(layerId);
-        if (layerStyles) {
-            const index = layerStyles.findIndex(s => s.style.id === styleWithMetadata.style.id);
+        const layerStyles = this.styles.get(layerId) || [];
+        const index = layerStyles.findIndex(s => s.style.id === styleWithMetadata.style.id);
 
-            if (index !== -1) {
-                layerStyles[index] = styleWithMetadata;
-            } else {
-                layerStyles.push(styleWithMetadata);
-            }
-            this.styles.set(layerId, layerStyles);
+        if (index !== -1) {
+            layerStyles[index] = styleWithMetadata;
         } else {
-            this.styles.set(layerId, [styleWithMetadata]);
+            layerStyles.push(styleWithMetadata);
         }
+        this.styles.set(layerId, layerStyles);
         this.trigger('update');
     }
 
@@ -63,11 +59,9 @@ export class UserStyleService {
 
     getUserStyle (layerId, styleId) {
         const layerStyles = this.styles.get(layerId);
-        var style;
-        if (layerStyles) {
-            const s = layerStyles.filter(s => s.style.id === styleId);
-            style = s ? s[0] : undefined;
+        if (!layerStyles) {
+            return;
         }
-        return style;
+        return layerStyles.find(s => s.style.id === styleId);
     }
 }
