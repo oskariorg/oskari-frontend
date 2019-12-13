@@ -7,6 +7,7 @@ import { Background, StyledIcon, Row, Col, ColFixed, StyledInput, StyledButton, 
 export const ShadowTool = ({ mutator, date, time }) => {
     const [timeValue, setTime] = React.useState(time);
     const [dateValue, setDate] = React.useState(date);
+    const [sliderTimeValue, setSliderTime] = React.useState(time);
     const setCurrentTime = () => {
         const d = new Date();
         const curTime = `${d.getHours()}:${d.getMinutes()}`;
@@ -40,6 +41,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
     const changeTime = val => {
         if (validateTime(val)) {
             mutator.setTime(val);
+            setSliderTime(sliderValueForTime);
         }
         setTime(val);
     };
@@ -65,6 +67,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
         const fMinutes = minutes < 10 ? `0${minutes}` : minutes;
         const timeString = `${hours}:${fMinutes}`;
         setTime(timeString);
+        setSliderTime(val);
     };
 
     const marksForDate = () => {
@@ -84,9 +87,9 @@ export const ShadowTool = ({ mutator, date, time }) => {
     };
 
     const marksForTime = {
-        6: '',
-        12: '',
-        18: ''
+        360: '',
+        720: '',
+        1080: ''
     };
 
     const speedValues = [
@@ -122,7 +125,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
                 <ColFixed>
                     <InputGroup compact>
                         <Border>
-                            <StyledSlider marks={marksForTime} min={0} max={1439} style={{ margin: 0 }} value={sliderValueForTime()} onChange={changeSliderTime} />
+                            <StyledSlider marks={marksForTime} min={0} max={1439} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} />
                         </Border>
                     </InputGroup>
                 </ColFixed>
