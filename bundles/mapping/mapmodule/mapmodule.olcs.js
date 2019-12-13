@@ -464,12 +464,12 @@ class MapModuleOlCesium extends MapModuleOl {
     _disableMapMoveControls () {
         const styleClass = 'map-move-control-disabled';
         const mapInMobileMode = Oskari.util.isMobile();
-        var controls;
+        var controlSelectors;
 
         if (mapInMobileMode) {
-            controls = ['.mobile-zoom-in', '.mobile-zoom-out', '.mobile-my-location', '.mobile-xy', '.mobile-north'];
+            controlSelectors = this._getMobileMapControlSelectors();
         } else {
-            controls = ['.maprotator', '.coordinatetool', '.mylocationplugin'];
+            controlSelectors = this._getDesktopMapControlSelectors();
             // Zoom bar need more handling than other controls
             const zoomBar = jQuery('.mappluginsContainer').find('.zoombar');
             zoomBar.addClass(styleClass);
@@ -478,7 +478,7 @@ class MapModuleOlCesium extends MapModuleOl {
             slider.slider('disable');
         }
 
-        controls.forEach(controlClass => {
+        controlSelectors.forEach(controlClass => {
             const control = jQuery(controlClass);
             control.addClass(styleClass);
         });
@@ -486,12 +486,12 @@ class MapModuleOlCesium extends MapModuleOl {
     _enableMapMoveControls () {
         const styleClass = 'map-move-control-disabled';
         const mapInMobileMode = Oskari.util.isMobile();
-        var controls;
+        var controlSelectors;
 
         if (mapInMobileMode) {
-            controls = ['.mobile-zoom-in', '.mobile-zoom-out', '.mobile-my-location', '.mobile-xy', '.mobile-north'];
+            controlSelectors = this._getMobileMapControlSelectors();
         } else {
-            controls = ['.maprotator', '.coordinatetool', '.mylocationplugin'];
+            controlSelectors = this._getDesktopMapControlSelectors();
             // Zoom bar need more handling than other controls
             const zoomBar = jQuery('.mappluginsContainer').find('.zoombar');
             zoomBar.removeClass(styleClass);
@@ -500,10 +500,16 @@ class MapModuleOlCesium extends MapModuleOl {
             slider.slider('enable');
         }
 
-        controls.forEach(controlClass => {
+        controlSelectors.forEach(controlClass => {
             const control = jQuery(controlClass);
             control.removeClass(styleClass);
         });
+    }
+    _getMobileMapControlSelectors () {
+        return ['.mobile-zoom-in', '.mobile-zoom-out', '.mobile-my-location', '.mobile-xy', '.mobile-north','.camera-controls-3d i:nth-child(3)', '.camera-controls-3d i:nth-child(4)'];
+    }
+    _getDesktopMapControlSelectors () {
+        return ['.maprotator', '.coordinatetool', '.mylocationplugin'];
     }
     _toRadians (value) {
         return !isNaN(value) ? Cesium.Math.toRadians(value) : undefined;
