@@ -8,7 +8,7 @@ const darkBgColor = 'rgba(20,20,20,0.8)';
 const secondaryColor = '#006ce8';
 
 const MapControlsContainer = styled.div`
-    margin: 10px 0 0 30px;
+    margin: 0 0 10px 30px;
     display: flex;
     flex-wrap: wrap;
     width: 32px;
