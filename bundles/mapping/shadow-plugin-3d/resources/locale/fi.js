@@ -3,7 +3,8 @@ Oskari.registerLocalization(
         "lang": "fi",
         "key": "ShadowingPlugin3d",
         "value": {
-            "title": "Varjostus"
+            "title": "Varjostus",
+            "present": "Nykyhetki"
         }
     }
 );

@@ -3,7 +3,8 @@ Oskari.registerLocalization(
         "lang": "en",
         "key": "ShadowingPlugin3d",
         "value": {
-            "title": "Shadowing"
+            "title": "Shadowing",
+            "present": "Present"
         }
     }
 );
