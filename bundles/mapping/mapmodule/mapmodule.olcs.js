@@ -506,10 +506,10 @@ class MapModuleOlCesium extends MapModuleOl {
         });
     }
     _getMobileMapControlSelectors () {
-        return ['.mobile-zoom-in', '.mobile-zoom-out', '.mobile-my-location', '.mobile-xy', '.mobile-north', '.camera-controls-3d i:nth-child(3)', '.camera-controls-3d i:nth-child(4)'];
+        return ['.mobileToolbarContent .mobile-zoom-in', '.mobileToolbarContent .mobile-zoom-out', '.mobileToolbarContent .mobile-my-location', '.mobileToolbarContent .mobile-xy', '.mobileToolbarContent .mobile-north', '.mobileToolbarContent .camera-controls-3d i:nth-child(3)', '.mobileToolbarContent .camera-controls-3d i:nth-child(4)'];
     }
     _getDesktopMapControlSelectors () {
-        return ['.maprotator', '.coordinatetool', '.mylocationplugin'];
+        return ['.mappluginsContainer .maprotator', '.mappluginsContainer .coordinatetool', '.mappluginsContainer .mylocationplugin'];
     }
     _toRadians (value) {
         return !isNaN(value) ? Cesium.Math.toRadians(value) : undefined;
