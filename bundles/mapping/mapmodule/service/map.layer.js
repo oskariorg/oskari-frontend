@@ -603,6 +603,15 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 }
             });
         },
+
+        /**
+         * @method addLayerGroup
+         * @param {Oskari.mapframework.domain.MaplayerGroup} group map layer group to add.
+         */
+        addLayerGroup: function (group) {
+            this._layerGroups.push(group);
+        },
+
         /**
          * @method _loadAllLayerGroupsAjaxCallBack
          * Internal callback method for ajax loading in #loadAllLayerGroupsAjax()
