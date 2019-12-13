@@ -272,6 +272,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
             }
             return this._styles;
         },
+        resetStyleToDefault: function () {
+            this.setCustomStyle(null);
+            this.selectStyle('default');
+        },
         /**
          * @method getStyleDef
          * @param {String} styleName
