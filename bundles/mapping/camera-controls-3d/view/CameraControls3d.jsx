@@ -87,12 +87,12 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
 
     const moveMapControl = <MoveMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodMove);
-        setCameraToMoveMode();
+        setCameraToMoveMode(activeMapMoveMethod);
     }} title={mapInMobileMode ? '' : getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>;
 
     const rotateMapControl = <RotateMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
         setActiveMapMoveMethod(mapMoveMethodRotate);
-        setCameraToRotateMode();
+        setCameraToRotateMode(activeMapMoveMethod);
     }} title={ mapInMobileMode ? '' : getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>;
 
     const upControl = <UpIcon mapInMobileMode={mapInMobileMode}
