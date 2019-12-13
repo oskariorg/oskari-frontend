@@ -471,7 +471,7 @@ class MapModuleOlCesium extends MapModuleOl {
         } else {
             controls = ['.maprotator', '.coordinatetool', '.mylocationplugin'];
             // Zoom bar need more handling than other controls
-            const zoomBar = jQuery('.zoombar');
+            const zoomBar = jQuery('.mappluginsContainer').find('.zoombar');
             zoomBar.addClass(styleClass);
             zoomBar.children().addClass(styleClass);
             const slider = zoomBar.find('.slider');
@@ -493,7 +493,7 @@ class MapModuleOlCesium extends MapModuleOl {
         } else {
             controls = ['.maprotator', '.coordinatetool', '.mylocationplugin'];
             // Zoom bar need more handling than other controls
-            const zoomBar = jQuery('.zoombar');
+            const zoomBar = jQuery('.mappluginsContainer').find('.zoombar');
             zoomBar.removeClass(styleClass);
             zoomBar.children().removeClass(styleClass);
             const slider = zoomBar.find('.slider');
