@@ -22,6 +22,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this.loc = Oskari.getMsg.bind(null, 'ShadowingPlugin3d');
         this._toolOpen = false;
         this._element = null;
+        this._index = 90;
         this._popupContent = null;
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
@@ -81,7 +82,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
             this._element.css('display', 'inline-block');
             this._addToMobileToolBar();
         } else {
-            this._addToPluginContainer();
+            this.addToPluginContainer(this._element);
         }
 
         this._createControlElement();
@@ -106,11 +107,6 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     _addToMobileToolBar () {
         const resetMapStateControl = jQuery('.toolbar_mobileToolbar').find('.mobile-reset-map-state');
         jQuery(this._element).insertAfter(resetMapStateControl);
-    }
-
-    _addToPluginContainer () {
-        const panButtonsControl = jQuery('.mappluginsContent').find('.panbuttons');
-        jQuery(this._element).insertAfter(panButtonsControl);
     }
 
     _toggleToolState () {

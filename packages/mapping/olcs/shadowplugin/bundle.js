@@ -7,11 +7,11 @@
 Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle", function () {
 }, {
     "create": function () {
-        return Oskari.clazz.create("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance");
+        return Oskari.clazz.create("Oskari.mapping.bundle.shadowplugin3d.instance");
     }
 }, {
 
-    "protocol": ["Oskari.bundle.Bundle", "Oskari.mapframework.bundle.extension.ExtensionBundle"],
+    "protocol": ["Oskari.bundle.Bundle"],
     "source": {
         "scripts": [{
             "type": "text/javascript",

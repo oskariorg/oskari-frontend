@@ -4,46 +4,42 @@ Oskari.app.playBundle(
   bundlename : 'shadow-plugin-3d'
 });
 */
-Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance',
-    function () {
-        this._started = false;
-        this.plugin = null;
-        this._mapmodule = null;
-        this._sandbox = null;
-        this.state = undefined;
-        this._log = Oskari.log('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance');
-    }, {
-        __name: 'shadow-plugin-3d',
-        /**
-        * @method getName
-        * @return {String} the name for the component
-        */
-        getName: function () {
+
+const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
+
+Oskari.clazz.defineES('Oskari.mapping.bundle.shadowplugin3d.instance',
+    class ShadowingPluginBundleInstance extends BasicBundle {
+        constructor () {
+            super();
+            this._started = false;
+            this.plugin = null;
+            this._mapmodule = null;
+            this._sandbox = null;
+            this.state = undefined;
+            this._log = Oskari.log('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance');
+            this.__name = 'shadow-plugin-3d';
+        }
+        getName () {
             return this.__name;
-        },
-        init: function () {},
-        setSandbox: function (sbx) {
-            this.sandbox = sbx;
-        },
-        getSandbox: function () {
-            return this.sandbox;
-        },
-        start: function (sandbox) {
+        }
+        getSandbox () {
+            return this._sandbox;
+        }
+        start (sandbox) {
             if (this._started) {
                 return;
             }
-            this._started = true;
-            sandbox = sandbox || Oskari.getSandbox();
-            this.setSandbox(sandbox);
+            this._sandbox = sandbox || Oskari.getSandbox();
             this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
             if (!this._mapmodule.getSupports3D()) {
                 this._log.warn('Shadowing plugin only supported in 3d mode');
                 return;
             }
             this.createPlugin();
-            sandbox.register(this);
-        },
-        createPlugin: function () {
+            this._sandbox.register(this);
+            this._started = true;
+        }
+        createPlugin () {
             if (this.plugin) {
                 return;
             }
@@ -51,17 +47,16 @@ Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleI
             this._mapmodule.registerPlugin(plugin);
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
-        },
-        stopPlugin: function () {
+        }
+        stopPlugin () {
             this._mapmodule.unregisterPlugin(this.plugin);
             this._mapmodule.stopPlugin(this.plugin);
             this.plugin = null;
-        },
-        stop: function () {
+        }
+        stop () {
             this.stopPlugin();
             this.sandbox = null;
             this.started = false;
         }
-    }, {
-        protocol: ['Oskari.bundle.BundleInstance']
-    });
+    }
+);
