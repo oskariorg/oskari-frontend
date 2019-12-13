@@ -506,7 +506,7 @@ class MapModuleOlCesium extends MapModuleOl {
         });
     }
     _getMobileMapControlSelectors () {
-        return ['.mobile-zoom-in', '.mobile-zoom-out', '.mobile-my-location', '.mobile-xy', '.mobile-north','.camera-controls-3d i:nth-child(3)', '.camera-controls-3d i:nth-child(4)'];
+        return ['.mobile-zoom-in', '.mobile-zoom-out', '.mobile-my-location', '.mobile-xy', '.mobile-north', '.camera-controls-3d i:nth-child(3)', '.camera-controls-3d i:nth-child(4)'];
     }
     _getDesktopMapControlSelectors () {
         return ['.maprotator', '.coordinatetool', '.mylocationplugin'];
