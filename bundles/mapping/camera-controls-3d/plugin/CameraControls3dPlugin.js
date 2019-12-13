@@ -15,6 +15,8 @@ Oskari.clazz.define(className,
         this._log = Oskari.log(shortName);
         this.loc = Oskari.getMsg.bind(null, 'CameraControls3d');
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
+        // plugin index 25. Insert after panbuttons.
+        this._index = 25;
     }, {
         getName: function () {
             return shortName;
@@ -69,20 +71,27 @@ Oskari.clazz.define(className,
                 this._element.css('display', 'inline-block');
                 this._addToMobileToolBar();
             } else {
-                this._addToPluginContainer();
+                this.addToPluginContainer(this._element);
             }
             ReactDOM.render(
                 <LocaleContext.Provider value={this.loc}>
                     <CameraControls3d mapInMobileMode={mapInMobileMode}/>
                 </LocaleContext.Provider>, this._element.get(0));
         },
+        /**
+         * @public @method getIndex
+         * Returns the plugin's preferred position in the container
+         *
+         *
+         * @return {Number} Plugin's preferred position in container
+         */
+        getIndex: function () {
+            // i.e. position
+            return this._index;
+        },
         _addToMobileToolBar () {
             const resetMapStateControl = jQuery('.toolbar_mobileToolbar').find('.mobile-reset-map-state');
             jQuery(this._element).insertAfter(resetMapStateControl);
-        },
-        _addToPluginContainer () {
-            const panButtonsControl = jQuery('.mappluginsContent').find('.panbuttons');
-            jQuery(this._element).insertAfter(panButtonsControl);
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
