@@ -49,7 +49,7 @@ class UIService extends StateHandler {
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 
-    setCurrentTime (date, time) {
+    setTimeAndDate (date, time) {
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 
@@ -79,5 +79,5 @@ class UIService extends StateHandler {
 export const ShadowToolHandler = mutatorMixin(UIService, [
     'setTime',
     'setDate',
-    'setCurrentTime'
+    'setTimeAndDate'
 ]);

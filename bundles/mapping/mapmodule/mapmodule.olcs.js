@@ -58,7 +58,8 @@ class MapModuleOlCesium extends MapModuleOl {
             zoom: 0,
             resolutions: this.getResolutionArray()
         }));
-
+        const sun = new Cesium.Sun();
+        console.log(sun);
         this.setTime('2019-06-01T12:00:00Z');
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
@@ -71,7 +72,8 @@ class MapModuleOlCesium extends MapModuleOl {
                 shadows: true,
                 contextOptions: {
                     allowTextureFilterAnisotropic: false
-                }
+                },
+                sun: sun
             }
         });
         this._map3D.container_.appendChild(creditContainer);
