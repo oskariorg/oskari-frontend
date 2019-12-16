@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionTabPane/PermissionRow';
-import { List, ListItem, Checkbox } from 'oskari-ui';
+import { List, ListItem, Checkbox, Message } from 'oskari-ui';
 import { withLocale } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
@@ -43,25 +43,27 @@ const renderRow = (modelRow) => {
             onChange = {checkboxOnChangeHandler}/>;
     });
 
-    return (<StyledListItem>
-        <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
-    </StyledListItem>);
+    return (
+        <StyledListItem>
+            <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
+        </StyledListItem>
+    );
 };
 
-const PermissionsTabPane = ({ getMessage, rolesAndPermissionTypes, permissions = {} }) => {
+const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {} }) => {
     if (!rolesAndPermissionTypes) {
         return;
     }
     const { roles, permissionTypes } = rolesAndPermissionTypes;
 
     const localizedPermissionTypes = permissionTypes.map(permission => {
-        permission.localizedText = getMessage('rights.' + permission.id);
+        permission.localizedText = <Message messageKey={`rights.${permission.id}`}/>;
         return permission;
     });
 
     const headerRow = {
         isHeaderRow: true,
-        text: getMessage('rights.role'),
+        text: <Message messageKey='rights.role'/>,
         permissions: [],
         permissionTypes: localizedPermissionTypes
     };
@@ -85,8 +87,7 @@ const PermissionsTabPane = ({ getMessage, rolesAndPermissionTypes, permissions =
 
 PermissionsTabPane.propTypes = {
     rolesAndPermissionTypes: PropTypes.object,
-    permissions: PropTypes.object,
-    getMessage: PropTypes.func.isRequired
+    permissions: PropTypes.object
 };
 
 const contextWrap = withLocale(PermissionsTabPane);

@@ -16,6 +16,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.dataProviders = [];
         this.mapLayerGroups = [];
         this.service = new AdminLayerFormService(() => this.update());
+        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.mapLayerService.on('availableVersionsUpdated', () => this.update());
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -67,28 +69,32 @@ export class LayerEditorFlyout extends ExtraFlyout {
         ReactDOM.render(uiCode, el.get(0));
     }
     getEditorUI () {
-        return (<LocaleContext.Provider value={this.loc}>
-            <MutatorContext.Provider value={this.service}>
-                <LayerWizard
-                    layer={this.service.getLayer()}
-                    capabilities={this.service.getCapabilities()}
-                    loading={this.service.isLoading()}
-                    layerTypes={this.service.getLayerTypes()}>
-                    <AdminLayerForm
-                        mapLayerGroups={this.mapLayerGroups}
-                        dataProviders={this.dataProviders}
-                        layer={this.service.getLayer()}
-                        messages={this.service.getMessages()}
-                        rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
-                        onDelete={() => this.service.deleteLayer()}
-                        onSave={() => this.service.saveLayer()}
-                        onCancel={() => {
-                            this.service.clearMessages();
-                            this.hide();
-                        }} />
-                </LayerWizard>
-            </MutatorContext.Provider>
-        </LocaleContext.Provider>);
+        const layer = this.service.getLayer();
+        return (
+            <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor' }}>
+                <MutatorContext.Provider value={this.service}>
+                    <LayerWizard
+                        layer={layer}
+                        capabilities={this.service.getCapabilities()}
+                        loading={this.service.isLoading()}
+                        layerTypes={this.mapLayerService.getLayerTypes()}
+                        versions = {this.mapLayerService.getVersionsForType(layer.type)}>
+                        <AdminLayerForm
+                            mapLayerGroups={this.mapLayerGroups}
+                            dataProviders={this.dataProviders}
+                            layer={layer}
+                            messages={this.service.getMessages()}
+                            rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
+                            onDelete={() => this.service.deleteLayer()}
+                            onSave={() => this.service.saveLayer()}
+                            onCancel={() => {
+                                this.service.clearMessages();
+                                this.hide();
+                            }} />
+                    </LayerWizard>
+                </MutatorContext.Provider>
+            </LocaleContext.Provider>
+        );
     }
     cleanUp () {
         const el = this.getElement();

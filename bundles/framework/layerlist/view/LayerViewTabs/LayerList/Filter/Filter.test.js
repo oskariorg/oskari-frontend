@@ -1,40 +1,33 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { Filter } from '.';
 import { testFilters } from './Filter.test.util';
-import { Select, Option } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Mutator, LocaleContext } from 'oskari-ui/util';
 import { getBundleInstance } from '../../test.util';
 
-describe('<Filter/> ', () => {
+describe('<Filter/>', () => {
     const instance = getBundleInstance();
-    const locale = instance.getLocalization();
     const mockFilterSelected = jest.fn();
-    const handler = {
-        setActiveFilterId: mockFilterSelected
-    };
-    const mutator = new Mutator(handler, ['setActiveFilterId']);
+    const mutator = new Mutator({ setActiveFilterId: mockFilterSelected }, ['setActiveFilterId']);
+
+    let wrapper = mount(
+        <LocaleContext.Provider value={{ bundleKey: instance.getName() }}>
+            <Filter filters={testFilters} activeFilterId={testFilters[1].id} mutator={mutator}/>
+        </LocaleContext.Provider>
+    );
 
     test('renders correct amount of options', () => {
         expect.assertions(2);
-        const wrapper = shallow(<Filter
-            filters={testFilters}
-            activeFilterId={testFilters[1].id}
-            mutator={mutator}
-            locale={locale}/>);
-
-        expect(wrapper.find(Select).length).toBe(1);
-        expect(wrapper.find(Option).length).toBe(2);
+        const select = wrapper.find('Select').first();
+        expect(select).not.toBe(null);
+        select.simulate('click');
+        expect(wrapper.find('MenuItem').length).toBe(2);
     });
 
     test('calls for update', () => {
         expect.assertions(1);
-        const wrapper = shallow(<Filter
-            filters={testFilters}
-            activeFilterId={testFilters[1].id}
-            mutator={mutator}
-            locale={locale}/>);
-        wrapper.find(Select).simulate('change');
+        wrapper.find('Select').first().simulate('click');
+        wrapper.find('MenuItem').first().simulate('click');
         expect(mockFilterSelected).toHaveBeenCalled();
     });
 });

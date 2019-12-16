@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { WarningIcon, Tooltip } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { WarningIcon, Tooltip, Message } from 'oskari-ui';
+import { Mutator, withLocale } from 'oskari-ui/util';
 import { TimeSerieIcon } from '../../../CustomIcons';
 import { LayerIcon } from '../../../LayerIcon';
 
@@ -28,10 +28,10 @@ const hasSubLayerMetadata = layer => {
     return !!subLayers.find(sub => !!sub.getMetadataIdentifier());
 };
 
-const getBackendStatus = (layer, locale) => {
+const getBackendStatus = layer => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {
-        text: locale.backendStatus[backendStatus],
+        messageKey: `backendStatus.${backendStatus}`,
         color: getStatusColor(backendStatus)
     };
     return status;
@@ -50,8 +50,8 @@ const getStatusColor = status => {
     }
 };
 
-export const LayerTools = ({ model, mutator, locale }) => {
-    const backendStatus = getBackendStatus(model, locale);
+const LayerTools = ({ model, mutator }) => {
+    const backendStatus = getBackendStatus(model);
     const infoIcon = {
         classes: ['layer-info']
     };
@@ -67,11 +67,11 @@ export const LayerTools = ({ model, mutator, locale }) => {
                 <WarningIcon tooltip={reason.getDescription()}/>
             }
             { model.hasTimeseries() &&
-                <Tooltip title={locale.layer.tooltip.timeseries}>
+                <Tooltip title={<Message messageKey='layer.tooltip.timeseries'/>}>
                     <TimeSerieIcon />
                 </Tooltip>
             }
-            <Tooltip title={backendStatus.text}>
+            <Tooltip title={<Message messageKey={backendStatus.messageKey}/>}>
                 <LayerIcon
                     fill={backendStatus.color}
                     type={model.getLayerType()}
@@ -86,6 +86,8 @@ export const LayerTools = ({ model, mutator, locale }) => {
 
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    locale: PropTypes.any.isRequired
+    mutator: PropTypes.instanceOf(Mutator).isRequired
 };
+
+const wrapped = withLocale(LayerTools);
+export { wrapped as LayerTools };

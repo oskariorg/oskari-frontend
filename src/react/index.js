@@ -6,7 +6,6 @@ export { Collapse, Panel as CollapsePanel } from '../../bundles/admin/admin-laye
 export { Confirm } from '../../bundles/admin/admin-layereditor/components/Confirm';
 export { Dropdown } from '../../bundles/admin/admin-layereditor/components/Dropdown';
 export { List, ListItem } from '../../bundles/admin/admin-layereditor/components/List';
-export { Menu } from '../../bundles/admin/admin-layereditor/components/Menu';
 export { NumberInput } from '../../bundles/admin/admin-layereditor/components/NumberInput';
 export { Opacity } from '../../bundles/admin/admin-layereditor/components/Opacity';
 export { Popover } from '../../bundles/admin/admin-layereditor/components/Popover';
@@ -24,3 +23,5 @@ export { UrlInput } from '../../bundles/admin/admin-layereditor/components/UrlIn
 export { Icon } from '../../bundles/admin/admin-layereditor/components/Icon';
 export { WarningIcon } from '../../bundles/admin/admin-layereditor/components/WarningIcon';
 export { Tooltip } from '../../bundles/admin/admin-layereditor/components/Tooltip';
+export { LocalizationComponent } from './components/LocalizationComponent';
+export { Message } from './components/Message';

@@ -32,8 +32,7 @@ Oskari.registerLocalization(
             },
             'layer': {
                 'tooltip': {
-                    'timeseries': 'Aikasarjataso',
-                    'addLayer': 'Lisää uusi karttataso'
+                    'timeseries': 'Aikasarjataso'
                 },
                 'styles': {
                     'title': 'Tyyli'

@@ -1224,6 +1224,11 @@ export class MapModule extends AbstractMapModule {
         return olGeoJSON.writeFeaturesObject(features);
     }
 
+    setTime () {
+        var log = Oskari.log('Oskari.mapframework.ui.module.common.MapModule');
+        log.warn('setTime only available in 3D map');
+    }
+
     getOLGeometryFromGeoJSON (geojson) {
         var olGeoJSON = new olFormatGeoJSON();
         var olGeom;
