@@ -31,7 +31,7 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
     const publishable = layer.getPermission('publish');
 
     const [visible, setVisible] = useState(visibilityInfo.visible);
-    React.useEffect(() => {
+    useEffect(() => {
         setVisible(visibilityInfo.visible);
     }, [visibilityInfo]);
 
@@ -63,9 +63,10 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                                 <b>{name}</b><br/>
                                                 {organizationName}
                                             </ColAuto>
-                                            <ColAutoRight style={{ padding: '0px', marginTop: '20px' }}>
+                                            <ColAutoRight style={{ padding: '0px' }}>
                                                 {publishable &&
                                                 <Fragment>
+                                                    <br/>
                                                     <Icon type="check" style={{ color: '#01ca79' }} />
                                                     <Publishable>{locale.layer.publishable}</Publishable>
                                                 </Fragment>

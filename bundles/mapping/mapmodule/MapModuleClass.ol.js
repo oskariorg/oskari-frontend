@@ -148,10 +148,28 @@ export class MapModule extends AbstractMapModule {
             me.notifyStartMove();
         });
 
+        function wasInfoBoxClicked (event) {
+            // - Chrome supports event.path.
+            // - Most others composedPath() https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
+            // - Polyfilled for IE/Edge on src/polyfills.js
+            var path = event.path || (event.composedPath && event.composedPath()) || [];
+            const foundInfoBox = path.find(item => (item.className || '').indexOf('olPopup') !== -1);
+            return typeof foundInfoBox !== 'undefined';
+        }
+
         map.on('singleclick', function (evt) {
             if (me.getDrawingMode()) {
                 return;
             }
+            if (wasInfoBoxClicked(evt.originalEvent)) {
+                // After OL 6 upgrade:
+                // - ol/MapBrowserEventHandler.emulateClick_ receives map click, dispatches it and schedules it to be triggered again after small delay
+                // - infobox/OpenlayersPopupPlugin receives the click in _setClickEvent() popupElement.onclick -> closes the popup so it's no longer on map
+                // - the delayed event from emulateClick_ triggers and detects that there is no overlay on the spot that was
+                //   clicked (since infobox was removed from that spot on the previous step) triggering a new MapClickedEvent and opening another infobox
+                return;
+            }
+
             var CtrlPressed = evt.originalEvent.ctrlKey;
             var lonlat = {
                 lon: evt.coordinate[0],
@@ -654,7 +672,7 @@ export class MapModule extends AbstractMapModule {
             break;
         default:
             view.setCenter(location);
-            if (zoom === Number) {
+            if (!isNaN(zoom)) {
                 view.setZoom(zoom);
             }
             callback(true);
@@ -673,10 +691,10 @@ export class MapModule extends AbstractMapModule {
      *     Usable animations: fly/pan/zoomPan
      * @return {Boolean} success
      */
-    centerMap (lonlat, zoom, suppressEnd, options) {
+    centerMap (lonlat, zoom, suppressEnd, options = {}) {
         const view = this.getMap().getView();
-        const animation = options && options.animation ? options.animation : '';
-        const duration = options && options.duration ? options.duration : 3000;
+        const animation = options.animation ? options.animation : '';
+        const duration = options.duration ? options.duration : 3000;
 
         lonlat = this.normalizeLonLat(lonlat);
         if (!this.isValidLonLat(lonlat.lon, lonlat.lat)) {
@@ -698,7 +716,7 @@ export class MapModule extends AbstractMapModule {
                 return true;
             }
         }
-        if (zoom === Number) {
+        if (!isNaN(zoom)) {
             // backwards compatibility
             zoom = { type: 'zoom', value: zoom };
         }
