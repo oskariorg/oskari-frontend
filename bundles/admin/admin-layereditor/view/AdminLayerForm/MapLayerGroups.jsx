@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import { Checkbox, Collapse, CollapsePanel, List, ListItem, Message } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 
-export const MapLayerGroups = LocaleConsumer(({ layer, mapLayerGroups, service, lang }) => {
+export const MapLayerGroups = LocaleConsumer(({ layer, mapLayerGroups, controller, lang }) => {
     const dataSource = mapLayerGroups.map(group =>
         <Checkbox key={group.id}
-            onChange={(evt) => service.setMapLayerGroup(evt.target.checked, group)}
+            onChange={(evt) => controller.setMapLayerGroup(evt.target.checked, group)}
             checked={!!layer.maplayerGroups.find(cur => group.id === cur.id)}>{group.name[lang]}
         </Checkbox>
     );
@@ -23,6 +23,6 @@ export const MapLayerGroups = LocaleConsumer(({ layer, mapLayerGroups, service, 
 MapLayerGroups.propTypes = {
     layer: PropTypes.object.isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
-    service: PropTypes.any.isRequired,
+    controller: PropTypes.any.isRequired,
     lang: PropTypes.string.isRequired
 };

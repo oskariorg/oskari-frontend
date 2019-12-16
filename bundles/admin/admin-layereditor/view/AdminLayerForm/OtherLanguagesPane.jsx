@@ -4,7 +4,7 @@ import { Collapse, CollapsePanel, Message } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 
-export const OtherLanguagesPane = LocaleConsumer(({ layer, service, lang }) => (
+export const OtherLanguagesPane = LocaleConsumer(({ layer, controller, lang }) => (
     <Collapse>
         <CollapsePanel header={<Message messageKey='otherLanguages'/>}>
             {
@@ -14,7 +14,7 @@ export const OtherLanguagesPane = LocaleConsumer(({ layer, service, lang }) => (
                         key={layer.layer_id + lang}
                         layer={layer}
                         lang={lang}
-                        service={service} />)
+                        controller={controller} />)
             }
         </CollapsePanel>
     </Collapse>
@@ -22,6 +22,6 @@ export const OtherLanguagesPane = LocaleConsumer(({ layer, service, lang }) => (
 
 OtherLanguagesPane.propTypes = {
     lang: PropTypes.string.isRequired,
-    service: PropTypes.any,
+    controller: PropTypes.any,
     layer: PropTypes.object
 };

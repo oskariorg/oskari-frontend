@@ -9,7 +9,7 @@ import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 import { OtherLanguagesPane } from './OtherLanguagesPane';
 
 const GeneralTabPane = (props) => {
-    const { mapLayerGroups, dataProviders, layer, service } = props;
+    const { mapLayerGroups, dataProviders, layer, controller } = props;
     const lang = Oskari.getLang();
     const credentialProps = {
         allowCredentials: true,
@@ -19,8 +19,8 @@ const GeneralTabPane = (props) => {
         panelText: <Message messageKey='usernameAndPassword'/>,
         usernameText: <Message messageKey='username'/>,
         passwordText: <Message messageKey='password'/>,
-        usernameOnChange: service.setUsername,
-        passwordOnChange: service.setPassword
+        usernameOnChange: controller.setUsername,
+        passwordOnChange: controller.setPassword
     };
     return (
         <StyledTab>
@@ -31,7 +31,7 @@ const GeneralTabPane = (props) => {
                         <UrlInput
                             key={layer.id}
                             value={layer.url}
-                            onChange={(url) => service.setLayerUrl(url)}
+                            onChange={(url) => controller.setLayerUrl(url)}
                             credentials={credentialProps}
                         />
                     </div>
@@ -39,24 +39,24 @@ const GeneralTabPane = (props) => {
             </StyledComponentGroup>
             <Message messageKey='uniqueName' />
             <StyledComponent>
-                <TextInput type='text' value={layer.name} onChange={(evt) => service.setLayerName(evt.target.value)} />
+                <TextInput type='text' value={layer.name} onChange={(evt) => controller.setLayerName(evt.target.value)} />
             </StyledComponent>
             <StyledComponentGroup>
-                <LocalizedLayerInfo layer={layer} lang={lang} service={service} />
+                <LocalizedLayerInfo layer={layer} lang={lang} controller={controller} />
                 <StyledComponent>
-                    <OtherLanguagesPane layer={layer} lang={lang} service={service} />
+                    <OtherLanguagesPane layer={layer} lang={lang} controller={controller} />
                 </StyledComponent>
             </StyledComponentGroup>
             <Message messageKey='dataProvider' />
             <StyledComponent>
                 <DataProviderSelect key={layer.id}
                     value={layer.organizationName}
-                    onChange={(evt) => service.setDataProvider(evt)}
+                    onChange={(evt) => controller.setDataProvider(evt)}
                     dataProviders={dataProviders} />
             </StyledComponent>
             <Message messageKey='mapLayerGroups' />
             <StyledComponent>
-                <MapLayerGroups layer={layer} mapLayerGroups={mapLayerGroups} service={service} lang={lang} />
+                <MapLayerGroups layer={layer} mapLayerGroups={mapLayerGroups} controller={controller} lang={lang} />
             </StyledComponent>
         </StyledTab>
     );
@@ -65,9 +65,8 @@ const GeneralTabPane = (props) => {
 GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
-    service: PropTypes.any,
-    layer: PropTypes.object,
-    Message: PropTypes.elementType.isRequired
+    controller: PropTypes.object,
+    layer: PropTypes.object
 };
 
 const contextWrap = LocaleConsumer(GeneralTabPane);

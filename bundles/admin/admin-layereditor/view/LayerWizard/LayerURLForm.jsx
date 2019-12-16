@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, UrlInput } from 'oskari-ui';
-import { Controller } from 'oskari-ui/util';
 
 const versionsAvailable = {
     'wmslayer': ['1.1.1', '1.3.0'],
@@ -35,5 +34,5 @@ export const LayerURLForm = ({ layer, loading, controller }) => {
 LayerURLForm.propTypes = {
     layer: PropTypes.object,
     loading: PropTypes.bool,
-    controller: PropTypes.instanceof(Controller).isRequired
+    controller: PropTypes.object.isRequired
 };

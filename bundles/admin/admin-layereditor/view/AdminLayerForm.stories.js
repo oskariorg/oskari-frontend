@@ -26,7 +26,8 @@ const layer = new AbstractLayer();
 layer.setAdmin({});
 layer.setGroups([]);
 
-const service = new AdminLayerFormService();
+const dummyRefresh = () => console.log('State update');
+const service = new AdminLayerFormService(dummyRefresh);
 service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)
