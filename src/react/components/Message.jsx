@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const Label = styled('div')`
@@ -28,5 +28,5 @@ Message.propTypes = {
     LabelComponent: PropTypes.elementType
 };
 
-const wrapped = withLocale(Message);
+const wrapped = LocaleConsumer(Message);
 export { wrapped as Message };

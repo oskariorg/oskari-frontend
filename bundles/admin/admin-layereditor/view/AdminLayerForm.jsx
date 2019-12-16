@@ -5,7 +5,7 @@ import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
 import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
 import { StyledRoot } from './AdminLayerForm/StyledFormComponents';
-import { withLocale, withMutator } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Confirm, Alert, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
@@ -17,7 +17,7 @@ const PaddedAlert = styled(Alert)`
     margin-bottom: 5px;
 `;
 const AdminLayerForm = ({
-    mutator,
+    controller,
     mapLayerGroups,
     dataProviders,
     layer,
@@ -32,13 +32,13 @@ const AdminLayerForm = ({
         { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
         <Tabs>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
-                <GeneralTabPane dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} layer={layer} service={mutator} />
+                <GeneralTabPane dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} layer={layer} controller={controller} />
             </TabPane>
             <TabPane key='visual' tab={<Message messageKey='visualizationTabTitle'/>}>
-                <VisualizationTabPane layer={layer} service={mutator} />
+                <VisualizationTabPane layer={layer} controller={controller} />
             </TabPane>
             <TabPane key='additional' tab={<Message messageKey='additionalTabTitle'/>}>
-                <AdditionalTabPane layer={layer} service={mutator} />
+                <AdditionalTabPane layer={layer} controller={controller} />
             </TabPane>
             <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
                 <PermissionsTabPane
@@ -71,7 +71,7 @@ const AdminLayerForm = ({
 );
 
 AdminLayerForm.propTypes = {
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
@@ -83,5 +83,5 @@ AdminLayerForm.propTypes = {
     rolesAndPermissionTypes: PropTypes.object
 };
 
-const contextWrap = withMutator(withLocale(AdminLayerForm));
+const contextWrap = LocaleConsumer(AdminLayerForm);
 export { contextWrap as AdminLayerForm };

@@ -11,7 +11,7 @@ export const LocaleContext = React.createContext();
  * Developers should use the Message component whenever they can and avoid using the getMessage function.
  * The getMessage function may be used when an element can't use a ReactNode as a prop. (e.g. placeholder in TextInput)
  */
-export function withLocale (Component) {
+export function LocaleConsumer (Component) {
     const LocalizedComponent = (props, ref) => {
         return (
             <LocaleContext.Consumer>
@@ -23,6 +23,6 @@ export function withLocale (Component) {
         );
     };
     const name = Component.displayName || Component.name;
-    LocalizedComponent.displayName = `withLocale(${name})`;
+    LocalizedComponent.displayName = `LocaleConsumer(${name})`;
     return React.forwardRef(LocalizedComponent);
 }

@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             }
         },
 
-        getClassificationMutator: function () {
+        getClassificationController: function () {
             const eventBuilder = Oskari.eventBuilder('StatsGrid.ClassificationChangedEvent');
             return {
                 setActiveIndicator: hash => this.setActiveIndicator(hash),

@@ -4,7 +4,7 @@ import { AdminLayerForm } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
 import { AdminLayerFormService } from './AdminLayerFormService';
 import { Spin } from 'oskari-ui';
-import { LocaleContext, MutatorContext } from 'oskari-ui/util';
+import { LocaleContext } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -69,26 +69,26 @@ export class LayerEditorFlyout extends ExtraFlyout {
     getEditorUI () {
         return (
             <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor' }}>
-                <MutatorContext.Provider value={this.service}>
-                    <LayerWizard
+                <LayerWizard
+                    layer={this.service.getLayer()}
+                    capabilities={this.service.getCapabilities()}
+                    loading={this.service.isLoading()}
+                    layerTypes={this.service.getLayerTypes()}
+                    controller={this.service.getController()}>
+                    <AdminLayerForm
+                        mapLayerGroups={this.mapLayerGroups}
+                        dataProviders={this.dataProviders}
                         layer={this.service.getLayer()}
-                        capabilities={this.service.getCapabilities()}
-                        loading={this.service.isLoading()}
-                        layerTypes={this.service.getLayerTypes()}>
-                        <AdminLayerForm
-                            mapLayerGroups={this.mapLayerGroups}
-                            dataProviders={this.dataProviders}
-                            layer={this.service.getLayer()}
-                            messages={this.service.getMessages()}
-                            rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
-                            onDelete={() => this.service.deleteLayer()}
-                            onSave={() => this.service.saveLayer()}
-                            onCancel={() => {
-                                this.service.clearMessages();
-                                this.hide();
-                            }} />
-                    </LayerWizard>
-                </MutatorContext.Provider>
+                        messages={this.service.getMessages()}
+                        rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
+                        controller={this.service.getController()}
+                        onDelete={() => this.service.deleteLayer()}
+                        onSave={() => this.service.saveLayer()}
+                        onCancel={() => {
+                            this.service.clearMessages();
+                            this.hide();
+                        }} />
+                </LayerWizard>
             </LocaleContext.Provider>
         );
     }

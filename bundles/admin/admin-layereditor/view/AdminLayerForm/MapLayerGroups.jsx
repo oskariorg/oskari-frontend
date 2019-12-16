@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Collapse, CollapsePanel, List, ListItem, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 
-export const MapLayerGroups = withLocale(({ layer, mapLayerGroups, service, lang }) => {
+export const MapLayerGroups = LocaleConsumer(({ layer, mapLayerGroups, service, lang }) => {
     const dataSource = mapLayerGroups.map(group =>
         <Checkbox key={group.id}
             onChange={(evt) => service.setMapLayerGroup(evt.target.checked, group)}

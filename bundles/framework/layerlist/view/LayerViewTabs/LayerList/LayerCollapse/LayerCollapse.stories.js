@@ -67,7 +67,7 @@ const resetStoryState = () => {
 
 const render = () => (
     <LocaleContext.Provider value={{ bundleKey: instance.getName() }}>
-        <LayerCollapse {...handler.getState()} mutator={handler.getMutator()} />
+        <LayerCollapse {...handler.getState()} controller={handler.getController()} />
     </LocaleContext.Provider>
 );
 

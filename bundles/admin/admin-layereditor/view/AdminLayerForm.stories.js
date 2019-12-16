@@ -9,7 +9,7 @@ import '../../../mapping/mapmodule/domain/AbstractLayer';
 import '../../../mapping/mapmodule/domain/style';
 import '../resources/locale/fi';
 
-import { LocaleContext, MutatorContext } from 'oskari-ui/util';
+import { LocaleContext } from 'oskari-ui/util';
 
 const Oskari = window.Oskari;
 const sandbox = Oskari.getSandbox();
@@ -32,15 +32,14 @@ service.initLayerState(layer);
 storiesOf('AdminLayerForm', module)
     .add('layout', () => (
         <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor', getMessage: customGetMessageImpl }}>
-            <MutatorContext.Provider value={service}>
-                <AdminLayerForm
-                    mapLayerGroups={[]}
-                    dataProviders={[]}
-                    layer={service.getLayer()}
-                    messages={service.getMessages()}
-                    onDelete={() => {}}
-                    onSave={() => {}}
-                    onCancel={() => {}} />
-            </MutatorContext.Provider>
+            <AdminLayerForm
+                mapLayerGroups={[]}
+                dataProviders={[]}
+                layer={service.getLayer()}
+                messages={service.getMessages()}
+                controller={service.getController()}
+                onDelete={() => {}}
+                onSave={() => {}}
+                onCancel={() => {}} />
         </LocaleContext.Provider>
     ));

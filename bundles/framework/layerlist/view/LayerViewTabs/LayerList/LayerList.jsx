@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from '../propTypes';
 import { Button, Spin, Tooltip, Icon, Message } from 'oskari-ui';
-import { Mutator, withLocale } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
 import { Grouping } from './Grouping';
@@ -64,7 +64,7 @@ const Indicator = ({ show, children }) => {
 };
 
 const LayerList = React.forwardRef((props, ref) => {
-    const { error, loading = false, updating = false, mutator } = props;
+    const { error, loading = false, updating = false, controller } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
@@ -79,16 +79,16 @@ const LayerList = React.forwardRef((props, ref) => {
         <Content spacing={'15px'}>
             <Row>
                 <Column spacing={'10px'}>
-                    <Search ref={ref} searchText={searchText} mutator={filter.mutator} />
+                    <Search ref={ref} searchText={searchText} controller={filter.controller} />
                     <ControlsRow spacing={'10px'}>
                         <Grouping
                             selected={grouping.selected}
                             options={grouping.options}
-                            mutator={mutator}/>
+                            controller={controller}/>
                         <Filter key={filterKey}
                             filters={filters}
                             activeFilterId={activeFilterId}
-                            mutator={filter.mutator}/>
+                            controller={filter.controller}/>
                     </ControlsRow>
                 </Column>
                 <Tooltip title={<Message messageKey='filter.search.tooltip'/>}>
@@ -103,7 +103,7 @@ const LayerList = React.forwardRef((props, ref) => {
             { loading && <Spinner/> }
             { !loading &&
                 <Indicator show={updating}>
-                    <LayerCollapse {...collapse.state} mutator={collapse.mutator}/>
+                    <LayerCollapse {...collapse.state} controller={collapse.controller}/>
                 </Indicator>
             }
         </Content>
@@ -122,8 +122,8 @@ LayerList.propTypes = {
     filter: shapes.stateful.isRequired,
     showAddButton: PropTypes.bool,
     grouping: PropTypes.shape(grouping).isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const wrapped = withLocale(React.memo(LayerList));
+const wrapped = LocaleConsumer(React.memo(LayerList));
 export { wrapped as LayerList };

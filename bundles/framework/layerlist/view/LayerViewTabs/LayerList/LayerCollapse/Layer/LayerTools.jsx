@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { WarningIcon, Tooltip, Message } from 'oskari-ui';
-import { Mutator, withLocale } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { TimeSerieIcon } from '../../../CustomIcons';
 import { LayerIcon } from '../../../LayerIcon';
 
@@ -50,7 +50,7 @@ const getStatusColor = status => {
     }
 };
 
-const LayerTools = ({ model, mutator }) => {
+const LayerTools = ({ model, controller }) => {
     const backendStatus = getBackendStatus(model);
     const infoIcon = {
         classes: ['layer-info']
@@ -75,19 +75,19 @@ const LayerTools = ({ model, mutator }) => {
                 <LayerIcon
                     fill={backendStatus.color}
                     type={model.getLayerType()}
-                    onClick={() => mutator.showLayerBackendStatus(model.getId())}/>
+                    onClick={() => controller.showLayerBackendStatus(model.getId())}/>
             </Tooltip>
             <SpriteIcon
                 className={infoIcon.classes.join(' ')}
-                onClick={() => mutator.showLayerMetadata(model)}/>
+                onClick={() => controller.showLayerMetadata(model)}/>
         </Tools>
     );
 };
 
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const wrapped = withLocale(LayerTools);
+const wrapped = LocaleConsumer(LayerTools);
 export { wrapped as LayerTools };

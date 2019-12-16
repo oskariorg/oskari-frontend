@@ -1,25 +1,25 @@
-import { Mutator } from './Mutator';
+import { Controller } from './Controller';
 
 /**
- * An easy way to add Mutator to an UIService. Adds getMutator function to the UIService.
- * The mixin takes Mutator constructor parameters as parameter.
+ * An easy way to add Controller to an UIService. Adds getController function to the UI handler.
+ * The mixin takes Controller constructor parameters as parameter.
  *
- * @mixin mutatorMixin
- * @mixes Mutator
+ * @mixin controllerMixin
+ * @mixes Controller
  * @example
  * // LoadingHandler.js
- * class LoadingHandler extends StateHandler {
+ * class UIHandler extends StateHandler {
  *      setLoading (loading) {
  *          this.updateState({ loading });
  *      }
  * };
- * export const LoadingHandler = mutatorMixin(UIService, ['setLoading']);
+ * export const LoadingHandler = controllerMixin(UIHandler, ['setLoading']);
  *
  * // LoadingButton.jsx
- * export const LoadingButton = ({loading, mutator}) => (
+ * export const LoadingButton = ({loading, controller}) => (
  *     <div>
  *         { loading && <Spin /> }
- *         <Button onClick={() => mutator.setLoading(!loading)}>
+ *         <Button onClick={() => controller.setLoading(!loading)}>
  *     </div>
  * );
  *
@@ -31,28 +31,28 @@ import { Mutator } from './Mutator';
  *     }
  *     render () {
  *         const state = this.loadingHandler.getState();
- *         const mutator = this.loadingHandler.getMutator();
- *         ReactDom.render(<LoadingButton loading={state.loading} mutator={mutator} />, document);
+ *         const controller = this.loadingHandler.getController();
+ *         ReactDom.render(<LoadingButton loading={state.loading} controller={controller} />, document);
  *     }
  * }
  */
-export const mutatorMixin = (UIService, functionNames = []) => {
-    class MixedService extends UIService {
+export const controllerMixin = (UIHandler, functionNames = []) => {
+    class HandlerWithController extends UIHandler {
         constructor (...args) {
             super(...args);
             let methods = functionNames;
             if (!Array.isArray(methods) || methods.length === 0) {
                 methods = [];
-                Oskari.log().warn('Mutator does not have mutating methods!');
+                Oskari.log().warn('Controller does not have any methods!');
             }
-            this.mutator = new Mutator(this, methods);
+            this.controller = new Controller(this, methods);
         }
         /**
-         * @return {Mutator} Mutator for the service
+         * @return {Controller} Controller for the service
          */
-        getMutator () {
-            return this.mutator;
+        getController () {
+            return this.controller;
         }
     }
-    return MixedService;
+    return HandlerWithController;
 };

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { withContext } from 'oskari-ui/util';
 // TODO: change to use general oskari react button and pass props.handleClick = handleManualClassification
 
-const handleManualClassification = ({ indicators, mutator, manualView, indicatorData }) => {
+const handleManualClassification = ({ indicators, controller, manualView, indicatorData }) => {
     const view = manualView.view;
     if (indicators.active.series && indicators.serieStats && indicators.serieStats.serie) {
         view.setData(indicators.serieStats.serie);
@@ -13,7 +13,7 @@ const handleManualClassification = ({ indicators, mutator, manualView, indicator
         // failed to get serie or data -> don't open
     }
     manualView.setAnimating(false);
-    view.openEditor(bounds => mutator.updateClassification('manualBounds', bounds));
+    view.openEditor(bounds => controller.updateClassification('manualBounds', bounds));
 };
 
 const ManualClassification = props => {
@@ -30,7 +30,7 @@ const ManualClassification = props => {
 
 ManualClassification.propTypes = {
     disabled: PropTypes.bool.isRequired,
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     indicators: PropTypes.object.isRequired,
     manualView: PropTypes.object.isRequired,
     indicatorData: PropTypes.object.isRequired,

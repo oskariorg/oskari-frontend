@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Icon, Select, Option, InputGroup, Button, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { THEME_COLOR } from '..';
 
 const StyledSelect = styled(Select)`
@@ -25,7 +25,7 @@ const getOption = (style) => (
     </Option>
 );
 
-export const StyleSettings = withLocale(({ layer, onChange }) => {
+export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
     const styles = layer.getStyles();
     const styleTool = layer.getTool('ownStyle');
     const currentStyle = layer.getCurrentStyle();

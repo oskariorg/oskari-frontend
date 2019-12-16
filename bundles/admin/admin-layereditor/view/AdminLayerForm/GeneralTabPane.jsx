@@ -4,7 +4,7 @@ import { DataProviderSelect } from './DataProviderSelect';
 import { TextInput, UrlInput, Message } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormComponents';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 import { OtherLanguagesPane } from './OtherLanguagesPane';
 
@@ -70,5 +70,5 @@ GeneralTabPane.propTypes = {
     Message: PropTypes.elementType.isRequired
 };
 
-const contextWrap = withLocale(GeneralTabPane);
+const contextWrap = LocaleConsumer(GeneralTabPane);
 export { contextWrap as GeneralTabPane };

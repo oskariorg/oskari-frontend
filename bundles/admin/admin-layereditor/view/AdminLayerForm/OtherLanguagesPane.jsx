@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 
-export const OtherLanguagesPane = withLocale(({ layer, service, lang }) => (
+export const OtherLanguagesPane = LocaleConsumer(({ layer, service, lang }) => (
     <Collapse>
         <CollapsePanel header={<Message messageKey='otherLanguages'/>}>
             {

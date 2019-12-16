@@ -1,3 +1,3 @@
-export { mutatorMixin } from './mixins';
-export { Mutator } from './Mutator';
+export { controllerMixin } from './mixins';
+export { Controller } from './Controller';
 export { StateHandler } from './StateHandler';

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Switch, Tooltip } from 'oskari-ui';
+import { Controller } from 'oskari-ui/util';
 import { LayerTools } from './LayerTools';
 
 const Flex = styled('div')`
@@ -34,8 +35,8 @@ const Body = styled(Flex)`
     flex-grow: 1;
 `;
 
-const onSelect = (checked, layerId, mutator) => {
-    checked ? mutator.addLayer(layerId) : mutator.removeLayer(layerId);
+const onSelect = (checked, layerId, controller) => {
+    checked ? controller.addLayer(layerId) : controller.removeLayer(layerId);
 };
 
 const onToolClick = tool => {
@@ -45,7 +46,7 @@ const onToolClick = tool => {
     }
 };
 
-const Layer = ({ model, even, selected, mutator }) => {
+const Layer = ({ model, even, selected, controller }) => {
     return (
         <LayerDiv even={even} className="layer">
             <CustomTools className="custom-tools">
@@ -62,12 +63,12 @@ const Layer = ({ model, even, selected, mutator }) => {
             <Body>
                 <Label>
                     <Switch size="small" checked={selected}
-                        onChange={checked => onSelect(checked, model.getId(), mutator)}
+                        onChange={checked => onSelect(checked, model.getId(), controller)}
                         disabled={model.isSticky()} />
                     <div>{model.getName()}</div>
                 </Label>
             </Body>
-            <LayerTools model={model} mutator={mutator}/>
+            <LayerTools model={model} controller={controller}/>
         </LayerDiv>
     );
 };
@@ -76,7 +77,7 @@ Layer.propTypes = {
     model: PropTypes.any.isRequired,
     even: PropTypes.bool.isRequired,
     selected: PropTypes.bool.isRequired,
-    mutator: PropTypes.any.isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
 const memoized = React.memo(Layer);

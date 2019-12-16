@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionTabPane/PermissionRow';
 import { List, ListItem, Checkbox, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
     &:first-child > div {
@@ -24,7 +24,7 @@ const ListDiv = styled.div`
 `;
 
 const checkboxOnChangeHandler = (event) => {
-    // TODO: Replace console.log with service mutator call to mutate state of selected permissions
+    // TODO: Replace console.log with controller call to mutate state of selected permissions
     const role = event.target.role;
     const permission = event.target.permission;
     console.log('Checkbox with role ' + role + ' and permission ' + permission);
@@ -90,5 +90,5 @@ PermissionsTabPane.propTypes = {
     permissions: PropTypes.object
 };
 
-const contextWrap = withLocale(PermissionsTabPane);
+const contextWrap = LocaleConsumer(PermissionsTabPane);
 export { contextWrap as PermissionsTabPane };

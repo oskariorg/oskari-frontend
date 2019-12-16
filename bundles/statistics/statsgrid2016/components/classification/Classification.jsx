@@ -41,20 +41,20 @@ class Classification extends React.Component {
                 <Header active = {this.props.indicators.active} isEdit = {isEdit}
                     handleClick = {this.handleToggleClassification}
                     indicators = {this.props.indicators.selected}
-                    mutator = {this.props.mutator}/>
+                    controller = {this.props.controller}/>
                 <div className="classification-content-wrapper" style={this.getContentWrapperStyle()}>
                     {isEdit &&
                         <EditClassification classifications = {classifications}
                             indicators = {this.props.indicators}
                             editEnabled = {pluginState.editEnabled}
-                            mutator = {this.props.mutator}
+                            controller = {this.props.controller}
                             indicatorData = {this.props.indicatorData}
                             manualView = {this.props.manualView}/>
                     }
                     <Legend legendProps = {this.props.legendProps}
                         indicatorData = {this.props.indicatorData}
                         transparency = {classifications.values.transparency}
-                        mutator = {this.props.mutator}/>
+                        controller = {this.props.controller}/>
                 </div>
             </div>
         );
@@ -69,7 +69,7 @@ Classification.propTypes = {
     legendProps: PropTypes.object.isRequired,
     manualView: PropTypes.object,
     onRenderChange: PropTypes.func.isRequired,
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     loc: PropTypes.func.isRequired
 };
 

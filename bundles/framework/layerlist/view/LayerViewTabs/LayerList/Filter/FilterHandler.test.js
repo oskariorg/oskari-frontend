@@ -15,9 +15,9 @@ describe('FilterHandler', () => {
         });
     });
 
-    test('has mutator', () => {
+    test('has controller', () => {
         expect.assertions(1);
-        expect(handler.getMutator()).not.toBeNull();
+        expect(handler.getController()).not.toBeNull();
     });
 
     test('adding filters', () => {
@@ -30,8 +30,8 @@ describe('FilterHandler', () => {
         expect.assertions(3);
         const mockFn = jest.fn();
         handler.addStateListener(mockFn);
-        handler.getMutator().setActiveFilterId('newest');
-        handler.getMutator().setSearchText('base');
+        handler.getController().setActiveFilterId('newest');
+        handler.getController().setSearchText('base');
 
         const { searchText, activeFilterId } = handler.getState();
         expect(activeFilterId).toBe('newest');
