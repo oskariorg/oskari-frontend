@@ -327,7 +327,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
     getMapZoom () {
         var zoomlevel = this.getMap().getView().getZoom();
-        if (typeof (zoomlevel) === 'undefined') {
+        if (typeof (zoomlevel) === 'undefined' || zoomlevel === 0) {
             // Cesium view has been zoomed outside ol zoomlevels.
             zoomlevel = this._lastKnownZoomLevel;
         } else {
@@ -477,9 +477,12 @@ class MapModuleOlCesium extends MapModuleOl {
             roll: 0.0       // default value
         }
     * }
+    *
     */
     setCamera (options) {
         this._set3DModeEnabled(true);
+        this._resetMoveMode();
+
         if (this._mapReady) {
             if (options) {
                 var camera = this._map3D.getCesiumScene().camera;
@@ -508,7 +511,87 @@ class MapModuleOlCesium extends MapModuleOl {
             });
         }
     }
+    /**
+     * Function to reset map move mode and 3D camera controls to default.
+     * This is needed since user might click reset map view on panbuttons when camera is in rotate mode.
+     */
+    _resetMoveMode () {
+        this.setCameraToMoveMode();
+        const cameraControlsPlugin = this._pluginInstances.CameraControls3dPlugin;
+        if (cameraControlsPlugin) {
+            cameraControlsPlugin.resetState();
+        }
+    }
 
+    setCameraToRotateMode () {
+        const camera = this.getCesiumScene().camera;
+        // Look at target in front at current direction
+        var distanceInMeters = 5;
+        camera.zoomIn(distanceInMeters);
+        var lookAtTarget = camera.position;
+        // Place camera to original position (x meters from look at target)
+        camera.constrainedAxis = Cesium.Cartesian3.UNIT_Z;
+        var offset = new Cesium.HeadingPitchRange(camera.heading, camera.pitch, distanceInMeters);
+        camera.lookAt(lookAtTarget, offset);
+        this._disableMapMoveControls();
+    }
+
+    setCameraToMoveMode () {
+        const camera = this.getCesiumScene().camera;
+        camera.constrainedAxis = undefined;
+        camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+        this._enableMapMoveControls();
+    }
+    _disableMapMoveControls () {
+        const styleClass = 'map-move-control-disabled';
+        const mapInMobileMode = Oskari.util.isMobile();
+        var controlSelectors;
+
+        if (mapInMobileMode) {
+            controlSelectors = this._getMobileMapControlSelectors();
+        } else {
+            controlSelectors = this._getDesktopMapControlSelectors();
+            // Zoom bar need more handling than other controls
+            const zoomBar = jQuery('.mappluginsContainer').find('.zoombar');
+            zoomBar.addClass(styleClass);
+            zoomBar.children().addClass(styleClass);
+            const slider = zoomBar.find('.slider');
+            slider.slider('disable');
+        }
+
+        controlSelectors.forEach(controlClass => {
+            const control = jQuery(controlClass);
+            control.addClass(styleClass);
+        });
+    }
+    _enableMapMoveControls () {
+        const styleClass = 'map-move-control-disabled';
+        const mapInMobileMode = Oskari.util.isMobile();
+        var controlSelectors;
+
+        if (mapInMobileMode) {
+            controlSelectors = this._getMobileMapControlSelectors();
+        } else {
+            controlSelectors = this._getDesktopMapControlSelectors();
+            // Zoom bar need more handling than other controls
+            const zoomBar = jQuery('.mappluginsContainer').find('.zoombar');
+            zoomBar.removeClass(styleClass);
+            zoomBar.children().removeClass(styleClass);
+            const slider = zoomBar.find('.slider');
+            slider.slider('enable');
+        }
+
+        controlSelectors.forEach(controlClass => {
+            const control = jQuery(controlClass);
+            control.removeClass(styleClass);
+        });
+    }
+    _getMobileMapControlSelectors () {
+        return ['.mobileToolbarContent .mobile-zoom-in', '.mobileToolbarContent .mobile-zoom-out', '.mobileToolbarContent .mobile-my-location', '.mobileToolbarContent .mobile-xy', '.mobileToolbarContent .mobile-north', '.mobileToolbarContent .camera-controls-3d i:nth-child(3)', '.mobileToolbarContent .camera-controls-3d i:nth-child(4)'];
+    }
+    _getDesktopMapControlSelectors () {
+        return ['.mappluginsContainer .maprotator', '.mappluginsContainer .coordinatetool', '.mappluginsContainer .mylocationplugin'];
+    }
     _toRadians (value) {
         return !isNaN(value) ? Cesium.Math.toRadians(value) : undefined;
     }

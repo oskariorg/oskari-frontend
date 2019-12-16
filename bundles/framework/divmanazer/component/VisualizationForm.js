@@ -70,6 +70,11 @@ Oskari.clazz.define(
         this.template = jQuery(
             '<div id="visualization-form"></div>'
         );
+
+        this.templateNameContainer = jQuery(
+            '<div class="nameContainer"></div>'
+        );
+
         this.templateRenderButton = jQuery(
             '<div class="renderButton"></div>'
         );
@@ -100,11 +105,28 @@ Oskari.clazz.define(
          * @return {jQuery}
          */
         getForm: function () {
-            var me = this,
-                form = this.template.clone(),
-                formClazzes = this._getFormClazz(),
-                btnContainer,
-                formName;
+            const me = this;
+            const form = this.template.clone();
+            const formClazzes = this._getFormClazz();
+            var btnContainer;
+            var formName;
+
+            if (me._options.hasOwnProperty('name')) {
+                const styleNameHeader = jQuery(
+                    '<div class="subheader">' + me._loc.subheaders.name + '</div>'
+                );
+                form.append(styleNameHeader);
+
+                this.nameInput = Oskari.clazz.create('Oskari.userinterface.component.TextInput', 'styleNameInput');
+                this.nameInput.setValue(me._options.name);
+                const nameContainer = this.templateNameContainer.clone();
+                this.nameInput.insertTo(nameContainer);
+                form.append(nameContainer);
+            }
+            const styleHeader = jQuery(
+                '<div class="subheader">' + me._loc.subheaders.style + '</div>'
+            );
+            form.append(styleHeader);
 
             for (formName in formClazzes) {
                 if (formClazzes.hasOwnProperty(formName)) {
@@ -126,24 +148,27 @@ Oskari.clazz.define(
 
         /**
          * @public @method getValues
-         * Returns the values of each form clazz.
+         * Returns the values of each form clazz and optional name of style
          *
          *
          * @return {Object}
          */
         getValues: function () {
-            var values = {},
-                formClazzes = this._getFormClazz(),
-                fClazzName,
-                fClazz;
+            const values = {};
+            const formClazzes = this._getFormClazz();
 
-            for (fClazzName in formClazzes) {
+            for (let fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
-                    fClazz = formClazzes[fClazzName];
+                    let fClazz = formClazzes[fClazzName];
                     values[fClazzName] = fClazz.getValues();
                 }
             }
-
+            if (this._options.hasOwnProperty('name') && this.nameInput) {
+                const styleNameInputValue = this.nameInput.getValue();
+                if (styleNameInputValue && styleNameInputValue.length > 0) {
+                    values.name = styleNameInputValue;
+                }
+            }
             return values;
         },
 
@@ -188,6 +213,9 @@ Oskari.clazz.define(
             };
             return oskariStyle;
         },
+        getOskariStyleName () {
+            return this.getValues().name;
+        },
 
         /**
          * @public @method setOskariStyleValues
@@ -195,13 +223,17 @@ Oskari.clazz.define(
          *
          * @param {Object} featureStyle
          */
-        setOskariStyleValues: function (featureStyle) {
+        setOskariStyleValues: function (featureStyle, styleName) {
             if (featureStyle === null || featureStyle === undefined) {
                 return;
             }
             var formClazzes = this._getFormClazz();
             var fClazzName;
             var fClazz;
+            if (styleName) {
+                this._options = jQuery.extend(this._options, { name: styleName });
+            }
+
             for (fClazzName in formClazzes) {
                 if (formClazzes.hasOwnProperty(fClazzName)) {
                     fClazz = formClazzes[fClazzName];
