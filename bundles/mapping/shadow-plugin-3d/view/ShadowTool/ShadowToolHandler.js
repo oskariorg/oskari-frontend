@@ -11,7 +11,9 @@ class UIService extends StateHandler {
         this.state = {
             time: this._getTime(),
             date: this._getDate(),
-            year: this._getYear()
+            year: this._getYear(),
+            playing: false,
+            speed: 0
         };
         this.eventHandlers = this._createEventHandlers();
     }

@@ -33,6 +33,7 @@ export const StyledInput = styled.input`
     width: 60px;
     border: none;
     height: 30px;
+    text-align: center;
 `;
 
 export const StyledButton = styled(Button)`
