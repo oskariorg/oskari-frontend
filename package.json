@@ -40,7 +40,6 @@
     "@babel/preset-react": "7.0.0",
     "@babel/runtime-corejs3": "7.6.3",
     "@storybook/react": "5.1.11",
-    "@types/jest": "24.0.18",
     "antd": "3.24.2",
     "babel-loader": "8.0.6",
     "babel-plugin-styled-components": "1.10.6",
@@ -92,7 +91,6 @@
     "style-loader": "1.0.0",
     "styled-components": "4.3.2",
     "sumoselect": "3.0.5",
-    "uglifyjs-webpack-plugin": "2.2.0",
     "webpack": "4.39.3",
     "webpack-cli": "3.3.8",
     "webpack-dev-server": "3.8.0"
