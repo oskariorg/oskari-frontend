@@ -20,6 +20,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
         this._time = null;
+        this._log = Oskari.log('MapModuleOlCesium');
     }
 
     /**
@@ -524,21 +525,27 @@ class MapModuleOlCesium extends MapModuleOl {
     }
 
     setCameraToRotateMode () {
-        const camera = this.getCesiumScene().camera;
-        // Look at target in front at current direction
-        var distanceInMeters = 5;
-        camera.zoomIn(distanceInMeters);
-        var lookAtTarget = camera.position;
-        // Place camera to original position (x meters from look at target)
-        camera.constrainedAxis = Cesium.Cartesian3.UNIT_Z;
-        var offset = new Cesium.HeadingPitchRange(camera.heading, camera.pitch, distanceInMeters);
-        camera.lookAt(lookAtTarget, offset);
-        this._disableMapMoveControls();
+        const scene = this.getCesiumScene();
+        const { camera } = scene;
+
+        // Get target to look at with ray from globe surface
+        const ray = camera.getPickRay(new Cesium.Cartesian2(
+            Math.round(scene.canvas.clientWidth / 2),
+            Math.round(scene.canvas.clientHeight / 2)
+        ));
+
+        const lookAtTarget = scene.globe.pick(ray, scene);
+
+        if (Cesium.defined(lookAtTarget)) {
+            camera.lookAt(lookAtTarget, camera.position);
+            this._disableMapMoveControls();
+        } else {
+            this._log.warn('LookAtTarget cannot be determined. Maybe looking at space.');
+        }
     }
 
     setCameraToMoveMode () {
         const camera = this.getCesiumScene().camera;
-        camera.constrainedAxis = undefined;
         camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
         this._enableMapMoveControls();
     }
