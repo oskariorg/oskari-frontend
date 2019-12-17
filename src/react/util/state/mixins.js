@@ -1,7 +1,7 @@
 import { Controller } from './Controller';
 
 /**
- * An easy way to add Controller to an UIService. Adds getController function to the UI handler.
+ * An easy way to add Controller to an UIHandler. Adds getController function to the UI handler.
  * The mixin takes Controller constructor parameters as parameter.
  *
  * @mixin controllerMixin
