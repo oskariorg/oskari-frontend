@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Option, InputGroup } from 'oskari-ui';
-import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledSlider, StyledSelect, Border, StyledPlayButton } from './ShadowToolStyled';
+import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledTimeSlider, StyledSelect, Border, StyledPlayButton } from './ShadowToolStyled';
 import { PlayPauseIcon } from '../../resources/icons/';
 
 const MINUTES = 1439;
 
-export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, playing, playHandler }) => {
+export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed }) => {
     const inputChangeTime = event => {
         const val = event.target.value;
         changeHandler(val);
@@ -43,17 +43,25 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
 
     const speedValues = [
         {
-            value: 1,
-            label: '1x'
+            value: 'slow',
+            label: 'Hidas'
         },
         {
-            value: 60,
-            label: '60x'
+            value: 'normal',
+            label: 'Normaali'
+        },
+        {
+            value: 'fast',
+            label: 'Nopea'
         }
     ];
 
     const clickPlayButton = () => {
         playHandler(!playing);
+    };
+
+    const handleSpeedChange = (val) => {
+        speedHandler(val);
     };
 
     return (
@@ -64,16 +72,16 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
             </Col>
             <ColFixed>
                 <InputGroup compact>
+                    <StyledPlayButton onClick={clickPlayButton}>
+                        <PlayPauseIcon initial={playing} />
+                    </StyledPlayButton>
                     <Border>
-                        <StyledPlayButton onClick={clickPlayButton}>
-                            <PlayPauseIcon initial={playing} />
-                        </StyledPlayButton>
-                        <StyledSlider marks={marksForTime} min={0} max={MINUTES} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
+                        <StyledTimeSlider marks={marksForTime} min={0} max={MINUTES} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
                     </Border>
                 </InputGroup>
             </ColFixed>
             <Col>
-                <StyledSelect style={{ width: '100%' }}>
+                <StyledSelect defaultValue={speed} style={{ width: '100%' }} size='large' onChange={handleSpeedChange}>
                     {speedValues.map(speed => (
                         <Option key={speed.value} value={speed.value}>{speed.label}</Option>
                     ))}
@@ -88,5 +96,7 @@ ShadowToolTime.propTypes = {
     sliderTimeValue: PropTypes.number.isRequired,
     changeHandler: PropTypes.func.isRequired,
     playing: PropTypes.bool.isRequired,
-    playHandler: PropTypes.func.isRequired
+    playHandler: PropTypes.func.isRequired,
+    speedHandler: PropTypes.func.isRequired,
+    speed: PropTypes.string.isRequired
 };

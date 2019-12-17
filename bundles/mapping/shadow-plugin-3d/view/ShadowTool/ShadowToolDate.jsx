@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledButton, StyledSlider } from './ShadowToolStyled';
+import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledButton, StyledDateSlider } from './ShadowToolStyled';
 import moment from 'moment';
 
 /**
@@ -53,7 +53,7 @@ export const ShadowToolDate = ({ changeHandler, sliderDateValue, dateValue, curr
                 <StyledInput value={dateValue} onChange={inputChangeDate} />
             </Col>
             <ColFixed>
-                <StyledSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} tooltipVisible={false} />
+                <StyledDateSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} tooltipVisible={false} />
             </ColFixed>
             <Col>
                 <StyledButton onClick={setCurrentTime}>Nykyhetki</StyledButton>

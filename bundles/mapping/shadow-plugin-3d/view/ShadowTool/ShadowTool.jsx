@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Mutator } from 'oskari-ui/util';
 import { Background } from './ShadowToolStyled';
@@ -7,25 +7,56 @@ import { ShadowToolDate } from './ShadowToolDate';
 import { validateDate, validateTime, sliderValueForDate, sliderValueForTime } from './ShadowToolUtil';
 import moment from 'moment';
 
+// Helper function using react-hooks to manipulate setInterval
+function useInterval (callback, delay) {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        function tick () {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+}
+
 export const ShadowTool = ({ mutator, date, time }) => {
     const [timeValue, setTime] = useState(time);
     const [dateValue, setDate] = useState(date);
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
     const [sliderDateValue, setSliderDate] = useState(sliderValueForDate(date));
     const [playing, setPlaying] = useState(false);
+    const [speed, setSpeed] = useState('slow');
 
-    useEffect(() => {
-        const tick = setInterval(() => {
-            if (playing) {
-                const nextTime = moment.utc(timeValue, 'HH:mm').add(1, 'minute').format('HH:mm');
-                const nextDate = nextTime < timeValue
-                    ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
-                    : dateValue;
-                changeTimeAndDate(nextTime, nextDate);
-            }
-        }, 1000);
-        return () => clearInterval(tick);
-    }, []);
+    useInterval(() => {
+        let nextTime;
+        let nextDate;
+        switch (speed) {
+        case 'normal':
+            nextTime = moment.utc(timeValue, 'HH:mm').add(1, 'hour').format('HH:mm');
+            nextDate = nextTime < timeValue
+                ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
+                : dateValue;
+            break;
+        case 'fast':
+            nextTime = timeValue;
+            nextDate = moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M');
+            break;
+        default:
+            nextTime = moment.utc(timeValue, 'HH:mm').add(1, 'minute').format('HH:mm');
+            nextDate = nextTime < timeValue
+                ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
+                : dateValue;
+            break;
+        }
+        changeTimeAndDate(nextTime, nextDate);
+    }, playing ? 1000 : null);
 
     const changeTime = val => {
         if (validateTime(val)) {
@@ -65,6 +96,8 @@ export const ShadowTool = ({ mutator, date, time }) => {
                 sliderTimeValue={sliderTimeValue}
                 playing={playing}
                 playHandler={setPlaying}
+                speedHandler={setSpeed}
+                speed={speed}
             />
         </Background>
     );
