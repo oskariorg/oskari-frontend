@@ -538,10 +538,10 @@ class MapModuleOlCesium extends MapModuleOl {
 
         if (Cesium.defined(lookAtTarget)) {
             camera.lookAt(lookAtTarget, camera.position);
+            this._disableMapMoveControls();
         } else {
             this._log.warn('LookAtTarget cannot be determined. Maybe looking at space.');
         }
-        this._disableMapMoveControls();
     }
 
     setCameraToMoveMode () {
