@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Option, InputGroup } from 'oskari-ui';
-import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledSlider, StyledSelect, Border } from './ShadowToolStyled';
+import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledSlider, StyledSelect, Border, StyledPlayButton } from './ShadowToolStyled';
+import { PlayPauseIcon } from '../../resources/icons/';
 
 const MINUTES = 1439;
 
-export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue }) => {
+export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, playing, playHandler }) => {
     const inputChangeTime = event => {
         const val = event.target.value;
         changeHandler(val);
@@ -20,9 +21,24 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue }) =>
     };
 
     const marksForTime = {
-        360: '',
-        720: '',
-        1080: ''
+        360: {
+            label: '6:00',
+            style: {
+                color: '#fff'
+            }
+        },
+        720: {
+            label: '12:00',
+            style: {
+                color: '#fff'
+            }
+        },
+        1080: {
+            label: '18:00',
+            style: {
+                color: '#fff'
+            }
+        }
     };
 
     const speedValues = [
@@ -36,6 +52,10 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue }) =>
         }
     ];
 
+    const clickPlayButton = () => {
+        playHandler(!playing);
+    };
+
     return (
         <Row style={{ marginTop: '20px' }}>
             <Col>
@@ -45,6 +65,9 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue }) =>
             <ColFixed>
                 <InputGroup compact>
                     <Border>
+                        <StyledPlayButton onClick={clickPlayButton}>
+                            <PlayPauseIcon initial={playing} />
+                        </StyledPlayButton>
                         <StyledSlider marks={marksForTime} min={0} max={MINUTES} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
                     </Border>
                 </InputGroup>
@@ -63,5 +86,7 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue }) =>
 ShadowToolTime.propTypes = {
     timeValue: PropTypes.string.isRequired,
     sliderTimeValue: PropTypes.number.isRequired,
-    changeHandler: PropTypes.func.isRequired
+    changeHandler: PropTypes.func.isRequired,
+    playing: PropTypes.bool.isRequired,
+    playHandler: PropTypes.func.isRequired
 };

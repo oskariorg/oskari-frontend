@@ -75,6 +75,10 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._teardownUI();
     }
 
+    unmountReactPopup () {
+        ReactDOM.unmountComponentAtNode(this._popupContent.get(0));
+    }
+
     _createUI (mapInMobileMode) {
         this._element = this._mountPoint.clone();
 
@@ -152,6 +156,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
                 el.removeClass('active');
             }
             me._toolOpen = false;
+            me.unmountReactPopup();
             popup.close(true);
         });
 

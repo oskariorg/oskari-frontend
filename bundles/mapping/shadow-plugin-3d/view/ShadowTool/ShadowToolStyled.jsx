@@ -72,3 +72,11 @@ export const Border = styled('div')`
     width: 90%;
     padding: 10px 15px;
 `;
+
+export const StyledPlayButton = styled('button')`
+    padding: 0;
+    border: 0;
+    background: #ffd400;
+    height: 40px;
+    width: 40px;
+`;

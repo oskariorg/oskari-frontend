@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { withLocale } from 'oskari-ui/util';
-import { ShadowIcon } from '../../resources/icons/ShadowIcon';
+import { ShadowIcon } from '../../resources/icons/';
 
 const darkBgColor = 'rgba(20,20,20,0.8)';
 const secondaryColor = '#006ce8';

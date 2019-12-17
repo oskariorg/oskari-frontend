@@ -12,23 +12,20 @@ export const ShadowTool = ({ mutator, date, time }) => {
     const [dateValue, setDate] = useState(date);
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
     const [sliderDateValue, setSliderDate] = useState(sliderValueForDate(date));
-    // const [speed, setSpeed] = useState(0);
     const [playing, setPlaying] = useState(false);
 
     useEffect(() => {
-        const tick = () => {
+        const tick = setInterval(() => {
             if (playing) {
-                const nextMinute = moment.utc(timeValue, 'HH:mm').add(1, 'minute').format('HH:mm');
-                changeTime(nextMinute);
+                const nextTime = moment.utc(timeValue, 'HH:mm').add(1, 'minute').format('HH:mm');
+                const nextDate = nextTime < timeValue
+                    ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
+                    : dateValue;
+                changeTimeAndDate(nextTime, nextDate);
             }
-        };
-        const playInterval = setInterval(tick, 1000);
-        return () => clearInterval(playInterval);
+        }, 1000);
+        return () => clearInterval(tick);
     }, []);
-
-    const clickPlayButton = () => {
-        setPlaying(!playing);
-    };
 
     const changeTime = val => {
         if (validateTime(val)) {
@@ -66,8 +63,9 @@ export const ShadowTool = ({ mutator, date, time }) => {
                 changeHandler={changeTime}
                 timeValue={timeValue}
                 sliderTimeValue={sliderTimeValue}
+                playing={playing}
+                playHandler={setPlaying}
             />
-            <button onClick={clickPlayButton}>Testi</button>
         </Background>
     );
 };
