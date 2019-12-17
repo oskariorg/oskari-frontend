@@ -28,7 +28,7 @@ export const Col = styled.div`
 `;
 
 export const StyledInput = styled.input`
-    border-radius: 2px;
+    border-radius: 4px;
     box-shadow: inset 0.5px 0.5px 1.5px 0 rgba(0, 0, 0, 0.5);
     width: 60px;
     border: none;
@@ -101,6 +101,7 @@ export const StyledTimeSlider = styled(StyledSlider)`
 
 export const StyledDateSlider = styled(StyledSlider)`
     width: 93%;
+    margin-top: 20px;
 `;
 
 export const StyledSelect = styled(Select)``;

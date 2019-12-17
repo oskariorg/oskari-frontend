@@ -19,6 +19,7 @@ class UIService extends StateHandler {
     }
 
     updateTimeEvent (event) {
+        console.log(event);
         const time = event.getTime();
         const date = event.getDate();
         this.updateState({ time, date });
@@ -40,12 +41,12 @@ class UIService extends StateHandler {
     }
 
     setTime (time) {
-        const date = this._getDate();
+        const date = this.state.date;
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 
     setDate (date) {
-        const time = this._getTime();
+        const time = this.state.time;
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 

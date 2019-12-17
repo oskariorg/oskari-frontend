@@ -39,12 +39,18 @@ export const ShadowTool = ({ mutator, date, time }) => {
         let nextDate;
         switch (speed) {
         case 'normal':
-            nextTime = moment.utc(timeValue, 'HH:mm').add(1, 'hour').format('HH:mm');
+            nextTime = moment.utc(timeValue, 'HH:mm').add(6, 'minutes').format('HH:mm');
             nextDate = nextTime < timeValue
                 ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
                 : dateValue;
             break;
         case 'fast':
+            nextTime = moment.utc(timeValue, 'HH:mm').add(30, 'minutes').format('HH:mm');
+            nextDate = nextTime < timeValue
+                ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
+                : dateValue;
+            break;
+        case 'superfast':
             nextTime = timeValue;
             nextDate = moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M');
             break;
@@ -56,7 +62,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
             break;
         }
         changeTimeAndDate(nextTime, nextDate);
-    }, playing ? 1000 : null);
+    }, playing ? 100 : null);
 
     const changeTime = val => {
         if (validateTime(val)) {

@@ -53,6 +53,10 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
         {
             value: 'fast',
             label: 'Nopea'
+        },
+        {
+            value: 'superfast',
+            label: 'Sairaan nopee'
         }
     ];
 
@@ -65,7 +69,7 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
     };
 
     return (
-        <Row style={{ marginTop: '20px' }}>
+        <Row style={{ marginTop: '5px' }}>
             <Col>
                 <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
                 <StyledInput value={timeValue} onChange={inputChangeTime} />
