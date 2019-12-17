@@ -27,6 +27,18 @@ Oskari.clazz.define('Oskari.mapping.cameracontrols3d.CameraControls3dTool',
                 config: {}
             };
         },
+        // Key in view config non-map-module-plugin tools (for returning the state when modifying an existing published map).
+        bundleName: 'camera-controls-3d',
+
+        /**
+      * Initialise tool
+      * @method init
+      */
+        init: function (data) {
+            if (data.configuration[this.bundleName]) {
+                this.setEnabled(true);
+            }
+        },
         /**
     * Get values.
     * @method getValues
@@ -35,18 +47,17 @@ Oskari.clazz.define('Oskari.mapping.cameracontrols3d.CameraControls3dTool',
     * @returns {Object} tool value object
     */
         getValues: function () {
-            var me = this;
-
-            if (me.state.enabled) {
-                return {
-                    configuration: {
-                        mapfull: {
-                            conf: {
-                                plugins: [{ id: this.getTool().id, config: this.getPlugin().getConfig() }]
-                            }
-                        }
-                    }
+            if (this.state.enabled) {
+                var pluginConfig = this.getPlugin().getConfig();
+                pluginConfig.instance = null;
+                var json = {
+                    configuration: {}
                 };
+                json.configuration[this.bundleName] = {
+                    conf: pluginConfig,
+                    state: {}
+                };
+                return json;
             } else {
                 return null;
             }
