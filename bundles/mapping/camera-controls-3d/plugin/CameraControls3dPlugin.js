@@ -28,15 +28,6 @@ Oskari.clazz.define(className,
             this.redrawUI(Oskari.util.isMobile());
         },
         /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin.
-         * Not implemented.
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         */
-        changeToolStyle: function (style, div) {},
-        /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
@@ -51,6 +42,7 @@ Oskari.clazz.define(className,
             }
             ReactDOM.unmountComponentAtNode(this.getElement().get(0));
             this.getElement().detach();
+            this._element = undefined;
         },
         /**
          * Get jQuery element.

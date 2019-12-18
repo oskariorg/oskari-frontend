@@ -19,6 +19,9 @@ Oskari.clazz.define("Oskari.mapping.cameracontrols3d.CameraControls3dBundle", fu
 		}, {
 			"type" : "text/javascript",
 			"src" : "../../../bundles/mapping/camera-controls-3d/plugin/CameraControls3dPlugin.js"
+		},{
+			"type" : "text/javascript",
+			"src" : "../../../bundles/mapping/camera-controls-3d/tool/CameraControls3dTool.js"
 		}],
 		"locales" : [{
 			"lang" : "fi",
