@@ -11,9 +11,9 @@ describe('<Filter/>', () => {
     const controller = new Controller({ setActiveFilterId: mockFilterSelected }, ['setActiveFilterId']);
 
     let wrapper = mount(
-        <LocaleContext.Provider value={{ bundleKey: instance.getName() }}>
+        <LocaleProvider value={{ bundleKey: instance.getName() }}>
             <Filter filters={testFilters} activeFilterId={testFilters[1].id} controller={controller}/>
-        </LocaleContext.Provider>
+        </LocaleProvider>
     );
 
     test('renders correct amount of options', () => {

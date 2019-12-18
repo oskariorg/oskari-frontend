@@ -1,6 +1,3 @@
-/**
- * @module oskari-ui
- */
 export { Alert } from './components/Alert';
 export { Badge } from './components/Badge';
 export { Button } from './components/Button';
@@ -9,7 +6,6 @@ export { Collapse, Panel as CollapsePanel } from './components/Collapse';
 export { Confirm } from './components/Confirm';
 export { Dropdown } from './components/Dropdown';
 export { List, ListItem } from './components/List';
-export { Menu } from './components/Menu';
 export { NumberInput } from './components/NumberInput';
 export { Opacity } from './components/Opacity';
 export { Popover } from './components/Popover';

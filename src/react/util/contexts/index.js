@@ -1,2 +1,2 @@
 export { GenericContext, withContext } from './GenericContext';
-export { LocaleContext, LocaleConsumer } from './LocaleContext';
+export { LocaleProvider, LocaleConsumer } from './LocaleContext';

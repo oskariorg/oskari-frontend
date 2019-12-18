@@ -380,9 +380,6 @@ export class AdminLayerFormService {
         return this.layer;
     }
 
-    getLayerTypes () {
-        return ['wfslayer', 'wmslayer'];
-    }
     isLoading () {
         return this.loadingCount > 0;
     }

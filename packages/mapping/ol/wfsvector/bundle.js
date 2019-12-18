@@ -8,7 +8,6 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
 }, {
         "create": function () {
             return this;
-
         },
         "update": function (manager, bundle, bi, info) {
 
@@ -72,6 +71,9 @@ Oskari.clazz.define("Oskari.wfsvector.WfsVectorBundle", function () {
                 }, {
                     "type": "text/javascript",
                     "src": "../../../../bundles/mapping/mapwfs2/plugin/WfsVectorLayerPlugin.ol.js"
+                }, {
+                    "type": "text/javascript",
+                    "src": "../../../../bundles/mapping/mapwfs2/UserStylesFlyout.js"
                 }
             ],
             "locales" : [{

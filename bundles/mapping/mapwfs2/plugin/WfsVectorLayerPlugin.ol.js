@@ -5,6 +5,7 @@ import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
 import { WFS_ID_KEY, WFS_FTR_ID_KEY, WFS_FTR_ID_LOCALE } from './WfsVectorLayerPlugin/util/props';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../mapmodule/domain/constants';
+import { UserStyleService } from '../service/UserStyleService';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
 const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
@@ -29,6 +30,9 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.vectorLayerHandler = new VectorLayerHandler(this);
         this.mvtLayerHandler = new MvtLayerHandler(this);
         this.layerHandlersByLayerId = {};
+        this.userStyleService = new UserStyleService();
+        Oskari.getSandbox().registerService(this.userStyleService);
+        this.availableVersions = ['1.1.0', '2.0.0', '3.0'];
     }
 
     /* ---- AbstractMapModulePlugin functions ---- */
@@ -78,7 +82,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             this.renderMode = RENDER_MODE_VECTOR;
         }
         this.reqEventHandler = new ReqEventHandler(sandbox);
-        this.visualizationForm = new VisualizationForm();
+        this.visualizationForm = new VisualizationForm({ name: '' });
         this.WFSLayerService = new WFSLayerService(sandbox);
         this.vectorFeatureService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
         this.mapLayerService = sandbox.getService('Oskari.mapframework.service.MapLayerService');
@@ -86,7 +90,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!this.mapLayerService || !this.vectorFeatureService) {
             return;
         }
-        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer');
+        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer', this.availableVersions);
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);
@@ -224,16 +228,21 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      * @return VisualizationForm's form element
      */
-    getCustomStyleEditorForm (layer) {
-        this.visualizationForm.setOskariStyleValues(layer.getCustomStyle());
+    getCustomStyleEditorForm (customStyle, styleName) {
+        if (!customStyle) {
+            this.visualizationForm = new VisualizationForm({ name: '' });
+        } else {
+            this.visualizationForm.setOskariStyleValues(customStyle, styleName);
+        }
         return this.visualizationForm.getForm();
     }
     /**
      * @method applyEditorStyle Applies custom style editor's style to the layer.
      * @param {Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer} layer
      */
-    applyEditorStyle (layer) {
+    applyEditorStyle (layer, styleId) {
         const style = this.visualizationForm.getOskariStyle();
+        style.id = styleId;
         layer.setCustomStyle(style);
         layer.selectStyle('oskari_custom');
     }
@@ -359,6 +368,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             return;
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
+    }
+    saveUserStyle (layerId, styleId) {
+        const oskariStyle = this.visualizationForm.getOskariStyle();
+        const name = this.visualizationForm.getOskariStyleName();
+        oskariStyle.id = styleId;
+        const styleWithMetadata = {
+            name: name,
+            style: oskariStyle
+        };
+        this.userStyleService.saveUserStyle(layerId, styleWithMetadata);
     }
 };
 

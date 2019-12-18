@@ -50,7 +50,7 @@ Oskari.clazz.define(
                 toolOwnStyle.setIconCls('show-own-style-tool');
                 toolOwnStyle.setTooltip(locOwnStyle);
                 toolOwnStyle.setCallback(function () {
-                    me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId()]);
+                    me.sandbox.postRequestByName('ShowOwnStyleRequest', [layer.getId(), undefined, false]);
                 });
                 layer.addTool(toolOwnStyle);
             }

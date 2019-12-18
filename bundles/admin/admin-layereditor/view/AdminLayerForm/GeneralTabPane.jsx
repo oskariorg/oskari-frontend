@@ -65,7 +65,7 @@ const GeneralTabPane = (props) => {
 GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
-    controller: PropTypes.object,
+    controller: PropTypes.any,
     layer: PropTypes.object
 };
 

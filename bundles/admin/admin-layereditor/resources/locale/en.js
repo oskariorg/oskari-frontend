@@ -28,19 +28,26 @@ Oskari.registerLocalization(
                 "descplaceholder": "Description in {0}"
             },
             "en": {
+                "lang": "English",
                 "placeholder": "Name in English",
                 "descplaceholder": "Description in English"
             },
             "fi": {
+                "lang": "Finnish",
                 "placeholder": "Name in Finnish",
                 "descplaceholder": "Description in Finnish"
             },
             "sv": {
+                "lang": "Swedish",
                 "placeholder": "Name in Swedish",
                 "descplaceholder": "Description in Swedish"
             },
+            "addLayer": "Add a new map layer",
             "dataProvider": "Dataprovider",
             "addDataProvider": "Add dataprovider",
+            "dataProviderName": "Dataprovider name",
+            "themeName": "Theme name",
+            "addTheme": "Add theme",
             "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",

@@ -4,7 +4,7 @@ import { AdminLayerForm } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
 import { AdminLayerFormService } from './AdminLayerFormService';
 import { Spin } from 'oskari-ui';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -16,6 +16,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.dataProviders = [];
         this.mapLayerGroups = [];
         this.service = new AdminLayerFormService(() => this.update());
+        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.mapLayerService.on('availableVersionsUpdated', () => this.update());
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -67,21 +69,23 @@ export class LayerEditorFlyout extends ExtraFlyout {
         ReactDOM.render(uiCode, el.get(0));
     }
     getEditorUI () {
+        const layer = this.service.getLayer();
         return (
-            <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor' }}>
+            <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
                 <LayerWizard
-                    layer={this.service.getLayer()}
+                    layer={layer}
+                    controller={this.service.getController()}
                     capabilities={this.service.getCapabilities()}
                     loading={this.service.isLoading()}
-                    layerTypes={this.service.getLayerTypes()}
-                    controller={this.service.getController()}>
+                    layerTypes={this.mapLayerService.getLayerTypes()}
+                    versions = {this.mapLayerService.getVersionsForType(layer.type)}>
                     <AdminLayerForm
+                        layer={layer}
                         mapLayerGroups={this.mapLayerGroups}
                         dataProviders={this.dataProviders}
-                        layer={this.service.getLayer()}
+                        controller={this.service.getController()}
                         messages={this.service.getMessages()}
                         rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
-                        controller={this.service.getController()}
                         onDelete={() => this.service.deleteLayer()}
                         onSave={() => this.service.saveLayer()}
                         onCancel={() => {
@@ -89,7 +93,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                             this.hide();
                         }} />
                 </LayerWizard>
-            </LocaleContext.Provider>
+            </LocaleProvider>
         );
     }
     cleanUp () {
