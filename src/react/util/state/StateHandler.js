@@ -1,7 +1,8 @@
-/**
- * StateHandler for immutable UI state handling.
- */
 export class StateHandler {
+    /**
+     * @class StateHandler
+     * @classdesc For immutable UI state handling
+     */
     constructor () {
         this.stateListeners = [];
         this.state = {};

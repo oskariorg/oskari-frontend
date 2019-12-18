@@ -7,6 +7,30 @@ const Label = styled('div')`
     display: inline-block;
 `;
 
+/**
+ * @class Message
+ * @calssdesc <Message>
+ * @memberof module:oskari-ui
+ * @see {@link module:oskari-ui/util.LocaleProvider|LocaleProvider}
+ * @param {Object} props - { bundleKey, messageKey, messageArgs:optional, getMessage:optional, LabelComponent:optional }
+ *
+ * @example <caption>Registering bundle localization</caption>
+ * Oskari.registerLocalization({
+ *     "lang": "en",
+ *     "key": "helloworld",
+ *     "value": {
+ *         "hello": "Hello {name}!"
+ *     }
+ * });
+ *
+ * @example <caption>Basic usage</caption>
+ * <Message bundleKey="helloworld" messageKey="hello" messageArgs={['Jack']}/>
+ *
+ * @example <caption>With LocaleProvider</caption>
+ * <LocaleProvider value={{bundleKey: 'helloworld'}}>
+ *     <Message messageKey="hello" messageArgs={['Jack']}/>
+ * </LocaleProvider>
+ */
 const Message = ({ bundleKey, messageKey, messageArgs, getMessage, LabelComponent = Label }) => {
     if (!messageKey) {
         return null;

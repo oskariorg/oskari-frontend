@@ -48,7 +48,7 @@ export const controllerMixin = (UIHandler, functionNames = []) => {
             this.controller = new Controller(this, methods);
         }
         /**
-         * @return {Controller} Controller for the service
+         * @return {Controller} Controller for the handler
          */
         getController () {
             return this.controller;

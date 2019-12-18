@@ -1,15 +1,43 @@
 import React from 'react';
 
-/**
- * The context takes an object with two properties as a parameter. { bundleKey, getMessage }
- * getMessage is optional and can be used to provide a custom function taking the same params as Oskari.getMsg.
- */
-export const LocaleContext = React.createContext();
+const LocaleContext = React.createContext();
 
 /**
- * The context provides Message component and getMessage functions for it's children.
- * Developers should use the Message component whenever they can and avoid using the getMessage function.
+ * @class LocaleProvider
+ * @classdesc Provides messaging context down the component tree. Usefull with oskari-ui/Message component.
+ * @see {@link LocaleConsumer}
+ * @param {Object} props - { bundleKey, getMessage:optional }
+ * @example
+ * import { Message } from 'oskari-ui';
+ * import { LocaleProvider } from 'oskari-ui/util';
+ *
+ * const Greeting = () => (
+ *     <LocaleProvider value={{bundleKey: 'helloworld'}}>
+ *         <Message messageKey="hello" messageArgs={['Jack']}/>
+ *     </LocaleProvider>
+ * );
+ */
+export const LocaleProvider = LocaleContext.Provider;
+
+/**
+ * @class LocaleConsumer
+ * @classdesc
+ * A higher order component utilizing messaging context to the component it wraps.
+ * Using LocaleConsumer and getMessage function directly should be avoided.
+ * Using oskari-ui/Message component instead is encouraged.
+ *
+ * The context provides bundleKey string and getMessage function.
  * The getMessage function may be used when an element can't use a ReactNode as a prop. (e.g. placeholder in TextInput)
+ * @see {@link LocaleProvider}
+ * @param {ReactElement} Component The component to pass localizations to
+ *
+ * @example <caption>Modified TextInput</caption>
+ * import { TextInput } from 'oskari-ui';
+ * import { LocaleConsumer } from 'oskari-ui/util';
+ *
+ * const NameInput = LocaleConsumer(({ getMessage }) => (
+ *     <TextInput placeholder={getMessage('placeholders.name')} />
+ * ));
  */
 export function LocaleConsumer (Component) {
     const LocalizedComponent = (props, ref) => {

@@ -1,6 +1,8 @@
 /**
- * re-binds all object methods starting with 'handle',
- * so that methods can be used detached from instance. For use in React
+ * Re-binds all object methods starting with prefix, so that methods can be used detached from instance. For use in React
+ * @function handleBinder
+ * @param {Object} ob - Object to bind functions to
+ * @param {string} [prefix=handle] - Binds all functions starting with prefix
  */
 export function handleBinder (ob, prefix = 'handle') {
     const proto = Object.getPrototypeOf(ob);
