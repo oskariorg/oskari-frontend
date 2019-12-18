@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { withLocale } from 'oskari-ui/util';
+import { Mutator, withMutator, withLocale } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './CameraControls3d/CameraControl3dIcons';
 
-const upDownChangePercent = 10;
 const iconShadow = '1px 1px 2px rgba(0,0,0,0.6)';
 const darkBgColor = 'rgba(20,20,20,0.8)';
 // TODO: Change secondary color reference later when global way available
@@ -53,52 +52,20 @@ const Break = styled.div`
     height: 0;
 `;
 
-const getMapModule = () => {
-    return Oskari.getSandbox().getStatefulComponents().mapfull.getMapModule();
-};
-
-const upDownClickHandler = (directionUp) => {
-    const mapmodule = getMapModule();
-    const cam = mapmodule.getCamera();
-    if (directionUp) {
-        cam.location.altitude = cam.location.altitude * ((100 + upDownChangePercent) / 100);
-    } else {
-        cam.location.altitude = cam.location.altitude * ((100 - upDownChangePercent) / 100);
-    }
-    mapmodule.setCamera(cam);
-    Oskari.getSandbox().postRequestByName('MapMoveRequest');
-};
-
-const setCameraToMoveMode = (activeMapMoveMethod) => {
-    if (activeMapMoveMethod === mapMoveMethodMove) {
-        return;
-    }
-    getMapModule().setCameraToMoveMode();
-};
-const setCameraToRotateMode = (activeMapMoveMethod) => {
-    if (activeMapMoveMethod === mapMoveMethodRotate) {
-        return;
-    }
-    getMapModule().setCameraToRotateMode();
-};
-
-const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
-    const [activeMapMoveMethod, setActiveMapMoveMethod] = useState(mapMoveMethodMove);
+const CameraControls3d = ({ mapInMobileMode, activeMapMoveMethod, mutator, getMessage }) => {
 
     const moveMapControl = <MoveMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
-        setActiveMapMoveMethod(mapMoveMethodMove);
-        setCameraToMoveMode(activeMapMoveMethod);
+        mutator.setActiveMapMoveMethod(mapMoveMethodMove);
     }} title={mapInMobileMode ? '' : getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>;
 
     const rotateMapControl = <RotateMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
-        setActiveMapMoveMethod(mapMoveMethodRotate);
-        setCameraToRotateMode(activeMapMoveMethod);
+        mutator.setActiveMapMoveMethod(mapMoveMethodRotate);
     }} title={ mapInMobileMode ? '' : getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>;
 
     const upControl = <UpIcon mapInMobileMode={mapInMobileMode}
-        clickHandler={() => upDownClickHandler(true)} title={mapInMobileMode ? '' : getMessage('tooltip.up')}/>;
+        clickHandler={() => mutator.changeCameraAltitude(true)} title={mapInMobileMode ? '' : getMessage('tooltip.up')}/>;
     const downControl = <DownIcon mapInMobileMode={mapInMobileMode}
-        clickHandler={() => upDownClickHandler(false)} title={mapInMobileMode ? '' : getMessage('tooltip.down')}/>;
+        clickHandler={() => mutator.changeCameraAltitude(false)} title={mapInMobileMode ? '' : getMessage('tooltip.down')}/>;
 
     if (mapInMobileMode) {
         return (<MobileContainer>
@@ -127,8 +94,10 @@ const CameraControls3d = ({ mapInMobileMode, getMessage }) => {
 
 CameraControls3d.propTypes = {
     mapInMobileMode: PropTypes.bool.isRequired,
+    activeMapMoveMethod: PropTypes.string.isRequired,
+    mutator: PropTypes.instanceOf(Mutator).isRequired,
     getMessage: PropTypes.func.isRequired
 };
 
-const contextWrap = withLocale(CameraControls3d);
+const contextWrap = withMutator(withLocale(CameraControls3d));
 export { contextWrap as CameraControls3d };

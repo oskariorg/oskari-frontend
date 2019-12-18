@@ -1,7 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleContext } from 'oskari-ui/util';
+import { MutatorContext, LocaleContext } from 'oskari-ui/util';
 import { CameraControls3d } from '../view/CameraControls3d';
+import { CameraControls3dHandler } from '../view/CameraControls3dHandler';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
 const shortName = 'CameraControls3dPlugin';
@@ -16,6 +17,7 @@ Oskari.clazz.define(className,
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
+        this._handler = new CameraControls3dHandler(() => this._render(Oskari.util.isMobile()));
     }, {
         getName: function () {
             return shortName;
@@ -27,15 +29,6 @@ Oskari.clazz.define(className,
         resetState: function () {
             this.redrawUI(Oskari.util.isMobile());
         },
-        /**
-         * @public @method changeToolStyle
-         * Changes the tool style of the plugin.
-         * Not implemented.
-         *
-         * @param {Object} style
-         * @param {jQuery} div
-         */
-        changeToolStyle: function (style, div) {},
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI
@@ -72,9 +65,14 @@ Oskari.clazz.define(className,
             } else {
                 this.addToPluginContainer(this._element);
             }
+            this._render(mapInMobileMode);
+        },
+        _render (mapInMobileMode) {
             ReactDOM.render(
                 <LocaleContext.Provider value={{ bundleKey: 'CameraControls3d' }}>
-                    <CameraControls3d mapInMobileMode={mapInMobileMode}/>
+                    <MutatorContext.Provider value={this._handler}>
+                        <CameraControls3d mapInMobileMode={mapInMobileMode} activeMapMoveMethod={this._handler.getActiveMapMoveMethod()}/>
+                    </MutatorContext.Provider>
                 </LocaleContext.Provider>, this._element.get(0));
         },
         /**
