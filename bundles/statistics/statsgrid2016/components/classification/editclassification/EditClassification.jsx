@@ -72,19 +72,19 @@ const getDisabledClassificationMethods = valueCount => {
     return valueCount < 3 ? ['jenks'] : [];
 };
 
-const handleSelectChange = (mutator, properties, value) => {
+const handleSelectChange = (controller, properties, value) => {
     if (properties.valueType === 'int') {
         value = parseInt(value);
     }
-    mutator.updateClassification(properties.id, value);
+    controller.updateClassification(properties.id, value);
 };
 
-const handleCheckboxChange = (mutator, id, isSelected) => {
-    mutator.updateClassification(id, isSelected);
+const handleCheckboxChange = (controller, id, isSelected) => {
+    controller.updateClassification(id, isSelected);
 };
 
 const EditClassification = props => {
-    const { indicators, mutator, loc, editEnabled, manualView, indicatorData } = props;
+    const { indicators, controller, loc, editEnabled, manualView, indicatorData } = props;
     const { methods, values, modes, colors, types, mapStyles } = props.classifications;
     const disabledOptions = getDisabledOptions(props);
     const disabled = !editEnabled;
@@ -94,7 +94,7 @@ const EditClassification = props => {
         <div className="classification-edit">
             <div className="classification-options">
                 <Select value = {values.mapStyle} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                     options = {getLocalizedOptions(mapStyles, loc('classify.map'))}
                     properties = {{
                         id: 'mapStyle',
@@ -103,7 +103,7 @@ const EditClassification = props => {
                     }}/>
 
                 <Select value = {values.method} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                     options = {getLocalizedOptions(methods, loc('classify.methods'), getDisabledClassificationMethods(valueCount))}
                     properties = {{
                         id: 'method',
@@ -113,11 +113,11 @@ const EditClassification = props => {
 
                 {values.method === 'manual' &&
                     <ManualClassification disabled = {disabled} manualView = {manualView}
-                        indicators={indicators} indicatorData = {indicatorData} mutator= {mutator}/>
+                        indicators={indicators} indicatorData = {indicatorData} controller= {controller}/>
                 }
 
                 <Select value = {values.count} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                     options = {getValidCountRange(props.classifications)}
                     properties = {{
                         id: 'count',
@@ -127,7 +127,7 @@ const EditClassification = props => {
                     }}/>
 
                 <Select value = {values.mode} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                     options = {getLocalizedOptions(modes, loc('classify.modes'), disabledOptions.mode)}
                     properties = {{
                         id: 'mode',
@@ -136,21 +136,21 @@ const EditClassification = props => {
                     }}/>
 
                 {values.mapStyle !== 'choropleth' &&
-                    <Slider key="point-size" values = {values} disabled = {disabled} mutator = {mutator}/>
+                    <Slider key="point-size" values = {values} disabled = {disabled} controller = {controller}/>
                 }
 
                 <Checkbox key="showValues" value = {values.showValues} disabled = {disabled}
-                    handleChange = {(id, isSelected) => handleCheckboxChange(mutator, id, isSelected)}
+                    handleChange = {(id, isSelected) => handleCheckboxChange(controller, id, isSelected)}
                     properties = {{
                         id: 'showValues',
                         class: 'show-values',
                         label: loc('classify.map.showValues')
                     }}/>
 
-                <Color values = {values} disabled = {disabled} colors = {colors} mutator = {mutator}/>
+                <Color values = {values} disabled = {disabled} colors = {colors} controller = {controller}/>
 
                 <Select key="transparency" value = {values.transparency} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                     options = {getTransparencyOptions(values.transparency)}
                     properties = {{
                         id: 'transparency',
@@ -161,7 +161,7 @@ const EditClassification = props => {
 
                 {values.mapStyle !== 'points' &&
                     <Select key="type" value = {values.type} disabled = {disabled}
-                        handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                        handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                         options = {getLocalizedOptions(types, loc('colorset'))}
                         properties = {{
                             id: 'type',
@@ -171,7 +171,7 @@ const EditClassification = props => {
                 }
 
                 <Select key="fractionDigits" value = {values.fractionDigits} disabled = {disabled}
-                    handleChange = {(properties, value) => handleSelectChange(mutator, properties, value)}
+                    handleChange = {(properties, value) => handleSelectChange(controller, properties, value)}
                     options = {[0, 1, 2, 3, 4, 5]}
                     properties = {{
                         id: 'fractionDigits',
@@ -188,7 +188,7 @@ EditClassification.propTypes = {
     indicatorData: PropTypes.object.isRequired,
     editEnabled: PropTypes.bool.isRequired,
     classifications: PropTypes.object.isRequired,
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     manualView: PropTypes.object,
     loc: PropTypes.func.isRequired
 };

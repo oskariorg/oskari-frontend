@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { ShadowControl } from '../view/ShadowControl/';
 import { ShadowTool, ShadowToolHandler } from '../view/ShadowTool/';
 
@@ -88,9 +88,9 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._createControlElement();
 
         ReactDOM.render(
-            <LocaleContext.Provider value={this.loc}>
+            <LocaleProvider value={this.loc}>
                 <ShadowControl mapInMobileMode={mapInMobileMode}/>
-            </LocaleContext.Provider>, this._element.get(0));
+            </LocaleProvider>, this._element.get(0));
     }
 
     _createControlElement () {
@@ -138,7 +138,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._popup = popupService.createPopup();
         ReactDOM.render(
             <ShadowTool {... this.stateHandler.getState()}
-                mutator={this.stateHandler.getMutator()}
+                controller={this.stateHandler.getController()}
                 locale={this.loc}/>,
             popupContent.get(0));
         this._popupContent = popupContent;

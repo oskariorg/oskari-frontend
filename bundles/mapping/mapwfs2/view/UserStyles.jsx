@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { List, ListItem, Icon, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { UserStyleRow } from './UserStyles/UserStyleRow';
 
 // TODO: Fix this once style accessible smarter way
@@ -84,5 +84,5 @@ UserStyles.propTypes = {
     removeUserStyleHandler: PropTypes.func.isRequired
 };
 
-const contextWrap = withLocale(UserStyles);
+const contextWrap = LocaleConsumer(UserStyles);
 export { contextWrap as UserStyles };

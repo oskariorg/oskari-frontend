@@ -3,11 +3,11 @@ import { shallow } from 'enzyme';
 import { Grouping } from './Grouping';
 import { GroupingOption } from '../../../model/GroupingOption';
 import { Select, Option } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 
 describe('<Grouping/>', () => {
     const mockGroupingSelected = jest.fn();
-    const mutator = new Mutator({ setGrouping: mockGroupingSelected }, ['setGrouping']);
+    const controller = new Controller({ setGrouping: mockGroupingSelected }, ['setGrouping']);
     const options = [
         new GroupingOption('key1', 'title 1', 'method1'),
         new GroupingOption('key2', 'title 2', 'method2'),
@@ -16,7 +16,7 @@ describe('<Grouping/>', () => {
     const localeContextMock = { getMessage: () => {} };
 
     let wrapper = shallow(
-        <Grouping selected={options[1].getKey()} options={options} mutator={mutator} {...localeContextMock} />);
+        <Grouping selected={options[1].getKey()} options={options} controller={controller} {...localeContextMock} />);
 
     test('renders correct amount of options', () => {
         expect.assertions(2);

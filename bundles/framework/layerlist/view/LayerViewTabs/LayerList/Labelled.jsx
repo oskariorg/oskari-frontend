@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 export const Label = styled('div')`
@@ -33,5 +33,5 @@ Labelled.propTypes = {
     ]).isRequired
 };
 
-const wrapped = withLocale(Labelled);
+const wrapped = LocaleConsumer(Labelled);
 export { wrapped as Labelled };

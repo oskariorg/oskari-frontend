@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './CameraControls3d/CameraControl3dIcons';
 
 const upDownChangePercent = 10;
@@ -130,5 +130,5 @@ CameraControls3d.propTypes = {
     getMessage: PropTypes.func.isRequired
 };
 
-const contextWrap = withLocale(CameraControls3d);
+const contextWrap = LocaleConsumer(CameraControls3d);
 export { contextWrap as CameraControls3d };

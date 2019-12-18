@@ -1,9 +1,9 @@
 
-import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { LayerListHandler } from './LayerList';
 import { SelectedLayersHandler } from './SelectedLayers';
 
-class UIStateHandler extends StateHandler {
+class ViewHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
@@ -13,11 +13,11 @@ class UIStateHandler extends StateHandler {
         this.state = {
             layerList: {
                 state: this.layerListHandler.getState(),
-                mutator: this.layerListHandler.getMutator()
+                controller: this.layerListHandler.getController()
             },
             selectedLayers: {
                 state: this.selectedLayersHandler.getState(),
-                mutator: this.selectedLayersHandler.getMutator()
+                controller: this.selectedLayersHandler.getController()
             },
             autoFocusSearch: true
         };
@@ -30,7 +30,7 @@ class UIStateHandler extends StateHandler {
             autoFocusSearch: false,
             layerList: {
                 state: layerListState,
-                mutator: this.state.layerList.mutator
+                controller: this.state.layerList.controller
             }
         }));
         return handler;
@@ -42,7 +42,7 @@ class UIStateHandler extends StateHandler {
             this.updateState({
                 selectedLayers: {
                     state: selectedLayersState,
-                    mutator: this.state.selectedLayers.mutator
+                    controller: this.state.selectedLayers.controller
                 }
             });
         });
@@ -123,6 +123,6 @@ class UIStateHandler extends StateHandler {
     }
 }
 
-export const LayerViewTabsHandler = mutatorMixin(UIStateHandler, [
+export const LayerViewTabsHandler = controllerMixin(ViewHandler, [
     'setTab'
 ]);

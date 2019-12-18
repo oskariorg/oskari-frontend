@@ -1,4 +1,4 @@
-import { StateHandler, Timeout, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, Timeout, controllerMixin } from 'oskari-ui/util';
 import { FilterHandler } from './Filter/';
 import { LayerCollapseHandler } from './LayerCollapse/';
 import { GroupingOption } from '../../../model/GroupingOption';
@@ -8,7 +8,7 @@ import { GROUPING_PRESET, TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS } from './preset';
 const UI_UPDATE_TIMEOUT = 100;
 const HEAVY_UI_UPDATE_TIMEOUT = 600;
 
-class UIStateHandler extends StateHandler {
+class ViewHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
@@ -44,11 +44,11 @@ class UIStateHandler extends StateHandler {
             },
             filter: {
                 state: this.filterHandler.getState(),
-                mutator: this.filterHandler.getMutator()
+                controller: this.filterHandler.getController()
             },
             collapse: {
                 state: collapseHandler.getState(),
-                mutator: collapseHandler.getMutator()
+                controller: collapseHandler.getController()
             }
         };
     }
@@ -81,7 +81,7 @@ class UIStateHandler extends StateHandler {
                 this.updateState({
                     collapse: {
                         state: collapseState,
-                        mutator: handler.getMutator()
+                        controller: handler.getController()
                     },
                     updating: false
                 });
@@ -110,7 +110,7 @@ class UIStateHandler extends StateHandler {
             const immediateStateChange = {
                 filter: {
                     state: filterState,
-                    mutator: this.state.filter.mutator
+                    controller: this.state.filter.controller
                 }
             };
             if (!searchTextChanged) {
@@ -176,6 +176,6 @@ class UIStateHandler extends StateHandler {
     }
 }
 
-export const LayerListHandler = mutatorMixin(UIStateHandler, [
+export const LayerListHandler = controllerMixin(ViewHandler, [
     'setGrouping'
 ]);

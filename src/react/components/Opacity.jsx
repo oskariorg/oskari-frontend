@@ -27,7 +27,7 @@ const StyledClear = styled('br')`
 export class Opacity extends React.Component {
     constructor (props) {
         super(props);
-        this.state = {opacity: props.defaultValue};
+        this.state = { opacity: props.defaultValue };
         this.onChange = this.onChange.bind(this);
     }
 

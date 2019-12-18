@@ -4,14 +4,14 @@ import { withContext } from 'oskari-ui/util';
 import { ColorSelect } from './ColorSelect';
 import './color.scss';
 
-const handleReverseColors = (mutator, isReverse) => {
-    mutator.updateClassification('reverseColors', isReverse);
+const handleReverseColors = (controller, isReverse) => {
+    controller.updateClassification('reverseColors', isReverse);
 };
-const handleColorChange = (mutator, value) => {
-    mutator.updateClassification('name', value);
+const handleColorChange = (controller, value) => {
+    controller.updateClassification('name', value);
 };
 
-const Color = ({ colors, values, loc, mutator, disabled }) => {
+const Color = ({ colors, values, loc, controller, disabled }) => {
     let label = loc('colorset.button');
     const isSimple = values.mapStyle !== 'choropleth';
     const opacity = values.transparency / 100 || 1;
@@ -23,12 +23,12 @@ const Color = ({ colors, values, loc, mutator, disabled }) => {
             <div className="select-label">{label}</div>
             <div className = "classification-colors value">
                 <ColorSelect colors = {colors} isSimple = {isSimple} value = {values.name} opacity = {opacity}
-                    disabled = {disabled} handleColorChange = {value => handleColorChange(mutator, value)}/>
+                    disabled = {disabled} handleColorChange = {value => handleColorChange(controller, value)}/>
                 {!isSimple &&
                     <span className="flip-colors">
                         <input id="legend-flip-colors" type="checkbox"
                             checked = {values.reverseColors} disabled = {disabled}
-                            onChange = {evt => handleReverseColors(mutator, evt.target.checked)}/>
+                            onChange = {evt => handleReverseColors(controller, evt.target.checked)}/>
                         <label htmlFor="legend-flip-colors">{loc('colorset.flipButton')}</label>
                     </span>
                 }
@@ -40,7 +40,7 @@ Color.propTypes = {
     colors: PropTypes.array.isRequired,
     values: PropTypes.object.isRequired,
     disabled: PropTypes.bool.isRequired,
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     loc: PropTypes.func.isRequired
 };
 

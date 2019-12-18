@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutator } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 import { Background, StyledIcon, Row, Col, StyledInput, StyledButton } from './ShadowToolStyled';
 
-export const ShadowTool = ({ mutator, date, time }) => {
+export const ShadowTool = ({ controller, date, time }) => {
     const [timeValue, setTime] = React.useState(time);
     const [dateValue, setDate] = React.useState(date);
     const setCurrentTime = () => {
@@ -12,7 +12,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
         const curDate = `${d.getDate()}/${d.getMonth() + 1}`;
         setTime(curTime);
         setDate(curDate);
-        mutator.setCurrentTime(curDate, curTime);
+        controller.setCurrentTime(curDate, curTime);
     };
 
     const validateTime = (target) => {
@@ -34,7 +34,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
     const changeTime = event => {
         const val = event.target.value;
         if (validateTime(val)) {
-            mutator.setTime(val);
+            controller.setTime(val);
         }
         setTime(val);
     };
@@ -42,7 +42,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
     const changeDate = event => {
         const val = event.target.value;
         if (validateDate(val)) {
-            mutator.setDate(val);
+            controller.setDate(val);
         }
         setDate(event.target.value);
     };
@@ -69,7 +69,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
 };
 
 ShadowTool.propTypes = {
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired
 };

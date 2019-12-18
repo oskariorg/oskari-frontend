@@ -2,7 +2,7 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Footer } from './Footer/';
-import { Mutator, withLocale } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
 import { Icon, Message } from 'oskari-ui';
@@ -25,7 +25,7 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
-const LayerBox = ({ layer, index, visibilityInfo, mutator }) => {
+const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
@@ -37,10 +37,10 @@ const LayerBox = ({ layer, index, visibilityInfo, mutator }) => {
 
     const handleToggleVisibility = () => {
         setVisible(!visible);
-        mutator.toggleLayerVisibility(layer);
+        controller.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
-        mutator.removeLayer(layer);
+        controller.removeLayer(layer);
     };
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
@@ -84,7 +84,7 @@ const LayerBox = ({ layer, index, visibilityInfo, mutator }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <Footer layer={layer} mutator={mutator} visibilityInfo={visibilityInfo}/>
+                                <Footer layer={layer} controller={controller} visibilityInfo={visibilityInfo}/>
                             </StyledBox>
                         </Col>
                     </Row>
@@ -98,8 +98,8 @@ LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
     visibilityInfo: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const wrapped = withLocale(LayerBox);
+const wrapped = LocaleConsumer(LayerBox);
 export { wrapped as LayerBox };

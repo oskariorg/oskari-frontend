@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerCollapsePanel } from './LayerCollapsePanel';
 import { Alert } from '../Alert';
 import styled from 'styled-components';
@@ -16,12 +16,12 @@ const StyledCollapse = styled(Collapse)`
     }
 `;
 
-const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator }) => {
+const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }) => {
     if (!Array.isArray(groups) || groups.length === 0) {
         return <Alert showIcon type='info' message={<Message messageKey='errors.noResults'/>}/>;
     }
     return (
-        <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => mutator.updateOpenGroupTitles(keys)}>
+        <StyledCollapse bordered activeKey={openGroupTitles} onChange={keys => controller.updateOpenGroupTitles(keys)}>
             {
                 groups.map(group => {
                     const layerIds = group.getLayers().map(lyr => lyr.getId());
@@ -34,7 +34,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, mutator }) =
                             trimmed
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
-                            mutator={mutator}
+                            controller={controller}
                         />
                     );
                 })
@@ -48,8 +48,8 @@ LayerCollapse.propTypes = {
     openGroupTitles: PropTypes.array.isRequired,
     filtered: PropTypes.array,
     selectedLayerIds: PropTypes.array.isRequired,
-    mutator: PropTypes.any.isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const wrapped = withLocale(LayerCollapse);
+const wrapped = LocaleConsumer(LayerCollapse);
 export { wrapped as LayerCollapse };

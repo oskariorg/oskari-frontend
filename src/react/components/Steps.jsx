@@ -4,7 +4,7 @@ import { Steps as AntSteps } from 'antd';
 import 'antd/es/steps/style/index.js';
 
 export const Step = (props) => {
-    const {children, ...other} = props;
+    const { children, ...other } = props;
     return (
         <AntSteps.Step {...other}>{children}</AntSteps.Step>
     );
@@ -15,7 +15,7 @@ Step.propTypes = {
 };
 
 export const Steps = (props) => {
-    const {children, ...other} = props;
+    const { children, ...other } = props;
     return (
         <AntSteps {...other}>{children}</AntSteps>
     );

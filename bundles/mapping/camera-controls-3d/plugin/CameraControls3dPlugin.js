@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { CameraControls3d } from '../view/CameraControls3d';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
@@ -65,9 +65,9 @@ Oskari.clazz.define(className,
                 this.addToPluginContainer(this._element);
             }
             ReactDOM.render(
-                <LocaleContext.Provider value={{ bundleKey: 'CameraControls3d' }}>
+                <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
                     <CameraControls3d mapInMobileMode={mapInMobileMode}/>
-                </LocaleContext.Provider>, this._element.get(0));
+                </LocaleProvider>, this._element.get(0));
         },
         /**
          * @public @method getIndex

@@ -1,16 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
-import { withLocale } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { StyledComponent } from './StyledFormComponents';
 
-export const LocalizedLayerInfo = withLocale(({ layer, lang, service, getMessage }) => {
+export const LocalizedLayerInfo = LocaleConsumer(({ layer, lang, controller, getMessage }) => {
     const selectedLang = Oskari.getLang();
     const name = layer[`name_${lang}`];
     const description = layer[`title_${lang}`];
     const langPrefix = typeof getMessage(lang) === 'object' ? lang : 'generic';
-    const onNameChange = evt => service.setLocalizedLayerName(lang, evt.target.value);
-    const onDescriptionChange = evt => service.setLocalizedLayerDescription(lang, evt.target.value);
+    const onNameChange = evt => controller.setLocalizedLayerName(lang, evt.target.value);
+    const onDescriptionChange = evt => controller.setLocalizedLayerDescription(lang, evt.target.value);
     if (selectedLang === lang) {
         return (
             <React.Fragment>
@@ -37,6 +37,6 @@ export const LocalizedLayerInfo = withLocale(({ layer, lang, service, getMessage
 
 LocalizedLayerInfo.propTypes = {
     lang: PropTypes.string.isRequired,
-    service: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     layer: PropTypes.object.isRequired
 };
