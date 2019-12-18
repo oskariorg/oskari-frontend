@@ -63,7 +63,7 @@ export const UpIcon = ({ mapInMobileMode, clickHandler, title }) =>
 UpIcon.propTypes = {
     mapInMobileMode: PropTypes.bool.isRequired,
     clickHandler: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string
 };
 
 export const DownIcon = ({ mapInMobileMode, clickHandler, title }) =>
@@ -72,7 +72,7 @@ export const DownIcon = ({ mapInMobileMode, clickHandler, title }) =>
 DownIcon.propTypes = {
     mapInMobileMode: PropTypes.bool.isRequired,
     clickHandler: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired
+    title: PropTypes.string
 };
 
 export const MoveMapIcon = ({ mapInMobileMode, clickHandler, title, controlIsActive }) =>
@@ -81,7 +81,7 @@ export const MoveMapIcon = ({ mapInMobileMode, clickHandler, title, controlIsAct
 MoveMapIcon.propTypes = {
     mapInMobileMode: PropTypes.bool.isRequired,
     clickHandler: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     controlIsActive: PropTypes.bool.isRequired
 };
 
@@ -91,6 +91,6 @@ export const RotateMapIcon = ({ mapInMobileMode, clickHandler, title, controlIsA
 RotateMapIcon.propTypes = {
     mapInMobileMode: PropTypes.bool.isRequired,
     clickHandler: PropTypes.func.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     controlIsActive: PropTypes.bool.isRequired
 };
