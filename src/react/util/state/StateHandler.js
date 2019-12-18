@@ -1,7 +1,7 @@
 export class StateHandler {
     /**
      * @class StateHandler
-     * @classdesc For immutable UI state handling
+     * @classdesc For shallowly immutable UI state handling
      */
     constructor () {
         this.stateListeners = [];
