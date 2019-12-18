@@ -2,7 +2,7 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Filter } from '.';
 import { testFilters } from './Filter.test.util';
-import { Controller, LocaleContext } from 'oskari-ui/util';
+import { Controller, LocaleProvider } from 'oskari-ui/util';
 import { getBundleInstance } from '../../test.util';
 
 describe('<Filter/>', () => {

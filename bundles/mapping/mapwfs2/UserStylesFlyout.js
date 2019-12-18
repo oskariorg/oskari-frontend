@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { UserStyles } from './view/UserStyles';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 

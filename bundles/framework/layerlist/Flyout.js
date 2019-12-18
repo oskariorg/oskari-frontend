@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
 
 /**

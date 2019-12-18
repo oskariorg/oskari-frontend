@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { initServices, getBundleInstance } from '../../test.util';
 import { LayerCollapse, LayerCollapseHandler } from '.';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
 import '../../../../../../../src/global';
 import '../../../../../../mapping/mapmodule/domain/AbstractLayer';

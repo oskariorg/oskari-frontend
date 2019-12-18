@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { CameraControls3d } from '../view/CameraControls3d';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';

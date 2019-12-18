@@ -17,7 +17,7 @@ const LocaleContext = React.createContext();
  *     </LocaleProvider>
  * );
  */
-export const LocaleProvider = LocaleProvider;
+export const LocaleProvider = LocaleContext.Provider;
 
 /**
  * @class LocaleConsumer

@@ -1,9 +1,11 @@
 /**
- * @classdesc 
- * Oskari.BasicBundle. For inheritance only.
- * 
+ * @class BasicBundle
  * @abstract
  * @hideconstructor
+ * @classdesc
+ * Oskari.BasicBundle.
+ * For inheritance only.
+ * 
  * @example <caption>Creating yor own bundle</caption>
  * const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
  * 
@@ -18,47 +20,65 @@
  *     }
  * );
  */
-class BasicBundle {
-    constructor () {
-        /** Bundle sanbox */
-        this.sandbox = null;
-        /** Bundle name, override in subclass! */
-        this.__name = '';
-        /** Oskari event handlers */
-        this.eventHandlers = {};
-        /** Oskari request handlers */
-        this.requestHandlers = {};
-    }
+Oskari.clazz.define('Oskari.BasicBundle', function () {
+    /**
+     * Oskari sandbox.
+     * @memberof BasicBundle
+     */
+    var sandbox = null; // Separate declaration for documentation.
+    this.sandbox = sandbox;
+}, {
+    /**
+     * Override in subclass! Empty string by default.
+     * @memberof BasicBundle
+     */
+    __name: '',
 
     /**
-     * 
+     * Name of the Bundle. Extending classes should declare their own __name property.
+     * @memberof BasicBundle
      */
-    getName () {
+    getName: function () {
         return this.__name;
-    }
+    },
 
     /**
-     * @param {Oskari.mapframework.event.Event} event A Oskari event object
-     * Event is handled forwarded to correct {@link BasicBundle#eventHandlers|eventHandler} if found or discarded if not.
+     * @memberof BasicBundle
+     * @param {Oskari.mapframework.event.Event} event A Oskari event object.
+     * Event is handled forwarded to correct {@link BasicBundle#eventHandlers|eventHandler}
+     * if found or discarded if not.
      */
-    onEvent (event) {
+    onEvent: function (event) {
         var handler = this.eventHandlers[event.getName()];
         if (!handler) {
             return;
         }
         return handler.call(this, event);
-    }
+    },
 
-    /*
-     * Module protocol method
+    /**
+     * Oskari event handlers
+     * @memberof BasicBundle
      */
-    init () { }
+    eventHandlers: {},
+
+    /**
+     * Oskari request handlers
+     * @memberof BasicBundle
+     */
+    requestHandlers: {},
+
+    /**
+     * Module protocol method.
+     * @memberof BasicBundled
+     */
+    init: function () { },
 
     /** 
-     * Called from sandbox
-     * @param {Object} sandbox Bundle sandbox
+     * Called from sandbox.
+     * @memberof BasicBundle
      */
-    start (sandbox) {
+    start: function (sandbox) {
         sandbox.register(this);
         this.sandbox = sandbox;
 
@@ -72,19 +92,20 @@ class BasicBundle {
         if (this._startImpl) {
             this._startImpl(sandbox);
         }
-    }
+    },
 
     /**
-     * Called from sandbox
-     * @param {Object} sandbox Bundle sandbox
+     * Called from sandbox.
+     * @override
+     * @memberof BasicBundle
      */
-    update (sandbox) { }
+    update: function (sandbox) { },
 
     /**
-     * Called from sandbox
-     * @param {Object} sandbox Bundle sandbox
+     * Called from sandbox.
+     * @memberof BasicBundle
      */
-    stop (sandbox) {
+    stop: function (sandbox) {
         Object.keys(this.requestHandlers).forEach(function (requestName) {
             sandbox.requestHandler(requestName, null);
         }, this);
@@ -94,12 +115,6 @@ class BasicBundle {
 
         sandbox.unregister(this);
     }
-};
-
-Oskari.clazz.defineES(
-    'Oskari.BasicBundle',
-    BasicBundle,
-    {
-        'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
-    }
-);
+}, {
+    'protocol': ['Oskari.bundle.BundleInstance', 'Oskari.mapframework.module.Module']
+});
