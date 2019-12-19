@@ -10,7 +10,7 @@ Oskari.registerLocalization(
                 "rotate": "Kierrä karttaa"
             },
             "rotateModeFailure": {
-                "message" : "Kierto tilaan asetus epäonnistui",
+                "message" : "Kiertotilaan asetus epäonnistui",
                 "description": "Kameran tulee osoittaa kohti maanpintaa kun tila asetetaan" 
             }
         }
