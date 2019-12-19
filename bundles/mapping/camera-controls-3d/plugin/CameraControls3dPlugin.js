@@ -27,6 +27,7 @@ Oskari.clazz.define(className,
          * Resets the state in the plugin
          */
         resetState: function () {
+            this.handler.resetToInitialState();
             this.redrawUI(Oskari.util.isMobile());
         },
         /**

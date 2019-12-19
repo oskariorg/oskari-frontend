@@ -49,6 +49,10 @@ class UIService extends StateHandler {
     notify (operationFailed) {
         this.listeners.forEach(consumer => consumer(operationFailed));
     }
+
+    resetToInitialState () {
+        this.updateState({ 'activeMapMoveMethod': mapMoveMethodMove });
+    }
 }
 
 export const CameraControls3dHandler = controllerMixin(UIService, [
