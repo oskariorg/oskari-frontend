@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { List as AntList } from 'antd';
 import 'antd/es/list/style/index.js';
 
-export const List = ({header, footer, dataSource, bordered, renderItem}) => {
+export const List = ({ header, footer, dataSource, bordered, renderItem }) => {
     return (
         <AntList
             header={header}
@@ -15,7 +15,7 @@ export const List = ({header, footer, dataSource, bordered, renderItem}) => {
     );
 };
 
-export const ListItem = ({children, ...other}) => (
+export const ListItem = ({ children, ...other }) => (
     <AntList.Item {...other}>
         {children}
     </AntList.Item>

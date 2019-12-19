@@ -14,7 +14,7 @@ export class AdminLayerFormService {
         this.fetchRolesAndPermissionTypes();
     }
 
-    getMutator () {
+    getController () {
         const me = this;
         return {
             setType (type) {
@@ -160,7 +160,7 @@ export class AdminLayerFormService {
         }).then(function (response) {
             me.loadingCount--;
             if (!response.ok) {
-                me.getMutator().setMessage('TODO', 'error');
+                me.getController().setMessage('TODO', 'error');
             }
             return response.json();
         }).then(function (json) {
@@ -218,7 +218,7 @@ export class AdminLayerFormService {
         const validationErrorMessages = this.validateUserInputValues(layer);
 
         if (validationErrorMessages.length > 0) {
-            this.getMutator().setMessages(validationErrorMessages);
+            this.getController().setMessages(validationErrorMessages);
             return;
         }
         this.setLayerOptions(layer);
@@ -233,10 +233,10 @@ export class AdminLayerFormService {
             body: stringify(layer)
         }).then(response => {
             if (response.ok) {
-                me.getMutator().setMessage('messages.saveSuccess', 'success');
+                me.getController().setMessage('messages.saveSuccess', 'success');
                 return response.json();
             } else {
-                me.getMutator().setMessage('messages.saveFailed', 'error');
+                me.getController().setMessage('messages.saveFailed', 'error');
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
@@ -265,7 +265,7 @@ export class AdminLayerFormService {
             if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.mapLayerService.addLayer(mapLayer);
             } else {
-                this.getMutator().setMessage('messages.errorInsertAllreadyExists', 'error');
+                this.getController().setMessage('messages.errorInsertAllreadyExists', 'error');
                 // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
             }
         }
@@ -313,7 +313,7 @@ export class AdminLayerFormService {
             if (response.ok) {
                 // TODO handle this, just close the flyout?
             } else {
-                me.getMutator().setMessage('messages.errorRemoveLayer', 'error');
+                me.getController().setMessage('messages.errorRemoveLayer', 'error');
             }
             return response;
         });
@@ -342,7 +342,7 @@ export class AdminLayerFormService {
             if (response.ok) {
                 me.layer.version = version;
             } else {
-                me.getMutator().setMessage('TODO', 'error');
+                me.getController().setMessage('TODO', 'error');
             }
             return response.json();
         }).then(function (json) {
@@ -367,7 +367,7 @@ export class AdminLayerFormService {
             me.notify();
         }).catch(error => {
             me.log.error(error);
-            me.getMutator().setMessage('messages.errorFetchUserRolesAndPermissionTypes', 'error');
+            me.getController().setMessage('messages.errorFetchUserRolesAndPermissionTypes', 'error');
             me.notify();
         });
     }

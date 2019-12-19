@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { shapes } from './propTypes';
 import styled from 'styled-components';
 import { Tabs, TabPane, Message } from 'oskari-ui';
-import { Mutator, withMutator, withLocale } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerList } from './LayerList/';
 import { SelectedLayers, SelectedTab } from './SelectedLayers/';
 import { TABS_ALL_LAYERS, TABS_SELECTED_LAYERS } from '.';
@@ -30,7 +30,7 @@ const focus = ref => {
     }
 };
 
-const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutator }) => {
+const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, controller }) => {
     const searchTermInputRef = useRef(null);
     useEffect(() => {
         if (autoFocusSearch) {
@@ -38,7 +38,7 @@ const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutato
         }
     });
     const onChange = tabKey => {
-        mutator.setTab(tabKey);
+        controller.setTab(tabKey);
         if (tabKey !== TABS_ALL_LAYERS) {
             return;
         }
@@ -51,7 +51,7 @@ const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutato
                 key={TABS_ALL_LAYERS}
                 tab={<Message messageKey='tabs.layerList' />}
             >
-                <LayerList ref={searchTermInputRef} {...layerList.state} mutator={layerList.mutator} />
+                <LayerList ref={searchTermInputRef} {...layerList.state} controller={layerList.controller} />
             </TabPane>
             <TabPane
                 key={TABS_SELECTED_LAYERS}
@@ -63,7 +63,7 @@ const LayerViewTabs = ({ tab, layerList, selectedLayers, autoFocusSearch, mutato
                         num={selectedLayers.state.layers.length}
                         messageKey='tabs.selectedLayers'/>
                 }>
-                <SelectedLayers {...selectedLayers.state} mutator={selectedLayers.mutator}/>
+                <SelectedLayers {...selectedLayers.state} controller={selectedLayers.controller}/>
             </TabPane>
         </ControlledTabs>
     );
@@ -74,8 +74,8 @@ LayerViewTabs.propTypes = {
     selectedLayers: shapes.stateful.isRequired,
     tab: PropTypes.string,
     autoFocusSearch: PropTypes.bool,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const contextWrap = withMutator(withLocale(LayerViewTabs));
+const contextWrap = LocaleConsumer(LayerViewTabs);
 export { contextWrap as LayerViewTabs };

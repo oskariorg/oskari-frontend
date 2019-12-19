@@ -1,13 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { withLocale } from 'oskari-ui/util';
+import { Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 const StyledLink = styled('a')`
     cursor: pointer;
 `;
 
-export const VisibilityInfo = withLocale(({ action, text, messageKey, Message }) => {
+export const VisibilityInfo = ({ action, text, messageKey }) => {
     const message = (
         <React.Fragment>
             { messageKey && <Message messageKey={messageKey} />}
@@ -18,7 +18,7 @@ export const VisibilityInfo = withLocale(({ action, text, messageKey, Message })
         return <StyledLink onClick={action}>{message}</StyledLink>;
     }
     return message;
-});
+};
 
 VisibilityInfo.propTypes = {
     action: PropTypes.func,

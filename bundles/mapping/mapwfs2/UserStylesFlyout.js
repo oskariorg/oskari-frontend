@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { UserStyles } from './view/UserStyles';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
 
@@ -56,9 +56,9 @@ export class UserStylesFlyout extends ExtraFlyout {
     getEditorUI () {
         const styles = this.service.getUserStylesForLayer(this.layerId);
         return (
-            <LocaleContext.Provider value={{ bundleKey: 'MapWfs2' }}>
+            <LocaleProvider value={{ bundleKey: 'MapWfs2' }}>
                 <UserStyles layerId={this.layerId} styles={styles} removeUserStyleHandler={this.removeUserStyleHandler}></UserStyles>
-            </LocaleContext.Provider>
+            </LocaleProvider>
         );
     }
     cleanUp () {

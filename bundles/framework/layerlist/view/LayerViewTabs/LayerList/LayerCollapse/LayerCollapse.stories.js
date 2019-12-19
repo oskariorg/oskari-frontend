@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { initServices, getBundleInstance } from '../../test.util';
 import { LayerCollapse, LayerCollapseHandler } from '.';
-import { LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
 import '../../../../../../../src/global';
 import '../../../../../../mapping/mapmodule/domain/AbstractLayer';
@@ -66,9 +66,9 @@ const resetStoryState = () => {
 };
 
 const render = () => (
-    <LocaleContext.Provider value={{ bundleKey: instance.getName() }}>
-        <LayerCollapse {...handler.getState()} mutator={handler.getMutator()} />
-    </LocaleContext.Provider>
+    <LocaleProvider value={{ bundleKey: instance.getName() }}>
+        <LayerCollapse {...handler.getState()} controller={handler.getController()} />
+    </LocaleProvider>
 );
 
 storiesOf('LayerCollapse', module)

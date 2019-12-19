@@ -1,4 +1,4 @@
-import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
 const mapMoveMethodMove = 'move';
 const upDownChangePercent = 10;
@@ -47,7 +47,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const CameraControls3dHandler = mutatorMixin(UIService, [
+export const CameraControls3dHandler = controllerMixin(UIService, [
     'setActiveMapMoveMethod',
     'changeCameraAltitude'
 ]);

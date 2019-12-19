@@ -9,7 +9,7 @@ import '../../../mapping/mapmodule/domain/AbstractLayer';
 import '../../../mapping/mapmodule/domain/style';
 import '../resources/locale/fi';
 
-import { LocaleContext, MutatorContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 
 const Oskari = window.Oskari;
 const sandbox = Oskari.getSandbox();
@@ -26,21 +26,21 @@ const layer = new AbstractLayer();
 layer.setAdmin({});
 layer.setGroups([]);
 
-const service = new AdminLayerFormService();
+const dummyRefresh = () => console.log('State update');
+const service = new AdminLayerFormService(dummyRefresh);
 service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)
     .add('layout', () => (
-        <LocaleContext.Provider value={{ bundleKey: 'admin-layereditor', getMessage: customGetMessageImpl }}>
-            <MutatorContext.Provider value={service}>
-                <AdminLayerForm
-                    mapLayerGroups={[]}
-                    dataProviders={[]}
-                    layer={service.getLayer()}
-                    messages={service.getMessages()}
-                    onDelete={() => {}}
-                    onSave={() => {}}
-                    onCancel={() => {}} />
-            </MutatorContext.Provider>
-        </LocaleContext.Provider>
+        <LocaleProvider value={{ bundleKey: 'admin-layereditor', getMessage: customGetMessageImpl }}>
+            <AdminLayerForm
+                mapLayerGroups={[]}
+                dataProviders={[]}
+                layer={service.getLayer()}
+                messages={service.getMessages()}
+                controller={service.getController()}
+                onDelete={() => {}}
+                onSave={() => {}}
+                onCancel={() => {}} />
+        </LocaleProvider>
     ));

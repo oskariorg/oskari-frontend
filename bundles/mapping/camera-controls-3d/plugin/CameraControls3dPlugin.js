@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { MutatorContext, LocaleContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import { CameraControls3d } from '../view/CameraControls3d';
 import { CameraControls3dHandler } from '../view/CameraControls3dHandler';
 
@@ -17,7 +17,7 @@ Oskari.clazz.define(className,
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
-        this._handler = new CameraControls3dHandler(() => this._render(Oskari.util.isMobile()));
+        this.handler = new CameraControls3dHandler(() => this._render(Oskari.util.isMobile()));
     }, {
         getName: function () {
             return shortName;
@@ -44,6 +44,7 @@ Oskari.clazz.define(className,
             }
             ReactDOM.unmountComponentAtNode(this.getElement().get(0));
             this.getElement().detach();
+            this._element = undefined;
         },
         /**
          * Get jQuery element.
@@ -68,12 +69,15 @@ Oskari.clazz.define(className,
             this._render(mapInMobileMode);
         },
         _render (mapInMobileMode) {
+            if (!this.getElement()) {
+                return;
+            }
             ReactDOM.render(
-                <LocaleContext.Provider value={{ bundleKey: 'CameraControls3d' }}>
-                    <MutatorContext.Provider value={this._handler}>
-                        <CameraControls3d mapInMobileMode={mapInMobileMode} activeMapMoveMethod={this._handler.getActiveMapMoveMethod()}/>
-                    </MutatorContext.Provider>
-                </LocaleContext.Provider>, this._element.get(0));
+                <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
+                    <CameraControls3d mapInMobileMode={mapInMobileMode}
+                        activeMapMoveMethod={this.handler.getActiveMapMoveMethod()}
+                        controller={this.handler.getController()}/>
+                </LocaleProvider>, this._element.get(0));
         },
         /**
          * @public @method getIndex

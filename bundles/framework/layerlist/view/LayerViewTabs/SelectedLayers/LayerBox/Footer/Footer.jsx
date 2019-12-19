@@ -6,7 +6,7 @@ import { VisibilityInfo } from './VisibilityInfo';
 import { OpacitySlider } from './OpacitySlider';
 import { StyleSettings } from './StyleSettings';
 import { ToolMenu } from './ToolMenu';
-import { Mutator } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 import { Row, ColAuto, ColAutoRight } from '../Grid';
 
 const GrayRow = styled(Row)`
@@ -26,7 +26,7 @@ const GrayRow = styled(Row)`
     }
 `;
 
-const getVisibilityInfoProps = ({ layer, visibilityInfo, mutator }) => {
+const getVisibilityInfoProps = ({ layer, visibilityInfo, controller }) => {
     const { unsupported, visible, inScale, geometryMatch } = visibilityInfo;
     if (!visible) {
         return {
@@ -42,17 +42,17 @@ const getVisibilityInfoProps = ({ layer, visibilityInfo, mutator }) => {
     if (!inScale || !geometryMatch) {
         const zoomToExtent = !geometryMatch;
         return {
-            action: () => mutator.locateLayer(layer, zoomToExtent),
+            action: () => controller.locateLayer(layer, zoomToExtent),
             messageKey: zoomToExtent ? 'layer.moveToContentArea' : 'layer.moveToScale'
         };
     }
 };
 
-export const Footer = ({ layer, mutator, visibilityInfo }) => {
+export const Footer = ({ layer, controller, visibilityInfo }) => {
     const tools = layer.getTools();
     const opacity = layer.getOpacity();
     const layerType = layer.getLayerType();
-    const visibilityInfoProps = getVisibilityInfoProps({ layer, mutator, visibilityInfo });
+    const visibilityInfoProps = getVisibilityInfoProps({ layer, controller, visibilityInfo });
     return (
         <GrayRow>
             <ColAuto>
@@ -68,13 +68,13 @@ export const Footer = ({ layer, mutator, visibilityInfo }) => {
                     <ColAuto>
                         <OpacitySlider
                             value={opacity}
-                            onChange={value => mutator.changeOpacity(layer, value)}
+                            onChange={value => controller.changeOpacity(layer, value)}
                         />
                     </ColAuto>
                     <ColAuto>
                         <StyleSettings
                             layer={layer}
-                            onChange={styleName => mutator.changeLayerStyle(layer, styleName)}
+                            onChange={styleName => controller.changeLayerStyle(layer, styleName)}
                         />
                     </ColAuto>
                 </Fragment>
@@ -89,5 +89,5 @@ export const Footer = ({ layer, mutator, visibilityInfo }) => {
 Footer.propTypes = {
     layer: PropTypes.object.isRequired,
     visibilityInfo: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };

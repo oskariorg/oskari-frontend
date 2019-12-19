@@ -60,7 +60,7 @@ export class UrlInput extends React.Component {
         });
     }
     render () {
-        const {credentials, ...other} = this.props;
+        const { credentials, ...other } = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Mutator } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './CameraControl3dIcons';
 
 const iconShadow = '1px 1px 2px rgba(0,0,0,0.6)';
@@ -48,21 +48,21 @@ const Break = styled.div`
     height: 0;
 `;
 
-export const CameraControls3dDesktop = ({ activeMapMoveMethod, mutator, getMessage }) => {
+const CameraControls3dDesktop = ({ activeMapMoveMethod, controller, getMessage }) => {
     const mapInMobileMode = false;
 
     return (<MapControlsContainer>
         <MapControlContainer controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}>
             <MapControl>
                 <MoveMapIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => mutator.setActiveMapMoveMethod(mapMoveMethodMove)}
+                    clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
                     title={getMessage('tooltip.move')} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>
             </MapControl>
         </MapControlContainer>
         <MapControlContainer controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}>
             <MapControl>
                 <RotateMapIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => mutator.setActiveMapMoveMethod(mapMoveMethodRotate)}
+                    clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
                     title={ getMessage('tooltip.rotate')} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>
             </MapControl>
         </MapControlContainer>
@@ -70,13 +70,13 @@ export const CameraControls3dDesktop = ({ activeMapMoveMethod, mutator, getMessa
         <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
             <MapControl>
                 <UpIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => mutator.changeCameraAltitude(true)} title={getMessage('tooltip.up')}/>
+                    clickHandler={() => controller.changeCameraAltitude(true)} title={getMessage('tooltip.up')}/>
             </MapControl>
         </MapControlContainer>
         <MapControlContainer disabled = {activeMapMoveMethod === mapMoveMethodRotate}>
             <MapControl>
                 <DownIcon mapInMobileMode={mapInMobileMode}
-                    clickHandler={() => mutator.changeCameraAltitude(false)} title={getMessage('tooltip.down')}/>
+                    clickHandler={() => controller.changeCameraAltitude(false)} title={getMessage('tooltip.down')}/>
             </MapControl>
         </MapControlContainer>
     </MapControlsContainer>);
@@ -84,6 +84,9 @@ export const CameraControls3dDesktop = ({ activeMapMoveMethod, mutator, getMessa
 
 CameraControls3dDesktop.propTypes = {
     activeMapMoveMethod: PropTypes.string.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     getMessage: PropTypes.func.isRequired
 };
+
+const contextWrap = LocaleConsumer(CameraControls3dDesktop);
+export { contextWrap as CameraControls3dDesktop };

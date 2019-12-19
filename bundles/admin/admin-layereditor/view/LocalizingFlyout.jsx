@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Spin, LocalizationComponent, TextInput, Button, Message } from 'oskari-ui';
-import { LocaleContext, handleBinder, StateHandler, mutatorMixin, Mutator } from 'oskari-ui/util';
+import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -49,13 +49,13 @@ export class LocalizingFlyout extends ExtraFlyout {
     }
     onUpdate () {
         // The UI handler itself should never be passed to a component.
-        // Instead, the handler should provide a mutator object, a subset of the handlers methods.
-        // The mutator should contain only methods the components require.
-        const mutator = this.uiHandler.getMutator();
+        // Instead, the handler should provide a controller object, a subset of the handlers methods.
+        // The controller should contain only methods the components require.
+        const controller = this.uiHandler.getController();
         let ui = (
-            <LocaleContext.Provider value={{ bundleKey: this.instance.getName() }}>
-                <LocalizedContent { ...this.uiHandler.getState() } mutator={mutator}/>
-            </LocaleContext.Provider>
+            <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
+                <LocalizedContent { ...this.uiHandler.getState() } controller={controller}/>
+            </LocaleProvider>
         );
         ReactDOM.render(ui, this.mountPoint);
     }
@@ -112,8 +112,8 @@ class UIService extends StateHandler {
 }
 
 // Add getMutator function to the service. List which functions are available for the components.
-// mutatorMixin extends the service by adding getMutator function. The function returns a Mutator object.
-const UIHandler = mutatorMixin(UIService, [
+// controllerMixin extends the service by adding getController function. The function returns a Controller object.
+const UIHandler = controllerMixin(UIService, [
     'setValue',
     'save',
     'cancel'
@@ -135,7 +135,7 @@ const Buttons = styled('div')`
     padding-top: 15px;
 `;
 
-const LocalizedContent = ({ loading, labels, value, headerMessageKey, mutator }) => {
+const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller }) => {
     const Component = (
         <Container>
             <Header>
@@ -147,16 +147,16 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, mutator })
                 single={true}
                 value={value}
                 languages={Oskari.getSupportedLanguages()}
-                onChange={mutator.setValue}
+                onChange={controller.setValue}
                 LabelComponent={Label}
             >
                 <TextInput />
             </LocalizationComponent>
             <Buttons>
-                <Button onClick={() => mutator.cancel()}>
+                <Button onClick={() => controller.cancel()}>
                     <Message messageKey='cancel'/>
                 </Button>
-                <Button onClick={() => mutator.save()} type='primary'>
+                <Button onClick={() => controller.save()} type='primary'>
                     <Message messageKey='save'/>
                 </Button>
             </Buttons>
@@ -172,5 +172,5 @@ LocalizedContent.propTypes = {
     labels: PropTypes.object,
     value: PropTypes.object,
     headerMessageKey: PropTypes.string,
-    mutator: PropTypes.instanceOf(Mutator)
+    controller: PropTypes.instanceOf(Controller)
 };

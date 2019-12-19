@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Mutator } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './CameraControl3dIcons';
 const mapMoveMethodMove = 'move';
 const mapMoveMethodRotate = 'rotate';
@@ -11,26 +11,26 @@ const MobileContainer = styled.div`
     margin-right: 5px;
 `;
 
-export const CameraControls3dMobile = ({ activeMapMoveMethod, mutator }) => {
+export const CameraControls3dMobile = ({ activeMapMoveMethod, controller }) => {
     const mapInMobileMode = true;
 
     return (
         <MobileContainer>
-            <MoveMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
-                mutator.setActiveMapMoveMethod(mapMoveMethodMove);
-            }} controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>
-            <RotateMapIcon mapInMobileMode={mapInMobileMode} clickHandler={() => {
-                mutator.setActiveMapMoveMethod(mapMoveMethodRotate);
-            }} controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>
+            <MoveMapIcon mapInMobileMode={mapInMobileMode}
+                clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodMove)}
+                controlIsActive = {activeMapMoveMethod === mapMoveMethodMove}/>
+            <RotateMapIcon mapInMobileMode={mapInMobileMode}
+                clickHandler={() => controller.setActiveMapMoveMethod(mapMoveMethodRotate)}
+                controlIsActive = {activeMapMoveMethod === mapMoveMethodRotate}/>
             <UpIcon mapInMobileMode={mapInMobileMode}
-                clickHandler={() => mutator.changeCameraAltitude(true)}/>
+                clickHandler={() => controller.changeCameraAltitude(true)}/>
             <DownIcon mapInMobileMode={mapInMobileMode}
-                clickHandler={() => mutator.changeCameraAltitude(false)}/>
+                clickHandler={() => controller.changeCameraAltitude(false)}/>
         </MobileContainer>
     );
 };
 
 CameraControls3dMobile.propTypes = {
     activeMapMoveMethod: PropTypes.string.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };

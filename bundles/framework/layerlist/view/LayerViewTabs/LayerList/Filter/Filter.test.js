@@ -2,18 +2,18 @@ import React from 'react';
 import { mount } from 'enzyme';
 import { Filter } from '.';
 import { testFilters } from './Filter.test.util';
-import { Mutator, LocaleContext } from 'oskari-ui/util';
+import { Controller, LocaleProvider } from 'oskari-ui/util';
 import { getBundleInstance } from '../../test.util';
 
 describe('<Filter/>', () => {
     const instance = getBundleInstance();
     const mockFilterSelected = jest.fn();
-    const mutator = new Mutator({ setActiveFilterId: mockFilterSelected }, ['setActiveFilterId']);
+    const controller = new Controller({ setActiveFilterId: mockFilterSelected }, ['setActiveFilterId']);
 
     let wrapper = mount(
-        <LocaleContext.Provider value={{ bundleKey: instance.getName() }}>
-            <Filter filters={testFilters} activeFilterId={testFilters[1].id} mutator={mutator}/>
-        </LocaleContext.Provider>
+        <LocaleProvider value={{ bundleKey: instance.getName() }}>
+            <Filter filters={testFilters} activeFilterId={testFilters[1].id} controller={controller}/>
+        </LocaleProvider>
     );
 
     test('renders correct amount of options', () => {

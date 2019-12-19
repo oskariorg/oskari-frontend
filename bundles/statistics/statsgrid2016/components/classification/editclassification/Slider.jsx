@@ -35,7 +35,7 @@ class Slider extends React.Component {
                     min: ui.values[0],
                     max: ui.values[1]
                 };
-                this.props.mutator.updateClassificationObj(value);
+                this.props.controller.updateClassificationObj(value);
             }
         });
     }
@@ -71,7 +71,7 @@ class Slider extends React.Component {
 Slider.propTypes = {
     values: PropTypes.object.isRequired,
     disabled: PropTypes.bool.isRequired,
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     loc: PropTypes.func.isRequired
 };
 const cls = withContext(Slider);

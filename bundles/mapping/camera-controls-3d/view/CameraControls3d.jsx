@@ -1,24 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Mutator, withMutator, withLocale } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 import { CameraControls3dDesktop } from './CameraControls3d/CameraControls3dDesktop';
 import { CameraControls3dMobile } from './CameraControls3d/CameraControls3dMobile';
 
-const CameraControls3d = ({ mapInMobileMode, activeMapMoveMethod, mutator, getMessage }) => {
+export const CameraControls3d = ({ mapInMobileMode, activeMapMoveMethod, controller }) => {
     if (mapInMobileMode) {
         return (<CameraControls3dMobile activeMapMoveMethod={activeMapMoveMethod}
-            mutator={mutator}/>);
+            controller={controller}/>);
     }
     return (<CameraControls3dDesktop activeMapMoveMethod={activeMapMoveMethod}
-        mutator={mutator} getMessage={getMessage} />);
+        controller={controller} />);
 };
 
 CameraControls3d.propTypes = {
     mapInMobileMode: PropTypes.bool.isRequired,
     activeMapMoveMethod: PropTypes.string.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    getMessage: PropTypes.func.isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
-
-const contextWrap = withMutator(withLocale(CameraControls3d));
-export { contextWrap as CameraControls3d };

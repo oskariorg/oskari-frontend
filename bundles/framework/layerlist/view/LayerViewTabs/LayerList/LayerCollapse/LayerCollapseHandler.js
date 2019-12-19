@@ -1,4 +1,4 @@
-import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
 
 const ANIMATION_TIMEOUT = 400;
@@ -8,7 +8,7 @@ const LAYER_REFRESH_THROTTLE = 2000;
  * Holds and mutates layer list state.
  * Handles events related to layer listing.
  */
-class UIService extends StateHandler {
+class ViewHandler extends StateHandler {
     constructor (instance, groupingMethod = 'getInspireName') {
         super();
         this.sandbox = instance.getSandbox();
@@ -205,7 +205,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const LayerCollapseHandler = mutatorMixin(UIService, [
+export const LayerCollapseHandler = controllerMixin(ViewHandler, [
     'addLayer',
     'removeLayer',
     'updateOpenGroupTitles',

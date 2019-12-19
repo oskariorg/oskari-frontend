@@ -1,6 +1,6 @@
-import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 
-class UIService extends StateHandler {
+class ViewHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
@@ -116,7 +116,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const SelectedLayersHandler = mutatorMixin(UIService, [
+export const SelectedLayersHandler = controllerMixin(ViewHandler, [
     'reorderLayers',
     'removeLayer',
     'changeOpacity',

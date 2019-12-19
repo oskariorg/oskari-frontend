@@ -2,6 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Badge, CollapsePanel, List, ListItem } from 'oskari-ui';
+import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import styled from 'styled-components';
 
@@ -21,8 +22,8 @@ const StyledListItem = styled(ListItem)`
     }
 `;
 
-const renderLayer = ({ model, even, selected, mutator }) => {
-    const itemProps = { model, even, selected, mutator };
+const renderLayer = ({ model, even, selected, controller }) => {
+    const itemProps = { model, even, selected, controller };
     return (
         <StyledListItem>
             <Layer key={model.getId()} {...itemProps} />
@@ -33,17 +34,17 @@ renderLayer.propTypes = {
     model: PropTypes.any,
     even: PropTypes.any,
     selected: PropTypes.any,
-    mutator: PropTypes.any
+    controller: PropTypes.any
 };
 
 const LayerCollapsePanel = (props) => {
-    const { group, selectedLayerIds, mutator, ...propsNeededForPanel } = props;
+    const { group, selectedLayerIds, controller, ...propsNeededForPanel } = props;
     const layerRows = group.getLayers().map((layer, index) => {
         const layerProps = {
             model: layer,
             even: index % 2 === 0,
             selected: Array.isArray(selectedLayerIds) && selectedLayerIds.includes(layer.getId()),
-            mutator
+            controller
         };
         return layerProps;
     });
@@ -63,7 +64,7 @@ const LayerCollapsePanel = (props) => {
 LayerCollapsePanel.propTypes = {
     group: PropTypes.any.isRequired,
     selectedLayerIds: PropTypes.array.isRequired,
-    mutator: PropTypes.any.isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
 const comparisonFn = (prevProps, nextProps) => {
