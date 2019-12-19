@@ -11,9 +11,7 @@ class UIService extends StateHandler {
         this.state = {
             time: this._getInitialTime(),
             date: this._getInitialDate(),
-            year: this._getInitialYear(),
-            playing: false,
-            speed: 0
+            year: this._getInitialYear()
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -49,12 +47,12 @@ class UIService extends StateHandler {
 
     setTime (time) {
         const date = this._getDate();
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
+        this.setTimeAndDate(date, time);
     }
 
     setDate (date) {
         const time = this._getTime();
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
+        this.setTimeAndDate(date, time);
     }
 
     setTimeAndDate (date, time) {

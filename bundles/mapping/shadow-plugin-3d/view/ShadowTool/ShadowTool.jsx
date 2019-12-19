@@ -32,7 +32,7 @@ export const ShadowTool = ({ controller, date, time }) => {
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
     const [sliderDateValue, setSliderDate] = useState(sliderValueForDate(date));
     const [playing, setPlaying] = useState(false);
-    const [speed, setSpeed] = useState('slow');
+    const [speed, setSpeed] = useState('normal');
 
     useInterval(() => {
         let nextTime;
@@ -40,20 +40,28 @@ export const ShadowTool = ({ controller, date, time }) => {
         switch (speed) {
         case 'normal':
             nextTime = addMinutes(6);
-            nextDate = nextTime < timeValue ? addDays(1) : dateValue;
+            nextDate = calculateNextDay(nextTime);
             break;
         case 'fast':
             nextTime = addMinutes(30);
-            nextDate = nextTime < timeValue ? addDays(1) : dateValue;
+            nextDate = calculateNextDay(nextTime);
             break;
         case 'slow':
         default:
             nextTime = addMinutes(1);
-            nextDate = nextTime < timeValue ? addDays(1) : dateValue;
+            nextDate = calculateNextDay(nextTime);
             break;
         }
         changeTimeAndDate(nextTime, nextDate);
     }, playing ? 50 : null);
+
+    const calculateNextDay = (nextTime) => {
+        const nextDate = nextTime < timeValue ? addDays(1) : dateValue;
+        if (nextDate === '1/1' && nextDate !== dateValue) {
+            setPlaying(false);
+        }
+        return nextDate;
+    };
 
     const addMinutes = (minutes) => {
         return moment.utc(timeValue, 'HH:mm').add(minutes, 'minutes').format('HH:mm');
