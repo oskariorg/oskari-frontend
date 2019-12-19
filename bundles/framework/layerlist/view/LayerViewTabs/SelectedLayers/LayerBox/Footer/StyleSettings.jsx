@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Icon, Select, Option, InputGroup, Button } from 'oskari-ui';
+import { Icon, Select, Option, InputGroup, Button, Message } from 'oskari-ui';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { THEME_COLOR } from '..';
 
 const StyledSelect = styled(Select)`
@@ -24,7 +25,7 @@ const getOption = (style) => (
     </Option>
 );
 
-export const StyleSettings = ({ layer, locale, onChange }) => {
+export const StyleSettings = LocaleConsumer(({ layer, onChange }) => {
     const styles = layer.getStyles();
     const styleTool = layer.getTool('ownStyle');
     const currentStyle = layer.getCurrentStyle();
@@ -33,7 +34,7 @@ export const StyleSettings = ({ layer, locale, onChange }) => {
     }
     return (
         <Fragment>
-            <Label>{ locale.layer.styles.title }</Label>
+            <Message messageKey={'layer.styles.title'} LabelComponent={Label} />
             <InputGroup compact>
                 <StyledSelect
                     value={currentStyle.getName()}
@@ -56,9 +57,8 @@ export const StyleSettings = ({ layer, locale, onChange }) => {
             </InputGroup>
         </Fragment>
     );
-};
+});
 StyleSettings.propTypes = {
     layer: PropTypes.object.isRequired,
-    locale: PropTypes.object.isRequired,
     onChange: PropTypes.func.isRequired
 };

@@ -2,12 +2,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { shapes } from '../propTypes';
-import { Button, Spin, Tooltip, Icon } from 'oskari-ui';
+import { Spin, Tooltip, Icon, Message } from 'oskari-ui';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { LayerCollapse } from './LayerCollapse/';
 import { Filter, Search } from './Filter/';
 import { Grouping } from './Grouping';
 import { Spinner } from './Spinner';
 import { Alert } from './Alert';
+import { CreateTools } from './CreateTools';
 import { GroupingOption } from '../../../model/GroupingOption';
 import styled from 'styled-components';
 
@@ -40,20 +42,13 @@ const ControlsRow = styled(Row)`
 const InfoIcon = styled(Icon)`
     color: #979797;
     font-size: 20px;
-    margin-left: 8px;
     margin-top: 5px;
-`;
-
-const AddButton = styled(Button)`
-    margin-left: 8px;
 `;
 
 const Content = styled(Column)`
     max-width: 600px;
     min-width: 500px;
 `;
-
-const addLayer = () => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []);
 
 const Indicator = ({ show, children }) => {
     if (show) {
@@ -63,11 +58,11 @@ const Indicator = ({ show, children }) => {
 };
 
 const LayerList = React.forwardRef((props, ref) => {
-    const { error, loading = false, updating = false, locale, mutator } = props;
+    const { error, loading = false, updating = false, controller } = props;
     if (error) {
         return <Alert showIcon type="error" description={error}/>;
     }
-    const { grouping, filter, collapse, showAddButton } = props;
+    const { grouping, filter, collapse, createTools } = props;
 
     // Force select to render on filter change by making the component fully controlled.
     // Clear btn won't clear the value properly without this.
@@ -76,35 +71,33 @@ const LayerList = React.forwardRef((props, ref) => {
 
     return (
         <Content spacing={'15px'}>
-            <Row>
+            <Row spacing={'8px'}>
                 <Column spacing={'10px'}>
-                    <Search ref={ref} searchText={searchText} mutator={filter.mutator} locale={locale} />
+                    <Search ref={ref} searchText={searchText} controller={filter.controller} />
                     <ControlsRow spacing={'10px'}>
                         <Grouping
                             selected={grouping.selected}
                             options={grouping.options}
-                            mutator={mutator}
-                            locale={locale}/>
+                            controller={controller}/>
                         <Filter key={filterKey}
                             filters={filters}
                             activeFilterId={activeFilterId}
-                            mutator={filter.mutator}
-                            locale={locale}/>
+                            controller={filter.controller}/>
                     </ControlsRow>
                 </Column>
-                <Tooltip title={locale.filter.search.tooltip}>
-                    <InfoIcon type="question-circle" />
-                </Tooltip>
-                { showAddButton &&
-                    <Tooltip title={locale.layer.tooltip.addLayer}>
-                        <AddButton icon="plus" onClick={addLayer} />
+                <div>
+                    <Tooltip title={<Message messageKey='filter.search.tooltip'/>}>
+                        <InfoIcon type="question-circle" />
                     </Tooltip>
-                }
+                </div>
+                <div>
+                    <CreateTools tools={createTools} />
+                </div>
             </Row>
             { loading && <Spinner/> }
             { !loading &&
                 <Indicator show={updating}>
-                    <LayerCollapse {...collapse.state} mutator={collapse.mutator} locale={locale}/>
+                    <LayerCollapse {...collapse.state} controller={collapse.controller}/>
                 </Indicator>
             }
         </Content>
@@ -119,13 +112,12 @@ LayerList.propTypes = {
     error: PropTypes.string,
     loading: PropTypes.bool,
     updating: PropTypes.bool,
-    locale: PropTypes.object.isRequired,
     collapse: shapes.stateful.isRequired,
     filter: shapes.stateful.isRequired,
-    showAddButton: PropTypes.bool,
-    mutator: PropTypes.object.isRequired,
-    grouping: PropTypes.shape(grouping).isRequired
+    createTools: PropTypes.array,
+    grouping: PropTypes.shape(grouping).isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
-const memoized = React.memo(LayerList);
-export { memoized as LayerList };
+const wrapped = LocaleConsumer(React.memo(LayerList));
+export { wrapped as LayerList };

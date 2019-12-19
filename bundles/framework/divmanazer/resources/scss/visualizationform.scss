@@ -12,10 +12,26 @@
 }
 
 div#visualization-form {
+    max-width: 200px;
     div.renderButton {
         display: inline-block;
         border: 1px solid black;
         margin: 5px;
+    }
+    div.nameContainer {
+        margin-left: 5px;
+        margin-right: 15px;
+        .input-controls {
+            max-width: 190px;
+        }
+        input[type="text"] {
+            width: 190px;
+        }
+    }
+    div.subheader {
+        margin-left: 5px;
+        margin-bottom: 5px;
+        font-weight: bold;
     }
 }
 

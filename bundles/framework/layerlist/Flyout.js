@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { LocaleProvider } from 'oskari-ui/util';
 import { LayerViewTabs, LayerViewTabsHandler, TABS_ALL_LAYERS } from './view/LayerViewTabs/';
 
 /**
@@ -18,11 +19,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
     function (instance) {
         this.instance = instance;
         this.container = null;
-        this.log = Oskari.log('layerlist');
         this.tabsHandler = new LayerViewTabsHandler(this.instance);
         this.tabsHandler.getLayerListHandler().loadLayers();
         this.tabsHandler.addStateListener(() => this.render());
-        Oskari.on('app.start', () => this.tabsHandler.getLayerListHandler().updateAdminState());
     }, {
 
         /**
@@ -52,7 +51,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
          * Interface method implementation, does nothing atm
          * @method startPlugin
          */
-        startPlugin: function () { },
+        startPlugin: function () {
+            this.render();
+        },
         /**
          * @method stopPlugin
          *
@@ -99,12 +100,14 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.Flyout',
             if (!this.container) {
                 return;
             }
-            const locale = this.instance.getLocalization();
-            ReactDOM.render(
-                <LayerViewTabs {... this.tabsHandler.getState()}
-                    mutator={this.tabsHandler.getMutator()}
-                    locale={locale} />,
-                this.container);
+            const content = (
+                <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
+                    <LayerViewTabs
+                        {...this.tabsHandler.getState()}
+                        controller={this.tabsHandler.getController()}/>
+                </LocaleProvider>
+            );
+            ReactDOM.render(content, this.container);
         }
     }, {
 

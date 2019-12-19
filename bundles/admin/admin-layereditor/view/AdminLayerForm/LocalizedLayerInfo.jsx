@@ -1,50 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { TextInput } from 'oskari-ui';
+import { TextInput, Message } from 'oskari-ui';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { StyledComponent } from './StyledFormComponents';
 
-const getLocalizedLabels = (lang, getMessage) => {
-    let prefix = typeof getMessage(lang) === 'object' ? lang : 'generic';
-    return {
-        name: getMessage(`${prefix}.placeholder`, [lang]),
-        description: getMessage(`${prefix}.descplaceholder`, [lang])
-    };
-};
-
-export const LocalizedLayerInfo = ({ layer, lang, service, getMessage }) => {
+export const LocalizedLayerInfo = LocaleConsumer(({ layer, lang, controller, getMessage }) => {
     const selectedLang = Oskari.getLang();
     const name = layer[`name_${lang}`];
     const description = layer[`title_${lang}`];
-    const labels = getLocalizedLabels(lang, getMessage);
-    const onNameChange = evt => service.setLocalizedLayerName(lang, evt.target.value);
-    const onDescriptionChange = evt => service.setLocalizedLayerDescription(lang, evt.target.value);
-    const nameInput = <TextInput type='text' value={name} onChange={onNameChange} />;
-    const descInput = <TextInput type='text' value={description} onChange={onDescriptionChange} />;
+    const langPrefix = typeof getMessage(lang) === 'object' ? lang : 'generic';
+    const onNameChange = evt => controller.setLocalizedLayerName(lang, evt.target.value);
+    const onDescriptionChange = evt => controller.setLocalizedLayerDescription(lang, evt.target.value);
     if (selectedLang === lang) {
         return (
             <React.Fragment>
-                <label>{labels.name}</label>
+                <Message messageKey={`${langPrefix}.placeholder`} messageArgs={[lang]} />
                 <StyledComponent>
-                    {nameInput}
+                    <TextInput type='text' value={name} onChange={onNameChange} />
                 </StyledComponent>
-                <label>{labels.description}</label>
+                <Message messageKey={`${langPrefix}.descplaceholder`} messageArgs={[lang]} />
                 <StyledComponent>
-                    {descInput}
+                    <TextInput type='text' value={description} onChange={onDescriptionChange} />
                 </StyledComponent>
             </React.Fragment>
         );
     }
     return (
         <React.Fragment>
-            <div>{labels.name}{nameInput}</div>
-            <div>{labels.description}{descInput}</div>
+            <Message messageKey={`${langPrefix}.placeholder`} messageArgs={[lang]} />
+            <TextInput type='text' value={name} onChange={onNameChange} />
+            <Message messageKey={`${langPrefix}.descplaceholder`} messageArgs={[lang]} />
+            <TextInput type='text' value={description} onChange={onDescriptionChange} />
         </React.Fragment>
     );
-};
+});
 
 LocalizedLayerInfo.propTypes = {
     lang: PropTypes.string.isRequired,
-    service: PropTypes.object.isRequired,
-    layer: PropTypes.object.isRequired,
-    getMessage: PropTypes.func.isRequired
+    controller: PropTypes.object.isRequired,
+    layer: PropTypes.object.isRequired
 };

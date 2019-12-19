@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
+import { Message } from 'oskari-ui';
+import { LocaleConsumer } from 'oskari-ui/util';
 import styled, { css, keyframes } from 'styled-components';
 
 const animation = keyframes`
@@ -30,7 +32,7 @@ const StyledBadge = styled.div`
         animation-iteration-count: ${BLINK_COUNT};`}
 `;
 
-export const SelectedTab = ({ num, text }) => {
+export const SelectedTab = LocaleConsumer(({ num, messageKey }) => {
     const [isBlinking, setBlinking] = useState(true);
     // Prevents blinking when flyout is hidden and shown again.
     useEffect(() => {
@@ -39,16 +41,16 @@ export const SelectedTab = ({ num, text }) => {
         return cleanUp;
     });
     return (
-        <span>
-            {text}
+        <React.Fragment>
+            <Message messageKey={messageKey} />
             <StyledBadge blink={isBlinking}>
                 {num}
             </StyledBadge>
-        </span>
+        </React.Fragment>
     );
-};
+});
 
 SelectedTab.propTypes = {
     num: PropTypes.number.isRequired,
-    text: PropTypes.string.isRequired
+    messageKey: PropTypes.string.isRequired
 };

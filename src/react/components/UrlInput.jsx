@@ -60,7 +60,7 @@ export class UrlInput extends React.Component {
         });
     }
     render () {
-        const {credentials, ...other} = this.props;
+        const { credentials, ...other } = this.props;
         const protocolSelect = (
             <Select
                 value={this.state.protocol}
@@ -83,11 +83,11 @@ export class UrlInput extends React.Component {
                     <Collapse defaultActiveKey={this.state.defaultPanel}>
                         <Panel header={credentials.panelText} key='usernameAndPassword'>
                             <div>
-                                <label>{credentials.usernameText}</label>
+                                {credentials.usernameText}
                                 <div><TextInput value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
                             </div>
                             <div>
-                                <label>{credentials.passwordText}</label>
+                                {credentials.passwordText}
                                 <div><TextInput value={credentials.passwordValue} type='password' onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
                             </div>
                         </Panel>

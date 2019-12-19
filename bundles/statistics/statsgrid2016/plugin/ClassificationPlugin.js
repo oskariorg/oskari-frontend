@@ -77,18 +77,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             if (indicatorData.status === 'PENDING') return;
             const classifications = this.getClassificationProps(activeIndicator, activeClassfication, indicatorData);
             const legendProps = this.getLegendProps(indicatorData.data, classifications.values, indicators.serieStats);
-            const mutator = this.service.getStateService().getClassificationMutator();
+            const controller = this.service.getStateService().getClassificationController();
             const classification = legendProps.classification;
             // TODO: These should be handled elsewhere
             if (classification) {
                 if (classifications.values.method === 'manual' && !classifications.values.manualBounds) {
                     // store manual bounds based on last used bounds
-                    mutator.updateClassification('manualBounds', classification.bounds);
+                    controller.updateClassification('manualBounds', classification.bounds);
                     return;
                 }
                 if (classifications.values.count !== classification.getGroups().length) {
                     // classification count changed!!
-                    mutator.updateClassification('count', classification.getGroups().length);
+                    controller.updateClassification('count', classification.getGroups().length);
                     return;
                 }
             }
@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
                         legendProps = {legendProps} pluginState = {pluginState}
                         onRenderChange = {this.rendered.bind(this)}
                         indicatorData = {indicatorData}
-                        mutator = {mutator}
+                        controller = {controller}
                         manualView = {manualView}/>
                 </GenericContext.Provider>
             ), this.node);

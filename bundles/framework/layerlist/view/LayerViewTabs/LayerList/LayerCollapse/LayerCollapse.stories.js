@@ -2,6 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { initServices, getBundleInstance } from '../../test.util';
 import { LayerCollapse, LayerCollapseHandler } from '.';
+import { LocaleProvider } from 'oskari-ui/util';
 import { LayerGroup } from '../../../../../layerselector2/model/LayerGroup.class';
 import '../../../../../../../src/global';
 import '../../../../../../mapping/mapmodule/domain/AbstractLayer';
@@ -10,7 +11,6 @@ initServices();
 
 const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer');
 const instance = getBundleInstance();
-const locale = instance.getLocalization();
 
 let lyrCount = 0;
 const createLayer = (name, type) => {
@@ -65,7 +65,11 @@ const resetStoryState = () => {
     });
 };
 
-const render = () => <LayerCollapse {...handler.getState()} mutator={handler.getMutator()} locale={locale} />;
+const render = () => (
+    <LocaleProvider value={{ bundleKey: instance.getName() }}>
+        <LayerCollapse {...handler.getState()} controller={handler.getController()} />
+    </LocaleProvider>
+);
 
 storiesOf('LayerCollapse', module)
 

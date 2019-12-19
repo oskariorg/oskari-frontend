@@ -1,31 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message } from 'oskari-ui';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 
-export const OtherLanguagesPane = (props) => {
-    const { layer, service, getMessage, lang } = props;
-    return (
-        <Collapse>
-            <CollapsePanel header={getMessage('otherLanguages')}>
-                {
-                    Oskari.getSupportedLanguages()
-                        .filter(supportedLang => supportedLang !== lang)
-                        .map(lang => <LocalizedLayerInfo
-                            key={layer.layer_id + lang}
-                            layer={layer}
-                            lang={lang}
-                            service={service}
-                            getMessage={getMessage} />)
-                }
-            </CollapsePanel>
-        </Collapse>
-    );
-};
+export const OtherLanguagesPane = LocaleConsumer(({ layer, controller, lang }) => (
+    <Collapse>
+        <CollapsePanel header={<Message messageKey='otherLanguages'/>}>
+            {
+                Oskari.getSupportedLanguages()
+                    .filter(supportedLang => supportedLang !== lang)
+                    .map(lang => <LocalizedLayerInfo
+                        key={layer.layer_id + lang}
+                        layer={layer}
+                        lang={lang}
+                        controller={controller} />)
+            }
+        </CollapsePanel>
+    </Collapse>
+));
 
 OtherLanguagesPane.propTypes = {
     lang: PropTypes.string.isRequired,
-    service: PropTypes.any,
-    layer: PropTypes.object,
-    getMessage: PropTypes.func
+    controller: PropTypes.any,
+    layer: PropTypes.object
 };

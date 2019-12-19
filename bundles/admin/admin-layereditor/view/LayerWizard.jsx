@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Steps, Step, Button } from 'oskari-ui';
+import { Steps, Step, Button, Message } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
-import { withLocale, withMutator } from 'oskari-ui/util';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
+import styled from 'styled-components';
 
 const WIZARD_STEP = {
     INITIAL: 0,
@@ -13,16 +14,16 @@ const WIZARD_STEP = {
     DETAILS: 3
 };
 
-function setStep (mutator, requested) {
+function setStep (controller, requested) {
     switch (requested) {
     case WIZARD_STEP.INITIAL:
-        mutator.setType();
+        controller.setType();
         break;
     case WIZARD_STEP.SERVICE:
-        mutator.setVersion();
+        controller.setVersion();
         break;
     case WIZARD_STEP.LAYER:
-        mutator.setLayerName();
+        controller.setLayerName();
         break;
     }
 }
@@ -40,19 +41,29 @@ function getStep (layer) {
     return WIZARD_STEP.DETAILS;
 }
 
+const LayerTypeTitle = ({ layer, LabelComponent }) => (
+    <React.Fragment>
+        <Message messageKey='wizard.type' LabelComponent={LabelComponent} />
+        { layer.type && `: ${layer.type}` }
+    </React.Fragment>
+);
+LayerTypeTitle.propTypes = {
+    layer: PropTypes.object.isRequired,
+    LabelComponent: PropTypes.elementType
+};
+
+const Header = styled('h4')``;
+const Paragraph = styled('p')``;
+
 const LayerWizard = ({
-    mutator,
+    controller,
     layer,
     capabilities = {},
     layerTypes = [],
     loading,
     children,
-    getMessage
+    versions
 }) => {
-    let typeTitle = getMessage('wizard.type');
-    if (layer.type) {
-        typeTitle = `${typeTitle}: ${layer.type}`;
-    }
     const currentStep = getStep(layer);
     const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
@@ -60,37 +71,38 @@ const LayerWizard = ({
         <div>
             { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
             <Steps current={currentStep}>
-                <Step title={ typeTitle } />
-                <Step title={getMessage('wizard.service')} />
-                <Step title={getMessage('wizard.layers')} />
-                <Step title={getMessage('wizard.details')} />
+                <Step title={<LayerTypeTitle layer={layer}/>} />
+                <Step title={<Message messageKey='wizard.service'/>} />
+                <Step title={<Message messageKey='wizard.layers'/>} />
+                <Step title={<Message messageKey='wizard.details'/>} />
             </Steps>
             }
             { currentStep === WIZARD_STEP.INITIAL &&
                 <React.Fragment>
-                    <h4>{typeTitle}</h4>
-                    <p>{getMessage('wizard.typeDescription')}</p>
+                    <LayerTypeTitle layer={layer} LabelComponent={Header}/>
+                    <Message messageKey='wizard.typeDescription' LabelComponent={Paragraph}/>
                     <LayerTypeSelection
                         types={layerTypes || []}
-                        onSelect={(type) => mutator.setType(type)} />
+                        onSelect={(type) => controller.setType(type)} />
                 </React.Fragment>
             }
             { currentStep === WIZARD_STEP.SERVICE &&
                 <React.Fragment>
-                    <h4>{getMessage('wizard.service')}</h4>
-                    <p>{getMessage('wizard.serviceDescription')}</p>
+                    <Message messageKey='wizard.service' LabelComponent={Header}/>
+                    <Message messageKey='wizard.serviceDescription' LabelComponent={Paragraph}/>
                     <LayerURLForm
                         layer={layer}
                         loading={loading}
-                        service={mutator} />
+                        controller={controller}
+                        versions= {versions} />
                 </React.Fragment>
             }
             { currentStep === WIZARD_STEP.LAYER &&
                 <React.Fragment>
-                    <h4>{getMessage('wizard.layers')}</h4>
-                    <p>{getMessage('wizard.layersDescription')}</p>
+                    <Message messageKey='wizard.layers' LabelComponent={Header}/>
+                    <Message messageKey='wizard.layersDescription' LabelComponent={Paragraph}/>
                     <LayerCapabilitiesListing
-                        onSelect={(item) => mutator.layerSelected(item.name)}
+                        onSelect={(item) => controller.layerSelected(item.name)}
                         capabilities={capabilities} />
                 </React.Fragment>
             }
@@ -100,7 +112,9 @@ const LayerWizard = ({
                 </React.Fragment>
             }
             { !isFirstStep && !isDetailsForOldLayer &&
-                <Button onClick={() => setStep(mutator, getStep(layer) - 1)}>{getMessage('cancel')}</Button>
+                <Button onClick={() => setStep(controller, getStep(layer) - 1)}>
+                    {<Message messageKey='cancel'/>}
+                </Button>
             }
         </div>
     );
@@ -108,13 +122,13 @@ const LayerWizard = ({
 
 LayerWizard.propTypes = {
     layer: PropTypes.object.isRequired,
-    mutator: PropTypes.object.isRequired,
-    getMessage: PropTypes.func.isRequired,
+    controller: PropTypes.object.isRequired,
     loading: PropTypes.bool,
     capabilities: PropTypes.object,
     layerTypes: PropTypes.array,
-    children: PropTypes.any
+    children: PropTypes.any,
+    versions: PropTypes.array.isRequired
 };
 
-const contextWrap = withMutator(withLocale(LayerWizard));
+const contextWrap = LocaleConsumer(LayerWizard);
 export { contextWrap as LayerWizard };

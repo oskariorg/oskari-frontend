@@ -28,19 +28,26 @@ Oskari.registerLocalization(
                 "descplaceholder": "Kuvaus kielellä {0}"
             },
             "en": {
+                "lang": "Englanti",
                 "placeholder": "Nimi englanniksi",
                 "descplaceholder": "Kuvaus englanniksi"
             },
             "fi": {
+                "lang": "Suomi",
                 "placeholder": "Nimi suomeksi",
                 "descplaceholder": "Kuvaus suomeksi"
             },
             "sv": {
+                "lang": "Ruotsi",
                 "placeholder": "Nimi ruotsiksi",
                 "descplaceholder": "Kuvaus ruotsiksi"
             },
+            "addLayer": "Lisää uusi karttataso",
             "dataProvider": "Tiedontuottaja",
+            "dataProviderName": "Tiedontuottajan nimi",
             "addDataProvider": "Lisää tiedontuottaja",
+            "themeName": "Teeman nimi",
+            "addTheme": "Lisää teema",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",

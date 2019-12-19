@@ -1,4 +1,4 @@
-import { StateHandler, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import moment from 'moment';
 
 class UIService extends StateHandler {
@@ -84,7 +84,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const ShadowToolHandler = mutatorMixin(UIService, [
+export const ShadowToolHandler = controllerMixin(UIService, [
     'setTime',
     'setDate',
     'setTimeAndDate'

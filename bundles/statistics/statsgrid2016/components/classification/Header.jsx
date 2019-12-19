@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { withContext } from 'oskari-ui/util';
 import './header.scss';
 
-const handleIndicatorChange = (mutator, value) => {
-    mutator.setActiveIndicator(value);
+const handleIndicatorChange = (controller, value) => {
+    controller.setActiveIndicator(value);
 };
 
-const getTitleComponent = (indicators, active, mutator, title) => {
+const getTitleComponent = (indicators, active, controller, title) => {
     if (indicators.length > 1) {
         return (
-            <select value={active.hash} onChange={evt => handleIndicatorChange(mutator, evt.target.value)}>
+            <select value={active.hash} onChange={evt => handleIndicatorChange(controller, evt.target.value)}>
                 {indicators.map(opt => <option key={opt.id} value={opt.id}>{opt.title}</option>)}
             </select>
         );
@@ -21,7 +21,7 @@ const getTitleComponent = (indicators, active, mutator, title) => {
 };
 
 const Header = props => {
-    const { indicators, active, mutator } = props;
+    const { indicators, active, controller } = props;
     const headerClass = indicators.length > 1 ? 'active-header multi-selected' : 'active-header single-selected';
     const { title } = indicators.find(indicator => active.hash === indicator.id) || { title: '' };
     let buttonClass = 'edit-button';
@@ -33,7 +33,7 @@ const Header = props => {
 
     return (
         <div className={headerClass} data-selected-indicator={title}>
-            {getTitleComponent(indicators, active, mutator, title)}
+            {getTitleComponent(indicators, active, controller, title)}
             <div className={buttonClass} title={props.loc(buttonTooltip)} onMouseUp = {props.handleClick}/>
         </div>
     );
@@ -44,7 +44,7 @@ Header.propTypes = {
     active: PropTypes.object.isRequired,
     isEdit: PropTypes.bool.isRequired,
     handleClick: PropTypes.func.isRequired,
-    mutator: PropTypes.object.isRequired,
+    controller: PropTypes.object.isRequired,
     loc: PropTypes.func.isRequired
 };
 

@@ -13,14 +13,14 @@ describe('LayerListHandler', () => {
         expect(state).toHaveProperty('grouping.selected');
         expect(state).toHaveProperty('grouping.options');
         expect(state).toHaveProperty('filter.state');
-        expect(state).toHaveProperty('filter.mutator');
+        expect(state).toHaveProperty('filter.controller');
         expect(state).toHaveProperty('collapse.state');
-        expect(state).toHaveProperty('collapse.mutator');
+        expect(state).toHaveProperty('collapse.controller');
     });
 
-    test('has mutator', () => {
+    test('has controller', () => {
         expect.assertions(1);
-        expect(handler.getMutator()).not.toBeNull();
+        expect(handler.getController()).not.toBeNull();
     });
 
     test('grouping updates correctly', () => {
@@ -29,11 +29,11 @@ describe('LayerListHandler', () => {
         handler.addStateListener(mockFn);
 
         const existingGrouping = GROUPING_PRESET[1].key;
-        handler.getMutator().setGrouping(existingGrouping);
+        handler.getController().setGrouping(existingGrouping);
         expect(handler.getState().grouping.selected).toBe(existingGrouping);
 
         const invalidGroupingKey = 'Not existing grouping';
-        handler.getMutator().setGrouping(invalidGroupingKey);
+        handler.getController().setGrouping(invalidGroupingKey);
         expect(handler.getState().grouping.selected).toBe(existingGrouping);
 
         // Setting an invalid group key won't change the state.

@@ -80,6 +80,7 @@ Oskari.registerLocalization(
                 "MapLegend": "Visa kartförklaringen",
                 "MapRotator": "Tillåt kartrotation",
                 "CrosshairTool": "Visa kartans mittpunkt",
+                "CameraControls3d": "Kameraverktyg",
                 "toolbarToolNames": {
                     "history": "Gå bakåt eller framåt",
                     "history_back": "Gå bakåt",

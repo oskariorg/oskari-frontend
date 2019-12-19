@@ -1,20 +1,23 @@
 import React from 'react';
 import { TextInput, Icon } from 'oskari-ui';
-import { Mutator } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import PropTypes from 'prop-types';
 
-export const Search = React.forwardRef(({ searchText, locale, mutator }, ref) => {
+const Search = React.forwardRef(({ searchText, getMessage, controller }, ref) => {
     return <TextInput
         ref={ref}
         value={searchText}
         allowClear
-        placeholder={locale.filter.search.placeholder}
+        placeholder={getMessage('filter.search.placeholder')}
         prefix={<Icon type="search"/>}
-        onChange={event => mutator.setSearchText(event.currentTarget.value)}/>;
+        onChange={event => controller.setSearchText(event.currentTarget.value)}/>;
 });
 Search.displayName = 'Search';
 Search.propTypes = {
     searchText: PropTypes.string,
-    locale: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    getMessage: PropTypes.func.isRequired
 };
+
+const wrapped = LocaleConsumer(Search);
+export { wrapped as Search };

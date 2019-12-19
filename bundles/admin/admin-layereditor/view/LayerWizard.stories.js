@@ -2,7 +2,7 @@ import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { LayerWizard } from './LayerWizard';
 import { AdminLayerFormService } from './AdminLayerFormService';
-import { LocaleContext, MutatorContext } from 'oskari-ui/util';
+import { LocaleProvider } from 'oskari-ui/util';
 import '../../../../src/global';
 import '../resources/locale/fi';
 import '../resources/locale/sv';
@@ -55,7 +55,7 @@ service.capabilities = {
     capabilitiesFailed: ['you'],
     unsupportedLayers: ['till']
 };
-const loc = Oskari.getMsg.bind(null, 'admin-layereditor');
+const localeProviderOptions = { bundleKey: 'admin-layereditor' };
 const layerTypes = service.getLayerTypes();
 const capabilities = service.getCapabilities();
 
@@ -64,44 +64,41 @@ storiesOf('LayerWizard', module)
     .add('Initial view', () => {
         Oskari.setLang('en');
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={service.getLayer()}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                            Not shown
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={service.getLayer()}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                        Not shown
+                </LayerWizard>
+            </LocaleProvider>);
     })
     .add('Initial view sv', () => {
         Oskari.setLang('sv');
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={service.getLayer()}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                            Not shown
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={service.getLayer()}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                        Not shown
+                </LayerWizard>
+            </LocaleProvider>);
     })
     .add('Initial view fi', () => {
         Oskari.setLang('fi');
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={service.getLayer()}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                            Not shown
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={service.getLayer()}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                        Not shown
+                </LayerWizard>
+            </LocaleProvider>);
     })
     .add('Type selected', () => {
         Oskari.setLang('en');
@@ -110,16 +107,15 @@ storiesOf('LayerWizard', module)
             type: 'wfslayer'
         };
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={layer}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                            Not shown
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={layer}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                        Not shown
+                </LayerWizard>
+            </LocaleProvider>);
     })
     .add('URL and version selected', () => {
         Oskari.setLang('en');
@@ -130,16 +126,15 @@ storiesOf('LayerWizard', module)
             version: '3.0'
         };
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={layer}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                            Not shown
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={layer}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                        Not shown
+                </LayerWizard>
+            </LocaleProvider>);
     })
     .add('Everything selected', () => {
         Oskari.setLang('en');
@@ -151,16 +146,15 @@ storiesOf('LayerWizard', module)
             name: 'make it'
         };
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={layer}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                        Layer: {JSON.stringify(layer)}
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={layer}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                    Layer: {JSON.stringify(layer)}
+                </LayerWizard>
+            </LocaleProvider>);
     })
     .add('Editing layer', () => {
         Oskari.setLang('en');
@@ -173,14 +167,13 @@ storiesOf('LayerWizard', module)
             isNew: false
         };
         return (
-            <LocaleContext.Provider value={loc}>
-                <MutatorContext.Provider value={service}>
-                    <LayerWizard
-                        layer={layer}
-                        capabilities={capabilities}
-                        layerTypes={layerTypes}>
-                        Layer: {JSON.stringify(layer)}
-                    </LayerWizard>
-                </MutatorContext.Provider>
-            </LocaleContext.Provider>);
+            <LocaleProvider value={localeProviderOptions}>
+                <LayerWizard
+                    layer={layer}
+                    capabilities={capabilities}
+                    layerTypes={layerTypes}
+                    controller={service.getController()}>
+                    Layer: {JSON.stringify(layer)}
+                </LayerWizard>
+            </LocaleProvider>);
     });

@@ -1,24 +1,38 @@
 /**
- * @class Oskari.BasicBundle
- * Abstract class, for inheritance only
+ * @class BasicBundle
+ * @abstract
+ * @hideconstructor
+ * @classdesc
+ * Oskari.BasicBundle.
+ * For inheritance only.
  */
 Oskari.clazz.define('Oskari.BasicBundle', function () {
-    this.sandbox = null;
+    /**
+     * Oskari sandbox.
+     * @memberof BasicBundle
+     */
+    var sandbox = null; // Separate declaration for documentation.
+    this.sandbox = sandbox;
 }, {
     /**
-     * @static @property __name
-     * override in subclass!
+     * Override in subclass! Empty string by default.
+     * @memberof BasicBundle
      */
     __name: '',
 
+    /**
+     * Name of the Bundle. Extending classes should declare their own __name property.
+     * @memberof BasicBundle
+     */
     getName: function () {
         return this.__name;
     },
 
     /**
-     * @method onEvent
-     * @param {Oskari.mapframework.event.Event} event a Oskari event object
-     * Event is handled forwarded to correct #eventHandlers if found or discarded if not.
+     * @memberof BasicBundle
+     * @param {Oskari.mapframework.event.Event} event A Oskari event object.
+     * Event is handled forwarded to correct {@link BasicBundle#eventHandlers|eventHandler}
+     * if found or discarded if not.
      */
     onEvent: function (event) {
         var handler = this.eventHandlers[event.getName()];
@@ -28,19 +42,27 @@ Oskari.clazz.define('Oskari.BasicBundle', function () {
         return handler.call(this, event);
     },
 
-    eventHandlers: {}, // Override in subclass
-
-    requestHandlers: {}, // Override in subclass
+    /**
+     * Oskari event handlers
+     * @memberof BasicBundle
+     */
+    eventHandlers: {},
 
     /**
-     * @method init
-     * Module protocol method
+     * Oskari request handlers
+     * @memberof BasicBundle
+     */
+    requestHandlers: {},
+
+    /**
+     * Module protocol method.
+     * @memberof BasicBundled
      */
     init: function () { },
 
     /** 
-     * @method start
-     * Called from sandbox
+     * Called from sandbox.
+     * @memberof BasicBundle
      */
     start: function (sandbox) {
         sandbox.register(this);
@@ -59,14 +81,14 @@ Oskari.clazz.define('Oskari.BasicBundle', function () {
     },
 
     /**
-     * @method update
-     * Called from sandbox
+     * Called from sandbox.
+     * @memberof BasicBundle
      */
     update: function (sandbox) { },
 
     /**
-     * @method stop
-     * Called from sandbox
+     * Called from sandbox.
+     * @memberof BasicBundle
      */
     stop: function (sandbox) {
         Object.keys(this.requestHandlers).forEach(function (requestName) {

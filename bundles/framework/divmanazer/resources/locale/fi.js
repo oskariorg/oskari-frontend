@@ -143,6 +143,10 @@ Oskari.registerLocalization(
             }
         },
         "VisualizationForm": {
+            "subheaders" : {
+                "name" : "Tyylin nimi",
+                "style" : "Esitystapa"
+            },
             "tooltips": {
                 "dot": "Muokkaa pisteen esitystapaa",
                 "area": "Muokkaa alueen esitystapaa",

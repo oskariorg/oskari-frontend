@@ -1,4 +1,4 @@
-import { StateHandler, Timeout, mutatorMixin } from 'oskari-ui/util';
+import { StateHandler, Timeout, controllerMixin } from 'oskari-ui/util';
 import { FilterHandler } from './Filter/';
 import { LayerCollapseHandler } from './LayerCollapse/';
 import { GroupingOption } from '../../../model/GroupingOption';
@@ -8,7 +8,7 @@ import { GROUPING_PRESET, TEXT_SEARCH_TYPING_TIMEOUT_SETTINGS } from './preset';
 const UI_UPDATE_TIMEOUT = 100;
 const HEAVY_UI_UPDATE_TIMEOUT = 600;
 
-class UIStateHandler extends StateHandler {
+class ViewHandler extends StateHandler {
     constructor (instance) {
         super();
         this.instance = instance;
@@ -28,6 +28,7 @@ class UIStateHandler extends StateHandler {
         const groupingOptions = GROUPING_PRESET.map(option =>
             new GroupingOption(option.key, this.locale.grouping[option.localeKey], option.method));
 
+        this.toolingService = this._createToolingService();
         this.filterHandler = this._createFilterHandler();
         this.layerCollapseHandlers = this._createLayerCollapseHandlers(groupingOptions);
         const selectedGrouping = groupingOptions[0].getKey();
@@ -36,20 +37,36 @@ class UIStateHandler extends StateHandler {
         this.state = {
             loading: false,
             updating: false,
-            showAddButton: this.sandbox.hasHandler('ShowLayerEditorRequest'),
+            createTools: this._getCreateTools(),
             grouping: {
                 selected: selectedGrouping,
                 options: groupingOptions
             },
             filter: {
                 state: this.filterHandler.getState(),
-                mutator: this.filterHandler.getMutator()
+                controller: this.filterHandler.getController()
             },
             collapse: {
                 state: collapseHandler.getState(),
-                mutator: collapseHandler.getMutator()
+                controller: collapseHandler.getController()
             }
         };
+    }
+
+    _createToolingService () {
+        const service = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
+        service.on('add', ({ tool }) => {
+            if (tool && tool.getTypes().includes(service.TYPE_CREATE)) {
+                this.updateState({ createTools: this._getCreateTools() });
+            }
+        });
+        return service;
+    }
+
+    _getCreateTools () {
+        const createTools = Object.values(this.toolingService.getTools())
+            .filter(tool => tool.getTypes().includes(this.toolingService.CREATE));
+        return createTools;
     }
 
     _createLayerCollapseHandlers (groupingOptions) {
@@ -64,7 +81,7 @@ class UIStateHandler extends StateHandler {
                 this.updateState({
                     collapse: {
                         state: collapseState,
-                        mutator: handler.getMutator()
+                        controller: handler.getController()
                     },
                     updating: false
                 });
@@ -93,7 +110,7 @@ class UIStateHandler extends StateHandler {
             const immediateStateChange = {
                 filter: {
                     state: filterState,
-                    mutator: this.state.filter.mutator
+                    controller: this.state.filter.controller
                 }
             };
             if (!searchTextChanged) {
@@ -142,12 +159,6 @@ class UIStateHandler extends StateHandler {
         mapLayerService.loadAllLayerGroupsAjax(successCB, failureCB, { forceProxy });
     }
 
-    updateAdminState () {
-        this.updateState({
-            showAddButton: this.sandbox.hasHandler('ShowLayerEditorRequest')
-        });
-    }
-
     setGrouping (groupingKey) {
         const handler = this.getCollapseHandler(groupingKey);
         if (!handler) {
@@ -165,6 +176,6 @@ class UIStateHandler extends StateHandler {
     }
 }
 
-export const LayerListHandler = mutatorMixin(UIStateHandler, [
+export const LayerListHandler = controllerMixin(ViewHandler, [
     'setGrouping'
 ]);

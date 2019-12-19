@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
-import { Mutator } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 import { Background } from './ShadowToolStyled';
 import { ShadowToolTime } from './ShadowToolTime';
 import { ShadowToolDate } from './ShadowToolDate';
@@ -26,7 +26,7 @@ function useInterval (callback, delay) {
     }, [delay]);
 }
 
-export const ShadowTool = ({ mutator, date, time }) => {
+export const ShadowTool = ({ controller, date, time }) => {
     const [timeValue, setTime] = useState(time);
     const [dateValue, setDate] = useState(date);
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
@@ -65,7 +65,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
 
     const changeTime = val => {
         if (validateTime(val)) {
-            mutator.setTime(val);
+            controller.setTime(val);
             setSliderTime(sliderValueForTime(val));
         }
         setTime(val);
@@ -73,7 +73,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
 
     const changeDate = val => {
         if (validateDate(val)) {
-            mutator.setDate(val);
+            controller.setDate(val);
             setSliderDate(sliderValueForDate(val));
         }
         setDate(val);
@@ -84,7 +84,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
         setDate(d);
         setSliderDate(sliderValueForDate(d));
         setSliderTime(sliderValueForTime(t));
-        mutator.setTimeAndDate(d, t);
+        controller.setTimeAndDate(d, t);
     };
 
     return (
@@ -109,7 +109,7 @@ export const ShadowTool = ({ mutator, date, time }) => {
 };
 
 ShadowTool.propTypes = {
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired
 };

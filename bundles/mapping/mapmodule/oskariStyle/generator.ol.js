@@ -279,7 +279,7 @@ const getTextStyle = styleDef => {
         return;
     }
     const text = {};
-    const { scale, offsetX, offsetY, rotation, textAlign, textBaseline, font, fill, stroke, labelText } = styleDef.text;
+    const { scale, offsetX, offsetY, rotation, textAlign, textBaseline, font, fill, stroke, labelText, overflow } = styleDef.text;
     if (scale) {
         text.scale = scale;
     }
@@ -300,6 +300,9 @@ const getTextStyle = styleDef => {
     }
     if (font) {
         text.font = font;
+    }
+    if (overflow) {
+        text.overflow = !!overflow;
     }
     if (fill && fill.color) {
         text.fill = new olStyleFill({

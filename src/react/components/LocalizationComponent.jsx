@@ -1,36 +1,71 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
-import { Collapse, CollapsePanel } from 'oskari-ui';
+import { Collapse, CollapsePanel, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 const Label = styled('div')`
     display: inline-block;
 `;
 
-const getMsg = Oskari.getMsg.bind(null, 'oskariui');
+const getInitialValue = (languages, value, isSingle) => {
+    const initialValue = value || {};
+    languages.forEach(lang => {
+        if (!initialValue[lang]) {
+            initialValue[lang] = isSingle ? '' : {};
+        }
+        if (isSingle && typeof initialValue[lang] === 'object') {
+            initialValue[lang] = Object.values(initialValue[lang]).shift();
+        }
+    });
+    return initialValue;
+};
 
-export const LocalizationComponent = ({ languages, onChange, value, labels, LabelComponent = Label, collapse = true, defaultOpen = false, children }) => {
-    if (languages.length === 0) {
+const getLabel = (labels, lang, elementName, isSingle) => {
+    let label = labels && labels[lang];
+    if (label) {
+        label = isSingle ? label : (elementName && label[elementName]);
+    }
+    if (typeof label === 'object') {
+        label = Object.values(label).shift();
+    }
+    return label;
+};
+const getElementValueChangeHandler = (values, lang, elementName, isSingle, setValue, onChange) => {
+    if (!isSingle && !elementName) {
+        return;
+    }
+    return event => {
+        const clone = { ...values };
+        if (isSingle) {
+            clone[lang] = event.target.value;
+        } else {
+            clone[lang][elementName] = event.target.value;
+        }
+        setValue(clone);
+        if (typeof onChange === 'function') {
+            onChange(clone);
+        }
+    };
+};
+
+export const LocalizationComponent = ({
+    languages,
+    onChange,
+    value,
+    labels,
+    LabelComponent = Label,
+    collapse = true,
+    defaultOpen = false,
+    single = false,
+    children }) => {
+    if (!Array.isArray(languages) || languages.length === 0) {
         return null;
     }
-    const [internalValue, setInternalValue] = useState(value);
+    const [internalValue, setInternalValue] = useState(getInitialValue(languages, value, single));
     const nodes = React.Children.toArray(children);
-    const getElementValueChangeHandler = (lang, name) => {
-        if (!name) {
-            return null;
-        }
-        return event => {
-            const clone = { ...internalValue };
-            clone[lang][name] = event.target.value;
-            setInternalValue(clone);
-            if (typeof onChange === 'function') {
-                onChange(internalValue);
-            }
-        };
-    };
     useEffect(() => {
-        setInternalValue(value);
-    }, [value]);
+        setInternalValue(getInitialValue(languages, value, single));
+    }, [languages, value, single]);
 
     const localizedElements = languages.map(lang => {
         return nodes.map((element, index) => {
@@ -39,12 +74,14 @@ export const LocalizationComponent = ({ languages, onChange, value, labels, Labe
                 return element;
             }
             const { name } = element.props;
-            const elementValue = (internalValue && internalValue[lang] && internalValue[lang][name]) || '';
-            const onElementValueChange = getElementValueChangeHandler(lang, name);
+            const onElementValueChange =
+                getElementValueChangeHandler(internalValue, lang, name, single, setInternalValue, onChange);
+            let elementValue = single ? internalValue[lang] : internalValue[lang][name];
+            let label = getLabel(labels, lang, name, single);
             return (
                 <React.Fragment key={`${lang}_${index}`}>
-                    { name && labels && labels[lang] && labels[lang][name] &&
-                        <LabelComponent>{ labels[lang][name] }</LabelComponent>
+                    { label &&
+                        <LabelComponent>{ label }</LabelComponent>
                     }
                     <element.type {...element.props} value={elementValue} onChange={onElementValueChange}/>
                 </React.Fragment>
@@ -64,7 +101,7 @@ export const LocalizationComponent = ({ languages, onChange, value, labels, Labe
         <React.Fragment>
             { firstLocalizedElement }
             <Collapse bordered defaultActiveKey={defaultOpen === true ? panelKey : null}>
-                <CollapsePanel header={getMsg('otherLanguages')} key={panelKey}>
+                <CollapsePanel header={<Message bundleKey='oskariui' messageKey='otherLanguages' />} key={panelKey}>
                     { localizedElements }
                 </CollapsePanel>
             </Collapse>
@@ -79,6 +116,7 @@ LocalizationComponent.propTypes = {
     labels: PropTypes.object,
     LabelComponent: PropTypes.elementType,
     collapse: PropTypes.bool,
+    single: PropTypes.bool,
     defaultOpen: PropTypes.bool,
     children: PropTypes.oneOfType([
         PropTypes.arrayOf(PropTypes.node),

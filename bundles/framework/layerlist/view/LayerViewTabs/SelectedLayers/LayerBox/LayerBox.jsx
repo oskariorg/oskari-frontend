@@ -2,10 +2,10 @@ import React, { useState, useEffect, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Footer } from './Footer/';
-import { Mutator } from 'oskari-ui/util';
+import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon } from 'oskari-ui';
+import { Icon, Message } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
 
 const StyledBox = styled.div`
@@ -25,7 +25,7 @@ const Publishable = styled.span`
     margin-left: 5px;
 `;
 
-export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
+const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
     const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
@@ -37,10 +37,10 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
 
     const handleToggleVisibility = () => {
         setVisible(!visible);
-        mutator.toggleLayerVisibility(layer);
+        controller.toggleLayerVisibility(layer);
     };
     const handleRemoveLayer = () => {
-        mutator.removeLayer(layer);
+        controller.removeLayer(layer);
     };
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
@@ -68,7 +68,9 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                                 <Fragment>
                                                     <br/>
                                                     <Icon type="check" style={{ color: '#01ca79' }} />
-                                                    <Publishable>{locale.layer.publishable}</Publishable>
+                                                    <Publishable>
+                                                        <Message messageKey={'layer.publishable'} />
+                                                    </Publishable>
                                                 </Fragment>
                                                 }
                                             </ColAutoRight>
@@ -82,7 +84,7 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
                                         />
                                     </ColAutoRight>
                                 </Row>
-                                <Footer layer={layer} mutator={mutator} visibilityInfo={visibilityInfo} locale={locale} />
+                                <Footer layer={layer} controller={controller} visibilityInfo={visibilityInfo}/>
                             </StyledBox>
                         </Col>
                     </Row>
@@ -95,7 +97,9 @@ export const LayerBox = ({ layer, index, locale, mutator, visibilityInfo }) => {
 LayerBox.propTypes = {
     layer: PropTypes.object.isRequired,
     index: PropTypes.number.isRequired,
-    locale: PropTypes.object.isRequired,
-    mutator: PropTypes.instanceOf(Mutator).isRequired,
-    visibilityInfo: PropTypes.object.isRequired
+    visibilityInfo: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
+
+const wrapped = LocaleConsumer(LayerBox);
+export { wrapped as LayerBox };

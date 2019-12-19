@@ -28,19 +28,26 @@ Oskari.registerLocalization(
                 "descplaceholder": "Beskrivning på {0}"
             },
             "en": {
+                "lang": "Engelska",
                 "placeholder": "Namn på engelska",
                 "descplaceholder": "Beskrivning på engelska"
             },
             "fi": {
+                "lang": "Finska",
                 "placeholder": "Namn på finska",
                 "descplaceholder": "Beskrivning på finska"
             },
             "sv": {
+                "lang": "Svenska",
                 "placeholder": "Namn på svenska",
                 "descplaceholder": "Beskrivning på svenska"
             },
+            "addLayer": "Lägg till ett nytt kartlager",
             "dataProvider": "Dataprovider",
+            "dataProviderName": "Dataprovider namn",
             "addDataProvider": "Lägg till dataprovider",
+            "themeName": "Teman namn",
+            "addTheme": "Lägg till tema",
             "mapLayerGroups": "Maplayer-grupper",
             "selectMapLayerGroupsButton": "Välj grupper",
             "cancel": "Tillbaka",
