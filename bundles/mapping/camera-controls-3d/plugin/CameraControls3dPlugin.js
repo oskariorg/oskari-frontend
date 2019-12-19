@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
 import { CameraControls3d } from '../view/CameraControls3d';
+import { CameraControls3dHandler } from '../view/CameraControls3dHandler';
 
 const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
 const shortName = 'CameraControls3dPlugin';
@@ -16,6 +17,7 @@ Oskari.clazz.define(className,
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
+        this.handler = new CameraControls3dHandler((operationFailed) => this._render(Oskari.util.isMobile(), operationFailed));
     }, {
         getName: function () {
             return shortName;
@@ -25,6 +27,7 @@ Oskari.clazz.define(className,
          * Resets the state in the plugin
          */
         resetState: function () {
+            this.handler.resetToInitialState();
             this.redrawUI(Oskari.util.isMobile());
         },
         /**
@@ -64,9 +67,18 @@ Oskari.clazz.define(className,
             } else {
                 this.addToPluginContainer(this._element);
             }
+            this._render(mapInMobileMode);
+        },
+        _render (mapInMobileMode, operationFailed) {
+            if (!this.getElement()) {
+                return;
+            }
             ReactDOM.render(
                 <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
-                    <CameraControls3d mapInMobileMode={mapInMobileMode}/>
+                    <CameraControls3d mapInMobileMode={mapInMobileMode}
+                        activeMapMoveMethod={this.handler.getActiveMapMoveMethod()}
+                        controller={this.handler.getController()}
+                        operationFailed = {operationFailed}/>
                 </LocaleProvider>, this._element.get(0));
         },
         /**

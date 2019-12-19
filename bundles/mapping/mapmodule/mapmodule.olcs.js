@@ -523,7 +523,11 @@ class MapModuleOlCesium extends MapModuleOl {
             cameraControlsPlugin.resetState();
         }
     }
-
+    /**
+     * Set camera to rotate mode
+     *
+     * returns boolean operationFailed
+     */
     setCameraToRotateMode () {
         const scene = this.getCesiumScene();
         const { camera } = scene;
@@ -539,8 +543,10 @@ class MapModuleOlCesium extends MapModuleOl {
         if (Cesium.defined(lookAtTarget)) {
             camera.lookAt(lookAtTarget, camera.position);
             this._disableMapMoveControls();
+            return false;
         } else {
             this._log.warn('LookAtTarget cannot be determined. Maybe looking at space.');
+            return true;
         }
     }
 
