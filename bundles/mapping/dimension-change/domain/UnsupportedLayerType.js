@@ -1,8 +1,8 @@
-
+import { UnsupportedLayerReason } from '../../mapmodule/domain/UnsupportedLayerReason';
 const unsupportedIn3D = ['vectortile'];
 const unsupportedIn2D = ['tiles3d'];
 
-export class UnsupportedLayerType extends Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason') {
+export class UnsupportedLayerType extends UnsupportedLayerReason {
     constructor (severity) {
         super('dimension', severity);
         const map = Oskari.getSandbox().getMap();

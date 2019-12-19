@@ -19,16 +19,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         var me = this;
         me._sandbox = sandbox;
         var addToolButtonBuilder = Oskari.requestBuilder('Toolbar.AddToolButtonRequest');
-        var tooltip = me.conf.uuid ? me.loc('to3Dview') : me.loc('backTo2Dview');
-        var iconCls = me.conf.uuid ? 'dimension-tool' : 'dimension-tool-back';
-        var buttonConf = {
-            iconCls: iconCls,
-            tooltip: tooltip,
+        var buttonConf = this._getButtonConf();
+        sandbox.request(me, addToolButtonBuilder('DimensionChange', 'dimensionviews', buttonConf));
+        this._addLayerSupportedChecks();
+    },
+    _getButtonConf: function () {
+        const conf = {
             sticky: true,
             callback: this._changeDimension.bind(this)
         };
-        sandbox.request(me, addToolButtonBuilder('DimensionChange', 'dimensionviews', buttonConf));
-        this._addLayerSupportedChecks();
+        if (this._sandbox.getMap().getSupports3D()) {
+            conf.tooltip = this.loc('backTo2Dview');
+            conf.iconCls = 'dimension-tool-back';
+        } else {
+            conf.tooltip = this.loc('to3Dview');
+            conf.iconCls = 'dimension-tool';
+        }
+        return conf;
     },
     _addLayerSupportedChecks: function () {
         const map = this._sandbox.getMap();
