@@ -5,20 +5,6 @@
  * @classdesc
  * Oskari.BasicBundle.
  * For inheritance only.
- * 
- * @example <caption>Creating yor own bundle</caption>
- * const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
- * 
- * Oskari.clazz.defineES('Oskari.<mynamespace>.<bundle-identifier>.MyBundleInstance',
- *     class MyBundleInstance extends BasicBundle {
- *         constructor () {
- *             this.__name = 'Oskari.<mynamespace>.<bundle-identifier>.MyBundleInstance'
- *         }
- *         _startImpl () {
- *             console.log('Hello world!');
- *         }
- *     }
- * );
  */
 Oskari.clazz.define('Oskari.BasicBundle', function () {
     /**
@@ -96,7 +82,6 @@ Oskari.clazz.define('Oskari.BasicBundle', function () {
 
     /**
      * Called from sandbox.
-     * @override
      * @memberof BasicBundle
      */
     update: function (sandbox) { },
