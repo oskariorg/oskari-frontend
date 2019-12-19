@@ -17,7 +17,7 @@ Oskari.clazz.define(className,
         this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
-        this.handler = new CameraControls3dHandler(() => this._render(Oskari.util.isMobile()));
+        this.handler = new CameraControls3dHandler((operationFailed) => this._render(Oskari.util.isMobile(), operationFailed));
     }, {
         getName: function () {
             return shortName;
@@ -68,7 +68,7 @@ Oskari.clazz.define(className,
             }
             this._render(mapInMobileMode);
         },
-        _render (mapInMobileMode) {
+        _render (mapInMobileMode, operationFailed) {
             if (!this.getElement()) {
                 return;
             }
@@ -76,7 +76,8 @@ Oskari.clazz.define(className,
                 <LocaleProvider value={{ bundleKey: 'CameraControls3d' }}>
                     <CameraControls3d mapInMobileMode={mapInMobileMode}
                         activeMapMoveMethod={this.handler.getActiveMapMoveMethod()}
-                        controller={this.handler.getController()}/>
+                        controller={this.handler.getController()}
+                        operationFailed = {operationFailed}/>
                 </LocaleProvider>, this._element.get(0));
         },
         /**

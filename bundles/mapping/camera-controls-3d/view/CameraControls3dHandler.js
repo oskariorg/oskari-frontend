@@ -18,13 +18,17 @@ class UIService extends StateHandler {
         if (this.activeMapMoveMethod === activeMapMoveMethod) {
             return;
         }
+        var operationFailed;
         if (activeMapMoveMethod === mapMoveMethodMove) {
-            this.mapmodule.setCameraToMoveMode();
+            operationFailed = this.mapmodule.setCameraToMoveMode();
         } else {
-            this.mapmodule.setCameraToRotateMode();
+            operationFailed = this.mapmodule.setCameraToRotateMode();
         }
-        this.updateState({ activeMapMoveMethod });
-        this.notify();
+
+        if (!operationFailed) {
+            this.updateState({ activeMapMoveMethod });
+        }
+        this.notify(operationFailed);
     }
 
     changeCameraAltitude (directionUp) {
@@ -42,8 +46,8 @@ class UIService extends StateHandler {
         return this.state.activeMapMoveMethod;
     }
 
-    notify () {
-        this.listeners.forEach(consumer => consumer());
+    notify (operationFailed) {
+        this.listeners.forEach(consumer => consumer(operationFailed));
     }
 }
 

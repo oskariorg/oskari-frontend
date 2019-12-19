@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { Controller, LocaleConsumer } from 'oskari-ui/util';
+import { Controller } from 'oskari-ui/util';
 import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './CameraControl3dIcons';
 
 const iconShadow = '1px 1px 2px rgba(0,0,0,0.6)';
@@ -48,7 +48,7 @@ const Break = styled.div`
     height: 0;
 `;
 
-const CameraControls3dDesktop = ({ activeMapMoveMethod, controller, getMessage }) => {
+export const CameraControls3dDesktop = ({ activeMapMoveMethod, controller, getMessage }) => {
     const mapInMobileMode = false;
 
     return (<MapControlsContainer>
@@ -87,6 +87,3 @@ CameraControls3dDesktop.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
     getMessage: PropTypes.func.isRequired
 };
-
-const contextWrap = LocaleConsumer(CameraControls3dDesktop);
-export { contextWrap as CameraControls3dDesktop };
