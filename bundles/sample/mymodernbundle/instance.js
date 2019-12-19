@@ -6,7 +6,7 @@ const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
  *
  * This bundle demonstrates a simplest possible bundle that will just alert a Hello message on startup.
  * See source for details.
- * 
+ *
  * @see BasicBundle
  * @see SimpleBundle
  */
