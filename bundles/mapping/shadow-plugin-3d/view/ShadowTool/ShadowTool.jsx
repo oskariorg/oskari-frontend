@@ -39,30 +39,29 @@ export const ShadowTool = ({ mutator, date, time }) => {
         let nextDate;
         switch (speed) {
         case 'normal':
-            nextTime = moment.utc(timeValue, 'HH:mm').add(6, 'minutes').format('HH:mm');
-            nextDate = nextTime < timeValue
-                ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
-                : dateValue;
+            nextTime = addMinutes(6);
+            nextDate = nextTime < timeValue ? addDays(1) : dateValue;
             break;
         case 'fast':
-            nextTime = moment.utc(timeValue, 'HH:mm').add(30, 'minutes').format('HH:mm');
-            nextDate = nextTime < timeValue
-                ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
-                : dateValue;
+            nextTime = addMinutes(30);
+            nextDate = nextTime < timeValue ? addDays(1) : dateValue;
             break;
-        case 'superfast':
-            nextTime = timeValue;
-            nextDate = moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M');
-            break;
+        case 'slow':
         default:
-            nextTime = moment.utc(timeValue, 'HH:mm').add(1, 'minute').format('HH:mm');
-            nextDate = nextTime < timeValue
-                ? moment.utc(dateValue, 'D/M').add(1, 'day').format('D/M')
-                : dateValue;
+            nextTime = addMinutes(1);
+            nextDate = nextTime < timeValue ? addDays(1) : dateValue;
             break;
         }
         changeTimeAndDate(nextTime, nextDate);
-    }, playing ? 100 : null);
+    }, playing ? 50 : null);
+
+    const addMinutes = (minutes) => {
+        return moment.utc(timeValue, 'HH:mm').add(minutes, 'minutes').format('HH:mm');
+    };
+
+    const addDays = (days) => {
+        return moment.utc(dateValue, 'D/M').add(days, 'day').format('D/M');
+    };
 
     const changeTime = val => {
         if (validateTime(val)) {

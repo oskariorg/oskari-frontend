@@ -53,10 +53,6 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
         {
             value: 'fast',
             label: 'Nopea'
-        },
-        {
-            value: 'superfast',
-            label: 'Sairaan nopee'
         }
     ];
 
