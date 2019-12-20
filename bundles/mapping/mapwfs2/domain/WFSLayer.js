@@ -27,8 +27,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         this._customStyle = null;
         this._filterJson = null;
         this._internalOpened = false;
-
+        this._userStyles = [];
         this.localization = Oskari.getLocalization('MapWfs2');
+        this.sandbox = Oskari.getSandbox('WFSLayer');
     }, {
         /* Layer type specific functions */
 
@@ -262,19 +263,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          * Gets layer styles
          */
         getStyles: function () {
-            if (this.getCustomStyle()) {
-                var locOwnStyle = this.localization['own-style'];
-                var style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
-                style.setName('oskari_custom');
-                style.setTitle(locOwnStyle);
-                style.setLegend('');
-                return this._styles.concat([style]);
+            if (this._userStyles.length > 0) {
+                const styles = this._userStyles.map(s => {
+                    const style = Oskari.clazz.create('Oskari.mapframework.domain.Style');
+                    style.setName(s.name);
+                    style.setTitle(s.name);
+                    style.setLegend('');
+                    return style;
+                });
+                return this._styles.concat(styles);
             }
             return this._styles;
-        },
-        resetStyleToDefault: function () {
-            this.setCustomStyle(null);
-            this.selectStyle('default');
         },
         /**
          * @method getStyleDef
@@ -282,8 +281,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
          * @return {Object}
          */
         getStyleDef (styleName) {
-            if (styleName === 'oskari_custom') {
-                return { [this._layerName]: { featureStyle: this.getCustomStyle() } };
+            const userStyleWithMetadata = this._userStyles.filter(s => s.name === styleName)[0];
+            if (userStyleWithMetadata) {
+                return { [this._layerName]: { featureStyle: userStyleWithMetadata.style } };
             }
             if (this._options.styles) {
                 return this._options.styles[styleName];
@@ -340,6 +340,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer',
         },
         isFilterSupported: function () {
             return true;
+        },
+        saveUserStyle (styleWithMetadata) {
+            if (!styleWithMetadata) {
+                return;
+            }
+            const index = this._userStyles.findIndex(s => s.style.id === styleWithMetadata.style.id);
+            if (index !== -1) {
+                this._userStyles[index] = styleWithMetadata;
+            } else {
+                this._userStyles.push(styleWithMetadata);
+            }
+            // Set style to layer
+            this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), styleWithMetadata.name]);
+        },
+        removeStyle (styleId) {
+            const index = this._userStyles.findIndex(s => s.style.id === styleId);
+            if (index !== -1) {
+                this._userStyles.splice(index, 1);
+            }
+
+            // Remove style from layer if active
+            if (this.getCustomStyle() && this.getCustomStyle().id === styleId) {
+                this.sandbox.postRequestByName('ChangeMapLayerStyleRequest', [this.getId(), 'default']);
+            }
         }
     }, {
         'extend': ['Oskari.mapframework.mapmodule.VectorTileLayer']

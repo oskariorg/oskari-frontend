@@ -79,7 +79,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapwfs2.request.ShowOwnStyleRequ
                     styleId = Date.now();
                 }
                 self.plugin.applyEditorStyle(layer, styleId);
-                self.plugin.saveUserStyle(layerId, styleId);
+                self.plugin.saveUserStyle(layer, styleId);
                 var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'update');
                 self.plugin.getSandbox().notifyAll(event);
                 dialog.close();
