@@ -70,6 +70,7 @@ Oskari.registerLocalization(
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
                 "invalidStyleJson" : "Style JSON-syntaxen är ogiltig.",
                 "invalidHoverJson" : "Hover JSON-syntaxen är ogiltig.",
+                "invalidAttributeJson" : "Attribut JSON-syntaxen är ogiltig.",
                 "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
                 "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter."
             },

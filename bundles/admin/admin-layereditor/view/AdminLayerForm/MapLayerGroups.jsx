@@ -7,7 +7,7 @@ export const MapLayerGroups = LocaleConsumer(({ layer, mapLayerGroups, controlle
     const dataSource = mapLayerGroups.map(group =>
         <Checkbox key={group.id}
             onChange={(evt) => controller.setMapLayerGroup(evt.target.checked, group)}
-            checked={!!layer.maplayerGroups.find(cur => group.id === cur.id)}>{group.name[lang]}
+            checked={!!layer.maplayerGroups.find(cur => cur === group.id)}>{group.name[lang]}
         </Checkbox>
     );
     const renderItem = item => <ListItem>{item}</ListItem>;

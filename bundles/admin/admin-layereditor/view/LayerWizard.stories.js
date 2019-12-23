@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { LayerWizard } from './LayerWizard';
-import { AdminLayerFormService } from './AdminLayerFormService';
+import { AdminLayerFormHandler } from './AdminLayerFormHandler';
 import { LocaleProvider } from 'oskari-ui/util';
 import '../../../../src/global';
 import '../resources/locale/fi';
@@ -9,7 +9,7 @@ import '../resources/locale/sv';
 import '../resources/locale/en';
 
 const Oskari = window.Oskari;
-const service = new AdminLayerFormService(() => console.log('State update'));
+const service = new AdminLayerFormHandler(() => console.log('State update'));
 service.initLayerState();
 service.capabilities = {
     layers: [{

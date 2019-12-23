@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { AdminLayerForm } from './AdminLayerForm';
-import { AdminLayerFormService } from './AdminLayerFormService';
+import { AdminLayerFormHandler } from './AdminLayerFormHandler';
 
 import '../../../../src/global';
 import '../../../mapping/mapmodule/service/map.state';
@@ -27,7 +27,7 @@ layer.setAdmin({});
 layer.setGroups([]);
 
 const dummyRefresh = () => console.log('State update');
-const service = new AdminLayerFormService(dummyRefresh);
+const service = new AdminLayerFormHandler(dummyRefresh);
 service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
-import { AdminLayerFormService } from './AdminLayerFormService';
+import { AdminLayerFormHandler } from './AdminLayerFormHandler';
 import { Spin } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 
@@ -15,7 +15,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.loc = null;
         this.dataProviders = [];
         this.mapLayerGroups = [];
-        this.service = new AdminLayerFormService(() => this.update());
+        this.uiHandler = new AdminLayerFormHandler(() => this.update());
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('availableVersionsUpdated', () => this.update());
         this.on('show', () => {
@@ -44,9 +44,9 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     setLayer (layer) {
         if (!layer) {
-            this.service.resetLayer();
+            this.uiHandler.resetLayer();
         } else {
-            this.service.fetchLayer(layer.getId());
+            this.uiHandler.fetchLayer(layer.getId());
         }
     }
     setDataProviders (dataProviders) {
@@ -62,34 +62,36 @@ export class LayerEditorFlyout extends ExtraFlyout {
         }
         let uiCode = this.getEditorUI();
         // TODO: Move spinner logic inside of LayerWizard
-        if (this.service.isLoading()) {
+        if (this.uiHandler.isLoading()) {
             uiCode = <Spin>{ uiCode }</Spin>;
         }
 
         ReactDOM.render(uiCode, el.get(0));
     }
     getEditorUI () {
-        const layer = this.service.getLayer();
+        const { layer, capabilities, loading, messages, rolesAndPermissionTypes } = this.uiHandler.getState();
+        const controller = this.uiHandler.getController();
+        console.log(layer);
         return (
             <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
                 <LayerWizard
                     layer={layer}
-                    controller={this.service.getController()}
-                    capabilities={this.service.getCapabilities()}
-                    loading={this.service.isLoading()}
+                    controller={controller}
+                    capabilities={capabilities}
+                    loading={loading}
                     layerTypes={this.mapLayerService.getLayerTypes()}
                     versions = {this.mapLayerService.getVersionsForType(layer.type)}>
                     <AdminLayerForm
                         layer={layer}
                         mapLayerGroups={this.mapLayerGroups}
                         dataProviders={this.dataProviders}
-                        controller={this.service.getController()}
-                        messages={this.service.getMessages()}
-                        rolesAndPermissionTypes={this.service.getRolesAndPermissionTypes()}
-                        onDelete={() => this.service.deleteLayer()}
-                        onSave={() => this.service.saveLayer()}
+                        controller={controller}
+                        messages={messages}
+                        rolesAndPermissionTypes={rolesAndPermissionTypes}
+                        onDelete={() => this.uiHandler.deleteLayer()}
+                        onSave={() => this.uiHandler.saveLayer()}
                         onCancel={() => {
-                            this.service.clearMessages();
+                            this.uiHandler.clearMessages();
                             this.hide();
                         }} />
                 </LayerWizard>
@@ -102,6 +104,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
             return;
         }
         ReactDOM.unmountComponentAtNode(el.get(0));
-        this.service.clearMessages();
+        this.uiHandler.clearMessages();
     }
 }
