@@ -6,11 +6,14 @@ class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+        this.mapLayerService.on('availableVersionsUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
         this.loadingCount = 0;
         this.layerHelper = getLayerHelper(Oskari.getSupportedLanguages());
         this.setState({
             layer: {},
+            layerTypes: this.mapLayerService.getLayerTypes(),
+            versions: [],
             capabilities: {},
             messages: [],
             loading: false
@@ -19,9 +22,18 @@ class UIHandler extends StateHandler {
         this.fetchRolesAndPermissionTypes();
     }
 
+    updateLayerTypeVersions () {
+        const { layer } = this.getState();
+        this.updateState({
+            layerTypes: this.mapLayerService.getLayerTypes(),
+            versions: this.mapLayerService.getVersionsForType(layer.type)
+        });
+    }
+
     setType (type) {
         this.updateState({
-            layer: { ...this.getState().layer, type }
+            layer: { ...this.getState().layer, type },
+            versions: this.mapLayerService.getVersionsForType(type)
         });
     }
     setLayerUrl (url) {
@@ -31,7 +43,6 @@ class UIHandler extends StateHandler {
     }
     setVersion (version) {
         if (!version) {
-            // for moving back to previous step
             this.updateState({ 
                 capabilities: {},
                 layer: { ...this.getState().layer, version: undefined }
@@ -162,10 +173,10 @@ class UIHandler extends StateHandler {
     setMessages (messages) {
         this.updateState({ messages });
     }
-    ///
     resetLayer () {
         this.updateState({
-            layer: this.layerHelper.createEmpty()
+            layer: this.layerHelper.createEmpty(),
+            versions: []
         });
     }
     ajaxStarted () {

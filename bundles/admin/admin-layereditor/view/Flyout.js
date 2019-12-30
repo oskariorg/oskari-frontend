@@ -16,8 +16,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
         this.dataProviders = [];
         this.mapLayerGroups = [];
         this.uiHandler = new AdminLayerFormHandler(() => this.update());
-        this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        this.mapLayerService.on('availableVersionsUpdated', () => this.update());
         this.on('show', () => {
             if (!this.getElement()) {
                 this.createUi();
@@ -69,9 +67,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
         ReactDOM.render(uiCode, el.get(0));
     }
     getEditorUI () {
-        const { layer, capabilities, loading, messages, rolesAndPermissionTypes } = this.uiHandler.getState();
+        const { layer, layerTypes, versions, capabilities, loading, messages, rolesAndPermissionTypes } = this.uiHandler.getState();
         const controller = this.uiHandler.getController();
-        console.log(layer);
         return (
             <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
                 <LayerWizard
@@ -79,8 +76,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
                     controller={controller}
                     capabilities={capabilities}
                     loading={loading}
-                    layerTypes={this.mapLayerService.getLayerTypes()}
-                    versions = {this.mapLayerService.getVersionsForType(layer.type)}>
+                    layerTypes={layerTypes}
+                    versions = {versions}>
                     <AdminLayerForm
                         layer={layer}
                         mapLayerGroups={this.mapLayerGroups}

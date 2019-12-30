@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Steps, Step, Button, Message } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
 import styled from 'styled-components';
 
@@ -122,7 +122,7 @@ const LayerWizard = ({
 
 LayerWizard.propTypes = {
     layer: PropTypes.object.isRequired,
-    controller: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     loading: PropTypes.bool,
     capabilities: PropTypes.object,
     layerTypes: PropTypes.array,

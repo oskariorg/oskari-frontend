@@ -5,7 +5,7 @@ import { VisualizationTabPane } from './AdminLayerForm/VisualizationTabPane';
 import { AdditionalTabPane } from './AdminLayerForm/AdditionalTabPane';
 import { PermissionsTabPane } from './AdminLayerForm/PermissionsTabPane';
 import { StyledRoot } from './AdminLayerForm/StyledFormComponents';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Confirm, Alert, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
@@ -71,7 +71,7 @@ const AdminLayerForm = ({
 );
 
 AdminLayerForm.propTypes = {
-    controller: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
