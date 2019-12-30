@@ -72,7 +72,7 @@ export const getLayerHelper = (supportedLanguages) => {
             ..._getLocalizedLayerInfoFromAbstract(layer),
             groupId: layer.getAdmin().organizationId,
             organizationName: layer.getOrganizationName(),
-            maplayerGroups: [...layer.getGroups()], //TODO normalize groups, now int[] or object[{ id: int }]
+            maplayerGroups: [...layer.getGroups()],
             opacity: layer.getOpacity() || 100,
             minscale: layer.getMinScale() || 1,
             maxscale: layer.getMaxScale() || 1,

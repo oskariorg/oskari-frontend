@@ -43,6 +43,7 @@ class UIHandler extends StateHandler {
     }
     setVersion (version) {
         if (!version) {
+            // for moving back to previous step
             this.updateState({ 
                 capabilities: {},
                 layer: { ...this.getState().layer, version: undefined }
