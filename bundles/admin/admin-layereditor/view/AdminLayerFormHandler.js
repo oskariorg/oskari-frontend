@@ -44,7 +44,7 @@ class UIHandler extends StateHandler {
     setVersion (version) {
         if (!version) {
             // for moving back to previous step
-            this.updateState({ 
+            this.updateState({
                 capabilities: {},
                 layer: { ...this.getState().layer, version: undefined }
             });
@@ -60,7 +60,7 @@ class UIHandler extends StateHandler {
         }
         const found = capabilities.layers[name];
         if (found) {
-            this.updateState({ 
+            this.updateState({
                 layer: this.layerHelper.fromServer({ ...layer, ...found })
             });
         } else {
@@ -75,12 +75,12 @@ class UIHandler extends StateHandler {
     setPassword (password) {
         this.updateState({
             layer: { ...this.getState().layer, password }
-        })
+        });
     }
     setLayerName (name) {
         this.updateState({
             layer: { ...this.getState().layer, name }
-        })
+        });
     }
     setLocalizedLayerName (lang, name) {
         const localized = `name_${lang}`;
@@ -89,7 +89,7 @@ class UIHandler extends StateHandler {
                 ...this.getState().layer,
                 [localized]: name
             }
-        })
+        });
     }
     setLocalizedLayerDescription (lang, description) {
         const localized = `title_${lang}`;
@@ -98,7 +98,7 @@ class UIHandler extends StateHandler {
                 ...this.getState().layer,
                 [localized]: description
             }
-        })
+        });
     }
     setDataProvider (dataProvider) {
         this.updateState({
@@ -106,7 +106,7 @@ class UIHandler extends StateHandler {
                 ...this.getState().layer,
                 groupId: dataProvider
             }
-        })
+        });
     }
     setMapLayerGroup (checked, group) {
         const layer = { ...this.getState().layer };
@@ -124,7 +124,7 @@ class UIHandler extends StateHandler {
     setOpacity (opacity) {
         this.updateState({
             layer: { ...this.getState().layer, opacity }
-        })
+        });
     }
     setMinAndMaxScale (values) {
         this.updateState({
@@ -133,38 +133,38 @@ class UIHandler extends StateHandler {
                 maxscale: values[0],
                 minscale: values[1]
             }
-        })
+        });
     }
     setStyle (style) {
         this.updateState({
             layer: { ...this.getState().layer, style }
-        })
+        });
     }
     setStyleJSON (styleJSON) {
         this.updateState({
             layer: { ...this.getState().layer, styleJSON }
-        })
+        });
     }
     setHoverJSON (hoverJSON) {
         this.updateState({
             layer: { ...this.getState().layer, hoverJSON }
-        })
+        });
     }
     setMetadataIdentifier (metadataid) {
         this.updateState({
             layer: { ...this.getState().layer, metadataid }
-        })
+        });
     }
     setGfiContent (gfiContent) {
         this.updateState({
             layer: { ...this.getState().layer, gfiContent }
-        })
+        });
     }
     setAttributes (attributes) {
         // TODO; Fix attributes input area JSON parsing.
         this.updateState({
             layer: { ...this.getState().layer, attributes }
-        })
+        });
     }
     setMessage (key, type) {
         this.updateState({
@@ -194,7 +194,7 @@ class UIHandler extends StateHandler {
         }
         this.updateState({
             loading: this.isLoading()
-        })
+        });
     }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
@@ -264,7 +264,6 @@ class UIHandler extends StateHandler {
             alert('Not implemented yet');
             return;
         }
-        const me = this;
 
         // Modify layer for backend
         const layer = { ...this.getState().layer };
@@ -405,7 +404,7 @@ class UIHandler extends StateHandler {
         }).then(json => {
             this.updateState({
                 capabilities: json || {}
-            })
+            });
         });
     }
 
