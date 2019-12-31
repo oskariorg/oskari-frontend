@@ -22,6 +22,9 @@ Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle"
         }, {
             "type": "text/javascript",
             "src": "../../../../bundles/mapping/shadow-plugin-3d/tool/ShadowTool.js"
+        }, {
+            "type": "text/css",
+            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "fi",
