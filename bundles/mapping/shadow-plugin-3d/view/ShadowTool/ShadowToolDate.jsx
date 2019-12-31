@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Message } from 'oskari-ui';
 import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledButton, StyledDateSlider } from './ShadowToolStyled';
 import moment from 'moment';
 
@@ -57,7 +56,7 @@ export const ShadowToolDate = ({ changeHandler, sliderDateValue, dateValue, curr
                 <StyledDateSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} tooltipVisible={false} />
             </ColFixed>
             <Col>
-                <StyledButton onClick={setCurrentTime}><Message messageKey={'present'} /></StyledButton>
+                <StyledButton onClick={setCurrentTime}>Nykyhetki</StyledButton>
             </Col>
         </Row>
     );

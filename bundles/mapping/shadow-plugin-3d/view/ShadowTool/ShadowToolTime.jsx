@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Option, InputGroup, Message } from 'oskari-ui';
+import { Option, InputGroup } from 'oskari-ui';
 import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledTimeSlider, StyledSelect, Border, StyledPlayButton } from './ShadowToolStyled';
 import { PlayPauseIcon } from '../../resources/icons/';
 
@@ -44,15 +44,15 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
     const speedValues = [
         {
             value: 'slow',
-            label: <Message messageKey={'speeds.slow'} />
+            label: 'Hidas'
         },
         {
             value: 'normal',
-            label: <Message messageKey={'speeds.normal'} />
+            label: 'Normaali'
         },
         {
             value: 'fast',
-            label: <Message messageKey={'speeds.fast'} />
+            label: 'Nopea'
         }
     ];
 
@@ -73,7 +73,7 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
             <ColFixed>
                 <InputGroup compact>
                     <StyledPlayButton onClick={clickPlayButton}>
-                        <PlayPauseIcon status={playing} />
+                        <PlayPauseIcon initial={playing} />
                     </StyledPlayButton>
                     <Border>
                         <StyledTimeSlider marks={marksForTime} min={0} max={MINUTES} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
