@@ -82,6 +82,20 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, name }
         });
     }
+    setLocalizedNames (values) {
+        const updateValues = {};
+        Object.keys(values).forEach(language => {
+            const { name, description } = values[language];
+            updateValues[`name_${language}`] = name;
+            updateValues[`title_${language}`] = description;
+        });
+        this.updateState({
+            layer: {
+                ...this.getState().layer,
+                ...updateValues
+            }
+        });
+    }
     setLocalizedLayerName (lang, name) {
         const localized = `name_${lang}`;
         this.updateState({
@@ -452,6 +466,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setUsername',
     'setPassword',
     'setLayerName',
+    'setLocalizedNames',
     'setLocalizedLayerName',
     'setLocalizedLayerDescription',
     'setDataProvider',
