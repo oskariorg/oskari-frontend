@@ -29,6 +29,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         this._stickyLayerIds = {};
         this._layerGroups = [];
         this.availableVersions = {};
+        this.composingModels = {};
 
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
 
@@ -959,8 +960,19 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 this.trigger('availableVersionsUpdated');
             }
         },
+        /**
+         * @method registerComposingModel
+         * @param {String} type
+         * @param {Oskari.mapframework.domain.LayerComposingModel} composingModel
+         */
+        registerComposingModel: function (type, composingModel) {
+            this.composingModels[type] = composingModel;
+        },
         getVersionsForType (type) {
             return this.availableVersions[type] || [];
+        },
+        getComposingModelForType (type) {
+            return this.composingModels[type];
         },
         getLayerTypes () {
             return Object.keys(this.availableVersions) || [];

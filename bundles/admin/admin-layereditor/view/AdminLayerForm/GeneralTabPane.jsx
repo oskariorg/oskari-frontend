@@ -7,6 +7,8 @@ import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormCo
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 const PaddedLabel = styled('div')`
     padding-bottom: 5px;
 `;
@@ -15,7 +17,7 @@ const Padding = styled('div')`
 `;
 
 const GeneralTabPane = (props) => {
-    const { mapLayerGroups, dataProviders, layer, bundleKey, controller } = props;
+    const { mapLayerGroups, dataProviders, layer, propertyFields, bundleKey, controller } = props;
     const credentialProps = {
         allowCredentials: true,
         defaultOpen: false,
@@ -43,8 +45,9 @@ const GeneralTabPane = (props) => {
             description: layer[`title_${language}`]
         };
     });
-    return (
-        <StyledTab>
+
+    const urlInput =
+        <React.Fragment>
             <Message messageKey='interfaceAddress' />
             <StyledComponentGroup>
                 <StyledComponent>
@@ -58,24 +61,34 @@ const GeneralTabPane = (props) => {
                     </div>
                 </StyledComponent>
             </StyledComponentGroup>
+        </React.Fragment>;
+
+    const nameInput =
+        <React.Fragment>
             <Message messageKey='uniqueName' />
             <StyledComponent>
                 <TextInput type='text' value={layer.name} onChange={(evt) => controller.setLayerName(evt.target.value)} />
             </StyledComponent>
-            <StyledComponentGroup>
-                <LocalizationComponent
-                    labels={localized.labels}
-                    value={localized.values}
-                    languages={Oskari.getSupportedLanguages()}
-                    onChange={controller.setLocalizedNames}
-                    LabelComponent={PaddedLabel}
-                >
-                    <TextInput type='text' name='name'/>
-                    <Padding/>
-                    <TextInput type='text' name='description'/>
-                    <Padding/>
-                </LocalizationComponent>
-            </StyledComponentGroup>
+        </React.Fragment>;
+
+    const localizedNamesInput =
+        <StyledComponentGroup>
+            <LocalizationComponent
+                labels={localized.labels}
+                value={localized.values}
+                languages={Oskari.getSupportedLanguages()}
+                onChange={controller.setLocalizedNames}
+                LabelComponent={PaddedLabel}
+            >
+                <TextInput type='text' name='name'/>
+                <Padding/>
+                <TextInput type='text' name='description'/>
+                <Padding/>
+            </LocalizationComponent>
+        </StyledComponentGroup>;
+
+    const dataProviderInput =
+        <React.Fragment>
             <Message messageKey='dataProvider' />
             <StyledComponent>
                 <DataProviderSelect key={layer.id}
@@ -83,10 +96,23 @@ const GeneralTabPane = (props) => {
                     onChange={(evt) => controller.setDataProvider(evt)}
                     dataProviders={dataProviders} />
             </StyledComponent>
+        </React.Fragment>;
+
+    const mapGroupsInput =
+        <React.Fragment>
             <Message messageKey='mapLayerGroups' />
             <StyledComponent>
                 <MapLayerGroups layer={layer} mapLayerGroups={mapLayerGroups} controller={controller} lang={Oskari.getLang()} />
             </StyledComponent>
+        </React.Fragment>;
+
+    return (
+        <StyledTab>
+            { propertyFields.includes(LayerComposingModel.URL) && urlInput }
+            { propertyFields.includes(LayerComposingModel.NAME) && nameInput }
+            { propertyFields.includes(LayerComposingModel.LOCALIZED_NAMES) && localizedNamesInput }
+            { propertyFields.includes(LayerComposingModel.ORGANIZATION_NAME) && dataProviderInput }
+            { propertyFields.includes(LayerComposingModel.GROUPS) && mapGroupsInput }
         </StyledTab>
     );
 };
@@ -94,9 +120,10 @@ const GeneralTabPane = (props) => {
 GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired,
+    propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     layer: PropTypes.object,
-    bundleKey: PropTypes.string.isRequired
+    bundleKey: PropTypes.string.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
 
 const contextWrap = LocaleConsumer(GeneralTabPane);

@@ -14,6 +14,7 @@ class UIHandler extends StateHandler {
             layer: {},
             layerTypes: this.mapLayerService.getLayerTypes(),
             versions: [],
+            propertyFields: [],
             capabilities: {},
             messages: [],
             loading: false
@@ -29,12 +30,10 @@ class UIHandler extends StateHandler {
             versions: this.mapLayerService.getVersionsForType(layer.type)
         });
     }
-
     setType (type) {
-        this.updateState({
-            layer: { ...this.getState().layer, type },
-            versions: this.mapLayerService.getVersionsForType(type)
-        });
+        const { layer } = this.getState();
+        const versions = this.mapLayerService.getVersionsForType(type);
+        this.updateState({ layer, versions });
     }
     setLayerUrl (url) {
         this.updateState({
@@ -60,8 +59,12 @@ class UIHandler extends StateHandler {
         }
         const found = capabilities.layers[name];
         if (found) {
+            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found });
+            const { type, version } = updateLayer;
+            const composingModel = this.mapLayerService.getComposingModelForType(type);
             this.updateState({
-                layer: this.layerHelper.fromServer({ ...layer, ...found })
+                layer: updateLayer,
+                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
             });
         } else {
             this.log.error('Layer not in capabilities: ' + name);
@@ -173,7 +176,8 @@ class UIHandler extends StateHandler {
     resetLayer () {
         this.updateState({
             layer: this.layerHelper.createEmpty(),
-            versions: []
+            versions: [],
+            propertyFields: []
         });
     }
     ajaxStarted () {
@@ -213,13 +217,18 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
+            const layer = this.layerHelper.fromServer(json.layer);
+            const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
             this.updateState({
-                layer: this.layerHelper.fromServer(json.layer)
+                layer,
+                propertyFields: composingModel ? composingModel.getPropertyFields(layer.version) : []
             });
         });
     }
 
     /**
+     * TODO REMOVE UNUSED FUNCTION, FIX STORIES
+     *
      * Initializes layer model used in UI
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
      */
@@ -390,8 +399,10 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (response.ok) {
+                const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
                 this.updateState({
-                    layer: { ...this.getState().layer, version }
+                    layer: { ...this.getState().layer, version },
+                    propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
                 });
             } else {
                 this.setMessage('TODO', 'error');
