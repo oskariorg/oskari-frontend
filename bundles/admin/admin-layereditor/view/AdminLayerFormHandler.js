@@ -6,7 +6,7 @@ class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        this.mapLayerService.on('availableVersionsUpdated', () => this.updateLayerTypeVersions());
+        this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
         this.loadingCount = 0;
         this.layerHelper = getLayerHelper(Oskari.getSupportedLanguages());
@@ -31,9 +31,10 @@ class UIHandler extends StateHandler {
         });
     }
     setType (type) {
-        const { layer } = this.getState();
-        const versions = this.mapLayerService.getVersionsForType(type);
-        this.updateState({ layer, versions });
+        this.updateState({
+            layer: { ...this.getState().layer, type },
+            versions: this.mapLayerService.getVersionsForType(type)
+        });
     }
     setLayerUrl (url) {
         this.updateState({
@@ -176,6 +177,7 @@ class UIHandler extends StateHandler {
     resetLayer () {
         this.updateState({
             layer: this.layerHelper.createEmpty(),
+            capabilities: {},
             versions: [],
             propertyFields: []
         });

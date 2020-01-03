@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { DataProviderSelect } from './DataProviderSelect';
 import { LocalizationComponent, TextInput, UrlInput, Message } from 'oskari-ui';
@@ -19,7 +19,7 @@ const Padding = styled('div')`
 const GeneralTabPane = (props) => {
     const { mapLayerGroups, dataProviders, layer, propertyFields, bundleKey, controller } = props;
     const credentialProps = {
-        allowCredentials: true,
+        allowCredentials: propertyFields.includes(LayerComposingModel.CREDENTIALS),
         defaultOpen: false,
         usernameValue: layer.username,
         passwordValue: layer.password,
@@ -47,7 +47,7 @@ const GeneralTabPane = (props) => {
     });
 
     const urlInput =
-        <React.Fragment>
+        <Fragment>
             <Message messageKey='interfaceAddress' />
             <StyledComponentGroup>
                 <StyledComponent>
@@ -61,15 +61,15 @@ const GeneralTabPane = (props) => {
                     </div>
                 </StyledComponent>
             </StyledComponentGroup>
-        </React.Fragment>;
+        </Fragment>;
 
     const nameInput =
-        <React.Fragment>
+        <Fragment>
             <Message messageKey='uniqueName' />
             <StyledComponent>
                 <TextInput type='text' value={layer.name} onChange={(evt) => controller.setLayerName(evt.target.value)} />
             </StyledComponent>
-        </React.Fragment>;
+        </Fragment>;
 
     const localizedNamesInput =
         <StyledComponentGroup>
@@ -88,7 +88,7 @@ const GeneralTabPane = (props) => {
         </StyledComponentGroup>;
 
     const dataProviderInput =
-        <React.Fragment>
+        <Fragment>
             <Message messageKey='dataProvider' />
             <StyledComponent>
                 <DataProviderSelect key={layer.id}
@@ -96,15 +96,15 @@ const GeneralTabPane = (props) => {
                     onChange={(evt) => controller.setDataProvider(evt)}
                     dataProviders={dataProviders} />
             </StyledComponent>
-        </React.Fragment>;
+        </Fragment>;
 
     const mapGroupsInput =
-        <React.Fragment>
+        <Fragment>
             <Message messageKey='mapLayerGroups' />
             <StyledComponent>
                 <MapLayerGroups layer={layer} mapLayerGroups={mapLayerGroups} controller={controller} lang={Oskari.getLang()} />
             </StyledComponent>
-        </React.Fragment>;
+        </Fragment>;
 
     return (
         <StyledTab>

@@ -37,6 +37,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this._setupAdminTooling();
             this._loadDataProviders();
             this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
+            this._getLayerService().on('availableLayerTypesUpdated', () => this._setupLayerTools());
         }
 
         _setDataProviders (dataProviders) {
@@ -124,10 +125,9 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 // detect layerId and replace with the corresponding layerModel
                 layer = service.findMapLayer(layer);
             }
-            if (!layer || layer.getLayerType() !== 'wfs' || layer.getVersion() !== '1.1.0') {
+            if (!layer || !this._hasComposingModel(layer)) {
                 return;
             }
-
             // add feature data tool for layer
             const tool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             tool.setName('layer-editor');
@@ -140,6 +140,23 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             });
 
             service.addToolForLayer(layer, tool, suppressEvent);
+        }
+
+        /**
+         * Checks if layer composing is supported for the layer.
+         * @param {Object} layer
+         * @return {boolean} true, if composing is supported.
+         */
+        _hasComposingModel (layer) {
+            const service = this._getLayerService();
+            let composingModel = service.getComposingModelForType(layer.getLayerType());
+            if (!composingModel) {
+                composingModel = service.getComposingModelForType(layer.getLayerType() + 'layer');
+                if (!composingModel) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         /**

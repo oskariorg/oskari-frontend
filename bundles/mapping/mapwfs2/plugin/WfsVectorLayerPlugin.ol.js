@@ -33,11 +33,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.layerHandlersByLayerId = {};
         this.userStyleService = new UserStyleService();
         Oskari.getSandbox().registerService(this.userStyleService);
-        this.availableVersions = ['1.1.0', '2.0.0', '3.0'];
-        this.layerComposingModel = new LayerComposingModel([
-            LayerComposingModel.URL,
-            LayerComposingModel.PASSWORD
-        ]);
     }
 
     /* ---- AbstractMapModulePlugin functions ---- */
@@ -95,8 +90,17 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!this.mapLayerService || !this.vectorFeatureService) {
             return;
         }
-        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer', this.availableVersions);
-        this.mapLayerService.registerComposingModel(this.getLayerTypeSelector(), this.layerComposingModel);
+        const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
+        const composingModel = new LayerComposingModel([
+            LayerComposingModel.URL,
+            LayerComposingModel.CREDENTIALS,
+            LayerComposingModel.STYLE,
+            LayerComposingModel.STYLE_JSON,
+            LayerComposingModel.HOVER_JSON,
+            LayerComposingModel.METAINFO,
+            LayerComposingModel.GFI_CONTENT
+        ], ['1.1.0', '2.0.0', '3.0']);
+        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), layerClass, composingModel);
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);

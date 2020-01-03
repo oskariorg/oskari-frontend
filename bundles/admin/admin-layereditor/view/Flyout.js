@@ -68,7 +68,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     getEditorUI () {
         const { layer, layerTypes, versions, capabilities, loading, messages, propertyFields, rolesAndPermissionTypes } = this.uiHandler.getState();
-        console.log(layer);
         const controller = this.uiHandler.getController();
         return (
             <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
@@ -78,7 +77,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                     capabilities={capabilities}
                     loading={loading}
                     layerTypes={layerTypes}
-                    versions = {versions}>
+                    versions={versions}>
                     <AdminLayerForm
                         layer={layer}
                         propertyFields={propertyFields}

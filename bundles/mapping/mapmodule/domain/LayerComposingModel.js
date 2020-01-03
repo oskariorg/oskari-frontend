@@ -1,47 +1,86 @@
-const layerPropertyFields = {
-    URL: 'url',
-    NAME: 'name',
-    LOCALIZED_NAMES: 'localizedNames',
-    GROUP_ID: 'groupId',
-    ORGANIZATION_NAME: 'organizationName',
-    GROUPS: 'maplayerGroups',
-    OPACITY: 'opacity',
-    SCALE: 'scale',
-    PASSWORD: 'password'
-};
-// Common property fields for all layer types and versions
-const commonFields = [
-    layerPropertyFields.NAME,
-    layerPropertyFields.LOCALIZED_NAMES,
-    layerPropertyFields.GROUP_ID,
-    layerPropertyFields.ORGANIZATION_NAME,
-    layerPropertyFields.GROUPS,
-    layerPropertyFields.OPACITY,
-    layerPropertyFields.SCALE
-].map(field => [field, true]);
+const PROPERTY_FIELDS = [
+    'URL',
+    'NAME',
+    'LOCALIZED_NAMES',
+    'ORGANIZATION_NAME',
+    'GROUPS',
+    'OPACITY',
+    'SCALE',
+    'STYLE',
+    'STYLE_JSON',
+    'HOVER_JSON',
+    'CREDENTIALS',
+    'METAINFO',
+    'GFI_CONTENT',
+    'ATTRIBUTES'
+];
 
+// Common fields are enforced on composing model.
+const COMMON_PROPERTY_FIELDS = [
+    'NAME',
+    'LOCALIZED_NAMES',
+    'ORGANIZATION_NAME',
+    'GROUPS',
+    'OPACITY',
+    'SCALE',
+    'ATTRIBUTES'
+];
+
+const ALL_VERSIONS = 'all';
+
+/**
+ * @private
+ * @param {string[]|string} [versions]
+ * @return {string[]} Version array
+ */
+const getValidatedVersions = versions => {
+    if (Array.isArray(versions)) {
+        return versions;
+    }
+    if (typeof versions !== 'string') {
+        return;
+    }
+    return [versions];
+};
+
+/**
+ * @classdesc Describes available properties for a layer and it's versions.
+ */
 class LayerComposingModel {
-    constructor (fields) {
-        this.propertyFields = new Map(commonFields);
+    /**
+     * @param {string[]} fields
+     * @param {string[]|string} [versions] Supported layer versions. All versions supported by default.
+     */
+    constructor (fields, versions) {
+        this.versions = getValidatedVersions(versions) || ALL_VERSIONS;
+        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions]));
         if (Array.isArray(fields)) {
-            fields.forEach(cur => {
-                if (typeof cur === 'string') {
-                    this.setPropertyField(cur);
-                    return;
-                }
-                if (typeof cur === 'object') {
-                    const { field, versions } = cur;
-                    this.setPropertyField(field, versions);
-                }
-            });
+            fields.forEach(cur => this.setPropertyField(cur, this.versions));
         }
     }
-    setPropertyField (field, versions = true) {
-        if (!field) {
+
+    /**
+     * Registers a property for the layer model.
+     *
+     * @param {string} field Layer property key. One of LayerComposingModel.PROPERTY_FIELDS.
+     * @param {string[]|string} [versions] Layer versions where the property is supported in.
+     */
+    setPropertyField (field, versions) {
+        if (!field || !PROPERTY_FIELDS.includes(field)) {
             return;
         }
-        this.propertyFields.set(field, versions);
+        const validVersions = getValidatedVersions(versions) || this.versions;
+        if (!validVersions) {
+            return;
+        }
+        this.propertyFields.set(field, validVersions);
     }
+    /**
+     * To get layer property fields.
+     *
+     * @param {string} [version] Require fields for a specific layer version.
+     * @return {string[]} Property fields for the layer model.
+     */
     getPropertyFields (version) {
         if (!version) {
             return Array.from(this.propertyFields.keys());
@@ -49,13 +88,36 @@ class LayerComposingModel {
         return Array.from(this.propertyFields)
             .filter(entry => {
                 const supportedVersions = entry[1];
-                return supportedVersions === true || supportedVersions.includes(version);
+                return supportedVersions === ALL_VERSIONS || supportedVersions.includes(version);
             })
             .map(entry => entry[0]);
     }
+
+    /**
+     * Set supported layer versions. Overrides add previously set property field versions.
+     * @param {string[]|string} [versions] Layer versions where the property is supported in.
+     */
+    setVersions (versions) {
+        this.versions = getValidatedVersions(versions) || ALL_VERSIONS;
+        for (const field in this.propertyFields.keys()) {
+            this.propertyFields.set(field, this.versions);
+        }
+    }
+    /**
+     * @return {string[]} Versions with composing support
+     */
+    getVersions () {
+        if (this.versions === ALL_VERSIONS) {
+            return [];
+        }
+        return [...this.versions];
+    }
 };
 // Assign static property fields
-Object.keys(layerPropertyFields).forEach(key => {
-    LayerComposingModel[key] = layerPropertyFields[key];
+PROPERTY_FIELDS.forEach(key => {
+    LayerComposingModel[key] = key;
 });
+LayerComposingModel.PROPERTY_FIELDS = PROPERTY_FIELDS;
+LayerComposingModel.COMMON_PROPERTY_FIELDS = COMMON_PROPERTY_FIELDS;
+
 Oskari.clazz.defineES('Oskari.mapframework.domain.LayerComposingModel', LayerComposingModel);
