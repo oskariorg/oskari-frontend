@@ -9,9 +9,9 @@ class UIService extends StateHandler {
         this.mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
         this._time = Cesium.JulianDate.toDate(this.mapmodule.getTime());
         this.state = {
-            time: this._getTime(),
-            date: this._getDate(),
-            year: this._getYear()
+            time: this._getInitialTime(),
+            date: this._getInitialDate(),
+            year: this._getInitialYear()
         };
         this.eventHandlers = this._createEventHandlers();
     }
@@ -22,32 +22,40 @@ class UIService extends StateHandler {
         this.updateState({ time, date });
     }
 
-    _getTime () {
+    _getInitialTime () {
         const clock = moment(this._time).format('H:mm');
         return clock;
     }
 
-    _getDate () {
+    _getInitialDate () {
         const date = moment(this._time).format('D/M');
         return date;
     }
 
-    _getYear () {
+    _getInitialYear () {
         const year = moment(this._time).format('YYYY');
         return year;
     }
 
+    _getTime () {
+        return this.state.time;
+    }
+
+    _getDate () {
+        return this.state.date;
+    }
+
     setTime (time) {
         const date = this._getDate();
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
+        this.setTimeAndDate(date, time);
     }
 
     setDate (date) {
         const time = this._getTime();
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
+        this.setTimeAndDate(date, time);
     }
 
-    setCurrentTime (date, time) {
+    setTimeAndDate (date, time) {
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 
@@ -77,5 +85,5 @@ class UIService extends StateHandler {
 export const ShadowToolHandler = controllerMixin(UIService, [
     'setTime',
     'setDate',
-    'setCurrentTime'
+    'setTimeAndDate'
 ]);
