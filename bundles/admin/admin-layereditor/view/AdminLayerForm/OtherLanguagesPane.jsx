@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Collapse, CollapsePanel, Message } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 
 export const OtherLanguagesPane = LocaleConsumer(({ layer, controller, lang }) => (
@@ -22,6 +22,6 @@ export const OtherLanguagesPane = LocaleConsumer(({ layer, controller, lang }) =
 
 OtherLanguagesPane.propTypes = {
     lang: PropTypes.string.isRequired,
-    controller: PropTypes.any,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     layer: PropTypes.object
 };

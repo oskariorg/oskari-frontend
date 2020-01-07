@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { StyleSelect } from './StyleSelect';
 import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './StyledFormComponents';
 import { Slider, TextAreaInput, Opacity, Message } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
 const VerticalComponent = styled(StyledComponent)`
@@ -52,7 +52,7 @@ const VisualizationTabPane = (props) => {
 
 VisualizationTabPane.propTypes = {
     layer: PropTypes.object,
-    controller: PropTypes.any,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     visualizationProps: PropTypes.any
 };
 
