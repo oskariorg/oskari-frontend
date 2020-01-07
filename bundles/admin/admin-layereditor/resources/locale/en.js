@@ -70,6 +70,7 @@ Oskari.registerLocalization(
                 "errorRemoveLayer": "The map layer could not be removed.",
                 "invalidStyleJson" : "Invalid Style JSON syntax.",
                 "invalidHoverJson" : "Invalid Hover JSON syntax.",
+                "invalidAttributeJson" : "Invalid Attribute JSON syntax.",
                 "errorInsertAllreadyExists": "The new map layer has been added. A map layer with same identifier already exists.",
                 "errorFetchUserRolesAndPermissionTypes": "Error occured when fetching user roles and permission types."
             },

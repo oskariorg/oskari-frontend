@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, Message } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { StyledComponent } from './StyledFormComponents';
 
 export const LocalizedLayerInfo = LocaleConsumer(({ layer, lang, controller, getMessage }) => {
@@ -37,6 +37,6 @@ export const LocalizedLayerInfo = LocaleConsumer(({ layer, lang, controller, get
 
 LocalizedLayerInfo.propTypes = {
     lang: PropTypes.string.isRequired,
-    controller: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     layer: PropTypes.object.isRequired
 };

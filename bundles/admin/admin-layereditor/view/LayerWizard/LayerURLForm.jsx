@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Button, UrlInput } from 'oskari-ui';
+import { Controller } from 'oskari-ui/util';
 
 export const LayerURLForm = ({ layer, loading, controller, versions }) => {
     const credentials = {
@@ -26,6 +27,6 @@ export const LayerURLForm = ({ layer, loading, controller, versions }) => {
 LayerURLForm.propTypes = {
     layer: PropTypes.object,
     loading: PropTypes.bool,
-    controller: PropTypes.object.isRequired,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     versions: PropTypes.array.isRequired
 };

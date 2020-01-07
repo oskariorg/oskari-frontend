@@ -4,7 +4,7 @@ import { DataProviderSelect } from './DataProviderSelect';
 import { TextInput, UrlInput, Message } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormComponents';
-import { LocaleConsumer } from 'oskari-ui/util';
+import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LocalizedLayerInfo } from './LocalizedLayerInfo';
 import { OtherLanguagesPane } from './OtherLanguagesPane';
 
@@ -65,7 +65,7 @@ const GeneralTabPane = (props) => {
 GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
-    controller: PropTypes.any,
+    controller: PropTypes.instanceOf(Controller).isRequired,
     layer: PropTypes.object
 };
 
