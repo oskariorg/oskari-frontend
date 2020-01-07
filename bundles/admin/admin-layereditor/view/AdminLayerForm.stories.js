@@ -20,7 +20,7 @@ const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer
 
 const locale = Oskari.getMsg.bind(null, 'admin-layereditor');
 // Message parameters causes missing library errors, skip them.
-const customGetMessageImpl = (key, ...ingnoredMessageParams) => locale(key);
+const customGetMessageImpl = (key, ...ignoredMessageParams) => locale(key);
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
