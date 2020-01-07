@@ -244,7 +244,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         const style = this.visualizationForm.getOskariStyle();
         style.id = styleId;
         layer.setCustomStyle(style);
-        layer.selectStyle('oskari_custom');
+        layer.selectStyle(this.visualizationForm.getOskariStyleName());
     }
     /**
      * @method findLayerByOLLayer
@@ -369,7 +369,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         Oskari.getSandbox().notifyAll(builder.apply(null, args));
     }
-    saveUserStyle (layerId, styleId) {
+    saveUserStyle (layer, styleId) {
         const oskariStyle = this.visualizationForm.getOskariStyle();
         const name = this.visualizationForm.getOskariStyleName();
         oskariStyle.id = styleId;
@@ -377,7 +377,8 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             name: name,
             style: oskariStyle
         };
-        this.userStyleService.saveUserStyle(layerId, styleWithMetadata);
+        layer.saveUserStyle(styleWithMetadata);
+        this.userStyleService.saveUserStyle(layer.getId(), styleWithMetadata);
     }
 };
 

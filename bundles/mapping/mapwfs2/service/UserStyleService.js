@@ -43,12 +43,11 @@ export class UserStyleService {
 
     removeUserStyleFromLayer (layerId, styleId) {
         const layer = Oskari.getSandbox().findMapLayerFromSelectedMapLayers(layerId);
-        if (layer && layer.getCustomStyle() && layer.getCustomStyle().id === styleId) {
-            layer.resetStyleToDefault();
-            Oskari.getSandbox().postRequestByName('ChangeMapLayerStyleRequest', [layerId]);
+        if (!layer) {
+            return;
         }
+        layer.removeStyle(styleId);
     }
-
     getQName () {
         return 'Oskari.mapframework.bundle.mapwfs2.service.UserStyleService';
     }
