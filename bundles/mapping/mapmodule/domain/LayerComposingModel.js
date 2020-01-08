@@ -1,18 +1,34 @@
 const PROPERTY_FIELDS = [
     'URL',
+    'CREDENTIALS',
+    'API_KEY',
     'NAME',
+    'TILE_MATRIX',
     'LOCALIZED_NAMES',
     'ORGANIZATION_NAME',
     'GROUPS',
+    'SRS',
+    'SELECTED_TIME',
+    'REALTIME',
+    'REFRESH_RATE',
+    'LEGEND_URL',
     'OPACITY',
     'SCALE',
     'STYLE',
     'STYLE_JSON',
+    'EXT_STYLE_JSON',
     'HOVER_JSON',
-    'CREDENTIALS',
+    'CLUSTERING_DISTANCE',
     'METAINFO',
+    'WFS_RENDER_MODE',
+    'WFS_JOB_TYPE',
+    'WFS_IS_RESOLVE_DEPTH',
+    'GFI_RESPONSE_TYPE',
+    'GFI_XSLT',
     'GFI_CONTENT',
-    'ATTRIBUTES'
+    'CAPABILITIES_UPDATE_RATE',
+    'ATTRIBUTES',
+    'ATTRIBUTIONS'
 ];
 
 // Common fields are enforced on composing model.
@@ -22,8 +38,7 @@ const COMMON_PROPERTY_FIELDS = [
     'ORGANIZATION_NAME',
     'GROUPS',
     'OPACITY',
-    'SCALE',
-    'ATTRIBUTES'
+    'SCALE'
 ];
 
 const ALL_VERSIONS = 'all';
