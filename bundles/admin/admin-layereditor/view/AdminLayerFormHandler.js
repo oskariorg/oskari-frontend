@@ -1,6 +1,7 @@
 import { stringify } from 'query-string';
 import { getLayerHelper } from './LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './AdminLayerForm/PermissionUtil';
 
 class UIHandler extends StateHandler {
     constructor (consumer) {
@@ -220,6 +221,8 @@ class UIHandler extends StateHandler {
             return response.json();
         }).then(json => {
             const layer = this.layerHelper.fromServer(json.layer);
+            // Add 'role' all to permissions for UI state handling purposes
+            layer.role_permissions.all = [];
             const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
             this.updateState({
                 layer,
@@ -276,7 +279,8 @@ class UIHandler extends StateHandler {
         const layer = { ...this.getState().layer };
         const layerGroups = layer.maplayerGroups;
         layer.maplayerGroups = layer.maplayerGroups.map(cur => cur.id).join(',');
-
+        // Remove role 'all' from permissions as this was only used for UI state handling purposes
+        delete layer.role_permissions.all;
         const validationErrorMessages = this.validateUserInputValues(layer);
 
         if (validationErrorMessages.length > 0) {
@@ -451,6 +455,17 @@ class UIHandler extends StateHandler {
             messages: []
         });
     }
+
+    handlePermission (checked, role, permission) {
+        const layer = this.getState().layer;
+        role === roleAll
+            ? handlePermissionForAllRoles(checked, layer.role_permissions, permission)
+            : handlePermissionForSingleRole(layer.role_permissions[role], permission);
+
+        this.updateState({
+            layer: layer
+        });
+    }
 }
 
 const wrapped = controllerMixin(UIHandler, [
@@ -472,6 +487,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setGfiContent',
     'setAttributes',
     'setMessage',
-    'setMessages'
+    'setMessages',
+    'handlePermission'
 ]);
 export { wrapped as AdminLayerFormHandler };

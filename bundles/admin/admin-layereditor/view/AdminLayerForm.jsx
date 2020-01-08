@@ -44,7 +44,8 @@ const AdminLayerForm = ({
             <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
                 <PermissionsTabPane
                     rolesAndPermissionTypes={rolesAndPermissionTypes}
-                    permissions={layer.role_permissions} />
+                    permissions={layer.role_permissions}
+                    controller={controller}/>
             </TabPane>
         </Tabs>
         <PaddedButton type='primary' onClick={() => onSave()}>

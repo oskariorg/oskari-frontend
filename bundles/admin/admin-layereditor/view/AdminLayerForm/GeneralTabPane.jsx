@@ -80,6 +80,10 @@ const GeneralTabPane = (props) => {
                 onChange={controller.setLocalizedNames}
                 LabelComponent={PaddedLabel}
             >
+                {/*
+                    The inputs have to be on direct children for LocalizationComponent.
+                    Can't wrap them to <StyledComponent>.
+                */}
                 <TextInput type='text' name='name'/>
                 <Padding/>
                 <TextInput type='text' name='description'/>
