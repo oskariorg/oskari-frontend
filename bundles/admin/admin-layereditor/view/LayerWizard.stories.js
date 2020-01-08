@@ -56,7 +56,7 @@ service.capabilities = {
     unsupportedLayers: ['till']
 };
 const localeProviderOptions = { bundleKey: 'admin-layereditor' };
-const layerTypes = service.getLayerTypes();
+const layerTypes = ['wfslayer'];
 const capabilities = service.getCapabilities();
 
 // const sandbox = Oskari.getSandbox();
@@ -112,6 +112,7 @@ storiesOf('LayerWizard', module)
                     layer={layer}
                     capabilities={capabilities}
                     layerTypes={layerTypes}
+                    versions={['1.1.0', '2.0.0']}
                     controller={service.getController()}>
                         Not shown
                 </LayerWizard>
