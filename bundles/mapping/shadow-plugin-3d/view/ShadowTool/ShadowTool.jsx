@@ -73,7 +73,7 @@ export const ShadowTool = ({ controller, date, time }) => {
 
     const changeTime = val => {
         if (validateTime(val)) {
-            controller.setTime(val);
+            controller.requestNewTime(val);
             setSliderTime(sliderValueForTime(val));
         }
         setTime(val);
@@ -81,7 +81,7 @@ export const ShadowTool = ({ controller, date, time }) => {
 
     const changeDate = val => {
         if (validateDate(val)) {
-            controller.setDate(val);
+            controller.requestNewDate(val);
             setSliderDate(sliderValueForDate(val));
         }
         setDate(val);
@@ -92,7 +92,7 @@ export const ShadowTool = ({ controller, date, time }) => {
         setDate(d);
         setSliderDate(sliderValueForDate(d));
         setSliderTime(sliderValueForTime(t));
-        controller.setTimeAndDate(d, t);
+        controller.requestNewTimeAndDate(d, t);
     };
 
     return (

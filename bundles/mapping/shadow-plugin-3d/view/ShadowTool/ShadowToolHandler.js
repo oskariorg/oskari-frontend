@@ -20,15 +20,15 @@ class UIService extends StateHandler {
         this.updateState({ time, date });
     }
 
-    setTime (time) {
-        this.setTimeAndDate(this.getState().date, time);
+    requestNewTime (time) {
+        this.requestNewTimeAndDate(this.getState().date, time);
     }
 
-    setDate (date) {
-        this.setTimeAndDate(date, this.getState().time);
+    requestNewDate (date) {
+        this.requestNewTimeAndDate(date, this.getState().time);
     }
 
-    setTimeAndDate (date, time) {
+    requestNewTimeAndDate (date, time) {
         this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
     }
 
@@ -56,7 +56,7 @@ class UIService extends StateHandler {
 }
 
 export const ShadowToolHandler = controllerMixin(UIService, [
-    'setTime',
-    'setDate',
-    'setTimeAndDate'
+    'requestNewTime',
+    'requestNewDate',
+    'requestNewTimeAndDate'
 ]);
