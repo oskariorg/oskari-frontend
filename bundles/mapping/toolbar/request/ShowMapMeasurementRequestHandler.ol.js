@@ -14,24 +14,9 @@ Oskari.clazz.define(
      *          reference to toolbarInstance that handles the buttons
      */
     function (toolbar) {
-        var me = this;
-        me._toolbar = toolbar;
-
-        var loc = me._toolbar.getLocalization('measure');
-        var title = loc.title;
-        me._title = title;
-        me._dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-        me._dialog.addClass('oskari-measurement');
-
-        var buttons = [];
-        var cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
-
-        cancelBtn.setTitle(loc.close);
-
-        buttons.push(cancelBtn);
-        me._buttons = buttons;
-        me._dialogShown = false;
-        me._content = null;
+        this._toolbar = toolbar;
+        this._loc = toolbar.getLocalization('measure');
+        this._dialog = null;
     }, {
         /**
          * @method handleRequest
@@ -51,45 +36,56 @@ Oskari.clazz.define(
          * @method _showMeasurementResults
          */
         _showMeasurementResults: function (value) {
-            var me = this;
-            var dialog = me._dialog;
-
             // show measurements in toolbar's content container
-            if (me._toolbar.conf.hasContentContainer) {
-                me._showResultsInPlugin(value);
-            } else {
-                // if there is no content container, show the data in dialog
-                if (!me._dialogShown) {
-                    dialog.show(me._title, '', me._buttons);
-                    var cancelBtn = me._buttons[0];
-                    cancelBtn.setHandler(function () {
-                        me.stopMeasuring(true);
-                    });
-
-                    dialog.moveTo('#toolbar div.toolrow[tbgroup=default-basictools]', 'top');
-                    me._content = jQuery('<div></div>');
-                    dialog.setContent(me._content);
-                    me._dialogShown = true;
-                }
-
-                me._content.html(value);
+            if (this._toolbar.conf.hasContentContainer) {
+                this._showResultsInPlugin(value);
+                return;
             }
+            // if there is no content container, show the data in dialog
+            if (this._dialog) {
+                this._dialog.setContent(value);
+                return;
+            }
+
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            dialog.addClass('oskari-measurement');
+            const closeBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            const clearBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            closeBtn.setTitle(this._loc.close);
+            closeBtn.setHandler(() => this.stopMeasuring(true));
+            clearBtn.setTitle(this._loc.clear);
+            clearBtn.setHandler(() => this._clearMeasurements());
+            dialog.show(this._loc.title, value, [clearBtn, closeBtn]);
+            dialog.moveTo('#toolbar div.toolrow[tbgroup=default-basictools]', 'top');
+            this._dialog = dialog;
         },
         stopMeasuring: function (selectDefault) {
             var me = this;
-            if (me._toolbar.currentMeasureTool) {
-                me._toolbar.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', [me._toolbar.currentMeasureTool, true]);
+            if (this._dialog) {
+                this._dialog.close(true);
+                this._dialog = null;
             }
-            if (me._dialogShown) {
-                me._dialogShown = false;
-                me._dialog.close(true);
+            if (this._toolbar.currentMeasureTool) {
+                Oskari.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', ['mapmeasure', true, true]);
             }
             if (!selectDefault) {
                 return;
             }
             // ask toolbar to select default tool
             var toolbarRequest = Oskari.requestBuilder('Toolbar.SelectToolButtonRequest')();
-            me._toolbar.getSandbox().request(me._toolbar, toolbarRequest);
+            Oskari.getSandbox().request(me._toolbar, toolbarRequest);
+        },
+        _clearMeasurements: function () {
+            // Clear measurements and continue drawing
+            Oskari.getSandbox().postRequestByName('DrawTools.StopDrawingRequest', ['mapmeasure', true, true]);
+            const tool = this._toolbar.currentMeasureTool;
+            if (tool) {
+                const shape = tool === 'measureline' ? 'LineString' : 'Polygon';
+                Oskari.getSandbox().postRequestByName('DrawTools.StartDrawingRequest', ['mapmeasure', shape, {
+                    allowMultipleDrawing: true,
+                    showMeasureOnMap: true
+                }]);
+            }
         },
         /**
          * @method update
@@ -99,7 +95,8 @@ Oskari.clazz.define(
             var me = this;
             var toolContainerRequest;
             if (!me.toolContentDivData) {
-                var cancelBtn = me._buttons[0];
+                const cancelBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+                cancelBtn.setTitle(this._loc.close);
                 cancelBtn.setHandler(function () {
                     me.stopMeasuring(true);
                     me._hideResultsInPlugin(true);
@@ -108,9 +105,9 @@ Oskari.clazz.define(
                 // store data for later reuse
                 me.toolContentDivData = {
                     className: 'measureline',
-                    title: me._title,
+                    title: this.loc.title,
                     content: jQuery('<div></div>'),
-                    buttons: me._buttons
+                    buttons: [cancelBtn]
                 };
 
                 toolContainerRequest = Oskari.requestBuilder(
