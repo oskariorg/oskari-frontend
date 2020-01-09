@@ -27,7 +27,16 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
         this._popupTemplate = jQuery('<div></div>');
-        this.stateHandler = new ShadowToolHandler(this.instance);
+
+        const sandbox = this.instance.getSandbox();
+        const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        // only usable with the 3d map/Cesium
+        const initialTime = Cesium.JulianDate.toDate(mapmodule.getTime());
+        this.stateHandler = new ShadowToolHandler(sandbox, initialTime);
+        // handle state change
+        this.stateHandler.addStateListener(() => {
+
+        });
     }
     getName () {
         return className;
