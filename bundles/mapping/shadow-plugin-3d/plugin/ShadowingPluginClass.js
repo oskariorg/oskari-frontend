@@ -16,8 +16,6 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._clazz = className;
         this._name = 'ShadowingPlugin';
         this._defaultLocation = 'top right';
-        this._time = null;
-        this._date = null;
         this._log = Oskari.log(className);
         this.loc = Oskari.getMsg.bind(null, 'ShadowingPlugin3d');
         this._toolOpen = false;
@@ -32,11 +30,9 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         // only usable with the 3d map/Cesium
         const initialTime = Cesium.JulianDate.toDate(mapmodule.getTime());
-        this.stateHandler = new ShadowToolHandler(sandbox, initialTime);
-        // handle state change
-        this.stateHandler.addStateListener(() => {
-
-        });
+        this.stateHandler = new ShadowToolHandler((date, time) => {
+            sandbox.postRequestByName('SetTimeRequest', [date, time]);
+        }, initialTime);
     }
     getName () {
         return className;
@@ -58,8 +54,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     _createEventHandlers () {
         return {
             TimeChangedEvent: function (event) {
-                this._time = event.getTime();
-                this._date = event.getDate();
+                this.stateHandler.update(event.getDate(), event.getTime());
             }
         };
     }

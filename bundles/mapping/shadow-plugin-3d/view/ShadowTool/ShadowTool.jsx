@@ -92,7 +92,7 @@ export const ShadowTool = ({ controller, date, time }) => {
         setDate(d);
         setSliderDate(sliderValueForDate(d));
         setSliderTime(sliderValueForTime(t));
-        controller.requestNewTimeAndDate(d, t);
+        controller.requestNewDateAndTime(d, t);
     };
 
     return (
