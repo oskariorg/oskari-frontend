@@ -63,7 +63,7 @@ Oskari.registerLocalization(
             "metaInfoIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "metaInfoId": "Metatiedon tiedostotunniste",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
-            "attributes": "Ominaisuudet",
+            "attributes": "Attribuutit",
             "messages": {
                 "saveSuccess": "Tallennettu",
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
@@ -71,7 +71,7 @@ Oskari.registerLocalization(
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
                 "invalidStyleJson" : "Style JSON-syntaksi on virheellinen.",
                 "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
-                "invalidAttributeJson" : "Ominaisuudet kentän JSON-syntaksi on virheellinen.",
+                "invalidAttributeJson" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut"
             },
