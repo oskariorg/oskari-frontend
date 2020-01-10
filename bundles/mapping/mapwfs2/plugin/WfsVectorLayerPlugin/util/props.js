@@ -14,11 +14,7 @@ function destructComplex (value) {
 function removeComplexPrefix (field) {
     return field.startsWith('$') ? field.substring(1) : field;
 }
-function sortedFieldsFromProps (properties) {
-    const fields = fieldsFromProps(properties);
-    fields.sort((a, b) => removeComplexPrefix(a).localeCompare(removeComplexPrefix(b)));
-    return fields;
-}
+
 function fieldsFromProps (properties) {
     return Object.keys(properties).filter(key => !hiddenProps.has(removeComplexPrefix(key)));
 }
