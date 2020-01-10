@@ -6,6 +6,7 @@ import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from './StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
+import { SrsSettings } from './GeneralTabPane/SrsSettings';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -17,7 +18,7 @@ const Padding = styled('div')`
 `;
 
 const GeneralTabPane = (props) => {
-    const { mapLayerGroups, dataProviders, layer, propertyFields, bundleKey, controller } = props;
+    const { mapLayerGroups, dataProviders, layer, capabilities, propertyFields, bundleKey, controller } = props;
     const credentialProps = {
         allowCredentials: propertyFields.includes(LayerComposingModel.CREDENTIALS),
         defaultOpen: false,
@@ -113,6 +114,13 @@ const GeneralTabPane = (props) => {
     return (
         <StyledTab>
             { propertyFields.includes(LayerComposingModel.URL) && urlInput }
+            { propertyFields.includes(LayerComposingModel.SRS) &&
+                <SrsSettings
+                    layer={layer}
+                    propertyFields={propertyFields}
+                    capabilities={capabilities}
+                    onChange={forcedSRS => controller.setForcedSRS(forcedSRS)} />
+            }
             { propertyFields.includes(LayerComposingModel.NAME) && nameInput }
             { propertyFields.includes(LayerComposingModel.LOCALIZED_NAMES) && localizedNamesInput }
             { propertyFields.includes(LayerComposingModel.ORGANIZATION_NAME) && dataProviderInput }
@@ -125,7 +133,8 @@ GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    layer: PropTypes.object,
+    layer: PropTypes.object.isRequired,
+    capabilities: PropTypes.object,
     bundleKey: PropTypes.string.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

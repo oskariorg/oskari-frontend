@@ -64,6 +64,11 @@ Oskari.registerLocalization(
             "metaInfoId": "Metatiedon tiedostotunniste",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
             "attributes": "Ominaisuudet",
+            "forcedSRS": "Pakotetut projektiot",
+            "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
+            "supportedSRS": "Tuetut projektiot",
+            "missingSRS": "Puuttuvat projektiot",
+            "missingSRSInfo": "Sovelluksen oletusnäkymien projektiot, joita taso ei tue",
             "messages": {
                 "saveSuccess": "Tallennettu",
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",

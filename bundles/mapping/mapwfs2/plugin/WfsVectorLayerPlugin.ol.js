@@ -97,6 +97,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             LayerComposingModel.URL,
             LayerComposingModel.CREDENTIALS,
             LayerComposingModel.SRS,
+            LayerComposingModel.CAPABILITIES,
             LayerComposingModel.CLUSTERING_DISTANCE,
             LayerComposingModel.STYLE,
             LayerComposingModel.STYLE_JSON,

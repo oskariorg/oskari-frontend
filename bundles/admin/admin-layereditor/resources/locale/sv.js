@@ -63,6 +63,11 @@ Oskari.registerLocalization(
             "metaInfoId": "Metadatans filtagg",
             "gfiContent": "Tilläggande text för GFI-dialog",
             "attributes": "Attribut",
+            "forcedSRS": "Tvingade SRS",
+            "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
+            "supportedSRS": "Stöd SRS",
+            "missingSRS": "Saknade SRS",
+            "missingSRSInfo": "Denna kartlager stöder inte vissa applikationens standardprojektioner",
             "messages": {
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",

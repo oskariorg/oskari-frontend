@@ -1,3 +1,4 @@
+import { Select } from 'oskari-ui';
 import styled from 'styled-components';
 
 export const StyledRoot = styled('div')`
@@ -18,6 +19,9 @@ export const StyledComponentGroup = styled('div')`
 export const StyledComponent = styled('div')`
     padding-top: 5px;
     padding-bottom: 10px;
+    & ${Select} {
+        width: 100%;
+    }
 `;
 
 export const StyledColumnLeft = styled('div')`
