@@ -3,8 +3,6 @@ import { getLayerHelper } from './LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './AdminLayerForm/PermissionUtil';
 
-const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
-
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
