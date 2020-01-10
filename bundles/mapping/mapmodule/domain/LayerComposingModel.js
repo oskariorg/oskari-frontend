@@ -36,7 +36,8 @@ const COMMON_PROPERTY_FIELDS = [
     'ORGANIZATION_NAME',
     'GROUPS',
     'OPACITY',
-    'SCALE'
+    'SCALE',
+    'ATTRIBUTES'
 ];
 
 const ALL_VERSIONS = 'all';

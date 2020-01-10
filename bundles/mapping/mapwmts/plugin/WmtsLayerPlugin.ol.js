@@ -44,8 +44,7 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 LayerComposingModel.GFI_RESPONSE_TYPE,
                 LayerComposingModel.GFI_XSLT,
                 LayerComposingModel.GFI_CONTENT,
-                LayerComposingModel.CAPABILITIES_UPDATE_RATE,
-                LayerComposingModel.ATTRIBUTES
+                LayerComposingModel.CAPABILITIES_UPDATE_RATE
             ], ['1.0.0']);
             mapLayerService.registerLayerModel(this.layertype, className, composingModel);
             layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');

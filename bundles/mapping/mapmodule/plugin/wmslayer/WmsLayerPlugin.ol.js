@@ -46,8 +46,7 @@ Oskari.clazz.define(
                 LayerComposingModel.GFI_RESPONSE_TYPE,
                 LayerComposingModel.GFI_XSLT,
                 LayerComposingModel.GFI_CONTENT,
-                LayerComposingModel.CAPABILITIES_UPDATE_RATE,
-                LayerComposingModel.ATTRIBUTES
+                LayerComposingModel.CAPABILITIES_UPDATE_RATE
             ], ['1.1.1', '1.3.0']);
             const type = this.getLayerTypeSelector().toLowerCase() + 'layer';
             mapLayerService.registerLayerModel(type, layerClass, composingModel);
