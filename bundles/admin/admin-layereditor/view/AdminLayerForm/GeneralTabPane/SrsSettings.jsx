@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option, Message, Tooltip, Icon } from 'oskari-ui';
+import { Select, Option, Message, Tooltip, Icon, Tag } from 'oskari-ui';
 import { LocaleConsumer } from 'oskari-ui/util';
 import { StyledComponent } from '../StyledFormComponents';
 import styled from 'styled-components';
@@ -21,25 +21,39 @@ const InfoIcon = styled(Icon)`
     margin-left: 10px;
 `;
 
-const CapabilitiesSrsInfo = LocaleConsumer(({ missing, supported }) => {
+const EpsgCodeTags = ({ codes }) => {
+    if (!codes || !Array.isArray(codes) || codes.length === 0) {
+        return null;
+    }
     return (
-        <FlexRow>
-            <div>
-                <Message messageKey='supportedSRS' />
-                <StyledComponent>
-                    { supported.join(', ') }
-                </StyledComponent>
-            </div>
-            <div>
-                <Message messageKey='missingSRS' />
-                <Tooltip title={<Message messageKey='missingInfo'/>}>
-                    <InfoIcon type="question-circle" />
-                </Tooltip>
-                <StyledComponent>
-                    { missing.join(', ') }
-                </StyledComponent>
-            </div>
-        </FlexRow>
+        <StyledComponent>
+            { codes.map((epsg, i) => <Tag key={i}>{epsg}</Tag>) }
+        </StyledComponent>
+    );
+};
+EpsgCodeTags.propTypes = {
+    codes: PropTypes.any
+};
+
+const SupportedSRS = LocaleConsumer(({ epsgCodes }) => (
+    <div>
+        <Message messageKey='supportedSRS' />
+        <EpsgCodeTags codes={epsgCodes} />
+    </div>
+));
+
+const MissingSRS = LocaleConsumer(({ epsgCodes }) => {
+    if (!epsgCodes || !Array.isArray(epsgCodes) || epsgCodes.length === 0) {
+        return null;
+    }
+    return (
+        <div>
+            <Message messageKey='missingSRS' />
+            <Tooltip title={<Message messageKey='missingSRSInfo'/>}>
+                <InfoIcon type="question-circle" />
+            </Tooltip>
+            <EpsgCodeTags codes={epsgCodes} />
+        </div>
     );
 });
 
@@ -58,7 +72,10 @@ const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange }) => 
     return (
         <Fragment>
             { propertyFields.includes(LayerComposingModel.CAPABILITIES) &&
-                <CapabilitiesSrsInfo supported={supported} missing={missing} />
+                <FlexRow>
+                    <SupportedSRS epsgCodes={supported}/>
+                    <MissingSRS epsgCodes={missing}/>
+                </FlexRow>
             }
             <Message messageKey='forcedSRS' />
             <Tooltip title={<Message messageKey='forcedSRSInfo'/>}>
@@ -66,7 +83,7 @@ const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange }) => 
             </Tooltip>
             <StyledComponent>
                 <Select mode='tags' value={forced} onChange={onChange}>
-                    { systemProjections.map((cur, i) => <Option key={`sysproj_${i}`}>{cur}</Option>) }
+                    { systemProjections.map((cur, i) => <Option key={i}>{cur}</Option>) }
                 </Select>
             </StyledComponent>
         </Fragment>
