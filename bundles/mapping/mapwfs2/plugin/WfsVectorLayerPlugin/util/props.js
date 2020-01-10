@@ -15,9 +15,12 @@ function removeComplexPrefix (field) {
     return field.startsWith('$') ? field.substring(1) : field;
 }
 function sortedFieldsFromProps (properties) {
-    const fields = Object.keys(properties).filter(key => !hiddenProps.has(removeComplexPrefix(key)));
+    const fields = fieldsFromProps(properties);
     fields.sort((a, b) => removeComplexPrefix(a).localeCompare(removeComplexPrefix(b)));
     return fields;
+}
+function fieldsFromProps (properties) {
+    return Object.keys(properties).filter(key => !hiddenProps.has(removeComplexPrefix(key)));
 }
 
 function propsArrayFrom (properties, fields) {
@@ -37,7 +40,7 @@ export function getFieldsArray (propsList) {
     if (!propsList.length) {
         return [];
     }
-    let fields = sortedFieldsFromProps(propsList[0]);
+    let fields = fieldsFromProps(propsList[0]);
     fields = fields.map(removeComplexPrefix);
     fields.unshift(WFS_FTR_ID_KEY);
     return fields;
