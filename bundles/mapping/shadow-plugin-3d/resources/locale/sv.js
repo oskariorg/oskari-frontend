@@ -4,7 +4,12 @@ Oskari.registerLocalization(
         "key": "ShadowingPlugin3d",
         "value": {
             "title": "Skuggning",
-            "present": "Nutid"
+            "present": "Nutid",
+            "speeds": {
+                "slow": "Långsam",
+                "normal": "Normal",
+                "fast": "Snabb"
+            }
         }
     }
 );

@@ -4,7 +4,12 @@ Oskari.registerLocalization(
         "key": "ShadowingPlugin3d",
         "value": {
             "title": "Shadowing",
-            "present": "Present"
+            "present": "Present",
+            "speeds": {
+                "slow": "Slow",
+                "normal": "Normal",
+                "fast": "Fast"
+            }
         }
     }
 );

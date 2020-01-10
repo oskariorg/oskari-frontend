@@ -111,7 +111,7 @@ class UIService extends StateHandler {
     }
 }
 
-// Add getMutator function to the service. List which functions are available for the components.
+// Add getController function to the service. List which functions are available for the components.
 // controllerMixin extends the service by adding getController function. The function returns a Controller object.
 const UIHandler = controllerMixin(UIService, [
     'setValue',

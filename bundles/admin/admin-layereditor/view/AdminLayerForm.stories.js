@@ -1,7 +1,7 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
 import { AdminLayerForm } from './AdminLayerForm';
-import { AdminLayerFormService } from './AdminLayerFormService';
+import { AdminLayerFormHandler } from './AdminLayerFormHandler';
 
 import '../../../../src/global';
 import '../../../mapping/mapmodule/service/map.state';
@@ -20,14 +20,14 @@ const AbstractLayer = Oskari.clazz.get('Oskari.mapframework.domain.AbstractLayer
 
 const locale = Oskari.getMsg.bind(null, 'admin-layereditor');
 // Message parameters causes missing library errors, skip them.
-const customGetMessageImpl = (key, ...ingnoredMessageParams) => locale(key);
+const customGetMessageImpl = (key, ...ignoredMessageParams) => locale(key);
 
 const layer = new AbstractLayer();
 layer.setAdmin({});
 layer.setGroups([]);
 
 const dummyRefresh = () => console.log('State update');
-const service = new AdminLayerFormService(dummyRefresh);
+const service = new AdminLayerFormHandler(dummyRefresh);
 service.initLayerState(layer);
 
 storiesOf('AdminLayerForm', module)
