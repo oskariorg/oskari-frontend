@@ -4,7 +4,12 @@ Oskari.registerLocalization(
         "key": "ShadowingPlugin3d",
         "value": {
             "title": "Varjostus",
-            "present": "Nykyhetki"
+            "present": "Nykyhetki",
+            "speeds": {
+                "slow": "Hidas",
+                "normal": "Normaali",
+                "fast": "Nopea"
+            }
         }
     }
 );

@@ -1,69 +1,117 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'oskari-ui/util';
-import { Background, StyledIcon, Row, Col, StyledInput, StyledButton } from './ShadowToolStyled';
+import { Background } from './ShadowToolStyled';
+import { ShadowToolTime } from './ShadowToolTime';
+import { ShadowToolDate } from './ShadowToolDate';
+import { validateDate, validateTime, sliderValueForDate, sliderValueForTime } from './ShadowToolUtil';
+import moment from 'moment';
+
+// Helper function using react-hooks to manipulate setInterval
+function useInterval (callback, delay) {
+    const savedCallback = useRef();
+
+    useEffect(() => {
+        savedCallback.current = callback;
+    }, [callback]);
+
+    useEffect(() => {
+        function tick () {
+            savedCallback.current();
+        }
+        if (delay !== null) {
+            let id = setInterval(tick, delay);
+            return () => clearInterval(id);
+        }
+    }, [delay]);
+}
 
 export const ShadowTool = ({ controller, date, time }) => {
-    const [timeValue, setTime] = React.useState(time);
-    const [dateValue, setDate] = React.useState(date);
-    const setCurrentTime = () => {
-        const d = new Date();
-        const curTime = `${d.getHours()}:${d.getMinutes()}`;
-        const curDate = `${d.getDate()}/${d.getMonth() + 1}`;
-        setTime(curTime);
-        setDate(curDate);
-        controller.setCurrentTime(curDate, curTime);
-    };
+    const [timeValue, setTime] = useState(time);
+    const [dateValue, setDate] = useState(date);
+    const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
+    const [sliderDateValue, setSliderDate] = useState(sliderValueForDate(date));
+    const [playing, setPlaying] = useState(false);
+    const [speed, setSpeed] = useState('normal');
 
-    const validateTime = (target) => {
-        const regex = /^(0[0-9]|1[0-9]|2[0-3]|[0-9]):[0-5][0-9]$/;
-        return regex.test(target);
-    };
-
-    const validateDate = (target) => {
-        const matches = /^(0[1-9]|1[0-9]|2[0-9]|3[0-1]|[1-9])[/](0[1-9]|1[0-2]|[1-9])$/.exec(target);
-        if (matches === null) {
-            return false;
+    useInterval(() => {
+        let nextTime;
+        let nextDate;
+        switch (speed) {
+        case 'normal':
+            nextTime = addMinutes(6);
+            nextDate = calculateNextDay(nextTime);
+            break;
+        case 'fast':
+            nextTime = addMinutes(30);
+            nextDate = calculateNextDay(nextTime);
+            break;
+        case 'slow':
+        default:
+            nextTime = addMinutes(1);
+            nextDate = calculateNextDay(nextTime);
+            break;
         }
-        const d = parseInt(matches[1]);
-        const m = matches[2] - 1;
-        const dateObject = new Date(2019, m, d);
-        return dateObject.getDate() === d && dateObject.getMonth() === m;
+        changeTimeAndDate(nextTime, nextDate);
+    }, playing ? 50 : null);
+
+    const calculateNextDay = (nextTime) => {
+        const nextDate = nextTime < timeValue ? addDays(1) : dateValue;
+        if (nextDate === '1/1' && nextDate !== dateValue) {
+            setPlaying(false);
+        }
+        return nextDate;
     };
 
-    const changeTime = event => {
-        const val = event.target.value;
+    const addMinutes = (minutes) => {
+        return moment.utc(timeValue, 'HH:mm').add(minutes, 'minutes').format('HH:mm');
+    };
+
+    const addDays = (days) => {
+        return moment.utc(dateValue, 'D/M').add(days, 'day').format('D/M');
+    };
+
+    const changeTime = val => {
         if (validateTime(val)) {
-            controller.setTime(val);
+            controller.requestNewTime(val);
+            setSliderTime(sliderValueForTime(val));
         }
         setTime(val);
     };
 
-    const changeDate = event => {
-        const val = event.target.value;
+    const changeDate = val => {
         if (validateDate(val)) {
-            controller.setDate(val);
+            controller.requestNewDate(val);
+            setSliderDate(sliderValueForDate(val));
         }
-        setDate(event.target.value);
+        setDate(val);
+    };
+
+    const changeTimeAndDate = (t, d) => {
+        setTime(t);
+        setDate(d);
+        setSliderDate(sliderValueForDate(d));
+        setSliderTime(sliderValueForTime(t));
+        controller.requestNewDateAndTime(d, t);
     };
 
     return (
         <Background>
-            <Row>
-                <Col>
-                    <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-                    <StyledInput value={dateValue} onChange={changeDate} />
-                </Col>
-                <Col>
-                    <StyledButton onClick={setCurrentTime}>Nykyhetki</StyledButton>
-                </Col>
-            </Row>
-            <Row style={{ marginTop: '20px' }}>
-                <Col>
-                    <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-                    <StyledInput value={timeValue} onChange={changeTime} />
-                </Col>
-            </Row>
+            <ShadowToolDate
+                changeHandler={changeDate}
+                sliderDateValue={sliderDateValue}
+                dateValue={dateValue}
+                currentTimeHandler={changeTimeAndDate}
+            />
+            <ShadowToolTime
+                changeHandler={changeTime}
+                timeValue={timeValue}
+                sliderTimeValue={sliderTimeValue}
+                playing={playing}
+                playHandler={setPlaying}
+                speedHandler={setSpeed}
+                speed={speed}
+            />
         </Background>
     );
 };
