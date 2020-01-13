@@ -95,10 +95,11 @@ export class LayerEditorFlyout extends ExtraFlyout {
                     }}>
                     <AdminLayerForm
                         layer={layer}
+                        controller={controller}
+                        capabilities={capabilities}
                         propertyFields={propertyFields}
                         mapLayerGroups={this.mapLayerGroups}
                         dataProviders={this.dataProviders}
-                        controller={controller}
                         messages={messages}
                         rolesAndPermissionTypes={rolesAndPermissionTypes}
                         onDelete={() => this.uiHandler.deleteLayer()}

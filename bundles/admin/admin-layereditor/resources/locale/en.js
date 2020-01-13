@@ -63,6 +63,11 @@ Oskari.registerLocalization(
             "metaInfoId": "Metadata file identifier",
             "gfiContent": "Additional GFI info",
             "attributes": "Attributes",
+            "forcedSRS": "Forced SRS",
+            "forcedSRSInfo": "View projections override compared to capabilities",
+            "supportedSRS": "Supported SRS",
+            "missingSRS": "Missing SRS",
+            "missingSRSInfo": "App default view projections not supported by layer",
             "messages": {
                 "saveSuccess": "Saved",
                 "saveFailed": "A system error occurred. Data has not been updated.",

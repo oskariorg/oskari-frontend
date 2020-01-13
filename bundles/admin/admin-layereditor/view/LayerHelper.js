@@ -105,8 +105,9 @@ export const getLayerHelper = (supportedLanguages) => {
     /**
      * Returns an object for admin functionality where data has been collected from server response
      * @param {Object} layer from server response
+     * @param {Object} options
      */
-    const fromServer = (layer) => {
+    const fromServer = (layer, options = {}) => {
         /*
          TODO: styles are layer type specific things:
         - for WMS these are in capabilities
@@ -126,17 +127,17 @@ export const getLayerHelper = (supportedLanguages) => {
             styles: availableStyles,
             isNew: !layer.id
         };
-        delete transformed.organization_id;
-        delete transformed.organization;
-        delete transformed.groups;
-        delete transformed.locale;
         // FIXME: do something with these / layer specific stuff
-        // FIXME: https://github.com/oskariorg/oskari-server/pull/461 "Assumes that frontend passes capabilities json back when requesting insert or update."
-        delete transformed.capabilities;
-        // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
-        delete transformed.gfiContent;
         // server response has role_permissions:
         // role_permissions: {Admin: [], User: [], Guest: [],…}
+        let removeKeys = ['organization_id', 'organization', 'groups', 'locale'];
+        // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
+        removeKeys.push('gfiContent');
+
+        if (Array.isArray(options.preserve)) {
+            removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
+        }
+        removeKeys.forEach(key => delete transformed[key]);
         return transformed;
     };
 

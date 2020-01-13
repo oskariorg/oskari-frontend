@@ -21,6 +21,7 @@ const AdminLayerForm = ({
     mapLayerGroups,
     dataProviders,
     layer,
+    capabilities,
     propertyFields,
     messages = [],
     onCancel,
@@ -33,7 +34,13 @@ const AdminLayerForm = ({
         { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
         <Tabs>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
-                <GeneralTabPane dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} layer={layer} propertyFields={propertyFields} controller={controller} />
+                <GeneralTabPane
+                    dataProviders={dataProviders}
+                    mapLayerGroups={mapLayerGroups}
+                    layer={layer}
+                    capabilities={capabilities}
+                    propertyFields={propertyFields}
+                    controller={controller} />
             </TabPane>
             <TabPane key='visual' tab={<Message messageKey='visualizationTabTitle'/>}>
                 <VisualizationTabPane layer={layer} propertyFields={propertyFields} controller={controller} />
@@ -77,6 +84,7 @@ AdminLayerForm.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
+    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     messages: PropTypes.array,
     onCancel: PropTypes.func,

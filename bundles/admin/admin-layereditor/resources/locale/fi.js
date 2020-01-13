@@ -63,6 +63,11 @@ Oskari.registerLocalization(
             "metaInfoIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "metaInfoId": "Metatiedon tiedostotunniste",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
+            "forcedSRS": "Pakotetut projektiot",
+            "forcedSRSInfo": "Pakotetut projektiot verrattuna GetCapabilites-määritykseen",
+            "supportedSRS": "Tuetut projektiot",
+            "missingSRS": "Puuttuvat projektiot",
+            "missingSRSInfo": "Sovelluksen oletusnäkymien projektiot, joita taso ei tue",
             "attributes": "Attribuutit",
             "messages": {
                 "saveSuccess": "Tallennettu",
