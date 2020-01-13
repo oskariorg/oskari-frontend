@@ -32,17 +32,20 @@ const EpsgCodeTags = ({ codes }) => {
     );
 };
 EpsgCodeTags.propTypes = {
-    codes: PropTypes.any
+    codes: PropTypes.arrayOf(PropTypes.string)
 };
 
-const SupportedSRS = LocaleConsumer(({ epsgCodes }) => (
+const SupportedSRS = ({ epsgCodes }) => (
     <div>
         <Message messageKey='supportedSRS' />
         <EpsgCodeTags codes={epsgCodes} />
     </div>
-));
+);
+SupportedSRS.propTypes = {
+    epsgCodes: PropTypes.arrayOf(PropTypes.string)
+};
 
-const MissingSRS = LocaleConsumer(({ epsgCodes }) => {
+const MissingSRS = ({ epsgCodes }) => {
     if (!epsgCodes || !Array.isArray(epsgCodes) || epsgCodes.length === 0) {
         return null;
     }
@@ -55,10 +58,12 @@ const MissingSRS = LocaleConsumer(({ epsgCodes }) => {
             <EpsgCodeTags codes={epsgCodes} />
         </div>
     );
-});
+};
+MissingSRS.propTypes = {
+    epsgCodes: PropTypes.arrayOf(PropTypes.string)
+};
 
-const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange }) => {
-    console.log(capabilities);
+export const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange }) => {
     const systemProjections = Array.from(new Set(Oskari.app.getSystemDefaultViews().map(view => view.srsName)));
     const forced = layer.attributes ? layer.attributes.forcedSRS || [] : [];
     let supported = [];
@@ -96,6 +101,3 @@ SrsSettings.propTypes = {
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     onChange: PropTypes.func
 };
-
-const contextWrap = LocaleConsumer(SrsSettings);
-export { contextWrap as SrsSettings };
