@@ -67,7 +67,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         ReactDOM.render(uiCode, el.get(0));
     }
     getEditorUI () {
-        const { layer, layerTypes, versions, capabilities, loading, messages, rolesAndPermissionTypes } = this.uiHandler.getState();
+        const { layer, layerTypes, versions, capabilities, loading, messages, rolesAndPermissionTypes, credentialsCollapseOpen } = this.uiHandler.getState();
         const controller = this.uiHandler.getController();
         return (
             <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
@@ -77,7 +77,13 @@ export class LayerEditorFlyout extends ExtraFlyout {
                     capabilities={capabilities}
                     loading={loading}
                     layerTypes={layerTypes}
-                    versions = {versions}>
+                    versions = {versions}
+                    messages={messages}
+                    credentialsCollapseOpen={credentialsCollapseOpen}
+                    onCancel={() => {
+                        this.uiHandler.clearMessages();
+                        this.uiHandler.clearCredentialsCollapse();
+                    }}>
                     <AdminLayerForm
                         layer={layer}
                         mapLayerGroups={this.mapLayerGroups}

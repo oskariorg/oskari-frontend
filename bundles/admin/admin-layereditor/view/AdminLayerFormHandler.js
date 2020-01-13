@@ -17,7 +17,8 @@ class UIHandler extends StateHandler {
             versions: [],
             capabilities: {},
             messages: [],
-            loading: false
+            loading: false,
+            credentialsCollapseOpen: false
         });
         this.addStateListener(consumer);
         this.fetchRolesAndPermissionTypes();
@@ -385,8 +386,14 @@ class UIHandler extends StateHandler {
         var params = {
             type: layer.type,
             version: version,
-            url: layer.url
+            url: layer.url,
+            user: layer.username,
+            pw: layer.password
         };
+
+        // Remove undefined params
+        Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+
         fetch(Oskari.urls.getRoute('LayerAdmin', params), {
             method: 'GET',
             headers: {
@@ -398,14 +405,22 @@ class UIHandler extends StateHandler {
                 this.updateState({
                     layer: { ...this.getState().layer, version }
                 });
+                return response.json();
             } else {
-                this.setMessage('TODO', 'error');
+                if (response.status === 401) {
+                    this.setMessage('messages.unauthorizedErrorFetchCapabilities', 'warning');
+                    this.updateState({ credentialsCollapseOpen: true });
+                } else {
+                    this.setMessage('messages.errorFetchCapabilities', 'error');
+                }
+                return Promise.reject(new Error('Capabilities fetching failed with status code ' + response.status + ' and text ' + response.statusText));
             }
-            return response.json();
         }).then(json => {
             this.updateState({
                 capabilities: json || {}
             });
+        }).catch(error => {
+            this.log.error(error);
         });
     }
 
@@ -437,11 +452,14 @@ class UIHandler extends StateHandler {
     isLoading () {
         return this.loadingCount > 0;
     }
-
     clearMessages () {
         this.updateState({
             messages: []
         });
+    }
+
+    clearCredentialsCollapse () {
+        this.updateState({ credentialsCollapseOpen: false });
     }
 
     handlePermission (checked, role, permission) {

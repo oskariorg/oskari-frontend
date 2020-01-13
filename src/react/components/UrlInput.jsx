@@ -22,10 +22,6 @@ export class UrlInput extends React.Component {
                 url: undefined
             };
         }
-        if (props.credentials && props.credentials.defaultOpen) {
-            // Panel with this key is open as default
-            this.state.defaultPanel = 'usernameAndPassword';
-        }
     }
     setProtocol (protocol) {
         if (!this.props.onChange) {
@@ -76,11 +72,19 @@ export class UrlInput extends React.Component {
             value: undefined,
             onChange: this.onChange.bind(this)
         };
+
+        let collapseProps = {}
+
+        if (this.props.credentials && this.props.credentials.defaultOpen) {
+            // Panel with this key is open as default
+            collapseProps.activeKey = 'usernameAndPassword';
+        }
+
         return (
             <div>
                 <Input {...processedProps} value={this.state.url} addonBefore={protocolSelect} />&nbsp;
                 {credentials.allowCredentials &&
-                    <Collapse defaultActiveKey={this.state.defaultPanel}>
+                    <Collapse {...collapseProps}>
                         <Panel header={credentials.panelText} key='usernameAndPassword'>
                             <div>
                                 {credentials.usernameText}
