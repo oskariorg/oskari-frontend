@@ -53,7 +53,7 @@ function getStep (layer) {
 const LayerTypeTitle = ({ layer, LabelComponent }) => (
     <React.Fragment>
         <Message messageKey='wizard.type' LabelComponent={LabelComponent} />
-        { layer.type && <React.Fragment><div style={{ display: 'inline' }}>:</div><div>{layer.type}</div></React.Fragment>}
+        { layer.type && <React.Fragment><span>:</span><div>{layer.type}</div></React.Fragment>}
     </React.Fragment>
 );
 
