@@ -21,6 +21,7 @@ const AdminLayerForm = ({
     mapLayerGroups,
     dataProviders,
     layer,
+    propertyFields,
     messages = [],
     onCancel,
     onDelete,
@@ -32,13 +33,13 @@ const AdminLayerForm = ({
         { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
         <Tabs>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
-                <GeneralTabPane dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} layer={layer} controller={controller} />
+                <GeneralTabPane dataProviders={dataProviders} mapLayerGroups={mapLayerGroups} layer={layer} propertyFields={propertyFields} controller={controller} />
             </TabPane>
             <TabPane key='visual' tab={<Message messageKey='visualizationTabTitle'/>}>
-                <VisualizationTabPane layer={layer} controller={controller} />
+                <VisualizationTabPane layer={layer} propertyFields={propertyFields} controller={controller} />
             </TabPane>
             <TabPane key='additional' tab={<Message messageKey='additionalTabTitle'/>}>
-                <AdditionalTabPane layer={layer} controller={controller} />
+                <AdditionalTabPane layer={layer} propertyFields={propertyFields} controller={controller} />
             </TabPane>
             <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
                 <PermissionsTabPane
@@ -76,6 +77,7 @@ AdminLayerForm.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
+    propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     messages: PropTypes.array,
     onCancel: PropTypes.func,
     onSave: PropTypes.func,

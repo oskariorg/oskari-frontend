@@ -28,7 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
         this._layerGroups = [];
-        this.availableVersions = {};
+        this.composingModels = {};
 
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
 
@@ -949,21 +949,27 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *            Mapping from map-layer json "type" parameter to a class as in #typeMapping
          * @param {String|Function} modelRef
          *            layer model clazz name (like 'Oskari.mapframework.domain.WmsLayer') or constructor function
-         * @param {Array} availableVersionsForType
-         *            string array containing available versions for given type
+         * @param {Oskari.mapframework.domain.LayerComposingModel} composingModel
          */
-        registerLayerModel: function (type, modelRef, availableVersionsForType) {
+        registerLayerModel: function (type, modelRef, composingModel) {
             this.typeMapping[type] = modelRef;
-            if (availableVersionsForType) {
-                this.availableVersions[type] = availableVersionsForType;
-                this.trigger('availableVersionsUpdated');
+            if (composingModel) {
+                this.composingModels[type] = composingModel;
+                this.trigger('availableLayerTypesUpdated', type);
             }
         },
         getVersionsForType (type) {
-            return this.availableVersions[type] || [];
+            const composingModel = this.composingModels[type];
+            if (!composingModel) {
+                return [];
+            }
+            return composingModel.getVersions();
+        },
+        getComposingModelForType (type) {
+            return this.composingModels[type];
         },
         getLayerTypes () {
-            return Object.keys(this.availableVersions) || [];
+            return Object.keys(this.composingModels) || [];
         },
         /**
          * @method unregisterLayerModel
@@ -975,7 +981,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         unregisterLayerModel: function (type) {
             delete this.typeMapping[type];
-            delete this.availableVersions[type];
+            delete this.composingModels[type];
         },
 
         /**

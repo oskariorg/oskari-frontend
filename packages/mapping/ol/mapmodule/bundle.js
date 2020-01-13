@@ -67,6 +67,9 @@ Oskari.clazz.define(
                     'src': '../../../../bundles/mapping/mapmodule/domain/AbstractLayer.js'
                 }, {
                     'type': 'text/javascript',
+                    'src': '../../../../bundles/mapping/mapmodule/domain/LayerComposingModel.js'
+                }, {
+                    'type': 'text/javascript',
                     'src': '../../../../bundles/mapping/mapmodule/domain/style.js'
                 }, {
                     'type': 'text/javascript',

@@ -8,6 +8,7 @@ import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../mapmodule/domain/consta
 import { UserStyleService } from '../service/UserStyleService';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
 const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
@@ -32,7 +33,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         this.layerHandlersByLayerId = {};
         this.userStyleService = new UserStyleService();
         Oskari.getSandbox().registerService(this.userStyleService);
-        this.availableVersions = ['1.1.0', '2.0.0', '3.0'];
     }
 
     /* ---- AbstractMapModulePlugin functions ---- */
@@ -90,7 +90,22 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         if (!this.mapLayerService || !this.vectorFeatureService) {
             return;
         }
-        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer', this.availableVersions);
+        const composingModel = new LayerComposingModel([
+            LayerComposingModel.URL,
+            LayerComposingModel.CREDENTIALS,
+            LayerComposingModel.SRS,
+            LayerComposingModel.CLUSTERING_DISTANCE,
+            LayerComposingModel.STYLE,
+            LayerComposingModel.STYLE_JSON,
+            LayerComposingModel.HOVER_JSON,
+            LayerComposingModel.WFS_RENDER_MODE,
+            LayerComposingModel.METAINFO,
+            LayerComposingModel.GFI_CONTENT,
+            LayerComposingModel.CAPABILITIES_UPDATE_RATE
+        ], ['1.1.0', '2.0.0', '3.0']);
+
+        const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';
+        this.mapLayerService.registerLayerModel(this.getLayerTypeSelector(), layerClass, composingModel);
         this.mapLayerService.registerLayerModelBuilder(this.getLayerTypeSelector(), new WfsLayerModelBuilder(sandbox));
         this.vectorFeatureService.registerLayerType(this.layertype, this);
         sandbox.registerService(this.WFSLayerService);

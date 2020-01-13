@@ -6,6 +6,8 @@ import * as olProj from 'ol/proj';
 import { OskariImageWMS } from './OskariImageWMS';
 import { OskariTileWMS } from './OskariTileWMS';
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 /**
  * @class Oskari.mapframework.mapmodule.WmsLayerPlugin
  * Provides functionality to draw WMS layers on the map
@@ -18,7 +20,6 @@ Oskari.clazz.define(
      */
     function () {
         this._log = Oskari.log(this.getName());
-        this.availableVersions = ['1.1.1', '1.3.0'];
     },
     {
         __name: 'WmsLayerPlugin',
@@ -31,7 +32,24 @@ Oskari.clazz.define(
 
         _initImpl () {
             const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-            mapLayerService.registerLayerModel(this.getLayerTypeSelector().toLowerCase() + 'layer', 'Oskari.mapframework.domain.WmsLayer', this.availableVersions);
+            const layerClass = 'Oskari.mapframework.domain.WmsLayer';
+            const composingModel = new LayerComposingModel([
+                LayerComposingModel.URL,
+                LayerComposingModel.CREDENTIALS,
+                LayerComposingModel.SRS,
+                LayerComposingModel.SELECTED_TIME,
+                LayerComposingModel.REALTIME,
+                LayerComposingModel.REFRESH_RATE,
+                LayerComposingModel.STYLE,
+                LayerComposingModel.LEGEND_URL,
+                LayerComposingModel.METAINFO,
+                LayerComposingModel.GFI_RESPONSE_TYPE,
+                LayerComposingModel.GFI_XSLT,
+                LayerComposingModel.GFI_CONTENT,
+                LayerComposingModel.CAPABILITIES_UPDATE_RATE
+            ], ['1.1.1', '1.3.0']);
+            const type = this.getLayerTypeSelector().toLowerCase() + 'layer';
+            mapLayerService.registerLayerModel(type, layerClass, composingModel);
         },
 
         _createPluginEventHandlers: function () {

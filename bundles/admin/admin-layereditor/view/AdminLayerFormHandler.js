@@ -7,7 +7,7 @@ class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
-        this.mapLayerService.on('availableVersionsUpdated', () => this.updateLayerTypeVersions());
+        this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
         this.loadingCount = 0;
         this.layerHelper = getLayerHelper(Oskari.getSupportedLanguages());
@@ -15,6 +15,7 @@ class UIHandler extends StateHandler {
             layer: {},
             layerTypes: this.mapLayerService.getLayerTypes(),
             versions: [],
+            propertyFields: [],
             capabilities: {},
             messages: [],
             loading: false,
@@ -31,7 +32,6 @@ class UIHandler extends StateHandler {
             versions: this.mapLayerService.getVersionsForType(layer.type)
         });
     }
-
     setType (type) {
         this.updateState({
             layer: { ...this.getState().layer, type },
@@ -62,8 +62,12 @@ class UIHandler extends StateHandler {
         }
         const found = capabilities.layers[name];
         if (found) {
+            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found });
+            const { type, version } = updateLayer;
+            const composingModel = this.mapLayerService.getComposingModelForType(type);
             this.updateState({
-                layer: this.layerHelper.fromServer({ ...layer, ...found })
+                layer: updateLayer,
+                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
             });
         } else {
             this.log.error('Layer not in capabilities: ' + name);
@@ -175,7 +179,9 @@ class UIHandler extends StateHandler {
     resetLayer () {
         this.updateState({
             layer: this.layerHelper.createEmpty(),
-            versions: []
+            capabilities: {},
+            versions: [],
+            propertyFields: []
         });
     }
     ajaxStarted () {
@@ -218,13 +224,17 @@ class UIHandler extends StateHandler {
             const layer = this.layerHelper.fromServer(json.layer);
             // Add 'role' all to permissions for UI state handling purposes
             layer.role_permissions.all = [];
+            const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
             this.updateState({
-                layer: layer
+                layer,
+                propertyFields: composingModel ? composingModel.getPropertyFields(layer.version) : []
             });
         });
     }
 
     /**
+     * TODO REMOVE UNUSED FUNCTION, FIX STORIES
+     *
      * Initializes layer model used in UI
      * @param {Oskari.mapframework.domain.AbstractLayer} layer
      */
@@ -402,8 +412,10 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (response.ok) {
+                const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
                 this.updateState({
-                    layer: { ...this.getState().layer, version }
+                    layer: { ...this.getState().layer, version },
+                    propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
                 });
                 return response.json();
             } else {

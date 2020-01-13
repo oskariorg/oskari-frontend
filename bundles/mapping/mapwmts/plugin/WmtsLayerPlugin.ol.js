@@ -1,6 +1,8 @@
 import olSourceVector from 'ol/source/Vector';
 import olLayerVector from 'ol/layer/Vector';
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 /**
  * A Plugin to manage WMTS OpenLayers map layers
  *
@@ -28,8 +30,23 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
                 // no map layer service - TODO: signal failure
                 return;
             }
-
-            mapLayerService.registerLayerModel(this.layertype, 'Oskari.mapframework.wmts.domain.WmtsLayer');
+            const className = 'Oskari.mapframework.wmts.domain.WmtsLayer';
+            const composingModel = new LayerComposingModel([
+                LayerComposingModel.URL,
+                LayerComposingModel.CREDENTIALS,
+                LayerComposingModel.SRS,
+                LayerComposingModel.SELECTED_TIME,
+                LayerComposingModel.REALTIME,
+                LayerComposingModel.REFRESH_RATE,
+                LayerComposingModel.STYLE,
+                LayerComposingModel.LEGEND_URL,
+                LayerComposingModel.METAINFO,
+                LayerComposingModel.GFI_RESPONSE_TYPE,
+                LayerComposingModel.GFI_XSLT,
+                LayerComposingModel.GFI_CONTENT,
+                LayerComposingModel.CAPABILITIES_UPDATE_RATE
+            ], ['1.0.0']);
+            mapLayerService.registerLayerModel(this.layertype, className, composingModel);
             layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
             mapLayerService.registerLayerModelBuilder(this.layertype, layerModelBuilder);
 
