@@ -306,21 +306,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.toolbar.ToolbarBundleInstance',
                 var me = this;
                 var sandbox = this.getSandbox();
 
-                me.currentMeasureTool = null;
-
                 /* we'll show prompt if measure tool has been selected */
                 if (!me.measureTools[event.getGroupId()] || !me.measureTools[event.getGroupId()][event.getToolId()]) {
                     if (!event.getSticky()) {
                         return;
                     }
                     me.requestHandlers.showMapMeasurementRequestHandler.stopMeasuring(false);
+                    me.currentMeasureTool = null;
                     return;
                 }
-
                 me.currentMeasureTool = event.getToolId();
-
                 var msg = me.getLocalization('measure').guidance[event.getToolId()];
-
                 sandbox.request(me, Oskari.requestBuilder('ShowMapMeasurementRequest')(msg || '', false, null, null));
             },
             'UIChangeEvent': function (evt) {

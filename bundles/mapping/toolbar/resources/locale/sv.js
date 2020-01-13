@@ -28,6 +28,7 @@ Oskari.registerLocalization(
         "measure": {
             "title": "Mätningsresultat",
             "close": "Avbryt",
+            "clear": "Ta bort alla mätningar",
             "guidance": {
                 "measureline": "Rita en linje och mät avståndet på kartan. Klicka på startpunkten för linjen att börja mäta. Efter det klickar du ut samtliga brytpunkter på linjen.",
                 "measurearea": "Rita ett område och mät den på kartan. Klicka på startpunkten för områdets gränslinje för att börja mäta. Efter det klickar du på samtliga brytpunkter i gränslinjen."
