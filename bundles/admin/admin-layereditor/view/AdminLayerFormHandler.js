@@ -156,10 +156,33 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, metadataid }
         });
     }
+    setLegendImage (legendImage) {
+        this.updateState({
+            layer: { ...this.getState().layer, legendImage }
+        });
+    }
     setGfiContent (gfiContent) {
         this.updateState({
             layer: { ...this.getState().layer, gfiContent }
         });
+    }
+    setGfiType (gfiType) {
+        this.updateState({
+            layer: { ...this.getState().layer, gfiType }
+        });
+    }
+    setGfiXslt (gfiXslt) {
+        this.updateState({
+            layer: { ...this.getState().layer, gfiXslt }
+        });
+    }
+    setQueryFormat (value) {
+        const layer = { ...this.getState().layer };
+        if (!layer.format) {
+            layer.format = {};
+        }
+        layer.format.value = value;
+        this.updateState({ layer });
     }
     setAttributes (attributes) {
         // TODO; Fix attributes input area JSON parsing.
@@ -484,6 +507,9 @@ const wrapped = controllerMixin(UIHandler, [
     'setStyleJSON',
     'setHoverJSON',
     'setMetadataIdentifier',
+    'setLegendImage',
+    'setGfiType',
+    'setGfiXslt',
     'setGfiContent',
     'setAttributes',
     'setMessage',
