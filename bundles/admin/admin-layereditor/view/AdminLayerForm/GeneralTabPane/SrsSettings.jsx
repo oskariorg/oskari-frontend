@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Message, Tooltip, Icon, Tag } from 'oskari-ui';
-import { LocaleConsumer } from 'oskari-ui/util';
 import { StyledComponent } from '../StyledFormComponents';
 import styled from 'styled-components';
 
