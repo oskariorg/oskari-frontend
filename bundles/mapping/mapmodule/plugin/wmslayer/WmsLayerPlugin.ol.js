@@ -42,9 +42,9 @@ Oskari.clazz.define(
                 LayerComposingModel.REALTIME,
                 LayerComposingModel.REFRESH_RATE,
                 LayerComposingModel.STYLE,
-                LayerComposingModel.LEGEND_URL,
+                LayerComposingModel.LEGEND_IMAGE,
                 LayerComposingModel.METAINFO,
-                LayerComposingModel.GFI_RESPONSE_TYPE,
+                LayerComposingModel.GFI_TYPE,
                 LayerComposingModel.GFI_XSLT,
                 LayerComposingModel.GFI_CONTENT,
                 LayerComposingModel.CAPABILITIES_UPDATE_RATE
