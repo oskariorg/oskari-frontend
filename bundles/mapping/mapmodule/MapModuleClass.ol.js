@@ -148,11 +148,29 @@ export class MapModule extends AbstractMapModule {
             me.notifyStartMove();
         });
 
+        function getElementPath (element) {
+            if (!element) {
+                return [];
+            }
+
+            const path = [];
+            while (element.parentNode !== null) {
+                path.push(element);
+                element = element.parentNode;
+            }
+            return path;
+        }
+
         function wasInfoBoxClicked (event) {
             // - Chrome supports event.path.
             // - Most others composedPath() https://developer.mozilla.org/en-US/docs/Web/API/Event/composedPath
             // - Polyfilled for IE/Edge on src/polyfills.js
             var path = event.path || (event.composedPath && event.composedPath()) || [];
+            if (!path.length) {
+                // For some reason Firefox returns an empty array and as we _have_ clicked the map there _should_ at least be the map in the path
+                // try it again...
+                path = getElementPath(event.target) || [];
+            }
             const foundInfoBox = path.find(item => (item.className || '').indexOf('olPopup') !== -1);
             return typeof foundInfoBox !== 'undefined';
         }

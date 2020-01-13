@@ -13,8 +13,6 @@ export class UserLayer extends WFSLayer {
         this.description = undefined;
         this.source = undefined;
         this.renderingElement = undefined;
-        this.featureProperties = []; // property names in fixed order from user_layer table fields column
-        this.featurePropertyIndexes = [];
     }
 
     setDescription (desc) {
@@ -45,26 +43,6 @@ export class UserLayer extends WFSLayer {
 
     getRenderingElement () {
         return this.renderingElement;
-    }
-
-    setFeatureProperties (fields) {
-        this.featureProperties = fields;
-    }
-
-    getFeatureProperties () {
-        return this.featureProperties;
-    }
-
-    setFeaturePropertyIndexes (indexes) {
-        this.featurePropertyIndexes = indexes;
-    }
-
-    getFeaturePropertyIndexes () {
-        return this.featurePropertyIndexes;
-    }
-
-    hasOrder () {
-        return this.featureProperties && this.featureProperties.length > 1;
     }
 
     isFilterSupported () {

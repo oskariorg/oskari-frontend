@@ -16,8 +16,6 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._clazz = className;
         this._name = 'ShadowingPlugin';
         this._defaultLocation = 'top right';
-        this._time = null;
-        this._date = null;
         this._log = Oskari.log(className);
         this.loc = Oskari.getMsg.bind(null, 'ShadowingPlugin3d');
         this._toolOpen = false;
@@ -27,7 +25,14 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
         this._popupTemplate = jQuery('<div></div>');
-        this.stateHandler = new ShadowToolHandler(this.instance);
+
+        const sandbox = this.instance.getSandbox();
+        const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
+        // only usable with the 3d map/Cesium
+        const initialTime = Cesium.JulianDate.toDate(mapmodule.getTime());
+        this.stateHandler = new ShadowToolHandler((date, time) => {
+            sandbox.postRequestByName('SetTimeRequest', [date, time]);
+        }, initialTime);
     }
     getName () {
         return className;
@@ -49,8 +54,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     _createEventHandlers () {
         return {
             TimeChangedEvent: function (event) {
-                this._time = event.getTime();
-                this._date = event.getDate();
+                this.stateHandler.update(event.getDate(), event.getTime());
             }
         };
     }
@@ -75,6 +79,10 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._teardownUI();
     }
 
+    unmountReactPopup () {
+        ReactDOM.unmountComponentAtNode(this._popupContent.get(0));
+    }
+
     _createUI (mapInMobileMode) {
         this._element = this._mountPoint.clone();
 
@@ -88,7 +96,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._createControlElement();
 
         ReactDOM.render(
-            <LocaleProvider value={this.loc}>
+            <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
                 <ShadowControl mapInMobileMode={mapInMobileMode}/>
             </LocaleProvider>, this._element.get(0));
     }
@@ -127,21 +135,27 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         }
     }
 
+    render () {
+        const popupContent = this._popupTemplate.clone();
+        ReactDOM.render(
+            <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
+                <ShadowTool {... this.stateHandler.getState()}
+                    controller={this.stateHandler.getController()}
+                />
+            </LocaleProvider>,
+            popupContent.get(0));
+        this._popupContent = popupContent;
+    }
+
     _showPopup () {
         const me = this;
         const popupTitle = this.loc('title');
-        const popupContent = this._popupTemplate.clone();
         const popupLocation = 'left';
         const mapmodule = this.getMapModule();
         const popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
         this._popup = popupService.createPopup();
-        ReactDOM.render(
-            <ShadowTool {... this.stateHandler.getState()}
-                controller={this.stateHandler.getController()}
-                locale={this.loc}/>,
-            popupContent.get(0));
-        this._popupContent = popupContent;
+        this.render();
 
         // create close icon
         this._popup.createCloseIcon();
@@ -152,6 +166,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
                 el.removeClass('active');
             }
             me._toolOpen = false;
+            me.unmountReactPopup();
             popup.close(true);
         });
 
@@ -159,7 +174,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._popup.makeDraggable();
         this._popup.addClass('shadowtool__popup');
 
-        this._popup.show(popupTitle, popupContent);
+        this._popup.show(popupTitle, this._popupContent);
         const elem = this.getElement();
 
         const popupCloseIcon = (mapmodule.getTheme() === 'dark') ? 'icon-close-white' : undefined;

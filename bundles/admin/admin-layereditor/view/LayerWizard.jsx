@@ -1,11 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Steps, Step, Button, Message } from 'oskari-ui';
+import { Steps, Step, Button, Message, Alert } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
 import { LayerURLForm } from './LayerWizard/LayerURLForm';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
 import styled from 'styled-components';
+
+const PaddedAlert = styled(Alert)`
+    margin-bottom: 5px;
+`;
+
+const PaddedStepsDiv = styled.div`
+    margin-top: 10px;
+    margin-bottom: 10px;
+`;
 
 const WIZARD_STEP = {
     INITIAL: 0,
@@ -44,9 +53,10 @@ function getStep (layer) {
 const LayerTypeTitle = ({ layer, LabelComponent }) => (
     <React.Fragment>
         <Message messageKey='wizard.type' LabelComponent={LabelComponent} />
-        { layer.type && `: ${layer.type}` }
+        { layer.type && <React.Fragment><span>:</span><div>{layer.type}</div></React.Fragment>}
     </React.Fragment>
 );
+
 LayerTypeTitle.propTypes = {
     layer: PropTypes.object.isRequired,
     LabelComponent: PropTypes.elementType
@@ -62,21 +72,27 @@ const LayerWizard = ({
     layerTypes = [],
     loading,
     children,
-    versions
+    versions,
+    messages = [],
+    credentialsCollapseOpen,
+    onCancel
 }) => {
     const currentStep = getStep(layer);
     const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
     return (
         <div>
-            { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
-            <Steps current={currentStep}>
-                <Step title={<LayerTypeTitle layer={layer}/>} />
-                <Step title={<Message messageKey='wizard.service'/>} />
-                <Step title={<Message messageKey='wizard.layers'/>} />
-                <Step title={<Message messageKey='wizard.details'/>} />
-            </Steps>
-            }
+            { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
+            <PaddedStepsDiv>
+                { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
+                <Steps current={currentStep}>
+                    <Step title={<LayerTypeTitle layer={layer}/>} />
+                    <Step title={<Message messageKey='wizard.service'/>} />
+                    <Step title={<Message messageKey='wizard.layers'/>} />
+                    <Step title={<Message messageKey='wizard.details'/>} />
+                </Steps>
+                }
+            </PaddedStepsDiv>
             { currentStep === WIZARD_STEP.INITIAL &&
                 <React.Fragment>
                     <LayerTypeTitle layer={layer} LabelComponent={Header}/>
@@ -94,7 +110,8 @@ const LayerWizard = ({
                         layer={layer}
                         loading={loading}
                         controller={controller}
-                        versions= {versions} />
+                        versions= {versions}
+                        credentialsCollapseOpen = {credentialsCollapseOpen}/>
                 </React.Fragment>
             }
             { currentStep === WIZARD_STEP.LAYER &&
@@ -112,7 +129,10 @@ const LayerWizard = ({
                 </React.Fragment>
             }
             { !isFirstStep && !isDetailsForOldLayer &&
-                <Button onClick={() => setStep(controller, getStep(layer) - 1)}>
+                <Button onClick={() => {
+                    setStep(controller, getStep(layer) - 1);
+                    onCancel();
+                }}>
                     {<Message messageKey='cancel'/>}
                 </Button>
             }
@@ -127,7 +147,10 @@ LayerWizard.propTypes = {
     capabilities: PropTypes.object,
     layerTypes: PropTypes.array,
     children: PropTypes.any,
-    versions: PropTypes.array.isRequired
+    versions: PropTypes.array.isRequired,
+    messages: PropTypes.array,
+    credentialsCollapseOpen: PropTypes.bool.isRequired,
+    onCancel: PropTypes.func.isRequired
 };
 
 const contextWrap = LocaleConsumer(LayerWizard);

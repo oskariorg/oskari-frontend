@@ -65,17 +65,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.ToolSelectionHandler',
                 break;
             case 'map_control_measure_tool':
                 type = 'LineString';
-                id = 'measureline';
+                id = 'mapmeasure';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
-                    allowMultipleDrawing: 'single',
+                    allowMultipleDrawing: true,
                     showMeasureOnMap: true
                 }]);
                 break;
             case 'map_control_measure_area_tool':
                 type = 'Polygon';
-                id = 'measurearea';
+                id = 'mapmeasure';
                 me.sandbox.postRequestByName('DrawTools.StartDrawingRequest', [id, type, {
-                    allowMultipleDrawing: 'single',
+                    allowMultipleDrawing: true,
                     showMeasureOnMap: true
                 }]);
                 break;
