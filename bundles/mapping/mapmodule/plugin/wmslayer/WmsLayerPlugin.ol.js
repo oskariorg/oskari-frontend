@@ -37,6 +37,7 @@ Oskari.clazz.define(
                 LayerComposingModel.URL,
                 LayerComposingModel.CREDENTIALS,
                 LayerComposingModel.SRS,
+                LayerComposingModel.CAPABILITIES,
                 LayerComposingModel.SELECTED_TIME,
                 LayerComposingModel.REALTIME,
                 LayerComposingModel.REFRESH_RATE,

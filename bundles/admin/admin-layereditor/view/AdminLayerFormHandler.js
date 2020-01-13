@@ -88,6 +88,18 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, name }
         });
     }
+    setForcedSRS (forcedSRS) {
+        const layer = { ...this.getState().layer };
+        if (typeof layer.attributes !== 'object') {
+            layer.attributes = {};
+        }
+        if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
+            delete layer.attributes.forcedSRS;
+        } else {
+            layer.attributes = { ...layer.attributes, forcedSRS };
+        }
+        this.updateState({ layer });
+    }
     setLocalizedNames (values) {
         const updateValues = {};
         Object.keys(values).forEach(language => {
@@ -244,13 +256,18 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const layer = this.layerHelper.fromServer(json.layer);
+            const layer = this.layerHelper.fromServer(json.layer, {
+                preserve: ['capabilities']
+            });
+            const { capabilities, type, version } = layer;
+            delete layer.capabilities;
             // Add 'role' all to permissions for UI state handling purposes
             layer.role_permissions.all = [];
-            const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
+            const composingModel = this.mapLayerService.getComposingModelForType(type);
             this.updateState({
                 layer,
-                propertyFields: composingModel ? composingModel.getPropertyFields(layer.version) : []
+                capabilities,
+                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
             });
         });
     }
@@ -516,6 +533,7 @@ const wrapped = controllerMixin(UIHandler, [
     'layerSelected',
     'setUsername',
     'setPassword',
+    'setForcedSRS',
     'setLayerName',
     'setLocalizedNames',
     'setDataProvider',

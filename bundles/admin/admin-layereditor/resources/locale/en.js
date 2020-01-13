@@ -70,6 +70,11 @@ Oskari.registerLocalization(
             "legendImage": "Default legend URL",
             "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
             "legendImagePlaceholder": "Give the URL address of the map legend.",
+            "forcedSRS": "Forced SRS",
+            "forcedSRSInfo": "View projections override compared to capabilities",
+            "supportedSRS": "Supported SRS",
+            "missingSRS": "Missing SRS",
+            "missingSRSInfo": "App default view projections not supported by layer",
             "messages": {
                 "saveSuccess": "Saved",
                 "saveFailed": "A system error occurred. Data has not been updated.",

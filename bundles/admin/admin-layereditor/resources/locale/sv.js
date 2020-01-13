@@ -70,6 +70,11 @@ Oskari.registerLocalization(
             "legendImage": "URL adress för kartförklaringar",
             "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
             "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
+            "forcedSRS": "Tvingade SRS",
+            "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
+            "supportedSRS": "Stöd SRS",
+            "missingSRS": "Saknade SRS",
+            "missingSRSInfo": "Denna kartlager stöder inte vissa applikationens standardprojektioner",
             "messages": {
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
