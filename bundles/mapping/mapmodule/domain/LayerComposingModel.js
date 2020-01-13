@@ -21,8 +21,6 @@ const PROPERTY_FIELDS = [
     'CLUSTERING_DISTANCE',
     'METAINFO',
     'WFS_RENDER_MODE',
-    'WFS_JOB_TYPE',
-    'WFS_IS_RESOLVE_DEPTH',
     'GFI_RESPONSE_TYPE',
     'GFI_XSLT',
     'GFI_CONTENT',
@@ -39,7 +37,8 @@ const COMMON_PROPERTY_FIELDS = [
     'ORGANIZATION_NAME',
     'GROUPS',
     'OPACITY',
-    'SCALE'
+    'SCALE',
+    'ATTRIBUTES'
 ];
 
 const ALL_VERSIONS = 'all';

@@ -77,7 +77,9 @@ Oskari.registerLocalization(
                 "invalidHoverJson" : "Hover JSON-syntaxen är ogiltig.",
                 "invalidAttributeJson" : "Attribut JSON-syntaxen är ogiltig.",
                 "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
-                "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter."
+                "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter.",
+                "errorFetchCapabilities": "Det gick inte att hämta gränssnittsinformation.",
+                "unauthorizedErrorFetchCapabilities": "Användarnamn och lösenord krävs av tjänsten."
             },
             "otherLanguages": "Other languages",
             "styleJSON": "Style JSON",

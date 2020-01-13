@@ -60,61 +60,61 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
         adjustMapSize: function () {
             var me = this;
 
-            // do not resize map if resizeEnabled is false
-            if (me.resizeEnabled === null || me.resizeEnabled === undefined || me.resizeEnabled) {
-                var contentMap = jQuery('#' + me.contentMapDivId),
-                    dataContent = jQuery('.oskariui-left'),
-                    dataContentHasContent = dataContent.length && !dataContent.is(':empty'),
-                    dataContentWidth = dataContent.width(),
-                    mapContainer = contentMap.find('.oskariui-center'),
-                    mapDiv = jQuery('#' + me.mapDivId),
-                    mapHeight = jQuery(window).height(),
-                    mapWidth = contentMap.width(),
-                    sidebar = jQuery('#sidebar:visible'),
-                    // FIXME: this must be done different way in future
-                    statsgrid = jQuery('.statsgrid:visible:not(.oskari-tile):not(.oskari-flyoutcontent)'),
-
-                    maxWidth = jQuery(window).width() - sidebar.width() - statsgrid.width(),
-                    mapTools = jQuery('#maptools:visible');
-
-                contentMap.height(mapHeight);
-
-                var toolbar = contentMap.find(
-                    '#menutoolbar:visible'
-                );
-                if (toolbar.length > 0) {
-                    mapHeight -= toolbar.height();
-                }
-                dataContent.height(mapHeight);
-                mapDiv.height(mapHeight);
-
-                if (dataContentHasContent) {
-                    if (dataContent.is(':visible') &&
-                            dataContentWidth) {
-                        mapWidth -= dataContentWidth;
-                    }
-                } else {
-                    dataContent.addClass('oskari-closed');
-                }
-
-                if (contentMap.hasClass('oskari-map-window-fullscreen')) {
-                    maxWidth += mapTools.width();
-                    maxWidth += sidebar.width();
-                    var position = sidebar.position();
-                    if (position && position.left) {
-                        maxWidth += position;
-                    }
-                }
-
-                if (mapWidth > maxWidth) {
-                    mapWidth = maxWidth;
-                }
-
-                mapContainer.width(mapWidth);
-
-                // notify map module that size has changed
-                me.updateSize();
+            if (me.resizeEnabled === false) {
+                // do not resize map if resizeEnabled is false
+                return;
             }
+            var contentMap = jQuery('#' + me.contentMapDivId);
+            var dataContent = jQuery('.oskariui-left');
+            var dataContentHasContent = dataContent.length && !dataContent.is(':empty');
+            var dataContentWidth = dataContent.width();
+            var mapContainer = contentMap.find('.oskariui-center');
+            var mapDiv = jQuery('#' + me.mapDivId);
+            var mapHeight = jQuery(window).height();
+            var mapWidth = contentMap.width();
+            var sidebar = jQuery('#sidebar:visible');
+            // FIXME: this must be done different way in future
+            var statsgrid = jQuery('.statsgrid:visible:not(.oskari-tile):not(.oskari-flyoutcontent)');
+            var maxWidth = jQuery(window).width() - sidebar.width() - statsgrid.width();
+            var mapTools = jQuery('#maptools:visible');
+
+            contentMap.height(mapHeight);
+
+            var toolbar = contentMap.find(
+                '#menutoolbar:visible'
+            );
+            if (toolbar.length > 0) {
+                mapHeight -= toolbar.height();
+            }
+            dataContent.height(mapHeight);
+            mapDiv.height(mapHeight);
+
+            if (dataContentHasContent) {
+                if (dataContent.is(':visible') &&
+                        dataContentWidth) {
+                    mapWidth -= dataContentWidth;
+                }
+            } else {
+                dataContent.addClass('oskari-closed');
+            }
+
+            if (contentMap.hasClass('oskari-map-window-fullscreen')) {
+                maxWidth += mapTools.width();
+                maxWidth += sidebar.width();
+                var position = sidebar.position();
+                if (position && position.left) {
+                    maxWidth += position;
+                }
+            }
+
+            if (mapWidth > maxWidth) {
+                mapWidth = maxWidth;
+            }
+
+            mapContainer.width(mapWidth);
+
+            // notify map module that size has changed
+            me.updateSize();
         },
 
         /**
