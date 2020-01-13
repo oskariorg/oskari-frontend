@@ -88,6 +88,24 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, name }
         });
     }
+    setSelectedTime (selectedTime) {
+        const layer = { ...this.getState().layer };
+        if (!layer.params) {
+            layer.params = {};
+        }
+        layer.params.selectedTime = selectedTime;
+        this.updateState({ layer });
+    }
+    setRealtime (realtime) {
+        this.updateState({
+            layer: { ...this.getState().layer, realtime }
+        });
+    }
+    setRefreshRate (refreshRate) {
+        this.updateState({
+            layer: { ...this.getState().layer, refreshRate }
+        });
+    }
     setForcedSRS (forcedSRS) {
         const layer = { ...this.getState().layer };
         if (typeof layer.attributes !== 'object') {
@@ -533,6 +551,9 @@ const wrapped = controllerMixin(UIHandler, [
     'layerSelected',
     'setUsername',
     'setPassword',
+    'setSelectedTime',
+    'setRealtime',
+    'setRefreshRate',
     'setForcedSRS',
     'setLayerName',
     'setLocalizedNames',

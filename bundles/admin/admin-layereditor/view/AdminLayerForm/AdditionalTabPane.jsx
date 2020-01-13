@@ -1,18 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { TextInput, TextAreaInput, Tooltip, Icon, Message } from 'oskari-ui';
+import { TextInput, TextAreaInput, Tooltip, Icon, Switch, Message } from 'oskari-ui';
 import { StyledTab, StyledComponent } from './StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
+import { InlineFlex } from './InlineFlex';
 import styled from 'styled-components';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const InlineValue = styled('div')`
-    display: flex;
-    > * {
-        flex: 1;
-    }
-`;
 const InfoIcon = styled(Icon)`
     margin-left: 10px;
 `;
@@ -55,7 +50,7 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
         </Fragment>;
 
     const gfiTypeSelect = !layer.gfiType ? null : (
-        <InlineValue>
+        <InlineFlex>
             <div>
                 <Message messageKey='gfiType'/>
                 <Tooltip title={<Message messageKey='gfiTypeDesc'/>}>
@@ -63,7 +58,7 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
                 </Tooltip>
             </div>
             <div>{ layer.gfiType }</div>
-        </InlineValue>
+        </InlineFlex>
     );
 
     const gfiXsltInput =
@@ -91,14 +86,37 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
             </StyledComponent>
         </Fragment>;
 
+    const selectedTimeInput =
+        <Fragment>
+            <Message messageKey='selectedTime' />
+            <StyledComponent>
+                <TextInput type='text' value={layer.params ? layer.params.selectedTime : ''} onChange={(evt) => controller.setSelectedTime(evt.target.value)} />
+            </StyledComponent>
+        </Fragment>;
+
+    const realtimeInput =
+        <Fragment>
+            <InlineFlex lockFirstChild>
+                <Switch size='small' checked={layer.realtime} onChange={checked => controller.setRealtime(checked)} />
+                <Message messageKey='realtime'/>
+            </InlineFlex>
+            { layer.realtime &&
+                <StyledComponent>
+                    <TextInput type='text' value={layer.refreshRate} onChange={(evt) => controller.setRefreshRate(evt.target.value)} />
+                </StyledComponent>
+            }
+        </Fragment>;
+
     return (
         <StyledTab>
+            { propertyFields.includes(LayerComposingModel.SELECTED_TIME) && selectedTimeInput }
             { propertyFields.includes(LayerComposingModel.METAINFO) && metainfoInput }
             { propertyFields.includes(LayerComposingModel.LEGEND_IMAGE) && legendImageInput }
             { propertyFields.includes(LayerComposingModel.GFI_CONTENT) && gfiContentInput }
             { propertyFields.includes(LayerComposingModel.GFI_TYPE) && gfiTypeSelect }
             { propertyFields.includes(LayerComposingModel.GFI_XSLT) && gfiXsltInput }
             { propertyFields.includes(LayerComposingModel.ATTRIBUTES) && attributesInput }
+            { propertyFields.includes(LayerComposingModel.REALTIME) && realtimeInput }
         </StyledTab>
     );
 });
