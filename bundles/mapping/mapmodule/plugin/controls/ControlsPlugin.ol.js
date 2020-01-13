@@ -39,7 +39,7 @@ Oskari.clazz.define(
         _createEventHandlers: function () {
             return {
                 'DrawingEvent': function (event) {
-                    if (event.getId() !== 'measureline' && event.getId() !== 'measurearea') {
+                    if (event.getId() !== 'mapmeasure') {
                         // this isn't about measurements, stop processing it
                         return;
                     }
@@ -54,7 +54,6 @@ Oskari.clazz.define(
                     if (data.showMeasureOnMap) {
                         return;
                     }
-
                     // FIXME! Does StopDrawingRequest need to send drawingEvent?
                     if (finished) {
                         return;
@@ -71,7 +70,7 @@ Oskari.clazz.define(
                     }
                 },
                 'Toolbar.ToolSelectedEvent': function (event) {
-                    if (event._toolId !== 'zoombox' && event.getSticky()) {
+                    if (event.getToolId() !== 'zoombox' && event.getSticky()) {
                         this._clearLifetimeInteractions();
                     }
                 }

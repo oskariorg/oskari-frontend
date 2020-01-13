@@ -16,6 +16,7 @@ export { Spin } from './components/Spin';
 export { Step, Steps } from './components/Steps';
 export { Switch } from './components/Switch';
 export { Tabs, TabPane } from './components/Tabs';
+export { Tag } from './components/Tag';
 export { TextAreaInput } from './components/TextAreaInput';
 export { TextInput } from './components/TextInput';
 export { InputGroup } from './components/InputGroup';

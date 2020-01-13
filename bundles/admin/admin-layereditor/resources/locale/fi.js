@@ -73,7 +73,9 @@ Oskari.registerLocalization(
                 "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
                 "invalidAttributeJson" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
-                "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut"
+                "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",
+                "errorFetchCapabilities": "Rajapinnan tietojen haku epäonnistui.",
+                "unauthorizedErrorFetchCapabilities": "Palvelu vaatii käyttäjätunnuksen ja salasanan."
             },
             "otherLanguages": "Muut kielet",
             "styleJSON": "Style JSON",

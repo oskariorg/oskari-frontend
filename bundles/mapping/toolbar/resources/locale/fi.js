@@ -28,6 +28,7 @@ Oskari.registerLocalization(
         "measure": {
             "title": "Mittaustulokset",
             "close": "Lopeta",
+            "clear": "Poista kaikki mittaukset",
             "guidance": {
                 "measureline": "Piirrä mitattava etäisyys klikkaamalla viivan taitepisteitä.",
                 "measurearea": "Piirrä mitattava alue klikkaamalla alueen kulmapisteitä."

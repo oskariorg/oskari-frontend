@@ -2,80 +2,36 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import moment from 'moment';
 
 class UIService extends StateHandler {
-    constructor (instance) {
+    constructor (requestFn, initialDate) {
         super();
-        this.instance = instance;
-        this.sandbox = instance.getSandbox();
-        this.mapmodule = this.sandbox.findRegisteredModuleInstance('MainMapModule');
-        this._time = Cesium.JulianDate.toDate(this.mapmodule.getTime());
+        this.requestFunction = requestFn;
+        const time = moment(initialDate);
         this.state = {
-            time: this._getTime(),
-            date: this._getDate(),
-            year: this._getYear()
+            time: time.format('H:mm'),
+            date: time.format('D/M'),
+            year: time.format('YYYY')
         };
-        this.eventHandlers = this._createEventHandlers();
     }
 
-    updateTimeEvent (event) {
-        const time = event.getTime();
-        const date = event.getDate();
+    update (date, time) {
         this.updateState({ time, date });
     }
 
-    _getTime () {
-        const clock = moment(this._time).format('H:mm');
-        return clock;
+    requestNewTime (time) {
+        this.requestNewDateAndTime(this.getState().date, time);
     }
 
-    _getDate () {
-        const date = moment(this._time).format('D/M');
-        return date;
+    requestNewDate (date) {
+        this.requestNewDateAndTime(date, this.getState().time);
     }
 
-    _getYear () {
-        const year = moment(this._time).format('YYYY');
-        return year;
-    }
-
-    setTime (time) {
-        const date = this._getDate();
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
-    }
-
-    setDate (date) {
-        const time = this._getTime();
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
-    }
-
-    setCurrentTime (date, time) {
-        this.sandbox.postRequestByName('SetTimeRequest', [date, time]);
-    }
-
-    /**
-     * "Module" name for event handling
-     */
-    getName () {
-        return 'ShadowToolHandler';
-    }
-    onEvent (event) {
-        const handler = this.eventHandlers[event.getName()];
-        if (!handler) {
-            return;
-        }
-        return handler.apply(this, [event]);
-    }
-
-    _createEventHandlers () {
-        const handlers = {
-            'TimeChangedEvent': event => this.updateTimeEvent(event)
-        };
-        this.sandbox.registerForEventByName(this, 'TimeChangedEvent');
-        return handlers;
+    requestNewDateAndTime (date, time) {
+        this.requestFunction(date, time);
     }
 }
 
 export const ShadowToolHandler = controllerMixin(UIService, [
-    'setTime',
-    'setDate',
-    'setCurrentTime'
+    'requestNewTime',
+    'requestNewDate',
+    'requestNewDateAndTime'
 ]);
