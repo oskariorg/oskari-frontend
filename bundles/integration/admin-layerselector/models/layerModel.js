@@ -7,10 +7,19 @@
             initialize: function (model) {
                 // exted given object (layer) with this one
                 if (model) {
+                    // bind direct member functions from model
                     for (var key in model) {
                         if (model[key] && typeof model[key] === 'function') {
-                            var prop = model[key];
+                            let prop = model[key];
                             this[key] = prop.bind(this.attributes);
+                        }
+                    }
+                    // bind prototype functions
+                    const functions = this.getAllFunctionsFromPrototypeHierarchy(model);
+                    for (let key in functions) {
+                        let func = functions[key];
+                        if (!this[key]) {
+                            this[key] = func.bind(this);
                         }
                     }
                 }
@@ -18,6 +27,20 @@
                 this.supportedLanguages = Oskari.getSupportedLanguages();
                 // setup backbone id so collections work
                 this.id = model.getId();
+            },
+            getAllFunctionsFromPrototypeHierarchy (obj) {
+                const functions = {};
+                var o = Object.getPrototypeOf(obj);
+                while (o) {
+                    const names = Object.getOwnPropertyNames(o);
+                    names.forEach(name => {
+                        if (typeof o[name] === 'function') {
+                            functions[name] = o[name];
+                        }
+                    });
+                    o = Object.getPrototypeOf(o);
+                }
+                return functions;
             },
             /**
              * Selects the first style so legendImage will show initial value
