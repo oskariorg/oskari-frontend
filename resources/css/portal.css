@@ -204,7 +204,7 @@ h5 {
 }
 
 
-table {
+table:not([class*="ant-"]) {
   /* Cells should have 10px of vertical padding so we reach 28px in total */
   font-size: 12px;
   line-height: 18px;
@@ -375,7 +375,13 @@ table tr td:first-child {
   background: linear-gradient(top, #217ad4, #3a97ee);
 }
 
-input[type=email], input[type=number], input[type=tel], input[type=text], input[type=password], input[type=search], input[type=url] {
+input[type=email]:not([class*="ant-"]),
+input[type=number]:not([class*="ant-"]),
+input[type=tel]:not([class*="ant-"]),
+input[type=text]:not([class*="ant-"]),
+input[type=password]:not([class*="ant-"]),
+input[type=search]:not([class*="ant-"]),
+input[type=url]:not([class*="ant-"]) {
   -moz-border-radius: 4px;
   -webkit-border-radius: 4px;
   border-radius: 4px;
@@ -386,7 +392,7 @@ input[type=email], input[type=number], input[type=tel], input[type=text], input[
   box-shadow: inset 3px 2px 4px rgba(0, 0, 0, 0.15);
 }
 
-textarea {
+textarea:not([class*="ant-"]) {
   -webkit-border-radius: 4px;
   -moz-border-radius: 4px;
   -o-border-radius: 4px;
@@ -409,7 +415,7 @@ textarea {
   z-index: 99;
 }
 
-select {
+select:not([class*="ant-"]) {
   width: 206px;
   color: #3c3c3c;
   -moz-border-radius: 4px;

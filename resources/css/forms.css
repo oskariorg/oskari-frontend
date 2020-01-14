@@ -23,7 +23,21 @@ input::-ms-clear {
   display: none;
 }
 
-input[type=button]:not([class*="ant-"]), input[type=email], input[type=number], input[type=file], input[type=password], input[type=reset], input[type=search], input[type=submit], input[type=tel], input[type=text], input[type=url], select, textarea, .textarea, button {
+input[type=button]:not([class*="ant-"]), 
+input[type=email]:not([class*="ant-"]),
+input[type=number]:not([class*="ant-"]),
+input[type=file]:not([class*="ant-"]),
+input[type=password]:not([class*="ant-"]),
+input[type=reset]:not([class*="ant-"]),
+input[type=search]:not([class*="ant-"]),
+input[type=submit]:not([class*="ant-"]),
+input[type=tel]:not([class*="ant-"]),
+input[type=text]:not([class*="ant-"]),
+input[type=url]:not([class*="ant-"]),
+select:not([class*="ant-"]),
+textarea:not([class*="ant-"]),
+.textarea,
+button:not([class*="ant-"]) {
   border: 1px solid;
   border-color: #BFBFBF #DEDEDE #DEDEDE #BFBFBF;
   padding: 8px 5px;
@@ -36,13 +50,19 @@ input[type="image"] {
   padding: 0;
 }
 
-button:not([class*="ant-"])::-moz-focus-inner, input[type="button"]:not([class*="ant-"])::-moz-focus-inner, input[type="submit"]::-moz-focus-inner, input[type="reset"]::-moz-focus-inner {
+button:not([class*="ant-"])::-moz-focus-inner,
+input[type="button"]:not([class*="ant-"])::-moz-focus-inner,
+input[type="submit"]:not([class*="ant-"])::-moz-focus-inner,
+input[type="reset"]:not([class*="ant-"])::-moz-focus-inner {
   padding: 0 !important;
   border: 0 none !important;
 }
 
 /* This is used in buttons */
-input[type="submit"], input[type="button"]:not([class*="ant-"]), input[type="reset"], button:not([class*="ant-"]) {
+input[type="submit"]:not([class*="ant-"]),
+input[type="button"]:not([class*="ant-"]),
+input[type="reset"]:not([class*="ant-"]),
+button:not([class*="ant-"]) {
   cursor: pointer;
   overflow: visible;
   padding: 8px 5px;
@@ -50,9 +70,12 @@ input[type="submit"], input[type="button"]:not([class*="ant-"]), input[type="res
   min-width: 4em;
   width: auto;
 }
-input[type="submit"]:hover:enabled, input[type="submit"]:focus,
-input[type="button"]:not([class*="ant-"]):hover:enabled, input[type="button"]:not([class*="ant-"]):focus,
-input[type="reset"]:hover:enabled, input[type="reset"]:focus,
+input[type="submit"]:not([class*="ant-"]):hover:enabled,
+input[type="submit"]:not([class*="ant-"]):focus,
+input[type="button"]:not([class*="ant-"]):hover:enabled,
+input[type="button"]:not([class*="ant-"]):focus,
+input[type="reset"]:not([class*="ant-"]):hover:enabled,
+input[type="reset"]:not([class*="ant-"]):focus,
 button:not([class*="ant-"]):hover:enabled,
 button:not([class*="ant-"]):focus {
   background: #DFF4FF;
@@ -62,8 +85,8 @@ button:not([class*="ant-"]):focus {
 }
 
 /* This is used in buttons */
-input[type="submit"],
-input[type="reset"],
+input[type="submit"]:not([class*="ant-"]),
+input[type="reset"]:not([class*="ant-"]),
 input[type="button"]:not([class*="ant-"]),
 button:not([class*="ant-"]),
 .lfr-actions, .lfr-actions ul {
@@ -76,8 +99,8 @@ button:not([class*="ant-"]),
 }
 
 /* This is used in buttons */
-input[type="submit"]:hover:enabled,
-input[type="reset"]:hover:enabled,
+input[type="submit"]:not([class*="ant-"]):hover:enabled,
+input[type="reset"]:not([class*="ant-"]):hover:enabled,
 input[type="button"]:not([class*="ant-"]):hover:enabled,
 button:not([class*="ant-"]):hover:enabled,
 .lfr-actions:hover, .lfr-actions:hover ul {
@@ -88,9 +111,9 @@ button:not([class*="ant-"]):hover:enabled,
 }
 
 /* This is used in buttons */
-input[type="submit"]:focus,
+input[type="submit"]:not([class*="ant-"]):focus,
 input[type="button"]:not([class*="ant-"]):focus,
-input[type="reset"]:focus,
+input[type="reset"]:not([class*="ant-"]):focus,
 button:not([class*="ant-"]):focus,
 .lfr-actions:focus, .lfr-actions:focus ul {
   background: #ebebeb url(../images/application/state_active_bg.png) repeat-x 0 0;
@@ -98,7 +121,8 @@ button:not([class*="ant-"]):focus,
 }
 
 /* This is used in all primary buttons */
-button.primary, input.primary {
+button.primary:not([class*="ant-"]),
+input.primary:not([class*="ant-"]) {
   background-color: #217ad4;
   background-image: url(../images/blue_button_liuku.png);
   border-color: #0000BF #0000DE #0000DE #0000BF;
@@ -107,12 +131,13 @@ button.primary, input.primary {
 }
 
 /* Doesn't seem to be in use, nothing sets the focus class in oskari */
-input.focus, textarea.focus {
+input.focus:not([class*="ant-"]),
+textarea.focus:not([class*="ant-"]) {
   background: #FFD400 none;
   border: 1px solid #FC0;
 }
 
-textarea {
+textarea:not([class*="ant-"]) {
   padding: 5px 5px;
 }
 
@@ -123,9 +148,9 @@ label > input:disabled + span {
 }
 
 button:not([class*="ant-"]):disabled,
-input:disabled,
-select:disabled,
-textarea:disabled {
+input:not([class*="ant-"]):disabled,
+select:not([class*="ant-"]):disabled,
+textarea:not([class*="ant-"]):disabled {
     cursor: default;
     opacity: 0.5;
 }
