@@ -193,8 +193,8 @@ Oskari.registerLocalization(
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",
             "matrixSetDesc": "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
-            "realtime": "Reaaliaikataso",
-            "refreshRate": "Virkistystaajuus (sekunneissa)",
+            "realtime": "Realtidslager",
+            "refreshRate": "Uppdateringsfrekvens (i sekunder)",
             "jobTypeDesc": "Service job typ",
             "jobTypeDefault": "default",
             "jobTypes": {

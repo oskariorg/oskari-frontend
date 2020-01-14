@@ -4,6 +4,7 @@ import { StyleSelect } from './StyleSelect';
 import { StyledTab, StyledComponent, StyledColumnLeft, StyledColumnRight } from './StyledFormComponents';
 import { Slider, TextAreaInput, Opacity, Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
+import { InfoTooltip } from './InfoTooltip';
 import styled from 'styled-components';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -22,9 +23,12 @@ const VisualizationTabPane = ({ layer, propertyFields, controller }) => {
             </StyledComponent>
         </Fragment>;
 
+    const styleInfoKeys = propertyFields.includes(LayerComposingModel.CAPABILITIES_STYLE)
+        ? ['styleDesc', 'styleDescCapabilities'] : 'styleDesc';
     const styleSelect =
         <Fragment>
             <Message messageKey='style'/>
+            <InfoTooltip messageKeys={styleInfoKeys} />
             <StyledComponent>
                 <StyleSelect styles={layer.styles} currentStyle={layer.style} controller={controller} />
             </StyledComponent>
