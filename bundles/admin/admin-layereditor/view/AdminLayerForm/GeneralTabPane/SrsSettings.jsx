@@ -1,7 +1,8 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Select, Option, Message, Tooltip, Icon, Tag } from 'oskari-ui';
+import { Select, Option, Message, Tag } from 'oskari-ui';
 import { StyledComponent } from '../StyledFormComponents';
+import { InfoTooltip } from '../InfoTooltip';
 import styled from 'styled-components';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -14,10 +15,6 @@ const FlexRow = styled('div')`
     > :not(:last-child) {
         margin-right: 10px;
     }
-`;
-
-const InfoIcon = styled(Icon)`
-    margin-left: 10px;
 `;
 
 const EpsgCodeTags = ({ codes }) => {
@@ -51,9 +48,7 @@ const MissingSRS = ({ epsgCodes }) => {
     return (
         <div>
             <Message messageKey='missingSRS' />
-            <Tooltip title={<Message messageKey='missingSRSInfo'/>}>
-                <InfoIcon type="question-circle" />
-            </Tooltip>
+            <InfoTooltip messageKeys='missingSRSInfo' />
             <EpsgCodeTags codes={epsgCodes} />
         </div>
     );
@@ -82,12 +77,10 @@ export const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange
                 </FlexRow>
             }
             <Message messageKey='forcedSRS' />
-            <Tooltip title={<Message messageKey='forcedSRSInfo'/>}>
-                <InfoIcon type="question-circle" />
-            </Tooltip>
+            <InfoTooltip messageKeys='forcedSRSInfo' />
             <StyledComponent>
                 <Select mode='tags' value={forced} onChange={onChange}>
-                    { systemProjections.map((cur, i) => <Option key={i}>{cur}</Option>) }
+                    { systemProjections.map(cur => <Option key={cur}>{cur}</Option>) }
                 </Select>
             </StyledComponent>
         </Fragment>

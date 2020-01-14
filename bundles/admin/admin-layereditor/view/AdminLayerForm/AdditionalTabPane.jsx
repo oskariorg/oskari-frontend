@@ -1,16 +1,14 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { TextInput, TextAreaInput, Tooltip, Icon, Switch, Message } from 'oskari-ui';
+import { TextInput, TextAreaInput, Message } from 'oskari-ui';
 import { StyledTab, StyledComponent } from './StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InlineFlex } from './InlineFlex';
-import styled from 'styled-components';
+import { InfoTooltip } from './InfoTooltip';
+import { Realtime } from './AdditionalTabPane/Realtime';
+import { SelectedTime } from './AdditionalTabPane/SelectedTime';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
-
-const InfoIcon = styled(Icon)`
-    margin-left: 10px;
-`;
 
 export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, controller, getMessage }) => {
     const metainfoInput =
@@ -18,7 +16,6 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
             <Message messageKey='metainfoId'/>
             <StyledComponent>
                 <TextInput
-                    placeholder={getMessage('metaInfoIdDesc')}
                     value={layer.metadataid}
                     onChange={(evt) => controller.setMetadataIdentifier(evt.target.value)} />
             </StyledComponent>
@@ -27,9 +24,7 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
     const legendImageInput =
         <Fragment>
             <Message messageKey='legendImage'/>
-            <Tooltip title={<Message messageKey='legendImageDesc'/>}>
-                <InfoIcon type="question-circle" />
-            </Tooltip>
+            <InfoTooltip messageKeys='legendImageDesc'/>
             <StyledComponent>
                 <TextInput
                     placeholder={getMessage('legendImagePlaceholder')}
@@ -53,9 +48,7 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
         <InlineFlex>
             <div>
                 <Message messageKey='gfiType'/>
-                <Tooltip title={<Message messageKey='gfiTypeDesc'/>}>
-                    <InfoIcon type="question-circle" />
-                </Tooltip>
+                <InfoTooltip messageKeys='gfiTypeDesc'/>
             </div>
             <div>{ layer.gfiType }</div>
         </InlineFlex>
@@ -64,9 +57,7 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
     const gfiXsltInput =
         <Fragment>
             <Message messageKey='gfiStyle'/>
-            <Tooltip title={<Message messageKey='gfiStyleDesc'/>}>
-                <InfoIcon type="question-circle" />
-            </Tooltip>
+            <InfoTooltip messageKeys='gfiStyleDesc'/>
             <StyledComponent>
                 <TextAreaInput
                     rows={4}
@@ -86,37 +77,22 @@ export const AdditionalTabPane = LocaleConsumer(({ layer, propertyFields, contro
             </StyledComponent>
         </Fragment>;
 
-    const selectedTimeInput =
-        <Fragment>
-            <Message messageKey='selectedTime' />
-            <StyledComponent>
-                <TextInput type='text' value={layer.params ? layer.params.selectedTime : ''} onChange={(evt) => controller.setSelectedTime(evt.target.value)} />
-            </StyledComponent>
-        </Fragment>;
-
-    const realtimeInput =
-        <Fragment>
-            <InlineFlex lockFirstChild>
-                <Switch size='small' checked={layer.realtime} onChange={checked => controller.setRealtime(checked)} />
-                <Message messageKey='realtime'/>
-            </InlineFlex>
-            { layer.realtime &&
-                <StyledComponent>
-                    <TextInput type='text' value={layer.refreshRate} onChange={(evt) => controller.setRefreshRate(evt.target.value)} />
-                </StyledComponent>
-            }
-        </Fragment>;
+    const lyrAndController = { layer, controller };
 
     return (
         <StyledTab>
-            { propertyFields.includes(LayerComposingModel.SELECTED_TIME) && selectedTimeInput }
+            { propertyFields.includes(LayerComposingModel.SELECTED_TIME) &&
+                <SelectedTime {...lyrAndController} />
+            }
             { propertyFields.includes(LayerComposingModel.METAINFO) && metainfoInput }
             { propertyFields.includes(LayerComposingModel.LEGEND_IMAGE) && legendImageInput }
             { propertyFields.includes(LayerComposingModel.GFI_CONTENT) && gfiContentInput }
             { propertyFields.includes(LayerComposingModel.GFI_TYPE) && gfiTypeSelect }
             { propertyFields.includes(LayerComposingModel.GFI_XSLT) && gfiXsltInput }
             { propertyFields.includes(LayerComposingModel.ATTRIBUTES) && attributesInput }
-            { propertyFields.includes(LayerComposingModel.REALTIME) && realtimeInput }
+            { propertyFields.includes(LayerComposingModel.REALTIME) &&
+                <Realtime {...lyrAndController} />
+            }
         </StyledTab>
     );
 });
