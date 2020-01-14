@@ -100,7 +100,7 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             LayerComposingModel.STYLE_JSON,
             LayerComposingModel.HOVER_JSON,
             LayerComposingModel.WFS_RENDER_MODE,
-            LayerComposingModel.METAINFO,
+            LayerComposingModel.METADATAID,
             LayerComposingModel.CAPABILITIES_UPDATE_RATE
         ], ['1.1.0', '2.0.0', '3.0']);
 

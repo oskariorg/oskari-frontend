@@ -44,7 +44,7 @@ Oskari.clazz.define(
                 LayerComposingModel.STYLE,
                 LayerComposingModel.CAPABILITIES_STYLES,
                 LayerComposingModel.LEGEND_IMAGE,
-                LayerComposingModel.METAINFO,
+                LayerComposingModel.METADATAID,
                 LayerComposingModel.GFI_TYPE,
                 LayerComposingModel.GFI_XSLT,
                 LayerComposingModel.GFI_CONTENT,
