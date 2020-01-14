@@ -63,6 +63,8 @@ Oskari.registerLocalization(
             "realtime": "Reaaliaikataso",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "refreshRate": " Virkistystaajuus sekunteina",
+            "capabilitiesUpdateRate": "Capabilities päivitystiheys",
+            "capabilitiesUpdateRateDesc": "Päivitystiheys sekunteina",
             "minScale": "Pienin mittakaava",
             "maxScale": "Suurin mittakaava",
             "minAndMaxScale": "Pienin ja suurin mittakaava",

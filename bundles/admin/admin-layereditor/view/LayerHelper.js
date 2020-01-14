@@ -68,6 +68,7 @@ export const getLayerHelper = (supportedLanguages) => {
             url: layer.getAdmin().url,
             username: layer.getAdmin().username,
             password: layer.getAdmin().password,
+            capabilitiesUpdateRate: layer.getAdmin().capabilitiesUpdateRate,
             name: layer.getLayerName(),
             ..._getLocalizedLayerInfoFromAbstract(layer),
             groupId: layer.getAdmin().organizationId,

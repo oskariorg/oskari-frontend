@@ -10,11 +10,15 @@ import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
 import { Attributes } from './Attributes';
 import { MetadataId } from './MetadataId';
+import { CapabilitiesUpdateRate } from './CapabilitiesUpdateRate';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const AdditionalTabPane = ({ layer, propertyFields, controller }) => (
     <StyledTab>
+        { propertyFields.includes(LayerComposingModel.CAPABILITIES_UPDATE_RATE) &&
+            <CapabilitiesUpdateRate layer={layer} controller={controller} />
+        }
         { propertyFields.includes(LayerComposingModel.SELECTED_TIME) &&
             <SelectedTime layer={layer} controller={controller} />
         }
@@ -23,6 +27,9 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => (
         }
         { propertyFields.includes(LayerComposingModel.LEGEND_IMAGE) &&
             <LegendImage layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.REALTIME) &&
+            <Realtime layer={layer} controller={controller} />
         }
         { propertyFields.includes(LayerComposingModel.GFI_CONTENT) &&
             <GfiContent layer={layer} controller={controller} />
@@ -35,9 +42,6 @@ export const AdditionalTabPane = ({ layer, propertyFields, controller }) => (
         }
         { propertyFields.includes(LayerComposingModel.ATTRIBUTES) &&
             <Attributes layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.REALTIME) &&
-            <Realtime layer={layer} controller={controller} />
         }
     </StyledTab>
 );

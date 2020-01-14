@@ -106,6 +106,11 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, refreshRate }
         });
     }
+    setCapabilitiesUpdateRate (capabilitiesUpdateRate) {
+        this.updateState({
+            layer: { ...this.getState().layer, capabilitiesUpdateRate }
+        });
+    }
     setForcedSRS (forcedSRS) {
         const layer = { ...this.getState().layer };
         if (typeof layer.attributes !== 'object') {
@@ -545,32 +550,33 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setType',
-    'setLayerUrl',
-    'setVersion',
+    'handlePermission',
     'layerSelected',
-    'setUsername',
-    'setPassword',
-    'setSelectedTime',
-    'setRealtime',
-    'setRefreshRate',
-    'setForcedSRS',
-    'setLayerName',
-    'setLocalizedNames',
+    'setAttributes',
+    'setCapabilitiesUpdateRate',
     'setDataProvider',
-    'setMapLayerGroup',
-    'setOpacity',
-    'setMinAndMaxScale',
-    'setStyleJSON',
-    'setHoverJSON',
-    'setMetadataIdentifier',
-    'setLegendImage',
+    'setForcedSRS',
+    'setGfiContent',
     'setGfiType',
     'setGfiXslt',
-    'setGfiContent',
-    'setAttributes',
+    'setHoverJSON',
+    'setLayerName',
+    'setLayerUrl',
+    'setLegendImage',
+    'setLocalizedNames',
+    'setMapLayerGroup',
     'setMessage',
     'setMessages',
-    'handlePermission'
+    'setMetadataIdentifier',
+    'setMinAndMaxScale',
+    'setOpacity',
+    'setPassword',
+    'setRealtime',
+    'setRefreshRate',
+    'setSelectedTime',
+    'setStyleJSON',
+    'setType',
+    'setUsername',
+    'setVersion'
 ]);
 export { wrapped as AdminLayerFormHandler };

@@ -61,6 +61,8 @@ Oskari.registerLocalization(
             "selectedTime": "Vald tid",
             "realtime": "Realtidslager",
             "refreshRate": "Uppdateringsfrekvens (i sekunder)",
+            "capabilitiesUpdateRate": "Capabilities uppdateringsfrekvens",
+            "capabilitiesUpdateRateDesc": "Uppdateringsfrekvens i sekunder",
             "opacity": "Opacitet",
             "minScale": "Minimiskala",
             "maxScale": "Maximiskala",

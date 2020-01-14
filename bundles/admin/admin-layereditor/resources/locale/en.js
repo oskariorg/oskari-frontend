@@ -62,6 +62,8 @@ Oskari.registerLocalization(
             "realtime": "Real time layer",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "refreshRate": "Refresh rate in seconds",
+            "capabilitiesUpdateRate": "Capabilities update rate",
+            "capabilitiesUpdateRateDesc": "Update rate in seconds",
             "opacity": "Opacity",
             "minScale": "Minimum scale",
             "maxScale": "Maximum scale",

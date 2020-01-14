@@ -32,18 +32,17 @@ Oskari.clazz.define('Oskari.mapframework.wmts.mapmodule.plugin.WmtsLayerPlugin',
             }
             const className = 'Oskari.mapframework.wmts.domain.WmtsLayer';
             const composingModel = new LayerComposingModel([
-                LayerComposingModel.URL,
-                LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.SRS,
                 LayerComposingModel.CAPABILITIES,
-                LayerComposingModel.STYLE,
                 LayerComposingModel.CAPABILITIES_STYLES,
-                LayerComposingModel.LEGEND_IMAGE,
-                LayerComposingModel.METADATAID,
+                LayerComposingModel.CAPABILITIES_UPDATE_RATE,
+                LayerComposingModel.CREDENTIALS,
+                LayerComposingModel.GFI_CONTENT,
                 LayerComposingModel.GFI_TYPE,
                 LayerComposingModel.GFI_XSLT,
-                LayerComposingModel.GFI_CONTENT,
-                LayerComposingModel.CAPABILITIES_UPDATE_RATE
+                LayerComposingModel.LEGEND_IMAGE,
+                LayerComposingModel.SRS,
+                LayerComposingModel.STYLE,
+                LayerComposingModel.URL
             ], ['1.0.0']);
             mapLayerService.registerLayerModel(this.layertype, className, composingModel);
             layerModelBuilder = Oskari.clazz.create('Oskari.mapframework.wmts.service.WmtsLayerModelBuilder');
