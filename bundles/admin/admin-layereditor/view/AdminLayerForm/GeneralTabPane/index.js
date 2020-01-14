@@ -1,0 +1,1 @@
+export { GeneralTabPane } from './GeneralTabPane';

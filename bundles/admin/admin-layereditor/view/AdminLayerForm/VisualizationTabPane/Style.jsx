@@ -27,7 +27,7 @@ export const Style = ({ layer, propertyFields, controller }) => {
     );
 };
 Style.propTypes = {
-    layer: PropTypes.string,
+    layer: PropTypes.object.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

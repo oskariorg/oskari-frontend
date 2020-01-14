@@ -1,13 +1,12 @@
 import React from 'react';
 import { storiesOf } from '@storybook/react';
-import { AdminLayerForm } from './AdminLayerForm';
-import { AdminLayerFormHandler } from './AdminLayerFormHandler';
+import { AdminLayerForm, AdminLayerFormHandler } from './';
 
-import '../../../../src/global';
-import '../../../mapping/mapmodule/service/map.state';
-import '../../../mapping/mapmodule/domain/AbstractLayer';
-import '../../../mapping/mapmodule/domain/style';
-import '../resources/locale/fi';
+import '../../../../../src/global';
+import '../../../../mapping/mapmodule/service/map.state';
+import '../../../../mapping/mapmodule/domain/AbstractLayer';
+import '../../../../mapping/mapmodule/domain/style';
+import '../../resources/locale/fi';
 
 import { LocaleProvider } from 'oskari-ui/util';
 

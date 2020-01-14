@@ -1,0 +1,1 @@
+export { PermissionsTabPane } from './PermissionsTabPane';
