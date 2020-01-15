@@ -45,6 +45,7 @@ Oskari.registerLocalization(
             "addLayer": "Add a new map layer",
             "dataProvider": "Dataprovider",
             "addDataProvider": "Add dataprovider",
+            "editDataProvider": "Edit dataprovider",
             "dataProviderName": "Dataprovider name",
             "themeName": "Theme name",
             "addTheme": "Add theme",

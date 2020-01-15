@@ -3,6 +3,7 @@ export class LayerGroup {
         this.name = title;
         this.layers = [];
         this.searchIndex = {};
+        this.tools = [];
     }
     /**
      * @method setId
@@ -27,6 +28,17 @@ export class LayerGroup {
         this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
     }
     /**
+     * @method addTool
+     * @param {Oskari.mapframework.domain.Tool} tool
+     */
+    setTools (tools) {
+        this.tools = tools;
+    }
+
+    getTools () {
+        return this.tools;
+    }
+    /**
      * @method getLayers
      * @return {Layer[]}
      */
@@ -48,6 +60,7 @@ export class LayerGroup {
         const clone = new LayerGroup(this.name);
         clone.layers = [...this.layers];
         clone.searchIndex = { ...this.searchIndex };
+        clone.tools = [ ...this.tools ];
         return clone;
     }
 };

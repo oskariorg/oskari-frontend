@@ -46,6 +46,7 @@ Oskari.registerLocalization(
             "dataProvider": "Dataprovider",
             "dataProviderName": "Dataprovider namn",
             "addDataProvider": "Lägg till dataprovider",
+            "editDataProvider": "Redigera dataprovider",
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
             "mapLayerGroups": "Maplayer-grupper",

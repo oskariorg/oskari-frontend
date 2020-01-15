@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Badge, CollapsePanel, List, ListItem } from 'oskari-ui';
+import { Badge, CollapsePanel, List, ListItem, Tooltip } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Layer } from './Layer/';
 import styled from 'styled-components';
@@ -22,6 +22,10 @@ const StyledListItem = styled(ListItem)`
     }
 `;
 
+const StyledEditGroup = styled.span`
+    padding-right: 20px;
+`;
+
 const renderLayer = ({ model, even, selected, controller }) => {
     const itemProps = { model, even, selected, controller };
     return (
@@ -35,6 +39,13 @@ renderLayer.propTypes = {
     even: PropTypes.any,
     selected: PropTypes.any,
     controller: PropTypes.any
+};
+
+const onToolClick = tool => {
+    const cb = tool.getCallback();
+    if (cb) {
+        cb();
+    }
 };
 
 const LayerCollapsePanel = (props) => {
@@ -51,11 +62,22 @@ const LayerCollapsePanel = (props) => {
     const badgeText = group.unfilteredLayerCount
         ? layerRows.length + ' / ' + group.unfilteredLayerCount
         : layerRows.length;
+
     return (
         <StyledCollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
-            extra={<Badge inversed={true} count={badgeText}/>}
-        >
+            extra={
+                <React.Fragment>
+                    {
+                        group.getTools().map((tool, i) =>
+                            <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
+                                <StyledEditGroup className={tool.getIconCls()} onClick={() => onToolClick(tool)}/>
+                            </Tooltip>
+                        )
+                    }
+                    <Badge inversed={true} count={badgeText}/>
+                </React.Fragment>
+            }>
             <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
         </StyledCollapsePanel>
     );

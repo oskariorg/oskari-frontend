@@ -81,6 +81,8 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             addLayerTool.setName('layer-editor-add-layer');
             addLayerTool.setTitle(this.loc('addLayer'));
             addLayerTool.setCallback(() => Oskari.getSandbox().postRequestByName('ShowLayerEditorRequest', []));
+            addLayerTool.setTypes([toolingService.TYPE_CREATE]);
+            toolingService.addTool(addLayerTool);
 
             const offset = {
                 x: -100,
@@ -95,21 +97,27 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     this.showFormPopup(flyoutKey, position);
                 };
             };
+
             const addDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             addDataProviderTool.setName('layer-editor-add-data-provider');
             addDataProviderTool.setTitle(this.loc('addDataProvider'));
             addDataProviderTool.setCallback(createPopupCallback(FLYOUT.DATA_PROVIDER));
+            addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
+            toolingService.addTool(addDataProviderTool);
+
+            const editDataProviderTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
+            editDataProviderTool.setName('edit-data-provider');
+            editDataProviderTool.setCallback(() => console.log('TODO'));
+            editDataProviderTool.setIconCls('edit-layer');
+            editDataProviderTool.setTooltip(this.loc('editDataProvider'));
+            editDataProviderTool.setTypes(['layergroup']);
+            toolingService.addTool(editDataProviderTool);
 
             const addThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
             addThemeTool.setName('layer-editor-add-theme');
             addThemeTool.setTitle(this.loc('addTheme'));
             addThemeTool.setCallback(createPopupCallback(FLYOUT.THEME));
-
-            addLayerTool.setTypes([toolingService.TYPE_CREATE]);
             addThemeTool.setTypes([toolingService.TYPE_CREATE]);
-            addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
-            toolingService.addTool(addLayerTool);
-            toolingService.addTool(addDataProviderTool);
             toolingService.addTool(addThemeTool);
         }
 

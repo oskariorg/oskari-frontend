@@ -46,6 +46,7 @@ Oskari.registerLocalization(
             "dataProvider": "Tiedontuottaja",
             "dataProviderName": "Tiedontuottajan nimi",
             "addDataProvider": "Lisää tiedontuottaja",
+            "editDataProvider": "Muokkaa tiedontuottajaa",
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
             "mapLayerGroups": "Tason ryhmät",

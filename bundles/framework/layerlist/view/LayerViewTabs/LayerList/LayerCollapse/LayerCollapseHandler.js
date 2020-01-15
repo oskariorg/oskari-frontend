@@ -13,6 +13,8 @@ class ViewHandler extends StateHandler {
         super();
         this.sandbox = instance.getSandbox();
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        this.toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
+        this.toolingService.on('add', () => this.updateLayerGroups());
         this.map = this.sandbox.getMap();
         this.groupingMethod = groupingMethod;
         this.filter = {
@@ -79,7 +81,8 @@ class ViewHandler extends StateHandler {
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
-        let groups = groupLayers([...layers], this.groupingMethod);
+        const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
+        let groups = groupLayers([...layers], this.groupingMethod, tools);
         if (!searchText) {
             this.updateState({ groups });
             return;

@@ -18,7 +18,7 @@ const comparator = (a, b, method) => {
  * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
  * @param {String} method layer method name to sort by
  */
-export const groupLayers = (layers, method) => {
+export const groupLayers = (layers, method, tools) => {
     const groupList = [];
     let group = null;
 
@@ -35,6 +35,7 @@ export const groupLayers = (layers, method) => {
                 groupList.push(group);
             }
             group.addLayer(layer);
+            group.setTools(tools);
         });
 
     return groupList;
