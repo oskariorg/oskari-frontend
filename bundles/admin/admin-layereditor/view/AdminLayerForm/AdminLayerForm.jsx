@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { GeneralTabPane } from './GeneralTabPane/';
-import { VisualizationTabPane } from './VisualizationTabPane/';
-import { AdditionalTabPane } from './AdditionalTabPane/';
-import { PermissionsTabPane } from './PermissionsTabPane/';
+import { GeneralTabPane } from './GeneralTabPane';
+import { VisualizationTabPane } from './VisualizationTabPane';
+import { AdditionalTabPane } from './AdditionalTabPane';
+import { PermissionsTabPane } from './PermissionsTabPane';
 import { StyledRoot } from './StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Confirm, Alert, Button, Tabs, Message } from 'oskari-ui';
+import { Confirm, Alert, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import styled from 'styled-components';
 
 const PaddedButton = styled(Button)`
@@ -33,25 +33,33 @@ const AdminLayerForm = ({
     <StyledRoot>
         { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
         <Tabs>
-            <GeneralTabPane
-                layer={layer}
-                propertyFields={propertyFields}
-                controller={controller}
-                dataProviders={dataProviders}
-                mapLayerGroups={mapLayerGroups}
-                capabilities={capabilities} />
-            <VisualizationTabPane
-                layer={layer}
-                propertyFields={propertyFields}
-                controller={controller}/>
-            <AdditionalTabPane
-                layer={layer}
-                propertyFields={propertyFields}
-                controller={controller} />
-            <PermissionsTabPane
-                rolesAndPermissionTypes={rolesAndPermissionTypes}
-                permissions={layer.role_permissions}
-                controller={controller}/>
+            <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
+                <GeneralTabPane
+                    layer={layer}
+                    propertyFields={propertyFields}
+                    controller={controller}
+                    dataProviders={dataProviders}
+                    mapLayerGroups={mapLayerGroups}
+                    capabilities={capabilities} />
+            </TabPane>
+            <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
+                <VisualizationTabPane
+                    layer={layer}
+                    propertyFields={propertyFields}
+                    controller={controller}/>
+            </TabPane>
+            <TabPane key='additional' tab={<Message messageKey='additionalTabTitle'/>}>
+                <AdditionalTabPane
+                    layer={layer}
+                    propertyFields={propertyFields}
+                    controller={controller} />
+            </TabPane>
+            <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
+                <PermissionsTabPane
+                    rolesAndPermissionTypes={rolesAndPermissionTypes}
+                    permissions={layer.role_permissions}
+                    controller={controller}/>
+            </TabPane>
         </Tabs>
         <PaddedButton type='primary' onClick={() => onSave()}>
             <Message messageKey={layer.isNew ? 'add' : 'save'}/>

@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledTab, StyledColumnLeft, StyledColumnRight } from '../StyledFormComponents';
-import { TabPane, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
 import { Style } from './Style';
@@ -12,29 +11,27 @@ import { Scale } from './Scale';
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, propertyFields, controller }) => (
-    <TabPane key='visual' tab={<Message messageKey='visualizationTabTitle'/>}>
-        <StyledTab>
-            <StyledColumnLeft>
-                { propertyFields.includes(LayerComposingModel.OPACITY) &&
-                    <Opacity layer={layer} controller={controller} />
-                }
-                { propertyFields.includes(LayerComposingModel.STYLE) &&
-                    <Style layer={layer} controller={controller} propertyFields={propertyFields} />
-                }
-                { propertyFields.includes(LayerComposingModel.STYLE_JSON) &&
-                    <StyleJson layer={layer} controller={controller} />
-                }
-                { propertyFields.includes(LayerComposingModel.HOVER_JSON) &&
-                    <HoverJson layer={layer} controller={controller} />
-                }
-            </StyledColumnLeft>
-            <StyledColumnRight>
-                { propertyFields.includes(LayerComposingModel.SCALE) &&
-                    <Scale layer={layer} controller={controller} />
-                }
-            </StyledColumnRight>
-        </StyledTab>
-    </TabPane>
+    <StyledTab>
+        <StyledColumnLeft>
+            { propertyFields.includes(LayerComposingModel.OPACITY) &&
+                <Opacity layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(LayerComposingModel.STYLE) &&
+                <Style layer={layer} controller={controller} propertyFields={propertyFields} />
+            }
+            { propertyFields.includes(LayerComposingModel.STYLE_JSON) &&
+                <StyleJson layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(LayerComposingModel.HOVER_JSON) &&
+                <HoverJson layer={layer} controller={controller} />
+            }
+        </StyledColumnLeft>
+        <StyledColumnRight>
+            { propertyFields.includes(LayerComposingModel.SCALE) &&
+                <Scale layer={layer} controller={controller} />
+            }
+        </StyledColumnRight>
+    </StyledTab>
 );
 
 VisualizationTabPane.propTypes = {

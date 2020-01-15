@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { StyledTab } from '../StyledFormComponents';
-import { TabPane, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { LegendImage } from './LegendImage';
 import { Realtime } from './Realtime';
@@ -16,37 +15,35 @@ import { CapabilitiesUpdateRate } from './CapabilitiesUpdateRate';
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const AdditionalTabPane = ({ layer, propertyFields, controller }) => (
-    <TabPane key='additional' tab={<Message messageKey='additionalTabTitle'/>}>
-        <StyledTab>
-            { propertyFields.includes(LayerComposingModel.CAPABILITIES_UPDATE_RATE) &&
-                <CapabilitiesUpdateRate layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.SELECTED_TIME) &&
-                <SelectedTime layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.METADATAID) &&
-                <MetadataId layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.LEGEND_IMAGE) &&
-                <LegendImage layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.REALTIME) &&
-                <Realtime layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.GFI_CONTENT) &&
-                <GfiContent layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.GFI_TYPE) &&
-                <GfiType layer={layer} />
-            }
-            { propertyFields.includes(LayerComposingModel.GFI_XSLT) &&
-                <GfiStyle layer={layer} controller={controller} />
-            }
-            { propertyFields.includes(LayerComposingModel.ATTRIBUTES) &&
-                <Attributes layer={layer} controller={controller} />
-            }
-        </StyledTab>
-    </TabPane>
+    <StyledTab>
+        { propertyFields.includes(LayerComposingModel.CAPABILITIES_UPDATE_RATE) &&
+            <CapabilitiesUpdateRate layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.SELECTED_TIME) &&
+            <SelectedTime layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.METADATAID) &&
+            <MetadataId layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.LEGEND_IMAGE) &&
+            <LegendImage layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.REALTIME) &&
+            <Realtime layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.GFI_CONTENT) &&
+            <GfiContent layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.GFI_TYPE) &&
+            <GfiType layer={layer} />
+        }
+        { propertyFields.includes(LayerComposingModel.GFI_XSLT) &&
+            <GfiStyle layer={layer} controller={controller} />
+        }
+        { propertyFields.includes(LayerComposingModel.ATTRIBUTES) &&
+            <Attributes layer={layer} controller={controller} />
+        }
+    </StyledTab>
 );
 AdditionalTabPane.propTypes = {
     layer: PropTypes.object,

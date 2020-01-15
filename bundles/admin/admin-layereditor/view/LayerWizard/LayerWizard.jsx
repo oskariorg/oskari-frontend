@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Steps, Step, Button, Message, Alert } from 'oskari-ui';
-import { LayerTypeSelection } from './LayerWizard/LayerTypeSelection';
-import { LayerURLForm } from './LayerWizard/LayerURLForm';
+import { LayerTypeSelection } from './LayerTypeSelection';
+import { LayerURLForm } from './LayerURLForm';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { LayerCapabilitiesListing } from './LayerWizard/LayerCapabilitiesListing';
+import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
 import styled from 'styled-components';
 
 const PaddedAlert = styled(Alert)`

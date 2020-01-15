@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { DataProviderSelect } from './DataProviderSelect';
-import { TabPane, LocalizationComponent, TextInput, UrlInput, Message } from 'oskari-ui';
+import { LocalizationComponent, TextInput, UrlInput, Message } from 'oskari-ui';
 import { MapLayerGroups } from './MapLayerGroups';
 import { StyledTab, StyledComponentGroup, StyledComponent } from '../StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
@@ -112,22 +112,20 @@ const GeneralTabPane = (props) => {
         </Fragment>;
 
     return (
-        <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
-            <StyledTab>
-                { propertyFields.includes(LayerComposingModel.URL) && urlInput }
-                { propertyFields.includes(LayerComposingModel.SRS) &&
-                    <SrsSettings
-                        layer={layer}
-                        propertyFields={propertyFields}
-                        capabilities={capabilities}
-                        onChange={forcedSRS => controller.setForcedSRS(forcedSRS)} />
-                }
-                { propertyFields.includes(LayerComposingModel.NAME) && nameInput }
-                { propertyFields.includes(LayerComposingModel.LOCALIZED_NAMES) && localizedNamesInput }
-                { propertyFields.includes(LayerComposingModel.ORGANIZATION_NAME) && dataProviderInput }
-                { propertyFields.includes(LayerComposingModel.GROUPS) && mapGroupsInput }
-            </StyledTab>
-        </TabPane>
+        <StyledTab>
+            { propertyFields.includes(LayerComposingModel.URL) && urlInput }
+            { propertyFields.includes(LayerComposingModel.SRS) &&
+                <SrsSettings
+                    layer={layer}
+                    propertyFields={propertyFields}
+                    capabilities={capabilities}
+                    onChange={forcedSRS => controller.setForcedSRS(forcedSRS)} />
+            }
+            { propertyFields.includes(LayerComposingModel.NAME) && nameInput }
+            { propertyFields.includes(LayerComposingModel.LOCALIZED_NAMES) && localizedNamesInput }
+            { propertyFields.includes(LayerComposingModel.ORGANIZATION_NAME) && dataProviderInput }
+            { propertyFields.includes(LayerComposingModel.GROUPS) && mapGroupsInput }
+        </StyledTab>
     );
 };
 

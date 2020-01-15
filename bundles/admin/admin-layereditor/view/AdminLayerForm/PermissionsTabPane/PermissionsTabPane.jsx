@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionRow';
-import { TabPane, List, ListItem, Checkbox, Message } from 'oskari-ui';
+import { List, ListItem, Checkbox, Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { roleAll } from '../PermissionUtil';
 
@@ -75,11 +75,9 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     };
 
     return (
-        <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
-            <ListDiv>
-                <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
-            </ListDiv>
-        </TabPane>
+        <ListDiv>
+            <List bordered={false} dataSource={permissionDataModel} renderItem={renderRow}/>
+        </ListDiv>
     );
 };
 
