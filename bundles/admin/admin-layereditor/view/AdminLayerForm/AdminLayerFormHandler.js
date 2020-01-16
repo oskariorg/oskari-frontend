@@ -129,18 +129,9 @@ class UIHandler extends StateHandler {
         layer.attributes = this.layerHelper.toJson(attributes);
         this.updateState({ layer });
     }
-    setLocalizedNames (values) {
-        const updateValues = {};
-        Object.keys(values).forEach(language => {
-            const { name, description } = values[language];
-            updateValues[`name_${language}`] = name;
-            updateValues[`title_${language}`] = description;
-        });
+    setLocalizedNames (locale) {
         this.updateState({
-            layer: {
-                ...this.getState().layer,
-                ...updateValues
-            }
+            layer: { ...this.getState().layer, locale }
         });
     }
     setDataProvider (dataProvider) {

@@ -6,10 +6,10 @@ export const getLayerHelper = (supportedLanguages) => {
     const _getLocalizedLayerInfoFromAbstract = (layer) => {
         const info = {};
         supportedLanguages.forEach(lang => {
-            const name = `name_${lang}`;
-            const description = `title_${lang}`;
-            info[name] = layer ? layer.getName(lang) : '';
-            info[description] = layer ? layer.getDescription(lang) : '';
+            info[lang] = {
+                name: layer ? layer.getName(lang) : '',
+                subtitle: layer ? layer.getDescription(lang) : ''
+            };
         });
         return info;
     };
@@ -88,21 +88,6 @@ export const getLayerHelper = (supportedLanguages) => {
             isNew: !layer.getId()
         };
     };
-
-    /**
-     * Maps a locale object {en: {name: '', subtitle: ''}} to internal model {name_en:'', title_en: ''}}
-     * @param {Object} locale object from server response
-     */
-    const _getLocalizedLayerInfoFromServer = (locale) => {
-        const info = {};
-        Object.keys(locale).forEach(lang => {
-            const name = `name_${lang}`;
-            const description = `title_${lang}`;
-            info[name] = locale[lang].name || '';
-            info[description] = locale[lang].subtitle || '';
-        });
-        return info;
-    };
     /**
      * Returns an object for admin functionality where data has been collected from server response
      * @param {Object} layer from server response
@@ -122,7 +107,6 @@ export const getLayerHelper = (supportedLanguages) => {
             groupId: layer.organization_id,
             organizationName: layer.organization,
             maplayerGroups: layer.groups || [], // TODO: check this
-            ..._getLocalizedLayerInfoFromServer(layer.locale || {}),
             styleTitle: layer.style,
             styleJSON: layer.options.styles ? toJson(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
             hoverJSON: toJson(layer.options.hover),
@@ -133,7 +117,7 @@ export const getLayerHelper = (supportedLanguages) => {
         // FIXME: do something with these / layer specific stuff
         // server response has role_permissions:
         // role_permissions: {Admin: [], User: [], Guest: [],…}
-        let removeKeys = ['organization_id', 'organization', 'groups', 'locale'];
+        let removeKeys = ['organization_id', 'organization', 'groups'];
         // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
         removeKeys.push('gfiContent');
 

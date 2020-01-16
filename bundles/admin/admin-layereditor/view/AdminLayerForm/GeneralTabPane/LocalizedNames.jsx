@@ -12,44 +12,39 @@ const Padding = styled('div')`
     padding-top: 10px;
 `;
 
-export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => {
+const getLabels = bundleKey => {
     const getMsg = Oskari.getMsg.bind(null, bundleKey);
-    const localized = {
-        labels: {},
-        values: {}
-    };
+    const labels = {};
     Oskari.getSupportedLanguages().forEach(language => {
         const langPrefix = typeof getMsg(language) === 'object' ? language : 'generic';
-        localized.labels[language] = {
+        labels[language] = {
             name: getMsg(`${langPrefix}.placeholder`, [language]),
-            description: getMsg(`${langPrefix}.descplaceholder`, [language])
-        };
-        localized.values[language] = {
-            name: layer[`name_${language}`],
-            description: layer[`title_${language}`]
+            subtitle: getMsg(`${langPrefix}.descplaceholder`, [language])
         };
     });
-    return (
-        <StyledComponentGroup>
-            <LocalizationComponent
-                labels={localized.labels}
-                value={localized.values}
-                languages={Oskari.getSupportedLanguages()}
-                onChange={controller.setLocalizedNames}
-                LabelComponent={PaddedLabel}
-            >
-                {/*
-                    The inputs have to be on direct children for LocalizationComponent.
-                    Can't wrap them to <StyledComponent>.
-                */}
-                <TextInput type='text' name='name'/>
-                <Padding/>
-                <TextInput type='text' name='description'/>
-                <Padding/>
-            </LocalizationComponent>
-        </StyledComponentGroup>
-    );
-});
+    return labels;
+};
+
+export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => (
+    <StyledComponentGroup>
+        <LocalizationComponent
+            labels={getLabels(bundleKey)}
+            value={layer.locale}
+            languages={Oskari.getSupportedLanguages()}
+            onChange={controller.setLocalizedNames}
+            LabelComponent={PaddedLabel}
+        >
+            {/*
+                The inputs have to be on direct children for LocalizationComponent.
+                Can't wrap them to <StyledComponent>.
+            */}
+            <TextInput type='text' name='name'/>
+            <Padding/>
+            <TextInput type='text' name='subtitle'/>
+            <Padding/>
+        </LocalizationComponent>
+    </StyledComponentGroup>
+));
 LocalizedNames.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
