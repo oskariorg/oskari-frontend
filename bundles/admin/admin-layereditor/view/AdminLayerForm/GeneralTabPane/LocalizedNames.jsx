@@ -24,10 +24,7 @@ export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) 
             name: getMsg(`${langPrefix}.placeholder`, [language]),
             subtitle: getMsg(`${langPrefix}.descplaceholder`, [language])
         };
-        localized.values[language] = {
-            name: layer[`name_${language}`],
-            subtitle: layer[`title_${language}`]
-        };
+        localized.values = layer.locale;
     });
     return (
         <StyledComponentGroup>
@@ -44,7 +41,7 @@ export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) 
                 */}
                 <TextInput type='text' name='name'/>
                 <Padding/>
-                <TextInput type='text' name='description'/>
+                <TextInput type='text' name='subtitle'/>
                 <Padding/>
             </LocalizationComponent>
         </StyledComponentGroup>
