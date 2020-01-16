@@ -115,14 +115,18 @@ class UIHandler extends StateHandler {
     }
     setForcedSRS (forcedSRS) {
         const layer = { ...this.getState().layer };
-        if (typeof layer.attributes !== 'object') {
-            layer.attributes = {};
+        let attributes;
+        try {
+            attributes = layer.attributes ? JSON.parse(layer.attributes) : {};
+            if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
+                delete attributes.forcedSRS;
+            } else {
+                attributes = { ...attributes, forcedSRS };
+            }
+        } catch (err) {
+            attributes = { forcedSRS };
         }
-        if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
-            delete layer.attributes.forcedSRS;
-        } else {
-            layer.attributes = { ...layer.attributes, forcedSRS };
-        }
+        layer.attributes = this.layerHelper.toJson(attributes);
         this.updateState({ layer });
     }
     setLocalizedNames (values) {

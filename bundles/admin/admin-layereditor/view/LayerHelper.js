@@ -161,6 +161,7 @@ export const getLayerHelper = (supportedLanguages) => {
     return {
         fromAbstractLayer,
         fromServer,
-        createEmpty
+        createEmpty,
+        toJson
     };
 };
