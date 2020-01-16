@@ -300,6 +300,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * @return {LocalizingFlyout}
          */
         _getThemeFlyout (id) {
+            const me = this;
             const fetchTheme = (id, setLoading, setValue) => {
                 setLoading(true);
                 jQuery.ajax({
@@ -329,7 +330,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 scroll: false
             });
             this.themeFlyout.setSaveAction((value, id) => {
-                // TODO add discreet notifications
                 const httpMethod = id ? 'POST' : 'PUT';
                 const payload = id ? { locales: value, id: id } : { locales: value };
                 jQuery.ajax({
@@ -342,9 +342,20 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
                         this._getLayerService().addLayerGroup(group);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.saveSuccess'));
+                        dialog.fadeout();
                     },
-                    error: () => {
+                    error: (jqXHR, textStatus, errorThrown) => {
                         this.themeFlyout.setLoading(false);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.saveFailed'));
+                        dialog.fadeout();
+                        // Log error
+                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                        Oskari.log('admin-layereditor').error(errorText);
                     }
                 });
             });
@@ -386,7 +397,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 scroll: false
             });
             this.dataProviderFlyout.setSaveAction(value => {
-                // TODO add discreet notifications
+                const me = this;
                 const httpMethod = id ? 'POST' : 'PUT';
                 const payload = id ? { locales: value, id: id } : { locales: value };
                 jQuery.ajax({
@@ -404,9 +415,19 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         const dataProviders = [...this.dataProviders, dataProvider];
                         dataProviders.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
                         this._setDataProviders(dataProviders);
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.saveSuccess'));
+                        dialog.fadeout();
                     },
-                    error: () => {
+                    error: (jqXHR, textStatus, errorThrown) => {
                         this.dataProviderFlyout.setLoading(false);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.saveFailed'));
+                        dialog.fadeout();
+                        // Log error
+                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                        Oskari.log('admin-layereditor').error(errorText);
                     }
                 });
             });
