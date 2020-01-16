@@ -113,13 +113,16 @@ class UIHandler extends StateHandler {
     }
     setForcedSRS (forcedSRS) {
         const layer = { ...this.getState().layer };
-        if (typeof layer.attributes !== 'object') {
-            layer.attributes = {};
-        }
-        if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
-            delete layer.attributes.forcedSRS;
-        } else {
-            layer.attributes = { ...layer.attributes, forcedSRS };
+        try {
+            let attributes = layer.attributes ? JSON.parse(layer.attributes) : {};
+            if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
+                delete attributes.forcedSRS;
+            } else {
+                attributes = { ...attributes, forcedSRS };
+            }
+            layer.attributes = attributes;
+        } catch (err) {
+            layer.attributes = { forcedSRS };
         }
         this.updateState({ layer });
     }
