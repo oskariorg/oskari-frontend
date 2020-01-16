@@ -80,11 +80,11 @@ export const getLayerHelper = (supportedLanguages) => {
             style: layer.getCurrentStyle().getName(),
             styleTitle: layer.getCurrentStyle().getTitle(),
             styles: availableStyles,
-            styleJSON: layer._options.styles ? JSON.stringify(getMVTStylesWithoutSrcLayer(layer._options.styles)) : '',
-            hoverJSON: layer._options.hover ? JSON.stringify(layer._options.hover) : '',
+            styleJSON: layer._options.styles ? toJson(getMVTStylesWithoutSrcLayer(layer._options.styles)) : '',
+            hoverJSON: toJson(layer._options.hover),
             metadataid: layer.getMetadataIdentifier() || '',
             gfiContent: layer.getGfiContent() || '',
-            attributes: JSON.parse(JSON.stringify(layer.getAttributes())),
+            attributes: toJson(layer.getAttributes() || {}),
             isNew: !layer.getId()
         };
     };
@@ -101,14 +101,16 @@ export const getLayerHelper = (supportedLanguages) => {
         */
         const availableStyles = [];
 
+        layer.options = layer.options || {};
         const transformed = {
             ...layer,
             groupId: layer.organization_id,
             organizationName: layer.organization,
             maplayerGroups: layer.groups || [], // TODO: check this
             styleTitle: layer.style,
-            styleJSON: layer.options.styles ? JSON.stringify(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
-            hoverJSON: layer.options.hover ? JSON.stringify(layer.options.hover) : '',
+            styleJSON: layer.options.styles ? toJson(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
+            hoverJSON: toJson(layer.options.hover),
+            attributes: toJson(layer.attributes || {}),
             styles: availableStyles,
             isNew: !layer.id
         };
@@ -126,6 +128,11 @@ export const getLayerHelper = (supportedLanguages) => {
         return transformed;
     };
 
+    /**
+     * Helper to stringify object
+     */
+    const toJson = obj => obj ? JSON.stringify(obj, null, 2) : '';
+
     const createEmpty = () => {
         return {
             opacity: 100,
@@ -138,6 +145,7 @@ export const getLayerHelper = (supportedLanguages) => {
     return {
         fromAbstractLayer,
         fromServer,
-        createEmpty
+        createEmpty,
+        toJson
     };
 };

@@ -1,3 +1,5 @@
+import React from 'react';
+import { openNotification } from 'oskari-ui';
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
@@ -113,14 +115,18 @@ class UIHandler extends StateHandler {
     }
     setForcedSRS (forcedSRS) {
         const layer = { ...this.getState().layer };
-        if (typeof layer.attributes !== 'object') {
-            layer.attributes = {};
+        let attributes;
+        try {
+            attributes = layer.attributes ? JSON.parse(layer.attributes) : {};
+            if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
+                delete attributes.forcedSRS;
+            } else {
+                attributes = { ...attributes, forcedSRS };
+            }
+        } catch (err) {
+            attributes = { forcedSRS };
         }
-        if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
-            delete layer.attributes.forcedSRS;
-        } else {
-            layer.attributes = { ...layer.attributes, forcedSRS };
-        }
+        layer.attributes = this.layerHelper.toJson(attributes);
         this.updateState({ layer });
     }
     setLocalizedNames (locale) {
@@ -224,7 +230,6 @@ class UIHandler extends StateHandler {
         this.updateState({ layer });
     }
     setAttributes (attributes) {
-        // TODO; Fix attributes input area JSON parsing.
         this.updateState({
             layer: { ...this.getState().layer, attributes }
         });
@@ -336,11 +341,6 @@ class UIHandler extends StateHandler {
 
     saveLayer () {
         const notImplementedYet = true;
-        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
-        if (notImplementedYet) {
-            alert('Not implemented yet');
-            return;
-        }
 
         // Modify layer for backend
         const layer = { ...this.getState().layer };
@@ -357,6 +357,30 @@ class UIHandler extends StateHandler {
         this.setLayerOptions(layer);
         // TODO Reconsider using fetch directly here.
         // Maybe create common ajax request handling for Oskari?
+
+        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
+        if (notImplementedYet) {
+            const jsonOut = JSON.stringify(layer, null, 2);
+            console.log(jsonOut);
+            openNotification('info', {
+                message: 'Save not implemented yet',
+                key: 'admin-layer-save',
+                description: (
+                    <div style={{ maxHeight: 700, overflow: 'auto' }}>
+                        <pre>{jsonOut}</pre>
+                    </div>
+                ),
+                duration: null,
+                placement: 'topRight',
+                top: 30,
+                style: {
+                    width: 500,
+                    marginLeft: -400
+                }
+            });
+            return;
+        }
+
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
