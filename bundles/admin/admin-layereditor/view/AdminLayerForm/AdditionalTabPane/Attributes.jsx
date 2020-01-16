@@ -10,8 +10,8 @@ export const Attributes = ({ layer, controller }) => (
         <StyledComponent>
             <TextAreaInput
                 rows={6}
-                value={JSON.stringify(layer.attributes || {}, null, 2)}
-                onChange={(evt) => controller.setAttributes(evt.target.value)} />
+                value={layer.attributes}
+                onChange={evt => controller.setAttributes(evt.target.value)} />
         </StyledComponent>
     </Fragment>
 );
