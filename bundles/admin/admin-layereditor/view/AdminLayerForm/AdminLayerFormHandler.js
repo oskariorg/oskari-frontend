@@ -1,5 +1,6 @@
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
+import { openNotification } from 'oskari-ui';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
@@ -345,11 +346,6 @@ class UIHandler extends StateHandler {
 
     saveLayer () {
         const notImplementedYet = true;
-        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
-        if (notImplementedYet) {
-            alert('Not implemented yet');
-            return;
-        }
 
         // Modify layer for backend
         const layer = { ...this.getState().layer };
@@ -366,6 +362,18 @@ class UIHandler extends StateHandler {
         this.setLayerOptions(layer);
         // TODO Reconsider using fetch directly here.
         // Maybe create common ajax request handling for Oskari?
+
+        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
+        if (notImplementedYet) {
+            openNotification('info', {
+                message: 'Message',
+                description: 'Description',
+                placement: 'topLeft',
+                top: 50
+            });
+            return;
+        }
+
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
