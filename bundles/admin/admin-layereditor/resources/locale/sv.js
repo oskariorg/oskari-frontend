@@ -75,6 +75,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",
             "attributes": "Attribut",
+            "clusteringDistance": "Punktavstånd i kluster",
             "legendImage": "URL adress för kartförklaringar",
             "legendImageDesc": "URL adress för kartförklaringar beskriver kartlager.",
             "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
@@ -83,6 +84,12 @@ Oskari.registerLocalization(
             "supportedSRS": "Stöd SRS",
             "missingSRS": "Saknade SRS",
             "missingSRSInfo": "Denna kartlager stöder inte vissa applikationens standardprojektioner",
+            "renderMode": {
+                "title": "Innehållstyp",
+                "mvt": "Massor av små objekt",
+                "vector": "Stora objekt",
+                "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
+            },
             "messages": {
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",

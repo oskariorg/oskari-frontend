@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Switch, Message, NumberInput } from 'oskari-ui';
+import { Switch, Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { InlineFlex } from '../InlineFlex';
 import { StyledComponent } from '../StyledFormComponents';
+import { Numeric } from '../Numeric';
 import styled from 'styled-components';
 
 const SpacedLabel = styled('div')`
@@ -31,12 +32,13 @@ export const Realtime = LocaleConsumer(({ layer, controller, getMessage }) => (
             <InfoTooltip messageKeys='realtimeDesc'/>
             { layer.realtime &&
                 <RefreshRate>
-                    <NumberInput
+                    <Numeric
                         placeholder={getMessage('refreshRate')}
                         value={layer.refreshRate}
-                        onChange={value => controller.setRefreshRate(value)}
-                        formatter={value => value && value > 0 ? `${value}s` : '' }
-                        parser={value => value.replace('s', '')} />
+                        suffix='s'
+                        allowNegative={false}
+                        allowZero={false}
+                        onChange={value => controller.setRefreshRate(value)} />
                 </RefreshRate>
             }
         </StyledComponent>

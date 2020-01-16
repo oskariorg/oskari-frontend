@@ -76,6 +76,7 @@ Oskari.registerLocalization(
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
             "attributes": "Attributes",
+            "clusteringDistance": "Point distance in cluster",
             "legendImage": "Default legend URL",
             "legendImageDesc": "The URL address for map layer legend is fetched automatically from the GetCapabilities response.",
             "legendImagePlaceholder": "Give the URL address of the map legend.",
@@ -84,6 +85,12 @@ Oskari.registerLocalization(
             "supportedSRS": "Supported SRS",
             "missingSRS": "Missing SRS",
             "missingSRSInfo": "App default view projections not supported by layer",
+            "renderMode": {
+                "title": "Collection type",
+                "mvt": "Lots of small objects",
+                "geojson": "Big objects",
+                "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
+            },
             "messages": {
                 "saveSuccess": "Saved",
                 "saveFailed": "A system error occurred. Data has not been updated.",

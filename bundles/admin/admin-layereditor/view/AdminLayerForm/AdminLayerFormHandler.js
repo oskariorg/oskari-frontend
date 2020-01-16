@@ -163,6 +163,18 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, opacity }
         });
     }
+    setClusteringDistance (clusteringDistance) {
+        const layer = { ...this.getState().layer };
+        layer.options = layer.options || {};
+        layer.options.clusteringDistance = clusteringDistance;
+        this.updateState({ layer });
+    }
+    setRenderMode (renderMode) {
+        const layer = { ...this.getState().layer };
+        layer.options = layer.options || {};
+        layer.options.renderMode = renderMode;
+        this.updateState({ layer });
+    }
     setMinAndMaxScale (values) {
         this.updateState({
             layer: {
@@ -554,6 +566,7 @@ const wrapped = controllerMixin(UIHandler, [
     'layerSelected',
     'setAttributes',
     'setCapabilitiesUpdateRate',
+    'setClusteringDistance',
     'setDataProvider',
     'setForcedSRS',
     'setGfiContent',
@@ -573,6 +586,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setPassword',
     'setRealtime',
     'setRefreshRate',
+    'setRenderMode',
     'setSelectedTime',
     'setStyleJSON',
     'setType',
