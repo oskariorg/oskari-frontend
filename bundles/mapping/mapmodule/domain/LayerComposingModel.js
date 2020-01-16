@@ -70,8 +70,8 @@ class LayerComposingModel {
      * @param {string[]|string} [versions] Supported layer versions. All versions supported by default.
      */
     constructor (fields, versions) {
-        this.versions = getValidatedVersions(versions) || ALL_VERSIONS;
-        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions]));
+        this.versions = getValidatedVersions(versions);
+        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions || ALL_VERSIONS]));
         if (Array.isArray(fields)) {
             fields.forEach(cur => this.setPropertyField(cur, this.versions));
         }
@@ -87,7 +87,7 @@ class LayerComposingModel {
         if (!field || !PROPERTY_FIELDS.includes(field)) {
             return;
         }
-        const validVersions = getValidatedVersions(versions) || this.versions;
+        const validVersions = getValidatedVersions(versions) || this.versions || ALL_VERSIONS;
         if (!validVersions) {
             return;
         }
@@ -116,7 +116,7 @@ class LayerComposingModel {
      * @param {string[]|string} [versions] Layer versions where the property is supported in.
      */
     setVersions (versions) {
-        this.versions = getValidatedVersions(versions) || ALL_VERSIONS;
+        this.versions = getValidatedVersions(versions);
         for (const field in this.propertyFields.keys()) {
             this.propertyFields.set(field, this.versions);
         }
@@ -125,7 +125,7 @@ class LayerComposingModel {
      * @return {string[]} Versions with composing support
      */
     getVersions () {
-        if (this.versions === ALL_VERSIONS) {
+        if (!this.versions) {
             return [];
         }
         return [...this.versions];
