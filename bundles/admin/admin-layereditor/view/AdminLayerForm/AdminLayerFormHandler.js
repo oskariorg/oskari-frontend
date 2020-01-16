@@ -1,7 +1,7 @@
 import { stringify } from 'query-string';
-import { getLayerHelper } from './LayerHelper';
+import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './AdminLayerForm/PermissionUtil';
+import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
 class UIHandler extends StateHandler {
     constructor (consumer) {

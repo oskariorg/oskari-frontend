@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { AdminLayerForm } from './AdminLayerForm';
-import { LayerWizard } from './LayerWizard';
-import { AdminLayerFormHandler } from './AdminLayerFormHandler';
+import { AdminLayerForm, AdminLayerFormHandler } from './AdminLayerForm';
+import { LayerWizard } from './LayerWizard/';
 import { Spin } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 

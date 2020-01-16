@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Message, Tag } from 'oskari-ui';
+import { Controller } from 'oskari-ui/util';
 import { StyledComponent } from '../StyledFormComponents';
 import { InfoTooltip } from '../InfoTooltip';
 import styled from 'styled-components';
@@ -57,7 +58,7 @@ MissingSRS.propTypes = {
     epsgCodes: PropTypes.arrayOf(PropTypes.string)
 };
 
-export const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange }) => {
+export const Srs = ({ layer, capabilities = {}, propertyFields, controller }) => {
     const systemProjections = Array.from(new Set(Oskari.app.getSystemDefaultViews().map(view => view.srsName)));
     const forced = layer.attributes ? layer.attributes.forcedSRS || [] : [];
     let supported = [];
@@ -79,7 +80,7 @@ export const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange
             <Message messageKey='forcedSRS' />
             <InfoTooltip messageKeys='forcedSRSInfo' />
             <StyledComponent>
-                <Select mode='tags' value={forced} onChange={onChange}>
+                <Select mode='tags' value={forced} onChange={forcedSRS => controller.setForcedSRS(forcedSRS)}>
                     { systemProjections.map(cur => <Option key={cur}>{cur}</Option>) }
                 </Select>
             </StyledComponent>
@@ -87,9 +88,9 @@ export const SrsSettings = ({ layer, capabilities = {}, propertyFields, onChange
     );
 };
 
-SrsSettings.propTypes = {
+Srs.propTypes = {
     layer: PropTypes.object.isRequired,
     capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    onChange: PropTypes.func
+    controller: PropTypes.instanceOf(Controller).isRequired
 };
