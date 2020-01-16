@@ -47,7 +47,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
             const composingModel = new LayerComposingModel([
                 LayerComposingModel.CREDENTIALS,
                 LayerComposingModel.SRS,
-                LayerComposingModel.STYLE,
                 LayerComposingModel.URL
             ], ['1.0.0']);
             if (mapLayerService) {
