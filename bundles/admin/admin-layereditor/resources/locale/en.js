@@ -49,6 +49,7 @@ Oskari.registerLocalization(
             "dataProviderName": "Dataprovider name",
             "themeName": "Theme name",
             "addTheme": "Add theme",
+            "editTheme" : "Edit theme",
             "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",

@@ -49,6 +49,7 @@ Oskari.registerLocalization(
             "editDataProvider": "Redigera dataprovider",
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
+            "editTheme" : "Redigera tema",
             "mapLayerGroups": "Maplayer-grupper",
             "selectMapLayerGroupsButton": "Välj grupper",
             "cancel": "Tillbaka",

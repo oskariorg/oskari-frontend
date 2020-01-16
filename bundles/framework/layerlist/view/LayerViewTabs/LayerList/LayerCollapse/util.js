@@ -1,3 +1,5 @@
+import { LayerURLForm } from "../../../../../../admin/admin-layereditor/view/LayerWizard/LayerURLForm";
+
 /**
  * If both layers have same group, they are ordered by layer.getName()
  * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
@@ -27,10 +29,19 @@ export const groupLayers = (layers, method, tools) => {
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
             const groupAttr = layer[method]();
+
+            let groupId;
+            if (method === 'getInspireName') {
+                groupId = layer._groups[0] ? layer._groups[0].id : undefined;
+            } else {
+                // Layers without organization are not visible in layerlist when grouped by dataprovider
+                groupId = layer.admin ? layer.admin.organizationId : -1;
+            }
+
             if (!group || group.getTitle() !== groupAttr) {
                 group = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                    groupAttr
+                    groupId, method, groupAttr
                 );
                 groupList.push(group);
             }
