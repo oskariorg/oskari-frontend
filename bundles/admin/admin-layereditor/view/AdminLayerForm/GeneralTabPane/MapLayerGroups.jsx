@@ -31,6 +31,5 @@ export const MapLayerGroups = ({ layer, mapLayerGroups, controller }) => {
 MapLayerGroups.propTypes = {
     layer: PropTypes.object.isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired,
-    lang: PropTypes.string.isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired
 };

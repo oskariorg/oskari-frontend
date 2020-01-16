@@ -7,6 +7,8 @@ import { Style } from './Style';
 import { StyleJson } from './StyleJson';
 import { HoverJson } from './HoverJson';
 import { Scale } from './Scale';
+import { ClusteringDistance } from './ClusteringDistance';
+import { WfsRenderMode } from './WfsRenderMode';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -15,6 +17,12 @@ export const VisualizationTabPane = ({ layer, propertyFields, controller }) => (
         <StyledColumnLeft>
             { propertyFields.includes(LayerComposingModel.OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(LayerComposingModel.CLUSTERING_DISTANCE) &&
+                <ClusteringDistance layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(LayerComposingModel.WFS_RENDER_MODE) &&
+                <WfsRenderMode layer={layer} controller={controller} />
             }
             { propertyFields.includes(LayerComposingModel.STYLE) &&
                 <Style layer={layer} controller={controller} propertyFields={propertyFields} />
@@ -37,6 +45,5 @@ export const VisualizationTabPane = ({ layer, propertyFields, controller }) => (
 VisualizationTabPane.propTypes = {
     layer: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired,
-    visualizationProps: PropTypes.any
+    controller: PropTypes.instanceOf(Controller).isRequired
 };

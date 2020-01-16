@@ -1,25 +1,17 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { Message, NumberInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { InfoTooltip } from '../InfoTooltip';
-import { InlineFlex } from '../InlineFlex';
-import { StyledComponent } from '../StyledFormComponents';
+import { Numeric } from '../Numeric';
 
 export const CapabilitiesUpdateRate = ({ layer, controller }) => (
-    <Fragment>
-        <Message messageKey='capabilitiesUpdateRate'/>
-        <InfoTooltip messageKeys='capabilitiesUpdateRateDesc'/>
-        <StyledComponent>
-            <InlineFlex>
-                <NumberInput
-                    value={layer.capabilitiesUpdateRate}
-                    onChange={value => controller.setCapabilitiesUpdateRate(value)}
-                    formatter={value => value && value > 0 ? `${value}s` : '' }
-                    parser={value => value.replace('s', '')} />
-            </InlineFlex>
-        </StyledComponent>
-    </Fragment>
+    <Numeric
+        value={layer.capabilitiesUpdateRate}
+        messageKey='capabilitiesUpdateRate'
+        infoKeys='capabilitiesUpdateRateDesc'
+        suffix='s'
+        allowNegative={false}
+        allowZero={false}
+        onChange={value => controller.setCapabilitiesUpdateRate(value)} />
 );
 CapabilitiesUpdateRate.propTypes = {
     layer: PropTypes.object.isRequired,
