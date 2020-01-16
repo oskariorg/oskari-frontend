@@ -22,11 +22,11 @@ export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) 
         const langPrefix = typeof getMsg(language) === 'object' ? language : 'generic';
         localized.labels[language] = {
             name: getMsg(`${langPrefix}.placeholder`, [language]),
-            description: getMsg(`${langPrefix}.descplaceholder`, [language])
+            subtitle: getMsg(`${langPrefix}.descplaceholder`, [language])
         };
         localized.values[language] = {
             name: layer[`name_${language}`],
-            description: layer[`title_${language}`]
+            subtitle: layer[`title_${language}`]
         };
     });
     return (

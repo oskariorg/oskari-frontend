@@ -6,10 +6,10 @@ export const getLayerHelper = (supportedLanguages) => {
     const _getLocalizedLayerInfoFromAbstract = (layer) => {
         const info = {};
         supportedLanguages.forEach(lang => {
-            const name = `name_${lang}`;
-            const description = `title_${lang}`;
-            info[name] = layer ? layer.getName(lang) : '';
-            info[description] = layer ? layer.getDescription(lang) : '';
+            info[lang] = {
+                name: layer ? layer.getName(lang) : '',
+                subtitle: layer ? layer.getDescription(lang) : ''
+            };
         });
         return info;
     };
@@ -88,21 +88,6 @@ export const getLayerHelper = (supportedLanguages) => {
             isNew: !layer.getId()
         };
     };
-
-    /**
-     * Maps a locale object {en: {name: '', subtitle: ''}} to internal model {name_en:'', title_en: ''}}
-     * @param {Object} locale object from server response
-     */
-    const _getLocalizedLayerInfoFromServer = (locale) => {
-        const info = {};
-        Object.keys(locale).forEach(lang => {
-            const name = `name_${lang}`;
-            const description = `title_${lang}`;
-            info[name] = locale[lang].name || '';
-            info[description] = locale[lang].subtitle || '';
-        });
-        return info;
-    };
     /**
      * Returns an object for admin functionality where data has been collected from server response
      * @param {Object} layer from server response
@@ -121,7 +106,6 @@ export const getLayerHelper = (supportedLanguages) => {
             groupId: layer.organization_id,
             organizationName: layer.organization,
             maplayerGroups: layer.groups || [], // TODO: check this
-            ..._getLocalizedLayerInfoFromServer(layer.locale || {}),
             styleTitle: layer.style,
             styleJSON: layer.options.styles ? JSON.stringify(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
             hoverJSON: layer.options.hover ? JSON.stringify(layer.options.hover) : '',
