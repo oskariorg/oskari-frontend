@@ -115,7 +115,7 @@ export const getLayerHelper = (supportedLanguages) => {
         // FIXME: do something with these / layer specific stuff
         // server response has role_permissions:
         // role_permissions: {Admin: [], User: [], Guest: [],…}
-        let removeKeys = ['organization_id', 'organization', 'groups', 'locale'];
+        let removeKeys = ['organization_id', 'organization', 'groups'];
         // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
         removeKeys.push('gfiContent');
 
