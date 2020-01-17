@@ -475,7 +475,7 @@ class UIHandler extends StateHandler {
         const validationErrors = [];
         this.validateJsonValue(layer.styleJSON, 'messages.invalidStyleJson', validationErrors);
         this.validateJsonValue(layer.hoverJSON, 'messages.invalidHoverJson', validationErrors);
-        this.validateJsonValue(layer.attributes, 'messages.invalidAttributeJson', validationErrors);
+        this.validateJsonValue(layer.tempAttributesStr, 'messages.invalidAttributeJson', validationErrors);
         return validationErrors;
     }
 

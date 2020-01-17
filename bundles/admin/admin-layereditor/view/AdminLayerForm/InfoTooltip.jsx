@@ -14,6 +14,8 @@ export const InfoTooltip = ({ message, messageKeys }) => {
     }
     if (Array.isArray(messageKeys) && messageKeys.length !== 0) {
         message = messageKeys.map((msgKey, i) => <Message key={i} messageKey={msgKey} />);
+    }
+    if (!message) {
         return null;
     }
     return (
