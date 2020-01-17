@@ -26,7 +26,7 @@ function useInterval (callback, delay) {
     }, [delay]);
 }
 
-export const ShadowTool = ({ controller, date, time }) => {
+export const ShadowTool = ({ controller, date, time, isMobile }) => {
     const [timeValue, setTime] = useState(time);
     const [dateValue, setDate] = useState(date);
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
@@ -96,14 +96,16 @@ export const ShadowTool = ({ controller, date, time }) => {
     };
 
     return (
-        <Background>
+        <Background isMobile={isMobile}>
             <ShadowToolDate
+                isMobile={isMobile}
                 changeHandler={changeDate}
                 sliderDateValue={sliderDateValue}
                 dateValue={dateValue}
                 currentTimeHandler={changeTimeAndDate}
             />
             <ShadowToolTime
+                isMobile={isMobile}
                 changeHandler={changeTime}
                 timeValue={timeValue}
                 sliderTimeValue={sliderTimeValue}
@@ -119,5 +121,6 @@ export const ShadowTool = ({ controller, date, time }) => {
 ShadowTool.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
     date: PropTypes.string.isRequired,
-    time: PropTypes.string.isRequired
+    time: PropTypes.string.isRequired,
+    isMobile: PropTypes.bool.isRequired
 };

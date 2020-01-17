@@ -141,6 +141,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
             <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
                 <ShadowTool {... this.stateHandler.getState()}
                     controller={this.stateHandler.getController()}
+                    isMobile = {Oskari.util.isMobile()}
                 />
             </LocaleProvider>,
             popupContent.get(0));

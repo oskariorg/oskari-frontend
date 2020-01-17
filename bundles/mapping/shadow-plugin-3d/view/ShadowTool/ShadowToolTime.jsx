@@ -1,12 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Option, InputGroup, Message } from 'oskari-ui';
-import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledTimeSlider, StyledSelect, Border, StyledPlayButton } from './ShadowToolStyled';
+import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledTimeSlider, StyledSelect, TimeBorder, StyledPlayButton } from './ShadowToolStyled';
 import { PlayPauseIcon } from '../../resources/icons/';
 
 const MINUTES = 1439;
 
-export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed }) => {
+export const ShadowToolTime = props => {
+    const { isMobile, changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed } = props;
     const inputChangeTime = event => {
         const val = event.target.value;
         changeHandler(val);
@@ -21,24 +22,9 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
     };
 
     const marksForTime = {
-        360: {
-            label: '6:00',
-            style: {
-                color: '#fff'
-            }
-        },
-        720: {
-            label: '12:00',
-            style: {
-                color: '#fff'
-            }
-        },
-        1080: {
-            label: '18:00',
-            style: {
-                color: '#fff'
-            }
-        }
+        360: isMobile ? '' : '6:00',
+        720: isMobile ? '' : '12:00',
+        1080: isMobile ? '' : '18:00'
     };
 
     const speedValues = [
@@ -63,35 +49,63 @@ export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, play
     const handleSpeedChange = (val) => {
         speedHandler(val);
     };
-
-    return (
-        <Row style={{ marginTop: '5px' }}>
+    const date = () => {
+        return (
             <Col>
-                <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
+                <StyledIcon type="clock-circle"/>
                 <StyledInput value={timeValue} onChange={inputChangeTime} />
             </Col>
-            <ColFixed>
-                <InputGroup compact>
-                    <StyledPlayButton onClick={clickPlayButton}>
-                        <PlayPauseIcon initial={playing} />
-                    </StyledPlayButton>
-                    <Border>
-                        <StyledTimeSlider marks={marksForTime} min={0} max={MINUTES} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
-                    </Border>
-                </InputGroup>
-            </ColFixed>
+        );
+    };
+    const time = () => {
+        return (
             <Col>
-                <StyledSelect defaultValue={speed} style={{ width: '100%' }} size='large' onChange={handleSpeedChange}>
+                <StyledSelect defaultValue={speed} size='large' onChange={handleSpeedChange}>
                     {speedValues.map(speed => (
                         <Option key={speed.value} value={speed.value}>{speed.label}</Option>
                     ))}
                 </StyledSelect>
             </Col>
+        );
+    };
+    const slider = () => {
+        return (
+            <InputGroup compact>
+                <StyledPlayButton onClick={clickPlayButton}>
+                    <PlayPauseIcon initial={playing} />
+                </StyledPlayButton>
+                <TimeBorder isMobile={isMobile}>
+                    <StyledTimeSlider marks = {marksForTime} min={0} max={MINUTES} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
+                </TimeBorder>
+            </InputGroup>
+        );
+    };
+    if (isMobile) {
+        return (
+            <div>
+                <Row style={{ marginTop: '20px' }}>
+                    {date()}
+                    {time()}
+                </Row>
+                <Row style={{ marginTop: '20px' }}>
+                    {slider()}
+                </Row>
+            </div>
+        );
+    }
+    return (
+        <Row style={{ marginTop: '5px' }}>
+            {date()}
+            <ColFixed>
+                {slider()}
+            </ColFixed>
+            {time()}
         </Row>
     );
 };
 
 ShadowToolTime.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
     timeValue: PropTypes.string.isRequired,
     sliderTimeValue: PropTypes.number.isRequired,
     changeHandler: PropTypes.func.isRequired,

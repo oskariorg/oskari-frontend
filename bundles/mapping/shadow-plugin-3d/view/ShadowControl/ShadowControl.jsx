@@ -38,7 +38,8 @@ const ShadowControl = ({ mapInMobileMode }) => {
     );
 };
 ShadowControl.propTypes = {
-    mapInMobileMode: PropTypes.bool.isRequired
+    mapInMobileMode: PropTypes.bool.isRequired,
+    controlIsActive: PropTypes.bool.isRequired
 };
 
 const contextWrap = LocaleConsumer(ShadowControl);
