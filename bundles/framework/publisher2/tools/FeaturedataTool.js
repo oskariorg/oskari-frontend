@@ -7,11 +7,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.FeaturedataTool',
         lefthanded: 'top right',
         righthanded: 'top right',
         allowedSiblings: [
-            'Oskari.mapframework.bundle.mapmodule.plugin.LayerSelectionPlugin',
+            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
-            'Oskari.mapframework.bundle.mapmodule.plugin.PublisherToolbarPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.SearchPlugin'
+            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
+            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
+            'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin',
+            'Oskari.mapping.maprotator.MapRotatorPlugin'
         ],
         groupedSiblings: false,
         /**
