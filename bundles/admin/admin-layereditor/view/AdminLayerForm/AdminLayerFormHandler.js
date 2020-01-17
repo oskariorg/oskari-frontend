@@ -126,8 +126,7 @@ class UIHandler extends StateHandler {
         } catch (err) {
             attributes = { forcedSRS };
         }
-        layer.attributes = this.layerHelper.toJson(attributes);
-        this.updateState({ layer });
+        this.updateLayerAttributes(attributes, layer);
     }
     setLocalizedNames (locale) {
         this.updateState({
@@ -229,10 +228,52 @@ class UIHandler extends StateHandler {
         layer.format.value = value;
         this.updateState({ layer });
     }
-    setAttributes (attributes) {
-        this.updateState({
-            layer: { ...this.getState().layer, attributes }
-        });
+    setAttributes (tempAttributesStr) {
+        const layer = { ...this.getState().layer, tempAttributesStr };
+        let tempAttributes = {};
+        try {
+            tempAttributes = JSON.parse(tempAttributesStr);
+        } catch (err) { }
+
+        const isEmpty = Object.keys(tempAttributes).length === 0;
+        if (isEmpty && !layer.attributes) {
+            this.updateState({ layer });
+            return;
+        }
+        if (!isEmpty) {
+            // format text input
+            layer.tempAttributesStr = this.layerHelper.toJson(tempAttributes);
+        }
+
+        let attributes = {};
+        try {
+            attributes = JSON.parse(layer.attributes);
+        } catch (err) { }
+
+        // Delete missing attibute keys but keep managed attributes
+        const managedAttributes = ['forcedSRS'];
+        Object.keys(attributes)
+            .filter(key => !managedAttributes.includes(key))
+            .forEach(key => delete attributes[key]);
+
+        this.updateLayerAttributes({ ...attributes, ...tempAttributes }, layer);
+    }
+    updateLayerAttributes (attributesObj, layer = { ...this.getState().layer }) {
+        // Stringify object
+        layer.attributes = this.layerHelper.toJson(attributesObj);
+        // Update text input
+        let tempAttributesValid = true;
+        if (layer.tempAttributesStr) {
+            try {
+                tempAttributesValid = typeof JSON.parse(layer.tempAttributesStr) === 'object';
+            } catch (err) {
+                tempAttributesValid = false;
+            }
+        }
+        if (tempAttributesValid) {
+            layer.tempAttributesStr = layer.attributes;
+        }
+        this.updateState({ layer });
     }
     setMessage (key, type) {
         this.updateState({
@@ -349,6 +390,8 @@ class UIHandler extends StateHandler {
         // Remove role 'all' from permissions as this was only used for UI state handling purposes
         delete layer.role_permissions.all;
         const validationErrorMessages = this.validateUserInputValues(layer);
+
+        delete layer.tempAttributesStr;
 
         if (validationErrorMessages.length > 0) {
             this.setMessages(validationErrorMessages);
