@@ -8,16 +8,16 @@ const InlineBlock = styled('div')`
     display: inline-block;
 `;
 
-export const InfoTooltip = ({ messageKeys }) => {
+export const InfoTooltip = ({ message, messageKeys }) => {
     if (typeof messageKeys === 'string') {
         messageKeys = [messageKeys];
     }
-    if (!Array.isArray(messageKeys) || messageKeys.length === 0) {
+    if (Array.isArray(messageKeys) && messageKeys.length !== 0) {
+        message = messageKeys.map((msgKey, i) => <Message key={i} messageKey={msgKey} />);
         return null;
     }
-    const messages = messageKeys.map((msgKey, i) => <Message key={i} messageKey={msgKey} />);
     return (
-        <Tooltip title={messages}>
+        <Tooltip title={message}>
             <InlineBlock>
                 <Icon type="question-circle" />
             </InlineBlock>
@@ -25,5 +25,6 @@ export const InfoTooltip = ({ messageKeys }) => {
     );
 };
 InfoTooltip.propTypes = {
+    message: PropTypes.node,
     messageKeys: PropTypes.oneOfType([PropTypes.arrayOf(PropTypes.string), PropTypes.string, PropTypes.any])
 };

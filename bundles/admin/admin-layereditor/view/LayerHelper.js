@@ -85,6 +85,7 @@ export const getLayerHelper = (supportedLanguages) => {
             metadataid: layer.getMetadataIdentifier() || '',
             gfiContent: layer.getGfiContent() || '',
             attributes: toJson(layer.getAttributes() || {}),
+            tempAttributesStr: toJson(layer.getAttributes() || {}),
             isNew: !layer.getId()
         };
     };
@@ -111,6 +112,7 @@ export const getLayerHelper = (supportedLanguages) => {
             styleJSON: layer.options.styles ? toJson(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
             hoverJSON: toJson(layer.options.hover),
             attributes: toJson(layer.attributes || {}),
+            tempAttributesStr: toJson(layer.attributes || {}),
             styles: availableStyles,
             isNew: !layer.id
         };
