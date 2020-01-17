@@ -13,41 +13,55 @@ import { MetadataId } from './MetadataId';
 import { CapabilitiesUpdateRate } from './CapabilitiesUpdateRate';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const {
+    CAPABILITIES_UPDATE_RATE,
+    SELECTED_TIME,
+    METADATAID,
+    LEGEND_IMAGE,
+    REALTIME,
+    GFI_CONTENT,
+    GFI_TYPE,
+    GFI_XSLT,
+    ATTRIBUTES
+} = LayerComposingModel;
 
-export const AdditionalTabPane = ({ layer, propertyFields, controller }) => (
-    <StyledTab>
-        { propertyFields.includes(LayerComposingModel.CAPABILITIES_UPDATE_RATE) &&
-            <CapabilitiesUpdateRate layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.SELECTED_TIME) &&
-            <SelectedTime layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.METADATAID) &&
-            <MetadataId layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.LEGEND_IMAGE) &&
-            <LegendImage layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.REALTIME) &&
-            <Realtime layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.GFI_CONTENT) &&
-            <GfiContent layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.GFI_TYPE) &&
-            <GfiType layer={layer} />
-        }
-        { propertyFields.includes(LayerComposingModel.GFI_XSLT) &&
-            <GfiStyle layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LayerComposingModel.ATTRIBUTES) &&
-            <Attributes layer={layer} controller={controller} />
-        }
-    </StyledTab>
-);
+export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, controller }) => {
+    const { isQueryable } = capabilities;
+    return (
+        <StyledTab>
+            { propertyFields.includes(CAPABILITIES_UPDATE_RATE) &&
+                <CapabilitiesUpdateRate layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(SELECTED_TIME) &&
+                <SelectedTime layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(METADATAID) &&
+                <MetadataId layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(LEGEND_IMAGE) &&
+                <LegendImage layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(REALTIME) &&
+                <Realtime layer={layer} controller={controller} />
+            }
+            { isQueryable && propertyFields.includes(GFI_CONTENT) &&
+                <GfiContent layer={layer} controller={controller} />
+            }
+            { isQueryable && propertyFields.includes(GFI_TYPE) &&
+                <GfiType layer={layer} />
+            }
+            { isQueryable && propertyFields.includes(GFI_XSLT) &&
+                <GfiStyle layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(ATTRIBUTES) &&
+                <Attributes layer={layer} controller={controller} />
+            }
+        </StyledTab>
+    );
+};
 AdditionalTabPane.propTypes = {
-    layer: PropTypes.object,
+    layer: PropTypes.object.isRequired,
+    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired,
-    additionalProps: PropTypes.any
+    controller: PropTypes.instanceOf(Controller).isRequired
 };

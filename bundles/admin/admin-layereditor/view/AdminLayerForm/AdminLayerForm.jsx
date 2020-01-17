@@ -52,7 +52,8 @@ const AdminLayerForm = ({
                 <AdditionalTabPane
                     layer={layer}
                     propertyFields={propertyFields}
-                    controller={controller} />
+                    controller={controller}
+                    capabilities={capabilities} />
             </TabPane>
             <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
                 <PermissionsTabPane
