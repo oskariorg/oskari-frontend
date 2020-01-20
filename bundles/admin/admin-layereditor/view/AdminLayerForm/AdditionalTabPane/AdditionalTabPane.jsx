@@ -33,7 +33,7 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
                 <CapabilitiesUpdateRate layer={layer} controller={controller} />
             }
             { propertyFields.includes(SELECTED_TIME) &&
-                <SelectedTime layer={layer} controller={controller} />
+                <SelectedTime layer={layer} capabilities={capabilities} controller={controller} />
             }
             { propertyFields.includes(METADATAID) &&
                 <MetadataId layer={layer} controller={controller} />
