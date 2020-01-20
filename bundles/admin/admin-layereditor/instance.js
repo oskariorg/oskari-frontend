@@ -30,7 +30,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 }
             };
-            this.dataProviders = [];
         }
         _startImpl () {
             this._setupLayerTools();
@@ -38,13 +37,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this._loadDataProviders();
             this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
             this._getLayerService().on('availableLayerTypesUpdated', () => this._setupLayerTools());
-        }
-
-        _setDataProviders (dataProviders) {
-            this.dataProviders = dataProviders;
-        }
-        _getDataProviders () {
-            return this.dataProviders;
         }
         /**
          * Fetches reference to the map layer service
@@ -270,7 +262,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     dataProviders.sort(function (a, b) {
                         return Oskari.util.naturalSort(a.name, b.name);
                     });
-                    me._setDataProviders(dataProviders);
+                    me._getLayerService().setDataProviders(dataProviders);
                 }
             });
         }
@@ -341,7 +333,9 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     success: response => {
                         this.themeFlyout.hide();
                         const group = Oskari.clazz.create('Oskari.mapframework.domain.MaplayerGroup', response);
-                        this._getLayerService().addLayerGroup(group);
+                        httpMethod === 'POST'
+                            ? this._getLayerService().updateLayerGroup(group)
+                            : this._getLayerService().addLayerGroup(group);
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         dialog.show(' ', me.loc('messages.saveSuccess'));
@@ -412,9 +406,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             id: response.id,
                             name: Oskari.getLocalized(response.name)
                         };
-                        const dataProviders = [...this.dataProviders, dataProvider];
-                        dataProviders.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-                        this._setDataProviders(dataProviders);
+
+                        httpMethod === 'POST'
+                            ? this._getLayerService().updateDataProvider(dataProvider)
+                            : this._getLayerService().addDataProvider(dataProvider);
+
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         dialog.show(' ', me.loc('messages.saveSuccess'));
                         dialog.fadeout();

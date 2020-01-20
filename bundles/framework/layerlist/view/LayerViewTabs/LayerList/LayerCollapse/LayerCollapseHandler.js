@@ -13,6 +13,8 @@ class ViewHandler extends StateHandler {
         super();
         this.sandbox = instance.getSandbox();
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        this.mapLayerService.on('theme.update', () => this.updateLayerGroups());
+        this.mapLayerService.on('dataProvider.update', () => this.updateLayerGroups());
         this.toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
         this.toolingService.on('add', () => this.updateLayerGroups());
         this.map = this.sandbox.getMap();
