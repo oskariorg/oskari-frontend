@@ -7,7 +7,7 @@ import { StyledComponent } from '../StyledFormComponents';
 
 const { CAPABILITIES_STYLE, STYLE_JSON } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const getOptionsFromJson = (json, propertyFields) => {
+const getOptionsFromJson = json => {
     const options = ['default'];
     try {
         // Read json and remove duplicates
@@ -26,7 +26,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
         styleInfoKeys.push('styleDescCapabilities');
         styleOptions = capabilities.styles;
     } else if (propertyFields.includes(STYLE_JSON)) {
-        styleOptions = getOptionsFromJson(layer.styleJSON, propertyFields);
+        styleOptions = getOptionsFromJson(layer.styleJSON);
     }
     if (!styleOptions || styleOptions.length === 0) {
         return null;
