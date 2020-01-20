@@ -5,10 +5,17 @@ import { Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { StyledComponent } from '../StyledFormComponents';
 
-const { CAPABILITIES_STYLE, STYLE_JSON } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const { CAPABILITIES_STYLE, STYLE_JSON, WFS_RENDER_MODE } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const getOptionsFromJson = json => {
+const getOptionsFromJson = (json, propertyFields) => {
     const options = ['default'];
+    if (propertyFields.includes(WFS_RENDER_MODE)) {
+        try {
+            options.push({ name: 'default', title: Oskari.getMsg('MapWfs2', 'default-style') });
+        } catch (err) {
+            options.push('default');
+        }
+    }
     try {
         // Read json and remove duplicates
         const jsonKeys = Object.keys(JSON.parse(json));
@@ -26,7 +33,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
         styleInfoKeys.push('styleDescCapabilities');
         styleOptions = capabilities.styles;
     } else if (propertyFields.includes(STYLE_JSON)) {
-        styleOptions = getOptionsFromJson(layer.styleJSON);
+        styleOptions = getOptionsFromJson(layer.styleJSON, propertyFields);
     }
     if (!styleOptions || styleOptions.length === 0) {
         return null;
