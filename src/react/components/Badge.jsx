@@ -12,7 +12,7 @@ export const Badge = ({ count, inversed }) => {
         whiteSpace: 'nowrap',
         textShadow: '0 -1px 0 rgba(0,0,0,.25)'
     };
-    return <AntBadge count={count} style={style} overflowCount={999} />;
+    return <AntBadge count={count} style={style} overflowCount={999} showZero={true}/>;
 };
 Badge.propTypes = {
     count: PropTypes.oneOfType([
