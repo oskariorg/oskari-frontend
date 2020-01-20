@@ -19,7 +19,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._mapReady = false;
         this._mapReadySubscribers = [];
         this._lastKnownZoomLevel = null;
-        this._time = null;
+        this._time = new Date();
         this._log = Oskari.log('MapModuleOlCesium');
     }
 
@@ -59,12 +59,11 @@ class MapModuleOlCesium extends MapModuleOl {
             zoom: 0,
             resolutions: this.getResolutionArray()
         }));
-        this.setTime('2019-06-01T12:00:00Z');
         const creditContainer = document.createElement('div');
         creditContainer.className = 'cesium-credit-container';
         this._map3D = new OLCesium({
             map: map,
-            time: () => this.getTime(),
+            time: () => this.getJulianTime(),
             sceneOptions: {
                 showCredit: true,
                 creditContainer,
@@ -294,36 +293,52 @@ class MapModuleOlCesium extends MapModuleOl {
 
     /**
      * @method getTime
-     * Gets time set for map shadowing
-     * @return {Cesium.JulianDate}
+     * Gets time set for map
+     * @return {Date}
      */
     getTime () {
-        return this._time;
+        return this._time || new Date();
     }
-
+    /**
+     * @method getJulianTime
+     * Gets time set for map in Julian date
+     * @return {Cesium.JulianDate}
+     */
+    getJulianTime () {
+        return Cesium.JulianDate.fromDate(this.getTime());
+    }
+    /**
+     * @method getTimeParams
+     * Gets time paramaters set for map
+     * @return {Object}
+     */
+    getTimeParams () {
+        const time = this.getTime();
+        return {
+            date: moment(time).format('D/M'),
+            time: moment(time).format('H:mm'),
+            year: time.getFullYear()
+        };
+    }
     /**
      * @method setTime
-     * Sets time for map shadowing
-     * @param {String} time in Iso8601 format
+     * Sets time for map
+     * @param {Date} time
      */
     setTime (time) {
-        this._time = Cesium.JulianDate.fromIso8601(time);
-        this.notifyTimeChanged(time);
+        if (!(time instanceof Date)) return;
+        this._time = time;
+        this.notifyTimeChanged();
     }
 
     /**
      * @method notifyTimeChanged
      * Notify other components that the time has changed. Sends a TimeChangedEvent
-     * @param {String} time in Iso8601 format
      */
-    notifyTimeChanged (time) {
-        const sandbox = this.getSandbox();
-
-        const dateObject = new Date(time);
-        const date = moment(dateObject).format('D/M');
-        const clock = moment(dateObject).format('H:mm');
-        const event = Oskari.eventBuilder('TimeChangedEvent')(date, clock);
-        sandbox.notifyAll(event);
+    notifyTimeChanged () {
+        const { date, time } = this.getTimeParams();
+        const event = Oskari.eventBuilder('TimeChangedEvent')(date, time);
+        this.getSandbox().notifyAll(event);
     }
 
     getMapZoom () {
@@ -619,7 +634,6 @@ class MapModuleOlCesium extends MapModuleOl {
             plugins: {}
         };
         var pluginName;
-
         for (pluginName in this._pluginInstances) {
             if (this._pluginInstances.hasOwnProperty(pluginName) && this._pluginInstances[pluginName].getState) {
                 state.plugins[pluginName] = this._pluginInstances[pluginName].getState();
@@ -627,6 +641,7 @@ class MapModuleOlCesium extends MapModuleOl {
         }
         if (this._map3D.getEnabled()) {
             state.camera = this.getCamera();
+            state.timePoint = this.getTimeParams();
         }
         return state;
     }
@@ -806,6 +821,7 @@ class MapModuleOlCesium extends MapModuleOl {
 
         if (this._map3D.getEnabled()) {
             var cam = this.getCamera();
+            const { date, time } = this.getTimeParams();
             params +=
                 '&cam=' + cam.location.x.toFixed(0) +
                 '_' + cam.location.y.toFixed(0) +
@@ -813,6 +829,8 @@ class MapModuleOlCesium extends MapModuleOl {
                 '_' + cam.orientation.heading.toFixed(2) +
                 '_' + cam.orientation.pitch.toFixed(2) +
                 '_' + cam.orientation.roll.toFixed(2);
+            params += '&time=' + date +
+                '_' + time;
         }
 
         for (pluginName in this._pluginInstances) {

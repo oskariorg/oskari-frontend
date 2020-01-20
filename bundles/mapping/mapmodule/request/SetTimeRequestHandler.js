@@ -20,6 +20,7 @@ Oskari.clazz.define(
             const date = request.getDate();
             const time = request.getTime();
             const year = request.getYear();
+
             if (!this.validateTime(time)) {
                 this.log.warn('Invalid time format. Valid format is HH:mm');
                 return;
@@ -28,9 +29,10 @@ Oskari.clazz.define(
                 this.log.warn('Invalid date format. Valid format is D/M.');
                 return;
             }
-            const formattedDate = this.formatDate(date, time, year);
-
-            this.mapModule.setTime(formattedDate);
+            const dateArray = date.split('/');
+            const timeArray = time.split(':');
+            const dateObj = new Date(year, dateArray[1] - 1, dateArray[0], timeArray[0], timeArray[1]);
+            this.mapModule.setTime(dateObj);
         },
 
         /**
@@ -55,17 +57,6 @@ Oskari.clazz.define(
             const m = matches[2] - 1;
             const dateObject = new Date(year, m, d);
             return dateObject.getDate() === d && dateObject.getMonth() === m;
-        },
-
-        /**
-         * @method formatDate
-         * @return {String} Time formatted to ISO standard 'YYYY-MM-DDTHH:mm:ss.sssZ'
-         */
-        formatDate: function (date, time, year) {
-            const dateArray = date.split('/');
-            const timeArray = time.split(':');
-            const dateObject = new Date(year, dateArray[1] - 1, dateArray[0], timeArray[0], timeArray[1]);
-            return dateObject.toISOString();
         }
     }, {
         /**

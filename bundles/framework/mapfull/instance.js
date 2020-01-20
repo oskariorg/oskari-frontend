@@ -413,7 +413,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
             var rbVisible = Oskari.requestBuilder('MapModulePlugin.MapLayerVisibilityRequest');
 
             me._teardownState(mapmodule);
-
             // map location needs to be set before layers are added
             // otherwise f.ex. wfs layers break on add
             if (ignoreLocation !== true) {
@@ -431,6 +430,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.mapfull.MapFullBundleInstance',
                     } catch (ex) {
                         Oskari.log(this.getName()).warn('Setting camera failed. Map module does not support 3d.');
                     }
+                }
+                if (state.hasOwnProperty('timePoint')) {
+                    const { date, time, year } = state.timePoint;
+                    sandbox.postRequestByName('SetTimeRequest', [date, time, year]);
                 }
             }
 

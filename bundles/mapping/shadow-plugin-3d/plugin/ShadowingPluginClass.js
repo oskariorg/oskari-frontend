@@ -26,10 +26,9 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
         this._popupTemplate = jQuery('<div></div>');
 
-        const sandbox = this.instance.getSandbox();
+        const sandbox = Oskari.getSandbox();
         const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
-        // only usable with the 3d map/Cesium
-        const initialTime = Cesium.JulianDate.toDate(mapmodule.getTime());
+        const initialTime = mapmodule.getTime ? mapmodule.getTime() : new Date();
         this.stateHandler = new ShadowToolHandler((date, time) => {
             sandbox.postRequestByName('SetTimeRequest', [date, time]);
         }, initialTime);
@@ -37,7 +36,23 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     getName () {
         return className;
     }
-
+    isOpen () {
+        return this._toolOpen;
+    }
+    _setLayerToolsEditModeImpl () {
+        const el = this.getElement();
+        if (!el) {
+            return;
+        }
+        if (this.inLayerToolsEditMode()) {
+            if (this.isOpen()) {
+                this._toggleToolState();
+            }
+            el.off('click');
+        } else {
+            this._bindIcon(el);
+        }
+    }
     /**
      * @method resetState
      * Resets the state in the plugin
@@ -67,16 +82,19 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         return this._popup;
     }
 
-    _teardownUI () {
+    teardownUI () {
+        if (this._popup) {
+            this._popup.close(true);
+        }
         if (!this.getElement()) {
             return;
         }
         ReactDOM.unmountComponentAtNode(this.getElement().get(0));
-        this.getElement().detach();
+        this.removeFromPluginContainer(this.getElement());
     }
 
-    stopPlugin () {
-        this._teardownUI();
+    _stopPluginImpl () {
+        this.teardownUI();
     }
 
     unmountReactPopup () {
@@ -84,30 +102,30 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     }
 
     _createUI (mapInMobileMode) {
-        this._element = this._mountPoint.clone();
-
+        this._createControlElement();
+        const el = this.getElement();
         if (mapInMobileMode) {
-            this._element.css('display', 'inline-block');
+            el.css('display', 'inline-block');
             this._addToMobileToolBar();
         } else {
-            this.addToPluginContainer(this._element);
+            this.addToPluginContainer(el);
         }
-
-        this._createControlElement();
-
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
                 <ShadowControl mapInMobileMode={mapInMobileMode}/>
-            </LocaleProvider>, this._element.get(0));
+            </LocaleProvider>, el.get(0));
     }
 
     _createControlElement () {
-        const me = this;
-        const el = this.getElement();
-
+        const el = this._mountPoint.clone();
+        // el.attr('title', 'todo');
+        this._bindIcon(el);
+        this._element = el;
+    }
+    _bindIcon (el) {
         el.off('click');
-        el.on('click', function (event) {
-            me._toggleToolState();
+        el.on('click', event => {
+            this._toggleToolState();
             event.stopPropagation();
         });
     }
