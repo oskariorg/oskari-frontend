@@ -20,11 +20,11 @@ AttributeInfo.propTypes = {
     attributes: PropTypes.string
 };
 export const Attributes = ({ layer, controller }) => {
-    const { tempAttributesStr } = layer;
+    const { tempAttributesJSON } = layer;
     let isValid = true;
-    if (tempAttributesStr) {
+    if (tempAttributesJSON) {
         try {
-            isValid = typeof JSON.parse(tempAttributesStr) === 'object';
+            isValid = typeof JSON.parse(tempAttributesJSON) === 'object';
         } catch (err) {
             isValid = false;
         }
@@ -37,7 +37,7 @@ export const Attributes = ({ layer, controller }) => {
                 <JsonInput
                     isValid={isValid}
                     rows={6}
-                    value={layer.tempAttributesStr}
+                    value={layer.tempAttributesJSON}
                     onChange={evt => controller.setAttributes(evt.target.value)} />
             </StyledComponent>
         </Fragment>

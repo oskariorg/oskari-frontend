@@ -9,7 +9,7 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
         <Message messageKey='dataProvider'/>
         <StyledComponent>
             <Select
-                value={layer.organizationName}
+                value={layer.groupId}
                 onChange={value => controller.setDataProvider(value)}>
                 { dataProviders.map(dataProvider =>
                     <Option key={dataProvider.id}>{dataProvider.name}</Option>

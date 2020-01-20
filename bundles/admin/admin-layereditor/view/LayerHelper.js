@@ -1,17 +1,62 @@
-export const getLayerHelper = (supportedLanguages) => {
+export const getLayerHelper = () => {
     /**
-     * Returns an object with name_[langcode] and title_[langcode] keys for all supported languages
-     * @param {*} layer AbstractLayer
+     * Returns an object for admin functionality where data has been collected from server response
+     * @param {Object} layer from server response
+     * @param {Object} options
      */
-    const _getLocalizedLayerInfoFromAbstract = (layer) => {
-        const info = {};
-        supportedLanguages.forEach(lang => {
-            info[lang] = {
-                name: layer ? layer.getName(lang) : '',
-                subtitle: layer ? layer.getDescription(lang) : ''
-            };
-        });
-        return info;
+    const fromServer = (layer, options = {}) => {
+        const transformed = {
+            ...layer,
+            attributes: layer.attributes || {},
+            options: layer.options || {},
+            groupId: `${layer.organization_id}`,
+            maplayerGroups: layer.groups || [], // TODO: check this
+            gfiContent: layer.gfi_content,
+            gfiType: layer.gfi_type,
+            gfiXslt: layer.gfi_xslt,
+            legendImage: layer.legend_image
+        };
+        setupTemporaryFields(transformed);
+        let removeKeys = [
+            'organization_id', 'organization', 'groups', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image'
+        ];
+        if (Array.isArray(options.preserve)) {
+            removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
+        }
+        removeKeys.forEach(key => delete transformed[key]);
+        return transformed;
+    };
+
+    const toServer = layer => {
+        // Remove role 'all' from permissions as this was only used for UI state handling purposes
+        const payload = {
+            ...layer,
+            attributes: toJson(layer.attributes),
+            options: toJson(layer.options)
+        };
+        removeTemporaryFields(payload);
+        return payload;
+    };
+
+    const setupTemporaryFields = layer => {
+        if (!layer.role_permissions) {
+            layer.role_permissions = {};
+        };
+        // Add 'role' all to permissions for UI state handling purposes
+        layer.role_permissions.all = [];
+        // Add temp json fields to keep the state on invalid json syntax
+        layer.tempAttributesJSON = layer.attributes ? toJson(layer.attributes) : '';
+        layer.tempStyleJSON = layer.options.styles ? toJson(layer.options.styles) : '';
+        layer.tempHoverJSON = layer.options.hover ? toJson(layer.options.hover) : '';
+        layer.isNew = !layer.id;
+    };
+
+    const removeTemporaryFields = layer => {
+        delete layer.role_permissions.all;
+        delete layer.tempAttributesJSON;
+        delete layer.tempStyleJSON;
+        delete layer.tempHoverJSON;
+        delete layer.isNew;
     };
 
     /**
@@ -44,103 +89,22 @@ export const getLayerHelper = (supportedLanguages) => {
     };
 
     /**
-     * Returns an object for admin functionality where data has been collected from an instance of Oskari AbstractLayer "clazz"
-     * @param {*} layer AbstractLayer
+     * @method getMVTStylesWithSrcLayer
+     * Styles in MVT layer options contain data source layer names as filtering keys.
+     * This function set styles with the layer child.
+     * @return {Object} styles object with layer name filters for easier JSON editing.
      */
-    const fromAbstractLayer = (layer) => {
-        if (!layer) {
+    const getMVTStylesWithSrcLayer = (styles, layerName) => {
+        if (!styles) {
             return;
         }
-
-        const styles = layer ? layer.getStyles() : [];
-        const availableStyles = [];
-        for (let i = 0; i < styles.length; i++) {
-            availableStyles.push({
-                name: styles[i].getName(),
-                title: styles[i].getTitle()
-            });
-        }
-
-        const transformed = {
-            type: layer.getLayerType(),
-            version: layer.getVersion(),
-            id: layer.getId(),
-            url: layer.getAdmin().url,
-            username: layer.getAdmin().username,
-            password: layer.getAdmin().password,
-            capabilitiesUpdateRate: layer.getAdmin().capabilitiesUpdateRate,
-            name: layer.getLayerName(),
-            ..._getLocalizedLayerInfoFromAbstract(layer),
-            groupId: layer.getAdmin().organizationId,
-            organizationName: layer.getOrganizationName(),
-            maplayerGroups: [...layer.getGroups()],
-            opacity: layer.getOpacity() || 100,
-            minscale: layer.getMinScale() || 1,
-            maxscale: layer.getMaxScale() || 1,
-            style: layer.getCurrentStyle().getName(),
-            styleTitle: layer.getCurrentStyle().getTitle(),
-            styles: availableStyles,
-            styleJSON: layer._options.styles ? toJson(getMVTStylesWithoutSrcLayer(layer._options.styles)) : '',
-            hoverJSON: toJson(layer._options.hover),
-            metadataid: layer.getMetadataIdentifier() || '',
-            gfiContent: layer.getGfiContent() || '',
-            attributes: toJson(layer.getAttributes() || {}),
-            isNew: !layer.getId()
-        };
-        setupTemporaryFields(transformed);
-        return transformed;
-    };
-    /**
-     * Returns an object for admin functionality where data has been collected from server response
-     * @param {Object} layer from server response
-     * @param {Object} options
-     */
-    const fromServer = (layer, options = {}) => {
-        /*
-         TODO: styles are layer type specific things:
-        - for WMS these are in capabilities
-        - for WFS these are in options
-        */
-        const availableStyles = [];
-
-        layer.options = layer.options || {};
-        const transformed = {
-            ...layer,
-            groupId: layer.organization_id,
-            organizationName: layer.organization,
-            maplayerGroups: layer.groups || [], // TODO: check this
-            styleTitle: layer.style,
-            styleJSON: layer.options.styles ? toJson(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
-            hoverJSON: toJson(layer.options.hover),
-            attributes: toJson(layer.attributes || {}),
-            styles: availableStyles,
-            isNew: !layer.id
-        };
-        setupTemporaryFields(transformed);
-        // FIXME: do something with these / layer specific stuff
-        // server response has role_permissions:
-        // role_permissions: {Admin: [], User: [], Guest: [],…}
-        let removeKeys = ['organization_id', 'organization', 'groups'];
-        // server response has gfiContent that we are NOT handling yet and its not supported by the abstractlayer mapping so remove ->:
-        removeKeys.push('gfiContent');
-
-        if (Array.isArray(options.preserve)) {
-            removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
-        }
-        removeKeys.forEach(key => delete transformed[key]);
-        return transformed;
-    };
-
-    const setupTemporaryFields = layer => {
-        layer.tempAttributesStr = layer.attributes;
-        layer.tempStyleJSON = layer.styleJSON;
-        layer.tempHoverJSON = layer.hoverJSON;
-    };
-
-    const removeTemporaryFields = layer => {
-        delete layer.tempAttributesStr;
-        delete layer.tempStyleJSON;
-        delete layer.tempHoverJSON;
+        const styleJson = JSON.parse(styles);
+        Object.keys(styleJson).forEach(function (styleKey) {
+            var mvtSrcLayerStyleDef = {};
+            mvtSrcLayerStyleDef[layerName] = styleJson[styleKey];
+            styleJson[styleKey] = mvtSrcLayerStyleDef;
+        });
+        return styleJson;
     };
 
     /**
@@ -158,10 +122,9 @@ export const getLayerHelper = (supportedLanguages) => {
     };
 
     return {
-        fromAbstractLayer,
         fromServer,
+        toServer,
         createEmpty,
-        toJson,
-        removeTemporaryFields
+        toJson
     };
 };
