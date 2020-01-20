@@ -61,7 +61,7 @@ export const getLayerHelper = (supportedLanguages) => {
             });
         }
 
-        return {
+        const transformed = {
             type: layer.getLayerType(),
             version: layer.getVersion(),
             id: layer.getId(),
@@ -85,9 +85,10 @@ export const getLayerHelper = (supportedLanguages) => {
             metadataid: layer.getMetadataIdentifier() || '',
             gfiContent: layer.getGfiContent() || '',
             attributes: toJson(layer.getAttributes() || {}),
-            tempAttributesStr: toJson(layer.getAttributes() || {}),
             isNew: !layer.getId()
         };
+        setupTemporaryFields(transformed);
+        return transformed;
     };
     /**
      * Returns an object for admin functionality where data has been collected from server response
@@ -112,10 +113,10 @@ export const getLayerHelper = (supportedLanguages) => {
             styleJSON: layer.options.styles ? toJson(this.getMVTStylesWithoutSrcLayer(layer.options.styles)) : '',
             hoverJSON: toJson(layer.options.hover),
             attributes: toJson(layer.attributes || {}),
-            tempAttributesStr: toJson(layer.attributes || {}),
             styles: availableStyles,
             isNew: !layer.id
         };
+        setupTemporaryFields(transformed);
         // FIXME: do something with these / layer specific stuff
         // server response has role_permissions:
         // role_permissions: {Admin: [], User: [], Guest: [],…}
@@ -128,6 +129,18 @@ export const getLayerHelper = (supportedLanguages) => {
         }
         removeKeys.forEach(key => delete transformed[key]);
         return transformed;
+    };
+
+    const setupTemporaryFields = layer => {
+        layer.tempAttributesStr = layer.attributes;
+        layer.tempStyleJSON = layer.styleJSON;
+        layer.tempHoverJSON = layer.hoverJSON;
+    };
+
+    const removeTemporaryFields = layer => {
+        delete layer.tempAttributesStr;
+        delete layer.tempStyleJSON;
+        delete layer.tempHoverJSON;
     };
 
     /**
@@ -148,6 +161,7 @@ export const getLayerHelper = (supportedLanguages) => {
         fromAbstractLayer,
         fromServer,
         createEmpty,
-        toJson
+        toJson,
+        removeTemporaryFields
     };
 };

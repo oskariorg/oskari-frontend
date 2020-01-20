@@ -57,7 +57,7 @@ Oskari.registerLocalization(
             "delete": "Poista",
             "opacity": "Peittävyys",
             "style": "Oletustyyli",
-            "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta. Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
+            "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
             "styleDescCapabilities": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
             "selectedTime": "Valittu aika",
             "realtime": "Reaaliaikataso",

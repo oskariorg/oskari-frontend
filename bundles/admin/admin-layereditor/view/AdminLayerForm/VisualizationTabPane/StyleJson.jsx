@@ -1,16 +1,17 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextAreaInput } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledComponent } from '../StyledFormComponents';
+import { JsonInput } from '../JsonInput';
 
 export const StyleJson = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='styleJSON'/>
         <StyledComponent>
-            <TextAreaInput
+            <JsonInput
                 rows={6}
-                value={layer.styleJSON}
+                value={layer.tempStyleJSON}
                 onChange={evt => controller.setStyleJSON(evt.target.value)} />
         </StyledComponent>
     </Fragment>
