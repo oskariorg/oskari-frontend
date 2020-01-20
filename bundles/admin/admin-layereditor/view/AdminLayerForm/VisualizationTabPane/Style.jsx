@@ -5,11 +5,32 @@ import { Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { StyledComponent } from '../StyledFormComponents';
 
-const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const { CAPABILITIES_STYLE, STYLE_JSON } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const Style = ({ layer, propertyFields, controller }) => {
-    const styleInfoKeys = propertyFields.includes(LayerComposingModel.CAPABILITIES_STYLE)
-        ? ['styleDesc', 'styleDescCapabilities'] : 'styleDesc';
+const getOptionsFromJson = json => {
+    const options = ['default'];
+    try {
+        // Read json and remove duplicates
+        const jsonKeys = Object.keys(JSON.parse(json));
+        return Array.from(new Set([...options, ...jsonKeys]));
+    } catch (err) {
+        return null;
+    }
+};
+
+export const Style = ({ layer, capabilities = {}, propertyFields, controller }) => {
+    const styleInfoKeys = ['styleDesc'];
+    let styleOptions;
+
+    if (propertyFields.includes(CAPABILITIES_STYLE)) {
+        styleInfoKeys.push('styleDescCapabilities');
+        styleOptions = capabilities.styles;
+    } else if (propertyFields.includes(STYLE_JSON)) {
+        styleOptions = getOptionsFromJson(layer.styleJSON);
+    }
+    if (!styleOptions || styleOptions.length === 0) {
+        return null;
+    }
     return (
         <Fragment>
             <Message messageKey='style'/>
@@ -17,10 +38,13 @@ export const Style = ({ layer, propertyFields, controller }) => {
             <StyledComponent>
                 <Select
                     defaultValue={layer.style}
-                    onChange={value => controller.setStyle(value)}>
-                    { layer.styles.map(style =>
-                        <Option key={style.name} value={style.name}>{style.title}</Option>
-                    )}
+                    onChange={value => controller.setStyle(value)}
+                >
+                    { styleOptions.map(option => (
+                        <Option key={option.name || option} value={option.name || option}>
+                            {option.title || option.name || option}
+                        </Option>
+                    )) }
                 </Select>
             </StyledComponent>
         </Fragment>
@@ -28,6 +52,7 @@ export const Style = ({ layer, propertyFields, controller }) => {
 };
 Style.propTypes = {
     layer: PropTypes.object.isRequired,
+    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

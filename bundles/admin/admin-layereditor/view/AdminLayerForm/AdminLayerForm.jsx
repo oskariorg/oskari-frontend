@@ -45,6 +45,7 @@ const AdminLayerForm = ({
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
                 <VisualizationTabPane
                     layer={layer}
+                    capabilities={capabilities}
                     propertyFields={propertyFields}
                     controller={controller}/>
             </TabPane>

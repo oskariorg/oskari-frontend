@@ -10,32 +10,33 @@ import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 
-const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const { OPACITY, CLUSTERING_DISTANCE, WFS_RENDER_MODE, STYLE, STYLE_JSON, HOVER_JSON, SCALE } =
+    Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const VisualizationTabPane = ({ layer, propertyFields, controller }) => (
+export const VisualizationTabPane = ({ layer, capabilities, propertyFields, controller }) => (
     <StyledTab>
         <StyledColumnLeft>
-            { propertyFields.includes(LayerComposingModel.OPACITY) &&
+            { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
             }
-            { propertyFields.includes(LayerComposingModel.CLUSTERING_DISTANCE) &&
+            { propertyFields.includes(CLUSTERING_DISTANCE) &&
                 <ClusteringDistance layer={layer} controller={controller} />
             }
-            { propertyFields.includes(LayerComposingModel.WFS_RENDER_MODE) &&
+            { propertyFields.includes(WFS_RENDER_MODE) &&
                 <WfsRenderMode layer={layer} controller={controller} />
             }
-            { propertyFields.includes(LayerComposingModel.STYLE) &&
-                <Style layer={layer} controller={controller} propertyFields={propertyFields} />
+            { propertyFields.includes(STYLE) &&
+                <Style layer={layer} capabilities={capabilities} controller={controller} propertyFields={propertyFields} />
             }
-            { propertyFields.includes(LayerComposingModel.STYLE_JSON) &&
+            { propertyFields.includes(STYLE_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
             }
-            { propertyFields.includes(LayerComposingModel.HOVER_JSON) &&
+            { propertyFields.includes(HOVER_JSON) &&
                 <HoverJson layer={layer} controller={controller} />
             }
         </StyledColumnLeft>
         <StyledColumnRight>
-            { propertyFields.includes(LayerComposingModel.SCALE) &&
+            { propertyFields.includes(SCALE) &&
                 <Scale layer={layer} controller={controller} />
             }
         </StyledColumnRight>
@@ -43,7 +44,8 @@ export const VisualizationTabPane = ({ layer, propertyFields, controller }) => (
 );
 
 VisualizationTabPane.propTypes = {
-    layer: PropTypes.object,
+    layer: PropTypes.object.isRequired,
+    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

@@ -185,15 +185,23 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, style }
         });
     }
-    setStyleJSON (styleJSON) {
-        this.updateState({
-            layer: { ...this.getState().layer, styleJSON }
-        });
+    setStyleJSON (tempStyleJSON) {
+        const layer = { ...this.getState().layer, tempStyleJSON };
+        try {
+            if (typeof JSON.parse(tempStyleJSON) === 'object') {
+                layer.styleJSON = tempStyleJSON;
+            }
+        } catch (err) { }
+        this.updateState({ layer });
     }
-    setHoverJSON (hoverJSON) {
-        this.updateState({
-            layer: { ...this.getState().layer, hoverJSON }
-        });
+    setHoverJSON (tempHoverJSON) {
+        const layer = { ...this.getState().layer, tempHoverJSON };
+        try {
+            if (typeof JSON.parse(tempHoverJSON) === 'object') {
+                layer.hoverJSON = tempHoverJSON;
+            }
+        } catch (err) { }
+        this.updateState({ layer });
     }
     setMetadataIdentifier (metadataid) {
         this.updateState({
@@ -391,7 +399,7 @@ class UIHandler extends StateHandler {
         delete layer.role_permissions.all;
         const validationErrorMessages = this.validateUserInputValues(layer);
 
-        delete layer.tempAttributesStr;
+        this.layerHelper.removeTemporaryFields(layer);
 
         if (validationErrorMessages.length > 0) {
             this.setMessages(validationErrorMessages);
@@ -473,8 +481,8 @@ class UIHandler extends StateHandler {
 
     validateUserInputValues (layer) {
         const validationErrors = [];
-        this.validateJsonValue(layer.styleJSON, 'messages.invalidStyleJson', validationErrors);
-        this.validateJsonValue(layer.hoverJSON, 'messages.invalidHoverJson', validationErrors);
+        this.validateJsonValue(layer.tempStyleJSON, 'messages.invalidStyleJson', validationErrors);
+        this.validateJsonValue(layer.tempHoverJSON, 'messages.invalidHoverJson', validationErrors);
         this.validateJsonValue(layer.tempAttributesStr, 'messages.invalidAttributeJson', validationErrors);
         return validationErrors;
     }
