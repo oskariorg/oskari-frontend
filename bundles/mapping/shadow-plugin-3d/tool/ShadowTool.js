@@ -2,10 +2,18 @@ Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.tool.ShadowTool',
     function () {
     }, {
         index: 2,
-        allowedLocations: ['top left', 'top right', 'bottom left', 'bottom right'],
+        allowedLocations: ['top left', 'top right'],
         lefthanded: 'top left',
         righthanded: 'top right',
-        allowedSiblings: [],
+        allowedSiblings: [
+            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
+            'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
+            'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
+            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
+            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
+            'Oskari.mapping.maprotator.MapRotatorPlugin'
+        ],
         groupedSiblings: true,
         /**
         * Get tool object.

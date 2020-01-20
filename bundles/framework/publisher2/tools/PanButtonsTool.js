@@ -8,7 +8,11 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.PanButtonsTool',
         allowedSiblings: [
             'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+            'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
+            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
+            'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin',
+            'Oskari.mapping.maprotator.MapRotatorPlugin'
         ],
 
         groupedSiblings: true,
