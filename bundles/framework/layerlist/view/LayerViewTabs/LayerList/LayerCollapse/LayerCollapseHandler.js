@@ -84,7 +84,10 @@ class ViewHandler extends StateHandler {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
-        let groups = groupLayers([...layers], this.groupingMethod, tools);
+        const isUserAdmin = tools.length > 0;
+        const themes = isUserAdmin ? this.mapLayerService.getAllLayerGroups() : [];
+        const dataProviders = isUserAdmin ? this.mapLayerService.getDataProviders() : [];
+        let groups = groupLayers([...layers], this.groupingMethod, tools, themes, dataProviders);
         if (!searchText) {
             this.updateState({ groups });
             return;
