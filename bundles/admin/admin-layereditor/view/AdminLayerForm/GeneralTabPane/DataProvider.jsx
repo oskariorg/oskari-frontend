@@ -10,7 +10,7 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
         <StyledComponent>
             <Select
                 value={layer.groupId}
-                onChange={value => controller.setDataProvider(value)}>
+                onChange={value => controller.setDataProviderId(value)}>
                 { dataProviders.map(dataProvider =>
                     <Option key={dataProvider.id}>{dataProvider.name}</Option>
                 )}

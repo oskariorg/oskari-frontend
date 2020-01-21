@@ -128,23 +128,20 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, locale }
         });
     }
-    setDataProvider (dataProvider) {
+    setDataProviderId (dataProviderId) {
         this.updateState({
-            layer: {
-                ...this.getState().layer,
-                groupId: dataProvider
-            }
+            layer: { ...this.getState().layer, dataProviderId }
         });
     }
-    setMapLayerGroup (checked, group) {
+    setGroup (checked, group) {
         const layer = { ...this.getState().layer };
         if (checked) {
-            layer.maplayerGroups = [...layer.maplayerGroups, group.id];
+            layer.groups = Array.fromArray(new Set([...layer.groups, group.id]));
         } else {
-            const found = layer.maplayerGroups.find(cur => cur === group.id);
+            const found = layer.groups.find(cur => cur === group.id);
             if (found) {
-                layer.maplayerGroups = [...layer.maplayerGroups];
-                layer.maplayerGroups.splice(layer.maplayerGroups.indexOf(found), 1);
+                layer.groups = [...layer.groups];
+                layer.groups.splice(layer.groups.indexOf(found), 1);
             }
         }
         this.updateState({ layer });
@@ -390,7 +387,7 @@ class UIHandler extends StateHandler {
             }
         }).then(data => {
             if (layer.id) {
-                data.groups = layer.maplayerGroups;
+                data.groups = layer.groups;
                 this.updateLayer(layer.id, data);
             } else {
                 this.createlayer(data);
@@ -568,7 +565,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setAttributes',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
-    'setDataProvider',
+    'setDataProviderId',
     'setForcedSRS',
     'setGfiContent',
     'setGfiType',
@@ -578,7 +575,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setLayerUrl',
     'setLegendImage',
     'setLocalizedNames',
-    'setMapLayerGroup',
+    'setGroup',
     'setMessage',
     'setMessages',
     'setMetadataIdentifier',
