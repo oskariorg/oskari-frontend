@@ -8,7 +8,7 @@ export const Groups = ({ layer, groups, controller }) => {
     const dataSource = groups.map(group =>
         <Checkbox key={group.id}
             onChange={evt => controller.setGroup(evt.target.checked, group)}
-            checked={!!layer.group.find(cur => cur === group.id)}
+            checked={!!layer.groups.find(cur => cur === group.id)}
         >
             {group.name[Oskari.getLang()]}
         </Checkbox>
