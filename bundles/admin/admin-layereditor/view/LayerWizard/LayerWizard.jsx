@@ -7,6 +7,8 @@ import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
 import styled from 'styled-components';
 
+const { CAPABILITIES } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 const PaddedAlert = styled(Alert)`
     margin-bottom: 5px;
 `;
@@ -23,7 +25,7 @@ const WIZARD_STEP = {
     DETAILS: 3
 };
 
-function setStep (controller, requested) {
+function setStep (controller, requested, hasCapabilitiesSupport) {
     switch (requested) {
     case WIZARD_STEP.INITIAL:
         controller.setType();
@@ -33,18 +35,21 @@ function setStep (controller, requested) {
         break;
     case WIZARD_STEP.LAYER:
         controller.setLayerName();
+        if (!hasCapabilitiesSupport) {
+            controller.setVersion();
+        }
         break;
     }
 }
 
-function getStep (layer) {
+function getStep (layer, hasCapabilitiesSupport) {
     if (typeof layer.type === 'undefined') {
         return WIZARD_STEP.INITIAL;
     }
     if (typeof layer.version === 'undefined') {
         return WIZARD_STEP.SERVICE;
     }
-    if (typeof layer.name === 'undefined') {
+    if (typeof layer.name === 'undefined' && hasCapabilitiesSupport) {
         return WIZARD_STEP.LAYER;
     }
     return WIZARD_STEP.DETAILS;
@@ -69,6 +74,7 @@ const LayerWizard = ({
     controller,
     layer,
     capabilities = {},
+    propertyFields = [],
     layerTypes = [],
     loading,
     children,
@@ -77,7 +83,8 @@ const LayerWizard = ({
     credentialsCollapseOpen,
     onCancel
 }) => {
-    const currentStep = getStep(layer);
+    const hasCapabilitiesSupport = propertyFields.includes(CAPABILITIES);
+    const currentStep = getStep(layer, hasCapabilitiesSupport);
     const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
     return (
@@ -130,7 +137,7 @@ const LayerWizard = ({
             }
             { !isFirstStep && !isDetailsForOldLayer &&
                 <Button onClick={() => {
-                    setStep(controller, getStep(layer) - 1);
+                    setStep(controller, getStep(layer) - 1, hasCapabilitiesSupport);
                     onCancel();
                 }}>
                     {<Message messageKey='cancel'/>}
@@ -145,6 +152,7 @@ LayerWizard.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
     loading: PropTypes.bool,
     capabilities: PropTypes.object,
+    propertyFields: PropTypes.array,
     layerTypes: PropTypes.array,
     children: PropTypes.any,
     versions: PropTypes.array.isRequired,

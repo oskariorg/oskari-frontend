@@ -5,6 +5,8 @@ import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
@@ -46,14 +48,18 @@ class UIHandler extends StateHandler {
         });
     }
     setVersion (version) {
+        const layer = { ...this.getState().layer, version };
         if (!version) {
             // for moving back to previous step
-            this.updateState({
-                capabilities: {},
-                layer: { ...this.getState().layer, version: undefined }
-            });
+            this.updateState({ layer, capabilities: {}, propertyFields: [] });
             return;
         }
+        const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
+        const propertyFields = composingModel ? composingModel.getPropertyFields(version) : [];
+        if (!propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
+            this.updateState({ layer, propertyFields });
+            return;
+        };
         this.fetchCapabilities(version);
     }
     layerSelected (name) {
