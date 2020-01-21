@@ -66,6 +66,7 @@ export const getLayerHelper = () => {
      * Useful when there is only one known data source layer for the styles.
      * @return {Object} styles object without layer name filters for easier JSON editing.
      */
+    // This is MVT layer specific function, MVT support is not implemented yet.
     // eslint-disable-next-line no-unused-vars
     const getMVTStylesWithoutSrcLayer = (styles) => {
         if (!styles) {
@@ -95,6 +96,7 @@ export const getLayerHelper = () => {
      * This function set styles with the layer child.
      * @return {Object} styles object with layer name filters for easier JSON editing.
      */
+    // This is MVT layer specific function, MVT support is not implemented yet.
     // eslint-disable-next-line no-unused-vars
     const getMVTStylesWithSrcLayer = (styles, layerName) => {
         if (!styles) {
