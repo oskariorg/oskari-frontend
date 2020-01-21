@@ -4,11 +4,11 @@ import { Checkbox, Collapse, CollapsePanel, List, ListItem, Message } from 'oska
 import { Controller } from 'oskari-ui/util';
 import { StyledComponent } from '../StyledFormComponents';
 
-export const MapLayerGroups = ({ layer, mapLayerGroups, controller }) => {
-    const dataSource = mapLayerGroups.map(group =>
+export const Groups = ({ layer, groups, controller }) => {
+    const dataSource = groups.map(group =>
         <Checkbox key={group.id}
-            onChange={evt => controller.setMapLayerGroup(evt.target.checked, group)}
-            checked={!!layer.maplayerGroups.find(cur => cur === group.id)}
+            onChange={evt => controller.setGroup(evt.target.checked, group)}
+            checked={!!layer.group.find(cur => cur === group.id)}
         >
             {group.name[Oskari.getLang()]}
         </Checkbox>
@@ -28,8 +28,8 @@ export const MapLayerGroups = ({ layer, mapLayerGroups, controller }) => {
     );
 };
 
-MapLayerGroups.propTypes = {
+Groups.propTypes = {
     layer: PropTypes.object.isRequired,
-    mapLayerGroups: PropTypes.array.isRequired,
+    groups: PropTypes.array.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

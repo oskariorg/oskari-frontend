@@ -5,7 +5,7 @@ import { Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { StyledComponent } from '../StyledFormComponents';
 
-const { CAPABILITIES_STYLE, STYLE_JSON } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const { CAPABILITIES_STYLES, STYLE_JSON } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 const getOptionsFromJson = json => {
     const options = ['default'];
@@ -22,11 +22,11 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
     const styleInfoKeys = ['styleDesc'];
     let styleOptions;
 
-    if (propertyFields.includes(CAPABILITIES_STYLE)) {
+    if (propertyFields.includes(CAPABILITIES_STYLES)) {
         styleInfoKeys.push('styleDescCapabilities');
         styleOptions = capabilities.styles;
     } else if (propertyFields.includes(STYLE_JSON)) {
-        styleOptions = getOptionsFromJson(layer.styleJSON);
+        styleOptions = getOptionsFromJson(layer.options.styles);
     }
     if (!styleOptions || styleOptions.length === 0) {
         return null;

@@ -7,7 +7,7 @@ import { Url } from './Url';
 import { Name } from './Name';
 import { LocalizedNames } from './LocalizedNames';
 import { DataProvider } from './DataProvider';
-import { MapLayerGroups } from './MapLayerGroups';
+import { Groups } from './Groups';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -29,7 +29,7 @@ const GeneralTabPane = ({ mapLayerGroups, dataProviders, layer, capabilities, pr
             <DataProvider layer={layer} controller={controller} dataProviders={dataProviders} />
         }
         { propertyFields.includes(LayerComposingModel.GROUPS) &&
-            <MapLayerGroups layer={layer} controller={controller} mapLayerGroups={mapLayerGroups} />
+            <Groups layer={layer} controller={controller} groups={mapLayerGroups} />
         }
     </StyledTab>
 );
