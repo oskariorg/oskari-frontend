@@ -224,7 +224,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             const flyout = this._getFlyout();
             const layerService = this._getLayerService();
             flyout.setLocale(this.loc);
-            flyout.setDataProviders(this._getDataProviders());
+            flyout.setDataProviders(layerService.getDataProviders());
             flyout.setMapLayerGroups(layerService.getAllLayerGroups());
             flyout.setLayer(layerService.findMapLayer(layerId));
             if (flyout.isVisible()) {
