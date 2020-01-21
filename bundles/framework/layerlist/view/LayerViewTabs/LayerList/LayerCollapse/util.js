@@ -15,10 +15,16 @@ const comparator = (a, b, method) => {
 };
 
 /**
+ * Function to construct layer groups based on information included in layers and given grouping method.
+ * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
+ *
  * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
  * @param {String} method layer method name to sort by
+ * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
+ * @param {Oskari.mapframework.domain.MaplayerGroup[]} allGroups all user groups available in Oskari
+ * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
-export const groupLayers = (layers, method, tools, themes = [], dataProviders = []) => {
+export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = []) => {
     const groupList = [];
     let group = null;
 
@@ -54,7 +60,7 @@ export const groupLayers = (layers, method, tools, themes = [], dataProviders = 
     let groupsWithoutLayers;
     const lang = Oskari.getLang();
     if (method === 'getInspireName') {
-        groupsWithoutLayers = themes.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(t => {
+        groupsWithoutLayers = allGroups.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(t => {
             const group = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                 t.id, method, t.name[lang]
@@ -63,7 +69,7 @@ export const groupLayers = (layers, method, tools, themes = [], dataProviders = 
             return group;
         });
     } else {
-        groupsWithoutLayers = dataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
+        groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
             const group = Oskari.clazz.create(
                 'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                 d.id, method, d.name
