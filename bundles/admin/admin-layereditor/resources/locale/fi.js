@@ -48,6 +48,8 @@ Oskari.registerLocalization(
             "addDataProvider": "Lisää tiedontuottaja",
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
+            "editTheme" : "Muokkaa teemaa",
+            "editDataProvider": "Muokkaa tiedontuottajaa",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",

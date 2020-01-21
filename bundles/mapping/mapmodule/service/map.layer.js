@@ -28,6 +28,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
         // used to store sticky layer ids - key = layer id, value = true if sticky (=layer cant be removed)
         this._stickyLayerIds = {};
         this._layerGroups = [];
+        this._dataProviders = [];
         this.composingModels = {};
 
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
@@ -610,6 +611,45 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          */
         addLayerGroup: function (group) {
             this._layerGroups.push(group);
+            this.trigger('theme.update');
+        },
+        /**
+         * @method updateLayerGroup
+         * @param {Oskari.mapframework.domain.MaplayerGroup} group map layer group to update.
+         */
+        updateLayerGroup: function (group) {
+            // Update group to layerGroups
+            const index = this._layerGroups.findIndex(g => g.getId() === group.getId());
+            if (index !== -1) {
+                this._layerGroups[index] = group;
+            }
+            // Update group to needed layers. Groups under layer only contains group name with current localization
+            const lang = Oskari.getLang();
+            this.getAllLayers().filter(l =>
+                l._groups.filter(g => g.id === group.id).map(g => (g.name = group.name[lang])));
+            this.trigger('theme.update');
+        },
+        /**
+         * @method updateDataProvider
+         * @param dataProvider object with structure like {id: 1, name "Provider name"}
+         */
+        updateDataProvider: function (dataProvider) {
+            // Update dataProvider to dataProviders
+            const index = this._dataProviders.findIndex(g => g.id === dataProvider.id);
+            if (index !== -1) {
+                this._dataProviders[index] = dataProvider;
+            }
+            // Update dataProvider to needed layers.
+            this.getAllLayers().filter(l => l.admin && l.admin.organizationId === dataProvider.id).map(l => (l._organizationName = dataProvider.name));
+            this.trigger('dataProvider.update');
+        },
+        /**
+         * @method addDataProvider
+         * @param dataProvider object with structure like {id: 1, name "Provider name"}
+         */
+        addDataProvider: function (dataProvider) {
+            this._dataProviders.push(dataProvider);
+            this.trigger('dataProvider.update');
         },
 
         /**
@@ -1531,6 +1571,14 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             });
             // return true if all layers were found
             return !missingLayer;
+        },
+
+        setDataProviders: function (dataProviders) {
+            this._dataProviders = dataProviders;
+        },
+
+        getDataProviders: function () {
+            return this._dataProviders;
         }
     }, {
         /**

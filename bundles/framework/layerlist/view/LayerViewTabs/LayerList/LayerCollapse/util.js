@@ -15,10 +15,16 @@ const comparator = (a, b, method) => {
 };
 
 /**
+ * Function to construct layer groups based on information included in layers and given grouping method.
+ * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
+ *
  * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
  * @param {String} method layer method name to sort by
+ * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
+ * @param {Oskari.mapframework.domain.MaplayerGroup[]} allGroups all user groups available in Oskari
+ * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
-export const groupLayers = (layers, method) => {
+export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = []) => {
     const groupList = [];
     let group = null;
 
@@ -27,15 +33,51 @@ export const groupLayers = (layers, method) => {
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
             const groupAttr = layer[method]();
+
+            let groupId;
+            if (method === 'getInspireName') {
+                groupId = layer._groups[0] ? layer._groups[0].id : undefined;
+                // Analysis and myplaces layers don't have numeric id.
+                if (typeof groupId !== 'number') {
+                    groupId = undefined;
+                }
+            } else {
+                // Analysis and myplaces layers don't have admin information.
+                groupId = layer.admin ? layer.admin.organizationId : undefined;
+            }
+
             if (!group || group.getTitle() !== groupAttr) {
                 group = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                    groupAttr
+                    groupId, method, groupAttr
                 );
                 groupList.push(group);
             }
             group.addLayer(layer);
+            group.setTools(tools);
         });
 
-    return groupList;
+    let groupsWithoutLayers;
+    const lang = Oskari.getLang();
+    if (method === 'getInspireName') {
+        groupsWithoutLayers = allGroups.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(t => {
+            const group = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                t.id, method, t.name[lang]
+            );
+            group.setTools(tools);
+            return group;
+        });
+    } else {
+        groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
+            const group = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                d.id, method, d.name
+            );
+            group.setTools(tools);
+            return group;
+        });
+    }
+    groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    return [...groupsWithoutLayers, ...groupList];
 };

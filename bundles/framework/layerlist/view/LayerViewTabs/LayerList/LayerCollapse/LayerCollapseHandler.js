@@ -13,6 +13,10 @@ class ViewHandler extends StateHandler {
         super();
         this.sandbox = instance.getSandbox();
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
+        this.mapLayerService.on('theme.update', () => this.updateLayerGroups());
+        this.mapLayerService.on('dataProvider.update', () => this.updateLayerGroups());
+        this.toolingService = this.sandbox.getService('Oskari.mapframework.service.LayerListToolingService');
+        this.toolingService.on('add', () => this.updateLayerGroups());
         this.map = this.sandbox.getMap();
         this.groupingMethod = groupingMethod;
         this.filter = {
@@ -79,7 +83,13 @@ class ViewHandler extends StateHandler {
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
         const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
-        let groups = groupLayers([...layers], this.groupingMethod);
+        const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
+        const isUserAdmin = tools.length > 0;
+        // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.
+        // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
+        const allGroups = isUserAdmin ? this.mapLayerService.getAllLayerGroups() : [];
+        const allDataProviders = isUserAdmin ? this.mapLayerService.getDataProviders() : [];
+        let groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders);
         if (!searchText) {
             this.updateState({ groups });
             return;
