@@ -142,7 +142,7 @@ class UIHandler extends StateHandler {
     setGroup (checked, group) {
         const layer = { ...this.getState().layer };
         if (checked) {
-            layer.groups = Array.fromArray(new Set([...layer.groups, group.id]));
+            layer.groups = Array.from(new Set([...layer.groups, group.id]));
         } else {
             const found = layer.groups.find(cur => cur === group.id);
             if (found) {
