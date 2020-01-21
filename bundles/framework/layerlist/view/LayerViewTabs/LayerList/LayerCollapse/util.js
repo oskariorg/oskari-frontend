@@ -31,9 +31,13 @@ export const groupLayers = (layers, method, tools, themes = [], dataProviders = 
             let groupId;
             if (method === 'getInspireName') {
                 groupId = layer._groups[0] ? layer._groups[0].id : undefined;
+                // Analysis and myplaces layers don't have numeric id.
+                if (typeof groupId !== 'number') {
+                    groupId = undefined;
+                }
             } else {
-                // Layers without organization are not visible in layerlist when grouped by dataprovider
-                groupId = layer.admin ? layer.admin.organizationId : -1;
+                // Analysis and myplaces layers don't have admin information.
+                groupId = layer.admin ? layer.admin.organizationId : undefined;
             }
 
             if (!group || group.getTitle() !== groupAttr) {
