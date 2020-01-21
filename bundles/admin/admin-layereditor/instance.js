@@ -390,6 +390,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
             });
+            this.dataProviderFlyout.setSize(250);
             this.dataProviderFlyout.setSaveAction(value => {
                 const me = this;
                 const httpMethod = id ? 'POST' : 'PUT';
