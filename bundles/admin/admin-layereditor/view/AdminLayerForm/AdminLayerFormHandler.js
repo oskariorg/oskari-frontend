@@ -272,9 +272,9 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
-    setMessage (key, type) {
+    setMessage (key, type, args) {
         this.updateState({
-            messages: [{ key, type }]
+            messages: [{ key, type, args }]
         });
     }
     setMessages (messages) {
@@ -491,11 +491,6 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (response.ok) {
-                const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
-                this.updateState({
-                    layer: { ...this.getState().layer, version },
-                    propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
-                });
                 return response.json();
             } else {
                 if (response.status === 401) {
@@ -507,10 +502,56 @@ class UIHandler extends StateHandler {
                 return Promise.reject(new Error('Capabilities fetching failed with status code ' + response.status + ' and text ' + response.statusText));
             }
         }).then(json => {
+            const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
             this.updateState({
-                capabilities: json || {}
+                capabilities: json || {},
+                layer: { ...this.getState().layer, version },
+                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
             });
         }).catch(error => {
+            this.log.error(error);
+        });
+    }
+
+    updateCapabilities () {
+        const { layer } = this.getState();
+        const params = {
+            id: layer.id,
+            srs: Oskari.getSandbox().getMap().getSrsName()
+        };
+        const updateFailed = reason => {
+            const errorMsgKey = reason ? 'capabilities.updateFailedWithReason' : 'capabilities.updateFailed';
+            this.setMessage(errorMsgKey, 'error', { reason });
+        };
+        this.ajaxStarted();
+        fetch(Oskari.urls.getRoute('UpdateCapabilities', params), {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            this.ajaxFinished();
+            if (response.ok) {
+                return response.json();
+            } else {
+                return Promise.reject(new Error('Updating capabilities failed'));
+            }
+        }).then(data => {
+            const { success, error, layerData = {} } = data;
+            if (success.includes(`${layer.id}`)) {
+                this.updateState({
+                    capabilities: layerData.capabilities,
+                    messages: [{ key: 'capabilities.updatedSuccesfully', type: 'success' }]
+                });
+            } else {
+                if (error) {
+                    updateFailed(Object.values(error)[0]);
+                    return;
+                };
+                updateFailed();
+            }
+        }).catch(error => {
+            updateFailed();
             this.log.error(error);
         });
     }
@@ -595,6 +636,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setStyleJSON',
     'setType',
     'setUsername',
-    'setVersion'
+    'setVersion',
+    'updateCapabilities'
 ]);
 export { wrapped as AdminLayerFormHandler };
