@@ -31,7 +31,11 @@ const AdminLayerForm = ({
     rolesAndPermissionTypes
 }) => (
     <StyledRoot>
-        { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
+        { messages.map(({ key, type, args }) =>
+            <PaddedAlert key={key} type={type} message={
+                <Message messageKey={key} messageArgs={args}/>
+            }/>
+        )}
         <Tabs>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
                 <GeneralTabPane
