@@ -83,7 +83,7 @@ export const LocalizationComponent = ({
                     { label &&
                         <LabelComponent>{ label }</LabelComponent>
                     }
-                    <element.type {...element.props} value={elementValue} onChange={onElementValueChange}/>
+                    <element.type {...element.props} value={elementValue} onChange={onElementValueChange} autoComplete='off' />
                 </React.Fragment>
             );
         });

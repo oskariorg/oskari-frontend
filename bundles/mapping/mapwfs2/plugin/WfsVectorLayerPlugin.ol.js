@@ -91,17 +91,16 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
             return;
         }
         const composingModel = new LayerComposingModel([
-            LayerComposingModel.URL,
-            LayerComposingModel.CREDENTIALS,
-            LayerComposingModel.SRS,
             LayerComposingModel.CAPABILITIES,
+            LayerComposingModel.CAPABILITIES_UPDATE_RATE,
             LayerComposingModel.CLUSTERING_DISTANCE,
+            LayerComposingModel.CREDENTIALS,
+            LayerComposingModel.HOVER_JSON,
+            LayerComposingModel.SRS,
             LayerComposingModel.STYLE,
             LayerComposingModel.STYLE_JSON,
-            LayerComposingModel.HOVER_JSON,
-            LayerComposingModel.WFS_RENDER_MODE,
-            LayerComposingModel.METAINFO,
-            LayerComposingModel.CAPABILITIES_UPDATE_RATE
+            LayerComposingModel.URL,
+            LayerComposingModel.WFS_RENDER_MODE
         ], ['1.1.0', '2.0.0', '3.0']);
 
         const layerClass = 'Oskari.mapframework.bundle.mapwfs2.domain.WFSLayer';

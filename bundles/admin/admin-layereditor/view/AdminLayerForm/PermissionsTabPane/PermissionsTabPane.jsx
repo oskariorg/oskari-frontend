@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { PermissionRow } from './PermissionTabPane/PermissionRow';
+import { PermissionRow } from './PermissionRow';
 import { List, ListItem, Checkbox, Message } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { roleAll } from './PermissionUtil';
+import { roleAll } from '../PermissionUtil';
 
 const StyledListItem = styled(ListItem)`
     &:first-child > div {

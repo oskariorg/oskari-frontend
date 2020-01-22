@@ -1,7 +1,11 @@
+import React from 'react';
+import { openNotification } from 'oskari-ui';
 import { stringify } from 'query-string';
-import { getLayerHelper } from './LayerHelper';
+import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
-import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './AdminLayerForm/PermissionUtil';
+import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
+
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 class UIHandler extends StateHandler {
     constructor (consumer) {
@@ -10,7 +14,7 @@ class UIHandler extends StateHandler {
         this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
         this.loadingCount = 0;
-        this.layerHelper = getLayerHelper(Oskari.getSupportedLanguages());
+        this.layerHelper = getLayerHelper();
         this.setState({
             layer: {},
             layerTypes: this.mapLayerService.getLayerTypes(),
@@ -44,14 +48,18 @@ class UIHandler extends StateHandler {
         });
     }
     setVersion (version) {
+        const layer = { ...this.getState().layer, version };
         if (!version) {
             // for moving back to previous step
-            this.updateState({
-                capabilities: {},
-                layer: { ...this.getState().layer, version: undefined }
-            });
+            this.updateState({ layer, capabilities: {}, propertyFields: [] });
             return;
         }
+        const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
+        const propertyFields = composingModel ? composingModel.getPropertyFields(version) : [];
+        if (!propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
+            this.updateState({ layer, propertyFields });
+            return;
+        };
         this.fetchCapabilities(version);
     }
     layerSelected (name) {
@@ -88,49 +96,58 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, name }
         });
     }
-    setForcedSRS (forcedSRS) {
+    setSelectedTime (selectedTime) {
         const layer = { ...this.getState().layer };
-        if (typeof layer.attributes !== 'object') {
-            layer.attributes = {};
+        if (!layer.params) {
+            layer.params = {};
         }
-        if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
-            delete layer.attributes.forcedSRS;
-        } else {
-            layer.attributes = { ...layer.attributes, forcedSRS };
-        }
+        layer.params.selectedTime = selectedTime;
         this.updateState({ layer });
     }
-    setLocalizedNames (values) {
-        const updateValues = {};
-        Object.keys(values).forEach(language => {
-            const { name, description } = values[language];
-            updateValues[`name_${language}`] = name;
-            updateValues[`title_${language}`] = description;
-        });
+    setRealtime (realtime) {
         this.updateState({
-            layer: {
-                ...this.getState().layer,
-                ...updateValues
-            }
+            layer: { ...this.getState().layer, realtime }
         });
     }
-    setDataProvider (dataProvider) {
+    setRefreshRate (refreshRate) {
         this.updateState({
-            layer: {
-                ...this.getState().layer,
-                groupId: dataProvider
-            }
+            layer: { ...this.getState().layer, refreshRate }
         });
     }
-    setMapLayerGroup (checked, group) {
+    setCapabilitiesUpdateRate (capabilitiesUpdateRate) {
+        this.updateState({
+            layer: { ...this.getState().layer, capabilitiesUpdateRate }
+        });
+    }
+    setForcedSRS (forcedSRS) {
+        const layer = { ...this.getState().layer };
+        let attributes = layer.attributes || {};
+        if (!Array.isArray(forcedSRS) || forcedSRS.length === 0) {
+            delete attributes.forcedSRS;
+        } else {
+            attributes = { ...attributes, forcedSRS };
+        }
+        this.updateLayerAttributes(attributes, layer);
+    }
+    setLocalizedNames (locale) {
+        this.updateState({
+            layer: { ...this.getState().layer, locale }
+        });
+    }
+    setDataProviderId (dataProviderId) {
+        this.updateState({
+            layer: { ...this.getState().layer, dataProviderId }
+        });
+    }
+    setGroup (checked, group) {
         const layer = { ...this.getState().layer };
         if (checked) {
-            layer.maplayerGroups = [...layer.maplayerGroups, group.id];
+            layer.groups = Array.from(new Set([...layer.groups, group.id]));
         } else {
-            const found = layer.maplayerGroups.find(cur => cur === group.id);
+            const found = layer.groups.find(cur => cur === group.id);
             if (found) {
-                layer.maplayerGroups = [...layer.maplayerGroups];
-                layer.maplayerGroups.splice(layer.maplayerGroups.indexOf(found), 1);
+                layer.groups = [...layer.groups];
+                layer.groups.splice(layer.groups.indexOf(found), 1);
             }
         }
         this.updateState({ layer });
@@ -139,6 +156,16 @@ class UIHandler extends StateHandler {
         this.updateState({
             layer: { ...this.getState().layer, opacity }
         });
+    }
+    setClusteringDistance (clusteringDistance) {
+        const layer = { ...this.getState().layer };
+        layer.options.clusteringDistance = clusteringDistance;
+        this.updateState({ layer });
+    }
+    setRenderMode (renderMode) {
+        const layer = { ...this.getState().layer };
+        layer.options.renderMode = renderMode;
+        this.updateState({ layer });
     }
     setMinAndMaxScale (values) {
         this.updateState({
@@ -154,15 +181,19 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, style }
         });
     }
-    setStyleJSON (styleJSON) {
-        this.updateState({
-            layer: { ...this.getState().layer, styleJSON }
-        });
+    setStyleJSON (tempStyleJSON) {
+        const layer = { ...this.getState().layer, tempStyleJSON };
+        try {
+            layer.options.styles = JSON.parse(tempStyleJSON);
+        } catch (err) { }
+        this.updateState({ layer });
     }
-    setHoverJSON (hoverJSON) {
-        this.updateState({
-            layer: { ...this.getState().layer, hoverJSON }
-        });
+    setHoverJSON (tempHoverJSON) {
+        const layer = { ...this.getState().layer, tempHoverJSON };
+        try {
+            layer.options.hover = JSON.parse(tempHoverJSON);
+        } catch (err) { }
+        this.updateState({ layer });
     }
     setMetadataIdentifier (metadataid) {
         this.updateState({
@@ -197,11 +228,49 @@ class UIHandler extends StateHandler {
         layer.format.value = value;
         this.updateState({ layer });
     }
-    setAttributes (attributes) {
-        // TODO; Fix attributes input area JSON parsing.
-        this.updateState({
-            layer: { ...this.getState().layer, attributes }
-        });
+    setAttributes (tempAttributesJSON) {
+        const layer = { ...this.getState().layer, tempAttributesJSON };
+        let tempAttributes = {};
+        try {
+            tempAttributes = JSON.parse(tempAttributesJSON);
+        } catch (err) { }
+
+        const isEmpty = Object.keys(tempAttributes).length === 0;
+        if (isEmpty && !layer.attributes) {
+            this.updateState({ layer });
+            return;
+        }
+        if (!isEmpty) {
+            // format text input
+            layer.tempAttributesJSON = this.layerHelper.toJson(tempAttributes);
+        }
+
+        let attributes = {};
+        try {
+            attributes = JSON.parse(layer.attributes);
+        } catch (err) { }
+
+        // Delete missing attibute keys but keep managed attributes
+        const managedAttributes = ['forcedSRS'];
+        Object.keys(attributes)
+            .filter(key => !managedAttributes.includes(key))
+            .forEach(key => delete attributes[key]);
+
+        this.updateLayerAttributes({ ...attributes, ...tempAttributes }, layer);
+    }
+    updateLayerAttributes (attributes, layer = { ...this.getState().layer }) {
+        layer.attributes = attributes;
+        // Update text input
+        if (layer.tempAttributesJSON) {
+            try {
+                if (typeof JSON.parse(layer.tempAttributesJSON) === 'object') {
+                    layer.tempAttributesJSON = this.layerHelper.toJson(layer.attributes);
+                }
+            } catch (err) {
+                // Don't override the user input. The user might lose some data.
+            }
+        }
+        this.updateState({ layer });
     }
     setMessage (key, type) {
         this.updateState({
@@ -261,8 +330,6 @@ class UIHandler extends StateHandler {
             });
             const { capabilities, type, version } = layer;
             delete layer.capabilities;
-            // Add 'role' all to permissions for UI state handling purposes
-            layer.role_permissions.all = [];
             const composingModel = this.mapLayerService.getComposingModelForType(type);
             this.updateState({
                 layer,
@@ -272,72 +339,50 @@ class UIHandler extends StateHandler {
         });
     }
 
-    /**
-     * TODO REMOVE UNUSED FUNCTION, FIX STORIES
-     *
-     * Initializes layer model used in UI
-     * @param {Oskari.mapframework.domain.AbstractLayer} layer
-     */
-    initLayerState (layer) {
-        this.clearMessages();
-        if (!layer) {
-            this.resetLayer();
-            return;
-        }
-        this.updateState({
-            layer: this.layerHelper.fromAbstractLayer(layer)
-        });
-    }
-
-    /**
-     * @method getMVTStylesWithSrcLayer
-     * Styles in MVT layer options contain data source layer names as filtering keys.
-     * This function set styles with the layer child.
-     * @return {Object} styles object with layer name filters for easier JSON editing.
-     */
-    getMVTStylesWithSrcLayer (styles, layerName) {
-        if (!styles) {
-            return;
-        }
-        const styleJson = JSON.parse(styles);
-        Object.keys(styleJson).forEach(function (styleKey) {
-            var mvtSrcLayerStyleDef = {};
-            mvtSrcLayerStyleDef[layerName] = styleJson[styleKey];
-            styleJson[styleKey] = mvtSrcLayerStyleDef;
-        });
-        return styleJson;
-    }
-
     saveLayer () {
         const notImplementedYet = true;
-        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
-        if (notImplementedYet) {
-            alert('Not implemented yet');
-            return;
-        }
-
-        // Modify layer for backend
-        const layer = { ...this.getState().layer };
-        const layerGroups = layer.maplayerGroups;
-        layer.maplayerGroups = layer.maplayerGroups.map(cur => cur.id).join(',');
-        // Remove role 'all' from permissions as this was only used for UI state handling purposes
-        delete layer.role_permissions.all;
-        const validationErrorMessages = this.validateUserInputValues(layer);
-
+        const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
             this.setMessages(validationErrorMessages);
             return;
         }
-        this.setLayerOptions(layer);
+        // Take a copy
+        const layer = { ...this.getState().layer };
+        // Modify layer for backend
+        const layerPayload = this.layerHelper.toServer(layer);
+
+        if (notImplementedYet) {
+            const jsonOut = JSON.stringify(layerPayload, null, 2);
+            console.log(jsonOut);
+            openNotification('info', {
+                message: 'Save not implemented yet',
+                key: 'admin-layer-save',
+                description: (
+                    <div style={{ maxHeight: 700, overflow: 'auto' }}>
+                        <pre>{jsonOut}</pre>
+                    </div>
+                ),
+                duration: null,
+                placement: 'topRight',
+                top: 30,
+                style: {
+                    width: 500,
+                    marginLeft: -400
+                }
+            });
+            return;
+        }
         // TODO Reconsider using fetch directly here.
         // Maybe create common ajax request handling for Oskari?
+
+        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
         fetch(Oskari.urls.getRoute('SaveLayer'), {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/x-www-form-urlencoded'
             },
-            body: stringify(layer)
+            body: stringify(layerPayload)
         }).then(response => {
             if (response.ok) {
                 this.setMessage('messages.saveSuccess', 'success');
@@ -348,7 +393,7 @@ class UIHandler extends StateHandler {
             }
         }).then(data => {
             if (layer.id) {
-                data.groups = layerGroups;
+                data.groups = layer.groups;
                 this.updateLayer(layer.id, data);
             } else {
                 this.createlayer(data);
@@ -380,9 +425,9 @@ class UIHandler extends StateHandler {
 
     validateUserInputValues (layer) {
         const validationErrors = [];
-        this.validateJsonValue(layer.styleJSON, 'messages.invalidStyleJson', validationErrors);
-        this.validateJsonValue(layer.hoverJSON, 'messages.invalidHoverJson', validationErrors);
-        this.validateJsonValue(layer.attributes, 'messages.invalidAttributeJson', validationErrors);
+        this.validateJsonValue(layer.tempStyleJSON, 'messages.invalidStyleJson', validationErrors);
+        this.validateJsonValue(layer.tempHoverJSON, 'messages.invalidHoverJson', validationErrors);
+        this.validateJsonValue(layer.tempAttributesJSON, 'messages.invalidAttributeJson', validationErrors);
         return validationErrors;
     }
 
@@ -398,12 +443,6 @@ class UIHandler extends StateHandler {
         } catch (error) {
             validationErrors.push({ key: msgKey, type: 'error' });
         }
-    }
-    setLayerOptions (layer) {
-        const styles = layer.styleJSON !== '' ? this.getMVTStylesWithSrcLayer(layer.styleJSON, layer.name) : undefined;
-        const hoverStyle = layer.hoverJSON !== '' ? JSON.parse(layer.hoverJSON) : undefined;
-        layer.options = { ...layer.options, ...{ styles: styles, hover: hoverStyle } };
-        layer.options = JSON.stringify(layer.options);
     }
 
     deleteLayer () {
@@ -527,29 +566,35 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setType',
-    'setLayerUrl',
-    'setVersion',
+    'handlePermission',
     'layerSelected',
-    'setUsername',
-    'setPassword',
+    'setAttributes',
+    'setCapabilitiesUpdateRate',
+    'setClusteringDistance',
+    'setDataProviderId',
     'setForcedSRS',
-    'setLayerName',
-    'setLocalizedNames',
-    'setDataProvider',
-    'setMapLayerGroup',
-    'setOpacity',
-    'setMinAndMaxScale',
-    'setStyleJSON',
-    'setHoverJSON',
-    'setMetadataIdentifier',
-    'setLegendImage',
+    'setGfiContent',
     'setGfiType',
     'setGfiXslt',
-    'setGfiContent',
-    'setAttributes',
+    'setHoverJSON',
+    'setLayerName',
+    'setLayerUrl',
+    'setLegendImage',
+    'setLocalizedNames',
+    'setGroup',
     'setMessage',
     'setMessages',
-    'handlePermission'
+    'setMetadataIdentifier',
+    'setMinAndMaxScale',
+    'setOpacity',
+    'setPassword',
+    'setRealtime',
+    'setRefreshRate',
+    'setRenderMode',
+    'setSelectedTime',
+    'setStyleJSON',
+    'setType',
+    'setUsername',
+    'setVersion'
 ]);
 export { wrapped as AdminLayerFormHandler };

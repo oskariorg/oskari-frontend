@@ -1,45 +1,47 @@
 const PROPERTY_FIELDS = [
-    'URL',
-    'CREDENTIALS',
     'API_KEY',
-    'NAME',
-    'VERSION',
-    'TILE_MATRIX',
-    'LOCALIZED_NAMES',
-    'ORGANIZATION_NAME',
-    'GROUPS',
-    'SRS',
-    'SELECTED_TIME',
-    'REALTIME',
-    'REFRESH_RATE',
-    'LEGEND_IMAGE',
-    'OPACITY',
-    'SCALE',
-    'STYLE',
-    'STYLE_JSON',
-    'EXT_STYLE_JSON',
-    'HOVER_JSON',
+    'ATTRIBUTES',
+    'ATTRIBUTIONS',
+    'CAPABILITIES',
+    'CAPABILITIES_STYLES',
+    'CAPABILITIES_UPDATE_RATE',
     'CLUSTERING_DISTANCE',
-    'METADATAID',
-    'WFS_RENDER_MODE',
+    'CREDENTIALS',
+    'EXT_STYLE_JSON',
+    'GFI_CONTENT',
     'GFI_TYPE',
     'GFI_XSLT',
-    'GFI_CONTENT',
-    'CAPABILITIES',
-    'CAPABILITIES_UPDATE_RATE',
-    'ATTRIBUTES',
-    'ATTRIBUTIONS'
+    'GROUPS',
+    'HOVER_JSON',
+    'LEGEND_IMAGE',
+    'LOCALIZED_NAMES',
+    'METADATAID',
+    'NAME',
+    'OPACITY',
+    'ORGANIZATION_NAME',
+    'REALTIME',
+    'REFRESH_RATE',
+    'SCALE',
+    'SELECTED_TIME',
+    'SRS',
+    'STYLE',
+    'STYLE_JSON',
+    'TILE_MATRIX',
+    'URL',
+    'VERSION',
+    'WFS_RENDER_MODE'
 ];
 
 // Common fields are enforced on composing model.
 const COMMON_PROPERTY_FIELDS = [
-    'NAME',
-    'LOCALIZED_NAMES',
-    'ORGANIZATION_NAME',
+    'ATTRIBUTES',
     'GROUPS',
+    'LOCALIZED_NAMES',
+    'METADATAID',
+    'NAME',
     'OPACITY',
-    'SCALE',
-    'ATTRIBUTES'
+    'ORGANIZATION_NAME',
+    'SCALE'
 ];
 
 const ALL_VERSIONS = 'all';
@@ -68,8 +70,8 @@ class LayerComposingModel {
      * @param {string[]|string} [versions] Supported layer versions. All versions supported by default.
      */
     constructor (fields, versions) {
-        this.versions = getValidatedVersions(versions) || ALL_VERSIONS;
-        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions]));
+        this.versions = getValidatedVersions(versions);
+        this.propertyFields = new Map(COMMON_PROPERTY_FIELDS.map(key => [key, this.versions || ALL_VERSIONS]));
         if (Array.isArray(fields)) {
             fields.forEach(cur => this.setPropertyField(cur, this.versions));
         }
@@ -85,7 +87,7 @@ class LayerComposingModel {
         if (!field || !PROPERTY_FIELDS.includes(field)) {
             return;
         }
-        const validVersions = getValidatedVersions(versions) || this.versions;
+        const validVersions = getValidatedVersions(versions) || this.versions || ALL_VERSIONS;
         if (!validVersions) {
             return;
         }
@@ -114,7 +116,7 @@ class LayerComposingModel {
      * @param {string[]|string} [versions] Layer versions where the property is supported in.
      */
     setVersions (versions) {
-        this.versions = getValidatedVersions(versions) || ALL_VERSIONS;
+        this.versions = getValidatedVersions(versions);
         for (const field in this.propertyFields.keys()) {
             this.propertyFields.set(field, this.versions);
         }
@@ -123,7 +125,7 @@ class LayerComposingModel {
      * @return {string[]} Versions with composing support
      */
     getVersions () {
-        if (this.versions === ALL_VERSIONS) {
+        if (!this.versions) {
             return [];
         }
         return [...this.versions];

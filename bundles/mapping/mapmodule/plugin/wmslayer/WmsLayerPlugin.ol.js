@@ -34,20 +34,20 @@ Oskari.clazz.define(
             const mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             const layerClass = 'Oskari.mapframework.domain.WmsLayer';
             const composingModel = new LayerComposingModel([
-                LayerComposingModel.URL,
-                LayerComposingModel.CREDENTIALS,
-                LayerComposingModel.SRS,
                 LayerComposingModel.CAPABILITIES,
-                LayerComposingModel.SELECTED_TIME,
-                LayerComposingModel.REALTIME,
-                LayerComposingModel.REFRESH_RATE,
-                LayerComposingModel.STYLE,
-                LayerComposingModel.LEGEND_IMAGE,
-                LayerComposingModel.METAINFO,
+                LayerComposingModel.CAPABILITIES_STYLES,
+                LayerComposingModel.CAPABILITIES_UPDATE_RATE,
+                LayerComposingModel.CREDENTIALS,
+                LayerComposingModel.GFI_CONTENT,
                 LayerComposingModel.GFI_TYPE,
                 LayerComposingModel.GFI_XSLT,
-                LayerComposingModel.GFI_CONTENT,
-                LayerComposingModel.CAPABILITIES_UPDATE_RATE
+                LayerComposingModel.LEGEND_IMAGE,
+                LayerComposingModel.REALTIME,
+                LayerComposingModel.REFRESH_RATE,
+                LayerComposingModel.SELECTED_TIME,
+                LayerComposingModel.SRS,
+                LayerComposingModel.STYLE,
+                LayerComposingModel.URL
             ], ['1.1.1', '1.3.0']);
             const type = this.getLayerTypeSelector().toLowerCase() + 'layer';
             mapLayerService.registerLayerModel(type, layerClass, composingModel);

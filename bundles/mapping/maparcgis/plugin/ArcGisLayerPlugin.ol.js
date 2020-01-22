@@ -2,6 +2,8 @@ import olLayerTile from 'ol/layer/Tile';
 import olSourceTileArcGISRest from 'ol/source/TileArcGISRest';
 import olSourceXYZ from 'ol/source/XYZ';
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 /**
  * @class Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin
  * Provides functionality to draw Stats layers on the map
@@ -12,7 +14,6 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
      * @method create called automatically on construction
      * @static
      */
-
     function () {
         this._log = Oskari.log(this.getName());
     }, {
@@ -43,14 +44,21 @@ Oskari.clazz.define('Oskari.arcgis.bundle.maparcgis.plugin.ArcGisLayerPlugin',
         _initImpl: function () {
             // register domain builder
             var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
+            const composingModel = new LayerComposingModel([
+                LayerComposingModel.CREDENTIALS,
+                LayerComposingModel.SRS,
+                LayerComposingModel.URL
+            ], ['1.0.0']);
             if (mapLayerService) {
                 mapLayerService.registerLayerModel(
                     'arcgislayer',
-                    'Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer'
+                    'Oskari.arcgis.bundle.maparcgis.domain.ArcGisLayer',
+                    composingModel
                 );
                 mapLayerService.registerLayerModel(
                     'arcgis93layer',
-                    'Oskari.arcgis.bundle.maparcgis.domain.ArcGis93Layer'
+                    'Oskari.arcgis.bundle.maparcgis.domain.ArcGis93Layer',
+                    composingModel
                 );
             }
         },

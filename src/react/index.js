@@ -9,7 +9,7 @@ export { List, ListItem } from './components/List';
 export { NumberInput } from './components/NumberInput';
 export { Opacity } from './components/Opacity';
 export { Popover } from './components/Popover';
-export { Radio } from './components/RadioButton';
+export { Radio } from './components/Radio';
 export { Select, Option } from './components/Select';
 export { Slider } from './components/Slider';
 export { Spin } from './components/Spin';

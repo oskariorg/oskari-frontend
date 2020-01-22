@@ -96,7 +96,7 @@ Oskari.registerLocalization(
             "renderMode": {
                 "title": "Innehållstyp",
                 "mvt": "Massor av små objekt",
-                "vector": "Stora objekt",
+                "geojson": "Stora objekt",
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
             "clusteringDistance": "Punktavstånd i kluster",
@@ -193,8 +193,8 @@ Oskari.registerLocalization(
             "matrixSetIdDesc": "WMTS-tjänstens MatrixSetId",
             "matrixSet": "Teknisk beskrivning av WMTS-tjänsten",
             "matrixSetDesc": "Teknisk beskrivning av WMTS-tjänsten i JSON-format",
-            "realtime": "Reaaliaikataso",
-            "refreshRate": "Virkistystaajuus (sekunneissa)",
+            "realtime": "Realtidslager",
+            "refreshRate": "Uppdateringsfrekvens (i sekunder)",
             "jobTypeDesc": "Service job typ",
             "jobTypeDefault": "default",
             "jobTypes": {
