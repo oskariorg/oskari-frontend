@@ -4,7 +4,6 @@ import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
-import { returnOrUpdate } from 'ol/extent';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -205,6 +204,11 @@ class UIHandler extends StateHandler {
             // Don't update the form data, just the temporary input.
         }
         this.updateState({ layer });
+    }
+    setOptions (options) {
+        this.updateState({
+            layer: { ...this.getState().layer, options }
+        });
     }
     setMetadataIdentifier (metadataid) {
         this.updateState({
@@ -595,6 +599,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setMetadataIdentifier',
     'setMinAndMaxScale',
     'setOpacity',
+    'setOptions',
     'setPassword',
     'setRealtime',
     'setRefreshRate',

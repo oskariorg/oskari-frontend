@@ -113,6 +113,12 @@ Oskari.registerLocalization(
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
             "hoverJSON": "Hover (JSON)",
+            "ion": {
+                "title": "Cesium ion",
+                "assetId": "Asset ID",
+                "assetServer": "Asset Server",
+                "accessToken": "Access Token"
+            },
             "rights": {
                 "PUBLISH": "rätt att publicera",
                 "VIEW_LAYER": "rätt att visa",

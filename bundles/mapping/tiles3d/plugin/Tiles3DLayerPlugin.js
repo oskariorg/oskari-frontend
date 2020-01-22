@@ -55,6 +55,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                 const registerType = this.layertype + 'layer';
                 const clazz = 'Oskari.mapframework.mapmodule.Tiles3DLayer';
                 const composingModel = new LayerComposingModel([
+                    LayerComposingModel.CESIUM_ION,
                     LayerComposingModel.SRS,
                     LayerComposingModel.STYLE,
                     LayerComposingModel.STYLES_JSON,
