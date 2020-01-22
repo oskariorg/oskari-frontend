@@ -1,6 +1,8 @@
 import { Tiles3DModelBuilder } from './Tiles3DModelBuilder';
 import { applyCustomMaterialSettings } from '../util/overrideCesiumMaterial'; // for side effects only
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 /**
  * @class Oskari.mapframework.mapmodule.Tiles3DLayerPlugin
  * Provides functionality to draw 3D tiles on the map
@@ -50,11 +52,17 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             // register domain builder
             var mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
             if (mapLayerService) {
-                mapLayerService.registerLayerModel(
-                    this.layertype + 'layer',
-                    'Oskari.mapframework.mapmodule.Tiles3DLayer'
-                );
-                mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', new Tiles3DModelBuilder());
+                const registerType = this.layertype + 'layer';
+                const clazz = 'Oskari.mapframework.mapmodule.Tiles3DLayer';
+                const composingModel = new LayerComposingModel([
+                    LayerComposingModel.SRS,
+                    LayerComposingModel.STYLE,
+                    LayerComposingModel.STYLES_JSON,
+                    LayerComposingModel.EXTERNAL_STYLES_JSON,
+                    LayerComposingModel.URL
+                ], ['0.0', '1.0']);
+                mapLayerService.registerLayerModel(registerType, clazz, composingModel);
+                mapLayerService.registerLayerModelBuilder(registerType, new Tiles3DModelBuilder());
             }
             if (!this.getMapModule().getSupports3D()) {
                 return;
