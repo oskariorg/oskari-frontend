@@ -33,15 +33,12 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         let groupId;
         if (method === 'getInspireName') {
             groupId = layerGroups[0] ? layerGroups[0].id : undefined;
-            // Analysis and myplaces layers don't have numeric id.
-            if (typeof groupId !== 'number') {
-                groupId = undefined;
-            }
         } else {
-            // Analysis and myplaces layers don't have admin information.
             groupId = layerAdmin ? layerAdmin.organizationId : undefined;
         }
-        return groupId;
+        // My map layers, my places, own analysis and 'orphan' groups don't have id so use negated random number
+        // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
+        return typeof groupId === 'number' ? groupId : -Math.random();
     };
 
     // sort layers by grouping & name

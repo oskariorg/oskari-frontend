@@ -47,7 +47,7 @@ class ViewHandler extends StateHandler {
             if (searchText) {
                 // open all groups
                 this.updateState({
-                    openGroupTitles: this.state.groups.map(group => group.getTitle())
+                    openGroupTitles: this.state.groups.map(group => group.getId())
                 });
             } else {
                 // close all groups

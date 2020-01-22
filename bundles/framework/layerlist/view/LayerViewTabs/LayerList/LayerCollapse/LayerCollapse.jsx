@@ -30,7 +30,7 @@ const LayerCollapse = ({ groups, openGroupTitles, selectedLayerIds, controller }
                     // This way the content of selected layer ids remains unchanged when a layer in another group gets added on map.
                     // When the properties remain unchanged, we can benefit from memoization.
                     return (
-                        <LayerCollapsePanel key={group.getTitle() + group.getId()}
+                        <LayerCollapsePanel key={group.getId()}
                             trimmed
                             selectedLayerIds={selectedLayersInGroup}
                             group={group}
