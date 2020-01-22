@@ -69,7 +69,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             propertyFields,
             rolesAndPermissionTypes,
             credentialsCollapseOpen,
-            tab 
+            tab
         } = this.uiHandler.getState();
         const controller = this.uiHandler.getController();
         return (
