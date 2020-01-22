@@ -120,7 +120,9 @@ export const getLayerHelper = () => {
         return {
             opacity: 100,
             role_permissions: {},
-            maplayerGroups: [],
+            groups: [],
+            options: {},
+            attributes: {},
             isNew: true
         };
     };
