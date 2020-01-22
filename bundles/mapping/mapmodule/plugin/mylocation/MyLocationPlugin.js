@@ -21,6 +21,7 @@ Oskari.clazz.define(
         me._index = 40;
         me._name = 'MyLocationPlugin';
         me._active = false;
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
         me._timeouts = 0;
         me._dialog = null;
         me._mobileDefs = {
@@ -54,13 +55,12 @@ Oskari.clazz.define(
          */
         _createControlElement: function () {
             var me = this,
-                el = me._templates.plugin.clone();
-            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
+                el = this._templates.plugin.clone();
             el.on('click', function () {
                 me._toggleMode();
             });
 
-            el.attr('title', me._loc.tooltip);
+            el.attr('title', this.loc('plugin.MyLocationPlugin.tooltip'));
 
             return el;
         },
@@ -85,6 +85,7 @@ Oskari.clazz.define(
                 });
             }
         },
+
         _setActive: function (bln) {
             this._active = !!bln;
             this._timeouts = 0;
@@ -127,16 +128,12 @@ Oskari.clazz.define(
          *
          */
         changeToolStyle: function (style, div) {
-            var me = this,
-                el = div || me.getElement();
-
+            const el = div || this.getElement();
             if (!el) {
                 return;
             }
-
             var styleClass = 'toolstyle-' + (style || 'rounded-dark');
-
-            me.changeCssClasses(styleClass, /^toolstyle-/, [el]);
+            this.changeCssClasses(styleClass, /^toolstyle-/, [el]);
         },
 
         /**
@@ -310,6 +307,45 @@ Oskari.clazz.define(
                 sandbox.postRequestByName('MapMoveRequest', [lon, lat]);
             }
         },
+        _handleError: function (error) {
+            if (this._dialog) {
+                this._dialog.close();
+            }
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const title = this.loc('plugin.MyLocationPlugin.error.title');
+            let msg;
+            this._dialog = dialog;
+
+            if (error === 'denied') {
+                msg = this.loc('plugin.MyLocationPlugin.error.denied');
+                dialog.show(title, msg, [dialog.createCloseButton()]);
+                this._setActive(false);
+                return;
+            }
+            // Location denied only has close button, other messages fades out
+            dialog.fadeout();
+            msg = this.loc('plugin.MyLocationPlugin.error.noLocation');
+            if (error === 'unavailable') {
+                dialog.show(title, msg);
+                this._setActive(false);
+                return;
+            }
+            // timeouts
+            this._timeouts++;
+            if (this._timeouts === 1) {
+                msg = this.loc('plugin.MyLocationPlugin.error.timeout');
+                dialog.show('', this._loc.error.timeout);
+                // request high accuracy location with longer timeout
+                this._requestLocation(20000);
+            } else if (this._timeouts === 2) {
+                // request low accuracy location
+                this._requestLocation(6000, false);
+            } else {
+                // show error and stop requesting location
+                dialog.show(title, msg);
+                this._setActive(false);
+            }
+        },
         _createEventHandlers: function () {
             return {
                 UserLocationEvent: (event) => {
@@ -320,37 +356,7 @@ Oskari.clazz.define(
                     }
                     var error = event.getError();
                     if (error) {
-                        if (this._dialog) {
-                            this._dialog.close();
-                        }
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        if (error === 'denied') {
-                            var btn = dialog.createCloseButton(this._loc.error.button);
-                            dialog.show(this._loc.error.title, this._loc.error.denied, [btn]);
-                            this._setActive(false);
-                        } else if (error === 'unavailable') {
-                            dialog.fadeout();
-                            dialog.show(this._loc.error.title, this._loc.error.noLocation);
-                            this._setActive(false);
-                        // timeouts
-                        } else {
-                            this._timeouts++;
-                            if (this._timeouts === 1) {
-                                dialog.fadeout(5000);
-                                dialog.show('', this._loc.error.timeout);
-                                // request high accuracy location with longer timeout
-                                this._requestLocation(20000);
-                            } else if (this._timeouts === 2) {
-                                // request low accuracy location
-                                this._requestLocation(6000, false);
-                            } else {
-                                // show error and stop requesting location
-                                dialog.fadeout();
-                                dialog.show(this._loc.error.title, this._loc.error.noLocation);
-                                this._setActive(false);
-                            }
-                        }
-                        this._dialog = dialog;
+                        this._handleError(error);
                     } else {
                         // success
                         this._setActive(false);
