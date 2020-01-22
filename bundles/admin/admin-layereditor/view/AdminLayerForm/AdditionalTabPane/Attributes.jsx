@@ -12,12 +12,12 @@ const AttributeInfo = ({ attributes }) => {
     }
     const info =
         <div>
-            <pre>{attributes}</pre>
+            <pre>{JSON.stringify(attributes, null, 2)}</pre>
         </div>;
     return <InfoTooltip message={info} />;
 };
 AttributeInfo.propTypes = {
-    attributes: PropTypes.string
+    attributes: PropTypes.object
 };
 export const Attributes = ({ layer, controller }) => {
     const { tempAttributesJSON } = layer;

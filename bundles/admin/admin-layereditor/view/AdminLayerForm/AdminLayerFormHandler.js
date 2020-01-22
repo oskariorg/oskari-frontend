@@ -245,18 +245,13 @@ class UIHandler extends StateHandler {
             layer.tempAttributesJSON = this.layerHelper.toJson(tempAttributes);
         }
 
-        let attributes = {};
-        try {
-            attributes = JSON.parse(layer.attributes);
-        } catch (err) { }
-
         // Delete missing attibute keys but keep managed attributes
         const managedAttributes = ['forcedSRS'];
-        Object.keys(attributes)
+        Object.keys(layer.attributes)
             .filter(key => !managedAttributes.includes(key))
-            .forEach(key => delete attributes[key]);
+            .forEach(key => delete layer.attributes[key]);
 
-        this.updateLayerAttributes({ ...attributes, ...tempAttributes }, layer);
+        this.updateLayerAttributes({ ...layer.attributes, ...tempAttributes }, layer);
     }
     updateLayerAttributes (attributes, layer = { ...this.getState().layer }) {
         layer.attributes = attributes;
