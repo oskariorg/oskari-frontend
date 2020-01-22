@@ -58,19 +58,9 @@ MissingSRS.propTypes = {
     epsgCodes: PropTypes.arrayOf(PropTypes.string)
 };
 
-const parseForcedSRSAttribute = attributesStr => {
-    try {
-        const attributes = JSON.parse(attributesStr);
-        if (attributes) {
-            return attributes.forcedSRS || [];
-        }
-    } catch (err) { }
-    return [];
-};
-
 export const Srs = ({ layer, capabilities = {}, propertyFields, controller }) => {
     const systemProjections = Array.from(new Set(Oskari.app.getSystemDefaultViews().map(view => view.srsName)));
-    let forced = parseForcedSRSAttribute(layer.attributes);
+    const forced = (layer.attributes && layer.attributes.forcedSRS) || [];
     let supported = [];
     let missing = [];
     if (propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
