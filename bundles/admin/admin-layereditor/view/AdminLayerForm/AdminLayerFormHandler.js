@@ -6,6 +6,7 @@ import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const DEFAULT_TAB = 'general';
 
 class UIHandler extends StateHandler {
     constructor (consumer) {
@@ -23,6 +24,7 @@ class UIHandler extends StateHandler {
             capabilities: {},
             messages: [],
             loading: false,
+            tab: DEFAULT_TAB,
             credentialsCollapseOpen: false
         });
         this.addStateListener(consumer);
@@ -280,12 +282,16 @@ class UIHandler extends StateHandler {
     setMessages (messages) {
         this.updateState({ messages });
     }
+    setTab (tab) {
+        this.updateState({ tab });
+    }
     resetLayer () {
         this.updateState({
             layer: this.layerHelper.createEmpty(),
             capabilities: {},
             versions: [],
-            propertyFields: []
+            propertyFields: [],
+            tab: DEFAULT_TAB
         });
     }
     ajaxStarted () {
@@ -637,6 +643,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setType',
     'setUsername',
     'setVersion',
+    'setTab',
     'updateCapabilities'
 ]);
 export { wrapped as AdminLayerFormHandler };

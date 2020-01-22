@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import { GeneralTabPane } from './GeneralTabPane';
 import { VisualizationTabPane } from './VisualizationTabPane';
@@ -24,6 +24,7 @@ const AdminLayerForm = ({
     capabilities,
     propertyFields,
     messages = [],
+    tab,
     onCancel,
     onDelete,
     onSave,
@@ -36,7 +37,7 @@ const AdminLayerForm = ({
                 <Message messageKey={key} messageArgs={args}/>
             }/>
         )}
-        <Tabs>
+        <Tabs activeKey={tab} onChange={tabKey => controller.setTab(tabKey)}>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
                 <GeneralTabPane
                     layer={layer}
@@ -103,7 +104,8 @@ AdminLayerForm.propTypes = {
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
-    rolesAndPermissionTypes: PropTypes.object
+    rolesAndPermissionTypes: PropTypes.object,
+    tab: PropTypes.string.isRequired
 };
 
 const contextWrap = LocaleConsumer(AdminLayerForm);
