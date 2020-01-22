@@ -5,32 +5,32 @@ import { Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { StyledComponent } from '../StyledFormComponents';
 
-const { CAPABILITIES_STYLES, STYLE_JSON } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
-
-const getOptionsFromJson = json => {
-    const options = ['default'];
-    try {
-        // Read json and remove duplicates
-        const jsonKeys = Object.keys(JSON.parse(json));
-        return Array.from(new Set([...options, ...jsonKeys]));
-    } catch (err) {
-        return null;
-    }
-};
+const {
+    CAPABILITIES_STYLES,
+    STYLES_JSON,
+    EXTERNAL_STYLES_JSON
+} = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const Style = ({ layer, capabilities = {}, propertyFields, controller }) => {
     const styleInfoKeys = ['styleDesc'];
-    let styleOptions;
+    let styleOptions = [];
 
     if (propertyFields.includes(CAPABILITIES_STYLES)) {
         styleInfoKeys.push('styleDescCapabilities');
         styleOptions = capabilities.styles;
-    } else if (propertyFields.includes(STYLE_JSON)) {
-        styleOptions = getOptionsFromJson(layer.options.styles);
+    } else {
+        if (propertyFields.includes(STYLES_JSON) && layer.options.styles) {
+            styleOptions = Object.keys(layer.options.styles);
+        }
+        if (propertyFields.includes(EXTERNAL_STYLES_JSON) && layer.options.externalStyles) {
+            styleOptions = styleOptions.concat(Object.keys(layer.options.externalStyles));
+        }
     }
     if (!styleOptions || styleOptions.length === 0) {
         return null;
     }
+    // Remove duplicates
+    styleOptions = [...new Set(styleOptions)];
     return (
         <Fragment>
             <Message messageKey='style'/>

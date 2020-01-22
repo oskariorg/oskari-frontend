@@ -15,8 +15,9 @@ const {
     OPACITY,
     CLUSTERING_DISTANCE,
     WFS_RENDER_MODE,
-    STYLE, STYLE_JSON,
-    EXTERNAL_STYLE_JSON,
+    STYLE,
+    STYLES_JSON,
+    EXTERNAL_STYLES_JSON,
     HOVER_JSON,
     SCALE
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -36,10 +37,10 @@ export const VisualizationTabPane = ({ layer, capabilities, propertyFields, cont
             { propertyFields.includes(STYLE) &&
                 <Style layer={layer} capabilities={capabilities} controller={controller} propertyFields={propertyFields} />
             }
-            { propertyFields.includes(STYLE_JSON) &&
+            { propertyFields.includes(STYLES_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
             }
-            { propertyFields.includes(EXTERNAL_STYLE_JSON) &&
+            { propertyFields.includes(EXTERNAL_STYLES_JSON) &&
                 <ExternalStyleJson layer={layer} controller={controller} />
             }
             { propertyFields.includes(HOVER_JSON) &&

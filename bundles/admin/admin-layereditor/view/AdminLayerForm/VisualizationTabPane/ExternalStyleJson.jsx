@@ -20,7 +20,7 @@ export const ExternalStyleJson = ({ layer, controller }) => (
         <StyledComponent>
             <JsonInput
                 rows={6}
-                value={layer.tempExtStyleJSON}
+                value={layer.tempExternalStylesJSON}
                 onChange={evt => controller.setExternalStyleJSON(evt.target.value)} />
         </StyledComponent>
     </Fragment>
