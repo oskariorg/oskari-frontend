@@ -66,7 +66,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                 if (!groupForOrphans) {
                     groupForOrphans = Oskari.clazz.create(
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        groupId, method, method === 'getInspireName' ? loc.grouping.noTheme : loc.grouping.noDataProvider
+                        groupId, method, '(' + loc.grouping.noGroup + ')'
                     );
                 }
                 groupForOrphans.addLayer(layer);
