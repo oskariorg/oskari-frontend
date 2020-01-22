@@ -65,7 +65,7 @@ Oskari.registerLocalization(
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "refreshRate": " Virkistystaajuus sekunteina",
             "capabilities": {
-                "show": "Näytä tason GetCapabilities-vastaus",
+                "show": "Näytä palvelun GetCapabilities-vastaus",
                 "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
                 "update": "Päivitä nyt",
                 "updateRate": "Capabilities päivitystiheys",

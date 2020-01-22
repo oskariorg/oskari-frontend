@@ -8,6 +8,15 @@ import styled from 'styled-components';
 const Link = styled('a')`
     margin-left: 10px;
 `;
+const getCapabilitiesUrl = ({ url, type, version, password, username }) => {
+    return Oskari.urls.getRoute('GetWSCapabilities', {
+        url,
+        type,
+        version,
+        pw: password,
+        user: username
+    });
+};
 
 export const CapabilitiesUpdate = ({ layer, controller }) => (
     <Fragment>
@@ -23,7 +32,7 @@ export const CapabilitiesUpdate = ({ layer, controller }) => (
                 <Button value={layer.name} onClick={() => controller.updateCapabilities()}>
                     <Message messageKey='capabilities.update' />
                 </Button>
-                <Link href={`${layer.url}?request=GetCapabilities`} target='capabilities'>
+                <Link href={getCapabilitiesUrl(layer)} target='capabilities'>
                     <Message messageKey='capabilities.show' />
                 </Link>
             </Fragment>
