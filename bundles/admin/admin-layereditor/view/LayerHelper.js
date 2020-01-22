@@ -117,14 +117,14 @@ export const getLayerHelper = () => {
     const toJson = obj => obj ? JSON.stringify(obj, null, 2) : '';
 
     const createEmpty = () => {
-        return {
+        const layer = {
             opacity: 100,
-            role_permissions: {},
             groups: [],
             options: {},
-            attributes: {},
-            isNew: true
+            attributes: {}
         };
+        setupTemporaryFields(layer);
+        return layer;
     };
 
     return {
