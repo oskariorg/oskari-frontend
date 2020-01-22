@@ -15,7 +15,7 @@ export const StyleJson = ({ layer, controller }) => (
         <StyledComponent>
             <JsonInput
                 rows={6}
-                value={layer.tempStyleJSON}
+                value={layer.tempStylesJSON}
                 onChange={evt => controller.setStyleJSON(evt.target.value)} />
         </StyledComponent>
     </Fragment>
