@@ -23,7 +23,7 @@ export const CapabilitiesUpdate = ({ layer, controller }) => (
                 <Button value={layer.name} onClick={() => controller.updateCapabilities()}>
                     <Message messageKey='capabilities.update' />
                 </Button>
-                <Link href={`${layer.url}?request=getCapabilities`} target='capabilities'>
+                <Link href={`${layer.url}?request=GetCapabilities`} target='capabilities'>
                     <Message messageKey='capabilities.show' />
                 </Link>
             </Fragment>
