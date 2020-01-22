@@ -28,7 +28,9 @@ Oskari.registerLocalization(
             'grouping': {
                 'title': 'Grouping',
                 'inspire': 'By Theme',
-                'organization': 'By Data Provider'
+                'organization': 'By Data Provider',
+                'noTheme' : 'No theme',
+                'noDataProvider' : 'No data provider'
             },
             'layer': {
                 'tooltip': {

@@ -12,6 +12,7 @@ class ViewHandler extends StateHandler {
     constructor (instance, groupingMethod = 'getInspireName') {
         super();
         this.sandbox = instance.getSandbox();
+        this.loc = instance._localization;
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('theme.update', () => this.updateLayerGroups());
         this.mapLayerService.on('dataProvider.update', () => this.updateLayerGroups());
@@ -87,7 +88,7 @@ class ViewHandler extends StateHandler {
         const isUserAdmin = tools.length > 0;
         const themes = isUserAdmin ? this.mapLayerService.getAllLayerGroups() : [];
         const dataProviders = isUserAdmin ? this.mapLayerService.getDataProviders() : [];
-        let groups = groupLayers([...layers], this.groupingMethod, tools, themes, dataProviders);
+        let groups = groupLayers([...layers], this.groupingMethod, tools, themes, dataProviders, this.loc);
         if (!searchText) {
             this.updateState({ groups });
             return;

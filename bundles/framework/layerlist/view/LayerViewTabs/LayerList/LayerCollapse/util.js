@@ -18,37 +18,56 @@ const comparator = (a, b, method) => {
  * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
  * @param {String} method layer method name to sort by
  */
-export const groupLayers = (layers, method, tools, themes = [], dataProviders = []) => {
+export const groupLayers = (layers, method, tools, themes = [], dataProviders = [], loc) => {
     const groupList = [];
     let group = null;
+    let groupForOrphans = null;
+
+    const determineGroupId = (layerGroups, layerAdmin) => {
+        let groupId;
+        if (method === 'getInspireName') {
+            groupId = layerGroups[0] ? layerGroups[0].id : undefined;
+            // Analysis and myplaces layers don't have numeric id.
+            if (typeof groupId !== 'number') {
+                groupId = undefined;
+            }
+        } else {
+            // Analysis and myplaces layers don't have admin information.
+            groupId = layerAdmin ? layerAdmin.organizationId : undefined;
+        }
+        return groupId;
+    };
 
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
-            const groupAttr = layer[method]();
+            let groupAttr = layer[method]();
+            let groupId = determineGroupId(layer._groups, layer.admin);
 
-            let groupId;
-            if (method === 'getInspireName') {
-                groupId = layer._groups[0] ? layer._groups[0].id : undefined;
-                // Analysis and myplaces layers don't have numeric id.
-                if (typeof groupId !== 'number') {
-                    groupId = undefined;
-                }
-            } else {
-                // Analysis and myplaces layers don't have admin information.
-                groupId = layer.admin ? layer.admin.organizationId : undefined;
-            }
-
-            if (!group || group.getTitle() !== groupAttr) {
+            // If grouping can be determined, create group if already not created
+            if (!group || (typeof groupAttr !== 'undefined' && groupAttr !== '' && group.getTitle() !== groupAttr)) {
                 group = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                     groupId, method, groupAttr
                 );
                 groupList.push(group);
             }
-            group.addLayer(layer);
-            group.setTools(tools);
+            // Add layer and tools to group if grouping can be determined
+            if (groupAttr) {
+                group.addLayer(layer);
+                group.setTools(tools);
+            }
+            // Create group for orphan layers if not already created and add layer to it
+            if (!groupAttr) {
+                if (!groupForOrphans) {
+                    groupForOrphans = Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                        groupId, method, method === 'getInspireName' ? loc.grouping.noTheme : loc.grouping.noDataProvider
+                    );
+                }
+                groupForOrphans.addLayer(layer);
+            }
         });
 
     let groupsWithoutLayers;
@@ -73,5 +92,5 @@ export const groupLayers = (layers, method, tools, themes = [], dataProviders = 
         });
     }
     groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-    return [...groupsWithoutLayers, ...groupList];
+    return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...groupList] : [...groupsWithoutLayers, ...groupList];
 };
