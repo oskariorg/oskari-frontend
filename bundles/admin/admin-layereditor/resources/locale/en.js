@@ -112,7 +112,7 @@ Oskari.registerLocalization(
             "otherLanguages": "Other languages",
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
-            "externalStyleFormats": "Supported formats:\n3D Tiles, Mapbox\n",
+            "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
             "hoverJSON": "Feature highlighting and tooltip (JSON)",
             "rights": {
                 "PUBLISH": "Publish",

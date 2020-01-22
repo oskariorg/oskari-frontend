@@ -111,7 +111,7 @@ Oskari.registerLocalization(
             "otherLanguages": "Other languages",
             "stylesJSON": "Stildefinitioner (JSON)",
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
-            "externalStyleFormats": "Stödda format:\n3D Tiles, Mapbox\n",
+            "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
             "hoverJSON": "Hover (JSON)",
             "rights": {
                 "PUBLISH": "rätt att publicera",
