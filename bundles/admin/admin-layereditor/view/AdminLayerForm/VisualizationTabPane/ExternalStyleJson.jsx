@@ -6,21 +6,26 @@ import { StyledComponent } from '../StyledFormComponents';
 import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
 
-const template = '{\n  "featureStyle": {...},\n  "content": [\n    {"key": "Feature Data"},\n    {"key": "ID", "valueProperty": "id"}\n  ]\n}';
+const template = '{\n  "My external json style": { ... },\n  ...\n}';
 
-export const HoverJson = ({ layer, controller }) => (
+export const ExternalStyleJson = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='hoverJSON'/>
-        <InfoTooltip message={<pre>{template}</pre>} />
+        <Message messageKey='externalStylesJSON'/>
+        <InfoTooltip message={
+            <Fragment>
+                <pre>{template}</pre>
+                <Message messageKey='externalStyleFormats'/>
+            </Fragment>
+        }/>
         <StyledComponent>
             <JsonInput
                 rows={6}
-                value={layer.tempHoverJSON}
-                onChange={evt => controller.setHoverJSON(evt.target.value)} />
+                value={layer.tempExternalStylesJSON}
+                onChange={evt => controller.setExternalStyleJSON(evt.target.value)} />
         </StyledComponent>
     </Fragment>
 );
-HoverJson.propTypes = {
+ExternalStyleJson.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

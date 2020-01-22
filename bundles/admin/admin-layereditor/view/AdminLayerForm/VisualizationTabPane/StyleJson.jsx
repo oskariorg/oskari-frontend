@@ -4,14 +4,18 @@ import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledComponent } from '../StyledFormComponents';
 import { JsonInput } from '../JsonInput';
+import { InfoTooltip } from '../InfoTooltip';
+
+const template = '{\n  "My style 1": {\n    "featureStyle": {...},\n    "optionalStyles": [{...}]\n  },\n  ...\n}';
 
 export const StyleJson = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='styleJSON'/>
+        <Message messageKey='stylesJSON'/>
+        <InfoTooltip message={<pre>{template}</pre>} />
         <StyledComponent>
             <JsonInput
                 rows={6}
-                value={layer.tempStyleJSON}
+                value={layer.tempStylesJSON}
                 onChange={evt => controller.setStyleJSON(evt.target.value)} />
         </StyledComponent>
     </Fragment>
