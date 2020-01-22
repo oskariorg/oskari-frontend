@@ -48,21 +48,21 @@ Oskari.clazz.define(
         /**
          * @private @method _createControlElement
          * Creates the DOM element that will be placed on the map
-         *
-         *
          * @return {jQuery}
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var me = this,
-                el = this._templates.plugin.clone();
-            el.on('click', function () {
-                me._toggleMode();
-            });
-
+            const el = this._templates.plugin.clone();
             el.attr('title', this.loc('plugin.MyLocationPlugin.tooltip'));
-
+            this._bindIcon(el);
+            this._element = el;
             return el;
+        },
+
+        _bindIcon: function (el) {
+            el.on('click', () => {
+                this._toggleMode();
+            });
         },
 
         /**
@@ -71,18 +71,16 @@ Oskari.clazz.define(
          *
          */
         _setLayerToolsEditModeImpl: function () {
-            var me = this;
-            if (!me.getElement()) {
+            const el = this.getElement();
+            if (!el) {
                 return;
             }
-            if (me.inLayerToolsEditMode()) {
+            if (this.inLayerToolsEditMode()) {
                 // disable icon
-                me.getElement().off('click');
+                el.off('click');
             } else {
                 // enable icon
-                me.getElement().on('click', function () {
-                    me._setupLocation();
-                });
+                this._bindIcon(el);
             }
         },
 
@@ -173,7 +171,6 @@ Oskari.clazz.define(
                 // no point in drawing the ui if we are not visible or enabled
                 return;
             }
-            var me = this;
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -187,9 +184,9 @@ Oskari.clazz.define(
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
-                me._element = me._createControlElement();
-                me.refresh();
-                this.addToPluginContainer(me._element);
+                this._createControlElement();
+                this.refresh();
+                this.addToPluginContainer(this.getElement());
             }
 
             this._handleStartMode();
