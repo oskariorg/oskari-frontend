@@ -93,22 +93,27 @@ Oskari.registerLocalization(
                 "geojson": "Big objects",
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
+            "validation": {
+                "styles" : "Invalid JSON syntax in Style definitions.",
+                "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
+                "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
+                "attributes" : "Invalid Attribute JSON syntax."
+            },
             "messages": {
                 "saveSuccess": "Saved",
                 "saveFailed": "A system error occurred. Data has not been updated.",
                 "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
                 "errorRemoveLayer": "The map layer could not be removed.",
-                "invalidStyleJson" : "Invalid Style JSON syntax.",
-                "invalidHoverJson" : "Invalid Hover JSON syntax.",
-                "invalidAttributeJson" : "Invalid Attribute JSON syntax.",
                 "errorInsertAllreadyExists": "The new map layer has been added. A map layer with same identifier already exists.",
                 "errorFetchUserRolesAndPermissionTypes": "Error occured when fetching user roles and permission types.",
                 "errorFetchCapabilities": "Fetching service capabilities failed.",
                 "unauthorizedErrorFetchCapabilities": "Username and password are required by the service."
             },
             "otherLanguages": "Other languages",
-            "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON",
+            "stylesJSON": "Style definitions (JSON)",
+            "externalStylesJSON": "3rd party style definitions (JSON)",
+            "externalStyleFormats": "Supported formats:\n3D Tiles, Mapbox\n",
+            "hoverJSON": "Feature highlighting and tooltip (JSON)",
             "rights": {
                 "PUBLISH": "Publish",
                 "VIEW_LAYER": "View",

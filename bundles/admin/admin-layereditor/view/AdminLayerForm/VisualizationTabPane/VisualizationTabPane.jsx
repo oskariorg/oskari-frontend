@@ -5,13 +5,21 @@ import { Controller } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
 import { Style } from './Style';
 import { StyleJson } from './StyleJson';
+import { ExternalStyleJson } from './ExternalStyleJson';
 import { HoverJson } from './HoverJson';
 import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
 
-const { OPACITY, CLUSTERING_DISTANCE, WFS_RENDER_MODE, STYLE, STYLE_JSON, HOVER_JSON, SCALE } =
-    Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const {
+    OPACITY,
+    CLUSTERING_DISTANCE,
+    WFS_RENDER_MODE,
+    STYLE, STYLE_JSON,
+    EXTERNAL_STYLE_JSON,
+    HOVER_JSON,
+    SCALE
+} = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, capabilities, propertyFields, controller }) => (
     <StyledTab>
@@ -30,6 +38,9 @@ export const VisualizationTabPane = ({ layer, capabilities, propertyFields, cont
             }
             { propertyFields.includes(STYLE_JSON) &&
                 <StyleJson layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(EXTERNAL_STYLE_JSON) &&
+                <ExternalStyleJson layer={layer} controller={controller} />
             }
             { propertyFields.includes(HOVER_JSON) &&
                 <HoverJson layer={layer} controller={controller} />

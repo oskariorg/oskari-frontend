@@ -4,6 +4,7 @@ import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
+import { returnOrUpdate } from 'ol/extent';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -181,18 +182,28 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, style }
         });
     }
-    setStyleJSON (tempStyleJSON) {
-        const layer = { ...this.getState().layer, tempStyleJSON };
-        try {
-            layer.options.styles = JSON.parse(tempStyleJSON);
-        } catch (err) { }
-        this.updateState({ layer });
+    setStyleJSON (json) {
+        this.updateOptionsJsonProperty(json, 'tempStylesJSON', 'styles');
     }
-    setHoverJSON (tempHoverJSON) {
-        const layer = { ...this.getState().layer, tempHoverJSON };
+    setExternalStyleJSON (json) {
+        this.updateOptionsJsonProperty(json, 'tempExternalStylesJSON', 'externalStyles');
+    }
+    setHoverJSON (json) {
+        this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
+    }
+    updateOptionsJsonProperty (json, jsonPropKey, dataPropKey) {
+        const layer = { ...this.getState().layer };
+        layer[jsonPropKey] = json;
+        if (json === '') {
+            delete layer.options[dataPropKey];
+            this.updateState({ layer });
+            return;
+        }
         try {
-            layer.options.hover = JSON.parse(tempHoverJSON);
-        } catch (err) { }
+            layer.options[dataPropKey] = JSON.parse(json);
+        } catch (err) {
+            // Don't update the form data, just the temporary input.
+        }
         this.updateState({ layer });
     }
     setMetadataIdentifier (metadataid) {
@@ -425,9 +436,10 @@ class UIHandler extends StateHandler {
 
     validateUserInputValues (layer) {
         const validationErrors = [];
-        this.validateJsonValue(layer.tempStyleJSON, 'messages.invalidStyleJson', validationErrors);
-        this.validateJsonValue(layer.tempHoverJSON, 'messages.invalidHoverJson', validationErrors);
-        this.validateJsonValue(layer.tempAttributesJSON, 'messages.invalidAttributeJson', validationErrors);
+        this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
+        this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
+        this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);
+        this.validateJsonValue(layer.tempAttributesJSON, 'validation.attributes', validationErrors);
         return validationErrors;
     }
 
@@ -593,6 +605,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setRenderMode',
     'setSelectedTime',
     'setStyleJSON',
+    'setExternalStyleJSON',
     'setType',
     'setUsername',
     'setVersion'

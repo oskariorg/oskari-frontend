@@ -45,16 +45,18 @@ export const getLayerHelper = () => {
         // Add 'role' all to permissions for UI state handling purposes
         layer.role_permissions.all = [];
         // Add temp json fields to keep the state on invalid json syntax
-        layer.tempAttributesJSON = layer.attributes ? toJson(layer.attributes) : '';
-        layer.tempStyleJSON = layer.options.styles ? toJson(layer.options.styles) : '';
-        layer.tempHoverJSON = layer.options.hover ? toJson(layer.options.hover) : '';
+        layer.tempAttributesJSON = toJson(layer.attributes);
+        layer.tempStylesJSON = toJson(layer.options.styles);
+        layer.tempExternalStylesJSON = toJson(layer.options.externalStyles);
+        layer.tempHoverJSON = toJson(layer.options.hover);
         layer.isNew = !layer.id;
     };
 
     const removeTemporaryFields = layer => {
         delete layer.role_permissions.all;
         delete layer.tempAttributesJSON;
-        delete layer.tempStyleJSON;
+        delete layer.tempStylesJSON;
+        delete layer.tempExternalStylesJSON;
         delete layer.tempHoverJSON;
         delete layer.isNew;
     };

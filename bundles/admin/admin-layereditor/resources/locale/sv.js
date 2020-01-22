@@ -92,22 +92,27 @@ Oskari.registerLocalization(
                 "vector": "Stora objekt",
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
+            "validation": {
+                "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
+                "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
+                "hover" : "Hover JSON-syntaxen är ogiltig.",
+                "attributes" : "Attribut JSON-syntaxen är ogiltig."
+            },
             "messages": {
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
-                "invalidStyleJson" : "Style JSON-syntaxen är ogiltig.",
-                "invalidHoverJson" : "Hover JSON-syntaxen är ogiltig.",
-                "invalidAttributeJson" : "Attribut JSON-syntaxen är ogiltig.",
                 "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
                 "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter.",
                 "errorFetchCapabilities": "Det gick inte att hämta gränssnittsinformation.",
                 "unauthorizedErrorFetchCapabilities": "Användarnamn och lösenord krävs av tjänsten."
             },
             "otherLanguages": "Other languages",
-            "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON",
+            "stylesJSON": "Stildefinitioner (JSON)",
+            "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
+            "externalStyleFormats": "Stödda format:\n3D Tiles, Mapbox\n",
+            "hoverJSON": "Hover (JSON)",
             "rights": {
                 "PUBLISH": "rätt att publicera",
                 "VIEW_LAYER": "rätt att visa",

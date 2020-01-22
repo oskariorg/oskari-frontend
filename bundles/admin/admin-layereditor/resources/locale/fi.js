@@ -93,22 +93,27 @@ Oskari.registerLocalization(
                 "geojson": "Suuria kohteita",
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
+            "validation": {
+                "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
+                "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
+                "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
+                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen."
+            },
             "messages": {
                 "saveSuccess": "Tallennettu",
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
-                "invalidStyleJson" : "Style JSON-syntaksi on virheellinen.",
-                "invalidHoverJson" : "Hover JSON-syntaksi on virheellinen.",
-                "invalidAttributeJson" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",
                 "errorFetchCapabilities": "Rajapinnan tietojen haku epäonnistui.",
                 "unauthorizedErrorFetchCapabilities": "Palvelu vaatii käyttäjätunnuksen ja salasanan."
             },
             "otherLanguages": "Muut kielet",
-            "styleJSON": "Style JSON",
-            "hoverJSON": "Hover JSON",
+            "stylesJSON": "Tyylimääritykset (JSON)",
+            "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
+            "externalStyleFormats": "Tuetut muodot:\n3D Tiles, Mapbox\n",
+            "hoverJSON": "Kohteen korostus ja tooltip (JSON)",
             "rights": {
                 "PUBLISH": "Julkaisuoikeus",
                 "VIEW_LAYER": "Katseluoikeus",
