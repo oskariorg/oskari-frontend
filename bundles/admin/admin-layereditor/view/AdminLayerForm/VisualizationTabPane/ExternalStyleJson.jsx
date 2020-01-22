@@ -12,11 +12,11 @@ export const ExternalStyleJson = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='externalStylesJSON'/>
         <InfoTooltip message={
-            <pre>
+            <Fragment>
+                <pre>{template}</pre>
                 <Message messageKey='externalStyleFormats'/>
-                {template}
-            </pre>
-        } />
+            </Fragment>
+        }/>
         <StyledComponent>
             <JsonInput
                 rows={6}

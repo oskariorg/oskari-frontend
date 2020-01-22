@@ -112,7 +112,7 @@ Oskari.registerLocalization(
             "otherLanguages": "Muut kielet",
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
-            "externalStyleFormats": "Tuetut muodot:\n3D Tiles, Mapbox\n",
+            "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
             "hoverJSON": "Kohteen korostus ja tooltip (JSON)",
             "rights": {
                 "PUBLISH": "Julkaisuoikeus",
