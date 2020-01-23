@@ -5,6 +5,8 @@ import { LayerTypeSelection } from './LayerTypeSelection';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
 import { ServiceStep } from './ServiceStep';
+import { LoadingIndicator } from './LoadingIndicator';
+import { LayerTypeTitle } from './LayerTypeTitle';
 import { StyledAlert, StyledSteps, Paragraph, Header } from './styled';
 
 const { CAPABILITIES } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -46,28 +48,6 @@ function getStep (layer, hasCapabilitiesSupport) {
     return WIZARD_STEP.DETAILS;
 }
 
-const LayerTypeTitle = ({ layer, LabelComponent }) => (
-    <React.Fragment>
-        <Message messageKey='wizard.type' LabelComponent={LabelComponent} />
-        { layer.type && <React.Fragment><span>:</span><div>{layer.type}</div></React.Fragment>}
-    </React.Fragment>
-);
-LayerTypeTitle.propTypes = {
-    layer: PropTypes.object.isRequired,
-    LabelComponent: PropTypes.elementType
-};
-
-const Loading = ({ loading, children }) => {
-    if (loading) {
-        return <Spin>{children}</Spin>;
-    }
-    return children;
-};
-Loading.propTypes = {
-    loading: PropTypes.bool,
-    children: PropTypes.node
-};
-
 const LayerWizard = ({
     controller,
     layer,
@@ -88,7 +68,7 @@ const LayerWizard = ({
     return (
         <Fragment>
             { messages.map(({ key, type }) => <StyledAlert key={key} message={<Message messageKey={key} />} type={type} />) }
-            <Loading loading={loading}>
+            <LoadingIndicator loading={loading}>
                 { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
                     <StyledSteps current={currentStep}>
                         <Step title={<LayerTypeTitle layer={layer}/>} />
@@ -98,13 +78,13 @@ const LayerWizard = ({
                     </StyledSteps>
                 }
                 { currentStep === WIZARD_STEP.INITIAL &&
-                    <React.Fragment>
+                    <Fragment>
                         <LayerTypeTitle layer={layer} LabelComponent={Header}/>
                         <Message messageKey='wizard.typeDescription' LabelComponent={Paragraph}/>
                         <LayerTypeSelection
                             types={layerTypes || []}
                             onSelect={(type) => controller.setType(type)} />
-                    </React.Fragment>
+                    </Fragment>
                 }
                 { currentStep === WIZARD_STEP.SERVICE &&
                     <ServiceStep
@@ -115,18 +95,18 @@ const LayerWizard = ({
                         credentialsCollapseOpen={credentialsCollapseOpen} />
                 }
                 { currentStep === WIZARD_STEP.LAYER &&
-                    <React.Fragment>
+                    <Fragment>
                         <Message messageKey='wizard.layers' LabelComponent={Header}/>
                         <Message messageKey='wizard.layersDescription' LabelComponent={Paragraph}/>
                         <LayerCapabilitiesListing
                             onSelect={(item) => controller.layerSelected(item.name)}
                             capabilities={capabilities} />
-                    </React.Fragment>
+                    </Fragment>
                 }
                 { currentStep === WIZARD_STEP.DETAILS &&
-                    <React.Fragment>
+                    <Fragment>
                         {children}
-                    </React.Fragment>
+                    </Fragment>
                 }
                 { !isFirstStep && !isDetailsForOldLayer &&
                     <Button onClick={() => {
@@ -136,7 +116,7 @@ const LayerWizard = ({
                         {<Message messageKey='cancel'/>}
                     </Button>
                 }
-            </Loading>
+            </LoadingIndicator>
         </Fragment>
     );
 };

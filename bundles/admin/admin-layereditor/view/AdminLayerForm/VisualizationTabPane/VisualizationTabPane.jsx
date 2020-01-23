@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { StyledTab, StyledColumnLeft, StyledColumnRight } from '../StyledFormComponents';
 import { Controller } from 'oskari-ui/util';
 import { Opacity } from './Opacity';
 import { Style } from './Style';
@@ -10,6 +9,7 @@ import { HoverJson } from './HoverJson';
 import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
+import { StyledColumn } from './styled';
 
 const {
     OPACITY,
@@ -23,8 +23,8 @@ const {
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 export const VisualizationTabPane = ({ layer, capabilities, propertyFields, controller }) => (
-    <StyledTab>
-        <StyledColumnLeft>
+    <Fragment>
+        <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
                 <Opacity layer={layer} controller={controller} />
             }
@@ -46,13 +46,13 @@ export const VisualizationTabPane = ({ layer, capabilities, propertyFields, cont
             { propertyFields.includes(HOVER_JSON) &&
                 <HoverJson layer={layer} controller={controller} />
             }
-        </StyledColumnLeft>
-        <StyledColumnRight>
+        </StyledColumn.Left>
+        <StyledColumn.Right>
             { propertyFields.includes(SCALE) &&
                 <Scale layer={layer} controller={controller} />
             }
-        </StyledColumnRight>
-    </StyledTab>
+        </StyledColumn.Right>
+    </Fragment>
 );
 
 VisualizationTabPane.propTypes = {

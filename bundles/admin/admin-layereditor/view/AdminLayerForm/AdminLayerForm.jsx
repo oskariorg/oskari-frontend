@@ -1,21 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { GeneralTabPane } from './GeneralTabPane';
 import { VisualizationTabPane } from './VisualizationTabPane';
 import { AdditionalTabPane } from './AdditionalTabPane';
 import { PermissionsTabPane } from './PermissionsTabPane';
-import { StyledRoot } from './StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Confirm, Alert, Button, Tabs, TabPane, Message } from 'oskari-ui';
-import styled from 'styled-components';
+import { Confirm, Button, Tabs, TabPane, Message } from 'oskari-ui';
+import { StyledRoot, StyledAlert, StyledButton } from './styled';
 
-const PaddedButton = styled(Button)`
-    margin-right: 5px;
-`;
-
-const PaddedAlert = styled(Alert)`
-    margin-bottom: 5px;
-`;
 const AdminLayerForm = ({
     controller,
     mapLayerGroups,
@@ -33,7 +25,7 @@ const AdminLayerForm = ({
 }) => (
     <StyledRoot>
         { messages.map(({ key, type, args }) =>
-            <PaddedAlert key={key} type={type} message={
+            <StyledAlert key={key} type={type} message={
                 <Message messageKey={key} messageArgs={args}/>
             }/>
         )}
@@ -68,9 +60,9 @@ const AdminLayerForm = ({
                     controller={controller}/>
             </TabPane>
         </Tabs>
-        <PaddedButton type='primary' onClick={() => onSave()}>
+        <StyledButton type='primary' onClick={() => onSave()}>
             <Message messageKey={layer.isNew ? 'add' : 'save'}/>
-        </PaddedButton>
+        </StyledButton>
         { !layer.isNew &&
             <Confirm
                 title={<Message messageKey='messages.confirmDeleteLayer'/>}
@@ -79,9 +71,9 @@ const AdminLayerForm = ({
                 cancelText={getMessage('cancel')}
                 placement='bottomLeft'
             >
-                <PaddedButton>
+                <StyledButton>
                     <Message messageKey='delete'/>
-                </PaddedButton>
+                </StyledButton>
             </Confirm>
         }
         { onCancel &&

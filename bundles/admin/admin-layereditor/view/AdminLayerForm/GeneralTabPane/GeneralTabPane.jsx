@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { StyledTab } from '../StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Srs } from './Srs';
 import { Url } from './Url';
@@ -12,7 +11,7 @@ import { Groups } from './Groups';
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 const GeneralTabPane = ({ mapLayerGroups, dataProviders, layer, capabilities, propertyFields, controller }) => (
-    <StyledTab>
+    <Fragment>
         { propertyFields.includes(LayerComposingModel.URL) &&
             <Url layer={layer} controller={controller} propertyFields={propertyFields} />
         }
@@ -31,7 +30,7 @@ const GeneralTabPane = ({ mapLayerGroups, dataProviders, layer, capabilities, pr
         { propertyFields.includes(LayerComposingModel.GROUPS) &&
             <Groups layer={layer} controller={controller} groups={mapLayerGroups} />
         }
-    </StyledTab>
+    </Fragment>
 );
 
 GeneralTabPane.propTypes = {

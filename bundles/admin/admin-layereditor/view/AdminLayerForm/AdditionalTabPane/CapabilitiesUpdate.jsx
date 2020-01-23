@@ -17,7 +17,7 @@ UpdateNowButton.propTypes = {
 const Link = styled('a')`
     margin-left: 10px;
 `;
-const ShowCapabilities = layerId => {
+const ShowCapabilities = ({ layerId }) => {
     const url = Oskari.urls.getRoute('GetLayerCapabilities', { id: layerId });
     return (
         <Link href={url} target='capabilities'>

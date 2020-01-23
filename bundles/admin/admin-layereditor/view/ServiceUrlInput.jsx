@@ -3,12 +3,12 @@ import PropTypes from 'prop-types';
 import { Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 
-const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const { CREDENTIALS } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const AdminUrlInput = ({ layer, propertyFields, controller }) => {
+export const ServiceUrlInput = ({ layer, propertyFields, controller, credentialsCollapseOpen = false }) => {
     const credentialProps = {
-        allowCredentials: propertyFields.includes(LayerComposingModel.CREDENTIALS),
-        defaultOpen: false,
+        allowCredentials: propertyFields.includes(CREDENTIALS),
+        defaultOpen: credentialsCollapseOpen,
         usernameValue: layer.username,
         passwordValue: layer.password,
         panelText: <Message messageKey='usernameAndPassword'/>,
@@ -25,8 +25,9 @@ export const AdminUrlInput = ({ layer, propertyFields, controller }) => {
             credentials={credentialProps}/>
     );
 };
-AdminUrlInput.propTypes = {
+ServiceUrlInput.propTypes = {
     layer: PropTypes.object.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
-    controller: PropTypes.instanceOf(Controller).isRequired
+    controller: PropTypes.instanceOf(Controller).isRequired,
+    credentialsCollapseOpen: PropTypes.bool
 };

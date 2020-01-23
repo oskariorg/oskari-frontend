@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, NumberInput } from 'oskari-ui';
 import { InlineFlex } from './InlineFlex';
-import { StyledComponent } from './StyledFormComponents';
+import { StyledFormField } from '../styled';
 import { InfoTooltip } from './InfoTooltip';
 import styled from 'styled-components';
 
@@ -71,12 +71,12 @@ export const Numeric = ({
 
     if (messageKey || infoKeys) {
         input =
-            <StyledComponent>
+            <StyledFormField>
                 <InlineFlex growLastChild={!!children}>
                     { input }
                     { children && <div>{ children }</div> }
                 </InlineFlex>
-            </StyledComponent>;
+            </StyledFormField>;
     }
     return (
         <Fragment>
