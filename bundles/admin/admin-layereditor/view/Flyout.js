@@ -78,6 +78,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                     layer={layer}
                     controller={controller}
                     capabilities={capabilities}
+                    propertyFields={propertyFields}
                     loading={loading}
                     layerTypes={layerTypes}
                     versions={versions}

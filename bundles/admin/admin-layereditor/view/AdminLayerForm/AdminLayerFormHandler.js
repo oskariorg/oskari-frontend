@@ -39,9 +39,11 @@ class UIHandler extends StateHandler {
         });
     }
     setType (type) {
+        const layer = { ...this.getState().layer, type };
         this.updateState({
-            layer: { ...this.getState().layer, type },
-            versions: this.mapLayerService.getVersionsForType(type)
+            layer,
+            versions: this.mapLayerService.getVersionsForType(type),
+            propertyFields: this.getPropertyFields(layer)
         });
     }
     setLayerUrl (url) {
@@ -51,18 +53,17 @@ class UIHandler extends StateHandler {
     }
     setVersion (version) {
         const layer = { ...this.getState().layer, version };
+        const propertyFields = this.getPropertyFields(layer);
         if (!version) {
             // for moving back to previous step
-            this.updateState({ layer, capabilities: {}, propertyFields: [] });
+            this.updateState({ layer, capabilities: {}, propertyFields });
             return;
         }
-        const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
-        const propertyFields = composingModel ? composingModel.getPropertyFields(version) : [];
         if (!propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
             this.updateState({ layer, propertyFields });
             return;
         };
-        this.fetchCapabilities(version);
+        this.fetchCapabilities(layer);
     }
     layerSelected (name) {
         const { capabilities, layer } = this.getState();
@@ -73,11 +74,9 @@ class UIHandler extends StateHandler {
         const found = capabilities.layers[name];
         if (found) {
             const updateLayer = this.layerHelper.fromServer({ ...layer, ...found });
-            const { type, version } = updateLayer;
-            const composingModel = this.mapLayerService.getComposingModelForType(type);
             this.updateState({
                 layer: updateLayer,
-                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
+                propertyFields: this.getPropertyFields(updateLayer)
             });
         } else {
             this.log.error('Layer not in capabilities: ' + name);
@@ -320,6 +319,11 @@ class UIHandler extends StateHandler {
             loading: this.isLoading()
         });
     }
+    getPropertyFields (layer) {
+        const { type, version } = layer;
+        const composingModel = this.mapLayerService.getComposingModelForType(type);
+        return composingModel ? composingModel.getPropertyFields(version) : [];
+    }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
     fetchLayer (id) {
@@ -341,16 +345,13 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const layer = this.layerHelper.fromServer(json.layer, {
+            const { capabilities, ...layer } = this.layerHelper.fromServer(json.layer, {
                 preserve: ['capabilities']
             });
-            const { capabilities, type, version } = layer;
-            delete layer.capabilities;
-            const composingModel = this.mapLayerService.getComposingModelForType(type);
             this.updateState({
                 layer,
                 capabilities,
-                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
+                propertyFields: this.getPropertyFields(layer)
             });
         });
     }
@@ -486,12 +487,11 @@ class UIHandler extends StateHandler {
         Calls action route like:
         http://localhost:8080/action?action_route=LayerAdmin&url=https://my.domain/geoserver/ows&type=wfslayer&version=1.1.0
     */
-    fetchCapabilities (version) {
+    fetchCapabilities (layer = this.getState().layer) {
         this.ajaxStarted();
-        const { layer } = this.getState();
         var params = {
             type: layer.type,
-            version: version,
+            version: layer.version,
             url: layer.url,
             user: layer.username,
             pw: layer.password
@@ -519,11 +519,11 @@ class UIHandler extends StateHandler {
                 return Promise.reject(new Error('Capabilities fetching failed with status code ' + response.status + ' and text ' + response.statusText));
             }
         }).then(json => {
-            const composingModel = this.mapLayerService.getComposingModelForType(layer.type);
+            const updateLayer = { ...this.getState().layer, version };
             this.updateState({
                 capabilities: json || {},
-                layer: { ...this.getState().layer, version },
-                propertyFields: composingModel ? composingModel.getPropertyFields(version) : []
+                layer: updateLayer,
+                propertyFields: this.getPropertyFields(updateLayer)
             });
         }).catch(error => {
             this.log.error(error);

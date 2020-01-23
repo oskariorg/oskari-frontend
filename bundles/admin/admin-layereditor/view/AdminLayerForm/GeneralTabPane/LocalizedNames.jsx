@@ -7,8 +7,11 @@ import styled from 'styled-components';
 const PaddedLabel = styled('div')`
     padding-bottom: 5px;
 `;
-const Padding = styled('div')`
+const PaddingTop = styled('div')`
     padding-top: 10px;
+`;
+const PaddingBottom = styled('div')`
+    padding-bottom: 10px;
 `;
 
 const getLabels = bundleKey => {
@@ -25,22 +28,24 @@ const getLabels = bundleKey => {
 };
 
 export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => (
-    <LocalizationComponent
-        labels={getLabels(bundleKey)}
-        value={layer.locale}
-        languages={Oskari.getSupportedLanguages()}
-        onChange={controller.setLocalizedNames}
-        LabelComponent={PaddedLabel}
-    >
-        {/*
-            The inputs have to be on direct children for LocalizationComponent.
-            Can't wrap them to <StyledFormField>.
-        */}
-        <TextInput type='text' name='name'/>
-        <Padding/>
-        <TextInput type='text' name='subtitle'/>
-        <Padding/>
-    </LocalizationComponent>
+    <PaddingBottom>
+        <LocalizationComponent
+            labels={getLabels(bundleKey)}
+            value={layer.locale}
+            languages={Oskari.getSupportedLanguages()}
+            onChange={controller.setLocalizedNames}
+            LabelComponent={PaddedLabel}
+        >
+            {/*
+                The inputs have to be on direct children for LocalizationComponent.
+                Can't wrap them to <StyledFormField>.
+            */}
+            <TextInput type='text' name='name'/>
+            <PaddingTop/>
+            <TextInput type='text' name='subtitle'/>
+            <PaddingTop/>
+        </LocalizationComponent>
+    </PaddingBottom>
 ));
 LocalizedNames.propTypes = {
     layer: PropTypes.object.isRequired,

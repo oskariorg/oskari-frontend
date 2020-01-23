@@ -1,10 +1,9 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextInput } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { Header, Paragraph } from './styled';
-import { ServiceUrlInput } from '../ServiceUrlInput';
-import { CesiumIon } from '../CesiumIon';
+import { Header, Paragraph, StyledButton } from './styled';
+import { ServiceEndPoint } from '../ServiceEndPoint/ServiceEndPoint';
 
 const {
     URL,
@@ -12,35 +11,47 @@ const {
     API_KEY
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const ServiceStep = ({ layer, controller, versions, propertyFields, credentialsCollapseOpen }) => {
-    const ionAssetSelected = propertyFields.includes(CESIUM_ION) && !!layer.options.assetId;
-    return (
-        <Fragment>
-            <Message messageKey='wizard.service' LabelComponent={Header}/>
-            <Message messageKey='wizard.serviceDescription' LabelComponent={Paragraph}/>
-            { propertyFields.includes(URL) && !ionAssetSelected &&
-                <ServiceUrlInput
-                    layer={layer}
-                    controller={controller}
-                    propertyFields={propertyFields}
-                    credentialsCollapseOpen={credentialsCollapseOpen} />
-            }
-            { propertyFields.includes(API_KEY) &&
-                <Fragment>
-                    <Message messageKey='apiKey' LabelComponent={Header}/>
-                    <TextInput value={layer.apiKey} onChange={evt => controller.setApiKey(evt.target.value)} />
-                </Fragment>
-            }
-            { propertyFields.includes(CESIUM_ION) &&
-                <CesiumIon layer={layer} controller={controller} defaultOpen />
-            }
-        </Fragment>
-    );
+const hasServiceEndpoint = ({ url, options}, propertyFields) => {
+    if (propertyFields.includes(URL) && url) {
+        return true;
+    }
+    if (propertyFields.includes(CESIUM_ION) && options.ionAssetId) {
+        return true;
+    }
+    if (propertyFields.includes(API_KEY) && options.apiKey) {
+        return true;
+    }
+    return false;
 };
+
+export const ServiceStep = ({ layer, controller, versions, propertyFields, loading, credentialsCollapseOpen }) => (
+    <Fragment>
+        <Message messageKey='wizard.service' LabelComponent={Header}/>
+        <Message messageKey='wizard.serviceDescription' LabelComponent={Paragraph}/>
+        <ServiceEndPoint
+            layer={layer}
+            controller={controller}
+            disabled={loading}
+            credentialsCollapseOpen={credentialsCollapseOpen}
+            propertyFields={propertyFields}
+        />
+        { versions.map((version, i) => (
+            <StyledButton
+                type="primary"
+                key={i}
+                onClick={() => controller.setVersion(version)}
+                disabled={!hasServiceEndpoint(layer, propertyFields) || loading}
+            >
+                {version}
+            </StyledButton>
+        ))}
+    </Fragment>
+);
 ServiceStep.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired,
-    propertyFields: PropTypes.array,
+    propertyFields: PropTypes.array.isRequired,
     versions: PropTypes.array.isRequired,
+    loading: PropTypes.bool.isRequired,
     credentialsCollapseOpen: PropTypes.bool.isRequired
 };

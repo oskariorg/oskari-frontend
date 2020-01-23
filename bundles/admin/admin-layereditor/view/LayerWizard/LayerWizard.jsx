@@ -91,6 +91,7 @@ const LayerWizard = ({
                         layer={layer}
                         controller={controller}
                         propertyFields={propertyFields}
+                        loading={loading}
                         versions={versions}
                         credentialsCollapseOpen={credentialsCollapseOpen} />
                 }

@@ -2,7 +2,7 @@ import React from 'react';
 import { Steps } from 'oskari-ui';
 import styled from 'styled-components';
 
-export { StyledAlert } from '../styled';
+export { StyledAlert, StyledButton } from '../styled';
 
 export const Header = styled('h4')``;
 export const Paragraph = styled('p')``;
