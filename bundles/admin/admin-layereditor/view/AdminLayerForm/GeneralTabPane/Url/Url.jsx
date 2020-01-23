@@ -1,40 +1,24 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, UrlInput } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../../StyledFormComponents';
 import { CesiumIon } from './CesiumIon';
+import { StyledComponent } from '../../StyledFormComponents';
+import { AdminUrlInput } from '../../../AdminUrlInput';
 
-const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+const { CESIUM_ION } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const Url = ({ layer, propertyFields, controller }) => {
-    const credentialProps = {
-        allowCredentials: propertyFields.includes(LayerComposingModel.CREDENTIALS),
-        defaultOpen: false,
-        usernameValue: layer.username,
-        passwordValue: layer.password,
-        panelText: <Message messageKey='usernameAndPassword'/>,
-        usernameText: <Message messageKey='username'/>,
-        passwordText: <Message messageKey='password'/>,
-        usernameOnChange: controller.setUsername,
-        passwordOnChange: controller.setPassword
-    };
-    return (
-        <Fragment>
-            <Message messageKey='interfaceAddress' />
-            <StyledComponent>
-                <UrlInput
-                    key={layer.id}
-                    value={layer.url}
-                    onChange={url => controller.setLayerUrl(url)}
-                    credentials={credentialProps}/>
-                { propertyFields.includes(LayerComposingModel.CESIUM_ION) &&
-                    <CesiumIon layer={layer} controller={controller} />
-                }
-            </StyledComponent>
-        </Fragment>
-    );
-};
+export const Url = ({ layer, propertyFields, controller }) => (
+    <Fragment>
+        <Message messageKey='interfaceAddress' />
+        <StyledComponent>
+            <AdminUrlInput layer={layer} controller={controller} propertyFields={propertyFields} />
+            { propertyFields.includes(CESIUM_ION) &&
+                <CesiumIon layer={layer} controller={controller} />
+            }
+        </StyledComponent>
+    </Fragment>
+);
 Url.propTypes = {
     layer: PropTypes.object.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,

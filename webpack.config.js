@@ -78,7 +78,11 @@ module.exports = (env, argv) => {
                 changeOrigin: true,
                 headers: {
                     'X-Forwarded-Host': 'localhost:' + proxyPort,
-                    'X-Forwarded-Proto': 'http'
+                    'X-Forwarded-Proto': 'http',
+                    'auth-email': 'joonas.heijari@maanmittauslaitos.fi',
+                    'auth-firstname': 'Joonas',
+                    'auth-lastname': 'Heijari',
+                    'auth-screenname': 'jheijari'
                 }
             }]
         };

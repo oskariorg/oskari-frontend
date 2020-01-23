@@ -1,22 +1,13 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Steps, Step, Button, Message, Alert, Spin } from 'oskari-ui';
+import { Step, Button, Message } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerTypeSelection';
-import { LayerURLForm } from './LayerURLForm';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
-import styled from 'styled-components';
+import { ServiceStep } from './ServiceStep';
+import { StyledAlert, StyledSteps, Paragraph, Header } from './styled';
 
 const { CAPABILITIES } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
-
-const PaddedAlert = styled(Alert)`
-    margin-bottom: 5px;
-`;
-
-const PaddedStepsDiv = styled.div`
-    margin-top: 10px;
-    margin-bottom: 10px;
-`;
 
 const WIZARD_STEP = {
     INITIAL: 0,
@@ -77,9 +68,6 @@ Loading.propTypes = {
     children: PropTypes.node
 };
 
-const Header = styled('h4')``;
-const Paragraph = styled('p')``;
-
 const LayerWizard = ({
     controller,
     layer,
@@ -99,18 +87,16 @@ const LayerWizard = ({
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
     return (
         <Fragment>
-            { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
+            { messages.map(({ key, type }) => <StyledAlert key={key} message={<Message messageKey={key} />} type={type} />) }
             <Loading loading={loading}>
-                <PaddedStepsDiv>
-                    { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
-                    <Steps current={currentStep}>
+                { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
+                    <StyledSteps current={currentStep}>
                         <Step title={<LayerTypeTitle layer={layer}/>} />
                         <Step title={<Message messageKey='wizard.service'/>} />
                         <Step title={<Message messageKey='wizard.layers'/>} />
                         <Step title={<Message messageKey='wizard.details'/>} />
-                    </Steps>
-                    }
-                </PaddedStepsDiv>
+                    </StyledSteps>
+                }
                 { currentStep === WIZARD_STEP.INITIAL &&
                     <React.Fragment>
                         <LayerTypeTitle layer={layer} LabelComponent={Header}/>
@@ -121,16 +107,12 @@ const LayerWizard = ({
                     </React.Fragment>
                 }
                 { currentStep === WIZARD_STEP.SERVICE &&
-                    <React.Fragment>
-                        <Message messageKey='wizard.service' LabelComponent={Header}/>
-                        <Message messageKey='wizard.serviceDescription' LabelComponent={Paragraph}/>
-                        <LayerURLForm
-                            layer={layer}
-                            loading={loading}
-                            controller={controller}
-                            versions= {versions}
-                            credentialsCollapseOpen = {credentialsCollapseOpen}/>
-                    </React.Fragment>
+                    <ServiceStep
+                        layer={layer}
+                        controller={controller}
+                        propertyFields={propertyFields}
+                        versions={versions}
+                        credentialsCollapseOpen={credentialsCollapseOpen} />
                 }
                 { currentStep === WIZARD_STEP.LAYER &&
                     <React.Fragment>
