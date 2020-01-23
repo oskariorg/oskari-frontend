@@ -26,7 +26,7 @@ const ShowCapabilities = ({ layerId }) => {
     );
 };
 ShowCapabilities.propTypes = {
-    layerId: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
+    layerId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired
 };
 
 export const CapabilitiesUpdate = ({ layer, controller }) => (
