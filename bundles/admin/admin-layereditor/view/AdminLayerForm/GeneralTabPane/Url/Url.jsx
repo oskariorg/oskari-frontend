@@ -2,7 +2,8 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, UrlInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledComponent } from '../../StyledFormComponents';
+import { CesiumIon } from './CesiumIon';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -27,6 +28,9 @@ export const Url = ({ layer, propertyFields, controller }) => {
                     value={layer.url}
                     onChange={url => controller.setLayerUrl(url)}
                     credentials={credentialProps}/>
+                { propertyFields.includes(LayerComposingModel.CESIUM_ION) &&
+                    <CesiumIon layer={layer} controller={controller} />
+                }
             </StyledComponent>
         </Fragment>
     );

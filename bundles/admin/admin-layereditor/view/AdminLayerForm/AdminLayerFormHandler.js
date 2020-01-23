@@ -207,6 +207,11 @@ class UIHandler extends StateHandler {
         }
         this.updateState({ layer });
     }
+    setOptions (options) {
+        this.updateState({
+            layer: { ...this.getState().layer, options }
+        });
+    }
     setMetadataIdentifier (metadataid) {
         this.updateState({
             layer: { ...this.getState().layer, metadataid }
@@ -641,6 +646,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setMetadataIdentifier',
     'setMinAndMaxScale',
     'setOpacity',
+    'setOptions',
     'setPassword',
     'setRealtime',
     'setRefreshRate',
