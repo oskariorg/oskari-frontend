@@ -65,7 +65,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         if (this.conf.uuid) {
             extraParams.uuid = this.conf.uuid;
         }
-        const blackListed = ['coord', 'zoomLevel', 'rotate', 'cam'];
+        const blackListed = ['coord', 'zoomLevel', 'rotate', 'cam', 'time'];
         const mapQueryStr = this._sandbox.generateMapLinkParameters(extraParams);
         const mapParams = Oskari.util.getRequestParameters(mapQueryStr);
         window.location.href = url + '?' + Object.keys(mapParams)
