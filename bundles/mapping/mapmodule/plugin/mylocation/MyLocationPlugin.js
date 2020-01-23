@@ -20,9 +20,7 @@ Oskari.clazz.define(
         me._defaultLocation = 'top right';
         me._index = 40;
         me._name = 'MyLocationPlugin';
-        me._active = false;
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
-        me._timeouts = 0;
         me._dialog = null;
         me._mobileDefs = {
             buttons: {
@@ -32,7 +30,7 @@ Oskari.clazz.define(
                     sticky: false,
                     show: true,
                     callback: function (el) {
-                        me._toggleMode();
+                        me._setupRequest();
                     }
                 }
             },
@@ -42,8 +40,11 @@ Oskari.clazz.define(
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
         };
-
-        me._currentMode = null;
+        this._waiting = false; // used with single location request
+        this._timeouts = 0; // timeouts for single location request
+        this._tracking = false;
+        this._trackingOptions = null;
+        this._handleStartMode();
     }, {
         /**
          * @private @method _createControlElement
@@ -61,13 +62,12 @@ Oskari.clazz.define(
 
         _bindIcon: function (el) {
             el.on('click', () => {
-                this._toggleMode();
+                this._setupRequest();
             });
         },
 
         /**
          * @private @method _setLayerToolsEditModeImpl
-         *
          *
          */
         _setLayerToolsEditModeImpl: function () {
@@ -83,9 +83,12 @@ Oskari.clazz.define(
                 this._bindIcon(el);
             }
         },
-
-        _setActive: function (bln) {
-            this._active = !!bln;
+        /**
+         * @private @method _setWaiting
+         *
+         */
+        _setWaiting: function (bln) {
+            this._waiting = !!bln;
             this._timeouts = 0;
             var el = this.getElement();
             if (!el) {
@@ -96,6 +99,14 @@ Oskari.clazz.define(
             } else {
                 el.removeClass('disabled');
             }
+        },
+        _setTracking: function (bln) {
+            // TODO: we should inform user that tracking is on
+            this._tracking = bln;
+        },
+        _clearRequests: function () {
+            this._setWaiting(false);
+            this._setTracking(false);
         },
         /**
          * @public @method refresh
@@ -135,17 +146,25 @@ Oskari.clazz.define(
         },
 
         /**
-         * @private @method _setupLocation
+         * @private @method _setupRequest
          * Tries to get the geolocation from browser and move the map to the
          * location
          *
          */
-        _setupLocation: function () {
-            if (this._active) {
-                return; // already requested and waiting response
+        _setupRequest: function () {
+            const opts = this._trackingOptions;
+            if (opts) {
+                if (this._tracking) {
+                    this.getSandbox().postRequestByName('StopUserLocationTrackingRequest');
+                    this._setTracking(false);
+                } else {
+                    this.getSandbox().postRequestByName('StartUserLocationTrackingRequest', [opts]);
+                    this._setTracking(true);
+                }
+            } else if (!this._waiting) {
+                this._requestLocation();
+                this._setWaiting(true);
             }
-            this._setActive(true);
-            this._requestLocation();
         },
         _requestLocation: function (timeout, highAccuracy) {
             const conf = this.getConfig();
@@ -188,8 +207,6 @@ Oskari.clazz.define(
                 this.refresh();
                 this.addToPluginContainer(this.getElement());
             }
-
-            this._handleStartMode();
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
@@ -216,68 +233,29 @@ Oskari.clazz.define(
         },
 
         /**
-         * Toggle mode continues/single or if not plugin is not configured continues mode then use only single mode.
-         * @method @private _toggleMode
-         */
-        _toggleMode: function () {
-            var conf = this.getConfig();
-
-            // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single
-            // (not draw user location and accurary circle and center map to user location)
-            if (conf.mode === 'continuous' && this._currentMode === 'continuous') {
-                this._currentMode = 'single';
-                this._stopTracking();
-                this._setupLocation();
-            }
-            // else if plugin is configured continuous mode and current toggled mode is "single" then toggle mode to continuous.
-            else if (conf.mode === 'continuous' && this._currentMode === 'single') {
-                this._currentMode = 'continuous';
-                this._startTracking();
-            }
-            // else if not plugin is not configured to continuous moden then use like "single"
-            else {
-                this._stopTracking();
-                this._setupLocation();
-            }
-        },
-        /**
-         * Start tracking.
-         * @method @private _startTracking
-         */
-        _startTracking: function () {
-            var conf = this.getConfig();
-            var sandbox = this.getSandbox();
-            if (conf.centerMapAutomatically === true) {
-                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location', centerMap: 'single' }]);
-            } else {
-                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location' }]);
-            }
-        },
-        /**
-         * Stop tracking.
-         * @method @private _stopTracking
-         */
-        _stopTracking: function () {
-            var sandbox = this.getSandbox();
-            sandbox.postRequestByName('StopUserLocationTrackingRequest');
-        },
-
-        /**
          * Handle plugin start mode
          * @private @method _handleStartMode
          */
         _handleStartMode: function () {
-            var me = this;
-            var conf = this.getConfig();
-
-            if (conf.mode === 'continuous') {
-                me._currentMode = 'continuous';
-                me._startTracking();
-            } else if (conf.centerMapAutomatically === true) {
-                me._currentMode = 'single';
-                me._setupLocation();
+            if (!this.isEnabled()) {
+                return;
             }
-            return true;
+            const conf = this.getConfig();
+            const centerMap = conf.centerMapAutomatically === true;
+            if (conf.mode === 'continuous') {
+                const opts = {
+                    addToMap: 'location'
+                };
+                if (centerMap) {
+                    opts.centerMap = 'single';
+                }
+                this._trackingOptions = opts;
+                this._setupRequest();
+            } else if (centerMap) {
+                // single location request on startup, use 30s timeout (browser may ask permission)
+                // don't set waiting -> doesn't show errors or chain requests with different accuracy & timeouts
+                this._requestLocation(30000);
+            }
         },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
@@ -294,10 +272,6 @@ Oskari.clazz.define(
          */
         _checkIfOutsideViewport (lon, lat) {
             var sandbox = this.getSandbox();
-            if (!this.isEnabled() || this._currentMode === 'single') {
-                // skip checking
-                return;
-            }
             var bbox = sandbox.getMap().getBbox();
             if (lon < bbox.left || lon > bbox.right || lat > bbox.top || lat < bbox.bottom) {
                 // outside view port, center map again
@@ -316,7 +290,7 @@ Oskari.clazz.define(
             if (error === 'denied') {
                 msg = this.loc('plugin.MyLocationPlugin.error.denied');
                 dialog.show(title, msg, [dialog.createCloseButton()]);
-                this._setActive(false);
+                this._clearRequests();
                 return;
             }
             // Location denied only has close button, other messages fades out
@@ -324,39 +298,44 @@ Oskari.clazz.define(
             msg = this.loc('plugin.MyLocationPlugin.error.noLocation');
             if (error === 'unavailable') {
                 dialog.show(title, msg);
-                this._setActive(false);
+                this._clearRequests();
                 return;
             }
-            // timeouts
-            this._timeouts++;
-            if (this._timeouts === 1) {
-                msg = this.loc('plugin.MyLocationPlugin.error.timeout');
-                dialog.show('', this._loc.error.timeout);
-                // request high accuracy location with longer timeout
-                this._requestLocation(20000);
-            } else if (this._timeouts === 2) {
-                // request low accuracy location
-                this._requestLocation(6000, false);
-            } else {
-                // show error and stop requesting location
-                dialog.show(title, msg);
-                this._setActive(false);
+            // timeout handling for single request
+            if (this._waiting && this._timeouts < 2) {
+                this._timeouts++;
+                if (this._timeouts === 1) {
+                    msg = this.loc('plugin.MyLocationPlugin.error.timeout');
+                    dialog.show('', this._loc.error.timeout);
+                    // request high accuracy location with longer timeout
+                    this._requestLocation(20000);
+                } else if (this._timeouts === 2) {
+                    // request low accuracy location
+                    this._requestLocation(6000, false);
+                }
+                return;
             }
+            // show no location error and stop requests
+            dialog.show(title, msg);
+            this._clearRequests();
         },
+
         _createEventHandlers: function () {
             return {
                 UserLocationEvent: (event) => {
-                    this._checkIfOutsideViewport(event.getLon(), event.getLat());
-
-                    if (!this._active) {
+                    if (!this._tracking && !this._waiting) {
                         return;
                     }
-                    var error = event.getError();
+                    const error = event.getError();
                     if (error) {
                         this._handleError(error);
+                        return;
+                    }
+                    //success
+                    if (this._tracking) {
+                        this._checkIfOutsideViewport(event.getLon(), event.getLat());
                     } else {
-                        // success
-                        this._setActive(false);
+                        this._setWaiting(false);
                     }
                 }
             };
