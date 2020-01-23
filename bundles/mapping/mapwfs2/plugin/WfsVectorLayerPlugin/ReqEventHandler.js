@@ -70,7 +70,12 @@ export class ReqEventHandler {
                 if (plugin.WFSLayerService.getAnalysisWFSLayerId()) {
                     targetLayers = [plugin.WFSLayerService.getAnalysisWFSLayerId()];
                 } else {
-                    targetLayers = plugin.WFSLayerService.isSelectFromAllLayers() ? plugin.getAllLayerIds() : [plugin.WFSLayerService.getTopWFSLayer()];
+                    if (plugin.WFSLayerService.isSelectFromAllLayers()) {
+                        targetLayers = plugin.getAllLayerIds();
+                    } else {
+                        const layerId = plugin.WFSLayerService.getTopWFSLayer();
+                        targetLayers = layerId ? [layerId] : [];
+                    }
                 }
                 targetLayers.forEach(layerId => {
                     const layer = getSelectedLayer(layerId);
