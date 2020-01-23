@@ -90,7 +90,7 @@ class ViewHandler extends StateHandler {
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
         const allGroups = isUserAdmin ? this.mapLayerService.getAllLayerGroups() : [];
         const allDataProviders = isUserAdmin ? this.mapLayerService.getDataProviders() : [];
-        let groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc);
+        let groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
         if (!searchText) {
             this.updateState({ groups });
             return;

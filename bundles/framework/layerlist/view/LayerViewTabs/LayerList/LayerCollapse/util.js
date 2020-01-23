@@ -24,7 +24,7 @@ const comparator = (a, b, method) => {
  * @param {Oskari.mapframework.domain.MaplayerGroup[]} allGroups all user groups available in Oskari
  * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
-export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], loc) => {
+export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
     const groupList = [];
     let group = null;
     let groupForOrphans = null;
@@ -66,7 +66,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
                 if (!groupForOrphans) {
                     groupForOrphans = Oskari.clazz.create(
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        groupId, method, '(' + loc.grouping.noGroup + ')'
+                        groupId, method, '(' + noGroupTitle + ')'
                     );
                 }
                 groupForOrphans.addLayer(layer);
