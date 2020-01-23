@@ -690,14 +690,18 @@ class MapModuleOlCesium extends MapModuleOl {
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
             return true;
-        } else {
-            const view = this.getMap().getView();
-            const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-            view.setCenter([lonlat.lon, lonlat.lat]);
-            view.setZoom(zoomValue);
-            this.notifyMoveEnd();
-            return true;
         }
+        if (!isNaN(zoom)) {
+            // backwards compatibility
+            zoom = { type: 'zoom', value: zoom };
+        }
+
+        const view = this.getMap().getView();
+        const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+        view.setCenter([lonlat.lon, lonlat.lat]);
+        view.setZoom(zoomValue);
+        this.notifyMoveEnd();
+        return true;
     }
 
     /**
