@@ -204,10 +204,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
             this.dialog = dialog;
             this.isOpen = true;
-            // tick the select from all layers - checkbox, if it was on previously
-            if (me.WFSLayerService.isSelectFromAllLayers()) {
-                jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
-            }
         },
 
         close: function (selectDefault) {
