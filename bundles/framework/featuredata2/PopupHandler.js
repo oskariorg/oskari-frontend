@@ -155,13 +155,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             instructions.append(this.loc.instructions);
             content.append(instructions);
 
-            var selectOptions = me.template.selectOptions.clone(),
-                selectFromTop = jQuery(selectOptions).find('#select-from-top-layer'),
-                selectFromAll = jQuery(selectOptions).find('#select-from-all-layers');
-            selectFromTop.find('span').html(this.loc.selectFromTop);
-            selectFromTop.find('input').prop('checked', true);
-            selectFromAll.find('span').html(this.loc.selectAll);
+            const selectOptions = me.template.selectOptions.clone();
+            const selectFromTop = selectOptions.find('#select-from-top-layer');
+            const selectFromAll = selectOptions.find('#select-from-all-layers');
 
+            selectFromTop.find('span').html(this.loc.selectFromTop);
+            selectFromAll.find('span').html(this.loc.selectAll);
+            if (this.WFSLayerService.isSelectFromAllLayers()) {
+                selectFromAll.find('input').prop('checked', true);
+            } else {
+                selectFromTop.find('input').prop('checked', true);
+            }
             selectFromTop.on('click', function () {
                 me.WFSLayerService.setSelectFromAllLayers(false);
             });
@@ -200,7 +204,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.featuredata2.PopupHandler',
             dialog.moveTo('#toolbar div.toolrow[tbgroup=default-selectiontools]', 'top');
             this.dialog = dialog;
             this.isOpen = true;
-
             // tick the select from all layers - checkbox, if it was on previously
             if (me.WFSLayerService.isSelectFromAllLayers()) {
                 jQuery('input[type=checkbox][name=selectAll]').prop('checked', true);
