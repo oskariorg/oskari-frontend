@@ -15,6 +15,12 @@ export class LayerGroup {
         return this.id;
     }
     /**
+     * @return {Boolean}
+     */
+    isEditable () {
+        return this.id > 0;
+    }
+    /**
      * @method getGroupMethod
      * @return {String}
      */

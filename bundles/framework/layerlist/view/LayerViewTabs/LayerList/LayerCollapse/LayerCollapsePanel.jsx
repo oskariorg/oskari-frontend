@@ -72,7 +72,7 @@ const LayerCollapsePanel = (props) => {
             extra={
                 <React.Fragment>
                     {
-                        group.id && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
+                        group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
                                 <StyledEditGroup className={tool.getIconCls()} onClick={(event) =>
                                     onToolClick(event, group.getId(), group.getGroupMethod(), tool)}/>

@@ -12,6 +12,7 @@ class ViewHandler extends StateHandler {
     constructor (instance, groupingMethod = 'getInspireName') {
         super();
         this.sandbox = instance.getSandbox();
+        this.loc = instance._localization;
         this.mapLayerService = this.sandbox.getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('theme.update', () => this.updateLayerGroups());
         this.mapLayerService.on('dataProvider.update', () => this.updateLayerGroups());
@@ -46,7 +47,7 @@ class ViewHandler extends StateHandler {
             if (searchText) {
                 // open all groups
                 this.updateState({
-                    openGroupTitles: this.state.groups.map(group => group.getTitle())
+                    openGroupTitles: this.state.groups.map(group => group.getId())
                 });
             } else {
                 // close all groups
@@ -89,7 +90,7 @@ class ViewHandler extends StateHandler {
         // For non admin users empty arrays are provided and with this empty groups are not included to layerlist.
         const allGroups = isUserAdmin ? this.mapLayerService.getAllLayerGroups() : [];
         const allDataProviders = isUserAdmin ? this.mapLayerService.getDataProviders() : [];
-        let groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders);
+        let groups = groupLayers([...layers], this.groupingMethod, tools, allGroups, allDataProviders, this.loc.grouping.noGroup);
         if (!searchText) {
             this.updateState({ groups });
             return;
