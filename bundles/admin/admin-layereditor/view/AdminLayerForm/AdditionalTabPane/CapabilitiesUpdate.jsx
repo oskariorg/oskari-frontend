@@ -5,17 +5,28 @@ import { Controller } from 'oskari-ui/util';
 import { Numeric } from '../Numeric';
 import styled from 'styled-components';
 
+const UpdateNowButton = ({ controller }) => (
+    <Button onClick={() => controller.updateCapabilities()}>
+        <Message messageKey='capabilities.update' />
+    </Button>
+);
+UpdateNowButton.propTypes = {
+    controller: PropTypes.instanceOf(Controller).isRequired
+};
+
 const Link = styled('a')`
     margin-left: 10px;
 `;
-const getCapabilitiesUrl = ({ url, type, version, password, username }) => {
-    return Oskari.urls.getRoute('GetWSCapabilities', {
-        url,
-        type,
-        version,
-        pw: password,
-        user: username
-    });
+const ShowCapabilities = layerId => {
+    const url = Oskari.urls.getRoute('GetLayerCapabilities', { id: layerId });
+    return (
+        <Link href={url} target='capabilities'>
+            <Message messageKey='capabilities.show' />
+        </Link>
+    );
+};
+ShowCapabilities.propTypes = {
+    layerId: PropTypes.oneOfType([PropTypes.string, PropTypes.object]).isRequired
 };
 
 export const CapabilitiesUpdate = ({ layer, controller }) => (
@@ -28,14 +39,12 @@ export const CapabilitiesUpdate = ({ layer, controller }) => (
             allowNegative={false}
             allowZero={false}
             onChange={value => controller.setCapabilitiesUpdateRate(value)}>
-            <Fragment>
-                <Button value={layer.name} onClick={() => controller.updateCapabilities()}>
-                    <Message messageKey='capabilities.update' />
-                </Button>
-                <Link href={getCapabilitiesUrl(layer)} target='capabilities'>
-                    <Message messageKey='capabilities.show' />
-                </Link>
-            </Fragment>
+            { layer.id &&
+                <Fragment>
+                    <UpdateNowButton controller={controller} />
+                    <ShowCapabilities layerId={layer.id} />
+                </Fragment>
+            }
         </Numeric>
     </Fragment>
 );
