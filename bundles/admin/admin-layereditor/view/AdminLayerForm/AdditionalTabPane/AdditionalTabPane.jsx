@@ -10,11 +10,11 @@ import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
 import { Attributes } from './Attributes';
 import { MetadataId } from './MetadataId';
-import { CapabilitiesUpdateRate } from './CapabilitiesUpdateRate';
+import { CapabilitiesUpdate } from './CapabilitiesUpdate';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const {
-    CAPABILITIES_UPDATE_RATE,
+    CAPABILITIES,
     SELECTED_TIME,
     METADATAID,
     LEGEND_IMAGE,
@@ -29,8 +29,8 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
     const { isQueryable } = capabilities;
     return (
         <StyledTab>
-            { propertyFields.includes(CAPABILITIES_UPDATE_RATE) &&
-                <CapabilitiesUpdateRate layer={layer} controller={controller} />
+            { propertyFields.includes(CAPABILITIES) &&
+                <CapabilitiesUpdate layer={layer} controller={controller} />
             }
             { propertyFields.includes(SELECTED_TIME) &&
                 <SelectedTime layer={layer} capabilities={capabilities} controller={controller} />

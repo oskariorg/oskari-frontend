@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { AdminLayerForm, AdminLayerFormHandler } from './AdminLayerForm';
 import { LayerWizard } from './LayerWizard';
-import { Spin } from 'oskari-ui';
 import { LocaleProvider } from 'oskari-ui/util';
 
 const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout');
@@ -57,13 +56,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
         if (!el) {
             return;
         }
-        let uiCode = this.getEditorUI();
-        // TODO: Move spinner logic inside of LayerWizard
-        if (this.uiHandler.isLoading()) {
-            uiCode = <Spin>{ uiCode }</Spin>;
-        }
-
-        ReactDOM.render(uiCode, el.get(0));
+        ReactDOM.render(this.getEditorUI(), el.get(0));
     }
     getEditorUI () {
         const {
@@ -75,7 +68,9 @@ export class LayerEditorFlyout extends ExtraFlyout {
             messages,
             propertyFields,
             rolesAndPermissionTypes,
-            credentialsCollapseOpen } = this.uiHandler.getState();
+            credentialsCollapseOpen,
+            tab
+        } = this.uiHandler.getState();
         const controller = this.uiHandler.getController();
         return (
             <LocaleProvider value={{ bundleKey: 'admin-layereditor' }}>
@@ -101,6 +96,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         dataProviders={this.dataProviders}
                         messages={messages}
                         rolesAndPermissionTypes={rolesAndPermissionTypes}
+                        tab={tab}
                         onDelete={() => this.uiHandler.deleteLayer()}
                         onSave={() => this.uiHandler.saveLayer()}
                         onCancel={() => {

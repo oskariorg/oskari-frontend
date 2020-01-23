@@ -16,7 +16,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
     let styleOptions = [];
 
     if (propertyFields.includes(CAPABILITIES_STYLES)) {
-        styleInfoKeys.push('styleDescCapabilities');
+        styleInfoKeys.push('capabilities.styleDesc');
         styleOptions = capabilities.styles;
     } else {
         if (propertyFields.includes(STYLES_JSON) && layer.options.styles) {

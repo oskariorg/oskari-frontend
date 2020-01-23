@@ -36,7 +36,6 @@ Oskari.clazz.define(
             const composingModel = new LayerComposingModel([
                 LayerComposingModel.CAPABILITIES,
                 LayerComposingModel.CAPABILITIES_STYLES,
-                LayerComposingModel.CAPABILITIES_UPDATE_RATE,
                 LayerComposingModel.CREDENTIALS,
                 LayerComposingModel.GFI_CONTENT,
                 LayerComposingModel.GFI_TYPE,

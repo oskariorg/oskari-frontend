@@ -24,37 +24,53 @@ const comparator = (a, b, method) => {
  * @param {Oskari.mapframework.domain.MaplayerGroup[]} allGroups all user groups available in Oskari
  * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
-export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = []) => {
+export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
     const groupList = [];
     let group = null;
+    let groupForOrphans = null;
+
+    const determineGroupId = (layerGroups, layerAdmin) => {
+        let groupId;
+        if (method === 'getInspireName') {
+            groupId = layerGroups[0] ? layerGroups[0].id : undefined;
+        } else {
+            groupId = layerAdmin ? layerAdmin.organizationId : undefined;
+        }
+        // My map layers, my places, own analysis and 'orphan' groups don't have id so use negated random number
+        // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
+        return typeof groupId === 'number' ? groupId : -Math.random();
+    };
 
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
-            const groupAttr = layer[method]();
+            let groupAttr = layer[method]();
+            let groupId = determineGroupId(layer._groups, layer.admin);
 
-            let groupId;
-            if (method === 'getInspireName') {
-                groupId = layer._groups[0] ? layer._groups[0].id : undefined;
-                // Analysis and myplaces layers don't have numeric id.
-                if (typeof groupId !== 'number') {
-                    groupId = undefined;
-                }
-            } else {
-                // Analysis and myplaces layers don't have admin information.
-                groupId = layer.admin ? layer.admin.organizationId : undefined;
-            }
-
-            if (!group || group.getTitle() !== groupAttr) {
+            // If grouping can be determined, create group if already not created
+            if (!group || (typeof groupAttr !== 'undefined' && groupAttr !== '' && group.getTitle() !== groupAttr)) {
                 group = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
                     groupId, method, groupAttr
                 );
                 groupList.push(group);
             }
-            group.addLayer(layer);
-            group.setTools(tools);
+            // Add layer and tools to group if grouping can be determined
+            if (groupAttr) {
+                group.addLayer(layer);
+                group.setTools(tools);
+            }
+            // Create group for orphan layers if not already created and add layer to it
+            if (!groupAttr) {
+                if (!groupForOrphans) {
+                    groupForOrphans = Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                        groupId, method, '(' + noGroupTitle + ')'
+                    );
+                }
+                groupForOrphans.addLayer(layer);
+            }
         });
 
     let groupsWithoutLayers;
@@ -79,5 +95,5 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         });
     }
     groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
-    return [...groupsWithoutLayers, ...groupList];
+    return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...groupList] : [...groupsWithoutLayers, ...groupList];
 };
