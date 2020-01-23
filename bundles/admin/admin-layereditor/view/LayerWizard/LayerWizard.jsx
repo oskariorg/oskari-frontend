@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Steps, Step, Button, Message, Alert } from 'oskari-ui';
+import { Steps, Step, Button, Message, Alert, Spin } from 'oskari-ui';
 import { LayerTypeSelection } from './LayerTypeSelection';
 import { LayerURLForm } from './LayerURLForm';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
@@ -61,10 +61,20 @@ const LayerTypeTitle = ({ layer, LabelComponent }) => (
         { layer.type && <React.Fragment><span>:</span><div>{layer.type}</div></React.Fragment>}
     </React.Fragment>
 );
-
 LayerTypeTitle.propTypes = {
     layer: PropTypes.object.isRequired,
     LabelComponent: PropTypes.elementType
+};
+
+const Loading = ({ loading, children }) => {
+    if (loading) {
+        return <Spin>{children}</Spin>;
+    }
+    return children;
+};
+Loading.propTypes = {
+    loading: PropTypes.bool,
+    children: PropTypes.node
 };
 
 const Header = styled('h4')``;
@@ -88,62 +98,64 @@ const LayerWizard = ({
     const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
     return (
-        <div>
+        <Fragment>
             { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
-            <PaddedStepsDiv>
-                { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
-                <Steps current={currentStep}>
-                    <Step title={<LayerTypeTitle layer={layer}/>} />
-                    <Step title={<Message messageKey='wizard.service'/>} />
-                    <Step title={<Message messageKey='wizard.layers'/>} />
-                    <Step title={<Message messageKey='wizard.details'/>} />
-                </Steps>
+            <Loading loading={loading}>
+                <PaddedStepsDiv>
+                    { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
+                    <Steps current={currentStep}>
+                        <Step title={<LayerTypeTitle layer={layer}/>} />
+                        <Step title={<Message messageKey='wizard.service'/>} />
+                        <Step title={<Message messageKey='wizard.layers'/>} />
+                        <Step title={<Message messageKey='wizard.details'/>} />
+                    </Steps>
+                    }
+                </PaddedStepsDiv>
+                { currentStep === WIZARD_STEP.INITIAL &&
+                    <React.Fragment>
+                        <LayerTypeTitle layer={layer} LabelComponent={Header}/>
+                        <Message messageKey='wizard.typeDescription' LabelComponent={Paragraph}/>
+                        <LayerTypeSelection
+                            types={layerTypes || []}
+                            onSelect={(type) => controller.setType(type)} />
+                    </React.Fragment>
                 }
-            </PaddedStepsDiv>
-            { currentStep === WIZARD_STEP.INITIAL &&
-                <React.Fragment>
-                    <LayerTypeTitle layer={layer} LabelComponent={Header}/>
-                    <Message messageKey='wizard.typeDescription' LabelComponent={Paragraph}/>
-                    <LayerTypeSelection
-                        types={layerTypes || []}
-                        onSelect={(type) => controller.setType(type)} />
-                </React.Fragment>
-            }
-            { currentStep === WIZARD_STEP.SERVICE &&
-                <React.Fragment>
-                    <Message messageKey='wizard.service' LabelComponent={Header}/>
-                    <Message messageKey='wizard.serviceDescription' LabelComponent={Paragraph}/>
-                    <LayerURLForm
-                        layer={layer}
-                        loading={loading}
-                        controller={controller}
-                        versions= {versions}
-                        credentialsCollapseOpen = {credentialsCollapseOpen}/>
-                </React.Fragment>
-            }
-            { currentStep === WIZARD_STEP.LAYER &&
-                <React.Fragment>
-                    <Message messageKey='wizard.layers' LabelComponent={Header}/>
-                    <Message messageKey='wizard.layersDescription' LabelComponent={Paragraph}/>
-                    <LayerCapabilitiesListing
-                        onSelect={(item) => controller.layerSelected(item.name)}
-                        capabilities={capabilities} />
-                </React.Fragment>
-            }
-            { currentStep === WIZARD_STEP.DETAILS &&
-                <React.Fragment>
-                    {children}
-                </React.Fragment>
-            }
-            { !isFirstStep && !isDetailsForOldLayer &&
-                <Button onClick={() => {
-                    setStep(controller, getStep(layer) - 1, hasCapabilitiesSupport);
-                    onCancel();
-                }}>
-                    {<Message messageKey='cancel'/>}
-                </Button>
-            }
-        </div>
+                { currentStep === WIZARD_STEP.SERVICE &&
+                    <React.Fragment>
+                        <Message messageKey='wizard.service' LabelComponent={Header}/>
+                        <Message messageKey='wizard.serviceDescription' LabelComponent={Paragraph}/>
+                        <LayerURLForm
+                            layer={layer}
+                            loading={loading}
+                            controller={controller}
+                            versions= {versions}
+                            credentialsCollapseOpen = {credentialsCollapseOpen}/>
+                    </React.Fragment>
+                }
+                { currentStep === WIZARD_STEP.LAYER &&
+                    <React.Fragment>
+                        <Message messageKey='wizard.layers' LabelComponent={Header}/>
+                        <Message messageKey='wizard.layersDescription' LabelComponent={Paragraph}/>
+                        <LayerCapabilitiesListing
+                            onSelect={(item) => controller.layerSelected(item.name)}
+                            capabilities={capabilities} />
+                    </React.Fragment>
+                }
+                { currentStep === WIZARD_STEP.DETAILS &&
+                    <React.Fragment>
+                        {children}
+                    </React.Fragment>
+                }
+                { !isFirstStep && !isDetailsForOldLayer &&
+                    <Button onClick={() => {
+                        setStep(controller, getStep(layer) - 1, hasCapabilitiesSupport);
+                        onCancel();
+                    }}>
+                        {<Message messageKey='cancel'/>}
+                    </Button>
+                }
+            </Loading>
+        </Fragment>
     );
 };
 

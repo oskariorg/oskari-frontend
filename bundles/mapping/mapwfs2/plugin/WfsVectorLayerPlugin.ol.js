@@ -92,7 +92,6 @@ export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
         }
         const composingModel = new LayerComposingModel([
             LayerComposingModel.CAPABILITIES,
-            LayerComposingModel.CAPABILITIES_UPDATE_RATE,
             LayerComposingModel.CLUSTERING_DISTANCE,
             LayerComposingModel.CREDENTIALS,
             LayerComposingModel.HOVER_JSON,
