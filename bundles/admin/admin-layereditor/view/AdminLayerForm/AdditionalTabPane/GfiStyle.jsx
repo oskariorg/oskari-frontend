@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, TextAreaInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledFormField } from '../../styled';
+import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 
 export const GfiStyle = ({ layer, controller }) => (

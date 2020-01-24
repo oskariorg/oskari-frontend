@@ -106,7 +106,9 @@ Oskari.registerLocalization(
                 "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
                 "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
                 "hover" : "Hover JSON-syntaxen är ogiltig.",
-                "attributes" : "Attribut JSON-syntaxen är ogiltig."
+                "attributes" : "Attribut JSON-syntaxen är ogiltig.",
+                "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
+                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
             },
             "messages": {
                 "saveSuccess": "Fel!",

@@ -107,7 +107,9 @@ Oskari.registerLocalization(
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
-                "attributes" : "Invalid Attribute JSON syntax."
+                "attributes" : "Invalid Attribute JSON syntax.",
+                "attributions" : "Invalid Attributions JSON syntax.",
+                "tileGrid" : "Invalid Tile grid JSON syntax."
             },
             "messages": {
                 "saveSuccess": "Saved",
