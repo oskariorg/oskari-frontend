@@ -529,7 +529,7 @@ class MapModuleOlCesium extends MapModuleOl {
     }
     /**
      * Function to reset map move mode and 3D camera controls to default.
-     * This is needed since user might click reset map view on panbuttons when camera is in rotate mode.
+     * This is needed since user might click reset map view or pan map on panbuttons when camera is in rotate mode.
      */
     _resetMoveMode () {
         this.setCameraToMoveMode();
@@ -564,10 +564,18 @@ class MapModuleOlCesium extends MapModuleOl {
             return true;
         }
     }
+    panMapByPixels (pX, pY) {
+        const plugin = this._pluginInstances.CameraControls3dPlugin;
+        if (plugin && plugin.isRotating()) {
+            this._resetMoveMode();
+        }
+        super.panMapByPixels(pX, pY, true, true);
+    }
 
     setCameraToMoveMode () {
         const camera = this.getCesiumScene().camera;
         camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+        this._map3D.getCamera().updateView();
         this._enableMapMoveControls();
     }
     _disableMapMoveControls () {
