@@ -6,8 +6,14 @@ import { StyledFormField } from './styled';
 import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
 
-const template = '{\n  "My style 1": {\n    "featureStyle": {...},\n    "optionalStyles": [{...}]\n  },\n  ...\n}';
-
+const template =
+`{
+    "My style 1": {
+        "featureStyle": {...},
+        "optionalStyles": [{...}]
+    },
+    ...
+}`;
 export const StyleJson = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='stylesJSON'/>
