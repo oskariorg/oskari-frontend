@@ -46,7 +46,8 @@ Oskari.clazz.define(
                 LayerComposingModel.SELECTED_TIME,
                 LayerComposingModel.SRS,
                 LayerComposingModel.STYLE,
-                LayerComposingModel.URL
+                LayerComposingModel.URL,
+                LayerComposingModel.VERSION
             ], ['1.1.1', '1.3.0']);
             const type = this.getLayerTypeSelector().toLowerCase() + 'layer';
             mapLayerService.registerLayerModel(type, layerClass, composingModel);

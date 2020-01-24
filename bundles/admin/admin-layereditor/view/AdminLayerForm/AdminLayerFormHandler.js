@@ -357,7 +357,8 @@ class UIHandler extends StateHandler {
             this.updateState({
                 layer,
                 capabilities,
-                propertyFields: this.getPropertyFields(layer)
+                propertyFields: this.getPropertyFields(layer),
+                versions: this.mapLayerService.getVersionsForType(layer.type)
             });
         });
     }

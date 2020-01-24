@@ -95,6 +95,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         propertyFields={propertyFields}
                         mapLayerGroups={this.mapLayerGroups}
                         dataProviders={this.dataProviders}
+                        versions={versions}
                         messages={messages}
                         rolesAndPermissionTypes={rolesAndPermissionTypes}
                         tab={tab}
