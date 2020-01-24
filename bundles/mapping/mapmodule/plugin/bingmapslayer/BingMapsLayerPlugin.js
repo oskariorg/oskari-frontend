@@ -3,6 +3,7 @@ import olLayerTile from 'ol/layer/Tile';
 import { BingMapsLayerModelBuilder } from './BingMapsLayerModelBuilder';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
     constructor (config) {
@@ -19,7 +20,11 @@ class BingMapsLayerPlugin extends AbstractMapLayerPlugin {
         // register domain builder
         const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         if (mapLayerService) {
-            mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass());
+            const composingModel = new LayerComposingModel([
+                LayerComposingModel.API_KEY,
+                LayerComposingModel.SRS
+            ]);
+            mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);
             mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
         }
     }

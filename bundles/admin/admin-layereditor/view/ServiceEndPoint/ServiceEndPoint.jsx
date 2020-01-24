@@ -16,24 +16,34 @@ const {
 const protocols = ['http://', 'https://'];
 
 export const ServiceEndPoint = ({ layer, propertyFields, disabled, credentialsCollapseOpen, controller }) => {
-    const urlSelected = propertyFields.includes(URL) && !!layer.url && !protocols.includes(layer.url);
+    let serviceUrlInput = null;
     const ionAssetSelected = propertyFields.includes(CESIUM_ION) && !!layer.options.ionAssetId;
+    if (propertyFields.includes(URL) && !ionAssetSelected) {
+        serviceUrlInput = (
+            <ServiceUrlInput
+                layer={layer}
+                credentialsCollapseOpen={credentialsCollapseOpen}
+                controller={controller}
+                disabled={disabled}
+                propertyFields={propertyFields} />
+        );
+    }
+    let cesiumIonSettings = null;
+    const urlSelected = propertyFields.includes(URL) && !!layer.url && !protocols.includes(layer.url);
+    if (propertyFields.includes(CESIUM_ION) && !urlSelected) {
+        cesiumIonSettings = <CesiumIon layer={layer} controller={controller} />;
+    }
     return (
         <Fragment>
-            <Message messageKey='interfaceAddress' />
-            <StyledFormField>
-                { propertyFields.includes(URL) && !ionAssetSelected &&
-                    <ServiceUrlInput
-                        layer={layer}
-                        credentialsCollapseOpen={credentialsCollapseOpen}
-                        controller={controller}
-                        disabled={disabled}
-                        propertyFields={propertyFields} />
-                }
-                { propertyFields.includes(CESIUM_ION) && !urlSelected &&
-                    <CesiumIon layer={layer} controller={controller} />
-                }
-            </StyledFormField>
+            { (serviceUrlInput || cesiumIonSettings) &&
+                <Fragment>
+                    <Message messageKey='interfaceAddress' />
+                    <StyledFormField>
+                        {serviceUrlInput}
+                        {cesiumIonSettings}
+                    </StyledFormField>
+                </Fragment>
+            }
             { propertyFields.includes(API_KEY) &&
                 <ApiKey layer={layer} controller={controller} />
             }
