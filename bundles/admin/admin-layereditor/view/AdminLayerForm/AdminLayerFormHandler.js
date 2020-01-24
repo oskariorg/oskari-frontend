@@ -519,7 +519,7 @@ class UIHandler extends StateHandler {
                 return Promise.reject(new Error('Capabilities fetching failed with status code ' + response.status + ' and text ' + response.statusText));
             }
         }).then(json => {
-            const updateLayer = { ...this.getState().layer, version };
+            const updateLayer = { ...layer };
             this.updateState({
                 capabilities: json || {},
                 layer: updateLayer,
