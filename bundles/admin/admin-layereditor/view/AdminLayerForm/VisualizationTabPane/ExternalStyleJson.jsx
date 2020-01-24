@@ -6,8 +6,11 @@ import { StyledFormField } from './styled';
 import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
 
-const template = '{\n  "My external json style": { ... },\n  ...\n}';
-
+const template =
+`{
+    "My external json style": { ... },
+    ...
+}`;
 export const ExternalStyleJson = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='externalStylesJSON'/>

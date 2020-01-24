@@ -40,7 +40,7 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
                 LayerComposingModel.ATTRIBUTIONS,
                 LayerComposingModel.CREDENTIALS,
                 LayerComposingModel.EXTERNAL_STYLES_JSON,
-                LayerComposingModel.HOVER_JSON,
+                LayerComposingModel.HOVER,
                 LayerComposingModel.SRS,
                 LayerComposingModel.STYLE,
                 LayerComposingModel.STYLES_JSON,

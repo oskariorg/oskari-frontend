@@ -123,7 +123,7 @@ Oskari.registerLocalization(
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
-            "hoverJSON": "Kohteen korostus ja tooltip (JSON)",
+            "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",
                 "assetId": "Asset ID",

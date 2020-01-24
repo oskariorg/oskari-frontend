@@ -5,7 +5,7 @@ import { Opacity } from './Opacity';
 import { Style } from './Style';
 import { StyleJson } from './StyleJson';
 import { ExternalStyleJson } from './ExternalStyleJson';
-import { HoverJson } from './HoverJson';
+import { Hover } from './Hover';
 import { Scale } from './Scale';
 import { ClusteringDistance } from './ClusteringDistance';
 import { WfsRenderMode } from './WfsRenderMode';
@@ -18,7 +18,7 @@ const {
     STYLE,
     STYLES_JSON,
     EXTERNAL_STYLES_JSON,
-    HOVER_JSON,
+    HOVER,
     SCALE
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -43,8 +43,8 @@ export const VisualizationTabPane = ({ layer, capabilities, propertyFields, cont
             { propertyFields.includes(EXTERNAL_STYLES_JSON) &&
                 <ExternalStyleJson layer={layer} controller={controller} />
             }
-            { propertyFields.includes(HOVER_JSON) &&
-                <HoverJson layer={layer} controller={controller} />
+            { propertyFields.includes(HOVER) &&
+                <Hover layer={layer} controller={controller} />
             }
         </StyledColumn.Left>
         <StyledColumn.Right>
