@@ -21,7 +21,7 @@ export const Attributions = ({ layer, controller }) => (
         <StyledFormField>
             <JsonInput
                 rows={6}
-                value={layer.tempTileGridJSON}
+                value={layer.tempAttributionsJSON}
                 onChange={evt => controller.setAttributionsJSON(evt.target.value)} />
         </StyledFormField>
     </Fragment>

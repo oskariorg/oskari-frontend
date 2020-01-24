@@ -107,7 +107,9 @@ Oskari.registerLocalization(
                 "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
                 "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
-                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen."
+                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
+                "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
+                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
             },
             "messages": {
                 "saveSuccess": "Tallennettu",
