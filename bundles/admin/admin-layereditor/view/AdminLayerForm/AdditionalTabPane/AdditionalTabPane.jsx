@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { StyledTab } from '../StyledFormComponents';
 import { Controller } from 'oskari-ui/util';
 import { LegendImage } from './LegendImage';
 import { Realtime } from './Realtime';
@@ -28,7 +27,7 @@ const {
 export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, controller }) => {
     const { isQueryable } = capabilities;
     return (
-        <StyledTab>
+        <Fragment>
             { propertyFields.includes(CAPABILITIES) &&
                 <CapabilitiesUpdate layer={layer} controller={controller} />
             }
@@ -56,7 +55,7 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
             { propertyFields.includes(ATTRIBUTES) &&
                 <Attributes layer={layer} controller={controller} />
             }
-        </StyledTab>
+        </Fragment>
     );
 };
 AdditionalTabPane.propTypes = {

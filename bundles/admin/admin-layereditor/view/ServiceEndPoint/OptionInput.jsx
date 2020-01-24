@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from './StyledFormComponents';
 
 const onChange = (evt, layer, propKey, update) => {
     const options = { ...layer.options };
@@ -17,12 +16,10 @@ const onChange = (evt, layer, propKey, update) => {
 export const OptionInput = ({ layer, controller, propKey }) => {
     const update = value => controller.setOptions(value);
     return (
-        <StyledComponent>
-            <TextInput
-                type='text'
-                value={layer.options[propKey]}
-                onChange={evt => onChange(evt, layer, propKey, update)} />
-        </StyledComponent>
+        <TextInput
+            type='text'
+            value={layer.options[propKey]}
+            onChange={evt => onChange(evt, layer, propKey, update)} />
     );
 };
 OptionInput.propTypes = {

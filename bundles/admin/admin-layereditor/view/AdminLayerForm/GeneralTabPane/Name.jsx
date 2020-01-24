@@ -2,14 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, TextInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 
 export const Name = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='uniqueName' />
-        <StyledComponent>
+        <StyledFormField>
             <TextInput type='text' value={layer.name} onChange={evt => controller.setLayerName(evt.target.value)} />
-        </StyledComponent>
+        </StyledFormField>
     </Fragment>
 );
 Name.propTypes = {

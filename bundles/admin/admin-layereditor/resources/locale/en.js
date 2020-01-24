@@ -19,6 +19,7 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
             "interfaceAddress": "Interface URL",
+            "apiKey": "Api key",
             "username": "Username",
             "password": "Password",
             "usernameAndPassword": "Username and password",

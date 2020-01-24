@@ -19,6 +19,7 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Lisätiedot",
             "permissionsTabTitle": "Oikeudet",
             "interfaceAddress": "Rajapinnan osoite",
+            "apiKey": "Api key",
             "username": "Käyttäjätunnus",
             "password": "Salasana",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",

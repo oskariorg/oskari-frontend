@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Radio } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from './styled';
 import { InfoTooltip } from '../InfoTooltip';
 
 const VECTOR = 'geojson';
@@ -14,7 +14,7 @@ export const WfsRenderMode = ({ layer, controller }) => {
     return (
         <Fragment>
             <Message messageKey='renderMode.title'/>
-            <StyledComponent>
+            <StyledFormField>
                 <Radio.Group value={value} buttonStyle='solid' onChange={evt => controller.setRenderMode(evt.target.value)}>
                     <Radio.Button value={VECTOR}>
                         <Message messageKey='renderMode.geojson'/>
@@ -24,7 +24,7 @@ export const WfsRenderMode = ({ layer, controller }) => {
                         <InfoTooltip messageKeys='renderMode.info'/>
                     </Radio.Button>
                 </Radio.Group>
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };

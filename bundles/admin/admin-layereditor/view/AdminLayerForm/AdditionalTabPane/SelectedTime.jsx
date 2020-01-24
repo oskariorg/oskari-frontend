@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 
 export const SelectedTime = ({ layer, capabilities, controller }) => {
     const value = layer.params ? layer.params.selectedTime : '';
@@ -12,14 +12,14 @@ export const SelectedTime = ({ layer, capabilities, controller }) => {
     return (
         <Fragment>
             <Message messageKey='selectedTime'/>
-            <StyledComponent>
+            <StyledFormField>
                 <Select
                     showSearch
                     value={value}
                     onChange={value => controller.setSelectedTime(value)}>
                     { capabilities.times.map(time => <Option key={time}>{time}</Option>)}
                 </Select>
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };
