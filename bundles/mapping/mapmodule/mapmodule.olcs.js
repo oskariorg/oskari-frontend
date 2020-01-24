@@ -18,6 +18,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._supports3D = true;
         this._mapReady = false;
         this._mapReadySubscribers = [];
+        this._moveEndSubscribers = [];
         this._lastKnownZoomLevel = null;
         this._time = new Date();
         this._log = Oskari.log('MapModuleOlCesium');
@@ -207,6 +208,16 @@ class MapModuleOlCesium extends MapModuleOl {
         this.updateDomain();
         const evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), camera);
         sandbox.notifyAll(evt);
+        this._notifyMoveEndSubscribers();
+    }
+
+    _notifyMoveEndSubscribers () {
+        if (this._moveEndSubscribers.length === 0) return;
+
+        this._moveEndSubscribers.forEach(({ func, args }) => {
+            func.apply(this, args);
+        });
+        this._moveEndSubscribers = [];
     }
 
     /**
@@ -568,6 +579,11 @@ class MapModuleOlCesium extends MapModuleOl {
         const plugin = this._pluginInstances.CameraControls3dPlugin;
         if (plugin && plugin.isRotating()) {
             this._resetMoveMode();
+            this._moveEndSubscribers.push({
+                func: super.panMapByPixels,
+                args: [pX, pY, true, true]
+            });
+            return;
         }
         super.panMapByPixels(pX, pY, true, true);
     }
