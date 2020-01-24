@@ -528,7 +528,6 @@ class MapModuleOlCesium extends MapModuleOl {
                 }
                 camera.setView(view);
                 this._map3D.getCamera().updateView();
-                this.updateDomain();
             }
         } else {
             // Cesium is not ready yet. Fire after it has been initialized properly.
