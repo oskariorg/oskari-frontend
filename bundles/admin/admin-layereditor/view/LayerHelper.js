@@ -46,18 +46,22 @@ export const getLayerHelper = () => {
         layer.role_permissions.all = [];
         // Add temp json fields to keep the state on invalid json syntax
         layer.tempAttributesJSON = toJson(layer.attributes);
-        layer.tempStylesJSON = toJson(layer.options.styles);
+        layer.tempAttributionsJSON = toJson(layer.options.attributions);
         layer.tempExternalStylesJSON = toJson(layer.options.externalStyles);
         layer.tempHoverJSON = toJson(layer.options.hover);
+        layer.tempStylesJSON = toJson(layer.options.styles);
+        layer.tempTileGridJSON = toJson(layer.options.tileGrid);
         layer.isNew = !layer.id;
     };
 
     const removeTemporaryFields = layer => {
         delete layer.role_permissions.all;
         delete layer.tempAttributesJSON;
-        delete layer.tempStylesJSON;
+        delete layer.tempAttributionsJSON;
         delete layer.tempExternalStylesJSON;
         delete layer.tempHoverJSON;
+        delete layer.tempStylesJSON;
+        delete layer.tempTileGridJSON;
         delete layer.isNew;
     };
 

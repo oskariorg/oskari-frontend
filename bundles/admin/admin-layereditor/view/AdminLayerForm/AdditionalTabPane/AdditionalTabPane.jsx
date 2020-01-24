@@ -21,6 +21,7 @@ const {
     GFI_CONTENT,
     GFI_TYPE,
     GFI_XSLT,
+    ATTRIBUTIONS,
     ATTRIBUTES
 } = LayerComposingModel;
 
@@ -30,6 +31,9 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
         <Fragment>
             { propertyFields.includes(CAPABILITIES) &&
                 <CapabilitiesUpdate layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(ATTRIBUTIONS) &&
+                <ATTRIBUTIONS layer={layer} controller={controller} />
             }
             { propertyFields.includes(SELECTED_TIME) &&
                 <SelectedTime layer={layer} capabilities={capabilities} controller={controller} />

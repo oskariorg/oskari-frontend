@@ -191,6 +191,12 @@ class UIHandler extends StateHandler {
     setHoverJSON (json) {
         this.updateOptionsJsonProperty(json, 'tempHoverJSON', 'hover');
     }
+    setTileGridJSON (json) {
+        this.updateOptionsJsonProperty(json, 'tempTileGridJSON', 'tileGrid');
+    }
+    setAttributionsJSON (json) {
+        this.updateOptionsJsonProperty(json, 'tempAttributionsJSON', 'attributions');
+    }
     updateOptionsJsonProperty (json, jsonPropKey, dataPropKey) {
         const layer = { ...this.getState().layer };
         layer[jsonPropKey] = json;
@@ -446,6 +452,8 @@ class UIHandler extends StateHandler {
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);
         this.validateJsonValue(layer.tempAttributesJSON, 'validation.attributes', validationErrors);
+        this.validateJsonValue(layer.tempAttributionsJSON, 'validation.attributions', validationErrors);
+        this.validateJsonValue(layer.tempTileGridJSON, 'validation.tileGrid', validationErrors);
         return validationErrors;
     }
 
@@ -627,6 +635,7 @@ const wrapped = controllerMixin(UIHandler, [
     'handlePermission',
     'layerSelected',
     'setAttributes',
+    'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
     'setClusteringDistance',
     'setDataProviderId',
@@ -654,6 +663,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setSelectedTime',
     'setStyle',
     'setStyleJSON',
+    'setTileGridJSON',
     'setType',
     'setUsername',
     'setVersion',

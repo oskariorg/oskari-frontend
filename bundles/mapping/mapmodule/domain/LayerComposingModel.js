@@ -26,7 +26,7 @@ const PROPERTY_FIELDS = [
     'SRS',
     'STYLE',
     'STYLES_JSON',
-    'TILE_MATRIX',
+    'TILE_GRID',
     'URL',
     'VERSION',
     'WFS_RENDER_MODE'
