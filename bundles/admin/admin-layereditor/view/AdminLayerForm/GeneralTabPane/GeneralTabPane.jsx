@@ -7,6 +7,7 @@ import { Name } from './Name';
 import { LocalizedNames } from './LocalizedNames';
 import { DataProvider } from './DataProvider';
 import { Groups } from './Groups';
+import { TileGrid } from './TileGrid';
 
 const {
     API_KEY,
@@ -16,6 +17,7 @@ const {
     ORGANIZATION_NAME,
     NAME,
     SRS,
+    TILE_GRID,
     URL
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
@@ -26,6 +28,9 @@ const GeneralTabPane = ({ mapLayerGroups, dataProviders, layer, capabilities, pr
         }
         { propertyFields.includes(SRS) &&
             <Srs layer={layer} controller={controller} propertyFields={propertyFields} capabilities={capabilities} />
+        }
+        { propertyFields.includes(TILE_GRID) &&
+            <TileGrid layer={layer} controller={controller} />
         }
         { propertyFields.includes(NAME) &&
             <Name layer={layer} controller={controller} />

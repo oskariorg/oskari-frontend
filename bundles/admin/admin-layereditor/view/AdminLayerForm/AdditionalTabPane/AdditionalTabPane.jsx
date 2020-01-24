@@ -8,6 +8,7 @@ import { GfiType } from './GfiType';
 import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
 import { Attributes } from './Attributes';
+import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
 import { CapabilitiesUpdate } from './CapabilitiesUpdate';
 
@@ -21,6 +22,7 @@ const {
     GFI_CONTENT,
     GFI_TYPE,
     GFI_XSLT,
+    ATTRIBUTIONS,
     ATTRIBUTES
 } = LayerComposingModel;
 
@@ -30,6 +32,9 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
         <Fragment>
             { propertyFields.includes(CAPABILITIES) &&
                 <CapabilitiesUpdate layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(ATTRIBUTIONS) &&
+                <Attributions layer={layer} controller={controller} />
             }
             { propertyFields.includes(SELECTED_TIME) &&
                 <SelectedTime layer={layer} capabilities={capabilities} controller={controller} />
