@@ -20,6 +20,8 @@ Oskari.registerLocalization(
             "permissionsTabTitle": "Oikeudet",
             "interfaceAddress": "Rajapinnan osoite",
             "apiKey": "Api key",
+            "attributions": "Lähdeviitteet",
+            "tileGrid": "Tiilimatriisi",
             "username": "Käyttäjätunnus",
             "password": "Salasana",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",

@@ -7,13 +7,11 @@ import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
 
 const template =
-`
-{
+`{
     "origin": [-548576, 8388608],
     "resolutions": [8192, ..., 0.25],
     "tileSize": [256, 256]
-}
-`;
+}`;
 export const TileGrid = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='tileGrid'/>

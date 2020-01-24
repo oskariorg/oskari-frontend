@@ -8,6 +8,7 @@ import { GfiType } from './GfiType';
 import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
 import { Attributes } from './Attributes';
+import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
 import { CapabilitiesUpdate } from './CapabilitiesUpdate';
 
@@ -33,7 +34,7 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
                 <CapabilitiesUpdate layer={layer} controller={controller} />
             }
             { propertyFields.includes(ATTRIBUTIONS) &&
-                <ATTRIBUTIONS layer={layer} controller={controller} />
+                <Attributions layer={layer} controller={controller} />
             }
             { propertyFields.includes(SELECTED_TIME) &&
                 <SelectedTime layer={layer} capabilities={capabilities} controller={controller} />

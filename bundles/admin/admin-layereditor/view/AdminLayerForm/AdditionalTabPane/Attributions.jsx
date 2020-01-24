@@ -7,15 +7,13 @@ import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
 
 const template =
-`
-[
+`[
     {
         "label": "© MyOrganization",
         "link": "https://linktomycopyrights"
     },
     ...
-]
-`;
+]`;
 export const Attributions = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='attributions'/>
