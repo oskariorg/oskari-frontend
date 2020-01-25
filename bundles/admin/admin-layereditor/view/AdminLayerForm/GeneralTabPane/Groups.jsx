@@ -2,13 +2,13 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Collapse, CollapsePanel, List, ListItem, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 
-export const MapLayerGroups = ({ layer, mapLayerGroups, controller }) => {
-    const dataSource = mapLayerGroups.map(group =>
+export const Groups = ({ layer, groups, controller }) => {
+    const dataSource = groups.map(group =>
         <Checkbox key={group.id}
-            onChange={evt => controller.setMapLayerGroup(evt.target.checked, group)}
-            checked={!!layer.maplayerGroups.find(cur => cur === group.id)}
+            onChange={evt => controller.setGroup(evt.target.checked, group)}
+            checked={!!layer.groups.find(cur => cur === group.id)}
         >
             {group.name[Oskari.getLang()]}
         </Checkbox>
@@ -17,19 +17,19 @@ export const MapLayerGroups = ({ layer, mapLayerGroups, controller }) => {
     return (
         <Fragment>
             <Message messageKey='mapLayerGroups' />
-            <StyledComponent>
+            <StyledFormField>
                 <Collapse>
                     <CollapsePanel header={<Message messageKey='selectMapLayerGroupsButton'/>}>
                         <List dataSource={dataSource} renderItem={renderItem} />
                     </CollapsePanel>
                 </Collapse>
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };
 
-MapLayerGroups.propTypes = {
+Groups.propTypes = {
     layer: PropTypes.object.isRequired,
-    mapLayerGroups: PropTypes.array.isRequired,
+    groups: PropTypes.array.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };

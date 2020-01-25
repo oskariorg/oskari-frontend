@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Select, Option, Message, Tag } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import styled from 'styled-components';
 
@@ -23,9 +23,9 @@ const EpsgCodeTags = ({ codes }) => {
         return null;
     }
     return (
-        <StyledComponent>
+        <StyledFormField>
             { codes.map((epsg, i) => <Tag key={i}>{epsg}</Tag>) }
-        </StyledComponent>
+        </StyledFormField>
     );
 };
 EpsgCodeTags.propTypes = {
@@ -58,19 +58,9 @@ MissingSRS.propTypes = {
     epsgCodes: PropTypes.arrayOf(PropTypes.string)
 };
 
-const parseForcedSRSAttribute = attributesStr => {
-    try {
-        const attributes = JSON.parse(attributesStr);
-        if (attributes) {
-            return attributes.forcedSRS || [];
-        }
-    } catch (err) { }
-    return [];
-};
-
 export const Srs = ({ layer, capabilities = {}, propertyFields, controller }) => {
     const systemProjections = Array.from(new Set(Oskari.app.getSystemDefaultViews().map(view => view.srsName)));
-    let forced = parseForcedSRSAttribute(layer.attributes);
+    const forced = (layer.attributes && layer.attributes.forcedSRS) || [];
     let supported = [];
     let missing = [];
     if (propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
@@ -89,11 +79,11 @@ export const Srs = ({ layer, capabilities = {}, propertyFields, controller }) =>
             }
             <Message messageKey='forcedSRS' />
             <InfoTooltip messageKeys='forcedSRSInfo' />
-            <StyledComponent>
+            <StyledFormField>
                 <Select mode='tags' value={forced} onChange={forcedSRS => controller.setForcedSRS(forcedSRS)}>
                     { systemProjections.map(cur => <Option key={cur}>{cur}</Option>) }
                 </Select>
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };

@@ -7,9 +7,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.CoordinateTool',
         lefthanded: 'top left',
         righthanded: 'top right',
         allowedSiblings: [
+            'Oskari.mapframework.bundle.featuredata2.plugin.FeaturedataPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.MyLocationPlugin',
             'Oskari.mapframework.bundle.mapmodule.plugin.PanButtons',
-            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar'
+            'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
+            'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
+            'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin',
+            'Oskari.mapping.maprotator.MapRotatorPlugin'
         ],
         templates: {
             'toolOptions': '<div class="tool-options"></div>'

@@ -15,27 +15,85 @@ const comparator = (a, b, method) => {
 };
 
 /**
+ * Function to construct layer groups based on information included in layers and given grouping method.
+ * Possible empty groups are included if allGroups and / or allDataProviders parameters are provided.
+ *
  * @param {Oskari.mapframework.domain.AbstractLayer[]} layers layers to group
  * @param {String} method layer method name to sort by
+ * @param {Oskari.mapframework.domain.Tool[]} tools tools to group
+ * @param {Oskari.mapframework.domain.MaplayerGroup[]} allGroups all user groups available in Oskari
+ * @param {Object[]} allDataProviders all dataproviders available in Oskari
  */
-export const groupLayers = (layers, method) => {
+export const groupLayers = (layers, method, tools, allGroups = [], allDataProviders = [], noGroupTitle) => {
     const groupList = [];
     let group = null;
+    let groupForOrphans = null;
+
+    const determineGroupId = (layerGroups, layerAdmin) => {
+        let groupId;
+        if (method === 'getInspireName') {
+            groupId = layerGroups[0] ? layerGroups[0].id : undefined;
+        } else {
+            groupId = layerAdmin ? layerAdmin.organizationId : undefined;
+        }
+        // My map layers, my places, own analysis and 'orphan' groups don't have id so use negated random number
+        // as unique Id (with positive id group is interpret as editable and group tools are shown in layer list).
+        return typeof groupId === 'number' ? groupId : -Math.random();
+    };
 
     // sort layers by grouping & name
     layers.sort((a, b) => comparator(a, b, method))
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
-            const groupAttr = layer[method]();
-            if (!group || group.getTitle() !== groupAttr) {
+            let groupAttr = layer[method]();
+            let groupId = determineGroupId(layer._groups, layer.admin);
+
+            // If grouping can be determined, create group if already not created
+            if (!group || (typeof groupAttr !== 'undefined' && groupAttr !== '' && group.getTitle() !== groupAttr)) {
                 group = Oskari.clazz.create(
                     'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                    groupAttr
+                    groupId, method, groupAttr
                 );
                 groupList.push(group);
             }
-            group.addLayer(layer);
+            // Add layer and tools to group if grouping can be determined
+            if (groupAttr) {
+                group.addLayer(layer);
+                group.setTools(tools);
+            }
+            // Create group for orphan layers if not already created and add layer to it
+            if (!groupAttr) {
+                if (!groupForOrphans) {
+                    groupForOrphans = Oskari.clazz.create(
+                        'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                        groupId, method, '(' + noGroupTitle + ')'
+                    );
+                }
+                groupForOrphans.addLayer(layer);
+            }
         });
 
-    return groupList;
+    let groupsWithoutLayers;
+    const lang = Oskari.getLang();
+    if (method === 'getInspireName') {
+        groupsWithoutLayers = allGroups.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(t => {
+            const group = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                t.id, method, t.name[lang]
+            );
+            group.setTools(tools);
+            return group;
+        });
+    } else {
+        groupsWithoutLayers = allDataProviders.filter(t => groupList.filter(g => g.id === t.id).length === 0).map(d => {
+            const group = Oskari.clazz.create(
+                'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
+                d.id, method, d.name
+            );
+            group.setTools(tools);
+            return group;
+        });
+    }
+    groupsWithoutLayers = groupsWithoutLayers.sort((a, b) => Oskari.util.naturalSort(a.name, b.name));
+    return groupForOrphans ? [groupForOrphans, ...groupsWithoutLayers, ...groupList] : [...groupsWithoutLayers, ...groupList];
 };

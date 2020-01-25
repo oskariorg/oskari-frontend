@@ -17,7 +17,7 @@ export class LocalizingFlyout extends ExtraFlyout {
         this.setContent(this.mountPoint);
 
         // Create a handler for ui state.
-        this.uiHandler = new UIHandler(instance);
+        this.uiHandler = new UIHandler(instance, options.id);
         // Calling updateState will affect only the properties listed.
         this.uiHandler.updateState({ headerMessageKey: options.headerMessageKey });
 
@@ -30,7 +30,12 @@ export class LocalizingFlyout extends ExtraFlyout {
         // State listener is called every time the state changes.
         // Here we are telling the UI to re render on state change, making the UI respond to user actions.
         this.uiHandler.addStateListener(this.onUpdate);
+        // Fetch data from backend using given id and function if provided
+        if (options.id && options.fetch) {
+            options.fetch(options.id, this.setLoading.bind(this), this.uiHandler.setValue.bind(this.uiHandler));
+        }
     }
+
     setSaveAction (action) {
         this.uiHandler.setSaveAction(action);
     }
@@ -63,7 +68,7 @@ export class LocalizingFlyout extends ExtraFlyout {
 
 // Create a service responsible of the UI state.
 class UIService extends StateHandler {
-    constructor (instance) {
+    constructor (instance, id) {
         super();
         const getMsg = Oskari.getMsg.bind(null, instance.getName());
         const labels = {};
@@ -78,6 +83,7 @@ class UIService extends StateHandler {
         });
         this.saveAction = null;
         this.cancelAction = null;
+        this.id = id;
     }
     setSaveAction (saveAction) {
         this.saveAction = saveAction;
@@ -94,7 +100,7 @@ class UIService extends StateHandler {
         }
         const { value } = this.getState();
         this.updateState({ loading: true });
-        this.saveAction(value);
+        this.saveAction(value, this.id);
     }
     cancel () {
         if (typeof this.cancelAction !== 'function') {

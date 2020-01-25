@@ -2,14 +2,16 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { TextInput, LocalizationComponent } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
-import { StyledComponentGroup } from '../StyledFormComponents';
 import styled from 'styled-components';
 
 const PaddedLabel = styled('div')`
     padding-bottom: 5px;
 `;
-const Padding = styled('div')`
+const PaddingTop = styled('div')`
     padding-top: 10px;
+`;
+const PaddingBottom = styled('div')`
+    padding-bottom: 10px;
 `;
 
 const getLabels = bundleKey => {
@@ -26,7 +28,7 @@ const getLabels = bundleKey => {
 };
 
 export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => (
-    <StyledComponentGroup>
+    <PaddingBottom>
         <LocalizationComponent
             labels={getLabels(bundleKey)}
             value={layer.locale}
@@ -36,14 +38,14 @@ export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) 
         >
             {/*
                 The inputs have to be on direct children for LocalizationComponent.
-                Can't wrap them to <StyledComponent>.
+                Can't wrap them to <StyledFormField>.
             */}
             <TextInput type='text' name='name'/>
-            <Padding/>
+            <PaddingTop/>
             <TextInput type='text' name='subtitle'/>
-            <Padding/>
+            <PaddingTop/>
         </LocalizationComponent>
-    </StyledComponentGroup>
+    </PaddingBottom>
 ));
 LocalizedNames.propTypes = {
     layer: PropTypes.object.isRequired,

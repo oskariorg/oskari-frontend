@@ -2,20 +2,20 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 
 export const DataProvider = ({ layer, dataProviders, controller }) => (
     <Fragment>
         <Message messageKey='dataProvider'/>
-        <StyledComponent>
+        <StyledFormField>
             <Select
-                value={layer.organizationName}
-                onChange={value => controller.setDataProvider(value)}>
+                value={layer.dataProviderId}
+                onChange={value => controller.setDataProviderId(value)}>
                 { dataProviders.map(dataProvider =>
                     <Option key={dataProvider.id}>{dataProvider.name}</Option>
                 )}
             </Select>
-        </StyledComponent>
+        </StyledFormField>
     </Fragment>
 );
 DataProvider.propTypes = {

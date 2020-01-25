@@ -31,7 +31,7 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, getMessage, LabelComponent = Label }) => {
+const Message = ({ bundleKey, messageKey, messageArgs, getMessage, children, LabelComponent = Label }) => {
     if (!messageKey) {
         return null;
     }
@@ -41,6 +41,7 @@ const Message = ({ bundleKey, messageKey, messageArgs, getMessage, LabelComponen
     return (
         <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
             { message }
+            { children }
         </LabelComponent>
     );
 };
@@ -49,6 +50,7 @@ Message.propTypes = {
     messageKey: PropTypes.string,
     messageArgs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     getMessage: PropTypes.func,
+    children: PropTypes.node,
     LabelComponent: PropTypes.elementType
 };
 

@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import { JsonInput } from '../JsonInput';
 
@@ -12,19 +12,19 @@ const AttributeInfo = ({ attributes }) => {
     }
     const info =
         <div>
-            <pre>{attributes}</pre>
+            <pre>{JSON.stringify(attributes, null, 2)}</pre>
         </div>;
     return <InfoTooltip message={info} />;
 };
 AttributeInfo.propTypes = {
-    attributes: PropTypes.string
+    attributes: PropTypes.object
 };
 export const Attributes = ({ layer, controller }) => {
-    const { tempAttributesStr } = layer;
+    const { tempAttributesJSON } = layer;
     let isValid = true;
-    if (tempAttributesStr) {
+    if (tempAttributesJSON) {
         try {
-            isValid = typeof JSON.parse(tempAttributesStr) === 'object';
+            isValid = typeof JSON.parse(tempAttributesJSON) === 'object';
         } catch (err) {
             isValid = false;
         }
@@ -33,13 +33,13 @@ export const Attributes = ({ layer, controller }) => {
         <Fragment>
             <Message messageKey='attributes'/>
             { !isValid && <AttributeInfo attributes={layer.attributes} /> }
-            <StyledComponent>
+            <StyledFormField>
                 <JsonInput
                     isValid={isValid}
                     rows={6}
-                    value={layer.tempAttributesStr}
+                    value={layer.tempAttributesJSON}
                     onChange={evt => controller.setAttributes(evt.target.value)} />
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };

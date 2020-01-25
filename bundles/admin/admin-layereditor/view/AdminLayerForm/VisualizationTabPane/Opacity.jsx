@@ -2,17 +2,17 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Opacity as CommonOpacity } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from './styled';
 
 export const Opacity = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='opacity'/>
-        <StyledComponent>
+        <StyledFormField>
             <CommonOpacity
                 key={layer.id}
                 defaultValue={layer.opacity}
                 onChange={value => controller.setOpacity(value)} />
-        </StyledComponent>
+        </StyledFormField>
     </Fragment>
 );
 Opacity.propTypes = {

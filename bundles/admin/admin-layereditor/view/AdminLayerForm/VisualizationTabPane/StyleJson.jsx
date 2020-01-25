@@ -1,18 +1,29 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { Message, TextAreaInput } from 'oskari-ui';
+import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from './styled';
+import { JsonInput } from '../JsonInput';
+import { InfoTooltip } from '../InfoTooltip';
 
+const template =
+`{
+    "My style 1": {
+        "featureStyle": {...},
+        "optionalStyles": [{...}]
+    },
+    ...
+}`;
 export const StyleJson = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='styleJSON'/>
-        <StyledComponent>
-            <TextAreaInput
+        <Message messageKey='stylesJSON'/>
+        <InfoTooltip message={<pre>{template}</pre>} />
+        <StyledFormField>
+            <JsonInput
                 rows={6}
-                value={layer.styleJSON}
+                value={layer.tempStylesJSON}
                 onChange={evt => controller.setStyleJSON(evt.target.value)} />
-        </StyledComponent>
+        </StyledFormField>
     </Fragment>
 );
 StyleJson.propTypes = {

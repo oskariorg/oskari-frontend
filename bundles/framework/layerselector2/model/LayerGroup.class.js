@@ -1,11 +1,34 @@
 export class LayerGroup {
-    constructor (title) {
+    constructor (id, groupMethod, title) {
+        this.id = id;
+        this.groupMethod = groupMethod;
         this.name = title;
         this.layers = [];
         this.searchIndex = {};
+        this.tools = [];
     }
     /**
-     * @method setId
+     * @method getId
+     * @return {String}
+     */
+    getId () {
+        return this.id;
+    }
+    /**
+     * @return {Boolean}
+     */
+    isEditable () {
+        return this.id > 0;
+    }
+    /**
+     * @method getGroupMethod
+     * @return {String}
+     */
+    getGroupMethod () {
+        return this.groupMethod;
+    }
+    /**
+     * @method setTitle
      * @param {String} name
      */
     setTitle (name) {
@@ -27,6 +50,17 @@ export class LayerGroup {
         this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
     }
     /**
+     * @method addTool
+     * @param {Oskari.mapframework.domain.Tool} tool
+     */
+    setTools (tools) {
+        this.tools = tools;
+    }
+
+    getTools () {
+        return this.tools;
+    }
+    /**
      * @method getLayers
      * @return {Layer[]}
      */
@@ -45,9 +79,10 @@ export class LayerGroup {
         return searchableIndex.indexOf(keyword.toLowerCase()) !== -1;
     }
     clone () {
-        const clone = new LayerGroup(this.name);
+        const clone = new LayerGroup(this.id, this.groupMethod, this.name);
         clone.layers = [...this.layers];
         clone.searchIndex = { ...this.searchIndex };
+        clone.tools = [ ...this.tools ];
         return clone;
     }
 };

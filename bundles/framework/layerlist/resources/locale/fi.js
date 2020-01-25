@@ -28,7 +28,8 @@ Oskari.registerLocalization(
             'grouping': {
                 'title': 'Ryhmittely',
                 'inspire': 'Aiheittain',
-                'organization': 'Tiedontuottajittain'
+                'organization': 'Tiedontuottajittain',
+                'noGroup' : 'Ei ryhmää'
             },
             'layer': {
                 'tooltip': {

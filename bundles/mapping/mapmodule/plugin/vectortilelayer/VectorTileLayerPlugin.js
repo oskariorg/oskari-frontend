@@ -10,6 +10,7 @@ import mapboxStyleFunction from 'ol-mapbox-style/stylefunction';
 import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, FTR_PROPERTY_ID } from '../../domain/constants';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 /**
  * @class Oskari.mapframework.mapmodule.VectorTileLayerPlugin
@@ -35,7 +36,18 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         // register domain builder
         const mapLayerService = this.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         if (mapLayerService) {
-            mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass());
+            const composingModel = new LayerComposingModel([
+                LayerComposingModel.ATTRIBUTIONS,
+                LayerComposingModel.CREDENTIALS,
+                LayerComposingModel.EXTERNAL_STYLES_JSON,
+                LayerComposingModel.HOVER,
+                LayerComposingModel.SRS,
+                LayerComposingModel.STYLE,
+                LayerComposingModel.STYLES_JSON,
+                LayerComposingModel.TILE_GRID,
+                LayerComposingModel.URL
+            ]);
+            mapLayerService.registerLayerModel(this.layertype + 'layer', this._getLayerModelClass(), composingModel);
             mapLayerService.registerLayerModelBuilder(this.layertype + 'layer', this._getModelBuilder());
         }
         this.getSandbox().getService('Oskari.mapframework.service.VectorFeatureService').registerLayerType(this.layertype, this);
