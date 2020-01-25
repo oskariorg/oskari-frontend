@@ -24,6 +24,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         this._popupContent = null;
         this._popup = null;
         this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
+        this._mobileMountPoint = jQuery('<div class="tool mobile-time-control-3d"></div>');
         this._popupTemplate = jQuery('<div></div>');
 
         const sandbox = Oskari.getSandbox();
@@ -102,18 +103,18 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     }
 
     _createUI (mapInMobileMode) {
-        this._createControlElement();
-        const el = this.getElement();
+        let el;
         if (mapInMobileMode) {
-            el.css('display', 'inline-block');
-            this._addToMobileToolBar();
+            el = this._createMobileControlElement();
+            this._addToMobileToolBar(el);
         } else {
+            el = this._createControlElement();
             this.addToPluginContainer(el);
         }
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
                 <ShadowControl isMobile={mapInMobileMode} controlIsActive={this._toolOpen}/>
-            </LocaleProvider>, this._element.get(0));
+            </LocaleProvider>, el.get(0));
     }
 
     _createControlElement () {
@@ -121,6 +122,13 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         // el.attr('title', 'todo');
         this._bindIcon(el);
         this._element = el;
+        return el;
+    }
+    _createMobileControlElement () {
+        const el = this._mobileMountPoint.clone();
+        this._bindIcon(el);
+        this._element = el;
+        return el;
     }
     _bindIcon (el) {
         el.off('click');
@@ -130,9 +138,9 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         });
     }
 
-    _addToMobileToolBar () {
-        const resetMapStateControl = jQuery('.toolbar_mobileToolbar').find('.mobile-reset-map-state');
-        jQuery(this._element).insertAfter(resetMapStateControl);
+    _addToMobileToolBar (el) {
+        const mobileToolbar = jQuery('.toolbar_mobileToolbar .toolrow');
+        mobileToolbar.append(el);
     }
 
     _toggleToolState () {

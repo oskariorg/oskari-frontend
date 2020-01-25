@@ -14,12 +14,8 @@ const DesktopContainer = styled.div`
     cursor: pointer;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.6);
 `;
-const MobileContainer = styled.div`
-    margin-top: 5px;
-    margin-right: 5px;
-`;
 
-const Control = styled.div`
+const StyledControl = styled.div`
     width: 32px;
     height: 32px;
     margin: 0;
@@ -31,21 +27,18 @@ const Control = styled.div`
 const ShadowControl = ({ isMobile, controlIsActive }) => {
     if (isMobile) {
         return (
-            <MobileContainer>
-                <Control>
-                    <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
-                </Control>
-            </MobileContainer>
+            <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
         );
     }
     return (
         <DesktopContainer>
-            <Control>
+            <StyledControl>
                 <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
-            </Control>
+            </StyledControl>;
         </DesktopContainer>
     );
 };
+
 ShadowControl.propTypes = {
     isMobile: PropTypes.bool.isRequired,
     controlIsActive: PropTypes.bool.isRequired
