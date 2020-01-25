@@ -1,2 +1,2 @@
 export { PlayPauseIcon } from './PlayPauseIcon';
-export { ShadowIcon } from './ShadowIcon';
+export { ControlIcon } from './ShadowIcon';

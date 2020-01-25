@@ -85,7 +85,6 @@ class ShadowingPlugin extends BasicMapModulePlugin {
 
     _createUI (mapInMobileMode) {
         this._element = this._mountPoint.clone();
-
         if (mapInMobileMode) {
             this._element.css('display', 'inline-block');
             this._addToMobileToolBar();
@@ -97,7 +96,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
 
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
-                <ShadowControl mapInMobileMode={mapInMobileMode}/>
+                <ShadowControl isMobile={mapInMobileMode} controlIsActive={this._toolOpen}/>
             </LocaleProvider>, this._element.get(0));
     }
 
