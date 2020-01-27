@@ -80,7 +80,7 @@ var options = {
     timeout: 15000,
     addToMap: true
 };
-Oskari.getSandbox().postRequestByName('MyLocationPlugin.GetUserLocationRequest'[true, options]);
+Oskari.getSandbox().postRequestByName('MyLocationPlugin.GetUserLocationRequest', [true, options]);
 ```
 
 Remove user location from the map:

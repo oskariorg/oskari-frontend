@@ -22,7 +22,7 @@ Oskari.clazz.define(
         me.WFSFeatureSelections = [];
         me.selectedWFSLayers = [];
         me.selectedWFSLayerIds = [];
-        me.selectFromAllLayers = null;
+        me.selectFromAllLayers = false;
         me.selectionToolsActive = null;
         me.analysisWFSLayerId = null;
 
