@@ -508,7 +508,7 @@ class UIHandler extends StateHandler {
         // Remove undefined params
         Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
 
-        fetch(Oskari.urls.getRoute('LayerAdmin', params), {
+        fetch(Oskari.urls.getRoute('ServiceCapabilities', params), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
