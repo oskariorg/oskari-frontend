@@ -9,16 +9,17 @@ export const getLayerHelper = () => {
             ...layer,
             attributes: layer.attributes || {},
             options: layer.options || {},
-            dataProviderId: `${layer.organization_id}`,
+            dataProviderId: `${layer.dataprovider_id}`,
             groups: layer.groups || [],
             gfiContent: layer.gfi_content,
             gfiType: layer.gfi_type,
             gfiXslt: layer.gfi_xslt,
-            legendImage: layer.legend_image
+            legendImage: layer.legend_image,
+            capabilitiesUpdateRate: layer.capabilities_update_rate_sec
         };
         setupTemporaryFields(transformed);
         let removeKeys = [
-            'organization_id', 'organization', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image'
+            'dataprovider_id', 'organization', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image', 'capabilities_update_rate_sec'
         ];
         if (Array.isArray(options.preserve)) {
             removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
