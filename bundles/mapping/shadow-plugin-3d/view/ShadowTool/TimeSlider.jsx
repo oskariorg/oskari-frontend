@@ -29,7 +29,7 @@ export const TimeSlider = ({ isMobile, changeHandler, sliderTimeValue, playing, 
                 <PlayPauseIcon initial={playing} />
             </StyledPlayButton>
             <TimeBorder isMobile={isMobile}>
-                <StyledTimeSlider marks = {marksForTime} min={0} max={MINUTES} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
+                <StyledTimeSlider useThick={isMobile} marks = {marksForTime} min={0} max={MINUTES} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
             </TimeBorder>
         </InputGroup>
     );
