@@ -290,6 +290,19 @@ class MapModuleOlCesium extends MapModuleOl {
         });
         return hits;
     }
+    _forEachFeatureAtPixelImpl (pixel, callback) {
+        if (!this._map3D.getEnabled()) {
+            super._forEachFeatureAtPixelImpl(pixel, callback);
+        }
+        const pickedList = this._map3D.getCesiumScene().drillPick(new Cesium.Cartesian2(pixel[0], pixel[1]));
+        pickedList.forEach(picked => {
+            const feature = picked.primitive.olFeature;
+            const layer = picked.primitive.olLayer;
+            if (feature && layer) {
+                callback(feature, layer);
+            }
+        });
+    }
 
     /**
      * @method getTime

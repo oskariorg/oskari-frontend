@@ -230,7 +230,7 @@ export class MapModule extends AbstractMapModule {
         const sandbox = this._sandbox;
         let ftrService = sandbox.getService('Oskari.mapframework.service.VectorFeatureService');
         if (!ftrService) {
-            ftrService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this._map);
+            ftrService = Oskari.clazz.create('Oskari.mapframework.service.VectorFeatureService', sandbox, this);
             sandbox.registerService(ftrService);
         }
         this.requestHandlers.vectorLayerRequestHandler = Oskari.clazz.create(
@@ -285,6 +285,9 @@ export class MapModule extends AbstractMapModule {
             addHit(feature, layer);
         });
         return hits;
+    }
+    _forEachFeatureAtPixelImpl (pixel, callback) {
+        this.getMap().forEachFeatureAtPixel(pixel, callback);
     }
 
     /* OL3 specific - check if this can be done in a common way
