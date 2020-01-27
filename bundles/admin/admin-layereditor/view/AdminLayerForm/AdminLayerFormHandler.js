@@ -354,6 +354,11 @@ class UIHandler extends StateHandler {
             const { capabilities, ...layer } = this.layerHelper.fromServer(json, {
                 preserve: ['capabilities']
             });
+            if (layer.warn) {
+                // currently only option for warning on this is "updateCapabilitiesFail"
+                this.setMessage(`messages.${layer.warn}`, 'warning');
+                delete layer.warn;
+            }
             this.updateState({
                 layer,
                 capabilities,
