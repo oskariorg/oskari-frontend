@@ -420,6 +420,9 @@ class UIHandler extends StateHandler {
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
+            // FIXME: layer data will be the same as for editing == admin data
+            // To get the layer json for "end-user" frontend for creating
+            // an AbstractLayer-based model -> make another request to get that JSON.
             if (layer.id) {
                 data.groups = layer.groups;
                 this.updateLayer(layer.id, data);
