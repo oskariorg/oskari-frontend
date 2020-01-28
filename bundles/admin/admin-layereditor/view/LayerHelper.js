@@ -9,16 +9,17 @@ export const getLayerHelper = () => {
             ...layer,
             attributes: layer.attributes || {},
             options: layer.options || {},
-            dataProviderId: `${layer.organization_id}`,
-            groups: layer.groups || [],
+            dataProviderId: `${layer.dataprovider_id}`,
+            groups: layer.group_ids || [],
             gfiContent: layer.gfi_content,
             gfiType: layer.gfi_type,
             gfiXslt: layer.gfi_xslt,
-            legendImage: layer.legend_image
+            legendImage: layer.legend_image,
+            capabilitiesUpdateRate: layer.capabilities_update_rate_sec
         };
         setupTemporaryFields(transformed);
         let removeKeys = [
-            'organization_id', 'organization', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image'
+            'dataprovider_id', 'group_ids', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image', 'capabilities_update_rate_sec'
         ];
         if (Array.isArray(options.preserve)) {
             removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
@@ -29,8 +30,16 @@ export const getLayerHelper = () => {
 
     const toServer = layer => {
         // Remove role 'all' from permissions as this was only used for UI state handling purposes
+        // TODO: Add some generic mapping for fields so we don't have to maintain fromServer and toServer.
         const payload = {
             ...layer,
+            dataprovider_id: layer.dataProviderId,
+            group_ids: layer.groups,
+            gfi_type: layer.gfiType,
+            gfi_xslt: layer.gfiXslt,
+            gfi_content: layer.gfiContent,
+            legend_image: layer.legendImage,
+            capabilities_update_rate_sec: layer.capabilitiesUpdateRate,
             attributes: toJson(layer.attributes),
             options: toJson(layer.options)
         };

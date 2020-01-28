@@ -356,9 +356,14 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const { capabilities, ...layer } = this.layerHelper.fromServer(json.layer, {
+            const { capabilities, ...layer } = this.layerHelper.fromServer(json, {
                 preserve: ['capabilities']
             });
+            if (layer.warn) {
+                // currently only option for warning on this is "updateCapabilitiesFail"
+                this.setMessage(`messages.${layer.warn}`, 'warning');
+                delete layer.warn;
+            }
             this.updateState({
                 layer,
                 capabilities,
@@ -421,6 +426,9 @@ class UIHandler extends StateHandler {
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
+            // FIXME: layer data will be the same as for editing == admin data
+            // To get the layer json for "end-user" frontend for creating
+            // an AbstractLayer-based model -> make another request to get that JSON.
             if (layer.id) {
                 data.groups = layer.groups;
                 this.updateLayer(layer.id, data);
@@ -514,7 +522,7 @@ class UIHandler extends StateHandler {
         // Remove undefined params
         Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
 
-        fetch(Oskari.urls.getRoute('LayerAdmin', params), {
+        fetch(Oskari.urls.getRoute('ServiceCapabilities', params), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json'
