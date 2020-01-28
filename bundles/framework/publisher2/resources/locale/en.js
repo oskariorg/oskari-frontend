@@ -82,7 +82,7 @@ Oskari.registerLocalization(
                 "MapRotator": "Enable map rotation",
                 "CrosshairTool": "Show map focal point",
                 "CameraControls3d": "Camera tools",
-                "ShadowTool": "Shadow tool",
+                "TimeControl3d": "Time control",
                 "toolbarToolNames": {
                     "history": "Move to previous or next view",
                     "history_back": "Move to previous view",

@@ -116,7 +116,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
-        // el.attr('title', 'todo');
+        el.attr('title', this.loc('tooltip'));
         this._bindIcon(el);
         this._element = el;
         return el;
