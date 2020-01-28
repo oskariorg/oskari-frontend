@@ -30,8 +30,16 @@ export const getLayerHelper = () => {
 
     const toServer = layer => {
         // Remove role 'all' from permissions as this was only used for UI state handling purposes
+        // TODO: Add some generic mapping for fields so we don't have to maintain fromServer and toServer.
         const payload = {
             ...layer,
+            dataprovider_id: layer.dataProviderId,
+            group_ids: layer.groups,
+            gfi_type: layer.gfiType,
+            gfi_xslt: layer.gfiXslt,
+            gfi_content: layer.gfiContent,
+            legend_image: layer.legendImage,
+            capabilities_update_rate_sec: layer.capabilitiesUpdateRate,
             attributes: toJson(layer.attributes),
             options: toJson(layer.options)
         };
