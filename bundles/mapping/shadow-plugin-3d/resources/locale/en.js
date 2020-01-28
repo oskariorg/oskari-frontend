@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         "lang": "en",
-        "key": "ShadowingPlugin3d",
+        "key": "TimeControl3d",
         "value": {
             "title": "Shadowing",
             "present": "Present",

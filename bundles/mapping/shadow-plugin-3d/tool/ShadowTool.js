@@ -1,4 +1,4 @@
-Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.tool.ShadowTool',
+Oskari.clazz.define('Oskari.mapping.time-control-3d.TimeControl3dTool',
     function () {
     }, {
         index: 2,
@@ -23,8 +23,8 @@ Oskari.clazz.define('Oskari.mapping.bundle.shadowplugin3d.tool.ShadowTool',
         */
         getTool: function () {
             return {
-                id: 'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin',
-                title: 'ShadowTool',
+                id: 'Oskari.mapping.time-control-3d.TimeControl3dPlugin',
+                title: 'TimeControl3d',
                 config: {}
             };
         },

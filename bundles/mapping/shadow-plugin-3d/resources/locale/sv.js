@@ -1,7 +1,7 @@
 Oskari.registerLocalization(
     {
         "lang": "sv",
-        "key": "ShadowingPlugin3d",
+        "key": "TimeControl3d",
         "value": {
             "title": "Skuggning",
             "present": "Nutid",

@@ -1,29 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
-import { ShadowControl } from '../view/ShadowControl/';
-import { ShadowTool, ShadowToolHandler } from '../view/ShadowTool/';
+import { ShadowControl } from '../view/ShadowControl';
+import { ShadowTool, ShadowToolHandler } from '../view/ShadowTool';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
-const className = 'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin';
 /**
- * @class Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin
+ * @class Oskari.mapping.time-control-3d.TimeControl3dPlugin
  */
-class ShadowingPlugin extends BasicMapModulePlugin {
+class TimeControl3dPlugin extends BasicMapModulePlugin {
     constructor (instance) {
         super();
         this.instance = instance;
-        this._clazz = className;
-        this._name = 'ShadowingPlugin';
+        this._clazz = 'Oskari.mapping.time-control-3d.TimeControl3dPlugin';
+        this._name = 'TimeControl3dPlugin';
         this._defaultLocation = 'top right';
-        this._log = Oskari.log(className);
-        this.loc = Oskari.getMsg.bind(null, 'ShadowingPlugin3d');
+        this._log = Oskari.log(this._name);
+        this.loc = Oskari.getMsg.bind(null, 'TimeControl3d');
         this._toolOpen = false;
         this._element = null;
         this._index = 90;
         this._popupContent = null;
         this._popup = null;
-        this._mountPoint = jQuery('<div class="mapplugin shadow-plugin"><div></div></div>');
+        this._mountPoint = jQuery('<div class="mapplugin time-control-3d"><div></div></div>');
         this._mobileMountPoint = jQuery('<div class="tool mobile-time-control-3d"></div>');
         this._popupTemplate = jQuery('<div></div>');
 
@@ -35,7 +34,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
         }, initialTime);
     }
     getName () {
-        return className;
+        return this._name;
     }
     isOpen () {
         return this._toolOpen;
@@ -164,7 +163,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     render () {
         const popupContent = this._popupTemplate.clone();
         ReactDOM.render(
-            <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
+            <LocaleProvider value={{ bundleKey: 'TimeControl3d' }}>
                 <ShadowTool {... this.stateHandler.getState()}
                     controller={this.stateHandler.getController()}
                     isMobile = {Oskari.util.isMobile()}
@@ -199,7 +198,7 @@ class ShadowingPlugin extends BasicMapModulePlugin {
 
         const themeColours = mapmodule.getThemeColours();
         this._popup.makeDraggable();
-        this._popup.addClass('shadowtool__popup');
+        this._popup.addClass('time-control-3d');
 
         this._popup.show(popupTitle, this._popupContent);
         const elem = this.getElement();
@@ -215,8 +214,8 @@ class ShadowingPlugin extends BasicMapModulePlugin {
     }
 }
 
-Oskari.clazz.defineES('Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin',
-    ShadowingPlugin,
+Oskari.clazz.defineES('Oskari.mapping.time-control-3d.TimeControl3dPlugin',
+    TimeControl3dPlugin,
     {
         'protocol': [
             'Oskari.mapframework.module.Module',

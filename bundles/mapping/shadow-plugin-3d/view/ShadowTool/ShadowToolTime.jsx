@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Row, ColFixed, Col } from './ShadowToolStyled';
-import { Speed } from './Speed'
+import { Speed } from './Speed';
 import { Input } from './Input';
 import { TimeSlider } from './TimeSlider';
 
