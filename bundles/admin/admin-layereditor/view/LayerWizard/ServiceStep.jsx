@@ -25,7 +25,7 @@ const hasServiceEndpoint = ({ url, options }, propertyFields) => {
 };
 
 const VersionButton = ({ version, controller, ...rest }) => (
-    <StyledButton type="primary" onClick={() => controller.setVersion(version)} { ...rest }>
+    <StyledButton type="primary" onClick={() => controller.versionSelected(version)} { ...rest }>
         { version && version }
         { !version && <Message messageKey='ok'/> }
     </StyledButton>

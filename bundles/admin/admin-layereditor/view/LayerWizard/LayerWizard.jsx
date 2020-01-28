@@ -24,12 +24,12 @@ function setStep (controller, requested, hasCapabilitiesSupport) {
         controller.setType();
         break;
     case WIZARD_STEP.SERVICE:
-        controller.setVersion();
+        controller.versionSelected();
         break;
     case WIZARD_STEP.LAYER:
         controller.setLayerName();
         if (!hasCapabilitiesSupport) {
-            controller.setVersion();
+            controller.versionSelected();
         }
         break;
     }
