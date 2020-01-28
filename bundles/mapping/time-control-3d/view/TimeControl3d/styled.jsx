@@ -4,14 +4,6 @@ import { Icon, Button, Slider, Select } from 'oskari-ui';
 const primaryColor = '#ffd400';
 const thickSlider = 8; // default is 4
 
-export const Background = styled.div(({ isMobile }) => ({
-    minHeight: isMobile ? '120px' : '90px',
-    width: isMobile ? '260px' : '720px',
-    backgroundColor: '#3c3c3c',
-    padding: '20px',
-    margin: '-10px'
-}));
-
 export const StyledIcon = styled(Icon)`
     margin-right: 15px;
     color: #d9d9d9;

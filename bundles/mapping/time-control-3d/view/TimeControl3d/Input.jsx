@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { StyledIcon, StyledInput } from './ShadowToolStyled';
+import { StyledIcon, StyledInput } from './styled';
 
 export const Input = ({ timeValue, changeHandler }) => {
     const inputChangeTime = event => {
@@ -9,10 +9,10 @@ export const Input = ({ timeValue, changeHandler }) => {
     };
 
     return (
-        <React.Fragment>
+        <Fragment>
             <StyledIcon type="clock-circle"/>
             <StyledInput value={timeValue} onChange={inputChangeTime} />
-        </React.Fragment>
+        </Fragment>
     );
 };
 

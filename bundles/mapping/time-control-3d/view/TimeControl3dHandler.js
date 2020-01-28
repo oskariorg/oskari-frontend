@@ -30,7 +30,7 @@ class UIService extends StateHandler {
     }
 }
 
-export const ShadowToolHandler = controllerMixin(UIService, [
+export const TimeControl3dHandler = controllerMixin(UIService, [
     'requestNewTime',
     'requestNewDate',
     'requestNewDateAndTime'

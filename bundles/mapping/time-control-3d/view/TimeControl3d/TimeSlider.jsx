@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { InputGroup } from 'oskari-ui';
-import { StyledTimeSlider, TimeBorder, StyledPlayButton } from './ShadowToolStyled';
-import { PlayPauseIcon } from '../../resources/icons';
+import { StyledTimeSlider, TimeBorder, StyledPlayButton } from './styled';
+import { PlayButton } from './PlayButton';
 
 const MINUTES = 1439;
 export const TimeSlider = ({ isMobile, changeHandler, sliderTimeValue, playing, playHandler }) => {
@@ -26,7 +26,7 @@ export const TimeSlider = ({ isMobile, changeHandler, sliderTimeValue, playing, 
     return (
         <InputGroup compact>
             <StyledPlayButton onClick={clickPlayButton}>
-                <PlayPauseIcon initial={playing} />
+                <PlayButton initial={playing} />
             </StyledPlayButton>
             <TimeBorder isMobile={isMobile}>
                 <StyledTimeSlider useThick={isMobile} marks = {marksForTime} min={0} max={MINUTES} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />

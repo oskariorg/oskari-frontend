@@ -1,8 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { LocaleProvider } from 'oskari-ui/util';
-import { ShadowControl } from '../view/ShadowControl';
-import { ShadowTool, ShadowToolHandler } from '../view/ShadowTool';
+import { TimeControl3d, TimeControl3dHandler, TimeControl3dButton } from '../view';
 
 const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin');
 /**
@@ -29,7 +28,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         const sandbox = Oskari.getSandbox();
         const mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
         const initialTime = mapmodule.getTime ? mapmodule.getTime() : new Date();
-        this.stateHandler = new ShadowToolHandler((date, time) => {
+        this.stateHandler = new TimeControl3dHandler((date, time) => {
             sandbox.postRequestByName('SetTimeRequest', [date, time]);
         }, initialTime);
     }
@@ -112,10 +111,9 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         }
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
-                <ShadowControl isMobile={mapInMobileMode} controlIsActive={this._toolOpen}/>
+                <TimeControl3dButton isMobile={mapInMobileMode} controlIsActive={this._toolOpen}/>
             </LocaleProvider>, el.get(0));
     }
-
     _createControlElement () {
         const el = this._mountPoint.clone();
         // el.attr('title', 'todo');
@@ -164,7 +162,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         const popupContent = this._popupTemplate.clone();
         ReactDOM.render(
             <LocaleProvider value={{ bundleKey: 'TimeControl3d' }}>
-                <ShadowTool {... this.stateHandler.getState()}
+                <TimeControl3d {... this.stateHandler.getState()}
                     controller={this.stateHandler.getController()}
                     isMobile = {Oskari.util.isMobile()}
                 />

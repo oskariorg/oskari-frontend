@@ -1,10 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { Controller } from 'oskari-ui/util';
-import { Background } from './ShadowToolStyled';
-import { ShadowToolTime } from './ShadowToolTime';
-import { ShadowToolDate } from './ShadowToolDate';
-import { validateDate, validateTime, sliderValueForDate, sliderValueForTime } from './ShadowToolUtil';
+import styled from 'styled-components';
+import { TimeControl } from './TimeControl3d/TimeControl';
+import { DateControl } from './TimeControl3d/DateControl';
+import { validateDate, validateTime, sliderValueForDate, sliderValueForTime } from './TimeControl3d/ShadowToolUtil';
 import moment from 'moment';
 
 // Helper function using react-hooks to manipulate setInterval
@@ -26,7 +26,15 @@ function useInterval (callback, delay) {
     }, [delay]);
 }
 
-export const ShadowTool = ({ controller, date, time, isMobile }) => {
+const Background = styled.div(({ isMobile }) => ({
+    minHeight: isMobile ? '120px' : '90px',
+    width: isMobile ? '260px' : '720px',
+    backgroundColor: '#3c3c3c',
+    padding: '20px',
+    margin: '-10px'
+}));
+
+export const TimeControl3d = ({ controller, date, time, isMobile }) => {
     const [timeValue, setTime] = useState(time);
     const [dateValue, setDate] = useState(date);
     const [sliderTimeValue, setSliderTime] = useState(sliderValueForTime(time));
@@ -97,14 +105,14 @@ export const ShadowTool = ({ controller, date, time, isMobile }) => {
 
     return (
         <Background isMobile={isMobile}>
-            <ShadowToolDate
+            <DateControl
                 isMobile={isMobile}
                 changeHandler={changeDate}
                 sliderDateValue={sliderDateValue}
                 dateValue={dateValue}
                 currentTimeHandler={changeTimeAndDate}
             />
-            <ShadowToolTime
+            <TimeControl
                 isMobile={isMobile}
                 changeHandler={changeTime}
                 timeValue={timeValue}
@@ -118,7 +126,7 @@ export const ShadowTool = ({ controller, date, time, isMobile }) => {
     );
 };
 
-ShadowTool.propTypes = {
+TimeControl3d.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
     date: PropTypes.string.isRequired,
     time: PropTypes.string.isRequired,

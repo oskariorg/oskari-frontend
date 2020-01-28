@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Option, Message } from 'oskari-ui';
-import { StyledSelect } from './ShadowToolStyled';
+import { StyledSelect } from './styled';
 
-export const Speed = ({ speedHandler, speed }) => {
+export const SpeedSelect = ({ speedHandler, speed }) => {
     const handleSpeedChange = (val) => {
         speedHandler(val);
     };
@@ -22,7 +22,7 @@ export const Speed = ({ speedHandler, speed }) => {
             label: <Message messageKey={'speeds.fast'} />
         }
     ];
-    return (        
+    return (
         <StyledSelect defaultValue={speed} size='large' onChange={handleSpeedChange}>
             {speedValues.map(speed => (
                 <Option key={speed.value} value={speed.value}>{speed.label}</Option>
@@ -30,7 +30,7 @@ export const Speed = ({ speedHandler, speed }) => {
         </StyledSelect>
     );
 };
-Speed.propTypes = {
+SpeedSelect.propTypes = {
     speedHandler: PropTypes.func.isRequired,
     speed: PropTypes.string.isRequired
 };
