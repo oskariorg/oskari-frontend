@@ -51,7 +51,7 @@ class UIHandler extends StateHandler {
             layer: { ...this.getState().layer, url }
         });
     }
-    setVersion (version) {
+    versionSelected (version) {
         const layer = { ...this.getState().layer, version };
         const propertyFields = this.getPropertyFields(layer);
         if (!version) {
@@ -64,6 +64,11 @@ class UIHandler extends StateHandler {
             return;
         };
         this.fetchCapabilities(layer);
+    }
+    setVersion (version) {
+        const layer = { ...this.getState().layer, version };
+        const propertyFields = this.getPropertyFields(layer);
+        this.updateState({ layer, propertyFields });
     }
     layerSelected (name) {
         const { capabilities, layer } = this.getState();
@@ -357,7 +362,8 @@ class UIHandler extends StateHandler {
             this.updateState({
                 layer,
                 capabilities,
-                propertyFields: this.getPropertyFields(layer)
+                propertyFields: this.getPropertyFields(layer),
+                versions: this.mapLayerService.getVersionsForType(layer.type)
             });
         });
     }
@@ -634,6 +640,7 @@ class UIHandler extends StateHandler {
 const wrapped = controllerMixin(UIHandler, [
     'handlePermission',
     'layerSelected',
+    'versionSelected',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',

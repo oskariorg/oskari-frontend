@@ -12,6 +12,7 @@ const AdminLayerForm = ({
     controller,
     mapLayerGroups,
     dataProviders,
+    versions,
     layer,
     capabilities,
     propertyFields,
@@ -37,6 +38,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
+                    versions={versions}
                     capabilities={capabilities} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
@@ -88,6 +90,7 @@ AdminLayerForm.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
+    versions: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
     capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,

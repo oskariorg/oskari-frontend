@@ -8,6 +8,7 @@ import { LocalizedNames } from './LocalizedNames';
 import { DataProvider } from './DataProvider';
 import { Groups } from './Groups';
 import { TileGrid } from './TileGrid';
+import { Version } from './Version';
 
 const {
     API_KEY,
@@ -18,13 +19,17 @@ const {
     NAME,
     SRS,
     TILE_GRID,
-    URL
+    URL,
+    VERSION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const GeneralTabPane = ({ mapLayerGroups, dataProviders, layer, capabilities, propertyFields, controller }) => (
+const GeneralTabPane = ({ mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
     <Fragment>
         { propertyFields.some(propKey => [URL, CESIUM_ION, API_KEY].includes(propKey)) &&
             <ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} />
+        }
+        { propertyFields.includes(VERSION) &&
+            <Version layer={layer} versions={versions} controller={controller} />
         }
         { propertyFields.includes(SRS) &&
             <Srs layer={layer} controller={controller} propertyFields={propertyFields} capabilities={capabilities} />
@@ -50,6 +55,7 @@ const GeneralTabPane = ({ mapLayerGroups, dataProviders, layer, capabilities, pr
 GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
+    versions: PropTypes.array.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     layer: PropTypes.object.isRequired,
     capabilities: PropTypes.object,
