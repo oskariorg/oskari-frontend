@@ -17,6 +17,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this._log = Oskari.log(this._name);
         this.loc = Oskari.getMsg.bind(null, 'TimeControl3d');
         this._toolOpen = false;
+        this._isMobile = Oskari.util.isMobile();
         this._element = null;
         this._index = 90;
         this._popupContent = null;
@@ -37,6 +38,10 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
     isOpen () {
         return this._toolOpen;
+    }
+    setOpen (bln) {
+        this._toolOpen = bln;
+        this._renderControlElement();
     }
     _setLayerToolsEditModeImpl () {
         const el = this.getElement();
@@ -61,8 +66,9 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
 
     redrawUI (mapInMobileMode) {
+        this._isMobile = mapInMobileMode;
         this.teardownUI();
-        this._createUI(mapInMobileMode);
+        this._createUI();
     }
 
     _createEventHandlers () {
@@ -82,14 +88,16 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     }
 
     teardownUI () {
-        if (this._popup) {
-            this._popup.close(true);
+        const popup = this.getPopUp();
+        const el = this.getElement();
+        if (popup) {
+            popup.close(true);
         }
-        if (!this.getElement()) {
+        if (!el) {
             return;
         }
-        ReactDOM.unmountComponentAtNode(this.getElement().get(0));
-        this.removeFromPluginContainer(this.getElement());
+        ReactDOM.unmountComponentAtNode(el.get(0));
+        this.removeFromPluginContainer(el);
     }
 
     _stopPluginImpl () {
@@ -100,19 +108,16 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         ReactDOM.unmountComponentAtNode(this._popupContent.get(0));
     }
 
-    _createUI (mapInMobileMode) {
+    _createUI () {
         let el;
-        if (mapInMobileMode) {
+        if (this._isMobile) {
             el = this._createMobileControlElement();
             this._addToMobileToolBar(el);
         } else {
             el = this._createControlElement();
             this.addToPluginContainer(el);
         }
-        ReactDOM.render(
-            <LocaleProvider value={{ bundleKey: 'ShadowingPlugin3d' }}>
-                <TimeControl3dButton isMobile={mapInMobileMode} controlIsActive={this._toolOpen}/>
-            </LocaleProvider>, el.get(0));
+        this._renderControlElement();
     }
     _createControlElement () {
         const el = this._mountPoint.clone();
@@ -134,27 +139,29 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             event.stopPropagation();
         });
     }
+    _renderControlElement () {
+        const el = this.getElement();
+        if (!el) return;
+
+        ReactDOM.render(
+            <TimeControl3dButton
+                isMobile={this._isMobile}
+                controlIsActive={this.isOpen()}
+            />, el.get(0));
+    }
 
     _addToMobileToolBar (el) {
+        // TODO: create method or request for svg based mobile tools
         const mobileToolbar = jQuery('.toolbar_mobileToolbar .toolrow');
         mobileToolbar.append(el);
     }
 
     _toggleToolState () {
-        const el = this.getElement();
-
-        if (this._toolOpen) {
-            if (el) {
-                el.removeClass('active');
-            }
-            this._toolOpen = false;
-            this._popup.close(true);
-        } else {
-            if (el) {
-                el.addClass('active');
-            }
-            this._toolOpen = true;
+        const popup = this.getPopUp();
+        if (!this.isOpen()) {
             this._showPopup();
+        } else if (popup) {
+            popup.close(true);
         }
     }
 
@@ -184,14 +191,8 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         // create close icon
         this._popup.createCloseIcon();
         this._popup.onClose(function () {
-            const popup = me.getPopUp();
-            const el = me.getElement();
-            if (el) {
-                el.removeClass('active');
-            }
-            me._toolOpen = false;
             me.unmountReactPopup();
-            popup.close(true);
+            me.setOpen(false);
         });
 
         const themeColours = mapmodule.getThemeColours();
@@ -209,6 +210,7 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         });
 
         this._popup.moveTo(elem, popupLocation, true);
+        this.setOpen(true);
     }
 }
 
