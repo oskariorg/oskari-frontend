@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { LocaleConsumer } from 'oskari-ui/util';
 import { ControlIcon } from './icons';
 
 const DesktopContainer = styled.div`
@@ -24,7 +23,7 @@ const StyledControl = styled.div`
     padding-top: 4px;
 `;
 
-const ShadowControl = ({ isMobile, controlIsActive }) => {
+export const TimeControl3dButton = ({ isMobile, controlIsActive }) => {
     if (isMobile) {
         return (
             <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
@@ -39,10 +38,7 @@ const ShadowControl = ({ isMobile, controlIsActive }) => {
     );
 };
 
-ShadowControl.propTypes = {
+TimeControl3dButton.propTypes = {
     isMobile: PropTypes.bool.isRequired,
     controlIsActive: PropTypes.bool.isRequired
 };
-
-const contextWrap = LocaleConsumer(ShadowControl);
-export { contextWrap as TimeControl3dButton };
