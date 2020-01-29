@@ -5,6 +5,8 @@ import { SpeedSelect } from './SpeedSelect';
 import { Input } from './Input';
 import { TimeSlider } from './TimeSlider';
 
+const timeIcon = 'clock-circle';
+
 export const TimeControl = props => {
     const { isMobile, changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed } = props;
     if (isMobile) {
@@ -12,7 +14,7 @@ export const TimeControl = props => {
             <div>
                 <Row style={{ marginTop: '20px' }}>
                     <Col>
-                        <Input timeValue ={timeValue} changeHandler ={changeHandler}/>
+                        <Input iconType={timeIcon} value={timeValue} changeHandler={changeHandler}/>
                     </Col>
                     <Col>
                         <SpeedSelect speedHandler={speedHandler} speed={speed}/>
@@ -33,7 +35,7 @@ export const TimeControl = props => {
     return (
         <Row style={{ marginTop: '5px' }}>
             <Col>
-                <Input timeValue ={timeValue} changeHandler ={changeHandler}/>
+                <Input iconType={timeIcon} value={timeValue} changeHandler={changeHandler}/>
             </Col>
             <ColFixed>
                 <TimeSlider

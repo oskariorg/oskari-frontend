@@ -4,9 +4,23 @@ import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import { TimeControl } from './TimeControl3d/TimeControl';
 import { DateControl } from './TimeControl3d/DateControl';
-import { validateDate, validateTime, sliderValueForDate, sliderValueForTime } from './TimeControl3d/ShadowToolUtil';
+import { validateDate, validateTime } from '../../mapmodule/util/time';
 import moment from 'moment';
 
+const sliderValueForDate = (d) => {
+    const dayMonth = d.split('/');
+    const diff = new Date(2019, dayMonth[1] - 1, dayMonth[0]) - new Date(2019, 0, 0);
+    const oneDay = 1000 * 60 * 60 * 24;
+    const day = Math.floor(diff / oneDay);
+    return day;
+};
+
+const sliderValueForTime = (t) => {
+    const hoursMinutes = t.split(':');
+    const hours = parseInt(hoursMinutes[0], 10) * 60;
+    const minutes = hoursMinutes[1] ? parseInt(hoursMinutes[1], 10) : 0;
+    return hours + minutes;
+};
 // Helper function using react-hooks to manipulate setInterval
 function useInterval (callback, delay) {
     const savedCallback = useRef();
@@ -27,8 +41,8 @@ function useInterval (callback, delay) {
 }
 
 const Background = styled.div(({ isMobile }) => ({
-    minHeight: isMobile ? '120px' : '90px',
-    width: isMobile ? '260px' : '720px',
+    minHeight: isMobile ? '120px !important' : '90px !imoprtant',
+    width: isMobile ? '260px !important' : '720px !important',
     backgroundColor: '#3c3c3c',
     padding: '20px',
     margin: '-10px'
