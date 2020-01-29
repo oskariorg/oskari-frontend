@@ -19,6 +19,11 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Lisätiedot",
             "permissionsTabTitle": "Oikeudet",
             "interfaceAddress": "Rajapinnan osoite",
+            "interfaceVersion": "Rajapinnan versio",
+            "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
+            "apiKey": "Api key",
+            "attributions": "Lähdeviitteet",
+            "tileGrid": "Tiilimatriisi",
             "username": "Käyttäjätunnus",
             "password": "Salasana",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",
@@ -60,13 +65,20 @@ Oskari.registerLocalization(
             "opacity": "Peittävyys",
             "style": "Oletustyyli",
             "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
-            "styleDescCapabilities": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
             "selectedTime": "Valittu aika",
             "realtime": "Reaaliaikataso",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "refreshRate": " Virkistystaajuus sekunteina",
-            "capabilitiesUpdateRate": "Capabilities päivitystiheys",
-            "capabilitiesUpdateRateDesc": "Päivitystiheys sekunteina",
+            "capabilities": {
+                "show": "Näytä palvelun GetCapabilities-vastaus",
+                "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
+                "update": "Päivitä nyt",
+                "updateRate": "Capabilities päivitystiheys",
+                "updateRateDesc": "Päivitystiheys sekunteina",
+                "updatedSuccesfully": "GetCapabilities päivitys onnistui.",
+                "updateFailed": "GetCapabilities päivitys epäonnistui.",
+                "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
+            },
             "minScale": "Pienin mittakaava",
             "maxScale": "Suurin mittakaava",
             "minAndMaxScale": "Pienin ja suurin mittakaava",
@@ -97,7 +109,9 @@ Oskari.registerLocalization(
                 "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
                 "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
-                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen."
+                "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
+                "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
+                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
             },
             "messages": {
                 "saveSuccess": "Tallennettu",
@@ -117,6 +131,13 @@ Oskari.registerLocalization(
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
             "hoverJSON": "Kohteen korostus ja tooltip (JSON)",
             "deleteGroupLayers" : "Poista ryhmään kuuluvat karttatasot",
+            "hover": "Kohteen korostus ja tooltip (JSON)",
+            "ion": {
+                "title": "Cesium ion",
+                "assetId": "Asset ID",
+                "assetServer": "Asset Server",
+                "accessToken": "Access Token"
+            },
             "rights": {
                 "PUBLISH": "Julkaisuoikeus",
                 "VIEW_LAYER": "Katseluoikeus",

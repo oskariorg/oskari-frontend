@@ -19,6 +19,10 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
             "interfaceAddress": "Gränssnitten address",
+            "interfaceVersion": "Gränss&shy;nittets version",
+            "apiKey": "Api key",
+            "attributions": "Tillskrivningar",
+            "tileGrid": "Rutmatris",
             "username": "Användarsnamn",
             "password": "Lösenord",
             "usernameAndPassword": "Användarsnamn och lösenord",
@@ -59,12 +63,19 @@ Oskari.registerLocalization(
             "delete": "Ta bort",
             "style": "Förvald utseende",
             "styleDesc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
-            "styleDescCapabilities": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
             "selectedTime": "Vald tid",
             "realtime": "Realtidslager",
             "refreshRate": "Uppdateringsfrekvens (i sekunder)",
-            "capabilitiesUpdateRate": "Capabilities uppdateringsfrekvens",
-            "capabilitiesUpdateRateDesc": "Uppdateringsfrekvens i sekunder",
+            "capabilities": {
+                "show": "Visa getCapabilities svar",
+                "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
+                "update": "Hämta nu",
+                "updateRate": "Capabilities uppdateringsfrekvens",
+                "updateRateDesc": "Uppdateringsfrekvens i sekunder",
+                "updatedSuccesfully": "Uppdatering lyckades.",
+                "updateFailed": "Uppdatering misslyckades.",
+                "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
+            },
             "opacity": "Opacitet",
             "minScale": "Minimiskala",
             "maxScale": "Maximiskala",
@@ -96,7 +107,9 @@ Oskari.registerLocalization(
                 "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
                 "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
                 "hover" : "Hover JSON-syntaxen är ogiltig.",
-                "attributes" : "Attribut JSON-syntaxen är ogiltig."
+                "attributes" : "Attribut JSON-syntaxen är ogiltig.",
+                "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
+                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
             },
             "messages": {
                 "saveSuccess": "Fel!",
@@ -116,6 +129,13 @@ Oskari.registerLocalization(
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
             "hoverJSON": "Hover (JSON)",
             "deleteGroupLayers" : "Radera kartlagren i gruppen",
+            "hover": "Hover (JSON)",
+            "ion": {
+                "title": "Cesium ion",
+                "assetId": "Asset ID",
+                "assetServer": "Asset Server",
+                "accessToken": "Access Token"
+            },
             "rights": {
                 "PUBLISH": "rätt att publicera",
                 "VIEW_LAYER": "rätt att visa",

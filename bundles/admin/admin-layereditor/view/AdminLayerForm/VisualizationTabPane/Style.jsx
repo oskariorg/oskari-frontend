@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from './styled';
 
 const {
     CAPABILITIES_STYLES,
@@ -16,7 +16,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
     let styleOptions = [];
 
     if (propertyFields.includes(CAPABILITIES_STYLES)) {
-        styleInfoKeys.push('styleDescCapabilities');
+        styleInfoKeys.push('capabilities.styleDesc');
         styleOptions = capabilities.styles;
     } else {
         if (propertyFields.includes(STYLES_JSON) && layer.options.styles) {
@@ -35,7 +35,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
         <Fragment>
             <Message messageKey='style'/>
             <InfoTooltip messageKeys={styleInfoKeys} />
-            <StyledComponent>
+            <StyledFormField>
                 <Select
                     defaultValue={layer.style}
                     onChange={value => controller.setStyle(value)}
@@ -46,7 +46,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
                         </Option>
                     )) }
                 </Select>
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };

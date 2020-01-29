@@ -30,6 +30,9 @@ Oskari.clazz.define(className,
             this.handler.resetToInitialState();
             this.redrawUI(Oskari.util.isMobile());
         },
+        isRotating: function () {
+            return this.handler.getActiveMapMoveMethod() === 'rotate';
+        },
         /**
          * Handle plugin UI and change it when desktop / mobile mode
          * @method  @public redrawUI

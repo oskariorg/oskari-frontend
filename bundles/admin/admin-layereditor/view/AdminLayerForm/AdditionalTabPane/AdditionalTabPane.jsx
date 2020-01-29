@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { StyledTab } from '../StyledFormComponents';
 import { Controller } from 'oskari-ui/util';
 import { LegendImage } from './LegendImage';
 import { Realtime } from './Realtime';
@@ -9,12 +8,13 @@ import { GfiType } from './GfiType';
 import { GfiContent } from './GfiContent';
 import { GfiStyle } from './GfiStyle';
 import { Attributes } from './Attributes';
+import { Attributions } from './Attributions';
 import { MetadataId } from './MetadataId';
-import { CapabilitiesUpdateRate } from './CapabilitiesUpdateRate';
+import { CapabilitiesUpdate } from './CapabilitiesUpdate';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const {
-    CAPABILITIES_UPDATE_RATE,
+    CAPABILITIES,
     SELECTED_TIME,
     METADATAID,
     LEGEND_IMAGE,
@@ -22,15 +22,19 @@ const {
     GFI_CONTENT,
     GFI_TYPE,
     GFI_XSLT,
+    ATTRIBUTIONS,
     ATTRIBUTES
 } = LayerComposingModel;
 
 export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, controller }) => {
     const { isQueryable } = capabilities;
     return (
-        <StyledTab>
-            { propertyFields.includes(CAPABILITIES_UPDATE_RATE) &&
-                <CapabilitiesUpdateRate layer={layer} controller={controller} />
+        <Fragment>
+            { propertyFields.includes(CAPABILITIES) &&
+                <CapabilitiesUpdate layer={layer} controller={controller} />
+            }
+            { propertyFields.includes(ATTRIBUTIONS) &&
+                <Attributions layer={layer} controller={controller} />
             }
             { propertyFields.includes(SELECTED_TIME) &&
                 <SelectedTime layer={layer} capabilities={capabilities} controller={controller} />
@@ -56,7 +60,7 @@ export const AdditionalTabPane = ({ layer, capabilities = {}, propertyFields, co
             { propertyFields.includes(ATTRIBUTES) &&
                 <Attributes layer={layer} controller={controller} />
             }
-        </StyledTab>
+        </Fragment>
     );
 };
 AdditionalTabPane.propTypes = {

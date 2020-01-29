@@ -2,8 +2,13 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, NumberInput } from 'oskari-ui';
 import { InlineFlex } from './InlineFlex';
-import { StyledComponent } from './StyledFormComponents';
+import { StyledFormField } from '../styled';
 import { InfoTooltip } from './InfoTooltip';
+import styled from 'styled-components';
+
+const Input = styled(NumberInput)`
+    min-width: 100px;
+`;
 
 const defaultOptions = {
     allowNegative: true,
@@ -37,6 +42,7 @@ export const Numeric = ({
     allowZero = defaultOptions.allowZero,
     value = '',
     onChange,
+    children,
     ...rest }) => {
     const validationOptions = { allowNegative, allowZero };
 
@@ -56,7 +62,7 @@ export const Numeric = ({
     };
 
     let input =
-        <NumberInput
+        <Input
             value={value}
             onChange={validationFilter(onChange, validationOptions)}
             formatter={formatNumber}
@@ -65,11 +71,12 @@ export const Numeric = ({
 
     if (messageKey || infoKeys) {
         input =
-            <StyledComponent>
-                <InlineFlex>
-                    {input}
+            <StyledFormField>
+                <InlineFlex growLastChild={!!children}>
+                    { input }
+                    { children && <div>{ children }</div> }
                 </InlineFlex>
-            </StyledComponent>;
+            </StyledFormField>;
     }
     return (
         <Fragment>
@@ -86,5 +93,6 @@ Numeric.propTypes = {
     suffix: PropTypes.string,
     allowNegative: PropTypes.bool,
     allowZero: PropTypes.bool,
-    onChange: PropTypes.func.isRequired
+    onChange: PropTypes.func.isRequired,
+    children: PropTypes.node
 };

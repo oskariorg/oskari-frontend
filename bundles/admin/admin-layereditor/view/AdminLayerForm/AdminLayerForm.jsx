@@ -4,26 +4,20 @@ import { GeneralTabPane } from './GeneralTabPane';
 import { VisualizationTabPane } from './VisualizationTabPane';
 import { AdditionalTabPane } from './AdditionalTabPane';
 import { PermissionsTabPane } from './PermissionsTabPane';
-import { StyledRoot } from './StyledFormComponents';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Confirm, Alert, Button, Tabs, TabPane, Message } from 'oskari-ui';
-import styled from 'styled-components';
+import { Confirm, Button, Tabs, TabPane, Message } from 'oskari-ui';
+import { StyledRoot, StyledAlert, StyledButton } from './styled';
 
-const PaddedButton = styled(Button)`
-    margin-right: 5px;
-`;
-
-const PaddedAlert = styled(Alert)`
-    margin-bottom: 5px;
-`;
 const AdminLayerForm = ({
     controller,
     mapLayerGroups,
     dataProviders,
+    versions,
     layer,
     capabilities,
     propertyFields,
     messages = [],
+    tab,
     onCancel,
     onDelete,
     onSave,
@@ -31,8 +25,12 @@ const AdminLayerForm = ({
     rolesAndPermissionTypes
 }) => (
     <StyledRoot>
-        { messages.map(({ key, type }) => <PaddedAlert key={key} message={<Message messageKey={key} />} type={type} />) }
-        <Tabs>
+        { messages.map(({ key, type, args }) =>
+            <StyledAlert key={key} type={type} message={
+                <Message messageKey={key} messageArgs={args}/>
+            }/>
+        )}
+        <Tabs activeKey={tab} onChange={tabKey => controller.setTab(tabKey)}>
             <TabPane key='general' tab={<Message messageKey='generalTabTitle'/>}>
                 <GeneralTabPane
                     layer={layer}
@@ -40,6 +38,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
+                    versions={versions}
                     capabilities={capabilities} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
@@ -63,9 +62,9 @@ const AdminLayerForm = ({
                     controller={controller}/>
             </TabPane>
         </Tabs>
-        <PaddedButton type='primary' onClick={() => onSave()}>
+        <StyledButton type='primary' onClick={() => onSave()}>
             <Message messageKey={layer.isNew ? 'add' : 'save'}/>
-        </PaddedButton>
+        </StyledButton>
         { !layer.isNew &&
             <Confirm
                 title={<Message messageKey='messages.confirmDeleteLayer'/>}
@@ -74,9 +73,9 @@ const AdminLayerForm = ({
                 cancelText={getMessage('cancel')}
                 placement='bottomLeft'
             >
-                <PaddedButton>
+                <StyledButton>
                     <Message messageKey='delete'/>
-                </PaddedButton>
+                </StyledButton>
             </Confirm>
         }
         { onCancel &&
@@ -91,6 +90,7 @@ AdminLayerForm.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
+    versions: PropTypes.array.isRequired,
     layer: PropTypes.object.isRequired,
     capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
@@ -99,7 +99,8 @@ AdminLayerForm.propTypes = {
     onSave: PropTypes.func,
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
-    rolesAndPermissionTypes: PropTypes.object
+    rolesAndPermissionTypes: PropTypes.object,
+    tab: PropTypes.string.isRequired
 };
 
 const contextWrap = LocaleConsumer(AdminLayerForm);

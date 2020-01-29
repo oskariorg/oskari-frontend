@@ -9,16 +9,17 @@ export const getLayerHelper = () => {
             ...layer,
             attributes: layer.attributes || {},
             options: layer.options || {},
-            dataProviderId: `${layer.organization_id}`,
-            groups: layer.groups || [],
+            dataProviderId: `${layer.dataprovider_id}`,
+            groups: layer.group_ids || [],
             gfiContent: layer.gfi_content,
             gfiType: layer.gfi_type,
             gfiXslt: layer.gfi_xslt,
-            legendImage: layer.legend_image
+            legendImage: layer.legend_image,
+            capabilitiesUpdateRate: layer.capabilities_update_rate_sec
         };
         setupTemporaryFields(transformed);
         let removeKeys = [
-            'organization_id', 'organization', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image'
+            'dataprovider_id', 'group_ids', 'capabilities', 'gfi_content', 'gfi_type', 'gfi_xslt', 'legend_image', 'capabilities_update_rate_sec'
         ];
         if (Array.isArray(options.preserve)) {
             removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
@@ -29,8 +30,16 @@ export const getLayerHelper = () => {
 
     const toServer = layer => {
         // Remove role 'all' from permissions as this was only used for UI state handling purposes
+        // TODO: Add some generic mapping for fields so we don't have to maintain fromServer and toServer.
         const payload = {
             ...layer,
+            dataprovider_id: layer.dataProviderId,
+            group_ids: layer.groups,
+            gfi_type: layer.gfiType,
+            gfi_xslt: layer.gfiXslt,
+            gfi_content: layer.gfiContent,
+            legend_image: layer.legendImage,
+            capabilities_update_rate_sec: layer.capabilitiesUpdateRate,
             attributes: toJson(layer.attributes),
             options: toJson(layer.options)
         };
@@ -46,18 +55,22 @@ export const getLayerHelper = () => {
         layer.role_permissions.all = [];
         // Add temp json fields to keep the state on invalid json syntax
         layer.tempAttributesJSON = toJson(layer.attributes);
-        layer.tempStylesJSON = toJson(layer.options.styles);
+        layer.tempAttributionsJSON = toJson(layer.options.attributions);
         layer.tempExternalStylesJSON = toJson(layer.options.externalStyles);
         layer.tempHoverJSON = toJson(layer.options.hover);
+        layer.tempStylesJSON = toJson(layer.options.styles);
+        layer.tempTileGridJSON = toJson(layer.options.tileGrid);
         layer.isNew = !layer.id;
     };
 
     const removeTemporaryFields = layer => {
         delete layer.role_permissions.all;
         delete layer.tempAttributesJSON;
-        delete layer.tempStylesJSON;
+        delete layer.tempAttributionsJSON;
         delete layer.tempExternalStylesJSON;
         delete layer.tempHoverJSON;
+        delete layer.tempStylesJSON;
+        delete layer.tempTileGridJSON;
         delete layer.isNew;
     };
 

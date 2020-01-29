@@ -2,10 +2,10 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Slider } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from './styled';
 import styled from 'styled-components';
 
-const VerticalComponent = styled(StyledComponent)`
+const VerticalComponent = styled(StyledFormField)`
     height: 400px;
     padding-bottom: 20px;
     margin-left: 25%;

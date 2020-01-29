@@ -18,6 +18,7 @@ class MapModuleOlCesium extends MapModuleOl {
         this._supports3D = true;
         this._mapReady = false;
         this._mapReadySubscribers = [];
+        this._moveEndSubscribers = [];
         this._lastKnownZoomLevel = null;
         this._time = new Date();
         this._log = Oskari.log('MapModuleOlCesium');
@@ -207,6 +208,16 @@ class MapModuleOlCesium extends MapModuleOl {
         this.updateDomain();
         const evt = Oskari.eventBuilder('AfterMapMoveEvent')(lonlat.lon, lonlat.lat, this.getMapZoom(), this.getMapScale(), camera);
         sandbox.notifyAll(evt);
+        this._notifyMoveEndSubscribers();
+    }
+
+    _notifyMoveEndSubscribers () {
+        if (this._moveEndSubscribers.length === 0) return;
+
+        this._moveEndSubscribers.forEach(({ func, args }) => {
+            func.apply(this, args);
+        });
+        this._moveEndSubscribers = [];
     }
 
     /**
@@ -517,7 +528,6 @@ class MapModuleOlCesium extends MapModuleOl {
                 }
                 camera.setView(view);
                 this._map3D.getCamera().updateView();
-                this.updateDomain();
             }
         } else {
             // Cesium is not ready yet. Fire after it has been initialized properly.
@@ -529,7 +539,7 @@ class MapModuleOlCesium extends MapModuleOl {
     }
     /**
      * Function to reset map move mode and 3D camera controls to default.
-     * This is needed since user might click reset map view on panbuttons when camera is in rotate mode.
+     * This is needed since user might click reset map view or pan map on panbuttons when camera is in rotate mode.
      */
     _resetMoveMode () {
         this.setCameraToMoveMode();
@@ -564,10 +574,23 @@ class MapModuleOlCesium extends MapModuleOl {
             return true;
         }
     }
+    panMapByPixels (pX, pY) {
+        const plugin = this._pluginInstances.CameraControls3dPlugin;
+        if (plugin && plugin.isRotating()) {
+            this._resetMoveMode();
+            this._moveEndSubscribers.push({
+                func: super.panMapByPixels,
+                args: [pX, pY, true, true]
+            });
+            return;
+        }
+        super.panMapByPixels(pX, pY, true, true);
+    }
 
     setCameraToMoveMode () {
         const camera = this.getCesiumScene().camera;
         camera.lookAtTransform(Cesium.Matrix4.IDENTITY);
+        this._map3D.getCamera().updateView();
         this._enableMapMoveControls();
     }
     _disableMapMoveControls () {
@@ -690,14 +713,18 @@ class MapModuleOlCesium extends MapModuleOl {
             // 3d map now only supports one animation so ignore the parameter, and just fly
             this._flyTo(location[0], location[1], cameraHeight, animationDuration, camera, complete);
             return true;
-        } else {
-            const view = this.getMap().getView();
-            const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
-            view.setCenter([lonlat.lon, lonlat.lat]);
-            view.setZoom(zoomValue);
-            this.notifyMoveEnd();
-            return true;
         }
+        if (!isNaN(zoom)) {
+            // backwards compatibility
+            zoom = { type: 'zoom', value: zoom };
+        }
+
+        const view = this.getMap().getView();
+        const zoomValue = zoom.type === 'scale' ? view.getZoomForResolution(zoom.value) : zoom.value;
+        view.setCenter([lonlat.lon, lonlat.lat]);
+        view.setZoom(zoomValue);
+        this.notifyMoveEnd();
+        return true;
     }
 
     /**

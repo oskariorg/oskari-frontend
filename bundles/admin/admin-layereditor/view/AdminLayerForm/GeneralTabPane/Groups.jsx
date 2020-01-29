@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Checkbox, Collapse, CollapsePanel, List, ListItem, Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 
 export const Groups = ({ layer, groups, controller }) => {
     const dataSource = groups.map(group =>
@@ -17,13 +17,13 @@ export const Groups = ({ layer, groups, controller }) => {
     return (
         <Fragment>
             <Message messageKey='mapLayerGroups' />
-            <StyledComponent>
+            <StyledFormField>
                 <Collapse>
                     <CollapsePanel header={<Message messageKey='selectMapLayerGroupsButton'/>}>
                         <List dataSource={dataSource} renderItem={renderItem} />
                     </CollapsePanel>
                 </Collapse>
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };

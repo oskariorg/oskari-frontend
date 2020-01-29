@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from '../styled';
 import { InfoTooltip } from '../InfoTooltip';
 import { JsonInput } from '../JsonInput';
 
@@ -33,13 +33,13 @@ export const Attributes = ({ layer, controller }) => {
         <Fragment>
             <Message messageKey='attributes'/>
             { !isValid && <AttributeInfo attributes={layer.attributes} /> }
-            <StyledComponent>
+            <StyledFormField>
                 <JsonInput
                     isValid={isValid}
                     rows={6}
                     value={layer.tempAttributesJSON}
                     onChange={evt => controller.setAttributes(evt.target.value)} />
-            </StyledComponent>
+            </StyledFormField>
         </Fragment>
     );
 };

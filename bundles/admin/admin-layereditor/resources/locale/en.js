@@ -19,6 +19,11 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
             "interfaceAddress": "Interface URL",
+            "interfaceVersion": "Interface version",
+            "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
+            "apiKey": "Api key",
+            "attributions": "Attributions",
+            "tileGrid": "Tile grid",
             "username": "Username",
             "password": "Password",
             "usernameAndPassword": "Username and password",
@@ -59,13 +64,20 @@ Oskari.registerLocalization(
             "delete": "Remove",
             "style": "Default Style",
             "styleDesc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
-            "styleDescCapabilities": "The style options are fetched automatically from the GetCapabilities response.",
             "selectedTime": "Selected time",
             "realtime": "Real time layer",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
             "refreshRate": "Refresh rate in seconds",
-            "capabilitiesUpdateRate": "Capabilities update rate",
-            "capabilitiesUpdateRateDesc": "Update rate in seconds",
+            "capabilities": {
+                "show": "Show GetCapabilities response",
+                "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
+                "update": "Update now",
+                "updateRate": "Capabilities update rate",
+                "updateRateDesc": "Update rate in seconds",
+                "updatedSuccesfully": "Capabilities re-check succeeded.",
+                "updateFailed": "Capablities re-check failed.",
+                "updateFailedWithReason": "Capablities re-check failed: {reason}"
+            },
             "opacity": "Opacity",
             "minScale": "Minimum scale",
             "maxScale": "Maximum scale",
@@ -97,7 +109,9 @@ Oskari.registerLocalization(
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
-                "attributes" : "Invalid Attribute JSON syntax."
+                "attributes" : "Invalid Attribute JSON syntax.",
+                "attributions" : "Invalid Attributions JSON syntax.",
+                "tileGrid" : "Invalid Tile grid JSON syntax."
             },
             "messages": {
                 "saveSuccess": "Saved",
@@ -117,6 +131,13 @@ Oskari.registerLocalization(
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
             "hoverJSON": "Feature highlighting and tooltip (JSON)",
             "deleteGroupLayers" : "Delete the map layers in the group",
+            "hover": "Feature highlighting and tooltip (JSON)",
+            "ion": {
+                "title": "Cesium ion",
+                "assetId": "Asset ID",
+                "assetServer": "Asset Server",
+                "accessToken": "Access Token"
+            },
             "rights": {
                 "PUBLISH": "Publish",
                 "VIEW_LAYER": "View",

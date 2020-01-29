@@ -2,12 +2,15 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { StyledComponent } from '../StyledFormComponents';
+import { StyledFormField } from './styled';
 import { JsonInput } from '../JsonInput';
 import { InfoTooltip } from '../InfoTooltip';
 
-const template = '{\n  "My external json style": { ... },\n  ...\n}';
-
+const template =
+`{
+    "My external json style": { ... },
+    ...
+}`;
 export const ExternalStyleJson = ({ layer, controller }) => (
     <Fragment>
         <Message messageKey='externalStylesJSON'/>
@@ -17,12 +20,12 @@ export const ExternalStyleJson = ({ layer, controller }) => (
                 <Message messageKey='externalStyleFormats'/>
             </Fragment>
         }/>
-        <StyledComponent>
+        <StyledFormField>
             <JsonInput
                 rows={6}
                 value={layer.tempExternalStylesJSON}
                 onChange={evt => controller.setExternalStyleJSON(evt.target.value)} />
-        </StyledComponent>
+        </StyledFormField>
     </Fragment>
 );
 ExternalStyleJson.propTypes = {
