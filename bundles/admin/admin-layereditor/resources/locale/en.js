@@ -19,6 +19,8 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
             "interfaceAddress": "Interface URL",
+            "interfaceVersion": "Interface version",
+            "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
             "apiKey": "Api key",
             "attributions": "Attributions",
             "tileGrid": "Tile grid",

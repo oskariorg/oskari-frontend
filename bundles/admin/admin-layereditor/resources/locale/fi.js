@@ -19,6 +19,8 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Lisätiedot",
             "permissionsTabTitle": "Oikeudet",
             "interfaceAddress": "Rajapinnan osoite",
+            "interfaceVersion": "Rajapinnan versio",
+            "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "apiKey": "Api key",
             "attributions": "Lähdeviitteet",
             "tileGrid": "Tiilimatriisi",

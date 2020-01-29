@@ -19,6 +19,7 @@ Oskari.registerLocalization(
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
             "interfaceAddress": "Gränssnitten address",
+            "interfaceVersion": "Gränss&shy;nittets version",
             "apiKey": "Api key",
             "attributions": "Tillskrivningar",
             "tileGrid": "Rutmatris",

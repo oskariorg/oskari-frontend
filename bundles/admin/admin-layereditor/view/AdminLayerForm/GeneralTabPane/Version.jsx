@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message, Radio, Tag } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { InlineFlex } from '../InlineFlex';
+import { InfoTooltip } from '../InfoTooltip';
 import { StyledFormField } from '../../styled';
 
 const commonPropTypes = {
@@ -25,7 +25,8 @@ export const Version = ({ versions, layer, controller }) => {
         : <VersionSelect versions={versions} layer={layer} controller={controller} />;
     return (
         <Fragment>
-            <Message messageKey='version'/>
+            <Message messageKey='interfaceVersion'/>
+            { !readonly && <InfoTooltip messageKeys='interfaceVersionDesc'/> }
             <StyledFormField>{ versionInfo }</StyledFormField>
         </Fragment>
     );
