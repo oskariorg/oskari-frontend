@@ -13,7 +13,7 @@ Oskari.clazz.define('Oskari.mapping.publisher.tool.MapRotator',
             'Oskari.mapframework.bundle.mapmodule.plugin.Portti2Zoombar',
             'Oskari.mapframework.bundle.coordinatetool.plugin.CoordinateToolPlugin',
             'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin',
-            'Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin'
+            'Oskari.mapping.time-control-3d.TimeControl3dPlugin'
         ],
         templates: {
             'toolOptions': '<div class="tool-options"></div>'
