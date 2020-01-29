@@ -79,9 +79,7 @@ Oskari.registerLocalization(
                 "updateFailedWithReason": "Capablities re-check failed: {reason}"
             },
             "opacity": "Opacity",
-            "minScale": "Minimum scale",
-            "maxScale": "Maximum scale",
-            "minAndMaxScale": "Min and max scale",
+            "scale": "Scale",
             "metadataIdDesc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
             "metadataId": "Metadata file identifier",
             "gfiContent": "Additional GFI info",

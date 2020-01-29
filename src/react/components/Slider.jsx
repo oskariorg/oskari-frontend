@@ -5,6 +5,22 @@ import 'antd/es/slider/style/index.js';
 
 // TODO colors should come from theme-variables
 const StyledAntSlider = styled(AntSlider)`
+    &.ant-slider-vertical {
+        padding: 0;
+        margin: 0;
+        .ant-slider-handle {
+            margin-bottom: 0;
+            margin-left: -7px;
+        } 
+        .ant-slider-dot {
+            width: 6px;
+            height: 6px;
+            left: 1px;
+        }
+        .ant-slider-mark {
+            top: 2px;
+        }
+    }
     .ant-slider-track {
         background-color: #0091ff;
     }

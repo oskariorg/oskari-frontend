@@ -22,7 +22,8 @@ const AdminLayerForm = ({
     onDelete,
     onSave,
     getMessage,
-    rolesAndPermissionTypes
+    rolesAndPermissionTypes,
+    scales
 }) => (
     <StyledRoot>
         { messages.map(({ key, type, args }) =>
@@ -45,6 +46,7 @@ const AdminLayerForm = ({
                 <VisualizationTabPane
                     layer={layer}
                     capabilities={capabilities}
+                    scales={scales}
                     propertyFields={propertyFields}
                     controller={controller}/>
             </TabPane>
@@ -100,7 +102,8 @@ AdminLayerForm.propTypes = {
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
     rolesAndPermissionTypes: PropTypes.object,
-    tab: PropTypes.string.isRequired
+    tab: PropTypes.string.isRequired,
+    scales: PropTypes.array.isRequired
 };
 
 const contextWrap = LocaleConsumer(AdminLayerForm);

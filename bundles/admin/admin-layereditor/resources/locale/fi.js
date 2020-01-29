@@ -79,9 +79,7 @@ Oskari.registerLocalization(
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
             },
-            "minScale": "Pienin mittakaava",
-            "maxScale": "Suurin mittakaava",
-            "minAndMaxScale": "Pienin ja suurin mittakaava",
+            "scale": "Mittakaava",
             "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "metadataId": "Metatiedon tiedostotunniste",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",

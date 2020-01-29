@@ -22,7 +22,7 @@ const {
     SCALE
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-export const VisualizationTabPane = ({ layer, capabilities, propertyFields, controller }) => (
+export const VisualizationTabPane = ({ layer, capabilities, scales, propertyFields, controller }) => (
     <Fragment>
         <StyledColumn.Left>
             { propertyFields.includes(OPACITY) &&
@@ -49,7 +49,7 @@ export const VisualizationTabPane = ({ layer, capabilities, propertyFields, cont
         </StyledColumn.Left>
         <StyledColumn.Right>
             { propertyFields.includes(SCALE) &&
-                <Scale layer={layer} controller={controller} />
+                <Scale layer={layer} scales={scales} controller={controller} />
             }
         </StyledColumn.Right>
     </Fragment>
@@ -58,6 +58,7 @@ export const VisualizationTabPane = ({ layer, capabilities, propertyFields, cont
 VisualizationTabPane.propTypes = {
     layer: PropTypes.object.isRequired,
     capabilities: PropTypes.object,
+    scales: PropTypes.array.isRequired,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
