@@ -129,7 +129,6 @@ Oskari.registerLocalization(
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
-            "hoverJSON": "Feature highlighting and tooltip (JSON)",
             "deleteGroupLayers" : "Delete the map layers in the group",
             "hover": "Feature highlighting and tooltip (JSON)",
             "ion": {

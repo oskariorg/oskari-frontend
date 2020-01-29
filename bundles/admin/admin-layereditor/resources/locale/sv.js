@@ -127,7 +127,6 @@ Oskari.registerLocalization(
             "stylesJSON": "Stildefinitioner (JSON)",
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
-            "hoverJSON": "Hover (JSON)",
             "deleteGroupLayers" : "Radera kartlagren i gruppen",
             "hover": "Hover (JSON)",
             "ion": {

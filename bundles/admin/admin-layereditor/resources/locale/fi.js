@@ -129,7 +129,6 @@ Oskari.registerLocalization(
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
-            "hoverJSON": "Kohteen korostus ja tooltip (JSON)",
             "deleteGroupLayers" : "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {
