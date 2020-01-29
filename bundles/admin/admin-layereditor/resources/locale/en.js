@@ -107,13 +107,16 @@ Oskari.registerLocalization(
                 "errorInsertAllreadyExists": "The new map layer has been added. A map layer with same identifier already exists.",
                 "errorFetchUserRolesAndPermissionTypes": "Error occured when fetching user roles and permission types.",
                 "errorFetchCapabilities": "Fetching service capabilities failed.",
-                "unauthorizedErrorFetchCapabilities": "Username and password are required by the service."
+                "unauthorizedErrorFetchCapabilities": "Username and password are required by the service.",
+                "deleteSuccess" : "Deleted",
+                "deleteFailed" : "Delete failed"
             },
             "otherLanguages": "Other languages",
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
             "hoverJSON": "Feature highlighting and tooltip (JSON)",
+            "deleteGroupLayers" : "Delete the map layers in the group",
             "rights": {
                 "PUBLISH": "Publish",
                 "VIEW_LAYER": "View",

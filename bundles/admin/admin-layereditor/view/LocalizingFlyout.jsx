@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, TextInput, Button, Message } from 'oskari-ui';
+import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox } from 'oskari-ui';
 import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -9,12 +9,13 @@ const ExtraFlyout = Oskari.clazz.get('Oskari.userinterface.extension.ExtraFlyout
 
 // NOTE: Everything is in the single file for demonstrating purposes.
 export class LocalizingFlyout extends ExtraFlyout {
-    constructor (instance, title, options = {}) {
+    constructor (instance, title, options = {}, deleteMapLayersText) {
         super(title, options);
         this.instance = instance;
         this.addClass('admin-localizing-flyout');
         this.mountPoint = document.createElement('div');
         this.setContent(this.mountPoint);
+        this.deleteMapLayersText = deleteMapLayersText;
 
         // Create a handler for ui state.
         this.uiHandler = new UIHandler(instance, options.id);
@@ -30,6 +31,8 @@ export class LocalizingFlyout extends ExtraFlyout {
         // State listener is called every time the state changes.
         // Here we are telling the UI to re render on state change, making the UI respond to user actions.
         this.uiHandler.addStateListener(this.onUpdate);
+        this.id = options.id;
+        this.layerCountInGroup = options.layerCountInGroup;
         // Fetch data from backend using given id and function if provided
         if (options.id && options.fetch) {
             options.fetch(options.id, this.setLoading.bind(this), this.uiHandler.setValue.bind(this.uiHandler));
@@ -38,6 +41,9 @@ export class LocalizingFlyout extends ExtraFlyout {
 
     setSaveAction (action) {
         this.uiHandler.setSaveAction(action);
+    }
+    setDeleteAction (action) {
+        this.uiHandler.setDeleteAction(action);
     }
     setLoading (loading) {
         this.uiHandler.updateState({ loading: !!loading });
@@ -59,7 +65,10 @@ export class LocalizingFlyout extends ExtraFlyout {
         const controller = this.uiHandler.getController();
         let ui = (
             <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
-                <LocalizedContent { ...this.uiHandler.getState() } controller={controller}/>
+                <LocalizedContent { ...this.uiHandler.getState() }
+                    controller={controller} id={this.id}
+                    deleteMapLayersText={this.deleteMapLayersText}
+                    layerCountInGroup={this.layerCountInGroup}/>
             </LocaleProvider>
         );
         ReactDOM.render(ui, this.mountPoint);
@@ -75,12 +84,14 @@ class UIService extends StateHandler {
         Oskari.getSupportedLanguages().forEach(lang => {
             labels[lang] = getMsg(`${lang}.lang`);
         });
-        this.setState({
+        this.initialState = {
             loading: false,
             headerMessageKey: null,
             value: {},
-            labels
-        });
+            labels,
+            deleteLayers: false
+        };
+        this.setState(this.initialState);
         this.saveAction = null;
         this.cancelAction = null;
         this.id = id;
@@ -91,8 +102,14 @@ class UIService extends StateHandler {
     setCancelAction (cancelAction) {
         this.cancelAction = cancelAction;
     }
+    setDeleteAction (deleteAction) {
+        this.deleteAction = deleteAction;
+    }
     setValue (value) {
         this.updateState({ value });
+    }
+    setDeleteLayers (value) {
+        this.updateState({ deleteLayers: value });
     }
     save () {
         if (typeof this.saveAction !== 'function') {
@@ -109,11 +126,14 @@ class UIService extends StateHandler {
         const { value } = this.getState();
         this.cancelAction(value);
     }
+    delete () {
+        if (typeof this.deleteAction !== 'function') {
+            return;
+        }
+        this.deleteAction(this.id, this.getState().deleteLayers);
+    }
     reset () {
-        this.updateState({
-            loading: false,
-            value: {}
-        });
+        this.setState(this.initialState);
     }
 }
 
@@ -122,12 +142,15 @@ class UIService extends StateHandler {
 const UIHandler = controllerMixin(UIService, [
     'setValue',
     'save',
-    'cancel'
+    'cancel',
+    'delete',
+    'setDeleteLayers'
 ]);
 
 // Creating the component
 const Container = styled('div')`
-    width: 180px;
+    width: 100%;
+    height: 100%;
 `;
 const Header = styled('div')`
     font-weight: bold;
@@ -141,7 +164,11 @@ const Buttons = styled('div')`
     padding-top: 15px;
 `;
 
-const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller }) => {
+const DeleteLayersCheckbox = styled(Checkbox)`
+    padding-top: 15px;
+`;
+
+const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, id, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
     const Component = (
         <Container>
             <Header>
@@ -158,10 +185,17 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
             >
                 <TextInput />
             </LocalizationComponent>
+            {id && layerCountInGroup > 0 &&
+                <DeleteLayersCheckbox checked={deleteLayers} onChange={ evt => controller.setDeleteLayers(evt.target.checked)}>{deleteMapLayersText + ' (' + layerCountInGroup + ')'}</DeleteLayersCheckbox>
+            }
             <Buttons>
                 <Button onClick={() => controller.cancel()}>
                     <Message messageKey='cancel'/>
                 </Button>
+                { id && <Button onClick={() => controller.delete()}>
+                    <Message messageKey='delete'/>
+                </Button>
+                }
                 <Button onClick={() => controller.save()} type='primary'>
                     <Message messageKey='save'/>
                 </Button>

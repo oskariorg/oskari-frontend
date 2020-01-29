@@ -107,13 +107,16 @@ Oskari.registerLocalization(
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",
                 "errorFetchCapabilities": "Rajapinnan tietojen haku epäonnistui.",
-                "unauthorizedErrorFetchCapabilities": "Palvelu vaatii käyttäjätunnuksen ja salasanan."
+                "unauthorizedErrorFetchCapabilities": "Palvelu vaatii käyttäjätunnuksen ja salasanan.",
+                "deleteSuccess" : "Poistettu",
+                "deleteFailed" : "Poisto epäonnistui"
             },
             "otherLanguages": "Muut kielet",
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
             "hoverJSON": "Kohteen korostus ja tooltip (JSON)",
+            "deleteGroupLayers" : "Poista ryhmään kuuluvat karttatasot",
             "rights": {
                 "PUBLISH": "Julkaisuoikeus",
                 "VIEW_LAYER": "Katseluoikeus",
