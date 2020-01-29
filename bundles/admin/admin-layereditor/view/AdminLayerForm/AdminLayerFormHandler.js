@@ -356,7 +356,7 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const { capabilities, ...layer } = this.layerHelper.fromServer(json, {
+            const { capabilities, ...layer } = this.layerHelper.fromServer(json.layer, {
                 preserve: ['capabilities']
             });
             if (layer.warn) {
