@@ -69,7 +69,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
             propertyFields,
             rolesAndPermissionTypes,
             credentialsCollapseOpen,
-            tab
+            tab,
+            scales
         } = this.uiHandler.getState();
         const controller = this.uiHandler.getController();
         return (
@@ -99,6 +100,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         messages={messages}
                         rolesAndPermissionTypes={rolesAndPermissionTypes}
                         tab={tab}
+                        scales={scales}
                         onDelete={() => this.uiHandler.deleteLayer()}
                         onSave={() => this.uiHandler.saveLayer()}
                         onCancel={() => {

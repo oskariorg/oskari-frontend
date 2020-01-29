@@ -76,9 +76,7 @@ Oskari.registerLocalization(
                 "updateFailedWithReason": "Uppdatering misslyckades: {reason}"
             },
             "opacity": "Opacitet",
-            "minScale": "Minimiskala",
-            "maxScale": "Maximiskala",
-            "minAndMaxScale": "Minimi och maximi skala",
+            "minAndMaxScale": "Skala",
             "metadataIdDesc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
             "metadataId": "Metadatans filtagg",
             "gfiContent": "Tilläggande text för GFI-dialog",

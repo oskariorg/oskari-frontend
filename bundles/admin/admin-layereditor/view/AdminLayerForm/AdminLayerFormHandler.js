@@ -11,6 +11,7 @@ const DEFAULT_TAB = 'general';
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
+        const mapmodule = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModule');
         this.mapLayerService = Oskari.getSandbox().getService('Oskari.mapframework.service.MapLayerService');
         this.mapLayerService.on('availableLayerTypesUpdated', () => this.updateLayerTypeVersions());
         this.log = Oskari.log('AdminLayerFormHandler');
@@ -25,7 +26,8 @@ class UIHandler extends StateHandler {
             messages: [],
             loading: false,
             tab: DEFAULT_TAB,
-            credentialsCollapseOpen: false
+            credentialsCollapseOpen: false,
+            scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
         });
         this.addStateListener(consumer);
         this.fetchRolesAndPermissionTypes();
@@ -173,12 +175,15 @@ class UIHandler extends StateHandler {
         layer.options.renderMode = renderMode;
         this.updateState({ layer });
     }
-    setMinAndMaxScale (values) {
+    getResolutionArray () {
+        return [ ...this.mapmodule.getResolutionArray() ];
+    }
+    setMinAndMaxScale ([ minscale, maxscale ]) {
         this.updateState({
             layer: {
                 ...this.getState().layer,
-                maxscale: values[0],
-                minscale: values[1]
+                minscale,
+                maxscale
             }
         });
     }
