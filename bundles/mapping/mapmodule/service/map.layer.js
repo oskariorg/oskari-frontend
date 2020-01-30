@@ -644,6 +644,37 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
             this.trigger('dataProvider.update');
         },
         /**
+         * @method deleteDataProvider
+         * @param dataProvider object with structure like {id: 1, name "Provider name"}
+         * @param deleteLayers boolean should layers be deleted
+         */
+        deleteDataProvider: function (dataProvider, deleteLayers) {
+            // Delete dataProvider from dataProviders
+            const index = this._dataProviders.findIndex(g => g.id === dataProvider.id);
+            if (index !== -1) {
+                const d = [...this._dataProviders];
+                d.splice(index, 1);
+                this._dataProviders = d;
+            }
+            if (deleteLayers) {
+                // Remove layers
+                const layers = this._loadedLayersList.filter(l => {
+                    if (!l.admin) {
+                        return true;
+                    }
+                    return l.admin.organizationId !== dataProvider.id;
+                });
+                this._loadedLayersList = layers;
+            } else {
+                // Clear data provider from needed layers.
+                this.getAllLayers().filter(l => l.admin && l.admin.organizationId === dataProvider.id).map(l => {
+                    l._organizationName = '';
+                    delete l.admin.organizationId;
+                });
+            }
+            this.trigger('dataProvider.update');
+        },
+        /**
          * @method addDataProvider
          * @param dataProvider object with structure like {id: 1, name "Provider name"}
          */

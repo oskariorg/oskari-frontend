@@ -113,16 +113,20 @@ Oskari.registerLocalization(
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
+                "confirmDeleteGroup": "Gruppen kommer att tas bort. Fortsätt?",
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
                 "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
                 "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter.",
                 "errorFetchCapabilities": "Det gick inte att hämta gränssnittsinformation.",
-                "unauthorizedErrorFetchCapabilities": "Användarnamn och lösenord krävs av tjänsten."
+                "unauthorizedErrorFetchCapabilities": "Användarnamn och lösenord krävs av tjänsten.",
+                "deleteSuccess" : "Utgår",
+                "deleteFailed" : "Borttagningen misslyckades"
             },
             "otherLanguages": "Other languages",
             "stylesJSON": "Stildefinitioner (JSON)",
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
+            "deleteGroupLayers" : "Radera kartlagren i gruppen",
             "hover": "Hover (JSON)",
             "ion": {
                 "title": "Cesium ion",

@@ -97,7 +97,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             addDataProviderTool.setTypes([toolingService.TYPE_CREATE]);
             toolingService.addTool(addDataProviderTool);
 
-            const editGroupCallBack = (evt, id, groupMethod) => {
+            const editGroupCallBack = (evt, id, groupMethod, layerCountInGroup) => {
                 const position = {
                     left: evt.pageX + offset.x,
                     top: evt.pageY + offset.y
@@ -116,7 +116,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     Oskari.log('admin-layereditor').error('Not supported groupMethod ' + groupMethod);
                     return;
                 }
-                this.showFormPopup(flyoutKey, position, id);
+                this.showFormPopup(flyoutKey, position, id, layerCountInGroup);
             };
 
             const editThemeTool = Oskari.clazz.create('Oskari.mapframework.domain.Tool');
@@ -194,19 +194,22 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * @param {string} flyoutKey FLYOUT.THEME or FLYOUT.DATA_PROVIDER
          * @param {object} position where to place the popup
          */
-        showFormPopup (flyoutKey, position, id) {
+        showFormPopup (flyoutKey, position, id, layerCountInGroup) {
             let flyout = null;
             switch (flyoutKey) {
             case FLYOUT.THEME:
-                flyout = this._getThemeFlyout(id);
+                flyout = this._getThemeFlyout(id, layerCountInGroup);
                 break;
             case FLYOUT.DATA_PROVIDER:
-                flyout = this._getDataProviderFlyout(id);
+                flyout = this._getDataProviderFlyout(id, layerCountInGroup);
                 break;
             default:
                 return;
             }
             const { left, top } = position;
+            const flyoutWidth = 330;
+            const flyoutHeight = 340;
+            flyout.setSize(flyoutWidth, flyoutHeight);
             flyout.move(left, top, true);
             if (flyout.isVisible()) {
                 flyout.bringToTop();
@@ -291,7 +294,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * Ensures theme flyout exists and returns it.
          * @return {LocalizingFlyout}
          */
-        _getThemeFlyout (id) {
+        _getThemeFlyout (id, layerCountInGroup) {
             const me = this;
             const fetchTheme = (id, setLoading, setValue) => {
                 setLoading(true);
@@ -315,8 +318,9 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this.themeFlyout = new LocalizingFlyout(this, loc, {
                 headerMessageKey: 'themeName',
                 id: id,
-                fetch: fetchTheme
-            });
+                fetch: fetchTheme,
+                layerCountInGroup: layerCountInGroup
+            }, this.loc('deleteGroupLayers'));
             this.themeFlyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
@@ -353,6 +357,10 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 });
             });
+            this.themeFlyout.setDeleteAction((id, deleteLayers) => {
+                // TODO: Call to backend, user info etc.
+                this.themeFlyout.hide();
+            });
             return this.themeFlyout;
         }
 
@@ -361,7 +369,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
          * Ensures theme flyout exists and returns it.
          * @return {LocalizingFlyout}
          */
-        _getDataProviderFlyout (id) {
+        _getDataProviderFlyout (id, layerCountInGroup) {
             const fetchDataProvider = (id, setLoading, setValue) => {
                 setLoading(true);
                 jQuery.ajax({
@@ -384,13 +392,13 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this.dataProviderFlyout = new LocalizingFlyout(this, loc, {
                 headerMessageKey: 'dataProviderName',
                 id: id,
-                fetch: fetchDataProvider
-            });
+                fetch: fetchDataProvider,
+                layerCountInGroup: layerCountInGroup
+            }, this.loc('deleteGroupLayers'));
             this.dataProviderFlyout.makeDraggable({
                 handle: '.oskari-flyouttoolbar',
                 scroll: false
             });
-            this.dataProviderFlyout.setSize(250);
             this.dataProviderFlyout.setSaveAction(value => {
                 const me = this;
                 const httpMethod = id ? 'POST' : 'PUT';
@@ -421,6 +429,33 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                         // Inform user with popup
                         const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                         dialog.show(' ', me.loc('messages.saveFailed'));
+                        dialog.fadeout();
+                        // Log error
+                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                        Oskari.log('admin-layereditor').error(errorText);
+                    }
+                });
+            });
+            this.dataProviderFlyout.setDeleteAction((id, deleteLayers) => {
+                const me = this;
+                this.dataProviderFlyout.setLoading(true);
+                jQuery.ajax({
+                    type: 'DELETE',
+                    url: Oskari.urls.getRoute('DataProvider', { id: id, deleteLayers: deleteLayers }),
+                    success: response => {
+                        this.dataProviderFlyout.setLoading(false);
+                        this.dataProviderFlyout.hide();
+                        this._getLayerService().deleteDataProvider(response, deleteLayers);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.deleteSuccess'));
+                        dialog.fadeout();
+                    },
+                    error: (jqXHR, textStatus, errorThrown) => {
+                        this.dataProviderFlyout.setLoading(false);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.deleteFailed'));
                         dialog.fadeout();
                         // Log error
                         const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
