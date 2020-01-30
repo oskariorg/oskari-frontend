@@ -1,5 +1,3 @@
-import React from 'react';
-import { openNotification } from 'oskari-ui';
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
@@ -384,11 +382,7 @@ class UIHandler extends StateHandler {
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 
-        // TODO Reconsider using fetch directly here.
-        // Maybe create common ajax request handling for Oskari?
-
-        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
-        fetch(Oskari.urls.getRoute('SaveLayer'), {
+        fetch(Oskari.urls.getRoute('LayerAdmin'), {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
