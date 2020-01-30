@@ -27,15 +27,29 @@ const getType = options => {
     const notificationOptionKeyFound = !!Object.keys(options).find(key => notificationOptions.includes(key));
     return notificationOptionKeyFound ? NOTIFICATION : ALERT;
 };
-const toNotificationOptions = ({ content, title, ...rest }) => ({
-    ...rest,
-    message: title,
-    description: content
-});
-const toMessageOptions = options => ({
-    ...options
-});
-const checkContentExists = (options = {}) => {
+const toNotificationOptions = (options) => {
+    const { title, content, ...rest } = options;
+    const notificationOptions = {
+        ...rest,
+        message: title,
+        description: content
+    };
+    delete notificationOptions.type;
+    delete notificationOptions.level;
+    return notificationOptions;
+};
+const toMessageOptions = options => {
+    const messageOptions = { ...options };
+    ['type', 'level', 'title', 'placement', 'closeIcon', 'onClick', 'style'].forEach(key => {
+        delete messageOptions[key];
+    });
+    return messageOptions;
+};
+
+const validate = (options) => {
+    if (!options) {
+        return {};
+    }
     if (typeof options === 'string') {
         return { content: options };
     }
@@ -45,7 +59,7 @@ const checkContentExists = (options = {}) => {
     if (React.isValidElement(options)) {
         return { content: options };
     }
-    return false;
+    return {};
 };
 
 /**
@@ -99,12 +113,12 @@ class Messaging {
     }
     /** @param {Messaging~Options} option */
     open (options) {
-        const { level, ...rest } = options;
-        const validOptions = checkContentExists(rest);
+        const validOptions = validate(options);
         if (!validOptions) {
             return;
         }
-        const [ broker, brokerOptions ] = getBroker(validOptions);
+        const { level, ...rest } = validOptions;
+        const [ broker, brokerOptions ] = getBroker(rest);
         if (!level || !broker.hasOwnProperty(level)) {
             broker.open(brokerOptions);
             return;
@@ -113,23 +127,23 @@ class Messaging {
     }
     /** @param {Messaging~Options} options **/
     success (options) {
-        this.open({ ...options, level: SUCCESS });
+        this.open({ ...validate(options), level: SUCCESS });
     }
     /** @param {Messaging~Options} options */
     info (options) {
-        this.open({ ...options, level: INFO });
+        this.open({ ...validate(options), level: INFO });
     }
     /** @param {Messaging~Options} options */
     alert (options) {
-        this.info({ ...options, type: ALERT });
+        this.info({ ...validate(options), type: ALERT });
     }
     /** @param {Messaging~Options} options */
     notify (options) {
-        this.info({ ...options, type: NOTIFICATION });
+        this.info({ ...validate(options), type: NOTIFICATION });
     }
     /** @param {Messaging~Options} options */
     warn (options) {
-        this.open({ ...options, level: WARN });
+        this.open({ ...validate(options), level: WARN });
     }
     /** @param {Messaging~Options} options */
     warning (options) {
@@ -137,11 +151,11 @@ class Messaging {
     }
     /** @param {Messaging~Options} options */
     error (options) {
-        this.open({ ...options, level: ERROR });
+        this.open({ ...validate(options), level: ERROR });
     }
     /** @param {Messaging~Options} options */
     loading (options) {
-        this.open({ ...options, level: LOADING });
+        this.open({ ...validate(options), level: LOADING });
     }
     /** @param {string} key */
     close (key) {
