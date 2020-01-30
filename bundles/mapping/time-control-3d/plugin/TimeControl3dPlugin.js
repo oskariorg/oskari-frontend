@@ -8,9 +8,8 @@ const BasicMapModulePlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.plugin.B
  * @class Oskari.mapping.time-control-3d.TimeControl3dPlugin
  */
 class TimeControl3dPlugin extends BasicMapModulePlugin {
-    constructor (instance) {
-        super();
-        this.instance = instance;
+    constructor (config) {
+        super(config);
         this._clazz = 'Oskari.mapping.time-control-3d.TimeControl3dPlugin';
         this._name = 'TimeControl3dPlugin';
         this._defaultLocation = 'top right';
@@ -181,7 +180,6 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
     _showPopup () {
         const me = this;
         const popupTitle = this.loc('title');
-        const popupLocation = 'left';
         const mapmodule = this.getMapModule();
         const popupService = this.getSandbox().getService('Oskari.userinterface.component.PopupService');
 
@@ -208,7 +206,10 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             'titleColour': themeColours.textColour,
             'iconCls': popupCloseIcon
         });
-
+        let popupLocation = this.getLocation().includes('left') ? 'right' : 'left';
+        if (this._isMobile) {
+            popupLocation = 'bottom';
+        }
         this._popup.moveTo(elem, popupLocation, true);
         this.setOpen(true);
     }

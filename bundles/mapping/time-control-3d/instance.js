@@ -36,7 +36,8 @@ Oskari.clazz.defineES('Oskari.mapping.time-control-3d.instance',
             if (this.plugin) {
                 return;
             }
-            const plugin = Oskari.clazz.create('Oskari.mapping.time-control-3d.TimeControl3dPlugin', this);
+            const conf = this.conf || {};
+            const plugin = Oskari.clazz.create('Oskari.mapping.time-control-3d.TimeControl3dPlugin', conf);
             this._mapmodule.registerPlugin(plugin);
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;
