@@ -1,17 +1,20 @@
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import React from 'react';
+import { Message } from 'oskari-ui';
+import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 
 const mapMoveMethodMove = 'move';
 const upDownChangePercent = 10;
+const bundleKey = 'CameraControls3d';
 
 class UIService extends StateHandler {
     constructor (consumer) {
         super();
-        // Initially in default move mode
-        this.state = {
-            activeMapMoveMethod: mapMoveMethodMove
-        };
-        this.listeners = [consumer];
         this.mapmodule = Oskari.getSandbox().getStatefulComponents().mapfull.getMapModule();
+        // Initially in default move mode
+        this.setState({
+            activeMapMoveMethod: mapMoveMethodMove
+        });
+        this.addStateListener(consumer);
     }
 
     setActiveMapMoveMethod (activeMapMoveMethod) {
@@ -24,11 +27,16 @@ class UIService extends StateHandler {
         } else {
             operationFailed = this.mapmodule.setCameraToRotateMode();
         }
-
-        if (!operationFailed) {
-            this.updateState({ activeMapMoveMethod });
+        if (operationFailed) {
+            const options = {
+                type: Messaging.NOTIFICATION,
+                title: <Message messageKey='rotateModeFailure.message' bundleKey={bundleKey} />,
+                content: <Message messageKey='rotateModeFailure.description' bundleKey={bundleKey} />
+            };
+            Messaging.warn(options);
+            return;
         }
-        this.notify(operationFailed);
+        this.updateState({ activeMapMoveMethod });
     }
 
     changeCameraAltitude (directionUp) {
@@ -44,10 +52,6 @@ class UIService extends StateHandler {
 
     getActiveMapMoveMethod () {
         return this.state.activeMapMoveMethod;
-    }
-
-    notify (operationFailed) {
-        this.listeners.forEach(consumer => consumer(operationFailed));
     }
 
     resetToInitialState () {
