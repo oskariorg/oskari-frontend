@@ -3,5 +3,5 @@
  * @module oskari-ui/util
  */
 export { StateHandler, Controller, controllerMixin } from './state';
-export { Timeout, handleBinder } from './extras';
+export { Timeout, Messaging, handleBinder } from './extras';
 export { GenericContext, withContext, LocaleProvider, LocaleConsumer } from './contexts';
