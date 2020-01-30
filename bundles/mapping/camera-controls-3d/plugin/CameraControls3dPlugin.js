@@ -8,7 +8,8 @@ const className = 'Oskari.mapping.cameracontrols3d.CameraControls3dPlugin';
 const shortName = 'CameraControls3dPlugin';
 
 Oskari.clazz.define(className,
-    function () {
+    function (config) {
+        this._config = config;
         this._clazz = className;
         this._defaultLocation = 'top right';
         this._toolOpen = false;
