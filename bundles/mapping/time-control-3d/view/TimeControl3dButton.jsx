@@ -33,7 +33,7 @@ export const TimeControl3dButton = ({ isMobile, controlIsActive }) => {
         <DesktopContainer>
             <StyledControl>
                 <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
-            </StyledControl>;
+            </StyledControl>
         </DesktopContainer>
     );
 };
