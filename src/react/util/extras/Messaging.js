@@ -67,14 +67,27 @@ const checkContentExists = (options = {}) => {
 
 /**
  * Utility for showing global messages.
+ *
  * @example
+ * import { React } from 'react';
+ * import { Message } from 'oskari-ui';
  * import { Messaging } from 'oskari-ui/util';
  *
+ * // Simple usage
+ * Messaging.open('Hello world');
+ *
+ * // The localized way
+ * Messaging.open(<Message messageKey='hello' bundleKey='my-hello-world-bundle'/>);
+ *
+ * // Localized error message
  * Messaging.open({
- *     type: Messaging.TYPE.NOTIFICATION,
- *     title: 'My title',
- *     content: 'My message content.'
+ *     title: <Message messageKey='error.notfound.title' bundleKey='my-bundle'/>,
+ *     content: <Message messageKey='error.notfound.content' bundleKey='my-bundle'/>,
+ *     level: Messaging.LEVEL.ERROR
  * });
+ *
+ * // Localized error alert with a shortcut
+ * Messaging.error(<Message messageKey='error.notfound.content' bundleKey='my-bundle'/>);
  */
 class Messaging {
     constructor () {
@@ -84,23 +97,7 @@ class Messaging {
             duration: 4.5
         });
     }
-    /**
-     * Shows a message.
-     * @param {Messaging~Options} options
-     *
-     * @example Simple usage
-     * Messaging.open('Hello world');
-     *
-     * @example The correct way
-     * Messaging.open(<Message messageKey='hello'/>);
-     *
-     * @example Error message
-     * Messaging.open({
-     *     title: <Message messageKey='error.notfound.title' bundleKey='my-bundle'/>,
-     *     content: <Message messageKey='error.notfound.content' bundleKey='my-bundle'/>,
-     *     level: Messaging.LEVEL.ERROR
-     * });
-     **/
+    /** @param {Messaging~Options} option */
     open (options) {
         const { level, ...rest } = options;
         const validOptions = checkContentExists(rest);
@@ -114,10 +111,7 @@ class Messaging {
         }
         broker[level](brokerOptions);
     }
-    /**
-     * Show a message with success icon.
-     * @param {Messaging~Options} options
-     **/
+    /** @param {Messaging~Options} options **/
     success (options) {
         this.open({ ...options, level: SUCCESS });
     }
