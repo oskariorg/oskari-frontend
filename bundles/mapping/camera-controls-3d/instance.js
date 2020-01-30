@@ -28,7 +28,8 @@ Oskari.clazz.defineES('Oskari.mapping.cameracontrols3d.instance',
             if (this.plugin) {
                 return;
             }
-            this.plugin = Oskari.clazz.create('Oskari.mapping.cameracontrols3d.CameraControls3dPlugin');
+            const conf = this.conf || {};
+            this.plugin = Oskari.clazz.create('Oskari.mapping.cameracontrols3d.CameraControls3dPlugin', conf);
             this._mapmodule.registerPlugin(this.plugin);
             this._mapmodule.startPlugin(this.plugin);
         }
