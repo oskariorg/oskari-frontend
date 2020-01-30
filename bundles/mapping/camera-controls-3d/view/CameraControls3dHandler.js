@@ -28,12 +28,10 @@ class UIService extends StateHandler {
             operationFailed = this.mapmodule.setCameraToRotateMode();
         }
         if (operationFailed) {
-            const options = {
-                type: Messaging.NOTIFICATION,
+            Messaging.warn({
                 title: <Message messageKey='rotateModeFailure.message' bundleKey={bundleKey} />,
                 content: <Message messageKey='rotateModeFailure.description' bundleKey={bundleKey} />
-            };
-            Messaging.warn(options);
+            });
             return;
         }
         this.updateState({ activeMapMoveMethod });
