@@ -79,9 +79,7 @@ Oskari.registerLocalization(
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
             },
-            "minScale": "Pienin mittakaava",
-            "maxScale": "Suurin mittakaava",
-            "minAndMaxScale": "Pienin ja suurin mittakaava",
+            "scale": "Mittakaava",
             "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
             "metadataId": "Metatiedon tiedostotunniste",
             "gfiContent": "Kohdetietoikkunan lisäsisältö",
@@ -117,16 +115,20 @@ Oskari.registerLocalization(
                 "saveSuccess": "Tallennettu",
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
+                "confirmDeleteGroup": "Ryhmä poistetaan. Haluatko jatkaa?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",
                 "errorFetchCapabilities": "Rajapinnan tietojen haku epäonnistui.",
-                "unauthorizedErrorFetchCapabilities": "Palvelu vaatii käyttäjätunnuksen ja salasanan."
+                "unauthorizedErrorFetchCapabilities": "Palvelu vaatii käyttäjätunnuksen ja salasanan.",
+                "deleteSuccess" : "Poistettu",
+                "deleteFailed" : "Poisto epäonnistui"
             },
             "otherLanguages": "Muut kielet",
             "stylesJSON": "Tyylimääritykset (JSON)",
             "externalStylesJSON": "Kolmannen osapuolen tyylimääritykset (JSON)",
             "externalStyleFormats": "Tuetut muodot: 3D Tiles, Mapbox",
+            "deleteGroupLayers" : "Poista ryhmään kuuluvat karttatasot",
             "hover": "Kohteen korostus ja tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

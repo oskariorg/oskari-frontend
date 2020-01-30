@@ -52,7 +52,6 @@ Oskari.clazz.define('Oskari.mapping.cameracontrols3d.CameraControls3dTool',
         getValues: function () {
             if (this.state.enabled) {
                 var pluginConfig = this.getPlugin().getConfig();
-                pluginConfig.instance = null;
                 var json = {
                     configuration: {}
                 };

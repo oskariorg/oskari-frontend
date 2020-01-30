@@ -79,9 +79,7 @@ Oskari.registerLocalization(
                 "updateFailedWithReason": "Capablities re-check failed: {reason}"
             },
             "opacity": "Opacity",
-            "minScale": "Minimum scale",
-            "maxScale": "Maximum scale",
-            "minAndMaxScale": "Min and max scale",
+            "scale": "Scale",
             "metadataIdDesc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
             "metadataId": "Metadata file identifier",
             "gfiContent": "Additional GFI info",
@@ -117,16 +115,20 @@ Oskari.registerLocalization(
                 "saveSuccess": "Saved",
                 "saveFailed": "A system error occurred. Data has not been updated.",
                 "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
+                "confirmDeleteGroup": "The group will be removed. Do you want to continue?",
                 "errorRemoveLayer": "The map layer could not be removed.",
                 "errorInsertAllreadyExists": "The new map layer has been added. A map layer with same identifier already exists.",
                 "errorFetchUserRolesAndPermissionTypes": "Error occured when fetching user roles and permission types.",
                 "errorFetchCapabilities": "Fetching service capabilities failed.",
-                "unauthorizedErrorFetchCapabilities": "Username and password are required by the service."
+                "unauthorizedErrorFetchCapabilities": "Username and password are required by the service.",
+                "deleteSuccess" : "Deleted",
+                "deleteFailed" : "Delete failed"
             },
             "otherLanguages": "Other languages",
             "stylesJSON": "Style definitions (JSON)",
             "externalStylesJSON": "3rd party style definitions (JSON)",
             "externalStyleFormats": "Supported formats: 3D Tiles, Mapbox",
+            "deleteGroupLayers" : "Delete the map layers in the group",
             "hover": "Feature highlighting and tooltip (JSON)",
             "ion": {
                 "title": "Cesium ion",

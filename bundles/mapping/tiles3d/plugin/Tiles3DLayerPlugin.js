@@ -158,10 +158,16 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
             if (!this.getMapModule().getSupports3D()) {
                 return;
             }
+            const options = layer.getOptions() || {};
+            const { ionAssetId, ionAssetServer, ionAccessToken } = options;
+
+            const url = ionAssetId
+                ? Cesium.IonResource.fromAssetId(ionAssetId, { server: ionAssetServer, accessToken: ionAccessToken })
+                : layer.getLayerUrls()[0];
             // Common settings for the dynamicScreenSpaceError optimization
             // copied from Cesium.Cesium3DTileset api doc.
             var tileset = new Cesium.Cesium3DTileset({
-                url: layer.getLayerUrls()[0],
+                url,
                 dynamicScreenSpaceError: true,
                 dynamicScreenSpaceErrorDensity: 0.00278,
                 dynamicScreenSpaceErrorFactor: 4.0,

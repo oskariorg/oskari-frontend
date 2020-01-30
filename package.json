@@ -41,7 +41,7 @@
     "@babel/runtime-corejs3": "7.6.3",
     "@storybook/react": "5.1.11",
     "@types/jest": "24.0.18",
-    "antd": "3.24.2",
+    "antd": "3.26.7",
     "babel-loader": "8.0.6",
     "babel-plugin-styled-components": "1.10.6",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",

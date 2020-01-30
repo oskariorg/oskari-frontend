@@ -42,10 +42,10 @@ renderLayer.propTypes = {
     controller: PropTypes.any
 };
 
-const onToolClick = (event, id, groupMethod, tool) => {
+const onToolClick = (event, id, groupMethod, tool, layerCountInGroup) => {
     const cb = tool.getCallback();
     if (cb) {
-        cb(event, id, groupMethod);
+        cb(event, id, groupMethod, layerCountInGroup);
     }
     // Prevent collapse open on tool icon click
     event.stopPropagation();
@@ -75,7 +75,7 @@ const LayerCollapsePanel = (props) => {
                         group.isEditable() && group.getTools().filter(t => t.getTypes().includes(group.groupMethod)).map((tool, i) =>
                             <Tooltip title={tool.getTooltip()} key={`${tool.getName()}_${i}`}>
                                 <StyledEditGroup className={tool.getIconCls()} onClick={(event) =>
-                                    onToolClick(event, group.getId(), group.getGroupMethod(), tool)}/>
+                                    onToolClick(event, group.getId(), group.getGroupMethod(), tool, group.getLayers().length)}/>
                             </Tooltip>
                         )
                     }
