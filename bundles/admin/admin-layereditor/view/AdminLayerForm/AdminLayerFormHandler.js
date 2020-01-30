@@ -1,4 +1,3 @@
-import React from 'react';
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
@@ -378,7 +377,6 @@ class UIHandler extends StateHandler {
     }
 
     saveLayer () {
-        const notImplementedYet = true;
         const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
             this.setMessages(validationErrorMessages);
@@ -389,38 +387,12 @@ class UIHandler extends StateHandler {
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 
-        if (notImplementedYet) {
-            const jsonOut = JSON.stringify(layerPayload, null, 2);
-            console.log(jsonOut);
-            Messaging.info({
-                title: 'Save not implemented yet',
-                key: 'admin-layer-save',
-                content: (
-                    <div style={{ maxHeight: 700, overflow: 'auto' }}>
-                        <pre>{jsonOut}</pre>
-                    </div>
-                ),
-                duration: null,
-                placement: 'topRight',
-                top: 30,
-                style: {
-                    width: 500,
-                    marginLeft: -400
-                }
-            });
-            return;
-        }
-        // TODO Reconsider using fetch directly here.
-        // Maybe create common ajax request handling for Oskari?
-
-        // FIXME: This should use LayerAdmin route and map the layer for payload properly before we can use it
-        fetch(Oskari.urls.getRoute('SaveLayer'), {
+        fetch(Oskari.urls.getRoute('LayerAdmin'), {
             method: 'POST',
             headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
+                'Content-Type': 'application/json'
             },
-            body: stringify(layerPayload)
+            body: JSON.stringify(layerPayload)
         }).then(response => {
             if (response.ok) {
                 this.setMessage('messages.saveSuccess', 'success');
