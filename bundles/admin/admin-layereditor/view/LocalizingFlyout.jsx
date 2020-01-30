@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox } from 'oskari-ui';
+import { Spin, LocalizationComponent, TextInput, Button, Message, Checkbox, Confirm } from 'oskari-ui';
 import { LocaleProvider, handleBinder, StateHandler, controllerMixin, Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
@@ -66,7 +66,7 @@ export class LocalizingFlyout extends ExtraFlyout {
         let ui = (
             <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                 <LocalizedContent { ...this.uiHandler.getState() }
-                    controller={controller} id={this.id}
+                    controller={controller}
                     deleteMapLayersText={this.deleteMapLayersText}
                     layerCountInGroup={this.layerCountInGroup}/>
             </LocaleProvider>
@@ -168,7 +168,7 @@ const DeleteLayersCheckbox = styled(Checkbox)`
     padding-top: 15px;
 `;
 
-const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, id, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
+const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
     const Component = (
         <Container>
             <Header>
@@ -185,17 +185,29 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
             >
                 <TextInput />
             </LocalizationComponent>
-            {id && layerCountInGroup > 0 &&
-                <DeleteLayersCheckbox checked={deleteLayers} onChange={ evt => controller.setDeleteLayers(evt.target.checked)}>{deleteMapLayersText + ' (' + layerCountInGroup + ')'}</DeleteLayersCheckbox>
-            }
             <Buttons>
                 <Button onClick={() => controller.cancel()}>
                     <Message messageKey='cancel'/>
                 </Button>
-                { id && <Button onClick={() => controller.delete()}>
-                    <Message messageKey='delete'/>
-                </Button>
-                }
+                <Confirm
+                    title={<React.Fragment>
+                        <div>
+                            <Message messageKey='messages.confirmDeleteGroup'/>
+                        </div>
+                        { layerCountInGroup > 0 &&
+                            <DeleteLayersCheckbox checked={deleteLayers} onChange={ evt => controller.setDeleteLayers(evt.target.checked)}>
+                                {deleteMapLayersText + ' (' + layerCountInGroup + ')'}
+                            </DeleteLayersCheckbox>
+                        }
+                    </React.Fragment>}
+                    onConfirm={() => controller.delete()}
+                    okText={<Message messageKey='ok'/>}
+                    cancelText={<Message messageKey='cancel'/>}
+                    placement='bottomLeft'>
+                    <Button>
+                        <Message messageKey='delete'/>
+                    </Button>
+                </Confirm>
                 <Button onClick={() => controller.save()} type='primary'>
                     <Message messageKey='save'/>
                 </Button>

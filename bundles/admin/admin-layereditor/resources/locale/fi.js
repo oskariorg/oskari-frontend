@@ -117,6 +117,7 @@ Oskari.registerLocalization(
                 "saveSuccess": "Tallennettu",
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
+                "confirmDeleteGroup": "Ryhmä poistetaan. Haluatko jatkaa?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",

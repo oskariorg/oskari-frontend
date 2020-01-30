@@ -115,6 +115,7 @@ Oskari.registerLocalization(
                 "saveSuccess": "Fel!",
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
+                "confirmDeleteGroup": "Gruppen kommer att tas bort. Fortsätt?",
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
                 "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
                 "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter.",
