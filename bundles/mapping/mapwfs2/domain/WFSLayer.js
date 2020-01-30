@@ -161,32 +161,6 @@ export class WFSLayer extends VectorTileLayer {
     }
 
     /**
-     * @method getClickedGeometries
-     * @return {String[[]..]} featureId  geometry
-     */
-    getClickedGeometries () {
-        return this._clickedGeometries;
-    }
-
-    /**
-     * @method setClickedGeometries
-     * @param {String[[]..]} id geom
-     */
-    setClickedGeometries (fgeom) {
-        this._clickedGeometries = fgeom;
-    }
-
-    /**
-     * @method addClickedGeometries
-     * @param {[]} id geom
-     */
-    addClickedGeometries (fgeom) {
-        for (var j = 0; j < fgeom.length; ++j) {
-            this._clickedGeometries.push(fgeom[j]);
-        }
-    }
-
-    /**
      * @method setPropertyTypes
      * @param {json} propertyTypes
      */
