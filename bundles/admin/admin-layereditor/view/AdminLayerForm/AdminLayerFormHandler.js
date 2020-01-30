@@ -1,8 +1,7 @@
 import React from 'react';
-import { openNotification } from 'oskari-ui';
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -388,10 +387,10 @@ class UIHandler extends StateHandler {
         if (notImplementedYet) {
             const jsonOut = JSON.stringify(layerPayload, null, 2);
             console.log(jsonOut);
-            openNotification('info', {
-                message: 'Save not implemented yet',
+            Messaging.info({
+                title: 'Save not implemented yet',
                 key: 'admin-layer-save',
-                description: (
+                content: (
                     <div style={{ maxHeight: 700, overflow: 'auto' }}>
                         <pre>{jsonOut}</pre>
                     </div>
