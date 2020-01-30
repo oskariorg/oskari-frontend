@@ -16,13 +16,14 @@ import {
  */
 Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
     class VectorFeatureService {
-        constructor (sandbox, olMap) {
+        constructor (sandbox, mapmodule) {
             this.__name = 'VectorFeatureService';
             this.__qname = 'Oskari.mapframework.service.VectorFeatureService';
             this._log = Oskari.log('VectorFeatureService');
             this._sandbox = sandbox;
             this._tooltipOverlay = null;
-            this._map = olMap;
+            this._map = mapmodule.getMap();
+            this._mapmodule = mapmodule;
             this._featureFormatter = new olFormatGeoJSON();
             this._tooltipState = {
                 feature: null
@@ -393,7 +394,7 @@ Oskari.clazz.defineES('Oskari.mapframework.service.VectorFeatureService',
         _onMapClicked (event) {
             const me = this;
             let clickHits = [];
-            me._map.forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
+            this._mapmodule.forEachFeatureAtPixel([event.getMouseX(), event.getMouseY()], (feature, layer) => {
                 if (!layer) {
                     return;
                 }

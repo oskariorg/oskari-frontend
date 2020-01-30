@@ -781,6 +781,12 @@ Oskari.clazz.define(
             }
             throw new Error('Not implemented _getFeaturesAtPixelImpl function.');
         },
+        forEachFeatureAtPixel (pixel, callback) {
+            if (typeof this._forEachFeatureAtPixelImpl === 'function') {
+                return this._forEachFeatureAtPixelImpl(pixel, callback);
+            }
+            throw new Error('Not implemented _forEachFeatureAtPixelImpl function.');
+        },
 
         /**
          * @method calculateLayerScales
