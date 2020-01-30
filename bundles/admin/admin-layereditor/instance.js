@@ -358,8 +358,31 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                 });
             });
             this.themeFlyout.setDeleteAction((id, deleteLayers) => {
-                // TODO: Call to backend, user info etc.
-                this.themeFlyout.hide();
+                const me = this;
+                this.themeFlyout.setLoading(true);
+                jQuery.ajax({
+                    type: 'DELETE',
+                    url: Oskari.urls.getRoute('MapLayerGroups', { id: id, deleteLayers: deleteLayers }),
+                    success: response => {
+                        this.themeFlyout.setLoading(false);
+                        this.themeFlyout.hide();
+                        this._getLayerService().deleteLayerGroup(response.id, response.parentId, deleteLayers);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.deleteSuccess'));
+                        dialog.fadeout();
+                    },
+                    error: (jqXHR, textStatus, errorThrown) => {
+                        this.themeFlyout.setLoading(false);
+                        // Inform user with popup
+                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                        dialog.show(' ', me.loc('messages.deleteFailed'));
+                        dialog.fadeout();
+                        // Log error
+                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                        Oskari.log('admin-layereditor').error(errorText);
+                    }
+                });
             });
             return this.themeFlyout;
         }
