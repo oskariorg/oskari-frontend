@@ -1,10 +1,14 @@
+import React from 'react';
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
-import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
+import { Message } from 'oskari-ui';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
+
+const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
 class UIHandler extends StateHandler {
     constructor (consumer) {
@@ -355,7 +359,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                this.setMessage('TODO', 'error');
+                Messaging.error('TODO');
             }
             return response.json();
         }).then(json => {
@@ -364,7 +368,7 @@ class UIHandler extends StateHandler {
             });
             if (layer.warn) {
                 // currently only option for warning on this is "updateCapabilitiesFail"
-                this.setMessage(`messages.${layer.warn}`, 'warning');
+                Messaging.warn(getMessage(`messages.${layer.warn}`));
                 delete layer.warn;
             }
             this.updateState({
@@ -379,7 +383,6 @@ class UIHandler extends StateHandler {
     saveLayer () {
         const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
-            this.setMessages(validationErrorMessages);
             return;
         }
         // Take a copy
@@ -395,10 +398,10 @@ class UIHandler extends StateHandler {
             body: JSON.stringify(layerPayload)
         }).then(response => {
             if (response.ok) {
-                this.setMessage('messages.saveSuccess', 'success');
+                Messaging.success(getMessage('messages.saveSuccess'));
                 return response.json();
             } else {
-                this.setMessage('messages.saveFailed', 'error');
+                Messaging.error(getMessage('messages.saveFailed'));
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
@@ -430,7 +433,7 @@ class UIHandler extends StateHandler {
             if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
                 this.mapLayerService.addLayer(mapLayer);
             } else {
-                this.setMessage('messages.errorInsertAllreadyExists', 'error');
+                Messaging.error(getMessage('messages.errorInsertAllreadyExists'));
                 // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
             }
         }
@@ -454,10 +457,13 @@ class UIHandler extends StateHandler {
         try {
             const result = JSON.parse(value);
             if (typeof result !== 'object') {
-                validationErrors.push({ key: msgKey, type: 'error' });
+                Messaging.error(getMessage(msgKey));
+                // TODO fix error checking logic, get rid of validationErrors array
+                validationErrors.push(true);
             }
         } catch (error) {
-            validationErrors.push({ key: msgKey, type: 'error' });
+            Messaging.error(getMessage(msgKey));
+            validationErrors.push(true);
         }
     }
 
@@ -475,7 +481,7 @@ class UIHandler extends StateHandler {
             if (response.ok) {
                 // TODO handle this, just close the flyout?
             } else {
-                this.setMessage('messages.errorRemoveLayer', 'error');
+                Messaging.error(getMessage('messages.errorRemoveLayer'));
             }
             return response;
         });
@@ -509,10 +515,10 @@ class UIHandler extends StateHandler {
                 return response.json();
             } else {
                 if (response.status === 401) {
-                    this.setMessage('messages.unauthorizedErrorFetchCapabilities', 'warning');
+                    Messaging.warn(getMessage('messages.unauthorizedErrorFetchCapabilities'));
                     this.updateState({ credentialsCollapseOpen: true });
                 } else {
-                    this.setMessage('messages.errorFetchCapabilities', 'error');
+                    Messaging.error(getMessage('messages.errorFetchCapabilities'));
                 }
                 return Promise.reject(new Error('Capabilities fetching failed with status code ' + response.status + ' and text ' + response.statusText));
             }
@@ -536,7 +542,7 @@ class UIHandler extends StateHandler {
         };
         const updateFailed = reason => {
             const errorMsgKey = reason ? 'capabilities.updateFailedWithReason' : 'capabilities.updateFailed';
-            this.setMessage(errorMsgKey, 'error', { reason });
+            Messaging.error(getMessage(errorMsgKey, { reason }));
         };
         this.ajaxStarted();
         fetch(Oskari.urls.getRoute('UpdateCapabilities', params), {
@@ -588,7 +594,7 @@ class UIHandler extends StateHandler {
                 });
             }).catch(error => {
                 this.log.error(error);
-                this.setMessage('messages.errorFetchUserRolesAndPermissionTypes', 'error');
+                Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
             });
     }
 
