@@ -151,6 +151,13 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
             return link ? `<a href="${link}">${label}</a>` : label;
         });
     }
+    getUrlParams (layer) {
+        if (!layer.getParams()) {
+            return null;
+        }
+        return Object.keys(layer.getParams())
+            .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
+    }
     /**
      * @method addMapLayerToMap
      * @private
@@ -160,9 +167,15 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
      * @param {Boolean} isBaseMap
      */
     addMapLayerToMap (layer, keepLayerOnTop, isBaseMap) {
+        let url = layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection());
+        const urlParams = this.getUrlParams(layer);
+        if (urlParams) {
+            const paramsPrefix = url.includes('?') ? '&' : '?';
+            url = url + paramsPrefix + urlParams;
+        }
         const sourceOpts = {
             format: new olFormatMVT(),
-            url: layer.getLayerUrl().replace('{epsg}', this.mapModule.getProjection()), // projection code
+            url,
             projection: this.getMap().getView().getProjection(), // OL projection object
             attributions: this.getAttributions(layer)
         };
