@@ -155,7 +155,8 @@ class VectorTileLayerPlugin extends AbstractMapLayerPlugin {
         if (!layer.getParams()) {
             return null;
         }
-        return Object.keys(layer.getParams())
+        const params = layer.getParams();
+        return Object.keys(params)
             .map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
     }
     /**
