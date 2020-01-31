@@ -1,6 +1,6 @@
 import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
-import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
+import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
