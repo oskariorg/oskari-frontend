@@ -69,6 +69,7 @@ const LayerCollapsePanel = (props) => {
     return (
         <StyledCollapsePanel {...propsNeededForPanel}
             header={group.getTitle()}
+            showArrow={layerRows.length > 0 }
             extra={
                 <React.Fragment>
                     {
@@ -82,7 +83,7 @@ const LayerCollapsePanel = (props) => {
                     <Badge inversed={true} count={badgeText}/>
                 </React.Fragment>
             }>
-            <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/>
+            { layerRows.length > 0 && <List bordered={false} dataSource={layerRows} renderItem={renderLayer}/> }
         </StyledCollapsePanel>
     );
 };
