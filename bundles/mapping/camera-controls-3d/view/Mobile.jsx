@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { Controller } from 'oskari-ui/util';
-import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './CameraControl3dIcons';
+import { MoveMapIcon, RotateMapIcon, UpIcon, DownIcon } from './Icons';
 const mapMoveMethodMove = 'move';
 const mapMoveMethodRotate = 'rotate';
 
@@ -11,7 +11,7 @@ const MobileContainer = styled.div`
     margin-right: 5px;
 `;
 
-export const CameraControls3dMobile = ({ activeMapMoveMethod, controller }) => {
+export const Mobile = ({ activeMapMoveMethod, controller }) => {
     const mapInMobileMode = true;
 
     return (
@@ -30,7 +30,7 @@ export const CameraControls3dMobile = ({ activeMapMoveMethod, controller }) => {
     );
 };
 
-CameraControls3dMobile.propTypes = {
+Mobile.propTypes = {
     activeMapMoveMethod: PropTypes.string.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
