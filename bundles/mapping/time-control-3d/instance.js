@@ -1,14 +1,7 @@
-/*
-Oskari.app.playBundle(
-{
-  bundlename : 'shadow-plugin-3d'
-});
-*/
-
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
-Oskari.clazz.defineES('Oskari.mapping.bundle.shadowplugin3d.instance',
-    class ShadowingPluginBundleInstance extends BasicBundle {
+Oskari.clazz.defineES('Oskari.mapping.time-control-3d.instance',
+    class TimeControl3d extends BasicBundle {
         constructor () {
             super();
             this._started = false;
@@ -16,8 +9,8 @@ Oskari.clazz.defineES('Oskari.mapping.bundle.shadowplugin3d.instance',
             this._mapmodule = null;
             this._sandbox = null;
             this.state = undefined;
-            this._log = Oskari.log('Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundleInstance');
-            this.__name = 'shadow-plugin-3d';
+            this.__name = 'time-control-3d';
+            this._log = Oskari.log(this.__name);
         }
         getName () {
             return this.__name;
@@ -32,7 +25,7 @@ Oskari.clazz.defineES('Oskari.mapping.bundle.shadowplugin3d.instance',
             this._sandbox = sandbox || Oskari.getSandbox();
             this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
             if (!this._mapmodule.getSupports3D()) {
-                this._log.warn('Shadowing plugin only supported in 3d mode');
+                this._log.warn('TimeControl3d is only supported in 3d mode');
                 return;
             }
             this.createPlugin();
@@ -43,7 +36,8 @@ Oskari.clazz.defineES('Oskari.mapping.bundle.shadowplugin3d.instance',
             if (this.plugin) {
                 return;
             }
-            const plugin = Oskari.clazz.create('Oskari.mapping.bundle.shadowplugin3d.plugin.ShadowingPlugin', this);
+            const conf = this.conf || {};
+            const plugin = Oskari.clazz.create('Oskari.mapping.time-control-3d.TimeControl3dPlugin', conf);
             this._mapmodule.registerPlugin(plugin);
             this._mapmodule.startPlugin(plugin);
             this.plugin = plugin;

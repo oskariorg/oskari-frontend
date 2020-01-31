@@ -1,13 +1,13 @@
 /**
- * @class Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle
+ * @class Oskari.mapping.time-control-3d.bundle
  *
  * Definition for bundle. See source for details.
  */
 
-Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle", function () {
+Oskari.clazz.define("Oskari.mapping.time-control-3d.bundle", function () {
 }, {
     "create": function () {
-        return Oskari.clazz.create("Oskari.mapping.bundle.shadowplugin3d.instance");
+        return Oskari.clazz.create("Oskari.mapping.time-control-3d.instance");
     }
 }, {
 
@@ -15,35 +15,35 @@ Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle"
     "source": {
         "scripts": [{
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/instance.js"
+            "src": "../../../bundles/mapping/time-control-3d/instance.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/plugin/ShadowingPluginClass.js"
+            "src": "../../../bundles/mapping/time-control-3d/plugin/TimeControl3dPlugin.js"
         }, {
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/tool/ShadowTool.js"
+            "src": "../../../bundles/mapping/time-control-3d/tool/TimeControl3dTool.js"
         }, {
             "type": "text/css",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/scss/style.scss"
+            "src": "../../../bundles/mapping/time-control-3d/resources/scss/style.scss"
         }],
         "locales": [{
             "lang": "fi",
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/locale/fi.js"
+            "src": "../../../bundles/mapping/time-control-3d/resources/locale/fi.js"
         }, {
             "lang": "sv",
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/locale/sv.js"
+            "src": "../../../bundles/mapping/time-control-3d/resources/locale/sv.js"
         }, {
             "lang": "en",
             "type": "text/javascript",
-            "src": "../../../../bundles/mapping/shadow-plugin-3d/resources/locale/en.js"
+            "src": "../../../bundles/mapping/time-control-3d/resources/locale/en.js"
         }]
     },
     "bundle": {
         "manifest": {
-            "Bundle-Identifier": "shadow-plugin-3d",
-            "Bundle-Name": "shadow-plugin-3d",
+            "Bundle-Identifier": "time-control-3d",
+            "Bundle-Name": "time-control-3d",
             "Bundle-Author": [{
                 "Name": "",
                 "Organisation": "nls.fi",
@@ -69,4 +69,4 @@ Oskari.clazz.define("Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle"
     "dependencies": ["jquery"]
 });
 
-Oskari.bundle_manager.installBundleClass("shadow-plugin-3d", "Oskari.mapping.bundle.shadowplugin3d.ShadowingPluginBundle");
+Oskari.bundle_manager.installBundleClass("time-control-3d", "Oskari.mapping.time-control-3d.bundle");

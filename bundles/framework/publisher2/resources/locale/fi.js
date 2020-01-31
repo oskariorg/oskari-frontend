@@ -82,7 +82,7 @@ Oskari.registerLocalization(
                 "MapRotator": "Salli kartan pyörittäminen",
                 "CrosshairTool": "Näytä kartan keskipiste",
                 "CameraControls3d": "Kameratyökalut",
-                "ShadowTool": "Varjostustyökalu",
+                "TimeControl3d": "Ajanhetken säädin",
                 "toolbarToolNames": {
                     "history": "Siirtyminen edelliseen ja seuraavaan näkymään",
                     "history_back": "Siirtyminen edelliseen näkymään",

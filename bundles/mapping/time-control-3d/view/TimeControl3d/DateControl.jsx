@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
-import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledButton, StyledDateSlider } from './ShadowToolStyled';
+import { Row, Col, ColFixed, StyledButton, StyledDateSlider } from './styled';
+import { Input } from './Input';
 import moment from 'moment';
 
 /**
@@ -9,12 +10,8 @@ import moment from 'moment';
  */
 const DAYS = 365;
 
-export const ShadowToolDate = props => {
+export const DateControl = props => {
     const { isMobile, changeHandler, sliderDateValue, dateValue, currentTimeHandler } = props;
-    const inputChangeDate = event => {
-        const val = event.target.value;
-        changeHandler(val);
-    };
 
     const changeSliderDate = (val) => {
         const d = new Date(2019, 0, val);
@@ -47,8 +44,7 @@ export const ShadowToolDate = props => {
     return (
         <Row>
             <Col>
-                <StyledIcon type="calendar"/>
-                <StyledInput value={dateValue} onChange={inputChangeDate} />
+                <Input iconType={'calendar'} value={dateValue} changeHandler={changeHandler}/>
             </Col>
             {!isMobile &&
                 <ColFixed>
@@ -62,7 +58,7 @@ export const ShadowToolDate = props => {
     );
 };
 
-ShadowToolDate.propTypes = {
+DateControl.propTypes = {
     isMobile: PropTypes.bool.isRequired,
     changeHandler: PropTypes.func.isRequired,
     sliderDateValue: PropTypes.number.isRequired,
