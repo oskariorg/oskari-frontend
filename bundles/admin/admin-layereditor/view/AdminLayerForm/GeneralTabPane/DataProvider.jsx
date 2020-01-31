@@ -9,6 +9,7 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
         <Message messageKey='dataProvider'/>
         <StyledFormField>
             <Select
+                showSearch
                 value={layer.dataProviderId}
                 onChange={value => controller.setDataProviderId(value)}>
                 { dataProviders.map(dataProvider =>

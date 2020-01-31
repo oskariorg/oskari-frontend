@@ -15,6 +15,7 @@ export const SelectedTime = ({ layer, capabilities, controller }) => {
             <StyledFormField>
                 <Select
                     showSearch
+                    allowClear
                     value={value}
                     onChange={value => controller.setSelectedTime(value)}>
                     { capabilities.times.map(time => <Option key={time}>{time}</Option>)}
