@@ -19,6 +19,7 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
     };
     return (
         <UrlInput
+            key={`refreshOnLayerChange_${layer.id}`}
             value={layer.url}
             disabled={disabled}
             onChange={url => controller.setLayerUrl(url)}
