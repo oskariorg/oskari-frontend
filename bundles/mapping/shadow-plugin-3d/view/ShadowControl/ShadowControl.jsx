@@ -2,43 +2,46 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { LocaleConsumer } from 'oskari-ui/util';
-import { ShadowIcon } from '../../resources/icons/';
+import { ControlIcon } from '../../resources/icons/';
 
-const darkBgColor = 'rgba(20,20,20,0.8)';
-const secondaryColor = '#006ce8';
-
-const MapControlsContainer = styled.div`
+const DesktopContainer = styled.div`
     margin: 0 0 10px 30px;
-    display: flex;
-    flex-wrap: wrap;
-    width: 32px;
-    align-items: center;
-`;
-
-const MapControl = styled.div`
-    border-radius: 50%;
     width: 32px;
     height: 32px;
-    cursor: pointer;
+    background-color: rgba(20,20,20,0.8);
+    border-radius: 50%;
     z-index: 15000;
+    cursor: pointer;
     box-shadow: 1px 1px 2px rgba(0,0,0,0.6);
-    background-color: ${props => props.controlIsActive && !props.isMobile ? secondaryColor : darkBgColor};
-    background-repeat: no-repeat;
-    margin: 0;
-    text-align: center;
 `;
 
-const ShadowControl = ({ mapInMobileMode }) => {
+const StyledControl = styled.div`
+    width: 32px;
+    height: 32px;
+    margin: 0;
+    text-align: center;
+    background-repeat: no-repeat;
+    padding-top: 4px;
+`;
+
+const ShadowControl = ({ isMobile, controlIsActive }) => {
+    if (isMobile) {
+        return (
+            <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
+        );
+    }
     return (
-        <MapControlsContainer>
-            <MapControl>
-                <ShadowIcon isMobile={mapInMobileMode} style={{ paddingTop: '3px' }} />
-            </MapControl>
-        </MapControlsContainer>
+        <DesktopContainer>
+            <StyledControl>
+                <ControlIcon isMobile={isMobile} controlIsActive={controlIsActive}/>
+            </StyledControl>;
+        </DesktopContainer>
     );
 };
+
 ShadowControl.propTypes = {
-    mapInMobileMode: PropTypes.bool.isRequired
+    isMobile: PropTypes.bool.isRequired,
+    controlIsActive: PropTypes.bool.isRequired
 };
 
 const contextWrap = LocaleConsumer(ShadowControl);

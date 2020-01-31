@@ -1,97 +1,58 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Option, InputGroup, Message } from 'oskari-ui';
-import { StyledIcon, Row, Col, ColFixed, StyledInput, StyledTimeSlider, StyledSelect, Border, StyledPlayButton } from './ShadowToolStyled';
-import { PlayPauseIcon } from '../../resources/icons/';
+import { Row, ColFixed, Col } from './ShadowToolStyled';
+import { Speed } from './Speed'
+import { Input } from './Input';
+import { TimeSlider } from './TimeSlider';
 
-const MINUTES = 1439;
-
-export const ShadowToolTime = ({ changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed }) => {
-    const inputChangeTime = event => {
-        const val = event.target.value;
-        changeHandler(val);
-    };
-
-    const changeSliderTime = (val) => {
-        const hours = Math.floor(val / 60);
-        const minutes = val % 60;
-        const fMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        const timeString = `${hours}:${fMinutes}`;
-        changeHandler(timeString);
-    };
-
-    const marksForTime = {
-        360: {
-            label: '6:00',
-            style: {
-                color: '#fff'
-            }
-        },
-        720: {
-            label: '12:00',
-            style: {
-                color: '#fff'
-            }
-        },
-        1080: {
-            label: '18:00',
-            style: {
-                color: '#fff'
-            }
-        }
-    };
-
-    const speedValues = [
-        {
-            value: 'slow',
-            label: <Message messageKey={'speeds.slow'} />
-        },
-        {
-            value: 'normal',
-            label: <Message messageKey={'speeds.normal'} />
-        },
-        {
-            value: 'fast',
-            label: <Message messageKey={'speeds.fast'} />
-        }
-    ];
-
-    const clickPlayButton = () => {
-        playHandler(!playing);
-    };
-
-    const handleSpeedChange = (val) => {
-        speedHandler(val);
-    };
-
+export const ShadowToolTime = props => {
+    const { isMobile, changeHandler, timeValue, sliderTimeValue, playing, playHandler, speedHandler, speed } = props;
+    if (isMobile) {
+        return (
+            <div>
+                <Row style={{ marginTop: '20px' }}>
+                    <Col>
+                        <Input timeValue ={timeValue} changeHandler ={changeHandler}></Input>
+                    </Col>
+                    <Col>
+                        <Speed speedHandler={speedHandler} speed={speed}></Speed>
+                    </Col>
+                </Row>
+                <Row style={{ marginTop: '20px' }}>
+                    <TimeSlider
+                        isMobile = {isMobile}
+                        changeHandler = {changeHandler}
+                        sliderTimeValue = {sliderTimeValue}
+                        playing = {playing}
+                        playHandler = {playHandler}
+                    ></TimeSlider>
+                </Row>
+            </div>
+        );
+    }
     return (
         <Row style={{ marginTop: '5px' }}>
             <Col>
-                <StyledIcon type="clock-circle" style={{ color: '#d9d9d9', fontSize: '18px' }} />
-                <StyledInput value={timeValue} onChange={inputChangeTime} />
+                <Input timeValue ={timeValue} changeHandler ={changeHandler}></Input>
             </Col>
             <ColFixed>
-                <InputGroup compact>
-                    <StyledPlayButton onClick={clickPlayButton}>
-                        <PlayPauseIcon initial={playing} />
-                    </StyledPlayButton>
-                    <Border>
-                        <StyledTimeSlider marks={marksForTime} min={0} max={MINUTES} style={{ margin: 0 }} value={sliderTimeValue} onChange={changeSliderTime} tooltipVisible={false} />
-                    </Border>
-                </InputGroup>
+                <TimeSlider
+                    isMobile = {isMobile}
+                    changeHandler = {changeHandler}
+                    sliderTimeValue = {sliderTimeValue}
+                    playing = {playing}
+                    playHandler = {playHandler}
+                ></TimeSlider>
             </ColFixed>
             <Col>
-                <StyledSelect defaultValue={speed} style={{ width: '100%' }} size='large' onChange={handleSpeedChange}>
-                    {speedValues.map(speed => (
-                        <Option key={speed.value} value={speed.value}>{speed.label}</Option>
-                    ))}
-                </StyledSelect>
+                <Speed speedHandler={speedHandler} speed={speed}></Speed>
             </Col>
         </Row>
     );
 };
 
 ShadowToolTime.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
     timeValue: PropTypes.string.isRequired,
     sliderTimeValue: PropTypes.number.isRequired,
     changeHandler: PropTypes.func.isRequired,

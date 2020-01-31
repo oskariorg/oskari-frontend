@@ -9,7 +9,8 @@ import moment from 'moment';
  */
 const DAYS = 365;
 
-export const ShadowToolDate = ({ changeHandler, sliderDateValue, dateValue, currentTimeHandler }) => {
+export const ShadowToolDate = props => {
+    const { isMobile, changeHandler, sliderDateValue, dateValue, currentTimeHandler } = props;
     const inputChangeDate = event => {
         const val = event.target.value;
         changeHandler(val);
@@ -23,16 +24,12 @@ export const ShadowToolDate = ({ changeHandler, sliderDateValue, dateValue, curr
 
     const marksForDate = () => {
         const months = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335];
-        const styledMark = {
-            color: '#fff'
-        };
         let i = 0;
         return months.reduce((marks, month) => {
             i++;
             return {
                 ...marks,
                 [month]: {
-                    style: styledMark,
                     label: i
                 }
             };
@@ -50,12 +47,14 @@ export const ShadowToolDate = ({ changeHandler, sliderDateValue, dateValue, curr
     return (
         <Row>
             <Col>
-                <StyledIcon type="calendar" style={{ color: '#d9d9d9', fontSize: '18px' }} />
+                <StyledIcon type="calendar"/>
                 <StyledInput value={dateValue} onChange={inputChangeDate} />
             </Col>
-            <ColFixed>
-                <StyledDateSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} tooltipVisible={false} />
-            </ColFixed>
+            {!isMobile &&
+                <ColFixed>
+                    <StyledDateSlider marks={marksForDate()} min={1} max={DAYS} step={1} value={sliderDateValue} onChange={changeSliderDate} tooltipVisible={false} />
+                </ColFixed>
+            }
             <Col>
                 <StyledButton onClick={setCurrentTime}><Message messageKey={'present'} /></StyledButton>
             </Col>
@@ -64,6 +63,7 @@ export const ShadowToolDate = ({ changeHandler, sliderDateValue, dateValue, curr
 };
 
 ShadowToolDate.propTypes = {
+    isMobile: PropTypes.bool.isRequired,
     changeHandler: PropTypes.func.isRequired,
     sliderDateValue: PropTypes.number.isRequired,
     dateValue: PropTypes.string.isRequired,
