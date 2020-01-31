@@ -617,13 +617,12 @@ class UIHandler extends StateHandler {
 
     handlePermission (checked, role, permission) {
         const layer = this.getState().layer;
+
         role === roleAll
             ? handlePermissionForAllRoles(checked, layer.role_permissions, permission)
-            : handlePermissionForSingleRole(layer.role_permissions[role], permission);
+            : handlePermissionForSingleRole(layer.role_permissions, permission, role);
 
-        this.updateState({
-            layer: layer
-        });
+        this.updateState({ layer });
     }
 }
 
