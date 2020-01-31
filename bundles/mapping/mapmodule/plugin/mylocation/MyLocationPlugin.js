@@ -153,12 +153,13 @@ Oskari.clazz.define(
          */
         _setupRequest: function () {
             const opts = this._trackingOptions;
+            const sb = Oskari.getSandbox();
             if (opts) {
                 if (this._tracking) {
-                    this.getSandbox().postRequestByName('StopUserLocationTrackingRequest');
+                    sb.postRequestByName('StopUserLocationTrackingRequest');
                     this._setTracking(false);
                 } else {
-                    this.getSandbox().postRequestByName('StartUserLocationTrackingRequest', [opts]);
+                    sb.postRequestByName('StartUserLocationTrackingRequest', [opts]);
                     this._setTracking(true);
                 }
             } else if (!this._waiting) {
