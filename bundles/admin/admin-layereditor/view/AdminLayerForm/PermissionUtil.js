@@ -12,7 +12,12 @@ export const handlePermissionForAllRoles = (checked, permissionsForAllRoles, per
     });
 };
 
-export const handlePermissionForSingleRole = (permissionsOfRole, permission) => {
+export const handlePermissionForSingleRole = (permissionsForAllRoles, permission, role) => {
+    let permissionsOfRole = permissionsForAllRoles[role];
+    if (!permissionsOfRole) {
+        permissionsOfRole = [];
+        permissionsForAllRoles[role] = permissionsOfRole;
+    }
     if (permissionsOfRole.includes(permission)) {
         permissionsOfRole.splice(
             permissionsOfRole.indexOf(permission), 1);
