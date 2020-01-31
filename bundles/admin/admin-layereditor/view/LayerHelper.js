@@ -39,9 +39,7 @@ export const getLayerHelper = () => {
             gfi_xslt: layer.gfiXslt,
             gfi_content: layer.gfiContent,
             legend_image: layer.legendImage,
-            capabilities_update_rate_sec: layer.capabilitiesUpdateRate,
-            attributes: toJson(layer.attributes),
-            options: toJson(layer.options)
+            capabilities_update_rate_sec: layer.capabilitiesUpdateRate
         };
         removeTemporaryFields(payload);
         return payload;
