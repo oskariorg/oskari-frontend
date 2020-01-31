@@ -24,7 +24,7 @@ const StyledListItem = styled(ListItem)`
 
 const StyledEditGroup = styled.span`
     padding-right: 20px;
-    padding-bottom: 5px;
+    padding-bottom: 1px;
 `;
 
 const renderLayer = ({ model, even, selected, controller }) => {
