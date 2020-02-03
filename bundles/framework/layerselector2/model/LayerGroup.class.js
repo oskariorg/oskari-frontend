@@ -39,7 +39,7 @@ export class LayerGroup {
      * @return {String}
      */
     getTitle () {
-        return this.name;
+        return this.name || '';
     }
     /**
      * @method addLayer
