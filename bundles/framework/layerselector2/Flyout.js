@@ -303,57 +303,31 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                     // skip published layers
                     return;
                 }
-                if (typeof layer.groupingMethod !== 'function') {
+                if (typeof layer[groupingMethod] !== 'function') {
                     // log "invalid grouping type"?
                     return;
                 }
-                const groupAttr = layer[groupingMethod]();
-                let group = groups[groupAttr];
+                const groupTitle = layer[groupingMethod]();
+                let group = groups[groupTitle];
                 if (!group) {
                     group = Oskari.clazz.create(
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        'generated_' + n, groupingMethod, groupAttr
+                        'generated_' + n, groupingMethod, groupTitle
                     );
-                    groups[groupAttr] = group;
+                    groups[groupTitle] = group;
                 }
                 group.addLayer(layer);
             });
             // sort groups alphabetically by title
-            const sortedGroups = Object.values(groups)
-                .sort((a, b) => Oskari.util.naturalSort(a.getTitle(), b.getTitle()))
-                .forEach(group => {
-                    // sort layers in group alphabetically by name
-                    var layers = group.getLayers()
-                        .sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
-                    group.layers = layers;
-                });
+            let sortedGroups = Object.values(groups)
+                .sort((a, b) => Oskari.util.naturalSort(a.getTitle(), b.getTitle()));
+            // sort layers inside groups alphabetically by name
+            sortedGroups.forEach(group => {
+                var layers = group.getLayers()
+                    .sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
+                group.setLayers(layers);
+            });
             return sortedGroups;
-        },
-
-        /**
-         * @method _layerListComparator
-         * Uses the private property #grouping to sort layer objects in the wanted order for rendering
-         * The #grouping property is the method name that is called on layer objects.
-         * If both layers have same group, they are ordered by layer.getName()
-         * @private
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
-         * @param {String} groupingMethod method name to sort by
-         */
-        _layerListComparator: function (a, b, groupingMethod) {
-            let nameA = a[groupingMethod]().toLowerCase();
-            let nameB = b[groupingMethod]().toLowerCase();
-            if (nameA === nameB && (a.getName() && b.getName())) {
-                nameA = a.getName().toLowerCase();
-                nameB = b.getName().toLowerCase();
-            }
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
         },
 
         /**
