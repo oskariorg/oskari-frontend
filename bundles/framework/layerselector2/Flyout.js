@@ -292,7 +292,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         /**
          * @method _getLayerGroups
-         * @param layers Gather groups from layer list. Grouping method is a 
+         * @param layers Gather groups from layer list
          * @param groupingMethod function name on layer objects to get the name for group
          * @private
          */
