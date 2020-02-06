@@ -295,36 +295,30 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @private
          */
         _getLayerGroups: function (layers, groupingMethod) {
-            var me = this,
-                groupList = [],
-                group = null,
-                n,
-                layer,
-                groupAttr;
+            var me = this;
+            const groups = {};
 
             // sort layers by grouping & name
             layers.sort(function (a, b) {
                 return me._layerListComparator(a, b, groupingMethod);
             });
-
-            for (n = 0; n < layers.length; n += 1) {
-                layer = layers[n];
-                if (layer.getMetaType && layer.getMetaType() === 'published') {
+            layers.forEach((layer, n) => {
+                if (typeof layer.getMetaType === 'function' && layer.getMetaType() === 'published') {
                     // skip published layers
-                    continue;
+                    return;
                 }
-                groupAttr = layer[groupingMethod]();
-                if (!group || group.getTitle() !== groupAttr) {
+                let groupAttr = layer[groupingMethod]();
+                let group = groups[groupAttr];
+                if (!group) {
                     group = Oskari.clazz.create(
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        groupAttr
+                        'generated_' + n, groupingMethod, groupAttr
                     );
-                    groupList.push(group);
+                    groups[groupAttr] = group;
                 }
-
                 group.addLayer(layer);
-            }
-            var sortedGroupList = jQuery.grep(groupList, function (group, index) {
+            });
+            var sortedGroupList = jQuery.grep(Object.values(groups), function (group) {
                 return group.getLayers().length > 0;
             });
             return sortedGroupList;
@@ -341,8 +335,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
          * @param {String} groupingMethod method name to sort by
          */
         _layerListComparator: function (a, b, groupingMethod) {
-            var nameA = a[groupingMethod]().toLowerCase(),
-                nameB = b[groupingMethod]().toLowerCase();
+            let nameA = a[groupingMethod]().toLowerCase();
+            let nameB = b[groupingMethod]().toLowerCase();
             if (nameA === nameB && (a.getName() && b.getName())) {
                 nameA = a.getName().toLowerCase();
                 nameB = b.getName().toLowerCase();
