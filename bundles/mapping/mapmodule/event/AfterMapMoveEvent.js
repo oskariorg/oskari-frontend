@@ -75,14 +75,19 @@ Oskari.clazz.define('Oskari.mapframework.event.common.AfterMapMoveEvent',
         },
 
         getParams: function () {
-            var me = this;
-            return {
-                centerX: me._centerX,
-                centerY: me._centerY,
-                zoom: me._zoom,
-                scale: me._scale,
-                camera: me._camera
+            const rpcPayload = {
+                centerX: this.getCenterX(),
+                centerY: this.getCenterY(),
+                zoom: this.getZoom(),
+                scale: this.getScale()
             };
+            const cam = this.getCamera();
+            if (cam) {
+                // only attach camera info if it is available (=~ using 3D mapmodule)
+                rpcPayload.camera = cam;
+            }
+
+            return rpcPayload;
         }
     }, {
         /**
