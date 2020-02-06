@@ -292,22 +292,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         /**
          * @method _getLayerGroups
+         * @param layers Gather groups from layer list. Grouping method is a 
+         * @param groupingMethod function name on layer objects to get the name for group
          * @private
          */
-        _getLayerGroups: function (layers, groupingMethod) {
-            var me = this;
+        _getLayerGroups: function (layers = [], groupingMethod) {
             const groups = {};
-
-            // sort layers by grouping & name
-            layers.sort(function (a, b) {
-                return me._layerListComparator(a, b, groupingMethod);
-            });
             layers.forEach((layer, n) => {
                 if (typeof layer.getMetaType === 'function' && layer.getMetaType() === 'published') {
                     // skip published layers
                     return;
                 }
-                let groupAttr = layer[groupingMethod]();
+                if (typeof layer.groupingMethod !== 'function') {
+                    // log "invalid grouping type"?
+                    return;
+                }
+                const groupAttr = layer[groupingMethod]();
                 let group = groups[groupAttr];
                 if (!group) {
                     group = Oskari.clazz.create(
@@ -318,10 +318,9 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
                 group.addLayer(layer);
             });
-            var sortedGroupList = jQuery.grep(Object.values(groups), function (group) {
+            return Object.values(groups).filter(group => {
                 return group.getLayers().length > 0;
             });
-            return sortedGroupList;
         },
 
         /**
