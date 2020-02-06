@@ -292,68 +292,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
 
         /**
          * @method _getLayerGroups
+         * @param layers Gather groups from layer list
+         * @param groupingMethod function name on layer objects to get the name for group
          * @private
          */
-        _getLayerGroups: function (layers, groupingMethod) {
-            var me = this,
-                groupList = [],
-                group = null,
-                n,
-                layer,
-                groupAttr;
-
-            // sort layers by grouping & name
-            layers.sort(function (a, b) {
-                return me._layerListComparator(a, b, groupingMethod);
-            });
-
-            for (n = 0; n < layers.length; n += 1) {
-                layer = layers[n];
-                if (layer.getMetaType && layer.getMetaType() === 'published') {
+        _getLayerGroups: function (layers = [], groupingMethod) {
+            const groups = {};
+            layers.forEach((layer, n) => {
+                if (typeof layer.getMetaType === 'function' && layer.getMetaType() === 'published') {
                     // skip published layers
-                    continue;
+                    return;
                 }
-                groupAttr = layer[groupingMethod]();
-                if (!group || group.getTitle() !== groupAttr) {
+                if (typeof layer[groupingMethod] !== 'function') {
+                    // log "invalid grouping type"?
+                    return;
+                }
+                const groupTitle = layer[groupingMethod]();
+                let group = groups[groupTitle];
+                if (!group) {
                     group = Oskari.clazz.create(
                         'Oskari.mapframework.bundle.layerselector2.model.LayerGroup',
-                        groupAttr
+                        'generated_' + n, groupingMethod, groupTitle
                     );
-                    groupList.push(group);
+                    groups[groupTitle] = group;
                 }
-
                 group.addLayer(layer);
-            }
-            var sortedGroupList = jQuery.grep(groupList, function (group, index) {
-                return group.getLayers().length > 0;
             });
-            return sortedGroupList;
-        },
-
-        /**
-         * @method _layerListComparator
-         * Uses the private property #grouping to sort layer objects in the wanted order for rendering
-         * The #grouping property is the method name that is called on layer objects.
-         * If both layers have same group, they are ordered by layer.getName()
-         * @private
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} a comparable layer 1
-         * @param {Oskari.mapframework.domain.WmsLayer/Oskari.mapframework.domain.WfsLayer/Oskari.mapframework.domain.VectorLayer/Object} b comparable layer 2
-         * @param {String} groupingMethod method name to sort by
-         */
-        _layerListComparator: function (a, b, groupingMethod) {
-            var nameA = a[groupingMethod]().toLowerCase(),
-                nameB = b[groupingMethod]().toLowerCase();
-            if (nameA === nameB && (a.getName() && b.getName())) {
-                nameA = a.getName().toLowerCase();
-                nameB = b.getName().toLowerCase();
-            }
-            if (nameA < nameB) {
-                return -1;
-            }
-            if (nameA > nameB) {
-                return 1;
-            }
-            return 0;
+            // sort groups alphabetically by title
+            let sortedGroups = Object.values(groups)
+                .sort((a, b) => Oskari.util.naturalSort(a.getTitle(), b.getTitle()));
+            // sort layers inside groups alphabetically by name
+            sortedGroups.forEach(group => {
+                var layers = group.getLayers()
+                    .sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
+                group.setLayers(layers);
+            });
+            return sortedGroups;
         },
 
         /**
