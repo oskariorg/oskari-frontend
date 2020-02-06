@@ -318,6 +318,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
                 group.addLayer(layer);
             });
+            // Groups without layers shouldn't happen because groups are gathered _FROM_ layers
+            // Don't know why this would be checked here.
             return Object.values(groups).filter(group => {
                 return group.getLayers().length > 0;
             });
