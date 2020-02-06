@@ -318,11 +318,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerselector2.Flyout',
                 }
                 group.addLayer(layer);
             });
-            // Groups without layers shouldn't happen because groups are gathered _FROM_ layers
-            // Don't know why this would be checked here.
-            return Object.values(groups).filter(group => {
-                return group.getLayers().length > 0;
-            });
+            // sort groups alphabetically by title
+            const sortedGroups = Object.values(groups)
+                .sort((a, b) => Oskari.util.naturalSort(a.getTitle(), b.getTitle()))
+                .forEach(group => {
+                    // sort layers in group alphabetically by name
+                    var layers = group.getLayers()
+                        .sort((a, b) => Oskari.util.naturalSort(a.getName(), b.getName()));
+                    group.layers = layers;
+                });
+            return sortedGroups;
         },
 
         /**
