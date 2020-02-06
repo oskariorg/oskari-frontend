@@ -67,6 +67,9 @@ export class LayerGroup {
     getLayers () {
         return this.layers;
     }
+    setLayers (newLayers = []) {
+        this.layers = newLayers;
+    }
     _getSearchIndex (layer) {
         var val = layer.getName() + ' ' +
             layer.getInspireName() + ' ' +
