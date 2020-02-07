@@ -3,7 +3,7 @@ import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
-import { handlePermissionForAllRoles, handlePermissionForSingleRole, roleAll } from './PermissionUtil';
+import { handlePermissionForAllRoles, handlePermissionForSingleRole } from './PermissionUtil';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 const DEFAULT_TAB = 'general';
@@ -82,7 +82,11 @@ class UIHandler extends StateHandler {
         }
         const found = capabilities.layers[name];
         if (found) {
-            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found });
+            const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+            const updateLayer = this.layerHelper.fromServer({ ...layer, ...found }, {
+                preserve: ['capabilities'],
+                roles: typesAndRoles.roles
+            });
             this.updateState({
                 layer: updateLayer,
                 propertyFields: this.getPropertyFields(updateLayer)
@@ -313,8 +317,9 @@ class UIHandler extends StateHandler {
         this.updateState({ tab });
     }
     resetLayer () {
+        const typesAndRoles = this.getRolesAndPermissionTypes() || {};
         this.updateState({
-            layer: this.layerHelper.createEmpty(),
+            layer: this.layerHelper.createEmpty(typesAndRoles.roles),
             capabilities: {},
             versions: [],
             propertyFields: [],
@@ -363,8 +368,10 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
+            const typesAndRoles = this.getRolesAndPermissionTypes() || {};
             const { capabilities, ...layer } = this.layerHelper.fromServer(json, {
-                preserve: ['capabilities']
+                preserve: ['capabilities'],
+                roles: typesAndRoles.roles
             });
             if (layer.warn) {
                 // currently only option for warning on this is "updateCapabilitiesFail"
@@ -408,12 +415,15 @@ class UIHandler extends StateHandler {
             // FIXME: layer data will be the same as for editing == admin data
             // To get the layer json for "end-user" frontend for creating
             // an AbstractLayer-based model -> make another request to get that JSON.
+            alert('Reload page - Work in progress...');
+            /*
             if (layer.id) {
                 data.groups = layer.groups;
                 this.updateLayer(layer.id, data);
             } else {
                 this.createlayer(data);
             }
+            */
         }).catch(error => this.log.error(error));
     }
 
@@ -588,7 +598,10 @@ class UIHandler extends StateHandler {
                 }
             }).then(data => {
                 this.loadingCount--;
+                const currentLayer = this.getState().layer;
+                this.layerHelper.initPermissionsForLayer(currentLayer, data.roles);
                 this.updateState({
+                    currentLayer,
                     loading: this.isLoading(),
                     rolesAndPermissionTypes: data
                 });
@@ -614,20 +627,22 @@ class UIHandler extends StateHandler {
     clearCredentialsCollapse () {
         this.updateState({ credentialsCollapseOpen: false });
     }
-
-    handlePermission (checked, role, permission) {
+    setPermissionForAll (permission, enabled) {
         const layer = this.getState().layer;
-
-        role === roleAll
-            ? handlePermissionForAllRoles(checked, layer.role_permissions, permission)
-            : handlePermissionForSingleRole(layer.role_permissions, permission, role);
+        handlePermissionForAllRoles(enabled, layer.role_permissions, permission);
+        this.updateState({ layer });
+    }
+    togglePermission (role, permission) {
+        const layer = this.getState().layer;
+        handlePermissionForSingleRole(layer.role_permissions, permission, role);
 
         this.updateState({ layer });
     }
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'handlePermission',
+    'setPermissionForAll',
+    'togglePermission',
     'layerSelected',
     'versionSelected',
     'setAttributes',
