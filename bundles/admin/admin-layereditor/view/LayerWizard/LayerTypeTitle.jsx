@@ -8,7 +8,8 @@ export const LayerTypeTitle = ({ layer, LabelComponent }) => (
         <Message messageKey='wizard.type' LabelComponent={LabelComponent} />
         { layer.type &&
             <Fragment>
-                <span>:</span><div>{layer.type}</div>
+                <span>:</span>
+                <div><Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} /></div>
             </Fragment>
         }
     </Fragment>
