@@ -12,6 +12,16 @@ Oskari.registerLocalization(
                 "layersDescription": "Valitse rajapinnasta löytyvistä tasoista se jonka haluat lisätä karttatasoksi",
                 "details": "Tason tiedot"
             },
+            "layertype": {
+                "wmslayer": "WMS",
+                "wmtslayer": "WMTS",
+                "wfslayer": "WFS/OAPIF",
+                "arcgislayer": "ArcGIS cache",
+                "arcgis93layer": "ArcGIS Rest",
+                "vectortilelayer": "Mapbox vektoritiili",
+                "tiles3dlayer": "Cesium 3D Tiles",
+                "bingmapslayer": "Bing"
+            },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
             "generalTabTitle": "Yleiset",

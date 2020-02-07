@@ -12,6 +12,16 @@ Oskari.registerLocalization(
                 "layersDescription": "These are the layers that are available in the service. Please select one to add as a map layer",
                 "details": "Map layer details"
             },
+            "layertype": {
+                "wmslayer": "WMS",
+                "wmtslayer": "WMTS",
+                "wfslayer": "WFS/OAPIF",
+                "arcgislayer": "ArcGIS cache",
+                "arcgis93layer": "ArcGIS Rest",
+                "vectortilelayer": "Mapbox vector tiles",
+                "tiles3dlayer": "Cesium 3D Tiles",
+                "bingmapslayer": "Bing"
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",
