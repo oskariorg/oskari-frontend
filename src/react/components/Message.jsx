@@ -31,13 +31,20 @@ const Label = styled('div')`
  *     <Message messageKey="hello" messageArgs={['Jack']}/>
  * </LocaleProvider>
  */
-const Message = ({ bundleKey, messageKey, messageArgs, getMessage, children, LabelComponent = Label }) => {
+const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, children, LabelComponent = Label }) => {
     if (!messageKey) {
         return null;
     }
-    const message = typeof getMessage === 'function'
-        ? getMessage(messageKey, messageArgs)
-        : Oskari.getMsg(bundleKey, messageKey, messageArgs);
+    let message = messageKey;
+    if (typeof getMessage === 'function') {
+        message = getMessage(messageKey, messageArgs);
+    } else {
+        message = Oskari.getMsg(bundleKey, messageKey, messageArgs);
+    }
+    // If we didn't find localization AND we have default value -> use it
+    if (message === messageKey && defaultMsg) {
+        message = defaultMsg;
+    }
     return (
         <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
             { message }
@@ -48,6 +55,7 @@ const Message = ({ bundleKey, messageKey, messageArgs, getMessage, children, Lab
 Message.propTypes = {
     bundleKey: PropTypes.string.isRequired,
     messageKey: PropTypes.string,
+    defaultMsg: PropTypes.string,
     messageArgs: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number])),
     getMessage: PropTypes.func,
     children: PropTypes.node,
