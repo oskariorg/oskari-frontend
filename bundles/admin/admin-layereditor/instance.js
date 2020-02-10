@@ -357,33 +357,36 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 });
             });
-            this.themeFlyout.setDeleteAction((id, deleteLayers) => {
-                const me = this;
-                this.themeFlyout.setLoading(true);
-                jQuery.ajax({
-                    type: 'DELETE',
-                    url: Oskari.urls.getRoute('MapLayerGroups', { id: id, deleteLayers: deleteLayers }),
-                    success: response => {
-                        this.themeFlyout.setLoading(false);
-                        this.themeFlyout.hide();
-                        this._getLayerService().deleteLayerGroup(response.id, response.parentId, deleteLayers);
-                        // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.deleteSuccess'));
-                        dialog.fadeout();
-                    },
-                    error: (jqXHR, textStatus, errorThrown) => {
-                        this.themeFlyout.setLoading(false);
-                        // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.deleteFailed'));
-                        dialog.fadeout();
-                        // Log error
-                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
-                        Oskari.log('admin-layereditor').error(errorText);
-                    }
+            if (id) {
+                // only add a delete action if we have something to delete
+                this.themeFlyout.setDeleteAction((id, deleteLayers) => {
+                    const me = this;
+                    this.themeFlyout.setLoading(true);
+                    jQuery.ajax({
+                        type: 'DELETE',
+                        url: Oskari.urls.getRoute('MapLayerGroups', { id: id, deleteLayers: deleteLayers }),
+                        success: response => {
+                            this.themeFlyout.setLoading(false);
+                            this.themeFlyout.hide();
+                            this._getLayerService().deleteLayerGroup(response.id, response.parentId, deleteLayers);
+                            // Inform user with popup
+                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            dialog.show(' ', me.loc('messages.deleteSuccess'));
+                            dialog.fadeout();
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            this.themeFlyout.setLoading(false);
+                            // Inform user with popup
+                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            dialog.show(' ', me.loc('messages.deleteFailed'));
+                            dialog.fadeout();
+                            // Log error
+                            const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                            Oskari.log('admin-layereditor').error(errorText);
+                        }
+                    });
                 });
-            });
+            }
             return this.themeFlyout;
         }
 
@@ -459,33 +462,36 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                     }
                 });
             });
-            this.dataProviderFlyout.setDeleteAction((id, deleteLayers) => {
-                const me = this;
-                this.dataProviderFlyout.setLoading(true);
-                jQuery.ajax({
-                    type: 'DELETE',
-                    url: Oskari.urls.getRoute('DataProvider', { id: id, deleteLayers: deleteLayers }),
-                    success: response => {
-                        this.dataProviderFlyout.setLoading(false);
-                        this.dataProviderFlyout.hide();
-                        this._getLayerService().deleteDataProvider(response, deleteLayers);
-                        // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.deleteSuccess'));
-                        dialog.fadeout();
-                    },
-                    error: (jqXHR, textStatus, errorThrown) => {
-                        this.dataProviderFlyout.setLoading(false);
-                        // Inform user with popup
-                        const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        dialog.show(' ', me.loc('messages.deleteFailed'));
-                        dialog.fadeout();
-                        // Log error
-                        const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
-                        Oskari.log('admin-layereditor').error(errorText);
-                    }
+            if (id) {
+                // only add a delete action if we have something to delete
+                this.dataProviderFlyout.setDeleteAction((id, deleteLayers) => {
+                    const me = this;
+                    this.dataProviderFlyout.setLoading(true);
+                    jQuery.ajax({
+                        type: 'DELETE',
+                        url: Oskari.urls.getRoute('DataProvider', { id: id, deleteLayers: deleteLayers }),
+                        success: response => {
+                            this.dataProviderFlyout.setLoading(false);
+                            this.dataProviderFlyout.hide();
+                            this._getLayerService().deleteDataProvider(response, deleteLayers);
+                            // Inform user with popup
+                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            dialog.show(' ', me.loc('messages.deleteSuccess'));
+                            dialog.fadeout();
+                        },
+                        error: (jqXHR, textStatus, errorThrown) => {
+                            this.dataProviderFlyout.setLoading(false);
+                            // Inform user with popup
+                            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                            dialog.show(' ', me.loc('messages.deleteFailed'));
+                            dialog.fadeout();
+                            // Log error
+                            const errorText = Oskari.util.getErrorTextFromAjaxFailureObjects(jqXHR, errorThrown);
+                            Oskari.log('admin-layereditor').error(errorText);
+                        }
+                    });
                 });
-            });
+            }
             return this.dataProviderFlyout;
         }
     }

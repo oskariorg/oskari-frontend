@@ -67,6 +67,7 @@ export class LocalizingFlyout extends ExtraFlyout {
             <LocaleProvider value={{ bundleKey: this.instance.getName() }}>
                 <LocalizedContent { ...this.uiHandler.getState() }
                     controller={controller}
+                    isNew={!this.id}
                     deleteMapLayersText={this.deleteMapLayersText}
                     layerCountInGroup={this.layerCountInGroup}/>
             </LocaleProvider>
@@ -167,8 +168,7 @@ const Buttons = styled('div')`
 const DeleteLayersCheckbox = styled(Checkbox)`
     padding-top: 15px;
 `;
-
-const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
+const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller, isNew, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
     const Component = (
         <Container>
             <Header>
@@ -189,25 +189,13 @@ const LocalizedContent = ({ loading, labels, value, headerMessageKey, controller
                 <Button onClick={() => controller.cancel()}>
                     <Message messageKey='cancel'/>
                 </Button>
-                <Confirm
-                    title={<React.Fragment>
-                        <div>
-                            <Message messageKey='messages.confirmDeleteGroup'/>
-                        </div>
-                        { layerCountInGroup > 0 &&
-                            <DeleteLayersCheckbox checked={deleteLayers} onChange={ evt => controller.setDeleteLayers(evt.target.checked)}>
-                                {deleteMapLayersText + ' (' + layerCountInGroup + ')'}
-                            </DeleteLayersCheckbox>
-                        }
-                    </React.Fragment>}
-                    onConfirm={() => controller.delete()}
-                    okText={<Message messageKey='ok'/>}
-                    cancelText={<Message messageKey='cancel'/>}
-                    placement='bottomLeft'>
-                    <Button>
-                        <Message messageKey='delete'/>
-                    </Button>
-                </Confirm>
+                { !isNew &&
+                <DeleteButton
+                    controller={controller}
+                    deleteMapLayersText={deleteMapLayersText}
+                    layerCountInGroup={layerCountInGroup}
+                    deleteLayers={deleteLayers} />
+                }
                 <Button onClick={() => controller.save()} type='primary'>
                     <Message messageKey='save'/>
                 </Button>
@@ -223,6 +211,35 @@ LocalizedContent.propTypes = {
     loading: PropTypes.bool,
     labels: PropTypes.object,
     value: PropTypes.object,
+    isNew: PropTypes.bool,
     headerMessageKey: PropTypes.string,
+    controller: PropTypes.instanceOf(Controller)
+};
+
+const DeleteButton = ({ controller, deleteMapLayersText, layerCountInGroup, deleteLayers }) => {
+    return (<Confirm
+        title={<React.Fragment>
+            <div>
+                <Message messageKey='messages.confirmDeleteGroup'/>
+            </div>
+            { layerCountInGroup > 0 &&
+                <DeleteLayersCheckbox checked={deleteLayers} onChange={ evt => controller.setDeleteLayers(evt.target.checked)}>
+                    {deleteMapLayersText + ' (' + layerCountInGroup + ')'}
+                </DeleteLayersCheckbox>
+            }
+        </React.Fragment>}
+        onConfirm={() => controller.delete()}
+        okText={<Message messageKey='ok'/>}
+        cancelText={<Message messageKey='cancel'/>}
+        placement='bottomLeft'>
+        <Button>
+            <Message messageKey='delete'/>
+        </Button>
+    </Confirm>);
+};
+DeleteButton.propTypes = {
+    deleteMapLayersText: PropTypes.string,
+    layerCountInGroup: PropTypes.number,
+    deleteLayers: PropTypes.bool,
     controller: PropTypes.instanceOf(Controller)
 };
