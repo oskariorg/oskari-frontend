@@ -17,11 +17,17 @@ export const getLayerHelper = () => {
      */
     const fromServer = (layer, options = {}) => {
         const transformed = {
-            ...layer,
-            attributes: layer.attributes || {},
-            options: layer.options || {}
+            groups: [],
+            attributes: {},
+            options: {},
+            ...layer
         };
+        // map keys from server response to clients expected keys
         Object.keys(APIMapping).forEach(key => {
+            if (!layer[key]) {
+                // server response didn't have the key - nothing needs to be done
+                return;
+            }
             // map keys to ones expected by the frontend
             const frontendKey = APIMapping[key];
             transformed[frontendKey] = layer[key];
@@ -35,11 +41,17 @@ export const getLayerHelper = () => {
             removeKeys = removeKeys.filter(key => !options.preserve.includes(key));
         }
         removeKeys.forEach(key => delete transformed[key]);
+
+        // remove "unset" values like dataproviderId
+        Object.keys(transformed).forEach(key => {
+            if (transformed[key] === -1) {
+                delete transformed[key];
+            }
+        });
         return transformed;
     };
 
     const toServer = layer => {
-        // Remove role 'all' from permissions as this was only used for UI state handling purposes
         const payload = {
             ...layer
         };
@@ -127,6 +139,12 @@ export const getLayerHelper = () => {
         });
         return styleJson;
     };
+
+    /**
+     * @method initPermissionsForLayer
+     * @param {Object} layer data that will be enhanced with permissions data
+     * @param {Object[]} roles array of objects with name key as roles available for the user to see
+     */
     const initPermissionsForLayer = (layer = {}, roles = []) => {
         if (!layer.role_permissions) {
             layer.role_permissions = {};
