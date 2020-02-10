@@ -53,13 +53,20 @@ LayerCapabilitiesListing.propTypes = {
  * @returns array of objects for rendering and including the original layer data
  */
 const prepareData = (capabilities) => {
-    return Object.values(capabilities.layers).map(layer => {
+    // init empty fields for possibly missing information
+    const data = {
+        layersWithErrors: [],
+        unsupportedLayers: [],
+        existingLayers: {},
+        ...capabilities
+    };
+    return Object.values(data.layers).map(layer => {
         return {
             title: layer.locale[Oskari.getLang()].name,
             name: layer.name,
-            isProblematic: !!capabilities.layersWithErrors.includes(layer.name),
-            isUnsupported: !!capabilities.unsupportedLayers.includes(layer.name),
-            isExisting: !!capabilities.existingLayers[layer.name],
+            isProblematic: !!data.layersWithErrors.includes(layer.name),
+            isUnsupported: !!data.unsupportedLayers.includes(layer.name),
+            isExisting: !!data.existingLayers[layer.name],
             layer
         };
     });
