@@ -114,6 +114,8 @@ Oskari.registerLocalization(
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
             "validation": {
+                "dataprovider": "Dataprovider is mandatory.",
+                "nopermissions": "Layer doesn't have any permissions.",
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",

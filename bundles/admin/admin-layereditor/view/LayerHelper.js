@@ -42,7 +42,7 @@ export const getLayerHelper = () => {
         }
         removeKeys.forEach(key => delete transformed[key]);
 
-        // remove "unset" values like dataproviderId
+        // remove "unset" values like dataproviderId is always -1 for new layers
         Object.keys(transformed).forEach(key => {
             if (transformed[key] === -1) {
                 delete transformed[key];

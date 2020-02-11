@@ -390,6 +390,10 @@ class UIHandler extends StateHandler {
     saveLayer () {
         const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
+            // TODO: formatting message and message duration
+            Messaging.error(<ul>{ validationErrorMessages
+                .map(msg => <li key={msg}>{msg}</li>)}
+            </ul>);
             return;
         }
         // Take a copy
@@ -415,7 +419,8 @@ class UIHandler extends StateHandler {
             // FIXME: layer data will be the same as for editing == admin data
             // To get the layer json for "end-user" frontend for creating
             // an AbstractLayer-based model -> make another request to get that JSON.
-            alert('Reload page - Work in progress...');
+            Messaging.warn('Reload page to see changes for end user - Work in progress...');
+            this.fetchLayer(data.id);
             /*
             if (layer.id) {
                 data.groups = layer.groups;
@@ -451,6 +456,12 @@ class UIHandler extends StateHandler {
 
     validateUserInputValues (layer) {
         const validationErrors = [];
+        if (!layer.dataProviderId || layer.dataProviderId === -1) {
+            validationErrors.push(getMessage('validation.dataprovider'));
+        }
+        if (!this.hasAnyPermissions(layer.role_permissions)) {
+            validationErrors.push(getMessage('validation.nopermissions'));
+        }
         this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);
@@ -458,6 +469,12 @@ class UIHandler extends StateHandler {
         this.validateJsonValue(layer.tempAttributionsJSON, 'validation.attributions', validationErrors);
         this.validateJsonValue(layer.tempTileGridJSON, 'validation.tileGrid', validationErrors);
         return validationErrors;
+    }
+
+    hasAnyPermissions (permissions = {}) {
+        return Object.keys(permissions).filter(role => {
+            return (permissions[role] || []).length > 0;
+        }).length > 0;
     }
 
     validateJsonValue (value, msgKey, validationErrors) {
