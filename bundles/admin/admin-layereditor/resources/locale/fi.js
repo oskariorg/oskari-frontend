@@ -114,6 +114,8 @@ Oskari.registerLocalization(
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
             "validation": {
+                "dataprovider": "Tiedontuottaja on pakollinen tieto.",
+                "nopermissions": "Tasolle ei ole asetettu oikeuksia",
                 "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
                 "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
