@@ -14,7 +14,7 @@ export const DataProvider = ({ layer, dataProviders, controller }) => (
                 value={layer.dataProviderId}
                 onChange={value => controller.setDataProviderId(value)}>
                 { dataProviders.map(dataProvider =>
-                    <Option key={dataProvider.id}>{dataProvider.name}</Option>
+                    <Option value={dataProvider.id} key={dataProvider.id}>{dataProvider.name}</Option>
                 )}
             </Select>
         </StyledFormField>
