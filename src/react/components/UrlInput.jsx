@@ -88,11 +88,11 @@ export class UrlInput extends React.Component {
                         <Panel header={credentials.panelText} key='usernameAndPassword'>
                             <div>
                                 {credentials.usernameText}
-                                <div><TextInput value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
+                                <div><TextInput autoComplete='off' value={credentials.usernameValue} type='text' onChange={(evt) => credentials.usernameOnChange(evt.target.value)} /></div>
                             </div>
                             <div>
                                 {credentials.passwordText}
-                                <div><TextInput value={credentials.passwordValue} type='password' onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
+                                <div><TextInput autoComplete='off' value={credentials.passwordValue} type='password' onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
                             </div>
                         </Panel>
                     </Collapse>
