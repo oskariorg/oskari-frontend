@@ -1,5 +1,9 @@
 import olView from 'ol/View';
 import olControlOverviewMap from 'ol/control/OverviewMap';
+import olLayerTile from 'ol/layer/Tile';
+import olLayerImage from 'ol/layer/Image';
+import olLayerVector from 'ol/layer/Vector';
+import olLayerVectorTile from 'ol/layer/VectorTile';
 
 /**
  * @class Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin
@@ -25,11 +29,14 @@ Oskari.clazz.define(
         me._index = 5;
         me._name = 'IndexMapPlugin';
         me._indexMap = null;
+        me._baseLayerId = null;
         me._indElement = null;
-        // FIXME a more generic filename or get it from config...
-        me._indexMapUrl = '/mapping/mapmodule/resources/images/suomi25m_tm35fin.png';
     },
     {
+        _stopPluginImpl: function () {
+            this._removeIndexMap();
+            this.teardownUI();
+        },
         /**
          * @private @method _createControlElement
          * Constructs/initializes the indexmap  control for the map.
@@ -60,67 +67,86 @@ Oskari.clazz.define(
 
             // add toggle functionality to button
             me._bindIcon(toggleButton);
+            this._createIndexMap();
             return el;
         },
 
         _bindIcon: function (icon) {
-            var me = this;
-
             icon.off('click');
-            icon.on('click', function (event) {
-                // Add index map control - remove old one
-                if (!me._indexMap || me._indexMap.getCollapsed()) {
-                    // get/Set only base layer to index map
-                    var layer = me.getMapModule().getBaseOLMapLayer();
-                    if (layer) {
-                        if (typeof layer.createIndexMapLayer === 'function') {
-                            // this is used for statslayer to create a copied layer as indexmap
-                            // as using it directly results in weird behavior:
-                            // - the normal map not refreshing on move after indexmap is opened
-                            // - in some cases indexmap + normal map going to an infinite update-loop when zooming out
-                            layer = layer.createIndexMapLayer();
-                        }
-                        var controlOptions = {
-                            target: me._indElement[0],
-                            layers: [ layer ],
-                            view: new olView({
-                                center: me.getMap().getView().getCenter(),
-                                projection: me.getMap().getView().getProjection(),
-                                zoom: me.getMap().getView().getZoom()
-                            })
-                        };
-                        // initialize control, pass container
-                        if (me._indexMap) {
-                            me.getMap().removeControl(me._indexMap);
-                        }
-                        me._indexMap = new olControlOverviewMap(controlOptions);
-                        me._indexMap.setCollapsible(true);
-                        me.getMap().addControl(me._indexMap);
-                        me._indexMap.setCollapsed(false);
-                    }
-                } else {
-                    me._indexMap.setCollapsed(true);
-                }
+            icon.on('click', () => {
+                this._handleClick();
             });
         },
-
         /**
-         * @method _createEventHandlers
-         * Create eventhandlers.
+         * @method _getOverviewLayers
+         * Creates copy of base layer with same source.
          *
-         *
-         * @return {Object.<string, Function>} EventHandlers
+         * @return {Array<ol/layer/Layer>} returns empty array if no layers available
          */
-        _createEventHandlers: function () {
-            var me = this;
-
-            return {
-                AfterMapMoveEvent: function (event) {
-                    if (me._indexMap && (event.getCreator() !== me.getClazz())) {
-                        me._indexMap.render();
-                    }
+        _getOverviewLayers: function () {
+            const result = [];
+            const mapmodule = this.getMapModule();
+            const layer = mapmodule.getBaseLayer();
+            if (!layer) return result;
+            const layerId = layer.getId();
+            const olLayer = mapmodule.getOLMapLayers(layerId);
+            if (!Array.isArray(olLayer)) return result;
+            olLayer.forEach(l => {
+                const source = l.getSource();
+                if (l instanceof olLayerTile) {
+                    result.push(new olLayerTile({ source }));
+                } else if (l instanceof olLayerImage) {
+                    result.push(new olLayerImage({ source }));
+                } else if (l instanceof olLayerVector) {
+                    result.push(new olLayerVector({
+                        source,
+                        style: l.getStyle()
+                    }));
+                } else if (l instanceof olLayerVectorTile) {
+                    result.push(new olLayerVectorTile({
+                        source,
+                        style: l.getStyle()
+                    }));
                 }
-            };
+            });
+            this._baseLayerId = layerId;
+            return result;
+        },
+        _createIndexMap: function (collapsed = true) {
+            if (this._indexMap) return;
+            const olMap = this.getMap();
+            const projection = olMap.getView().getProjection();
+            this._indexMap = new olControlOverviewMap({
+                target: this._indElement[0],
+                layers: this._getOverviewLayers(),
+                collapsed,
+                view: new olView({ projection })
+            });
+            olMap.addControl(this._indexMap);
+        },
+        _removeIndexMap: function () {
+            if (!this._indexMap) return;
+            this.getMap().removeControl(this._indexMap);
+            this._baseLayerId = null;
+            this._indexMap = null;
+        },
+        _handleClick: function () {
+            if (!this._indexMap) {
+                this._createIndexMap(false);
+                return;
+            }
+            if (this._indexMap.getCollapsed()) {
+                const baseLayer = this.getMapModule().getBaseLayer();
+                if (!baseLayer || this._baseLayerId === baseLayer.getId()) {
+                    this._indexMap.setCollapsed(false);
+                    return;
+                }
+                // base layer changed, create new index map
+                this._removeIndexMap();
+                this._createIndexMap(false);
+            } else {
+                this._indexMap.setCollapsed(true);
+            }
         },
         changeToolStyle: function (style, div) {
             var el = div || this.getElement();
@@ -138,7 +164,11 @@ Oskari.clazz.define(
             el.addClass('toolstyle-' + (style || 'default'));
         },
         _setLayerToolsEditModeImpl: function () {
-            var icon = this.getElement().find('.indexmapToggle');
+            const el = this.getElement();
+            if (!el) {
+                return;
+            }
+            var icon = el.find('.indexmapToggle');
 
             if (this.inLayerToolsEditMode()) {
                 // close map
