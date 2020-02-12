@@ -2480,17 +2480,6 @@ Oskari.clazz.define(
             });
             if (layer) return layer;
             return selectedLayers.find(l => l.isVisible());
-        },
-        /**
-         * Get 1st visible ol image layer.
-         * fallback to first visible ol layer
-         * @returns {ol/layer/Layer} null if not found
-         */
-        getBaseOLMapLayer: function () {
-            const layer = this.getBaseLayer();
-            if (!layer) return null;
-            const olLayers = this.getOLMapLayers(layer.getId());
-            return olLayers && olLayers.length > 0 ? olLayers[0] : null;
         }
         /* --------------- /MAP LAYERS ------------------------ */
     }, {
