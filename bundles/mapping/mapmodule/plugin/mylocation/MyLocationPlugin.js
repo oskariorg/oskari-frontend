@@ -22,6 +22,7 @@ Oskari.clazz.define(
         me._name = 'MyLocationPlugin';
         this.loc = Oskari.getMsg.bind(null, 'MapModule');
         me._dialog = null;
+        me._defaultIconCls = null;
         me._mobileDefs = {
             buttons: {
                 'mobile-my-location': {
@@ -44,7 +45,6 @@ Oskari.clazz.define(
         this._timeouts = 0; // timeouts for single location request
         this._tracking = false;
         this._trackingOptions = null;
-        this._handleStartMode();
     }, {
         /**
          * @private @method _createControlElement
@@ -101,8 +101,8 @@ Oskari.clazz.define(
             }
         },
         _setTracking: function (bln) {
-            // TODO: we should inform user that tracking is on
             this._tracking = bln;
+            this._toggleToolStyle(this._tracking);
         },
         _clearRequests: function () {
             this._setWaiting(false);
@@ -114,18 +114,15 @@ Oskari.clazz.define(
          *
          */
         refresh: function () {
-            var me = this,
-                conf = me.getConfig();
-
+            const conf = this.getConfig();
+            let toolStyle;
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
+                toolStyle = conf.toolStyle;
             } else {
-                var toolStyle = me.getToolStyleFromMapModule();
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
+                toolStyle = this.getToolStyleFromMapModule();
             }
+            this.changeToolStyle(toolStyle, this.getElement());
         },
 
         /**
@@ -142,7 +139,48 @@ Oskari.clazz.define(
                 return;
             }
             var styleClass = 'toolstyle-' + (style || 'rounded-dark');
+            this._defaultIconCls = styleClass;
             this.changeCssClasses(styleClass, /^toolstyle-/, [el]);
+        },
+        // used with continuous mode
+        _toggledIconStyle: function (styleClass) {
+            const light = styleClass.indexOf('-light');
+            if (light > 0) {
+                return styleClass.substring(0, light) + '-dark';
+            }
+            const dark = styleClass.indexOf('-dark');
+            if (dark > 0) {
+                return styleClass.substring(0, dark) + '-light';
+            }
+            return styleClass;
+        },
+        // used with continuous mode
+        _toggleToolStyle: function (active) {
+            let regEx;
+            let styleCls;
+            let el;
+            if (Oskari.util.isMobile()) {
+                el = this.getMapModule().getMobileDiv().find('.mobile-my-location');
+                const { iconCls } = this._mobileDefs.buttons['mobile-my-location'];
+                regEx = new RegExp('^' + iconCls + '-');
+                const { activeColour } = this.getMapModule().getThemeColours();
+                const isDark = Oskari.util.isDarkColor(activeColour);
+                if (active) {
+                    el.css('background-color', activeColour);
+                    styleCls = isDark ? iconCls + '-dark' : iconCls + '-light';
+                } else {
+                    el.css('background-color', '');
+                    styleCls = isDark ? iconCls + '-light' : iconCls + '-dark';
+                }
+            } else {
+                styleCls = this._defaultIconCls;
+                regEx = /^toolstyle-/;
+                el = this.getElement();
+                if (active) {
+                    styleCls = this._toggledIconStyle(styleCls);
+                }
+            }
+            this.changeCssClasses(styleCls, regEx, [el]);
         },
 
         /**
@@ -208,6 +246,9 @@ Oskari.clazz.define(
                 this.refresh();
                 this.addToPluginContainer(this.getElement());
             }
+            if (this._tracking) {
+                this._toggleToolStyle(true);
+            }
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
@@ -251,8 +292,8 @@ Oskari.clazz.define(
                     opts.centerMap = 'single';
                 }
                 this._trackingOptions = opts;
-                this._setupRequest();
-            } else if (centerMap) {
+            }
+            if (centerMap) {
                 // single location request on startup, use 30s timeout (browser may ask permission)
                 // don't set waiting -> doesn't show errors or chain requests with different accuracy & timeouts
                 this._requestLocation(30000);
@@ -262,8 +303,15 @@ Oskari.clazz.define(
          * @method _stopPluginImpl BasicMapModulePlugin method override
          * @param {Oskari.Sandbox} sandbox
          */
-        _stopPluginImpl: function (sandbox) {
+        _stopPluginImpl: function () {
             this.teardownUI();
+        },
+        _startPluginImpl: function () {
+            var me = this;
+            me.setEnabled(me._enabled);
+            const toolbarNotReady = me.setVisible(me._visible);
+            me._handleStartMode();
+            return toolbarNotReady;
         },
         /**
          * Checks at if device is outside of map viewport when mode is tracking.
@@ -332,7 +380,7 @@ Oskari.clazz.define(
                         this._handleError(error);
                         return;
                     }
-                    //success
+                    // success
                     if (this._tracking) {
                         this._checkIfOutsideViewport(event.getLon(), event.getLat());
                     } else {
