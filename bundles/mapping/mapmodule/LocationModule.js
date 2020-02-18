@@ -144,8 +144,9 @@ export function getLocationCoords () {
     return _locationCoords;
 };
 export function stopUserLocationWatch () {
-    if (navigator.geolocation) {
+    if (navigator.geolocation && _locationWatch !== null) {
         navigator.geolocation.clearWatch(_locationWatch);
+        _locationWatch = null;
     }
 };
 
