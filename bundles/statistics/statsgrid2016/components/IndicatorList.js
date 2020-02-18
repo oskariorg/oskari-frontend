@@ -14,7 +14,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         indicator: _.template(
             `<li>
                 <div>
-                    \${name}
+                    <span title="\${full}">\${name}</span>
                     <div class="indicator-list-info icon-info"/>
                     <div class="indicator-list-remove icon-close" data-ind-hash="\${indHash}"/>
                 </div>
@@ -67,7 +67,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         indicators.forEach(function (ind, id) {
             me.service.getUILabels(ind, function (labels) {
                 var indElem = jQuery(me.__templates.indicator({
-                    name: me._getIndicatorText(labels.indicator, labels.params),
+                    name: me._getIndicatorText(labels),
+                    full: labels.full,
                     indHash: ind.hash
                 }));
                 content.find('.statsgrid-indicator-list').append(indElem);
@@ -83,10 +84,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         });
         return content;
     },
-    _getIndicatorText (indicator, params) {
-        var cutLength = 55;
+    _getIndicatorText (labels) {
+        const { indicator, params, full } = labels;
+        let cutLength = 60;
         const dots = '... ';
-        if (indicator && indicator.length > cutLength) {
+        if (indicator && full.length > cutLength) {
             if (params) {
                 cutLength = cutLength - dots.length - params.length;
                 return indicator.substring(0, cutLength) + dots + params;
@@ -95,7 +97,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
                 return indicator.substring(0, cutLength) + dots;
             }
         } else {
-            return indicator;
+            return full;
         }
     },
     /**
