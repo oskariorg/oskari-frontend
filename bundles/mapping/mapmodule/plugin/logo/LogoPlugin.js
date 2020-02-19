@@ -356,29 +356,6 @@ Oskari.clazz.define(
         },
 
         /**
-         * @method _addIndicatorsToDataSourcesDialog
-         * Adds indicators to the data sources dialog.
-         *
-         * @param {Object} indicators
-         *
-         */
-        _addIndicatorsToDataSourcesDialog: function (indicators) {
-            if (!this.dataSourcesDialog) {
-                return;
-            }
-            var me = this;
-            this._service.removeGroup('indicators');
-            this._service.addGroup('indicators', me._loc.indicatorsHeader);
-            // add initial layers
-            Object.keys(indicators).forEach(function (id) {
-                me._service.addItemToGroup('indicators', {
-                    'id': id,
-                    'name': indicators[id].title,
-                    'source': indicators[id].organization
-                });
-            });
-        },
-        /**
          * @method updateLabels
          * Adds functionality to plugin
          *

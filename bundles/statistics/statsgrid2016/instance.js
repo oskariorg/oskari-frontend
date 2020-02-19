@@ -204,7 +204,7 @@ Oskari.clazz.define(
                 return;
             }
             var dsid = ds + '_' + id;
-            if (wasRemoved) {
+            if (wasRemoved === true) {
                 // the check if necessary if the same indicator is added more than once with different selections
                 if (!this.statsService.getStateService().isSelected(ds, id)) {
                     // if this was the last dataset for the datasource & indicator. Remove it.
@@ -243,7 +243,6 @@ Oskari.clazz.define(
                     evt.getDatasource(),
                     evt.getIndicator(),
                     evt.getSelections(),
-                    evt.getSeries(),
                     evt.isRemoved());
 
                 this._updateClassficationViewVisibility();
