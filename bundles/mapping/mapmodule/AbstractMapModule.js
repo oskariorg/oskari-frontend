@@ -1486,7 +1486,7 @@ Oskari.clazz.define(
             this.log.debug('[' + this.getName() + ']' + ' Starting ' + pluginName);
             try {
                 var tryAgainLater = plugin.startPlugin(this.getSandbox());
-                if (tryAgainLater && typeof plugin.redrawUI === 'function') {
+                if (tryAgainLater && (typeof plugin.redrawUI === 'function' || typeof plugin.lazyStartPlugin === 'function')) {
                     this.lazyStartPlugins.push(plugin);
                 }
             } catch (e) {
@@ -1509,10 +1509,18 @@ Oskari.clazz.define(
             this.lazyStartPlugins = [];
 
             tryStartingThese.forEach(function (plugin) {
-                var tryAgainLater = plugin.redrawUI(me.getMobileMode(), !!force);
-                if (tryAgainLater) {
+                let tryRedraw;
+                let tryLazyStart;
+                if (typeof plugin.redrawUI === 'function') {
+                    tryRedraw = plugin.redrawUI(me.getMobileMode(), !!force);
+                }
+                if (typeof plugin.lazyStartPlugin === 'function') {
+                    tryLazyStart = plugin.lazyStartPlugin();
+                }
+                if (tryRedraw || tryLazyStart) {
                     if (force) {
                         me.log.warn('Tried to force a start on plugin, but it still refused to start', plugin.getName());
+                        return;
                     }
                     me.lazyStartPlugins.push(plugin);
                 }
