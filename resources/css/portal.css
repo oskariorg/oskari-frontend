@@ -478,3 +478,15 @@ select:not([class*="ant-"]) {
   overflow: auto;
   position: fixed !important;
 }
+
+@keyframes backgroundFlash {
+  50% {
+    background-color: rgb(255,212,0);
+  }
+}
+.oskari-copy-effect {
+  -webkit-animation-name: backgroundFlash;
+  -webkit-animation-duration: 0.5s;
+  animation-name: backgroundFlash;
+  animation-duration: 0.5s;
+}

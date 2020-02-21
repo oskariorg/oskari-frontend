@@ -254,7 +254,7 @@ Oskari.clazz.category(
             var copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
             copyBtn.setTitle(loc.link.copy);
             copyBtn.setHandler(() => {
-                this.copyTextToClipboard(url);
+                Oskari.util.copyTextToClipboard(url, linkContent);
             });
             url = this._updateUrl(baseUrl, addMarkerBln, skipInfoBln);
             linkContent.text(url);
@@ -269,17 +269,6 @@ Oskari.clazz.category(
                 url += '&showIntro=false';
             }
             return url;
-        },
-        copyTextToClipboard: function (text) {
-            if (typeof text !== 'string') {
-                return;
-            }
-            var input = document.createElement('input');
-            document.body.appendChild(input);
-            input.value = text;
-            input.select();
-            document.execCommand('copy');
-            document.body.removeChild(input);
         },
         /**
          * Returns the map url for link tool
