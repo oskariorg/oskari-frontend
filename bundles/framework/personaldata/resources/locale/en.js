@@ -85,7 +85,8 @@ Oskari.registerLocalization(
                     "delete": "Delete"
                 },
                 "published": {
-                    "desc": "Copy the HTML code below to your html code and the map will be visible on your website:"
+                    "desc": "Copy the HTML code below to your html code and the map will be visible on your website:",
+                    "copy": "Copy to the clipboard"
                 },
                 "popup": {
                     "edit": "Edit Map Name",

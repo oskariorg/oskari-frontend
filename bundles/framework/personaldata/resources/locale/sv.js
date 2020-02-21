@@ -83,7 +83,8 @@ Oskari.registerLocalization(
                     "delete": "Ta bort"
                 },
                 "published": {
-                    "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats."
+                    "desc": "Inbädda kartan genom att lägga till HTML-koden nedan på din webbplats.",
+                    "copy": "Kopiera till klippbordet"
                 },
                 "popup": {
                     "edit": "Byt namn på kartan",

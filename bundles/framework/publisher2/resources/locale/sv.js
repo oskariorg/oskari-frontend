@@ -11,7 +11,8 @@ Oskari.registerLocalization(
         },
         "published": {
             "title": "Kartan har skapats för att kunna bäddas in",
-            "desc": "Karta har skapats. Bädda in kartan genom att lägga till HTML-koden nedan till din webbplats och du har kartan på din webbplats:"
+            "desc": "Karta har skapats. Bädda in kartan genom att lägga till HTML-koden nedan till din webbplats och du har kartan på din webbplats:",
+            "copy": "Kopiera till klippbordet"
         },
         "edit": {
             "popup": {
