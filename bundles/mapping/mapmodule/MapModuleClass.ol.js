@@ -350,12 +350,12 @@ export class MapModule extends AbstractMapModule {
                     return false;
                 }
                 // Don't include map controls to screenshot
-                return element.className ? element.className.indexOf('mapplugin') === -1 : true;
+                return element.className ? element.className.indexOf('ol-control') === -1 : true;
             }
         };
 
         me.getMap().once('rendercomplete', () => {
-            toPng(me.getMap().getTargetElement(), exportOptions).then((dataUrl) => {
+            toPng(me.getMap().getViewport(), exportOptions).then((dataUrl) => {
                 callback(dataUrl);
             }).catch(err => {
                 me.log.warn('Error producing a screenshot png data url: ' + err);
