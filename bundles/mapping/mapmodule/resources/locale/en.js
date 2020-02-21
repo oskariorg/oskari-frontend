@@ -124,6 +124,12 @@ Oskari.registerLocalization(
                 "center" : {
                     "tooltip": "Move to the original map view"
                 }
+            },
+            "Tiles3DLayerPlugin": {
+                "layerFilter": {
+                    "text": "3D layers",
+                    "tooltip": ""
+                }
             }
         },
         "guidedTour": {

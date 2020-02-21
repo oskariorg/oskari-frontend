@@ -124,6 +124,12 @@ Oskari.registerLocalization(
                 "center" : {
                     "tooltip": "Gå tillbaka till standardvyn för kartvyn"
                 }
+            },
+            "Tiles3DLayerPlugin": {
+                "layerFilter": {
+                    "text": "3D kartlager",
+                    "tooltip": ""
+                }
             }
         },
         "guidedTour": {
