@@ -55,11 +55,6 @@ div.hierarchical-layerlist {
         span.layer-tools {
             float: right;
         }
-        @-moz-document url-prefix() {
-            span.layer-tools {
-                margin-top: -30px;
-            }
-        }
         span.layer-icon {
             float: left;
             width: 16px;
@@ -515,11 +510,6 @@ div.hierarchical-layerlist {
             padding: 4px;
             margin-left: 10px;
             /* Group tools */
-            @-moz-document url-prefix() {
-                .group-tools {
-                    margin-top: -30px;
-                }
-            }
             .group-tools {
                 float: right;
                 .group-tool {
@@ -539,11 +529,6 @@ div.hierarchical-layerlist {
             }
 
             /* Subgroup tools */
-            @-moz-document url-prefix() {
-                .subgroup-tools {
-                    margin-top: -30px;
-                }
-            }
             .subgroup-tools {
                 float: right;
                 display: inline;
@@ -564,11 +549,6 @@ div.hierarchical-layerlist {
             }
 
             /* Subgroup subgroup tools */
-            @-moz-document url-prefix() {
-                .subgroup-subgroup-tools {
-                    margin-top: -30px;
-                }
-            }
             .subgroup-subgroup-tools {
                 float: right;
                 display: inline;
@@ -589,13 +569,6 @@ div.hierarchical-layerlist {
             }
 
             /*Layer tools */
-            @-moz-document url-prefix() {
-                .layer-tools {
-                    .layer-tool {
-                        margin-top: -30px;
-                    }
-                }
-            }
             .layer-tools {
                 .layer-tool {
                     width: 26px;
