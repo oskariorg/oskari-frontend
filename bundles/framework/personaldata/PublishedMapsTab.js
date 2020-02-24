@@ -674,20 +674,16 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
          *
          */
         _showIframeCodePopup: function (url, size, name) {
-            var me = this,
-                dialog = Oskari.clazz.create(
-                    'Oskari.userinterface.component.Popup'
-                ),
-                okBtn = dialog.createCloseButton(this.loc('tabs.publishedmaps.button.ok')),
-                iframeCode,
-                textarea,
-                content,
-                width = size ? size.width + 'px' : '100%',
-                height = size ? size.height + 'px' : '100%';
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const width = size ? size.width + 'px' : '100%';
+            const height = size ? size.height + 'px' : '100%';
 
-            okBtn.addClass('primary');
+            const closeBtn = dialog.createCloseButton();
+            closeBtn.addClass('primary');
+            const copyBtn = Oskari.clazz.create('Oskari.userinterface.component.Button');
+            copyBtn.setTitle(this.loc('tabs.publishedmaps.published.copy'));
 
-            iframeCode = '<iframe src="' + url + '" allow="geolocation" style="border: none;';
+            let iframeCode = '<iframe src="' + url + '" allow="geolocation" style="border: none;';
             if (width !== null && width !== undefined) {
                 iframeCode += ' width: ' + width + ';';
             }
@@ -695,18 +691,21 @@ Oskari.clazz.define('Oskari.mapframework.bundle.personaldata.PublishedMapsTab',
                 iframeCode += ' height: ' + height + ';';
             }
             iframeCode += '"></iframe>';
-            textarea =
+            const textarea =
                 '<textarea rows="3" cols="77">' +
                 iframeCode +
                 '</textarea>';
-            content = this.loc('tabs.publishedmaps.published.desc') + '<br/>' + textarea;
-
+            const content = this.loc('tabs.publishedmaps.published.desc') + '<br/>' + textarea;
+            copyBtn.setHandler(() => {
+                const el = dialog.getElement().find('textarea');
+                Oskari.util.copyTextToClipboard(iframeCode, el);
+            });
             dialog.makeModal();
             dialog.stopKeydownPropagation();
-            dialog.show(name, content, [okBtn]);
-            me.popupOpen = true;
-            dialog.onClose(function () {
-                me.popupOpen = false;
+            dialog.show(name, content, [copyBtn, closeBtn]);
+            this.popupOpen = true;
+            dialog.onClose(() => {
+                this.popupOpen = false;
             });
         }
     });

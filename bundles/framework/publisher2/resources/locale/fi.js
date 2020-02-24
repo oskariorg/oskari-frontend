@@ -11,7 +11,8 @@ Oskari.registerLocalization(
         },
         "published": {
             "title": "Upotettu kartta on valmis",
-            "desc": "Kartta on valmis. Julkaise kartta verkkosivulla liittämällä alla oleva html-koodi verkkosivun koodiin:"
+            "desc": "Kartta on valmis. Julkaise kartta verkkosivulla liittämällä alla oleva html-koodi verkkosivun koodiin:",
+            "copy": "Kopioi leikepöydälle"
         },
         "edit": {
             "popup": {

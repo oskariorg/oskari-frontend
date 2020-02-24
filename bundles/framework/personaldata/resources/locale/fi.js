@@ -85,7 +85,8 @@ Oskari.registerLocalization(
                     "delete": "Poista"
                 },
                 "published": {
-                    "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi."
+                    "desc": "Lisää alla oleva koodi html-koodiin verkkosivullasi. Kartta tulee näkyviin verkkosivullesi.",
+                    "copy": "Kopioi leikepöydälle"
                 },
                 "popup": {
                     "edit": "Vaihda kartan nimi",

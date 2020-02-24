@@ -11,7 +11,8 @@ Oskari.registerLocalization(
         },
         "published": {
             "title": "Embedded Map Saved",
-            "desc": "The embedded map has been saved. Publish it on your website by copying this code to the html code on your website:"
+            "desc": "The embedded map has been saved. Publish it on your website by copying this code to the html code on your website:",
+            "copy": "Copy to the clipboard"
         },
         "edit": {
             "popup": {
