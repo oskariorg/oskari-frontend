@@ -20,9 +20,9 @@ Oskari.clazz.define(
         me._defaultLocation = 'top right';
         me._index = 40;
         me._name = 'MyLocationPlugin';
-        me._active = false;
-        me._timeouts = 0;
+        this.loc = Oskari.getMsg.bind(null, 'MapModule');
         me._dialog = null;
+        me._defaultIconCls = null;
         me._mobileDefs = {
             buttons: {
                 'mobile-my-location': {
@@ -31,7 +31,7 @@ Oskari.clazz.define(
                     sticky: false,
                     show: true,
                     callback: function (el) {
-                        me._toggleMode();
+                        me._setupRequest();
                     }
                 }
             },
@@ -41,52 +41,54 @@ Oskari.clazz.define(
         me._templates = {
             plugin: jQuery('<div class="mapplugin mylocationplugin toolstyle-rounded-dark"><div class="icon"></div></div>')
         };
-
-        me._currentMode = null;
+        this._waiting = false; // used with single location request
+        this._timeouts = 0; // timeouts for single location request
+        this._tracking = false;
+        this._trackingOptions = null;
     }, {
         /**
          * @private @method _createControlElement
          * Creates the DOM element that will be placed on the map
-         *
-         *
          * @return {jQuery}
          * Plugin jQuery element
          */
         _createControlElement: function () {
-            var me = this,
-                el = me._templates.plugin.clone();
-            me._loc = Oskari.getLocalization('MapModule', Oskari.getLang() || Oskari.getDefaultLanguage()).plugin.MyLocationPlugin;
-            el.on('click', function () {
-                me._toggleMode();
-            });
-
-            el.attr('title', me._loc.tooltip);
-
+            const el = this._templates.plugin.clone();
+            el.attr('title', this.loc('plugin.MyLocationPlugin.tooltip'));
+            this._bindIcon(el);
+            this._element = el;
             return el;
+        },
+
+        _bindIcon: function (el) {
+            el.on('click', () => {
+                this._setupRequest();
+            });
         },
 
         /**
          * @private @method _setLayerToolsEditModeImpl
          *
-         *
          */
         _setLayerToolsEditModeImpl: function () {
-            var me = this;
-            if (!me.getElement()) {
+            const el = this.getElement();
+            if (!el) {
                 return;
             }
-            if (me.inLayerToolsEditMode()) {
+            if (this.inLayerToolsEditMode()) {
                 // disable icon
-                me.getElement().off('click');
+                el.off('click');
             } else {
                 // enable icon
-                me.getElement().on('click', function () {
-                    me._setupLocation();
-                });
+                this._bindIcon(el);
             }
         },
-        _setActive: function (bln) {
-            this._active = !!bln;
+        /**
+         * @private @method _setWaiting
+         *
+         */
+        _setWaiting: function (bln) {
+            this._waiting = !!bln;
             this._timeouts = 0;
             var el = this.getElement();
             if (!el) {
@@ -98,24 +100,29 @@ Oskari.clazz.define(
                 el.removeClass('disabled');
             }
         },
+        _setTracking: function (bln) {
+            this._tracking = bln;
+            this._toggleToolStyle(this._tracking);
+        },
+        _clearRequests: function () {
+            this._setWaiting(false);
+            this._setTracking(false);
+        },
         /**
          * @public @method refresh
          *
          *
          */
         refresh: function () {
-            var me = this,
-                conf = me.getConfig();
-
+            const conf = this.getConfig();
+            let toolStyle;
             // Change the style if in the conf
             if (conf && conf.toolStyle) {
-                me.changeToolStyle(conf.toolStyle, me.getElement());
+                toolStyle = conf.toolStyle;
             } else {
-                var toolStyle = me.getToolStyleFromMapModule();
-                if (toolStyle !== null && toolStyle !== undefined) {
-                    me.changeToolStyle(toolStyle, me.getElement());
-                }
+                toolStyle = this.getToolStyleFromMapModule();
             }
+            this.changeToolStyle(toolStyle, this.getElement());
         },
 
         /**
@@ -127,30 +134,76 @@ Oskari.clazz.define(
          *
          */
         changeToolStyle: function (style, div) {
-            var me = this,
-                el = div || me.getElement();
-
+            const el = div || this.getElement();
             if (!el) {
                 return;
             }
-
             var styleClass = 'toolstyle-' + (style || 'rounded-dark');
-
-            me.changeCssClasses(styleClass, /^toolstyle-/, [el]);
+            this._defaultIconCls = styleClass;
+            this.changeCssClasses(styleClass, /^toolstyle-/, [el]);
+        },
+        // used with continuous mode
+        _toggledIconStyle: function (styleClass) {
+            const light = styleClass.indexOf('-light');
+            if (light > 0) {
+                return styleClass.substring(0, light) + '-dark';
+            }
+            const dark = styleClass.indexOf('-dark');
+            if (dark > 0) {
+                return styleClass.substring(0, dark) + '-light';
+            }
+            return styleClass;
+        },
+        // used with continuous mode
+        _toggleToolStyle: function (active) {
+            let regEx;
+            let styleCls;
+            let el;
+            if (Oskari.util.isMobile()) {
+                el = this.getMapModule().getMobileDiv().find('.mobile-my-location');
+                const { iconCls } = this._mobileDefs.buttons['mobile-my-location'];
+                regEx = new RegExp('^' + iconCls + '-');
+                const { activeColour } = this.getMapModule().getThemeColours();
+                const isDark = Oskari.util.isDarkColor(activeColour);
+                if (active) {
+                    el.css('background-color', activeColour);
+                    styleCls = isDark ? iconCls + '-dark' : iconCls + '-light';
+                } else {
+                    el.css('background-color', '');
+                    styleCls = isDark ? iconCls + '-light' : iconCls + '-dark';
+                }
+            } else {
+                styleCls = this._defaultIconCls;
+                regEx = /^toolstyle-/;
+                el = this.getElement();
+                if (active) {
+                    styleCls = this._toggledIconStyle(styleCls);
+                }
+            }
+            this.changeCssClasses(styleCls, regEx, [el]);
         },
 
         /**
-         * @private @method _setupLocation
+         * @private @method _setupRequest
          * Tries to get the geolocation from browser and move the map to the
          * location
          *
          */
-        _setupLocation: function () {
-            if (this._active) {
-                return; // already requested and waiting response
+        _setupRequest: function () {
+            const opts = this._trackingOptions;
+            const sb = Oskari.getSandbox();
+            if (opts) {
+                if (this._tracking) {
+                    sb.postRequestByName('StopUserLocationTrackingRequest');
+                    this._setTracking(false);
+                } else {
+                    sb.postRequestByName('StartUserLocationTrackingRequest', [opts]);
+                    this._setTracking(true);
+                }
+            } else if (!this._waiting) {
+                this._requestLocation();
+                this._setWaiting(true);
             }
-            this._setActive(true);
-            this._requestLocation();
         },
         _requestLocation: function (timeout, highAccuracy) {
             const conf = this.getConfig();
@@ -176,7 +229,6 @@ Oskari.clazz.define(
                 // no point in drawing the ui if we are not visible or enabled
                 return;
             }
-            var me = this;
             var mobileDefs = this.getMobileDefs();
 
             // don't do anything now if request is not available.
@@ -190,12 +242,13 @@ Oskari.clazz.define(
             if (!toolbarNotReady && mapInMobileMode) {
                 this.addToolbarButtons(mobileDefs.buttons, mobileDefs.buttonGroup);
             } else {
-                me._element = me._createControlElement();
-                me.refresh();
-                this.addToPluginContainer(me._element);
+                this._createControlElement();
+                this.refresh();
+                this.addToPluginContainer(this.getElement());
             }
-
-            this._handleStartMode();
+            if (this._tracking) {
+                this._toggleToolStyle(true);
+            }
         },
         teardownUI: function () {
             this.removeFromPluginContainer(this.getElement());
@@ -222,75 +275,43 @@ Oskari.clazz.define(
         },
 
         /**
-         * Toggle mode continues/single or if not plugin is not configured continues mode then use only single mode.
-         * @method @private _toggleMode
-         */
-        _toggleMode: function () {
-            var conf = this.getConfig();
-
-            // If plugin configured to use continuous mode and current mode is "continuous" then toggle mode to single
-            // (not draw user location and accurary circle and center map to user location)
-            if (conf.mode === 'continuous' && this._currentMode === 'continuous') {
-                this._currentMode = 'single';
-                this._stopTracking();
-                this._setupLocation();
-            }
-            // else if plugin is configured continuous mode and current toggled mode is "single" then toggle mode to continuous.
-            else if (conf.mode === 'continuous' && this._currentMode === 'single') {
-                this._currentMode = 'continuous';
-                this._startTracking();
-            }
-            // else if not plugin is not configured to continuous moden then use like "single"
-            else {
-                this._stopTracking();
-                this._setupLocation();
-            }
-        },
-        /**
-         * Start tracking.
-         * @method @private _startTracking
-         */
-        _startTracking: function () {
-            var conf = this.getConfig();
-            var sandbox = this.getSandbox();
-            if (conf.centerMapAutomatically === true) {
-                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location', centerMap: 'single' }]);
-            } else {
-                sandbox.postRequestByName('StartUserLocationTrackingRequest', [{ addToMap: 'location' }]);
-            }
-        },
-        /**
-         * Stop tracking.
-         * @method @private _stopTracking
-         */
-        _stopTracking: function () {
-            var sandbox = this.getSandbox();
-            sandbox.postRequestByName('StopUserLocationTrackingRequest');
-        },
-
-        /**
          * Handle plugin start mode
          * @private @method _handleStartMode
          */
         _handleStartMode: function () {
-            var me = this;
-            var conf = this.getConfig();
-
-            if (conf.mode === 'continuous') {
-                me._currentMode = 'continuous';
-                me._startTracking();
-            } else if (conf.centerMapAutomatically === true) {
-                me._currentMode = 'single';
-                me._setupLocation();
+            if (!this.isEnabled()) {
+                return;
             }
-            return true;
+            const conf = this.getConfig();
+            const centerMap = conf.centerMapAutomatically === true;
+            if (conf.mode === 'continuous') {
+                const opts = {
+                    addToMap: 'location'
+                };
+                if (centerMap) {
+                    opts.centerMap = 'single';
+                }
+                this._trackingOptions = opts;
+            }
+            if (centerMap) {
+                // single location request on startup, use 30s timeout (browser may ask permission)
+                // don't set waiting -> doesn't show errors or chain requests with different accuracy & timeouts
+                this._requestLocation(30000);
+            }
         },
         /**
          * @method _stopPluginImpl BasicMapModulePlugin method override
          * @param {Oskari.Sandbox} sandbox
          */
-        _stopPluginImpl: function (sandbox) {
+        _stopPluginImpl: function () {
             this.teardownUI();
+        },
+        _startPluginImpl: function () {
+            var me = this;
+            me.setEnabled(me._enabled);
+            const toolbarNotReady = me.setVisible(me._visible);
+            me._handleStartMode();
+            return toolbarNotReady;
         },
         /**
          * Checks at if device is outside of map viewport when mode is tracking.
@@ -300,60 +321,70 @@ Oskari.clazz.define(
          */
         _checkIfOutsideViewport (lon, lat) {
             var sandbox = this.getSandbox();
-            if (!this.isEnabled() || this._currentMode === 'single') {
-                // skip checking
-                return;
-            }
             var bbox = sandbox.getMap().getBbox();
             if (lon < bbox.left || lon > bbox.right || lat > bbox.top || lat < bbox.bottom) {
                 // outside view port, center map again
                 sandbox.postRequestByName('MapMoveRequest', [lon, lat]);
             }
         },
+        _handleError: function (error) {
+            if (this._dialog) {
+                this._dialog.close();
+            }
+            const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const title = this.loc('plugin.MyLocationPlugin.error.title');
+            let msg;
+            this._dialog = dialog;
+
+            if (error === 'denied') {
+                msg = this.loc('plugin.MyLocationPlugin.error.denied');
+                dialog.show(title, msg, [dialog.createCloseButton()]);
+                this._clearRequests();
+                return;
+            }
+            // Location denied only has close button, other messages fades out
+            dialog.fadeout();
+            msg = this.loc('plugin.MyLocationPlugin.error.noLocation');
+            if (error === 'unavailable') {
+                dialog.show(title, msg);
+                this._clearRequests();
+                return;
+            }
+            // timeout handling for single request
+            if (this._waiting && this._timeouts < 2) {
+                this._timeouts++;
+                if (this._timeouts === 1) {
+                    msg = this.loc('plugin.MyLocationPlugin.error.timeout');
+                    dialog.show('', this._loc.error.timeout);
+                    // request high accuracy location with longer timeout
+                    this._requestLocation(20000);
+                } else if (this._timeouts === 2) {
+                    // request low accuracy location
+                    this._requestLocation(6000, false);
+                }
+                return;
+            }
+            // show no location error and stop requests
+            dialog.show(title, msg);
+            this._clearRequests();
+        },
+
         _createEventHandlers: function () {
             return {
                 UserLocationEvent: (event) => {
-                    this._checkIfOutsideViewport(event.getLon(), event.getLat());
-
-                    if (!this._active) {
+                    if (!this._tracking && !this._waiting) {
                         return;
                     }
-                    var error = event.getError();
+                    const error = event.getError();
                     if (error) {
-                        if (this._dialog) {
-                            this._dialog.close();
-                        }
-                        var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-                        if (error === 'denied') {
-                            var btn = dialog.createCloseButton(this._loc.error.button);
-                            dialog.show(this._loc.error.title, this._loc.error.denied, [btn]);
-                            this._setActive(false);
-                        } else if (error === 'unavailable') {
-                            dialog.fadeout();
-                            dialog.show(this._loc.error.title, this._loc.error.noLocation);
-                            this._setActive(false);
-                        // timeouts
-                        } else {
-                            this._timeouts++;
-                            if (this._timeouts === 1) {
-                                dialog.fadeout(5000);
-                                dialog.show('', this._loc.error.timeout);
-                                // request high accuracy location with longer timeout
-                                this._requestLocation(20000);
-                            } else if (this._timeouts === 2) {
-                                // request low accuracy location
-                                this._requestLocation(6000, false);
-                            } else {
-                                // show error and stop requesting location
-                                dialog.fadeout();
-                                dialog.show(this._loc.error.title, this._loc.error.noLocation);
-                                this._setActive(false);
-                            }
-                        }
-                        this._dialog = dialog;
+                        this._handleError(error);
+                        return;
+                    }
+                    // success
+                    if (this._tracking) {
+                        this._checkIfOutsideViewport(event.getLon(), event.getLat());
                     } else {
-                        // success
-                        this._setActive(false);
+                        this._setWaiting(false);
                     }
                 }
             };
