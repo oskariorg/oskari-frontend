@@ -265,10 +265,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
         __guidedTourDelegateTemplate: {
             priority: 20,
             show: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelector']);
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', this.getName()]);
             },
             hide: function () {
-                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelector']);
+                this.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', this.getName()]);
             },
             getTitle: function () {
                 return this.getLocalization('guidedTour').title;
@@ -286,7 +286,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 openLink.append(loc.openLink);
                 openLink.on('click',
                     function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', 'LayerSelector']);
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'attach', me.getName()]);
                         openLink.hide();
                         closeLink.show();
                     });
@@ -294,7 +294,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.layerlist.LayerListBundleInstanc
                 closeLink.append(loc.closeLink);
                 closeLink.on('click',
                     function () {
-                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', 'LayerSelector']);
+                        me.sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [null, 'close', me.getName()]);
                         openLink.show();
                         closeLink.hide();
                     });
