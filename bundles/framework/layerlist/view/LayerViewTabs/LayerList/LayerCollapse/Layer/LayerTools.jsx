@@ -31,6 +31,7 @@ const hasSubLayerMetadata = layer => {
 const getBackendStatus = layer => {
     const backendStatus = layer.getBackendStatus() || 'UNKNOWN';
     const status = {
+        addTooltip: backendStatus !== 'UNKNOWN',
         messageKey: `backendStatus.${backendStatus}`,
         color: getStatusColor(backendStatus)
     };
@@ -63,23 +64,19 @@ const LayerTools = ({ model, controller }) => {
     const reason = reasons ? map.getMostSevereUnsupportedLayerReason(reasons) : undefined;
     return (
         <Tools className="layer-tools">
-            { reason &&
-                <WarningIcon tooltip={reason.getDescription()}/>
+            {reason &&
+                <WarningIcon tooltip={reason.getDescription()} />
             }
-            { model.hasTimeseries() &&
-                <Tooltip title={<Message messageKey='layer.tooltip.timeseries'/>}>
+            {model.hasTimeseries() &&
+                <Tooltip title={<Message messageKey='layer.tooltip.timeseries' />}>
                     <TimeSerieIcon />
                 </Tooltip>
             }
-            <Tooltip title={<Message messageKey={backendStatus.messageKey}/>}>
-                <LayerIcon
-                    fill={backendStatus.color}
-                    type={model.getLayerType()}
-                    onClick={() => controller.showLayerBackendStatus(model.getId())}/>
-            </Tooltip>
+            <LayerStatus backendStatus={backendStatus} model={model}
+                onClick={() => controller.showLayerBackendStatus(model.getId())} />
             <SpriteIcon
                 className={infoIcon.classes.join(' ')}
-                onClick={() => controller.showLayerMetadata(model)}/>
+                onClick={() => controller.showLayerMetadata(model)} />
         </Tools>
     );
 };
@@ -87,6 +84,23 @@ const LayerTools = ({ model, controller }) => {
 LayerTools.propTypes = {
     model: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
+};
+
+const LayerStatus = ({ backendStatus, model, onClick }) => {
+    const icon = (<LayerIcon
+        fill={backendStatus.color}
+        type={model.getLayerType()}
+        onClick={() => onClick()} />);
+    if (backendStatus.addTooltip) {
+        return (<Tooltip title={<Message messageKey={backendStatus.messageKey} />}>{icon}</Tooltip>);
+    }
+    return icon;
+};
+
+LayerStatus.propTypes = {
+    backendStatus: PropTypes.object.isRequired,
+    model: PropTypes.object.isRequired,
+    onClick: PropTypes.func.isRequired
 };
 
 const wrapped = LocaleConsumer(LayerTools);
