@@ -6,7 +6,6 @@ import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { LayerCapabilitiesListing } from './LayerCapabilitiesListing';
 import { ServiceStep } from './ServiceStep';
 import { LoadingIndicator } from './LoadingIndicator';
-import { LayerTypeTitle } from './LayerTypeTitle';
 import { StyledAlert, StyledSteps, Paragraph, Header } from './styled';
 
 const { CAPABILITIES } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
@@ -71,7 +70,7 @@ const LayerWizard = ({
             <LoadingIndicator loading={loading}>
                 { (layer.isNew || currentStep !== WIZARD_STEP.DETAILS) &&
                     <StyledSteps current={currentStep}>
-                        <Step title={<LayerTypeTitle layer={layer}/>} />
+                        <Step title={<Message messageKey='wizard.type'/>} />
                         <Step title={<Message messageKey='wizard.service'/>} />
                         <Step title={<Message messageKey='wizard.layers'/>} />
                         <Step title={<Message messageKey='wizard.details'/>} />
@@ -79,7 +78,7 @@ const LayerWizard = ({
                 }
                 { currentStep === WIZARD_STEP.INITIAL &&
                     <Fragment>
-                        <LayerTypeTitle layer={layer} LabelComponent={Header}/>
+                        <Message messageKey='wizard.type' LabelComponent={Header}/>
                         <Message messageKey='wizard.typeDescription' LabelComponent={Paragraph}/>
                         <LayerTypeSelection
                             types={layerTypes || []}
