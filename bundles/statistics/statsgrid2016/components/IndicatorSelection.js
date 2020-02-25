@@ -173,7 +173,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorSelection', function (
         var indicOptions = {
             placeholder: panelLoc.selectIndicatorPlaceholder,
             multi: true,
-            disabled: true
+            disabled: true,
+            allowOverflow: true
         };
         var indicSelect = new SelectList();
         var indicDropdown = indicSelect.create(null, indicOptions);
