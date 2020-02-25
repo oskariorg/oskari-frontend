@@ -111,7 +111,7 @@ const LayerWizard = ({
                 }
                 { !isFirstStep && !isDetailsForOldLayer &&
                     <Button onClick={() => {
-                        setStep(controller, getStep(layer) - 1, hasCapabilitiesSupport);
+                        setStep(controller, currentStep - 1, hasCapabilitiesSupport);
                         onCancel();
                     }}>
                         {<Message messageKey='cancel'/>}
