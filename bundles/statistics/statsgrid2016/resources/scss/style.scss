@@ -173,9 +173,7 @@ div.oskari-flyout {
         max-width: 700px;
         min-width: 400px;
 
-        label span {
-            /* Indicator selection form */
-            width: 200px;
+        .stats-series-selection {
             display: inline-block;
         }
 
