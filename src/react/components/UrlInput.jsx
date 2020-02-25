@@ -92,7 +92,7 @@ export class UrlInput extends React.Component {
                             </div>
                             <div>
                                 {credentials.passwordText}
-                                <div><TextInput autoComplete='off' value={credentials.passwordValue} type='password' onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
+                                <div><Input.Password autoComplete='off' value={credentials.passwordValue} onChange={(evt) => credentials.passwordOnChange(evt.target.value)} /></div>
                             </div>
                         </Panel>
                     </Collapse>
