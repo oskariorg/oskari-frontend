@@ -544,7 +544,17 @@ class UIHandler extends StateHandler {
                 if (response.status === 401) {
                     Messaging.warn(getMessage('messages.unauthorizedErrorFetchCapabilities'));
                     this.updateState({ credentialsCollapseOpen: true });
+                } else if (response.status === 408) {
+                    // timeout when calling service
+                    Messaging.warn(getMessage('messages.timeoutErrorFetchCapabilities'));
+                } else if (response.status === 400) {
+                    // other connection issues when calling service
+                    Messaging.warn(getMessage('messages.connectionErrorFetchCapabilities'));
+                } else if (response.status === 417) {
+                    // response from the service was not what we expected/parsing problem
+                    Messaging.warn(getMessage('messages.parsingErrorFetchCapabilities'));
                 } else {
+                    // generic error
                     Messaging.error(getMessage('messages.errorFetchCapabilities'));
                 }
                 return Promise.reject(new Error('Capabilities fetching failed with status code ' + response.status + ' and text ' + response.statusText));

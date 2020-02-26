@@ -133,6 +133,9 @@ Oskari.registerLocalization(
                 "errorFetchUserRolesAndPermissionTypes": "Error occured when fetching user roles and permission types.",
                 "errorFetchCapabilities": "Fetching service capabilities failed.",
                 "unauthorizedErrorFetchCapabilities": "Username and password are required by the service.",
+                "timeoutErrorFetchCapabilities": "Request timed out before getting response from service. Check the interface URL.",
+                "connectionErrorFetchCapabilities": "Connection could not be established to the service. Check the interface URL.",
+                "parsingErrorFetchCapabilities": "The response from the service didn't match the requested standard. Check the map layer type and/or version.",
                 "deleteSuccess" : "Deleted",
                 "deleteFailed" : "Delete failed"
             },
