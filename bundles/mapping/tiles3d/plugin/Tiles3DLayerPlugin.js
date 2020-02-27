@@ -70,32 +70,29 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                     return layer.isLayerOfType(this.layertype);
                 });
             }
+            this._registerForLayerFiltering();
             if (!this.getMapModule().getSupports3D()) {
                 return;
             }
             this._initTilesetClickHandler();
             applyCustomMaterialSettings();
         },
-        _startPluginImpl: function () {
-            // Add layerlist filter button for 3D layers
-            const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
-            if (layerlistService) {
-                const id = this._layerFilterId;
-                layerlistService.registerLayerlistFilterButton(
-                    Oskari.getMsg('MapModule', 'plugin.Tiles3DLayerPlugin.layerFilter.text'),
-                    Oskari.getMsg('MapModule', 'plugin.Tiles3DLayerPlugin.layerFilter.tooltip'),
-                    {
-                        active: 'layer-' + id,
-                        deactive: 'layer-' + id + '-disabled'
-                    },
-                    id);
-            } else {
-                // layer service not ready, request lazy start
-                return true;
-            }
-        },
-        lazyStartPlugin: function () {
-            return this._startPluginImpl();
+        _registerForLayerFiltering: function () {
+            // Add layerlist filter button for 3D layers after app is started
+            Oskari.on('app.start', () => {
+                const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+                if (layerlistService) {
+                    const id = this._layerFilterId;
+                    layerlistService.registerLayerlistFilterButton(
+                        Oskari.getMsg('MapModule', 'plugin.Tiles3DLayerPlugin.layerFilter.text'),
+                        Oskari.getMsg('MapModule', 'plugin.Tiles3DLayerPlugin.layerFilter.tooltip'),
+                        {
+                            active: 'layer-' + id,
+                            deactive: 'layer-' + id + '-disabled'
+                        },
+                        id);
+                }
+            });
         },
         /**
          * @method _afterChangeMapLayerOpacityEvent
