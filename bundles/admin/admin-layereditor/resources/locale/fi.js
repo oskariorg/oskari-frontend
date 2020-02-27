@@ -68,6 +68,7 @@ Oskari.registerLocalization(
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",
+            "close": "Sulje",
             "ok": "Ok",
             "add": "Lisää",
             "save": "Tallenna",

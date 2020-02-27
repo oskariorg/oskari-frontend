@@ -82,7 +82,7 @@ const AdminLayerForm = ({
         }
         { onCancel &&
             <Button onClick={() => onCancel()}>
-                <Message messageKey='cancel'/>
+                <Message messageKey='close'/>
             </Button>
         }
     </StyledRoot>

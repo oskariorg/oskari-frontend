@@ -68,6 +68,7 @@ Oskari.registerLocalization(
             "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
+            "close": "Close",
             "ok": "Ok",
             "add": "Add",
             "save": "Save",
