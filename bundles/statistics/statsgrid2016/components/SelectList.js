@@ -71,25 +71,30 @@ export class SelectList extends FormComponent {
                     // Drowpdown's bottom is visible
                     return;
                 }
+                if (this.options.allowOverflow) {
+                    container.css('overflow', 'visible');
+                    return;
+                }
                 // Open up
                 dropdown.addClass('up');
-                if (dropdown.offset().top > containerTop + topMargin) {
+                const topOverflow = containerTop + topMargin - dropdown.offset().top;
+                if (topOverflow < 0) {
                     // Drowpdown's top is visible
                     return;
                 }
-                // Open starting from the top of the container
-                dropdown.removeClass('up');
-                dropdown.css('bottom', '');
-                dropdown.css('top', '0');
-                const top = containerTop - dropdown.offset().top + topMargin;
-                dropdown.css('top', top + 'px');
+                // Make dropdowns top visible by reducing option list height
+                const optsEl = dropdown.find('.options');
+                optsEl.css('max-height', optsEl.height() - topOverflow);
             });
             selected.on('sumo:closed', () => {
                 // reset previous settings
                 const dropdown = this._element.find('div.optWrapper');
+                if (this.options.allowOverflow) {
+                    dropdown.parents('div.oskari-flyoutcontentcontainer').css('overflow', '');
+                    return; // no need to modify css
+                }
                 dropdown.removeClass('up');
-                dropdown.css('top', '');
-                dropdown.css('bottom', '');
+                dropdown.find('.options').css('max-height', '');
             });
         }
     }
