@@ -92,7 +92,7 @@ Oskari.registerLocalization(
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
             },
             "layerStatus": {
-                "existing": "Taso on jo rekisteröity palveluun",
+                "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
                 "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."
             },
@@ -135,6 +135,7 @@ Oskari.registerLocalization(
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
                 "confirmDeleteGroup": "Ryhmä poistetaan. Haluatko jatkaa?",
+                "confirmDuplicatedLayer": "Taso on jo rekisteröity palveluun. Haluatko varmasti lisätä saman tason moneen kertaan?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",

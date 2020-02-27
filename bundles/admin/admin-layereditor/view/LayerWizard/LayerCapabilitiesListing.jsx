@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Icon, Tooltip, Message } from 'oskari-ui';
+import { List, ListItem, Icon, Tooltip, Message, Confirm } from 'oskari-ui';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesFilter } from './LayerCapabilitiesFilter';
 
 export const StyledListItem = styled(ListItem)`
@@ -17,7 +18,7 @@ overflow: hidden;
 text-overflow: ellipsis;
 `;
 
-export const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {} }) => {
+const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
     const [filter, setfilter] = useState('');
     const allLayers = prepareData(capabilities);
     const layers = sortLayers(filterLayers(allLayers, filter));
@@ -27,14 +28,18 @@ export const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
-            <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item)}></List>
+            <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item, getMessage)}></List>
         </React.Fragment>);
 };
 
 LayerCapabilitiesListing.propTypes = {
     capabilities: PropTypes.object,
+    getMessage: PropTypes.func.isRequired,
     onSelect: PropTypes.func
 };
+
+const contextWrap = LocaleConsumer(LayerCapabilitiesListing);
+export { contextWrap as LayerCapabilitiesListing };
 
 /**
  * Processes a layer list to be rendered based on capabilities
@@ -101,7 +106,19 @@ const filterLayers = (layers, filter) => {
     });
 };
 
-const getItem = (onSelect, item) => {
+const getItem = (onSelect, item, getMessage) => {
+    if (item.isExisting) {
+        return (<Confirm
+            title={<Message messageKey='messages.confirmDuplicatedLayer'/>}
+            onConfirm={() => onSelect(item.layer)}
+            okText={getMessage('ok')}
+            cancelText={getMessage('cancel')}
+        >
+            <StyledListItem item={item}>
+                {item.layer.name} / {item.title} {getIcon(item)}
+            </StyledListItem>
+        </Confirm>);
+    }
     return (
         <StyledListItem onClick={() => onSelect(item.layer)} item={item}>
             {item.layer.name} / {item.title} {getIcon(item)}
