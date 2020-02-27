@@ -10,36 +10,45 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         repaint: false
     };
     this.events();
+    this._dataChartsEl = null;
+    this._size = {};
 }, {
     _template: {
-        container: jQuery('<div></div>')
+        container: jQuery('<div class="graph-container"></div>')
     },
     /**
      * @method  @public render Render diagram
      * @param  {Object} el jQuery element
      */
-    render: function (el, options) {
-        var me = this;
-        if (options) {
-            me._chartInstance.setResizable(!!options.resizable);
-        }
+    render: function (el, size) {
         if (this.element) {
             // already rendered, just move the element to new el when needed
             if (el !== this.element.parent()) {
                 this.element.detach();
                 el.append(this.element);
             }
-            // update ui if diagram is resizable
-            if (options && options.resizable) {
-                me.updateUI(options);
-            }
             return;
         }
         this.element = this._template.container.clone();
         el.append(this.element);
-        this.updateUI(options);
+        this._dataChartsEl = el;
+        if (size) {
+            this.resizeUI(size);
+        } else {
+            this.updateUI();
+        }
     },
-    updateUI: function (options) {
+    resizeUI: function (size) {
+        const { maxHeight, width } = size;
+        if (maxHeight) {
+            this._size.maxHeight = maxHeight;
+        }
+        if (width) {
+            this._size.width = width;
+        }
+        this.updateUI();
+    },
+    updateUI: function () {
         var me = this;
         var el = this.element;
         if (!el) {
@@ -81,6 +90,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             var classificationOpts = me.service.getStateService().getClassificationOpts(me.getIndicator().hash);
             var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
             var formatter = Oskari.getNumberFormatter(fractionDigits);
+            const { maxHeight, width } = me._size;
             var chartOpts = {
                 colors: me.getColorScale(data),
                 valueRenderer: function (val) {
@@ -88,25 +98,16 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                         return null;
                     }
                     return formatter.format(val);
-                }
+                },
+                margin: {
+                    top: 0,
+                    bottom: 20
+                },
+                width
             };
-
-            if (me._chartInstance.isResizable()) {
-                var dataCharts = jQuery(el).closest('.oskari-datacharts');
-                if (options && options.height) {
-                    // height for flyout toolbar, defaults to 57px (.oskari-flyouttoolbar height)
-                    const heightOffset = jQuery(el).closest('.oskari-flyout').find('.oskari-flyouttoolbar:first').height() || 57;
-                    jQuery(el).closest('.oskari-flyoutcontentcontainer').css('max-height', 'none').height(options.height - heightOffset);
-                }
-                if (options && options.width) {
-                    // helps to calculate container width for chart, defaults to 16px + 16px padding
-                    const widthOffset = (parseInt(dataCharts.css('padding-left').replace(/[^-\d.]/g, '')) +
-                        parseInt(dataCharts.css('padding-right').replace(/[^-\d.]/g, ''))) || 32;
-                    chartOpts.width = options.width - widthOffset;
-                    dataCharts.width(options.width - widthOffset);
-                }
+            if (maxHeight) {
+                el.css('max-height', maxHeight);
             }
-
             if (!me._chartElement) {
                 me._chartElement = me.createBarCharts(data, chartOpts);
                 el.html(me._chartElement);
@@ -115,7 +116,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             }
 
             var labels = me.getChartHeaderElement();
-            el.parent().parent().find('.axisLabel').append(labels);
+            me._dataChartsEl.find('.axisLabel').append(labels);
 
             me._renderDone();
         });
@@ -171,7 +172,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         return this.service.getStateService().getActiveIndicator();
     },
     hasIndicators: function () {
-        return !!this.service.getStateService().getIndicators().length;
+        return this.service.getStateService().hasIndicators();
     },
     getIndicatorData: function (indicator, callback) {
         if (!indicator) {
