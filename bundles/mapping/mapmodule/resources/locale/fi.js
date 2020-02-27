@@ -124,6 +124,12 @@ Oskari.registerLocalization(
                 "center" : {
                     "tooltip": "Palaa alkutilaan"
                 }
+            },
+            "Tiles3DLayerPlugin": {
+                "layerFilter": {
+                    "text": "3D-tasot",
+                    "tooltip": ""
+                }
             }
         },
         "guidedTour": {

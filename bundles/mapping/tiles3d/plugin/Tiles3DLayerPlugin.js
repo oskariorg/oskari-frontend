@@ -19,6 +19,7 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
         __name: 'Tiles3DLayerPlugin',
         _clazz: 'Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
         layertype: 'tiles3d',
+        _layerFilterId: '3d',
 
         /**
          * Checks if the layer can be handled by this plugin
@@ -64,12 +65,34 @@ Oskari.clazz.define('Oskari.mapframework.mapmodule.Tiles3DLayerPlugin',
                 ]);
                 mapLayerService.registerLayerModel(registerType, clazz, composingModel);
                 mapLayerService.registerLayerModelBuilder(registerType, new Tiles3DModelBuilder());
+                // register layerlist filter for 3D layers
+                mapLayerService.registerLayerFilter(this._layerFilterId, (layer) => {
+                    return layer.isLayerOfType(this.layertype);
+                });
             }
+            this._registerForLayerFiltering();
             if (!this.getMapModule().getSupports3D()) {
                 return;
             }
             this._initTilesetClickHandler();
             applyCustomMaterialSettings();
+        },
+        _registerForLayerFiltering: function () {
+            // Add layerlist filter button for 3D layers after app is started
+            Oskari.on('app.start', () => {
+                const layerlistService = Oskari.getSandbox().getService('Oskari.mapframework.service.LayerlistService');
+                if (layerlistService) {
+                    const id = this._layerFilterId;
+                    layerlistService.registerLayerlistFilterButton(
+                        Oskari.getMsg('MapModule', 'plugin.Tiles3DLayerPlugin.layerFilter.text'),
+                        Oskari.getMsg('MapModule', 'plugin.Tiles3DLayerPlugin.layerFilter.tooltip'),
+                        {
+                            active: 'layer-' + id,
+                            deactive: 'layer-' + id + '-disabled'
+                        },
+                        id);
+                }
+            });
         },
         /**
          * @method _afterChangeMapLayerOpacityEvent
