@@ -545,34 +545,43 @@ div.oskari-flyout {
     * Diagram styles
     * ********************************************/
      &.statsgrid-diagram-flyout {
+        .oskari-flyoutcontentcontainer {
+            overflow: visible;
+            display: flex;
+        }
+        // remove padding to calculate chart size and margins
         .oskari-datacharts {
             position: relative;
-            padding: $flyoutPadding;
+            padding: 0;
             flex: 1;
-            overflow-y: auto;
         }
         .chart-controls {
             display:flex;
             justify-content: center;
             align-items: center;
-            padding: 7px;
+            padding: 20px 20px 28px;
 
            .dropdown {
                 display: flex;
                 max-width: 100%;
            }
         }
+        .chart {
+            overflow-y: auto;
+            display: flex;
+            justify-content: center;
+        }
+        .axisLabel {
+            margin-top: -15px;
+            position: absolute;
+            opacity: 0.8;
+        }
+        .stats-diagram-holder {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+        }
     }
-    .stats-diagram-holder {
-        display: flex;
-        flex-direction: column;
-        align-items: stretch;
-    }
-}
-
-.statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
-    overflow: visible;
-    display: flex;
 }
 
 /** Toggle buttons */
@@ -814,27 +823,6 @@ div.tab-material-controls div.title {
         padding-top:2em !important;
     }
 }
-.chart {
-    display: flex;
-    justify-content: center;
-}
-.axisLabel {
-    margin-top: -5px;
-    position: absolute;
-    opacity: 0.8;
-}
-.sticky {
-    font-weight: bold;
-    color:#F6F6F6;
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white;
-    overflow: hidden;
-    z-index: 3;
-    max-height: 100%;
-}
-
-.statsgrid-diagram-flyout .oskari-flyoutcontentcontainer {
-    max-width:700px;
-  }
 
 /* ********************************************
  * User indicator form
