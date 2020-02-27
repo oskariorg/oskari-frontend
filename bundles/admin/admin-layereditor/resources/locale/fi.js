@@ -69,6 +69,7 @@ Oskari.registerLocalization(
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",
             "close": "Sulje",
+            "backToPrevious": "Takaisin edelliseen vaiheeseen",
             "ok": "Ok",
             "add": "Lisää",
             "save": "Tallenna",
