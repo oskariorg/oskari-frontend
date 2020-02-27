@@ -34,25 +34,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
     getUiElement: function () {
         return this.uiElement;
     },
-    scroll: function (el) {
-        const axisLabel = el.find('.axisLabel');
-        const chart = el.find('.chart');
-        chart.scroll(function () {
-            var scrollAmount = jQuery(this).scrollTop();
-            // 14 is the 2% padding-bottom
-            if (scrollAmount >= 14) {
-                axisLabel.addClass('sticky');
-                axisLabel.css('margin-top', function () {
-                    return scrollAmount - 15;
-                });
-            } else {
-                if (axisLabel.hasClass('sticky')) {
-                    axisLabel.removeClass('sticky');
-                    axisLabel.css('margin-top', '');
-                }
-            }
-        });
-    },
     createUi: function () {
         if (this.getUiElement()) {
             // already created ui
