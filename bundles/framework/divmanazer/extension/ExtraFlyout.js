@@ -203,6 +203,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 'top': top
             });
         },
+        showOnPosition: function () {
+            const { position } = this.getOptions();
+            if (position) {
+                this.move(position.x, position.y, true);
+            }
+            this.show();
+        },
         getPosition: function () {
             if (!this._popup) {
                 return;
