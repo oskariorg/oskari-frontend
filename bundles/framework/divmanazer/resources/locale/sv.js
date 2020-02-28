@@ -281,7 +281,7 @@ Oskari.registerLocalization(
         },
         "FilterDialog": {
             "title": "Filter",
-            "description": "Välj funktionerna från kartlagret:",
+            "description": "Välj objekt från kartlager:",
             "cancelButton": "Avbryt",
             "clearButton": "Töm filter",
             "refreshButton": "Uppdatera filter",

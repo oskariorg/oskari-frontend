@@ -274,7 +274,7 @@ Oskari.clazz.define(
                 );
 
             panel.setTitle(layer.getName());
-            panel.setTooltip(layer.getName());
+            //panel.setTooltip(layer.getName());
             panel.getContainer().append(
                 this.instance.getLocalization('loading')
             );
@@ -285,6 +285,7 @@ Oskari.clazz.define(
                 panel.setTitleIcon('icon-funnel', function (event) {
                     me.addFilterFunctionality(event, layer);
                 });
+                panel.getHeader().find('.icon-funnel').prop('title', this.instance.getLocalization('filterDialogTooltip'));
             }
         },
         /**

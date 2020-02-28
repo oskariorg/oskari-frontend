@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "errorNoFields": "Karttatasolla ei ole kohdetietoja.",
         "columnSelectorTooltip": "Valitse näytettävät sarakkeet",
         "featureDataPopup": "Tunnusluvut",
+        "filterDialogTooltip": "Valitse kohteita",
         "selectionTools": {
             "title": "Valitse kohteita",
             "instructions": " ",

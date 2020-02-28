@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "errorNoFields": "The map layer has no feature data.",
         "columnSelectorTooltip": "Select visible columns",
         "featureDataPopup": "Statistical values",
+        "filterDialogTooltip": "Select features",
         "selectionTools": {
             "title": "Select Features",
             "instructions": " ",
