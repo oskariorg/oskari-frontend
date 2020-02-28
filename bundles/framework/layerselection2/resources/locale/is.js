@@ -102,6 +102,13 @@ Oskari.registerLocalization(
                     "operator_missing": "Virkjann vantar.",
                     "value_missing": "Gildi vantar.",
                     "boolean_operator_missing": "Rökvirkjann vantar"
+                },
+            "guidedTour": {
+                "title": "Valin lög",
+                "message": "Í Valin Lög valmyndinni getur þú fundið öll opnu kortalögin og skilgreint stillingar hvernig þú birtir þau í kortasýninni.<br/>Flokka kort með því draga þau til.<br/>Stjórna gagnsæi kortalags.<br/>Velja annan stíl, ef það er í boði.<br/>Opna fitjugögn í töflunni, ef gögn eru í boði.<br/>Sýna eða fela kortalög tímabundið.",
+                "openLink": "Sýna valin lög",
+                "closeLink": "Fela valin lög",
+                "tileText": "Valin lög"
                 }
             }
         }

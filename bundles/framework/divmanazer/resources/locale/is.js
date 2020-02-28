@@ -144,11 +144,6 @@ Oskari.registerLocalization(
                 "area": "Breyta stíl á fláka",
                 "line": "Breyta stíl á línu"
             },
-            "validation": {
-                "title": "Gögn innihalda villur:",
-                "strokeWidth": "Línubreiddin er ógild. Stærð á að vera á bilinu 1 til 50.",
-                "borderWidth": "Þykkt á brún línu er ógild. Stærð á að vera á bilinu 1 til 50."
-            },
             "dot": {
                 "title": "Stíll punktafitju",
                 "tooltip": "Skilgreina stíl fyrir punkta.",
