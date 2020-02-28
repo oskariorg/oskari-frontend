@@ -24,6 +24,9 @@ const getLabels = bundleKey => {
             subtitle: getMsg(`${langPrefix}.descplaceholder`, [language])
         };
     });
+    // mark mandatory field
+    const defaultLanguage = Oskari.getSupportedLanguages()[0];
+    labels[defaultLanguage].name = labels[defaultLanguage].name + ' (*)';
     return labels;
 };
 
