@@ -123,6 +123,7 @@ Oskari.registerLocalization(
             "validation": {
                 "dataprovider": "Tiedontuottaja on pakollinen tieto.",
                 "nopermissions": "Tasolle ei ole asetettu oikeuksia",
+                "locale": "Tasolle ei ole annettu nimeä oletuskielelle.",
                 "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
                 "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",

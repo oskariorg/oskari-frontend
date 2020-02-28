@@ -123,6 +123,7 @@ Oskari.registerLocalization(
             "validation": {
                 "dataprovider": "Dataprovider is mandatory.",
                 "nopermissions": "Layer doesn't have any permissions.",
+                "locale": "Name for end-user is mandatory.",
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
