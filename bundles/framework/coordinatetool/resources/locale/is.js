@@ -9,6 +9,7 @@ Oskari.registerLocalization(
             "crs": {
                 "EPSG:3067": "ETRS89-TM35FIN hnit",
                 "EPSG:3575": "Norðurpóll LAEA Evrópuhnit",
+                "EPSG:3857": "WGS 84 / Pseudo-Mercator hnit",
                 "default": "{crs} hnit"
             },
             "popup": {
