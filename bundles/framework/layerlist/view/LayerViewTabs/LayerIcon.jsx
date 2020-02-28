@@ -4,7 +4,7 @@ import { ImageLayerIcon, DataLayerIcon, UserDataIcon, ThreeDIcon } from './Custo
 
 // TODO replace logic with layer plugins registering their icons.
 export const LayerIcon = ({ type, ...rest }) => {
-    if (['wmts', 'wms'].includes(type)) {
+    if (['wmts', 'wms', 'arcgis93', 'arcgis'].includes(type)) {
         return <ImageLayerIcon {...rest} />;
     }
     if (['wfs'].includes(type)) {
