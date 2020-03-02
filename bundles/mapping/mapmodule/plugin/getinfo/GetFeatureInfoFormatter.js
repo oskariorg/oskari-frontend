@@ -440,7 +440,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             valpres = '';
             switch (vType) {
             case 'string':
-                if (value.indexOf('http://') === 0) {
+                if (value.indexOf('http://') === 0 || value.indexOf('https://') === 0) {
                     valpres = this.template.linkOutside.clone();
                     valpres.attr('href', value);
                     valpres.append(value);
