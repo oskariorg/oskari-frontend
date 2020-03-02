@@ -57,6 +57,10 @@ function() {
             "lang" : "en",
             "type" : "text/javascript",
             "src" : "../../../../bundles/admin/admin/resources/locale/en.js"
+        }, {
+            "lang" : "is",
+            "type" : "text/javascript",
+            "src" : "../../../../bundles/admin/admin/resources/locale/is.js"
         }]
     },
     "bundle" : {
