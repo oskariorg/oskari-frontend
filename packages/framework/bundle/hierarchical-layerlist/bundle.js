@@ -111,6 +111,10 @@ Oskari.clazz.define("Oskari.framework.bundle.hierarchical-layerlist.Hierarchical
                 "lang": "ru",
                 "type": "text/javascript",
                 "src": "../../../../bundles/framework/hierarchical-layerlist/resources/locale/ru.js"
+            }, {
+                "lang": "is",
+                "type": "text/javascript",
+                "src": "../../../../bundles/framework/hierarchical-layerlist/resources/locale/is.js"
             }]
         }
     });

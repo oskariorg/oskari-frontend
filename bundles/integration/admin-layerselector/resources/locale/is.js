@@ -10,8 +10,8 @@ Oskari.registerLocalization(
             "fetchingLayers": "Sækja kortalög"
         },
         "tile": {
-            "title": "A: Map Layers",
-            "tooltip": "EKKI ÞÝTT"
+            "title": "A: Kortalög",
+            "tooltip": ""
         },
         "view": {
             "title": "",
@@ -24,13 +24,19 @@ Oskari.registerLocalization(
             "loadFailed": "Ekki tókst að hlaða inn kortalögum. Vinsamlegast endurhladdu síðunni og veldu kortalög aftur.",
             "noResults": "Engar leitarniðurstöður.",
             "layerTypeNotSupported": "Tegund kortalags er ekki enn studd:",
-            "not_empty": "Það eru kortalög í þessu þema. Vinsamlega færðu þau í annað þema áður en þú fjarlægir þemað."
+            "not_empty": "Það eru kortalög í þessu þema. Vinsamlega færðu þau í annað þema áður en þú fjarlægir þemað.",
+            "invalidJSON": "Rangur JSON kóði.",
+            "externalStyle": {
+                "nameEmpty": "Nafn er skilyrt.",
+                "name": "Nafn inniheldur röng tákn.",
+                "content": "Stíllinn inniheldur rangt JSON innihald."
+            }
         },
         "loading": "Hleður...",
         "filter": {
             "text": "Leita kortalög",
             "inspire": "Eftir þema",
-            "organization": "Eftir gagnaveitanda",
+            "organization": "Eftir gagnaeiganda",
             "published": "Notendur"
         },
         "published": {
@@ -53,12 +59,16 @@ Oskari.registerLocalization(
                 "wfs": "WFS lag",
                 "wmts": "WMTS lag",
                 "arcgis": "ArcGISCache lag",
-                "arcgis93": "ArcGISRest lag"
+                "arcgis93": "ArcGISRest lag",
+                "tiles3d" : "3D Tiles lag",
+                "bingmaps" : "Bing Maps lag",
+                "vectortile" : "MVT lag"
             },
+            "confirmDeleteStyle": "Stíllinn verður fjarlægður, villtu halda áfram?",
             "selectLayer": "Velja kortalag",
             "selectSubLayer": "Velja undirlag",
             "addOrganization": "Bæta við stofnun",
-            "addOrganizationDesc": "Bæta við nýrri stofnun / gagnaveitanda.",
+            "addOrganizationDesc": "Bæta við nýrri stofnun / gagnaeiganda.",
             "addInspire": "Bæta við þema",
             "addInspireDesc": "Bæta við nýju þema.",
             "addLayer": "Bæta við kortalagi.",
@@ -75,8 +85,11 @@ Oskari.registerLocalization(
             "interfaceVersionDesc": "Veldu viðeigandi útgáfu. Settu nýjustu útgáfuna sem er studd efst.",
             "wms1_1_1": "WMS 1.1.1",
             "wms1_3_0": "WMS 1.3.0",
+            "tiles3d0_0": "3D Tiles 0.0",
+            "tiles3d1_0": "3D Tiles 1.0",
             "getInfo": "Sækja upplýsingar.",
             "editWfs": "Breyta WFS",
+            "options": "Options JSON",
             "selectClass": "Velja þema",
             "selectClassDesc": "Velja þema sem lýsir kortalaginu af listanum.",
             "baseName": "Nafn á bakgrunnskortalagi",
@@ -86,12 +99,19 @@ Oskari.registerLocalization(
             "editSubLayer": "Breyta undirlagi",
             "wmsInterfaceAddress": "URL tengibúnaður",
             "wmsUrl": "URL tengibúnaður",
-            "wmsInterfaceAddressDesc": "Sláðu inn slóð vefþjónustunnar í URL-ið án spurningamerkis og annarra breyta. Sæktu breytur kortalagsins með því að smella á \"Sækja upplýsingar\".",
+            "wmsInterfaceAddressDesc": "Skrifið slóð vefþjónustunnar í URL-ið án spurningamerkis og annarra breyta. Sæktu breytur kortalagsins með því að smella á \"Sækja upplýsingar\".",
             "wmsServiceMetaId": "Kennimerki lýsigagna í þjónustu",
             "wmsServiceMetaIdDesc": "Settu inn auðkenni skrár fyrir lýsigögnin sem lýsa tengibúnaðinum.",
             "layerNameAndDesc": "Nafn og lýsing kortalags",
+            "forcedSRS": "Þvingað SRS",
+            "forcedSRSInfo": "View projections override compared to capabilities",
+            "forcedSRSAdd": "Bæta við",
+            "supportedSRS": "Studd SRS",
+            "missingSRS": "Ekki stuðningur við SRS",
+            "layerProps": "Skilgreining kortalags",
             "metaInfoIdDesc": "Auðkenni lýsigagnaskrár er XML skrá sem er sótt sjálfkrafa úr svörun GetCapabilities",
             "metaInfoId": "Auðkenni lýsigagnaskrár",
+            "addDataprovider": "Gagnaeigandi",
             "wmsName": "Einkvæmt nafn",
             "wmsNameDesc": "Einkvæmt nafn er tæknilegt auðkenni. Það er sótt sjálfkrafa úr svörum GetCapabilities.",
             "username": "Notendanafn",
@@ -100,9 +120,9 @@ Oskari.registerLocalization(
             "selectedTime": "Valinn tími",
             "time": "Stuðningstími",
             "addInspireName": "Nafn á þema",
-            "addInspireNameTitle": "Sláðu inn þemanafn á mismunandi tungumálum.",
-            "addOrganizationName": "Nafn gagnaveitanda",
-            "addOrganizationNameTitle": "Sláðu inn nafn fyrirtækisins á mismunandi tungumálum.",
+            "addInspireNameTitle": "Skrifið þemanafn á mismunandi tungumálum.",
+            "addOrganizationName": "Nafn gagnaeiganda",
+            "addOrganizationNameTitle": "Skrifið nafn fyrirtækisins á mismunandi tungumálum.",
             "addNewClass": "Bæta við þema",
             "addNewLayer": "Bæta við kortalagi.",
             "addNewGroupLayer": "Bæta við hópi kortalaga.",
@@ -175,7 +195,7 @@ Oskari.registerLocalization(
                 "descplaceholder": "Description in Swedish"
             },
             "interfaceAddress": "URL tengibúnaður",
-            "interfaceAddressDesc": "Sláðu inn slóð vefþjónustunnar í URL-ið án spurningamerkis og annarra breyta. Sæktu breytur kortalagsins með því að smella á \"Sækja gögn\".",
+            "interfaceAddressDesc": "Skrifið slóð vefþjónustunnar í URL-ið án spurningamerkis og annarra breyta. Sæktu breytur kortalagsins með því að smella á \"Sækja gögn\".",
             "viewingRightsRoles": "Skoða réttindi hlutverka.",
             "metadataReadFailure": "Það er ekki hægt að sækja lýsigögn kortalagsins.",
             "permissionFailure": "Notandanafn eða lykilorð er rangt.",

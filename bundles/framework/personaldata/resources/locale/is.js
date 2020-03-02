@@ -133,6 +133,13 @@ Oskari.registerLocalization(
         "button": {
             "yes": "Já",
             "no": "Nei"
+        },
+        "guidedTour": {
+            "title": "Gögnin mín",
+            "message": "Í Gögnin Mín valmyndinni getur þú skoðað öll vistuð gögn og upplýsingar um prófílinn.<br/><br/>Skoðaðu og breyttu stöðum sem þú hefur vistað, kortasýn, ívafin kort, vísbendingar, greiningar og gagnasett.<br/><br/>Gögnin Mín er aðeins fyrir innskráða notendur.",
+            "openLink": "Sýna gögnin mín",
+            "closeLink": "Fela gögnin mín",
+            "tileText": "Gögnin mín"
         }
     }
 });

@@ -103,7 +103,11 @@ Oskari.registerLocalization(
                 "label": "Þemakort",
                 "tooltip": "Sýna þemakort á kortinu.",
                 "grid": "Sýna þemagögn í töflunni.",
-                "allowClassification": "Leyfa flokkun"
+                "allowClassification": "Leyfa flokkun",
+                "transparent": "Set classification background transparent",
+                "displayDiagram" : "Display charts",
+                "allowHidingClassification" : "Allow hiding classification",
+                "allowHidingSeriesControl" : "Allow hiding series player"
             },
             "layout": {
                 "label": "Grafískt útlit",
@@ -241,6 +245,13 @@ Oskari.registerLocalization(
             "tooltips": {
                 "publishable": "Sýna einungis útgefanleg kortalög."
             }
+        },
+        "guidedTour": {
+            "title": "Birting korta",
+            "message": "Í Birting Korta valmyndinni getur þú birt ívafin kort á þinni eigin vefsíðu.<br/><br/>Veldu kortalög, skilgreindu vefsíðu, veldu tól og hannaðu útlit. Smelltu á Vista og kortið þitt er tilbúið til birtingar. Afritaðu one line html kóða á vefsíðuna þína.<br/><br/>Ef þú vilt uppfæra kortið, getur þú fundið það í valmyndinni Mín Gögn. Uppfærslur birtast strax á kortinu þínu.<br/><br/>Birting Korta er aðeins í boði fyrir innskráða notendur.",
+            "openLink": "Sýna birtingu korta",
+            "closeLink": "Fela birtingu korta",
+            "tileText": "Birting korta"
         }
     }
 });

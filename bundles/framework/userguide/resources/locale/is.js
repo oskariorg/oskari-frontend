@@ -6,15 +6,15 @@ Oskari.registerLocalization(
         "title": "Hjálp",
         "desc": "",
         "flyout": {
-            "title": "Notkunarleiðbeiningar",
+            "title": "Leiðbeiningar",
             "loadingtxt": "<p>Er að hlaða upp leiðbeiningunum...</p>"
         },
         "tile": {
-            "title": "Notkunarleiðbeiningar"
+            "title": "Leiðbeiningar"
         },
         "error": {
             "title": "Villa!",
-            "generic": "Það tókst ekki að opna notkunarleiðbeiningarnar."
+            "generic": "Það tókst ekki að opna leiðbeiningarnar."
         },
         "tabs": [
             {
@@ -47,7 +47,7 @@ Oskari.registerLocalization(
             }
         ],
         "help": {
-            "tags": "kortagluggi, notkunarleiðbeiningar"
+            "tags": "kortagluggi, leiðbeiningar"
         }
     }
 });

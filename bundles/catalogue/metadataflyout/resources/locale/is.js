@@ -385,8 +385,8 @@ Oskari.registerLocalization(
                 "qualityPassFalse": "Gagnasettið er ekki í samræmi við forskriftina."
             },
             "heading": {
-                "abstractTextData": "Hugrænn texti (gögn)",
-                "abstractTextService": "Hugrænn texti (þjónustur)",
+                "abstractTextData": "Útdráttur (gögn)",
+                "abstractTextService": "Útdráttur (þjónustur)",
                 "accessConstraint": "Aðgengistakmörkun",
                 "citationDate": "Dagsetning",
                 "classification": "Flokkun",
