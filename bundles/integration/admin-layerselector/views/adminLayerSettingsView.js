@@ -38,9 +38,6 @@ function (
             'click .show-edit-layer': 'clickLayerSettings',
             'click .fetch-ws-button': 'fetchCapabilities',
             // 'click .edit-wfs-button': 'editWfsLayerConfiguration',
-            'click .import-wfs-style-button': 'importSldStyle',
-            'click .save-wfs-style-button': 'saveSldStyle',
-            'click .cancel-wfs-style-button': 'cancelSldStyle',
             'click .icon-close': 'clearInput',
             'change .admin-layer-type': 'createLayerSelect',
             'click .admin-add-group-ok': 'saveCollectionLayer',
@@ -48,7 +45,6 @@ function (
             'click .admin-remove-group': 'removeLayerCollection',
             'click .add-layer-record.capabilities li': 'handleCapabilitiesSelection',
             'change .admin-interface-version': 'handleInterfaceVersionChange',
-            'change .admin-sld-styles': 'handleSldStylesChange',
             'change .admin-layer-legendUrl': 'handleLayerLegendUrlChange',
             'click .layer-capabilities.icon-info': 'showCapabilitiesPopup',
             'click .add-layer-forced-proj .icon-close': 'removeForcedProj',
@@ -555,10 +551,6 @@ function (
                     }
                 }
             }
-            if (layerType === 'wfslayer') {
-                // sld styles for all wfs layers
-                me._setupSldStyles();
-            }
         },
         /**
          * Gets dataproviders
@@ -646,126 +638,6 @@ function (
             } else {
                 form.find("input[type='radio'][name='jobtype'][id='layer-jobtype-default']").prop('checked', true);
             }
-        },
-        /**
-         * New sld style management for importing it to server
-         *
-         * @method importSldStyle
-         */
-        importSldStyle: function (e) {
-            e.stopPropagation();
-            var element = jQuery(e.currentTarget),
-                form = element.parents('.add-style-send'),
-                sldImport = form.find('.add-layer-style-import-block');
-
-            // set this element invisible
-            element.hide();
-
-            // Show  new sld input block
-            sldImport.show();
-        },
-        /**
-         * Cancel sld style management for importing it to server
-         *
-         * @method cancelSldStyle
-         */
-        cancelSldStyle: function (e) {
-            e.stopPropagation();
-            var element = jQuery(e.currentTarget),
-                form = element.parents('.add-style-send'),
-                sldImport = form.find('.add-layer-style-import-block'),
-                sldImportBtn = form.find('.import-wfs-style-button');
-
-            // set this element invisible
-            sldImportBtn.show();
-
-            // Show  new sld input block
-            sldImport.hide();
-        },
-        /**
-         * Save new sld style to data base
-         *
-         * @method saveSldStyle
-         */
-        saveSldStyle: function (e) {
-            var me = this,
-                element = jQuery(e.currentTarget),
-                form = element.parents('.add-style-send'),
-                sldImport = form.find('.add-layer-style-import-block'),
-                sldImportBtn = form.find('.import-wfs-style-button'),
-                sldName = form.find('.add-layer-sld-style-sldname').val(),
-                sldXml = form.find('.add-sld-file').val();
-
-            // Check if sld is valid
-            if (me._checkXml(sldXml)) {
-                // Save new style
-                me._saveSldStyle(sldName, sldXml);
-            } else {
-                return;
-            }
-
-            // set this element invisible
-            sldImportBtn.show();
-
-            // Show  new sld input block
-            sldImport.hide();
-        },
-        /**
-         * Check, that xml has valid  syntax
-         *
-         * @method checkXml
-         */
-        _checkXml: function (xml) {
-            var me = this,
-                isValid = true;
-
-            if (xml) {
-                try {
-                    jQuery.parseXML(xml);
-                } catch (e) {
-                    isValid = false;
-                }
-            }
-
-            if (!isValid) {
-                me._showDialog('title', 'Not valid sld xml');
-            }
-            return isValid;
-        },
-        /**
-         * Handle sld styles selection
-         *
-         * @method handleSldStylesChange
-         */
-        handleSldStylesChange: function (e) {
-            e.stopPropagation();
-            var me = this,
-                element = jQuery(e.currentTarget),
-                form = element.parents('.admin-add-layer');
-
-            var styles = me.selectedSldStyles(form);
-            me._DefaultStylesUI(element, styles);
-        },
-        /**
-         * selected sld styles selection
-         *
-         * @method selectedSldStyles
-         */
-        selectedSldStyles: function (form) {
-            var selectedStyles = {},
-                styles = [];
-
-            form.find('#add-layer-sld-style option:selected').each(function () {
-                var sel = jQuery(this);
-                if (sel.length) {
-                    var style = {};
-                    style.id = sel.val();
-                    style.name = sel.text();
-                    styles.push(style);
-                }
-            });
-            selectedStyles.selectedStyles = styles;
-            return selectedStyles;
         },
         _DefaultStylesUI: function (element, selection) {
             var form = element.parents('.admin-add-layer'),
@@ -1143,7 +1015,6 @@ function (
                         data[key] = typeof value === 'object' ? JSON.stringify(value) : value;
                     });
                 }
-                data.styleSelection = JSON.stringify(me.selectedSldStyles(form));
                 data.style = form.find('#add-layer-style option:selected').text();
             }
             data.layerName = form.find('#add-layer-layerName').val();
@@ -1427,79 +1298,6 @@ function (
                 input.val('');
             }
         },
-        /**
-         * Fetch wfs specific common data / sld styles
-         *
-         * @method __setupSldStyles
-         */
-        _setupSldStyles: function () {
-            var me = this,
-                elem = me.$el;
-
-            if (me.sldStyles) {
-                me._SldStylesUI(elem);
-            }
-
-            jQuery.ajax({
-                type: 'POST',
-                dataType: 'json',
-                data: {},
-                url: Oskari.urls.getRoute('SldStyles'),
-                success: function (resp) {
-                    me.sldStyles = resp.sldStyles;
-                    me._SldStylesUI(elem);
-                },
-                error: function (jqXHR) {
-                    if (jqXHR.status !== 0) {
-                        me._showDialog(me.instance.getLocalization('admin').errorTitle, me.instance.getLocalization('admin').sldStylesFetchError);
-                    }
-                }
-            });
-        },
-        /**
-         * Save new sld style
-         *
-         * @method _saveSldStyle
-         */
-        _saveSldStyle: function (sldName, sldXml) {
-            var me = this;
-
-            jQuery.ajax({
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    name: sldName,
-                    xml: encodeURIComponent(sldXml)
-                },
-                url: Oskari.urls.getRoute('SldStyles'),
-                success: function (resp) {
-                    me._showDialog('title', 'New sld saved success / ' + sldName);
-                    // Update UI
-                    me._SldStylesAppendUI(resp.id, sldName);
-                },
-                error: function (jqXHR) {
-                    if (jqXHR.status !== 0) {
-                        me._showDialog('title', 'Save of new sld xml failed');
-                    }
-                }
-            });
-        },
-        _SldStylesUI: function (elem) {
-            var me = this,
-                sldSele = elem.find('#add-layer-sld-style');
-
-            for (var i = 0; me.sldStyles != null && i < me.sldStyles.length; i++) {
-                sldSele.append('<option value=' + me.sldStyles[i].id + ' >' + me.sldStyles[i].name + '</option>');
-            }
-        },
-        _SldStylesAppendUI: function (id, name) {
-            var me = this,
-                elem = me.$el,
-                sldSele = elem.find('#add-layer-sld-style');
-
-            sldSele.append('<option value=' + id + ' >' + name + '</option>');
-        },
-
         /**
          * Stops propagation if admin clicks layer settings section.
          *
