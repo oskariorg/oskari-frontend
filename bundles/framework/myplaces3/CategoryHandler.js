@@ -194,9 +194,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplaces3.CategoryHandler',
             baseJson.name = categoryModel.getName();
             baseJson.options.styles = this._geStyleForLayer(style);
             baseJson.id = this._getMapLayerId(categoryModel.getId());
-            // Publish permission is always ok for user's own data
+            // Publish and download permissions are always ok for user's own data
             baseJson.permissions = {
-                'publish': 'publication_permission_ok'
+                'publish': 'publication_permission_ok',
+                'download': 'download_permission_ok'
             };
             return baseJson;
         },
