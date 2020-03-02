@@ -82,7 +82,7 @@ Oskari.registerLocalization(
             }
         },
         "guidedTour": {
-            "title": "Map layers",
+            "title": "Kortalög",
             "message": "Í valmyndinni Kortalög finnur þú öll kortalögin í kortaþjónustunni.<br/><br/>Flokka kortalög eftir þema eða gagnaeiganda.<br/><br/>Leita í kortalögum eftir nafni kortalags, nafni gagnaeiganda eða lykilorði. Nýjustu kortalögin, vektorlög og lög sem hægt er að birta getur þú fundið í fyrirfram skilgreindum listum.<br/><br/>Opna kortalögin sem þú getur valið í Valin Lög valmyndinni.",
             "openLink": "Sýna kortalög",
             "closeLink": "Fela kortalög",

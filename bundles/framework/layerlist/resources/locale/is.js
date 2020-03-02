@@ -40,7 +40,7 @@ Oskari.registerLocalization(
                 },
                 'moveToScale': 'Farðu í hentugan mælikvarða',
                 'moveToContentArea': 'Vinsamlega færðu þig á hentugan stað',
-                'publishable': 'Publishable',
+                'publishable': 'Útgefanlegt',
                 'hidden': 'Kortið er falið tímabundið.'
             },
             'backendStatus': {
