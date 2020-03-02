@@ -108,15 +108,20 @@ Oskari.registerLocalization(
             "MyLocationPlugin": {
                 "tooltip": "Stilltu kortið á þína staðsetningu."
             },
-            "guidedTour": {
-                "help1": {
-                    "title": "Hliðra kortasýn",
-                    "message": "Það er hægt að hliðra kortasýninni á nokkra vegu.<br/><br/>Velja handverkfæri og draga kortasýnina með músinni.<br/><br/>Nota örvatakkanna á lyklaborðinu.<br/><br/>Smella á örvarnar í hliðrunartólinu. Þær má finna efst í hægra horni"
-                },
-                "help2": {
-                    "title": "Þysja inn og út í kortasýn",
-                    "message": "Það má þysja kortasýninni inn og út á nokkra vegu.<br/><br/>Velja mælikvarða í aðdráttarstikunni. Einnig er hægt að smella á (+) og (-) hnappana efst á aðdráttastikunni.<br/><br/>Nota á (+) og (-) hnappana á lyklaborðinu þínu.<br/><br/>Tvísmella á kortasýnina eða nota \"stækkunargler\" til að þysja inn í kortasýn."
+            "PanButtonsPlugin": {
+                "center" : {
+                    "tooltip": "Fara til baka í sjálfgefna sýn"
                 }
+            }
+        },
+        "guidedTour": {
+            "help1": {
+                "title": "Hliðra kortasýn",
+                "message": "Það er hægt að hliðra kortasýninni á nokkra vegu.<br/><br/>Velja handverkfæri og draga kortasýnina með músinni.<br/><br/>Nota örvatakkanna á lyklaborðinu.<br/><br/>Smella á örvarnar í hliðrunartólinu. Þær má finna efst í hægra horni"
+            },
+            "help2": {
+                "title": "Þysja inn og út í kortasýn",
+                "message": "Það má þysja kortasýninni inn og út á nokkra vegu.<br/><br/>Velja mælikvarða í aðdráttarstikunni. Einnig er hægt að smella á (+) og (-) hnappana efst á aðdráttastikunni.<br/><br/>Nota á (+) og (-) hnappana á lyklaborðinu þínu.<br/><br/>Tvísmella á kortasýnina eða nota \"stækkunargler\" til að þysja inn í kortasýn."
             }
         }
     }
