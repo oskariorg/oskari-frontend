@@ -27,6 +27,14 @@ const StyledNumberInput = styled(NumberInput)`
 `;
 
 export const OpacitySlider = ({ value, onChange }) => {
+    if (typeof value === 'string') {
+        // defensive measures. Link parameters for layer opacity seems to be sent as string
+        // TODO: fix type issue at its source
+        value = parseInt(value, 10);
+        if (isNaN(value)) {
+            value = 100;
+        }
+    }
     const [sliderValue, setSliderValue] = useState(value);
     const [eventTimeout, setEventTimeout] = useState(null);
     const instantValueChange = val => {
