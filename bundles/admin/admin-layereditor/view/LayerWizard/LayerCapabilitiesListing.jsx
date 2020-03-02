@@ -1,24 +1,14 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { List, ListItem, Popover } from 'oskari-ui';
+import { List, ListItem, Icon, Tooltip, Message, Confirm } from 'oskari-ui';
+import { LocaleConsumer } from 'oskari-ui/util';
 import { LayerCapabilitiesFilter } from './LayerCapabilitiesFilter';
 
 export const StyledListItem = styled(ListItem)`
 :hover {
-    color: white;
-    background-color: palevioletred;
+    background-color: #ffd400;
 }
-
-${({ item }) => item.isExisting && `
-background-color: palegreen;
-`}
-${({ item }) => item.isProblematic && `
-background-color: orange;
-`}
-${({ item }) => item.isUnsupported && `
-background-color: lightcoral;
-`}
 `;
 export const StylePopUl = styled.ul`
 max-width: 400px;
@@ -28,7 +18,7 @@ overflow: hidden;
 text-overflow: ellipsis;
 `;
 
-export const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {} }) => {
+const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {}, getMessage }) => {
     const [filter, setfilter] = useState('');
     const allLayers = prepareData(capabilities);
     const layers = sortLayers(filterLayers(allLayers, filter));
@@ -38,14 +28,18 @@ export const LayerCapabilitiesListing = ({ capabilities = {}, onSelect = () => {
                 placeholder="Filter layers"
                 filter={filter}
                 onChange={(value) => setfilter(value)}/>
-            <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item)}></List>
+            <List dataSource={layers} rowKey="name" renderItem={item => getItem(onSelect, item, getMessage)}></List>
         </React.Fragment>);
 };
 
 LayerCapabilitiesListing.propTypes = {
     capabilities: PropTypes.object,
+    getMessage: PropTypes.func.isRequired,
     onSelect: PropTypes.func
 };
+
+const contextWrap = LocaleConsumer(LayerCapabilitiesListing);
+export { contextWrap as LayerCapabilitiesListing };
 
 /**
  * Processes a layer list to be rendered based on capabilities
@@ -112,23 +106,40 @@ const filterLayers = (layers, filter) => {
     });
 };
 
-const getItem = (onSelect, item) => {
-    return (
-        <Popover content={generateContent(item)} title={item.title} placement="right">
-            <StyledListItem onClick={() => onSelect(item.layer)} item={item}>
-                {item.layer.name} / {item.title}
+const getItem = (onSelect, item, getMessage) => {
+    if (item.isExisting) {
+        return (<Confirm
+            title={<Message messageKey='messages.confirmDuplicatedLayer'/>}
+            onConfirm={() => onSelect(item.layer)}
+            okText={getMessage('ok')}
+            cancelText={getMessage('cancel')}
+        >
+            <StyledListItem item={item}>
+                {item.layer.name} / {item.title} {getIcon(item)}
             </StyledListItem>
-        </Popover>
+        </Confirm>);
+    }
+    return (
+        <StyledListItem onClick={() => onSelect(item.layer)} item={item}>
+            {item.layer.name} / {item.title} {getIcon(item)}
+        </StyledListItem>
     );
 };
 
-// FIXME: this is dummy content to show tech details/for debugging
-const generateContent = (item) => (
-    <StylePopUl>
-        <StylePopLi>Exists: {'' + item.isExisting}</StylePopLi>
-        <StylePopLi>Problematic: {'' + item.isProblematic}</StylePopLi>
-        <StylePopLi>Unsupported: {'' + item.isUnsupported}</StylePopLi>
-        <StylePopLi>{JSON.stringify(item.layer)}</StylePopLi>
-    </StylePopUl>
-
-);
+const getIcon = (item) => {
+    // <Tooltip title={message}>
+    if (item.isExisting) {
+        return (<Tooltip title={<Message key={item.name} messageKey="layerStatus.existing" />}>
+            <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+        </Tooltip>);
+    } else if (item.isProblematic) {
+        return (<Tooltip title={<Message key={item.name} messageKey="layerStatus.problematic" />}>
+            <Icon type="question-circle" theme="twoTone" twoToneColor="#ffde00" />
+        </Tooltip>);
+    } else if (item.isUnsupported) {
+        return (<Tooltip title={<Message key={item.name} messageKey="layerStatus.unsupported" />}>
+            <Icon type="warning" theme="twoTone" twoToneColor="#ab0000" />
+        </Tooltip>);
+    }
+    return null;
+};

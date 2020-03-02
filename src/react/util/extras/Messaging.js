@@ -108,7 +108,7 @@ class Messaging {
         notification.config({
             placement: 'topLeft',
             top: 50,
-            duration: 4.5
+            duration: 10
         });
     }
     /** @param {Messaging~Options} option */

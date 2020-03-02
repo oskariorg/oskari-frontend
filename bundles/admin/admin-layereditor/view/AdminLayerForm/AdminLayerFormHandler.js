@@ -462,6 +462,12 @@ class UIHandler extends StateHandler {
         if (!this.hasAnyPermissions(layer.role_permissions)) {
             validationErrors.push(getMessage('validation.nopermissions'));
         }
+        const loc = layer.locale || {};
+        const defaultLang = Oskari.getSupportedLanguages()[0];
+        const defaultLocale = loc[defaultLang] || {};
+        if (!defaultLocale.name) {
+            validationErrors.push(getMessage('validation.locale'));
+        }
         this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);

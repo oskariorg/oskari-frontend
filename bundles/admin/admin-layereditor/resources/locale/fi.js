@@ -68,6 +68,8 @@ Oskari.registerLocalization(
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",
+            "close": "Sulje",
+            "backToPrevious": "Takaisin edelliseen vaiheeseen",
             "ok": "Ok",
             "add": "Lisää",
             "save": "Tallenna",
@@ -88,6 +90,11 @@ Oskari.registerLocalization(
                 "updatedSuccesfully": "GetCapabilities päivitys onnistui.",
                 "updateFailed": "GetCapabilities päivitys epäonnistui.",
                 "updateFailedWithReason": "GetCapabilities päivitys epäonnistui: {reason}"
+            },
+            "layerStatus": {
+                "existing": "Taso on jo rekisteröity palveluun. Valitsemalla tämän tulet lisäämään saman tason useampaan kertaan.",
+                "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
+                "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."
             },
             "scale": "Mittakaava",
             "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
@@ -116,6 +123,7 @@ Oskari.registerLocalization(
             "validation": {
                 "dataprovider": "Tiedontuottaja on pakollinen tieto.",
                 "nopermissions": "Tasolle ei ole asetettu oikeuksia",
+                "locale": "Tasolle ei ole annettu nimeä oletuskielelle.",
                 "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
                 "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
@@ -128,6 +136,7 @@ Oskari.registerLocalization(
                 "saveFailed": "Järjestelmässä tapahtui virhe. Tietoja ei ole tallennettu.",
                 "confirmDeleteLayer": "Karttataso poistetaan. Haluatko jatkaa?",
                 "confirmDeleteGroup": "Ryhmä poistetaan. Haluatko jatkaa?",
+                "confirmDuplicatedLayer": "Taso on jo rekisteröity palveluun. Haluatko varmasti lisätä saman tason moneen kertaan?",
                 "errorRemoveLayer": "Karttatason poisto ei onnistunut.",
                 "errorInsertAllreadyExists": "Uusi karttataso on lisätty. Samalla tunnisteella on jo olemassa karttataso.",
                 "errorFetchUserRolesAndPermissionTypes": "Käyttäjäroolien ja käyttöoikeustyyppien haku ei onnistunut",

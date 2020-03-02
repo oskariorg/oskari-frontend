@@ -6,7 +6,7 @@ import { StyledFormField } from '../styled';
 
 export const DataProvider = ({ layer, dataProviders, controller }) => (
     <Fragment>
-        <Message messageKey='dataProvider'/>
+        <Message messageKey='dataProvider'/> (*)
         <StyledFormField>
             <Select
                 showSearch

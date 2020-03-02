@@ -68,6 +68,8 @@ Oskari.registerLocalization(
             "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
+            "close": "Close",
+            "backToPrevious": "Back to previous step",
             "ok": "Ok",
             "add": "Add",
             "save": "Save",
@@ -87,6 +89,11 @@ Oskari.registerLocalization(
                 "updatedSuccesfully": "Capabilities re-check succeeded.",
                 "updateFailed": "Capablities re-check failed.",
                 "updateFailedWithReason": "Capablities re-check failed: {reason}"
+            },
+            "layerStatus": {
+                "existing": "The map layer is already registered to this service. By selecting this you will be adding a duplicate layer.",
+                "problematic": "There were some issues parsing the capabilities for this layer. This layer might not work properly if added.",
+                "unsupported": "According to capabilities this layer doesn't support projections used on this service. This layer might not work properly if added."
             },
             "opacity": "Opacity",
             "scale": "Scale",
@@ -116,6 +123,7 @@ Oskari.registerLocalization(
             "validation": {
                 "dataprovider": "Dataprovider is mandatory.",
                 "nopermissions": "Layer doesn't have any permissions.",
+                "locale": "Name for end-user is mandatory.",
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
@@ -128,6 +136,7 @@ Oskari.registerLocalization(
                 "saveFailed": "A system error occurred. Data has not been updated.",
                 "confirmDeleteLayer": "The map layer will be removed. Do you want to continue?",
                 "confirmDeleteGroup": "The group will be removed. Do you want to continue?",
+                "confirmDuplicatedLayer": "The map layer has been registered previously. Are you sure you want to duplicate it?",
                 "errorRemoveLayer": "The map layer could not be removed.",
                 "errorInsertAllreadyExists": "The new map layer has been added. A map layer with same identifier already exists.",
                 "errorFetchUserRolesAndPermissionTypes": "Error occured when fetching user roles and permission types.",

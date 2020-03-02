@@ -113,7 +113,7 @@ const LayerWizard = ({
                         setStep(controller, currentStep - 1, hasCapabilitiesSupport);
                         onCancel();
                     }}>
-                        {<Message messageKey='cancel'/>}
+                        {<Message messageKey='backToPrevious'/>}
                     </Button>
                 }
             </LoadingIndicator>
