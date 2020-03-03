@@ -73,6 +73,7 @@ Oskari.registerLocalization(
             "ok": "Ok",
             "add": "Add",
             "save": "Save",
+            "skipCapabilities": "Add manually",
             "delete": "Remove",
             "style": "Default Style",
             "styleDesc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
