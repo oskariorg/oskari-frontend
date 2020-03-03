@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 import { PermissionRow } from './PermissionRow';
-import { List, ListItem, Checkbox, Message } from 'oskari-ui';
+import { List, ListItem, Checkbox, Message, Tooltip } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
@@ -89,12 +89,15 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             }
             // the actual role-based rows
             const role = modelRow.role.name;
-            return <Checkbox key={permission.id + '_' + role}
-                permissionDescription={permission.localizedText}
-                permission={permission.id}
-                role={role}
-                checked={modelRow.permissions.includes(permission.id)}
-                onChange = {(event) => controller.togglePermission(event.target.role, event.target.permission)}/>;
+            return (<Tooltip key={permission.id + '_' + role}
+                title={permission.localizedText}>
+                <Checkbox
+                    permissionDescription={permission.localizedText}
+                    permission={permission.id}
+                    role={role}
+                    checked={modelRow.permissions.includes(permission.id)}
+                    onChange = {(event) => controller.togglePermission(event.target.role, event.target.permission)}/>
+            </Tooltip>);
         });
 
         const rowKey = modelRow.isHeaderRow ? 'header' : modelRow.role.name;
