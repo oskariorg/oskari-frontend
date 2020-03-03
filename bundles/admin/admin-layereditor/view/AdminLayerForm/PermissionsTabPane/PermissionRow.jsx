@@ -4,8 +4,10 @@ import styled from 'styled-components';
 
 const RowContainer = styled.div`
     display: flex;
-    flex-wrap: wrap;
 `;
+// Add `flex-wrap:wrap;` to let divs inside a row to break/flow to additional rows.
+// Note! This breaks the "table" so it's hard for user to see what permission is being set.
+// Note! Handle table wider than display with another kind of UI (like listing roles as headings and permissions as list under that heading)
 
 const TextColumn = styled.div`
     flex-grow: 1;
