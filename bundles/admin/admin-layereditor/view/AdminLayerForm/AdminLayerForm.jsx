@@ -24,8 +24,10 @@ const AdminLayerForm = ({
     getMessage,
     rolesAndPermissionTypes,
     scales
-}) => (
-    <StyledRoot>
+}) => {
+    // For returning to add multiple layers from service endpoint
+    const hasCapabilitiesFetched = !!Object.keys(capabilities).length;
+    return (<StyledRoot>
         { messages.map(({ key, type, args }) =>
             <StyledAlert key={key} type={type} message={
                 <Message messageKey={key} messageArgs={args}/>
@@ -68,25 +70,32 @@ const AdminLayerForm = ({
             <Message messageKey={layer.isNew ? 'add' : 'save'}/>
         </StyledButton>
         { !layer.isNew &&
-            <Confirm
-                title={<Message messageKey='messages.confirmDeleteLayer'/>}
-                onConfirm={() => onDelete()}
-                okText={getMessage('ok')}
-                cancelText={getMessage('cancel')}
-                placement='bottomLeft'
-            >
-                <StyledButton>
-                    <Message messageKey='delete'/>
-                </StyledButton>
-            </Confirm>
+            <React.Fragment>
+                <Confirm
+                    title={<Message messageKey='messages.confirmDeleteLayer'/>}
+                    onConfirm={() => onDelete()}
+                    okText={getMessage('ok')}
+                    cancelText={getMessage('cancel')}
+                    placement='bottomLeft'
+                >
+                    <StyledButton>
+                        <Message messageKey='delete'/>
+                    </StyledButton>
+                </Confirm>
+                { hasCapabilitiesFetched &&
+                    <StyledButton onClick={() => controller.addNewFromSameService() }>
+                        <Message messageKey='addNewFromSameService'/>
+                    </StyledButton>
+                }
+            </React.Fragment>
         }
         { onCancel &&
             <Button onClick={() => onCancel()}>
                 <Message messageKey='close'/>
             </Button>
         }
-    </StyledRoot>
-);
+    </StyledRoot>);
+};
 
 AdminLayerForm.propTypes = {
     controller: PropTypes.instanceOf(Controller).isRequired,

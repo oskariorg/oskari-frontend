@@ -2,13 +2,14 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { Message } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
-import { Header, StyledButton } from './styled';
+import { Header, StyledButton, DangerButton } from './styled';
 import { ServiceEndPoint } from '../ServiceEndPoint/ServiceEndPoint';
 
 const {
     URL,
     CESIUM_ION,
-    API_KEY
+    API_KEY,
+    CAPABILITIES
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
 const hasServiceEndpoint = ({ url, options }, propertyFields) => {
@@ -37,6 +38,7 @@ VersionButton.propTypes = {
 
 export const ServiceStep = ({ layer, controller, versions, propertyFields, loading, credentialsCollapseOpen }) => {
     const versionsDisabled = !hasServiceEndpoint(layer, propertyFields) || loading;
+    const hasCapabilitiesSupport = propertyFields.includes(CAPABILITIES);
     if (versions.length === 0) {
         versions.push('');
     }
@@ -55,6 +57,11 @@ export const ServiceStep = ({ layer, controller, versions, propertyFields, loadi
             { versions.map((version, i) => (
                 <VersionButton key={i} version={version} controller={controller} disabled={versionsDisabled} />
             )) }
+            { hasCapabilitiesSupport &&
+                <DangerButton onClick={() => controller.skipCapabilities()}>
+                    <Message messageKey='skipCapabilities'/>
+                </DangerButton>
+            }
         </Fragment>
     );
 };

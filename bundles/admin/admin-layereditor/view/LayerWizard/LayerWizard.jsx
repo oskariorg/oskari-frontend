@@ -61,6 +61,8 @@ const LayerWizard = ({
     onCancel
 }) => {
     const hasCapabilitiesSupport = propertyFields.includes(CAPABILITIES);
+    // For manual adding of layers/skipping capabilities and returning properly from layer details to service endpoint
+    const hasCapabilitiesFetched = !!Object.keys(capabilities).length;
     const currentStep = getStep(layer, hasCapabilitiesSupport);
     const isFirstStep = currentStep === WIZARD_STEP.INITIAL;
     const isDetailsForOldLayer = !layer.isNew && currentStep === WIZARD_STEP.DETAILS;
@@ -110,7 +112,7 @@ const LayerWizard = ({
                 }
                 { !isFirstStep && !isDetailsForOldLayer &&
                     <Button onClick={() => {
-                        setStep(controller, currentStep - 1, hasCapabilitiesSupport);
+                        setStep(controller, currentStep - 1, hasCapabilitiesFetched && hasCapabilitiesSupport);
                         onCancel();
                     }}>
                         {<Message messageKey='backToPrevious'/>}

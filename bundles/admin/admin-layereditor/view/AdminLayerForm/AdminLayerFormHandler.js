@@ -57,6 +57,12 @@ class UIHandler extends StateHandler {
     }
     versionSelected (version) {
         const layer = { ...this.getState().layer, version };
+        if (typeof version === 'undefined') {
+            // object spread doesn't work when removing value == returning from manually adding layer/skipping capabilities
+            delete layer.version;
+            // if we are returning we also need to clear name
+            delete layer.name;
+        }
         const propertyFields = this.getPropertyFields(layer);
         if (!version) {
             // for moving back to previous step
@@ -94,6 +100,29 @@ class UIHandler extends StateHandler {
         } else {
             this.log.error('Layer not in capabilities: ' + name);
         }
+    }
+    skipCapabilities () {
+        // force an OGC service to skip the capabilities phase of the wizard since some services are not standard compliant
+        // This is a last ditch effort to support such services.
+        const layer = {
+            name: '',
+            version: '',
+            ...this.getState().layer
+        };
+        this.updateState({ layer });
+    }
+    addNewFromSameService () {
+        // initialize state for adding a new layer from the same OGC service (service having capabilities)
+        const state = this.getState();
+        const layer = { ...state.layer };
+        const capabilities = state.capabilities || { existingLayers: {} };
+        // add newly added layer to "existing layers" so it's shown as existing
+        capabilities.existingLayers[layer.name] = state.layer;
+        // delete name for "new" layer so we are taken back to the capabilities layer listing
+        delete layer.name;
+        // delete layer id so we won't modify the one we just added
+        delete layer.id;
+        this.updateState({ layer, capabilities });
     }
     setUsername (username) {
         this.updateState({
@@ -369,7 +398,7 @@ class UIHandler extends StateHandler {
             return response.json();
         }).then(json => {
             const typesAndRoles = this.getRolesAndPermissionTypes() || {};
-            const { capabilities, ...layer } = this.layerHelper.fromServer(json, {
+            const { ...layer } = this.layerHelper.fromServer(json, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
@@ -380,7 +409,6 @@ class UIHandler extends StateHandler {
             }
             this.updateState({
                 layer,
-                capabilities,
                 propertyFields: this.getPropertyFields(layer),
                 versions: this.mapLayerService.getVersionsForType(layer.type)
             });
@@ -674,10 +702,8 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setPermissionForAll',
-    'togglePermission',
+    'addNewFromSameService',
     'layerSelected',
-    'versionSelected',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
@@ -701,6 +727,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setOpacity',
     'setOptions',
     'setPassword',
+    'setPermissionForAll',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',
@@ -712,6 +739,9 @@ const wrapped = controllerMixin(UIHandler, [
     'setUsername',
     'setVersion',
     'setTab',
-    'updateCapabilities'
+    'skipCapabilities',
+    'togglePermission',
+    'updateCapabilities',
+    'versionSelected'
 ]);
 export { wrapped as AdminLayerFormHandler };
