@@ -57,6 +57,12 @@ class UIHandler extends StateHandler {
     }
     versionSelected (version) {
         const layer = { ...this.getState().layer, version };
+        if (typeof version === 'undefined') {
+            // object spread doesn't work when removing value == returning from manually adding layer/skipping capabilities
+            delete layer.version;
+            // if we are returning we also need to clear name
+            delete layer.name;
+        }
         const propertyFields = this.getPropertyFields(layer);
         if (!version) {
             // for moving back to previous step
@@ -94,6 +100,16 @@ class UIHandler extends StateHandler {
         } else {
             this.log.error('Layer not in capabilities: ' + name);
         }
+    }
+    skipCapabilities () {
+        // force an OGC service to skip the capabilities phase of the wizard since some services are not standard compliant
+        // This is a last ditch effort to support such services.
+        const layer = {
+            name: '',
+            version: '',
+            ...this.getState().layer
+        };
+        this.updateState({ layer });
     }
     setUsername (username) {
         this.updateState({
@@ -712,6 +728,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setUsername',
     'setVersion',
     'setTab',
+    'skipCapabilities',
     'updateCapabilities'
 ]);
 export { wrapped as AdminLayerFormHandler };

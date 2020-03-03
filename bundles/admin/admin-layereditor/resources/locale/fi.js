@@ -73,6 +73,7 @@ Oskari.registerLocalization(
             "ok": "Ok",
             "add": "Lisää",
             "save": "Tallenna",
+            "skipCapabilities": "Manuaalinen lisäys",
             "delete": "Poista",
             "opacity": "Peittävyys",
             "style": "Oletustyyli",
