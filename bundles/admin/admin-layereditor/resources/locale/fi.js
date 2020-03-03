@@ -74,6 +74,7 @@ Oskari.registerLocalization(
             "add": "Lisää",
             "save": "Tallenna",
             "skipCapabilities": "Manuaalinen lisäys",
+            "addNewFromSameService": "Lisää uusi taso samasta palvelusta",
             "delete": "Poista",
             "opacity": "Peittävyys",
             "style": "Oletustyyli",

@@ -111,6 +111,19 @@ class UIHandler extends StateHandler {
         };
         this.updateState({ layer });
     }
+    addNewFromSameService () {
+        // initialize state for adding a new layer from the same OGC service (service having capabilities)
+        const state = this.getState();
+        const layer = { ...state.layer };
+        const capabilities = state.capabilities || { existingLayers: {} };
+        // add newly added layer to "existing layers" so it's shown as existing
+        capabilities.existingLayers[layer.name] = state.layer;
+        // delete name for "new" layer so we are taken back to the capabilities layer listing
+        delete layer.name;
+        // delete layer id so we won't modify the one we just added
+        delete layer.id;
+        this.updateState({ layer, capabilities });
+    }
     setUsername (username) {
         this.updateState({
             layer: { ...this.getState().layer, username }
@@ -385,7 +398,7 @@ class UIHandler extends StateHandler {
             return response.json();
         }).then(json => {
             const typesAndRoles = this.getRolesAndPermissionTypes() || {};
-            const { capabilities, ...layer } = this.layerHelper.fromServer(json, {
+            const { ...layer } = this.layerHelper.fromServer(json, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
@@ -396,7 +409,6 @@ class UIHandler extends StateHandler {
             }
             this.updateState({
                 layer,
-                capabilities,
                 propertyFields: this.getPropertyFields(layer),
                 versions: this.mapLayerService.getVersionsForType(layer.type)
             });
@@ -690,10 +702,8 @@ class UIHandler extends StateHandler {
 }
 
 const wrapped = controllerMixin(UIHandler, [
-    'setPermissionForAll',
-    'togglePermission',
+    'addNewFromSameService',
     'layerSelected',
-    'versionSelected',
     'setAttributes',
     'setAttributionsJSON',
     'setCapabilitiesUpdateRate',
@@ -717,6 +727,7 @@ const wrapped = controllerMixin(UIHandler, [
     'setOpacity',
     'setOptions',
     'setPassword',
+    'setPermissionForAll',
     'setRealtime',
     'setRefreshRate',
     'setRenderMode',
@@ -729,6 +740,8 @@ const wrapped = controllerMixin(UIHandler, [
     'setVersion',
     'setTab',
     'skipCapabilities',
-    'updateCapabilities'
+    'togglePermission',
+    'updateCapabilities',
+    'versionSelected'
 ]);
 export { wrapped as AdminLayerFormHandler };
