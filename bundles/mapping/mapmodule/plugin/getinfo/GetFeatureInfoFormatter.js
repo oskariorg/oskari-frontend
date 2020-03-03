@@ -9,8 +9,8 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
         myPlacesWrapper: '<div class="myplaces_place">' +
             '<div class="getinforesult_header"><div class="icon-bubble-left"></div><div class="getinforesult_header_title myplaces_header"></div></div>' +
             '<p class="myplaces_desc"></p>' +
-            '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank"></a>' + '</div>',
-        linkOutside: '<a target="_blank"></a>'
+            '<a class="myplaces_imglink" target="_blank" rel="noopener"><img class="myplaces_img"></img></a>' + '<br><a class="myplaces_link" target="_blank" rel="noopener"></a>' + '</div>',
+        linkOutside: '<a target="_blank" rel="noopener"></a>'
     },
     formatters: {
         html: function (datumContent) {
@@ -37,7 +37,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                 '<h3 class="myplaces_header"></h3>' +
                     '<p class="myplaces_desc"></p>' +
                     '<a class="myplaces_imglink" target="_blank"><img class="myplaces_img"></img></a>' +
-                    '<br><a class="myplaces_link" target="_blank"></a>' +
+                    '<br><a class="myplaces_link" target="_blank" rel="noopener"></a>' +
                 '</div>');
             var desc = content.find('p.myplaces_desc');
             var img = content.find('a.myplaces_imglink');
@@ -122,7 +122,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
                     }
                 }
             } else if (pValue.indexOf && pValue.indexOf('://') > 0 && pValue.indexOf('://') < 7) {
-                var link = jQuery('<a target="_blank"></a>');
+                var link = jQuery('<a target="_blank" rel="noopener"></a>');
                 link.attr('href', pValue);
                 link.append(pValue);
                 value.append(link);
@@ -440,7 +440,7 @@ Oskari.clazz.category('Oskari.mapframework.mapmodule.GetInfoPlugin', 'formatter'
             valpres = '';
             switch (vType) {
             case 'string':
-                if (value.indexOf('http://') === 0) {
+                if (value.indexOf('http://') === 0 || value.indexOf('https://') === 0) {
                     valpres = this.template.linkOutside.clone();
                     valpres.attr('href', value);
                     valpres.append(value);
