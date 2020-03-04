@@ -174,7 +174,6 @@ Oskari.clazz.define(
             const isSeriesActive = this.statsService.getStateService().isSeriesActive();
             const layer = this.getLayerService().findMapLayer(this._layerId);
             const layerVisible = layer ? layer.isVisible() : true;
-
             this.setSeriesControlVisible(isSeriesActive && layerVisible);
         },
         /**
@@ -190,61 +189,83 @@ Oskari.clazz.define(
         getStatisticsService: function () {
             return this.statsService;
         },
+        getDataProviderInfoService: function () {
+            if (this.dataProviderInfoService) {
+                return this.dataProviderInfoService;
+            }
+            this.dataProviderInfoService = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            return this.dataProviderInfoService;
+        },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
-         * @param  {Number} ds         datasource id
-         * @param  {String} id         indicator id
-         * @param  {Object} selections Year/other possible selections
-         * @param  {Boolean} wasRemoved true if the indicator was removed
+         * @param  {StatsGrid.IndicatorEvent} event
          */
-        notifyDataProviderInfo: function (ds, id, selections, wasRemoved) {
-            var me = this;
-            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
-            if (!service) {
-                return;
+        notifyDataProviderInfo: function (event) {
+            const ind = {
+                datasource: event.getDatasource(),
+                indicator: event.getIndicator(),
+                selections: event.getSelections()
+            };
+            if (event.isRemoved()) {
+                this.removeDataProviverInfo(ind);
+            } else {
+                this.addDataProviderInfo(ind);
             }
-            var dsid = ds + '_' + id;
-            if (wasRemoved === true) {
-                // the check if necessary if the same indicator is added more than once with different selections
-                if (!this.statsService.getStateService().isSelected(ds, id)) {
-                    // if this was the last dataset for the datasource & indicator. Remove it.
-                    service.removeItemFromGroup('indicators', dsid);
+        },
+        removeDataProviverInfo: function (ind) {
+            const { datasource, indicator } = ind;
+            // the check if necessary if the same indicator is added more than once with different selections
+            if (!this.statsService.getStateService().isSelected(datasource, indicator)) {
+                // if this was the last dataset for the datasource & indicator. Remove it.
+                const service = this.getDataProviderInfoService();
+                if (service) {
+                    const id = datasource + '_' + indicator;
+                    service.removeItemFromGroup('indicators', id);
                 }
-                return;
             }
-            // indicator added - determine UI labels
-            this.statsService.getUILabels({
-                datasource: ds,
-                indicator: id,
-                selections: selections
-            }, function (labels) {
-                var datasource = me.statsService.getDatasource(ds);
+        },
+        addDataProviderInfo: function (ind) {
+            const service = this.getDataProviderInfoService();
+            if (!service) return;
+            const { datasource, indicator, selections } = ind;
+            const { name, info: { url } } = this.statsService.getDatasource(datasource);
+            const id = datasource + '_' + indicator;
 
-                var data = {
-                    'id': dsid,
-                    'name': labels.indicator,
-                    'source': [labels.source, {
-                        name: datasource.name,
-                        url: datasource.info.url
-                    }]
+            const callback = labels => {
+                const data = {
+                    id,
+                    name: labels.indicator,
+                    source: [labels.source, { name, url }]
                 };
                 if (!service.addItemToGroup('indicators', data)) {
                     // if adding failed, it might because group was not registered.
-                    service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
+                    service.addGroup('indicators', this.getLocalization().dataProviderInfoTitle);
                     // Try adding again
                     service.addItemToGroup('indicators', data);
                 }
-            });
+            };
+            this.statsService.getUILabels({ datasource, indicator, selections }, callback);
+        },
+        clearDataProviderInfo: function () {
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            service.removeGroup('indicators');
         },
         eventHandlers: {
+            'StatsGrid.StateChangedEvent': function (evt) {
+                this.statsService.notifyOskariEvent(evt);
+                this._updateClassficationViewVisibility();
+                this._updateSeriesControlVisibility();
+                if (evt.isReset()) {
+                    this.clearDataProviderInfo();
+                } else {
+                    this.statsService.getStateService().getIndicators().forEach(ind => {
+                        this.addDataProviderInfo(ind);
+                    });
+                }
+            },
             'StatsGrid.IndicatorEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-                this.notifyDataProviderInfo(
-                    evt.getDatasource(),
-                    evt.getIndicator(),
-                    evt.getSelections(),
-                    evt.isRemoved());
-
+                this.notifyDataProviderInfo(evt);
                 this._updateClassficationViewVisibility();
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
@@ -362,7 +383,6 @@ Oskari.clazz.define(
             if (!layerModel || !layerModel.isLayerOfType('STATS')) {
                 return;
             }
-
             // add feature data tool for layer
             var layerLoc = this.getLocalization('layertools').table_icon || {};
             var label = layerLoc.title || 'Thematic maps';
@@ -401,58 +421,18 @@ Oskari.clazz.define(
          */
         setState: function (state) {
             state = state || this.state || {};
-            var service = this.statsService.getStateService();
-            service.reset();
-            if (state.regionset) {
-                service.setRegionset(state.regionset);
-            }
-
-            if (state.indicators) {
-                state.indicators.forEach(function (ind) {
-                    service.addIndicator(ind.ds, ind.id, ind.selections, ind.series, ind.classification);
-                });
-            }
-
-            if (state.active) {
-                service.setActiveIndicator(state.active);
-            }
-
-            if (state.activeRegion) {
-                service.toggleRegion(state.activeRegion);
-            }
-
+            this.statsService.getStateService().setState(state);
             // if state says view was visible fire up the UI, otherwise close it
             var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
             sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
         getState: function () {
-            var me = this;
-            var service = this.statsService.getStateService();
-            var state = {
-                indicators: [],
-                regionset: service.getRegionset(),
-                view: me.visible
+            var state = this.statsService.getStateService().getState();
+            return {
+                ...state,
+                view: this.visible
             };
-            service.getIndicators().forEach(function (ind) {
-                state.indicators.push({
-                    ds: ind.datasource,
-                    id: ind.indicator,
-                    selections: ind.selections,
-                    series: ind.series,
-                    classification: service.getClassificationOpts(ind.hash)
-                });
-            });
-            var active = service.getActiveIndicator();
-            if (active) {
-                state.active = active.hash;
-            }
-
-            var activeRegion = service.getRegion();
-            if (activeRegion) {
-                state.activeRegion = activeRegion;
-            }
-            return state;
         },
         createClassficationView: function () {
             if (this.classificationPlugin) {
