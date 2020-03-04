@@ -9,21 +9,31 @@ const RowContainer = styled.div`
 // Note! This breaks the "table" so it's hard for user to see what permission is being set.
 // Note! Handle table wider than display with another kind of UI (like listing roles as headings and permissions as list under that heading)
 
+export const TEXT_COLUMN_SIZE = {
+    width: 195,
+    padding: 5
+};
+
+export const PERMISSION_TYPE_COLUMN_SIZE = {
+    width: 110,
+    padding: 5
+};
+
 const TextColumn = styled.div`
     flex-grow: 1;
-    width: 195px;
-    padding-left: 5px;
+    width: ${TEXT_COLUMN_SIZE.width}px;
+    padding-left: ${TEXT_COLUMN_SIZE.padding}px;
     align-self: ${props => props.isHeaderRow ? 'flex-end' : 'stretch'};
 `;
 
 const StyledPermissionDiv = styled.div`
     flex-grow: 1;
     float: left;
-    width: 110px;
+    width: ${PERMISSION_TYPE_COLUMN_SIZE.width}px;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    padding: 5px !important;
+    padding: ${PERMISSION_TYPE_COLUMN_SIZE.padding}px !important;
 `;
 
 const Break = styled.div`
