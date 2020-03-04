@@ -18,7 +18,7 @@ Oskari.registerLocalization(
                 "wfslayer": "WFS/OAPIF",
                 "arcgislayer": "ArcGIS cache",
                 "arcgis93layer": "ArcGIS Rest",
-                "vectortilelayer": "Mapbox vektoritiili",
+                "vectortilelayer": "!!!!Mapbox vektoritiili",
                 "tiles3dlayer": "Cesium 3D Tiles",
                 "bingmapslayer": "Bing"
             },
@@ -30,7 +30,7 @@ Oskari.registerLocalization(
             "permissionsTabTitle": "Permissions",
             "interfaceAddress": "Gränssnitten address",
             "interfaceVersion": "Gränss&shy;nittets version",
-            "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
+            "interfaceVersionDesc": "!!!!Valitse ensisijaisesti uusin rajapinnan tukema versio.",
             "apiKey": "Api key",
             "attributions": "Tillskrivningar",
             "tileGrid": "Rutmatris",
@@ -80,7 +80,7 @@ Oskari.registerLocalization(
             "styleDesc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
             "selectedTime": "Vald tid",
             "realtime": "Realtidslager",
-            "realtimeDesc": "!!!!!!!!!!!!!!!!!!!!Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
+            "realtimeDesc": "!!!!Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
             "refreshRate": "Uppdateringsfrekvens (i sekunder)",
             "capabilities": {
                 "show": "Visa getCapabilities svar",
@@ -123,8 +123,8 @@ Oskari.registerLocalization(
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
             "validation": {
-                "dataprovider": "!!!!!!Tiedontuottaja on pakollinen tieto.",
-                "nopermissions": "!!!!!Tasolle ei ole asetettu oikeuksia",
+                "dataprovider": "!!!!Tiedontuottaja on pakollinen tieto.",
+                "nopermissions": "!!!!Tasolle ei ole asetettu oikeuksia",
                 "locale": "Kartlagrets namn är obligatoriskt.",
                 "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
                 "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
@@ -138,7 +138,7 @@ Oskari.registerLocalization(
                 "saveFailed": "Systemfel. Försök på nytt senare.",
                 "confirmDeleteLayer": "Kartlager blir raderad. Fortsätt?",
                 "confirmDeleteGroup": "Gruppen kommer att tas bort. Fortsätt?",
-                "confirmDuplicatedLayer": "!!!!!Taso on jo rekisteröity palveluun. Haluatko varmasti lisätä saman tason moneen kertaan?",
+                "confirmDuplicatedLayer": "!!!!Taso on jo rekisteröity palveluun. Haluatko varmasti lisätä saman tason moneen kertaan?",
                 "errorRemoveLayer": "Kartlager kunde inte tas bort.",
                 "errorInsertAllreadyExists": "Kartlager har lagrats men ett kartlager med samma id existeras.",
                 "errorFetchUserRolesAndPermissionTypes": "Det gick inte att hämta användarroller och behörigheter.",
