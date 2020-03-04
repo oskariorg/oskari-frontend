@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { PermissionRow } from './PermissionRow';
-import { List, ListItem, Checkbox, Message } from 'oskari-ui';
+import { PermissionRow, TEXT_COLUMN_SIZE, PERMISSION_TYPE_COLUMN_SIZE } from './PermissionRow';
+import { List, ListItem, Checkbox, Message, Tooltip } from 'oskari-ui';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 
 const StyledListItem = styled(ListItem)`
@@ -17,10 +17,15 @@ const StyledListItem = styled(ListItem)`
             background-color: #f3f3f3;
         }
     }
+    width: ${props => props.rowWidth}px;
 `;
 
+// Overflow makes additional/customized permission types available by scrolling
+// It is not ideal at least when there are both many roles and additional permission types
+// But most instances don't have them so it's not a huge issue for first version of the UI
 const ListDiv = styled.div`
-    padding-bottom: 20px;
+    margin-bottom: 20px;
+    overflow: auto;
 `;
 
 function getHeaderPermissions (dataRows, roles) {
@@ -53,7 +58,8 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
     const { roles, permissionTypes } = rolesAndPermissionTypes;
 
     const localizedPermissionTypes = permissionTypes.map(permission => {
-        permission.localizedText = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.id} />;
+        // permissions might have server side localization as "name" that defaults to id if not given
+        permission.localizedText = <Message messageKey={`rights.${permission.id}`} defaultMsg={permission.name} />;
         return permission;
     });
 
@@ -73,7 +79,6 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         permissions: getHeaderPermissions(dataRows, roles),
         permissionTypes: localizedPermissionTypes
     };
-
     const permissionDataModel = [headerRow, ...dataRows];
 
     const renderRow = (modelRow) => {
@@ -89,17 +94,24 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
             }
             // the actual role-based rows
             const role = modelRow.role.name;
-            return <Checkbox key={permission.id + '_' + role}
-                permissionDescription={permission.localizedText}
-                permission={permission.id}
-                role={role}
-                checked={modelRow.permissions.includes(permission.id)}
-                onChange = {(event) => controller.togglePermission(event.target.role, event.target.permission)}/>;
+            return (<Tooltip key={permission.id + '_' + role}
+                title={<span>{role}: {permission.localizedText}</span>}>
+                <Checkbox
+                    permissionDescription={permission.localizedText}
+                    permission={permission.id}
+                    role={role}
+                    checked={modelRow.permissions.includes(permission.id)}
+                    onChange = {(event) => controller.togglePermission(event.target.role, event.target.permission)}/>
+            </Tooltip>);
         });
 
         const rowKey = modelRow.isHeaderRow ? 'header' : modelRow.role.name;
+        // calculate width in case there are additional permission types the background isn't colored properly without it
+        // 200 for role name column and 120/permission type (110 + 5 padding on both side)
+        const rowWidth = (TEXT_COLUMN_SIZE.width + TEXT_COLUMN_SIZE.padding) +
+            (PERMISSION_TYPE_COLUMN_SIZE.width + PERMISSION_TYPE_COLUMN_SIZE.padding * 2) * headerRow.permissionTypes.length;
         return (
-            <StyledListItem>
+            <StyledListItem rowWidth={rowWidth}>
                 <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
             </StyledListItem>
         );
