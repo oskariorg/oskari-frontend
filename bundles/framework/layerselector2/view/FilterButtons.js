@@ -27,8 +27,11 @@ Oskari.clazz.define('Oskari.layerselector2.view.FilterButtons',
             filterButton.attr('data-filter', filterName);
             filterButton.find('.filter-text').html(toolText);
             filterButton.attr('title', tooltip);
-            filterButton.find('.filter-icon').addClass('filter-' + filterName);
-            filterButton.find('.filter-icon').addClass(iconClassDeactive);
+            var icon = filterButton.find('.filter-icon');
+            icon.addClass('filter-' + filterName);
+            icon.addClass(iconClassDeactive);
+            // force height to make buttons look similar when filter icon is missing
+            icon.css('height', '16px');
 
             me.filterButtons.push({
                 name: filterName,
