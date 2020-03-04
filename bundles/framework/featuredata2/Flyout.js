@@ -18,6 +18,7 @@ Oskari.clazz.define(
     function (instance) {
         this.instance = instance;
         this.container = null;
+        this.flyout = null;
         this.state = null;
         this.layers = {};
         this._fixedDecimalCount = 2;
@@ -86,6 +87,7 @@ Oskari.clazz.define(
             if (!flyout.hasClass('featuredata')) {
                 flyout.addClass('featuredata');
             }
+            this.flyout = flyout;
         },
 
         /**
@@ -272,12 +274,12 @@ Oskari.clazz.define(
                 panel = Oskari.clazz.create(
                     'Oskari.userinterface.component.TabPanel'
                 );
-
-            panel.setTitle(layer.getName());
-            //panel.setTooltip(layer.getName());
             panel.getContainer().append(
                 this.instance.getLocalization('loading')
             );
+            const name = layer.getName();
+            panel.setTitle(name);
+            panel.setTooltip(name);
             panel.layer = layer;
             this.layers['' + layer.getId()] = panel;
             this.tabsContainer.addPanel(panel);
@@ -287,6 +289,24 @@ Oskari.clazz.define(
                 });
                 panel.getHeader().find('.icon-funnel').prop('title', this.instance.getLocalization('filterDialogTooltip'));
             }
+            this.updatePanelTitles();
+        },
+        updatePanelTitles: function () {
+            const panels = this.layers;
+            const ids = Object.keys(panels);
+            if (!this.flyout || !ids.length) return;
+            const spaceForLabel = (this.flyout.width() - 45) / ids.length;
+            let maxLabel = (spaceForLabel - 58) / 7; // 7px/char
+            maxLabel = maxLabel && maxLabel > 15 ? maxLabel : 15;
+            ids.forEach(id => {
+                const panel = panels[id];
+                const name = panel.layer.getName();
+                if (name.length > maxLabel) {
+                    panel.updateTitle(name.substring(0, maxLabel - 3) + '\u2026'); // ellipsis
+                } else {
+                    panel.updateTitle(name);
+                }
+            });
         },
         /**
          * @method layerRemoved
@@ -308,6 +328,7 @@ Oskari.clazz.define(
                 delete this.layers[layerId];
                 panel.getContainer().remove();
             }
+            this.updatePanelTitles(true);
         },
         /**
          * @method  @public selectGridValues select grid values
@@ -444,6 +465,9 @@ Oskari.clazz.define(
 
             // End resizing
             jQuery(document).on('mouseup', function () {
+                if (me.resizing) {
+                    me.updatePanelTitles();
+                }
                 me.resizing = false;
                 me.resized = true;
             });
