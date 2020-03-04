@@ -144,6 +144,9 @@ Oskari.clazz.define("Oskari.statistics.statsgrid.StatsGridBundle",
                 "src": "../../../bundles/statistics/statsgrid2016/event/ParameterChangedEvent.js"
             }, {
                 "type": "text/javascript",
+                "src": "../../../bundles/statistics/statsgrid2016/event/StateChangedEvent.js"
+            }, {
+                "type": "text/javascript",
                 "src": "../../../bundles/statistics/statsgrid2016/publisher/AbstractStatsPluginTool.js"
             }, {
                 "type": "text/javascript",
