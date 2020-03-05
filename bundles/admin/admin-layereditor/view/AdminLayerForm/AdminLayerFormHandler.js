@@ -32,7 +32,7 @@ class UIHandler extends StateHandler {
             scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
         });
         this.addStateListener(consumer);
-        this.fetchRolesAndPermissionTypes();
+        this.fetchLayerAdminMetadata();
     }
 
     updateLayerTypeVersions () {
@@ -88,7 +88,7 @@ class UIHandler extends StateHandler {
         }
         const found = capabilities.layers[name];
         if (found) {
-            const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+            const typesAndRoles = this.getAdminMetadata();
             const updateLayer = this.layerHelper.fromServer({ ...layer, ...found }, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
@@ -346,7 +346,7 @@ class UIHandler extends StateHandler {
         this.updateState({ tab });
     }
     resetLayer () {
-        const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+        const typesAndRoles = this.getAdminMetadata();
         this.updateState({
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
             capabilities: {},
@@ -397,7 +397,7 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+            const typesAndRoles = this.getAdminMetadata();
             const { ...layer } = this.layerHelper.fromServer(json, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
@@ -648,9 +648,9 @@ class UIHandler extends StateHandler {
         });
     }
 
-    fetchRolesAndPermissionTypes () {
+    fetchLayerAdminMetadata () {
         this.ajaxStarted();
-        fetch(Oskari.urls.getRoute('GetAllRolesAndPermissionTypes'))
+        fetch(Oskari.urls.getRoute('LayerAdminMetadata'))
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -664,16 +664,19 @@ class UIHandler extends StateHandler {
                 this.updateState({
                     currentLayer,
                     loading: this.isLoading(),
-                    rolesAndPermissionTypes: data
+                    metadata: data
                 });
             }).catch(error => {
                 this.log.error(error);
                 Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
             });
     }
-
-    getRolesAndPermissionTypes () {
-        return this.getState().rolesAndPermissionTypes;
+    /**
+     * Object with roles and permissionTypes objects that are needed to create the UI that
+     * matches the configuration of the system
+     */
+    getAdminMetadata () {
+        return this.getState().metadata || {};
     };
 
     isLoading () {
