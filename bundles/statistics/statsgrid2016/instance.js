@@ -60,18 +60,12 @@ Oskari.clazz.define(
             this.flyoutManager.init();
             this.getTile().setupTools(this.flyoutManager);
 
-            // disable tile if we don't have anything to show or enable if we do
-            // setup initial state
-            this.setState();
-
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published);
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
             if (this.isEmbedded()) {
                 // Start in an embedded map mode
-                me.createClassficationView();
-
                 if (me.conf.grid) {
                     me.togglePlugin.addTool('table');
                 }
@@ -87,11 +81,6 @@ Oskari.clazz.define(
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
-            // setup DataProviderInfoService group if possible (LogoPlugin)
-            var dsiservice = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
-            if (dsiservice) {
-                dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
-            }
 
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
@@ -111,6 +100,8 @@ Oskari.clazz.define(
                     });
                 }
             }
+            // setup initial state
+            this.setState();
         },
         addMapPluginToggleTool: function (tool) {
             if (!this.togglePlugin || !tool) {
@@ -157,15 +148,10 @@ Oskari.clazz.define(
          * Update visibility of classification / legend based on idicators length & stats layer visibility
          */
         _updateClassficationViewVisibility: function () {
-            const service = this.statsService.getStateService();
-            var indicatorsExist = service.hasIndicators();
+            const indicatorsExist = this.statsService.getStateService().hasIndicators();
             var layer = this.getLayerService().findMapLayer(this._layerId);
             var layerVisible = layer ? layer.isVisible() : true;
-            const visible = indicatorsExist && layerVisible;
-            service.updateClassificationPluginState('visible', visible);
-            if (visible) {
-                this.createClassficationView();
-            }
+            this.setClassificationViewVisible(indicatorsExist && layerVisible);
         },
         /**
          * Update visibility of series control based on active indicator & stats layer visibility
@@ -175,6 +161,10 @@ Oskari.clazz.define(
             const layer = this.getLayerService().findMapLayer(this._layerId);
             const layerVisible = layer ? layer.isVisible() : true;
             this.setSeriesControlVisible(isSeriesActive && layerVisible);
+        },
+        _removeStatsLayer: function () {
+            const builder = Oskari.requestBuilder('RemoveMapLayerRequest');
+            Oskari.getSandbox().request(this.getName(), builder(this._layerId));
         },
         /**
          * Fetches reference to the map layer service
@@ -190,11 +180,7 @@ Oskari.clazz.define(
             return this.statsService;
         },
         getDataProviderInfoService: function () {
-            if (this.dataProviderInfoService) {
-                return this.dataProviderInfoService;
-            }
-            this.dataProviderInfoService = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
-            return this.dataProviderInfoService;
+            return this.getSandbox().getService('Oskari.map.DataProviderInfoService');
         },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
@@ -252,16 +238,20 @@ Oskari.clazz.define(
         },
         eventHandlers: {
             'StatsGrid.StateChangedEvent': function (evt) {
-                this.statsService.notifyOskariEvent(evt);
-                this._updateClassficationViewVisibility();
-                this._updateSeriesControlVisibility();
                 if (evt.isReset()) {
                     this.clearDataProviderInfo();
+                    this._removeStatsLayer();
+                    this.setClassificationViewVisible(false);
+                    this.setSeriesControlVisible(false);
                 } else {
                     this.statsService.getStateService().getIndicators().forEach(ind => {
                         this.addDataProviderInfo(ind);
                     });
+                    this._updateSeriesControlVisibility();
+                    this._updateClassficationViewVisibility();
                 }
+                // notify other components
+                this.statsService.notifyOskariEvent(evt);
             },
             'StatsGrid.IndicatorEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -317,12 +307,10 @@ Oskari.clazz.define(
             },
             AfterMapLayerRemoveEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer || layer.getId() !== this._layerId) {
+                if (!layer || layer.getId() !== this._layerId || event._creator === this.getName()) {
                     return;
                 }
-                var emptyState = {};
-                this.setState(emptyState);
-                this.removeClassificationView();
+                this.statsService.getStateService().resetState();
             },
             /**
              * @method MapLayerEvent
@@ -423,21 +411,17 @@ Oskari.clazz.define(
             state = state || this.state || {};
             this.statsService.getStateService().setState(state);
             // if state says view was visible fire up the UI, otherwise close it
-            var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
-            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
+            this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
         getState: function () {
-            var state = this.statsService.getStateService().getState();
+            const serviceState = this.statsService.getStateService().getState();
             return {
-                ...state,
+                ...serviceState,
                 view: this.visible
             };
         },
         createClassficationView: function () {
-            if (this.classificationPlugin) {
-                return;
-            }
             var config = jQuery.extend(true, {}, this.getConfiguration());
             var sandbox = this.getSandbox();
             var locale = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -450,12 +434,23 @@ Oskari.clazz.define(
             mapModule.startPlugin(this.classificationPlugin);
             this.classificationPlugin.buildUI();
         },
+        // TODO do we need to unregister plugin
         removeClassificationView: function () {
             if (this.classificationPlugin) {
                 const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
                 mapModule.unregisterPlugin(this.classificationPlugin);
                 mapModule.stopPlugin(this.classificationPlugin);
                 this.classificationPlugin = null;
+            }
+        },
+        setClassificationViewVisible: function (visible) {
+            if (!this.classificationPlugin) {
+                this.createClassficationView();
+            }
+            if (visible) {
+                this.statsService.getStateService().updateClassificationPluginState('visible', visible, true);
+            } else {
+                this.classificationPlugin.stopPlugin();
             }
         },
         setSeriesControlVisible: function (visible) {
