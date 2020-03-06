@@ -17,12 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
-
-        if (instance.isEmbedded()) {
-            this._defaultLocation = config.legendLocation;
-        } else {
-            this._defaultLocation = 'right bottom';
-        }
+        this._defaultLocation = me._config.legendLocation || 'right bottom';
         me._fixedLocation = true;
         me._name = 'ClassificationPlugin';
         me.element = null;
@@ -45,6 +40,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this._overflowedOffset = null;
         this._previousIsEdit = false;
         this.indicatorData = {};
+        this._bindToEvents();
+        this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
     }, {
         _createControlElement: function () {
             if (this.element !== null) {
@@ -67,7 +64,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this._overflowCheck();
         },
         render: function (activeClassfication) {
-            if (!this.node) return;
+            if (!this.node) {
+                this.buildUI();
+                return;
+            }
             const stateService = this.service.getStateService();
             const activeIndicator = stateService.getActiveIndicator();
             const regionset = stateService.getRegionset();
@@ -205,13 +205,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         teardownUI: function () {
             var element = this.getElement();
-            // detach old element from screen
-            if (element) {
+            if (this.node) {
                 ReactDOM.unmountComponentAtNode(this.node);
-                this.removeFromPluginContainer(element, true);
-                this.element = null;
-                this.trigger('hide');
+                this.node = null;
             }
+            if (element) {
+                this.removeFromPluginContainer(element);
+                this.element = null;
+            }
+            this.trigger('hide');
         },
         buildUI: function () {
             if (this.element) {
@@ -219,10 +221,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             }
             this.addToPluginContainer(this._createControlElement());
             this._makeDraggable();
-            this._overflowCheck();
             this.node = this.element.get(0);
-            this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
-            this._bindToEvents();
             this.render();
         },
         _makeDraggable: function () {
