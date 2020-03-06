@@ -79,8 +79,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.updateClassificationPluginState(key, defaults[key]);
             }
         },
-        updateClassificationPluginState: function (key, value) {
-            if (this.classificationPluginState[key] === value) {
+        updateClassificationPluginState: function (key, value, force) {
+            if (!force && this.classificationPluginState[key] === value) {
                 return;
             }
             this.classificationPluginState[key] = value;
@@ -171,7 +171,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     id: ind.indicator,
                     selections: ind.selections,
                     series: ind.series,
-                    classification: this.getClassificationOpts(ind.hash)
+                    classification: ind.classification || this.getClassificationOpts(ind.hash)
                 };
             });
             const activeInd = this.getActiveIndicator();
@@ -217,7 +217,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             var me = this;
 
             // if region is same than previous then unselect region
-            if (region && region === me.activeRegion) {
+            if (region === me.activeRegion) {
                 region = null;
             }
             clearTimeout(me._timers.setActiveRegion);
@@ -435,13 +435,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 // active was the one removed -> reset active
                 this.setActiveIndicator();
             }
-            // notify
-            var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
-            this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, series, true));
-
-            // if no indicators then reset active region
-            if (this.indicators.length === 0) {
-                this.toggleRegion(null);
+            if (this.hasIndicators()) {
+                // notify
+                var eventBuilder = Oskari.eventBuilder('StatsGrid.IndicatorEvent');
+                this.sandbox.notifyAll(eventBuilder(datasrc, indicator, selections, series, true));
+            } else {
+                // if no indicators then reset state
+                // last indicator removal should act like all indicators or layer was removed
+                this.resetState();
             }
 
             return removedIndicator;
