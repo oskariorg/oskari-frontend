@@ -43,6 +43,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         me.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             me._updateIndicatorList();
         });
+        me.service.on('StatsGrid.StateChangedEvent', function (event) {
+            me._updateIndicatorList();
+        });
     },
     /**
      * @method _getIndicators
@@ -114,7 +117,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         var removeAllBtn = me._removeAllBtn;
         removeAllBtn.setTitle(me.loc('indicatorList.removeAll'));
         removeAllBtn.setHandler(function () {
-            me._removeAllIndicators();
+            me.service.getStateService().resetState();
         });
         // Add button to content
         removeAllBtn.insertTo(content);
@@ -122,14 +125,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
         this.element.append(content);
         // Update indicator list
         me._updateIndicatorList();
-    },
-    /**
-     * @method _removeAllIndicators
-     * Removes all indicators via {Oskari.statistics.statsgrid.StateService}
-     */
-    _removeAllIndicators: function () {
-        this.service.getStateService().reset();
-        this._updateIndicatorList();
     },
     /**
      * @method _updateIndicatorList

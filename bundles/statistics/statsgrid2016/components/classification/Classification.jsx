@@ -17,6 +17,9 @@ class Classification extends React.Component {
     componentDidUpdate () {
         this.props.onRenderChange(this.state.isEdit);
     }
+    componentDidMount () {
+        this.props.onRenderChange(false);
+    }
     handleToggleClassification () {
         this.setState(oldState => ({ isEdit: !oldState.isEdit }));
     }

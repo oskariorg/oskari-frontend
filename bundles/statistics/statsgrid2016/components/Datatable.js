@@ -460,6 +460,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 me.updateModel();
             }
         });
+        this.service.on('StatsGrid.StateChangedEvent', function (event) {
+            if (event.isReset()) {
+                me.updateModel();
+            }
+        });
         me._bindedEvents = true;
     },
 

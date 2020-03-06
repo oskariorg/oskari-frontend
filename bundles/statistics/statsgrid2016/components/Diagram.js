@@ -46,7 +46,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             // ui not yet created so no need to update it
             return;
         }
-
         if (!this.hasIndicators()) {
             this.clearChart();
             this.element.html(this.loc.statsgrid.noResults);
@@ -273,6 +272,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         });
         this.service.on('StatsGrid.RegionsetChangedEvent', function () {
             me.updateUI();
+        });
+        this.service.on('StatsGrid.StateChangedEvent', function (event) {
+            if (event.isReset()) {
+                me.updateUI();
+            }
         });
     }
 });
