@@ -67,7 +67,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
             loading,
             messages,
             propertyFields,
-            rolesAndPermissionTypes,
+            metadata,
             credentialsCollapseOpen,
             tab,
             scales
@@ -98,7 +98,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         dataProviders={this.dataProviders}
                         versions={versions}
                         messages={messages}
-                        rolesAndPermissionTypes={rolesAndPermissionTypes}
+                        rolesAndPermissionTypes={metadata}
                         tab={tab}
                         scales={scales}
                         onDelete={() => this.uiHandler.deleteLayer()}
