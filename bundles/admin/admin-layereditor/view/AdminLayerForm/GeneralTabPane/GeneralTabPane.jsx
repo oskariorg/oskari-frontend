@@ -9,6 +9,7 @@ import { DataProvider } from './DataProvider';
 import { Groups } from './Groups';
 import { TileGrid } from './TileGrid';
 import { Version } from './Version';
+import { Mandatory } from '../Mandatory';
 
 const {
     API_KEY,
@@ -26,7 +27,7 @@ const {
 const GeneralTabPane = ({ mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
     <Fragment>
         { propertyFields.some(propKey => [URL, CESIUM_ION, API_KEY].includes(propKey)) &&
-            <ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} />
+            <Mandatory><ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} /></Mandatory>
         }
         { propertyFields.includes(VERSION) &&
             <Version layer={layer} versions={versions} controller={controller} />

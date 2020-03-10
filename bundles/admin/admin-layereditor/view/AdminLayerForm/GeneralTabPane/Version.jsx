@@ -4,6 +4,7 @@ import { Message, Radio, Tag } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { InfoTooltip } from '../InfoTooltip';
 import { StyledFormField } from '../../styled';
+import { MandatoryIcon } from '../Mandatory';
 
 const commonPropTypes = {
     layer: PropTypes.object.isRequired,
@@ -25,7 +26,7 @@ export const Version = ({ versions, layer, controller }) => {
         : <VersionSelect versions={versions} layer={layer} controller={controller} />;
     return (
         <Fragment>
-            <Message messageKey='interfaceVersion'/>
+            <Message messageKey='interfaceVersion'/> <MandatoryIcon />
             { !readonly && <InfoTooltip messageKeys='interfaceVersionDesc'/> }
             <StyledFormField>{ versionInfo }</StyledFormField>
         </Fragment>
