@@ -497,8 +497,7 @@ class UIHandler extends StateHandler {
             validationErrors.push(getMessage('validation.locale'));
         }
 
-        let mandatoryFields = this.getAdminMetadata().layerTypes || {};
-        mandatoryFields = mandatoryFields[layer.type] || [];
+        let mandatoryFields = this.getMandatoryFieldsForType(layer.type);
         const getValue = (item, key) => {
             if (!item || !key) {
                 return;
@@ -700,7 +699,14 @@ class UIHandler extends StateHandler {
      */
     getAdminMetadata () {
         return this.getState().metadata || {};
-    };
+    }
+
+    getMandatoryFieldsForType (type) {
+        const metadata = this.getAdminMetadata().layerTypes || {};
+        const mandatoryFields = metadata[type] || [];
+        // TODO: add dataproviderId, role_permissions, default locale?
+        return mandatoryFields;
+    }
 
     isLoading () {
         return this.loadingCount > 0;
