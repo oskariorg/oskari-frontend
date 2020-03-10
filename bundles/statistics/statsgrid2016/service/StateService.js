@@ -138,26 +138,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             // map to keep stored states work properly
             this.indicators = indicators.map(ind => {
                 const hash = ind.hash || this.getHash(ind.ds, ind.id, ind.selections, ind.series);
-                const series = ind.series;
-                // TODO is this really needed
-                if (series) {
-                    this.seriesService.setValues(series.values);
-                    ind.selections[series.id] = this.seriesService.getValue();
-                    ind.classification.mode = 'distinct';
-                }
                 return {
                     datasource: Number(ind.ds),
                     indicator: ind.id,
                     selections: ind.selections,
-                    series,
+                    series: ind.series,
                     hash,
                     classification: ind.classification || this.getClassificationOpts(hash)
                 };
-            });
+            // published maps or saved views may contain dublicate indicators => filter dublicates
+            }).filter((ind, i, inds) => inds.findIndex(find => (find.hash === ind.hash)) === i);
 
             let active = this.indicators.find(ind => ind.hash === activeHash);
-            if (active && active.classification) {
-                this.lastSelectedClassification = active.classification;
+            if (active) {
+                const { classification, series, selections } = active;
+                if (classification) {
+                    this.lastSelectedClassification = classification;
+                }
+                if (series) {
+                    const selected = selections[series.id];
+                    this.seriesService.setSelectedValue(selected);
+                    this.seriesService.setValues(series.values);
+                }
             }
             this.activeIndicator = active || null;
             const eventBuilder = Oskari.eventBuilder('StatsGrid.StateChangedEvent');
