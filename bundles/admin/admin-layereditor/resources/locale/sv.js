@@ -107,7 +107,13 @@ Oskari.registerLocalization(
                 "hover" : "Hover JSON-syntaxen är ogiltig.",
                 "attributes" : "Attribut JSON-syntaxen är ogiltig.",
                 "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
-                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
+                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig.",
+                "url": "Gränssnitten address is mandatory.",
+                "name": "Unik namn för kartlager is mandatory.",
+                "version": "Gränss&shy;nittets version is mandatory.",
+                "options": {
+                    "apiKey": "Api key is mandatory."
+                }
             },
             "messages": {
                 "saveSuccess": "Fel!",

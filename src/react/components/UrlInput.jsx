@@ -28,7 +28,10 @@ export class UrlInput extends React.Component {
             return;
         }
         this.setState((state) => {
-            this.props.onChange(`${protocol}://${state.url}`);
+            if (state.url) {
+                // trigger upstream state change only if we have more than the protocol
+                this.props.onChange(`${protocol}://${state.url}`);
+            }
             return {
                 ...state,
                 protocol
@@ -51,7 +54,12 @@ export class UrlInput extends React.Component {
                 newState.protocol = urlParts.shift();
                 newState.url = urlParts.join('');
             }
-            this.props.onChange(`${newState.protocol}://${newState.url}`);
+            if (!newState.url.trim()) {
+                // If we only have protocol -> trigger "unset"
+                this.props.onChange(undefined);
+            } else {
+                this.props.onChange(`${newState.protocol}://${newState.url}`);
+            }
             return newState;
         });
     }
