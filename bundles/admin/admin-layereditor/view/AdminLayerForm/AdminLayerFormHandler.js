@@ -496,6 +496,29 @@ class UIHandler extends StateHandler {
         if (!defaultLocale.name) {
             validationErrors.push(getMessage('validation.locale'));
         }
+
+        let mandatoryFields = this.getAdminMetadata().layerTypes || {};
+        mandatoryFields = mandatoryFields[layer.type] || [];
+        const getValue = (item, key) => {
+            if (!item || !key) {
+                return;
+            }
+            const keyParts = key.split('.');
+            if (keyParts.length === 1) {
+                // undefined or trimmed value
+                return item[key] && item[key].trim();
+            }
+            let newItem = item[keyParts.shift()];
+            // recurse with new item and parts left on the key
+            return getValue(newItem, keyParts.join('.'));
+        };
+        mandatoryFields.forEach(field => {
+            const value = getValue(layer, field);
+            if (!value || value === -1) {
+                validationErrors.push(getMessage('validation.' + field));
+            }
+        });
+
         this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);

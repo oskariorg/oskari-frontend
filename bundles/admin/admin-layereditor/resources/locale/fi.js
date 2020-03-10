@@ -131,7 +131,12 @@ Oskari.registerLocalization(
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
                 "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
-                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
+                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen.",
+                "url": "Rajapinnan osoite on pakollinen tieto.",
+                "version": "Rajapinnan versio on pakollinen tieto.",
+                "options": {
+                    "apiKey": "Api key on pakollinen tieto."
+                }
             },
             "messages": {
                 "saveSuccess": "Tallennettu",

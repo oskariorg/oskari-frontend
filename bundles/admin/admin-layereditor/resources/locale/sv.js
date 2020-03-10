@@ -107,7 +107,12 @@ Oskari.registerLocalization(
                 "hover" : "Hover JSON-syntaxen är ogiltig.",
                 "attributes" : "Attribut JSON-syntaxen är ogiltig.",
                 "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
-                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
+                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig.",
+                "url": "Interface URL is mandatory.",
+                "version": "Interface version is mandatory.",
+                "options": {
+                    "apiKey": "Api key is mandatory."
+                }
             },
             "messages": {
                 "saveSuccess": "Fel!",
