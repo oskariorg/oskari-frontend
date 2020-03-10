@@ -133,6 +133,7 @@ Oskari.registerLocalization(
                 "attributions" : "Invalid Attributions JSON syntax.",
                 "tileGrid" : "Invalid Tile grid JSON syntax.",
                 "url": "Interface URL is mandatory.",
+                "name": "Unique name is mandatory.",
                 "version": "Interface version is mandatory.",
                 "options": {
                     "apiKey": "Api key is mandatory."

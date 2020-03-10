@@ -133,6 +133,7 @@ Oskari.registerLocalization(
                 "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
                 "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen.",
                 "url": "Rajapinnan osoite on pakollinen tieto.",
+                "name": "Karttatason yksilöivä nimi on pakollinen tieto.",
                 "version": "Rajapinnan versio on pakollinen tieto.",
                 "options": {
                     "apiKey": "Api key on pakollinen tieto."
