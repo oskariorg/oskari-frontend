@@ -29,7 +29,7 @@ export class UrlInput extends React.Component {
         }
         this.setState((state) => {
             if (state.url) {
-                // trigger state change only if we have more than the protocol
+                // trigger upstream state change only if we have more than the protocol
                 this.props.onChange(`${protocol}://${state.url}`);
             }
             return {
