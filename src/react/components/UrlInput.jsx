@@ -51,7 +51,12 @@ export class UrlInput extends React.Component {
                 newState.protocol = urlParts.shift();
                 newState.url = urlParts.join('');
             }
-            this.props.onChange(`${newState.protocol}://${newState.url}`);
+            if (!newState.url.trim()) {
+                // If we only have protocol -> trigger "unset"
+                this.props.onChange(undefined);
+            } else {
+                this.props.onChange(`${newState.protocol}://${newState.url}`);
+            }
             return newState;
         });
     }
