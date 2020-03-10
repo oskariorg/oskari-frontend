@@ -27,7 +27,7 @@ const getLabels = bundleKey => {
     });
     // mark mandatory field
     const defaultLanguage = Oskari.getSupportedLanguages()[0];
-    labels[defaultLanguage].name = labels[defaultLanguage].name + ' ' + <MandatoryIcon />;
+    labels[defaultLanguage].name = (<React.Fragment>{labels[defaultLanguage].name} <MandatoryIcon /></React.Fragment>);
     return labels;
 };
 
