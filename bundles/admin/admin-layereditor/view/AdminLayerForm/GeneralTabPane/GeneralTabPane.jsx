@@ -27,7 +27,7 @@ const {
 const GeneralTabPane = ({ mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
     <Fragment>
         { propertyFields.some(propKey => [URL, CESIUM_ION, API_KEY].includes(propKey)) &&
-            <Mandatory><ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} /></Mandatory>
+            <ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} />
         }
         { propertyFields.includes(VERSION) &&
             <Version layer={layer} versions={versions} controller={controller} />
@@ -42,10 +42,10 @@ const GeneralTabPane = ({ mapLayerGroups, dataProviders, versions, layer, capabi
             <Name layer={layer} controller={controller} />
         }
         { propertyFields.includes(LOCALIZED_NAMES) &&
-            <LocalizedNames layer={layer} controller={controller} />
+            <Mandatory><LocalizedNames layer={layer} controller={controller} /></Mandatory>
         }
         { propertyFields.includes(ORGANIZATION_NAME) &&
-            <DataProvider layer={layer} controller={controller} dataProviders={dataProviders} />
+            <Mandatory><DataProvider layer={layer} controller={controller} dataProviders={dataProviders} /></Mandatory>
         }
         { propertyFields.includes(GROUPS) &&
             <Groups layer={layer} controller={controller} groups={mapLayerGroups} />

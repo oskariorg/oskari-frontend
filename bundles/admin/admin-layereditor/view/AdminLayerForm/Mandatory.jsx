@@ -39,9 +39,8 @@ Mandatory.propTypes = {
 export const MandatoryIcon = () => (
     <MandatoryContext.Consumer>
         {
-            value => {
-                console.log('Value in mandatory icon:', value);
-                if (!value) {
+            isMandatory => {
+                if (!isMandatory) {
                     // Not wrapped in MandatoryContext -> Don't return any UI element
                     return null;
                 }

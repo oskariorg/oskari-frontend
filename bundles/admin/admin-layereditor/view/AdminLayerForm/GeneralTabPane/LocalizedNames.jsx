@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TextInput, LocalizationComponent } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
+import { MandatoryIcon } from '../Mandatory';
 
 const PaddedLabel = styled('div')`
     padding-bottom: 5px;
@@ -26,7 +27,7 @@ const getLabels = bundleKey => {
     });
     // mark mandatory field
     const defaultLanguage = Oskari.getSupportedLanguages()[0];
-    labels[defaultLanguage].name = labels[defaultLanguage].name + ' (*)';
+    labels[defaultLanguage].name = labels[defaultLanguage].name + ' ' + <MandatoryIcon />;
     return labels;
 };
 

@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Message, Select, Option } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
+import { MandatoryIcon } from '../Mandatory';
 
 export const DataProvider = ({ layer, dataProviders, controller }) => (
     <Fragment>
-        <Message messageKey='dataProvider'/> (*)
+        <Message messageKey='dataProvider'/>  <MandatoryIcon />
         <StyledFormField>
             <Select
                 showSearch

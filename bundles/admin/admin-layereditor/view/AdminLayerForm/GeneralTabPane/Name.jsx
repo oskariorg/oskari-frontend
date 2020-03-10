@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { Message, TextInput } from 'oskari-ui';
 import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from '../styled';
+import { MandatoryIcon } from '../Mandatory';
 
 export const Name = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='uniqueName' />
+        <Message messageKey='uniqueName' /> <MandatoryIcon />
         <StyledFormField>
             <TextInput type='text' value={layer.name} onChange={evt => controller.setLayerName(evt.target.value)} />
         </StyledFormField>
