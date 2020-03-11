@@ -25,7 +25,8 @@ const getLabel = (labels, lang, elementName, isSingle) => {
     if (label) {
         label = isSingle ? label : (elementName && label[elementName]);
     }
-    if (typeof label === 'object') {
+    const isReactComponent = label.$$typeof === Symbol.for('react.element');
+    if (!isReactComponent && typeof label === 'object') {
         label = Object.values(label).shift();
     }
     return label;
