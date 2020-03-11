@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
+import { Icon } from 'oskari-ui';
 
 const MandatoryContext = React.createContext();
 
@@ -36,7 +37,7 @@ Mandatory.propTypes = {
     children: PropTypes.any
 };
 
-export const MandatoryIcon = () => (
+export const MandatoryIcon = ({ isValid = false }) => (
     <MandatoryContext.Consumer>
         {
             isMandatory => {
@@ -45,8 +46,14 @@ export const MandatoryIcon = () => (
                     return null;
                 }
                 // This was wrapped in mandatory -> Show users it's required
-                return '(*)';
+                // red by default and when isValid=false
+                // green when isValid=true
+                return <Icon type="star" theme="twoTone" twoToneColor={isValid ? '#52c41a' : '#da5151'} />;
             }
         }
     </MandatoryContext.Consumer>
 );
+
+MandatoryIcon.propTypes = {
+    isValid: PropTypes.bool
+};

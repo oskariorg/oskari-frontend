@@ -15,7 +15,7 @@ const PaddingBottom = styled('div')`
     padding-bottom: 10px;
 `;
 
-const getLabels = bundleKey => {
+const getLabels = (bundleKey, locale = {}) => {
     const getMsg = Oskari.getMsg.bind(null, bundleKey);
     const labels = {};
     Oskari.getSupportedLanguages().forEach(language => {
@@ -27,14 +27,16 @@ const getLabels = bundleKey => {
     });
     // mark mandatory field
     const defaultLanguage = Oskari.getSupportedLanguages()[0];
-    labels[defaultLanguage].name = (<React.Fragment>{labels[defaultLanguage].name} <MandatoryIcon /></React.Fragment>);
+    labels[defaultLanguage].name = (<React.Fragment>
+        {labels[defaultLanguage].name} <MandatoryIcon isValid={locale[defaultLanguage] && locale[defaultLanguage].name} />
+    </React.Fragment>);
     return labels;
 };
 
 export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => (
     <PaddingBottom>
         <LocalizationComponent
-            labels={getLabels(bundleKey)}
+            labels={getLabels(bundleKey, layer.locale)}
             value={layer.locale}
             languages={Oskari.getSupportedLanguages()}
             onChange={controller.setLocalizedNames}

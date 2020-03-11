@@ -7,7 +7,7 @@ import { MandatoryIcon } from '../Mandatory';
 
 export const DataProvider = ({ layer, dataProviders, controller }) => (
     <Fragment>
-        <Message messageKey='dataProvider'/>  <MandatoryIcon />
+        <Message messageKey='dataProvider'/>  <MandatoryIcon isValid={layer.dataProviderId && layer.dataProviderId !== -1}/>
         <StyledFormField>
             <Select
                 showSearch

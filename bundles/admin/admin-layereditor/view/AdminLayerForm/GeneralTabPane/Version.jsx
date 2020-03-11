@@ -19,14 +19,14 @@ const VersionSelect = ({ layer, versions, controller }) => (
 );
 VersionSelect.propTypes = commonPropTypes;
 
-export const Version = ({ versions, layer, controller }) => {
+export const Version = ({ versions = [], layer = {}, controller }) => {
     const readonly = versions.length < 2 && versions.includes(layer.version);
     const versionInfo = readonly
         ? <Tag>{layer.version}</Tag>
         : <VersionSelect versions={versions} layer={layer} controller={controller} />;
     return (
         <Fragment>
-            <Message messageKey='interfaceVersion'/> <MandatoryIcon />
+            <Message messageKey='interfaceVersion'/> <MandatoryIcon isValid={readonly || versions.includes(layer.version)} />
             { !readonly && <InfoTooltip messageKeys='interfaceVersionDesc'/> }
             <StyledFormField>{ versionInfo }</StyledFormField>
         </Fragment>

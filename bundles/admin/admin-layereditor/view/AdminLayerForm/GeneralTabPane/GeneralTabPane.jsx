@@ -26,32 +26,72 @@ const {
 
 const GeneralTabPane = ({ mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
     <Fragment>
-        { propertyFields.some(propKey => [URL, CESIUM_ION, API_KEY].includes(propKey)) &&
-            <ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} />
-        }
-        { propertyFields.includes(VERSION) &&
-            <Version layer={layer} versions={versions} controller={controller} />
-        }
-        { propertyFields.includes(SRS) &&
-            <Srs layer={layer} controller={controller} propertyFields={propertyFields} capabilities={capabilities} />
-        }
-        { propertyFields.includes(TILE_GRID) &&
-            <TileGrid layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(NAME) &&
-            <Name layer={layer} controller={controller} />
-        }
-        { propertyFields.includes(LOCALIZED_NAMES) &&
-            <Mandatory><LocalizedNames layer={layer} controller={controller} /></Mandatory>
-        }
-        { propertyFields.includes(ORGANIZATION_NAME) &&
-            <Mandatory><DataProvider layer={layer} controller={controller} dataProviders={dataProviders} /></Mandatory>
-        }
-        { propertyFields.includes(GROUPS) &&
-            <Groups layer={layer} controller={controller} groups={mapLayerGroups} />
-        }
+        { getEndpointField(layer, propertyFields, controller) }
+        { getVersionField(layer, propertyFields, controller, versions) }
+        { getSRSField(layer, propertyFields, controller, capabilities) }
+        { getTileGridField(layer, propertyFields, controller) }
+        { getNameField(layer, propertyFields, controller) }
+        { getLocaleField(layer, propertyFields, controller) }
+        { getDataproviderField(layer, propertyFields, controller, dataProviders) }
+        { getGroupsField(layer, propertyFields, controller, mapLayerGroups) }
     </Fragment>
 );
+
+const getEndpointField = (layer, propertyFields, controller) => {
+    if (!propertyFields.some(propKey => [URL, CESIUM_ION, API_KEY].includes(propKey))) {
+        return null;
+    }
+    return (<ServiceEndPoint layer={layer} controller={controller} propertyFields={propertyFields} />);
+};
+
+const getVersionField = (layer, propertyFields, controller, versions) => {
+    if (!propertyFields.includes(VERSION)) {
+        return null;
+    }
+    return (<Version layer={layer} versions={versions} controller={controller} />);
+};
+
+const getSRSField = (layer, propertyFields, controller, capabilities) => {
+    if (!propertyFields.includes(SRS)) {
+        return null;
+    }
+    return (<Srs layer={layer} controller={controller} propertyFields={propertyFields} capabilities={capabilities} />);
+};
+
+const getTileGridField = (layer, propertyFields, controller) => {
+    if (!propertyFields.includes(TILE_GRID)) {
+        return null;
+    }
+    return (<TileGrid layer={layer} controller={controller} />);
+};
+
+const getNameField = (layer, propertyFields, controller) => {
+    if (!propertyFields.includes(NAME)) {
+        return null;
+    }
+    return (<Name layer={layer} controller={controller} />);
+};
+
+const getLocaleField = (layer, propertyFields, controller) => {
+    if (!propertyFields.includes(LOCALIZED_NAMES)) {
+        return null;
+    }
+    return (<Mandatory><LocalizedNames layer={layer} controller={controller} /></Mandatory>);
+};
+
+const getDataproviderField = (layer, propertyFields, controller, dataProviders) => {
+    if (!propertyFields.includes(ORGANIZATION_NAME)) {
+        return null;
+    }
+    return (<Mandatory><DataProvider layer={layer} controller={controller} dataProviders={dataProviders} /></Mandatory>);
+};
+
+const getGroupsField = (layer, propertyFields, controller, mapLayerGroups) => {
+    if (!propertyFields.includes(GROUPS)) {
+        return null;
+    }
+    return (<Groups layer={layer} controller={controller} groups={mapLayerGroups} />);
+};
 
 GeneralTabPane.propTypes = {
     mapLayerGroups: PropTypes.array.isRequired,
