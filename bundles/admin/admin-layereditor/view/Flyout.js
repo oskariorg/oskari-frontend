@@ -98,6 +98,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         versions={versions}
                         messages={messages}
                         rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
+                        hasPermissions={this.uiHandler.hasAnyPermissions(layer.role_permissions)}
                         tab={tab}
                         scales={scales}
                         onDelete={() => this.uiHandler.deleteLayer()}

@@ -7,6 +7,7 @@ import { PermissionsTabPane } from './PermissionsTabPane';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Confirm, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import { StyledRoot, StyledAlert, StyledButton } from './styled';
+import { Mandatory, MandatoryIcon } from './Mandatory';
 
 const AdminLayerForm = ({
     controller,
@@ -23,6 +24,7 @@ const AdminLayerForm = ({
     onSave,
     getMessage,
     rolesAndPermissionTypes,
+    hasPermissions = false,
     scales
 }) => {
     // For returning to add multiple layers from service endpoint
@@ -60,7 +62,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     capabilities={capabilities} />
             </TabPane>
-            <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
+            <TabPane key='permissions' tab={<Mandatory><Message messageKey='permissionsTabTitle'/> <MandatoryIcon isValid={hasPermissions}/></Mandatory>}>
                 <PermissionsTabPane
                     rolesAndPermissionTypes={rolesAndPermissionTypes}
                     permissions={layer.role_permissions}
@@ -112,6 +114,7 @@ AdminLayerForm.propTypes = {
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
     rolesAndPermissionTypes: PropTypes.object,
+    hasPermissions: PropTypes.bool,
     tab: PropTypes.string.isRequired,
     scales: PropTypes.array.isRequired
 };
