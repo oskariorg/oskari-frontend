@@ -24,18 +24,28 @@ const {
     VERSION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const GeneralTabPane = ({ mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
+const GeneralTabPane = ({ mandatoryFields, mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
     <Fragment>
-        { getEndpointField(layer, propertyFields, controller) }
-        { getVersionField(layer, propertyFields, controller, versions) }
-        { getSRSField(layer, propertyFields, controller, capabilities) }
-        { getTileGridField(layer, propertyFields, controller) }
-        { getNameField(layer, propertyFields, controller) }
-        { getLocaleField(layer, propertyFields, controller) }
-        { getDataproviderField(layer, propertyFields, controller, dataProviders) }
-        { getGroupsField(layer, propertyFields, controller, mapLayerGroups) }
+        { wrapMandatory(mandatoryFields, 'url', getEndpointField(layer, propertyFields, controller)) }
+        { wrapMandatory(mandatoryFields, 'version', getVersionField(layer, propertyFields, controller, versions)) }
+        { wrapMandatory(mandatoryFields, 'srs', getSRSField(layer, propertyFields, controller, capabilities)) }
+        { wrapMandatory(mandatoryFields, 'tilegrid', getTileGridField(layer, propertyFields, controller)) }
+        { wrapMandatory(mandatoryFields, 'name', getNameField(layer, propertyFields, controller)) }
+        { wrapMandatory(mandatoryFields, 'locale', getLocaleField(layer, propertyFields, controller)) }
+        { wrapMandatory(mandatoryFields, 'dataproviderId', getDataproviderField(layer, propertyFields, controller, dataProviders)) }
+        { wrapMandatory(mandatoryFields, 'groups', getGroupsField(layer, propertyFields, controller, mapLayerGroups)) }
     </Fragment>
 );
+
+const wrapMandatory = (mandatoryFields = [], name, field) => {
+    if (!field) {
+        return null;
+    }
+    if (mandatoryFields.includes(name)) {
+        return <Mandatory>{field}</Mandatory>;
+    }
+    return field;
+};
 
 const getEndpointField = (layer, propertyFields, controller) => {
     if (!propertyFields.some(propKey => [URL, CESIUM_ION, API_KEY].includes(propKey))) {
@@ -94,6 +104,7 @@ const getGroupsField = (layer, propertyFields, controller, mapLayerGroups) => {
 };
 
 GeneralTabPane.propTypes = {
+    mandatoryFields: PropTypes.array,
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     versions: PropTypes.array.isRequired,

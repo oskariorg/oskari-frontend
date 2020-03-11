@@ -42,6 +42,7 @@ const AdminLayerForm = ({
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
                     versions={versions}
+                    mandatoryFields={rolesAndPermissionTypes.layerTypes[layer.type]}
                     capabilities={capabilities} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
