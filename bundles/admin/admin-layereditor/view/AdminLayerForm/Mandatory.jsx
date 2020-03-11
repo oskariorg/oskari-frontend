@@ -37,6 +37,7 @@ Mandatory.propTypes = {
     children: PropTypes.any
 };
 
+// TODO: isValid should probably be a prop in Mandatory instead
 export const MandatoryIcon = ({ isValid = false }) => (
     <MandatoryContext.Consumer>
         {
