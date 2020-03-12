@@ -481,9 +481,65 @@ class UIHandler extends StateHandler {
             }
         }
     }
+    getValidatorFunctions (layerType) {
+        const validators = {
+            dataproviderId: (value) => (value && value !== -1),
+            locale: (value = {}) => {
+                const defaultLang = Oskari.getSupportedLanguages()[0];
+                return value[defaultLang] && value[defaultLang].name;
+            },
+            role_permissions: (value = {}) => this.hasAnyPermissions(value)
+        };
+
+        // function to dig a value from json object structure.
+        // Key is split from dots (.) and is used to get values like options.apiKey
+        const getValue = (item, key) => {
+            if (!item || !key) {
+                return;
+            }
+            const keyParts = key.split('.');
+            if (keyParts.length === 1) {
+                // undefined or trimmed value
+                return item[key] && item[key].trim();
+            }
+            let newItem = item[keyParts.shift()];
+            // recurse with new item and parts left on the key
+            return getValue(newItem, keyParts.join('.'));
+        };
+        // wrap validators so they take layer as param so we can dig values from structures
+        const wrappers = {};
+        Object.keys(validators).forEach(field => {
+            wrappers[field] = (layer) => validators[field](getValue(layer, field));
+        });
+
+        // Add checks for mandatory fields
+        const hasValue = (value) => value && value !== -1;
+        let mandatoryFields = this.getMandatoryFieldsForType(layerType);
+        mandatoryFields.forEach(field => {
+            wrappers[field] = (layer) => hasValue(getValue(layer, field));
+        });
+        return wrappers;
+    }
+    getValidatorFor (key) {
+        if (!key) {
+            return null;
+        }
+        const validators = this.getValidatorFunctions();
+        return validators[key];
+    }
 
     validateUserInputValues (layer) {
+        const validators = this.getValidatorFunctions(layer.type);
         const validationErrors = [];
+        Object.keys(validators).forEach(field => {
+            const isValid = validators[field](layer);
+            if (!isValid) {
+                // TODO: messaging needs to be changed!!!
+                validationErrors.push(field);
+            }
+        });
+
+        /*
         if (!layer.dataProviderId || layer.dataProviderId === -1) {
             validationErrors.push(getMessage('validation.dataprovider'));
         }
@@ -498,25 +554,13 @@ class UIHandler extends StateHandler {
         }
 
         let mandatoryFields = this.getMandatoryFieldsForType(layer.type);
-        const getValue = (item, key) => {
-            if (!item || !key) {
-                return;
-            }
-            const keyParts = key.split('.');
-            if (keyParts.length === 1) {
-                // undefined or trimmed value
-                return item[key] && item[key].trim();
-            }
-            let newItem = item[keyParts.shift()];
-            // recurse with new item and parts left on the key
-            return getValue(newItem, keyParts.join('.'));
-        };
         mandatoryFields.forEach(field => {
             const value = getValue(layer, field);
             if (!value || value === -1) {
                 validationErrors.push(getMessage('validation.' + field));
             }
         });
+        */
 
         this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
