@@ -14,6 +14,7 @@ Oskari.registerLocalization(
         "errorNoFields": "Detta kartlager saknar attributdata.",
         "columnSelectorTooltip": "Välj synliga kolumner",
         "featureDataPopup": "Summa värden",
+        "filterDialogTooltip": "Välj objekt",
         "selectionTools": {
             "title": "Markera objekt på kartan",
             "instructions": " ",

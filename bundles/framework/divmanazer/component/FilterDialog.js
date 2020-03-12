@@ -99,8 +99,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                 updateButton = Oskari.clazz.create('Oskari.userinterface.component.Button'),
                 layerAttributes,
                 popupTitle,
-                popupContent,
-                filterErrors;
+                popupContent;
 
             if (typeof layer !== 'undefined') {
                 me._layer = layer;
@@ -146,16 +145,9 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             updateButton.setHandler(function () {
                 var filtersJson = me.getFilterValues(); // Get the filter values from the dialog
                 // Validate the values for errors
-                filterErrors = me._validateFilterValues(filtersJson);
+                const filterErrors = me._validateFilterValues(filtersJson);
 
-                // "additional" errors, other than "missing value" etc.. ie. bbox selected but no property filters
-                if (filtersJson.filterErrors) {
-                    if (!filterErrors) {
-                        filterErrors = [];
-                    }
-                    filterErrors = filterErrors.concat(filtersJson.filterErrors);
-                }
-                if (filterErrors) {
+                if (filterErrors.length > 0) {
                     // If there were validation errors, notify the user of them
                     // and prevent refreshing the filter values.
                     me._displayValidationErrors(filterErrors);
@@ -666,8 +658,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          *          Should have 'id' and 'name' keys if an array of objects (optional).
          */
         _appendOptionValues: function (select, placeHolder, values) {
-            var option = jQuery(this.__filterTemplates.option),
-                i;
+            var option = jQuery(this.__filterTemplates.option);
             // Append the first, empty value to work as a placeholder
             if (placeHolder) {
                 option.attr('value', '');
@@ -676,7 +667,7 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             }
 
             // Iterate the list of given values
-            for (i = 0; values && i < values.length; ++i) {
+            for (let i = 0; i < values.length; i++) {
                 option = jQuery(this.__filterTemplates.option);
                 // Array of strings.
                 if (typeof values[i] === 'string') {
@@ -733,7 +724,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
             } else if (bboxValue === 'false') {
                 filterValues.noBBOX = true;
             }
-
             if (typeof this.fixedOptions.clickedFeaturesSelection === 'undefined') {
                 clickedFeatures = jQuery(popupContent).find('#clicked-features-selection-container').find('input[name=analysis-filter-radio]').is(':checked');
                 filterByGeometry = jQuery(popupContent).find('#filter-by-geometry-selection-container').find('input[name=filter-by-geometry]:checked').val();
@@ -794,14 +784,6 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                     delete filterValues.filters;
                 }
             }
-
-            if (filterValues.noBBOX && (!filterValues.filters || filterValues.filters.length === 0)) {
-                if (!filterValues.filterErrors) {
-                    filterValues.filterErrors = [];
-                }
-                filterValues.filterErrors.push('bbox_selected_with_no_properties');
-            }
-
             return filterValues;
         },
 
@@ -816,42 +798,43 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @method _validateFilterValues
          * @private
          * @param {Object} filterValues
-         * @return {Object/Boolean} return an error object if there were
-         *                          validation errors, false otherwise.
+         * @return {Array} return array containing errors, empty array if no errors
          */
         _validateFilterValues: function (filterValues) {
-            var errors = [],
-                filters = (filterValues && filterValues.filters ? filterValues.filters : []),
-                filter,
-                i;
+            const loc = this.loc.validation;
+            const errors = [];
+            const filters = filterValues.filters ? filterValues.filters : [];
+            if (filters.length === 0) {
+                if (filterValues.noBBOX) {
+                    errors.push(loc['bbox_selected_with_no_properties']); // bbox_not_selected
+                } else if (Object.keys(filterValues).length === 0) {
+                    errors.push(loc['attribute_missing']);
+                    errors.push(loc['value_missing']);
+                }
+            }
 
-            for (i = 0; filters && i < filters.length; i += 1) {
-                filter = filters[i];
+            for (let i = 0; i < filters.length; i++) {
+                const filter = filters[i];
                 // These are the filter objects
                 if (i % 2 === 0) {
                     if (filter.boolean) {
-                        errors.push('boolean_operator_missing');
+                        errors.push(loc['boolean_operator_missing']);
                     }
                     if (!filter.attribute) {
-                        errors.push('attribute_missing');
+                        errors.push(loc['attribute_missing']);
                     }
                     if (!filter.operator) {
-                        errors.push('operator_missing');
+                        errors.push(loc['operator_missing']);
                     }
                     if (!filter.value) {
-                        errors.push('value_missing');
+                        errors.push(loc['value_missing']);
                     }
                 } else {
                     // These are the boolean operators combining the filters
                     if (!filter.boolean) {
-                        errors.push('boolean_operator_missing');
+                        errors.push(loc['boolean_operator_missing']);
                     }
                 }
-            }
-
-            // If no errors found, set the errors variable to false
-            if (!errors.length) {
-                errors = false;
             }
             return errors;
         },
@@ -860,19 +843,13 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * Displays validation error messages to the user.
          *
          * @method _displayValidationErrors
-         * @param {Object} errors
+         * @param {Array} errors
          */
         _displayValidationErrors: function (errors) {
-            var loc = this.loc.validation,
-                popup = Oskari.clazz.create('Oskari.userinterface.component.Popup'),
-                closeButton = popup.createCloseButton(Oskari.getMsg('DivManazer', 'buttons.ok')),
-                popupTitle = (this.loc.error && this.loc.error.title) ? this.loc.error.title : '',
-                popupContent = '<h4>' + loc.title + '</h4>',
-                i;
-            for (i = 0; i < errors.length; ++i) {
-                popupContent += '<p>' + loc[errors[i]] + '</p>';
-            }
-            popup.showFromModal(this.popup.getElement(), popupTitle, popupContent, [closeButton]);
+            const popup = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+            const closeButton = popup.createCloseButton();
+            const popupContent = '<p>' + errors.join('</p><p>') + '</p>';
+            popup.showFromModal(this.popup.getElement(), this.loc.validation.title, popupContent, [closeButton]);
         },
 
         /**
@@ -881,11 +858,11 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * Load analysis layers in start.
          *
          */
-        _loadWFSLayerPropertiesAndTypes: function (layer_id, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
+        _loadWFSLayerPropertiesAndTypes: function (layerId, prevJson, cb, clickedFeatures, selectedTemporaryFeatures) {
             var me = this;
 
             // Request analyis layers via the backend
-            me._getWFSLayerPropertiesAndTypes(layer_id,
+            me._getWFSLayerPropertiesAndTypes(layerId,
                 // Success callback
 
                 function (response) {
@@ -894,9 +871,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
                     }
                 },
                 // Error callback
-
                 function (jqXHR, textStatus, errorThrown) {
-                    me.instance.showMessage(me.loc.error.title, me.loc.error.loadLayerTypesFailed);
+                    Oskari.log('FilterDialog').error('Failed to load layer properties and types for layer:', layerId);
                 });
         },
 
@@ -907,8 +883,8 @@ Oskari.clazz.define('Oskari.userinterface.component.FilterDialog',
          * @param {Function} success the success callback
          * @param {Function} failure the failure callback
          */
-        _getWFSLayerPropertiesAndTypes: function (layer_id, success, failure) {
-            var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&simple=true&layer_id=' + layer_id;
+        _getWFSLayerPropertiesAndTypes: function (layerId, success, failure) {
+            var url = Oskari.urls.getRoute('GetWFSDescribeFeature') + '&simple=true&layer_id=' + layerId;
             jQuery.ajax({
                 type: 'GET',
                 dataType: 'json',

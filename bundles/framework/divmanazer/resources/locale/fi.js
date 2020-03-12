@@ -282,7 +282,7 @@ Oskari.registerLocalization(
         },
         "FilterDialog": {
             "title": "Kohteiden suodatus",
-            "description": "Suodata kohteita tasolta:",
+            "description": "Valitse kohteita tasolta:",
             "cancelButton": "Peruuta",
             "clearButton": "Tyhjennä",
             "refreshButton": "Päivitä",
