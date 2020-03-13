@@ -419,9 +419,12 @@ class UIHandler extends StateHandler {
         const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
             // TODO: formatting message and message duration
-            Messaging.error(<ul>{ validationErrorMessages
-                .map(msg => <li key={msg}>{msg}</li>)}
-            </ul>);
+            Messaging.error(<div>
+                {getMessage('validation.mandatoryMsg')}
+                <ul>{ validationErrorMessages
+                    .map(field => <li key={field}>{getMessage(`fields.${field}`)}</li>)}
+                </ul>
+            </div>);
             return;
         }
         // Take a copy
@@ -535,6 +538,7 @@ class UIHandler extends StateHandler {
             const isValid = validators[field](layer);
             if (!isValid) {
                 // TODO: messaging needs to be changed!!!
+                // TODO: locale is problematic since it's an object structure in localizations instead of plain field name
                 validationErrors.push(field);
             }
         });

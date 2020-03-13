@@ -64,7 +64,8 @@ Oskari.registerLocalization(
                 "metadataId": "Metatiedon tiedostotunniste",
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
-
+                "role_permissions": "Oikeudet",
+                "dataproviderId": "Tiedontuottaja"
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
@@ -76,7 +77,6 @@ Oskari.registerLocalization(
             "attributions": "Lähdeviitteet",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",
             "addLayer": "Lisää uusi karttataso",
-            "dataProvider": "Tiedontuottaja",
             "dataProviderName": "Tiedontuottajan nimi",
             "addDataProvider": "Lisää tiedontuottaja",
             "themeName": "Teeman nimi",
@@ -132,7 +132,7 @@ Oskari.registerLocalization(
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
             "validation": {
-                "mandatoryMsg": "Pakollinen tieto puuttuu:",
+                "mandatoryMsg": "Pakollisia tietoja puuttuu:",
                 "dataprovider": "Tiedontuottaja on pakollinen tieto.",
                 "nopermissions": "Tasolle ei ole asetettu oikeuksia",
                 "locale": "Tasolle ei ole annettu nimeä oletuskielelle.",

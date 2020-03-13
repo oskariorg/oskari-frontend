@@ -64,6 +64,8 @@ Oskari.registerLocalization(
                 "metadataId": "Metadatans filtagg",
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
+                "role_permissions": "Permissions",
+                "dataproviderId": "Dataprovider"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
@@ -75,7 +77,6 @@ Oskari.registerLocalization(
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarsnamn och lösenord",
             "addLayer": "Lägg till ett nytt kartlager",
-            "dataProvider": "Dataprovider",
             "dataProviderName": "Dataprovider namn",
             "addDataProvider": "Lägg till dataprovider",
             "editDataProvider": "Redigera dataprovider",

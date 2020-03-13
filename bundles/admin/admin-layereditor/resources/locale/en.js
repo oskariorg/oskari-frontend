@@ -64,6 +64,8 @@ Oskari.registerLocalization(
                 "metadataId": "Metadata file identifier",
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
+                "role_permissions": "Permissions",
+                "dataProvider": "Dataprovider"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
@@ -75,7 +77,6 @@ Oskari.registerLocalization(
             "attributions": "Attributions",
             "usernameAndPassword": "Username and password",
             "addLayer": "Add a new map layer",
-            "dataProvider": "Dataprovider",
             "dataProviderName": "Dataprovider name",
             "addDataProvider": "Add dataprovider",
             "editDataProvider": "Edit dataprovider",
