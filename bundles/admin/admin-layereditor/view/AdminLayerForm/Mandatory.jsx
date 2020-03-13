@@ -1,17 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 import { Icon } from 'oskari-ui';
 
 const MandatoryContext = React.createContext();
-
-const StyledBorder = styled('div')`
-border-right: 1px dotted orange;
-border-bottom: 1px dotted orange;
-padding-right: 5px;
-padding-bottom: 5px;
-margin-bottom: 5px;
-`;
 
 /** *
  * import { Mandatory, MandatoryIcon } from './Mandatory';
@@ -25,12 +16,11 @@ margin-bottom: 5px;
  *
  * Don't show field as mandatory:
  *     <SomeComponent />
- * );
+ * Note! We could wrap Mandatory with a style to "flash" the field on validation error but that might be too "flashy" on each validation.
+ * Maybe we could do it when user clicks save?
  */
 export const Mandatory = ({ children }) => {
-    return <StyledBorder>
-        <MandatoryContext.Provider value={true}>{children}</MandatoryContext.Provider>
-    </StyledBorder>;
+    return <MandatoryContext.Provider value={true}>{children}</MandatoryContext.Provider>;
 };
 
 Mandatory.propTypes = {

@@ -486,13 +486,12 @@ class UIHandler extends StateHandler {
     }
     getValidatorFunctions (layerType) {
         const validators = {
-            dataproviderId: (value) => (value && value !== -1),
-            locale: (value = {}) => {
-                const defaultLang = Oskari.getSupportedLanguages()[0];
-                return value[defaultLang] && value[defaultLang].name;
-            },
+            dataProviderId: (value) => (value && value !== -1),
             role_permissions: (value = {}) => this.hasAnyPermissions(value)
         };
+        const defaultLang = Oskari.getSupportedLanguages()[0];
+        const localeKey = `locale.${defaultLang}.name`;
+        validators[localeKey] = (value) => (value && value.trim());
 
         // function to dig a value from json object structure.
         // Key is split from dots (.) and is used to get values like options.apiKey
@@ -502,8 +501,13 @@ class UIHandler extends StateHandler {
             }
             const keyParts = key.split('.');
             if (keyParts.length === 1) {
-                // undefined or trimmed value
-                return item[key] && item[key].trim();
+                // undefined or trimmed value when string
+                const value = item[key] && item[key];
+                if (typeof value === 'string') {
+                    return value.trim();
+                }
+                // permissions is an object so don't trim but return value
+                return value;
             }
             let newItem = item[keyParts.shift()];
             // recurse with new item and parts left on the key
@@ -542,29 +546,6 @@ class UIHandler extends StateHandler {
                 validationErrors.push(field);
             }
         });
-
-        /*
-        if (!layer.dataProviderId || layer.dataProviderId === -1) {
-            validationErrors.push(getMessage('validation.dataprovider'));
-        }
-        if (!this.hasAnyPermissions(layer.role_permissions)) {
-            validationErrors.push(getMessage('validation.nopermissions'));
-        }
-        const loc = layer.locale || {};
-        const defaultLang = Oskari.getSupportedLanguages()[0];
-        const defaultLocale = loc[defaultLang] || {};
-        if (!defaultLocale.name) {
-            validationErrors.push(getMessage('validation.locale'));
-        }
-
-        let mandatoryFields = this.getMandatoryFieldsForType(layer.type);
-        mandatoryFields.forEach(field => {
-            const value = getValue(layer, field);
-            if (!value || value === -1) {
-                validationErrors.push(getMessage('validation.' + field));
-            }
-        });
-        */
 
         this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);

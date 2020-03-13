@@ -27,29 +27,29 @@ Oskari.registerLocalization(
                 "version": "Gränss&shy;nittets version",
                 "username": "Användarsnamn",
                 "password": "Lösenord",
-                "uniqueName": "Unik namn för kartlager",
+                "name": "Unik namn för kartlager",
                 "options": {
                     "apiKey": "Api key",
                     "tileGrid": "Rutmatris"
                 },
                 "locale": {
                     "generic": {
-                        "placeholder": "Namn på {0}",
+                        "name": "Namn på {0}",
                         "descplaceholder": "Beskrivning på {0}"
                     },
                     "en": {
                         "lang": "Engelska",
-                        "placeholder": "Namn på engelska",
+                        "name": "Namn på engelska",
                         "descplaceholder": "Beskrivning på engelska"
                     },
                     "fi": {
                         "lang": "Finska",
-                        "placeholder": "Namn på finska",
+                        "name": "Namn på finska",
                         "descplaceholder": "Beskrivning på finska"
                     },
                     "sv": {
                         "lang": "Svenska",
-                        "placeholder": "Namn på svenska",
+                        "name": "Namn på svenska",
                         "descplaceholder": "Beskrivning på svenska"
                     }
                 },
@@ -65,7 +65,7 @@ Oskari.registerLocalization(
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Permissions",
-                "dataproviderId": "Dataprovider"
+                "dataProviderId": "Dataprovider"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
@@ -132,21 +132,13 @@ Oskari.registerLocalization(
                 "info": "Visning av små objekt har optimerats. Detta begränsar skalanivåerna på vilka objekten visas."
             },
             "validation": {
-                "dataprovider": "!!!!Tiedontuottaja on pakollinen tieto.",
-                "nopermissions": "!!!!Tasolle ei ole asetettu oikeuksia",
-                "locale": "Kartlagrets namn är obligatoriskt.",
+                "mandatoryMsg": "!!!!Mandatory fields missing:",
                 "styles" : "Stildefinitioner JSON-syntaxen är ogiltig.",
                 "externalStyles" : "Stildefinitioner av tredjeparts JSON-syntaxen är ogiltig.",
                 "hover" : "Hover JSON-syntaxen är ogiltig.",
                 "attributes" : "Attribut JSON-syntaxen är ogiltig.",
                 "attributions" : "Tillskrivningar JSON-syntaxen är ogiltig.",
-                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig.",
-                "url": "Gränssnitten address is mandatory.",
-                "name": "Unik namn för kartlager is mandatory.",
-                "version": "Gränss&shy;nittets version is mandatory.",
-                "options": {
-                    "apiKey": "Api key is mandatory."
-                }
+                "tileGrid" : "Rutmatris JSON-syntaxen är ogiltig."
             },
             "messages": {
                 "saveSuccess": "Fel!",

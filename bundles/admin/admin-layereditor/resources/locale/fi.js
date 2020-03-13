@@ -27,30 +27,30 @@ Oskari.registerLocalization(
                 "version": "Rajapinnan versio",
                 "username": "Käyttäjätunnus",
                 "password": "Salasana",
-                "uniqueName": "Karttatason yksilöivä nimi",
+                "name": "Karttatason yksilöivä nimi",
                 "options": {
                     "apiKey": "Api key",
                     "tileGrid": "Tiilimatriisi"
                 },
                 "locale": {
                     "generic": {
-                        "placeholder": "Nimi kielellä {0}",
-                        "descplaceholder": "Kuvaus kielellä {0}"
+                        "name": "Nimi kielellä {0}",
+                        "subtitle": "Kuvaus kielellä {0}"
                     },
                     "en": {
                         "lang": "Englanti",
-                        "placeholder": "Nimi englanniksi",
-                        "descplaceholder": "Kuvaus englanniksi"
+                        "name": "Nimi englanniksi",
+                        "subtitle": "Kuvaus englanniksi"
                     },
                     "fi": {
                         "lang": "Suomi",
-                        "placeholder": "Nimi suomeksi",
-                        "descplaceholder": "Kuvaus suomeksi"
+                        "name": "Nimi suomeksi",
+                        "subtitle": "Kuvaus suomeksi"
                     },
                     "sv": {
                         "lang": "Ruotsi",
-                        "placeholder": "Nimi ruotsiksi",
-                        "descplaceholder": "Kuvaus ruotsiksi"
+                        "name": "Nimi ruotsiksi",
+                        "subtitle": "Kuvaus ruotsiksi"
                     }
                 },
                 "opacity": "Peittävyys",
@@ -65,7 +65,7 @@ Oskari.registerLocalization(
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
-                "dataproviderId": "Tiedontuottaja"
+                "dataProviderId": "Tiedontuottaja"
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
@@ -133,21 +133,12 @@ Oskari.registerLocalization(
             },
             "validation": {
                 "mandatoryMsg": "Pakollisia tietoja puuttuu:",
-                "dataprovider": "Tiedontuottaja on pakollinen tieto.",
-                "nopermissions": "Tasolle ei ole asetettu oikeuksia",
-                "locale": "Tasolle ei ole annettu nimeä oletuskielelle.",
                 "styles" : "Tyylimääritysten JSON-syntaksi on virheellinen.",
                 "externalStyles" : "Kolmannen osapuolen tyylimääritysten JSON-syntaksi on virheellinen.",
                 "hover" : "Kohteen korostus ja tooltip JSON-syntaksi on virheellinen.",
                 "attributes" : "Attribuutit kentän JSON-syntaksi on virheellinen.",
                 "attributions" : "Lähdeviitteet kentän JSON-syntaksi on virheellinen.",
-                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen.",
-                "url": "Rajapinnan osoite on pakollinen tieto.",
-                "name": "Karttatason yksilöivä nimi on pakollinen tieto.",
-                "version": "Rajapinnan versio on pakollinen tieto.",
-                "options": {
-                    "apiKey": "Api key on pakollinen tieto."
-                }
+                "tileGrid" : "Tiilimatriisi kentän JSON-syntaksi on virheellinen."
             },
             "messages": {
                 "saveSuccess": "Tallennettu",

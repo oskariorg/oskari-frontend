@@ -27,30 +27,30 @@ Oskari.registerLocalization(
                 "version": "Interface version",
                 "username": "Username",
                 "password": "Password",
-                "uniqueName": "Unique name",
+                "name": "Unique name",
                 "options": {
                     "apiKey": "Api key",
                     "tileGrid": "Tile grid"
                 },
                 "locale": {
                     "generic": {
-                        "placeholder": "Name in {0}",
-                        "descplaceholder": "Description in {0}"
+                        "name": "Name in {0}",
+                        "subtitle": "Description in {0}"
                     },
                     "en": {
                         "lang": "English",
-                        "placeholder": "Name in English",
-                        "descplaceholder": "Description in English"
+                        "name": "Name in English",
+                        "subtitle": "Description in English"
                     },
                     "fi": {
                         "lang": "Finnish",
-                        "placeholder": "Name in Finnish",
-                        "descplaceholder": "Description in Finnish"
+                        "name": "Name in Finnish",
+                        "subtitle": "Description in Finnish"
                     },
                     "sv": {
                         "lang": "Swedish",
-                        "placeholder": "Name in Swedish",
-                        "descplaceholder": "Description in Swedish"
+                        "name": "Name in Swedish",
+                        "subtitle": "Description in Swedish"
                     }
                 },
                 "opacity": "Opacity",
@@ -65,7 +65,7 @@ Oskari.registerLocalization(
                 "gfiContent": "Additional GFI info",
                 "gfiType": "GFI response type",
                 "role_permissions": "Permissions",
-                "dataProvider": "Dataprovider"
+                "dataProviderId": "Dataprovider"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
@@ -132,21 +132,13 @@ Oskari.registerLocalization(
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
             "validation": {
-                "dataprovider": "Dataprovider is mandatory.",
-                "nopermissions": "Layer doesn't have any permissions.",
-                "locale": "Name for end-user is mandatory.",
+                "mandatoryMsg": "Mandatory fields missing:",
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",
                 "attributes" : "Invalid Attribute JSON syntax.",
                 "attributions" : "Invalid Attributions JSON syntax.",
-                "tileGrid" : "Invalid Tile grid JSON syntax.",
-                "url": "Interface URL is mandatory.",
-                "name": "Unique name is mandatory.",
-                "version": "Interface version is mandatory.",
-                "options": {
-                    "apiKey": "Api key is mandatory."
-                }
+                "tileGrid" : "Invalid Tile grid JSON syntax."
             },
             "messages": {
                 "saveSuccess": "Saved",
