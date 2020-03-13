@@ -6,7 +6,7 @@ import { StyledFormField } from '../styled';
 
 export const GfiContent = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='gfiContent'/>
+        <Message messageKey='fields.gfiContent'/>
         <StyledFormField>
             <TextAreaInput
                 rows={4}

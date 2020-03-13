@@ -22,41 +22,58 @@ Oskari.registerLocalization(
                 "tiles3dlayer": "Cesium 3D Tiles",
                 "bingmapslayer": "Bing"
             },
+            "fields": {
+                "url": "Gränssnitten address",
+                "version": "Gränss&shy;nittets version",
+                "username": "Användarsnamn",
+                "password": "Lösenord",
+                "uniqueName": "Unik namn för kartlager",
+                "options": {
+                    "apiKey": "Api key",
+                    "tileGrid": "Rutmatris"
+                },
+                "locale": {
+                    "generic": {
+                        "placeholder": "Namn på {0}",
+                        "descplaceholder": "Beskrivning på {0}"
+                    },
+                    "en": {
+                        "lang": "Engelska",
+                        "placeholder": "Namn på engelska",
+                        "descplaceholder": "Beskrivning på engelska"
+                    },
+                    "fi": {
+                        "lang": "Finska",
+                        "placeholder": "Namn på finska",
+                        "descplaceholder": "Beskrivning på finska"
+                    },
+                    "sv": {
+                        "lang": "Svenska",
+                        "placeholder": "Namn på svenska",
+                        "descplaceholder": "Beskrivning på svenska"
+                    }
+                },
+                "opacity": "Opacitet",
+                "style": "Förvald utseende",
+                "params": {
+                    "selectedTime": "Vald tid"
+                },
+                "realtime": "Realtidslager",
+                "refreshRate": "Uppdateringsfrekvens (i sekunder)",
+                "scale": "Skala",
+                "metadataId": "Metadatans filtagg",
+                "gfiContent": "Tilläggande text för GFI-dialog",
+                "gfiType": "GFI svartyp",
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
-            "interfaceAddress": "Gränssnitten address",
-            "interfaceVersion": "Gränss&shy;nittets version",
             "interfaceVersionDesc": "!!!!Valitse ensisijaisesti uusin rajapinnan tukema versio.",
-            "apiKey": "Api key",
             "attributions": "Tillskrivningar",
-            "tileGrid": "Rutmatris",
-            "username": "Användarsnamn",
-            "password": "Lösenord",
             "usernameAndPassword": "Användarsnamn och lösenord",
-            "uniqueName": "Unik namn för kartlager",
-            "generic": {
-                "placeholder": "Namn på {0}",
-                "descplaceholder": "Beskrivning på {0}"
-            },
-            "en": {
-                "lang": "Engelska",
-                "placeholder": "Namn på engelska",
-                "descplaceholder": "Beskrivning på engelska"
-            },
-            "fi": {
-                "lang": "Finska",
-                "placeholder": "Namn på finska",
-                "descplaceholder": "Beskrivning på finska"
-            },
-            "sv": {
-                "lang": "Svenska",
-                "placeholder": "Namn på svenska",
-                "descplaceholder": "Beskrivning på svenska"
-            },
             "addLayer": "Lägg till ett nytt kartlager",
             "dataProvider": "Dataprovider",
             "dataProviderName": "Dataprovider namn",
@@ -76,12 +93,8 @@ Oskari.registerLocalization(
             "skipCapabilities": "Tillägg manuellt",
             "addNewFromSameService": "Lägg till ett nytt lager från samma tjänst",
             "delete": "Ta bort",
-            "style": "Förvald utseende",
             "styleDesc": "Välj en standardstil från listan. Om det finns flera alternativ kan användare välja ett tema i menyn 'Valda lager'.",
-            "selectedTime": "Vald tid",
-            "realtime": "Realtidslager",
             "realtimeDesc": "!!!!Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
-            "refreshRate": "Uppdateringsfrekvens (i sekunder)",
             "capabilities": {
                 "show": "Visa getCapabilities svar",
                 "styleDesc": "Stilalternativen hämtas automatiskt från GetCapabilities-svaret.",
@@ -97,12 +110,7 @@ Oskari.registerLocalization(
                 "problematic": "Det förekom problem vid tolkningen av lagrets capabilities dokument. Lagret fungerar kanske inte normalt.",
                 "unsupported": "Lagret stöder inte de projektioner, som tjänsten använder. Lagret fungerar kanske inte normalt."
             },
-            "opacity": "Opacitet",
-            "scale": "Skala",
             "metadataIdDesc": "Geodataregistrets metadata filtagg, som unikt identifierar metadatans XML beskrivning",
-            "metadataId": "Metadatans filtagg",
-            "gfiContent": "Tilläggande text för GFI-dialog",
-            "gfiType": "GFI svartyp",
             "gfiTypeDesc": "Svarets typ dvs Get Feature Info (GFI)",
             "gfiStyle": "GFI stil",
             "gfiStyleDesc": "GFI stil (XSLT)",

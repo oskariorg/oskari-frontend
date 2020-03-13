@@ -38,7 +38,7 @@ export const ServiceEndPoint = ({ layer, propertyFields, disabled, credentialsCo
         <Fragment>
             { (serviceUrlInput || cesiumIonSettings) &&
                 <Fragment>
-                    <Message messageKey='interfaceAddress' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />) <MandatoryIcon isValid={!!layer.url} />
+                    <Message messageKey='fields.url' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />) <MandatoryIcon isValid={!!layer.url} />
                     <StyledFormField>
                         {serviceUrlInput}
                         {cesiumIonSettings}

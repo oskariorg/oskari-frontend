@@ -8,7 +8,7 @@ import { StyledFormField } from '../styled';
 
 export const ApiKey = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='apiKey' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />)
+        <Message messageKey='fields.options.apiKey' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />)
         <StyledFormField>
             <OptionInput layer={layer} controller={controller} propKey='apiKey'/>
         </StyledFormField>

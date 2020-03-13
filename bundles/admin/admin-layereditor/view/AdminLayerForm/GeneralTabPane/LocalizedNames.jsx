@@ -19,10 +19,10 @@ const getLabels = (bundleKey, locale = {}) => {
     const getMsg = Oskari.getMsg.bind(null, bundleKey);
     const labels = {};
     Oskari.getSupportedLanguages().forEach(language => {
-        const langPrefix = typeof getMsg(language) === 'object' ? language : 'generic';
+        const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
         labels[language] = {
-            name: getMsg(`${langPrefix}.placeholder`, [language]),
-            subtitle: getMsg(`${langPrefix}.descplaceholder`, [language])
+            name: getMsg(`fields.locale.${langPrefix}.placeholder`, [language]),
+            subtitle: getMsg(`fields.locale.${langPrefix}.descplaceholder`, [language])
         };
     });
     // mark mandatory field

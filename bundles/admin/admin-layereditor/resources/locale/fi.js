@@ -22,49 +22,67 @@ Oskari.registerLocalization(
                 "tiles3dlayer": "Cesium 3D Tiles",
                 "bingmapslayer": "Bing"
             },
+            "fields": {
+                "url": "Rajapinnan osoite",
+                "version": "Rajapinnan versio",
+                "username": "Käyttäjätunnus",
+                "password": "Salasana",
+                "uniqueName": "Karttatason yksilöivä nimi",
+                "options": {
+                    "apiKey": "Api key",
+                    "tileGrid": "Tiilimatriisi"
+                },
+                "locale": {
+                    "generic": {
+                        "placeholder": "Nimi kielellä {0}",
+                        "descplaceholder": "Kuvaus kielellä {0}"
+                    },
+                    "en": {
+                        "lang": "Englanti",
+                        "placeholder": "Nimi englanniksi",
+                        "descplaceholder": "Kuvaus englanniksi"
+                    },
+                    "fi": {
+                        "lang": "Suomi",
+                        "placeholder": "Nimi suomeksi",
+                        "descplaceholder": "Kuvaus suomeksi"
+                    },
+                    "sv": {
+                        "lang": "Ruotsi",
+                        "placeholder": "Nimi ruotsiksi",
+                        "descplaceholder": "Kuvaus ruotsiksi"
+                    }
+                },
+                "opacity": "Peittävyys",
+                "style": "Oletustyyli",
+                "params": {
+                    "selectedTime": "Valittu aika"
+                },
+                "realtime": "Reaaliaikataso",
+                "refreshRate": " Virkistystaajuus sekunteina",
+                "scale": "Mittakaava",
+                "metadataId": "Metatiedon tiedostotunniste",
+                "gfiContent": "Kohdetietoikkunan lisäsisältö",
+                "gfiType": "GFI-vastaustyyppi",
+
+            },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",
             "generalTabTitle": "Yleiset",
             "visualizationTabTitle": "Visualisointi",
             "additionalTabTitle": "Lisätiedot",
             "permissionsTabTitle": "Oikeudet",
-            "interfaceAddress": "Rajapinnan osoite",
-            "interfaceVersion": "Rajapinnan versio",
             "interfaceVersionDesc": "Valitse ensisijaisesti uusin rajapinnan tukema versio.",
-            "apiKey": "Api key",
             "attributions": "Lähdeviitteet",
-            "tileGrid": "Tiilimatriisi",
-            "username": "Käyttäjätunnus",
-            "password": "Salasana",
             "usernameAndPassword": "Käyttäjätunnus ja salasana",
-            "uniqueName": "Karttatason yksilöivä nimi",
-            "generic": {
-                "placeholder": "Nimi kielellä {0}",
-                "descplaceholder": "Kuvaus kielellä {0}"
-            },
-            "en": {
-                "lang": "Englanti",
-                "placeholder": "Nimi englanniksi",
-                "descplaceholder": "Kuvaus englanniksi"
-            },
-            "fi": {
-                "lang": "Suomi",
-                "placeholder": "Nimi suomeksi",
-                "descplaceholder": "Kuvaus suomeksi"
-            },
-            "sv": {
-                "lang": "Ruotsi",
-                "placeholder": "Nimi ruotsiksi",
-                "descplaceholder": "Kuvaus ruotsiksi"
-            },
             "addLayer": "Lisää uusi karttataso",
             "dataProvider": "Tiedontuottaja",
             "dataProviderName": "Tiedontuottajan nimi",
             "addDataProvider": "Lisää tiedontuottaja",
-            "editDataProvider": "Muokkaa tiedontuottajaa",
             "themeName": "Teeman nimi",
             "addTheme": "Lisää teema",
             "editTheme" : "Muokkaa teemaa",
+            "editDataProvider": "Muokkaa tiedontuottajaa",
             "mapLayerGroups": "Tason ryhmät",
             "selectMapLayerGroupsButton": "Valitse ryhmät",
             "cancel": "Peruuta",
@@ -76,12 +94,8 @@ Oskari.registerLocalization(
             "skipCapabilities": "Manuaalinen lisäys",
             "addNewFromSameService": "Lisää uusi taso samasta palvelusta",
             "delete": "Poista",
-            "style": "Oletustyyli",
             "styleDesc": "Valitse listalta, mitä tyyliä käytetään oletusarvoisesti karttanäkymissä. Käyttäjä voi vaihtaa tyyliä ”Valitut tasot”-valikon kautta.",
-            "selectedTime": "Valittu aika",
-            "realtime": "Reaaliaikataso",
             "realtimeDesc": "Klikkaa valituksi, jos kyseessä on reaaliaikaisesti päivittyvä karttataso. Karttatason virkistystaajuus määritellään sekunteina.",
-            "refreshRate": " Virkistystaajuus sekunteina",
             "capabilities": {
                 "show": "Näytä palvelun GetCapabilities-vastaus",
                 "styleDesc": "Tyylit määritellään GetCapabilities-vastausviestin wms:Style-elementissä, josta ne haetaan valintalistalle.",
@@ -97,12 +111,7 @@ Oskari.registerLocalization(
                 "problematic": "Tason capabilities parsinnassa ongelmia. Taso ei välttämättä toimi oikein.",
                 "unsupported": "Taso ei capabilitiesin mukaan tue käytössä olevia projektioita. Taso ei välttämättä toimi oikein."
             },
-            "opacity": "Peittävyys",
-            "scale": "Mittakaava",
             "metadataIdDesc": "Metatiedon tiedostotunniste on XML-muotoisen metatietotiedoston tiedostotunniste. Se haetaan automaattisesti GetCapabilities-vastausviestistä.",
-            "metadataId": "Metatiedon tiedostotunniste",
-            "gfiContent": "Kohdetietoikkunan lisäsisältö",
-            "gfiType": "GFI-vastaustyyppi",
             "gfiTypeDesc": "Valitse listalta formaatti, jossa kohdetiedot (GFI) haetaan. Mahdolliset formaatit on määritelty WMS-palvelun GetCapabilities-vastausviestissä.",
             "gfiStyle": "GFI-tyyli (XSLT)",
             "gfiStyleDesc": "Määrittele kohdetietojen esitystapa XSLT-muunnoksen avulla.",
@@ -123,6 +132,7 @@ Oskari.registerLocalization(
                 "info": "Pienten kohteiden esittämistä on optimoitu. Tämä rajoittaa mittakaavatasoja, joilla kohteet näytetään."
             },
             "validation": {
+                "mandatoryMsg": "Pakollinen tieto puuttuu:",
                 "dataprovider": "Tiedontuottaja on pakollinen tieto.",
                 "nopermissions": "Tasolle ei ole asetettu oikeuksia",
                 "locale": "Tasolle ei ole annettu nimeä oletuskielelle.",

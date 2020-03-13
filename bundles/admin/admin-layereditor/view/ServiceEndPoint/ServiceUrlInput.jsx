@@ -12,8 +12,8 @@ export const ServiceUrlInput = ({ layer, propertyFields, disabled, controller, c
         usernameValue: layer.username,
         passwordValue: layer.password,
         panelText: <Message messageKey='usernameAndPassword'/>,
-        usernameText: <Message messageKey='username'/>,
-        passwordText: <Message messageKey='password'/>,
+        usernameText: <Message messageKey='fields.username'/>,
+        passwordText: <Message messageKey='fields.password'/>,
         usernameOnChange: controller.setUsername,
         passwordOnChange: controller.setPassword
     };

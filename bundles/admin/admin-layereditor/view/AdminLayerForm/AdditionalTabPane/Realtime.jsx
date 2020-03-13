@@ -27,13 +27,13 @@ export const Realtime = LocaleConsumer(({ layer, controller, getMessage }) => (
         <StyledFormField>
             <label>
                 <Switch size='small' checked={layer.realtime} onChange={checked => controller.setRealtime(checked)} />
-                <Message messageKey='realtime' LabelComponent={SpacedLabel} />
+                <Message messageKey='fields.realtime' LabelComponent={SpacedLabel} />
             </label>
             <InfoTooltip messageKeys='realtimeDesc'/>
             { layer.realtime &&
                 <RefreshRate>
                     <Numeric
-                        placeholder={getMessage('refreshRate')}
+                        placeholder={getMessage('fields.refreshRate')}
                         value={layer.refreshRate}
                         suffix='s'
                         allowNegative={false}
@@ -44,6 +44,7 @@ export const Realtime = LocaleConsumer(({ layer, controller, getMessage }) => (
         </StyledFormField>
     </Expand>
 ));
+
 Realtime.propTypes = {
     layer: PropTypes.object.isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired

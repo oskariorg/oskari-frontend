@@ -11,7 +11,7 @@ export const GfiType = ({ layer }) => {
     return (
         <InlineFlex>
             <div>
-                <Message messageKey='gfiType'/>
+                <Message messageKey='fields.gfiType'/>
                 <InfoTooltip messageKeys='gfiTypeDesc'/>
             </div>
             <div>{ layer.gfiType }</div>
