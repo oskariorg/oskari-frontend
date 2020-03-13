@@ -24,25 +24,26 @@ const {
     VERSION
 } = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
 
-const GeneralTabPane = ({ mandatoryFields, mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
+const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, layer, capabilities, propertyFields, controller }) => (
     <Fragment>
-        { wrapMandatory(mandatoryFields, 'url', getEndpointField(layer, propertyFields, controller)) }
-        { wrapMandatory(mandatoryFields, 'version', getVersionField(layer, propertyFields, controller, versions)) }
-        { wrapMandatory(mandatoryFields, 'srs', getSRSField(layer, propertyFields, controller, capabilities)) }
-        { wrapMandatory(mandatoryFields, 'tilegrid', getTileGridField(layer, propertyFields, controller)) }
-        { wrapMandatory(mandatoryFields, 'name', getNameField(layer, propertyFields, controller)) }
-        { wrapMandatory(mandatoryFields, 'locale', getLocaleField(layer, propertyFields, controller)) }
-        { wrapMandatory(mandatoryFields, 'dataproviderId', getDataproviderField(layer, propertyFields, controller, dataProviders)) }
-        { wrapMandatory(mandatoryFields, 'groups', getGroupsField(layer, propertyFields, controller, mapLayerGroups)) }
+        { wrapMandatory(validators, layer, 'url', getEndpointField(layer, propertyFields, controller)) }
+        { wrapMandatory(validators, layer, 'version', getVersionField(layer, propertyFields, controller, versions)) }
+        { wrapMandatory(validators, layer, 'srs', getSRSField(layer, propertyFields, controller, capabilities)) }
+        { wrapMandatory(validators, layer, 'options.tileGrid', getTileGridField(layer, propertyFields, controller)) }
+        { wrapMandatory(validators, layer, 'name', getNameField(layer, propertyFields, controller)) }
+        { wrapMandatory(validators, layer, `locale.${Oskari.getSupportedLanguages()[0]}.name`, getLocaleField(layer, propertyFields, controller)) }
+        { wrapMandatory(validators, layer, 'dataProviderId', getDataproviderField(layer, propertyFields, controller, dataProviders)) }
+        { wrapMandatory(validators, layer, 'groups', getGroupsField(layer, propertyFields, controller, mapLayerGroups)) }
     </Fragment>
 );
 
-const wrapMandatory = (mandatoryFields = [], name, field) => {
+const wrapMandatory = (validators = {}, layer, name, field) => {
     if (!field) {
         return null;
     }
-    if (mandatoryFields.includes(name)) {
-        return <Mandatory>{field}</Mandatory>;
+    const validatorFunc = validators[name];
+    if (typeof validatorFunc === 'function') {
+        return <Mandatory isValid={validatorFunc(layer)}>{field}</Mandatory>;
     }
     return field;
 };
@@ -86,14 +87,14 @@ const getLocaleField = (layer, propertyFields, controller) => {
     if (!propertyFields.includes(LOCALIZED_NAMES)) {
         return null;
     }
-    return (<Mandatory><LocalizedNames layer={layer} controller={controller} /></Mandatory>);
+    return (<LocalizedNames layer={layer} controller={controller} />);
 };
 
 const getDataproviderField = (layer, propertyFields, controller, dataProviders) => {
     if (!propertyFields.includes(ORGANIZATION_NAME)) {
         return null;
     }
-    return (<Mandatory><DataProvider layer={layer} controller={controller} dataProviders={dataProviders} /></Mandatory>);
+    return (<DataProvider layer={layer} controller={controller} dataProviders={dataProviders} />);
 };
 
 const getGroupsField = (layer, propertyFields, controller, mapLayerGroups) => {
@@ -104,7 +105,7 @@ const getGroupsField = (layer, propertyFields, controller, mapLayerGroups) => {
 };
 
 GeneralTabPane.propTypes = {
-    mandatoryFields: PropTypes.array,
+    validators: PropTypes.object,
     mapLayerGroups: PropTypes.array.isRequired,
     dataProviders: PropTypes.array.isRequired,
     versions: PropTypes.array.isRequired,

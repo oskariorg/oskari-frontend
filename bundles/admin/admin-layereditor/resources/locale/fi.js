@@ -65,7 +65,8 @@ Oskari.registerLocalization(
                 "gfiContent": "Kohdetietoikkunan lisäsisältö",
                 "gfiType": "GFI-vastaustyyppi",
                 "role_permissions": "Oikeudet",
-                "dataProviderId": "Tiedontuottaja"
+                "dataProviderId": "Tiedontuottaja",
+                "groups": "Tason ryhmät"
             },
             "editor-tool": "Muokkaa tasoa",
             "flyout-title": "Karttatasohallinta",

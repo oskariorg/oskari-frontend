@@ -65,7 +65,8 @@ Oskari.registerLocalization(
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Permissions",
-                "dataProviderId": "Dataprovider"
+                "dataProviderId": "Dataprovider",
+                "groups": "Maplayer-grupper"
             },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
@@ -83,7 +84,6 @@ Oskari.registerLocalization(
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
             "editTheme" : "Redigera tema",
-            "mapLayerGroups": "Maplayer-grupper",
             "selectMapLayerGroupsButton": "Välj grupper",
             "cancel": "Tillbaka",
             "close": "Stäng",

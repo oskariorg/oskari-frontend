@@ -491,7 +491,7 @@ class UIHandler extends StateHandler {
         };
         const defaultLang = Oskari.getSupportedLanguages()[0];
         const localeKey = `locale.${defaultLang}.name`;
-        validators[localeKey] = (value) => (value && value.trim());
+        validators[localeKey] = (value) => (value && value.trim().length > 0);
 
         // function to dig a value from json object structure.
         // Key is split from dots (.) and is used to get values like options.apiKey
@@ -541,8 +541,6 @@ class UIHandler extends StateHandler {
         Object.keys(validators).forEach(field => {
             const isValid = validators[field](layer);
             if (!isValid) {
-                // TODO: messaging needs to be changed!!!
-                // TODO: locale is problematic since it's an object structure in localizations instead of plain field name
                 validationErrors.push(field);
             }
         });

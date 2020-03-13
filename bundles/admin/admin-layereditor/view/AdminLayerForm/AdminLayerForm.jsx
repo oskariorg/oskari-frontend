@@ -24,11 +24,16 @@ const AdminLayerForm = ({
     onSave,
     getMessage,
     rolesAndPermissionTypes,
-    hasPermissions = false,
+    validators = {},
     scales
 }) => {
     // For returning to add multiple layers from service endpoint
     const hasCapabilitiesFetched = !!Object.keys(capabilities).length;
+    let validPermissions = true;
+    const permissionValidator = validators['role_permissions'];
+    if (typeof permissionValidator === 'function') {
+        validPermissions = permissionValidator(layer);
+    }
     return (<StyledRoot>
         { messages.map(({ key, type, args }) =>
             <StyledAlert key={key} type={type} message={
@@ -44,7 +49,7 @@ const AdminLayerForm = ({
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
                     versions={versions}
-                    mandatoryFields={rolesAndPermissionTypes.layerTypes[layer.type]}
+                    validators={validators}
                     capabilities={capabilities} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
@@ -62,7 +67,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     capabilities={capabilities} />
             </TabPane>
-            <TabPane key='permissions' tab={<Mandatory isValid={hasPermissions}><Message messageKey='permissionsTabTitle'/> <MandatoryIcon /></Mandatory>}>
+            <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/> <MandatoryIcon /></Mandatory>}>
                 <PermissionsTabPane
                     rolesAndPermissionTypes={rolesAndPermissionTypes}
                     permissions={layer.role_permissions}
@@ -114,7 +119,7 @@ AdminLayerForm.propTypes = {
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
     rolesAndPermissionTypes: PropTypes.object,
-    hasPermissions: PropTypes.bool,
+    validators: PropTypes.object,
     tab: PropTypes.string.isRequired,
     scales: PropTypes.array.isRequired
 };
