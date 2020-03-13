@@ -62,7 +62,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     capabilities={capabilities} />
             </TabPane>
-            <TabPane key='permissions' tab={<Mandatory><Message messageKey='permissionsTabTitle'/> <MandatoryIcon isValid={hasPermissions}/></Mandatory>}>
+            <TabPane key='permissions' tab={<Mandatory isValid={hasPermissions}><Message messageKey='permissionsTabTitle'/> <MandatoryIcon /></Mandatory>}>
                 <PermissionsTabPane
                     rolesAndPermissionTypes={rolesAndPermissionTypes}
                     permissions={layer.role_permissions}

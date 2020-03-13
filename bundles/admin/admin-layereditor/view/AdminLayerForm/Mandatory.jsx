@@ -19,23 +19,26 @@ const MandatoryContext = React.createContext();
  * Note! We could wrap Mandatory with a style to "flash" the field on validation error but that might be too "flashy" on each validation.
  * Maybe we could do it when user clicks save?
  */
-export const Mandatory = ({ children }) => {
-    return <MandatoryContext.Provider value={true}>{children}</MandatoryContext.Provider>;
+export const Mandatory = ({ isValid = false, children }) => {
+    return <MandatoryContext.Provider value={{ isValid }}>{children}</MandatoryContext.Provider>;
 };
 
 Mandatory.propTypes = {
+    isValid: PropTypes.bool,
     children: PropTypes.any
 };
 
 // TODO: isValid should probably be a prop in Mandatory instead
-export const MandatoryIcon = ({ isValid = false }) => (
+export const MandatoryIcon = () => (
     <MandatoryContext.Consumer>
         {
-            isMandatory => {
-                if (!isMandatory) {
+            value => {
+                if (!value) {
                     // Not wrapped in MandatoryContext -> Don't return any UI element
+                    // reason: this is just a placeholder to show icon if the field is mandatory
                     return null;
                 }
+                const { isValid } = value;
                 // This was wrapped in mandatory -> Show users it's required
                 // red by default and when isValid=false
                 // green when isValid=true
@@ -44,7 +47,3 @@ export const MandatoryIcon = ({ isValid = false }) => (
         }
     </MandatoryContext.Consumer>
 );
-
-MandatoryIcon.propTypes = {
-    isValid: PropTypes.bool
-};

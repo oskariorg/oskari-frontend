@@ -26,7 +26,7 @@ export const Version = ({ versions = [], layer = {}, controller }) => {
         : <VersionSelect versions={versions} layer={layer} controller={controller} />;
     return (
         <Fragment>
-            <Message messageKey='fields.version'/> <MandatoryIcon isValid={readonly || versions.includes(layer.version)} />
+            <Message messageKey='fields.version'/> <MandatoryIcon />
             { !readonly && <InfoTooltip messageKeys='interfaceVersionDesc'/> }
             <StyledFormField>{ versionInfo }</StyledFormField>
         </Fragment>

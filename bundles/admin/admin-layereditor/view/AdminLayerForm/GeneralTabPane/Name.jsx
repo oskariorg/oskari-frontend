@@ -7,7 +7,7 @@ import { MandatoryIcon } from '../Mandatory';
 
 export const Name = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='fields.name' /> <MandatoryIcon isValid={!!layer.name} />
+        <Message messageKey='fields.name' /> <MandatoryIcon />
         <StyledFormField>
             <TextInput type='text' value={layer.name} onChange={evt => controller.setLayerName(evt.target.value)} />
         </StyledFormField>

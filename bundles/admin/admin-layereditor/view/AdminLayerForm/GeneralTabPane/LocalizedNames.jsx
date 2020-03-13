@@ -15,7 +15,7 @@ const PaddingBottom = styled('div')`
     padding-bottom: 10px;
 `;
 
-const getLabels = (bundleKey, locale = {}) => {
+const getLabels = (bundleKey) => {
     const getMsg = Oskari.getMsg.bind(null, bundleKey);
     const labels = {};
     Oskari.getSupportedLanguages().forEach(language => {
@@ -28,7 +28,7 @@ const getLabels = (bundleKey, locale = {}) => {
     // mark mandatory field
     const defaultLanguage = Oskari.getSupportedLanguages()[0];
     labels[defaultLanguage].name = (<React.Fragment>
-        {labels[defaultLanguage].name} <MandatoryIcon isValid={locale[defaultLanguage] && locale[defaultLanguage].name} />
+        {labels[defaultLanguage].name} <MandatoryIcon />
     </React.Fragment>);
     return labels;
 };
