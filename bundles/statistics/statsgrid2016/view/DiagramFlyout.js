@@ -70,7 +70,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.DiagramFlyout', function (
         const el = this.getElement();
         const controls = el.find('.chart-controls').outerHeight() || 73;
         const toolbar = el.find('.oskari-flyouttoolbar').outerHeight() || 57;
-        return height - controls + toolbar;
+        return height - controls - toolbar;
     }
 }, {
     extend: ['Oskari.userinterface.extension.ExtraFlyout']
