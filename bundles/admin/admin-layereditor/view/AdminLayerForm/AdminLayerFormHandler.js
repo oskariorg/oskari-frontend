@@ -419,9 +419,12 @@ class UIHandler extends StateHandler {
         const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
             // TODO: formatting message and message duration
-            Messaging.error(<ul>{ validationErrorMessages
-                .map(msg => <li key={msg}>{msg}</li>)}
-            </ul>);
+            Messaging.error(<div>
+                {getMessage('validation.mandatoryMsg')}
+                <ul>{ validationErrorMessages
+                    .map(field => <li key={field}>{getMessage(`fields.${field}`)}</li>)}
+                </ul>
+            </div>);
             return;
         }
         // Take a copy
@@ -481,40 +484,73 @@ class UIHandler extends StateHandler {
             }
         }
     }
+    getValidatorFunctions (layerType) {
+        const hasValue = (value) => {
+            if (typeof value === 'string') {
+                return value.trim().length > 0;
+            }
+            if (typeof value === 'number') {
+                return value !== -1;
+            }
 
-    validateUserInputValues (layer) {
-        const validationErrors = [];
-        if (!layer.dataProviderId || layer.dataProviderId === -1) {
-            validationErrors.push(getMessage('validation.dataprovider'));
-        }
-        if (!this.hasAnyPermissions(layer.role_permissions)) {
-            validationErrors.push(getMessage('validation.nopermissions'));
-        }
-        const loc = layer.locale || {};
+            return !!value;
+        };
+        const validators = {
+            dataProviderId: hasValue,
+            role_permissions: (value = {}) => this.hasAnyPermissions(value)
+        };
         const defaultLang = Oskari.getSupportedLanguages()[0];
-        const defaultLocale = loc[defaultLang] || {};
-        if (!defaultLocale.name) {
-            validationErrors.push(getMessage('validation.locale'));
-        }
+        const localeKey = `locale.${defaultLang}.name`;
+        validators[localeKey] = hasValue;
 
-        let mandatoryFields = this.getMandatoryFieldsForType(layer.type);
+        // function to dig a value from json object structure.
+        // Key is split from dots (.) and is used to get values like options.apiKey
         const getValue = (item, key) => {
             if (!item || !key) {
                 return;
             }
             const keyParts = key.split('.');
             if (keyParts.length === 1) {
-                // undefined or trimmed value
-                return item[key] && item[key].trim();
+                // undefined or trimmed value when string
+                const value = item[key] && item[key];
+                if (typeof value === 'string') {
+                    return value.trim();
+                }
+                // permissions is an object so don't trim but return value
+                return value;
             }
             let newItem = item[keyParts.shift()];
             // recurse with new item and parts left on the key
             return getValue(newItem, keyParts.join('.'));
         };
+        // wrap validators so they take layer as param so we can dig values from structures
+        const wrappers = {};
+        Object.keys(validators).forEach(field => {
+            wrappers[field] = (layer) => validators[field](getValue(layer, field));
+        });
+
+        // Add checks for mandatory fields
+        let mandatoryFields = this.getMandatoryFieldsForType(layerType);
         mandatoryFields.forEach(field => {
-            const value = getValue(layer, field);
-            if (!value || value === -1) {
-                validationErrors.push(getMessage('validation.' + field));
+            wrappers[field] = (layer) => hasValue(getValue(layer, field));
+        });
+        return wrappers;
+    }
+    getValidatorFor (key) {
+        if (!key) {
+            return null;
+        }
+        const validators = this.getValidatorFunctions();
+        return validators[key];
+    }
+
+    validateUserInputValues (layer) {
+        const validators = this.getValidatorFunctions(layer.type);
+        const validationErrors = [];
+        Object.keys(validators).forEach(field => {
+            const isValid = validators[field](layer);
+            if (!isValid) {
+                validationErrors.push(field);
             }
         });
 

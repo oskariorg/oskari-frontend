@@ -14,7 +14,7 @@ const template =
 }`;
 export const TileGrid = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='tileGrid'/>
+        <Message messageKey='fields.options.tileGrid'/>
         <InfoTooltip message={<pre>{template}</pre>} />
         <StyledFormField>
             <JsonInput

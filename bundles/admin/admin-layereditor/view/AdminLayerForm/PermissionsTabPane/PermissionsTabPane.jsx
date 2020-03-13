@@ -17,7 +17,6 @@ const StyledListItem = styled(ListItem)`
             background-color: #f3f3f3;
         }
     }
-    width: ${props => props.rowWidth}px;
 `;
 
 // Overflow makes additional/customized permission types available by scrolling
@@ -111,7 +110,7 @@ const PermissionsTabPane = ({ rolesAndPermissionTypes, permissions = {}, control
         const rowWidth = (TEXT_COLUMN_SIZE.width + TEXT_COLUMN_SIZE.padding) +
             (PERMISSION_TYPE_COLUMN_SIZE.width + PERMISSION_TYPE_COLUMN_SIZE.padding * 2) * headerRow.permissionTypes.length;
         return (
-            <StyledListItem rowWidth={rowWidth}>
+            <StyledListItem style={{ width: rowWidth + 'px' }}>
                 <PermissionRow key={rowKey} isHeaderRow={modelRow.isHeaderRow} text={modelRow.text} checkboxes={checkboxes}/>
             </StyledListItem>
         );

@@ -7,7 +7,7 @@ import { InfoTooltip } from '../InfoTooltip';
 
 export const MetadataId = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='metadataId'/>
+        <Message messageKey='fields.metadataId'/>
         <InfoTooltip messageKeys='metadataIdDesc'/>
         <StyledFormField>
             <TextInput

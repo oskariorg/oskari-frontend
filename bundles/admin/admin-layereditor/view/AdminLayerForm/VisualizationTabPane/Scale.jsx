@@ -79,7 +79,7 @@ export const Scale = ({ layer, scales, controller }) => {
     });
     return (
         <VerticalComponent>
-            <Message messageKey='scale' LabelComponent={CenteredLabel} />
+            <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
             <Icon type='plus-circle'/>
             <SliderContainer>
                 <Slider key={layer.id}

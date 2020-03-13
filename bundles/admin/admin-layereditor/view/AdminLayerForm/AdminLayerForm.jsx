@@ -7,6 +7,7 @@ import { PermissionsTabPane } from './PermissionsTabPane';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
 import { Confirm, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import { StyledRoot, StyledAlert, StyledButton } from './styled';
+import { Mandatory, MandatoryIcon } from './Mandatory';
 
 const AdminLayerForm = ({
     controller,
@@ -23,10 +24,16 @@ const AdminLayerForm = ({
     onSave,
     getMessage,
     rolesAndPermissionTypes,
+    validators = {},
     scales
 }) => {
     // For returning to add multiple layers from service endpoint
     const hasCapabilitiesFetched = !!Object.keys(capabilities).length;
+    let validPermissions = true;
+    const permissionValidator = validators['role_permissions'];
+    if (typeof permissionValidator === 'function') {
+        validPermissions = permissionValidator(layer);
+    }
     return (<StyledRoot>
         { messages.map(({ key, type, args }) =>
             <StyledAlert key={key} type={type} message={
@@ -42,6 +49,7 @@ const AdminLayerForm = ({
                     dataProviders={dataProviders}
                     mapLayerGroups={mapLayerGroups}
                     versions={versions}
+                    validators={validators}
                     capabilities={capabilities} />
             </TabPane>
             <TabPane key='visualization' tab={<Message messageKey='visualizationTabTitle'/>}>
@@ -59,7 +67,7 @@ const AdminLayerForm = ({
                     controller={controller}
                     capabilities={capabilities} />
             </TabPane>
-            <TabPane key='permissions' tab={<Message messageKey='permissionsTabTitle'/>}>
+            <TabPane key='permissions' tab={<Mandatory isValid={validPermissions}><Message messageKey='permissionsTabTitle'/> <MandatoryIcon /></Mandatory>}>
                 <PermissionsTabPane
                     rolesAndPermissionTypes={rolesAndPermissionTypes}
                     permissions={layer.role_permissions}
@@ -111,6 +119,7 @@ AdminLayerForm.propTypes = {
     onDelete: PropTypes.func,
     getMessage: PropTypes.func.isRequired,
     rolesAndPermissionTypes: PropTypes.object,
+    validators: PropTypes.object,
     tab: PropTypes.string.isRequired,
     scales: PropTypes.array.isRequired
 };

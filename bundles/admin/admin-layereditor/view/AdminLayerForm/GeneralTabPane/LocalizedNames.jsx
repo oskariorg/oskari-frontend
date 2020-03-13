@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { TextInput, LocalizationComponent } from 'oskari-ui';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import styled from 'styled-components';
+import { MandatoryIcon } from '../Mandatory';
 
 const PaddedLabel = styled('div')`
     padding-bottom: 5px;
@@ -14,26 +15,28 @@ const PaddingBottom = styled('div')`
     padding-bottom: 10px;
 `;
 
-const getLabels = bundleKey => {
+const getLabels = (bundleKey) => {
     const getMsg = Oskari.getMsg.bind(null, bundleKey);
     const labels = {};
     Oskari.getSupportedLanguages().forEach(language => {
-        const langPrefix = typeof getMsg(language) === 'object' ? language : 'generic';
+        const langPrefix = typeof getMsg(`fields.locale.${language}`) === 'object' ? language : 'generic';
         labels[language] = {
-            name: getMsg(`${langPrefix}.placeholder`, [language]),
-            subtitle: getMsg(`${langPrefix}.descplaceholder`, [language])
+            name: getMsg(`fields.locale.${langPrefix}.name`, [language]),
+            subtitle: getMsg(`fields.locale.${langPrefix}.subtitle`, [language])
         };
     });
     // mark mandatory field
     const defaultLanguage = Oskari.getSupportedLanguages()[0];
-    labels[defaultLanguage].name = labels[defaultLanguage].name + ' (*)';
+    labels[defaultLanguage].name = (<React.Fragment>
+        {labels[defaultLanguage].name} <MandatoryIcon />
+    </React.Fragment>);
     return labels;
 };
 
 export const LocalizedNames = LocaleConsumer(({ layer, controller, bundleKey }) => (
     <PaddingBottom>
         <LocalizationComponent
-            labels={getLabels(bundleKey)}
+            labels={getLabels(bundleKey, layer.locale)}
             value={layer.locale}
             languages={Oskari.getSupportedLanguages()}
             onChange={controller.setLocalizedNames}
