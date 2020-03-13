@@ -485,13 +485,23 @@ class UIHandler extends StateHandler {
         }
     }
     getValidatorFunctions (layerType) {
+        const hasValue = (value) => {
+            if (typeof value === 'string') {
+                return value.trim().length > 0;
+            }
+            if (typeof value === 'number') {
+                return value !== -1;
+            }
+
+            return !!value;
+        };
         const validators = {
-            dataProviderId: (value) => (value && value !== -1),
+            dataProviderId: hasValue,
             role_permissions: (value = {}) => this.hasAnyPermissions(value)
         };
         const defaultLang = Oskari.getSupportedLanguages()[0];
         const localeKey = `locale.${defaultLang}.name`;
-        validators[localeKey] = (value) => (value && value.trim().length > 0);
+        validators[localeKey] = hasValue;
 
         // function to dig a value from json object structure.
         // Key is split from dots (.) and is used to get values like options.apiKey
@@ -520,7 +530,6 @@ class UIHandler extends StateHandler {
         });
 
         // Add checks for mandatory fields
-        const hasValue = (value) => value && value !== -1;
         let mandatoryFields = this.getMandatoryFieldsForType(layerType);
         mandatoryFields.forEach(field => {
             wrappers[field] = (layer) => hasValue(getValue(layer, field));

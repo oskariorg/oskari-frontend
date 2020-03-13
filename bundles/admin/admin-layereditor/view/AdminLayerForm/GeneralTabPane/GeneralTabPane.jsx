@@ -37,6 +37,8 @@ const GeneralTabPane = ({ validators, mapLayerGroups, dataProviders, versions, l
     </Fragment>
 );
 
+// TODO: this isn't as elegant as it could. Maybe refactor so we can loop the field names and get Fields and
+// validators/Mandatory based on that
 const wrapMandatory = (validators = {}, layer, name, field) => {
     if (!field) {
         return null;
