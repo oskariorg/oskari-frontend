@@ -1,5 +1,4 @@
 import React from 'react';
-import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
@@ -115,14 +114,21 @@ class UIHandler extends StateHandler {
         // initialize state for adding a new layer from the same OGC service (service having capabilities)
         const state = this.getState();
         const layer = { ...state.layer };
-        const capabilities = state.capabilities || { existingLayers: {} };
+
         // add newly added layer to "existing layers" so it's shown as existing
+        const capabilities = state.capabilities || {};
+        capabilities.existingLayers = capabilities.existingLayers || {};
         capabilities.existingLayers[layer.name] = state.layer;
-        // delete name for "new" layer so we are taken back to the capabilities layer listing
-        delete layer.name;
-        // delete layer id so we won't modify the one we just added
-        delete layer.id;
-        this.updateState({ layer, capabilities });
+
+        // trigger capabilities fetching using layers type, url, version if we don't have them stored
+        if (!capabilities.layers || !capabilities.layers.length) {
+            this.fetchCapabilities(layer);
+        } else {
+            // update state with layer having no name and id so we don't overwrite an existing layer
+            delete layer.name;
+            delete layer.id;
+            this.updateState({ layer, capabilities });
+        }
     }
     setUsername (username) {
         this.updateState({
@@ -378,7 +384,7 @@ class UIHandler extends StateHandler {
     }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
-    fetchLayer (id) {
+    fetchLayer (id, keepCapabilities = false) {
         this.clearMessages();
         if (!id) {
             this.resetLayer();
@@ -407,11 +413,18 @@ class UIHandler extends StateHandler {
                 Messaging.warn(getMessage(`messages.${layer.warn}`));
                 delete layer.warn;
             }
-            this.updateState({
+            const newState = {
                 layer,
                 propertyFields: this.getPropertyFields(layer),
                 versions: this.mapLayerService.getVersionsForType(layer.type)
-            });
+            };
+            if (!keepCapabilities) {
+                // for editing new layers we want to flush capabilities
+                // when refreshing a saved layer from server we want to keep
+                //  any existing capabilities to speed up the process of adding many layers
+                newState.capabilities = {};
+            }
+            this.updateState(newState);
         });
     }
 
@@ -451,7 +464,7 @@ class UIHandler extends StateHandler {
             // To get the layer json for "end-user" frontend for creating
             // an AbstractLayer-based model -> make another request to get that JSON.
             Messaging.warn('Reload page to see changes for end user - Work in progress...');
-            this.fetchLayer(data.id);
+            this.fetchLayer(data.id, true);
             /*
             if (layer.id) {
                 data.groups = layer.groups;
@@ -653,6 +666,10 @@ class UIHandler extends StateHandler {
             }
         }).then(json => {
             const updateLayer = { ...layer };
+            // update state with layer having no name and id so we don't accidentally overwrite an existing layer
+            // this is in case we clicked the "add new from same service" on an existing layer
+            delete updateLayer.name;
+            delete updateLayer.id;
             this.updateState({
                 capabilities: json || {},
                 layer: updateLayer,

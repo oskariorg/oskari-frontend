@@ -9,6 +9,8 @@ import { Confirm, Button, Tabs, TabPane, Message } from 'oskari-ui';
 import { StyledRoot, StyledAlert, StyledButton } from './styled';
 import { Mandatory, MandatoryIcon } from './Mandatory';
 
+const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
 const AdminLayerForm = ({
     controller,
     mapLayerGroups,
@@ -28,7 +30,7 @@ const AdminLayerForm = ({
     scales
 }) => {
     // For returning to add multiple layers from service endpoint
-    const hasCapabilitiesFetched = !!Object.keys(capabilities).length;
+    const hasCapabilitiesSupport = propertyFields.includes(LayerComposingModel.CAPABILITIES);
     let validPermissions = true;
     const permissionValidator = validators['role_permissions'];
     if (typeof permissionValidator === 'function') {
@@ -90,7 +92,7 @@ const AdminLayerForm = ({
                         <Message messageKey='delete'/>
                     </StyledButton>
                 </Confirm>
-                { hasCapabilitiesFetched &&
+                { hasCapabilitiesSupport &&
                     <StyledButton onClick={() => controller.addNewFromSameService() }>
                         <Message messageKey='addNewFromSameService'/>
                     </StyledButton>
