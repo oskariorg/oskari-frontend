@@ -445,6 +445,7 @@ class UIHandler extends StateHandler {
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('LayerAdmin'), {
             method: 'POST',
             headers: {
@@ -452,6 +453,7 @@ class UIHandler extends StateHandler {
             },
             body: JSON.stringify(layerPayload)
         }).then(response => {
+            this.ajaxFinished();
             if (response.ok) {
                 Messaging.success(getMessage('messages.saveSuccess'));
                 return response.json();
@@ -460,31 +462,61 @@ class UIHandler extends StateHandler {
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
-            // FIXME: layer data will be the same as for editing == admin data
-            // To get the layer json for "end-user" frontend for creating
-            // an AbstractLayer-based model -> make another request to get that JSON.
+            // layer data will be the same as for editing == admin data
             Messaging.warn('Reload page to see changes for end user - Work in progress...');
+            // refresh current layer data from server after saving just in case to prevent possible out-of-sync
             this.fetchLayer(data.id, true);
-            /*
-            if (layer.id) {
-                data.groups = layer.groups;
-                this.updateLayer(layer.id, data);
-            } else {
-                this.createlayer(data);
-            }
-            */
+            // Update layer for end-user as that model is different than admin uses
+            // end-user layer is AbstractLayer-based model -> make another request to get that JSON.
+            this.fetchLayerForEndUser(data.id);
         }).catch(error => this.log.error(error));
     }
 
-    updateLayer (layerId, layerData) {
-        this.mapLayerService.updateLayer(layerId, layerData);
+    fetchLayerForEndUser (layerId) {
+        // send id as parameter so we don't get the whole layer listing
+        var url = Oskari.urls.getRoute('GetHierarchicalMapLayerGroups', {
+            srs: Oskari.getSandbox().getMap().getSrsName(),
+            lang: Oskari.getLang(),
+            id: layerId
+        });
+        this.ajaxStarted();
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            this.ajaxFinished();
+            if (!response.ok) {
+                Messaging.error('TODO');
+            }
+            return response.json();
+        }).then(json => {
+            if (json.layers.length !== 1) {
+                Messaging.error('TODO');
+                return;
+            }
+            this.refreshEndUserLayer(layerId, json.layers[0]);
+        });
     }
-
+    refreshEndUserLayer (layerId, layerData = {}) {
+        if (typeof layerId === 'undefined') {
+            // can't refresh without id
+            return;
+        }
+        const existingLayer = this.mapLayerService.findMapLayer(layerId);
+        if (existingLayer) {
+            this.mapLayerService.updateLayer(layerId, layerData);
+        } else if (layerData.id) {
+            this.createlayer(layerData);
+        } else {
+            Messaging.error('TODO');
+        }
+    }
     createlayer (layerData) {
-        // TODO: Test this method when layer creation in tested with new wizard
         const mapLayer = this.mapLayerService.createMapLayer(layerData);
 
-        if (layerData.baseLayerId) {
+        if (layerData.baseLayerId && layerData.baseLayerId !== -1) {
             // If this is a sublayer, add it to its parent's sublayer array
             this.mapLayerService.addSubLayer(layerData.baseLayerId, mapLayer);
         } else {
