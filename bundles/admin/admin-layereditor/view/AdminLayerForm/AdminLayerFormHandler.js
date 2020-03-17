@@ -620,14 +620,19 @@ class UIHandler extends StateHandler {
             pw: layer.password
         };
 
-        // Remove undefined params
-        Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+        // create POST payload from params
+        const payload = Object.keys(params)
+            .filter(key => typeof params[key] !== 'undefined')
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+            .join('&');
 
-        fetch(Oskari.urls.getRoute('ServiceCapabilities', params), {
+        fetch(Oskari.urls.getRoute('ServiceCapabilities'), {
             method: 'POST',
             headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
                 'Accept': 'application/json'
-            }
+            },
+            body: payload
         }).then(response => {
             this.ajaxFinished();
             if (response.ok) {
