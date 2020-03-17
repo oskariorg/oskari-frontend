@@ -1548,6 +1548,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *  layerModel if found matching id or null if not found
          */
         findMapLayer: function (id, layerList) {
+            if (typeof id === 'undefined') {
+                return;
+            }
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
