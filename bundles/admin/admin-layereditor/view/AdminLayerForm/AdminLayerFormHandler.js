@@ -587,18 +587,13 @@ class UIHandler extends StateHandler {
     }
 
     deleteLayer () {
-        // FIXME: This should use LayerAdmin route instead but this probably works anyway
         const { layer } = this.getState();
-        fetch(Oskari.urls.getRoute('DeleteLayer'), {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: stringify(layer)
+        fetch(Oskari.urls.getRoute('LayerAdmin', { id: layer.id }), {
+            method: 'DELETE'
         }).then(response => {
             if (response.ok) {
-                // TODO handle this, just close the flyout?
+                // TODO: handle this somehow/close the flyout?
+                this.resetLayer();
             } else {
                 Messaging.error(getMessage('messages.errorRemoveLayer'));
             }
