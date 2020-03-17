@@ -607,6 +607,7 @@ class UIHandler extends StateHandler {
             if (response.ok) {
                 // TODO: handle this somehow/close the flyout?
                 this.resetLayer();
+                this.mapLayerService.removeLayer(layer.id);
             } else {
                 Messaging.error(getMessage('messages.errorRemoveLayer'));
             }
