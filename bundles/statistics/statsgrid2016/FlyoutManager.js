@@ -4,7 +4,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     var loc = instance.getLocalization();
     Oskari.makeObservable(this);
     this.service = instance.getStatisticsService().getStateService();
-
+    this._positionY = 5;
     this.flyoutInfo = [
         {
             id: 'search',
@@ -22,7 +22,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             id: 'diagram',
             title: loc.tile.diagram,
             oskariClass: 'Oskari.statistics.statsgrid.view.DiagramFlyout',
-            cls: 'statsgrid-diagram-flyout'
+            cls: 'statsgrid-diagram-flyout',
+            resizable: true,
+            minWidth: 630,
+            minHeight: 400
+
         },
         {
             id: 'indicatorForm',
@@ -43,14 +47,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         var p = jQuery('#mapdiv');
         var position = p.position().left;
         var offset = 40;
-
+        const y = this._positionY;
         this.flyoutInfo.forEach(function (info) {
             var flyout = Oskari.clazz.create(info.oskariClass, info.title, {
                 width: 'auto',
                 cls: info.cls,
-                pos: {
+                position: {
                     x: position + offset,
-                    y: 5
+                    y
                 }
             }, me.instance);
             flyout.makeDraggable({
@@ -64,12 +68,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             });
             me.flyouts[info.id] = flyout;
             position = position + flyout.getSize().width;
-            if (info.id === 'diagram') {
+            if (info.resizable) {
+                const { minWidth, minHeight } = info;
                 flyout.makeResizable({
-                    minWidth: 630,
-                    minHeight: 400,
-                    handle: '.oskari-flyouttoolbar, .statsgrid-data-container > .header',
-                    scroll: false
+                    minWidth,
+                    minHeight
                 });
             }
         });
@@ -80,21 +83,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
         if (!flyout) {
             return;
         }
-
-        const indicators = this.service.getIndicators();
-
-        if ((type === 'diagram' || type === 'table') && indicators.length === 0) {
+        if ((type === 'diagram' || type === 'table') && !this.service.hasIndicators()) {
             const searchFlyout = me.flyouts['search'];
-            searchFlyout.move(searchFlyout.options.pos.x, searchFlyout.options.pos.y, true);
-            searchFlyout.show();
+            searchFlyout.showOnPosition();
             this.trigger('show', 'search');
-            const calculutedFlyoutPositionX = searchFlyout.options.pos.x + searchFlyout._popup[0].clientWidth + 5;
-            flyout.move(calculutedFlyoutPositionX, flyout.options.pos.y, true);
+            const { pos: { x: searchX } } = searchFlyout.getOptions();
+            const x = searchX + searchFlyout.getSize().width + 5;
+            const y = this._positionY;
+            flyout.move(x, y, true);
+            flyout.show();
         } else {
-            flyout.move(flyout.options.pos.x, flyout.options.pos.y, true);
+            flyout.showOnPosition();
         }
-
-        flyout.show();
         this.trigger('show', type);
     },
     hide: function (type) {
