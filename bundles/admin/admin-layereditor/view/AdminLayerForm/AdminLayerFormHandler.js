@@ -624,7 +624,7 @@ class UIHandler extends StateHandler {
         Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
 
         fetch(Oskari.urls.getRoute('ServiceCapabilities', params), {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json'
             }
