@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Koko ja suunta",
                 "tooltip": "Valitse tulosteen arkkikoko ja suunta. Tarkista muutokset esikatselukuvasta.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 pystysuunta",
-                        "classForPreview": "preview-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 vaakasuunta",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 pystysuunta",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 vaakasuunta",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 pystysuunta",
+                    "A4_Landscape": "A4 vaakasuunta",
+                    "A3": "A3 pystysuunta",
+                    "A3_Landscape": "A3 vaakasuunta"
+                }
             },
             "preview": {
                 "label": "Esikatselu",
@@ -76,52 +59,33 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Tiedostomuoto",
                 "tooltip": "Valitse tiedostomuoto, jossa haluat tulosteen.",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG-kuva"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF-dokumentti"
-                    }
-                ]
+                "options": {
+                    "png": "PNG-kuva",
+                    "pdf": "PDF-dokumentti"
+                }
             },
             "mapTitle": {
                 "label": "Näytettävät tiedot",
                 "tooltip": "Valitse tulosteessa näytettävät tiedot."
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Näytä palvelun logo",
-                        "tooltip": "Näytä tulosteessa tämän palvelun logo.",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Näytä mittakaava",
-                        "tooltip": "Näytä tulosteessa kartan mittakaava.",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Näytä päivämäärä",
-                        "tooltip": "Näytä tulosteessa sen laatimispäivämäärä.",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageTimeSeriesTime",
-                        "label": "Näytä aikasarjan ajanhetki",
-                        "tooltip": "Näytä tulosteessa aikasarjan ajanhetki.",
-                        "checked": "checked",
-                        "printLabel": "Aikasarjan ajanhetki"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Näytä palvelun logo",
+                    "tooltip": "Näytä tulosteessa tämän palvelun logo."
+                },
+                "pageScale": {
+                    "label": "Näytä mittakaava",
+                    "tooltip": "Näytä tulosteessa kartan mittakaava."
+                },
+                "pageDate": {
+                    "label": "Näytä päivämäärä",
+                    "tooltip": "Näytä tulosteessa sen laatimispäivämäärä."
+                },
+                "pageTimeSeriesTime": {
+                    "label": "Näytä aikasarjan ajanhetki",
+                    "tooltip": "Näytä tulosteessa aikasarjan ajanhetki.",
+                    "printLabel": "Aikasarjan ajanhetki"
+                }
             },
             "help": "Ohje",
             "error": {
@@ -135,8 +99,8 @@ Oskari.registerLocalization(
             "scale": {
                 "label": "Mittakaava",
                 "tooltip": "Määritä tulostuksessa käytettävä mittakaava",
-                "mapScale": "Käytä kartan mittakaavaa",
-                "definedScale": "Valitse mittakaava",
+                "map": "Käytä kartan mittakaavaa",
+                "configured": "Valitse mittakaava",
                 "unsupportedLayersMessage": "Seuraavat tasot eivät tulostu mittakaava valinnalla",
                 "unsupportedLayersTitle": "Tulosteessa ei näy kaikki tasot"
             }
