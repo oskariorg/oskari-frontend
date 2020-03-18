@@ -5,7 +5,7 @@ import { Footer } from './Footer/';
 import { Controller, LocaleConsumer } from 'oskari-ui/util';
 import { Draggable } from 'react-beautiful-dnd';
 import { Row, Col, ColAuto, ColAutoRight } from './Grid';
-import { Icon, Message } from 'oskari-ui';
+import { Icon, Message, Tooltip } from 'oskari-ui';
 import { EyeOpen, EyeShut, DragIcon } from '../../CustomIcons';
 
 const StyledBox = styled.div`
@@ -26,7 +26,6 @@ const Publishable = styled.span`
 `;
 
 const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
-    const name = layer.getName();
     const organizationName = layer.getOrganizationName();
     const publishable = layer.getPermission('publish');
 
@@ -42,6 +41,15 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
     const handleRemoveLayer = () => {
         controller.removeLayer(layer);
     };
+    const getName = () => {
+        const field = <b>{layer.getName()}</b>;
+        const description = layer.getDescription();
+        if (!description) {
+            return field;
+        }
+        return <Tooltip title={description}>{field}</Tooltip>;
+    };
+
     return (
         <Draggable draggableId={`${layer.getId()}`} index={index}>
             { provided => (
@@ -60,7 +68,7 @@ const LayerBox = ({ layer, index, visibilityInfo, controller }) => {
                                     <Col>
                                         <Row style={{ padding: '0px' }}>
                                             <ColAuto style={{ padding: '0px' }}>
-                                                <b>{name}</b><br/>
+                                                {getName()}<br/>
                                                 {organizationName}
                                             </ColAuto>
                                             <ColAutoRight style={{ padding: '0px' }}>
