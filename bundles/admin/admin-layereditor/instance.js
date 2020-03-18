@@ -36,7 +36,11 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             this._setupAdminTooling();
             this._loadDataProviders();
             this.sandbox.requestHandler(ShowLayerEditorRequest.NAME, new ShowLayerEditorRequestHandler(this));
-            this._getLayerService().on('availableLayerTypesUpdated', () => this._setupLayerTools());
+            const layerService = this._getLayerService();
+            layerService.on('availableLayerTypesUpdated', () => this._setupLayerTools());
+            // listen to changes so admin form is updated with new/updated/removed grouping options
+            layerService.on('theme.update', () => this._getFlyout().setMapLayerGroups(this.getGroups()));
+            layerService.on('dataProvider.update', () => this._getFlyout().setDataProviders(this.getDataProviders()));
         }
         /**
          * Fetches reference to the map layer service
@@ -227,14 +231,29 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
             const flyout = this._getFlyout();
             const layerService = this._getLayerService();
             flyout.setLocale(this.loc);
-            flyout.setDataProviders(layerService.getDataProviders());
-            flyout.setMapLayerGroups(layerService.getAllLayerGroups());
+            flyout.setDataProviders(this.getDataProviders());
+            flyout.setMapLayerGroups(this.getGroups());
             flyout.setLayer(layerService.findMapLayer(layerId));
             if (flyout.isVisible()) {
                 flyout.bringToTop();
             } else {
                 flyout.show();
             }
+        }
+        getDataProviders () {
+            const dataProviders = this._getLayerService().getDataProviders();
+            dataProviders.sort(function (a, b) {
+                return Oskari.util.naturalSort(a.name, b.name);
+            });
+            return dataProviders;
+        }
+
+        getGroups () {
+            const groups = this._getLayerService().getAllLayerGroups();
+            groups.sort(function (a, b) {
+                return Oskari.util.naturalSort(a.name, b.name);
+            });
+            return groups;
         }
 
         /**
@@ -260,10 +279,6 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
                             id: org.id,
                             name: Oskari.getLocalized(org.name)
                         });
-                    });
-
-                    dataProviders.sort(function (a, b) {
-                        return Oskari.util.naturalSort(a.name, b.name);
                     });
                     me._getLayerService().setDataProviders(dataProviders);
                 }

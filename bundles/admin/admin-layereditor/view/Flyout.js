@@ -47,9 +47,11 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     setDataProviders (dataProviders) {
         this.dataProviders = dataProviders;
+        this.update();
     }
     setMapLayerGroups (mapLayerGroups) {
         this.mapLayerGroups = mapLayerGroups;
+        this.update();
     }
     update () {
         const el = this.getElement();

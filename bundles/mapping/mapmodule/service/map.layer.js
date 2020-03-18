@@ -1626,6 +1626,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
         setDataProviders: function (dataProviders) {
             this._dataProviders = dataProviders;
+            this.trigger('dataProvider.update');
         },
 
         getDataProviders: function () {
