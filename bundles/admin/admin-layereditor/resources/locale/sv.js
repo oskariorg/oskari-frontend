@@ -74,7 +74,7 @@ Oskari.registerLocalization(
             "visualizationTabTitle": "Visualisering",
             "additionalTabTitle": "Ytterligare",
             "permissionsTabTitle": "Rättigheter",
-            "interfaceVersionDesc": "!!!!Valitse ensisijaisesti uusin rajapinnan tukema versio.",
+            "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
             "usernameAndPassword": "Användarsnamn och lösenord",
             "addLayer": "Lägg till ett nytt kartlager",
@@ -157,7 +157,7 @@ Oskari.registerLocalization(
                 "deleteSuccess" : "Utgår",
                 "deleteFailed" : "Borttagningen misslyckades"
             },
-            "otherLanguages": "Other languages",
+            "otherLanguages": "Andra språk",
             "stylesJSON": "Stildefinitioner (JSON)",
             "externalStylesJSON": "Stildefinitioner av tredjeparts (JSON)",
             "externalStyleFormats": "Stödda format: 3D Tiles, Mapbox",
