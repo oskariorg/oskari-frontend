@@ -468,11 +468,11 @@ class UIHandler extends StateHandler {
             this.fetchLayer(data.id, true);
             // Update layer for end-user as that model is different than admin uses
             // end-user layer is AbstractLayer-based model -> make another request to get that JSON.
-            this.fetchLayerForEndUser(data.id);
+            this.fetchLayerForEndUser(data.id, layerPayload.group_ids);
         }).catch(error => this.log.error(error));
     }
 
-    fetchLayerForEndUser (layerId) {
+    fetchLayerForEndUser (layerId, groups = []) {
         // send id as parameter so we don't get the whole layer listing
         var url = Oskari.urls.getRoute('GetHierarchicalMapLayerGroups', {
             srs: Oskari.getSandbox().getMap().getSrsName(),
@@ -496,7 +496,11 @@ class UIHandler extends StateHandler {
                 Messaging.error('TODO');
                 return;
             }
-            this.refreshEndUserLayer(layerId, json.layers[0]);
+            const layer = json.layers[0];
+            // this is needed because maplayer service expects groups to be found on layer when creating/updating
+            // TODO: refactor maplayer service groups handling
+            layer.groups = groups.map(id => ({ id }));
+            this.refreshEndUserLayer(layerId, layer);
         });
     }
     refreshEndUserLayer (layerId, layerData = {}) {

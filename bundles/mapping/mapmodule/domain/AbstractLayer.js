@@ -1295,7 +1295,7 @@ Oskari.clazz.define(
         },
         /**
          * @method @public setGroups
-         * @param {Array} groups groups array [{id:1,name:name"}]
+         * @param {Array} groups groups array [{id:1,name:"name"}]
          */
         setGroups: function (groups) {
             this._groups = groups || [{ id: -1, name: '' }];
