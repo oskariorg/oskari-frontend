@@ -128,7 +128,7 @@ Oskari.registerLocalization(
             "Tiles3DLayerPlugin": {
                 "layerFilter": {
                     "text": "3D-tasot",
-                    "tooltip": ""
+                    "tooltip": "Näytä vain 3D-aineistot"
                 }
             }
         },
