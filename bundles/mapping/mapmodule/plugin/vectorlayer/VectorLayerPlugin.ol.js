@@ -444,6 +444,7 @@ Oskari.clazz.define(
                 me.raiseVectorLayer(olLayer);
             }
             olLayer.setOpacity(layer.getOpacity() / 100);
+            olLayer.setVisible(layer.isVisible());
             return olLayer;
         },
 
