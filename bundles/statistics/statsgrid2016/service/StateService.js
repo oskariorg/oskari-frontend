@@ -32,7 +32,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
             },
             classificationPluginState: {
                 editEnabled: true,
-                visible: true,
                 transparent: false
             }
         };
@@ -79,8 +78,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                 this.updateClassificationPluginState(key, defaults[key]);
             }
         },
-        updateClassificationPluginState: function (key, value, force) {
-            if (!force && this.classificationPluginState[key] === value) {
+        updateClassificationPluginState: function (key, value) {
+            if (this.classificationPluginState[key] === value) {
                 return;
             }
             this.classificationPluginState[key] = value;

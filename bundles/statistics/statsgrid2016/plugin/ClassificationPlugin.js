@@ -65,7 +65,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         },
         render: function (activeClassfication) {
             if (!this.node) {
-                this.buildUI();
                 return;
             }
             const stateService = this.service.getStateService();
@@ -201,7 +200,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return false;
         },
         toggleUI: function () {
-            return this.service.getStateService().toggleClassificationPluginState('visible');
+            this.element ? this.teardownUI() : this.buildUI();
+            return !!this.element;
         },
         teardownUI: function () {
             var element = this.getElement();
@@ -216,13 +216,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.trigger('hide');
         },
         buildUI: function () {
-            if (this.element) {
-                return;
+            if (!this.element) {
+                this.addToPluginContainer(this._createControlElement());
+                this._makeDraggable();
+                this.node = this.element.get(0);
+                this.render();
             }
-            this.addToPluginContainer(this._createControlElement());
-            this._makeDraggable();
-            this.node = this.element.get(0);
-            this.render();
+            this.trigger('show');
         },
         _makeDraggable: function () {
             this.getElement().draggable();
@@ -282,7 +282,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         hasUI: function () {
             // Plugin has ui element but returns false, because
             // otherwise publisher would stop this plugin and start it again when leaving the publisher,
-            // resulting a misfuctioning duplicate classification element on screen.
+            // instance updates visibility
             return false;
         },
         _bindToEvents: function () {
@@ -298,12 +298,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
 
             // UI styling changes e.g. disable classification editing, make transparent
-            this.service.getStateService().on('ClassificationPluginChanged', ({ key, value }) => {
-                if (key === 'visible') {
-                    value ? this.trigger('show') : this.trigger('hide');
-                }
-                this.render();
-            });
+            this.service.getStateService().on('ClassificationPluginChanged', () => this.render());
             // need to update transparency select
             this.service.on('AfterChangeMapLayerOpacityEvent', event => this.render());
             // need to calculate contents max height and check overflow

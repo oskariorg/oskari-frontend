@@ -144,23 +144,23 @@ Oskari.clazz.define(
         getLayerId: function () {
             return this._layerId;
         },
+        isLayerHidden: function () {
+            const layer = this.getLayerService().findMapLayer(this._layerId);
+            return layer ? !layer.isVisible() : false;
+        },
         /**
          * Update visibility of classification / legend based on idicators length & stats layer visibility
          */
-        _updateClassficationViewVisibility: function () {
+        updateClassficationViewVisibility: function () {
             const indicatorsExist = this.statsService.getStateService().hasIndicators();
-            var layer = this.getLayerService().findMapLayer(this._layerId);
-            var layerVisible = layer ? layer.isVisible() : true;
-            this.setClassificationViewVisible(indicatorsExist && layerVisible);
+            this._setClassificationViewVisible(indicatorsExist && !this.isLayerHidden());
         },
         /**
          * Update visibility of series control based on active indicator & stats layer visibility
          */
-        _updateSeriesControlVisibility: function () {
+        updateSeriesControlVisibility: function () {
             const isSeriesActive = this.statsService.getStateService().isSeriesActive();
-            const layer = this.getLayerService().findMapLayer(this._layerId);
-            const layerVisible = layer ? layer.isVisible() : true;
-            this.setSeriesControlVisible(isSeriesActive && layerVisible);
+            this._setSeriesControlVisible(isSeriesActive && !this.isLayerHidden());
         },
         _removeStatsLayer: function () {
             const builder = Oskari.requestBuilder('RemoveMapLayerRequest');
@@ -241,14 +241,14 @@ Oskari.clazz.define(
                 if (evt.isReset()) {
                     this.clearDataProviderInfo();
                     this._removeStatsLayer();
-                    this.setClassificationViewVisible(false);
-                    this.setSeriesControlVisible(false);
+                    this._setClassificationViewVisible(false);
+                    this._setSeriesControlVisible(false);
                 } else {
                     this.statsService.getStateService().getIndicators().forEach(ind => {
                         this.addDataProviderInfo(ind);
                     });
-                    this._updateSeriesControlVisibility();
-                    this._updateClassficationViewVisibility();
+                    this.updateSeriesControlVisibility();
+                    this.updateClassficationViewVisibility();
                 }
                 // notify other components
                 this.statsService.notifyOskariEvent(evt);
@@ -256,7 +256,7 @@ Oskari.clazz.define(
             'StatsGrid.IndicatorEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
                 this.notifyDataProviderInfo(evt);
-                this._updateClassficationViewVisibility();
+                this.updateClassficationViewVisibility();
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -266,7 +266,7 @@ Oskari.clazz.define(
             },
             'StatsGrid.ActiveIndicatorChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-                this._updateSeriesControlVisibility();
+                this.updateSeriesControlVisibility();
             },
             'StatsGrid.ClassificationChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -340,8 +340,8 @@ Oskari.clazz.define(
                 if (!layer || layer.getId() !== this._layerId) {
                     return;
                 }
-                this._updateClassficationViewVisibility();
-                this._updateSeriesControlVisibility();
+                this.updateClassficationViewVisibility();
+                this.updateSeriesControlVisibility();
             },
             FeatureEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -443,17 +443,18 @@ Oskari.clazz.define(
                 this.classificationPlugin = null;
             }
         },
-        setClassificationViewVisible: function (visible) {
-            if (!this.classificationPlugin) {
+        _setClassificationViewVisible: function (visible) {
+            if (!this.classificationPlugin && visible) {
                 this.createClassficationView();
+                return;
             }
             if (visible) {
-                this.statsService.getStateService().updateClassificationPluginState('visible', visible, true);
-            } else {
+                this.classificationPlugin.buildUI();
+            } else if (this.classificationPlugin) {
                 this.classificationPlugin.stopPlugin();
             }
         },
-        setSeriesControlVisible: function (visible) {
+        _setSeriesControlVisible: function (visible) {
             if (visible) {
                 if (this.seriesControlPlugin) {
                     if (!this.seriesControlPlugin.getElement()) {

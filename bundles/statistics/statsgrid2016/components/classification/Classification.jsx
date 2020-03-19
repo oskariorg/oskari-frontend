@@ -33,9 +33,6 @@ class Classification extends React.Component {
 
     render () {
         const { classifications, pluginState } = this.props;
-        if (!pluginState.visible) {
-            return null;
-        }
         const isEdit = this.state.isEdit;
         let containerClass = pluginState.transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
 
