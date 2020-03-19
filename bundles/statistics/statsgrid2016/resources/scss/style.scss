@@ -370,7 +370,10 @@ div.oskari-flyout {
             }
 
             td:first-child, th:first-child {
-                max-width: 130px;
+                max-width: 140px;
+            }
+            .statsgrid-header-0 {
+                overflow: visible;
             }
         }
 

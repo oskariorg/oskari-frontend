@@ -29,7 +29,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 '<div class="title"></div>' +
                 '<div class="header">' +
                 '   <div class="selection"></div>' +
-                '   <div class="info"></div>' +
                 '</div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
@@ -133,8 +132,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         me.grid.setColumnUIName('region', function (content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
             tableHeader.find('.title').remove();
-            tableHeader.find('.info').html(gridLoc.areaSelection.info);
-
             content.append(tableHeader);
 
             // regionset selection is shown if map is not embedded
@@ -157,7 +154,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 // Else only show current regionset without info
                 var regionsetDef = me.service.getRegionsets(me.getCurrentRegionset()) || {};
                 tableHeader.find('.selection').html(regionsetDef.name);
-                tableHeader.find('.info').remove();
             }
 
             var sortBy = tableHeader.find('.sortby');
@@ -246,7 +242,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
 
         // done is called when we have indicator names for columns
         var done = function () {
-            me.grid.setAutoHeightHeader(30);
+            me.grid.setAutoHeightHeader(15);
             me.grid.setDataModel(model);
             me.grid.renderTo(me.mainEl.find('.grid'));
 
