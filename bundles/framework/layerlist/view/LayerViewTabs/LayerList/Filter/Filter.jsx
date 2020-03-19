@@ -28,7 +28,7 @@ const Filter = ({ filters, activeFilterId, controller }) => {
                 >
                     {
                         filters.map(({ id, text }) => (
-                            <Option key={id} value={id}>{text}</Option>
+                            <Option key={id} value={id} title>{text}</Option>
                         ))
                     }
                 </Select>
