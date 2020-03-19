@@ -53,8 +53,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
         }
         this.datasourceId = datasourceId;
         this.indicatorId = indicatorId;
-        this.show();
         this.createUi();
+        this.showOnPosition();
 
         // set empty values to focus on name field
         this.indicatorForm.setValues();
@@ -183,9 +183,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.IndicatorFormFlyout', func
             });
         });
         this.setContent(this.uiElement);
-        // options.pos.x/y is injected by FlyoutManager and without
-        // explicit call to move() the flyout opens in seemingly random locations (out of screen etc)
-        this.move(this.options.pos.x, this.options.pos.y, true);
     },
     setSpinnerVisible: function (show) {
         this.uiElement.find('.spinner-holder').css('height', show ? '100px' : '0');

@@ -81,6 +81,11 @@ Oskari.clazz.define('Oskari.userinterface.component.TabPanel',
             link = header.find('a');
             link.html(this.getTitle());
         },
+        updateTitle: function (title) {
+            if (!this.header) return;
+            this.title = title;
+            this.header.find('a').html(title);
+        },
         /**
          * @method setTitleIcon
          * Sets icon to panel header afetr title

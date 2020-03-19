@@ -33,7 +33,7 @@ export const Style = ({ layer, capabilities = {}, propertyFields, controller }) 
     styleOptions = [...new Set(styleOptions)];
     return (
         <Fragment>
-            <Message messageKey='style'/>
+            <Message messageKey='fields.style'/>
             <InfoTooltip messageKeys={styleInfoKeys} />
             <StyledFormField>
                 <Select

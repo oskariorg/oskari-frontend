@@ -11,7 +11,7 @@ export const SelectedTime = ({ layer, capabilities, controller }) => {
     }
     return (
         <Fragment>
-            <Message messageKey='selectedTime'/>
+            <Message messageKey='fields.params.selectedTime'/>
             <StyledFormField>
                 <Select
                     showSearch

@@ -47,9 +47,11 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     setDataProviders (dataProviders) {
         this.dataProviders = dataProviders;
+        this.update();
     }
     setMapLayerGroups (mapLayerGroups) {
         this.mapLayerGroups = mapLayerGroups;
+        this.update();
     }
     update () {
         const el = this.getElement();
@@ -67,7 +69,6 @@ export class LayerEditorFlyout extends ExtraFlyout {
             loading,
             messages,
             propertyFields,
-            rolesAndPermissionTypes,
             credentialsCollapseOpen,
             tab,
             scales
@@ -98,7 +99,8 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         dataProviders={this.dataProviders}
                         versions={versions}
                         messages={messages}
-                        rolesAndPermissionTypes={rolesAndPermissionTypes}
+                        rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
+                        validators={this.uiHandler.getValidatorFunctions(layer.type)}
                         tab={tab}
                         scales={scales}
                         onDelete={() => this.uiHandler.deleteLayer()}

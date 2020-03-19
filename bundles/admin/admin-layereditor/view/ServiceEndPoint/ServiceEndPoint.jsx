@@ -6,6 +6,7 @@ import { CesiumIon } from './CesiumIon';
 import { StyledFormField } from '../AdminLayerForm/styled';
 import { ApiKey } from './ApiKey';
 import { ServiceUrlInput } from './ServiceUrlInput';
+import { MandatoryIcon } from '../AdminLayerForm/Mandatory';
 
 const {
     API_KEY,
@@ -37,7 +38,7 @@ export const ServiceEndPoint = ({ layer, propertyFields, disabled, credentialsCo
         <Fragment>
             { (serviceUrlInput || cesiumIonSettings) &&
                 <Fragment>
-                    <Message messageKey='interfaceAddress' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />)
+                    <Message messageKey='fields.url' /> (<Message messageKey={`layertype.${layer.type}`} defaultMsg={layer.type} />) <MandatoryIcon />
                     <StyledFormField>
                         {serviceUrlInput}
                         {cesiumIonSettings}

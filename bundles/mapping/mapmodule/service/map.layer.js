@@ -1548,6 +1548,9 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          *  layerModel if found matching id or null if not found
          */
         findMapLayer: function (id, layerList) {
+            if (typeof id === 'undefined') {
+                return;
+            }
             if (!layerList) {
                 layerList = this._loadedLayersList;
             }
@@ -1623,6 +1626,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
 
         setDataProviders: function (dataProviders) {
             this._dataProviders = dataProviders;
+            this.trigger('dataProvider.update');
         },
 
         getDataProviders: function () {

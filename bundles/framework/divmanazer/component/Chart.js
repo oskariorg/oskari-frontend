@@ -1,69 +1,116 @@
 Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
     this.svg = null;
-    this.dimensions = this.chartDimensions();
+    this.dimensions = {};
     this.x = null;
     this.y = null;
     this.colorScale = null;
     this.data = null;
     this.chartType = null;
-    this.containerWidth = null;
     this.plot = jQuery('<div style="width:100%"></div>');
     this.axisLabelValues = jQuery('<div style="width:100%"></div>');
     this.sortingType = null;
-    this.defaultWidth = 630;
     this._g = null;
     this._options = {
-        colors: ['#555', '#555']
+        colors: ['#555', '#555'],
+        width: 630,
+        margin: {
+            left: 50,
+            right: 50,
+            bottom: 15,
+            top: 10,
+            maxForLabel: 140
+        },
+        maxTicks: 10
     };
-    this.resizable = false;
     this.loc = Oskari.getMsg.bind(null, 'DivManazer');
-    this.noValStr = this.loc('graph.noValue');
+    this.calculateDimensions();
 }, {
-    _checkColors: function (opts) {
-        var options = opts || {};
-        options.colors = options.colors || this._options.colors;
-        if (typeof options.colors === 'string') {
-            options.colors = [options.colors];
+    setOptions: function (options = {}) {
+        const opts = jQuery.extend(true, {}, this._options, options);
+        if (typeof opts.valueRenderer !== 'function') {
+            opts.valueRenderer = null;
         }
+        if (typeof opts.colors === 'string') {
+            opts.colors = [opts.colors];
+        }
+        this._options = opts;
+    },
+    getOptions: function () {
+        return this._options;
     },
     chartIsInitialized: function () {
         return this.svg !== null;
     },
-    chartDimensions: function (sideMargin) {
-        var me = this;
-        var margin = isNaN(sideMargin) ? 80 : Math.min(sideMargin, 140);
-        var dataset = this.getDatasetMinMax();
-        // dataset has both negative and positive values, labels are inside chart -> use smaller margin
-        if (dataset.min < 0 && dataset.max > 0) {
-            var ratio = Math.max(Math.abs(dataset.min), dataset.max) / Math.min(Math.abs(dataset.min), dataset.max);
-            if (ratio < 10) { // 10 ticks/x-labels
-                // min ratio 1: x-axel's origin is in the center
-                margin = margin - margin / ratio;
-                margin = Math.max(margin, 40); // min margin
-            }
-        }
-        // set up svg using margin conventions - we'll need plenty of room on the left for labels
-        var dimensions = {
-            margin: {
-                top: 10,
-                right: margin,
-                bottom: 15,
-                left: margin
+    calculateDimensions: function () {
+        const { width, margin: { top, bottom } } = this.getOptions();
+        const { labels, dataset, axis, height, margin: { left, right } } = this.getDimensionsFromData();
+        this.dimensions = {
+            margin: { left, right, top, bottom },
+            dataset,
+            axis,
+            container: { width, height },
+            chart: {
+                width: width - left - right,
+                height: height - bottom - top
             },
-            dataset: {
-                min: dataset.min,
-                max: dataset.max
-            },
-            xAxisOffset: -5,
-            width: function () {
-                var width = me.containerWidth || me.defaultWidth;
-                return width - this.margin.left - this.margin.right;
-            },
-            height: function () {
-                return (me.data.length * 21) - (this.margin.top - this.margin.bottom);
-            }
+            labels
         };
-        return dimensions;
+    },
+    getDimensionsFromData: function () {
+        const pxPerChar = 5.5;
+        const xLabelOffset = 15;
+        const xOffset = -5;
+
+        const { width, margin: { left: optLeft, right: optRight, maxForLabel }, maxTicks } = this.getOptions();
+        // default values if couldn't calculate from data
+        let left = optLeft;
+        let right = optRight;
+        let min = 0;
+        let max = 0;
+        let ticks = 0;
+        let height = 0;
+        let positive = 0;
+        let negative = 0;
+
+        if (this.data) {
+            height = this.data.length * 21;
+            min = d3.min(this.data, function (d) { return d.value; });
+            max = d3.max(this.data, function (d) { return d.value; });
+
+            const widestLabel = d3.max(this.data, function (d) { return d.name.length; });
+            const labelPx = widestLabel * pxPerChar;
+            let labelMargin = labelPx < maxForLabel ? labelPx : maxForLabel;
+            let chartWidth = width - left - right;
+            const x = d3.scaleLinear().domain(this.getScaleArray(min, max)).range([ 0, chartWidth ]);
+            let xOrigin = x(0);
+            // calculate how much space is needed for labels, if negative then label fits inside chart
+            const spaceForPositive = labelMargin - xOrigin;
+            const spaceForNegative = xOrigin + labelMargin - chartWidth;
+            if (spaceForPositive > 0) {
+                left = spaceForPositive + optLeft / 2;
+            }
+            if (spaceForNegative > 0) {
+                right = spaceForNegative + optRight / 2;
+            }
+            // update chart width
+            chartWidth = width - left - right;
+            xOrigin = x.range([0, chartWidth])(0);
+            // calculate max label lengths and ticks
+            positive = Math.floor((left + xOrigin - xLabelOffset) / pxPerChar);
+            negative = Math.floor((right + chartWidth - xOrigin - xLabelOffset) / pxPerChar);
+
+            const xDigits = Math.floor((Math.log(Math.max(Math.abs(min), max)) * Math.LOG10E) + 1);
+            const tickTarget = Math.floor((chartWidth / xDigits) / 10);
+            ticks = tickTarget > maxTicks ? maxTicks : tickTarget;
+        }
+
+        return {
+            height,
+            dataset: { min, max },
+            axis: { ticks, xOffset },
+            margin: { left, right },
+            labels: { positive, negative }
+        };
     },
     initScales: function () {
         // from zero to max value. This could also be from min to max value, but it causes problems if
@@ -72,41 +119,32 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
 
         this.x = d3.scaleLinear();
         this.y = d3.scaleBand();
-        var dataset = this.dimensions.dataset;
-        var xScaleDomain;
-        if (dataset.min > 0) {
-            xScaleDomain = [0, dataset.max];
-        } else if (dataset.max < 0) {
-            xScaleDomain = [dataset.min, 0];
-        } else {
-            xScaleDomain = [dataset.min, dataset.max];
-        }
+        var { min, max } = this.dimensions.dataset;
+        var xScaleDomain = this.getScaleArray(min, max);
         var yScaleDomain = this.data.map(function (d) {
             return d.name;
         });
         this.x.domain(xScaleDomain);
         this.y.domain(yScaleDomain);
     },
+    getScaleArray (min, max) {
+        if (min > 0) {
+            return [0, max];
+        }
+        if (max < 0) {
+            return [min, 0];
+        }
+        return [min, max];
+    },
     getSVGTemplate: function () {
+        const { container, margin } = this.dimensions;
         var svg = d3.select(this.plot.get(0)).append('svg')
-            .attr('width', this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right)
-            .attr('height', this.dimensions.height() + this.dimensions.margin.top + this.dimensions.margin.bottom)
+            .attr('width', container.width)
+            .attr('height', container.height)
             .append('g')
-            .attr('transform', 'translate(' + this.dimensions.margin.left + ',' + this.dimensions.margin.top + ')');
+            .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         return svg;
-    },
-    getDatasetMinMax: function () {
-        var min = 0;
-        var max = 0;
-        if (this.data) {
-            min = d3.min(this.data, function (d) { return d.value; });
-            max = d3.max(this.data, function (d) { return d.value; });
-        }
-        return {
-            min: min,
-            max: max
-        };
     },
     nullsLast: function (a, b) {
         if (a == null && b == null) return 0;
@@ -171,18 +209,12 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      *
      */
     initAxis: function () {
-        var me = this;
-        var widestValue = Math.max(Math.abs(this.dimensions.dataset.min), this.dimensions.dataset.max);
-        var numDigits = Math.floor((Math.log(widestValue) * Math.LOG10E) + 1);
-        var range = this.x.range();
-        var width = range[1] - range[0];
-        var tickTarget = Math.floor((width / numDigits) / 10);
-
+        const { chart: { height }, axis: { ticks, xOffset } } = this.dimensions;
         this.xAxis = d3.axisTop(this.x)
-            .ticks(Math.min(10, tickTarget))
-            .tickSizeInner(-this.dimensions.height() + this.dimensions.xAxisOffset)
+            .ticks(ticks)
+            .tickSizeInner(-height + xOffset)
             .tickSizeOuter(0)
-            .tickFormat(function (d) { return me.loc('graph.tick', { value: d }); });
+            .tickFormat(d => this.loc('graph.tick', { value: d }));
     },
     /**
      * initializes the chart skeleton without any specific line or bar options
@@ -208,20 +240,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         }
         this.data = data;
         this.sortDataByType();
-        var maxNameLength = d3.max(data, function (d) { return d.name.length; });
-        this.dimensions = this.chartDimensions(maxNameLength * 5.5);
-    },
-    /**
-     * parses the options passed in
-     *
-     * @method parseOptions
-     * @param  {} options
-     */
-    parseOptions: function (options) {
-        if (options.width) {
-            this.containerWidth = options.width;
-        }
-        this.valueRenderer = options.valueRenderer;
+        this.calculateDimensions();
     },
     /**
      *
@@ -240,14 +259,16 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         xtickAxis.selectAll('line')
             .attr('stroke', '#eee');
 
+        const { container, margin } = this.dimensions;
         // append the x-axis to different element so we can show the values when scrollign
+        const height = 12;
         var gx = d3.select(this.axisLabelValues.get(0))
             .append('svg')
-            .attr('width', this.dimensions.width() + this.dimensions.margin.left + this.dimensions.margin.right)
-            .attr('height', 12)
+            .attr('width', container.width)
+            .attr('height', height)
             .append('g')
             .attr('class', 'x axis header')
-            .attr('transform', 'translate(' + this.dimensions.margin.left + ',' + this.dimensions.margin.top + ')')
+            .attr('transform', 'translate(' + margin.left + ',' + height + ')')
             .call(this.xAxis);
 
         gx.select('.domain').remove();
@@ -259,13 +280,11 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @method setColorScale
      */
     setColorScale: function (colors) {
-        this.colorScale = d3.scaleThreshold().domain(colors.bounds).range(colors.values);
-    },
-    setResizable: function (resizable) {
-        this.resizable = resizable;
-    },
-    isResizable: function () {
-        return this.resizable;
+        if (Array.isArray(colors)) {
+            this.colorScale = d3.scaleThreshold().range(colors);
+        } else {
+            this.colorScale = d3.scaleThreshold().domain(colors.bounds).range(colors.values);
+        }
     },
     /**
      * handles data & options passed to it, initializes skeleton chart and then applies barchart specific options to the element
@@ -274,29 +293,14 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @param { Object } options keys: colors -> color scale, valueRenderer -> function for rendering bar values
      */
     createBarChart: function (data, options) {
+        this.setOptions(options);
         if (this.svg === null) {
             this.handleData(data);
         }
-        if (options) {
-            this._options = options;
-        }
-
-        var opts = this._options;
-
-        if (Object.keys(opts).length !== 0) {
-            this.parseOptions(opts);
-        }
-
-        this._checkColors(opts);
-        this.setColorScale(opts.colors);
+        const { colors, valueRenderer } = this.getOptions();
+        this.setColorScale(colors);
         this.initChart();
         var me = this;
-        var originX = this.x(0);
-        var textMaxLength = {
-            // handleData() maxNameLength uses 5.5 px/char, 10 + 5 px for text margin
-            positive: Math.floor((this.dimensions.margin.left + originX - 15) / 5.5),
-            negative: Math.floor((this.dimensions.margin.right + this.dimensions.width() - originX - 15) / 5.5)
-        };
         // labels
         var labels = this.svg.append('g')
             .selectAll('.labels')
@@ -323,6 +327,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             .attr('stroke', '#aaa')
             .attr('shape-rendering', 'crispEdges');
         // append text
+        const { labels: maxLabels } = this.dimensions;
         labels.append('text')
             .attr('text-anchor', function (d) {
                 if (d.value < 0) {
@@ -341,7 +346,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             .style('font-size', '11px')
             .attr('fill', '#000')
             .text(function (d) {
-                return me.getTextContent(d, textMaxLength);
+                return me.getTextContent(d, maxLabels);
             });
 
         // bars
@@ -368,20 +373,21 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
             .attr('height', 17)
             .attr('width', barWidth);
         // append text
+        const noValStr = this.loc('graph.noValue');
         bars.each(function (d, i) {
             var isNumber = typeof d.value === 'number';
-            if (!me.valueRenderer && isNumber) {
+            if (!valueRenderer && isNumber) {
                 return;
             }
             var textAnchor = 'start';
             var transformX = '5px';
-            var locationX = originX;
-            var rendered = me.noValStr;
+            var locationX = me.x(0);
+            var rendered = noValStr;
             var color = '#999';
             if (isNumber) {
                 locationX = me.x(d.value);
                 var width = barWidth(d);
-                rendered = me.valueRenderer(d.value);
+                rendered = valueRenderer(d.value);
                 var renderedLength = typeof rendered === 'string' ? rendered.length * 8 : 0; // 8px per char (generous)
                 var fitsInBar = renderedLength < width - 10; // padding of 5px + 5px
                 if (fitsInBar) {
@@ -418,18 +424,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @method createLineChart
      */
     createLineChart: function (data, options) {
+        this.setOptions(options);
         this.handleData(data);
-
-        if (options) {
-            this._options = options;
-        }
-
-        var opts = this._options;
-        if (Object.keys(opts).length !== 0) {
-            this.parseOptions(opts);
-        }
-        this._checkColors(opts);
-        this.setColorScale(opts.colors);
+        const { colors } = this.getOptions(options);
+        this.setColorScale(colors);
         this.initChart();
         var me = this;
         var linegen = d3.line()
@@ -446,10 +444,7 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
         return this.getGraph();
     },
     getTextContent: function (d, maxLength) {
-        var max = maxLength.positive;
-        if (d.value < 0) {
-            max = maxLength.negative;
-        }
+        const max = d.value < 0 ? maxLength.negative : maxLength.positive;
         if (d.name.length > max) {
             return d.name.substring(0, max - 3) + '\u2026'; // ellipsis
         }
@@ -462,9 +457,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      */
     chart: function (selection) {
         var me = this;
-        // //update x & y scales
-        this.y.range([ this.dimensions.height(), 0 ]);
-        this.x.range([ 0, this.dimensions.width() ]);
+        const { height, width } = this.dimensions.chart;
+        // update x & y scales
+        this.y.range([ height, 0 ]);
+        this.x.range([ 0, width ]);
 
         selection.each(function (data) {
             me.initAxis();
@@ -481,15 +477,10 @@ Oskari.clazz.define('Oskari.userinterface.component.Chart', function () {
      * @param  [data]
      */
     redraw: function (data, options) {
+        this.setOptions(options);
         var chart;
         this.handleData(data);
 
-        if (options) {
-            this._options = options;
-        }
-        if (!this.isResizable()) {
-            this._options.width = this.defaultWidth;
-        }
         // Clear previous graphs
         this.clear();
         if (this.chartType === 'barchart') {

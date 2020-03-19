@@ -66,19 +66,11 @@ Oskari.clazz.define('Oskari.mapframework.wmts.service.WMTSLayerService', functio
                 data: {
                     id: layer.getId()
                 },
-                dataType: 'xml',
+                dataType: 'text',
                 type: 'GET',
                 url: getCapsUrl,
                 success: function (response) {
-                    var responseXml = response;
-
-                    // Fixed IE9 issue when getting capabilities XML.
-                    // If IE9 then response capabilities XML is in reposne.xml
-                    if (response.xml) {
-                        responseXml = response.xml;
-                    }
-
-                    var caps = format.read(responseXml);
+                    var caps = format.read(response);
                     // Check if need reverse matrixset top left coordinates.
                     // Readed by layer attributes reverseMatrixIdsCoordinates property to matrixId specific transforms.
                     // For example layer can be following attribute: { reverseMatrixIdsCoordinates: {'ETRS-TM35FIN':true}}

@@ -22,50 +22,68 @@ Oskari.registerLocalization(
                 "tiles3dlayer": "Cesium 3D Tiles",
                 "bingmapslayer": "Bing"
             },
+            "fields": {
+                "url": "Interface URL",
+                "version": "Interface version",
+                "username": "Username",
+                "password": "Password",
+                "name": "Unique name",
+                "options": {
+                    "apiKey": "Api key",
+                    "tileGrid": "Tile grid"
+                },
+                "locale": {
+                    "generic": {
+                        "name": "Name in {0}",
+                        "subtitle": "Description in {0}"
+                    },
+                    "en": {
+                        "lang": "English",
+                        "name": "Name in English",
+                        "subtitle": "Description in English"
+                    },
+                    "fi": {
+                        "lang": "Finnish",
+                        "name": "Name in Finnish",
+                        "subtitle": "Description in Finnish"
+                    },
+                    "sv": {
+                        "lang": "Swedish",
+                        "name": "Name in Swedish",
+                        "subtitle": "Description in Swedish"
+                    }
+                },
+                "opacity": "Opacity",
+                "style": "Default Style",
+                "params": {
+                    "selectedTime": "Selected time"
+                },
+                "realtime": "Real time layer",
+                "refreshRate": "Refresh rate in seconds",
+                "scale": "Scale",
+                "metadataId": "Metadata file identifier",
+                "gfiContent": "Additional GFI info",
+                "gfiType": "GFI response type",
+                "role_permissions": "Permissions",
+                "dataProviderId": "Dataprovider",
+                "groups": "Maplayer groups"
+            },
             "editor-tool": "Edit layer",
             "flyout-title": "Layer administration",
             "generalTabTitle": "General",
             "visualizationTabTitle": "Visualization",
             "additionalTabTitle": "Additional",
             "permissionsTabTitle": "Permissions",
-            "interfaceAddress": "Interface URL",
-            "interfaceVersion": "Interface version",
             "interfaceVersionDesc": "Select an appropriate version. Prioritize the newest version that is supported.",
-            "apiKey": "Api key",
             "attributions": "Attributions",
-            "tileGrid": "Tile grid",
-            "username": "Username",
-            "password": "Password",
             "usernameAndPassword": "Username and password",
-            "uniqueName": "Unique name",
-            "generic": {
-                "placeholder": "Name in {0}",
-                "descplaceholder": "Description in {0}"
-            },
-            "en": {
-                "lang": "English",
-                "placeholder": "Name in English",
-                "descplaceholder": "Description in English"
-            },
-            "fi": {
-                "lang": "Finnish",
-                "placeholder": "Name in Finnish",
-                "descplaceholder": "Description in Finnish"
-            },
-            "sv": {
-                "lang": "Swedish",
-                "placeholder": "Name in Swedish",
-                "descplaceholder": "Description in Swedish"
-            },
             "addLayer": "Add a new map layer",
-            "dataProvider": "Dataprovider",
+            "dataProviderName": "Dataprovider name",
             "addDataProvider": "Add dataprovider",
             "editDataProvider": "Edit dataprovider",
-            "dataProviderName": "Dataprovider name",
             "themeName": "Theme name",
             "addTheme": "Add theme",
             "editTheme" : "Edit theme",
-            "mapLayerGroups": "Maplayer groups",
             "selectMapLayerGroupsButton": "Select groups",
             "cancel": "Cancel",
             "close": "Close",
@@ -76,12 +94,8 @@ Oskari.registerLocalization(
             "skipCapabilities": "Add manually",
             "addNewFromSameService": "Add a new layer from same service",
             "delete": "Remove",
-            "style": "Default Style",
             "styleDesc": "Select a default style from the list. If there are several options, users can select a theme in the ‘Selected Layers’ menu.",
-            "selectedTime": "Selected time",
-            "realtime": "Real time layer",
             "realtimeDesc": "Select, if the map layer is updated in real time. The refresh rate is defined in seconds.",
-            "refreshRate": "Refresh rate in seconds",
             "capabilities": {
                 "show": "Show GetCapabilities response",
                 "styleDesc": "The style options are fetched automatically from the GetCapabilities response.",
@@ -97,12 +111,7 @@ Oskari.registerLocalization(
                 "problematic": "There were some issues parsing the capabilities for this layer. This layer might not work properly if added.",
                 "unsupported": "According to capabilities this layer doesn't support projections used on this service. This layer might not work properly if added."
             },
-            "opacity": "Opacity",
-            "scale": "Scale",
             "metadataIdDesc": "The metadata file identifier is an XML file identifier. It is fetched automatically from the GetCapabilities response.",
-            "metadataId": "Metadata file identifier",
-            "gfiContent": "Additional GFI info",
-            "gfiType": "GFI response type",
             "gfiTypeDesc": "Select a format for Get Feature Information (GFI). Possible formats are fetched automatically from the GetCapabilities response.",
             "gfiStyle": "GFI style (XSLT)",
             "gfiStyleDesc": "Define a style for Get Feature Information (GFI) as XSLT transformation.",
@@ -123,9 +132,7 @@ Oskari.registerLocalization(
                 "info": "Viewing of small objects has been optimized. This restricts the scale on which the objects are viewed."
             },
             "validation": {
-                "dataprovider": "Dataprovider is mandatory.",
-                "nopermissions": "Layer doesn't have any permissions.",
-                "locale": "Name for end-user is mandatory.",
+                "mandatoryMsg": "Mandatory fields missing:",
                 "styles" : "Invalid JSON syntax in Style definitions.",
                 "externalStyles" : "Invalid JSON syntax in 3rd party style definitions.",
                 "hover" : "Invalid JSON syntax in Feature highlighting and tooltip.",

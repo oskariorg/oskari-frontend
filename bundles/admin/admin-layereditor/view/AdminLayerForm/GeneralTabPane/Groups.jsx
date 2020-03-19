@@ -16,7 +16,7 @@ export const Groups = ({ layer, groups, controller }) => {
     const renderItem = item => <ListItem>{item}</ListItem>;
     return (
         <Fragment>
-            <Message messageKey='mapLayerGroups' />
+            <Message messageKey='fields.groups' />
             <StyledFormField>
                 <Collapse>
                     <CollapsePanel header={<Message messageKey='selectMapLayerGroupsButton'/>}>

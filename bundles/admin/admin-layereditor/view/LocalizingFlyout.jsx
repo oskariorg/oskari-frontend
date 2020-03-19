@@ -83,7 +83,12 @@ class UIService extends StateHandler {
         const getMsg = Oskari.getMsg.bind(null, instance.getName());
         const labels = {};
         Oskari.getSupportedLanguages().forEach(lang => {
-            labels[lang] = getMsg(`${lang}.lang`);
+            const locale = getMsg(`fields.locale.${lang}`);
+            if (typeof locale === 'object') {
+                labels[lang] = locale.lang || lang;
+            } else {
+                labels[lang] = lang;
+            }
         });
         this.initialState = {
             loading: false,

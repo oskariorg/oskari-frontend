@@ -1,5 +1,4 @@
 import React from 'react';
-import { stringify } from 'query-string';
 import { getLayerHelper } from '../LayerHelper';
 import { StateHandler, Messaging, controllerMixin } from 'oskari-ui/util';
 import { Message } from 'oskari-ui';
@@ -32,7 +31,7 @@ class UIHandler extends StateHandler {
             scales: mapmodule.getScaleArray().map(value => typeof value === 'string' ? parseInt(value) : value)
         });
         this.addStateListener(consumer);
-        this.fetchRolesAndPermissionTypes();
+        this.fetchLayerAdminMetadata();
     }
 
     updateLayerTypeVersions () {
@@ -88,7 +87,7 @@ class UIHandler extends StateHandler {
         }
         const found = capabilities.layers[name];
         if (found) {
-            const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+            const typesAndRoles = this.getAdminMetadata();
             const updateLayer = this.layerHelper.fromServer({ ...layer, ...found }, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
@@ -115,14 +114,21 @@ class UIHandler extends StateHandler {
         // initialize state for adding a new layer from the same OGC service (service having capabilities)
         const state = this.getState();
         const layer = { ...state.layer };
-        const capabilities = state.capabilities || { existingLayers: {} };
+
         // add newly added layer to "existing layers" so it's shown as existing
+        const capabilities = state.capabilities || {};
+        capabilities.existingLayers = capabilities.existingLayers || {};
         capabilities.existingLayers[layer.name] = state.layer;
-        // delete name for "new" layer so we are taken back to the capabilities layer listing
-        delete layer.name;
-        // delete layer id so we won't modify the one we just added
-        delete layer.id;
-        this.updateState({ layer, capabilities });
+
+        // trigger capabilities fetching using layers type, url, version if we don't have them stored
+        if (!capabilities.layers || !capabilities.layers.length) {
+            this.fetchCapabilities(layer);
+        } else {
+            // update state with layer having no name and id so we don't overwrite an existing layer
+            delete layer.name;
+            delete layer.id;
+            this.updateState({ layer, capabilities });
+        }
     }
     setUsername (username) {
         this.updateState({
@@ -346,7 +352,7 @@ class UIHandler extends StateHandler {
         this.updateState({ tab });
     }
     resetLayer () {
-        const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+        const typesAndRoles = this.getAdminMetadata();
         this.updateState({
             layer: this.layerHelper.createEmpty(typesAndRoles.roles),
             capabilities: {},
@@ -378,7 +384,7 @@ class UIHandler extends StateHandler {
     }
 
     // http://localhost:8080/action?action_route=LayerAdmin&id=889
-    fetchLayer (id) {
+    fetchLayer (id, keepCapabilities = false) {
         this.clearMessages();
         if (!id) {
             this.resetLayer();
@@ -397,7 +403,7 @@ class UIHandler extends StateHandler {
             }
             return response.json();
         }).then(json => {
-            const typesAndRoles = this.getRolesAndPermissionTypes() || {};
+            const typesAndRoles = this.getAdminMetadata();
             const { ...layer } = this.layerHelper.fromServer(json, {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
@@ -407,11 +413,18 @@ class UIHandler extends StateHandler {
                 Messaging.warn(getMessage(`messages.${layer.warn}`));
                 delete layer.warn;
             }
-            this.updateState({
+            const newState = {
                 layer,
                 propertyFields: this.getPropertyFields(layer),
                 versions: this.mapLayerService.getVersionsForType(layer.type)
-            });
+            };
+            if (!keepCapabilities) {
+                // for editing new layers we want to flush capabilities
+                // when refreshing a saved layer from server we want to keep
+                //  any existing capabilities to speed up the process of adding many layers
+                newState.capabilities = {};
+            }
+            this.updateState(newState);
         });
     }
 
@@ -419,9 +432,12 @@ class UIHandler extends StateHandler {
         const validationErrorMessages = this.validateUserInputValues(this.getState().layer);
         if (validationErrorMessages.length > 0) {
             // TODO: formatting message and message duration
-            Messaging.error(<ul>{ validationErrorMessages
-                .map(msg => <li key={msg}>{msg}</li>)}
-            </ul>);
+            Messaging.error(<div>
+                {getMessage('validation.mandatoryMsg')}
+                <ul>{ validationErrorMessages
+                    .map(field => <li key={field}>{getMessage(`fields.${field}`)}</li>)}
+                </ul>
+            </div>);
             return;
         }
         // Take a copy
@@ -429,6 +445,7 @@ class UIHandler extends StateHandler {
         // Modify layer for backend
         const layerPayload = this.layerHelper.toServer(layer);
 
+        this.ajaxStarted();
         fetch(Oskari.urls.getRoute('LayerAdmin'), {
             method: 'POST',
             headers: {
@@ -436,6 +453,7 @@ class UIHandler extends StateHandler {
             },
             body: JSON.stringify(layerPayload)
         }).then(response => {
+            this.ajaxFinished();
             if (response.ok) {
                 Messaging.success(getMessage('messages.saveSuccess'));
                 return response.json();
@@ -444,31 +462,61 @@ class UIHandler extends StateHandler {
                 return Promise.reject(Error('Save failed'));
             }
         }).then(data => {
-            // FIXME: layer data will be the same as for editing == admin data
-            // To get the layer json for "end-user" frontend for creating
-            // an AbstractLayer-based model -> make another request to get that JSON.
+            // layer data will be the same as for editing == admin data
             Messaging.warn('Reload page to see changes for end user - Work in progress...');
-            this.fetchLayer(data.id);
-            /*
-            if (layer.id) {
-                data.groups = layer.groups;
-                this.updateLayer(layer.id, data);
-            } else {
-                this.createlayer(data);
-            }
-            */
+            // refresh current layer data from server after saving just in case to prevent possible out-of-sync
+            this.fetchLayer(data.id, true);
+            // Update layer for end-user as that model is different than admin uses
+            // end-user layer is AbstractLayer-based model -> make another request to get that JSON.
+            this.fetchLayerForEndUser(data.id);
         }).catch(error => this.log.error(error));
     }
 
-    updateLayer (layerId, layerData) {
-        this.mapLayerService.updateLayer(layerId, layerData);
+    fetchLayerForEndUser (layerId) {
+        // send id as parameter so we don't get the whole layer listing
+        var url = Oskari.urls.getRoute('GetHierarchicalMapLayerGroups', {
+            srs: Oskari.getSandbox().getMap().getSrsName(),
+            lang: Oskari.getLang(),
+            id: layerId
+        });
+        this.ajaxStarted();
+        fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json'
+            }
+        }).then(response => {
+            this.ajaxFinished();
+            if (!response.ok) {
+                Messaging.error('TODO');
+            }
+            return response.json();
+        }).then(json => {
+            if (json.layers.length !== 1) {
+                Messaging.error('TODO');
+                return;
+            }
+            this.refreshEndUserLayer(layerId, json.layers[0]);
+        });
     }
-
+    refreshEndUserLayer (layerId, layerData = {}) {
+        if (typeof layerId === 'undefined') {
+            // can't refresh without id
+            return;
+        }
+        const existingLayer = this.mapLayerService.findMapLayer(layerId);
+        if (existingLayer) {
+            this.mapLayerService.updateLayer(layerId, layerData);
+        } else if (layerData.id) {
+            this.createlayer(layerData);
+        } else {
+            Messaging.error('TODO');
+        }
+    }
     createlayer (layerData) {
-        // TODO: Test this method when layer creation in tested with new wizard
         const mapLayer = this.mapLayerService.createMapLayer(layerData);
 
-        if (layerData.baseLayerId) {
+        if (layerData.baseLayerId && layerData.baseLayerId !== -1) {
             // If this is a sublayer, add it to its parent's sublayer array
             this.mapLayerService.addSubLayer(layerData.baseLayerId, mapLayer);
         } else {
@@ -481,21 +529,76 @@ class UIHandler extends StateHandler {
             }
         }
     }
+    getValidatorFunctions (layerType) {
+        const hasValue = (value) => {
+            if (typeof value === 'string') {
+                return value.trim().length > 0;
+            }
+            if (typeof value === 'number') {
+                return value !== -1;
+            }
+
+            return !!value;
+        };
+        const validators = {
+            dataProviderId: hasValue,
+            role_permissions: (value = {}) => this.hasAnyPermissions(value)
+        };
+        const defaultLang = Oskari.getSupportedLanguages()[0];
+        const localeKey = `locale.${defaultLang}.name`;
+        validators[localeKey] = hasValue;
+
+        // function to dig a value from json object structure.
+        // Key is split from dots (.) and is used to get values like options.apiKey
+        const getValue = (item, key) => {
+            if (!item || !key) {
+                return;
+            }
+            const keyParts = key.split('.');
+            if (keyParts.length === 1) {
+                // undefined or trimmed value when string
+                const value = item[key] && item[key];
+                if (typeof value === 'string') {
+                    return value.trim();
+                }
+                // permissions is an object so don't trim but return value
+                return value;
+            }
+            let newItem = item[keyParts.shift()];
+            // recurse with new item and parts left on the key
+            return getValue(newItem, keyParts.join('.'));
+        };
+        // wrap validators so they take layer as param so we can dig values from structures
+        const wrappers = {};
+        Object.keys(validators).forEach(field => {
+            wrappers[field] = (layer) => validators[field](getValue(layer, field));
+        });
+
+        // Add checks for mandatory fields
+        let mandatoryFields = this.getMandatoryFieldsForType(layerType);
+        mandatoryFields.forEach(field => {
+            wrappers[field] = (layer) => hasValue(getValue(layer, field));
+        });
+        return wrappers;
+    }
+    getValidatorFor (key) {
+        if (!key) {
+            return null;
+        }
+        const validators = this.getValidatorFunctions();
+        return validators[key];
+    }
 
     validateUserInputValues (layer) {
+        const validators = this.getValidatorFunctions(layer.type);
         const validationErrors = [];
-        if (!layer.dataProviderId || layer.dataProviderId === -1) {
-            validationErrors.push(getMessage('validation.dataprovider'));
-        }
-        if (!this.hasAnyPermissions(layer.role_permissions)) {
-            validationErrors.push(getMessage('validation.nopermissions'));
-        }
-        const loc = layer.locale || {};
-        const defaultLang = Oskari.getSupportedLanguages()[0];
-        const defaultLocale = loc[defaultLang] || {};
-        if (!defaultLocale.name) {
-            validationErrors.push(getMessage('validation.locale'));
-        }
+        Object.keys(validators).forEach(field => {
+            const isValid = validators[field](layer);
+            if (!isValid) {
+                validationErrors.push(field);
+            }
+        });
+
         this.validateJsonValue(layer.tempStylesJSON, 'validation.styles', validationErrors);
         this.validateJsonValue(layer.tempExternalStylesJSON, 'validation.externalStyles', validationErrors);
         this.validateJsonValue(layer.tempHoverJSON, 'validation.hover', validationErrors);
@@ -529,18 +632,14 @@ class UIHandler extends StateHandler {
     }
 
     deleteLayer () {
-        // FIXME: This should use LayerAdmin route instead but this probably works anyway
         const { layer } = this.getState();
-        fetch(Oskari.urls.getRoute('DeleteLayer'), {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/x-www-form-urlencoded'
-            },
-            body: stringify(layer)
+        fetch(Oskari.urls.getRoute('LayerAdmin', { id: layer.id }), {
+            method: 'DELETE'
         }).then(response => {
             if (response.ok) {
-                // TODO handle this, just close the flyout?
+                // TODO: handle this somehow/close the flyout?
+                this.resetLayer();
+                this.mapLayerService.removeLayer(layer.id);
             } else {
                 Messaging.error(getMessage('messages.errorRemoveLayer'));
             }
@@ -562,14 +661,19 @@ class UIHandler extends StateHandler {
             pw: layer.password
         };
 
-        // Remove undefined params
-        Object.keys(params).forEach(key => params[key] === undefined && delete params[key]);
+        // create POST payload from params
+        const payload = Object.keys(params)
+            .filter(key => typeof params[key] !== 'undefined')
+            .map(key => encodeURIComponent(key) + '=' + encodeURIComponent(params[key]))
+            .join('&');
 
-        fetch(Oskari.urls.getRoute('ServiceCapabilities', params), {
-            method: 'GET',
+        fetch(Oskari.urls.getRoute('ServiceCapabilities'), {
+            method: 'POST',
             headers: {
+                'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8',
                 'Accept': 'application/json'
-            }
+            },
+            body: payload
         }).then(response => {
             this.ajaxFinished();
             if (response.ok) {
@@ -595,6 +699,10 @@ class UIHandler extends StateHandler {
             }
         }).then(json => {
             const updateLayer = { ...layer };
+            // update state with layer having no name and id so we don't accidentally overwrite an existing layer
+            // this is in case we clicked the "add new from same service" on an existing layer
+            delete updateLayer.name;
+            delete updateLayer.id;
             this.updateState({
                 capabilities: json || {},
                 layer: updateLayer,
@@ -648,9 +756,9 @@ class UIHandler extends StateHandler {
         });
     }
 
-    fetchRolesAndPermissionTypes () {
+    fetchLayerAdminMetadata () {
         this.ajaxStarted();
-        fetch(Oskari.urls.getRoute('GetAllRolesAndPermissionTypes'))
+        fetch(Oskari.urls.getRoute('LayerAdminMetadata'))
             .then(response => {
                 if (response.ok) {
                     return response.json();
@@ -664,17 +772,27 @@ class UIHandler extends StateHandler {
                 this.updateState({
                     currentLayer,
                     loading: this.isLoading(),
-                    rolesAndPermissionTypes: data
+                    metadata: data
                 });
             }).catch(error => {
                 this.log.error(error);
                 Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
             });
     }
+    /**
+     * Object with roles and permissionTypes objects that are needed to create the UI that
+     * matches the configuration of the system
+     */
+    getAdminMetadata () {
+        return this.getState().metadata || {};
+    }
 
-    getRolesAndPermissionTypes () {
-        return this.getState().rolesAndPermissionTypes;
-    };
+    getMandatoryFieldsForType (type) {
+        const metadata = this.getAdminMetadata().layerTypes || {};
+        const mandatoryFields = metadata[type] || [];
+        // TODO: add dataproviderId, role_permissions, default locale?
+        return mandatoryFields;
+    }
 
     isLoading () {
         return this.loadingCount > 0;

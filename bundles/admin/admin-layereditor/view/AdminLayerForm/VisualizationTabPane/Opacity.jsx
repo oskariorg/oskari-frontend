@@ -6,7 +6,7 @@ import { StyledFormField } from './styled';
 
 export const Opacity = ({ layer, controller }) => (
     <Fragment>
-        <Message messageKey='opacity'/>
+        <Message messageKey='fields.opacity'/>
         <StyledFormField>
             <CommonOpacity
                 key={layer.id}

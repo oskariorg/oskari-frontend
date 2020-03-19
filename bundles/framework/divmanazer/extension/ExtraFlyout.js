@@ -16,7 +16,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
         // UI text for title
         this.title = title;
         this._visible = true;
-        this._resizable = false;
         this._popup = null;
         /* @property container the DIV element */
         this.container = null;
@@ -64,7 +63,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             return this._visible;
         },
         isResizable: function () {
-            return this._resizable;
+            return this.options.resizable === true;
         },
         show: function () {
             var me = this;
@@ -103,7 +102,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 });
                 me._popup = popup;
                 me.bringToTop();
-                me._popup.on('click', function () {
+                me._popup.on('mousedown', function () {
                     me.bringToTop();
                 });
                 me.hide(true);
@@ -121,7 +120,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             var me = this;
             this._popup = this.__templates.popup.clone();
 
-            this._popup.on('click', function () {
+            this._popup.on('mousedown', function () {
                 me.bringToTop();
             });
             this.setTitle(this.title);
@@ -204,6 +203,13 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 'top': top
             });
         },
+        showOnPosition: function () {
+            const { position } = this.getOptions();
+            if (position) {
+                this.move(position.x, position.y, true);
+            }
+            this.show();
+        },
         getPosition: function () {
             if (!this._popup) {
                 return;
@@ -215,7 +221,7 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
                 return;
             }
             return {
-                width: this._popup.outerWidth(),
+                width: this._popup.width(),
                 height: this._popup.height()
             };
         },
@@ -238,10 +244,6 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
             me._popup.draggable({
                 scroll: !!options.scroll,
                 handle: options.handle || '.oskari-flyouttoolbar',
-                start: function () {
-                    // bring this flyout to top when user starts dragging it
-                    me.bringToTop();
-                },
                 stop: function () {
                     // prevent to drag flyout's toolbar out of the viewport's top
                     if (me._popup.position().top < 0) {
@@ -255,34 +257,36 @@ Oskari.clazz.define('Oskari.userinterface.extension.ExtraFlyout',
          * Makes dialog resizable with jQuery
          * @param opts optional options for resizing
          */
-        makeResizable: function (opts) {
+        makeResizable: function (opts = {}) {
             var me = this;
-            opts = opts || {};
-            me.options.resizable = true;
-            me._popup.resizable({
-                minWidth: opts.minWidth || 630,
-                minHeight: opts.minHeight || 400,
-                scroll: !!opts.scroll,
-                handles: opts.handles || 'n,e,s,w,ne,nw,se,sw',
-                handle: opts.handle || '.oskari-flyouttoolbar',
-                start: function () {
-                    // bring this flyout to top when user starts dragging it
-                    me.bringToTop();
-                },
+            this.options.resizable = true;
+            const defaults = {
+                minWidth: 300,
+                minHeight: 200,
+                handles: 'n,e,s,w,ne,nw,se,sw',
+                containment: 'document'
+            };
+            const resizeOpts = { ...defaults, ...opts };
+            const el = this.getElement();
+            el.resizable({
+                ...resizeOpts,
                 stop: function () {
-                    me.options.width = jQuery(this).width();
-                    me.options.height = jQuery(this).height();
-                    me.__render();
-                    me.trigger('resize', me.options);
+                    me.trigger('resize', { ...me.getSize() });
                 }
             });
-            this._resizable = true;
+            // set min size to element, so it can't be smaller than with resize
+            el.css('min-width', resizeOpts.minWidth);
+            el.css('min-height', resizeOpts.minHeight);
+            el.find('.oskari-flyoutcontentcontainer').css('max-height', 'none');
         },
         getElement: function () {
             return this._popup;
         },
         getContent: function () {
             return this._popup.find('.oskari-flyoutcontent');
+        },
+        getOptions: function () {
+            return this.options;
         },
 
         /************************************************************************************************
