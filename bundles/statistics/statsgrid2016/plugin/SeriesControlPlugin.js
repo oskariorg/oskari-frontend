@@ -33,6 +33,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControlPlugin',
             this.element ? this.teardownUI() : this._buildUI();
             return !!this.element;
         },
+        hasUI: function () {
+            // Plugin has ui element but returns false, because
+            // otherwise publisher would stop this plugin and start it again when leaving the publisher,
+            // instance updates visibility
+            return false;
+        },
         teardownUI: function () {
             this._isMobileVisible = false;
             if (this.element) {
