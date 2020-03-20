@@ -60,18 +60,12 @@ Oskari.clazz.define(
             this.flyoutManager.init();
             this.getTile().setupTools(this.flyoutManager);
 
-            // disable tile if we don't have anything to show or enable if we do
-            // setup initial state
-            this.setState();
-
             this.togglePlugin = Oskari.clazz.create('Oskari.statistics.statsgrid.TogglePlugin', this.getFlyoutManager(), this.getLocalization().published);
             mapModule.registerPlugin(this.togglePlugin);
             mapModule.startPlugin(this.togglePlugin);
 
             if (this.isEmbedded()) {
                 // Start in an embedded map mode
-                me.createClassficationView();
-
                 if (me.conf.grid) {
                     me.togglePlugin.addTool('table');
                 }
@@ -87,11 +81,6 @@ Oskari.clazz.define(
             }
             // Add tool for statslayers so selected layers can show a link to open the statsgrid functionality
             this.__setupLayerTools();
-            // setup DataProviderInfoService group if possible (LogoPlugin)
-            var dsiservice = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
-            if (dsiservice) {
-                dsiservice.addGroup('indicators', this.getLocalization().dataProviderInfoTitle || 'Indicators');
-            }
 
             // regionsetViewer creation need be there because of start order
             this.regionsetViewer = Oskari.clazz.create('Oskari.statistics.statsgrid.RegionsetViewer', this, sandbox, this.conf);
@@ -111,6 +100,8 @@ Oskari.clazz.define(
                     });
                 }
             }
+            // setup initial state
+            this.setState();
         },
         addMapPluginToggleTool: function (tool) {
             if (!this.togglePlugin || !tool) {
@@ -153,29 +144,27 @@ Oskari.clazz.define(
         getLayerId: function () {
             return this._layerId;
         },
+        isLayerHidden: function () {
+            const layer = this.getLayerService().findMapLayer(this._layerId);
+            return layer ? !layer.isVisible() : false;
+        },
         /**
          * Update visibility of classification / legend based on idicators length & stats layer visibility
          */
-        _updateClassficationViewVisibility: function () {
-            const service = this.statsService.getStateService();
-            var indicatorsExist = service.hasIndicators();
-            var layer = this.getLayerService().findMapLayer(this._layerId);
-            var layerVisible = layer ? layer.isVisible() : true;
-            const visible = indicatorsExist && layerVisible;
-            service.updateClassificationPluginState('visible', visible);
-            if (visible) {
-                this.createClassficationView();
-            }
+        updateClassficationViewVisibility: function () {
+            const indicatorsExist = this.statsService.getStateService().hasIndicators();
+            this._setClassificationViewVisible(indicatorsExist && !this.isLayerHidden());
         },
         /**
          * Update visibility of series control based on active indicator & stats layer visibility
          */
-        _updateSeriesControlVisibility: function () {
+        updateSeriesControlVisibility: function () {
             const isSeriesActive = this.statsService.getStateService().isSeriesActive();
-            const layer = this.getLayerService().findMapLayer(this._layerId);
-            const layerVisible = layer ? layer.isVisible() : true;
-
-            this.setSeriesControlVisible(isSeriesActive && layerVisible);
+            this._setSeriesControlVisible(isSeriesActive && !this.isLayerHidden());
+        },
+        _removeStatsLayer: function () {
+            const builder = Oskari.requestBuilder('RemoveMapLayerRequest');
+            Oskari.getSandbox().request(this.getName(), builder(this._layerId));
         },
         /**
          * Fetches reference to the map layer service
@@ -190,62 +179,84 @@ Oskari.clazz.define(
         getStatisticsService: function () {
             return this.statsService;
         },
+        getDataProviderInfoService: function () {
+            return this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+        },
         /**
          * This will trigger an update on the LogoPlugin/Datasources popup when available.
-         * @param  {Number} ds         datasource id
-         * @param  {String} id         indicator id
-         * @param  {Object} selections Year/other possible selections
-         * @param  {Boolean} wasRemoved true if the indicator was removed
+         * @param  {StatsGrid.IndicatorEvent} event
          */
-        notifyDataProviderInfo: function (ds, id, selections, wasRemoved) {
-            var me = this;
-            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
-            if (!service) {
-                return;
+        notifyDataProviderInfo: function (event) {
+            const ind = {
+                datasource: event.getDatasource(),
+                indicator: event.getIndicator(),
+                selections: event.getSelections()
+            };
+            if (event.isRemoved()) {
+                this.removeDataProviverInfo(ind);
+            } else {
+                this.addDataProviderInfo(ind);
             }
-            var dsid = ds + '_' + id;
-            if (wasRemoved === true) {
-                // the check if necessary if the same indicator is added more than once with different selections
-                if (!this.statsService.getStateService().isSelected(ds, id)) {
-                    // if this was the last dataset for the datasource & indicator. Remove it.
-                    service.removeItemFromGroup('indicators', dsid);
+        },
+        removeDataProviverInfo: function (ind) {
+            const { datasource, indicator } = ind;
+            // the check if necessary if the same indicator is added more than once with different selections
+            if (!this.statsService.getStateService().isSelected(datasource, indicator)) {
+                // if this was the last dataset for the datasource & indicator. Remove it.
+                const service = this.getDataProviderInfoService();
+                if (service) {
+                    const id = datasource + '_' + indicator;
+                    service.removeItemFromGroup('indicators', id);
                 }
-                return;
             }
-            // indicator added - determine UI labels
-            this.statsService.getUILabels({
-                datasource: ds,
-                indicator: id,
-                selections: selections
-            }, function (labels) {
-                var datasource = me.statsService.getDatasource(ds);
+        },
+        addDataProviderInfo: function (ind) {
+            const service = this.getDataProviderInfoService();
+            if (!service) return;
+            const { datasource, indicator, selections } = ind;
+            const { name, info: { url } } = this.statsService.getDatasource(datasource);
+            const id = datasource + '_' + indicator;
 
-                var data = {
-                    'id': dsid,
-                    'name': labels.indicator,
-                    'source': [labels.source, {
-                        name: datasource.name,
-                        url: datasource.info.url
-                    }]
+            const callback = labels => {
+                const data = {
+                    id,
+                    name: labels.indicator,
+                    source: [labels.source, { name, url }]
                 };
                 if (!service.addItemToGroup('indicators', data)) {
                     // if adding failed, it might because group was not registered.
-                    service.addGroup('indicators', me.getLocalization().dataProviderInfoTitle || 'Indicators');
+                    service.addGroup('indicators', this.getLocalization().dataProviderInfoTitle);
                     // Try adding again
                     service.addItemToGroup('indicators', data);
                 }
-            });
+            };
+            this.statsService.getUILabels({ datasource, indicator, selections }, callback);
+        },
+        clearDataProviderInfo: function () {
+            var service = this.getSandbox().getService('Oskari.map.DataProviderInfoService');
+            service.removeGroup('indicators');
         },
         eventHandlers: {
+            'StatsGrid.StateChangedEvent': function (evt) {
+                if (evt.isReset()) {
+                    this.clearDataProviderInfo();
+                    this._removeStatsLayer();
+                    this._setClassificationViewVisible(false);
+                    this._setSeriesControlVisible(false);
+                } else {
+                    this.statsService.getStateService().getIndicators().forEach(ind => {
+                        this.addDataProviderInfo(ind);
+                    });
+                    this.updateSeriesControlVisibility();
+                    this.updateClassficationViewVisibility();
+                }
+                // notify other components
+                this.statsService.notifyOskariEvent(evt);
+            },
             'StatsGrid.IndicatorEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-                this.notifyDataProviderInfo(
-                    evt.getDatasource(),
-                    evt.getIndicator(),
-                    evt.getSelections(),
-                    evt.isRemoved());
-
-                this._updateClassficationViewVisibility();
+                this.notifyDataProviderInfo(evt);
+                this.updateClassficationViewVisibility();
             },
             'StatsGrid.RegionsetChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -255,7 +266,7 @@ Oskari.clazz.define(
             },
             'StatsGrid.ActiveIndicatorChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
-                this._updateSeriesControlVisibility();
+                this.updateSeriesControlVisibility();
             },
             'StatsGrid.ClassificationChangedEvent': function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -296,12 +307,10 @@ Oskari.clazz.define(
             },
             AfterMapLayerRemoveEvent: function (event) {
                 var layer = event.getMapLayer();
-                if (!layer || layer.getId() !== this._layerId) {
+                if (!layer || layer.getId() !== this._layerId || event._creator === this.getName()) {
                     return;
                 }
-                var emptyState = {};
-                this.setState(emptyState);
-                this.removeClassificationView();
+                this.statsService.getStateService().resetState();
             },
             /**
              * @method MapLayerEvent
@@ -331,8 +340,8 @@ Oskari.clazz.define(
                 if (!layer || layer.getId() !== this._layerId) {
                     return;
                 }
-                this._updateClassficationViewVisibility();
-                this._updateSeriesControlVisibility();
+                this.updateClassficationViewVisibility();
+                this.updateSeriesControlVisibility();
             },
             FeatureEvent: function (evt) {
                 this.statsService.notifyOskariEvent(evt);
@@ -362,7 +371,6 @@ Oskari.clazz.define(
             if (!layerModel || !layerModel.isLayerOfType('STATS')) {
                 return;
             }
-
             // add feature data tool for layer
             var layerLoc = this.getLocalization('layertools').table_icon || {};
             var label = layerLoc.title || 'Thematic maps';
@@ -401,63 +409,19 @@ Oskari.clazz.define(
          */
         setState: function (state) {
             state = state || this.state || {};
-            var service = this.statsService.getStateService();
-            service.reset();
-            if (state.regionset) {
-                service.setRegionset(state.regionset);
-            }
-
-            if (state.indicators) {
-                state.indicators.forEach(function (ind) {
-                    service.addIndicator(ind.ds, ind.id, ind.selections, ind.series, ind.classification);
-                });
-            }
-
-            if (state.active) {
-                service.setActiveIndicator(state.active);
-            }
-
-            if (state.activeRegion) {
-                service.toggleRegion(state.activeRegion);
-            }
-
+            this.statsService.getStateService().setState(state);
             // if state says view was visible fire up the UI, otherwise close it
-            var sandbox = this.getSandbox();
             var uimode = state.view ? 'attach' : 'close';
-            sandbox.postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
+            this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, uimode]);
         },
         getState: function () {
-            var me = this;
-            var service = this.statsService.getStateService();
-            var state = {
-                indicators: [],
-                regionset: service.getRegionset(),
-                view: me.visible
+            const serviceState = this.statsService.getStateService().getState();
+            return {
+                ...serviceState,
+                view: this.visible
             };
-            service.getIndicators().forEach(function (ind) {
-                state.indicators.push({
-                    ds: ind.datasource,
-                    id: ind.indicator,
-                    selections: ind.selections,
-                    series: ind.series,
-                    classification: service.getClassificationOpts(ind.hash)
-                });
-            });
-            var active = service.getActiveIndicator();
-            if (active) {
-                state.active = active.hash;
-            }
-
-            var activeRegion = service.getRegion();
-            if (activeRegion) {
-                state.activeRegion = activeRegion;
-            }
-            return state;
         },
         createClassficationView: function () {
-            if (this.classificationPlugin) {
-                return;
-            }
             var config = jQuery.extend(true, {}, this.getConfiguration());
             var sandbox = this.getSandbox();
             var locale = Oskari.getMsg.bind(null, 'StatsGrid');
@@ -470,6 +434,7 @@ Oskari.clazz.define(
             mapModule.startPlugin(this.classificationPlugin);
             this.classificationPlugin.buildUI();
         },
+        // TODO do we need to unregister plugin
         removeClassificationView: function () {
             if (this.classificationPlugin) {
                 const mapModule = this.getSandbox().findRegisteredModuleInstance('MainMapModule');
@@ -478,7 +443,18 @@ Oskari.clazz.define(
                 this.classificationPlugin = null;
             }
         },
-        setSeriesControlVisible: function (visible) {
+        _setClassificationViewVisible: function (visible) {
+            if (!this.classificationPlugin && visible) {
+                this.createClassficationView();
+                return;
+            }
+            if (visible) {
+                this.classificationPlugin.buildUI();
+            } else if (this.classificationPlugin) {
+                this.classificationPlugin.stopPlugin();
+            }
+        },
+        _setSeriesControlVisible: function (visible) {
             if (visible) {
                 if (this.seriesControlPlugin) {
                     if (!this.seriesControlPlugin.getElement()) {

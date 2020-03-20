@@ -40,26 +40,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.OpacityTool', function (
         stats.getStatisticsService().getStateService().updateClassificationPluginState('transparent', enabled);
     },
     getValues: function () {
-        var me = this;
-        var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
-
-        var statslayerOnMap = this._getStatsLayer();
-        if (!statslayerOnMap || !statsGridState) {
-            return null;
-        }
-        if (!me.state.enabled) {
-            return null;
-        }
-        return {
-            configuration: {
-                statsgrid: {
-                    state: statsGridState,
-                    conf: {
-                        transparent: me.state.enabled
-                    }
-                }
-            }
-        };
+        return this.getConfiguration({ transparent: this.isEnabled() });
     },
     stop: function () {
         const service = Oskari.getSandbox().getService('Oskari.statistics.statsgrid.StatisticsService');

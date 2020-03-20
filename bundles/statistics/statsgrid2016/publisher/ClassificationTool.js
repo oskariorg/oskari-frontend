@@ -12,10 +12,6 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         'Oskari.mapframework.bundle.mapmodule.plugin.IndexMapPlugin'
     ],
     init: function (pdata) {
-        var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
-        if (stats) {
-            stats.createClassficationView();
-        }
         if (pdata && Oskari.util.keyExists(pdata, 'configuration.statsgrid.conf') && pdata.configuration.statsgrid.conf.allowClassification !== false) {
             this.setEnabled(true);
         } else {
@@ -51,29 +47,19 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationTool', fun
         }
     },
     getValues: function () {
-        var me = this;
-        var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
-        // just to make sure if user removes the statslayer while in publisher
-        // if there is no statslayer on map -> don't setup publishedgrid
-        // otherwise always return the state even if grid is not selected so
-        //  publishedgrid gets the information it needs to render map correctly
-        var statslayerOnMap = this._getStatsLayer();
-        if (statslayerOnMap && statsGridState) {
-            // without view = true -> the sidepanel is not shown when the statsgrid bundle starts
-            statsGridState.view = me.state.enabled;
+        const allowClassification = this.isEnabled();
+        const legendLocation = 'bottom right';
+        if (this._isStatsActive()) {
             return {
                 configuration: {
                     statsgrid: {
-                        conf: {
-                            allowClassification: me.state.enabled,
-                            legendLocation: 'bottom right'
-                        }
+                        conf: { allowClassification, legendLocation },
+                        state: this.__sandbox.getStatefulComponents().statsgrid.getState()
                     }
                 }
             };
-        } else {
-            return {};
         }
+        return {};
     },
     /**
     * Stop tool.

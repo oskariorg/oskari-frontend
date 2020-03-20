@@ -1,6 +1,6 @@
 Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', function () {
 }, {
-    index: 0,
+    index: 1,
     group: 'data',
     allowedLocations: [],
     allowedSiblings: [],
@@ -64,26 +64,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.StatsTableTool', functio
         }
     },
     getValues: function () {
-        var me = this;
-        var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
-        // just to make sure if user removes the statslayer while in publisher
-        // if there is no statslayer on map -> don't setup statsgrid
-        // otherwise always return the state even if grid is not selected so
-        // statsgrid gets the information it needs to render map correctly
-        var statslayerOnMap = this._getStatsLayer();
-        if (!statslayerOnMap || !statsGridState) {
-            return null;
-        }
-        return {
-            configuration: {
-                statsgrid: {
-                    state: statsGridState,
-                    conf: {
-                        grid: me.state.enabled
-                    }
-                }
-            }
-        };
+        return this.getConfiguration({ grid: this.isEnabled() });
     },
     stop: function () {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');

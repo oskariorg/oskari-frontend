@@ -17,12 +17,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         me._instance = instance;
         me._clazz = 'Oskari.statistics.statsgrid.ClassificationPlugin';
         me._index = 9;
-
-        if (instance.isEmbedded()) {
-            this._defaultLocation = config.legendLocation;
-        } else {
-            this._defaultLocation = 'right bottom';
-        }
+        this._defaultLocation = me._config.legendLocation || 'right bottom';
         me._fixedLocation = true;
         me._name = 'ClassificationPlugin';
         me.element = null;
@@ -45,6 +40,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         this._overflowedOffset = null;
         this._previousIsEdit = false;
         this.indicatorData = {};
+        this._bindToEvents();
+        this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
     }, {
         _createControlElement: function () {
             if (this.element !== null) {
@@ -67,7 +64,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this._overflowCheck();
         },
         render: function (activeClassfication) {
-            if (!this.node) return;
+            if (!this.node) {
+                return;
+            }
             const stateService = this.service.getStateService();
             const activeIndicator = stateService.getActiveIndicator();
             const regionset = stateService.getRegionset();
@@ -201,29 +200,29 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             return false;
         },
         toggleUI: function () {
-            return this.service.getStateService().toggleClassificationPluginState('visible');
+            this.element ? this.teardownUI() : this.buildUI();
+            return !!this.element;
         },
         teardownUI: function () {
             var element = this.getElement();
-            // detach old element from screen
-            if (element) {
+            if (this.node) {
                 ReactDOM.unmountComponentAtNode(this.node);
-                this.removeFromPluginContainer(element, true);
-                this.element = null;
-                this.trigger('hide');
+                this.node = null;
             }
+            if (element) {
+                this.removeFromPluginContainer(element);
+                this.element = null;
+            }
+            this.trigger('hide');
         },
         buildUI: function () {
-            if (this.element) {
-                return;
+            if (!this.element) {
+                this.addToPluginContainer(this._createControlElement());
+                this._makeDraggable();
+                this.node = this.element.get(0);
+                this.render();
             }
-            this.addToPluginContainer(this._createControlElement());
-            this._makeDraggable();
-            this._overflowCheck();
-            this.node = this.element.get(0);
-            this.service.getStateService().initClassificationPluginState(this._config, this._instance.isEmbedded());
-            this._bindToEvents();
-            this.render();
+            this.trigger('show');
         },
         _makeDraggable: function () {
             this.getElement().draggable();
@@ -283,7 +282,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
         hasUI: function () {
             // Plugin has ui element but returns false, because
             // otherwise publisher would stop this plugin and start it again when leaving the publisher,
-            // resulting a misfuctioning duplicate classification element on screen.
+            // instance updates visibility
             return false;
         },
         _bindToEvents: function () {
@@ -299,12 +298,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('StatsGrid.ClassificationChangedEvent', event => this.render(event.getCurrent()));
 
             // UI styling changes e.g. disable classification editing, make transparent
-            this.service.getStateService().on('ClassificationPluginChanged', ({ key, value }) => {
-                if (key === 'visible') {
-                    value ? this.trigger('show') : this.trigger('hide');
-                }
-                this.render();
-            });
+            this.service.getStateService().on('ClassificationPluginChanged', () => this.render());
             // need to update transparency select
             this.service.on('AfterChangeMapLayerOpacityEvent', event => this.render());
             // need to calculate contents max height and check overflow

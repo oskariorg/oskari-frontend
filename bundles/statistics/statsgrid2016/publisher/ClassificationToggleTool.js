@@ -12,7 +12,7 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
             data.configuration.statsgrid.conf.classification === true;
         this.setEnabled(enabled);
     },
-    getTool: function (stateData) {
+    getTool: function () {
         var me = this;
         if (!me.__tool) {
             me.__tool = {
@@ -41,32 +41,13 @@ Oskari.clazz.define('Oskari.mapframework.publisher.tool.ClassificationToggleTool
         }
     },
     getValues: function () {
-        var me = this;
-        var statsGridState = me.__sandbox.getStatefulComponents().statsgrid.getState();
-
-        var statslayerOnMap = this._getStatsLayer();
-        if (!statslayerOnMap || !statsGridState) {
-            return null;
-        }
-        if (!me.state.enabled) {
-            return null;
-        }
-        return {
-            configuration: {
-                statsgrid: {
-                    state: statsGridState,
-                    conf: {
-                        classification: me.state.enabled
-                    }
-                }
-            }
-        };
+        return this.getConfiguration({ classification: this.isEnabled() });
     },
     stop: function () {
         var stats = Oskari.getSandbox().findRegisteredModuleInstance('StatsGrid');
         if (stats) {
             stats.togglePlugin.removeTool(this.id);
-            stats.getStatisticsService().getStateService().resetClassificationPluginState('visible');
+            stats.updateClassficationViewVisibility();
         }
     }
 }, {

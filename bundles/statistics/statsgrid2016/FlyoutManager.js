@@ -87,7 +87,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
             const searchFlyout = me.flyouts['search'];
             searchFlyout.showOnPosition();
             this.trigger('show', 'search');
-            const { pos: { x: searchX } } = searchFlyout.getOptions();
+            const { position: { x: searchX } } = searchFlyout.getOptions();
             const x = searchX + searchFlyout.getSize().width + 5;
             const y = this._positionY;
             flyout.move(x, y, true);

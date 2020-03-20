@@ -17,6 +17,9 @@ class Classification extends React.Component {
     componentDidUpdate () {
         this.props.onRenderChange(this.state.isEdit);
     }
+    componentDidMount () {
+        this.props.onRenderChange(false);
+    }
     handleToggleClassification () {
         this.setState(oldState => ({ isEdit: !oldState.isEdit }));
     }
@@ -30,9 +33,6 @@ class Classification extends React.Component {
 
     render () {
         const { classifications, pluginState } = this.props;
-        if (!pluginState.visible) {
-            return null;
-        }
         const isEdit = this.state.isEdit;
         let containerClass = pluginState.transparent ? 'statsgrid-classification-container transparent-classification' : 'statsgrid-classification-container';
 

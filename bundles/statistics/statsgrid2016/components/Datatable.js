@@ -387,10 +387,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
         var src = this.service.getDatasource(datasrc);
         log.debug('Indicator added ', src, indId, selections, series);
-        var state = this.service.getStateService();
-        var hash = this.service.getStateService().getHash(datasrc, indId, selections, series);
-
-        state.setActiveIndicator(hash);
         this._handleRegionsetChanged(this.getCurrentRegionset());
     },
     /**
@@ -457,6 +453,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 me.grid.selectColumn(current.hash);
             }
             if (!current) {
+                me.updateModel();
+            }
+        });
+        this.service.on('StatsGrid.StateChangedEvent', function (event) {
+            if (event.isReset()) {
                 me.updateModel();
             }
         });

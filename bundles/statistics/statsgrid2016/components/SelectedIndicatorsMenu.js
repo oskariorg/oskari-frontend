@@ -154,6 +154,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
                 });
             }
         });
+        this.service.on('StatsGrid.StateChangedEvent', function (event) {
+            if (event.isReset() && me._select) {
+                me._select.clearOptions();
+            }
+        });
     }
 
 });

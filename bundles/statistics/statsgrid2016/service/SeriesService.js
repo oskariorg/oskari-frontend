@@ -268,6 +268,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             var onEvent = function () {
                 me.collectGroupStats(me._updateActiveIndicator.bind(me));
             };
+            statisticsService.on('StatsGrid.StateChangedEvent', evt => {
+                if (evt.isReset()) {
+                    return;
+                }
+                this.collectGroupStats();
+            });
             statisticsService.on('StatsGrid.RegionsetChangedEvent', onEvent);
             statisticsService.on('StatsGrid.IndicatorEvent', function (evt) {
                 if (evt.series) {
