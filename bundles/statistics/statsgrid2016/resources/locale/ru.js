@@ -73,10 +73,8 @@ Oskari.registerLocalization(
             "noResults": "Данные не выбраны",
             "noValues": "Нет значений для выбранных данных",
             "areaSelection": {
-                "title": "АРЕАЛ ОБИТАНИЯ",
-                "info": "Пересмотреть ареал обитания для данных из выпадающего списка"
+                "title": "АРЕАЛ ОБИТАНИЯ"
             },
-            "source": "Данные",
             "orderBy": "Сортировать",
             "orderByAscending": "Сортировать по возрастанию",
             "orderByDescending": "Сортировать по убыванию",

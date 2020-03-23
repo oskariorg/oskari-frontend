@@ -67,10 +67,8 @@ Oskari.registerLocalization(
             "noResults": "Aucune donnée sélectionnée",
             "noValues": "Aucune valeur pour les données sélectionnées",
             "areaSelection": {
-                "title": "DIVISION DE SUPERFICIE",
-                "info": "Redéfinir la division de superficie pour les données tirées de la liste déroulante"
+                "title": "DIVISION DE SUPERFICIE"
             },
-            "source": "Données",
             "orderBy": "Trier",
             "orderByAscending": "Trier en ordre croissant",
             "orderByDescending": "Trier en ordre décroissant",

@@ -66,10 +66,8 @@ Oskari.registerLocalization({
             'noResults': 'Inga valda datamängder',
             'noValues': 'Inga värden i den valda datamängden',
             'areaSelection': {
-                'title': 'OMRÅDESINDELNING',
-                'info': 'Omdefiniera den önskade områdesindelningen från rullgardinsmenyn.'
+                'title': 'OMRÅDESINDELNING'
             },
-            'source': 'Indikator',
             'orderBy': 'Sortera',
             'orderByAscending': 'Sortera stigande',
             'orderByDescending': 'Sortera sjunkande',
