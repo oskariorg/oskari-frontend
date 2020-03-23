@@ -128,7 +128,7 @@ Oskari.registerLocalization(
             "Tiles3DLayerPlugin": {
                 "layerFilter": {
                     "text": "3D kartlager",
-                    "tooltip": ""
+                    "tooltip": "Visa endast 3D-datamängder"
                 }
             }
         },
