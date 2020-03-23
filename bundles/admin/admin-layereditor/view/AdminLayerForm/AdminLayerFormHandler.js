@@ -9,6 +9,8 @@ const DEFAULT_TAB = 'general';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
+const __VALIDATOR_CACHE = {};
+
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
@@ -534,6 +536,9 @@ class UIHandler extends StateHandler {
         }
     }
     getValidatorFunctions (layerType) {
+        if (__VALIDATOR_CACHE[layerType]) {
+            return __VALIDATOR_CACHE[layerType];
+        }
         const hasValue = (value) => {
             if (typeof value === 'string') {
                 return value.trim().length > 0;
@@ -583,6 +588,7 @@ class UIHandler extends StateHandler {
         mandatoryFields.forEach(field => {
             wrappers[field] = (layer) => hasValue(getValue(layer, field));
         });
+        __VALIDATOR_CACHE[layerType] = wrappers;
         return wrappers;
     }
     getValidatorFor (key) {
@@ -778,6 +784,8 @@ class UIHandler extends StateHandler {
                     loading: this.isLoading(),
                     metadata: data
                 });
+                // invalidate cache if it was populated
+                Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
             }).catch(error => {
                 this.log.error(error);
                 Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');
