@@ -155,9 +155,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     this.lastSelectedClassification = classification;
                 }
                 if (series) {
-                    const selected = selections[series.id];
-                    this.seriesService.setSelectedValue(selected);
-                    this.seriesService.setValues(series.values);
+                    this.seriesService.setValues(series.values, selections[series.id]);
                 }
             }
             this.activeIndicator = active || null;
@@ -321,7 +319,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
          */
         setActiveIndicator: function (indicatorHash) {
             var me = this;
-
             clearTimeout(me._timers.setActiveIndicator);
 
             // This must be on some way to discard set active indicator if calling repeatly.

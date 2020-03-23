@@ -35,6 +35,11 @@ Oskari.clazz.category(
 
             var selected = this.table.find('th.' + me._columnClsPrefix + columnIndex);
             selected.addClass('selected');
+            const cls = 'selected-effect';
+            selected.addClass(cls);
+            setTimeout(() => {
+                selected.removeClass(cls);
+            }, 1000);
 
             this._selectActivePage();
         },

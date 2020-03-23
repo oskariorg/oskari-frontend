@@ -102,15 +102,12 @@ $flyoutPadding: 16px;
     font-weight: normal;
 
     .header {
-        width: 85%;
         position: absolute;
         top: 5px;
-        .title {
-            font-weight: bold;
-        }
+        margin-right: 25px;
     }
     .icon-warning-light {
-        top: 88%;
+        bottom: 0;
         position: absolute;
         cursor: pointer;
     }
@@ -360,9 +357,11 @@ div.oskari-flyout {
         table.oskari-grid {
             th.selected {
                 background-color: #FDF8D9;
+            }
+            th.selected-effect {
                 animation-name: statsgridcolumnselection;
                 animation-duration: 0.5s;
-                animation-iteration-count: 3;
+                animation-iteration-count: 2;
             }
 
             td {

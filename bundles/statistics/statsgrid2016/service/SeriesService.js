@@ -54,10 +54,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         getValue: function () {
             return this.selectedValue;
         },
-        setValues: function (values) {
+        setValues: function (values, selected) {
+            const value = typeof selected === 'undefined' ? this.selectedValue : selected;
             if (Array.isArray(values) && values.length > 1) {
                 values.sort(this._sortAsc);
-                if (!this.selectedValue || values.indexOf(this.selectedValue) === -1) {
+                if (values.includes(value)) {
+                    this.setSelectedValue(value);
+                } else {
                     this.setSelectedValue(values[0]);
                 }
                 this.values = values;
@@ -83,12 +86,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                     series.forEach(function (ind) {
                         ind.selections[ind.series.id] = selected;
                     });
-                    // Nofity table and graph
-                    var eventBuilder = Oskari.eventBuilder('StatsGrid.ParameterChangedEvent');
-                    this.sandbox.notifyAll(eventBuilder());
-
-                    // Show series stats layer on the map if not there already.
-                    this._updateActiveIndicator();
                 }
             }
 
@@ -101,6 +98,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                     this.animating = false;
                 }
             }
+            // Nofity table and graph
+            var eventBuilder = Oskari.eventBuilder('StatsGrid.ParameterChangedEvent');
+            this.sandbox.notifyAll(eventBuilder());
         },
         next: function (animatedChange) {
             if (animatedChange && !this.animating) {
@@ -177,7 +177,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
         _sortAsc: function (a, b) {
             return a - b;
         },
-        collectGroupStats: function (callback) {
+        collectGroupStats: function () {
             var me = this;
             var service = this.getStateService();
             var region = service.getRegionset();
@@ -191,15 +191,13 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
                     return typeof ind.series !== 'undefined' && !me.getSeriesStats(ind.hash);
                 });
                 if (seriesWithoutStats.length > 0) {
-                    if (typeof callback === 'function') {
-                        var collectedCount = 0;
-                        var collectedLastStatsCb = function () {
-                            collectedCount++;
-                            if (collectedCount === seriesWithoutStats.length) {
-                                callback();
-                            }
-                        };
-                    }
+                    var collectedCount = 0;
+                    var collectedLastStatsCb = function () {
+                        collectedCount++;
+                        if (collectedCount === seriesWithoutStats.length) {
+                            // TODO notify ParameterChangedEvent ??
+                        }
+                    };
                     seriesWithoutStats.forEach(function (ind) {
                         me._collectSeriesGroupStats(ind.datasource, ind.indicator, ind.selections, ind.series, collectedLastStatsCb);
                     });
@@ -264,29 +262,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesService',
             });
         },
         bindToEvents: function (statisticsService) {
-            var me = this;
-            var onEvent = function () {
-                me.collectGroupStats(me._updateActiveIndicator.bind(me));
-            };
             statisticsService.on('StatsGrid.StateChangedEvent', evt => {
                 if (evt.isReset()) {
                     return;
                 }
                 this.collectGroupStats();
             });
-            statisticsService.on('StatsGrid.RegionsetChangedEvent', onEvent);
-            statisticsService.on('StatsGrid.IndicatorEvent', function (evt) {
+            statisticsService.on('StatsGrid.RegionsetChangedEvent', () => this.collectGroupStats());
+            statisticsService.on('StatsGrid.IndicatorEvent', evt => {
                 if (evt.series) {
-                    onEvent();
+                    this.collectGroupStats();
                 }
             });
-        },
-        _updateActiveIndicator: function () {
-            var stateService = this.getStateService();
-            var activeInd = stateService.getActiveIndicator();
-            if (activeInd) {
-                stateService.setActiveIndicator(activeInd.hash);
-            }
         }
     }, {
         'protocol': ['Oskari.mapframework.service.Service']

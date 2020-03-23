@@ -303,6 +303,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.ClassificationPlugin',
             this.service.on('AfterChangeMapLayerOpacityEvent', event => this.render());
             // need to calculate contents max height and check overflow
             this.service.on('MapSizeChangedEvent', event => this.render());
+            // need to update labels
+            this.service.on('StatsGrid.ParameterChangedEvent', () => this.render());
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
