@@ -108,10 +108,12 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
         }
         this.update();
     },
-    update: function () {
+    update: function (changed = true) {
         var select = this.element.find('select');
         select.trigger('chosen:updated');
-        select.trigger('change');
+        if (changed) {
+            select.trigger('change');
+        }
     },
     getOptions: function () {
         var chosen = this.element.find('select');
@@ -197,9 +199,10 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
     *   updates an already defined chosen with new data
     *   @param {data} data to apply
     */
-    updateOptions: function (data) {
+    updateOptions: function (data, value) {
         var me = this;
         var chosen = this.element.find('select');
+        const previous = chosen.val();
         chosen.trigger('chosen:close');
         chosen.empty();
         // append empty options so we can use the placeholder
@@ -212,6 +215,13 @@ Oskari.clazz.define('Oskari.userinterface.component.SelectList', function (id) {
             option.val(choice.id).text(choice.title);
             chosen.append(option);
         });
+        if (typeof value !== 'undefined') {
+            chosen.val(value);
+            if (previous === value) {
+                this.update(false);
+                return;
+            }
+        }
         this.update();
     },
     getId: function () {

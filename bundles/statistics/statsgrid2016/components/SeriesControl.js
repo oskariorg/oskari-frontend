@@ -279,8 +279,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
                 }
                 return true;
             }
-            this._updateSeriesIndex(this.seriesService.getSelectedIndex());
         }
+        this._updateSeriesIndex(this.seriesService.getSelectedIndex());
         return false;
     },
     _initValues: function () {
@@ -296,5 +296,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
     _bindToEvents: function () {
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event =>
             this._updateValues(event.getCurrent()));
+        this.service.on('StatsGrid.ParameterChangedEvent', () =>
+            this._updateValues());
     }
 });

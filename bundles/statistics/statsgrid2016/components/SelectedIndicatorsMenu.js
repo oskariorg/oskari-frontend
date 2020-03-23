@@ -92,12 +92,14 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
     },
     _getIndicatorUILabels: function (callback) {
         var options = [];
-        var indicators = this.service.getStateService().getIndicators();
+        const service = this.service.getStateService();
+        var indicators = service.getIndicators();
         if (!indicators.length) {
             // no indicators to list
             callback(options);
             return;
         }
+        const { hash } = service.getActiveIndicator();
         var me = this;
         var count = 0;
         indicators.forEach(function (option) {
@@ -108,7 +110,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
                     title: label.full
                 });
                 if (count === indicators.length) {
-                    callback(options);
+                    callback(options, hash);
                 }
             });
         });
@@ -149,8 +151,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SelectedIndicatorsMenu', functi
         });
         this.service.on('StatsGrid.ParameterChangedEvent', function (event) {
             if (me._select) {
-                me._getIndicatorUILabels(function (options) {
-                    me._select.updateOptions(options);
+                me._getIndicatorUILabels(function (options, value) {
+                    me._select.updateOptions(options, value);
                 });
             }
         });

@@ -29,14 +29,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 '<div class="title"></div>' +
                 '<div class="header">' +
                 '   <div class="selection"></div>' +
-                '   <div class="info"></div>' +
                 '</div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>'),
         tableHeaderWithContent: _.template('<div class="statsgrid-grid-table-header-content">' +
-                '<div class="header"><span class="title"></span> </br> </div>' +
+                '<div class="header"></div>' +
                 '<div class="icon icon-close-dark"></div>' +
-                '<div style="clear:both;"></div>' +
                 '<div class="sortby"><div class="orderTitle"></div><div class="order"></div><div style="clear:both;"></div></div>' +
                 '</div>')
     },
@@ -133,8 +131,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         me.grid.setColumnUIName('region', function (content) {
             var tableHeader = jQuery(me.__templates.tableHeader());
             tableHeader.find('.title').remove();
-            tableHeader.find('.info').html(gridLoc.areaSelection.info);
-
             content.append(tableHeader);
 
             // regionset selection is shown if map is not embedded
@@ -157,7 +153,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 // Else only show current regionset without info
                 var regionsetDef = me.service.getRegionsets(me.getCurrentRegionset()) || {};
                 tableHeader.find('.selection').html(regionsetDef.name);
-                tableHeader.find('.info').remove();
             }
 
             var sortBy = tableHeader.find('.sortby');
@@ -244,22 +239,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         var me = this;
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
 
-        // done is called when we have indicator names for columns
-        var done = function () {
-            me.grid.setAutoHeightHeader(30);
-            me.grid.setDataModel(model);
-            me.grid.renderTo(me.mainEl.find('.grid'));
-
-            var state = me.service.getStateService();
-            var activeIndicator = state.getActiveIndicator();
-            if (activeIndicator) {
-                me.grid.selectColumn(activeIndicator.hash);
-            }
-        };
-        if (!indicators.length) {
-            done();
-            return;
-        }
         indicators.forEach(function (ind, id) {
             var numberFormatter = Oskari.getNumberFormatter(ind.classification.fractionDigits);
             me.grid.setColumnValueRenderer(ind.hash, function (value) {
@@ -270,8 +249,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             });
             me.grid.setColumnUIName(ind.hash, function (content) {
                 var tableHeader = jQuery(me.__templates.tableHeaderWithContent());
-                tableHeader.find('.title').html(gridLoc.source + ' ' + (id + 1) + ':');
-
                 me.service.getUILabels(ind, function (labels) {
                     tableHeader.find('.header').append(labels.full).attr('title', labels.full);
                 });
@@ -359,8 +336,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                     sortBy.find('.orderTitle').attr('title', gridLoc.orderByDescending);
                     order.addClass('desc');
                 }
-
-                tableHeader.on('click', function () {
+                // bind click handler to content element
+                content.on('click', function () {
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
@@ -370,10 +347,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 content.css('width', cellWidth + '%');
                 content.append(tableHeader);
             });
-            if (indicators.length - 1 === id) {
-                done();
-            }
         });
+        me.grid.setAutoHeightHeader(15);
+        me.grid.setDataModel(model);
+        me.grid.renderTo(me.mainEl.find('.grid'));
     },
 
     /**
@@ -385,9 +362,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
      */
     _handleIndicatorAdded: function (datasrc, indId, selections, series) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-        var src = this.service.getDatasource(datasrc);
-        log.debug('Indicator added ', src, indId, selections, series);
-        this._handleRegionsetChanged(this.getCurrentRegionset());
+        log.debug('Indicator added ', datasrc, indId, selections, series);
+        this._handleRegionsetChanged();
     },
     /**
      * @method  @private handleIndicatorAdded Handle indicator removed
@@ -397,9 +373,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
      */
     _handleIndicatorRemoved: function (datasrc, indId, selections) {
         var log = Oskari.log('Oskari.statistics.statsgrid.Datatable');
-        var src = this.service.getDatasource(datasrc);
-        log.debug('Indicator removed', src, indId, selections);
-        this._handleRegionsetChanged(this.getCurrentRegionset());
+        log.debug('Indicator removed', datasrc, indId, selections);
+        this._handleRegionsetChanged();
     },
 
     _bindToEvents: function () {
@@ -444,16 +419,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
 
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', function (event) {
             var current = event.getCurrent();
-            var previous = event.getPrevious();
             log.debug('Active indicator changed! ', current);
-            if (current === previous) { // No change, but event was sent to refresh components
-                me._handleRegionsetChanged();
-            }
             if (current && me.grid) {
                 me.grid.selectColumn(current.hash);
-            }
-            if (!current) {
-                me.updateModel();
             }
         });
         this.service.on('StatsGrid.StateChangedEvent', function (event) {
@@ -501,6 +469,10 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
 
         el.append(main);
         me._handleRegionsetChanged();
+        const active = me.service.getStateService().getActiveIndicator();
+        if (active) {
+            me.grid.selectColumn(active.hash);
+        }
     },
 
     setHeaderHeight: function () {
