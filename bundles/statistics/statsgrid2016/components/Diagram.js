@@ -274,6 +274,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
         this.service.on('StatsGrid.RegionsetChangedEvent', function () {
             me.updateUI();
         });
+        this.service.on('StatsGrid.ParameterChangedEvent', function () {
+            me.updateUI();
+        });
         this.service.on('StatsGrid.StateChangedEvent', function (event) {
             if (event.isReset()) {
                 me.updateUI();
