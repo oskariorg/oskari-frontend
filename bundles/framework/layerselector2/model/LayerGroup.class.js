@@ -46,6 +46,10 @@ export class LayerGroup {
      * @param {Layer} layer
      */
     addLayer (layer) {
+        if (this.searchIndex[layer.getId()]) {
+            // Tried adding the same layer again
+            return;
+        }
         this.layers.push(layer);
         this.searchIndex[layer.getId()] = this._getSearchIndex(layer);
     }
