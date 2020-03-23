@@ -522,17 +522,12 @@ class UIHandler extends StateHandler {
     createlayer (layerData) {
         const mapLayer = this.mapLayerService.createMapLayer(layerData);
 
-        if (layerData.baseLayerId && layerData.baseLayerId !== -1) {
-            // If this is a sublayer, add it to its parent's sublayer array
-            this.mapLayerService.addSubLayer(layerData.baseLayerId, mapLayer);
+        // Register layer to the map layer service.
+        if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
+            this.mapLayerService.addLayer(mapLayer);
         } else {
-            // Otherwise just add it to the map layer service.
-            if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
-                this.mapLayerService.addLayer(mapLayer);
-            } else {
-                Messaging.error(getMessage('messages.errorInsertAllreadyExists'));
-                // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
-            }
+            Messaging.error(getMessage('messages.errorInsertAllreadyExists'));
+            // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
     }
     getValidatorFunctions (layerType) {
