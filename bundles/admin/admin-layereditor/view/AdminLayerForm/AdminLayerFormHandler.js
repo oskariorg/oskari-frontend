@@ -401,7 +401,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error('TODO');
+                Messaging.error(getMessage('messages.errorFetchLayerFailed'));
             }
             return response.json();
         }).then(json => {
@@ -490,12 +490,12 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error('TODO');
+                Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
             }
             return response.json();
         }).then(json => {
             if (json.layers.length !== 1) {
-                Messaging.error('TODO');
+                Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
                 return;
             }
             const layer = json.layers[0];
@@ -516,7 +516,7 @@ class UIHandler extends StateHandler {
         } else if (layerData.id) {
             this.createlayer(layerData);
         } else {
-            Messaging.error('TODO');
+            Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
         }
     }
     createlayer (layerData) {
