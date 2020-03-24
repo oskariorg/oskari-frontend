@@ -501,7 +501,17 @@ class UIHandler extends StateHandler {
             const layer = json.layers[0];
             // this is needed because maplayer service expects groups to be found on layer when creating/updating
             // TODO: refactor maplayer service groups handling
-            layer.groups = groups.map(id => ({ id }));
+            layer.groups = groups.map(id => {
+                const item = {
+                    id
+                };
+                const group = this.mapLayerGroups.find(g => g.id === id);
+                if (!group) {
+                    return item;
+                }
+                item.name = Oskari.getLocalized(group.name);
+                return item;
+            });
             this.refreshEndUserLayer(layerId, layer);
         });
     }
@@ -759,6 +769,9 @@ class UIHandler extends StateHandler {
             updateFailed();
             this.log.error(error);
         });
+    }
+    setMapLayerGroups (mapLayerGroups) {
+        this.mapLayerGroups = mapLayerGroups;
     }
 
     fetchLayerAdminMetadata () {

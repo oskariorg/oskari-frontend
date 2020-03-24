@@ -51,6 +51,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
     }
     setMapLayerGroups (mapLayerGroups) {
         this.mapLayerGroups = mapLayerGroups;
+        this.uiHandler.setMapLayerGroups(mapLayerGroups);
         this.update();
     }
     update () {
