@@ -103,7 +103,7 @@ const AdminLayerForm = ({
                     controller={controller}/>
             </TabPane>
         </Tabs>
-        <MemoedSaveButton layer={layer.isNew} onSave={onSave} validationErrors={validationErrors} />
+        <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} />
         { !layer.isNew &&
             <React.Fragment>
                 <Confirm
