@@ -101,6 +101,7 @@ export class LayerEditorFlyout extends ExtraFlyout {
                         messages={messages}
                         rolesAndPermissionTypes={this.uiHandler.getAdminMetadata()}
                         validators={this.uiHandler.getValidatorFunctions(layer.type)}
+                        validationErrors={this.uiHandler.validateUserInputValues(layer)}
                         tab={tab}
                         scales={scales}
                         onDelete={() => this.uiHandler.deleteLayer()}
