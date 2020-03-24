@@ -338,6 +338,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 }
                 // bind click handler to content element
                 content.on('click', function () {
+                    jQuery(this).addClass('selected-effect');
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
