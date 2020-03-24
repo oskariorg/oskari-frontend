@@ -167,7 +167,7 @@ class ViewHandler extends StateHandler {
                 const layerId = event.getLayerId();
                 const operation = event.getOperation();
 
-                if (['sticky'].includes(operation)) {
+                if (operation === 'sticky') {
                     this._refreshLayer(layerId);
                 } else if (['add', 'remove', 'update'].includes(operation)) {
                     this.updateLayerGroups();
