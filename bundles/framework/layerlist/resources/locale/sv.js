@@ -53,7 +53,7 @@ Oskari.registerLocalization(
             },
             'guidedTour': {
                 'title': 'Kartlager',
-                'message': 'På Kartlager-listan hittar du alla i karttjänsten tillgängliga kartlager.<br/><br/>Sortera kartlager antingen med tema eller med dataleverantör.<br/><br/>Sök kartlager med kartlagernamn, en dataleverantörs namn eller ett sökord. De nyaste kartlager, kartlager med vektorgrafik eller kartlager som kan publiceras hittar du på färdiga listor.<br/><br/>Bladet Valda kartlager visar vilka kartlager är öppet. Du kan dra dessa kartlager i en annan ordning, justera kartlagrens opacitet eller byta stil på en del kartlager.',
+                'message': 'På Kartlager-listan hittar du alla i karttjänsten tillgängliga kartlager.<br/><br/>Sortera kartlager antingen med tema eller med dataproducent.<br/><br/>Sök kartlager med kartlagernamn, en dataproducents namn eller ett sökord. De nyaste kartlager, kartlager med vektorgrafik eller kartlager som kan publiceras hittar du på färdiga listor.<br/><br/>Bladet Valda kartlager visar vilka kartlager är öppet. Du kan dra dessa kartlager i en annan ordning, justera kartlagrens opacitet eller byta stil på en del kartlager.',
                 'openLink': 'Visa kartlagren',
                 'closeLink': 'Göm kartlagren',
                 'tileText': 'Kartlagren'
