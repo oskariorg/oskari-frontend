@@ -69,8 +69,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
              */
             'Publisher.MapPublishedEvent': function (event) {
                 var me = this;
-                var url = event.getUrl();
-                var iframeCode = '<div class="codesnippet"><code>&lt;iframe src="' + url + '" allow="geolocation" style="border: none;';
+                let iframeCode = event.getUrl() + '" allow="geolocation" style="border: none;';
                 var width = event.getWidth();
                 var height = event.getHeight();
 
@@ -82,9 +81,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                     iframeCode += ' height: ' + height + ';';
                 }
 
-                iframeCode += '"&gt;&lt;/iframe&gt;</code></div>';
+                const textCode = '<iframe src="' + iframeCode + '"></iframe>';
+                const codeSnippet = '<div class="codesnippet"><code>&lt;iframe src="' + iframeCode + '"&gt;&lt;/iframe&gt;</code></div>';
 
-                var content = me.loc('published.desc') + '<br/><br/>' + iframeCode;
+                var content = me.loc('published.desc') + '<br/><br/>' + codeSnippet;
 
                 var dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
                 var closeBtn = dialog.createCloseButton();
@@ -93,7 +93,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.publisher2.PublisherBundleInstan
                 copyBtn.setTitle(me.loc('published.copy'));
                 copyBtn.setHandler(() => {
                     const el = dialog.getElement().find('.codesnippet');
-                    Oskari.util.copyTextToClipboard(iframeCode, el);
+                    Oskari.util.copyTextToClipboard(textCode, el);
                 });
                 const title = me.loc('published.title');
                 dialog.show(title, content, [copyBtn, closeBtn]);
