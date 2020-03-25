@@ -156,7 +156,9 @@ Oskari.registerLocalization(
                 "parsingErrorFetchCapabilities": "Tjänstens svar kan inte tolkas. Kolla kartlagrets typ och/eller version.",
                 "deleteSuccess" : "Utgår",
                 "deleteFailed" : "Borttagningen misslyckades",
-                "updateCapabilitiesFail": "Sökning till gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnitt tjänsten fungerar för tillfället inte."
+                "updateCapabilitiesFail": "Gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnittstjänsten är för tilfället ur funktion.",
+                "errorFetchLayerFailed": "Kartlagret returnerar ingen data. Kartlagret existerar möjligen inte längre eller du har inte rättigheter att använda det.",
+                "errorFetchLayerEnduserFailed": "Listan över kartlagren kan inte uppdateras, eftersom kartlagret inte returnerar någon data. Du kom väl ihåg att uppdatera rättigheterna som tillhör din användarroll?"
             },
             "otherLanguages": "Andra språk",
             "stylesJSON": "Stildefinitioner (JSON)",
