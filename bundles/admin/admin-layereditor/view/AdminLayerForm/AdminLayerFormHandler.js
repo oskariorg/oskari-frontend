@@ -389,6 +389,7 @@ class UIHandler extends StateHandler {
     fetchLayer (id, keepCapabilities = false) {
         this.clearMessages();
         if (!id) {
+            // adding new layer
             this.resetLayer();
             return;
         }
@@ -410,6 +411,8 @@ class UIHandler extends StateHandler {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
+            // remove possible existing flag since we loaded the layer -> it is not new
+            delete layer.isNew;
             if (layer.warn) {
                 // currently only option for warning on this is "updateCapabilitiesFail"
                 Messaging.warn(getMessage(`messages.${layer.warn}`));
