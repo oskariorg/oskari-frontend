@@ -50,7 +50,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
             let groupAttr = layer[method]();
-            let groupId = determineGroupId(layer.getGroups(), layer.admin);
+            let groupId = determineGroupId(layer.getGroups(), layer.getAdmin());
 
             // If grouping can be determined, create group if already not created
             if (!group || (typeof groupAttr !== 'undefined' && groupAttr !== '' && group.getTitle() !== groupAttr)) {
