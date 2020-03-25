@@ -23,7 +23,7 @@ Oskari.registerLocalization(
                 "bingmapslayer": "Bing"
             },
             "fields": {
-                "url": "Gränssnitten adress",
+                "url": "Gränssnittets adress",
                 "version": "Gränssnittets version",
                 "username": "Användarnamn",
                 "password": "Lösenord",
