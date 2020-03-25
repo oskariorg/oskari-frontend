@@ -468,7 +468,6 @@ class UIHandler extends StateHandler {
             }
         }).then(data => {
             // layer data will be the same as for editing == admin data
-            Messaging.warn('Reload page to see changes for end user - Work in progress...');
             // refresh current layer data from server after saving just in case to prevent possible out-of-sync
             this.fetchLayer(data.id, true);
             // Update layer for end-user as that model is different than admin uses
