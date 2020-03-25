@@ -126,6 +126,7 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
          * @throws error if layer with the same id already exists
          */
         addLayer: function (layerModel, suppressEvent) {
+            var me = this;
             if (!layerModel) {
                 Oskari.log(this.getName()).warn('Called addLayer without a layer!');
                 return;
@@ -136,20 +137,38 @@ Oskari.clazz.define('Oskari.mapframework.service.MapLayerService',
                 return;
             }
 
+            const layerId = layerModel.getId();
             // throws exception if the id is reserved to existing maplayer
             // we need to check again here
-            this.checkForDuplicateId(layerModel.getId(), layerModel.getName());
+            this.checkForDuplicateId(layerId, layerModel.getName());
 
-            this._reservedLayerIds[layerModel.getId()] = true;
+            this._reservedLayerIds[layerId] = true;
             // everything ok, lets add the layer
             this._loadedLayersList.push(layerModel);
 
             // flush cache for newest filter when layer is added
             this._newestLayers = null;
 
+            const groups = layerModel.getGroups();
+            if (groups && groups.length > 0) {
+                // for each group on the layer
+                groups.forEach(function (group) {
+                    // find the group details
+                    var groupConf = me.getAllLayerGroups(group.id);
+                    if (!groupConf) {
+                        return;
+                    }
+                    groupConf.addChildren({
+                        type: 'layer',
+                        id: layerId,
+                        order: 1000000
+                    });
+                });
+            }
+
             if (suppressEvent !== true) {
                 // notify components of added layer if not suppressed
-                var event = Oskari.eventBuilder('MapLayerEvent')(layerModel.getId(), 'add');
+                var event = Oskari.eventBuilder('MapLayerEvent')(layerId, 'add');
                 this.getSandbox().notifyAll(event);
             }
         },

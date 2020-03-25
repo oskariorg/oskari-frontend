@@ -9,6 +9,8 @@ const DEFAULT_TAB = 'general';
 
 const getMessage = (key, args) => <Message messageKey={key} messageArgs={args} bundleKey='admin-layereditor' />;
 
+const __VALIDATOR_CACHE = {};
+
 class UIHandler extends StateHandler {
     constructor (consumer) {
         super();
@@ -387,6 +389,7 @@ class UIHandler extends StateHandler {
     fetchLayer (id, keepCapabilities = false) {
         this.clearMessages();
         if (!id) {
+            // adding new layer
             this.resetLayer();
             return;
         }
@@ -399,7 +402,7 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error('TODO');
+                Messaging.error(getMessage('messages.errorFetchLayerFailed'));
             }
             return response.json();
         }).then(json => {
@@ -408,6 +411,8 @@ class UIHandler extends StateHandler {
                 preserve: ['capabilities'],
                 roles: typesAndRoles.roles
             });
+            // remove possible existing flag since we loaded the layer -> it is not new
+            delete layer.isNew;
             if (layer.warn) {
                 // currently only option for warning on this is "updateCapabilitiesFail"
                 Messaging.warn(getMessage(`messages.${layer.warn}`));
@@ -463,16 +468,15 @@ class UIHandler extends StateHandler {
             }
         }).then(data => {
             // layer data will be the same as for editing == admin data
-            Messaging.warn('Reload page to see changes for end user - Work in progress...');
             // refresh current layer data from server after saving just in case to prevent possible out-of-sync
             this.fetchLayer(data.id, true);
             // Update layer for end-user as that model is different than admin uses
             // end-user layer is AbstractLayer-based model -> make another request to get that JSON.
-            this.fetchLayerForEndUser(data.id);
+            this.fetchLayerForEndUser(data.id, layerPayload.group_ids);
         }).catch(error => this.log.error(error));
     }
 
-    fetchLayerForEndUser (layerId) {
+    fetchLayerForEndUser (layerId, groups = []) {
         // send id as parameter so we don't get the whole layer listing
         var url = Oskari.urls.getRoute('GetHierarchicalMapLayerGroups', {
             srs: Oskari.getSandbox().getMap().getSrsName(),
@@ -488,15 +492,29 @@ class UIHandler extends StateHandler {
         }).then(response => {
             this.ajaxFinished();
             if (!response.ok) {
-                Messaging.error('TODO');
+                Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
             }
             return response.json();
         }).then(json => {
             if (json.layers.length !== 1) {
-                Messaging.error('TODO');
+                Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
                 return;
             }
-            this.refreshEndUserLayer(layerId, json.layers[0]);
+            const layer = json.layers[0];
+            // this is needed because maplayer service expects groups to be found on layer when creating/updating
+            // TODO: refactor maplayer service groups handling
+            layer.groups = groups.map(id => {
+                const item = {
+                    id
+                };
+                const group = this.mapLayerGroups.find(g => g.id === id);
+                if (!group) {
+                    return item;
+                }
+                item.name = Oskari.getLocalized(group.name);
+                return item;
+            });
+            this.refreshEndUserLayer(layerId, layer);
         });
     }
     refreshEndUserLayer (layerId, layerData = {}) {
@@ -510,26 +528,24 @@ class UIHandler extends StateHandler {
         } else if (layerData.id) {
             this.createlayer(layerData);
         } else {
-            Messaging.error('TODO');
+            Messaging.error(getMessage('messages.errorFetchLayerEnduserFailed'));
         }
     }
     createlayer (layerData) {
         const mapLayer = this.mapLayerService.createMapLayer(layerData);
 
-        if (layerData.baseLayerId && layerData.baseLayerId !== -1) {
-            // If this is a sublayer, add it to its parent's sublayer array
-            this.mapLayerService.addSubLayer(layerData.baseLayerId, mapLayer);
+        // Register layer to the map layer service.
+        if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
+            this.mapLayerService.addLayer(mapLayer);
         } else {
-            // Otherwise just add it to the map layer service.
-            if (this.mapLayerService._reservedLayerIds[mapLayer.getId()] !== true) {
-                this.mapLayerService.addLayer(mapLayer);
-            } else {
-                Messaging.error(getMessage('messages.errorInsertAllreadyExists'));
-                // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
-            }
+            Messaging.error(getMessage('messages.errorInsertAllreadyExists'));
+            // should we update if layer already exists??? mapLayerService.updateLayer(e.layerData.id, e.layerData);
         }
     }
     getValidatorFunctions (layerType) {
+        if (__VALIDATOR_CACHE[layerType]) {
+            return __VALIDATOR_CACHE[layerType];
+        }
         const hasValue = (value) => {
             if (typeof value === 'string') {
                 return value.trim().length > 0;
@@ -579,6 +595,7 @@ class UIHandler extends StateHandler {
         mandatoryFields.forEach(field => {
             wrappers[field] = (layer) => hasValue(getValue(layer, field));
         });
+        __VALIDATOR_CACHE[layerType] = wrappers;
         return wrappers;
     }
     getValidatorFor (key) {
@@ -755,6 +772,9 @@ class UIHandler extends StateHandler {
             this.log.error(error);
         });
     }
+    setMapLayerGroups (mapLayerGroups) {
+        this.mapLayerGroups = mapLayerGroups;
+    }
 
     fetchLayerAdminMetadata () {
         this.ajaxStarted();
@@ -774,6 +794,8 @@ class UIHandler extends StateHandler {
                     loading: this.isLoading(),
                     metadata: data
                 });
+                // invalidate cache if it was populated
+                Object.keys(__VALIDATOR_CACHE).forEach(key => delete __VALIDATOR_CACHE[key]);
             }).catch(error => {
                 this.log.error(error);
                 Messaging.error('messages.errorFetchUserRolesAndPermissionTypes');

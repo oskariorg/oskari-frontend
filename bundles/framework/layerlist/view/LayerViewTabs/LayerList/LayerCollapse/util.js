@@ -29,10 +29,14 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
     let group = null;
     let groupForOrphans = null;
 
-    const determineGroupId = (layerGroups, layerAdmin) => {
+    const determineGroupId = (layerGroups = [], layerAdmin) => {
         let groupId;
         if (method === 'getInspireName') {
-            groupId = layerGroups[0] ? layerGroups[0].id : undefined;
+            if (layerGroups.length) {
+                groupId = layerGroups[0] ? layerGroups[0].id : undefined;
+            } else {
+                groupId = -1;
+            }
         } else {
             groupId = layerAdmin ? layerAdmin.organizationId : undefined;
         }
@@ -46,7 +50,7 @@ export const groupLayers = (layers, method, tools, allGroups = [], allDataProvid
         .filter(layer => !layer.getMetaType || layer.getMetaType() !== 'published')
         .forEach(layer => {
             let groupAttr = layer[method]();
-            let groupId = determineGroupId(layer._groups, layer.admin);
+            let groupId = determineGroupId(layer.getGroups(), layer.admin);
 
             // If grouping can be determined, create group if already not created
             if (!group || (typeof groupAttr !== 'undefined' && groupAttr !== '' && group.getTitle() !== groupAttr)) {

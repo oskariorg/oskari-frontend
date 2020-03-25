@@ -139,7 +139,7 @@ class ViewHandler extends StateHandler {
      * "Module" name for event handling
      */
     getName () {
-        return 'LayerCollapse.CollapseService';
+        return 'LayerCollapse.CollapseService.' + this.groupingMethod;
     }
 
     /**
@@ -167,9 +167,9 @@ class ViewHandler extends StateHandler {
                 const layerId = event.getLayerId();
                 const operation = event.getOperation();
 
-                if (['update', 'sticky'].includes(operation)) {
+                if (operation === 'sticky') {
                     this._refreshLayer(layerId);
-                } else if (['add', 'remove'].includes(operation)) {
+                } else if (['add', 'remove', 'update'].includes(operation)) {
                     this.updateLayerGroups();
                 } else if (operation === 'tool') {
                     if (layerId) {

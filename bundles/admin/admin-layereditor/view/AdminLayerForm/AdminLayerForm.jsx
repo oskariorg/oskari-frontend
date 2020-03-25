@@ -5,11 +5,37 @@ import { VisualizationTabPane } from './VisualizationTabPane';
 import { AdditionalTabPane } from './AdditionalTabPane';
 import { PermissionsTabPane } from './PermissionsTabPane';
 import { LocaleConsumer, Controller } from 'oskari-ui/util';
-import { Confirm, Button, Tabs, TabPane, Message } from 'oskari-ui';
+import { Confirm, Button, Tabs, TabPane, Message, Tooltip } from 'oskari-ui';
 import { StyledRoot, StyledAlert, StyledButton } from './styled';
 import { Mandatory, MandatoryIcon } from './Mandatory';
 
 const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerComposingModel');
+
+const getValidationMessage = (validationErrorMessages = []) => {
+    return (<div>
+        <Message messageKey={'validation.mandatoryMsg'} />
+        <ul>{ validationErrorMessages
+            .map(field => <li key={field}><Message messageKey={`fields.${field}`}/></li>)}
+        </ul>
+    </div>);
+};
+
+const SaveButton = ({ isNew, onSave, validationErrors = [] }) => {
+    const btn = (<StyledButton type='primary' onClick={() => onSave()} disabled={validationErrors.length}>
+        <Message messageKey={isNew ? 'add' : 'save'}/>
+    </StyledButton>);
+    if (!validationErrors.length) {
+        return btn;
+    }
+    return (<Tooltip title={getValidationMessage(validationErrors)}>{btn}</Tooltip>);
+};
+
+SaveButton.propTypes = {
+    isNew: PropTypes.bool.isRequired,
+    onSave: PropTypes.func.isRequired,
+    validationErrors: PropTypes.array
+};
+const MemoedSaveButton = React.memo(SaveButton);
 
 const AdminLayerForm = ({
     controller,
@@ -27,6 +53,7 @@ const AdminLayerForm = ({
     getMessage,
     rolesAndPermissionTypes,
     validators = {},
+    validationErrors = [],
     scales
 }) => {
     // For returning to add multiple layers from service endpoint
@@ -76,9 +103,7 @@ const AdminLayerForm = ({
                     controller={controller}/>
             </TabPane>
         </Tabs>
-        <StyledButton type='primary' onClick={() => onSave()}>
-            <Message messageKey={layer.isNew ? 'add' : 'save'}/>
-        </StyledButton>
+        <MemoedSaveButton isNew={!!layer.isNew} onSave={onSave} validationErrors={validationErrors} />
         { !layer.isNew &&
             <React.Fragment>
                 <Confirm
@@ -122,6 +147,7 @@ AdminLayerForm.propTypes = {
     getMessage: PropTypes.func.isRequired,
     rolesAndPermissionTypes: PropTypes.object,
     validators: PropTypes.object,
+    validationErrors: PropTypes.arrayOf(PropTypes.string),
     tab: PropTypes.string.isRequired,
     scales: PropTypes.array.isRequired
 };

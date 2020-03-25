@@ -155,7 +155,10 @@ Oskari.registerLocalization(
                 "connectionErrorFetchCapabilities": "Connection could not be established to the service. Check the interface URL.",
                 "parsingErrorFetchCapabilities": "The response from the service didn't match the requested standard. Check the map layer type and/or version.",
                 "deleteSuccess" : "Deleted",
-                "deleteFailed" : "Delete failed"
+                "deleteFailed" : "Delete failed",
+                "updateCapabilitiesFail": "Fetching service capabilities failed. Interface URL, type or version could be wrong or the service is currently down.",
+                "errorFetchLayerFailed": "Fetching layer details failed. The layer might have been removed or you don't have permission for the layer.",
+                "errorFetchLayerEnduserFailed": "Fetching layer details for the layer listing failed. Did you add 'View' permission for a role that you have?"
             },
             "otherLanguages": "Other languages",
             "stylesJSON": "Style definitions (JSON)",

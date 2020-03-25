@@ -99,10 +99,15 @@ class ViewHandler extends StateHandler {
                 }
             },
             'MapLayerEvent': event => {
+                const layerId = event.getLayerId();
+                if (['add', 'remove'].includes(event.getOperation()) && layerId) {
+                    // refresh layer list on add/remove when layerId is provided
+                    this.getLayerListHandler().updateState({});
+                    return;
+                }
                 if (!['update', 'sticky', 'tool'].includes(event.getOperation())) {
                     return;
                 }
-                const layerId = event.getLayerId();
                 if (layerId) {
                     const { layers } = this.selectedLayersHandler.getState();
                     if (!layers.find(layer => layer.getId() === layerId)) {
