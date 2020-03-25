@@ -23,11 +23,11 @@ Oskari.registerLocalization(
                 "bingmapslayer": "Bing"
             },
             "fields": {
-                "url": "Gränssnitten address",
-                "version": "Gränss&shy;nittets version",
-                "username": "Användarsnamn",
+                "url": "Gränssnitten adress",
+                "version": "Gränssnittets version",
+                "username": "Användarnamn",
                 "password": "Lösenord",
-                "name": "Unik namn för kartlager",
+                "name": "Unikt namn för kartlager",
                 "options": {
                     "apiKey": "Api key",
                     "tileGrid": "Rutmatris"
@@ -35,22 +35,22 @@ Oskari.registerLocalization(
                 "locale": {
                     "generic": {
                         "name": "Namn på {0}",
-                        "descplaceholder": "Beskrivning på {0}"
+                        "subtitle": "Beskrivning på {0}"
                     },
                     "en": {
                         "lang": "Engelska",
                         "name": "Namn på engelska",
-                        "descplaceholder": "Beskrivning på engelska"
+                        "subtitle": "Beskrivning på engelska"
                     },
                     "fi": {
                         "lang": "Finska",
                         "name": "Namn på finska",
-                        "descplaceholder": "Beskrivning på finska"
+                        "subtitle": "Beskrivning på finska"
                     },
                     "sv": {
                         "lang": "Svenska",
                         "name": "Namn på svenska",
-                        "descplaceholder": "Beskrivning på svenska"
+                        "subtitle": "Beskrivning på svenska"
                     }
                 },
                 "opacity": "Opacitet",
@@ -65,8 +65,8 @@ Oskari.registerLocalization(
                 "gfiContent": "Tilläggande text för GFI-dialog",
                 "gfiType": "GFI svartyp",
                 "role_permissions": "Rättigheter",
-                "dataProviderId": "Dataprovider",
-                "groups": "Maplayer-grupper"
+                "dataProviderId": "Dataproducent",
+                "groups": "Grupp av kartlager"
             },
             "editor-tool": "Editera kartlager",
             "flyout-title": "Administrering av kartlager",
@@ -76,15 +76,15 @@ Oskari.registerLocalization(
             "permissionsTabTitle": "Rättigheter",
             "interfaceVersionDesc": "Välj primärt den nyaste versionen som stöds av gränssnittet.",
             "attributions": "Tillskrivningar",
-            "usernameAndPassword": "Användarsnamn och lösenord",
+            "usernameAndPassword": "Användarnamn och lösenord",
             "addLayer": "Lägg till ett nytt kartlager",
-            "dataProviderName": "Dataprovider namn",
-            "addDataProvider": "Lägg till dataprovider",
-            "editDataProvider": "Redigera dataprovider",
+            "dataProviderName": "Dataproducent namn",
+            "addDataProvider": "Lägg till dataproducent",
+            "editDataProvider": "Redigera dataproducent",
             "themeName": "Teman namn",
             "addTheme": "Lägg till tema",
             "editTheme" : "Redigera tema",
-            "selectMapLayerGroupsButton": "Välj grupper",
+            "selectMapLayerGroupsButton": "Välj grupp",
             "cancel": "Tillbaka",
             "close": "Stäng",
             "backToPrevious": "Tillbaka till föregående steg",
@@ -122,9 +122,9 @@ Oskari.registerLocalization(
             "legendImagePlaceholder": "Ge ett ny adress för kartförklaring.",
             "forcedSRS": "Tvingade SRS",
             "forcedSRSInfo": "Tvångs SRS jämfört med GetCapabilites",
-            "supportedSRS": "Stöd SRS",
-            "missingSRS": "Saknade SRS",
-            "missingSRSInfo": "Denna kartlager stöder inte vissa applikationens standardprojektioner",
+            "supportedSRS": "Stödda SRS",
+            "missingSRS": "Felande SRS",
+            "missingSRSInfo": "Detta kartlager stöder inte vissa applikationens standardprojektioner",
             "renderMode": {
                 "title": "Innehållstyp",
                 "mvt": "Massor av små objekt",
