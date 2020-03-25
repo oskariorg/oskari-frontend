@@ -1,5 +1,17 @@
 const BasicBundle = Oskari.clazz.get('Oskari.BasicBundle');
 
+const GUIDED_TOUR_TEMPLATE = {
+    priority: 100,
+    positionAlign: 'left',
+    getTitle: () => Oskari.getMsg('CameraControls3d', 'guidedTour.title'),
+    getContent: () => {
+        const content = jQuery('<div></div>');
+        content.append(Oskari.getMsg('CameraControls3d', 'guidedTour.message'));
+        return content;
+    },
+    getPositionRef: () => jQuery('.camera-controls-3d')
+};
+
 Oskari.clazz.defineES('Oskari.mapping.cameracontrols3d.instance',
     class CameraControls3dBundleInstance extends BasicBundle {
         constructor () {
@@ -22,6 +34,7 @@ Oskari.clazz.defineES('Oskari.mapping.cameracontrols3d.instance',
             this._mapmodule = sandbox.findRegisteredModuleInstance('MainMapModule');
             this.createPlugin();
             this.sandbox.register(this);
+            this._registerForGuidedTour();
             this._started = true;
         }
         createPlugin () {
@@ -42,6 +55,38 @@ Oskari.clazz.defineES('Oskari.mapping.cameracontrols3d.instance',
             this.stopPlugin();
             this.sandbox = null;
             this.started = false;
+        }
+        _registerForGuidedTour () {
+            const me = this;
+            function sendRegister () {
+                const requestBuilder = Oskari.requestBuilder('Guidedtour.AddToGuidedTourRequest');
+                if (requestBuilder && me.sandbox.hasHandler('Guidedtour.AddToGuidedTourRequest')) {
+                    const delegate = {
+                        bundleName: me.getName()
+                    };
+                    for (let prop in GUIDED_TOUR_TEMPLATE) {
+                        if (typeof GUIDED_TOUR_TEMPLATE[prop] === 'function') {
+                            delegate[prop] = GUIDED_TOUR_TEMPLATE[prop].bind(me); // bind methods to bundle instance
+                        } else {
+                            delegate[prop] = GUIDED_TOUR_TEMPLATE[prop]; // assign values
+                        }
+                    }
+                    me.sandbox.request(me, requestBuilder(delegate));
+                }
+            }
+
+            function handler (msg) {
+                if (msg.id === 'guidedtour') {
+                    sendRegister();
+                }
+            }
+
+            const tourInstance = me.sandbox.findRegisteredModuleInstance('GuidedTour');
+            if (tourInstance) {
+                sendRegister();
+            } else {
+                Oskari.on('bundle.start', handler);
+            }
         }
     }
 );
