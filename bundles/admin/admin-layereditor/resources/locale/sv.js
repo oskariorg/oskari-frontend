@@ -155,7 +155,8 @@ Oskari.registerLocalization(
                 "connectionErrorFetchCapabilities": "Anslutning till tjänsten kunde inte etableras. Kolla gränssnittets URL.",
                 "parsingErrorFetchCapabilities": "Tjänstens svar kan inte tolkas. Kolla kartlagrets typ och/eller version.",
                 "deleteSuccess" : "Utgår",
-                "deleteFailed" : "Borttagningen misslyckades"
+                "deleteFailed" : "Borttagningen misslyckades",
+                "updateCapabilitiesFail": "Sökning till gränssnittet returnerar ingen data. Kartlagrets adress, typ eller version kan vara felaktig eller gränssnitt tjänsten fungerar för tillfället inte."
             },
             "otherLanguages": "Andra språk",
             "stylesJSON": "Stildefinitioner (JSON)",
