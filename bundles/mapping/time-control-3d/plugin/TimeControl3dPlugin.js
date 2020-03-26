@@ -64,10 +64,10 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         this.redrawUI(Oskari.util.isMobile());
     }
 
-    redrawUI (mapInMobileMode) {
+    redrawUI (mapInMobileMode, forced) {
         this._isMobile = mapInMobileMode;
         this.teardownUI();
-        this._createUI();
+        return this._createUI(forced);
     }
 
     _createEventHandlers () {
@@ -107,11 +107,13 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
         ReactDOM.unmountComponentAtNode(this._popupContent.get(0));
     }
 
-    _createUI () {
+    _createUI (forced) {
         let el;
         if (this._isMobile) {
             el = this._createMobileControlElement();
-            this._addToMobileToolBar(el);
+            if (this._addToMobileToolBar(el, forced)) {
+                return true;
+            };
         } else {
             el = this._createControlElement();
             this.addToPluginContainer(el);
@@ -149,10 +151,22 @@ class TimeControl3dPlugin extends BasicMapModulePlugin {
             />, el.get(0));
     }
 
-    _addToMobileToolBar (el) {
-        // TODO: create method or request for svg based mobile tools
-        const mobileToolbar = jQuery('.toolbar_mobileToolbar .toolrow');
-        mobileToolbar.append(el);
+    _addToMobileToolBar (el, forced) {
+        // TODO: create mapmodule method and tools service for svg based mobile tools
+        const toolbar = jQuery('.toolbar_' + this.getMapModule().getMobileToolbar());
+        const toolrow = toolbar.find('.toolrow');
+        if (toolrow.length) {
+            toolrow.append(el);
+            return false;
+        }
+        // there's no other tools added, add toolrow
+        if (forced) {
+            const row = jQuery('<div class="toolrow"></div>');
+            row.append(el);
+            toolbar.append(row);
+            return false;
+        }
+        return true; // waiting for toolbar
     }
 
     _toggleToolState () {

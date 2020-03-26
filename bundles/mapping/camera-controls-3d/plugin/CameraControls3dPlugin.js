@@ -14,7 +14,7 @@ Oskari.clazz.define(className,
         this._toolOpen = false;
         this._index = 80;
         this._log = Oskari.log(shortName);
-        this._mountPoint = jQuery('<div class="mapplugin camera-controls-3d"><div></div></div>');
+        this._mountPoint = jQuery('<div class="camera-controls-3d"><div></div></div>');
         // plugin index 25. Insert after panbuttons.
         this._index = 25;
         this.handler = new CameraControls3dHandler(state => this._render(Oskari.util.isMobile(), state));
@@ -37,9 +37,9 @@ Oskari.clazz.define(className,
          * @method  @public redrawUI
          * @param  {Boolean} mapInMobileMode is map in mobile mode
          */
-        redrawUI: function (mapInMobileMode) {
+        redrawUI: function (mapInMobileMode, forced) {
             this.teardownUI();
-            this._createUI(mapInMobileMode);
+            return this._createUI(mapInMobileMode, forced);
         },
         teardownUI: function () {
             if (!this.getElement()) {
@@ -59,16 +59,17 @@ Oskari.clazz.define(className,
         stopPlugin: function () {
             this.teardownUI();
         },
-        _createUI: function (mapInMobileMode) {
+        _createUI: function (mapInMobileMode, forced) {
             this._element = this._mountPoint.clone();
-
             if (mapInMobileMode) {
-                // In mobile mode set to same line as other controls
-                this._element.css('display', 'inline-block');
-                this._addToMobileToolBar();
+                if (this._addToMobileToolBar(forced)) {
+                    return true;
+                }
             } else {
                 this.addToPluginContainer(this._element);
             }
+            const cls = mapInMobileMode ? 'tool' : 'mapplugin';
+            this._element.addClass(cls);
             this._render(mapInMobileMode);
         },
         _render (mapInMobileMode, state = this.handler.getState()) {
@@ -97,9 +98,30 @@ Oskari.clazz.define(className,
             // i.e. position
             return this._index;
         },
-        _addToMobileToolBar () {
-            const resetMapStateControl = jQuery('.toolbar_mobileToolbar').find('.mobile-reset-map-state');
-            jQuery(this._element).insertAfter(resetMapStateControl);
+        _addToMobileToolBar (forced) {
+            // TODO: create mapmodule method and tools service for svg based mobile tools
+            const el = this.getElement();
+            const toolbar = jQuery('.toolbar_' + this.getMapModule().getMobileToolbar());
+            const resetMapStateControl = toolbar.find('.mobile-reset-map-state');
+            // if mapmove controls exists then add after them
+            if (resetMapStateControl.length) {
+                el.insertAfter(resetMapStateControl);
+                return false;
+            }
+            // no mapmove controls, add first
+            const toolrow = toolbar.find('.toolrow');
+            if (toolrow.length) {
+                toolrow.prepend(el);
+                return false;
+            }
+            // there's no other tools added, add toolrow
+            if (forced) {
+                const row = jQuery('<div class="toolrow"></div>');
+                row.append(el);
+                toolbar.append(row);
+                return false;
+            }
+            return true; // waiting for toolbar
         }
     }, {
         'extend': ['Oskari.mapping.mapmodule.plugin.BasicMapModulePlugin'],
