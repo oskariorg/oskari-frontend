@@ -101,7 +101,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                     if (indicator) {
                         indicator.classification[key] = value;
                         if (eventBuilder) {
-                            this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                            this.sandbox.notifyAll(eventBuilder(indicator.classification, { [key]: value }));
                         }
                     }
                 },
@@ -112,7 +112,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.StateService',
                             indicator.classification[key] = obj[key];
                         });
                         if (eventBuilder) {
-                            this.sandbox.notifyAll(eventBuilder(indicator.classification));
+                            this.sandbox.notifyAll(eventBuilder(indicator.classification, obj));
                         }
                     }
                 }
