@@ -400,6 +400,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
             log.debug('Indicator parameter changed! ');
             me._handleRegionsetChanged();
         });
+        this.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
+            if (event.getChanged().hasOwnProperty('fractionDigits')) {
+                me._handleRegionsetChanged();
+            }
+        });
 
         this.service.on('StatsGrid.RegionSelectedEvent', function (event) {
             log.debug('Region selected! ', event.getRegion());
