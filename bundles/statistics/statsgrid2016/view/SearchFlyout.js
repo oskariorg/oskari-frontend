@@ -164,7 +164,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
 
         // Overrides selection key and value from provided search values.
         const getSearchWithModifiedParam = (values, paramKey, paramValue) => {
-            const modSelection = { ...values.selection, [paramKey]: paramValue };
+            const modSelection = { ...values.selections, [paramKey]: paramValue };
             return { ...values, selections: modSelection };
         };
 
@@ -196,6 +196,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.view.SearchFlyout', function (t
                     return;
                 }
                 const { error, multiselectStatus, ...searchValues } = this._getRefinedSearch(metadata, commonSearchValues);
+
                 if (error) {
                     errorMap.set(indicatorName, error);
                     checkDone();
