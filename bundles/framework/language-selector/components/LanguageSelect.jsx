@@ -4,7 +4,9 @@ import styled from 'styled-components';
 import { languageNames } from './languageNames';
 
 const StyledSelect = styled('select')`
-    width: 100%;
+    &&& {
+        width: 100%;
+    }
     & option[value="_"][disabled] {
         display: none;
     }
