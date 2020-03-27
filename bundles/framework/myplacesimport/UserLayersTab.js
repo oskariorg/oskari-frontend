@@ -211,7 +211,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
                     // someone elses shared layer from URL-param etc
                     return;
                 }
-                if (layersAdded.contains(layer.getId())) {
+                if (layersAdded.includes(layer.getId())) {
                     // about to add a duplicate layer.
                     // Don't know why but this was handled before so just in case
                     return;
