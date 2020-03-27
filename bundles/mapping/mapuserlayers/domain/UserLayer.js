@@ -45,6 +45,17 @@ export class UserLayer extends WFSLayer {
         return this.renderingElement;
     }
 
+    /**
+     * Internal information as link params might produce userlayers that are NOT this users layers in the maplayerservice
+     * @param {String} src set by myplacesimport if this is truely
+     */
+    markAsInternalDownloadSource () {
+        this.__internalFlagForUsersOwnLayers = true;
+    }
+    isInternalDownloadSource () {
+        return this.__internalFlagForUsersOwnLayers;
+    }
+
     isFilterSupported () {
         // this defaults to false in AbstractLayer, but WFSLayer returns true.
         // Not sure if this is something we want, but it's the same behavior as before but NOT having
