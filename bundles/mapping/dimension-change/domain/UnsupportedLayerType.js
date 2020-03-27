@@ -10,12 +10,13 @@ export class UnsupportedLayerType extends UnsupportedLayerReason {
             if (isLayerSupported(layer, map.getSupports3D())) {
                 return true;
             }
+            // not supported -> Return an instance of UnsupportedLayerReason
             return this;
         });
     }
 }
 
-export const isLayerSupported = (layer, mapSupports3D) => {
+export const isLayerSupported = (layer, mapSupports3D = false) => {
     if (mapSupports3D && unsupportedIn3D.includes(layer.getLayerType())) {
         return false;
     }
