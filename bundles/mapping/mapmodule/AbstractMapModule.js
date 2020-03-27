@@ -1214,7 +1214,7 @@ Oskari.clazz.define(
             var mobileDiv = this.getMobileDiv();
             var toolbar = mobileDiv.find('.mobileToolbarContent');
 
-            if (toolbar.find('.toolbar_mobileToolbar').children().length === 0) {
+            if (toolbar.find('.toolbar_mobileToolbar').children().length === 0 && !mobileDiv.find('.mapplugin').length) {
                 // plugins didn't add any content -> hide it so the empty bar is not visible
                 mobileDiv.hide();
             } else {
