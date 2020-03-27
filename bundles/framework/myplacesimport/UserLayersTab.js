@@ -205,34 +205,25 @@ Oskari.clazz.define('Oskari.mapframework.bundle.myplacesimport.UserLayersTab',
             const gridModel = Oskari.clazz.create('Oskari.userinterface.component.GridModel');
 
             gridModel.setIdField('id');
-
+            const layersAdded = [];
             layers.forEach(function (layer) {
-                if (gridModel.data.length === 0) {
-                    gridModel.addData({
-                        'id': layer.getId(),
-                        'name': layer.getName(),
-                        'description': layer.getDescription(),
-                        'source': layer.getSource(),
-                        'isBase': layer.isBaseLayer()
-                    });
+                if (!layer.isInternalDownloadSource()) {
+                    // someone elses shared layer from URL-param etc
                     return;
                 }
-                var idDouble = false;
-                for (var i = 0; i < gridModel.data.length; i++) {
-                    if (layer.getId() === gridModel.data[i].id) {
-                        idDouble = true;
-                        break;
-                    }
+                if (layersAdded.contains(layer.getId())) {
+                    // about to add a duplicate layer.
+                    // Don't know why but this was handled before so just in case
+                    return;
                 }
-                if (!idDouble && layer.isInternalDownloadSource()) {
-                    gridModel.addData({
-                        'id': layer.getId(),
-                        'name': layer.getName(),
-                        'description': layer.getDescription(),
-                        'source': layer.getSource(),
-                        'isBase': layer.isBaseLayer()
-                    });
-                }
+                gridModel.addData({
+                    'id': layer.getId(),
+                    'name': layer.getName(),
+                    'description': layer.getDescription(),
+                    'source': layer.getSource(),
+                    'isBase': layer.isBaseLayer()
+                });
+                layersAdded.push(layer.getId());
             });
             return gridModel;
         },
