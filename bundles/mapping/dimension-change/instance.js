@@ -1,4 +1,4 @@
-import { UnsupportedLayerType } from './domain/UnsupportedLayerType';
+import { UnsupportedLayerType, isLayerSupported } from './domain/UnsupportedLayerType';
 
 const UnsupportedLayerReason = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerReason');
 const UnsupportedLayerSrs = Oskari.clazz.get('Oskari.mapframework.domain.UnsupportedLayerSrs');
@@ -65,13 +65,28 @@ Oskari.clazz.define('Oskari.mapframework.bundle.dimension-change.DimensionChange
         if (this.conf.uuid) {
             extraParams.uuid = this.conf.uuid;
         }
+        // coord is skipped because projections might be different and the current location coordinates would have different meaning
+        // zoomlevels might differ from appsetup to another as well
+        // rotate is not supported on 3d
+        // cam and time are not supported in 2d
         const blackListed = ['coord', 'zoomLevel', 'rotate', 'cam', 'time'];
+        if (!this._hasSupportedLayers()) {
+            // skip map layers as current ones are unsupported and use the appsetups default layers instead
+            blackListed.push('mapLayers');
+        }
         const mapQueryStr = this._sandbox.generateMapLinkParameters(extraParams);
         const mapParams = Oskari.util.getRequestParameters(mapQueryStr);
         window.location.href = url + '?' + Object.keys(mapParams)
             .filter(key => !blackListed.includes(key))
             .map(key => `${key}=${mapParams[key]}`)
             .join('&');
+    },
+    _hasSupportedLayers: function () {
+        const mapState = this._sandbox.getMap();
+        // The whole bundle is based on if the current map supports 3d, the other option doesn't and vice versa
+        const targetMapSupports3D = !mapState.getSupports3D();
+        const supportedLayers = mapState.getLayers().filter(layer => isLayerSupported(layer, targetMapSupports3D));
+        return supportedLayers.length > 0;
     },
     handleRequest: function (core, request) {
         this._changeDimension();

@@ -7,13 +7,23 @@ export class UnsupportedLayerType extends UnsupportedLayerReason {
         super('dimension', severity);
         const map = Oskari.getSandbox().getMap();
         this.setLayerCheckFunction(layer => {
-            if ((map.getSupports3D() && unsupportedIn3D.includes(layer.getLayerType())) ||
-                (!map.getSupports3D() && unsupportedIn2D.includes(layer.getLayerType()))) {
-                return this;
+            if (isLayerSupported(layer, map.getSupports3D())) {
+                return true;
             }
-            return true;
+            // not supported -> Return an instance of UnsupportedLayerReason
+            return this;
         });
     }
 }
+
+export const isLayerSupported = (layer, mapSupports3D = false) => {
+    if (mapSupports3D && unsupportedIn3D.includes(layer.getLayerType())) {
+        return false;
+    }
+    if (!mapSupports3D && unsupportedIn2D.includes(layer.getLayerType())) {
+        return false;
+    }
+    return true;
+};
 
 Oskari.clazz.defineES('Oskari.mapframework.domain.UnsupportedLayerType', UnsupportedLayerType);
