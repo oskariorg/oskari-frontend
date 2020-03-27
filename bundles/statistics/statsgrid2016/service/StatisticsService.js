@@ -526,6 +526,7 @@
             }
             return regionsets;
         },
+        // FIXME: getIndicatorData returns error if dataset contains serie which is outside of current selection
         getCurrentDataset: function (callback) {
             var me = this;
             if (typeof callback !== 'function') {

@@ -9,9 +9,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.ClassificationChangedEven
      * @method create called automatically on construction
      * @static
      */
-    function (current, previous) {
+    function (current, changed = {}) {
         this.current = current;
-        this.previous = previous;
+        this.changed = changed;
     }, {
         /**
          * @method getName
@@ -22,18 +22,18 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.event.ClassificationChangedEven
             return 'StatsGrid.ClassificationChangedEvent';
         },
         /**
-         * Current active indicator
+         * Active indicator's classification
          * @return {Object}
          */
         getCurrent: function () {
             return this.current;
         },
         /**
-         * Previously active indicator
+         * Updated value
          * @return {Object}
          */
-        getPrevious: function () {
-            return this.previous;
+        getChanged: function () {
+            return this.changed;
         }
     }, {
         'protocol': ['Oskari.mapframework.event.Event']

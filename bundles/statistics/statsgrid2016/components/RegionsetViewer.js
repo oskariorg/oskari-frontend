@@ -455,6 +455,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.RegionsetViewer', function (ins
             // Always show the active indicator
             me.render(state.getRegion());
         });
+        me.service.on('StatsGrid.ParameterChangedEvent', function (event) {
+            me.render(state.getRegion());
+        });
 
         me.service.on('StatsGrid.RegionsetChangedEvent', function (event) {
             // Need to update the map

@@ -55,13 +55,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             // ui not yet created so no need to update it
             return;
         }
-        if (!this.hasIndicators()) {
+        const indicator = this.service.getStateService().getActiveIndicator();
+        if (!indicator) {
             this.clearChart();
-            this.element.html(this.loc.statsgrid.noResults);
+            el.html(this.loc.statsgrid.noResults);
             return;
-        } else if (this._chartElement) {
-            // reattach possibly detached component
-            el.html(this._chartElement);
         }
         if (this._renderState.inProgress) {
             // handle render being called multiple times in quick succession
@@ -71,24 +69,19 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             return;
         }
         this._renderState.inProgress = true;
-        this.getIndicatorData(this.getIndicator(), function (data) {
-            if (!data) {
-                me._renderDone();
-                return;
-            }
+        this.getIndicatorData(indicator, function (data) {
             var isUndefined = function (element) {
                 return element.value === undefined;
             };
-
-            if (data.every(isUndefined)) {
+            if (!data || data.every(isUndefined)) {
                 me.clearChart();
                 me._renderDone();
-                me.element.html(me.loc.statsgrid.noValues);
+                el.html(me.loc.statsgrid.noValues);
                 return;
             }
-            var classificationOpts = me.service.getStateService().getClassificationOpts(me.getIndicator().hash);
-            var fractionDigits = typeof classificationOpts.fractionDigits === 'number' ? classificationOpts.fractionDigits : 1;
-            var formatter = Oskari.getNumberFormatter(fractionDigits);
+            const { fractionDigits } = indicator.classification;
+            const digits = typeof fractionDigits === 'number' ? fractionDigits : 1;
+            var formatter = Oskari.getNumberFormatter(digits);
             const { maxHeight, width } = me._size;
             var chartOpts = {
                 colors: me.getColorScale(data),
@@ -111,6 +104,8 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
                 me._chartElement = me.createBarCharts(data, chartOpts);
                 el.html(me._chartElement);
             } else {
+                // reattach possibly detached component
+                el.html(me._chartElement);
                 me.getChartInstance().redraw(data, chartOpts);
             }
 
@@ -167,31 +162,28 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             chart.clear();
         }
     },
-    getIndicator: function () {
-        return this.service.getStateService().getActiveIndicator();
-    },
     hasIndicators: function () {
         return this.service.getStateService().hasIndicators();
     },
-    getIndicatorData: function (indicator, callback) {
-        if (!indicator) {
-            callback();
-            return;
-        }
-        this.service.getCurrentDataset(function (err, response) {
+    getIndicatorData: function (ind, callback) {
+        const setId = this.service.getStateService().getRegionset();
+        const { datasource, indicator, selections, series } = ind;
+        this.service.getRegions(setId, (err, regions) => {
             if (err) {
                 callback();
                 return;
             }
-            var indicatorData = [];
-            response.data.forEach(function (dataItem) {
-                indicatorData.push({
-                    name: dataItem.name,
-                    value: dataItem.values[indicator.hash],
-                    id: dataItem.id
+            this.service.getIndicatorData(datasource, indicator, selections, series, setId, (err, data) => {
+                if (err) {
+                    callback();
+                    return;
+                }
+                const response = regions.map(({ id, name }) => {
+                    const value = data[id];
+                    return { id, name, value };
                 });
+                callback(response);
             });
-            callback(indicatorData);
         });
     },
     /**
@@ -272,6 +264,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Diagram', function (service, lo
             }
         });
         this.service.on('StatsGrid.RegionsetChangedEvent', function () {
+            me.updateUI();
+        });
+        this.service.on('StatsGrid.ParameterChangedEvent', function () {
             me.updateUI();
         });
         this.service.on('StatsGrid.StateChangedEvent', function (event) {

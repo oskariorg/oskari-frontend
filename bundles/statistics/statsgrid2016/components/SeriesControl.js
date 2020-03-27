@@ -110,12 +110,15 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         // quick ui response
         var delta = forward ? 1 : -1;
         var requestedIndex = this._uiState.currentSeriesIndex + delta;
-        if (requestedIndex >= 0 && requestedIndex < this._uiState.values.length) {
+        if (this._isValidIndex(requestedIndex)) {
             this._renderHandle(requestedIndex);
             this._updateValueDisplay(requestedIndex);
         }
 
         forward ? this.seriesService.next() : this.seriesService.previous();
+    },
+    _isValidIndex: function (index) {
+        return index >= 0 && index < this._uiState.values.length;
     },
     render: function (el) {
         this._element = jQuery(this.__templates.main());
@@ -124,7 +127,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
             this.setWidth(this._minWidth);
         }
         el.append(this._element);
-        this._initValues();
+        this._updateValues();
     },
     /**
      * @method _setAnimationState Set animating / not animating state
@@ -264,30 +267,22 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         display.text(value);
     },
     _updateValues: function (indicator) {
-        this._setAnimationState(this.seriesService.isAnimating());
-        if (indicator && indicator.series) {
-            const values = indicator.series.values;
-            var seriesChanged = '' + values !== '' + this._uiState.values;
-            if (seriesChanged) {
-                // series changed, update service
-                this.seriesService.setValues(values || []);
-                this._updateLineSegments();
-                this._updateSeriesIndex(this.seriesService.getSelectedIndex());
-                if (this.seriesService.isAnimating()) {
-                    this.seriesService.setAnimating(false);
-                    this._setAnimationState(false);
-                }
-                return true;
+        const active = indicator || this.service.getStateService().getActiveIndicator();
+        if (active && active.series) {
+            this.seriesService.setValues(active.series.values);
+            this._updateLineSegments();
+            this._updateSeriesIndex(this.seriesService.getSelectedIndex());
+            if (this.seriesService.isAnimating()) {
+                this.seriesService.setAnimating(false);
+                this._setAnimationState(false);
             }
         }
-        this._updateSeriesIndex(this.seriesService.getSelectedIndex());
-        return false;
     },
-    _initValues: function () {
-        const indicator = this.service.getStateService().getActiveIndicator();
-        const updated = this._updateValues(indicator);
-        if (!updated) {
-            this._updateLineSegments();
+    _updateSelection: function () {
+        this._setAnimationState(this.seriesService.isAnimating());
+        const index = this.seriesService.getSelectedIndex();
+        if (this._isValidIndex(index)) {
+            this._updateSeriesIndex(index);
         }
     },
     /**
@@ -297,6 +292,6 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.SeriesControl', function (sandb
         this.service.on('StatsGrid.ActiveIndicatorChangedEvent', event =>
             this._updateValues(event.getCurrent()));
         this.service.on('StatsGrid.ParameterChangedEvent', () =>
-            this._updateValues());
+            this._updateSelection());
     }
 });

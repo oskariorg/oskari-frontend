@@ -338,6 +338,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
                 }
                 // bind click handler to content element
                 content.on('click', function () {
+                    jQuery(this).addClass('selected-effect');
                     me.service.getStateService().setActiveIndicator(ind.hash);
                 });
 
@@ -398,6 +399,11 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Datatable', function (sandbox, 
         this.service.on('StatsGrid.ParameterChangedEvent', function (event) {
             log.debug('Indicator parameter changed! ');
             me._handleRegionsetChanged();
+        });
+        this.service.on('StatsGrid.ClassificationChangedEvent', function (event) {
+            if (event.getChanged().hasOwnProperty('fractionDigits')) {
+                me._handleRegionsetChanged();
+            }
         });
 
         this.service.on('StatsGrid.RegionSelectedEvent', function (event) {
