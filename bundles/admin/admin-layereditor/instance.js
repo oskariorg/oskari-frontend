@@ -251,7 +251,7 @@ Oskari.clazz.defineES('Oskari.admin.admin-layereditor.instance',
         getGroups () {
             const groups = this._getLayerService().getAllLayerGroups();
             groups.sort(function (a, b) {
-                return Oskari.util.naturalSort(a.name, b.name);
+                return Oskari.util.naturalSort(Oskari.getLocalized(a.name), Oskari.getLocalized(b.name));
             });
             return groups;
         }
