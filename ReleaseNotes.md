@@ -1,5 +1,43 @@
 # Release Notes
 
+## 1.55.0
+
+For a full list of changes see:
+https://github.com/oskariorg/oskari-frontend/milestone/22?closed=1
+
+New bundle for layer administration: admin-layereditor
+- Currently integrated with layerlist bundle (the React-based layerlisting option) but works with the Oskari request/event API and so can be easily integrated with other layer listing bundles as well
+- LayerModelBuilders now provide information about the layer data they require to function and the fields shown for specific layer type depends on that
+- Also the layer types and versions for layer types that can be managed by the admin is based on layer plugins so this is more extendable approach than before
+- Validation is based on mandatory fields metadata provided by server so the frontend can tell the admin if the server will accept the layer info or not before trying to save it
+- Error handling is much better when adding layers. Reasons for problems are communicated more clearly and in more detail (timeouts, unexpected response from server and what the admin can try to resolve these)
+
+3D:
+- Added a tool/plugin that can be used to control time on the 3D mapmodule. This will affect time in Cesium.js so mostly shadows/sun position at this stage. Time is controllable with the request/event API so RPC can be used for this as well.
+- Added a tool/plugin that can be used to control camera for accessibility when mouse/touch dragging is challenging
+- SetTimeRequest for 3D mapmodule controlling date/time for shadows etc
+
+React components
+- Moved common components and utility to src/react (previously under a bundle)
+- Added Message component for showing localized UI texts
+- Added Messaging component for showing notifications (might be renamed to avoid confusing it with Message component)
+- LocalizationComponent for providing a localizable field for each supported language (common component with admin functionalities)
+- Added a sample bundle for documentary purposes: https://github.com/oskariorg/oskari-frontend/blob/develop/bundles/sample/mymodernbundle/
+
+Other fixes/improvements:
+
+- Fixed an issue with infobox on Firefox: https://github.com/oskariorg/oskari-docs/issues/157
+- Added support for adding multiple custom styles for vector layers in preparation for allowing user to save them (WFS-styles the end user can modify are currently runtime only)
+- Fixed publisher tool layout options
+- Fixed issue with indexmap
+- Fixed some issues with geolocation tracking functionalities
+- Publisher now has a "copy to clipboard" functionality like the link tool
+- Allow download of feature data table for user generated content (my places/userlayer)
+- Added icelandic translations
+- Improvements/fixes for statistical data searches/data fetching/diagram
+- Added text overflow support for vector feature label styling
+
+
 ## 1.54.1
 
 For a full list of changes see:
