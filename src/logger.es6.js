@@ -14,16 +14,59 @@ const hasConsole = !!getConsole();
 // Set to true to enable timestamps in log messages
 let _inclTimestamp = false;
 
+const messageBuffer = [];
+function flushMessages() {
+    while(messageBuffer.length) {
+        _logMsg(messageBuffer.shift());
+    }
+}
+const throttledFlush = throttle(flushMessages, 20000);
+
+// from oskari.util
+function throttle(func, wait, options) {
+    var context, args, result;
+    var timeout = null;
+    var previous = 0;
+    if (!options) options = {};
+    var later = function () {
+        previous = options.leading === false ? 0 : Date.now();
+        timeout = null;
+        result = func.apply(context, args);
+        if (!timeout) context = args = null;
+    };
+    return function () {
+        var now = Date.now();
+        if (!previous && options.leading === false) previous = now;
+        var remaining = wait - (now - previous);
+        context = this;
+        args = arguments;
+        if (remaining <= 0 || remaining > wait) {
+            if (timeout) {
+                clearTimeout(timeout);
+                timeout = null;
+            }
+            previous = now;
+            result = func.apply(context, args);
+            if (!timeout) context = args = null;
+        } else if (!timeout && options.trailing !== false) {
+            timeout = setTimeout(later, remaining);
+        }
+        return result;
+    };
+}
+//setInterval(throttledFlush, 2000);
+
 /** Utility methods for logger */
 function _logMsg(args) {
     var level = args.shift();
+    const logOutput = getConsole();
     if (!hasConsole ||
-        !getConsole()[level] ||
-        !getConsole()[level].apply) {
+        !logOutput[level] ||
+        !logOutput[level].apply) {
         // maybe gather messages and provide a custom debug console?
         return;
     }
-    getConsole()[level].apply(getConsole(), args);
+    logOutput[level].apply(getConsole(), args);
 }
 
 function ts() {
@@ -41,7 +84,9 @@ function _doLogging(logName, logLevel, logMessages) {
     // prefix logName + messages with logLevel
     logMessages.unshift(logLevel);
     // write to log
-    _logMsg(logMessages);
+    messageBuffer.push(logMessages);
+    throttledFlush();
+    //_logMsg(logMessages);
 }
 
 // this will be shared between all loggers
