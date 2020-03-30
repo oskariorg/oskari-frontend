@@ -1,6 +1,6 @@
 {
   "name": "oskari-frontend",
-  "version": "1.55.0-dev",
+  "version": "1.55.0",
   "private": true,
   "description": "Oskari frontend",
   "keywords": [
