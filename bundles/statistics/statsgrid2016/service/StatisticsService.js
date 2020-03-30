@@ -113,15 +113,15 @@
                 return src.type === 'user';
             });
         },
-        getUILabels: function (indicator, callback) {
-            var me = this;
+        getUILabels: function (ind, callback) {
             var selectionValues = this.locale('panels.newSearch.selectionValues');
             if (typeof callback !== 'function') {
                 // log error message
                 return;
             }
+            const { datasource, indicator, selections, series } = ind;
 
-            me.getIndicatorMetadata(indicator.datasource, indicator.indicator, function (err, ind) {
+            this.getIndicatorMetadata(datasource, indicator, function (err, meta) {
                 if (err) {
                     callback({
                         error: true,
@@ -132,49 +132,37 @@
                     });
                     return;
                 }
-
-                var uiLabels = [];
-                var preferredFormatting = [];
-                for (var sel in indicator.selections) {
-                    var val = indicator.selections[sel];
-
-                    ind.selectors.forEach(function (selector) {
-                        selector.allowedValues.forEach(function (value) {
-                            if (val !== (value.id || value)) {
-                                return;
-                            }
-                            var name = value.name;
-                            if (!name) {
-                                name = value.id || value;
-                                // try finding localization for the param
-                                // FIXME: get rid of this -> have server give ui labels
-                                name = (selectionValues[selector.id] && selectionValues[selector.id][name]) ? selectionValues[selector.id][name] : name;
-                            }
-                            uiLabels.push({
-                                selector: selector.id,
-                                id: value.id || value,
-                                label: name
-                            });
-
-                            preferredFormatting.push(name);
-                        });
-                    });
+                const { name, selectors, source } = meta;
+                const uiLabels = [];
+                Object.keys(selections).forEach(key => {
+                    const selection = selections[key];
+                    const foundSelector = selectors.find(s => s.id === key);
+                    if (foundSelector) {
+                        const value = foundSelector.allowedValues.find(v => selection === v.id || selection === v);
+                        const isObject = typeof value === 'object';
+                        const selector = foundSelector.id;
+                        const id = isObject ? value.id : value;
+                        let label;
+                        if (isObject) {
+                            label = value.name;
+                        } else {
+                            // try finding localization for the param
+                            label = Oskari.util.keyExists(selectionValues, selector + '.' + value) ? selectionValues[selector][value] : value;
+                        }
+                        uiLabels.push({ selector, id, label });
+                    }
+                });
+                const localizedName = Oskari.getLocalized(name);
+                let selectorsFormatted = ' (' + uiLabels.map(l => l.label).join(' / ') + ')';
+                if (series) {
+                    const range = String(series.values[0]) + ' - ' + String(series.values[series.values.length - 1]);
+                    selectorsFormatted = range + ' ' + selectorsFormatted;
                 }
-
-                var name = Oskari.getLocalized(ind.name);
-                var selectorsFormatted;
-                if (indicator.series) {
-                    var range = String(indicator.series.values[0]) + ' - ' + String(indicator.series.values[indicator.series.values.length - 1]);
-                    selectorsFormatted = range + ' (' + preferredFormatting.join(' / ') + ')';
-                } else {
-                    selectorsFormatted = '(' + preferredFormatting.join(' / ') + ')';
-                }
-
                 callback({
-                    indicator: name,
-                    source: Oskari.getLocalized(ind.source),
+                    indicator: localizedName,
+                    source: Oskari.getLocalized(source),
                     params: selectorsFormatted,
-                    full: name + ' ' + selectorsFormatted,
+                    full: localizedName + ' ' + selectorsFormatted,
                     paramsAsObject: uiLabels
                 });
             });
