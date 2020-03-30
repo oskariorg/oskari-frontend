@@ -90,11 +90,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.IndicatorList', function (servi
     _getIndicatorText (labels) {
         const { indicator, params, full } = labels;
         let cutLength = 60;
+        let minLength = 20;
         const dots = '... ';
         if (indicator && full.length > cutLength) {
             if (params) {
                 cutLength = cutLength - dots.length - params.length;
-                return indicator.substring(0, cutLength) + dots + params;
+                return indicator.substring(0, Math.max(minLength, cutLength)) + dots + params;
             } else {
                 cutLength = cutLength - dots.length;
                 return indicator.substring(0, cutLength) + dots;
