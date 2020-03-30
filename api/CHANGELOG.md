@@ -33,6 +33,11 @@ Year as a number, defaults to current year (optional)
 2019 || 2010
 ```
 
+
+### [mod] [rpc] AfterMapMoveEvent
+
+Event now includes details for camera position when using the 3D mapmodule
+
 ## 1.54.0
 
 ### [add] [rpc] New MapTourRequest Request
