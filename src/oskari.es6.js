@@ -45,7 +45,7 @@ function appendQueryToURL(url, query) {
 }
 
 const Oskari = {
-    VERSION: '1.55.0',
+    VERSION: '1.56.0-dev',
     setMarkers (markers) {
         _markers = markers || [];
     },
