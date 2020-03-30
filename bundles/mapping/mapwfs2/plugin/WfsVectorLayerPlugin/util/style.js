@@ -130,8 +130,7 @@ const getStyleForGeometry = (geometry, styleTypes) => {
     case 'GeometryCollection':
         const geometries = geometry.getGeometries();
         if (geometries && geometries.length > 0) {
-            const geometryNames = geometries.map(g => g.getType());
-            log.info('Received GeometryCollection with geometries ' + geometryNames + '. Using first one to determine feature style.');
+            log.debug('Received GeometryCollection. Using first feature to determine feature style.');
             style = getStyleForGeometry(geometries[0], styleTypes);
         } else {
             log.info('Received GeometryCollection without geometries. Feature style cannot be determined.');
