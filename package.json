@@ -90,7 +90,7 @@
     "sass-loader": "8.0.0",
     "script-loader": "0.7.2",
     "style-loader": "1.0.0",
-    "styled-components": "4.3.2",
+    "styled-components": "5.0.1",
     "sumoselect": "3.0.5",
     "uglifyjs-webpack-plugin": "2.2.0",
     "webpack": "4.39.3",
