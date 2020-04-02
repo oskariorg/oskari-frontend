@@ -76,7 +76,7 @@
     "lodash": "4.17.15",
     "merge": "1.2.1",
     "mini-css-extract-plugin": "0.8.0",
-    "mobile-detect": "1.4.3",
+    "mobile-detect": "1.4.4",
     "moment": "2.24.0",
     "node-sass": "4.12.0",
     "ol": "6.2.1",
