@@ -13,6 +13,7 @@ import * as olProjProj4 from 'ol/proj/proj4';
 import * as olProj from 'ol/proj';
 import { easeOut } from 'ol/easing';
 import olMap from 'ol/Map';
+import 'ol/ol.css';
 import { defaults as olControlDefaults } from 'ol/control';
 import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
