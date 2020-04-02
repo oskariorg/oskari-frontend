@@ -18,8 +18,6 @@ import * as olSphere from 'ol/sphere';
 import * as olGeom from 'ol/geom';
 import { fromCircle } from 'ol/geom/Polygon';
 import olFeature from 'ol/Feature';
-import { toPng } from 'html-to-image';
-
 import { OskariImageWMS } from './plugin/wmslayer/OskariImageWMS';
 import { getOlStyle } from './oskariStyle/generator.ol';
 import { LAYER_ID } from '../mapmodule/domain/constants';
@@ -343,24 +341,25 @@ export class MapModule extends AbstractMapModule {
             return;
         }
 
-        const exportOptions = {
-            filter: (element) => {
-                // Don't include canvas elements with zero width to screenshot
-                if (element instanceof HTMLCanvasElement && element.width === 0) {
-                    return false;
+        me.getMap().once('rendercomplete', function () {
+            const mapCanvas = document.createElement('canvas');
+            const size = me.getMap().getSize();
+            mapCanvas.width = size[0];
+            mapCanvas.height = size[1];
+            const mapContext = mapCanvas.getContext('2d');
+            Array.prototype.forEach.call(document.querySelectorAll('.ol-layer canvas'), function (canvas) {
+                if (canvas.width > 0) {
+                    const opacity = canvas.parentNode.style.opacity;
+                    mapContext.globalAlpha = opacity === '' ? 1 : Number(opacity);
+                    const transform = canvas.style.transform;
+                    // Get the transform parameters from the style's transform matrix
+                    const matrix = transform.match(/^matrix\(([^(]*)\)$/)[1].split(',').map(Number);
+                    // Apply the transform to the export map context
+                    CanvasRenderingContext2D.prototype.setTransform.apply(mapContext, matrix);
+                    mapContext.drawImage(canvas, 0, 0);
                 }
-                // Don't include map controls to screenshot
-                return element.className ? element.className.indexOf('ol-control') === -1 : true;
-            }
-        };
-
-        me.getMap().once('rendercomplete', () => {
-            toPng(me.getMap().getViewport(), exportOptions).then((dataUrl) => {
-                callback(dataUrl);
-            }).catch(err => {
-                me.log.warn('Error producing a screenshot png data url: ' + err);
-                callback('');
             });
+            callback(mapCanvas.toDataURL());
         });
 
         try {
