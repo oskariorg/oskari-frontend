@@ -64,7 +64,7 @@ export const Srs = ({ layer, propertyFields, controller }) => {
     let supported = [];
     let missing = [];
     if (propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
-        if (Array.isArray(layer.capabilities.srs)) {
+        if (layer.capabilities && Array.isArray(layer.capabilities.srs)) {
             supported = layer.capabilities.srs;
         }
         missing = systemProjections.filter(cur => !supported.includes(cur));
