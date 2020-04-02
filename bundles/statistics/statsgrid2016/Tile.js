@@ -134,13 +134,12 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
         var me = this;
         var extraOptions = me.getExtensions();
         Object.keys(extraOptions).forEach(function (key) {
-            // hide all flyout
-            me.flyoutManager.hide(key);
             // hide the tile "extra selection"
             var extension = extraOptions[key];
             extension.removeClass('material-selected');
             extension.addClass('hidden');
         });
+        this.flyoutManager.tileClosed();
     },
     /**
      * Shows the tile extra options (when tile is activated)
@@ -153,6 +152,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
         Object.keys(extraOptions).forEach(function (key) {
             extraOptions[key].removeClass('hidden');
         });
+        this.flyoutManager.tileAttached();
     },
     /**
      * [getExtensions description]

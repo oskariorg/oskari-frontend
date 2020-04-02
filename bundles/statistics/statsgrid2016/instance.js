@@ -287,22 +287,14 @@ Oskari.clazz.define(
                 this.getSandbox().postRequestByName('userinterface.UpdateExtensionRequest', [this, 'close']);
             },
             'userinterface.ExtensionUpdatedEvent': function (event) {
-                var me = this;
                 // Not handle other extension update events
-                if (event.getExtension().getName() !== me.getName()) {
+                if (event.getExtension().getName() !== this.getName()) {
                     return;
                 }
-                var wasClosed = event.getViewState() === 'close';
-                // moving flyout around will trigger attach states on each move
-                var visibilityChanged = this.visible === wasClosed;
-                this.visible = !wasClosed;
-                if (!visibilityChanged) {
-                    return;
-                }
-                if (wasClosed) {
-                    me.getTile().hideExtensions();
+                if (event.getViewState() === 'close') {
+                    this.getTile().hideExtensions();
                 } else {
-                    me.getTile().showExtensions();
+                    this.getTile().showExtensions();
                 }
             },
             AfterMapLayerRemoveEvent: function (event) {
