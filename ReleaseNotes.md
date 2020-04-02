@@ -2,7 +2,7 @@
 
 ## 1.55.1
 
-Main reason for this hotfix was a problem with a vectortile layer styling library that prevented vectortile layers from being rendered (fixed in https://github.com/openlayers/ol-mapbox-style/pull/262).
+Main reason for this hotfix was a problem with a vector tile styling library that prevented vector tile layers from being rendered (fixed in https://github.com/openlayers/ol-mapbox-style/pull/262).
 
 For a full list of changes see:
 https://github.com/oskariorg/oskari-frontend/milestone/25?closed=1
