@@ -1,5 +1,18 @@
 # Release Notes
 
+## 1.55.1
+
+Updates to libraries:
+
+- OpenLayers 6.1.1 -> 6.2.1
+- ol-mapbox-style 5.0.2 -> 6.1.1
+- React 16.11 -> 16.12 (tested with 16.13 but it needs more changes to work properly)
+- Styled-components 4.3.2 -> 5.0.1
+- React-beautiful-dnd 12.0.0 -> 13.0.0
+- mobile-detect 1.4.3 -> 1.4.4
+
+Main reason being a problem with vectortile layer styling that prevented vectortile layers to be rendered (fixed in https://github.com/openlayers/ol-mapbox-style/pull/262).
+
 ## 1.55.0
 
 For a full list of changes see:
