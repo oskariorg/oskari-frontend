@@ -64,11 +64,11 @@ const getVersionField = (layer, propertyFields, controller, versions) => {
     return (<Version layer={layer} versions={versions} controller={controller} />);
 };
 
-const getSRSField = (layer, propertyFields, controller, capabilities) => {
+const getSRSField = (layer, propertyFields, controller) => {
     if (!propertyFields.includes(SRS)) {
         return null;
     }
-    return (<Srs layer={layer} controller={controller} propertyFields={propertyFields} capabilities={capabilities} />);
+    return (<Srs layer={layer} controller={controller} propertyFields={propertyFields} />);
 };
 
 const getTileGridField = (layer, propertyFields, controller) => {

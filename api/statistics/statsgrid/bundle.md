@@ -136,11 +136,6 @@ Indicator selector, regionset selector and a datagrid with the indicator data ar
     <td> To control maplayers as regionsets via requests </td>
   </tr>
   <tr>
-    <td> Oskari mapstats </td>
-    <td> Expects to be present in the application setup </td>
-    <td> Provides support for statslayer layertype which are used as regionsets </td>
-  </tr>
-  <tr>
     <td> Oskari divmanazer</td>
     <td> Expects to be present in the application setup </td>
     <td> For basic UI components </td>

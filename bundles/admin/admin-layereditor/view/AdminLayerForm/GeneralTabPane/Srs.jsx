@@ -58,14 +58,14 @@ MissingSRS.propTypes = {
     epsgCodes: PropTypes.arrayOf(PropTypes.string)
 };
 
-export const Srs = ({ layer, capabilities = {}, propertyFields, controller }) => {
+export const Srs = ({ layer, propertyFields, controller }) => {
     const systemProjections = Array.from(new Set(Oskari.app.getSystemDefaultViews().map(view => view.srsName)));
     const forced = (layer.attributes && layer.attributes.forcedSRS) || [];
     let supported = [];
     let missing = [];
     if (propertyFields.includes(LayerComposingModel.CAPABILITIES)) {
-        if (Array.isArray(capabilities.srs)) {
-            supported = capabilities.srs;
+        if (layer.capabilities && Array.isArray(layer.capabilities.srs)) {
+            supported = layer.capabilities.srs;
         }
         missing = systemProjections.filter(cur => !supported.includes(cur));
     }
@@ -90,7 +90,6 @@ export const Srs = ({ layer, capabilities = {}, propertyFields, controller }) =>
 
 Srs.propTypes = {
     layer: PropTypes.object.isRequired,
-    capabilities: PropTypes.object,
     propertyFields: PropTypes.arrayOf(PropTypes.string).isRequired,
     controller: PropTypes.instanceOf(Controller).isRequired
 };
