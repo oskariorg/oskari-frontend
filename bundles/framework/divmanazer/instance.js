@@ -645,25 +645,8 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
 
             flyoutInfo = extensionInfo.plugins['Oskari.userinterface.Flyout'];
 
-            /* opening  flyouts 'attached' closes previously attachily opened  flyout(s) */
-            if (state === 'attach' && flyoutInfo) {
-                if (request.getExtensionLocation().top || request.getExtensionLocation().left) {
-                    me.origExtensionLocation = {};
-                }
-
-                var extLocation = function (request, me, axis) {
-                    if (me.origExtensionLocation) {
-                        if (request.getExtensionLocation()[axis]) {
-                            me.origExtensionLocation[axis] = jQuery(flyoutInfo.el).css(axis);
-                            jQuery(flyoutInfo.el).css(axis, request.getExtensionLocation()[axis] + 'px');
-                        } else if (me.origExtensionLocation[axis]) {
-                            jQuery(flyoutInfo.el).css(axis, me.origExtensionLocation[axis]);
-                        }
-                    }
-                };
-                extLocation(request, me, 'top');
-                extLocation(request, me, 'left');
-
+            /* opening extension 'attached' closes previously attachily opened extensions (tile, flyout) */
+            if (state === 'attach') {
                 ops = me.flyoutOps;
                 closeOp = ops.close;
                 for (n = 0, len = extensions.length; n < len; n += 1) {
@@ -682,32 +665,43 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                     if (otherFlyoutInfo) {
                         otherFlyoutPlugin = otherFlyoutInfo.plugin;
                         otherFlyout = otherFlyoutInfo.el;
-
-                        otherExtensionInfo.state = otherState;
                         closeOp.apply(this, [otherFlyout, otherFlyoutPlugin, otherExtensionInfo]);
-
-                        me.notifyExtensionViewStateChange(otherExtensionInfo);
-                    } else {
-                        continue;
                     }
-
                     otherTileInfo = plgnfo['Oskari.userinterface.Tile'];
                     if (otherTileInfo) {
                         otherTile = otherTileInfo.el;
-
                         me.applyTransition(otherTile, otherState, me.tileTransitions);
                     }
+                    otherExtensionInfo.state = otherState;
+                    me.notifyExtensionViewStateChange(otherExtensionInfo);
                 }
             }
+            var extLocation = function (request, me, axis) {
+                // TODO
+                if (request.getExtensionLocation().top || request.getExtensionLocation().left) {
+                    me.origExtensionLocation = {};
+                }
+                if (me.origExtensionLocation) {
+                    if (request.getExtensionLocation()[axis]) {
+                        me.origExtensionLocation[axis] = jQuery(flyoutInfo.el).css(axis);
+                        jQuery(flyoutInfo.el).css(axis, request.getExtensionLocation()[axis] + 'px');
+                    } else if (me.origExtensionLocation[axis]) {
+                        jQuery(flyoutInfo.el).css(axis, me.origExtensionLocation[axis]);
+                    }
+                }
+            };
 
             /* let's transition flyout if one exists */
             if (flyoutInfo) {
                 flyoutPlugin = flyoutInfo.plugin;
                 flyout = flyoutInfo.el;
-
-                // if flyout plugin has a lazyRender created, use it.
-                if (state === 'attach' && flyoutPlugin.lazyRender) {
-                    flyoutPlugin.lazyRender();
+                if (state === 'attach') {
+                    extLocation(request, me, 'top');
+                    extLocation(request, me, 'left');
+                    // if flyout plugin has a lazyRender created, use it.
+                    if (flyoutPlugin.lazyRender) {
+                        flyoutPlugin.lazyRender();
+                    }
                 }
 
                 /**
