@@ -131,13 +131,9 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
      * Hides all the extra options (used when tile is "deactivated")
      */
     hideExtensions: function () {
-        var me = this;
-        var extraOptions = me.getExtensions();
+        var extraOptions = this.getExtensions();
         Object.keys(extraOptions).forEach(function (key) {
-            // hide the tile "extra selection"
-            var extension = extraOptions[key];
-            extension.removeClass('material-selected');
-            extension.addClass('hidden');
+            extraOptions[key].addClass('hidden');
         });
         this.flyoutManager.tileClosed();
     },
@@ -146,9 +142,7 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.Tile', function (instance, serv
      * @return {[type]} [description]
      */
     showExtensions: function () {
-        var me = this;
-        var extraOptions = me.getExtensions();
-        this.flyoutManager.init();
+        var extraOptions = this.getExtensions();
         Object.keys(extraOptions).forEach(function (key) {
             extraOptions[key].removeClass('hidden');
         });
