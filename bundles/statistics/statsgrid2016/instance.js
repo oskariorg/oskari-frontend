@@ -243,6 +243,7 @@ Oskari.clazz.define(
                     this._removeStatsLayer();
                     this._setClassificationViewVisible(false);
                     this._setSeriesControlVisible(false);
+                    this.flyoutManager.hideFlyouts();
                 } else {
                     this.statsService.getStateService().getIndicators().forEach(ind => {
                         this.addDataProviderInfo(ind);
