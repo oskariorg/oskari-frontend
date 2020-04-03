@@ -7,20 +7,6 @@ $lightIcon: url("../images/world_light.svg");
 div.mapplugin.indexmap {
     text-align: left;
 
-    .olControlOverviewMapElement {
-        /* Hide by default, control's maximize: false doesn't seem to do anything */
-        display: none;
-        background-color: #FFFFFF;
-        border-color: #D0D0D0;
-        border-left-width: 2px;
-        border-style: solid;
-        border-top-width: 2px;
-        padding: 5px;
-        margin-left: $toggleSize;
-        margin-right: 0;
-        margin-bottom: -$toggleSize;
-    }
-
     div.icon {
         width: $toggleSize !important;
         height: $toggleSize !important;
@@ -113,14 +99,7 @@ div.mapplugin.indexmap {
 .right {
     div.mapplugin.indexmap {
         text-align: right;
-
-        .olControlOverviewMapElement {
-            margin-left: 0;
-            margin-right: $toggleSize;
-        }
-
     }
-
 }
 
 /**
