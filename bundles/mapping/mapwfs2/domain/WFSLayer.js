@@ -8,7 +8,7 @@ const VectorTileLayer = Oskari.clazz.get('Oskari.mapframework.mapmodule.VectorTi
 
 export class WFSLayer extends VectorTileLayer {
     constructor () {
-        super();
+        super(...arguments);
         /* Layer Type */
         this._layerType = 'WFS';
         this._featureData = true;

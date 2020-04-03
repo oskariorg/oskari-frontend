@@ -12,18 +12,6 @@ div.mapplugin.scalebar {
     border-left: 1px solid black;
     border-right: 1px solid black;
 
-/*
-    border-left: 2px solid #000000;
-    border-bottom: 2px solid #000000;
-    border-right: 2px solid #000000;
-*/
-/*
-    div.ol-scale-line {
-        div.ol-scale-line-inner {
-            padding: 2px;
-        }
-    }
-*/
     div {
         // Add a slight brightening to the bg so the scale is visible on dark backgrounds
         background-color: rgba(255, 255, 255, 0.2);
@@ -45,7 +33,21 @@ div.mapplugin.scalebar {
     }
 
     div.ol-scale-line {
+        /* reset styles that are set ny ol/ol.css */
+        /* all: unset; works in chrome but not in IE */
+        border-radius: inherit;
+        background: inherit;
+        bottom: inherit;
+        left: inherit;
+        padding: inherit;
+        position: inherit;
         div.ol-scale-line-inner {
+            /* reset styles that are set ny ol/ol.css */
+            border: inherit;
+            border-top: inherit;
+            color: inherit;
+            font-size: inherit;
+            margin: inherit;
             &::before {
               content:'';
               padding-left: 5px;
