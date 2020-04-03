@@ -7,20 +7,6 @@ $lightIcon: url("../images/world_light.svg");
 div.mapplugin.indexmap {
     text-align: left;
 
-    .olControlOverviewMapElement {
-        /* Hide by default, control's maximize: false doesn't seem to do anything */
-        display: none;
-        background-color: #FFFFFF;
-        border-color: #D0D0D0;
-        border-left-width: 2px;
-        border-style: solid;
-        border-top-width: 2px;
-        padding: 5px;
-        margin-left: $toggleSize;
-        margin-right: 0;
-        margin-bottom: -$toggleSize;
-    }
-
     div.icon {
         width: $toggleSize !important;
         height: $toggleSize !important;
@@ -106,25 +92,23 @@ div.mapplugin.indexmap {
     .mapplugin.ol_indexmap {
         width: 150px !important;
         height:150px !important;
-        display: inline;}
+        display: inline;
+    }
 }
 
 .right {
     div.mapplugin.indexmap {
         text-align: right;
-
-        .olControlOverviewMapElement {
-            margin-left: 0;
-            margin-right: $toggleSize;
-        }
-
     }
-
 }
 
 /**
   ol specific
  */
+div.ol-overviewmap.ol-control {
+    /* reset positioning that is set in ol/ol.css so the indexmap isn't opened outside the browser window */ 
+    position: inherit;
+}
 .ol-overviewmap .ol-overviewmap-map {
     border: 1px solid #3c3c3c;
     height: 150px;
