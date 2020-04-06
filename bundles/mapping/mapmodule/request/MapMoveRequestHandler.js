@@ -17,6 +17,7 @@ Oskari.clazz.define(
     function (sandbox, mapModule) {
         this.sandbox = sandbox;
         this.mapModule = mapModule;
+        this._log = Oskari.log('MapMoveRequestHandler');
     }, {
         /**
          * @method handleRequest
@@ -32,15 +33,19 @@ Oskari.clazz.define(
             const requestZoom = request.getZoom();
             const srsName = request.getSrsName();
             const animation = request.getAnimation();
-            const requestLonlat = {
-                lon: request.getCenterX(),
-                lat: request.getCenterY()
-            };
-            const options = { animation: animation };
+            const lon = request.getCenterX();
+            const lat = request.getCenterY();
             let zoom;
-
+            if (!this.mapModule.isValidLonLat(lon, lat)) {
+                if (this.mapModule.isValidBounds(requestZoom)) {
+                    this.mapModule.zoomToExtent(requestZoom);
+                } else {
+                    this._log.warn('Map move requested without valid location or bounds');
+                }
+                return;
+            }
             // transform coordinates to given projection
-            const lonlat = this.mapModule.transformCoordinates(requestLonlat, srsName);
+            const lonlat = this.mapModule.transformCoordinates({ lon, lat }, srsName);
 
             // check if zoom is not null or undefined
             if (requestZoom != null) {
@@ -49,7 +54,10 @@ Oskari.clazz.define(
                     ? { type: 'scale', value: this.mapModule.getResolutionForScale(requestZoom.scale) }
                     : { type: 'zoom', value: requestZoom };
             }
-            this.mapModule.centerMap(lonlat, zoom, true, options);
+            const success = this.mapModule.centerMap(lonlat, zoom, true, { animation });
+            if (success === false) {
+                this._log.warn('MapMoveRequest failed');
+            }
         }
     }, {
         /**
