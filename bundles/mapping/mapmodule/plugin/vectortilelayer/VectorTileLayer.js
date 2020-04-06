@@ -1,5 +1,8 @@
 Oskari.clazz.define('Oskari.mapframework.mapmodule.VectorTileLayer',
     function () {
+        // passes params and options to AbstractLayer constructor automatically.
+        // If this is changed to ES6 class these will need to be passed manually with super(...arguments)
+        // like in https://github.com/oskariorg/oskari-frontend/pull/1260
         /* style definition for this layer */
         this.hoverOptions = null;
 
