@@ -2358,6 +2358,18 @@ Oskari.clazz.define(
             return false;
         },
         /**
+         * @method @public isValidBounds
+         * checks if given object is valid bounds object
+         * @return {boolean}
+         */
+        isValidBounds: function (obj) {
+            if (typeof obj !== 'object') {
+                return false;
+            }
+            const props = ['left', 'top', 'bottom', 'right'];
+            return props.every(p => obj.hasOwnProperty(p) && typeof obj[p] === 'number');
+        },
+        /**
          * @method handleMapLayerUpdateRequest
          * Update layer params and force update (wms) or force redraw for other layer types
          * @param layerId
