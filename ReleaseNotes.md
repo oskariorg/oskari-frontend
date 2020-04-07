@@ -1,5 +1,12 @@
 # Release Notes
 
+## 1.55.2
+
+- Fix issue with styles on user generated content (myplaces and userlayer layers)
+- Fix visual/layout issues with map scalebar and index map
+- Update OpenLayers 6.2.1 -> 6.3.1
+- Restore an undocumented option for MapMoveRequest to work with just giving bounds without center coordinates. No documentation added as we don't recommend using MapMoveRequest without mandatory x and y coordinates. As bounds can be used to adjust viewport (location and zoom) as only parameter we will probably move this possibility to another request in the future.
+
 ## 1.55.1
 
 Main reason for this hotfix was a problem with a vector tile styling library that prevented vector tile layers from being rendered (fixed in https://github.com/openlayers/ol-mapbox-style/pull/262).
