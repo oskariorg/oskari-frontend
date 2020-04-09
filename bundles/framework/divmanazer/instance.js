@@ -677,7 +677,6 @@ Oskari.clazz.define('Oskari.userinterface.bundle.ui.UserInterfaceBundleInstance'
                 }
             }
             var extLocation = function (request, me, axis) {
-                // TODO
                 if (request.getExtensionLocation().top || request.getExtensionLocation().left) {
                     me.origExtensionLocation = {};
                 }
