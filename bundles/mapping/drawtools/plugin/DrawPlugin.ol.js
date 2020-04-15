@@ -988,13 +988,7 @@ Oskari.clazz.define(
                 var mapmodule = this.getMapModule();
                 if (geom instanceof olGeom.Polygon) {
                     area = mapmodule.getGeomArea(geom);
-                    if (area < 10000) {
-                        area = area.toFixed(0) + ' m&sup2;';
-                    } else if (area > 1000000) {
-                        area = (area / 1000000).toFixed(3) + ' km&sup2;';
-                    } else {
-                        area = (area / 10000).toFixed(2) + ' ha';
-                    }
+                    area = mapmodule.formatMeasurementResult(area, 'area');
                     if (area) {
                         area = area.replace('.', ',');
                     }
@@ -1009,11 +1003,7 @@ Oskari.clazz.define(
                     }
                 } else if (geom instanceof olGeom.LineString) {
                     length = mapmodule.getGeomLength(geom);
-                    if (length < 1000) {
-                        length = length.toFixed(0) + ' m';
-                    } else {
-                        length = (length / 1000).toFixed(3) + ' km';
-                    }
+                    length = mapmodule.formatMeasurementResult(length, 'line');
                     if (length) {
                         length = length.replace('.', ',');
                     }
