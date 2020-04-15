@@ -120,5 +120,21 @@ Oskari.clazz.define('Oskari.statistics.statsgrid.FlyoutManager', function (insta
     },
     getFlyout: function (type) {
         return this.flyouts[type];
+    },
+    tileAttached: function () {
+        if (this.service.hasIndicators()) {
+            return;
+        }
+        this.open('search');
+    },
+    tileClosed: function () {
+        this.hide('search');
+    },
+    hideFlyouts: function () {
+        Object.keys(this.flyouts).forEach(type => {
+            if (type === 'search') return;
+            this.hide(type);
+        });
     }
+
 });
