@@ -446,6 +446,7 @@ export class MapModule extends AbstractMapModule {
         if (typeof measurement !== 'number') {
             return;
         }
+        const zoomedForAccuracy = this.getResolution() < 1;
 
         if (drawMode === 'area') {
             // 1 000 000 m² === 1 km²
@@ -455,7 +456,7 @@ export class MapModule extends AbstractMapModule {
                 unit = ' km²';
             } else if (measurement < 10000) {
                 result = measurement;// (Math.round(100 * measurement) / 100);
-                decimals = 0;
+                decimals = zoomedForAccuracy ? 1 : 0;
                 unit = ' m²';
             } else {
                 result = measurement / 10000; // (Math.round(100 * measurement) / 100);
@@ -470,7 +471,7 @@ export class MapModule extends AbstractMapModule {
                 unit = ' km';
             } else {
                 result = measurement; // (Math.round(100 * measurement) / 100);
-                decimals = 0;
+                decimals = zoomedForAccuracy ? 1 : 0;
                 unit = ' m';
             }
         } else {
