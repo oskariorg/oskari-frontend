@@ -396,17 +396,14 @@ export class MapModule extends AbstractMapModule {
      *
      * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
      * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
+     * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomArea (geometry) {
         if (!geometry || (geometry.getType() !== 'Polygon' && geometry.getType() !== 'MultiPolygon')) {
             return 0;
         }
         var sourceProj = this.getMap().getView().getProjection();
-        if (sourceProj.getUnits() !== 'degrees') {
-            return geometry.getArea();
-        }
-        var geom = geometry.clone().transform(sourceProj, 'EPSG:4326');
-        return Math.abs(olSphere.getArea(geom, { projection: 'EPSG:4326', radius: 6378137 }));
+        return olSphere.getArea(geometry, { projection: sourceProj });
     }
 
     /**
@@ -418,23 +415,14 @@ export class MapModule extends AbstractMapModule {
      *
      * http://gis.stackexchange.com/questions/142062/openlayers-3-linestring-getlength-not-returning-expected-value
      * "Bottom line: if your view is 4326 or 3857, don't use getLength()."
+     * https://openlayers.org/en/latest/apidoc/module-ol_sphere.html
      */
     getGeomLength (geometry) {
-        var length = 0;
         if (!geometry || geometry.getType() !== 'LineString') {
             return 0;
         }
         var sourceProj = this.getMap().getView().getProjection();
-        if (sourceProj.getUnits() !== 'degrees') {
-            return geometry.getLength();
-        }
-        var coordinates = geometry.getCoordinates();
-        for (var i = 0, ii = coordinates.length - 1; i < ii; ++i) {
-            var c1 = olProj.transform(coordinates[i], sourceProj, 'EPSG:4326');
-            var c2 = olProj.transform(coordinates[i + 1], sourceProj, 'EPSG:4326');
-            length += olSphere.getDistance(c1, c2, 6378137);
-        }
-        return length;
+        return olSphere.getLength(geometry, { projection: sourceProj });
     }
 
     /**
