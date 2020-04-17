@@ -83,7 +83,7 @@ class ViewHandler extends StateHandler {
 
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
-        const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
+        const layers = filterId === 'all' ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
         const isUserAdmin = tools.length > 0;
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.

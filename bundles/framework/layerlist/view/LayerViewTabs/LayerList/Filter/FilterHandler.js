@@ -7,12 +7,21 @@ class ViewHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.layerlistService = this.sandbox.getService('Oskari.mapframework.service.LayerlistService');
         this.state = {
-            activeFilterId: null,
+            activeFilterId: 'all',
             searchText: null,
-            filters: Object.values(this.layerlistService.getLayerlistFilterButtons())
+            filters: this.initFilters()
         };
         this.layerlistService.on('Layerlist.Filter.Button.Add',
             ({ properties }) => this.addFilter(properties));
+    }
+    initFilters () {
+        // Add all layers selection to first
+        const all = {
+            text: Oskari.getMsg('LayerList', 'filter.all.title'),
+            tooltip: Oskari.getMsg('LayerList', 'filter.all.tooltip'),
+            id: 'all'
+        };
+        return [all, ...Object.values(this.layerlistService.getLayerlistFilterButtons())];
     }
 
     setActiveFilterId (activeFilterId) {
