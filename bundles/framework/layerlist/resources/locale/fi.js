@@ -15,7 +15,10 @@ Oskari.registerLocalization(
             },
             'filter': {
                 'title': 'Näytä',
-                'placeholder': 'Kaikki karttatasot',
+                'all': {
+                    'title': 'Kaikki karttatasot',
+                    'tooltip': ''
+                },
                 'search': {
                     'placeholder': 'Hae karttatasoa nimen, tiedontuottajan tai avainsanan perusteella',
                     'tooltip': 'Voit hakea karttatasoa nimen, tiedontuottajan tai avainsanan perusteella. Voit kirjoittaa nimen kokonaan tai vain osan nimestä.',    

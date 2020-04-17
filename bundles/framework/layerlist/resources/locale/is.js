@@ -15,7 +15,10 @@ Oskari.registerLocalization(
             },
             'filter': {
                 'title': 'Sýna',
-                'placeholder': 'All layers',
+                'all': {
+                    'title': 'All layers',
+                    'tooltip': ''
+                },
                 'search': {
                     'placeholder': 'Leita í kortalögum eftir nafni kortalags, nafni gagnaframleiðanda eða lykilorði sem lýsir kortalaginu.',
                     'tooltip': 'Skrifaðu hluta nafnsins á kortalaginu, nafn gagnaframleiðanda eða lykilorð sem lýsir kortalaginu.'
