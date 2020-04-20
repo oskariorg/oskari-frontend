@@ -1,4 +1,5 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
+import { FILTER_ALL_LAYERS } from '..';
 
 class ViewHandler extends StateHandler {
     constructor (instance) {
@@ -7,7 +8,7 @@ class ViewHandler extends StateHandler {
         this.sandbox = instance.getSandbox();
         this.layerlistService = this.sandbox.getService('Oskari.mapframework.service.LayerlistService');
         this.state = {
-            activeFilterId: 'all',
+            activeFilterId: FILTER_ALL_LAYERS,
             searchText: null,
             filters: this.initFilters()
         };
@@ -19,7 +20,7 @@ class ViewHandler extends StateHandler {
         const all = {
             text: Oskari.getMsg('LayerList', 'filter.all.title'),
             tooltip: Oskari.getMsg('LayerList', 'filter.all.tooltip'),
-            id: 'all'
+            id: FILTER_ALL_LAYERS
         };
         return [all, ...Object.values(this.layerlistService.getLayerlistFilterButtons())];
     }
