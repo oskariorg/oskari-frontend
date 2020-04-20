@@ -1,5 +1,6 @@
 import { StateHandler, controllerMixin } from 'oskari-ui/util';
 import { groupLayers } from './util';
+import { FILTER_ALL_LAYERS } from '..';
 
 const ANIMATION_TIMEOUT = 400;
 const LAYER_REFRESH_THROTTLE = 2000;
@@ -21,7 +22,7 @@ class ViewHandler extends StateHandler {
         this.map = this.sandbox.getMap();
         this.groupingMethod = groupingMethod;
         this.filter = {
-            activeId: null,
+            activeId: FILTER_ALL_LAYERS,
             text: null
         };
         this.state = {
@@ -83,7 +84,7 @@ class ViewHandler extends StateHandler {
 
     updateLayerGroups () {
         const { searchText, activeId: filterId } = this.filter;
-        const layers = filterId ? this.mapLayerService.getFilteredLayers(filterId) : this.mapLayerService.getAllLayers();
+        const layers = filterId === FILTER_ALL_LAYERS ? this.mapLayerService.getAllLayers() : this.mapLayerService.getFilteredLayers(filterId);
         const tools = Object.values(this.toolingService.getTools()).filter(tool => tool.getTypes().includes('layergroup'));
         const isUserAdmin = tools.length > 0;
         // For admin users all groups and all data providers are provided to groupLayers function to include possible empty groups to layerlist.

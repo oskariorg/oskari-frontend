@@ -1,18 +1,18 @@
 import { FilterHandler } from '.';
 import { testFilters } from './Filter.test.util';
 import { initServices, getBundleInstance } from '../../test.util';
+import { FILTER_ALL_LAYERS } from '..';
 
 describe('FilterHandler', () => {
     initServices();
     const handler = new FilterHandler(getBundleInstance());
 
     test('ui state initializes correctly', () => {
-        expect.assertions(1);
-        expect(handler.getState()).toStrictEqual({
-            activeFilterId: null,
-            searchText: null,
-            filters: []
-        });
+        expect.assertions(3);
+        const { searchText, activeFilterId, filters } = handler.getState();
+        expect(activeFilterId).toBe(FILTER_ALL_LAYERS);
+        expect(searchText).toBe(null);
+        expect(filters[0].id).toBe(FILTER_ALL_LAYERS);
     });
 
     test('has controller', () => {
@@ -23,7 +23,7 @@ describe('FilterHandler', () => {
     test('adding filters', () => {
         expect.assertions(1);
         testFilters.forEach(cur => handler.addFilter(cur));
-        expect(handler.getState().filters.length).toBe(2);
+        expect(handler.getState().filters.length).toBe(3);
     });
 
     test('notifying state changes', () => {

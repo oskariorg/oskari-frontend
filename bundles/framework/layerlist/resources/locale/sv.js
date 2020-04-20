@@ -15,7 +15,10 @@ Oskari.registerLocalization(
             },
             'filter': {
                 'title': 'Visa',
-                'placeholder': 'Alla kartlager',
+                'all': {
+                    'title': 'Alla kartlager',
+                    'tooltip': ''
+                },
                 'search': {
                     'placeholder': 'Sök kartlager med namnet, dataproducenten eller nyckelordet',
                     'tooltip': 'Sök kartlager med namnet, dataproducenten eller nyckelordet som beskriver kartlagret. Skriv en del av namnet på kartlagret, dataproducenten eller nyckelordet som beskriver kartlagret.'
