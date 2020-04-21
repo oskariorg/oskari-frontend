@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Méret",
                 "tooltip": "Nyomtatási elrendezés kiválasztsa. Az előnézet ennek megfelelően frissül.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 álló",
-                        "classForPreview": "Előnézet-álló",
-                        "selected": "Filename"
-                    },
-                    {
-                        "id": "A4_Fekvő",
-                        "label": "A4 fekvő",
-                        "classForPreview": "előnézet-fekvő"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 álló",
-                        "classForPreview": "Előnézet-álló"
-                    },
-                    {
-                        "id": "A3_Fekvő",
-                        "label": "A3 fekvő",
-                        "classForPreview": "előnézet-fekvő"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 álló",
+                    "A4_Landscape": "A4 fekvő",
+                    "A3": "A3 álló",
+                    "A3_Landscape": "A3 fekvő"
+                }
             },
             "preview": {
                 "label": "Előnézet",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formátum",
                 "tooltip": "Válassza ki a fájlformátumot.",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG kép"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": "Filename",
-                        "label": "PDF dokumentum"
-                    }
-                ]
+                "options": {
+                    "png": "PNG kép",
+                    "pdf": "PDF dokumentum"   
+                }
             },
             "mapTitle": {
                 "label": "Cím hozzáadása",
                 "tooltip": "adjon címet a térképnek"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Oskari logo hozzáadása",
-                        "tooltip": "A logót elrejtheti, ha szükséges.",
-                        "checked": "ellenőrzött"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Méretarány megadása.",
-                        "tooltip": "Adja meg a térkép méretarányát.",
-                        "checked": "ellenőrzött"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Dátum megadása",
-                        "tooltip": "Megadhat dátumot is a nyomtatáshoz.",
-                        "checked": "ellenőrzött"
-                    }
-                ]
+               "pageLogo": {
+                    "label": "Oskari logo hozzáadása",
+                    "tooltip": "A logót elrejtheti, ha szükséges."    
+                },
+                "pageScale": {
+                    "label": "Méretarány megadása.",
+                    "tooltip": "Adja meg a térkép méretarányát."
+                },
+                "pageDate": {
+                    "label": "Dátum megadása",
+                    "tooltip": "Megadhat dátumot is a nyomtatáshoz."
+                }
             },
             "help": "Segítség",
             "error": {
