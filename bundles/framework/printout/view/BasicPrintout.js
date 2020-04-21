@@ -1,4 +1,4 @@
-import { SIZE_OPTIONS, FORMAT_OPTIONS, PAGE_OPTIONS, SCALE_OPTIONS, TIME_OPTION, WINDOW_SIZE, PARAMS } from '../constants.js';
+import { SIZE_OPTIONS, FORMAT_OPTIONS, PAGE_OPTIONS, SCALE_OPTIONS, TIME_OPTION, WINDOW_SIZE, PARAMS } from '../constants';
 /**
  * @class Oskari.mapframework.bundle.printout.view.BasicPrintout
  * Renders the printouts "publish mode" sidebar view where the user can make
@@ -109,10 +109,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             var settingsPanel = me._createSettingsPanel();
             accordion.addPanel(settingsPanel);
-            // --------------- TESTING
-                me.instance.conf.scaleSelection = true;
-                me.instance.conf.scales = [500,1000,10000,25000,50000,100000];
-            // --------------
 
             if (me.instance.conf.scaleSelection) {
                 var scalePanel = me._createScalePanel();
