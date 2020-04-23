@@ -68,10 +68,7 @@ Oskari.clazz.define(
             this._config.ignoredLayerTypes = Array.from(ignoredLayerTypes);
         },
 
-        _destroyControlElement: function () {
-            // Slight misuse of the function, but I don't want to override
-            // _stopPluginImpl.
-
+        _stopPluginImpl: function () {
             // hide infobox if open
             this._closeGfiInfo();
         },
