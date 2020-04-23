@@ -178,7 +178,6 @@ Oskari.clazz.define(
                 popupDOM,
                 popup;
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
-
             if (isMarker) {
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
@@ -556,19 +555,18 @@ Oskari.clazz.define(
                     // No content left, close popup
                     this.close(popupId);
                 } else {
+                    const { colourScheme, font, title, lonlat } = popup;
                     this._renderPopup(
                         popupId,
                         contentData,
-                        popup.title,
-                        popup.lonlat,
-                        popup.colourScheme,
-                        popup.font,
+                        title,
+                        lonlat,
+                        { colourScheme, font },
                         true
                     );
                 }
             }
         },
-
         setAdaptable: function (isAdaptable) {
             this.adaptable = isAdaptable;
         },
