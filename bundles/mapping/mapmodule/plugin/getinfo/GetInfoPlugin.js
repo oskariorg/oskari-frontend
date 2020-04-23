@@ -100,9 +100,6 @@ Oskari.clazz.define(
                     }
                     this.handleGetInfo(click);
                 },
-                AfterMapMoveEvent: function (evt) {
-                    this._cancelAjaxRequest();
-                },
                 AfterMapLayerRemoveEvent: function (evt) {
                     this._refreshGfiInfo('remove', evt.getMapLayer().getId());
                 },

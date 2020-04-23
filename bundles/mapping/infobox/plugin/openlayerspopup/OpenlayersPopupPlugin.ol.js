@@ -245,7 +245,6 @@ Oskari.clazz.define(
                 });
                 mapModule.getMap().addOverlay(popup);
                 popup.setPosition(lonlatArray);
-                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
 
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
@@ -320,6 +319,9 @@ Oskari.clazz.define(
                 } else {
                     me._adaptPopupSize(id, refresh);
                 }
+            }
+            if (popupType === 'desktop') {
+                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
             }
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
