@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Suurus ja  suund",
                 "tooltip": "Vali trükimall. Nähtav eelvaates.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4-püstformaat",
-                        "classForPreview": "preview-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 põikformaat",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 püstformaat",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 põikformaat",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "A4-püstformaat",
+                    "A4_Landscape": "A4 põikformaat",
+                    "A3": "A3 püstformaat",
+                    "A3_Landscape": "A3 põikformaat"
+                }
             },
             "preview": {
                 "label": "Eelvaade",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Failiformaad",
                 "tooltip": "Vali failiformaat",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG kujutis"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF dokument"
-                    }
-                ]
+                "options": {
+                    "png": "PNG kujutis",
+                    "pdf": "PDF dokument"
+                }
             },
             "mapTitle": {
                 "label": "Lisa pealkiri",
                 "tooltip": "Lisa kaardi pealkiri"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Lisa Paikkatietokkuna logo väljatrükile",
-                        "tooltip": "Vajadusel saab Paikkatietokkuna logo peita",
-                        "checked": "märgitud"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Lisa kaardile mõõtkava",
-                        "tooltip": "Soovi korral lisa trükisele mõõtkava.",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Näita trükisel kuupäeva",
-                        "tooltip": "Trükisele saab lisada selle kuupäeva",
-                        "checked": "checked"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Lisa Paikkatietokkuna logo väljatrükile",
+                    "tooltip": "Vajadusel saab Paikkatietokkuna logo peita"
+                },
+                "pageScale": {
+                    "label": "Lisa kaardile mõõtkava",
+                    "tooltip": "Soovi korral lisa trükisele mõõtkava."
+                },
+                "pageDate": {
+                    "label": "Näita trükisel kuupäeva",
+                    "tooltip": "Trükisele saab lisada selle kuupäeva"
+                }
             },
             "help": "Abi",
             "error": {

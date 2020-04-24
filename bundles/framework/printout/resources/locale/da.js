@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Størrelse",
                 "tooltip": "Vælg udskriftslayout │Forhåndsvisning af kort opdateres i overensstemmelse hermed",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portræt",
-                        "classForPreview": "forhåndsvisning af portræt",
-                        "selected": "Filename"
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 landskab",
-                        "classForPreview": "forhåndsvisning af landskab"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portræt",
-                        "classForPreview": "forhåndsvisning af portræt"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 landskab",
-                        "classForPreview": "forhåndsvisning af landskab"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portræt",
+                    "A4_Landscape": "A4 landskab",
+                    "A3": "A3 portræt",
+                    "A3_Landscape": "A3 landskab",
+                }
             },
             "preview": {
                 "label": "Forhåndsvisning",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format",
                 "tooltip": "Vælg filformat",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG image"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": "Filename",
-                        "label": "PDF document"
-                    }
-                ]
+                "options": {
+                    "png": "PNG image",
+                    "pdf": "PDF document"
+                }
             },
             "mapTitle": {
                 "label": "Tilføj titel",
                 "tooltip": "tilføj en titel til kortet"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "sideLogo",
-                        "label": "Tilføj Oskari logo",
-                        "tooltip": "Det er muligt at skjule logoet om nødvendigt",
-                        "checked": "afkrydset"
-                    },
-                    {
-                        "id": "sideSkalering",
-                        "label": "Tilføj skalering til kortet",
-                        "tooltip": "Tilføj skalering til kortet",
-                        "checked": "afkrydset"
-                    },
-                    {
-                        "id": "sideDato",
-                        "label": "Tilføj dato",
-                        "tooltip": "Du kan tilføje dato på udskriften",
-                        "checked": "afkrydset"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Tilføj Oskari logo",
+                    "tooltip": "Det er muligt at skjule logoet om nødvendigt"
+                },
+                "pageScale" : {
+                    "label": "Tilføj skalering til kortet",
+                    "tooltip": "Tilføj skalering til kortet"
+                },
+                "pageDate": {
+                    "label": "Tilføj dato",
+                    "tooltip": "Du kan tilføje dato på udskriften"
+                }
             },
             "help": "Hjælp",
             "error": {

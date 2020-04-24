@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Størrelse",
                 "tooltip": "Velg utskriftsstørrelse. Oppdateringer vises i forhåndsvisningen",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portrett",
-                        "classForPreview": "forhåndsvisning-portrett",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 landskap",
-                        "classForPreview": "forhåndsvisning-landskap"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portrett",
-                        "classForPreview": "forhåndsvisning-portrett"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 landskap",
-                        "classForPreview": "forhåndsvisning-landskap"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portrett",
+                    "A4_Landscape": "A4 landskap",
+                    "A3": "A3 portrett",
+                    "A3_Landscape": "A3 landskap"
+                }
             },
             "preview": {
                 "label": "Forhåndsvisning",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Filformat",
                 "tooltip": "Velg filformat",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG bildefil"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF-dokument"
-                    }
-                ]
+                "options": {
+                    "png": "PNG bildefil",
+                    "pdf": "PDF-dokument"
+                }
             },
             "mapTitle": {
                 "label": "Kartnavn",
                 "tooltip": "Legg til navn på kartet"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Vis logoen til den finske geoportalen Paikkatietoikkuna i utskriften",
-                        "tooltip": "Du kan skjule logoen til den finske geoportalen Paikkatietoikkuna om nødvendig",
-                        "checked": "kontrollert"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Legg til målestokk til kartutskriften",
-                        "tooltip": "Legg til målestokk til kartet dersom det er ønskelig",
-                        "checked": "kontrollert"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Vis dato i kartutskriften",
-                        "tooltip": "Du kan legge til dato i utskriften",
-                        "checked": "kontrollert"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Vis logoen til den finske geoportalen Paikkatietoikkuna i utskriften",
+                    "tooltip": "Du kan skjule logoen til den finske geoportalen Paikkatietoikkuna om nødvendig"
+                },
+                "pageScale": {
+                    "label": "Legg til målestokk til kartutskriften",
+                    "tooltip": "Legg til målestokk til kartet dersom det er ønskelig"
+                },
+                "pageDate": {
+                    "label": "Vis dato i kartutskriften",
+                    "tooltip": "Du kan legge til dato i utskriften"
+                }
             },
             "help": "Hjelp",
             "error": {

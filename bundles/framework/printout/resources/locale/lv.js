@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Izmērs",
                 "tooltip": "Izvēlēties drukas izkārtojumu| Priekšskatījuma karte tiek atbilstoši atjaunota",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portrets",
-                        "classForPreview": "Portretorientācija",
-                        "selected": "patiess"
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 ainava",
-                        "classForPreview": "Ainavorientācija"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portrets",
-                        "classForPreview": "Portretorientācija"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 ainava",
-                        "classForPreview": "Ainavorientācija"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portrets",
+                    "A4_Landscape": "A4 ainava",
+                    "A3": "A3 portrets",
+                    "A3_Landscape": "A3 ainava"
+                }
             },
             "preview": {
                 "label": "Priekšskatījums",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formāts",
                 "tooltip": "Izvēlēties datnes formātu",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "attēls/png",
-                        "label": "PNG attēls"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "lietotne/pdf",
-                        "selected": "patiess",
-                        "label": "PDF dokuments"
-                    }
-                ]
+                "options": {
+                    "png": "PNG attēls",
+                    "pdf": "PDF dokuments"
+                }
             },
             "mapTitle": {
                 "label": "Pievienot nosaukumu",
                 "tooltip": "pievienot nosaukumu kartei"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "lapasLogotips",
-                        "label": "Pievienot \"Oskari\" logotipu",
-                        "tooltip": "Jūs varat paslēpt logotipu, ja nepieciešams",
-                        "checked": "pārbaudīts"
-                    },
-                    {
-                        "id": "lapasMērogs",
-                        "label": "Pievienot mērogu kartei",
-                        "tooltip": "Pievienot mērogu kartei",
-                        "checked": "pārbaudīts"
-                    },
-                    {
-                        "id": "lapasDatums",
-                        "label": "Pievienot datumu",
-                        "tooltip": "Jūs varat pievienot datumu izdrukai",
-                        "checked": "pārbaudīts"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Pievienot \"Oskari\" logotipu",
+                    "tooltip": "Jūs varat paslēpt logotipu, ja nepieciešams"
+                },
+                "pageScale": {
+                    "label": "Pievienot mērogu kartei",
+                    "tooltip": "Pievienot mērogu kartei"
+                },
+                "pageDate": {
+                    "label": "Pievienot datumu",
+                    "tooltip": "Jūs varat pievienot datumu izdrukai"
+                }
             },
             "help": "Palīdzība",
             "error": {

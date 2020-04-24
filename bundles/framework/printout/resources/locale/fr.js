@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Taille et direction.",
                 "tooltip": "Sélectionnez une taille d'impression et une direction. Vous pouvez voir les changements dans l'aperçu de l'image.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portrait",
-                        "classForPreview": "aperçu-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Paysage",
-                        "label": "A4 paysage",
-                        "classForPreview": "aperçu-paysage"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portrait",
-                        "classForPreview": "aperçu-portrait"
-                    },
-                    {
-                        "id": "A3_Paysage",
-                        "label": "A3 paysage",
-                        "classForPreview": "aperçu-paysage"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portrait",
+                    "A4_Landscape": "A4 paysage",
+                    "A3": "A3 portrait",
+                    "A3_Landscape": "A3 paysage"
+                }
             },
             "preview": {
                 "label": "Aperçu",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format du fichier",
                 "tooltip": "Sélectionnez le format du fichier de votre impression.",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "Image PNG"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "Document PDF"
-                    }
-                ]
+                "options": {
+                    "png": "Image PNG",
+                    "pdf": "Document PDF"
+                }
             },
             "mapTitle": {
                 "label": "Titre de la carte",
                 "tooltip": "Ajoutez un titre à la carte."
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Afficher le logo du géoportail finlandais Paikkatietoikkuna sur l'impression.",
-                        "tooltip": "Vous pouvez cacher le logo du géoportail finlandais Paikkatietoikkuna si nécessaire.",
-                        "checked": "vérifié"
-                    },
-                    {
-                        "id": "échellePage",
-                        "label": "Ajoutez une échelle à l'impression.",
-                        "tooltip": "Ajoutez une échelle à la carte, si vous le voulez.",
-                        "checked": "vérifié"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Afficher une date sur l'impression.",
-                        "tooltip": "Vous pouvez afficher une date sur l'impression.",
-                        "checked": "vérifié"
-                    }
-                ]
+                "pageLogo" : {
+                    "label": "Afficher le logo du géoportail finlandais Paikkatietoikkuna sur l'impression.",
+                    "tooltip": "Vous pouvez cacher le logo du géoportail finlandais Paikkatietoikkuna si nécessaire."
+                },
+                "pageScale": {                    
+                    "label": "Ajoutez une échelle à l'impression.",
+                    "tooltip": "Ajoutez une échelle à la carte, si vous le voulez."
+                },
+                "pageDate": {
+                    "label": "Afficher une date sur l'impression.",
+                    "tooltip": "Vous pouvez afficher une date sur l'impression."
+                }
             },
             "help": "Aide",
             "error": {
@@ -128,8 +94,8 @@ Oskari.registerLocalization(
             "scale": {
                 "label": "Échelle",
                 "tooltip": "Préciser l'échelle à utiliser pour l'impression",
-                "mapScale": "Utiliser l'échelle de carte",
-                "definedScale": "Sélectionner une échelle",
+                "map": "Utiliser l'échelle de carte",
+                "defined": "Sélectionner une échelle",
                 "unsupportedLayersMessage": "Les couches cartographiques suivantes n'apparaissent pas dans l'impression",
                 "unsupportedLayersTitle": "L'impression n'affiche pas toutes les couches"
             }

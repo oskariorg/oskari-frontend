@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Madhësia",
                 "tooltip": "Zgjidh formën (modelin) e shtypjes I",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 Vertikal (portrait)",
-                        "classForPreview": "parapamje për shtypje vertikale",
-                        "selected": "e vërtetë"
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 Horizontal (landscape)",
-                        "classForPreview": "parapamje për shtypje horizontale"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 Vertikal (portrait)",
-                        "classForPreview": "parapamje për shtypje vertikale"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 Horizontal (landscape)",
-                        "classForPreview": "parapamje për shtypje horizontale"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 Vertikal (portrait)",
+                    "A4_Landscape": "A4 Horizontal (landscape)",
+                    "A3": "A3 Vertikal (portrait)",
+                    "A3_Landscape": "A3 Horizontal (landscape)"
+                }
             },
             "preview": {
                 "label": "Parapamje për shtypje",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formati",
                 "tooltip": "Përzgjedh formatin e skedarit",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "imazh/png",
-                        "label": "PNG imazh"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "aplikacion/pdf",
-                        "selected": "e vërtetë",
-                        "label": "PDF dokument"
-                    }
-                ]
+                "options": {
+                    "png": "PNG imazh",
+                    "pdf": "PDF dokument"
+                }
             },
             "mapTitle": {
                 "label": "Shto titullin",
                 "tooltip": "Shto titullin për hartën"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "Llogoja e hartës",
-                        "label": "Shto llogon Oskari",
-                        "tooltip": "Ju mund ta fshihni llogon nëse është e nevojshme",
-                        "checked": "E kontrolluar"
-                    },
-                    {
-                        "id": "Shkalla e faqes",
-                        "label": "Shto hartës shkallët",
-                        "tooltip": "Shto hartës shkallët",
-                        "checked": "E kontrolluar"
-                    },
-                    {
-                        "id": "Data e faqës",
-                        "label": "Shto datën",
-                        "tooltip": "Ju mund t'ia shtoni datën shtypjes",
-                        "checked": "E kontrolluar"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Shto llogon Oskari",
+                    "tooltip": "Ju mund ta fshihni llogon nëse është e nevojshme"
+                },
+                "pageScale": {
+                    "label": "Shto hartës shkallët",
+                    "tooltip": "Shto hartës shkallët"
+                },
+                "pageDate": {
+                    "label": "Shto datën",
+                    "tooltip": "Ju mund t'ia shtoni datën shtypjes"
+                }
             },
             "help": "Ndihmë",
             "error": {

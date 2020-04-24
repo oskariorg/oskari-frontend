@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Μέγεθος",
                 "tooltip": "Επιλέξτε διάταξη εκτύπωσης (print layout). Η προεπισκόπηση χάρτη ανανεώνεται ανάλογα.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "Α4 πορτρετο",
-                        "classForPreview": "preview-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 landscape",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 πορτρέτο",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 landscape",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "Α4 πορτρετο",
+                    "A4_Landscape": "A4 landscape",
+                    "A3": "A3 πορτρέτο",
+                    "A3_Landscape": "A3 landscape"       
+                }
             },
             "preview": {
                 "label": "Προεπισκόπιση",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format",
                 "tooltip": "Επιλέξτε το format του αρχείου",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG image"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "Έγγραφο PDF"
-                    }
-                ]
+                "options": {
+                    "png": "PNG image",
+                    "pdf": "Έγγραφο PDF"
+                }
             },
             "mapTitle": {
                 "label": "Πρόσθεση τίτλου",
                 "tooltip": "προσθέστε τίτλο του χάρτη"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Προσθέστε τιο λογότυπο του OSKARI",
-                        "tooltip": "Μπορείτε να αποκρύψετε το λογότυπο αν χρειαστεί",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Προσθέστε κλίμακα στον χάρτη",
-                        "tooltip": "Προσθέστε κλίμακα στον χάρτη",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Προσθέστε ημερομηνία",
-                        "tooltip": "Μπορείτε να προσθέσετε ημερομηνία στην εκτύπωση",
-                        "checked": "checked"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Προσθέστε τιο λογότυπο του OSKARI",
+                    "tooltip": "Μπορείτε να αποκρύψετε το λογότυπο αν χρειαστεί"
+                },
+                "pageScale": {
+                    "label": "Προσθέστε κλίμακα στον χάρτη",
+                    "tooltip": "Προσθέστε κλίμακα στον χάρτη"
+                },
+                "pageDate": {
+                    "label": "Προσθέστε ημερομηνία",
+                    "tooltip": "Μπορείτε να προσθέσετε ημερομηνία στην εκτύπωση"
+                }
             },
             "help": "Βοήθεια",
             "error": {

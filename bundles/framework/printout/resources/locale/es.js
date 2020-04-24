@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Tamaño",
                 "tooltip": "Seleccione el tamaño de impresión. La previsualización del mapa muestra las actualizaciones",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 vertical",
-                        "classForPreview": "Previsualización vertical",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 apaisado",
-                        "classForPreview": "Previsualización apaisada"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 vertical",
-                        "classForPreview": "Previsualización vertical"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 apaisado",
-                        "classForPreview": "Previsualización apaisada"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 vertical",
+                    "A4_Landscape": "A4 apaisado",
+                    "A3": "A3 vertical",
+                    "A3_Landscape": "A3 apaisado"
+                }
             },
             "preview": {
                 "label": "Previsualización",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formato",
                 "tooltip": "Seleccionar el formato del fichero",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "Imagen PNG"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "aplicación/pdf",
-                        "selected": true,
-                        "label": "documento PDF"
-                    }
-                ]
+                "options": {
+                    "png": "Imagen PNG",
+                    "pdf": "documento PDF"
+                }
             },
             "mapTitle": {
                 "label": "Título del mapa",
                 "tooltip": "Añadir un título para el mapa impreso"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Añadir el logo de Oskari en la impresión",
-                        "tooltip": "Si es necesario, puede ocultar el logo",
-                        "checked": "comprobado"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Añadir una escala al mapa impreso",
-                        "tooltip": "Añadir una escala al mapa impreso",
-                        "checked": "comprobado"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Añadir una fecha al mapa impreso",
-                        "tooltip": "Puede añadir una fecha a la impresión",
-                        "checked": "comprobado"
-                    }
-                ]
+                "pageLogo" :{
+                    "label": "Añadir el logo de Oskari en la impresión",
+                    "tooltip": "Si es necesario, puede ocultar el logo"
+                },
+                "pageScale": {
+                    "label": "Añadir una escala al mapa impreso",
+                    "tooltip": "Añadir una escala al mapa impreso"
+                },
+                "pageDate": {
+                    "label": "Añadir una fecha al mapa impreso",
+                    "tooltip": "Puede añadir una fecha a la impresión"
+                }
             },
             "help": "Ayuda",
             "error": {

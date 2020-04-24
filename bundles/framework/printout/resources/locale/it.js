@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Dimensione",
                 "tooltip": "Scegli la dimensione di stampa. Gli aggiornamenti sono mostrati nell'anteprima",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portrait",
-                        "classForPreview": "Anteprima-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 landscape",
-                        "classForPreview": "Anteprima-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portrait",
-                        "classForPreview": "Anteprima-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 landscape",
-                        "classForPreview": "Anteprima-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portrait",
+                    "A4_Landscape": "A4 landscape",
+                    "A3": "A3 portrait",
+                    "A3_Landscape": "A3 landscape"
+                }
             },
             "preview": {
                 "label": "Anteprima",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formato del file",
                 "tooltip": "Scegli un formato di file",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG image"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF document"
-                    }
-                ]
+                "options": {
+                    "png": "PNG image",
+                    "pdf": "PDF document"
+                }
             },
             "mapTitle": {
                 "label": "Titolo della mappa",
                 "tooltip": "Aggiungi un titolo alla mappa"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Mostra il logo del geoportale finlandese Paikkatietoikkuna nella stampa.",
-                        "tooltip": "Puoi nascondere il logo del geoportale finlandese Paikkatietoikkuna se necessario.",
-                        "checked": "Verificato"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Aggiungi la scala alla mappa da stampare",
-                        "tooltip": "Puoi aggiungere la scala alla mappa",
-                        "checked": "Verificato"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Mostra la data nella mappa da stampare",
-                        "tooltip": "Puoi aggiungere la data di stampa",
-                        "checked": "Verificato"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Mostra il logo del geoportale finlandese Paikkatietoikkuna nella stampa.",
+                    "tooltip": "Puoi nascondere il logo del geoportale finlandese Paikkatietoikkuna se necessario."
+                },
+                "pageScale": {
+                    "label": "Aggiungi la scala alla mappa da stampare",
+                    "tooltip": "Puoi aggiungere la scala alla mappa"
+                },
+                "pageDate": {
+                    "label": "Mostra la data nella mappa da stampare",
+                        "tooltip": "Puoi aggiungere la data di stampa"
+                }
             },
             "help": "Aiuto",
             "error": {

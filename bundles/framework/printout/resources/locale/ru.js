@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Размер и направление",
                 "tooltip": "Выберите размер печати и направление. Вы можете видеть обновления на предварительном просмотре изображения.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 книжная",
-                        "classForPreview": "preview-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 альбомная",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 книжная",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 альбомная",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 книжная",
+                    "A4_Landscape": "A4 альбомная",
+                    "A3": "A3 книжная",
+                    "A3_Landscape": "A3 альбомная"
+                }
             },
             "preview": {
                 "label": "Предпросмотр",
@@ -77,45 +60,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Формат файла",
                 "tooltip": "Выбрать формат файла для вашей печати.",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG изображение"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF документ"
-                    }
-                ]
+                "options": {
+                    "png": "PNG изображение",
+                    "pdf": "PDF документ"
+                }
             },
             "mapTitle": {
                 "label": "Название карты",
                 "tooltip": "Добавить название для карты."
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Включить логотип",
-                        "tooltip": "Вы можете скрыть лого если нужно.",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Добавьте масштаб при печати карты.",
-                        "tooltip": "Добавьте масштаб карты, по желанию.",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Использовать текущую дату",
-                        "tooltip": "Вы можете добавить дату при печати карты.",
-                        "checked": "checked"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Включить логотип",
+                    "tooltip": "Вы можете скрыть лого если нужно."
+                },
+                "pageScale": {
+                    "label": "Добавьте масштаб при печати карты.",
+                    "tooltip": "Добавьте масштаб карты, по желанию."
+                },
+                "pageDate": {
+                    "label": "Использовать текущую дату",
+                    "tooltip": "Вы можете добавить дату при печати карты."
+                }
             },
             "help": "Помощь",
             "error": {
@@ -129,8 +95,8 @@ Oskari.registerLocalization(
             "scale": {
                 "label": "Масштаб",
                 "tooltip": "Укажите масштаб для печати",
-                "mapScale": "Используйте масштаб карты",
-                "definedScale": "Выбрать масштаб",
+                "map": "Используйте масштаб карты",
+                "defined": "Выбрать масштаб",
                 "unsupportedLayersMessage": "На распечатке не отображаются следующие слои",
                 "unsupportedLayersTitle": "Распечатка не показывает все слои"
             }
