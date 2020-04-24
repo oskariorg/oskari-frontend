@@ -218,8 +218,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var tooltipCont = me.template.help.clone();
             tooltipCont.attr('title', me.loc.settings.tooltip);
             panel.getHeader().append(tooltipCont);
-
-
             var format = me.template.format.clone();
             format.find('.printout_format_label').html(me.loc.format.label);
 
@@ -257,7 +255,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const options = [...PAGE_OPTIONS];
             if (this._isTimeSeriesActive()) {
                 options.push(TIME_OPTION);
-            } // TODO puske tai poista pageScale !== m
+            }
             options.forEach(function (value) {
                 var opt = me.template.optionPage.clone();
                 const id = 'printout-page-' + value;
@@ -268,7 +266,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             });
             contentPanel.append(contentOptions);
             // scale line on print isn't implemented for non-metric projections so hide the choice here.
-            // TODO
             var mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (mapmodule.getProjectionUnits() !== 'm') {
                 me.contentOptionDivs.pageScale.css('display', 'none');
@@ -307,7 +304,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 dialog.fadeout();
             };
             const handleInputChange = value => {
-                console.log(value);
                 if (value === 'configured') {
                     selection.show();
                     checkUnsupportedLayers();
@@ -351,7 +347,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 select.append(opt);
             });
             select.on('change', function () {
-                console.log(this.value);
                 me.mapmodule.zoomToScale(this.value, false);
                 me._cleanMapPreview();
                 me._updateMapPreview();
@@ -548,8 +543,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                     selections[this.value] = true;
                 }
             });
-            console.log(maplinkArgs);
-            console.log(selections);
             return { maplinkArgs, pageSize, format, customStyles, pageTitle, ...selections };
         },
         _getUrlForPreview: function (scaledWidth) {
@@ -644,24 +637,23 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @method printMap
          * Sends the gathered map data to the server to save them/publish the map.
          *
-         * @param {Object} selections map data as returned by _gatherSelections()
+         * @param {Object} selections map data as returned by _gatherParams()
          *
          */
         printMap: function (selections) {
-            const { maplinkArgs, pageTimeSeriesTime, customStyles, ...params } = selections || this._gatherSelections();
-            if (this._isTimeSeriesActive()) { // riittääkö että option mukana pakotettun true/false ja voiko kerätä selections
+            const { maplinkArgs, customStyles, ...params } = selections || this._gatherParams();
+            if (this._isTimeSeriesActive()) {
                 params[PARAMS.TIME] = this.timeseriesPlugin.getCurrentTime();
-                if (pageTimeSeriesTime) {
+                if (params.pageTimeSeriesTime) {
                     params[PARAMS.FORMATTED_TIME] = this.timeseriesPlugin.getCurrentTimeFormatted();
-                    params[PARAMS.SERIES_LABEL] = 'timeseriesPrintLabel'; // this.contentOptionsMap.pageTimeSeriesTime.printLabel; //TODO selections mukana
+                    params[PARAMS.SERIES_LABEL] = this.loc.content.pageTimeSeriesTime.printLabel;
                 }
             }
             const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
             let url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
 
             // additional layout params for PDF? is needed??
-            url = url + this._getLayoutParams(selections.pageSize);
-            console.log(selections);
+            url = url + this._getLayoutParams(params.pageSize);
             const hasCustomStyles = Object.keys(customStyles).length > 0;
             const hasTileData = Object.keys(this.instance.tileData).length > 0;
             // We need to use the POST method if there's GeoJSON or tile data.
@@ -701,7 +693,6 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var me = this;
             var params = '';
             var ind = SIZE_OPTIONS.findIndex(opt => opt.value === pageSize);
-            console.log('INDEX', ind, me.layoutParams);
 
             if (me.layoutParams.pageTemplate) {
                 params = '&pageTemplate=' + me.layoutParams.pageTemplate + '_' + pageSize + '.pdf';
@@ -883,7 +874,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @return {Object} state
          */
         getState: function () {
-            return this._gatherSelections();
+            return this._gatherParams();
         },
 
         /**
