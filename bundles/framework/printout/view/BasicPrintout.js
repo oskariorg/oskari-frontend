@@ -521,7 +521,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             const sandbox = this.instance.getSandbox();
             const pageSize = this._getPageSize();
             const format = container.find('input[name=printout-format]:checked').val() || FORMAT_OPTIONS[0].mime;
-            
+
             var resolution = sandbox.getMap().getResolution();
 
             var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
