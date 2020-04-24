@@ -1,12 +1,11 @@
 {
   "name": "oskari-frontend",
   "version": "1.56.0-dev",
-  "private": true,
   "description": "Oskari frontend",
   "keywords": [
-    "Oskari"
+    "oskari", "geoportal", "maps"
   ],
-  "homepage": "http://oskari.org",
+  "homepage": "https://oskari.org",
   "bugs": {
     "url": "https://github.com/oskariorg/oskari-docs/issues"
   },
@@ -14,7 +13,7 @@
     "type": "git",
     "url": "https://github.com/oskariorg/oskari-frontend.git"
   },
-  "license": "MIT",
+  "license": "(MIT OR EUPL-1.1)",
   "main": "grunt.js",
   "scripts": {
     "lintfix": "eslint . --quiet --fix",
@@ -92,8 +91,8 @@
     "styled-components": "5.0.1",
     "sumoselect": "3.0.5",
     "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "4.39.3",
-    "webpack-cli": "3.3.8",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.8.0"
   }
 }
