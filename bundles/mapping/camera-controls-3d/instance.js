@@ -19,7 +19,6 @@ Oskari.clazz.defineES('Oskari.mapping.cameracontrols3d.instance',
             this._started = false;
             this.plugin = null;
             this._mapmodule = null;
-            this._sandbox = null;
             this.state = undefined;
             this.name = 'camera-controls-3d';
         }
