@@ -1,5 +1,5 @@
 import React from 'react';
-import { Slider as AntSlider } from 'antd';
+import AntSlider from 'antd/es/slider';
 import styled from 'styled-components';
 import 'antd/es/slider/style/index.js';
 

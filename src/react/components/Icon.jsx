@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon as AntIcon } from 'antd';
+import AntIcon from 'antd/es/icon';
 import 'antd/es/icon/style/index.js';
 
 export const Icon = props => <AntIcon {...props} />;
