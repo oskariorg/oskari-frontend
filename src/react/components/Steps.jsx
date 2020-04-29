@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntSteps from 'antd/es/steps';
+import { Steps as AntSteps } from 'antd';
 import 'antd/es/steps/style/index.js';
 
 export const Step = (props) => {

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntButton from 'antd/es/button';
+import { Button as AntButton } from 'antd';
 import 'antd/es/button/style/index.js';
 
 export const Button = ({ children, ...other }) => (
