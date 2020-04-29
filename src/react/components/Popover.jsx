@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Popover as AntPopover } from 'antd';
+import AntPopover from 'antd/es/popover';
 import 'antd/es/popover/style/index.js';
 
 export const Popover = ({ children, ...other }) => (

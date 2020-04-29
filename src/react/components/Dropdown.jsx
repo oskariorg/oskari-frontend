@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { Dropdown as AntDropdown, Menu } from 'antd';
+import AntDropdown from 'antd/es/dropdown';
+import Menu from 'antd/es/menu';
 import 'antd/es/dropdown/style/index.js';
 import 'antd/es/menu/style/index.js';
 
