@@ -1,4 +1,4 @@
-import AntSelect from 'antd/es/select';
+import { Select as AntSelect } from 'antd';
 import 'antd/es/select/style/index.js';
 import styled from 'styled-components';
 

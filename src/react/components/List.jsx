@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntList from 'antd/es/list';
+import { List as AntList } from 'antd';
 import 'antd/es/list/style/index.js';
 
 export const List = ({ header, footer, dataSource, bordered, renderItem }) => {

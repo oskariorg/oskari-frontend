@@ -1,7 +1,7 @@
 
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntBadge from 'antd/es/badge';
+import { Badge as AntBadge } from 'antd';
 import 'antd/es/badge/style/index.js';
 
 export const Badge = ({ count, inversed }) => {
