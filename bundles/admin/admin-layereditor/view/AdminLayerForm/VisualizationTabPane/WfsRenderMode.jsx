@@ -5,7 +5,7 @@ import { Controller } from 'oskari-ui/util';
 import { StyledFormField } from './styled';
 import { InfoTooltip } from '../InfoTooltip';
 
-const VECTOR = 'geojson';
+const VECTOR = 'vector';
 const MVT = 'mvt';
 
 export const WfsRenderMode = ({ layer, controller }) => {
