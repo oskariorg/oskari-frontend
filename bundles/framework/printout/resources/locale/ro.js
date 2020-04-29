@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Dimensiune",
                 "tooltip": "Alegere format de imprimare",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portret",
-                        "classForPreview": "previzualizare-portret",
-                        "selected": "Adevărat"
-                    },
-                    {
-                        "id": "A4_peisaj",
-                        "label": "A4 peisaj",
-                        "classForPreview": "previzualizare_peisaj"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portret",
-                        "classForPreview": "previzualizare-portret"
-                    },
-                    {
-                        "id": "A3_peisaj",
-                        "label": "A3 peisaj",
-                        "classForPreview": "previzualizare-peisaj"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portret",
+                    "A4_Landscape": "A4 peisaj",
+                    "A3": "A3 portret",
+                    "A3_Landscape": "A3 peisaj"
+                }
             },
             "preview": {
                 "label": "Previzualizare",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format",
                 "tooltip": "Selectare format fişier",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "imagine PNG"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": "adevărat",
-                        "label": "document PDF"
-                    }
-                ]
+                "options": {
+                    "png": "imagine PNG",
+                    "pdf": "document PDF"
+                }
             },
             "mapTitle": {
                 "label": "Adăugare titlu",
                 "tooltip": "adăugare titlu hartă"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "Siglăpagină",
-                        "label": "Adăugare siglă Oskari",
-                        "tooltip": "Puteţi ascunde sigla dacă este necesar",
-                        "checked": "verificat"
-                    },
-                    {
-                        "id": "Scară",
-                        "label": "Adăugare scară hartă",
-                        "tooltip": "Adăugare scară hartă",
-                        "checked": "verificat"
-                    },
-                    {
-                        "id": "Data",
-                        "label": "Adăugare dată",
-                        "tooltip": "Puteţi adăuga data pe harta tipărită",
-                        "checked": "verificat"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Adăugare siglă Oskari",
+                    "tooltip": "Puteţi ascunde sigla dacă este necesar"
+                },
+                "pageScale": {
+                    "label": "Adăugare scară hartă",
+                    "tooltip": "Adăugare scară hartă"
+                },
+                "pageDate": {
+                    "label": "Adăugare dată",
+                    "tooltip": "Puteţi adăuga data pe harta tipărită"
+                }
             },
             "help": "Ajutor",
             "error": {

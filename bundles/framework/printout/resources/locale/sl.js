@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Velikost",
                 "tooltip": "Izberi velikost lista za izris. Zadnje spremembe vidiš v oknu za predogled.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 pokončno",
-                        "classForPreview": "predogled-pokončno",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Ležeče",
-                        "label": "A4 ležeče",
-                        "classForPreview": "predogled-ležeče"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 pokončno",
-                        "classForPreview": "predogled-pokončno"
-                    },
-                    {
-                        "id": "A3_Ležeče",
-                        "label": "A3 ležeče",
-                        "classForPreview": "predogled-ležeče"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 pokončno",
+                    "A4_Landscape": "A4 ležeče",
+                    "A3":  "A3 pokončno",
+                    "A3_Landscape": "A3 ležeče"
+                }
             },
             "preview": {
                 "label": "Predogled",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format datoteke",
                 "tooltip": "Izberi format datoteke",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "slika/png",
-                        "label": "PNG slika"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "aplikacija/pdf",
-                        "selected": true,
-                        "label": "PDF dokument"
-                    }
-                ]
+                "options": {
+                    "png": "PNG slika",
+                    "pdf": "PDF dokument"
+                }
             },
             "mapTitle": {
                 "label": "Naslov karte",
                 "tooltip": "Dodaj naslov karte"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "LogoStrani",
-                        "label": "Pri izrisu dodaj Oskari logo",
-                        "tooltip": "Če želiš lahko Oskari logo skriješ",
-                        "checked": "preverjeno"
-                    },
-                    {
-                        "id": "meriloStrani",
-                        "label": "Dodaj merilo na karto",
-                        "tooltip": "Če želiš, dodaj merilo na karto.",
-                        "checked": "preverjeno"
-                    },
-                    {
-                        "id": "datumStrani",
-                        "label": "Prikaži datum na izrisu",
-                        "tooltip": "Lahko dodaš datum na izris",
-                        "checked": "preverjeno"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Pri izrisu dodaj Oskari logo",
+                    "tooltip": "Če želiš lahko Oskari logo skriješ"
+                },
+                "pageScale": {
+                    "label": "Dodaj merilo na karto",
+                    "tooltip": "Če želiš, dodaj merilo na karto."
+                },
+                "pageDate": {
+                    "label": "Prikaži datum na izrisu",
+                    "tooltip": "Lahko dodaš datum na izris"
+                }
             },
             "help": "Pomoč",
             "error": {

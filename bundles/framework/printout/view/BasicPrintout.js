@@ -1,3 +1,4 @@
+import { SIZE_OPTIONS, FORMAT_OPTIONS, PAGE_OPTIONS, SCALE_OPTIONS, TIME_OPTION, WINDOW_SIZE, PARAMS } from '../constants';
 /**
  * @class Oskari.mapframework.bundle.printout.view.BasicPrintout
  * Renders the printouts "publish mode" sidebar view where the user can make
@@ -36,42 +37,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         // Layout params, pdf template
         me.layoutParams = {};
 
-        // FIXME: remove option configuration from localization files
-        /* page sizes listed in localisations */
-        me.sizeOptions = me.loc.size.options;
-
-        me.sizeOptionsMap = {};
-        me.sizeOptions.forEach(function (opt) {
-            me.sizeOptionsMap[opt.id] = opt;
-        });
-
         me.mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
-
-        me.scaleOptionsMap = {
-            mapscale: {
-                label: me.loc.scale.mapScale,
-                selected: true
-            },
-            usedefinedscale: {
-                label: me.loc.scale.definedScale,
-                selected: false,
-                scales: me.instance.conf.scales || me.mapmodule.getScaleArray().slice().reverse()
-            }
-        };
-
-        /* format options listed in localisations */
-        me.formatOptions = me.loc.format.options;
-        me.formatOptionsMap = {};
-        me.formatOptions.forEach(function (opt) {
-            me.formatOptionsMap[opt.id] = opt;
-        });
-
-        /* content options listed in localisations */
-        me.contentOptions = me.loc.content.options;
-        me.contentOptionsMap = {};
-        me.contentOptions.forEach(function (opt) {
-            me.contentOptionsMap[opt.id] = opt;
-        });
 
         me.accordion = null;
         me.mainPanel = null;
@@ -90,9 +56,10 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
         me.contentOptionDivs = {};
         me.timeseriesPlugin = Oskari.getSandbox().findRegisteredModuleInstance('MainMapModuleTimeseriesControlPlugin');
+        me.scales = null;
     }, {
         __templates: {
-            preview: '<div class="preview"><img /><span></span></div>',
+            preview: '<div><img /><span></span></div>',
             previewNotes: '<div class="previewNotes"><span></span></div>',
             location: '<div class="location"></div>',
             tool: '<div class="tool ">' + '<input type="checkbox"/>' + '<label></label></div>',
@@ -100,12 +67,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             help: '<div class="help icon-info"></div>',
             main: '<div class="basic_printout">' + '<div class="header">' + '<div class="icon-close">' + '</div>' + '<h3></h3>' + '</div>' + '<div class="content">' + '</div>' + '<form method="post" target="map_popup_111" id="oskari_print_formID" style="display:none" action="" ><input name="geojson" type="hidden" value="" id="oskari_geojson"/><input name="tiles" type="hidden" value="" id="oskari_tiles"/><input name="tabledata" type="hidden" value="" id="oskari_print_tabledata"/><input name="customStyles" type="hidden" value=""/></form>' + '</div>',
             format: '<div class="printout_format_cont printout_settings_cont"><div class="printout_format_label"></div></div>',
-            formatOptionTool: '<div class="tool ">' + '<input type="radio" name="format" />' + '<label></label></div>',
-            title: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
-            option: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
-            sizeOptionTool: '<div class="tool ">' + '<input type="radio" name="size" />' + '<label></label></div>',
-            scaleOptionTool: '<div class="tool ">' + '<input type="radio" name="scale" />' + '<label></label></div>',
-            scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>'
+            mapTitle: '<div class="printout_title_cont printout_settings_cont"><div class="printout_title_label"></div><input class="printout_title_field" type="text"></div>',
+            optionPage: '<div class="printout_option_cont printout_settings_cont">' + '<input type="checkbox" />' + '<label></label></div>',
+            optionTool: '<div class="tool">' + '<input type="radio"/>' + '<label class="printout_radiolabel"></label></div>',
+            scaleSelection: '<div class="scaleselection">' + '<select name="scaleselect" />' + '</div>',
+            contentOptions: '<div class=""/>'
         },
         /**
          * @public @method render
@@ -207,36 +173,29 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tooltipCont.attr('title', me.loc.size.tooltip);
             panel.getHeader().append(tooltipCont);
             // content
-            me.sizeOptions.forEach(function (option) {
-                var toolContainer = me.template.sizeOptionTool.clone();
-                var label = option.label;
-
-                if (option.width && option.height) {
-                    label = label + ' (' + option.width + ' x ' + option.height + 'px)';
+            SIZE_OPTIONS.forEach(function (option, i) {
+                const { value, width, height } = option;
+                var toolContainer = me.template.optionTool.clone();
+                let label = me.loc.size.options[value];
+                const id = 'printout-size-' + value;
+                if (width && height) {
+                    label = label + ' (' + width + ' x ' + height + 'px)';
                 }
-                toolContainer.find('label').append(label).attr({
-                    'for': option.id,
-                    'class': 'printout_radiolabel'
-                });
-                if (option.selected) {
-                    toolContainer.find('input').prop('checked', true);
+                toolContainer.find('label').append(label).attr('for', id);
+                const input = toolContainer.find('input');
+                if (i === 0) {
+                    input.prop('checked', true);
                 }
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.id,
-                    'name': 'size',
-                    'id': option.id
+                input.attr({
+                    value,
+                    name: 'printout-size',
+                    id
                 });
-                toolContainer.find('input').on('change', function () {
-                    // reset previous setting
-                    me.sizeOptions.forEach(function (opt) {
-                        opt.selected = false;
-                    });
-                    // select this one
-                    option.selected = true;
+                input.on('change', function () {
                     me._cleanMapPreview();
                     me._updateMapPreview();
                 });
+                contentPanel.append(toolContainer);
             });
 
             return panel;
@@ -259,71 +218,58 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var tooltipCont = me.template.help.clone();
             tooltipCont.attr('title', me.loc.settings.tooltip);
             panel.getHeader().append(tooltipCont);
-
-            /* format options from localisations files */
             var format = me.template.format.clone();
-
             format.find('.printout_format_label').html(me.loc.format.label);
 
-            me.formatOptions.forEach(function (option) {
-                var toolContainer = me.template.formatOptionTool.clone();
-                toolContainer.find('label').append(option.label).attr({
-                    'for': option.id,
-                    'class': 'printout_radiolabel'
-                });
-                if (option.selected) {
-                    toolContainer.find('input').prop('checked', true);
+            FORMAT_OPTIONS.forEach(function (option, i) {
+                const { name, mime } = option;
+                var toolContainer = me.template.optionTool.clone();
+                const id = 'printout-format-' + name;
+                const label = me.loc.format.options[name];
+                toolContainer.find('label').append(label).attr('for', id);
+                const input = toolContainer.find('input');
+                if (i === 0) {
+                    input.prop('checked', true);
                 }
+                input.attr({
+                    value: mime,
+                    name: 'printout-format',
+                    id
+                });
+                input.on('change', function () {
+                    if (name === 'png') {
+                        contentOptions.find('input').prop('disabled', true);
+                    } else {
+                        contentOptions.find('input').prop('disabled', false);
+                    }
+                });
                 format.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': option.format,
-                    'name': 'format',
-                    'id': option.id
-                });
-                toolContainer.find('input').on('change', function () {
-                    // reset previous setting
-                    me.formatOptions.forEach(function (opt) {
-                        opt.selected = false;
-                    });
-                    option.selected = true;
-                });
             });
             contentPanel.append(format);
-
-            var mapTitle = me.template.title.clone();
+            /* --- options available for pdf --- */
+            const contentOptions = me.template.contentOptions.clone();
+            var mapTitle = me.template.mapTitle.clone();
             mapTitle.find('.printout_title_label').html(me.loc.mapTitle.label);
-            mapTitle.find('.printout_title_field').attr({
-                'value': '',
-                'placeholder': me.loc.mapTitle.label
+            mapTitle.find('.printout_title_field').attr('placeholder', me.loc.mapTitle.label);
+            contentOptions.append(mapTitle);
+            const options = [...PAGE_OPTIONS];
+            if (this._isTimeSeriesActive()) {
+                options.push(TIME_OPTION);
+            }
+            options.forEach(function (value) {
+                var opt = me.template.optionPage.clone();
+                const id = 'printout-page-' + value;
+                opt.find('input').attr({ id, value }).prop('checked', true);
+                const label = me.loc.content[value].label;
+                opt.find('label').html(label).attr('for', id);
+                contentOptions.append(opt);
             });
-
-            contentPanel.append(mapTitle);
-
-            const areLayersWithTimeSeriesSelected =
-                me.instance.sandbox.findAllSelectedMapLayers()
-                    .filter(l => l.getAttributes().times).length > 0;
-
-            /* CONTENT options from localisations files */
-            me.contentOptions.forEach(function (dat) {
-                if (dat.id === 'pageTimeSeriesTime' && (typeof me.timeseriesPlugin === 'undefined' || !areLayersWithTimeSeriesSelected)) {
-                    return;
-                }
-                var opt = me.template.option.clone();
-                opt.find('input').attr('id', dat.id).prop('checked', !!dat.checked);
-                opt.find('label').html(dat.label).attr({
-                    'for': dat.id,
-                    'class': 'printout_checklabel'
-                });
-                me.contentOptionDivs[dat.id] = opt;
-                contentPanel.append(opt);
-            });
-
+            contentPanel.append(contentOptions);
             // scale line on print isn't implemented for non-metric projections so hide the choice here.
             var mapmodule = me.instance.sandbox.findRegisteredModuleInstance('MainMapModule');
             if (mapmodule.getProjectionUnits() !== 'm') {
                 me.contentOptionDivs.pageScale.css('display', 'none');
             }
-
             return panel;
         },
 
@@ -345,97 +291,68 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             tooltipCont.attr('title', me.loc.scale.tooltip);
             panel.getHeader().append(tooltipCont);
 
-            var unsupportedLayersDialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
-            var okButton = unsupportedLayersDialog.createCloseButton('OK');
-            okButton.addClass('primary');
-
-            var getUnsupportedLayers = function () {
-                var layerNames = [];
-                var layers = me.instance.sandbox.findAllSelectedMapLayers().filter(function (l) {
-                    return l.getLayerType() === 'wmts';
-                });
-                layers.forEach(function (layer) {
-                    layerNames.push(layer.getName());
-                });
-                return layerNames;
+            const checkUnsupportedLayers = () => {
+                const layerNames = this.instance.sandbox.findAllSelectedMapLayers()
+                    .filter(l => l.getLayerType() === 'wmts')
+                    .map(l => l.getName());
+                if (layerNames.length === 0) return;
+                const dialog = Oskari.clazz.create('Oskari.userinterface.component.Popup');
+                const message = '<div>' + me.loc.scale.unsupportedLayersMessage + ':</div><ul><li>' + layerNames.join('</li><li>') + '</li></ul>';
+                var btn = dialog.createCloseButton();
+                btn.setPrimary(true);
+                dialog.show(me.loc.scale.unsupportedLayersTitle, message, [btn]);
+                dialog.fadeout();
+            };
+            const handleInputChange = value => {
+                if (value === 'configured') {
+                    selection.show();
+                    checkUnsupportedLayers();
+                    this._updateScaleToSelected(true);
+                    this.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest', [['zoom']]);
+                    this.instance.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['zoom']]);
+                } else {
+                    selection.hide();
+                    this.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest', [['zoom']]);
+                    this.instance.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['zoom']]);
+                }
+                this._cleanMapPreview();
+                this._updateMapPreview();
             };
 
-            Object.keys(me.scaleOptionsMap).forEach(function (key) {
-                var option = me.scaleOptionsMap[key];
-                var toolContainer = me.template.scaleOptionTool.clone();
-                var label = option.label;
-
-                toolContainer.find('label').append(label).attr({
-                    'for': option.key,
-                    'class': 'printout_radiolabel'
-                });
-                toolContainer.find('input').prop('checked', !!option.selected);
-                contentPanel.append(toolContainer);
-                toolContainer.find('input').attr({
-                    'value': key,
-                    'name': 'scale',
-                    'id': key
-                });
-                toolContainer.find('input').on('change', function () {
-                    if (option.scales) {
-                        contentPanel.find('.scale-' + key).show();
-                        me._updateScaleToSelected(true);
-
-                        me.instance.sandbox.postRequestByName('DisableMapKeyboardMovementRequest', [['zoom']]);
-                        me.instance.sandbox.postRequestByName('DisableMapMouseMovementRequest', [['zoom']]);
-                        // check if selected layers contains wmts layers
-                    } else {
-                        contentPanel.find('.scaleselection').hide();
-                        me.instance.sandbox.postRequestByName('EnableMapKeyboardMovementRequest', [['zoom']]);
-                        me.instance.sandbox.postRequestByName('EnableMapMouseMovementRequest', [['zoom']]);
-                    }
-
-                    // reset previous setting
-                    Object.keys(me.scaleOptionsMap).forEach(function (k) {
-                        var opt = me.scaleOptionsMap[k];
-                        opt.selected = false;
-                    });
-                    option.selected = true;
-                    var unsupportedLayers = getUnsupportedLayers();
-                    if (unsupportedLayers.length > 0 && option.scales) {
-                        var message = '<div>' + me.loc.scale.unsupportedLayersMessage + ':</div><ul>';
-                        unsupportedLayers.forEach(function (layerName) {
-                            message += '<li>' + layerName + '</li>';
-                        });
-                        message += '</ul>';
-                        unsupportedLayersDialog.show(me.loc.scale.unsupportedLayersTitle, message, [okButton]);
-                    }
-                    me._cleanMapPreview();
-                    me._updateMapPreview();
-                });
-
-                if (option.scales) {
-                    var selection = me.template.scaleSelection.clone();
-                    selection.addClass('scale-' + key);
-                    var currentScale = me.mapmodule.getMapScale();
-
-                    var optionEl = jQuery('<option></option>');
-                    option.scales.forEach(function (scale) {
-                        var el = optionEl.clone();
-                        el.attr('value', scale);
-                        el.html('1:' + scale);
-                        if (scale === currentScale) {
-                            el.attr('selected', true);
-                        }
-                        selection.find('select').append(el);
-                    });
-
-                    selection.find('select').on('change', function () {
-                        var el = jQuery(this);
-                        var selectedScale = el.val();
-                        me.mapmodule.zoomToScale(selectedScale, false);
-                        me._cleanMapPreview();
-                        me._updateMapPreview();
-                    });
-                    contentPanel.append(selection);
-                    selection.toggle(!!option.selected);
+            SCALE_OPTIONS.forEach(function (value, i) {
+                var toolContainer = me.template.optionTool.clone();
+                var label = me.loc.scale[value];
+                const id = 'printout-scale-' + value;
+                toolContainer.find('label').append(label).attr('for', id);
+                const input = toolContainer.find('input');
+                if (i === 0) {
+                    input.prop('checked', true);
                 }
+                input.attr({
+                    id,
+                    value,
+                    name: 'printout-scale'
+                });
+                input.on('change', () => handleInputChange(value));
+                contentPanel.append(toolContainer);
             });
+
+            const scales = me.instance.conf.scales || me.mapmodule.getScaleArray().slice().reverse();
+            const selection = me.template.scaleSelection.clone();
+            const select = selection.find('select');
+            scales.forEach(function (scale) {
+                var opt = jQuery('<option></option>');
+                opt.attr('value', scale);
+                opt.html('1:' + scale);
+                select.append(opt);
+            });
+            select.on('change', function () {
+                me.mapmodule.zoomToScale(this.value, false);
+                me._cleanMapPreview();
+                me._updateMapPreview();
+            });
+            this.scales = scales;
+            contentPanel.append(selection);
 
             return panel;
         },
@@ -446,22 +363,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @private
          */
         _updateScaleToSelected: function (selectFirst) {
-            var me = this;
-            Object.keys(me.scaleOptionsMap).forEach(function (key) {
-                var option = me.scaleOptionsMap[key];
-                var selection = me.mainPanel.find('.scale-' + key);
-                if (option.scales && option.scales.findIndex(
-                    function (s) {
-                        return s === me.mapmodule.getMapScale();
-                    }) > -1) {
-                    selection.find('select').val(me.mapmodule.getMapScale());
-                }
-                // else select first option
-                else if (selectFirst === true) {
-                    selection.find('select').val(selection.find('select option:first').val());
-                    selection.find('select').trigger('change');
-                }
-            });
+            var select = this.mainPanel.find('.scaleselection select');
+            const scales = this.scales;
+            const mapScale = this.mapmodule.getMapScale();
+            if (scales && scales.includes(mapScale)) {
+                select.val(scales);
+            }
+            // else select first option
+            else if (selectFirst === true) {
+                select.val(select.find('option:first').val());
+                select.trigger('change');
+            }
         },
 
         /**
@@ -515,16 +427,22 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             this.previewImgDiv.hide();
             this.previewSpan.text(this.loc.preview.pending);
         },
+        _isTimeSeriesActive: function () {
+            const hasLayers =
+                    this.instance.sandbox.findAllSelectedMapLayers()
+                        .filter(l => l.getAttributes().times).length > 0;
+            return hasLayers && !!this.timeseriesPlugin;
+        },
 
         /**
          * @private @method _updateMapPreview
          */
         _updateMapPreview: function () {
             var me = this;
-            const { url, cls } = this._gatherSelectionsForPreview(200);
-            me.previewContent.removeClass('preview-portrait');
-            me.previewContent.removeClass('preview-landscape');
-            me.previewContent.addClass(cls);
+            const url = this._getUrlForPreview(200);
+            const isLandscape = this._isLandscape();
+            const cls = isLandscape ? 'preview preview-landscape' : 'preview preview-portrait';
+            me.previewContent.attr('class', cls);
 
             me.progressSpinner.start();
             window.setTimeout(function () {
@@ -542,8 +460,8 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @public @method showFullScaleMapPreview
          */
         showFullScaleMapPreview: function () {
-            const { url, isLandscape } = this._gatherSelectionsForPreview();
-            this.openURLinWindow(url, isLandscape);
+            const url = this._getUrlForPreview();
+            this.openURLinWindow(url);
         },
 
         /**
@@ -585,10 +503,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
             var saveBtn = Oskari.clazz.create('Oskari.userinterface.component.buttons.SaveButton');
             saveBtn.setTitle(me.loc.buttons.save);
             saveBtn.setHandler(function () {
-                var selections = me._gatherSelections();
-                if (selections) {
-                    me._printMap(selections);
-                }
+                me.printMap();
             });
             saveBtn.insertTo(buttonCont);
 
@@ -596,57 +511,42 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
         },
 
         /**
-         * @private @method _gatherSelections
-         * Gathers printout selections and returns them as JSON object
-         *
+         * @private @method _gatherParams
+         * Gathers selections and returns them as JSON object
          *
          * @return {Object}
          */
-        _gatherSelections: function (format) {
-            var me = this;
-            var container = me.mainPanel;
-            var sandbox = me.instance.getSandbox();
-            var size = container.find('input[name=size]:checked').val();
-            var selectedFormat = (format !== null && format !== undefined) ? format : container.find('input[name=format]:checked').val();
-            var title = container.find('.printout_title_field').val();
+        _gatherParams: function () {
+            const container = this.mainPanel;
+            const sandbox = this.instance.getSandbox();
+            const pageSize = this._getPageSize();
+            const format = container.find('input[name=printout-format]:checked').val() || FORMAT_OPTIONS[0].mime;
+
             var resolution = sandbox.getMap().getResolution();
 
             var scale = jQuery('div.basic_printout select[name=scaleselect]').val();
             var scaleText = '';
 
-            if (me.instance.conf.scaleSelection && me.scaleOptionsMap.usedefinedscale.selected) {
-                resolution = me.mapmodule.getExactResolution(scale);
+            if (this.instance.conf.scaleSelection && this.scaleOptionsMap.usedefinedscale.selected) {
+                resolution = this.mapmodule.getExactResolution(scale);
                 scaleText = '1:' + scale;
             }
+            const pageTitle = encodeURIComponent(container.find('.printout_title_field').val());
+            const srs = sandbox.getMap().getSrsName();
+            const customStyles = this._getSelectedCustomStyles();
+            // printMap has been called outside so keep this separation for mapLinkArgs and selections
+            var maplinkArgs = sandbox.generateMapLinkParameters({ srs, resolution, scaleText });
+            var selections = {};
 
-            var maplinkArgs = sandbox.generateMapLinkParameters({
-                srs: sandbox.getMap().getSrsName(),
-                resolution: resolution,
-                scaleText: scaleText
-            });
-            var selections = {
-                pageTitle: title,
-                pageSize: size,
-                maplinkArgs: maplinkArgs,
-                format: selectedFormat || 'application/pdf',
-                customStyles: this._getSelectedCustomStyles()
-            };
-
-            if (!size) {
-                var firstSizeOption = container.find('input[name=size]').first();
-                firstSizeOption.prop('checked', true);
-                selections.pageSize = firstSizeOption.val();
-            }
-
-            for (var p in me.contentOptionsMap) {
-                if (me.contentOptionsMap.hasOwnProperty(p) && me.contentOptionDivs[p]) {
-                    selections[p] = me.contentOptionDivs[p].find('input').prop('checked');
+            container.find('.printout_option_cont input').each(function () {
+                if (this.checked === true) {
+                    selections[this.value] = true;
                 }
-            }
-            return selections;
+            });
+            return { maplinkArgs, pageSize, format, customStyles, pageTitle, ...selections };
         },
-        _gatherSelectionsForPreview: function (scaledWidth) {
-            const pageSize = this.mainPanel.find('input[name=size]:checked').val() || 'A4';
+        _getUrlForPreview: function (scaledWidth) {
+            const pageSize = this._getPageSize();
             const map = Oskari.getSandbox().getMap();
             const baseLayer = this.mapmodule.getBaseLayer();
 
@@ -669,11 +569,13 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 url += '&scaledWidth=' + scaledWidth;
             }
 
-            return {
-                url,
-                cls: this.sizeOptionsMap[pageSize].classForPreview,
-                isLandscape: pageSize.includes('Land')
-            };
+            return url;
+        },
+        _getWindowSpecs: function () {
+            const isLandscape = this._isLandscape();
+            const width = isLandscape ? WINDOW_SIZE[1] : WINDOW_SIZE[0];
+            const height = isLandscape ? WINDOW_SIZE[0] : WINDOW_SIZE[1];
+            return `location=1,status=1,scrollbars=1,width=${width},height=${height}`;
         },
         _getSelectedCustomStyles: function () {
             const customStyles = {};
@@ -685,7 +587,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
                 }
             });
 
-            return customStyles;
+            return JSON.stringify(customStyles);
         },
         /**
          * @public @method openURLinWindow
@@ -694,35 +596,27 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @param {boolean} isLandscape
          *
          */
-        openURLinWindow: function (infoUrl, isLandscape) {
-            var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
-            if (isLandscape) {
-                wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=1200,' + 'height=850';
-            }
-            var link = infoUrl;
-            window.open(link, 'BasicPrintout', wopParm);
+        openURLinWindow: function (infoUrl) {
+            const wopParm = this._getWindowSpecs();
+            window.open(infoUrl, 'BasicPrintout', wopParm);
         },
 
         /**
          * @private @method openPostURLinWindow
          * Sends the gathered map data to the server to save them/publish the map.
          *
+         * @param {String} printUrl Url to print service action route GetPrint
          * @param {String} geoJson Stringified GeoJSON
          * @param {String} tileData Stringified tile data
-         * @param {Object} printUrl Url to print service action route GetPrint
-         * @param {Object} selections map data as returned by _gatherSelections()
+         * @param {String} customStyles Stringified styles
          *
          */
-        openPostURLinWindow: function (geoJson, tileData, tableData, printUrl, selections) {
+        openPostURLinWindow: function (printUrl, geoJson, tileData, tableData, customStyles) {
             var me = this;
-            var wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=850,' + 'height=1200';
-            if (me._isLandscape(selections)) {
-                wopParm = 'location=1,' + 'status=1,' + 'scrollbars=1,' + 'width=1200,' + 'height=850';
-            }
-            var link = printUrl;
-            me.mainPanel.find('#oskari_print_formID').attr('action', link);
-            me.mainPanel.find('input[name=customStyles]').val(JSON.stringify(selections.customStyles));
-
+            var wopParm = this._getWindowSpecs();
+            me.mainPanel.find('#oskari_print_formID').attr('action', printUrl);
+            me.mainPanel.find('input[name=customStyles]').val(customStyles);
+            // Are these used anymore??
             if (geoJson) {
                 // UTF-8 Base64 encoding
                 var textu8 = unescape(encodeURIComponent(geoJson));
@@ -739,84 +633,40 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
             me.mainPanel.find('#oskari_print_formID').submit();
         },
-
         /**
-         * @public @method printMap
+         * @method printMap
          * Sends the gathered map data to the server to save them/publish the map.
          *
-         * @param {Object} printParams, parameters for printing pdf via print service
+         * @param {Object} selections map data as returned by _gatherParams()
          *
          */
-        printMap: function (printParams) {
-            var me = this;
-            me._printMap(printParams, null);
-        },
-
-        /**
-         * @private @method _printMap
-         * Sends the gathered map data to the server to save them/publish the map.
-         *
-         * @param {Object} selections map data as returned by _gatherSelections()
-         *
-         */
-        _printMap: function (selections) {
-            var me = this;
-            // base url + layers/location
-            var url = Oskari.urls.getRoute('GetPrint') + '&' + selections.maplinkArgs;
-            // page size
-            url = url + '&pageSize=' + selections.pageSize;
-            // title for PDF
-            url = url + '&pageTitle=' + encodeURIComponent(selections.pageTitle);
-            var contentOptions = [];
-
-            Object.keys(me.contentOptionsMap).forEach(function (optKey) {
-                if (selections[optKey]) {
-                    contentOptions.push('&' + optKey + '=true');
-                }
-            });
-            // ??
-            url = url + contentOptions.join('');
-            // png/pdf
-            url = url + '&format=' + selections.format;
-            // additional layout params for PDF?
-            url = url + me._getLayoutParams(selections.pageSize);
-
-            // TODO: what what in the what now? Pretty sure saveFile isn't used or implemented on the server, but keeping it for now just to be on the safe side
-            if (selections.saveFile) {
-                url = url + '&saveFile=' + selections.saveFile;
-            }
-
-            if (selections.scaleText) {
-                url = url + '&scaleText=' + selections.scaleText;
-            }
-
-            if (typeof me.timeseriesPlugin !== 'undefined') {
-                const areLayersWithTimeSeriesSelected =
-                    me.instance.sandbox.findAllSelectedMapLayers()
-                        .filter(l => l.getAttributes().times).length > 0;
-
-                if (areLayersWithTimeSeriesSelected) {
-                    url = url + '&time=' + me.timeseriesPlugin.getCurrentTime();
-                }
-                if (selections.pageTimeSeriesTime) {
-                    url = url + '&formattedTime=' + me.timeseriesPlugin.getCurrentTimeFormatted();
-                    url = url + '&timeseriesPrintLabel=' + me.contentOptionsMap.pageTimeSeriesTime.printLabel;
+        printMap: function (selections) {
+            const { maplinkArgs, customStyles, ...params } = selections || this._gatherParams();
+            if (this._isTimeSeriesActive()) {
+                params[PARAMS.TIME] = this.timeseriesPlugin.getCurrentTime();
+                if (params.pageTimeSeriesTime) {
+                    params[PARAMS.FORMATTED_TIME] = this.timeseriesPlugin.getCurrentTimeFormatted();
+                    params[PARAMS.SERIES_LABEL] = this.loc.content.pageTimeSeriesTime.printLabel;
                 }
             }
-            const hasCustomStyles = Object.keys(selections.customStyles).length > 0;
-            const hasTileData = Object.keys(me.instance.tileData).length > 0;
+            const paramsList = Object.keys(params).map(key => '&' + key + '=' + params[key]);
+            let url = Oskari.urls.getRoute('GetPrint') + '&' + maplinkArgs + paramsList.join('');
+
+            // additional layout params for PDF? is needed??
+            url = url + this._getLayoutParams(params.pageSize);
+            const hasCustomStyles = Object.keys(customStyles).length > 0;
+            const hasTileData = Object.keys(this.instance.tileData).length > 0;
             // We need to use the POST method if there's GeoJSON or tile data.
-            if (hasTileData || hasCustomStyles || me.instance.tableJson) {
-                var stringifiedJson = me._stringifyGeoJson(null);
-                var stringifiedTileData = me._stringifyTileData(me.instance.tileData);
-                var stringifiedTableData = me._stringifyTableData(me.instance.tableJson);
+            if (hasTileData || hasCustomStyles || this.instance.tableJson) {
+                var stringifiedJson = this._stringifyGeoJson(null);
+                var stringifiedTileData = this._stringifyTileData(this.instance.tileData);
+                var stringifiedTableData = this._stringifyTableData(this.instance.tableJson);
                 Oskari.log('BasicPrintout').debug('PRINT POST URL ' + url);
-                me.openPostURLinWindow(stringifiedJson, stringifiedTileData, stringifiedTableData, url, selections);
+                this.openPostURLinWindow(url, stringifiedJson, stringifiedTileData, stringifiedTableData, customStyles);
             } else {
                 // Otherwise GET is satisfiable.
-                Oskari.log('BasicPrintout').debug('PRINT URL ' + url);
-                const isLandscape = this._isLandscape(selections);
-                me.openURLinWindow(url, isLandscape);
+                Oskari.log('BasicPrintout').warn('PRINT URL ' + url);
+                this.openURLinWindow(url);
             }
         },
 
@@ -838,10 +688,11 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          *
          * @param {String} pageSize
          */
+        // TODO is this needed??
         _getLayoutParams: function (pageSize) {
             var me = this;
             var params = '';
-            var ind = me._getPageMapRectInd(pageSize);
+            var ind = SIZE_OPTIONS.findIndex(opt => opt.value === pageSize);
 
             if (me.layoutParams.pageTemplate) {
                 params = '&pageTemplate=' + me.layoutParams.pageTemplate + '_' + pageSize + '.pdf';
@@ -860,16 +711,17 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
 
         /**
          * @private @method _isLandscape
-         *
-         * @param {Object} JSONobject (_gatherSelections)
-         *
          * @return true/false
          * return true, if Landscape print orientation
          */
-        _isLandscape: function (selections) {
-            return this.sizeOptionsMap[selections.pageSize].id.indexOf('Land') > -1;
+        _isLandscape: function (pageSize) {
+            const ps = pageSize || this._getPageSize();
+            const opt = SIZE_OPTIONS.find(o => o.value === ps);
+            return opt ? opt.landscape : SIZE_OPTIONS[0].landscape;
         },
-
+        _getPageSize: function () {
+            return this.mainPanel.find('input[name=printout-size]:checked').val() || SIZE_OPTIONS[0].value;
+        },
         /**
          * @private @method _stringifyGeoJson
          * Get auxiliary graphics in geojson format + styles
@@ -1022,7 +874,7 @@ Oskari.clazz.define('Oskari.mapframework.bundle.printout.view.BasicPrintout',
          * @return {Object} state
          */
         getState: function () {
-            return this._gatherSelections();
+            return this._gatherParams();
         },
 
         /**

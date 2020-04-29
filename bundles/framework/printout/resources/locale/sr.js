@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Veličina",
                 "tooltip": "Izaberi prikaz štampe. Prikaz je ažuriran",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 uspravno",
-                        "classForPreview": "prikaz-uspravno",
-                        "selected": "ispravno"
-                    },
-                    {
-                        "id": "A4 položeno",
-                        "label": "A4 položeno",
-                        "classForPreview": "prikaz-položeno"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 uspravno",
-                        "classForPreview": "prikaz-uspravno"
-                    },
-                    {
-                        "id": "A3 uspravno",
-                        "label": "A3 položeno",
-                        "classForPreview": "prikaz-položeno"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 uspravno",
+                    "A4_Landscape": "A4 položeno",
+                    "A3": "A3 uspravno",
+                    "A3_Landscape":"A3 položeno"
+                }
             },
             "preview": {
                 "label": "Prikaz",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format",
                 "tooltip": "Izaberi format datoteke",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG slika"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": "ispravno",
-                        "label": "PDF dokument"
-                    }
-                ]
+                "options": {
+                    "png": "PNG slika",
+                    "pdf": "PDF dokument"
+                }
             },
             "mapTitle": {
                 "label": "Dodaj naslov",
                 "tooltip": "Dodaj naslov za mapu"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "Logo",
-                        "label": "Dodaj OSKARI logo",
-                        "tooltip": "Možete sakriti logo ako je potrebno",
-                        "checked": "provereno"
-                    },
-                    {
-                        "id": "razmera",
-                        "label": "Dodaj razmeru na mapu",
-                        "tooltip": "Dodavanje razmere na mapu",
-                        "checked": "provereno"
-                    },
-                    {
-                        "id": "datum",
-                        "label": "Dodati datum",
-                        "tooltip": "Možete dodati datum za štampu",
-                        "checked": "provereno"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Dodaj OSKARI logo",
+                    "tooltip": "Možete sakriti logo ako je potrebno"
+                },
+                "pageScale": {
+                    "label": "Dodaj razmeru na mapu",
+                    "tooltip": "Dodavanje razmere na mapu"
+                },
+                "pageDate": {
+                    "label": "Dodati datum",
+                    "tooltip": "Možete dodati datum za štampu"
+                }
             },
             "help": "Pomoć",
             "error": {

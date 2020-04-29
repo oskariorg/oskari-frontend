@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Stærð og stefna",
                 "tooltip": "Veldu prentstærð og hvernig blaðið snýr. Þú getur séð uppfærslur í forskoðunarglugganum.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 portrait",
-                        "classForPreview": "forskoðun-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_landslags",
-                        "label": "A4 landslags",
-                        "classForPreview": "forskoðun-landslags"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 portrait",
-                        "classForPreview": "forskoðun-portrait"
-                    },
-                    {
-                        "id": "A3_Landslags",
-                        "label": "A3 landslags",
-                        "classForPreview": "forskoðun-landslags"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 portrait",
+                    "A4_Landscape": "A4 landslags",
+                    "A3": "A3 portrait",
+                    "A3_Landscape": "A3 landslags"
+                }
             },
             "preview": {
                 "label": "Forskoðun",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Skráarsnið",
                 "tooltip": "Veldu skráarsnið fyrir útprentunina.",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG mynd"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF skjal"
-                    }
-                ]
+                "options": {
+                    "png": "PNG mynd",
+                    "pdf": "PDF skjal"
+                }
             },
             "mapTitle": {
                 "label": "Heiti korts",
                 "tooltip": "Bættu við heiti korts"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Sýna merki Landmælinga Íslands í útprentuninni.",
-                        "tooltip": "Þú getur falið merki Landmælinga Íslands ef það er nauðsynlegt.",
-                        "checked": "yfirfarið"
-                    },
-                    {
-                        "id": "Mælikvarði síðu.",
-                        "label": "Bæta mælikvarða við útprentun á korti.",
-                        "tooltip": "Ef þú vilt geturðu bætt mælikvarða við útprentun á korti.",
-                        "checked": "yfirfarið"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Sýna dagsetningu í útprentuninni.",
-                        "tooltip": "Þú getur bætt dagsetningu við í útprentuninni.",
-                        "checked": "yfirfarið"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Sýna merki Landmælinga Íslands í útprentuninni.",
+                    "tooltip": "Þú getur falið merki Landmælinga Íslands ef það er nauðsynlegt."
+                },
+                "pageScale": {
+                    "label": "Bæta mælikvarða við útprentun á korti.",
+                    "tooltip": "Ef þú vilt geturðu bætt mælikvarða við útprentun á korti."
+                },
+                "pageDate": {
+                    "label": "Sýna dagsetningu í útprentuninni.",
+                    "tooltip": "Þú getur bætt dagsetningu við í útprentuninni."
+                }
             },
             "help": "Hjálp",
             "error": {

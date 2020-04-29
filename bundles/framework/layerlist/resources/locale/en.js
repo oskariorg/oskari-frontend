@@ -15,7 +15,10 @@ Oskari.registerLocalization(
             },
             'filter': {
                 'title': 'Show',
-                'placeholder': 'All layers',
+                'all': {
+                    'title': 'All layers',
+                    'tooltip': ''
+                },
                 'search': {
                     'placeholder': 'Search map layers by name, data producer or keyword',
                     'tooltip': 'Search map layers by name, data producer or keyword. You can type a whole term or a part of it.'

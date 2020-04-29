@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Storlek",
                 "tooltip": "Välj utskriftsstorlek. Uppdateringar visas i förhandsgranskningsbilden.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 porträtt",
-                        "classForPreview": "förhandsgranska-porträtt",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 landskap",
-                        "classForPreview": "förhandsgranska-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 porträtt",
-                        "classForPreview": "förhandsgranska-porträtt"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 landskap",
-                        "classForPreview": "förhandsgranska-landskap"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 porträtt",                        
+                    "A4_Landscape": "A4 landskap",
+                    "A3": "A3 porträtt",
+                    "A3_Landscape": "A3 landskap"        
+                }
             },
             "preview": {
                 "label": "Förhandsgranska",
@@ -76,52 +59,33 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Filformat",
                 "tooltip": "Välj fil format",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG bild"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF dokument"
-                    }
-                ]
+                "options": {
+                    "png": "PNG bild",
+                    "pdf": "PDF dokument"
+                }
             },
             "mapTitle": {
                 "label": "Kart rubrik",
                 "tooltip": "Lägg till rubrik för kartan"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Inkludera logotyp i utskriften",
-                        "tooltip": "Du kan dölja logotyp vid behov.",
-                        "checked": "kontrollerad"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Lägg en skala till kartutskriften",
-                        "tooltip": "Lägg till skala till kartan, om du vill.",
-                        "checked": "kontrollerad"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Visa ett datum i kartutskriften",
-                        "tooltip": "Du kan lägga till ett datum till utskriften.",
-                        "checked": "kontrollerad"
-                    },
-                    {
-                        "id": "pageTimeSeriesTime",
-                        "label": "Visa tidpunkten av tidsserien",
-                        "tooltip": "Visa tiden för dess tidsserie på utskriften.",
-                        "checked": "checked",
-                        "printLabel": "Tidpunkten av tidsserien"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Inkludera logotyp i utskriften",
+                    "tooltip": "Du kan dölja logotyp vid behov."
+                },
+                "pageScale": {
+                    "label": "Lägg en skala till kartutskriften",
+                    "tooltip": "Lägg till skala till kartan, om du vill."
+                },
+                "pageDate": {
+                    "label": "Visa ett datum i kartutskriften",
+                    "tooltip": "Du kan lägga till ett datum till utskriften."
+                },
+                "pageTimeSeriesTime": {
+                    "label": "Visa tidpunkten av tidsserien",
+                    "tooltip": "Visa tiden för dess tidsserie på utskriften.",
+                    "printLabel": "Tidpunkten av tidsserien"
+                }
             },
             "help": "Hjälp",
             "error": {
@@ -135,8 +99,8 @@ Oskari.registerLocalization(
             "scale": {
                 "label": "Skala",
                 "tooltip": "Ange skalan som ska användas för utskrift",
-                "mapScale": "Använd kartskalan",
-                "definedScale": "Välj en skala",
+                "map": "Använd kartskalan",
+                "defined": "Välj en skala",
                 "unsupportedLayersMessage": "Följande kartläggare visas inte på utskriften",
                 "unsupportedLayersTitle": "Utskriften visar inte alla lager"
             }

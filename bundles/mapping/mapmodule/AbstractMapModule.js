@@ -2415,7 +2415,7 @@ Oskari.clazz.define(
             positionAlign: 'left'
         },
         {
-            priority: 100,
+            priority: 110,
             getTitle: function () {
                 return this.getLocalization().guidedTour.help2.title;
             },

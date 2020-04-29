@@ -178,7 +178,6 @@ Oskari.clazz.define(
                 popupDOM,
                 popup;
             jQuery(contentDiv).addClass('infoboxPopupNoMargin');
-
             if (isMarker) {
                 var markerPosition = mapModule.getSvgMarkerPopupPxPosition(marker);
                 offsetX = markerPosition.x;
@@ -246,7 +245,6 @@ Oskari.clazz.define(
                 });
                 mapModule.getMap().addOverlay(popup);
                 popup.setPosition(lonlatArray);
-                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
 
                 jQuery(popup.div).css('overflow', 'visible');
                 jQuery(popup.groupDiv).css('overflow', 'visible');
@@ -321,6 +319,9 @@ Oskari.clazz.define(
                 } else {
                     me._adaptPopupSize(id, refresh);
                 }
+            }
+            if (popupType === 'desktop') {
+                setTimeout(me._panMapToShowPopup.bind(me, lonlatArray, positioning), 0);
             }
             me._setClickEvent(id, popup, contentData, additionalTools, isInMobileMode);
         },
@@ -556,19 +557,18 @@ Oskari.clazz.define(
                     // No content left, close popup
                     this.close(popupId);
                 } else {
+                    const { colourScheme, font, title, lonlat } = popup;
                     this._renderPopup(
                         popupId,
                         contentData,
-                        popup.title,
-                        popup.lonlat,
-                        popup.colourScheme,
-                        popup.font,
+                        title,
+                        lonlat,
+                        { colourScheme, font },
                         true
                     );
                 }
             }
         },
-
         setAdaptable: function (isAdaptable) {
             this.adaptable = isAdaptable;
         },

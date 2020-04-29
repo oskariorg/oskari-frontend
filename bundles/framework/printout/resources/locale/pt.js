@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Dimensão",
                 "tooltip": "Escolher aspeto da impressão| Pré-visualização é atualizada em consonância",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 retrato",
-                        "classForPreview": "Pré-visualização retrato",
-                        "selected": "verdadeiro"
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 paisagem",
-                        "classForPreview": "pré-visualização paisagem"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 retrato",
-                        "classForPreview": "Pré-visualização retrato"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 paisagem",
-                        "classForPreview": "pré-visualização paisagem"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 retrato",
+                    "A4_Landscape": "A4 paisagem",
+                    "A3": "A3 retrato",
+                    "A3_Landscape": "A3 paisagem"
+                }
             },
             "preview": {
                 "label": "Pré-visualização",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formato",
                 "tooltip": "Selecionar formato do ficheiro",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "imagem/png",
-                        "label": "Imagem PNG"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "aplicação/pdf",
-                        "selected": "verdadeiro",
-                        "label": "Documento pdf"
-                    }
-                ]
+                "options": {
+                    "png": "Imagem PNG",
+                    "pdf": "Documento pdf"
+                }
             },
             "mapTitle": {
                 "label": "Adicionar título",
                 "tooltip": "Adicionar título à carta"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "Logótipo",
-                        "label": "Adicionar o logótipo Oskari",
-                        "tooltip": "Pode esconder o logótipo se necessário",
-                        "checked": "verificado"
-                    },
-                    {
-                        "id": "Escala da página",
-                        "label": "Adicionar escala à carta",
-                        "tooltip": "Adicionar escala à carta",
-                        "checked": "verificado"
-                    },
-                    {
-                        "id": "data da página",
-                        "label": "Adicionar data",
-                        "tooltip": "Pode adicionar data à impressão",
-                        "checked": "verificado"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Adicionar o logótipo Oskari",
+                    "tooltip": "Pode esconder o logótipo se necessário"
+                },
+                "pageScale": {
+                    "label": "Adicionar escala à carta",
+                    "tooltip": "Adicionar escala à carta"
+                },
+                "pageDate": {
+                    "label": "Adicionar data",
+                    "tooltip": "Pode adicionar data à impressão"
+                }
             },
             "help": "Ajuda",
             "error": {

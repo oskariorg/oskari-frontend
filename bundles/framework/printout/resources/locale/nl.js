@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Grootte",
                 "tooltip": "Kies afdrukindeling. Voorbeeldkaart wordt dienovereenkomstig aangepast.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 staand",
-                        "classForPreview": "preview-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 liggend",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 staand",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 liggend",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 staand",
+                    "A4_Landscape": "A4 liggend",
+                    "A3": "A3 staand",
+                    "A3_Landscape": "A3 liggend"
+                }
             },
             "preview": {
                 "label": "Voorbeeld",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Formaat",
                 "tooltip": "Selecteer bestandsformaat",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG afbeelding"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "PDF document"
-                    }
-                ]
+                "options": {
+                    "png": "PNG afbeelding",
+                    "pdf": "PDF document"
+                }
             },
             "mapTitle": {
                 "label": "Voeg titel toe",
                 "tooltip": "Voeg een titel toe aan de kaart"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Voeg het Oskari logo toe",
-                        "tooltip": "U kunt het logo indien nodig verbergen",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Voeg schaal toe aan de kaart",
-                        "tooltip": "Voeg schaal toe aan de kaart",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Voeg datum toe",
-                        "tooltip": "U kunt de datum toevoegen aan de afdruk",
-                        "checked": "checked"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Voeg het Oskari logo toe",
+                    "tooltip": "U kunt het logo indien nodig verbergen"
+                },
+                "pageScale": {
+                    "label": "Voeg schaal toe aan de kaart",
+                    "tooltip": "Voeg schaal toe aan de kaart"
+                },
+                "pageDate": {
+                    "label": "Voeg datum toe",
+                    "tooltip": "U kunt de datum toevoegen aan de afdruk",
+                }
             },
             "help": "Help",
             "error": {

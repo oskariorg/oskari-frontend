@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Розмір",
                 "tooltip": "Обрати макет друку| Попередній перегляд оновлюється відповідно",
-                "options": [
-                    {
-                        "id": "А4",
-                        "label": "А4 Книжкова",
-                        "classForPreview": "preview-portrait",
-                        "selected": "true"
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "А4 Альбомна",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "А3",
-                        "label": "А3 Книжкова",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "А3 Альбомна",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "А4": "А4 Книжкова",
+                    "A4_Landscape": "А4 Альбомна",
+                    "А3": "А3 Книжкова",
+                    "A3_Landscape": "А3 Альбомна"
+                }
             },
             "preview": {
                 "label": "Попередній перегляд",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Формат",
                 "tooltip": "Оберіть формат файлу",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "PNG зображення"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": "true",
-                        "label": "PDF документ"
-                    }
-                ]
+                "options": {
+                    "png": "PNG зображення",
+                    "pdf": "PDF документ"
+                }
             },
             "mapTitle": {
                 "label": "Додати заголовок",
                 "tooltip": "Додати заголовок на карту"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Додати логотип Oskari",
-                        "tooltip": "Ви можете приховати логотип, якщо це необхідно",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Додати масштаб на карту",
-                        "tooltip": "Додати масштаб на карту",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Додати дату",
-                        "tooltip": "Ви можете також додати дату до роздруківки",
-                        "checked": "checked"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Додати логотип Oskari",
+                    "tooltip": "Ви можете приховати логотип, якщо це необхідно"
+                },
+                "pageScale": {
+                    "label": "Додати масштаб на карту",
+                    "tooltip": "Додати масштаб на карту"
+                },
+                "pageDate": {
+                    "label": "Додати дату",
+                    "tooltip": "Ви можете також додати дату до роздруківки"
+                }
             },
             "help": "Довідка",
             "error": {

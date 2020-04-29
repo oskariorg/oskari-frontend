@@ -26,29 +26,12 @@ Oskari.registerLocalization(
             "size": {
                 "label": "Velikost",
                 "tooltip": "Vyberte rozložení tisku| Současně je aktualizován náhled mapy.",
-                "options": [
-                    {
-                        "id": "A4",
-                        "label": "A4 na výšku",
-                        "classForPreview": "preview-portrait",
-                        "selected": true
-                    },
-                    {
-                        "id": "A4_Landscape",
-                        "label": "A4 na šířku",
-                        "classForPreview": "preview-landscape"
-                    },
-                    {
-                        "id": "A3",
-                        "label": "A3 na výšku",
-                        "classForPreview": "preview-portrait"
-                    },
-                    {
-                        "id": "A3_Landscape",
-                        "label": "A3 na šířku",
-                        "classForPreview": "preview-landscape"
-                    }
-                ]
+                "options": {
+                    "A4": "A4 na výšku",
+                    "A4_Landscape": "A4 na šířku",
+                    "A3": "A3 na výšku",
+                    "A3_Landscape": "A3 na šířku"
+                }
             },
             "preview": {
                 "label": "Náhled",
@@ -76,45 +59,28 @@ Oskari.registerLocalization(
             "format": {
                 "label": "Format",
                 "tooltip": "Vyberte formát souboru",
-                "options": [
-                    {
-                        "id": "png",
-                        "format": "image/png",
-                        "label": "Obrázek PNG"
-                    },
-                    {
-                        "id": "pdf",
-                        "format": "application/pdf",
-                        "selected": true,
-                        "label": "Dokument PDF"
-                    }
-                ]
+                "options": {
+                    "png": "Obrázek PNG",
+                    "pdf": "Dokument PDF"
+                }
             },
             "mapTitle": {
                 "label": "Vložit název",
                 "tooltip": "vložit název mapy"
             },
             "content": {
-                "options": [
-                    {
-                        "id": "pageLogo",
-                        "label": "Přidat logo Paikkatietoikkuna",
-                        "tooltip": "Je-li to nezbytné, lze logo skrýt",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageScale",
-                        "label": "Vložit do mapy měřítko",
-                        "tooltip": "Vložit do mapy měřítko",
-                        "checked": "checked"
-                    },
-                    {
-                        "id": "pageDate",
-                        "label": "Vložit datum",
-                        "tooltip": "Do výtisku lze vložit datum",
-                        "checked": "checked"
-                    }
-                ]
+                "pageLogo": {
+                    "label": "Přidat logo Paikkatietoikkuna",
+                    "tooltip": "Je-li to nezbytné, lze logo skrýt"
+                },
+                "pageScale": {
+                    "label": "Vložit do mapy měřítko",
+                    "tooltip": "Vložit do mapy měřítko"
+                },
+                "pageDate": {
+                    "label": "Vložit datum",
+                    "tooltip": "Do výtisku lze vložit datum"
+                }
             },
             "help": "Nápověda",
             "error": {
