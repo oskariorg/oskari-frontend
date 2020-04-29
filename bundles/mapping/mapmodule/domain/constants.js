@@ -8,3 +8,7 @@ export const FTR_PROPERTY_ID = 'id';
 export const SERVICE_LAYER_REQUEST = 'layerRequest';
 export const SERVICE_HOVER = 'hover';
 export const SERVICE_CLICK = 'click';
+
+// wfs render modes
+export const RENDER_MODE_MVT = 'mvt';
+export const RENDER_MODE_VECTOR = 'vector';

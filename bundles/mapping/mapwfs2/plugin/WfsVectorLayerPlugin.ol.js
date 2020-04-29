@@ -4,7 +4,7 @@ import { ReqEventHandler } from './WfsVectorLayerPlugin/ReqEventHandler';
 import { HoverHandler } from './WfsVectorLayerPlugin/HoverHandler';
 import { styleGenerator } from './WfsVectorLayerPlugin/util/style';
 import { WFS_ID_KEY, WFS_FTR_ID_KEY, WFS_FTR_ID_LOCALE } from './WfsVectorLayerPlugin/util/props';
-import { LAYER_ID, LAYER_HOVER, LAYER_TYPE } from '../../mapmodule/domain/constants';
+import { LAYER_ID, LAYER_HOVER, LAYER_TYPE, RENDER_MODE_MVT, RENDER_MODE_VECTOR } from '../../mapmodule/domain/constants';
 import { UserStyleService } from '../service/UserStyleService';
 
 const AbstractMapLayerPlugin = Oskari.clazz.get('Oskari.mapping.mapmodule.AbstractMapLayerPlugin');
@@ -12,9 +12,6 @@ const LayerComposingModel = Oskari.clazz.get('Oskari.mapframework.domain.LayerCo
 const VisualizationForm = Oskari.clazz.get('Oskari.userinterface.component.VisualizationForm');
 const WFSLayerService = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.service.WFSLayerService');
 const WfsLayerModelBuilder = Oskari.clazz.get('Oskari.mapframework.bundle.mapwfs2.domain.WfsLayerModelBuilder');
-
-const RENDER_MODE_MVT = 'mvt';
-const RENDER_MODE_VECTOR = 'vector';
 
 export class WfsVectorLayerPlugin extends AbstractMapLayerPlugin {
     constructor (config) {
