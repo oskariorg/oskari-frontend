@@ -39,11 +39,13 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     if (typeof getMessage === 'function') {
         message = getMessage(messageKey, messageArgs);
     } else {
-        message = Oskari.getMsg(bundleKey, messageKey, messageArgs);
+        message = getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs);
     }
     // If we didn't find localization AND we have default value -> use it
     if (message === messageKey && defaultMsg) {
         message = defaultMsg;
+    } else {
+        message = `--[${messageKey}]--`;
     }
     return (
         <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
@@ -61,6 +63,16 @@ Message.propTypes = {
     children: PropTypes.node,
     LabelComponent: PropTypes.elementType
 };
+
+function getMessageUsingOskariGlobal(bundleKey, messageKey, messageArgs) {
+    try {
+        return Oskari.getMsg(bundleKey, messageKey, messageArgs);
+    } catch(e) {
+        // no locale provider OR bundleKey missing from locale provider
+        Oskari.log().warn(`Message tag used without LocaleProvider or bundleKey not provided when getting: ${messageKey}. Original error: ${e.message}`);
+    }
+    return messageKey;
+}
 
 const wrapped = LocaleConsumer(Message);
 export { wrapped as Message };
