@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import AntCollapse from 'antd/es/collapse';
+import { Collapse as AntCollapse } from 'antd';
 import styled from 'styled-components';
 import 'antd/es/collapse/style/index.js';
 

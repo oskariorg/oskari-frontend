@@ -1,5 +1,5 @@
 import React from 'react';
-import AntSwitch from 'antd/es/switch';
+import { Switch as AntSwitch } from 'antd';
 import 'antd/es/switch/style/index.js';
 
 export const Switch = props => <AntSwitch {...props}/>;

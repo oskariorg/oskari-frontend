@@ -1,6 +1,6 @@
 import React from 'react';
+import { Input } from 'antd';
 import PropTypes from 'prop-types';
-import Input from 'antd/es/input';
 import { Select, Option } from './Select';
 import { Collapse, Panel } from './Collapse';
 import { TextInput } from './TextInput';
