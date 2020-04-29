@@ -1,12 +1,13 @@
 {
   "name": "oskari-frontend",
   "version": "1.56.0-dev",
-  "private": true,
   "description": "Oskari frontend",
   "keywords": [
-    "Oskari"
+    "oskari",
+    "geoportal",
+    "maps"
   ],
-  "homepage": "http://oskari.org",
+  "homepage": "https://oskari.org",
   "bugs": {
     "url": "https://github.com/oskariorg/oskari-docs/issues"
   },
@@ -14,7 +15,7 @@
     "type": "git",
     "url": "https://github.com/oskariorg/oskari-frontend.git"
   },
-  "license": "MIT",
+  "license": "(MIT OR EUPL-1.1)",
   "main": "grunt.js",
   "scripts": {
     "lintfix": "eslint . --quiet --fix",
@@ -35,15 +36,15 @@
     }
   },
   "dependencies": {
-    "@babel/core": "7.6.0",
-    "@babel/preset-env": "7.6.0",
-    "@babel/preset-react": "7.0.0",
-    "@babel/runtime-corejs3": "7.6.3",
+    "@babel/core": "7.9.0",
+    "@babel/preset-env": "7.9.5",
+    "@babel/preset-react": "7.9.4",
+    "@babel/runtime-corejs3": "7.9.2",
     "@storybook/react": "5.1.11",
     "@types/jest": "24.0.18",
     "antd": "3.26.7",
-    "babel-loader": "8.0.6",
-    "babel-plugin-styled-components": "1.10.6",
+    "babel-loader": "8.1.0",
+    "babel-plugin-styled-components": "1.10.7",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
     "cesium": "1.62.0",
     "copy-webpack-plugin": "5.0.4",
@@ -92,8 +93,8 @@
     "styled-components": "5.0.1",
     "sumoselect": "3.0.5",
     "uglifyjs-webpack-plugin": "2.2.0",
-    "webpack": "4.39.3",
-    "webpack-cli": "3.3.8",
+    "webpack": "4.43.0",
+    "webpack-cli": "3.3.11",
     "webpack-dev-server": "3.8.0"
   }
 }
