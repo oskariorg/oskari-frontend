@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Message, Slider, Icon } from 'oskari-ui';
+import { Numeric } from '../Numeric';
 import { Controller } from 'oskari-ui/util';
 import styled from 'styled-components';
 
@@ -51,7 +52,48 @@ const getLayerValues = (layer, levelToScale, defaultValues) => {
 const maxScaleOption = 1; // 1:1
 const halfALevel = 0.5;
 
+function getScales (layer) {
+    let { minscale, maxscale } = layer;
+    if (minscale === -1) {
+        minscale = '';
+    }
+    if (maxscale === -1) {
+        maxscale = '';
+    }
+    return {
+        minscale,
+        maxscale
+    };
+}
+
+// assumes scales go from big to small as they do on mapmodule
+function getMinZoom (minscale, scales) {
+    if (!minscale || minscale < 0) {
+        return 0;
+    }
+    const index = scales.findIndex(s => minscale >= s);
+    if (index === -1) {
+        return 0;
+    }
+    return index;
+}
+
+// assumes scales go from big to small as they do on mapmodule
+function getMaxZoom (maxscale, scales) {
+    const maxZoom = scales.length - 1;
+    if (!maxscale || maxscale < 0) {
+        return maxZoom;
+    }
+    const index = scales.findIndex(s => maxscale >= s) - 1;
+    if (index < 0) {
+        return maxZoom;
+    }
+    return index;
+}
+
 export const Scale = ({ layer, scales, controller }) => {
+    let { minscale, maxscale } = getScales(layer);
+    // console.log(getMinZoom(minscale, scales), getMaxZoom(maxscale, scales));
     const maxScale = scales[scales.length - 1];
     let maxZoomLevel = scales.length - 1;
     const levelToScale = {};
@@ -78,24 +120,50 @@ export const Scale = ({ layer, scales, controller }) => {
         levelToScale[i + halfALevel] = Math.round(scale - (scale - nextScale) / 2);
     });
     return (
-        <VerticalComponent>
-            <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
-            <Icon type='plus-circle'/>
-            <SliderContainer>
-                <Slider key={layer.id}
-                    vertical
-                    range
-                    reversed
-                    tipFormatter={value => `1:${levelToScale[value].toLocaleString()}`}
-                    step={halfALevel}
-                    marks={marks}
-                    min={0}
-                    max={maxZoomLevel}
-                    defaultValue={getLayerValues(layer, levelToScale, [0, maxZoomLevel])}
-                    onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => levelToScale[zoomLevel]))} />
-            </SliderContainer>
-            <Icon type='minus-circle'/>
-        </VerticalComponent>
+        <React.Fragment>
+            <VerticalComponent>
+                <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
+                <Icon type='plus-circle'/>
+                <SliderContainer>
+                    <Slider
+                        vertical
+                        range
+                        reversed
+                        tipFormatter={value => `1:${levelToScale[value].toLocaleString()}`}
+                        step={halfALevel}
+                        marks={marks}
+                        min={0}
+                        max={maxZoomLevel}
+                        defaultValue={getLayerValues(layer, levelToScale, [0, maxZoomLevel])}
+                        onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => levelToScale[zoomLevel]))} />
+                </SliderContainer>
+                <Icon type='minus-circle'/>
+                <table>
+                    <tbody>
+                        <tr>
+                            <td width="15%">Min scale</td>
+                            <td><Numeric
+                                prefix="1:"
+                                placeholder="Ei rajoitusta"
+                                value={ minscale }
+                                allowNegative={false}
+                                allowZero={false}
+                                onChange={value => controller.setMinAndMaxScale([value, maxscale])} /> {getMinZoom(minscale, scales)}</td>
+                        </tr>
+                        <tr>
+                            <td width="15%">Max scale</td>
+                            <td><Numeric
+                                prefix="1:"
+                                placeholder="Ei rajoitusta"
+                                value={ maxscale }
+                                allowNegative={false}
+                                allowZero={false}
+                                onChange={value => controller.setMinAndMaxScale([minscale, value])} /> {getMaxZoom(maxscale, scales)}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </VerticalComponent>
+        </React.Fragment>
     );
 };
 Scale.propTypes = {
