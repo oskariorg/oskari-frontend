@@ -44,8 +44,6 @@ const Message = ({ bundleKey, messageKey, messageArgs, defaultMsg, getMessage, c
     // If we didn't find localization AND we have default value -> use it
     if (message === messageKey && defaultMsg) {
         message = defaultMsg;
-    } else {
-        message = `--[${messageKey}]--`;
     }
     return (
         <LabelComponent onClick={() => Oskari.log().debug(`Text clicked - ${bundleKey}: ${messageKey}`)}>
