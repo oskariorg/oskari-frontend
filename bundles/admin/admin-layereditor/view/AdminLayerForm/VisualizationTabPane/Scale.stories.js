@@ -12,7 +12,6 @@ function getMessage () {
 function getController (state, setState) {
     return {
         setMinAndMaxScale: ([ minscale, maxscale ]) => {
-            console.log(minscale, maxscale);
             setState({
                 minscale,
                 maxscale

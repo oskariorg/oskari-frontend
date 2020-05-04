@@ -28,7 +28,6 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
     const locNoLimit = getMessage('fieldNoRestriction');
     let { minscale, maxscale } = normalizeScales(layer);
     const mapScales = scales.slice(0);
-    // console.log(getMinZoom(minscale, scales), getMaxZoom(maxscale, scales));
     const maxZoomLevel = mapScales.length - 1;
     const layerMaxZoom = getMaxZoom(maxscale, mapScales);
     const layerMinZoom = getMinZoom(minscale, mapScales);
@@ -74,10 +73,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
                         min={-1}
                         max={maxZoomLevel + 1}
                         value={ [layerMinZoom, layerMaxZoom] }
-                        onChange={values => {
-                            console.log(...values);
-                            controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]));
-                        }} />
+                        onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]))} />
                 </SliderContainer>
                 <Icon type='minus-circle'/>
             </VerticalComponent>
@@ -127,18 +123,19 @@ function getZoomLevel (scale, mapScales, defaultValue) {
 }
 
 function createSliderLabels (scales = [], locNoLimit) {
-    // labels every 5 levels
+    // Not restricted at each end
     const marks = {
         '-1': locNoLimit,
         [scales.length]: locNoLimit
     };
+    // labels every 5 levels
     scales.forEach((scale, index) => {
         if (index % 5 === 0) {
             marks[index] = '' + index;
         }
     });
     const maxZoomLevel = scales.length - 1;
-    // add label to the last one as well
+    // add label for the last zoom level as well
     if (maxZoomLevel % 5 !== 0) {
         marks[maxZoomLevel] = maxZoomLevel;
     }
