@@ -18,10 +18,20 @@ const CenteredLabel = styled('div')`
 `;
 
 const SliderContainer = styled('div')`
-    padding-left: calc(50% - 2px);
+    padding-left: 10%;
     height: 200px;
     padding-top: 15px;
     padding-bottom: 15px;
+`;
+
+const ScaleInput = styled(Numeric)`
+    width: 90%;
+    margin: 10px 0;
+`;
+
+const StyledIcon = styled(Icon)`
+text-align: left;
+padding-left: 6%;
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
@@ -32,52 +42,38 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
     const layerMaxZoom = getMaxZoom(maxscale, mapScales);
     const layerMinZoom = getMinZoom(minscale, mapScales);
     return (
-        <React.Fragment>
-            <VerticalComponent>
-                <table>
-                    <tbody>
-                        <tr>
-                            <td width="15%">Max scale</td>
-                            <td><Numeric
-                                prefix="1:"
-                                placeholder={locNoLimit}
-                                value={ maxscale }
-                                allowNegative={false}
-                                allowZero={false}
-                                onChange={value => controller.setMinAndMaxScale([minscale, value])} /> {layerMaxZoom}</td>
-                        </tr>
-                        <tr>
-                            <td width="15%">Min scale</td>
-                            <td><Numeric
-                                prefix="1:"
-                                placeholder={locNoLimit}
-                                value={ minscale }
-                                allowNegative={false}
-                                allowZero={false}
-                                onChange={value => controller.setMinAndMaxScale([value, maxscale])} /> {layerMinZoom}</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </VerticalComponent>
-            <VerticalComponent>
-                <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
-                <Icon type='plus-circle'/>
-                <SliderContainer>
-                    <Slider
-                        vertical
-                        range
-                        reversed
-                        tipFormatter={createTooltipFormatter(mapScales, locNoLimit)}
-                        step={1}
-                        marks={createSliderLabels(mapScales, locNoLimit)}
-                        min={-1}
-                        max={maxZoomLevel + 1}
-                        value={ [layerMinZoom, layerMaxZoom] }
-                        onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]))} />
-                </SliderContainer>
-                <Icon type='minus-circle'/>
-            </VerticalComponent>
-        </React.Fragment>
+        <VerticalComponent>
+            <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
+            <ScaleInput
+                prefix="1:"
+                placeholder={locNoLimit}
+                value={ maxscale }
+                allowNegative={false}
+                allowZero={false}
+                onChange={value => controller.setMinAndMaxScale([minscale, value])} />
+            <StyledIcon type='plus-circle'/>
+            <SliderContainer>
+                <Slider
+                    vertical
+                    range
+                    reversed
+                    tipFormatter={createTooltipFormatter(mapScales, locNoLimit)}
+                    step={1}
+                    marks={createSliderLabels(mapScales, locNoLimit)}
+                    min={-1}
+                    max={maxZoomLevel + 1}
+                    value={ [layerMinZoom, layerMaxZoom] }
+                    onChange={values => controller.setMinAndMaxScale(values.map(zoomLevel => mapScales[zoomLevel]))} />
+            </SliderContainer>
+            <StyledIcon type='minus-circle'/>
+            <ScaleInput
+                prefix="1:"
+                placeholder={locNoLimit}
+                value={ minscale }
+                allowNegative={false}
+                allowZero={false}
+                onChange={value => controller.setMinAndMaxScale([value, maxscale])} />
+        </VerticalComponent>
     );
 };
 
