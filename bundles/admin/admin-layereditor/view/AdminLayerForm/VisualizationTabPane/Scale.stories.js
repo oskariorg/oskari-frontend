@@ -5,10 +5,14 @@ import { Scale } from './Scale';
 
 import '../../../../../../src/global';
 
+function getMessage () {
+    return 'No restriction';
+}
+
 function getController (state, setState) {
-    console.log(arguments);
     return {
         setMinAndMaxScale: ([ minscale, maxscale ]) => {
+            console.log(minscale, maxscale);
             setState({
                 minscale,
                 maxscale
@@ -33,7 +37,7 @@ storiesOf('Scale', module)
             <Parent>
                 {(state = {}, setState) => (
                     <React.Fragment>
-                        <Scale layer={state} scales={scales} controller={getController(state, setState)} />
+                        <Scale layer={state} scales={scales} controller={getController(state, setState)} getMessage={getMessage} />
                         Scales: { JSON.stringify(scales) }
                         <pre>State:
                             { JSON.stringify(state, null, 2) }
