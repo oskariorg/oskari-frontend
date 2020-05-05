@@ -66,12 +66,6 @@ module.exports = (env, argv) => {
         config.devServer = {
             port: proxyPort,
             proxy: [{
-                context: ['/transport/cometd'],
-                target: 'ws://localhost:8080',
-                secure: false,
-                changeOrigin: true,
-                ws: true
-            }, {
                 context: ['**', `!/Oskari/dist/${version}/**`, '!/Oskari/bundles/bundle.js'],
                 target: 'http://localhost:8080',
                 secure: false,
