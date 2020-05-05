@@ -12,16 +12,20 @@ const VerticalComponent = styled('div')`
     margin-left: 25%;
 `;
 
-const CenteredLabel = styled('div')`
-    text-align: center;
+const FieldLabel = styled('div')`
     padding-bottom: 5px;
 `;
 
 const SliderContainer = styled('div')`
-    padding-left: 10%;
+    padding-left: 20%;
     height: 200px;
     padding-top: 15px;
     padding-bottom: 15px;
+
+    .ant-slider-mark-text {
+        padding-bottom: 3px;
+        font-size: 11px;
+    }
 `;
 
 const ScaleInput = styled(Numeric)`
@@ -31,7 +35,7 @@ const ScaleInput = styled(Numeric)`
 
 const StyledIcon = styled(Icon)`
 text-align: left;
-padding-left: 6%;
+padding-left: 16%;
 `;
 
 const Scale = ({ layer, scales = [], controller, getMessage }) => {
@@ -43,7 +47,7 @@ const Scale = ({ layer, scales = [], controller, getMessage }) => {
     const layerMinZoom = getMinZoom(minscale, mapScales);
     return (
         <VerticalComponent>
-            <Message messageKey='fields.scale' LabelComponent={CenteredLabel} />
+            <Message messageKey='fields.scale' LabelComponent={FieldLabel} />
             <ScaleInput
                 prefix="1:"
                 placeholder={locNoLimit}
